@@ -96,7 +96,7 @@ public:
     
     SireUnits::Dimension::MolarEnergy getPotentialEnergy(const System &system);
     
-    System minimizer( System &system, double max_iteration, double tolerance ); 
+    System minimizeEnergy(System &system, double tolerance, int max_iteration); 
 
     void integrate(IntegratorWorkspace &workspace,
                    const Symbol &nrg_component,
@@ -189,11 +189,11 @@ public:
 
     void setMinimization(bool);
 
-    double getMinimizeTol(void);
-    void setMinimizeTol(double);
+    //double getMinimizeTol(void);
+    //void setMinimizeTol(double);
 
-    int getMinimizeIterations(void);
-    void setMinimizeIterations(int);
+    //int getMinimizeIterations(void);
+    //void setMinimizeIterations(int);
 
     int getEquilib_iterations(void);
     void setEquilib_iterations(int);
@@ -206,7 +206,7 @@ public:
 
 private:
     void createContext(IntegratorWorkspace &workspace,
-                       SireUnits::Dimension::Time timestep, int nmoves, bool record_stats);
+                       SireUnits::Dimension::Time timestep);
     void destroyContext();
     
     /** Whether or not to save the velocities after every step, or to save them at the end of all of the steps */
@@ -282,10 +282,10 @@ private:
 
     SireUnits::Dimension::Time timeskip;
 
-    bool minimize;
+    //bool minimize;
 
-    double minimize_tol;
-    int minimize_iterations;
+    //double minimize_tol;
+    //int minimize_iterations;
 
 
     int equilib_iterations;
