@@ -127,7 +127,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const OpenMMFrEnergyST 
         << velver.platform_type << velver.Restraint_flag << velver.CMMremoval_frequency << velver.buffer_frequency << velver.energy_frequency
         << velver.device_index <<velver.precision << velver.Alchemical_value << velver.coulomb_power << velver.shift_delta << velver.delta_alchemical 
         << velver.gradients << velver.energies <<velver.perturbed_energies <<  velver.Integrator_type << velver.friction << velver.integration_tol 
-        << velver.timeskip << velver.minimize << velver.minimize_tol << velver.minimize_iterations << velver.equilib_iterations << velver.equilib_time_step
+        << velver.timeskip << /*velver.minimize << velver.minimize_tol << velver.minimize_iterations << velver.equilib_iterations <<*/ velver.equilib_time_step
         << velver.reinetialize_context << velver.GF_acc << velver.GB_acc
         << static_cast<const Integrator&>(velver);
 
@@ -151,8 +151,8 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, OpenMMFrEnergyST &velve
         >> velver.platform_type >> velver.Restraint_flag >> velver.CMMremoval_frequency >> velver.buffer_frequency >> velver.energy_frequency
         >> velver.device_index >> velver.precision >> velver.Alchemical_value >> velver.coulomb_power >> velver.shift_delta >> velver.delta_alchemical
         >> velver.gradients >> velver.energies >> velver.perturbed_energies >> velver.Integrator_type >> velver.friction 
-        >> velver.integration_tol >> velver.timeskip >> velver.minimize >> velver.minimize_tol >> velver.equilib_iterations >> velver.equilib_time_step
-        >> velver.minimize_iterations >> velver.reinetialize_context >> velver.GF_acc >> velver.GB_acc
+        >> velver.integration_tol >> velver.timeskip /*>> velver.minimize >> velver.minimize_tol >> velver.equilib_iterations >> velver.equilib_time_step
+        >> velver.minimize_iterations*/ >> velver.reinetialize_context >> velver.GF_acc >> velver.GB_acc
         >> static_cast<Integrator&>(velver);
 
         // Maybe....need to reinitialise from molgroup because openmm system was not serialised...
@@ -2764,7 +2764,7 @@ MolarEnergy OpenMMFrEnergyST::getPotentialEnergy(const System &system)
     IntegratorWorkspacePtr ws = this->createWorkspace(molgroup);
     ws.edit().setSystem(system);
     
-    createContext(ws.edit(), 2*femtosecond, 0, false);
+    createContext(ws.edit(), 2*femtosecond);
     
     int infoMask = 0;
     infoMask = infoMask +  OpenMM::State::Energy;
@@ -2846,7 +2846,7 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace, const Symbol &n
 
     bool Debug = false;
     
-    createContext(workspace, timestep, nmoves, record_stats);
+    createContext(workspace, timestep);
     
     const int nats = openmm_system->getNumParticles();
     
