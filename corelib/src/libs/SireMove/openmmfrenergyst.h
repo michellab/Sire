@@ -187,7 +187,7 @@ public:
     SireUnits::Dimension::Time getTimetoSkip(void);
     void setTimetoSkip(SireUnits::Dimension::Time);
 
-    void setMinimization(bool);
+    //void setMinimization(bool);
 
     //double getMinimizeTol(void);
     //void setMinimizeTol(double);

@@ -1,5 +1,13 @@
 build_core
 build_wrapper
+#files for wrapper
+module_info
+active_headers.data
+exposed_decl.pypp.txt
+named_tuple.py
+*.pyc
+*.data
+
 # Compiled Object files
 *.slo
 *.lo
