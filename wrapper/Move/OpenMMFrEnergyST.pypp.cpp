@@ -698,17 +698,6 @@ void register_OpenMMFrEnergyST_class(){
                 , ( bp::arg("arg0") ) );
         
         }
-        { //::SireMove::OpenMMFrEnergyST::setMinimization
-        
-            typedef void ( ::SireMove::OpenMMFrEnergyST::*setMinimization_function_type )( bool ) ;
-            setMinimization_function_type setMinimization_function_value( &::SireMove::OpenMMFrEnergyST::setMinimization );
-            
-            OpenMMFrEnergyST_exposer.def( 
-                "setMinimization"
-                , setMinimization_function_value
-                , ( bp::arg("arg0") ) );
-        
-        }
         { //::SireMove::OpenMMFrEnergyST::setPlatform
         
             typedef void ( ::SireMove::OpenMMFrEnergyST::*setPlatform_function_type )( ::QString ) ;
