@@ -1,0 +1,37 @@
+mode clj
+# Energy is sum of coulomb and Lennard Jones terms
+#parameter atm proton-num charge(|e|) sigma(A) epsilon(kcal mol-1)
+par  3010   CT    06      +0.117       3.3997   0.1094
+par  3011   H1    01      +0.028       2.4714   0.0157
+par  3012   OH    08      -0.598       3.0665   0.2104
+par  3013   HO    01      +0.397       0.0000   0.0000
+
+mode template
+solute methanol
+info translate 0.0 rotate 5.0
+#
+#
+#
+#   DM1--DM2  H02  H06
+#        |    |    |
+#        DM3--C01--O05
+#            / \
+#           H03 H04
+#
+atom C01 MEO 3010 3010  DM3 DUM DM2 DUM DM1 DUM
+atom H02 MEO 3011 3011  C01 MEO DM3 DUM DM2 DUM
+atom O05 MEO 3012 3012  C01 MEO H02 MEO DM3 DUM
+atom H03 MEO 3011 3011  C01 MEO O05 MEO H02 MEO
+atom H04 MEO 3011 3011  C01 MEO O05 MEO H02 MEO
+atom H06 MEO 3013 3013  O05 MEO C01 MEO H02 MEO
+bond O05 MEO C01 MEO
+bond H06 MEO O05 MEO
+bond H02 MEO C01 MEO
+bond H03 MEO C01 MEO
+bond H04 MEO C01 MEO
+angle H06 MEO O05 MEO C01 MEO flex 0.5
+angle H02 MEO C01 MEO O05 MEO flex 0.5
+angle H03 MEO C01 MEO O05 MEO flex 0.5
+angle H04 MEO C01 MEO O05 MEO flex 0.5
+dihedral H06 MEO O05 MEO C01 MEO H02 MEO flex 15.0
+

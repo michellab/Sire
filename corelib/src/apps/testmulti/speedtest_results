@@ -1,0 +1,104 @@
+Macbook Air 1.8 GHz Core i5 (2012 model)
+Theoretical peak is 1.8*8 = 14.4 GFLOPs per core
+
+AVX, check alignment
+Calculating the coulomb energy between two groups of 25000 particles. This involves calculating and summing  625000000 coulomb interaction energies. 
+Generating the random numbers... 
+Generating the random numbers took 6 ms 
+Converting to MultiFloat... 
+Took 0 ms 
+Converting to MultiDouble... 
+Took 54 ms 
+Calculating the coulomb energy using floats... 
+Energies "{ -9263.12, 70490, -90430, -36133.5, -51843.8, -2367.92, -5558.97, 74504.6 }" TOTAL -50602.6 
+took 542 ms 
+Speed is 13.8376 GFLOPS 
+Calculating the coulomb energy using doubles... 
+Energies "{ -9263.14, 70489.9, -90430.1, -36133.5, -51843.9, -2367.94, -5559, 74504.8 }" TOTAL -50602.7 
+took 6555 ms 
+Speed is 1.14416 GFLOPS 
+
+AVX, don't check alignment
+Calculating the coulomb energy between two groups of 25000 particles. This involves calculating and summing  625000000 coulomb interaction energies. 
+Generating the random numbers... 
+Generating the random numbers took 7 ms 
+Converting to MultiFloat... 
+Took 1 ms 
+Converting to MultiDouble... 
+Took 53 ms 
+Calculating the coulomb energy using floats... 
+Energies "{ -9263.12, 70490, -90430, -36133.5, -51843.8, -2367.92, -5558.97, 74504.6 }" TOTAL -50602.6 
+took 539 ms 
+Speed is 13.9147 GFLOPS 
+Calculating the coulomb energy using doubles... 
+Energies "{ -9263.14, 70489.9, -90430.1, -36133.5, -51843.9, -2367.94, -5559, 74504.8 }" TOTAL -50602.7 
+took 5541 ms 
+Speed is 1.35355 GFLOPS 
+
+SSE, check alignment
+Calculating the coulomb energy between two groups of 25000 particles. This involves calculating and summing  625000000 coulomb interaction energies. 
+Generating the random numbers... 
+Generating the random numbers took 7 ms 
+Converting to MultiFloat... 
+Took 0 ms 
+Converting to MultiDouble... 
+Took 107 ms 
+Calculating the coulomb energy using floats... 
+Energies "{ -61106.9, 68122.1, -95988.9, 38371.1 }" TOTAL -50602.6 
+took 589 ms 
+Speed is 12.7334 GFLOPS 
+Calculating the coulomb energy using doubles... 
+Energies "{ -61107, 68122, -95989.1, 38371.4 }" TOTAL -50602.7 
+took 5645 ms 
+Speed is 1.32861 GFLOPS 
+
+SSE, don't check alignment
+Calculating the coulomb energy between two groups of 25000 particles. This involves calculating and summing  625000000 coulomb interaction energies. 
+Generating the random numbers... 
+Generating the random numbers took 6 ms 
+Converting to MultiFloat... 
+Took 1 ms 
+Converting to MultiDouble... 
+Took 106 ms 
+Calculating the coulomb energy using floats... 
+Energies "{ -61106.9, 68122.1, -95988.9, 38371.1 }" TOTAL -50602.6 
+took 590 ms 
+Speed is 12.7119 GFLOPS 
+Calculating the coulomb energy using doubles... 
+Energies "{ -61107, 68122, -95989.1, 38371.4 }" TOTAL -50602.7 
+took 5217 ms 
+Speed is 1.43761 GFLOPS 
+
+Vanilla code, check alignment
+Calculating the coulomb energy between two groups of 25000 particles. This involves calculating and summing  625000000 coulomb interaction energies. 
+Generating the random numbers... 
+Generating the random numbers took 6 ms 
+Converting to MultiFloat... 
+Took 1 ms 
+Converting to MultiDouble... 
+Took 51 ms 
+Calculating the coulomb energy using floats... 
+Energies "{ -9263.14, 70489.9, -90430.1, -36133.5, -51843.9, -2367.94, -5559, 74504.8 }" TOTAL -50602.7 
+took 7357 ms 
+Speed is 1.01944 GFLOPS 
+Calculating the coulomb energy using doubles... 
+Energies "{ -9263.14, 70489.9, -90430.1, -36133.5, -51843.9, -2367.94, -5559, 74504.8 }" TOTAL -50602.7 
+took 10082 ms 
+Speed is 0.7439 GFLOPS 
+
+Vanilla code, don't check alignment
+Calculating the coulomb energy between two groups of 25000 particles. This involves calculating and summing  625000000 coulomb interaction energies. 
+Generating the random numbers... 
+Generating the random numbers took 6 ms 
+Converting to MultiFloat... 
+Took 1 ms 
+Converting to MultiDouble... 
+Took 54 ms 
+Calculating the coulomb energy using floats... 
+Energies "{ -9263.14, 70489.9, -90430.1, -36133.5, -51843.9, -2367.94, -5559, 74504.8 }" TOTAL -50602.7 
+took 8326 ms 
+Speed is 0.900793 GFLOPS 
+Calculating the coulomb energy using doubles... 
+Energies "{ -9263.14, 70489.9, -90430.1, -36133.5, -51843.9, -2367.94, -5559, 74504.8 }" TOTAL -50602.7 
+took 12035 ms 
+Speed is 0.623182 GFLOPS 

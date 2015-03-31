@@ -1,0 +1,24 @@
+ATOM      1 1HH3 ACE     1      -2.614   1.033   1.788  H 1
+ATOM      2  CH3 ACE     1      -2.160   0.537   0.930  C 1
+ATOM      3 2HH3 ACE     1      -2.475   1.035   0.013  H 1
+ATOM      4 3HH3 ACE     1      -2.476  -0.506   0.904  H 1
+ATOM      5  C   ACE     1      -0.672   0.582   1.009  C 1
+ATOM      6  O   ACE     1      -0.105   1.128   1.954  O 1
+ATOM      7  N   ALA     2       0.000   0.000   0.000  N 1
+ATOM      8  HN  ALA     2      -0.479  -0.475  -0.752  H 1
+ATOM      9  CA  ALA     2       1.430   0.000   0.000  C 1
+ATOM     10  HA  ALA     2       1.809  -0.451   0.917  H 1
+ATOM     11  CB  ALA     2       2.023  -0.763  -1.207  C 1
+ATOM     12 HB1  ALA     2       1.660  -0.317  -2.133  H 1
+ATOM     13 HB2  ALA     2       3.111  -0.702  -1.177  H 1
+ATOM     14 HB3  ALA     2       1.717  -1.808  -1.163  H 1
+ATOM     15  C   ALA     2       1.866   1.425   0.000  C 1
+ATOM     16  O   ALA     2       3.059   1.722   0.000  O 1
+ATOM     17  N   NME     3       0.890   2.351   0.000  N 1
+ATOM     18  H   NME     3      -0.087   2.093  -0.000  H 1
+ATOM     19  CH3 NME     3       1.224   3.741   0.000  C 1
+ATOM     20 1HH3 NME     3       2.308   3.855   0.000  H 1
+ATOM     21 2HH3 NME     3       0.809   4.215  -0.890  H 1
+ATOM     22 3HH3 NME     3       0.809   4.215   0.890  H 1
+TER
+END

@@ -1,0 +1,7 @@
+HEADER ABCD
+ATOM      1  A1  ha1     1       0.000   0.000   0.000
+ATOM      2  A2  ha1     1       2.000   0.000   0.000
+ATOM      3  A3  ha1     1       3.000   0.300  -1.700
+ATOM      4  A4  ha1     1       5.000   0.170  -1.700
+TER
+END

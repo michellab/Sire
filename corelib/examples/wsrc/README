@@ -1,0 +1,13 @@
+There are two scripts here. One (runwsrc.py) runs a WSRC simulation on
+proteinbox.top and proteinbox.crd using the parameters specified in
+the python script.
+
+Run it using "sire_python --ppn=12 runwsrc.py"
+
+The other (runconfig.py) runs the same WSRC simulation, but here the
+parameters are specified in the file "config".
+
+Run it using "python runconfig.py config"
+
+(I know that sire_python doesn't yet allow passing arguments to a script...)
+

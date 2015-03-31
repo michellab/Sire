@@ -1,0 +1,8 @@
+To generate the API documentation run "doxygen" in this directory.
+
+The documentation will be written to "api/html"
+
+It is controlled using the file "Doxyfile" - by changing the 
+options in this file you can change what sort of documentation
+is generated.
+

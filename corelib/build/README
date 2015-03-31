@@ -1,0 +1,40 @@
+
+Sire Multiscale Molecular Simulation Framework
+(C) 2005-2014 Christopher Woods, Julien Michel
+
+Thanks for your interest in downloading and using Sire.
+
+In this directory you will find the Sire source core:
+
+corelib = source for the core Sire libraries
+python  = source for the python3 wrappers
+
+You will also find the build directories (build/corelib and
+build/python) in which you are encouraged to compile Sire.
+
+Full install instructions are provided in the INSTALL file.
+
+Sire is provided freely under the GPL (see the COPYING file) and
+comes with NO WARRANTY and NO GUARANTEES. Sire is an 
+experimental code and you should not rely on it for 
+any commercial work.
+
+If you want to know more about Sire, please visit the website
+at http://siremol.org
+
+If you want to learn a little on how to write Sire scripts,
+please take a look at the tutorial in corelib/docs/tutorial.
+
+If you want to learn the API, read the API docuentation at
+http://siremol.org/apidocs/sire
+
+Alternatively, look at the help attached to the executables
+in the sire.app/bin directory, e.g. after installing Sire, run
+
+sire.app/bin/waterswap --help
+
+to get help using the waterswap executable.
+
+If you need more information, then please get in contact using
+the links provided on the website (http://siremol.org)
+

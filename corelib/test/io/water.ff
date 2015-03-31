@@ -1,0 +1,55 @@
+########################################
+#
+# Charge/LJ parameters for TIP4P water
+#
+########################################
+
+mode info
+ljcombine arithmetic
+
+mode clj
+par 3000 OW 8  0.000  3.15365 0.1550  # O TIP4P Water
+par 3001 HW 1  0.520  0.00000 0.0000  # H TIP4P Water
+par 3002 ?? 0 -1.040  0.00000 0.0000  # M TIP4P Water
+
+par 3003 C4 6  0.000  3.73000 0.2940  # United atom methane
+
+########################################
+#
+# Solvent template for TIP4P
+#
+########################################
+
+mode template
+solvent T4P
+info translate 0.2 rotate 5.0
+atom O00 3000 3000
+atom H01 3001 3001
+atom H02 3001 3001
+atom M03 3002 3002
+
+########################################
+#
+# Solute template for TIP4P water
+# (no mutation into methane)
+#
+########################################
+
+mode template
+solute water to methane
+info translate 0.1 rotate 2.5
+
+#       M03
+#       |
+#       O00   W2M (water-2-methane)
+#      /  \
+#    H01  H02
+
+atom O00 W2M  3000 3000  DM3 DUM DM2 DUM DM1 DUM
+atom H01 W2M  3001 3001  O00 W2M DM3 DUM DM2 DUM
+atom H02 W2M  3001 3001  O00 W2M H01 W2M DM3 DUM
+atom M03 W2M  3002 3002  O00 W2M H01 W2M H02 W2M
+
+bond H01 W2M O00 W2M param 0 0
+bond H02 W2M O00 W2M param 0 0
+bond M03 W2M O00 W2M param 0 0

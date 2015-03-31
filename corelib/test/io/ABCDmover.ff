@@ -1,0 +1,40 @@
+mode clj
+# Energy is sum of coulomb and Lennard Jones terms
+#parameter atm proton-num charge(|e|) sigma(A) epsilon(kcal mol-1)
+par    1   OS    01       0.00        0.00     0.00 
+
+mode bond
+# U(r) = k(r-r0)**2
+#parameter k(kcal mol-1 A-2) r0(A) comment
+par     1    200.0      2.0 
+par     2     10.0      2.0
+
+mode angle
+par     1    100.0     120.0
+
+mode dihedral
+term   1   0.000   1.000   1.000   0.000 
+term   2   0.000   1.000   2.000   180.000 
+term   3   0.000   1.000   3.000   0.000 
+term   4   0.000   1.000   4.000   0.000 
+par    1      1       2       3       4
+atm    OS    OS    OS    OS     1 
+
+mode template
+solute ABCD
+info translate 0.0 rotate 0.0
+#
+#   DM1--DM2
+#        |
+#        DM3--A1--A2--A3--A4
+#
+atom A1 HA1 1 1  DM3 DUM DM2 DUM DM1 DUM
+atom A2 HA1 1 1  A1  HA1 DM3 DUM DM2 DUM
+atom A3 HA1 1 1  A2  HA1 A1  HA1 DM3 DUM
+atom A4 HA1 1 1  A3  HA1 A2  HA1 A1  HA1
+bond A2 HA1 A1 HA1 param 0 0
+bond A3 HA1 A2 HA1 param 0 0
+bond A4 HA1 A3 HA1 param 0 0
+#angle A3 HA1 A2 HA1 A1 HA1 flex 1.0 param 1 1
+#angle A4 HA1 A3 HA1 A2 HA1 flex 1.0 param 1 1
+dihedral A4 HA1 A3 HA1 A2 HA1 A1 HA1 flex 15.0 param 1 1

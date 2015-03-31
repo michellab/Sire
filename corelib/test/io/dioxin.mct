@@ -1,0 +1,27 @@
+%MCT-version_1.0
+info produced_by pdb2mct.py, and will be broken!
+
+molecule 1 dioxin
+residue 1 
+atom  C1  C   -1.861    3.121    0.290
+atom  C2  C   -2.830    2.280   -0.282
+atom  C3  C   -2.529    0.944   -0.573
+atom  C4  C   -1.251    0.462   -0.284
+atom  C5  C   -0.282    1.303    0.287
+atom  C6  C   -0.581    2.635    0.578
+atom  O1  O    1.007    0.874    0.596
+atom  C7  C    1.251   -0.462    0.285
+atom  C8  C    0.282   -1.303   -0.287
+atom  O2  O   -1.007   -0.874   -0.594
+atom  C9  C    0.581   -2.635   -0.579
+atom  C10 C    1.862   -3.120   -0.290
+atom  C11 C    2.830   -2.280    0.282
+atom  C12 C    2.529   -0.945    0.573
+atom  Cl1 Cl  -2.211    4.740    0.647
+atom  Cl2 Cl  -4.385    2.853   -0.636
+atom  Cl3 Cl   2.211   -4.739   -0.648
+atom  Cl4 Cl   4.384   -2.853    0.636
+atom  H1  H   -3.279    0.274   -1.021
+atom  H2  H    0.189    3.283    1.027
+atom  H3  H   -0.188   -3.283   -1.027
+atom  H4  H    3.279   -0.275    1.022

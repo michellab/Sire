@@ -1,0 +1,200 @@
+mode bond
+# U(r) = k(r-r0)**2
+#parameter k(kcal mol-1 A-2) r0(A) comment
+
+#atm atm1 atm2 parameter
+
+mode angle
+# U(theta) = k(theta-theta0)**2
+#parameter k(kcal mol-1 deg-2) theta0(deg) comment
+par  4990    71.2   121.4
+par  4991    71.2   121.4
+par  4992    64.2   112.1
+
+#atm atm1 atm2 parameter
+atm  c  ce os  4990
+atm  c2 ce os  4991
+atm  ce os c3  4992
+
+mode dihedral
+# U(phi) = k1*( 1.0 + k2*(cos[k3*phi + k4]) )
+#term k1(kcal mol-1) k2 k3 k4(deg) #comment
+term   4500   0.000   0.000   0.000   0.000 
+term   4501   0.000   1.000   1.000   0.000 
+term   4502   2.550   1.000   2.000   180.000 
+term   4503   0.000   1.000   3.000   0.000 
+term   4504   0.000   1.000   4.000   0.000 
+term   4505   0.000   0.000   0.000   0.000 
+term   4506   0.000   1.000   1.000   0.000 
+term   4507   2.550   1.000   2.000   180.000 
+term   4508   0.000   1.000   3.000   0.000 
+term   4509   0.000   1.000   4.000   0.000 
+#par  term1  term2 etc..  #comment
+par   4500   4500   4501   4502   4503   4504
+par   4501   4505   4506   4507   4508   4509
+#atm atm1 atm2 atm3 atm4 parameter #comment
+atm cc   cd   ca   ca    4500  
+atm ha   cd   ca   ca    4501  
+
+mode clj
+#parameter atm proton-num charge(|e|) sigma(A) epsilon(kcal mol-1)
+par  3000   o    08   -0.61348    2.95992    0.21000 
+par  3001   c    06    0.66845    3.39967    0.08600 
+par  3002   c3   06   -0.17633    3.39967    0.10940 
+par  3003   hc   01    0.05574    2.64953    0.01570 
+par  3004   hc   01    0.05574    2.64953    0.01570 
+par  3005   hc   01    0.05574    2.64953    0.01570 
+par  3006   n    07   -0.55168    3.25000    0.17000 
+par  3007   hn   01    0.29683    1.06908    0.01570 
+par  3008   c3   06    0.05062    3.39967    0.10940 
+par  3009   h1   01    0.11472    2.47135    0.01570 
+par  3010   c3   06    0.17840    3.39967    0.10940 
+par  3011   h1   01    0.05240    2.47135    0.01570 
+par  3012   oh   08   -0.60572    3.06647    0.21040 
+par  3013   ho   01    0.40719    0.00000    0.00000 
+par  3014   c2   06   -0.34875    3.39967    0.08600 
+par  3015   ha   01    0.15674    2.59964    0.01500 
+par  3016   ce   06    0.04700    3.39967    0.08600
+par  3017   c    06    0.93103    3.39967    0.08600
+par  3018   o    08   -0.82282    2.95992    0.21000
+par  3019   o    08   -0.78861    2.95992    0.21000
+par  3020   os   08   -0.32612    3.00001    0.17000
+par  3021   c3   06    0.13308    3.39967    0.10940
+par  3022   h1   01    0.05047    2.47135    0.01570
+par  3023   c3   06    0.12134    3.39967    0.10940
+par  3024   h1   01    0.03867    2.47135    0.01570
+par  3025   oh   08   -0.58283    3.06647    0.21040
+par  3026   ho   01    0.38995    0.00000    0.00000
+par  3027   c3   06    0.09270    3.39967    0.10940
+par  3028   oh   08   -0.64371    3.06647    0.21040
+par  3029   ho   01    0.48549    0.00000    0.00000
+par  3030   h1   01    0.07569    2.47135    0.01570
+par  3031   c3   06    0.12561    3.39967    0.10940
+par  3032   h1   01    0.03748    2.47135    0.01570
+par  3033   h1   01    0.03748    2.47135    0.01570
+par  3034   oh   08   -0.62092    3.06647    0.21040
+par  3035   ho   01    0.42241    0.00000    0.00000
+mode template
+solute dana 
+info translate 1.0 rotate 5.0
+atom   C1 DAN 3008 3008   DM3 DUM  DM2 DUM  DM1 DUM
+atom   C2 DAN 3010 3010   C1 DAN  DM3 DUM  DM2 DUM
+atom   C3 DAN 3021 3021   C1 DAN  C2 DAN  DM3 DUM
+atom   O4 DAN 3020 3020   C3 DAN  C2 DAN  C1 DAN
+atom   C5 DAN 3014 3014   C2 DAN  C3 DAN  C1 DAN
+atom   C6 DAN 3016 3016   C5 DAN  O4 DAN  C2 DAN
+atom   C7 DAN 3017 3017   C6 DAN  C5 DAN  O4 DAN
+atom   O8 DAN 3018 3018   C7 DAN  C6 DAN  C5 DAN
+atom   O9 DAN 3019 3019   C7 DAN  O8 DAN  C6 DAN
+atom  O10 DAN 3012 3012   C2 DAN  C1 DAN  C5 DAN
+atom  N11 DAN 3006 3006   C1 DAN  C2 DAN  C3 DAN
+atom  C12 DAN 3001 3001  N11 DAN  C1 DAN  C2 DAN
+atom  C13 DAN 3002 3002  C12 DAN N11 DAN  C1 DAN
+atom  O14 DAN 3000 3000  C12 DAN N11 DAN C13 DAN
+atom  C15 DAN 3023 3023   C3 DAN  O4 DAN  C1 DAN
+atom  C16 DAN 3027 3027  C15 DAN  C3 DAN  C1 DAN
+atom  C17 DAN 3031 3031  C16 DAN C15 DAN  C3 DAN
+atom  O18 DAN 3034 3034  C17 DAN C16 DAN C15 DAN
+atom  O19 DAN 3028 3028  C16 DAN C17 DAN C15 DAN
+atom  O20 DAN 3025 3025  C15 DAN C16 DAN  C3 DAN
+atom  H21 DAN 3026 3026  O20 DAN C15 DAN  C3 DAN
+atom  H22 DAN 3030 3030  C16 DAN C17 DAN C15 DAN
+atom  H23 DAN 3029 3029  O19 DAN C16 DAN C15 DAN
+atom  H24 DAN 3032 3032  C17 DAN O18 DAN C16 DAN
+atom  H25 DAN 3033 3033  C17 DAN O18 DAN H24 DAN
+atom  H26 DAN 3035 3035  O18 DAN C17 DAN C16 DAN
+atom  H27 DAN 3022 3022   C3 DAN  C1 DAN  O4 DAN
+atom  H28 DAN 3009 3009   C1 DAN  C2 DAN  C3 DAN
+atom  H29 DAN 3007 3007  N11 DAN C12 DAN  C1 DAN
+atom  H30 DAN 3003 3003  C13 DAN C12 DAN N11 DAN
+atom  H31 DAN 3004 3004  C13 DAN H30 DAN C12 DAN
+atom  H32 DAN 3005 3005  C13 DAN H30 DAN H31 DAN
+atom  H33 DAN 3013 3013  O10 DAN  C2 DAN  C1 DAN
+atom  H34 DAN 3011 3011   C2 DAN  C1 DAN  C5 DAN
+atom  H35 DAN 3015 3015   C5 DAN  C2 DAN  C6 DAN
+atom  H36 DAN 3024 3024  C15 DAN C16 DAN  C3 DAN
+bond   C1 DAN   C2 DAN
+bond   C3 DAN   C1 DAN
+bond   O4 DAN   C3 DAN
+bond   C5 DAN   C2 DAN
+bond   C6 DAN   C5 DAN
+bond   C6 DAN   O4 DAN
+bond   C7 DAN   C6 DAN
+bond   O8 DAN   C7 DAN
+bond   O9 DAN   C7 DAN
+bond  O10 DAN   C2 DAN
+bond  N11 DAN   C1 DAN
+bond  C12 DAN  N11 DAN
+bond  C13 DAN  C12 DAN
+bond  O14 DAN  C12 DAN
+bond  C15 DAN   C3 DAN
+bond  C16 DAN  C15 DAN 
+bond  C17 DAN  C16 DAN
+bond  O18 DAN  C17 DAN 
+bond  O19 DAN  C16 DAN 
+bond  O20 DAN  C15 DAN 
+bond  H21 DAN  O20 DAN 
+bond  H22 DAN  C16 DAN 
+bond  H23 DAN  O19 DAN 
+bond  H24 DAN  C17 DAN
+bond  H25 DAN  C17 DAN 
+bond  H26 DAN  O18 DAN 
+bond  H27 DAN   C3 DAN 
+bond  H28 DAN   C1 DAN 
+bond  H29 DAN  N11 DAN 
+bond  H30 DAN  C13 DAN 
+bond  H31 DAN  C13 DAN 
+bond  H32 DAN  C13 DAN 
+bond  H33 DAN  O10 DAN 
+bond  H34 DAN   C2 DAN 
+bond  H35 DAN   C5 DAN 
+bond  H36 DAN  C15 DAN 
+angle O8 DAN C7 DAN C6 DAN flex 0.50
+angle O9 DAN C7 DAN O8 DAN flex 0.50
+angle O10 DAN  C2 DAN  C1 DAN flex 0.50
+angle N11 DAN  C1 DAN  C2 DAN flex 0.50
+angle C12 DAN N11 DAN  C1 DAN flex 0.50
+angle C13 DAN C12 DAN N11 DAN flex 0.50
+angle O14 DAN C12 DAN N11 DAN flex 0.50
+angle C15 DAN  C3 DAN  O4 DAN flex 0.50
+angle C16 DAN C15 DAN  C3 DAN flex 0.50
+angle C17 DAN C16 DAN C15 DAN flex 0.50
+angle O18 DAN C17 DAN C16 DAN flex 0.50
+angle O19 DAN C16 DAN C17 DAN flex 0.50
+angle O20 DAN C15 DAN C16 DAN flex 0.50
+angle H21 DAN O20 DAN C15 DAN flex 0.50
+angle H22 DAN C16 DAN C17 DAN flex 0.50
+angle H23 DAN O19 DAN C16 DAN flex 0.50
+angle H24 DAN C17 DAN O18 DAN flex 0.50
+angle H25 DAN C17 DAN O18 DAN flex 0.50
+angle H26 DAN O18 DAN C17 DAN flex 0.50
+angle H27 DAN  C3 DAN  C1 DAN flex 0.50
+angle H28 DAN  C1 DAN  C2 DAN flex 0.50
+angle H29 DAN N11 DAN C12 DAN flex 0.50
+angle H30 DAN C13 DAN C12 DAN flex 0.50
+angle H31 DAN C13 DAN H30 DAN flex 0.50
+angle H32 DAN C13 DAN H30 DAN flex 0.50
+angle H33 DAN O10 DAN  C2 DAN flex 0.50
+angle H34 DAN  C2 DAN  C1 DAN flex 0.50
+angle H35 DAN  C5 DAN  C2 DAN flex 0.50
+angle H36 DAN C15 DAN C16 DAN flex 0.50			     
+dihedral  O8 DAN  C7 DAN  C6 DAN  C5 DAN flex 5
+dihedral O10 DAN  C2 DAN  C1 DAN  C5 DAN flex 5
+dihedral N11 DAN  C1 DAN  C2 DAN  C3 DAN flex 5
+dihedral C12 DAN N11 DAN  C1 DAN  C2 DAN flex 5
+dihedral C13 DAN C12 DAN N11 DAN  C1 DAN flex 5 
+dihedral C15 DAN  C3 DAN  O4 DAN  C1 DAN flex 5
+dihedral C16 DAN C15 DAN  C3 DAN  C1 DAN flex 5
+dihedral C17 DAN C16 DAN C15 DAN  C3 DAN flex 5
+dihedral O18 DAN C17 DAN C16 DAN C15 DAN flex 5
+dihedral O19 DAN C16 DAN C17 DAN C15 DAN flex 5
+dihedral O20 DAN C15 DAN C16 DAN  C3 DAN flex 5
+dihedral H21 DAN O20 DAN C15 DAN  C3 DAN flex 5
+dihedral H22 DAN C16 DAN C17 DAN C15 DAN flex 5
+dihedral H23 DAN O19 DAN C16 DAN C15 DAN flex 5
+dihedral H25 DAN C17 DAN O18 DAN H24 DAN flex 5
+dihedral H26 DAN O18 DAN C17 DAN C16 DAN flex 5
+dihedral H32 DAN C13 DAN H30 DAN H31 DAN flex 5
+dihedral H33 DAN O10 DAN  C2 DAN  C1 DAN flex 5
+dihedral H36 DAN C15 DAN C16 DAN  C3 DAN flex 5
+					 

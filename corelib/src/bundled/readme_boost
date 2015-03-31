@@ -1,0 +1,27 @@
+The boost_headers.tgz file is a tarball of boost 1.54
+
+This was generated using the "bcp" utility that comes with boost.
+
+To generate this file, download boost, cd into the boost source
+directory and then type;
+
+./bootstrap.sh
+
+cd tools/bcp/
+
+../../bjam
+
+This will create the "bcp" utility in the boost bin directory
+(on my mac, this is bin.v2/tools/bcp/darwin-4.2.1/release/link-static/bcp)
+
+I copy this file into my path.
+
+To generate the list of needed boost header files, type
+
+mkdir tmp
+bcp --scan /path/to/corelib/src/libs/*/* --boost=/path/to/boost_1_54_0/ ./tmp
+
+This will copy all of the header files into tmp/boost
+
+Simply tar this up and you have the file :-)
+

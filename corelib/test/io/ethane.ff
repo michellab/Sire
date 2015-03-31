@@ -1,0 +1,41 @@
+mode clj
+# Energy is sum of coulomb and Lennard Jones terms
+#parameter atm proton-num charge(|e|) sigma(A) epsilon(kcal mol-1)
+par  3001   HC    01      +0.031       2.6495   0.0157
+par  3002   CT    06      -0.093       3.3997   0.1094
+
+mode template
+solute ethane
+info translate 0.0 rotate 5.0
+#
+#                DM2--DM1
+#                |
+#             H2 DM3 H6
+#             | /    |
+#         H3--C1-----C5-H7
+#             |      |
+#             H4     H8
+#
+atom C01 ETH 3002 3002  DM3 DUM DM2 DUM DM1 DUM
+atom C05 ETH 3002 3002  C01 ETH DM3 DUM DM2 DUM
+atom H06 ETH 3001 3001  C05 ETH C01 ETH DM3 DUM
+atom H07 ETH 3001 3001  C05 ETH C01 ETH H06 ETH
+atom H08 ETH 3001 3001  C05 ETH C01 ETH H06 ETH
+atom H02 ETH 3001 3001  C01 ETH C05 ETH H06 ETH
+atom H03 ETH 3001 3001  C01 ETH C05 ETH H02 ETH
+atom H04 ETH 3001 3001  C01 ETH C05 ETH H02 ETH
+bond C05 ETH C01 ETH
+bond H06 ETH C05 ETH
+bond H07 ETH C05 ETH
+bond H08 ETH C05 ETH
+bond H02 ETH C01 ETH
+bond H03 ETH C01 ETH
+bond H04 ETH C01 ETH
+angle H06 ETH C05 ETH C01 ETH flex 0.5
+angle H07 ETH C05 ETH C01 ETH flex 0.5
+angle H08 ETH C05 ETH C01 ETH flex 0.5
+angle H02 ETH C01 ETH C05 ETH flex 0.5
+angle H03 ETH C01 ETH C05 ETH flex 0.5
+angle H04 ETH C01 ETH C05 ETH flex 0.5
+dihedral H02 ETH C01 ETH C05 ETH H06 ETH flex 15.0
+

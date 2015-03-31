@@ -1,0 +1,130 @@
+mode bond
+# U(r) = k(r-r0)**2
+#parameter k(kcal mol-1 A-2) r0(A) comment
+
+#atm atm1 atm2 parameter
+
+mode angle
+# U(theta) = k(theta-theta0)**2
+#parameter k(kcal mol-1 deg-2) theta0(deg) comment
+
+#atm atm1 atm2 parameter
+
+mode dihedral
+# U(phi) = k1*( 1.0 + k2*(cos[k3*phi + k4]) )
+#term k1(kcal mol-1) k2 k3 k4(deg) #comment
+#par  term1  term2 etc..  #comment
+
+#atm atm1 atm2 atm3 atm4 parameter #comment
+
+mode clj
+#parameter atm proton-num charge(|e|) sigma(A) epsilon(kcal mol-1)
+par  3000    c   06    0.57715    3.39967    0.08600 
+par  3001   c3   06   -0.29370    3.39967    0.10940 
+par  3002    c   06    0.57715    3.39967    0.08600 
+par  3003   hc   01    0.09935    2.64953    0.01570 
+par  3004   hc   01    0.09935    2.64953    0.01570 
+par  3005   c3   06   -0.18095    3.39967    0.10940 
+par  3006    o   08   -0.51665    2.95992    0.21000 
+par  3007   c3   06   -0.03770    3.39967    0.10940 
+par  3008   hc   01    0.07485    2.64953    0.01570 
+par  3009   hc   01    0.07485    2.64953    0.01570 
+par  3010   c3   06   -0.18095    3.39967    0.10940 
+par  3011   hc   01    0.07485    2.64953    0.01570 
+par  3012   hc   01    0.07485    2.64953    0.01570 
+par  3013    o   08   -0.51665    2.95992    0.21000 
+par  3014   c3   06   -0.09200    3.39967    0.10940 
+par  3015   c3   06   -0.09200    3.39967    0.10940 
+par  3016   hc   01    0.04303    2.64953    0.01570 
+par  3017   hc   01    0.04303    2.64953    0.01570 
+par  3018   hc   01    0.04303    2.64953    0.01570 
+par  3019   hc   01    0.04303    2.64953    0.01570 
+par  3020   hc   01    0.04303    2.64953    0.01570 
+par  3021   hc   01    0.04303    2.64953    0.01570 
+mode template
+solute DIM
+info translate 0.0 rotate 1.0
+atom   C1 DIM 3000 3000  DM3 DUM DM2 DUM DM1 DUM
+atom   C2 DIM 3001 3001   C1 DIM DM3 DUM DM2 DUM
+atom   C3 DIM 3002 3002   C2 DIM  C1 DIM DM3 DUM
+atom   H1 DIM 3003 3003   C2 DIM  C1 DIM  C3 DIM
+atom   H2 DIM 3004 3004   C2 DIM  C1 DIM  C3 DIM
+atom   C4 DIM 3005 3005   C3 DIM  C2 DIM  C1 DIM
+atom   O2 DIM 3006 3006   C3 DIM  C2 DIM  C4 DIM
+atom   C5 DIM 3007 3007   C4 DIM  C3 DIM  C2 DIM
+atom   H3 DIM 3008 3008   C4 DIM  C3 DIM  C5 DIM
+atom   H4 DIM 3009 3009   C4 DIM  C3 DIM  C5 DIM
+atom   C6 DIM 3010 3010   C5 DIM  C4 DIM  C3 DIM
+atom   H5 DIM 3011 3011   C6 DIM  C5 DIM  C1 DIM
+atom   H6 DIM 3012 3012   C6 DIM  C5 DIM  C1 DIM
+atom   O1 DIM 3013 3013   C1 DIM  C2 DIM  C6 DIM
+atom   C7 DIM 3014 3014   C5 DIM  C4 DIM  C6 DIM
+atom   C8 DIM 3015 3015   C5 DIM  C4 DIM  C6 DIM
+atom   H7 DIM 3016 3016   C7 DIM  C5 DIM  C4 DIM
+atom   H8 DIM 3017 3017   C7 DIM  C5 DIM  H7 DIM
+atom   H9 DIM 3018 3018   C7 DIM  C5 DIM  H7 DIM
+atom  H10 DIM 3019 3019   C8 DIM  C5 DIM  C4 DIM
+atom  H11 DIM 3020 3020   C8 DIM  C5 DIM H10 DIM
+atom  H12 DIM 3021 3021   C8 DIM  C5 DIM H10 DIM
+bond   H1 DIM   C2 DIM flex 0.005
+bond   H2 DIM   C2 DIM flex 0.005
+bond   C1 DIM   C2 DIM flex 0.005
+bond   O1 DIM   C1 DIM flex 0.005
+bond   C6 DIM   C1 DIM 
+bond   H5 DIM   C6 DIM flex 0.005
+bond   H6 DIM   C6 DIM flex 0.005
+bond   C5 DIM   C6 DIM flex 0.005
+bond   C7 DIM   C5 DIM flex 0.005
+bond   H7 DIM   C7 DIM flex 0.005
+bond   H8 DIM   C7 DIM flex 0.005
+bond   H9 DIM   C7 DIM flex 0.005
+bond   C8 DIM   C5 DIM flex 0.005
+bond  H10 DIM   C8 DIM flex 0.005
+bond  H11 DIM   C8 DIM flex 0.005
+bond  H12 DIM   C8 DIM flex 0.005
+bond   C4 DIM   C5 DIM flex 0.005
+bond   H3 DIM   C4 DIM flex 0.005
+bond   H4 DIM   C4 DIM flex 0.005
+bond   C3 DIM   C4 DIM flex 0.005
+bond   O2 DIM   C3 DIM flex 0.005
+bond   C3 DIM   C2 DIM flex 0.005
+angle C3 DIM C2 DIM C1 DIM flex 0.25
+angle H1 DIM C2 DIM C1 DIM flex 0.25
+angle H2 DIM C2 DIM C1 DIM flex 0.25
+angle C4 DIM C3 DIM C2 DIM flex 0.25
+angle O2 DIM C3 DIM C2 DIM flex 0.25
+angle C5 DIM C4 DIM C3 DIM flex 0.25
+angle H3 DIM C4 DIM C3 DIM flex 0.25
+angle H4 DIM C4 DIM C3 DIM flex 0.25
+angle C6 DIM C5 DIM C4 DIM flex 0.25
+angle H5 DIM C6 DIM C5 DIM flex 0.25 
+angle H6 DIM C6 DIM C5 DIM flex 0.25
+angle O1 DIM C1 DIM C2 DIM flex 0.25
+angle C7 DIM C5 DIM C4 DIM flex 0.25
+angle C8 DIM C5 DIM C4 DIM flex 0.25
+angle H7 DIM C7 DIM C5 DIM flex 0.25
+angle H8 DIM C7 DIM C5 DIM flex 0.25
+angle H9 DIM C7 DIM C5 DIM flex 0.25
+angle H10 DIM C8 DIM C5 DIM flex 0.25
+angle H11 DIM C8 DIM C5 DIM flex 0.25
+angle H12 DIM C8 DIM C5 DIM flex 0.25
+dihedral H1 DIM C2 DIM  C1 DIM  C3 DIM flex 0.25
+dihedral H2 DIM C2 DIM  C1 DIM  C3 DIM flex 0.25
+dihedral C4 DIM C3 DIM  C2 DIM  C1 DIM flex 0.25
+dihedral O2 DIM C3 DIM  C2 DIM  C4 DIM flex 0.25
+dihedral C5 DIM C4 DIM  C3 DIM  C2 DIM flex 0.25
+dihedral H3 DIM C4 DIM  C3 DIM  C5 DIM flex 0.25
+dihedral H4 DIM C4 DIM  C3 DIM  C5 DIM flex 0.25
+dihedral C6 DIM C5 DIM  C4 DIM  C3 DIM flex 0.25
+dihedral H5 DIM C6 DIM  C5 DIM  C1 DIM flex 0.25
+dihedral H6 DIM C6 DIM  C5 DIM  C1 DIM flex 0.25
+dihedral O1 DIM C1 DIM  C2 DIM  C6 DIM flex 0.25
+dihedral C7 DIM C5 DIM  C4 DIM  C6 DIM flex 0.25
+dihedral C8 DIM C5 DIM  C4 DIM  C6 DIM flex 0.25
+dihedral H7 DIM C7 DIM  C5 DIM  C4 DIM flex 15.0
+dihedral H8 DIM C7 DIM  C5 DIM  H7 DIM flex 0.25
+dihedral H9 DIM C7 DIM  C5 DIM  H7 DIM flex 0.25
+dihedral H10 DIM C8 DIM  C5 DIM  C4 DIM flex 15.0
+dihedral H11 DIM C8 DIM  C5 DIM H10 DIM flex 0.25
+dihedral H12 DIM C8 DIM  C5 DIM H10 DIM flex 0.25
+

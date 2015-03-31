@@ -1,0 +1,59 @@
+This is a file that you can use to test if you MPI implementation
+is capable of supporting Sire. cmake will automatically compile
+this file when it compiles the rest of Sire, and it will compile
+it with the same MPI options as it compiles SireCluster 
+(the Sire library that depends on MPI).
+
+The resulting executable is called "test_mpi". Try running this
+executable. If it prints out;
+
+This implementation of MPI can support Sire
+
+then your MPI implementation will be able to support Sire. Any
+problems are thus caused by me, and you should report a bug
+via the Sire users mailing list (or the google code site).
+
+However, if it prints out something else, e.g.
+
+MPI multi-thread support is not available!
+
+then this shows that one of the features needed by Sire is not
+provided by your MPI implementation. In this case, you will need
+to install a different implementation (or talk to your cluster
+administrator). Sire requires a fully compliant MPI-2 installation, 
+which provides;
+
+MPI::Init_thread  (with MPI_THREAD_MULTIPLE)
+MPI::Query_thread
+MPI::Is_initialized
+MPI::Is_finalized
+
+(don't worry if you don't understand what this means - just 
+pass this information on to your cluster administrator, or
+get them to email us via the Sire users mailing list)
+
+To help test the MPI implementation, you can compile
+the test_mpi executable manually. To do this, type;
+
+mpic++ test_mpi.cpp -o test_mpi
+
+(mpic++ is the name of your MPI C++ compiler - sometimes
+it isn't called mpic++. It may be called mpicxx, or mpiCC).
+
+If you are installing MPI yourself, then compiling the above
+test_mpi.cpp file manually yourself is a good way to test
+if you have installed MPI correctly.
+
+If you are working with a cluster administrator, then give
+them a copy of test_mpi.cpp and ask them if they can 
+compile it. 
+
+Every cluster seems to have its own MPI implementation
+and configuration, so unfortunately, there are likely
+to be many problems. I am here to help, so please drop
+an email to the Sire users mailing list if you run
+into problems and are unable to solve them by manually
+compilig test_mpi.cpp
+
+Good luck ;-)
+

@@ -1,0 +1,58 @@
+mode clj
+# Energy is sum of coulomb and Lennard Jones terms
+#parameter atm proton-num charge(|e|) sigma(A) epsilon(kcal mol-1)
+par  3001   HC    01      +0.031       2.6495   0.0157
+par  3002   CT    06      -0.093       3.3997   0.1094
+par  3010   CT    06      +0.117       3.3997   0.1094
+par  3011   H1    01      +0.028       2.4714   0.0157
+par  3012   OH    08      -0.598       3.0665   0.2104
+par  3013   HO    01      +0.397       0.0000   0.0000
+mode template
+solute ethane2methanol
+info translate 0.0 rotate 5.0
+#
+#                DM2--DM1
+#                |
+#             H2 DM3 H6(H6)
+#             | /    |
+#         H3--C1-----C5(O5)--H7(D7)
+#             |      |
+#             H4     H8(D8)
+#
+atom C01 E2M 3002 3010  DM3 DUM DM2 DUM DM1 DUM
+atom C05 E2M 3002 3012  C01 E2M DM3 DUM DM2 DUM
+atom H06 E2M 3001 3013  C05 E2M C01 E2M DM3 DUM
+atom H07 E2M 3001  100  C05 E2M C01 E2M H06 E2M
+atom H08 E2M 3001  100  C05 E2M C01 E2M H06 E2M
+atom H02 E2M 3001 3011  C01 E2M C05 E2M H06 E2M
+atom H03 E2M 3001 3011  C01 E2M C05 E2M H02 E2M
+atom H04 E2M 3001 3011  C01 E2M C05 E2M H02 E2M
+bond C05 E2M C01 E2M param 0 0
+bond H06 E2M C05 E2M param 0 0
+bond H07 E2M C05 E2M param 0 0
+bond H08 E2M C05 E2M param 0 0
+bond H02 E2M C01 E2M param 0 0
+bond H03 E2M C01 E2M param 0 0
+bond H04 E2M C01 E2M param 0 0
+angle H06 E2M C05 E2M C01 E2M flex 0.5
+angle H07 E2M C05 E2M C01 E2M param 0 0
+angle H08 E2M C05 E2M C01 E2M param 0 0
+angle H06 E2M C05 E2M H07 E2M param 0 0
+angle H06 E2M C05 E2M H08 E2M param 0 0
+angle H07 E2M C05 E2M H08 E2M param 0 0
+angle H07 E2M C05 E2M C01 E2M flex 0.5
+angle H08 E2M C05 E2M C01 E2M flex 0.5
+angle H02 E2M C01 E2M C05 E2M flex 0.5
+angle H03 E2M C01 E2M C05 E2M flex 0.5
+angle H04 E2M C01 E2M C05 E2M flex 0.5
+dihedral H02 E2M C01 E2M C05 E2M H06 E2M flex 15.0
+dihedral H07 E2M C05 E2M C01 E2M H02 E2M param 0 0
+dihedral H07 E2M C05 E2M C01 E2M H03 E2M param 0 0
+dihedral H07 E2M C05 E2M C01 E2M H04 E2M param 0 0
+dihedral H08 E2M C05 E2M C01 E2M H02 E2M param 0 0
+dihedral H08 E2M C05 E2M C01 E2M H03 E2M param 0 0
+dihedral H08 E2M C05 E2M C01 E2M H04 E2M param 0 0
+variable C05 E2M bond 1.526 1.410
+variable H06 E2M bond 1.090 0.960
+variable H07 E2M bond 1.090 0.200
+variable H08 E2M bond 1.090 0.200

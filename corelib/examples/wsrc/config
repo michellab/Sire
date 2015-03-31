@@ -1,0 +1,16 @@
+
+# Specify the lambda values to use
+lambda values = [ 0.001, 0.999 ]
+
+fixed points = True
+
+# Specify the number of RETI iterations
+nmoves = 10
+
+# Specify the number of Monte Carlo moves to perform per RETI iteration
+nsubmoves = 100
+
+# Specify the number of equilibration moves to perform when setting up the system
+nequilmoves = 500
+
+energy monitor frequency = 10

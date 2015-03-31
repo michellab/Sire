@@ -1,0 +1,46 @@
+
+// Auto-generated file - do not edit
+
+#ifndef SIRE_CONFIG_H
+#define SIRE_CONFIG_H
+
+#cmakedefine HAVE_UNISTD_H 1
+
+#cmakedefine HAVE_LSEEK64 1
+
+#cmakedefine HAVE_MALLOC_MALLOC_H 1
+
+#cmakedefine HAVE_MSTATS 1
+
+#cmakedefine HAVE_CUBEROOT 1
+
+#cmakedefine HAVE_MALLINFO 1
+
+#cmakedefine HAVE_SYSCTL 1
+
+#cmakedefine HAVE_BACKTRACE 1
+
+#cmakedefine HAVE_EXECINFO_H 1
+
+/** Defines that show how much of the C++11 standard is supported
+    by this compiler */
+#cmakedefine HAS_CXX11_AUTO 1
+#cmakedefine HAS_CXX11_NULLPTR 1
+#cmakedefine HAS_CXX11_LAMBDA 1
+#cmakedefine HAS_CXX11_STATIC_ASSERT 1
+#cmakedefine HAS_CXX11_RVALUE_REFERENCES 1
+#cmakedefine HAS_CXX11_DECLTYPE 1
+#cmakedefine HAS_CXX11_CSTDINT_H 1
+#cmakedefine HAS_CXX11_LONG_LONG 1
+#cmakedefine HAS_CXX11_VARIADIC_TEMPLATES 1
+#cmakedefine HAS_CXX11_CONSTEXPR 1
+#cmakedefine HAS_CXX11_SIZEOF_MEMBER 1
+#cmakedefine HAS_CXX11_FUNC 1
+
+/** Paths used to locate the Sire libraries etc. */
+#define SIRE_BIN_DIR "@SIRE_BIN@"
+#define SIRE_LIBS_DIR "@SIRE_LIBS@"
+#define SIRE_BUNDLED_LIBS_DIR "@SIRE_BUNDLED_LIBS@"
+#define SIRE_SHARE_DIR "@SIRE_SHARE@"
+
+#endif
