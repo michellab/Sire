@@ -7,6 +7,8 @@
 
 namespace bp = boost::python;
 
+#include "SireMaths/align.h"
+
 #include "SireMaths/axisset.h"
 
 #include "SireMaths/matrix.h"
@@ -30,6 +32,8 @@ namespace bp = boost::python;
 #include "atomcoords.h"
 
 #include "atommatcher.h"
+
+#include "atommatchers.h"
 
 #include "bondid.h"
 

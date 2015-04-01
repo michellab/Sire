@@ -19,6 +19,7 @@
 #include "qmpotential.h"
 #include "qmprogram.h"
 #include "sgto.h"
+#include "sqm.h"
 
 #endif
 

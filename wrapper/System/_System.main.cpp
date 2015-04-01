@@ -95,6 +95,8 @@
 
 #include "TripleDistanceComponent.pypp.hpp"
 
+#include "VolMapMonitor.pypp.hpp"
+
 #include "WindowedComponent.pypp.hpp"
 
 namespace bp = boost::python;
@@ -201,6 +203,8 @@ BOOST_PYTHON_MODULE(_System){
     register_SystemMonitors_class();
 
     register_TripleDistanceComponent_class();
+
+    register_VolMapMonitor_class();
 
     register_SireSystem_properties();
 

@@ -7,19 +7,33 @@
 
 namespace bp = boost::python;
 
+#include "SireError/errors.h"
+
 #include "SireStream/datastream.h"
+
+#include "SireUnits/units.h"
+
+#include "atomidentifier.h"
 
 #include "atomidx.h"
 
 #include "atommatcher.h"
 
+#include "atommatchers.h"
+
 #include "atomname.h"
+
+#include "atomselection.h"
+
+#include "evaluator.h"
 
 #include "moleculeinfodata.h"
 
 #include "moleculeview.h"
 
-#include "atommatcher.h"
+#include "tostring.h"
+
+#include "atommatchers.h"
 
 SireMol::AtomNameMatcher __copy__(const SireMol::AtomNameMatcher &other){ return SireMol::AtomNameMatcher(other); }
 
@@ -34,17 +48,6 @@ void register_AtomNameMatcher_class(){
         AtomNameMatcher_exposer_t AtomNameMatcher_exposer = AtomNameMatcher_exposer_t( "AtomNameMatcher", bp::init< >() );
         bp::scope AtomNameMatcher_scope( AtomNameMatcher_exposer );
         AtomNameMatcher_exposer.def( bp::init< SireMol::AtomNameMatcher const & >(( bp::arg("arg0") )) );
-        { //::SireMol::AtomNameMatcher::match
-        
-            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::AtomNameMatcher::*match_function_type )( ::SireMol::MoleculeInfoData const &,::SireMol::MoleculeInfoData const & ) const;
-            match_function_type match_function_value( &::SireMol::AtomNameMatcher::match );
-            
-            AtomNameMatcher_exposer.def( 
-                "match"
-                , match_function_value
-                , ( bp::arg("molinfo0"), bp::arg("molinfo1") ) );
-        
-        }
         AtomNameMatcher_exposer.def( bp::self != bp::self );
         { //::SireMol::AtomNameMatcher::operator=
         
@@ -59,6 +62,16 @@ void register_AtomNameMatcher_class(){
         
         }
         AtomNameMatcher_exposer.def( bp::self == bp::self );
+        { //::SireMol::AtomNameMatcher::toString
+        
+            typedef ::QString ( ::SireMol::AtomNameMatcher::*toString_function_type )(  ) const;
+            toString_function_type toString_function_value( &::SireMol::AtomNameMatcher::toString );
+            
+            AtomNameMatcher_exposer.def( 
+                "toString"
+                , toString_function_value );
+        
+        }
         { //::SireMol::AtomNameMatcher::typeName
         
             typedef char const * ( *typeName_function_type )(  );
@@ -67,17 +80,6 @@ void register_AtomNameMatcher_class(){
             AtomNameMatcher_exposer.def( 
                 "typeName"
                 , typeName_function_value );
-        
-        }
-        { //::SireMol::AtomNameMatcher::unchangedAtomOrder
-        
-            typedef bool ( ::SireMol::AtomNameMatcher::*unchangedAtomOrder_function_type )( ::SireMol::MoleculeInfoData const &,::SireMol::MoleculeInfoData const & ) const;
-            unchangedAtomOrder_function_type unchangedAtomOrder_function_value( &::SireMol::AtomNameMatcher::unchangedAtomOrder );
-            
-            AtomNameMatcher_exposer.def( 
-                "unchangedAtomOrder"
-                , unchangedAtomOrder_function_value
-                , ( bp::arg("molinfo0"), bp::arg("molinfo1") ) );
         
         }
         { //::SireMol::AtomNameMatcher::what

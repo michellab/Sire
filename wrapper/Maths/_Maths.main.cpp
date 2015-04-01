@@ -75,6 +75,8 @@
 
 #include "Torsion.pypp.hpp"
 
+#include "Transform.pypp.hpp"
+
 #include "Triangle.pypp.hpp"
 
 #include "TrigArray2D_Matrix_.pypp.hpp"
@@ -179,6 +181,8 @@ BOOST_PYTHON_MODULE(_Maths){
     register_Sphere_class();
 
     register_Torsion_class();
+
+    register_Transform_class();
 
     register_Triangle_class();
 

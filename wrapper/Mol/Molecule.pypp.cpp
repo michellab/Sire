@@ -275,6 +275,7 @@ void register_Molecule_class(){
                 , number_function_value );
         
         }
+        Molecule_exposer.def( bp::self != bp::self );
         { //::SireMol::Molecule::operator=
         
             typedef ::SireMol::Molecule & ( ::SireMol::Molecule::*assign_function_type )( ::SireMol::Molecule const & ) ;
@@ -287,6 +288,7 @@ void register_Molecule_class(){
                 , bp::return_self< >() );
         
         }
+        Molecule_exposer.def( bp::self == bp::self );
         { //::SireMol::Molecule::properties
         
             typedef ::SireBase::Properties const & ( ::SireMol::Molecule::*properties_function_type )(  ) const;

@@ -291,16 +291,6 @@ void register_OpenMMFrEnergyST_class(){
                 , getFriction_function_value );
         
         }
-        { //::SireMove::OpenMMFrEnergyST::getGradient
-        
-            typedef double ( ::SireMove::OpenMMFrEnergyST::*getGradient_function_type )(  ) ;
-            getGradient_function_type getGradient_function_value( &::SireMove::OpenMMFrEnergyST::getGradient );
-            
-            OpenMMFrEnergyST_exposer.def( 
-                "getGradient"
-                , getGradient_function_value );
-        
-        }
         { //::SireMove::OpenMMFrEnergyST::getGradients
         
             typedef ::QVector< double > ( ::SireMove::OpenMMFrEnergyST::*getGradients_function_type )(  ) ;

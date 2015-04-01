@@ -444,35 +444,35 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::update
         
-            typedef void ( ::SireMol::MoleculeGroups::*update_function_type )( ::SireMol::MoleculeData const & ) ;
+            typedef void ( ::SireMol::MoleculeGroups::*update_function_type )( ::SireMol::MoleculeData const &,bool ) ;
             update_function_type update_function_value( &::SireMol::MoleculeGroups::update );
             
             MoleculeGroups_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("moldata") ) );
+                , ( bp::arg("moldata"), bp::arg("auto_commit")=(bool)(true) ) );
         
         }
         { //::SireMol::MoleculeGroups::update
         
-            typedef void ( ::SireMol::MoleculeGroups::*update_function_type )( ::SireMol::Molecules const & ) ;
+            typedef void ( ::SireMol::MoleculeGroups::*update_function_type )( ::SireMol::Molecules const &,bool ) ;
             update_function_type update_function_value( &::SireMol::MoleculeGroups::update );
             
             MoleculeGroups_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules"), bp::arg("auto_commit")=(bool)(true) ) );
         
         }
         { //::SireMol::MoleculeGroups::update
         
-            typedef void ( ::SireMol::MoleculeGroups::*update_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireMol::MoleculeGroups::*update_function_type )( ::SireMol::MoleculeGroup const &,bool ) ;
             update_function_type update_function_value( &::SireMol::MoleculeGroups::update );
             
             MoleculeGroups_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup"), bp::arg("auto_commit")=(bool)(true) ) );
         
         }
         MoleculeGroups_exposer.staticmethod( "typeName" );

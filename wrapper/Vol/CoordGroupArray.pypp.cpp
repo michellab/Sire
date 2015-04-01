@@ -11,6 +11,8 @@ namespace bp = boost::python;
 
 #include "SireError/errors.h"
 
+#include "SireMaths/align.h"
+
 #include "SireMaths/axisset.h"
 
 #include "SireMaths/matrix.h"
@@ -340,6 +342,28 @@ void register_CoordGroupArray_class(){
             CoordGroupArray_exposer.def( 
                 "toString"
                 , toString_function_value );
+        
+        }
+        { //::SireVol::CoordGroupArray::transform
+        
+            typedef void ( ::SireVol::CoordGroupArray::*transform_function_type )( ::SireMaths::Transform const & ) ;
+            transform_function_type transform_function_value( &::SireVol::CoordGroupArray::transform );
+            
+            CoordGroupArray_exposer.def( 
+                "transform"
+                , transform_function_value
+                , ( bp::arg("t") ) );
+        
+        }
+        { //::SireVol::CoordGroupArray::transform
+        
+            typedef void ( ::SireVol::CoordGroupArray::*transform_function_type )( ::quint32,::SireMaths::Transform const & ) ;
+            transform_function_type transform_function_value( &::SireVol::CoordGroupArray::transform );
+            
+            CoordGroupArray_exposer.def( 
+                "transform"
+                , transform_function_value
+                , ( bp::arg("i"), bp::arg("t") ) );
         
         }
         { //::SireVol::CoordGroupArray::translate

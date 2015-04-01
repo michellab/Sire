@@ -43,6 +43,8 @@ namespace bp = boost::python;
 
 #include "viewsofmol.h"
 
+#include "SireMaths/align.h"
+
 #include "SireMaths/axisset.h"
 
 #include "SireMaths/matrix.h"
@@ -66,6 +68,8 @@ namespace bp = boost::python;
 #include "atomcoords.h"
 
 #include "atommatcher.h"
+
+#include "atommatchers.h"
 
 #include "bondid.h"
 
@@ -98,6 +102,58 @@ void register_Mover_ViewsOfMol__class(){
         Mover_ViewsOfMol__exposer.def( bp::init< SireMol::ViewsOfMol const & >(( bp::arg("view") )) );
         Mover_ViewsOfMol__exposer.def( bp::init< SireMol::ViewsOfMol const &, SireMol::AtomSelection const & >(( bp::arg("view"), bp::arg("movable_atoms") )) );
         Mover_ViewsOfMol__exposer.def( bp::init< SireMol::Mover< SireMol::ViewsOfMol > const & >(( bp::arg("other") )) );
+        { //::SireMol::Mover< SireMol::ViewsOfMol >::align
+        
+            typedef SireMol::Mover< SireMol::ViewsOfMol > exported_class_t;
+            typedef ::SireMol::Mover< SireMol::ViewsOfMol > & ( ::SireMol::Mover< SireMol::ViewsOfMol >::*align_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
+            align_function_type align_function_value( &::SireMol::Mover< SireMol::ViewsOfMol >::align );
+            
+            Mover_ViewsOfMol__exposer.def( 
+                "align"
+                , align_function_value
+                , ( bp::arg("other"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::return_self< >() );
+        
+        }
+        { //::SireMol::Mover< SireMol::ViewsOfMol >::align
+        
+            typedef SireMol::Mover< SireMol::ViewsOfMol > exported_class_t;
+            typedef ::SireMol::Mover< SireMol::ViewsOfMol > & ( ::SireMol::Mover< SireMol::ViewsOfMol >::*align_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
+            align_function_type align_function_value( &::SireMol::Mover< SireMol::ViewsOfMol >::align );
+            
+            Mover_ViewsOfMol__exposer.def( 
+                "align"
+                , align_function_value
+                , ( bp::arg("other"), bp::arg("map0"), bp::arg("map1") )
+                , bp::return_self< >() );
+        
+        }
+        { //::SireMol::Mover< SireMol::ViewsOfMol >::align
+        
+            typedef SireMol::Mover< SireMol::ViewsOfMol > exported_class_t;
+            typedef ::SireMol::Mover< SireMol::ViewsOfMol > & ( ::SireMol::Mover< SireMol::ViewsOfMol >::*align_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
+            align_function_type align_function_value( &::SireMol::Mover< SireMol::ViewsOfMol >::align );
+            
+            Mover_ViewsOfMol__exposer.def( 
+                "align"
+                , align_function_value
+                , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::return_self< >() );
+        
+        }
+        { //::SireMol::Mover< SireMol::ViewsOfMol >::align
+        
+            typedef SireMol::Mover< SireMol::ViewsOfMol > exported_class_t;
+            typedef ::SireMol::Mover< SireMol::ViewsOfMol > & ( ::SireMol::Mover< SireMol::ViewsOfMol >::*align_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
+            align_function_type align_function_value( &::SireMol::Mover< SireMol::ViewsOfMol >::align );
+            
+            Mover_ViewsOfMol__exposer.def( 
+                "align"
+                , align_function_value
+                , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map0"), bp::arg("map1") )
+                , bp::return_self< >() );
+        
+        }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::alignTo
         
             typedef SireMol::Mover< SireMol::ViewsOfMol > exported_class_t;
@@ -378,6 +434,19 @@ void register_Mover_ViewsOfMol__class(){
             Mover_ViewsOfMol__exposer.def( 
                 "toString"
                 , toString_function_value );
+        
+        }
+        { //::SireMol::Mover< SireMol::ViewsOfMol >::transform
+        
+            typedef SireMol::Mover< SireMol::ViewsOfMol > exported_class_t;
+            typedef ::SireMol::Mover< SireMol::ViewsOfMol > & ( ::SireMol::Mover< SireMol::ViewsOfMol >::*transform_function_type )( ::SireMaths::Transform const &,::SireBase::PropertyMap const & ) ;
+            transform_function_type transform_function_value( &::SireMol::Mover< SireMol::ViewsOfMol >::transform );
+            
+            Mover_ViewsOfMol__exposer.def( 
+                "transform"
+                , transform_function_value
+                , ( bp::arg("transform"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::return_self< >() );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::translate

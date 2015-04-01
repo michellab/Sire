@@ -59,6 +59,8 @@
 
 #include "QMProgram.pypp.hpp"
 
+#include "SQM.pypp.hpp"
+
 #include "SS_GTO.pypp.hpp"
 
 #include "SS_GTOs.pypp.hpp"
@@ -135,6 +137,8 @@ BOOST_PYTHON_MODULE(_Squire){
     register_QMFF_class();
 
     register_QMMMFF_class();
+
+    register_SQM_class();
 
     register_SS_GTO_class();
 

@@ -41,15 +41,23 @@
 
 #include "AtomID.pypp.hpp"
 
+#include "AtomIDMatcher.pypp.hpp"
+
 #include "AtomIdx.pypp.hpp"
 
 #include "AtomIdxMatcher.pypp.hpp"
 
 #include "AtomIntProperty.pypp.hpp"
 
+#include "AtomMCSMatcher.pypp.hpp"
+
 #include "AtomMasses.pypp.hpp"
 
+#include "AtomMatchInverter.pypp.hpp"
+
 #include "AtomMatcher.pypp.hpp"
+
+#include "AtomMultiMatcher.pypp.hpp"
 
 #include "AtomName.pypp.hpp"
 
@@ -60,6 +68,8 @@
 #include "AtomPolarisabilities.pypp.hpp"
 
 #include "AtomProp.pypp.hpp"
+
+#include "AtomResultMatcher.pypp.hpp"
 
 #include "AtomSelection.pypp.hpp"
 
@@ -275,6 +285,8 @@
 
 #include "MolViewProperty.pypp.hpp"
 
+#include "MolWithResID.pypp.hpp"
+
 #include "Molecule.pypp.hpp"
 
 #include "MoleculeBeading.pypp.hpp"
@@ -441,9 +453,13 @@
 
 #include "ViewsOfMol.pypp.hpp"
 
+#include "VolumeMap.pypp.hpp"
+
 #include "WeightFunction.pypp.hpp"
 
 #include "Within.pypp.hpp"
+
+#include "_Mol_free_functions.pypp.hpp"
 
 namespace bp = boost::python;
 
@@ -558,11 +574,19 @@ BOOST_PYTHON_MODULE(_Mol){
 
     register_AtomEditor_class();
 
-    register_AtomIdx_class();
-
     register_AtomMatcher_class();
 
+    register_AtomIDMatcher_class();
+
+    register_AtomIdx_class();
+
     register_AtomIdxMatcher_class();
+
+    register_AtomMCSMatcher_class();
+
+    register_AtomMatchInverter_class();
+
+    register_AtomMultiMatcher_class();
 
     register_AtomName_class();
 
@@ -597,6 +621,8 @@ BOOST_PYTHON_MODULE(_Mol){
     register_AtomFloatProperty_class();
 
     register_AtomIntProperty_class();
+
+    register_AtomResultMatcher_class();
 
     register_AtomSelection_class();
 
@@ -782,6 +808,8 @@ BOOST_PYTHON_MODULE(_Mol){
 
     register_MolStructureEditor_class();
 
+    register_MolWithResID_class();
+
     register_MoleculeBeading_class();
 
     register_MoleculeGroup_class();
@@ -904,6 +932,10 @@ BOOST_PYTHON_MODULE(_Mol){
 
     register_UserBeading_class();
 
+    register_VolumeMap_class();
+
+    register_Within_class();
+
     register_SireMol_properties();
 
     bp::implicitly_convertible< SireMol::AtomID, SireMol::AtomIdentifier >();
@@ -924,6 +956,6 @@ BOOST_PYTHON_MODULE(_Mol){
 
     bp::implicitly_convertible< SireMol::MoleculeView, SireMol::PartialMolecule >();
 
-    register_Within_class();
+    register_free_functions();
 }
 

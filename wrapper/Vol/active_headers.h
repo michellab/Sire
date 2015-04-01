@@ -9,6 +9,7 @@
 #include "combinespaces.h"
 #include "coordgroup.h"
 #include "grid.h"
+#include "gridinfo.h"
 #include "patching.h"
 #include "periodicbox.h"
 #include "space.h"

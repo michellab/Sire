@@ -18,6 +18,7 @@ def fix_Table(c):
 
 def fix_ForceFields(c):
    c.add_declaration_code("#include \"forcetable.h\"")
+   c.add_declaration_code("#include \"energytable.h\"")
 
 special_code = { "SireFF::ForceTable" : fix_Table,
                  "SireFF::FieldTable" : fix_Table,

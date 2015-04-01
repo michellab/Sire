@@ -8,11 +8,25 @@
 
 namespace bp = boost::python;
 
+#include "SireError/errors.h"
+
 #include "SireMaths/quaternion.h"
+
+#include "SireMaths/sphere.h"
 
 #include "SireMaths/vectorproperty.h"
 
+#include "SireMol/atomcoords.h"
+
+#include "SireMol/atomelements.h"
+
+#include "SireMol/atommasses.h"
+
+#include "SireMol/atomselection.h"
+
 #include "SireMol/molecule.h"
+
+#include "SireMol/moleculedata.h"
 
 #include "SireMol/partialmolecule.h"
 
@@ -66,6 +80,48 @@ void register_RigidBodyMC_class(){
                 "centerOfRotation"
                 , centerOfRotation_function_value
                 , bp::return_value_policy<bp::clone_const_reference>() );
+        
+        }
+        { //::SireMove::RigidBodyMC::disableReflectionSphere
+        
+            typedef void ( ::SireMove::RigidBodyMC::*disableReflectionSphere_function_type )(  ) ;
+            disableReflectionSphere_function_type disableReflectionSphere_function_value( &::SireMove::RigidBodyMC::disableReflectionSphere );
+            
+            RigidBodyMC_exposer.def( 
+                "disableReflectionSphere"
+                , disableReflectionSphere_function_value );
+        
+        }
+        { //::SireMove::RigidBodyMC::disableReflectionVolume
+        
+            typedef void ( ::SireMove::RigidBodyMC::*disableReflectionVolume_function_type )(  ) ;
+            disableReflectionVolume_function_type disableReflectionVolume_function_value( &::SireMove::RigidBodyMC::disableReflectionVolume );
+            
+            RigidBodyMC_exposer.def( 
+                "disableReflectionVolume"
+                , disableReflectionVolume_function_value );
+        
+        }
+        { //::SireMove::RigidBodyMC::extract
+        
+            typedef ::SireMol::Molecules ( ::SireMove::RigidBodyMC::*extract_function_type )( ::SireMol::Molecules const & ) const;
+            extract_function_type extract_function_value( &::SireMove::RigidBodyMC::extract );
+            
+            RigidBodyMC_exposer.def( 
+                "extract"
+                , extract_function_value
+                , ( bp::arg("molecules") ) );
+        
+        }
+        { //::SireMove::RigidBodyMC::extract
+        
+            typedef ::SireMol::Molecules ( ::SireMove::RigidBodyMC::*extract_function_type )( ::SireMol::Molecules const &,::SireUnits::Dimension::Length ) const;
+            extract_function_type extract_function_value( &::SireMove::RigidBodyMC::extract );
+            
+            RigidBodyMC_exposer.def( 
+                "extract"
+                , extract_function_value
+                , ( bp::arg("molecules"), bp::arg("buffer") ) );
         
         }
         { //::SireMove::RigidBodyMC::maximumRotation
@@ -124,6 +180,16 @@ void register_RigidBodyMC_class(){
         
         }
         RigidBodyMC_exposer.def( bp::self == bp::self );
+        { //::SireMove::RigidBodyMC::reflectedVolume
+        
+            typedef double ( ::SireMove::RigidBodyMC::*reflectedVolume_function_type )(  ) const;
+            reflectedVolume_function_type reflectedVolume_function_value( &::SireMove::RigidBodyMC::reflectedVolume );
+            
+            RigidBodyMC_exposer.def( 
+                "reflectedVolume"
+                , reflectedVolume_function_value );
+        
+        }
         { //::SireMove::RigidBodyMC::reflectionSphereCenter
         
             typedef ::SireMaths::Vector ( ::SireMove::RigidBodyMC::*reflectionSphereCenter_function_type )(  ) const;
@@ -134,6 +200,28 @@ void register_RigidBodyMC_class(){
                 , reflectionSphereCenter_function_value );
         
         }
+        { //::SireMove::RigidBodyMC::reflectionSphereCenter
+        
+            typedef ::SireMaths::Vector ( ::SireMove::RigidBodyMC::*reflectionSphereCenter_function_type )( ::SireMol::MolNum ) const;
+            reflectionSphereCenter_function_type reflectionSphereCenter_function_value( &::SireMove::RigidBodyMC::reflectionSphereCenter );
+            
+            RigidBodyMC_exposer.def( 
+                "reflectionSphereCenter"
+                , reflectionSphereCenter_function_value
+                , ( bp::arg("molnum") ) );
+        
+        }
+        { //::SireMove::RigidBodyMC::reflectionSphereCenter
+        
+            typedef ::SireMaths::Vector ( ::SireMove::RigidBodyMC::*reflectionSphereCenter_function_type )( ::SireMol::MoleculeView const & ) const;
+            reflectionSphereCenter_function_type reflectionSphereCenter_function_value( &::SireMove::RigidBodyMC::reflectionSphereCenter );
+            
+            RigidBodyMC_exposer.def( 
+                "reflectionSphereCenter"
+                , reflectionSphereCenter_function_value
+                , ( bp::arg("molview") ) );
+        
+        }
         { //::SireMove::RigidBodyMC::reflectionSphereRadius
         
             typedef ::SireUnits::Dimension::Length ( ::SireMove::RigidBodyMC::*reflectionSphereRadius_function_type )(  ) const;
@@ -142,6 +230,58 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "reflectionSphereRadius"
                 , reflectionSphereRadius_function_value );
+        
+        }
+        { //::SireMove::RigidBodyMC::reflectionSphereRadius
+        
+            typedef ::SireUnits::Dimension::Length ( ::SireMove::RigidBodyMC::*reflectionSphereRadius_function_type )( ::SireMol::MolNum ) const;
+            reflectionSphereRadius_function_type reflectionSphereRadius_function_value( &::SireMove::RigidBodyMC::reflectionSphereRadius );
+            
+            RigidBodyMC_exposer.def( 
+                "reflectionSphereRadius"
+                , reflectionSphereRadius_function_value
+                , ( bp::arg("molnum") ) );
+        
+        }
+        { //::SireMove::RigidBodyMC::reflectionSphereRadius
+        
+            typedef ::SireUnits::Dimension::Length ( ::SireMove::RigidBodyMC::*reflectionSphereRadius_function_type )( ::SireMol::MoleculeView const & ) const;
+            reflectionSphereRadius_function_type reflectionSphereRadius_function_value( &::SireMove::RigidBodyMC::reflectionSphereRadius );
+            
+            RigidBodyMC_exposer.def( 
+                "reflectionSphereRadius"
+                , reflectionSphereRadius_function_value
+                , ( bp::arg("molview") ) );
+        
+        }
+        { //::SireMove::RigidBodyMC::reflectionVolume
+        
+            typedef ::QVector< SireMaths::Sphere > ( ::SireMove::RigidBodyMC::*reflectionVolume_function_type )(  ) const;
+            reflectionVolume_function_type reflectionVolume_function_value( &::SireMove::RigidBodyMC::reflectionVolume );
+            
+            RigidBodyMC_exposer.def( 
+                "reflectionVolume"
+                , reflectionVolume_function_value );
+        
+        }
+        { //::SireMove::RigidBodyMC::reflectionVolumePoints
+        
+            typedef ::QVector< SireMaths::Vector > ( ::SireMove::RigidBodyMC::*reflectionVolumePoints_function_type )(  ) const;
+            reflectionVolumePoints_function_type reflectionVolumePoints_function_value( &::SireMove::RigidBodyMC::reflectionVolumePoints );
+            
+            RigidBodyMC_exposer.def( 
+                "reflectionVolumePoints"
+                , reflectionVolumePoints_function_value );
+        
+        }
+        { //::SireMove::RigidBodyMC::reflectionVolumeRadius
+        
+            typedef ::SireUnits::Dimension::Length ( ::SireMove::RigidBodyMC::*reflectionVolumeRadius_function_type )(  ) const;
+            reflectionVolumeRadius_function_type reflectionVolumeRadius_function_value( &::SireMove::RigidBodyMC::reflectionVolumeRadius );
+            
+            RigidBodyMC_exposer.def( 
+                "reflectionVolumeRadius"
+                , reflectionVolumeRadius_function_value );
         
         }
         { //::SireMove::RigidBodyMC::sampler
@@ -208,6 +348,61 @@ void register_RigidBodyMC_class(){
                 "setReflectionSphere"
                 , setReflectionSphere_function_value
                 , ( bp::arg("sphere_center"), bp::arg("sphere_radius") ) );
+        
+        }
+        { //::SireMove::RigidBodyMC::setReflectionSphere
+        
+            typedef void ( ::SireMove::RigidBodyMC::*setReflectionSphere_function_type )( ::SireMol::MolNum,::SireMaths::Vector,::SireUnits::Dimension::Length ) ;
+            setReflectionSphere_function_type setReflectionSphere_function_value( &::SireMove::RigidBodyMC::setReflectionSphere );
+            
+            RigidBodyMC_exposer.def( 
+                "setReflectionSphere"
+                , setReflectionSphere_function_value
+                , ( bp::arg("molnum"), bp::arg("sphere_center"), bp::arg("sphere_radius") ) );
+        
+        }
+        { //::SireMove::RigidBodyMC::setReflectionSphere
+        
+            typedef void ( ::SireMove::RigidBodyMC::*setReflectionSphere_function_type )( ::SireMol::MoleculeView const &,::SireMaths::Vector,::SireUnits::Dimension::Length ) ;
+            setReflectionSphere_function_type setReflectionSphere_function_value( &::SireMove::RigidBodyMC::setReflectionSphere );
+            
+            RigidBodyMC_exposer.def( 
+                "setReflectionSphere"
+                , setReflectionSphere_function_value
+                , ( bp::arg("molview"), bp::arg("sphere_center"), bp::arg("sphere_radius") ) );
+        
+        }
+        { //::SireMove::RigidBodyMC::setReflectionVolume
+        
+            typedef void ( ::SireMove::RigidBodyMC::*setReflectionVolume_function_type )( ::QVector< SireMaths::Vector > const &,::SireUnits::Dimension::Length ) ;
+            setReflectionVolume_function_type setReflectionVolume_function_value( &::SireMove::RigidBodyMC::setReflectionVolume );
+            
+            RigidBodyMC_exposer.def( 
+                "setReflectionVolume"
+                , setReflectionVolume_function_value
+                , ( bp::arg("points"), bp::arg("radius") ) );
+        
+        }
+        { //::SireMove::RigidBodyMC::setReflectionVolume
+        
+            typedef void ( ::SireMove::RigidBodyMC::*setReflectionVolume_function_type )( ::SireMol::MoleculeView const &,::SireUnits::Dimension::Length,bool,::SireBase::PropertyMap const & ) ;
+            setReflectionVolume_function_type setReflectionVolume_function_value( &::SireMove::RigidBodyMC::setReflectionVolume );
+            
+            RigidBodyMC_exposer.def( 
+                "setReflectionVolume"
+                , setReflectionVolume_function_value
+                , ( bp::arg("molecule"), bp::arg("radius"), bp::arg("heavy_atoms_only"), bp::arg("map")=SireBase::PropertyMap() ) );
+        
+        }
+        { //::SireMove::RigidBodyMC::setReflectionVolume
+        
+            typedef void ( ::SireMove::RigidBodyMC::*setReflectionVolume_function_type )( ::SireMol::MoleculeView const &,::SireUnits::Dimension::Length,::SireBase::PropertyMap const & ) ;
+            setReflectionVolume_function_type setReflectionVolume_function_value( &::SireMove::RigidBodyMC::setReflectionVolume );
+            
+            RigidBodyMC_exposer.def( 
+                "setReflectionVolume"
+                , setReflectionVolume_function_value
+                , ( bp::arg("molecule"), bp::arg("radius"), bp::arg("map")=SireBase::PropertyMap() ) );
         
         }
         { //::SireMove::RigidBodyMC::setSampler
@@ -323,6 +518,38 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "usesReflectionMoves"
                 , usesReflectionMoves_function_value );
+        
+        }
+        { //::SireMove::RigidBodyMC::usesReflectionMoves
+        
+            typedef bool ( ::SireMove::RigidBodyMC::*usesReflectionMoves_function_type )( ::SireMol::MolNum ) const;
+            usesReflectionMoves_function_type usesReflectionMoves_function_value( &::SireMove::RigidBodyMC::usesReflectionMoves );
+            
+            RigidBodyMC_exposer.def( 
+                "usesReflectionMoves"
+                , usesReflectionMoves_function_value
+                , ( bp::arg("molnum") ) );
+        
+        }
+        { //::SireMove::RigidBodyMC::usesReflectionMoves
+        
+            typedef bool ( ::SireMove::RigidBodyMC::*usesReflectionMoves_function_type )( ::SireMol::MoleculeView const & ) const;
+            usesReflectionMoves_function_type usesReflectionMoves_function_value( &::SireMove::RigidBodyMC::usesReflectionMoves );
+            
+            RigidBodyMC_exposer.def( 
+                "usesReflectionMoves"
+                , usesReflectionMoves_function_value
+                , ( bp::arg("molview") ) );
+        
+        }
+        { //::SireMove::RigidBodyMC::usesReflectionVolume
+        
+            typedef bool ( ::SireMove::RigidBodyMC::*usesReflectionVolume_function_type )(  ) const;
+            usesReflectionVolume_function_type usesReflectionVolume_function_value( &::SireMove::RigidBodyMC::usesReflectionVolume );
+            
+            RigidBodyMC_exposer.def( 
+                "usesReflectionVolume"
+                , usesReflectionVolume_function_value );
         
         }
         RigidBodyMC_exposer.staticmethod( "typeName" );

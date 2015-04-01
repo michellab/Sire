@@ -10,6 +10,8 @@ namespace bp = boost::python;
 
 #include "SireBase/booleanproperty.h"
 
+#include "SireBase/errors.h"
+
 #include "SireBase/lengthproperty.h"
 
 #include "SireError/errors.h"
@@ -114,9 +116,41 @@ void register_InterFF_class(){
                 , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
+        { //::SireMM::InterFF::cljFunction
+        
+            typedef ::SireMM::CLJFunction const & ( ::SireMM::InterFF::*cljFunction_function_type )( ::QString ) const;
+            cljFunction_function_type cljFunction_function_value( &::SireMM::InterFF::cljFunction );
+            
+            InterFF_exposer.def( 
+                "cljFunction"
+                , cljFunction_function_value
+                , ( bp::arg("key") )
+                , bp::return_value_policy<bp::clone_const_reference>() );
+        
+        }
+        { //::SireMM::InterFF::cljFunctionKeys
+        
+            typedef ::QStringList ( ::SireMM::InterFF::*cljFunctionKeys_function_type )(  ) const;
+            cljFunctionKeys_function_type cljFunctionKeys_function_value( &::SireMM::InterFF::cljFunctionKeys );
+            
+            InterFF_exposer.def( 
+                "cljFunctionKeys"
+                , cljFunctionKeys_function_value );
+        
+        }
+        { //::SireMM::InterFF::cljFunctions
+        
+            typedef ::QHash< QString, SireBase::PropPtr< SireMM::CLJFunction > > ( ::SireMM::InterFF::*cljFunctions_function_type )(  ) const;
+            cljFunctions_function_type cljFunctions_function_value( &::SireMM::InterFF::cljFunctions );
+            
+            InterFF_exposer.def( 
+                "cljFunctions"
+                , cljFunctions_function_value );
+        
+        }
         { //::SireMM::InterFF::components
         
-            typedef ::SireMM::CLJComponent const & ( ::SireMM::InterFF::*components_function_type )(  ) const;
+            typedef ::SireMM::MultiCLJComponent const & ( ::SireMM::InterFF::*components_function_type )(  ) const;
             components_function_type components_function_value( &::SireMM::InterFF::components );
             
             InterFF_exposer.def( 
@@ -146,6 +180,26 @@ void register_InterFF_class(){
                 , disableGrid_function_value );
         
         }
+        { //::SireMM::InterFF::disableParallelCalculation
+        
+            typedef void ( ::SireMM::InterFF::*disableParallelCalculation_function_type )(  ) ;
+            disableParallelCalculation_function_type disableParallelCalculation_function_value( &::SireMM::InterFF::disableParallelCalculation );
+            
+            InterFF_exposer.def( 
+                "disableParallelCalculation"
+                , disableParallelCalculation_function_value );
+        
+        }
+        { //::SireMM::InterFF::disableReproducibleCalculation
+        
+            typedef void ( ::SireMM::InterFF::*disableReproducibleCalculation_function_type )(  ) ;
+            disableReproducibleCalculation_function_type disableReproducibleCalculation_function_value( &::SireMM::InterFF::disableReproducibleCalculation );
+            
+            InterFF_exposer.def( 
+                "disableReproducibleCalculation"
+                , disableReproducibleCalculation_function_value );
+        
+        }
         { //::SireMM::InterFF::enableGrid
         
             typedef void ( ::SireMM::InterFF::*enableGrid_function_type )(  ) ;
@@ -154,6 +208,26 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "enableGrid"
                 , enableGrid_function_value );
+        
+        }
+        { //::SireMM::InterFF::enableParallelCalculation
+        
+            typedef void ( ::SireMM::InterFF::*enableParallelCalculation_function_type )(  ) ;
+            enableParallelCalculation_function_type enableParallelCalculation_function_value( &::SireMM::InterFF::enableParallelCalculation );
+            
+            InterFF_exposer.def( 
+                "enableParallelCalculation"
+                , enableParallelCalculation_function_value );
+        
+        }
+        { //::SireMM::InterFF::enableReproducibleCalculation
+        
+            typedef void ( ::SireMM::InterFF::*enableReproducibleCalculation_function_type )(  ) ;
+            enableReproducibleCalculation_function_type enableReproducibleCalculation_function_value( &::SireMM::InterFF::enableReproducibleCalculation );
+            
+            InterFF_exposer.def( 
+                "enableReproducibleCalculation"
+                , enableReproducibleCalculation_function_value );
         
         }
         { //::SireMM::InterFF::fixedOnly
@@ -168,7 +242,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::grid
         
-            typedef ::SireMM::GridInfo ( ::SireMM::InterFF::*grid_function_type )(  ) const;
+            typedef ::SireVol::GridInfo ( ::SireMM::InterFF::*grid_function_type )(  ) const;
             grid_function_type grid_function_value( &::SireMM::InterFF::grid );
             
             InterFF_exposer.def( 
@@ -204,6 +278,16 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "mustNowRecalculateFromScratch"
                 , mustNowRecalculateFromScratch_function_value );
+        
+        }
+        { //::SireMM::InterFF::nCLJFunctions
+        
+            typedef int ( ::SireMM::InterFF::*nCLJFunctions_function_type )(  ) const;
+            nCLJFunctions_function_type nCLJFunctions_function_value( &::SireMM::InterFF::nCLJFunctions );
+            
+            InterFF_exposer.def( 
+                "nCLJFunctions"
+                , nCLJFunctions_function_value );
         
         }
         { //::SireMM::InterFF::needsAccepting
@@ -253,6 +337,27 @@ void register_InterFF_class(){
                 , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
+        { //::SireMM::InterFF::removeAllCLJFunctions
+        
+            typedef void ( ::SireMM::InterFF::*removeAllCLJFunctions_function_type )(  ) ;
+            removeAllCLJFunctions_function_type removeAllCLJFunctions_function_value( &::SireMM::InterFF::removeAllCLJFunctions );
+            
+            InterFF_exposer.def( 
+                "removeAllCLJFunctions"
+                , removeAllCLJFunctions_function_value );
+        
+        }
+        { //::SireMM::InterFF::removeCLJFunctionAt
+        
+            typedef void ( ::SireMM::InterFF::*removeCLJFunctionAt_function_type )( ::QString ) ;
+            removeCLJFunctionAt_function_type removeCLJFunctionAt_function_value( &::SireMM::InterFF::removeCLJFunctionAt );
+            
+            InterFF_exposer.def( 
+                "removeCLJFunctionAt"
+                , removeCLJFunctionAt_function_value
+                , ( bp::arg("key") ) );
+        
+        }
         { //::SireMM::InterFF::setCLJFunction
         
             typedef void ( ::SireMM::InterFF::*setCLJFunction_function_type )( ::SireMM::CLJFunction const & ) ;
@@ -262,6 +367,17 @@ void register_InterFF_class(){
                 "setCLJFunction"
                 , setCLJFunction_function_value
                 , ( bp::arg("cljfunc") ) );
+        
+        }
+        { //::SireMM::InterFF::setCLJFunction
+        
+            typedef void ( ::SireMM::InterFF::*setCLJFunction_function_type )( ::QString,::SireMM::CLJFunction const & ) ;
+            setCLJFunction_function_type setCLJFunction_function_value( &::SireMM::InterFF::setCLJFunction );
+            
+            InterFF_exposer.def( 
+                "setCLJFunction"
+                , setCLJFunction_function_value
+                , ( bp::arg("key"), bp::arg("cljfunc") ) );
         
         }
         { //::SireMM::InterFF::setFixedAtoms
@@ -352,6 +468,28 @@ void register_InterFF_class(){
                 , ( bp::arg("on") ) );
         
         }
+        { //::SireMM::InterFF::setUseParallelCalculation
+        
+            typedef void ( ::SireMM::InterFF::*setUseParallelCalculation_function_type )( bool ) ;
+            setUseParallelCalculation_function_type setUseParallelCalculation_function_value( &::SireMM::InterFF::setUseParallelCalculation );
+            
+            InterFF_exposer.def( 
+                "setUseParallelCalculation"
+                , setUseParallelCalculation_function_value
+                , ( bp::arg("on") ) );
+        
+        }
+        { //::SireMM::InterFF::setUseReproducibleCalculation
+        
+            typedef void ( ::SireMM::InterFF::*setUseReproducibleCalculation_function_type )( bool ) ;
+            setUseReproducibleCalculation_function_type setUseReproducibleCalculation_function_value( &::SireMM::InterFF::setUseReproducibleCalculation );
+            
+            InterFF_exposer.def( 
+                "setUseReproducibleCalculation"
+                , setUseReproducibleCalculation_function_value
+                , ( bp::arg("on") ) );
+        
+        }
         { //::SireMM::InterFF::typeName
         
             typedef char const * ( *typeName_function_type )(  );
@@ -370,6 +508,26 @@ void register_InterFF_class(){
             InterFF_exposer.def( 
                 "usesGrid"
                 , usesGrid_function_value );
+        
+        }
+        { //::SireMM::InterFF::usesParallelCalculation
+        
+            typedef bool ( ::SireMM::InterFF::*usesParallelCalculation_function_type )(  ) const;
+            usesParallelCalculation_function_type usesParallelCalculation_function_value( &::SireMM::InterFF::usesParallelCalculation );
+            
+            InterFF_exposer.def( 
+                "usesParallelCalculation"
+                , usesParallelCalculation_function_value );
+        
+        }
+        { //::SireMM::InterFF::usesReproducibleCalculation
+        
+            typedef bool ( ::SireMM::InterFF::*usesReproducibleCalculation_function_type )(  ) const;
+            usesReproducibleCalculation_function_type usesReproducibleCalculation_function_value( &::SireMM::InterFF::usesReproducibleCalculation );
+            
+            InterFF_exposer.def( 
+                "usesReproducibleCalculation"
+                , usesReproducibleCalculation_function_value );
         
         }
         { //::SireMM::InterFF::what

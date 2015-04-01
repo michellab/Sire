@@ -240,6 +240,17 @@ void register_ForceTable_class(){
                 , ( bp::arg("force") ) );
         
         }
+        { //::SireFF::ForceTable::setTable
+        
+            typedef void ( ::SireFF::ForceTable::*setTable_function_type )( ::SireMol::MolNum,::SireFF::MolForceTable & ) ;
+            setTable_function_type setTable_function_value( &::SireFF::ForceTable::setTable );
+            
+            ForceTable_exposer.def( 
+                "setTable"
+                , setTable_function_value
+                , ( bp::arg("molnum"), bp::arg("table") ) );
+        
+        }
         { //::SireFF::ForceTable::subtract
         
             typedef void ( ::SireFF::ForceTable::*subtract_function_type )( ::SireFF::ForceTable const & ) ;

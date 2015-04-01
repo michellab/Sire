@@ -11,6 +11,8 @@ namespace bp = boost::python;
 
 #include "SireError/errors.h"
 
+#include "SireMaths/align.h"
+
 #include "SireMaths/axisset.h"
 
 #include "SireMaths/matrix.h"
@@ -352,6 +354,39 @@ void register_CoordGroupArrayArray_class(){
             CoordGroupArrayArray_exposer.def( 
                 "toString"
                 , toString_function_value );
+        
+        }
+        { //::SireVol::CoordGroupArrayArray::transform
+        
+            typedef void ( ::SireVol::CoordGroupArrayArray::*transform_function_type )( ::SireMaths::Transform const & ) ;
+            transform_function_type transform_function_value( &::SireVol::CoordGroupArrayArray::transform );
+            
+            CoordGroupArrayArray_exposer.def( 
+                "transform"
+                , transform_function_value
+                , ( bp::arg("t") ) );
+        
+        }
+        { //::SireVol::CoordGroupArrayArray::transform
+        
+            typedef void ( ::SireVol::CoordGroupArrayArray::*transform_function_type )( ::quint32,::SireMaths::Transform const & ) ;
+            transform_function_type transform_function_value( &::SireVol::CoordGroupArrayArray::transform );
+            
+            CoordGroupArrayArray_exposer.def( 
+                "transform"
+                , transform_function_value
+                , ( bp::arg("i"), bp::arg("t") ) );
+        
+        }
+        { //::SireVol::CoordGroupArrayArray::transform
+        
+            typedef void ( ::SireVol::CoordGroupArrayArray::*transform_function_type )( ::quint32,::quint32,::SireMaths::Transform const & ) ;
+            transform_function_type transform_function_value( &::SireVol::CoordGroupArrayArray::transform );
+            
+            CoordGroupArrayArray_exposer.def( 
+                "transform"
+                , transform_function_value
+                , ( bp::arg("i"), bp::arg("j"), bp::arg("t") ) );
         
         }
         { //::SireVol::CoordGroupArrayArray::translate

@@ -29,6 +29,30 @@ void register_IntraGroupSoftCLJFF_class(){
         bp::scope IntraGroupSoftCLJFF_scope( IntraGroupSoftCLJFF_exposer );
         IntraGroupSoftCLJFF_exposer.def( bp::init< QString const & >(( bp::arg("name") )) );
         IntraGroupSoftCLJFF_exposer.def( bp::init< SireFF::Intra2B2G3DFF< SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > > const & >(( bp::arg("other") )) );
+        { //::SireFF::Intra2B2G3DFF< SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > >::energy
+        
+            typedef SireFF::Intra2B2G3DFF< SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > > exported_class_t;
+            typedef void ( ::SireFF::Intra2B2G3DFF< SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > >::*energy_function_type )( ::SireFF::EnergyTable &,double ) ;
+            energy_function_type energy_function_value( &::SireFF::Intra2B2G3DFF< SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > >::energy );
+            
+            IntraGroupSoftCLJFF_exposer.def( 
+                "energy"
+                , energy_function_value
+                , ( bp::arg("energytable"), bp::arg("scale_energy")=1 ) );
+        
+        }
+        { //::SireFF::Intra2B2G3DFF< SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > >::energy
+        
+            typedef SireFF::Intra2B2G3DFF< SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > > exported_class_t;
+            typedef void ( ::SireFF::Intra2B2G3DFF< SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > >::*energy_function_type )( ::SireFF::EnergyTable &,::SireCAS::Symbol const &,double ) ;
+            energy_function_type energy_function_value( &::SireFF::Intra2B2G3DFF< SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > >::energy );
+            
+            IntraGroupSoftCLJFF_exposer.def( 
+                "energy"
+                , energy_function_value
+                , ( bp::arg("energytable"), bp::arg("symbol"), bp::arg("scale_energy")=1 ) );
+        
+        }
         { //::SireFF::Intra2B2G3DFF< SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > >::field
         
             typedef SireFF::Intra2B2G3DFF< SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > > exported_class_t;

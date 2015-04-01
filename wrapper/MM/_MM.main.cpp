@@ -61,9 +61,13 @@
 
 #include "CLJDelta.pypp.hpp"
 
+#include "CLJExtractor.pypp.hpp"
+
 #include "CLJFunction.pypp.hpp"
 
 #include "CLJGrid.pypp.hpp"
+
+#include "CLJGroup.pypp.hpp"
 
 #include "CLJIntraFunction.pypp.hpp"
 
@@ -131,10 +135,6 @@
 
 #include "GridFF2.pypp.hpp"
 
-#include "GridIndex.pypp.hpp"
-
-#include "GridInfo.pypp.hpp"
-
 #include "GroupInternalParameters.pypp.hpp"
 
 #include "HarmonicSwitchingFunction.pypp.hpp"
@@ -162,6 +162,8 @@
 #include "InterGroupCoulombFF.pypp.hpp"
 
 #include "InterGroupCoulombFFBase.pypp.hpp"
+
+#include "InterGroupFF.pypp.hpp"
 
 #include "InterGroupLJFF.pypp.hpp"
 
@@ -248,6 +250,8 @@
 #include "LJProbe.pypp.hpp"
 
 #include "LJScaleFactor.pypp.hpp"
+
+#include "MultiCLJComponent.pypp.hpp"
 
 #include "NoCutoff.pypp.hpp"
 
@@ -480,7 +484,11 @@ BOOST_PYTHON_MODULE(_MM){
 
     register_CLJDelta_class();
 
+    register_CLJExtractor_class();
+
     register_CLJGrid_class();
+
+    register_CLJGroup_class();
 
     register_CLJIntraFunction_class();
 
@@ -536,10 +544,6 @@ BOOST_PYTHON_MODULE(_MM){
 
     register_GridFF2_class();
 
-    register_GridIndex_class();
-
-    register_GridInfo_class();
-
     register_GroupInternalParameters_class();
 
     register_HarmonicSwitchingFunction_class();
@@ -551,6 +555,8 @@ BOOST_PYTHON_MODULE(_MM){
     register_ImproperSymbols_class();
 
     register_InterFF_class();
+
+    register_InterGroupFF_class();
 
     register_InternalComponent_class();
 
@@ -585,6 +591,8 @@ BOOST_PYTHON_MODULE(_MM){
     register_LJPerturbation_class();
 
     register_LJProbe_class();
+
+    register_MultiCLJComponent_class();
 
     register_NoCutoff_class();
 

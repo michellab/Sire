@@ -7,9 +7,17 @@
 
 namespace bp = boost::python;
 
+#include "SireError/errors.h"
+
 #include "SireStream/datastream.h"
 
+#include "rangenerator.h"
+
 #include "sphere.h"
+
+#include <QDebug>
+
+#include <QElapsedTimer>
 
 #include "sphere.h"
 
@@ -17,7 +25,7 @@ SireMaths::Sphere __copy__(const SireMaths::Sphere &other){ return SireMaths::Sp
 
 #include "Qt/qdatastream.hpp"
 
-const char* pvt_get_name(const SireMaths::Sphere&){ return "SireMaths::Sphere";}
+#include "Helpers/str.hpp"
 
 void register_Sphere_class(){
 
@@ -37,6 +45,83 @@ void register_Sphere_class(){
                 "center"
                 , center_function_value
                 , bp::return_value_policy< bp::copy_const_reference >() );
+        
+        }
+        { //::SireMaths::Sphere::combinedVolume
+        
+            typedef double ( *combinedVolume_function_type )( ::QVector< SireMaths::Sphere > const & );
+            combinedVolume_function_type combinedVolume_function_value( &::SireMaths::Sphere::combinedVolume );
+            
+            Sphere_exposer.def( 
+                "combinedVolume"
+                , combinedVolume_function_value
+                , ( bp::arg("spheres") ) );
+        
+        }
+        { //::SireMaths::Sphere::combinedVolumeMC
+        
+            typedef double ( *combinedVolumeMC_function_type )( ::QVector< SireMaths::Sphere > const &,::qint64 );
+            combinedVolumeMC_function_type combinedVolumeMC_function_value( &::SireMaths::Sphere::combinedVolumeMC );
+            
+            Sphere_exposer.def( 
+                "combinedVolumeMC"
+                , combinedVolumeMC_function_value
+                , ( bp::arg("spheres"), bp::arg("nsamples")=(long long int)(-0x00000000000000001) ) );
+        
+        }
+        { //::SireMaths::Sphere::contains
+        
+            typedef bool ( ::SireMaths::Sphere::*contains_function_type )( ::SireMaths::Vector const & ) const;
+            contains_function_type contains_function_value( &::SireMaths::Sphere::contains );
+            
+            Sphere_exposer.def( 
+                "contains"
+                , contains_function_value
+                , ( bp::arg("point") ) );
+        
+        }
+        { //::SireMaths::Sphere::contains
+        
+            typedef bool ( ::SireMaths::Sphere::*contains_function_type )( ::SireMaths::Sphere const & ) const;
+            contains_function_type contains_function_value( &::SireMaths::Sphere::contains );
+            
+            Sphere_exposer.def( 
+                "contains"
+                , contains_function_value
+                , ( bp::arg("other") ) );
+        
+        }
+        { //::SireMaths::Sphere::intersectionVolume
+        
+            typedef double ( ::SireMaths::Sphere::*intersectionVolume_function_type )( ::SireMaths::Sphere const & ) const;
+            intersectionVolume_function_type intersectionVolume_function_value( &::SireMaths::Sphere::intersectionVolume );
+            
+            Sphere_exposer.def( 
+                "intersectionVolume"
+                , intersectionVolume_function_value
+                , ( bp::arg("other") ) );
+        
+        }
+        { //::SireMaths::Sphere::intersectionVolume
+        
+            typedef double ( ::SireMaths::Sphere::*intersectionVolume_function_type )( ::SireMaths::Sphere const &,::SireMaths::Sphere const & ) const;
+            intersectionVolume_function_type intersectionVolume_function_value( &::SireMaths::Sphere::intersectionVolume );
+            
+            Sphere_exposer.def( 
+                "intersectionVolume"
+                , intersectionVolume_function_value
+                , ( bp::arg("other0"), bp::arg("other1") ) );
+        
+        }
+        { //::SireMaths::Sphere::intersects
+        
+            typedef bool ( ::SireMaths::Sphere::*intersects_function_type )( ::SireMaths::Sphere const & ) const;
+            intersects_function_type intersects_function_value( &::SireMaths::Sphere::intersects );
+            
+            Sphere_exposer.def( 
+                "intersects"
+                , intersects_function_value
+                , ( bp::arg("other") ) );
         
         }
         Sphere_exposer.def( bp::self != bp::self );
@@ -95,6 +180,37 @@ void register_Sphere_class(){
                 , ( bp::arg("radius") ) );
         
         }
+        { //::SireMaths::Sphere::surfaceArea
+        
+            typedef double ( ::SireMaths::Sphere::*surfaceArea_function_type )(  ) const;
+            surfaceArea_function_type surfaceArea_function_value( &::SireMaths::Sphere::surfaceArea );
+            
+            Sphere_exposer.def( 
+                "surfaceArea"
+                , surfaceArea_function_value );
+        
+        }
+        { //::SireMaths::Sphere::toString
+        
+            typedef ::QString ( ::SireMaths::Sphere::*toString_function_type )(  ) const;
+            toString_function_type toString_function_value( &::SireMaths::Sphere::toString );
+            
+            Sphere_exposer.def( 
+                "toString"
+                , toString_function_value );
+        
+        }
+        { //::SireMaths::Sphere::translate
+        
+            typedef ::SireMaths::Sphere ( ::SireMaths::Sphere::*translate_function_type )( ::SireMaths::Vector const & ) const;
+            translate_function_type translate_function_value( &::SireMaths::Sphere::translate );
+            
+            Sphere_exposer.def( 
+                "translate"
+                , translate_function_value
+                , ( bp::arg("delta") ) );
+        
+        }
         { //::SireMaths::Sphere::typeName
         
             typedef char const * ( *typeName_function_type )(  );
@@ -103,6 +219,16 @@ void register_Sphere_class(){
             Sphere_exposer.def( 
                 "typeName"
                 , typeName_function_value );
+        
+        }
+        { //::SireMaths::Sphere::volume
+        
+            typedef double ( ::SireMaths::Sphere::*volume_function_type )(  ) const;
+            volume_function_type volume_function_value( &::SireMaths::Sphere::volume );
+            
+            Sphere_exposer.def( 
+                "volume"
+                , volume_function_value );
         
         }
         { //::SireMaths::Sphere::what
@@ -115,6 +241,8 @@ void register_Sphere_class(){
                 , what_function_value );
         
         }
+        Sphere_exposer.staticmethod( "combinedVolume" );
+        Sphere_exposer.staticmethod( "combinedVolumeMC" );
         Sphere_exposer.staticmethod( "typeName" );
         Sphere_exposer.def( "__copy__", &__copy__);
         Sphere_exposer.def( "__deepcopy__", &__copy__);
@@ -123,8 +251,8 @@ void register_Sphere_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Sphere_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMaths::Sphere >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
-        Sphere_exposer.def( "__str__", &pvt_get_name);
-        Sphere_exposer.def( "__repr__", &pvt_get_name);
+        Sphere_exposer.def( "__str__", &__str__< ::SireMaths::Sphere > );
+        Sphere_exposer.def( "__repr__", &__str__< ::SireMaths::Sphere > );
     }
 
 }

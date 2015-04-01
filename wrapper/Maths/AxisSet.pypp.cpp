@@ -51,6 +51,39 @@ void register_AxisSet_class(){
                 , ( bp::arg("vec") ) );
         
         }
+        { //::SireMaths::AxisSet::fromIdentity
+        
+            typedef ::QVector< SireMaths::Vector > ( ::SireMaths::AxisSet::*fromIdentity_function_type )( ::QVector< SireMaths::Vector > const & ) const;
+            fromIdentity_function_type fromIdentity_function_value( &::SireMaths::AxisSet::fromIdentity );
+            
+            AxisSet_exposer.def( 
+                "fromIdentity"
+                , fromIdentity_function_value
+                , ( bp::arg("vec") ) );
+        
+        }
+        { //::SireMaths::AxisSet::fromIdentity
+        
+            typedef ::SireMaths::Vector ( ::SireMaths::AxisSet::*fromIdentity_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            fromIdentity_function_type fromIdentity_function_value( &::SireMaths::AxisSet::fromIdentity );
+            
+            AxisSet_exposer.def( 
+                "fromIdentity"
+                , fromIdentity_function_value
+                , ( bp::arg("vec"), bp::arg("delta") ) );
+        
+        }
+        { //::SireMaths::AxisSet::fromIdentity
+        
+            typedef ::QVector< SireMaths::Vector > ( ::SireMaths::AxisSet::*fromIdentity_function_type )( ::QVector< SireMaths::Vector > const &,::SireMaths::Vector const & ) const;
+            fromIdentity_function_type fromIdentity_function_value( &::SireMaths::AxisSet::fromIdentity );
+            
+            AxisSet_exposer.def( 
+                "fromIdentity"
+                , fromIdentity_function_value
+                , ( bp::arg("vecs"), bp::arg("delta") ) );
+        
+        }
         { //::SireMaths::AxisSet::invMatrix
         
             typedef ::SireMaths::Matrix const & ( ::SireMaths::AxisSet::*invMatrix_function_type )(  ) const;

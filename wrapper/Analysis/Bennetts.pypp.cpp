@@ -17,6 +17,10 @@ namespace bp = boost::python;
 
 #include "SireStream/shareddatastream.h"
 
+#include "SireUnits/temperature.h"
+
+#include "SireUnits/units.h"
+
 #include "bennetts.h"
 
 #include "tostring.h"

@@ -19,6 +19,7 @@ from Sire.Base import *
 from Sire.Qt import *
 from Sire.ID import *
 from Sire.Config import *
+from Sire.Analysis import *
 
 from Sire.Tools.DCDFile import *
 
@@ -108,11 +109,9 @@ barostat_frequency = Parameter("barostat frequency", 25, """Number of steps befo
 
 lj_dispersion = Parameter("lj dispersion", False, """Whether or not to calculate and include the LJ dispersion term.""")
 
-cmm_removal = Parameter("center of mass frequency", 0, "Frequency of which the system center of mass motion is removed.""")
+cmm_removal = Parameter("center of mass frequency", 10, "Frequency of which the system center of mass motion is removed.""")
 
 center_solute = Parameter("center solute", True, """Whether or not to centre the centre of geometry of the solute in the box.""")
-
-center_protein = Parameter("center protein", False, """Whether or not to centre the centre of geometry of the protein in the box.""")
 
 use_restraints = Parameter("use restraints", False, """Whether or not to use harmonic restaints on the solute atoms.""")
 
@@ -125,6 +124,13 @@ unrestrained_residues = Parameter("unrestrained residues", ["WAT", "HOH"], """Na
 freeze_residues = Parameter("freeze residues", True, """Whether or not to freeze certain residues.""")
 
 frozen_residues = Parameter("frozen residues", ["LGR", "SIT", "NEG", "POS"], """List of residues to freeze if 'freeze residues' is True.""")
+
+#use_distance_restraints = Parameter("use distance restraints",True, """Whether or not to use restraints distances between pairs of atoms.""") 
+use_distance_restraints = Parameter("use distance restraints",False, """Whether or not to use restraints distances between pairs of atoms.""")
+
+#distance_restraints_dict = Parameter("distance restraints dictionary",{ (17,12):(3.0,10.0, 0.2) }, """Dictionnary of pair of atoms whose distance is restrained, and restraint parameters. Syntax is {(atom0,atom1):(reql, kl, Dl)} where atom0, atom1 are atomic indices. reql the equilibrium distance. Kl the force constant of the restraint. D the flat bottom radius.""")
+
+distance_restraints_dict = Parameter("distance restraints dictionary",{ }, """Dictionnary of pair of atoms whose distance is restrained, and restraint parameters. Syntax is {(atom0,atom1):(reql, kl, Dl)} where atom0, atom1 are atomic indices. reql the equilibrium distance. Kl the force constant of the restraint. D the flat bottom radius. WARNING: PBC distance checks not implemented, avoid restraining pair of atoms that may diffuse out of the box.""")
 
 ## Free energy specific keywords 
 
@@ -145,6 +151,7 @@ coulomb_power = Parameter("coulomb power", 0,
 
 energy_frequency = Parameter("energy frequency", 10,
                              """The number of time steps between evaluation of free energy gradients.""")
+
 
 #####################################
 
@@ -229,41 +236,6 @@ def centerSolute(system, space):
     return system
 
 
-def centerProtein(system, space):
-    
-    # ! Assuming first molecule in the system is the solute !
-    
-    if space.isPeriodic():
-        box_center = space.dimensions()/2
-    else:
-        box_center = Vector( 0.0, 0.0, 0.0 )
-    
-    protein = system.molecules().at(MolNum(2)) #second molecule
-
-    protein_cog = CenterOfGeometry(protein).point()
-    
-    delta = box_center - protein_cog
-    
-    molNums = system.molNums()
-    
-    for molnum in molNums:
-        mol = system.molecule(molnum).molecule()
-        molcoords = mol.property("coordinates")
-        molcoords.translate(delta)
-        mol = mol.edit().setProperty("coordinates",molcoords).commit()
-        system.update(mol)
-    
-    return system
-
-
-def printEnergies(energies):
-    components = energies.symbols()
-    
-    components.sort( key=str )
-    
-    for component in components:
-        print("%s == %f kcal mol-1" % (component, energies[component]))
-
 def createSystem(molecules):
     #print("Applying flexibility and zmatrix templates...")
     print("Creating the system...")
@@ -276,20 +248,25 @@ def createSystem(molecules):
         moleculeList.append(molecule)
 
     molecules = MoleculeGroup("molecules")
+    ions = MoleculeGroup("ions")
     
     for molecule in moleculeList:
         natoms = molecule.nAtoms()
-        molecules.add(molecule)
+        if natoms == 1:
+            ions.add(molecule)
+        else:
+            molecules.add(molecule)
 
     all = MoleculeGroup("all")
-
     all.add(molecules)
+    all.add(ions)
 
     # Add these groups to the System
     system = System()
 
     system.add(all)
     system.add(molecules)
+    system.add(ions)
        
     return system
 
@@ -299,6 +276,7 @@ def setupForcefields(system, space):
 
     all = system[ MGName("all") ]
     molecules = system[ MGName("molecules")]
+    ions = system[ MGName("ions") ]
     
     # - first solvent-solvent coulomb/LJ (CLJ) energy
     internonbondedff = InterCLJFF("molecules:molecules")
@@ -307,6 +285,20 @@ def setupForcefields(system, space):
         internonbondedff.setReactionFieldDielectric(rf_dielectric.val)
     internonbondedff.add(molecules)
 
+    inter_ions_nonbondedff = InterCLJFF("ions:ions")
+    if (cutoff_type.val != "nocutoff") :
+        inter_ions_nonbondedff.setUseReactionField(True)
+        inter_ions_nonbondedff.setReactionFieldDielectric(rf_dielectric.val)
+
+    inter_ions_nonbondedff.add(ions)
+    
+    inter_ions_molecules_nonbondedff = InterGroupCLJFF("ions:molecules")
+    if (cutoff_type.val != "nocutoff") :
+        inter_ions_molecules_nonbondedff.setUseReactionField(True)
+        inter_ions_molecules_nonbondedff.setReactionFieldDielectric(rf_dielectric.val)
+
+    inter_ions_molecules_nonbondedff.add(ions, MGIdx(0) )
+    inter_ions_molecules_nonbondedff.add(molecules, MGIdx(1) )
     
     # Now solute bond, angle, dihedral energy
     intrabondedff = InternalFF("molecules-intrabonded")
@@ -352,7 +344,7 @@ def setupForcefields(system, space):
                 restraintff.add(restraint)
 
     # Here is the list of all forcefields
-    forcefields = [ internonbondedff, intrabondedff, intranonbondedff, restraintff ]
+    forcefields = [ internonbondedff, intrabondedff, intranonbondedff, inter_ions_nonbondedff, inter_ions_molecules_nonbondedff, restraintff ] 
     
     for forcefield in forcefields:
         system.add(forcefield)
@@ -365,6 +357,7 @@ def setupForcefields(system, space):
 
     total_nrg = internonbondedff.components().total() +\
                 intranonbondedff.components().total() + intrabondedff.components().total() +\
+                inter_ions_nonbondedff.components().total() + inter_ions_molecules_nonbondedff.components().total() +\
                 restraintff.components().total()
 
     e_total = system.totalComponent()
@@ -374,10 +367,6 @@ def setupForcefields(system, space):
     # Add a monitor that calculates the average total energy and average energy
     # deltas - we will collect both a mean average and an zwanzig average
     system.add( "total_energy", MonitorComponent(e_total, Average()) )
-
-
-    #printEnergies( system.componentValues())
-
 
     return system
 
@@ -453,8 +442,6 @@ def setupMoves(system, random_seed, GPUS):
 
     moves.setGenerator( RanGenerator(random_seed) )
 
-    #print("\n*OpenMM Energy = %f kcal mol-1" % Integrator_OpenMM.getPotentialEnergy(system).value())
-
     return moves
 
 def atomNumListToProperty( list ):
@@ -484,6 +471,25 @@ def atomNumVectorListToProperty( list ):
     prop.setProperty("nrestrainedatoms", VariantProperty(i) );
 
     return prop
+
+def linkbondVectorListToProperty( list ):
+
+    prop = Properties()
+
+    i = 0
+
+    for value in list:
+        prop.setProperty("AtomNum0(%d)" % i, VariantProperty(value[0]))
+        prop.setProperty("AtomNum1(%d)" % i, VariantProperty(value[1]))
+        prop.setProperty("reql(%d)" % i, VariantProperty(value[2]))
+        prop.setProperty("kl(%d)" % i, VariantProperty(value[3]))
+        prop.setProperty("dl(%d)" % i, VariantProperty(value[4]))
+        i += 1
+
+    prop.setProperty("nbondlinks", VariantProperty(i) );
+
+    return prop
+
 
 def propertyToAtomNumList( prop ):
     list = []
@@ -561,6 +567,46 @@ def setupRestraints(system):
             system.update(mol)
 
     return system
+
+def setupDistanceRestraints(system):
+    prop_list = []
+
+    molecules = system[ MGName("all") ].molecules()
+
+    dic_items = list( distance_restraints_dict.val.items() )
+
+    for i in range(0,molecules.nMolecules()):
+        mol = molecules.molecule(MolNum(i+1)).molecule()
+        atoms_mol = mol.atoms()
+        natoms_mol = mol.nAtoms()
+        for j in range(0,natoms_mol):
+            at = atoms_mol[j]
+            atnumber = at.number()
+            for k in range(len(dic_items)):
+                if dic_items[k][0][0] == dic_items[k][0][1]:
+                    print ("Error! It is not possible to place a distance restraint on the same atom")
+                    sys.exit(-1)
+                if atnumber.value() - 1 in dic_items[k][0]:
+                    print (at)
+                    # atom0index atom1index, reql, kl, dl 
+                    prop_list.append((dic_items[k][0][0]+1, dic_items[k][0][1]+1,dic_items[k][1][0],dic_items[k][1][1], dic_items[k][1][2]))
+
+    unique_prop_list = []
+
+    [unique_prop_list.append(item) for item in prop_list if item not in unique_prop_list]
+
+    print (unique_prop_list)
+
+    #Mol number 0 will store all the information related to the bond-links in the system
+    mol0 = molecules.molecule(MolNum(1)).molecule()
+
+    mol0 = mol0.edit().setProperty("linkbonds", linkbondVectorListToProperty( unique_prop_list )).commit()
+
+    system.update(mol0)
+
+    return system
+
+
 
 def freezeResidues(system):
    
@@ -916,7 +962,7 @@ def setupForcefieldsFreeEnergy(system, space ):
 
     system.setComponent( lam, lambda_val.val )
 
-    #printEnergies( system.componentValues())
+    # printEnergies( system.componentValues() )
 
     return system
 
@@ -948,13 +994,6 @@ def setupMovesFreeEnergy(system,random_seed,GPUS,lam_val):
     Integrator_OpenMM.setMinimization(minimize.val)
     Integrator_OpenMM.setMinimizeTol(minimize_tol.val)
     Integrator_OpenMM.setMinimizeIterations(minimize_max_iter.val)
-    
-    if equilibrate.val:
-        Integrator_OpenMM.setEquilib_iterations(equil_iterations.val)
-    else:
-        Integrator_OpenMM.setEquilib_iterations(0)
-
-    Integrator_OpenMM.setEquilib_time_step(equil_timestep.val)
 
 
     Integrator_OpenMM.setBufferFrequency(buffered_coords_freq.val)
@@ -998,11 +1037,7 @@ def setupMovesFreeEnergy(system,random_seed,GPUS,lam_val):
     print("Generated random seed number %d " % random_seed)
 
     moves.setGenerator( RanGenerator(random_seed) )
-
-
-    #print("\n*OpenMM Energy = %f kcal mol-1" % Integrator_OpenMM.getPotentialEnergy(system).value())
-
-
+ 
     return moves
 
 def clearBuffers( system ):
@@ -1063,11 +1098,8 @@ def run():
 
         system = createSystem(molecules)
 
-        if (center_solute.val and center_protein.val == False):
+        if (center_solute.val):
             system = centerSolute(system, space)
-
-        if (center_protein.val):
-            system = centerProtein(system, space)
 
         if use_restraints.val:
             system = setupRestraints(system)
@@ -1107,6 +1139,9 @@ def run():
         trajectory = setupDCD(dcd_root.val, system)
 
     s1 = timer.elapsed()/1000.
+
+    # Jm debug 14/10/14
+    PDB().write(system[MGName("all")], "frame-0.pdb" )
     
     print("Running MD simulation ")
 
@@ -1142,6 +1177,9 @@ def runFreeNrg():
         host = "unknown"
 
     print(" ### Running Single Topology Molecular Dynamics Free Energy on %s ### " % host)
+    print ("### Simulation Parameters ### ") 
+    Parameter.printAll()
+    print ("### ###")
 
     timer = QTime()
     timer.start()
@@ -1164,15 +1202,15 @@ def runFreeNrg():
 
         system = createSystemFreeEnergy(molecules)
 
-        if (center_solute.val and center_protein.val == False):
+        if (center_solute.val):
             system = centerSolute(system, space)
-        
-        if (center_protein.val):
-            system = centerProtein(system, space)
 
         if use_restraints.val:
             system = setupRestraints(system)
         
+        if use_distance_restraints.val:
+            system = setupDistanceRestraints(system)
+
         # Note that this just set the mass to zero which freezes residues in OpenMM but Sire doesn't known that
         if freeze_residues.val:
             system = freezeResidues(system)
@@ -1215,6 +1253,8 @@ def runFreeNrg():
     
     print("Running MD simulation ")
 
+    grads = {}
+    grads[lambda_val.val] = AverageAndStddev()
     for i in range(cycle_start,cycle_end):
         print("\nCycle = ",i,"\n")
 
@@ -1230,10 +1270,19 @@ def runFreeNrg():
         integrator = mdmoves.integrator()
         gradients = integrator.getGradients()
         outgradients.write("%5d %20.10f\n" % (i, gradients[i-1]))
+        grads[lambda_val.val].accumulate( gradients[i-1] )
 
     s2 = timer.elapsed()/1000.
     print("Simulation took %d s " % ( s2 - s1))
-    
+
+    if os.path.exists("gradients.s3"):
+        siregrads = Sire.Stream.load("gradients.s3")
+    else:
+        siregrads = Gradients()
+    siregrads = siregrads + Gradients(grads) 
+   
+    Sire.Stream.save(siregrads, "gradients.s3")
+
     if buffered_coords_freq.val > 0:
         system = clearBuffers(system)
         # Necessary to write correct restart

@@ -149,6 +149,22 @@ namespace bp = boost::python;
 
 #include "getinstalldir.h"
 
+#include "SireError/errors.h"
+
+#include "getinstalldir.h"
+
+#include "sire_config.h"
+
+#include "sire_version.h"
+
+#include <QDebug>
+
+#include <QDir>
+
+#include <QFileInfo>
+
+#include "getinstalldir.h"
+
 #include "increment.h"
 
 #include "increment.h"
@@ -422,6 +438,17 @@ void register_free_functions(){
         bp::def( 
             "getLibDir"
             , getLibDir_function_value );
+    
+    }
+
+    { //::SireBase::getReleaseVersion
+    
+        typedef ::QString ( *getReleaseVersion_function_type )(  );
+        getReleaseVersion_function_type getReleaseVersion_function_value( &::SireBase::getReleaseVersion );
+        
+        bp::def( 
+            "getReleaseVersion"
+            , getReleaseVersion_function_value );
     
     }
 

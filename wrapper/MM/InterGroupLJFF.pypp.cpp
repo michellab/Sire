@@ -29,6 +29,30 @@ void register_InterGroupLJFF_class(){
         bp::scope InterGroupLJFF_scope( InterGroupLJFF_exposer );
         InterGroupLJFF_exposer.def( bp::init< QString const & >(( bp::arg("name") )) );
         InterGroupLJFF_exposer.def( bp::init< SireFF::Inter2B2G3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > > const & >(( bp::arg("other") )) );
+        { //::SireFF::Inter2B2G3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::energy
+        
+            typedef SireFF::Inter2B2G3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > > exported_class_t;
+            typedef void ( ::SireFF::Inter2B2G3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*energy_function_type )( ::SireFF::EnergyTable &,double ) ;
+            energy_function_type energy_function_value( &::SireFF::Inter2B2G3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::energy );
+            
+            InterGroupLJFF_exposer.def( 
+                "energy"
+                , energy_function_value
+                , ( bp::arg("energytable"), bp::arg("scale_energy")=1 ) );
+        
+        }
+        { //::SireFF::Inter2B2G3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::energy
+        
+            typedef SireFF::Inter2B2G3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > > exported_class_t;
+            typedef void ( ::SireFF::Inter2B2G3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*energy_function_type )( ::SireFF::EnergyTable &,::SireCAS::Symbol const &,double ) ;
+            energy_function_type energy_function_value( &::SireFF::Inter2B2G3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::energy );
+            
+            InterGroupLJFF_exposer.def( 
+                "energy"
+                , energy_function_value
+                , ( bp::arg("energytable"), bp::arg("symbol"), bp::arg("scale_energy")=1 ) );
+        
+        }
         { //::SireFF::Inter2B2G3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::field
         
             typedef SireFF::Inter2B2G3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > > exported_class_t;

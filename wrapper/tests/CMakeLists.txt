@@ -16,6 +16,7 @@ set (TEST_DIRS "SireBase"
                "SireVol"
                "OpenMM"
                "io"
+               "Tools"
      )
 
 # installation

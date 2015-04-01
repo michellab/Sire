@@ -111,29 +111,34 @@ class DCDFile(object):
 
         #spacedims = space.dimensions()
 
-        wrapmolcoordinates = False
+        #wrapmolcoordinates = False
 
-        wrapatomcoordinates = False
+        #wrapatomcoordinates = False
 
+        # JM 10/14 bugfix change of behavior of QSet in QT5
+        molnums = group.molNums()
+        molnums.sort()
 
         for i in range(0,group.nMolecules()):
-            mol = group[MolIdx(i)].molecule()
+            #mol = group[MolIdx(i)].molecule()
+            mol = group[molnums[i]].molecule()
+            #print (mol)
             molcoords = mol.property("coordinates")
 
-            if wrapmolcoordinates:
-                molcog = CenterOfGeometry(mol).point()
-            
-                wrapdelta = Vector( int( math.floor( molcog.x() / spacedims.x() ) ) ,\
-                                    int( math.floor( molcog.y() / spacedims.y() ) ) ,\
-                                    int( math.floor( molcog.z() / spacedims.z() ) ) )
-            
-                if ( wrapdelta[0] != 0 or wrapdelta[1] != 0 or wrapdelta[2] != 0):
-                    print("Mol %s wrapdelta %s %s %s " % (molnum.toString(), wrapdelta[0], wrapdelta[1], wrapdelta[2]))
-                    print(spacedims)
-                    print(molcoords.toVector())
-                    wrap = Vector( - wrapdelta[0] * spacedims.x() , - wrapdelta[1] * spacedims.y(), -wrapdelta[2] * spacedims.z() )               
-                    molcoords.translate(wrap)
-                    print(molcoords.toVector())
+            #if wrapmolcoordinates:
+            #    molcog = CenterOfGeometry(mol).point()
+            #
+            #    wrapdelta = Vector( int( math.floor( molcog.x() / spacedims.x() ) ) ,\
+            #                        int( math.floor( molcog.y() / spacedims.y() ) ) ,\
+            #                        int( math.floor( molcog.z() / spacedims.z() ) ) )
+            #
+            #    if ( wrapdelta[0] != 0 or wrapdelta[1] != 0 or wrapdelta[2] != 0):
+            #        print("Mol %s wrapdelta %s %s %s " % (molnum.toString(), wrapdelta[0], wrapdelta[1], wrapdelta[2]))
+            #        print(spacedims)
+            #        print(molcoords.toVector())
+            #        wrap = Vector( - wrapdelta[0] * spacedims.x() , - wrapdelta[1] * spacedims.y(), -wrapdelta[2] * spacedims.z() )               
+            #        molcoords.translate(wrap)
+            #        print(molcoords.toVector())
                     
             
             #molcoords.translate(wrapdelta)
@@ -209,6 +214,7 @@ class DCDFile(object):
 
             natoms = 0
             
+
             for i in range(0,group.nMolecules()):
                 mol = group[MolIdx(i)].molecule()
                 nat = mol.nAtoms()
@@ -222,8 +228,12 @@ class DCDFile(object):
         
             coords = []
 
+            # JM 10/14 bugfix change of behavior of QSet in QT5
+            molnums = group.molNums()
+            molnums.sort()
             for i in range(0,group.nMolecules()):
-                mol = group[MolIdx(i)].molecule()
+                #mol = group[MolIdx(i)].molecule()
+                mol = group[molnums[i]].molecule()
                 molcoords = mol.property("buffered_coord_%s" % x)
 
                 coords += molcoords.toVector()

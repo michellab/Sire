@@ -72,17 +72,6 @@ void register_CLJBox_class(){
                 , ( bp::arg("atoms") ) );
         
         }
-        { //::SireMM::CLJBox::apply
-        
-            typedef ::QVector< SireMM::CLJBoxIndex > ( ::SireMM::CLJBox::*apply_function_type )( ::SireMM::CLJDelta const & ) ;
-            apply_function_type apply_function_value( &::SireMM::CLJBox::apply );
-            
-            CLJBox_exposer.def( 
-                "apply"
-                , apply_function_value
-                , ( bp::arg("delta") ) );
-        
-        }
         { //::SireMM::CLJBox::at
         
             typedef ::SireMM::CLJAtom ( ::SireMM::CLJBox::*at_function_type )( int ) const;
@@ -264,17 +253,6 @@ void register_CLJBox_class(){
             CLJBox_exposer.def( 
                 "take"
                 , take_function_value
-                , ( bp::arg("atom") ) );
-        
-        }
-        { //::SireMM::CLJBox::takeNegative
-        
-            typedef ::SireMM::CLJAtom ( ::SireMM::CLJBox::*takeNegative_function_type )( int ) ;
-            takeNegative_function_type takeNegative_function_value( &::SireMM::CLJBox::takeNegative );
-            
-            CLJBox_exposer.def( 
-                "takeNegative"
-                , takeNegative_function_value
                 , ( bp::arg("atom") ) );
         
         }

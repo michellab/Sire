@@ -525,35 +525,35 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::update
         
-            typedef bool ( ::SireFF::FFMolGroup::*update_function_type )( ::SireMol::MoleculeData const & ) ;
+            typedef bool ( ::SireFF::FFMolGroup::*update_function_type )( ::SireMol::MoleculeData const &,bool ) ;
             update_function_type update_function_value( &::SireFF::FFMolGroup::update );
             
             FFMolGroup_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("moldata") ) );
+                , ( bp::arg("moldata"), bp::arg("auto_commit")=(bool)(true) ) );
         
         }
         { //::SireFF::FFMolGroup::update
         
-            typedef ::QList< SireMol::Molecule > ( ::SireFF::FFMolGroup::*update_function_type )( ::SireMol::Molecules const & ) ;
+            typedef ::QList< SireMol::Molecule > ( ::SireFF::FFMolGroup::*update_function_type )( ::SireMol::Molecules const &,bool ) ;
             update_function_type update_function_value( &::SireFF::FFMolGroup::update );
             
             FFMolGroup_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules"), bp::arg("auto_commit")=(bool)(true) ) );
         
         }
         { //::SireFF::FFMolGroup::update
         
-            typedef ::QList< SireMol::Molecule > ( ::SireFF::FFMolGroup::*update_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef ::QList< SireMol::Molecule > ( ::SireFF::FFMolGroup::*update_function_type )( ::SireMol::MoleculeGroup const &,bool ) ;
             update_function_type update_function_value( &::SireFF::FFMolGroup::update );
             
             FFMolGroup_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup"), bp::arg("auto_commit")=(bool)(true) ) );
         
         }
         { //::SireFF::FFMolGroup::what

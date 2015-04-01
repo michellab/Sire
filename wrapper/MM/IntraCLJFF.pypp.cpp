@@ -29,6 +29,30 @@ void register_IntraCLJFF_class(){
         bp::scope IntraCLJFF_scope( IntraCLJFF_exposer );
         IntraCLJFF_exposer.def( bp::init< QString const & >(( bp::arg("name") )) );
         IntraCLJFF_exposer.def( bp::init< SireFF::Intra2B3DFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > > const & >(( bp::arg("other") )) );
+        { //::SireFF::Intra2B3DFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > >::energy
+        
+            typedef SireFF::Intra2B3DFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > > exported_class_t;
+            typedef void ( ::SireFF::Intra2B3DFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > >::*energy_function_type )( ::SireFF::EnergyTable &,double ) ;
+            energy_function_type energy_function_value( &::SireFF::Intra2B3DFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > >::energy );
+            
+            IntraCLJFF_exposer.def( 
+                "energy"
+                , energy_function_value
+                , ( bp::arg("energytable"), bp::arg("scale_energy")=1 ) );
+        
+        }
+        { //::SireFF::Intra2B3DFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > >::energy
+        
+            typedef SireFF::Intra2B3DFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > > exported_class_t;
+            typedef void ( ::SireFF::Intra2B3DFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > >::*energy_function_type )( ::SireFF::EnergyTable &,::SireCAS::Symbol const &,double ) ;
+            energy_function_type energy_function_value( &::SireFF::Intra2B3DFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > >::energy );
+            
+            IntraCLJFF_exposer.def( 
+                "energy"
+                , energy_function_value
+                , ( bp::arg("energytable"), bp::arg("symbol"), bp::arg("scale_energy")=1 ) );
+        
+        }
         { //::SireFF::Intra2B3DFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > >::field
         
             typedef SireFF::Intra2B3DFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > > exported_class_t;

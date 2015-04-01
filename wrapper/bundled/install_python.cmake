@@ -4,7 +4,7 @@
 ###
 
 # Need to set the version of Python bundled with Sire
-set( PYTHON_VERSION "3.4" )
+set( PYTHON_VERSION "3.3" )
 set( PYTHON_ABIFLAGS "m" )
 
 # First, try to find the Python library in the "bundled" directory. If it exists,

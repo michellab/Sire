@@ -163,6 +163,16 @@ void register_SupraSystem_class(){
                 , clearSubStatistics_function_value );
         
         }
+        { //::SireMove::SupraSystem::collectSupraStats
+        
+            typedef void ( ::SireMove::SupraSystem::*collectSupraStats_function_type )(  ) ;
+            collectSupraStats_function_type collectSupraStats_function_value( &::SireMove::SupraSystem::collectSupraStats );
+            
+            SupraSystem_exposer.def( 
+                "collectSupraStats"
+                , collectSupraStats_function_value );
+        
+        }
         { //::SireMove::SupraSystem::count
         
             typedef int ( ::SireMove::SupraSystem::*count_function_type )(  ) const;

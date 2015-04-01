@@ -27,15 +27,13 @@ namespace bp = boost::python;
 
 #include "SireVol/cartesian.h"
 
+#include "SireVol/gridinfo.h"
+
 #include "SireVol/periodicbox.h"
 
 #include "cljboxes.h"
 
-#include "cljdelta.h"
-
 #include "cljfunction.h"
-
-#include "gridinfo.h"
 
 #include "switchingfunction.h"
 

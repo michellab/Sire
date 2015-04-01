@@ -33,6 +33,8 @@ namespace bp = boost::python;
 
 #include "segment.h"
 
+#include "SireMaths/align.h"
+
 #include "SireMaths/axisset.h"
 
 #include "SireMaths/matrix.h"
@@ -56,6 +58,8 @@ namespace bp = boost::python;
 #include "atomcoords.h"
 
 #include "atommatcher.h"
+
+#include "atommatchers.h"
 
 #include "bondid.h"
 
@@ -86,6 +90,58 @@ void register_Mover_Segment__class(){
         Mover_Segment__exposer.def( bp::init< SireMol::Segment const & >(( bp::arg("view") )) );
         Mover_Segment__exposer.def( bp::init< SireMol::Segment const &, SireMol::AtomSelection const & >(( bp::arg("view"), bp::arg("movable_atoms") )) );
         Mover_Segment__exposer.def( bp::init< SireMol::Mover< SireMol::Segment > const & >(( bp::arg("other") )) );
+        { //::SireMol::Mover< SireMol::Segment >::align
+        
+            typedef SireMol::Mover< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*align_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
+            align_function_type align_function_value( &::SireMol::Mover< SireMol::Segment >::align );
+            
+            Mover_Segment__exposer.def( 
+                "align"
+                , align_function_value
+                , ( bp::arg("other"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::return_self< >() );
+        
+        }
+        { //::SireMol::Mover< SireMol::Segment >::align
+        
+            typedef SireMol::Mover< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*align_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
+            align_function_type align_function_value( &::SireMol::Mover< SireMol::Segment >::align );
+            
+            Mover_Segment__exposer.def( 
+                "align"
+                , align_function_value
+                , ( bp::arg("other"), bp::arg("map0"), bp::arg("map1") )
+                , bp::return_self< >() );
+        
+        }
+        { //::SireMol::Mover< SireMol::Segment >::align
+        
+            typedef SireMol::Mover< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*align_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
+            align_function_type align_function_value( &::SireMol::Mover< SireMol::Segment >::align );
+            
+            Mover_Segment__exposer.def( 
+                "align"
+                , align_function_value
+                , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::return_self< >() );
+        
+        }
+        { //::SireMol::Mover< SireMol::Segment >::align
+        
+            typedef SireMol::Mover< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*align_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
+            align_function_type align_function_value( &::SireMol::Mover< SireMol::Segment >::align );
+            
+            Mover_Segment__exposer.def( 
+                "align"
+                , align_function_value
+                , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map0"), bp::arg("map1") )
+                , bp::return_self< >() );
+        
+        }
         { //::SireMol::Mover< SireMol::Segment >::alignTo
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
@@ -366,6 +422,19 @@ void register_Mover_Segment__class(){
             Mover_Segment__exposer.def( 
                 "toString"
                 , toString_function_value );
+        
+        }
+        { //::SireMol::Mover< SireMol::Segment >::transform
+        
+            typedef SireMol::Mover< SireMol::Segment > exported_class_t;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*transform_function_type )( ::SireMaths::Transform const &,::SireBase::PropertyMap const & ) ;
+            transform_function_type transform_function_value( &::SireMol::Mover< SireMol::Segment >::transform );
+            
+            Mover_Segment__exposer.def( 
+                "transform"
+                , transform_function_value
+                , ( bp::arg("transform"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::return_self< >() );
         
         }
         { //::SireMol::Mover< SireMol::Segment >::translate

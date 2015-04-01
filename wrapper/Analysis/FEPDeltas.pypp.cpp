@@ -194,6 +194,46 @@ void register_FEPDeltas_class(){
                 , sum_function_value );
         
         }
+        { //::SireAnalysis::FEPDeltas::sumBackwards
+        
+            typedef ::SireAnalysis::PMF ( ::SireAnalysis::FEPDeltas::*sumBackwards_function_type )(  ) const;
+            sumBackwards_function_type sumBackwards_function_value( &::SireAnalysis::FEPDeltas::sumBackwards );
+            
+            FEPDeltas_exposer.def( 
+                "sumBackwards"
+                , sumBackwards_function_value );
+        
+        }
+        { //::SireAnalysis::FEPDeltas::sumBackwardsTaylor
+        
+            typedef ::SireAnalysis::PMF ( ::SireAnalysis::FEPDeltas::*sumBackwardsTaylor_function_type )(  ) const;
+            sumBackwardsTaylor_function_type sumBackwardsTaylor_function_value( &::SireAnalysis::FEPDeltas::sumBackwardsTaylor );
+            
+            FEPDeltas_exposer.def( 
+                "sumBackwardsTaylor"
+                , sumBackwardsTaylor_function_value );
+        
+        }
+        { //::SireAnalysis::FEPDeltas::sumForwards
+        
+            typedef ::SireAnalysis::PMF ( ::SireAnalysis::FEPDeltas::*sumForwards_function_type )(  ) const;
+            sumForwards_function_type sumForwards_function_value( &::SireAnalysis::FEPDeltas::sumForwards );
+            
+            FEPDeltas_exposer.def( 
+                "sumForwards"
+                , sumForwards_function_value );
+        
+        }
+        { //::SireAnalysis::FEPDeltas::sumForwardsTaylor
+        
+            typedef ::SireAnalysis::PMF ( ::SireAnalysis::FEPDeltas::*sumForwardsTaylor_function_type )(  ) const;
+            sumForwardsTaylor_function_type sumForwardsTaylor_function_value( &::SireAnalysis::FEPDeltas::sumForwardsTaylor );
+            
+            FEPDeltas_exposer.def( 
+                "sumForwardsTaylor"
+                , sumForwardsTaylor_function_value );
+        
+        }
         { //::SireAnalysis::FEPDeltas::temperature
         
             typedef ::SireUnits::Dimension::Temperature ( ::SireAnalysis::FEPDeltas::*temperature_function_type )(  ) const;

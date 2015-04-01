@@ -64,6 +64,7 @@ void register_CLJAtoms_class(){
             ;
         CLJAtoms_exposer.def( bp::init< QVector< SireMM::CLJAtom > const & >(( bp::arg("atoms") )) );
         CLJAtoms_exposer.def( bp::init< QList< SireMM::CLJAtom > const & >(( bp::arg("atoms") )) );
+        CLJAtoms_exposer.def( bp::init< SireMM::CLJAtom const *, int >(( bp::arg("atoms"), bp::arg("natoms") )) );
         CLJAtoms_exposer.def( bp::init< QVector< SireMaths::Vector > const &, QVector< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > > const &, QVector< SireMM::LJParameter > const &, bp::optional< qint32 > >(( bp::arg("coordinates"), bp::arg("charges"), bp::arg("ljparams"), bp::arg("atomid")=(int)(1) )) );
         CLJAtoms_exposer.def( bp::init< QVector< SireMaths::Vector > const &, QVector< SireUnits::Dimension::PhysUnit< 0, 0, 0, 1, 0, 0, 0 > > const &, QVector< SireMM::LJParameter > const &, QVector< int > const & >(( bp::arg("coordinates"), bp::arg("charges"), bp::arg("ljparams"), bp::arg("ids") )) );
         CLJAtoms_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )) );
@@ -200,6 +201,16 @@ void register_CLJAtoms_class(){
                 , ( bp::arg("i") ) );
         
         }
+        { //::SireMM::CLJAtoms::hasDummies
+        
+            typedef bool ( ::SireMM::CLJAtoms::*hasDummies_function_type )(  ) const;
+            hasDummies_function_type hasDummies_function_value( &::SireMM::CLJAtoms::hasDummies );
+            
+            CLJAtoms_exposer.def( 
+                "hasDummies"
+                , hasDummies_function_value );
+        
+        }
         { //::SireMM::CLJAtoms::idOfDummy
         
             typedef ::SireMaths::MultiInt ( *idOfDummy_function_type )(  );
@@ -262,6 +273,26 @@ void register_CLJAtoms_class(){
                 , ( bp::arg("i") ) );
         
         }
+        { //::SireMM::CLJAtoms::maxCoords
+        
+            typedef ::SireMaths::Vector ( ::SireMM::CLJAtoms::*maxCoords_function_type )(  ) const;
+            maxCoords_function_type maxCoords_function_value( &::SireMM::CLJAtoms::maxCoords );
+            
+            CLJAtoms_exposer.def( 
+                "maxCoords"
+                , maxCoords_function_value );
+        
+        }
+        { //::SireMM::CLJAtoms::minCoords
+        
+            typedef ::SireMaths::Vector ( ::SireMM::CLJAtoms::*minCoords_function_type )(  ) const;
+            minCoords_function_type minCoords_function_value( &::SireMM::CLJAtoms::minCoords );
+            
+            CLJAtoms_exposer.def( 
+                "minCoords"
+                , minCoords_function_value );
+        
+        }
         { //::SireMM::CLJAtoms::nAtoms
         
             typedef int ( ::SireMM::CLJAtoms::*nAtoms_function_type )(  ) const;
@@ -270,6 +301,16 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value );
+        
+        }
+        { //::SireMM::CLJAtoms::nDummies
+        
+            typedef int ( ::SireMM::CLJAtoms::*nDummies_function_type )(  ) const;
+            nDummies_function_type nDummies_function_value( &::SireMM::CLJAtoms::nDummies );
+            
+            CLJAtoms_exposer.def( 
+                "nDummies"
+                , nDummies_function_value );
         
         }
         { //::SireMM::CLJAtoms::nPadded

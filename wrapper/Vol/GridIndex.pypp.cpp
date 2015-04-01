@@ -23,7 +23,7 @@ namespace bp = boost::python;
 
 #include "gridinfo.h"
 
-SireMM::GridIndex __copy__(const SireMM::GridIndex &other){ return SireMM::GridIndex(other); }
+SireVol::GridIndex __copy__(const SireVol::GridIndex &other){ return SireVol::GridIndex(other); }
 
 #include "Qt/qdatastream.hpp"
 
@@ -31,55 +31,55 @@ SireMM::GridIndex __copy__(const SireMM::GridIndex &other){ return SireMM::GridI
 
 void register_GridIndex_class(){
 
-    { //::SireMM::GridIndex
-        typedef bp::class_< SireMM::GridIndex > GridIndex_exposer_t;
+    { //::SireVol::GridIndex
+        typedef bp::class_< SireVol::GridIndex > GridIndex_exposer_t;
         GridIndex_exposer_t GridIndex_exposer = GridIndex_exposer_t( "GridIndex", bp::init< bp::optional< int, int, int > >(( bp::arg("i")=(int)(0), bp::arg("j")=(int)(0), bp::arg("k")=(int)(0) )) );
         bp::scope GridIndex_scope( GridIndex_exposer );
-        GridIndex_exposer.def( bp::init< SireMM::GridIndex const & >(( bp::arg("other") )) );
-        { //::SireMM::GridIndex::i
+        GridIndex_exposer.def( bp::init< SireVol::GridIndex const & >(( bp::arg("other") )) );
+        { //::SireVol::GridIndex::i
         
-            typedef ::qint32 ( ::SireMM::GridIndex::*i_function_type )(  ) const;
-            i_function_type i_function_value( &::SireMM::GridIndex::i );
+            typedef ::qint32 ( ::SireVol::GridIndex::*i_function_type )(  ) const;
+            i_function_type i_function_value( &::SireVol::GridIndex::i );
             
             GridIndex_exposer.def( 
                 "i"
                 , i_function_value );
         
         }
-        { //::SireMM::GridIndex::isNull
+        { //::SireVol::GridIndex::isNull
         
-            typedef bool ( ::SireMM::GridIndex::*isNull_function_type )(  ) const;
-            isNull_function_type isNull_function_value( &::SireMM::GridIndex::isNull );
+            typedef bool ( ::SireVol::GridIndex::*isNull_function_type )(  ) const;
+            isNull_function_type isNull_function_value( &::SireVol::GridIndex::isNull );
             
             GridIndex_exposer.def( 
                 "isNull"
                 , isNull_function_value );
         
         }
-        { //::SireMM::GridIndex::j
+        { //::SireVol::GridIndex::j
         
-            typedef ::qint32 ( ::SireMM::GridIndex::*j_function_type )(  ) const;
-            j_function_type j_function_value( &::SireMM::GridIndex::j );
+            typedef ::qint32 ( ::SireVol::GridIndex::*j_function_type )(  ) const;
+            j_function_type j_function_value( &::SireVol::GridIndex::j );
             
             GridIndex_exposer.def( 
                 "j"
                 , j_function_value );
         
         }
-        { //::SireMM::GridIndex::k
+        { //::SireVol::GridIndex::k
         
-            typedef ::qint32 ( ::SireMM::GridIndex::*k_function_type )(  ) const;
-            k_function_type k_function_value( &::SireMM::GridIndex::k );
+            typedef ::qint32 ( ::SireVol::GridIndex::*k_function_type )(  ) const;
+            k_function_type k_function_value( &::SireVol::GridIndex::k );
             
             GridIndex_exposer.def( 
                 "k"
                 , k_function_value );
         
         }
-        { //::SireMM::GridIndex::null
+        { //::SireVol::GridIndex::null
         
-            typedef ::SireMM::GridIndex ( *null_function_type )(  );
-            null_function_type null_function_value( &::SireMM::GridIndex::null );
+            typedef ::SireVol::GridIndex ( *null_function_type )(  );
+            null_function_type null_function_value( &::SireVol::GridIndex::null );
             
             GridIndex_exposer.def( 
                 "null"
@@ -87,10 +87,10 @@ void register_GridIndex_class(){
         
         }
         GridIndex_exposer.def( bp::self != bp::self );
-        { //::SireMM::GridIndex::operator=
+        { //::SireVol::GridIndex::operator=
         
-            typedef ::SireMM::GridIndex & ( ::SireMM::GridIndex::*assign_function_type )( ::SireMM::GridIndex const & ) ;
-            assign_function_type assign_function_value( &::SireMM::GridIndex::operator= );
+            typedef ::SireVol::GridIndex & ( ::SireVol::GridIndex::*assign_function_type )( ::SireVol::GridIndex const & ) ;
+            assign_function_type assign_function_value( &::SireVol::GridIndex::operator= );
             
             GridIndex_exposer.def( 
                 "assign"
@@ -100,30 +100,30 @@ void register_GridIndex_class(){
         
         }
         GridIndex_exposer.def( bp::self == bp::self );
-        { //::SireMM::GridIndex::toString
+        { //::SireVol::GridIndex::toString
         
-            typedef ::QString ( ::SireMM::GridIndex::*toString_function_type )(  ) const;
-            toString_function_type toString_function_value( &::SireMM::GridIndex::toString );
+            typedef ::QString ( ::SireVol::GridIndex::*toString_function_type )(  ) const;
+            toString_function_type toString_function_value( &::SireVol::GridIndex::toString );
             
             GridIndex_exposer.def( 
                 "toString"
                 , toString_function_value );
         
         }
-        { //::SireMM::GridIndex::typeName
+        { //::SireVol::GridIndex::typeName
         
             typedef char const * ( *typeName_function_type )(  );
-            typeName_function_type typeName_function_value( &::SireMM::GridIndex::typeName );
+            typeName_function_type typeName_function_value( &::SireVol::GridIndex::typeName );
             
             GridIndex_exposer.def( 
                 "typeName"
                 , typeName_function_value );
         
         }
-        { //::SireMM::GridIndex::what
+        { //::SireVol::GridIndex::what
         
-            typedef char const * ( ::SireMM::GridIndex::*what_function_type )(  ) const;
-            what_function_type what_function_value( &::SireMM::GridIndex::what );
+            typedef char const * ( ::SireVol::GridIndex::*what_function_type )(  ) const;
+            what_function_type what_function_value( &::SireVol::GridIndex::what );
             
             GridIndex_exposer.def( 
                 "what"
@@ -135,12 +135,12 @@ void register_GridIndex_class(){
         GridIndex_exposer.def( "__copy__", &__copy__);
         GridIndex_exposer.def( "__deepcopy__", &__copy__);
         GridIndex_exposer.def( "clone", &__copy__);
-        GridIndex_exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireMM::GridIndex >,
+        GridIndex_exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireVol::GridIndex >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
-        GridIndex_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMM::GridIndex >,
+        GridIndex_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireVol::GridIndex >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
-        GridIndex_exposer.def( "__str__", &__str__< ::SireMM::GridIndex > );
-        GridIndex_exposer.def( "__repr__", &__str__< ::SireMM::GridIndex > );
+        GridIndex_exposer.def( "__str__", &__str__< ::SireVol::GridIndex > );
+        GridIndex_exposer.def( "__repr__", &__str__< ::SireVol::GridIndex > );
     }
 
 }

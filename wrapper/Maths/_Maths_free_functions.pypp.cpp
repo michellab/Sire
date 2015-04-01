@@ -25,6 +25,30 @@ namespace bp = boost::python;
 
 #include "SireError/errors.h"
 
+#include "SireMaths/accumulator.h"
+
+#include "SireMaths/align.h"
+
+#include "SireStream/datastream.h"
+
+#include "align.h"
+
+#include "tostring.h"
+
+#include <QElapsedTimer>
+
+#include <gsl/gsl_blas.h>
+
+#include <gsl/gsl_linalg.h>
+
+#include <gsl/gsl_matrix.h>
+
+#include <gsl/gsl_vector.h>
+
+#include "align.h"
+
+#include "SireError/errors.h"
+
 #include "boys.h"
 
 #include "gamma.h"
@@ -93,6 +117,78 @@ namespace bp = boost::python;
 
 #include "SireError/errors.h"
 
+#include "SireMaths/accumulator.h"
+
+#include "SireMaths/align.h"
+
+#include "SireStream/datastream.h"
+
+#include "align.h"
+
+#include "tostring.h"
+
+#include <QElapsedTimer>
+
+#include <gsl/gsl_blas.h>
+
+#include <gsl/gsl_linalg.h>
+
+#include <gsl/gsl_matrix.h>
+
+#include <gsl/gsl_vector.h>
+
+#include "align.h"
+
+#include "SireError/errors.h"
+
+#include "SireMaths/accumulator.h"
+
+#include "SireMaths/align.h"
+
+#include "SireStream/datastream.h"
+
+#include "align.h"
+
+#include "tostring.h"
+
+#include <QElapsedTimer>
+
+#include <gsl/gsl_blas.h>
+
+#include <gsl/gsl_linalg.h>
+
+#include <gsl/gsl_matrix.h>
+
+#include <gsl/gsl_vector.h>
+
+#include "align.h"
+
+#include "SireError/errors.h"
+
+#include "SireMaths/accumulator.h"
+
+#include "SireMaths/align.h"
+
+#include "SireStream/datastream.h"
+
+#include "align.h"
+
+#include "tostring.h"
+
+#include <QElapsedTimer>
+
+#include <gsl/gsl_blas.h>
+
+#include <gsl/gsl_linalg.h>
+
+#include <gsl/gsl_matrix.h>
+
+#include <gsl/gsl_vector.h>
+
+#include "align.h"
+
+#include "SireError/errors.h"
+
 #include "linearap.h"
 
 #include "nmatrix.h"
@@ -120,6 +216,54 @@ namespace bp = boost::python;
 #include <gsl/gsl_sf_gamma.h>
 
 #include "gamma.h"
+
+#include "SireError/errors.h"
+
+#include "SireMaths/accumulator.h"
+
+#include "SireMaths/align.h"
+
+#include "SireStream/datastream.h"
+
+#include "align.h"
+
+#include "tostring.h"
+
+#include <QElapsedTimer>
+
+#include <gsl/gsl_blas.h>
+
+#include <gsl/gsl_linalg.h>
+
+#include <gsl/gsl_matrix.h>
+
+#include <gsl/gsl_vector.h>
+
+#include "align.h"
+
+#include "SireError/errors.h"
+
+#include "SireMaths/accumulator.h"
+
+#include "SireMaths/align.h"
+
+#include "SireStream/datastream.h"
+
+#include "align.h"
+
+#include "tostring.h"
+
+#include <QElapsedTimer>
+
+#include <gsl/gsl_blas.h>
+
+#include <gsl/gsl_linalg.h>
+
+#include <gsl/gsl_matrix.h>
+
+#include <gsl/gsl_vector.h>
+
+#include "align.h"
 
 #include "SireError/errors.h"
 
@@ -219,6 +363,18 @@ void register_free_functions(){
     
     }
 
+    { //::SireMaths::align
+    
+        typedef ::QVector< SireMaths::Vector > ( *align_function_type )( ::QVector< SireMaths::Vector > const &,::QVector< SireMaths::Vector > const &,bool );
+        align_function_type align_function_value( &::SireMaths::align );
+        
+        bp::def( 
+            "align"
+            , align_function_value
+            , ( bp::arg("p"), bp::arg("q"), bp::arg("fit")=(bool)(true) ) );
+    
+    }
+
     { //::SireMaths::boys
     
         typedef double ( *boys_function_type )( int,double );
@@ -291,6 +447,42 @@ void register_free_functions(){
     
     }
 
+    { //::SireMaths::getAlignment
+    
+        typedef ::SireMaths::Transform ( *getAlignment_function_type )( ::QVector< SireMaths::Vector > const &,::QVector< SireMaths::Vector > const &,bool );
+        getAlignment_function_type getAlignment_function_value( &::SireMaths::getAlignment );
+        
+        bp::def( 
+            "getAlignment"
+            , getAlignment_function_value
+            , ( bp::arg("p"), bp::arg("q"), bp::arg("fit")=(bool)(true) ) );
+    
+    }
+
+    { //::SireMaths::getCentroid
+    
+        typedef ::SireMaths::Vector ( *getCentroid_function_type )( ::QVector< SireMaths::Vector > const &,int );
+        getCentroid_function_type getCentroid_function_value( &::SireMaths::getCentroid );
+        
+        bp::def( 
+            "getCentroid"
+            , getCentroid_function_value
+            , ( bp::arg("p"), bp::arg("n")=(int)(-0x00000000000000001) ) );
+    
+    }
+
+    { //::SireMaths::getRMSD
+    
+        typedef double ( *getRMSD_function_type )( ::QVector< SireMaths::Vector > const &,::QVector< SireMaths::Vector > const &,int );
+        getRMSD_function_type getRMSD_function_value( &::SireMaths::getRMSD );
+        
+        bp::def( 
+            "getRMSD"
+            , getRMSD_function_value
+            , ( bp::arg("p"), bp::arg("q"), bp::arg("n")=(int)(-0x00000000000000001) ) );
+    
+    }
+
     { //::SireMaths::get_lowest_total_cost
     
         typedef double ( *get_lowest_total_cost_function_type )( ::SireMaths::NMatrix const & );
@@ -324,6 +516,30 @@ void register_free_functions(){
             "incomplete_gamma_lower"
             , incomplete_gamma_lower_function_value
             , ( bp::arg("alpha"), bp::arg("x") ) );
+    
+    }
+
+    { //::SireMaths::kabasch
+    
+        typedef ::SireMaths::Matrix ( *kabasch_function_type )( ::QVector< SireMaths::Vector > const &,::QVector< SireMaths::Vector > const & );
+        kabasch_function_type kabasch_function_value( &::SireMaths::kabasch );
+        
+        bp::def( 
+            "kabasch"
+            , kabasch_function_value
+            , ( bp::arg("p"), bp::arg("q") ) );
+    
+    }
+
+    { //::SireMaths::kabaschFit
+    
+        typedef ::SireMaths::Transform ( *kabaschFit_function_type )( ::QVector< SireMaths::Vector > const &,::QVector< SireMaths::Vector > const & );
+        kabaschFit_function_type kabaschFit_function_value( &::SireMaths::kabaschFit );
+        
+        bp::def( 
+            "kabaschFit"
+            , kabaschFit_function_value
+            , ( bp::arg("p"), bp::arg("q") ) );
     
     }
 

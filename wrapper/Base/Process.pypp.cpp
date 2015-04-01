@@ -17,6 +17,8 @@ namespace bp = boost::python;
 
 #include <QMutex>
 
+#include <QThread>
+
 #include <QTime>
 
 #include <boost/weak_ptr.hpp>

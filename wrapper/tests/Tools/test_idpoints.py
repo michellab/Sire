@@ -6,6 +6,8 @@ from Sire.Mol import *
 
 import Sire.Stream
 
+import os
+
 (waters, space) = Amber().readCrdTop("../io/waterbox.crd", "../io/waterbox.top")
 
 print(space.dimensions())
@@ -25,6 +27,9 @@ for overlap in overlaps:
 
 PDB().write(ligand, "ligand.pdb")
 PDB().write(swap, "waters.pdb")
+
+command = "rm ligand.pdb waters.pdb"
+os.system(command)
 
 if __name__ == "__main__":
     print("OK")

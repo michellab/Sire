@@ -15,6 +15,8 @@ namespace bp = boost::python;
 
 #include "cljworkspace.h"
 
+#include <QThreadStorage>
+
 #include <QVarLengthArray>
 
 #include "cljworkspace.h"
@@ -23,7 +25,7 @@ SireMM::CLJWorkspace __copy__(const SireMM::CLJWorkspace &other){ return SireMM:
 
 #include "Qt/qdatastream.hpp"
 
-const char* pvt_get_name(const SireMM::CLJWorkspace&){ return "SireMM::CLJWorkspace";}
+#include "Helpers/str.hpp"
 
 #include "Helpers/len.hpp"
 
@@ -34,6 +36,17 @@ void register_CLJWorkspace_class(){
         CLJWorkspace_exposer_t CLJWorkspace_exposer = CLJWorkspace_exposer_t( "CLJWorkspace", bp::init< >() );
         bp::scope CLJWorkspace_scope( CLJWorkspace_exposer );
         CLJWorkspace_exposer.def( bp::init< SireMM::CLJWorkspace const & >(( bp::arg("other") )) );
+        { //::SireMM::CLJWorkspace::accept
+        
+            typedef void ( ::SireMM::CLJWorkspace::*accept_function_type )( ::SireMM::CLJBoxes & ) ;
+            accept_function_type accept_function_value( &::SireMM::CLJWorkspace::accept );
+            
+            CLJWorkspace_exposer.def( 
+                "accept"
+                , accept_function_value
+                , ( bp::arg("boxes") ) );
+        
+        }
         { //::SireMM::CLJWorkspace::at
         
             typedef ::SireMM::CLJDelta const & ( ::SireMM::CLJWorkspace::*at_function_type )( int ) const;
@@ -46,6 +59,16 @@ void register_CLJWorkspace_class(){
                 , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
+        { //::SireMM::CLJWorkspace::changedAtoms
+        
+            typedef ::SireMM::CLJAtoms ( ::SireMM::CLJWorkspace::*changedAtoms_function_type )(  ) const;
+            changedAtoms_function_type changedAtoms_function_value( &::SireMM::CLJWorkspace::changedAtoms );
+            
+            CLJWorkspace_exposer.def( 
+                "changedAtoms"
+                , changedAtoms_function_value );
+        
+        }
         { //::SireMM::CLJWorkspace::clear
         
             typedef void ( ::SireMM::CLJWorkspace::*clear_function_type )(  ) ;
@@ -54,6 +77,17 @@ void register_CLJWorkspace_class(){
             CLJWorkspace_exposer.def( 
                 "clear"
                 , clear_function_value );
+        
+        }
+        { //::SireMM::CLJWorkspace::commit
+        
+            typedef ::QVector< SireMM::CLJBoxIndex > ( ::SireMM::CLJWorkspace::*commit_function_type )( ::SireMM::CLJBoxes &,::SireMM::CLJDelta const & ) ;
+            commit_function_type commit_function_value( &::SireMM::CLJWorkspace::commit );
+            
+            CLJWorkspace_exposer.def( 
+                "commit"
+                , commit_function_value
+                , ( bp::arg("boxes"), bp::arg("delta") ) );
         
         }
         { //::SireMM::CLJWorkspace::count
@@ -99,12 +133,23 @@ void register_CLJWorkspace_class(){
         }
         { //::SireMM::CLJWorkspace::merge
         
-            typedef ::SireMM::CLJDelta ( ::SireMM::CLJWorkspace::*merge_function_type )(  ) const;
+            typedef ::boost::tuples::tuple< SireMM::CLJAtoms, SireMM::CLJAtoms, SireMM::CLJAtoms, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJWorkspace::*merge_function_type )(  ) const;
             merge_function_type merge_function_value( &::SireMM::CLJWorkspace::merge );
             
             CLJWorkspace_exposer.def( 
                 "merge"
                 , merge_function_value );
+        
+        }
+        { //::SireMM::CLJWorkspace::mustRecalculateFromScratch
+        
+            typedef void ( ::SireMM::CLJWorkspace::*mustRecalculateFromScratch_function_type )( ::SireMM::CLJBoxes & ) ;
+            mustRecalculateFromScratch_function_type mustRecalculateFromScratch_function_value( &::SireMM::CLJWorkspace::mustRecalculateFromScratch );
+            
+            CLJWorkspace_exposer.def( 
+                "mustRecalculateFromScratch"
+                , mustRecalculateFromScratch_function_value
+                , ( bp::arg("boxes") ) );
         
         }
         { //::SireMM::CLJWorkspace::nDeltas
@@ -115,6 +160,36 @@ void register_CLJWorkspace_class(){
             CLJWorkspace_exposer.def( 
                 "nDeltas"
                 , nDeltas_function_value );
+        
+        }
+        { //::SireMM::CLJWorkspace::needsAccepting
+        
+            typedef bool ( ::SireMM::CLJWorkspace::*needsAccepting_function_type )(  ) const;
+            needsAccepting_function_type needsAccepting_function_value( &::SireMM::CLJWorkspace::needsAccepting );
+            
+            CLJWorkspace_exposer.def( 
+                "needsAccepting"
+                , needsAccepting_function_value );
+        
+        }
+        { //::SireMM::CLJWorkspace::newAtoms
+        
+            typedef ::SireMM::CLJAtoms ( ::SireMM::CLJWorkspace::*newAtoms_function_type )(  ) const;
+            newAtoms_function_type newAtoms_function_value( &::SireMM::CLJWorkspace::newAtoms );
+            
+            CLJWorkspace_exposer.def( 
+                "newAtoms"
+                , newAtoms_function_value );
+        
+        }
+        { //::SireMM::CLJWorkspace::oldAtoms
+        
+            typedef ::SireMM::CLJAtoms ( ::SireMM::CLJWorkspace::*oldAtoms_function_type )(  ) const;
+            oldAtoms_function_type oldAtoms_function_value( &::SireMM::CLJWorkspace::oldAtoms );
+            
+            CLJWorkspace_exposer.def( 
+                "oldAtoms"
+                , oldAtoms_function_value );
         
         }
         CLJWorkspace_exposer.def( bp::self != bp::self );
@@ -145,35 +220,45 @@ void register_CLJWorkspace_class(){
         }
         { //::SireMM::CLJWorkspace::push
         
-            typedef void ( ::SireMM::CLJWorkspace::*push_function_type )( ::SireMM::CLJDelta const & ) ;
+            typedef ::SireMM::CLJDelta ( ::SireMM::CLJWorkspace::*push_function_type )( ::SireMM::CLJBoxes &,::QVector< SireMM::CLJBoxIndex > const &,::SireMM::CLJAtoms const &,::SireMM::CLJDelta const & ) ;
             push_function_type push_function_value( &::SireMM::CLJWorkspace::push );
             
             CLJWorkspace_exposer.def( 
                 "push"
                 , push_function_value
-                , ( bp::arg("delta") ) );
+                , ( bp::arg("boxes"), bp::arg("old_atoms"), bp::arg("new_atoms"), bp::arg("old_delta") ) );
         
         }
-        { //::SireMM::CLJWorkspace::push
+        { //::SireMM::CLJWorkspace::recalculatingFromScratch
         
-            typedef void ( ::SireMM::CLJWorkspace::*push_function_type )( ::quint32,::SireMM::CLJBoxes const &,::QVector< SireMM::CLJBoxIndex > const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
-            push_function_type push_function_value( &::SireMM::CLJWorkspace::push );
+            typedef bool ( ::SireMM::CLJWorkspace::*recalculatingFromScratch_function_type )(  ) const;
+            recalculatingFromScratch_function_type recalculatingFromScratch_function_value( &::SireMM::CLJWorkspace::recalculatingFromScratch );
             
             CLJWorkspace_exposer.def( 
-                "push"
-                , push_function_value
-                , ( bp::arg("idnum"), bp::arg("boxes"), bp::arg("old_atoms"), bp::arg("new_atoms"), bp::arg("map")=SireBase::PropertyMap() ) );
+                "recalculatingFromScratch"
+                , recalculatingFromScratch_function_value );
         
         }
-        { //::SireMM::CLJWorkspace::push
+        { //::SireMM::CLJWorkspace::removeSameIDAtoms
         
-            typedef void ( ::SireMM::CLJWorkspace::*push_function_type )( ::quint32,::SireMM::CLJBoxes const &,::QVector< SireMM::CLJBoxIndex > const &,::SireMol::MoleculeView const &,::SireMM::CLJAtoms::ID_SOURCE,::SireBase::PropertyMap const & ) ;
-            push_function_type push_function_value( &::SireMM::CLJWorkspace::push );
+            typedef void ( ::SireMM::CLJWorkspace::*removeSameIDAtoms_function_type )( ::SireMM::CLJBoxes & ) ;
+            removeSameIDAtoms_function_type removeSameIDAtoms_function_value( &::SireMM::CLJWorkspace::removeSameIDAtoms );
             
             CLJWorkspace_exposer.def( 
-                "push"
-                , push_function_value
-                , ( bp::arg("idnum"), bp::arg("boxes"), bp::arg("old_atoms"), bp::arg("new_atoms"), bp::arg("source"), bp::arg("map")=SireBase::PropertyMap() ) );
+                "removeSameIDAtoms"
+                , removeSameIDAtoms_function_value
+                , ( bp::arg("boxes") ) );
+        
+        }
+        { //::SireMM::CLJWorkspace::revert
+        
+            typedef ::QVector< SireMM::CLJBoxIndex > ( ::SireMM::CLJWorkspace::*revert_function_type )( ::SireMM::CLJBoxes &,::SireMM::CLJDelta const & ) ;
+            revert_function_type revert_function_value( &::SireMM::CLJWorkspace::revert );
+            
+            CLJWorkspace_exposer.def( 
+                "revert"
+                , revert_function_value
+                , ( bp::arg("boxes"), bp::arg("delta") ) );
         
         }
         { //::SireMM::CLJWorkspace::size
@@ -184,6 +269,16 @@ void register_CLJWorkspace_class(){
             CLJWorkspace_exposer.def( 
                 "size"
                 , size_function_value );
+        
+        }
+        { //::SireMM::CLJWorkspace::toString
+        
+            typedef ::QString ( ::SireMM::CLJWorkspace::*toString_function_type )(  ) const;
+            toString_function_type toString_function_value( &::SireMM::CLJWorkspace::toString );
+            
+            CLJWorkspace_exposer.def( 
+                "toString"
+                , toString_function_value );
         
         }
         { //::SireMM::CLJWorkspace::typeName
@@ -214,8 +309,8 @@ void register_CLJWorkspace_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         CLJWorkspace_exposer.def( "__rrshift__", &__rrshift__QDataStream< ::SireMM::CLJWorkspace >,
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
-        CLJWorkspace_exposer.def( "__str__", &pvt_get_name);
-        CLJWorkspace_exposer.def( "__repr__", &pvt_get_name);
+        CLJWorkspace_exposer.def( "__str__", &__str__< ::SireMM::CLJWorkspace > );
+        CLJWorkspace_exposer.def( "__repr__", &__str__< ::SireMM::CLJWorkspace > );
         CLJWorkspace_exposer.def( "__len__", &__len_size< ::SireMM::CLJWorkspace > );
         CLJWorkspace_exposer.def( "__getitem__", &::SireMM::CLJWorkspace::getitem );
     }

@@ -11,6 +11,8 @@ namespace bp = boost::python;
 
 #include "SireError/errors.h"
 
+#include "SireMaths/align.h"
+
 #include "SireMaths/axisset.h"
 
 #include "SireMaths/matrix.h"
@@ -218,6 +220,30 @@ void register_CoordGroupEditor_class(){
                 "setCoordinates"
                 , setCoordinates_function_value
                 , ( bp::arg("i"), bp::arg("newcoords") )
+                , bp::return_self< >() );
+        
+        }
+        { //::SireVol::CoordGroupEditor::transform
+        
+            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*transform_function_type )( ::SireMaths::Transform const & ) ;
+            transform_function_type transform_function_value( &::SireVol::CoordGroupEditor::transform );
+            
+            CoordGroupEditor_exposer.def( 
+                "transform"
+                , transform_function_value
+                , ( bp::arg("t") )
+                , bp::return_self< >() );
+        
+        }
+        { //::SireVol::CoordGroupEditor::transform
+        
+            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*transform_function_type )( ::quint32,::SireMaths::Transform const & ) ;
+            transform_function_type transform_function_value( &::SireVol::CoordGroupEditor::transform );
+            
+            CoordGroupEditor_exposer.def( 
+                "transform"
+                , transform_function_value
+                , ( bp::arg("i"), bp::arg("t") )
                 , bp::return_self< >() );
         
         }

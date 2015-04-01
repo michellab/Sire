@@ -121,12 +121,19 @@
 #include <QDebug>
 #include <QMutex>
 #include "bondhunter.h"
+#include "SireError/errors.h"
 #include "SireStream/datastream.h"
+#include "SireUnits/units.h"
+#include "atomidentifier.h"
 #include "atomidx.h"
 #include "atommatcher.h"
+#include "atommatchers.h"
 #include "atomname.h"
+#include "atomselection.h"
+#include "evaluator.h"
 #include "moleculeinfodata.h"
 #include "moleculeview.h"
+#include "tostring.h"
 #include "atommatcher.h"
 void register_SireMol_properties()
 {

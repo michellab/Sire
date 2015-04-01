@@ -35,6 +35,7 @@
 #include "system.h"
 #include "systemmonitor.h"
 #include "systemmonitors.h"
+#include "volmapmonitor.h"
 
 #endif
 

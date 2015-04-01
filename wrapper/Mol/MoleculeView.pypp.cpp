@@ -306,6 +306,16 @@ void register_MoleculeView_class(){
                 , isEmpty_function_value );
         
         }
+        { //::SireMol::MoleculeView::isNull
+        
+            typedef bool ( ::SireMol::MoleculeView::*isNull_function_type )(  ) const;
+            isNull_function_type isNull_function_value( &::SireMol::MoleculeView::isNull );
+            
+            MoleculeView_exposer.def( 
+                "isNull"
+                , isNull_function_value );
+        
+        }
         { //::SireMol::MoleculeView::isSameMolecule
         
             typedef bool ( ::SireMol::MoleculeView::*isSameMolecule_function_type )( ::SireMol::MoleculeView const & ) const;

@@ -55,6 +55,16 @@ void register_Replicas_class(){
                 , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
+        { //::SireMove::Replicas::collectSupraStats
+        
+            typedef void ( ::SireMove::Replicas::*collectSupraStats_function_type )(  ) ;
+            collectSupraStats_function_type collectSupraStats_function_value( &::SireMove::Replicas::collectSupraStats );
+            
+            Replicas_exposer.def( 
+                "collectSupraStats"
+                , collectSupraStats_function_value );
+        
+        }
         { //::SireMove::Replicas::lambdaTrajectory
         
             typedef ::QVector< double > ( ::SireMove::Replicas::*lambdaTrajectory_function_type )(  ) const;
@@ -63,6 +73,16 @@ void register_Replicas_class(){
             Replicas_exposer.def( 
                 "lambdaTrajectory"
                 , lambdaTrajectory_function_value );
+        
+        }
+        { //::SireMove::Replicas::lambdaTrajectoryHistory
+        
+            typedef ::QList< QVector< double > > ( ::SireMove::Replicas::*lambdaTrajectoryHistory_function_type )(  ) const;
+            lambdaTrajectoryHistory_function_type lambdaTrajectoryHistory_function_value( &::SireMove::Replicas::lambdaTrajectoryHistory );
+            
+            Replicas_exposer.def( 
+                "lambdaTrajectoryHistory"
+                , lambdaTrajectoryHistory_function_value );
         
         }
         { //::SireMove::Replicas::nReplicas

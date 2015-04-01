@@ -29,6 +29,10 @@
 
 #include "Grid.pypp.hpp"
 
+#include "GridIndex.pypp.hpp"
+
+#include "GridInfo.pypp.hpp"
+
 #include "NullGrid.pypp.hpp"
 
 #include "NullPatching.pypp.hpp"
@@ -85,6 +89,10 @@ BOOST_PYTHON_MODULE(_Vol){
     register_CoordGroupEditor_class();
 
     register_Grid_class();
+
+    register_GridIndex_class();
+
+    register_GridInfo_class();
 
     register_NullGrid_class();
 

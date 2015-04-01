@@ -4,8 +4,8 @@
 #include "SireBase_registrars.h"
 
 #include "lengthproperty.h"
-#include "property.h"
 #include "cpuid.h"
+#include "property.h"
 #include "booleanproperty.h"
 #include "stringproperty.h"
 #include "propertymap.h"
@@ -22,9 +22,9 @@ void register_SireBase_objects()
 {
 
     ObjectRegistry::registerConverterFor< SireBase::LengthProperty >();
+    ObjectRegistry::registerConverterFor< SireBase::CPUID >();
     ObjectRegistry::registerConverterFor< SireBase::NullProperty >();
     ObjectRegistry::registerConverterFor< SireBase::VariantProperty >();
-    ObjectRegistry::registerConverterFor< SireBase::CPUID >();
     ObjectRegistry::registerConverterFor< SireBase::BooleanProperty >();
     ObjectRegistry::registerConverterFor< SireBase::StringProperty >();
     ObjectRegistry::registerConverterFor< SireBase::PropertyName >();

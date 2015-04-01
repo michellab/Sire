@@ -909,6 +909,16 @@ void register_AtomSelection_class(){
                 , isEmpty_function_value );
         
         }
+        { //::SireMol::AtomSelection::isNull
+        
+            typedef bool ( ::SireMol::AtomSelection::*isNull_function_type )(  ) const;
+            isNull_function_type isNull_function_value( &::SireMol::AtomSelection::isNull );
+            
+            AtomSelection_exposer.def( 
+                "isNull"
+                , isNull_function_value );
+        
+        }
         { //::SireMol::AtomSelection::mask
         
             typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type )( ::SireMol::AtomIdx ) ;

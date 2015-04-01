@@ -4,6 +4,7 @@
 #ifdef GCCXML_PARSE
 
 #include "accumulator.h"
+#include "align.h"
 #include "axisset.h"
 #include "boys.h"
 #include "complex.h"

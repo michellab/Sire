@@ -9,6 +9,8 @@ namespace bp = boost::python;
 
 #include "SireBase/quickcopy.hpp"
 
+#include "SireMaths/align.h"
+
 #include "SireStream/datastream.h"
 
 #include "SireStream/shareddatastream.h"
@@ -495,6 +497,30 @@ void register_AtomCoords_class(){
                 "toVector"
                 , toVector_function_value
                 , ( bp::arg("selection") ) );
+        
+        }
+        { //::SireMol::AtomProperty< SireMaths::Vector >::transform
+        
+            typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
+            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*transform_function_type )( ::SireMaths::Transform const & ) ;
+            transform_function_type transform_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::transform );
+            
+            AtomCoords_exposer.def( 
+                "transform"
+                , transform_function_value
+                , ( bp::arg("t") ) );
+        
+        }
+        { //::SireMol::AtomProperty< SireMaths::Vector >::transform
+        
+            typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
+            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*transform_function_type )( ::SireMol::CGIdx,::SireMaths::Transform const & ) ;
+            transform_function_type transform_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::transform );
+            
+            AtomCoords_exposer.def( 
+                "transform"
+                , transform_function_value
+                , ( bp::arg("cgidx"), bp::arg("t") ) );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector >::translate

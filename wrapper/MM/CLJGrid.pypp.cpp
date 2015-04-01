@@ -46,11 +46,11 @@ void register_CLJGrid_class(){
         bp::scope CLJGrid_scope( CLJGrid_exposer );
         CLJGrid_exposer.def( bp::init< SireVol::AABox const & >(( bp::arg("grid_dimensions") )) );
         CLJGrid_exposer.def( bp::init< SireVol::AABox const &, SireUnits::Dimension::Length >(( bp::arg("grid_dimensions"), bp::arg("grid_spacing") )) );
-        CLJGrid_exposer.def( bp::init< SireMM::GridInfo const & >(( bp::arg("grid") )) );
+        CLJGrid_exposer.def( bp::init< SireVol::GridInfo const & >(( bp::arg("grid") )) );
         CLJGrid_exposer.def( bp::init< SireMM::CLJFunction const & >(( bp::arg("cljfunc") )) );
         CLJGrid_exposer.def( bp::init< SireMM::CLJFunction const &, SireVol::AABox const & >(( bp::arg("cljfunc"), bp::arg("grid_dimensions") )) );
         CLJGrid_exposer.def( bp::init< SireMM::CLJFunction const &, SireVol::AABox const &, SireUnits::Dimension::Length >(( bp::arg("cljfunc"), bp::arg("grid_dimensions"), bp::arg("grid_spacing") )) );
-        CLJGrid_exposer.def( bp::init< SireMM::CLJFunction const &, SireMM::GridInfo const & >(( bp::arg("cljfunc"), bp::arg("grid") )) );
+        CLJGrid_exposer.def( bp::init< SireMM::CLJFunction const &, SireVol::GridInfo const & >(( bp::arg("cljfunc"), bp::arg("grid") )) );
         CLJGrid_exposer.def( bp::init< SireMM::CLJGrid const & >(( bp::arg("other") )) );
         { //::SireMM::CLJGrid::addFixedAtoms
         
@@ -128,6 +128,26 @@ void register_CLJGrid_class(){
                 , disableGrid_function_value );
         
         }
+        { //::SireMM::CLJGrid::disableParallelCalculation
+        
+            typedef void ( ::SireMM::CLJGrid::*disableParallelCalculation_function_type )(  ) ;
+            disableParallelCalculation_function_type disableParallelCalculation_function_value( &::SireMM::CLJGrid::disableParallelCalculation );
+            
+            CLJGrid_exposer.def( 
+                "disableParallelCalculation"
+                , disableParallelCalculation_function_value );
+        
+        }
+        { //::SireMM::CLJGrid::disableReproducibleCalculation
+        
+            typedef void ( ::SireMM::CLJGrid::*disableReproducibleCalculation_function_type )(  ) ;
+            disableReproducibleCalculation_function_type disableReproducibleCalculation_function_value( &::SireMM::CLJGrid::disableReproducibleCalculation );
+            
+            CLJGrid_exposer.def( 
+                "disableReproducibleCalculation"
+                , disableReproducibleCalculation_function_value );
+        
+        }
         { //::SireMM::CLJGrid::enableGrid
         
             typedef void ( ::SireMM::CLJGrid::*enableGrid_function_type )(  ) ;
@@ -136,6 +156,26 @@ void register_CLJGrid_class(){
             CLJGrid_exposer.def( 
                 "enableGrid"
                 , enableGrid_function_value );
+        
+        }
+        { //::SireMM::CLJGrid::enableParallelCalculation
+        
+            typedef void ( ::SireMM::CLJGrid::*enableParallelCalculation_function_type )(  ) ;
+            enableParallelCalculation_function_type enableParallelCalculation_function_value( &::SireMM::CLJGrid::enableParallelCalculation );
+            
+            CLJGrid_exposer.def( 
+                "enableParallelCalculation"
+                , enableParallelCalculation_function_value );
+        
+        }
+        { //::SireMM::CLJGrid::enableReproducibleCalculation
+        
+            typedef void ( ::SireMM::CLJGrid::*enableReproducibleCalculation_function_type )(  ) ;
+            enableReproducibleCalculation_function_type enableReproducibleCalculation_function_value( &::SireMM::CLJGrid::enableReproducibleCalculation );
+            
+            CLJGrid_exposer.def( 
+                "enableReproducibleCalculation"
+                , enableReproducibleCalculation_function_value );
         
         }
         { //::SireMM::CLJGrid::fixedAtoms
@@ -160,7 +200,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::grid
         
-            typedef ::SireMM::GridInfo ( ::SireMM::CLJGrid::*grid_function_type )(  ) const;
+            typedef ::SireVol::GridInfo ( ::SireMM::CLJGrid::*grid_function_type )(  ) const;
             grid_function_type grid_function_value( &::SireMM::CLJGrid::grid );
             
             CLJGrid_exposer.def( 
@@ -299,7 +339,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::setGrid
         
-            typedef void ( ::SireMM::CLJGrid::*setGrid_function_type )( ::SireMM::GridInfo const & ) ;
+            typedef void ( ::SireMM::CLJGrid::*setGrid_function_type )( ::SireVol::GridInfo const & ) ;
             setGrid_function_type setGrid_function_value( &::SireMM::CLJGrid::setGrid );
             
             CLJGrid_exposer.def( 
@@ -385,6 +425,28 @@ void register_CLJGrid_class(){
                 , ( bp::arg("on") ) );
         
         }
+        { //::SireMM::CLJGrid::setUseParallelCalculation
+        
+            typedef void ( ::SireMM::CLJGrid::*setUseParallelCalculation_function_type )( bool ) ;
+            setUseParallelCalculation_function_type setUseParallelCalculation_function_value( &::SireMM::CLJGrid::setUseParallelCalculation );
+            
+            CLJGrid_exposer.def( 
+                "setUseParallelCalculation"
+                , setUseParallelCalculation_function_value
+                , ( bp::arg("on") ) );
+        
+        }
+        { //::SireMM::CLJGrid::setUseReproducibleCalculation
+        
+            typedef void ( ::SireMM::CLJGrid::*setUseReproducibleCalculation_function_type )( bool ) ;
+            setUseReproducibleCalculation_function_type setUseReproducibleCalculation_function_value( &::SireMM::CLJGrid::setUseReproducibleCalculation );
+            
+            CLJGrid_exposer.def( 
+                "setUseReproducibleCalculation"
+                , setUseReproducibleCalculation_function_value
+                , ( bp::arg("on") ) );
+        
+        }
         { //::SireMM::CLJGrid::toString
         
             typedef ::QString ( ::SireMM::CLJGrid::*toString_function_type )(  ) const;
@@ -435,6 +497,26 @@ void register_CLJGrid_class(){
             CLJGrid_exposer.def( 
                 "usesGrid"
                 , usesGrid_function_value );
+        
+        }
+        { //::SireMM::CLJGrid::usesParallelCalculation
+        
+            typedef bool ( ::SireMM::CLJGrid::*usesParallelCalculation_function_type )(  ) const;
+            usesParallelCalculation_function_type usesParallelCalculation_function_value( &::SireMM::CLJGrid::usesParallelCalculation );
+            
+            CLJGrid_exposer.def( 
+                "usesParallelCalculation"
+                , usesParallelCalculation_function_value );
+        
+        }
+        { //::SireMM::CLJGrid::usesReproducibleCalculation
+        
+            typedef bool ( ::SireMM::CLJGrid::*usesReproducibleCalculation_function_type )(  ) const;
+            usesReproducibleCalculation_function_type usesReproducibleCalculation_function_value( &::SireMM::CLJGrid::usesReproducibleCalculation );
+            
+            CLJGrid_exposer.def( 
+                "usesReproducibleCalculation"
+                , usesReproducibleCalculation_function_value );
         
         }
         { //::SireMM::CLJGrid::what

@@ -81,6 +81,8 @@
 
 #include "PrefSampler.pypp.hpp"
 
+#include "RBWorkspaceJM.pypp.hpp"
+
 #include "RepExMove.pypp.hpp"
 
 #include "RepExSubMove.pypp.hpp"
@@ -257,6 +259,8 @@ BOOST_PYTHON_MODULE(_Move){
     register_Sampler_class();
 
     register_PrefSampler_class();
+
+    register_RBWorkspaceJM_class();
 
     register_RepExMove_class();
 

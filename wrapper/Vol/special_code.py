@@ -10,6 +10,7 @@ from pyplusplus.module_builder import call_policies
 def fix_CoordGroupEditor(c):
    c.decls( "translate" ).call_policies = call_policies.return_self()
    c.decls( "rotate" ).call_policies = call_policies.return_self()
+   c.decls( "transform" ).call_policies = call_policies.return_self()
    c.decls( "setCoordinates" ).call_policies = call_policies.return_self()
    c.decls( "mapInto" ).call_policies = call_policies.return_self()
    c.decls( "changeFrame" ).call_policies = call_policies.return_self()

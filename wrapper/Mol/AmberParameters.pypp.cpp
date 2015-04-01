@@ -87,6 +87,38 @@ void register_AmberParameters_class(){
                 , ( bp::arg("improper"), bp::arg("v"), bp::arg("periodicity"), bp::arg("phase") ) );
         
         }
+        { //::SireMol::AmberParameters::add14Pair
+        
+            typedef void ( ::SireMol::AmberParameters::*add14Pair_function_type )( ::SireMol::BondID const &,double const &,double const & ) ;
+            add14Pair_function_type add14Pair_function_value( &::SireMol::AmberParameters::add14Pair );
+            
+            AmberParameters_exposer.def( 
+                "add14Pair"
+                , add14Pair_function_value
+                , ( bp::arg("pair"), bp::arg("cscl"), bp::arg("ljscl") ) );
+        
+        }
+        { //::SireMol::AmberParameters::get14PairParams
+        
+            typedef ::QList< double > ( ::SireMol::AmberParameters::*get14PairParams_function_type )( ::SireMol::BondID const & ) ;
+            get14PairParams_function_type get14PairParams_function_value( &::SireMol::AmberParameters::get14PairParams );
+            
+            AmberParameters_exposer.def( 
+                "get14PairParams"
+                , get14PairParams_function_value
+                , ( bp::arg("pair") ) );
+        
+        }
+        { //::SireMol::AmberParameters::getAll14Pairs
+        
+            typedef ::QList< SireMol::BondID > ( ::SireMol::AmberParameters::*getAll14Pairs_function_type )(  ) ;
+            getAll14Pairs_function_type getAll14Pairs_function_value( &::SireMol::AmberParameters::getAll14Pairs );
+            
+            AmberParameters_exposer.def( 
+                "getAll14Pairs"
+                , getAll14Pairs_function_value );
+        
+        }
         { //::SireMol::AmberParameters::getAllAngles
         
             typedef ::QList< SireMol::AngleID > ( ::SireMol::AmberParameters::*getAllAngles_function_type )(  ) ;
@@ -249,6 +281,17 @@ void register_AmberParameters_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("improper") ) );
+        
+        }
+        { //::SireMol::AmberParameters::remove14Pair
+        
+            typedef void ( ::SireMol::AmberParameters::*remove14Pair_function_type )( ::SireMol::BondID const & ) ;
+            remove14Pair_function_type remove14Pair_function_value( &::SireMol::AmberParameters::remove14Pair );
+            
+            AmberParameters_exposer.def( 
+                "remove14Pair"
+                , remove14Pair_function_value
+                , ( bp::arg("pair") ) );
         
         }
         { //::SireMol::AmberParameters::typeName

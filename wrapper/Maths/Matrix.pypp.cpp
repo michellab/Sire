@@ -29,7 +29,11 @@ namespace bp = boost::python;
 
 #include <boost/scoped_array.hpp>
 
+#include <gsl/gsl_blas.h>
+
 #include <gsl/gsl_eigen.h>
+
+#include <gsl/gsl_linalg.h>
 
 #include <gsl/gsl_matrix.h>
 
@@ -54,7 +58,19 @@ void register_Matrix_class(){
         Matrix_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const &, SireMaths::Vector const & >(( bp::arg("r1"), bp::arg("r2"), bp::arg("r3") )) );
         Matrix_exposer.def( bp::init< boost::tuples::tuple< SireMaths::Vector, SireMaths::Vector, SireMaths::Vector, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > const & >(( bp::arg("rows") )) );
         Matrix_exposer.def( bp::init< SireMaths::NMatrix const & >(( bp::arg("m") )) );
+        Matrix_exposer.def( bp::init< gsl_matrix const * >(( bp::arg("m") )) );
         Matrix_exposer.def( bp::init< SireMaths::Matrix const & >(( bp::arg("m") )) );
+        { //::SireMaths::Matrix::at
+        
+            typedef double ( ::SireMaths::Matrix::*at_function_type )( int,int ) const;
+            at_function_type at_function_value( &::SireMaths::Matrix::at );
+            
+            Matrix_exposer.def( 
+                "at"
+                , at_function_value
+                , ( bp::arg("i"), bp::arg("j") ) );
+        
+        }
         { //::SireMaths::Matrix::checkedOffset
         
             typedef int ( ::SireMaths::Matrix::*checkedOffset_function_type )( int,int ) const;
@@ -96,6 +112,17 @@ void register_Matrix_class(){
                 , column2_function_value );
         
         }
+        { //::SireMaths::Matrix::covariance
+        
+            typedef ::SireMaths::Matrix ( *covariance_function_type )( ::QVector< SireMaths::Vector > const &,::QVector< SireMaths::Vector > const &,int );
+            covariance_function_type covariance_function_value( &::SireMaths::Matrix::covariance );
+            
+            Matrix_exposer.def( 
+                "covariance"
+                , covariance_function_value
+                , ( bp::arg("p"), bp::arg("q"), bp::arg("n")=(int)(-0x00000000000000001) ) );
+        
+        }
         { //::SireMaths::Matrix::determinant
         
             typedef double ( ::SireMaths::Matrix::*determinant_function_type )(  ) const;
@@ -108,7 +135,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::diagonalise
         
-            typedef ::std::pair< SireMaths::Vector, SireMaths::Matrix > ( ::SireMaths::Matrix::*diagonalise_function_type )(  ) const;
+            typedef ::boost::tuples::tuple< SireMaths::Vector, SireMaths::Matrix, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMaths::Matrix::*diagonalise_function_type )(  ) const;
             diagonalise_function_type diagonalise_function_value( &::SireMaths::Matrix::diagonalise );
             
             Matrix_exposer.def( 
@@ -251,6 +278,26 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "setToIdentity"
                 , setToIdentity_function_value );
+        
+        }
+        { //::SireMaths::Matrix::singleValueDecomposition
+        
+            typedef ::boost::tuples::tuple< SireMaths::Matrix, SireMaths::Matrix, SireMaths::Matrix, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMaths::Matrix::*singleValueDecomposition_function_type )(  ) const;
+            singleValueDecomposition_function_type singleValueDecomposition_function_value( &::SireMaths::Matrix::singleValueDecomposition );
+            
+            Matrix_exposer.def( 
+                "singleValueDecomposition"
+                , singleValueDecomposition_function_value );
+        
+        }
+        { //::SireMaths::Matrix::svd
+        
+            typedef ::boost::tuples::tuple< SireMaths::Matrix, SireMaths::Matrix, SireMaths::Matrix, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMaths::Matrix::*svd_function_type )(  ) const;
+            svd_function_type svd_function_value( &::SireMaths::Matrix::svd );
+            
+            Matrix_exposer.def( 
+                "svd"
+                , svd_function_value );
         
         }
         { //::SireMaths::Matrix::toString
@@ -403,6 +450,7 @@ void register_Matrix_class(){
                 , zz_function_value );
         
         }
+        Matrix_exposer.staticmethod( "covariance" );
         Matrix_exposer.staticmethod( "identity" );
         Matrix_exposer.staticmethod( "typeName" );
         Matrix_exposer.staticmethod( "zero" );

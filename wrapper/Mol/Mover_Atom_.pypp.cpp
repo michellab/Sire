@@ -45,6 +45,8 @@ namespace bp = boost::python;
 
 #include "atom.h"
 
+#include "SireMaths/align.h"
+
 #include "SireMaths/axisset.h"
 
 #include "SireMaths/matrix.h"
@@ -68,6 +70,8 @@ namespace bp = boost::python;
 #include "atomcoords.h"
 
 #include "atommatcher.h"
+
+#include "atommatchers.h"
 
 #include "bondid.h"
 
@@ -98,6 +102,58 @@ void register_Mover_Atom__class(){
         Mover_Atom__exposer.def( bp::init< SireMol::Atom const & >(( bp::arg("view") )) );
         Mover_Atom__exposer.def( bp::init< SireMol::Atom const &, SireMol::AtomSelection const & >(( bp::arg("view"), bp::arg("movable_atoms") )) );
         Mover_Atom__exposer.def( bp::init< SireMol::Mover< SireMol::Atom > const & >(( bp::arg("other") )) );
+        { //::SireMol::Mover< SireMol::Atom >::align
+        
+            typedef SireMol::Mover< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*align_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
+            align_function_type align_function_value( &::SireMol::Mover< SireMol::Atom >::align );
+            
+            Mover_Atom__exposer.def( 
+                "align"
+                , align_function_value
+                , ( bp::arg("other"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::return_self< >() );
+        
+        }
+        { //::SireMol::Mover< SireMol::Atom >::align
+        
+            typedef SireMol::Mover< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*align_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
+            align_function_type align_function_value( &::SireMol::Mover< SireMol::Atom >::align );
+            
+            Mover_Atom__exposer.def( 
+                "align"
+                , align_function_value
+                , ( bp::arg("other"), bp::arg("map0"), bp::arg("map1") )
+                , bp::return_self< >() );
+        
+        }
+        { //::SireMol::Mover< SireMol::Atom >::align
+        
+            typedef SireMol::Mover< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*align_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
+            align_function_type align_function_value( &::SireMol::Mover< SireMol::Atom >::align );
+            
+            Mover_Atom__exposer.def( 
+                "align"
+                , align_function_value
+                , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::return_self< >() );
+        
+        }
+        { //::SireMol::Mover< SireMol::Atom >::align
+        
+            typedef SireMol::Mover< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*align_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
+            align_function_type align_function_value( &::SireMol::Mover< SireMol::Atom >::align );
+            
+            Mover_Atom__exposer.def( 
+                "align"
+                , align_function_value
+                , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map0"), bp::arg("map1") )
+                , bp::return_self< >() );
+        
+        }
         { //::SireMol::Mover< SireMol::Atom >::alignTo
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
@@ -378,6 +434,19 @@ void register_Mover_Atom__class(){
             Mover_Atom__exposer.def( 
                 "toString"
                 , toString_function_value );
+        
+        }
+        { //::SireMol::Mover< SireMol::Atom >::transform
+        
+            typedef SireMol::Mover< SireMol::Atom > exported_class_t;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*transform_function_type )( ::SireMaths::Transform const &,::SireBase::PropertyMap const & ) ;
+            transform_function_type transform_function_value( &::SireMol::Mover< SireMol::Atom >::transform );
+            
+            Mover_Atom__exposer.def( 
+                "transform"
+                , transform_function_value
+                , ( bp::arg("transform"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::return_self< >() );
         
         }
         { //::SireMol::Mover< SireMol::Atom >::translate

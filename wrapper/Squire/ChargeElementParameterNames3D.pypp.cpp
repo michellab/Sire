@@ -7,7 +7,11 @@
 
 namespace bp = boost::python;
 
+#include "SireBase/booleanproperty.h"
+
 #include "SireError/errors.h"
+
+#include "SireFF/energytable.h"
 
 #include "SireFF/errors.h"
 

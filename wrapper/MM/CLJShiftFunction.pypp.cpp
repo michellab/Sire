@@ -17,9 +17,11 @@ namespace bp = boost::python;
 
 #include "SireStream/shareddatastream.h"
 
-#include "cljshiftfunction.h"
+#include "SireUnits/units.h"
 
-#include "gridinfo.h"
+#include "SireVol/gridinfo.h"
+
+#include "cljshiftfunction.h"
 
 #include <QDebug>
 
@@ -81,6 +83,16 @@ void register_CLJShiftFunction_class(){
             CLJShiftFunction_exposer.def( 
                 "supportsGridCalculation"
                 , supportsGridCalculation_function_value );
+        
+        }
+        { //::SireMM::CLJShiftFunction::toString
+        
+            typedef ::QString ( ::SireMM::CLJShiftFunction::*toString_function_type )(  ) const;
+            toString_function_type toString_function_value( &::SireMM::CLJShiftFunction::toString );
+            
+            CLJShiftFunction_exposer.def( 
+                "toString"
+                , toString_function_value );
         
         }
         { //::SireMM::CLJShiftFunction::typeName

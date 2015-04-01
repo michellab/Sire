@@ -40,6 +40,8 @@ namespace bp = boost::python;
 
 #include "SireStream/shareddatastream.h"
 
+#include "energytable.h"
+
 #include "ff3d.h"
 
 #include "ffidx.h"
@@ -69,6 +71,8 @@ namespace bp = boost::python;
 #include "forcefields.h"
 
 #include "forcetable.h"
+
+#include "energytable.h"
 
 SireFF::ForceFields __copy__(const SireFF::ForceFields &other){ return SireFF::ForceFields(other); }
 
@@ -609,6 +613,28 @@ void register_ForceFields_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("component") ) );
+        
+        }
+        { //::SireFF::ForceFields::energy
+        
+            typedef void ( ::SireFF::ForceFields::*energy_function_type )( ::SireFF::EnergyTable &,double ) ;
+            energy_function_type energy_function_value( &::SireFF::ForceFields::energy );
+            
+            ForceFields_exposer.def( 
+                "energy"
+                , energy_function_value
+                , ( bp::arg("energytable"), bp::arg("scale_energy")=1 ) );
+        
+        }
+        { //::SireFF::ForceFields::energy
+        
+            typedef void ( ::SireFF::ForceFields::*energy_function_type )( ::SireFF::EnergyTable &,::SireCAS::Symbol const &,double ) ;
+            energy_function_type energy_function_value( &::SireFF::ForceFields::energy );
+            
+            ForceFields_exposer.def( 
+                "energy"
+                , energy_function_value
+                , ( bp::arg("energytable"), bp::arg("component"), bp::arg("scale_energy")=1 ) );
         
         }
         { //::SireFF::ForceFields::energyComponents
@@ -1636,35 +1662,35 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::update
         
-            typedef void ( ::SireFF::ForceFields::*update_function_type )( ::SireMol::MoleculeData const & ) ;
+            typedef void ( ::SireFF::ForceFields::*update_function_type )( ::SireMol::MoleculeData const &,bool ) ;
             update_function_type update_function_value( &::SireFF::ForceFields::update );
             
             ForceFields_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("moldata") ) );
+                , ( bp::arg("moldata"), bp::arg("auto_commit")=(bool)(true) ) );
         
         }
         { //::SireFF::ForceFields::update
         
-            typedef void ( ::SireFF::ForceFields::*update_function_type )( ::SireMol::Molecules const & ) ;
+            typedef void ( ::SireFF::ForceFields::*update_function_type )( ::SireMol::Molecules const &,bool ) ;
             update_function_type update_function_value( &::SireFF::ForceFields::update );
             
             ForceFields_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules"), bp::arg("auto_commit")=(bool)(true) ) );
         
         }
         { //::SireFF::ForceFields::update
         
-            typedef void ( ::SireFF::ForceFields::*update_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireFF::ForceFields::*update_function_type )( ::SireMol::MoleculeGroup const &,bool ) ;
             update_function_type update_function_value( &::SireFF::ForceFields::update );
             
             ForceFields_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup"), bp::arg("auto_commit")=(bool)(true) ) );
         
         }
         { //::SireFF::ForceFields::userProperties

@@ -37,6 +37,8 @@ namespace bp = boost::python;
 
 #include "cutgroup.h"
 
+#include "SireMaths/align.h"
+
 #include "SireMaths/axisset.h"
 
 #include "SireMaths/matrix.h"
@@ -60,6 +62,8 @@ namespace bp = boost::python;
 #include "atomcoords.h"
 
 #include "atommatcher.h"
+
+#include "atommatchers.h"
 
 #include "bondid.h"
 
@@ -90,6 +94,58 @@ void register_Mover_CutGroup__class(){
         Mover_CutGroup__exposer.def( bp::init< SireMol::CutGroup const & >(( bp::arg("view") )) );
         Mover_CutGroup__exposer.def( bp::init< SireMol::CutGroup const &, SireMol::AtomSelection const & >(( bp::arg("view"), bp::arg("movable_atoms") )) );
         Mover_CutGroup__exposer.def( bp::init< SireMol::Mover< SireMol::CutGroup > const & >(( bp::arg("other") )) );
+        { //::SireMol::Mover< SireMol::CutGroup >::align
+        
+            typedef SireMol::Mover< SireMol::CutGroup > exported_class_t;
+            typedef ::SireMol::Mover< SireMol::CutGroup > & ( ::SireMol::Mover< SireMol::CutGroup >::*align_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
+            align_function_type align_function_value( &::SireMol::Mover< SireMol::CutGroup >::align );
+            
+            Mover_CutGroup__exposer.def( 
+                "align"
+                , align_function_value
+                , ( bp::arg("other"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::return_self< >() );
+        
+        }
+        { //::SireMol::Mover< SireMol::CutGroup >::align
+        
+            typedef SireMol::Mover< SireMol::CutGroup > exported_class_t;
+            typedef ::SireMol::Mover< SireMol::CutGroup > & ( ::SireMol::Mover< SireMol::CutGroup >::*align_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
+            align_function_type align_function_value( &::SireMol::Mover< SireMol::CutGroup >::align );
+            
+            Mover_CutGroup__exposer.def( 
+                "align"
+                , align_function_value
+                , ( bp::arg("other"), bp::arg("map0"), bp::arg("map1") )
+                , bp::return_self< >() );
+        
+        }
+        { //::SireMol::Mover< SireMol::CutGroup >::align
+        
+            typedef SireMol::Mover< SireMol::CutGroup > exported_class_t;
+            typedef ::SireMol::Mover< SireMol::CutGroup > & ( ::SireMol::Mover< SireMol::CutGroup >::*align_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
+            align_function_type align_function_value( &::SireMol::Mover< SireMol::CutGroup >::align );
+            
+            Mover_CutGroup__exposer.def( 
+                "align"
+                , align_function_value
+                , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::return_self< >() );
+        
+        }
+        { //::SireMol::Mover< SireMol::CutGroup >::align
+        
+            typedef SireMol::Mover< SireMol::CutGroup > exported_class_t;
+            typedef ::SireMol::Mover< SireMol::CutGroup > & ( ::SireMol::Mover< SireMol::CutGroup >::*align_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
+            align_function_type align_function_value( &::SireMol::Mover< SireMol::CutGroup >::align );
+            
+            Mover_CutGroup__exposer.def( 
+                "align"
+                , align_function_value
+                , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map0"), bp::arg("map1") )
+                , bp::return_self< >() );
+        
+        }
         { //::SireMol::Mover< SireMol::CutGroup >::alignTo
         
             typedef SireMol::Mover< SireMol::CutGroup > exported_class_t;
@@ -370,6 +426,19 @@ void register_Mover_CutGroup__class(){
             Mover_CutGroup__exposer.def( 
                 "toString"
                 , toString_function_value );
+        
+        }
+        { //::SireMol::Mover< SireMol::CutGroup >::transform
+        
+            typedef SireMol::Mover< SireMol::CutGroup > exported_class_t;
+            typedef ::SireMol::Mover< SireMol::CutGroup > & ( ::SireMol::Mover< SireMol::CutGroup >::*transform_function_type )( ::SireMaths::Transform const &,::SireBase::PropertyMap const & ) ;
+            transform_function_type transform_function_value( &::SireMol::Mover< SireMol::CutGroup >::transform );
+            
+            Mover_CutGroup__exposer.def( 
+                "transform"
+                , transform_function_value
+                , ( bp::arg("transform"), bp::arg("map")=SireBase::PropertyMap() )
+                , bp::return_self< >() );
         
         }
         { //::SireMol::Mover< SireMol::CutGroup >::translate

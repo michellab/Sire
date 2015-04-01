@@ -12,6 +12,8 @@ namespace bp = boost::python;
 
 #include "SireError/errors.h"
 
+#include "SireFF/energytable.h"
+
 #include "SireFF/ff.h"
 
 #include "SireFF/ffidx.h"
@@ -726,6 +728,28 @@ void register_System_class(){
                 "energy"
                 , energy_function_value
                 , ( bp::arg("component") ) );
+        
+        }
+        { //::SireSystem::System::energy
+        
+            typedef void ( ::SireSystem::System::*energy_function_type )( ::SireFF::EnergyTable &,double ) ;
+            energy_function_type energy_function_value( &::SireSystem::System::energy );
+            
+            System_exposer.def( 
+                "energy"
+                , energy_function_value
+                , ( bp::arg("energytable"), bp::arg("scale_energy")=1 ) );
+        
+        }
+        { //::SireSystem::System::energy
+        
+            typedef void ( ::SireSystem::System::*energy_function_type )( ::SireFF::EnergyTable &,::SireCAS::Symbol const &,double ) ;
+            energy_function_type energy_function_value( &::SireSystem::System::energy );
+            
+            System_exposer.def( 
+                "energy"
+                , energy_function_value
+                , ( bp::arg("energytable"), bp::arg("component"), bp::arg("scale_energy")=1 ) );
         
         }
         { //::SireSystem::System::energyComponents
@@ -1866,35 +1890,35 @@ void register_System_class(){
         }
         { //::SireSystem::System::update
         
-            typedef void ( ::SireSystem::System::*update_function_type )( ::SireMol::MoleculeData const & ) ;
+            typedef void ( ::SireSystem::System::*update_function_type )( ::SireMol::MoleculeData const &,bool ) ;
             update_function_type update_function_value( &::SireSystem::System::update );
             
             System_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("moldata") ) );
+                , ( bp::arg("moldata"), bp::arg("auto_commit")=(bool)(true) ) );
         
         }
         { //::SireSystem::System::update
         
-            typedef void ( ::SireSystem::System::*update_function_type )( ::SireMol::Molecules const & ) ;
+            typedef void ( ::SireSystem::System::*update_function_type )( ::SireMol::Molecules const &,bool ) ;
             update_function_type update_function_value( &::SireSystem::System::update );
             
             System_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules"), bp::arg("auto_commit")=(bool)(true) ) );
         
         }
         { //::SireSystem::System::update
         
-            typedef void ( ::SireSystem::System::*update_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireSystem::System::*update_function_type )( ::SireMol::MoleculeGroup const &,bool ) ;
             update_function_type update_function_value( &::SireSystem::System::update );
             
             System_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup"), bp::arg("auto_commit")=(bool)(true) ) );
         
         }
         { //::SireSystem::System::userProperties

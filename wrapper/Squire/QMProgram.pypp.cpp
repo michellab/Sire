@@ -89,6 +89,27 @@ void register_QMProgram_class(){
                 , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
+        { //::Squire::QMProgram::numberOfMMAtomsLimit
+        
+            typedef int ( ::Squire::QMProgram::*numberOfMMAtomsLimit_function_type )(  ) const;
+            numberOfMMAtomsLimit_function_type numberOfMMAtomsLimit_function_value( &::Squire::QMProgram::numberOfMMAtomsLimit );
+            
+            QMProgram_exposer.def( 
+                "numberOfMMAtomsLimit"
+                , numberOfMMAtomsLimit_function_value );
+        
+        }
+        { //::Squire::QMProgram::numberOfMMAtomsLimit
+        
+            typedef int ( ::Squire::QMProgram::*numberOfMMAtomsLimit_function_type )( int ) const;
+            numberOfMMAtomsLimit_function_type numberOfMMAtomsLimit_function_value( &::Squire::QMProgram::numberOfMMAtomsLimit );
+            
+            QMProgram_exposer.def( 
+                "numberOfMMAtomsLimit"
+                , numberOfMMAtomsLimit_function_value
+                , ( bp::arg("num_qm_atoms") ) );
+        
+        }
         { //::Squire::QMProgram::supportsGaussianCharges
         
             typedef bool ( ::Squire::QMProgram::*supportsGaussianCharges_function_type )(  ) const;

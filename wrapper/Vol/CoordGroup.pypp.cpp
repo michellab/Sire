@@ -11,6 +11,8 @@ namespace bp = boost::python;
 
 #include "SireError/errors.h"
 
+#include "SireMaths/align.h"
+
 #include "SireMaths/axisset.h"
 
 #include "SireMaths/matrix.h"

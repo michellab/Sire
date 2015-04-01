@@ -124,6 +124,16 @@ void register_Molpro_class(){
                 , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
+        { //::Squire::Molpro::latticeInBohrRadii
+        
+            typedef bool ( ::Squire::Molpro::*latticeInBohrRadii_function_type )(  ) const;
+            latticeInBohrRadii_function_type latticeInBohrRadii_function_value( &::Squire::Molpro::latticeInBohrRadii );
+            
+            Molpro_exposer.def( 
+                "latticeInBohrRadii"
+                , latticeInBohrRadii_function_value );
+        
+        }
         { //::Squire::Molpro::maximumRunTime
         
             typedef int ( ::Squire::Molpro::*maximumRunTime_function_type )(  ) const;
@@ -224,6 +234,17 @@ void register_Molpro_class(){
                 , ( bp::arg("force_template") ) );
         
         }
+        { //::Squire::Molpro::setLatticeInBohrRadii
+        
+            typedef void ( ::Squire::Molpro::*setLatticeInBohrRadii_function_type )( bool ) ;
+            setLatticeInBohrRadii_function_type setLatticeInBohrRadii_function_value( &::Squire::Molpro::setLatticeInBohrRadii );
+            
+            Molpro_exposer.def( 
+                "setLatticeInBohrRadii"
+                , setLatticeInBohrRadii_function_value
+                , ( bp::arg("on") ) );
+        
+        }
         { //::Squire::Molpro::setMaximumRunTime
         
             typedef void ( ::Squire::Molpro::*setMaximumRunTime_function_type )( int ) ;
@@ -276,6 +297,16 @@ void register_Molpro_class(){
             Molpro_exposer.def( 
                 "supportsLatticeCharges"
                 , supportsLatticeCharges_function_value );
+        
+        }
+        { //::Squire::Molpro::toString
+        
+            typedef ::QString ( ::Squire::Molpro::*toString_function_type )(  ) const;
+            toString_function_type toString_function_value( &::Squire::Molpro::toString );
+            
+            Molpro_exposer.def( 
+                "toString"
+                , toString_function_value );
         
         }
         { //::Squire::Molpro::totalCharge

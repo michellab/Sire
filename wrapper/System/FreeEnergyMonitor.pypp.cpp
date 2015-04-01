@@ -228,6 +228,16 @@ void register_FreeEnergyMonitor_class(){
                 , ( bp::arg("system") ) );
         
         }
+        { //::SireSystem::FreeEnergyMonitor::nSamples
+        
+            typedef int ( ::SireSystem::FreeEnergyMonitor::*nSamples_function_type )(  ) const;
+            nSamples_function_type nSamples_function_value( &::SireSystem::FreeEnergyMonitor::nSamples );
+            
+            FreeEnergyMonitor_exposer.def( 
+                "nSamples"
+                , nSamples_function_value );
+        
+        }
         FreeEnergyMonitor_exposer.def( bp::self != bp::self );
         FreeEnergyMonitor_exposer.def( bp::self + bp::self );
         { //::SireSystem::FreeEnergyMonitor::operator=

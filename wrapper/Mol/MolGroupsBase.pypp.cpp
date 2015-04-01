@@ -1765,46 +1765,46 @@ void register_MolGroupsBase_class(){
         }
         { //::SireMol::MolGroupsBase::update
         
-            typedef void ( ::SireMol::MolGroupsBase::*update_function_type )( ::SireMol::MoleculeData const & ) ;
+            typedef void ( ::SireMol::MolGroupsBase::*update_function_type )( ::SireMol::MoleculeData const &,bool ) ;
             update_function_type update_function_value( &::SireMol::MolGroupsBase::update );
             
             MolGroupsBase_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("moldata") ) );
+                , ( bp::arg("moldata"), bp::arg("auto_commit")=(bool)(true) ) );
         
         }
         { //::SireMol::MolGroupsBase::update
         
-            typedef void ( ::SireMol::MolGroupsBase::*update_function_type )( ::SireMol::MoleculeView const & ) ;
+            typedef void ( ::SireMol::MolGroupsBase::*update_function_type )( ::SireMol::MoleculeView const &,bool ) ;
             update_function_type update_function_value( &::SireMol::MolGroupsBase::update );
             
             MolGroupsBase_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview"), bp::arg("auto_commit")=(bool)(true) ) );
         
         }
         { //::SireMol::MolGroupsBase::update
         
-            typedef void ( ::SireMol::MolGroupsBase::*update_function_type )( ::SireMol::Molecules const & ) ;
+            typedef void ( ::SireMol::MolGroupsBase::*update_function_type )( ::SireMol::Molecules const &,bool ) ;
             update_function_type update_function_value( &::SireMol::MolGroupsBase::update );
             
             MolGroupsBase_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules"), bp::arg("auto_commit")=(bool)(true) ) );
         
         }
         { //::SireMol::MolGroupsBase::update
         
-            typedef void ( ::SireMol::MolGroupsBase::*update_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireMol::MolGroupsBase::*update_function_type )( ::SireMol::MoleculeGroup const &,bool ) ;
             update_function_type update_function_value( &::SireMol::MolGroupsBase::update );
             
             MolGroupsBase_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup"), bp::arg("auto_commit")=(bool)(true) ) );
         
         }
         MolGroupsBase_exposer.staticmethod( "null" );

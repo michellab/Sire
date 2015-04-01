@@ -11,6 +11,8 @@ namespace bp = boost::python;
 
 #include "atommatcher.h"
 
+#include "atommatchers.h"
+
 #include "moleculeinfodata.h"
 
 #include "molviewproperty.h"

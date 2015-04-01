@@ -8,6 +8,8 @@
 
 namespace bp = boost::python;
 
+#include "SireError/errors.h"
+
 #include "SireMaths/histogram.h"
 
 #include "SireMaths/maths.h"
@@ -34,9 +36,10 @@ void register_FreeEnergyAverage_class(){
         typedef bp::class_< SireMaths::FreeEnergyAverage, bp::bases< SireMaths::ExpAverage, SireMaths::Accumulator, SireBase::Property > > FreeEnergyAverage_exposer_t;
         FreeEnergyAverage_exposer_t FreeEnergyAverage_exposer = FreeEnergyAverage_exposer_t( "FreeEnergyAverage", bp::init< >() );
         bp::scope FreeEnergyAverage_scope( FreeEnergyAverage_exposer );
-        FreeEnergyAverage_exposer.def( bp::init< SireUnits::Dimension::Temperature const & >(( bp::arg("temperature") )) );
-        FreeEnergyAverage_exposer.def( bp::init< SireUnits::Dimension::MolarEnergy const & >(( bp::arg("binwidth") )) );
-        FreeEnergyAverage_exposer.def( bp::init< SireUnits::Dimension::Temperature const &, SireUnits::Dimension::MolarEnergy const & >(( bp::arg("temperature"), bp::arg("binwidth") )) );
+        FreeEnergyAverage_exposer.def( bp::init< bool >(( bp::arg("forwards_free_energy") )) );
+        FreeEnergyAverage_exposer.def( bp::init< SireUnits::Dimension::Temperature const &, bp::optional< bool > >(( bp::arg("temperature"), bp::arg("forwards_free_energy")=(bool)(true) )) );
+        FreeEnergyAverage_exposer.def( bp::init< SireUnits::Dimension::MolarEnergy const &, bp::optional< bool > >(( bp::arg("binwidth"), bp::arg("forwards_free_energy")=(bool)(true) )) );
+        FreeEnergyAverage_exposer.def( bp::init< SireUnits::Dimension::Temperature const &, SireUnits::Dimension::MolarEnergy const &, bp::optional< bool > >(( bp::arg("temperature"), bp::arg("binwidth"), bp::arg("forwards_free_energy")=(bool)(true) )) );
         FreeEnergyAverage_exposer.def( bp::init< SireMaths::FreeEnergyAverage const & >(( bp::arg("other") )) );
         { //::SireMaths::FreeEnergyAverage::accumulate
         
@@ -49,6 +52,26 @@ void register_FreeEnergyAverage_class(){
                 , ( bp::arg("value") ) );
         
         }
+        { //::SireMaths::FreeEnergyAverage::average
+        
+            typedef double ( ::SireMaths::FreeEnergyAverage::*average_function_type )(  ) const;
+            average_function_type average_function_value( &::SireMaths::FreeEnergyAverage::average );
+            
+            FreeEnergyAverage_exposer.def( 
+                "average"
+                , average_function_value );
+        
+        }
+        { //::SireMaths::FreeEnergyAverage::average2
+        
+            typedef double ( ::SireMaths::FreeEnergyAverage::*average2_function_type )(  ) const;
+            average2_function_type average2_function_value( &::SireMaths::FreeEnergyAverage::average2 );
+            
+            FreeEnergyAverage_exposer.def( 
+                "average2"
+                , average2_function_value );
+        
+        }
         { //::SireMaths::FreeEnergyAverage::clear
         
             typedef void ( ::SireMaths::FreeEnergyAverage::*clear_function_type )(  ) ;
@@ -57,6 +80,16 @@ void register_FreeEnergyAverage_class(){
             FreeEnergyAverage_exposer.def( 
                 "clear"
                 , clear_function_value );
+        
+        }
+        { //::SireMaths::FreeEnergyAverage::fepFreeEnergy
+        
+            typedef double ( ::SireMaths::FreeEnergyAverage::*fepFreeEnergy_function_type )(  ) const;
+            fepFreeEnergy_function_type fepFreeEnergy_function_value( &::SireMaths::FreeEnergyAverage::fepFreeEnergy );
+            
+            FreeEnergyAverage_exposer.def( 
+                "fepFreeEnergy"
+                , fepFreeEnergy_function_value );
         
         }
         { //::SireMaths::FreeEnergyAverage::histogram
@@ -68,6 +101,26 @@ void register_FreeEnergyAverage_class(){
                 "histogram"
                 , histogram_function_value
                 , bp::return_value_policy<bp::clone_const_reference>() );
+        
+        }
+        { //::SireMaths::FreeEnergyAverage::isBackwardsFreeEnergy
+        
+            typedef bool ( ::SireMaths::FreeEnergyAverage::*isBackwardsFreeEnergy_function_type )(  ) const;
+            isBackwardsFreeEnergy_function_type isBackwardsFreeEnergy_function_value( &::SireMaths::FreeEnergyAverage::isBackwardsFreeEnergy );
+            
+            FreeEnergyAverage_exposer.def( 
+                "isBackwardsFreeEnergy"
+                , isBackwardsFreeEnergy_function_value );
+        
+        }
+        { //::SireMaths::FreeEnergyAverage::isForwardsFreeEnergy
+        
+            typedef bool ( ::SireMaths::FreeEnergyAverage::*isForwardsFreeEnergy_function_type )(  ) const;
+            isForwardsFreeEnergy_function_type isForwardsFreeEnergy_function_value( &::SireMaths::FreeEnergyAverage::isForwardsFreeEnergy );
+            
+            FreeEnergyAverage_exposer.def( 
+                "isForwardsFreeEnergy"
+                , isForwardsFreeEnergy_function_value );
         
         }
         FreeEnergyAverage_exposer.def( bp::self != bp::self );

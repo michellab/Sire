@@ -3,8 +3,8 @@
 
 #include "SireCAS_registrars.h"
 
-#include "function.h"
 #include "expression.h"
+#include "function.h"
 #include "complexvalues.h"
 #include "values.h"
 #include "trigfuncs.h"
@@ -31,8 +31,8 @@
 void register_SireCAS_objects()
 {
 
-    ObjectRegistry::registerConverterFor< SireCAS::Function >();
     ObjectRegistry::registerConverterFor< SireCAS::Expression >();
+    ObjectRegistry::registerConverterFor< SireCAS::Function >();
     ObjectRegistry::registerConverterFor< SireCAS::ComplexValues >();
     ObjectRegistry::registerConverterFor< SireCAS::Values >();
     ObjectRegistry::registerConverterFor< SireCAS::Cos >();

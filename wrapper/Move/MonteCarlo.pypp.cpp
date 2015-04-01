@@ -55,6 +55,26 @@ void register_MonteCarlo_class(){
                 , clearStatistics_function_value );
         
         }
+        { //::SireMove::MonteCarlo::disableOptimisedMoves
+        
+            typedef void ( ::SireMove::MonteCarlo::*disableOptimisedMoves_function_type )(  ) ;
+            disableOptimisedMoves_function_type disableOptimisedMoves_function_value( &::SireMove::MonteCarlo::disableOptimisedMoves );
+            
+            MonteCarlo_exposer.def( 
+                "disableOptimisedMoves"
+                , disableOptimisedMoves_function_value );
+        
+        }
+        { //::SireMove::MonteCarlo::enableOptimisedMoves
+        
+            typedef void ( ::SireMove::MonteCarlo::*enableOptimisedMoves_function_type )(  ) ;
+            enableOptimisedMoves_function_type enableOptimisedMoves_function_value( &::SireMove::MonteCarlo::enableOptimisedMoves );
+            
+            MonteCarlo_exposer.def( 
+                "enableOptimisedMoves"
+                , enableOptimisedMoves_function_value );
+        
+        }
         { //::SireMove::MonteCarlo::ensemble
         
             typedef ::SireMove::Ensemble ( ::SireMove::MonteCarlo::*ensemble_function_type )(  ) const;
@@ -127,6 +147,17 @@ void register_MonteCarlo_class(){
                 , ( bp::arg("generator") ) );
         
         }
+        { //::SireMove::MonteCarlo::setUseOptimisedMoves
+        
+            typedef void ( ::SireMove::MonteCarlo::*setUseOptimisedMoves_function_type )( bool ) ;
+            setUseOptimisedMoves_function_type setUseOptimisedMoves_function_value( &::SireMove::MonteCarlo::setUseOptimisedMoves );
+            
+            MonteCarlo_exposer.def( 
+                "setUseOptimisedMoves"
+                , setUseOptimisedMoves_function_value
+                , ( bp::arg("on") ) );
+        
+        }
         { //::SireMove::MonteCarlo::typeName
         
             typedef char const * ( *typeName_function_type )(  );
@@ -135,6 +166,16 @@ void register_MonteCarlo_class(){
             MonteCarlo_exposer.def( 
                 "typeName"
                 , typeName_function_value );
+        
+        }
+        { //::SireMove::MonteCarlo::usingOptimisedMoves
+        
+            typedef bool ( ::SireMove::MonteCarlo::*usingOptimisedMoves_function_type )(  ) const;
+            usingOptimisedMoves_function_type usingOptimisedMoves_function_value( &::SireMove::MonteCarlo::usingOptimisedMoves );
+            
+            MonteCarlo_exposer.def( 
+                "usingOptimisedMoves"
+                , usingOptimisedMoves_function_value );
         
         }
         MonteCarlo_exposer.staticmethod( "typeName" );

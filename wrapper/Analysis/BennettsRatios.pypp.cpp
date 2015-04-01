@@ -17,6 +17,10 @@ namespace bp = boost::python;
 
 #include "SireStream/shareddatastream.h"
 
+#include "SireUnits/temperature.h"
+
+#include "SireUnits/units.h"
+
 #include "bennetts.h"
 
 #include "tostring.h"
@@ -55,6 +59,16 @@ void register_BennettsRatios_class(){
             BennettsRatios_exposer.def( 
                 "backwardsRatios"
                 , backwardsRatios_function_value );
+        
+        }
+        { //::SireAnalysis::BennettsRatios::constants
+        
+            typedef ::QVector< SireAnalysis::DataPoint > ( ::SireAnalysis::BennettsRatios::*constants_function_type )(  ) const;
+            constants_function_type constants_function_value( &::SireAnalysis::BennettsRatios::constants );
+            
+            BennettsRatios_exposer.def( 
+                "constants"
+                , constants_function_value );
         
         }
         { //::SireAnalysis::BennettsRatios::denominators

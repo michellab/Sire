@@ -21,10 +21,12 @@
 #include "integrator.h"
 #include "integratorworkspace.h"
 #include "integrator.h"
+#include "SireError/errors.h"
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
+#include "suprasubmoves.h"
 #include "suprasubsystem.h"
-#include "suprasubsystem.h"
+#include "suprasubmoves.h"
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 #include "supramove.h"
@@ -78,22 +80,18 @@
 #include "suprasystem.h"
 #include "supramoves.h"
 #include "SireError/errors.h"
-#include "SireMaths/rangenerator.h"
+#include "SireMaths/vector.h"
+#include "SireMol/atom.h"
+#include "SireMol/atomcoords.h"
+#include "SireMol/evaluator.h"
+#include "SireMol/moleculeview.h"
+#include "SireMol/mover.hpp"
+#include "SireMol/selector.hpp"
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
-#include "SireSystem/system.h"
-#include "SireUnits/temperature.h"
-#include "SireUnits/units.h"
-#include "ensemble.h"
-#include "move.h"
-#include <QMutex>
-#include "move.h"
-#include "SireError/errors.h"
-#include "SireStream/datastream.h"
-#include "SireStream/shareddatastream.h"
-#include "suprasubmoves.h"
-#include "suprasubsystem.h"
-#include "suprasubmoves.h"
+#include "getpoint.h"
+#include <QDebug>
+#include "getpoint.h"
 #include "SireMol/molecule.h"
 #include "SireMol/partialmolecule.h"
 #include "SireStream/datastream.h"
@@ -114,18 +112,20 @@
 #include "molinserter.h"
 #include "molinserter.h"
 #include "SireError/errors.h"
-#include "SireMaths/vector.h"
-#include "SireMol/atom.h"
-#include "SireMol/atomcoords.h"
-#include "SireMol/evaluator.h"
-#include "SireMol/moleculeview.h"
-#include "SireMol/mover.hpp"
-#include "SireMol/selector.hpp"
+#include "SireMaths/rangenerator.h"
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
-#include "getpoint.h"
-#include <QDebug>
-#include "getpoint.h"
+#include "SireSystem/system.h"
+#include "SireUnits/temperature.h"
+#include "SireUnits/units.h"
+#include "ensemble.h"
+#include "move.h"
+#include <QMutex>
+#include "move.h"
+#include "SireStream/datastream.h"
+#include "SireStream/shareddatastream.h"
+#include "suprasubsystem.h"
+#include "suprasubsystem.h"
 #include "SireMol/molecule.h"
 #include "SireMol/moleculegroup.h"
 #include "SireStream/datastream.h"
@@ -138,16 +138,16 @@ void register_SireMove_properties()
 {
     register_property_container< SireMove::SupraSubMovePtr, SireMove::SupraSubMove >();
     register_property_container< SireMove::IntegratorPtr, SireMove::Integrator >();
-    register_property_container< SireMove::SupraSubSystemPtr, SireMove::SupraSubSystem >();
+    register_property_container< SireMove::SupraSubMovesPtr, SireMove::SupraSubMoves >();
     register_property_container< SireMove::SupraMovePtr, SireMove::SupraMove >();
     register_property_container< SireMove::SupraSystemPtr, SireMove::SupraSystem >();
     register_property_container< SireMove::MovesPtr, SireMove::Moves >();
     register_property_container< SireMove::VelGenPtr, SireMove::VelocityGenerator >();
     register_property_container< SireMove::SupraMovesPtr, SireMove::SupraMoves >();
-    register_property_container< SireMove::MovePtr, SireMove::Move >();
-    register_property_container< SireMove::SupraSubMovesPtr, SireMove::SupraSubMoves >();
+    register_property_container< SireMove::GetPointPtr, SireMove::GetPoint >();
     register_property_container< SireMove::SamplerPtr, SireMove::Sampler >();
     register_property_container< SireMove::MolInserterPtr, SireMove::MolInserter >();
-    register_property_container< SireMove::GetPointPtr, SireMove::GetPoint >();
+    register_property_container< SireMove::MovePtr, SireMove::Move >();
+    register_property_container< SireMove::SupraSubSystemPtr, SireMove::SupraSubSystem >();
     register_property_container< SireMove::MolDeleterPtr, SireMove::MolDeleter >();
 }
