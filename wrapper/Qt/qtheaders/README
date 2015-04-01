@@ -1,0 +1,12 @@
+This directory contains the Qt headers that are scanned to 
+generate the Sire.Qt wrappers. These headers come
+from the opensource X11 version of Qt 4.2.1
+
+(the minimum version of Qt supported by Sire)
+
+These headers are used *just* to generate the wrappers, as then
+these wrappers should be source compatible with Qt >= 4.2.1
+
+These are modified versions of the Qt 4.2.1 headers, modified to allow
+easy generation of the boost::python wrappers.
+

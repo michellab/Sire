@@ -1,0 +1,19 @@
+#################################
+#
+# Defines some variables that say
+# where Sire is installed etc.
+#
+
+import Sire.Base
+
+binary_directory = Sire.Base.getBinDir()
+library_directory = Sire.Base.getLibDir()
+include_directory = "%s/include" % Sire.Base.getInstallDir()
+share_directory = Sire.Base.getShareDir()
+parameter_directory = "%s/parameters" % share_directory
+test_directory = "%s/test" % Sire.Base.getInstallDir()
+
+sire_repository_url = Sire.Base.getRepositoryURL()
+sire_repository_version = Sire.Base.getRepositoryVersion()
+sire_python_repository_url = "@SVN_REPOSITORY_URL@"
+sire_python_repository_version = "@SVN_VERSION_NUMBER@"

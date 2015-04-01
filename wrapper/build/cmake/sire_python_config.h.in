@@ -1,0 +1,10 @@
+
+// Auto-generated file - do not edit
+
+#ifndef SIRE_PYTHON2_CONFIG_H
+#define SIRE_PYTHON2_CONFIG_H
+
+/** Paths used to locate the Sire libraries etc. */
+#define SIRE_PYTHON2_DIR "@SIRE_PYTHON@"
+
+#endif
