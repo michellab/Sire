@@ -473,6 +473,17 @@ void register_OpenMMFrEnergyST_class(){
                 , isTimeReversible_function_value );
         
         }
+        { //::SireMove::OpenMMFrEnergyST::minimizer
+        
+            typedef ::SireSystem::System ( ::SireMove::OpenMMFrEnergyST::*minimizer_function_type )( ::SireSystem::System &,double,double ) ;
+            minimizer_function_type minimizer_function_value( &::SireMove::OpenMMFrEnergyST::minimizer );
+            
+            OpenMMFrEnergyST_exposer.def( 
+                "minimizer"
+                , minimizer_function_value
+                , ( bp::arg("system"), bp::arg("max_iteration"), bp::arg("tolerance") ) );
+        
+        }
         OpenMMFrEnergyST_exposer.def( bp::self != bp::self );
         { //::SireMove::OpenMMFrEnergyST::operator=
         
