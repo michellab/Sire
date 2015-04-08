@@ -1,5 +1,5 @@
 =========================
-IMSTALLATION INSTRUCTIONS
+INSTALLATION INSTRUCTIONS
 =========================
 
 Tested on Ubuntu 14.04
