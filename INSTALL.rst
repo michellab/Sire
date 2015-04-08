@@ -18,7 +18,7 @@ Do you have OpenMM installed? If not make sure it is!
 
 A minimum requirement is 2.8.12
 
-4. create a corelib build directory and build/install
+4. Create a corelib build directory and build/install
 ::
    mkdir build_core
    cd build_core
@@ -27,7 +27,7 @@ A minimum requirement is 2.8.12
    make install -j 4
 
 
-5. create wrapper build directory and build/install
+5. Create wrapper build directory and build/install
 ::
    mkdir build_wrapper
    cmake ../wrapper
