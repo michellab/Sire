@@ -182,7 +182,7 @@ OpenMMFrEnergyST::OpenMMFrEnergyST(bool frequent_save)
                 CMMremoval_frequency(0), buffer_frequency(0),energy_frequency(100),device_index("0"), precision("single"), Alchemical_value(0.5),coulomb_power(0),
                 shift_delta(2.0),delta_alchemical(0.001),gradients(),energies(), perturbed_energies(),
                 Integrator_type("leapfrogverlet"),friction(1.0 / picosecond ),integration_tol(0.001),timeskip(0.0 * picosecond),
-                minimize(false),minimize_tol(1.0),minimize_iterations(0),equilib_iterations(5000),equilib_time_step(0.0005 * picosecond),
+                //minimize(false),minimize_tol(1.0),minimize_iterations(0),equilib_iterations(5000),equilib_time_step(0.0005 * picosecond),
                 reinetialize_context(false),GF_acc(0.0),GB_acc(0.0)
 {}
 
@@ -199,7 +199,7 @@ OpenMMFrEnergyST::OpenMMFrEnergyST(const MoleculeGroup &molecule_group, const Mo
                 CMMremoval_frequency(0), buffer_frequency(0), energy_frequency(100),device_index("0"),precision("single"),Alchemical_value(0.5),coulomb_power(0),
                 shift_delta(2.0),delta_alchemical(0.001),gradients(),energies(), perturbed_energies(),
                 Integrator_type("leapfrogverlet"),friction(1.0 / picosecond ),integration_tol(0.001),timeskip(0.0 * picosecond),
-                minimize(false),minimize_tol(1.0),minimize_iterations(0),equilib_iterations(5000),equilib_time_step(0.0005 * picosecond),
+                //minimize(false),minimize_tol(1.0),minimize_iterations(0),equilib_iterations(5000),equilib_time_step(0.0005 * picosecond),
                 reinetialize_context(false),GF_acc(0.0),GB_acc(0.0)
 {}
 
@@ -223,7 +223,7 @@ OpenMMFrEnergyST::OpenMMFrEnergyST(const OpenMMFrEnergyST &other)
                 delta_alchemical(other.delta_alchemical), gradients(other.gradients),energies(other.energies), 
                 perturbed_energies(other.perturbed_energies),
                 Integrator_type(other.Integrator_type),friction(other.friction),integration_tol(other.integration_tol),timeskip(other.timeskip),
-                minimize(other.minimize),minimize_tol(other.minimize_tol),minimize_iterations(other.minimize_iterations),
+                //minimize(other.minimize),minimize_tol(other.minimize_tol),minimize_iterations(other.minimize_iterations),
                 equilib_iterations(other.equilib_iterations),equilib_time_step(other.equilib_time_step),
                 reinetialize_context(other.reinetialize_context),GF_acc(other.GF_acc),GB_acc(other.GB_acc)
 {}
@@ -276,9 +276,9 @@ OpenMMFrEnergyST& OpenMMFrEnergyST::operator=(const OpenMMFrEnergyST &other)
     friction = other.friction;
     integration_tol = other.integration_tol;
     timeskip=other.timeskip;
-    minimize=other.minimize;
-    minimize_tol=other.minimize_tol;
-    minimize_iterations=other.minimize_iterations;
+    //minimize=other.minimize;
+    //minimize_tol=other.minimize_tol;
+    //minimize_iterations=other.minimize_iterations;
     equilib_iterations=other.equilib_iterations;
     equilib_time_step=other.equilib_time_step;
     reinetialize_context=other.reinetialize_context;
@@ -322,9 +322,9 @@ bool OpenMMFrEnergyST::operator==(const OpenMMFrEnergyST &other) const
     and friction == other.friction
     and integration_tol == other.integration_tol
     and timeskip == other.timeskip
-    and minimize == other.minimize
-    and minimize_tol == other.minimize_tol
-    and minimize_iterations == other.minimize_iterations
+    //and minimize == other.minimize
+    //and minimize_tol == other.minimize_tol
+    //and minimize_iterations == other.minimize_iterations
     and equilib_iterations == other.equilib_iterations
     and equilib_time_step == other.equilib_time_step
     and reinetialize_context == other.reinetialize_context
@@ -2942,7 +2942,7 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace, const Symbol &n
     std::vector<OpenMM::Vec3> velocities_openmm(nats);
     
 
-    if(minimize){
+    /*if(minimize){
 
         //New time step for minimization and equilibartion in ps
         double dtm = convertTo( equilib_time_step.value(), picosecond);
@@ -3004,7 +3004,7 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace, const Symbol &n
             qDebug() << "End Equilibration";
             qDebug() << "\nStarting Production run";
         }
-    }
+    }*/
 
 
     //Time skipping
@@ -3286,8 +3286,8 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace, const Symbol &n
     
 
     //Disable Minimization because of multiple cycles
-    if(minimize)
-        minimize=false;
+    //if(minimize)
+    //    minimize=false;
     //Disable Time to Skip because of multiple cycles
     if(time_skip!=0){
         timeskip = SireUnits::Dimension::Time(0.0);
@@ -3751,40 +3751,40 @@ void OpenMMFrEnergyST::setTimetoSkip(SireUnits::Dimension::Time skip){
 
 
 /** Set Minimization stage on/off*/
-void OpenMMFrEnergyST::setMinimization(bool on_off){
+/*void OpenMMFrEnergyST::setMinimization(bool on_off){
 
     minimize = on_off;
 
-}
+}*/
 
 
 /** Get Minimization Tollerance*/
-double OpenMMFrEnergyST::getMinimizeTol(void){
+/*double OpenMMFrEnergyST::getMinimizeTol(void){
 
     return minimize_tol;
 
-}
+}*/
 
 /** Set Minimization Tollerance*/
-void OpenMMFrEnergyST::setMinimizeTol(double tollerance){
+/*void OpenMMFrEnergyST::setMinimizeTol(double tollerance){
 
     minimize_tol =  tollerance;
 
-}
+}*/
 
 /** Get the maximum number of iterations in the minimization stage*/
-int OpenMMFrEnergyST::getMinimizeIterations(void){
+/*int OpenMMFrEnergyST::getMinimizeIterations(void){
 
     return minimize_iterations;
 
-}
+}*/
 
 /** Get the maximum number of iterations in the minimization stage*/
-void OpenMMFrEnergyST::setMinimizeIterations(int iterations){
+/*void OpenMMFrEnergyST::setMinimizeIterations(int iterations){
 
     minimize_iterations = iterations;
 
-}
+}*/
 
 
 /** Get the total number of iterations used to perform the equilibration stage*/

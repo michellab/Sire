@@ -189,11 +189,11 @@ public:
 
     void setMinimization(bool);
 
-    double getMinimizeTol(void);
-    void setMinimizeTol(double);
+    //double getMinimizeTol(void);
+    //void setMinimizeTol(double);
 
-    int getMinimizeIterations(void);
-    void setMinimizeIterations(int);
+    //int getMinimizeIterations(void);
+    //void setMinimizeIterations(int);
 
     int getEquilib_iterations(void);
     void setEquilib_iterations(int);
@@ -282,10 +282,10 @@ private:
 
     SireUnits::Dimension::Time timeskip;
 
-    bool minimize;
+    //bool minimize;
 
-    double minimize_tol;
-    int minimize_iterations;
+    //double minimize_tol;
+    //int minimize_iterations;
 
 
     int equilib_iterations;
