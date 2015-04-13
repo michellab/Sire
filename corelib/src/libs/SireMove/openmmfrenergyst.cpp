@@ -2563,7 +2563,7 @@ void OpenMMFrEnergyST::initialise()  {
 }
 
 
-void OpenMMFrEnergyST::createContext(IntegratorWorkspace &workspace,SireUnits::Dimension::Time timestep, int nmoves, bool record_stats){
+void OpenMMFrEnergyST::createContext(IntegratorWorkspace &workspace,SireUnits::Dimension::Time timestep){
   
     bool Debug = false;
     
@@ -2778,14 +2778,19 @@ MolarEnergy OpenMMFrEnergyST::getPotentialEnergy(const System &system)
 }
 
 /** This method will update the position of the atoms in the molecule group used to initialise the integrator.  using the optional settings. It will return an updated Sire system object. **/
-System OpenMMFrEnergyST::minimizeEnergy( System &system, double max_iteration=1, double tolerance=1 )
+System OpenMMFrEnergyST::minimizeEnergy( System &system, double tolerance=1, int max_iteration=1 )
 {
   bool debug = false;
   // Step 1 create a workspace from the stored molecule group. 
   // JM FIXME: This duplicates code used in ::initialize(). should we store an intergrator workspace at the end of initialisation ? 
+  // AM FIXME: yes we probably should but I would possible change the overall structure a bit.
   // moleculegroup is the molgroup we initialised the integrator with
   const MoleculeGroup moleculegroup = this->molgroup.read();
   IntegratorWorkspacePtr workspace = this->createWorkspace(moleculegroup);
+  if(system.nMolecules()!=moleculegroup.nMolecules()){
+      std::cerr<<"Number of molecules in do not agree!";
+      exit(1);
+  }
   // JM FIXME: Should have some error checking in place to make sure that the passed system is compatible with the molgroup used to initialise 
   // the integrator. Basic tests would check if same number of atoms...
   workspace.edit().setSystem(system);
@@ -2795,9 +2800,7 @@ System OpenMMFrEnergyST::minimizeEnergy( System &system, double max_iteration=1,
   // Note that context is setup with integrator and platform defined at initialisation, but these won't actually matter for a minimization
   SireUnits::Dimension::Time timestep = 0.0 * picosecond;
   // FIXME: Are nmoves and record_states used at all by createContext??
-  int nmoves = 0;
-  bool record_stats = false;
-  createContext(workspace.edit(), timestep, nmoves, record_stats);
+  createContext(workspace.edit(), timestep);
   // Step 2 minimize
   OpenMM::LocalEnergyMinimizer::minimize(*openmm_context, tolerance , max_iteration);
   // Step 3 update the positions in the system

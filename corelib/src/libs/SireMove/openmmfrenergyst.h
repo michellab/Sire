@@ -96,7 +96,7 @@ public:
     
     SireUnits::Dimension::MolarEnergy getPotentialEnergy(const System &system);
     
-    System minimizeEnergy( System &system, double max_iteration, double tolerance ); 
+    System minimizeEnergy(System &system, double tolerance, int max_iteration); 
 
     void integrate(IntegratorWorkspace &workspace,
                    const Symbol &nrg_component,
@@ -206,7 +206,7 @@ public:
 
 private:
     void createContext(IntegratorWorkspace &workspace,
-                       SireUnits::Dimension::Time timestep, int nmoves, bool record_stats);
+                       SireUnits::Dimension::Time timestep);
     void destroyContext();
     
     /** Whether or not to save the velocities after every step, or to save them at the end of all of the steps */
