@@ -2778,7 +2778,7 @@ MolarEnergy OpenMMFrEnergyST::getPotentialEnergy(const System &system)
 }
 
 /** This method will update the position of the atoms in the molecule group used to initialise the integrator.  using the optional settings. It will return an updated Sire system object. **/
-System OpenMMFrEnergyST::minimizer( System &system, double max_iteration=1, double tolerance=1 )
+System OpenMMFrEnergyST::minimizeEnergy( System &system, double max_iteration=1, double tolerance=1 )
 {
   bool debug = false;
   // Step 1 create a workspace from the stored molecule group. 

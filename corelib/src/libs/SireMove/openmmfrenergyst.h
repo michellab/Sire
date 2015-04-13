@@ -96,7 +96,7 @@ public:
     
     SireUnits::Dimension::MolarEnergy getPotentialEnergy(const System &system);
     
-    System minimizer( System &system, double max_iteration, double tolerance ); 
+    System minimizeEnergy( System &system, double max_iteration, double tolerance ); 
 
     void integrate(IntegratorWorkspace &workspace,
                    const Symbol &nrg_component,
