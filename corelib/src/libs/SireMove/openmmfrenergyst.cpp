@@ -2778,7 +2778,7 @@ MolarEnergy OpenMMFrEnergyST::getPotentialEnergy(const System &system)
 }
 
 /** This method will update the position of the atoms in the molecule group used to initialise the integrator.  using the optional settings. It will return an updated Sire system object. **/
-System OpenMMFrEnergyST::minimizeEnergy( System &system, double tolerance=1, int max_iteration=1 )
+System OpenMMFrEnergyST::minimizeEnergy(System &system, double tolerance=1, int max_iteration=1)
 {
   bool debug = false;
   // Step 1 create a workspace from the stored molecule group. 
@@ -2839,6 +2839,101 @@ System OpenMMFrEnergyST::minimizeEnergy( System &system, double tolerance=1, int
   // Step 5. Return pointer to the workspace's system 
   const System & ptr_sys = ws.system();
   return ptr_sys;
+}
+
+/**
+ * <Anneals the system to the given lambda value>
+ * @param System Reference to the Sire system
+ * @param lambda valube of lambda to which
+ * @return System 
+ 
+ */
+
+System OpenMMFrEnergyST::annealLambda(System &system, double stepSize=0.005, int annealingSteps=10){
+
+    bool debug = true;
+    
+    const MoleculeGroup moleculegroup = this->molgroup.read();
+    IntegratorWorkspacePtr workspace = this->createWorkspace(moleculegroup);
+    if (system.nMolecules() != moleculegroup.nMolecules()) {
+        std::cerr << "Number of molecules in do not agree!";
+        exit(1);
+    }
+
+    SireUnits::Dimension::Time timestep = stepSize * picosecond;
+    createContext(workspace.edit(), timestep);
+
+    workspace.edit().setSystem(system);
+
+
+    int max = ceil(Alchemical_value / 0.1);
+
+    double lam = 0.0;
+
+    for (int i = 0; i < max + 1; i++) {
+        cout << "annealing for lambda value: " << lam << endl;
+
+        //NON BONDED TERMS
+        if (perturbed_energies[0])
+            openmm_context->setParameter("lam", lam); //1-5 HD
+        //1-4 Interactions
+        if (perturbed_energies[1])
+            openmm_context->setParameter("lamhd", lam); //1-4 HD
+        if (perturbed_energies[2])
+            openmm_context->setParameter("lamtd", 1.0 - lam); //1-4 To Dummy
+        if (perturbed_energies[3])
+            openmm_context->setParameter("lamfd", lam); //1-4 From Dummy
+        if (perturbed_energies[4])
+            openmm_context->setParameter("lamftd", lam); //1-4 From Dummy to Dummy
+
+        //BONDED PERTURBED TERMS
+        if (perturbed_energies[5])
+            openmm_context->setParameter("lambond", lam); //Bonds
+        if (perturbed_energies[6])
+            openmm_context->setParameter("lamangle", lam); //Angles
+        if (perturbed_energies[7])
+            openmm_context->setParameter("lamdih", lam); //Torsions
+
+        (openmm_context->getIntegrator()).step(annealingSteps);
+
+        if (i == max - 1)
+            lam = Alchemical_value;
+        else
+            lam = lam + 0.1;
+    }
+  int infoMask = OpenMM::State::Positions;
+  OpenMM::State state_openmm = openmm_context->getState(infoMask);
+  std::vector<OpenMM::Vec3> positions_openmm = state_openmm.getPositions();
+  
+  // Recast to atomicvelocityworkspace because want to use commitCoordinates() method to update system
+  AtomicVelocityWorkspace &ws = workspace.edit().asA<AtomicVelocityWorkspace>();
+ 
+  const int nmols = ws.nMolecules();  
+  int k=0;
+
+  for(int i=0; i<nmols;i++){
+
+    Vector *sire_coords = ws.coordsArray(i);
+ 
+    for(int j=0; j < ws.nAtoms(i) ; j++){
+
+      sire_coords[j] = Vector(positions_openmm[j+k][0] * (OpenMM::AngstromsPerNm),
+			      positions_openmm[j+k][1] * (OpenMM::AngstromsPerNm),
+			      positions_openmm[j+k][2] * (OpenMM::AngstromsPerNm));
+      if(debug)
+	qDebug() << "X = " << positions_openmm[j+k][0] * OpenMM::AngstromsPerNm << " A" << 
+	  " Y = " << positions_openmm[j+k][1] * OpenMM::AngstromsPerNm << " A" <<
+	  " Z = " << positions_openmm[j+k][2] * OpenMM::AngstromsPerNm << " A";
+      
+    }
+    k= k + ws.nAtoms(i);
+  }
+
+    ws.commitCoordinates();
+    destroyContext();
+    // Step 5. Return pointer to the workspace's system 
+    const System & ptr_sys = ws.system();
+    return ptr_sys;
 }
 
 void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace, const Symbol &nrg_component, SireUnits::Dimension::Time timestep, int nmoves, bool record_stats) {
@@ -2942,7 +3037,7 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace, const Symbol &n
     std::vector<OpenMM::Vec3> velocities_openmm(nats);
     
 
-    /*if(minimize){
+/*    if(minimize){
 
         //New time step for minimization and equilibartion in ps
         double dtm = convertTo( equilib_time_step.value(), picosecond);
@@ -2958,6 +3053,7 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace, const Symbol &n
 
         (openmm_context->getIntegrator()).setStepSize(dtm);
         OpenMM::LocalEnergyMinimizer::minimize(*openmm_context,minimize_tol,minimize_iterations);
+        
 
         int max = ceil(Alchemical_value/0.1);
 
@@ -3004,7 +3100,8 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace, const Symbol &n
             qDebug() << "End Equilibration";
             qDebug() << "\nStarting Production run";
         }
-    }*/
+    }
+ */
 
 
     //Time skipping

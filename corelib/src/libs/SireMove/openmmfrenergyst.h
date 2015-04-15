@@ -97,6 +97,8 @@ public:
     SireUnits::Dimension::MolarEnergy getPotentialEnergy(const System &system);
     
     System minimizeEnergy(System &system, double tolerance, int max_iteration); 
+    
+    System annealLambda(System &system, double stepSize, int annealingSteps);
 
     void integrate(IntegratorWorkspace &workspace,
                    const Symbol &nrg_component,
