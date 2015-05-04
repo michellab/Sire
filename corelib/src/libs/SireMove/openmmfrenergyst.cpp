@@ -2777,8 +2777,18 @@ MolarEnergy OpenMMFrEnergyST::getPotentialEnergy(const System &system)
     return nrg;
 }
 
-/** This method will update the position of the atoms in the molecule group used to initialise the integrator.  using the optional settings. It will return an updated Sire system object. **/
-System OpenMMFrEnergyST::minimizeEnergy(System &system, double tolerance=1, int max_iteration=1)
+/**  
+ * <Runs an energy Minimization on the current system.>
+ * @param System Reference to the Sire system
+ * @param tolerance allowed change in energy between minimization steps.
+ * @param max_iteration maximum number of allowed iteration steps. 
+ * @return System 
+ * This method minimizes the energy of the current configuration of the Sire
+ * system and will then set new position coordinates and return the updated Sire
+ * system object.
+ */
+
+System OpenMMFrEnergyST::minimizeEnergy(System &system, double tolerance=1.0, int max_iteration=1)
 {
   bool debug = false;
   // Step 1 create a workspace from the stored molecule group. 
@@ -2799,7 +2809,6 @@ System OpenMMFrEnergyST::minimizeEnergy(System &system, double tolerance=1, int 
   // like the code wouldn't cope with more than one context being defined at a given time. 
   // Note that context is setup with integrator and platform defined at initialisation, but these won't actually matter for a minimization
   SireUnits::Dimension::Time timestep = 0.0 * picosecond;
-  // FIXME: Are nmoves and record_states used at all by createContext??
   createContext(workspace.edit(), timestep);
   // Step 2 minimize
   OpenMM::LocalEnergyMinimizer::minimize(*openmm_context, tolerance , max_iteration);
@@ -2831,7 +2840,8 @@ System OpenMMFrEnergyST::minimizeEnergy(System &system, double tolerance=1, int 
     k= k + ws.nAtoms(i);
   }
 
-  // This causes the workspace to update the system coordinates with the contents of *sire_coords. Note that velocities aren't touched.
+  // This causes the workspace to update the system coordinates with the 
+  // contents of *sire_coords. Note that velocities aren't touched.
   ws.commitCoordinates();
   // Step 4 delete the context
   // JM 04/15 FIXME: See comment above at step 1
@@ -2844,17 +2854,19 @@ System OpenMMFrEnergyST::minimizeEnergy(System &system, double tolerance=1, int 
 /**
  * <Anneals the system to the given lambda value>
  * @param System Reference to the Sire system
- * @param lambda valube of lambda to which
+ * @param lambda value of lambda to which the system should be annealed to
  * @return System 
- 
+ * This method will slowly anneal the system to a given lambda value. 
  */
 
 System OpenMMFrEnergyST::annealLambda(System &system, double stepSize=0.005, int annealingSteps=10){
 
-    bool debug = true;
+    bool Debug = true;
+    const double AKMAPerPs = 0.04888821;
     
     const MoleculeGroup moleculegroup = this->molgroup.read();
     IntegratorWorkspacePtr workspace = this->createWorkspace(moleculegroup);
+    //TODO: Add some sanity checks here. 
     if (system.nMolecules() != moleculegroup.nMolecules()) {
         std::cerr << "Number of molecules in do not agree!";
         exit(1);
@@ -2904,6 +2916,7 @@ System OpenMMFrEnergyST::annealLambda(System &system, double stepSize=0.005, int
   int infoMask = OpenMM::State::Positions;
   OpenMM::State state_openmm = openmm_context->getState(infoMask);
   std::vector<OpenMM::Vec3> positions_openmm = state_openmm.getPositions();
+  std::vector<OpenMM::Vec3> velocities_openmm = state_openmm.getVelocities();
   
   // Recast to atomicvelocityworkspace because want to use commitCoordinates() method to update system
   AtomicVelocityWorkspace &ws = workspace.edit().asA<AtomicVelocityWorkspace>();
@@ -2911,31 +2924,42 @@ System OpenMMFrEnergyST::annealLambda(System &system, double stepSize=0.005, int
   const int nmols = ws.nMolecules();  
   int k=0;
 
-  for(int i=0; i<nmols;i++){
+   for(int i=0; i<nmols;i++){
 
-    Vector *sire_coords = ws.coordsArray(i);
- 
-    for(int j=0; j < ws.nAtoms(i) ; j++){
+        Vector *sire_coords = ws.coordsArray(i);
+        Vector *sire_momenta = ws.momentaArray(i);
+        const double *m = ws.massArray(i);
 
-      sire_coords[j] = Vector(positions_openmm[j+k][0] * (OpenMM::AngstromsPerNm),
-			      positions_openmm[j+k][1] * (OpenMM::AngstromsPerNm),
-			      positions_openmm[j+k][2] * (OpenMM::AngstromsPerNm));
-      if(debug)
-	qDebug() << "X = " << positions_openmm[j+k][0] * OpenMM::AngstromsPerNm << " A" << 
-	  " Y = " << positions_openmm[j+k][1] * OpenMM::AngstromsPerNm << " A" <<
-	  " Z = " << positions_openmm[j+k][2] * OpenMM::AngstromsPerNm << " A";
-      
+        for(int j=0; j < ws.nAtoms(i) ; j++){
+
+            sire_coords[j] = Vector(positions_openmm[j+k][0] * (OpenMM::AngstromsPerNm),
+            positions_openmm[j+k][1] * (OpenMM::AngstromsPerNm),
+            positions_openmm[j+k][2] * (OpenMM::AngstromsPerNm));
+
+            sire_momenta[j] = Vector(velocities_openmm[j+k][0] * m[j] * (OpenMM::AngstromsPerNm) * AKMAPerPs,
+                            velocities_openmm[j+k][1] * m[j] * (OpenMM::AngstromsPerNm) * AKMAPerPs, 
+                            velocities_openmm[j+k][2] * m[j] * (OpenMM::AngstromsPerNm) * AKMAPerPs);
+
+        }
+        k= k + ws.nAtoms(i);
     }
-    k= k + ws.nAtoms(i);
-  }
 
-    ws.commitCoordinates();
+
+    ws.commitCoordinatesAndVelocities();
     destroyContext();
     // Step 5. Return pointer to the workspace's system 
     const System & ptr_sys = ws.system();
     return ptr_sys;
 }
 
+/**
+ * <Main integration method>
+ * @param workspace Integrator workspace
+ * @param nrg_component
+ * @param timestep timestep used for the integration
+ * @param nmoves number of openmMM md moves that should be carried out.
+ * @param record_stats flag that lets you chose recording conditions
+ */
 void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace, const Symbol &nrg_component, SireUnits::Dimension::Time timestep, int nmoves, bool record_stats) {
 
 
@@ -3575,6 +3599,7 @@ void OpenMMFrEnergyST::setTemperature(SireUnits::Dimension::Temperature temperat
 }
 
 /** Set Monte Carlo Barostat on/off */
+
 void OpenMMFrEnergyST::setMCBarostat(bool MCBarostat){
     MCBarostat_flag = MCBarostat;
 }
@@ -3759,7 +3784,11 @@ double OpenMMFrEnergyST::getShift_delta(void){
 
 }
 
-/** Set the shift used in the soft core potential*/
+
+/**
+ * <Set the shift used in the soft core potential>
+ * @param shiftdelta
+ */
 void OpenMMFrEnergyST::setShift_delta(double shiftdelta){
 
     shift_delta = shiftdelta;
@@ -3773,7 +3802,10 @@ double OpenMMFrEnergyST:: getDeltaAlchemical(void){
 
 }
 
-/** Set the delta alchemical used in the FEP method*/
+/**
+ * Set the delta alchemical used in the FEP method
+ * @param deltaalchemical
+ */
 void OpenMMFrEnergyST::setDeltatAlchemical(double deltaalchemical){
 
     delta_alchemical = deltaalchemical;
@@ -3817,14 +3849,14 @@ void OpenMMFrEnergyST::setFriction(SireUnits::Dimension::Time thefriction) {
   friction = thefriction;
 } 
 
-/** Get the integration tollerance */
+/** Get the integration tolerance */
 double OpenMMFrEnergyST::getIntegration_tollerance(void){
 
     return integration_tol;
 
 }
 
-/** Set the integration tollerance*/
+/** Set the integration tolerance*/
 void OpenMMFrEnergyST::setIntegration_tollerance(double tollerance){
 
     integration_tol = tollerance;
