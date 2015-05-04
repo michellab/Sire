@@ -89,6 +89,17 @@ void register_OpenMMFrEnergyST_class(){
         bp::scope OpenMMFrEnergyST_scope( OpenMMFrEnergyST_exposer );
         OpenMMFrEnergyST_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireMol::MoleculeGroup const &, SireMol::MoleculeGroup const &, SireMol::MoleculeGroup const &, SireMol::MoleculeGroup const &, bp::optional< bool > >(( bp::arg("molecule_group"), bp::arg("solutes"), bp::arg("solute_hard"), bp::arg("solute_todummy"), bp::arg("solute_fromdummy"), bp::arg("frequent_save_velocities")=(bool)(false) )) );
         OpenMMFrEnergyST_exposer.def( bp::init< SireMove::OpenMMFrEnergyST const & >(( bp::arg("other") )) );
+        { //::SireMove::OpenMMFrEnergyST::annealLambda
+        
+            typedef ::SireSystem::System ( ::SireMove::OpenMMFrEnergyST::*annealLambda_function_type )( ::SireSystem::System &,double,int ) ;
+            annealLambda_function_type annealLambda_function_value( &::SireMove::OpenMMFrEnergyST::annealLambda );
+            
+            OpenMMFrEnergyST_exposer.def( 
+                "annealLambda"
+                , annealLambda_function_value
+                , ( bp::arg("system"), bp::arg("stepSize"), bp::arg("annealingSteps") ) );
+        
+        }
         { //::SireMove::OpenMMFrEnergyST::createWorkspace
         
             typedef ::SireMove::IntegratorWorkspacePtr ( ::SireMove::OpenMMFrEnergyST::*createWorkspace_function_type )( ::SireBase::PropertyMap const & ) const;
