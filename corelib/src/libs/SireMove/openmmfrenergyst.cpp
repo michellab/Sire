@@ -2883,7 +2883,6 @@ System OpenMMFrEnergyST::annealLambda(System &system, double stepSize=0.005, int
     double lam = 0.0;
 
     for (int i = 0; i < max + 1; i++) {
-        cout << "annealing for lambda value: " << lam << endl;
 
         //NON BONDED TERMS
         if (perturbed_energies[0])
@@ -2914,6 +2913,7 @@ System OpenMMFrEnergyST::annealLambda(System &system, double stepSize=0.005, int
             lam = lam + 0.1;
     }
   int infoMask = OpenMM::State::Positions;
+  infoMask = infoMask + OpenMM::State::Velocities; 
   OpenMM::State state_openmm = openmm_context->getState(infoMask);
   std::vector<OpenMM::Vec3> positions_openmm = state_openmm.getPositions();
   std::vector<OpenMM::Vec3> velocities_openmm = state_openmm.getVelocities();
