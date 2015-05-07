@@ -53,9 +53,9 @@ QDataStream& operator>>(QDataStream&, SireMove::OpenMMFrEnergyST&);
 namespace SireMove
 {
 
-/** This class implements single topology a free energy method Using OpenMM. 
+/** This class implements single topology a free energy method using OpenMM. 
  
-    @author Julien Michel and Gaetano Calabro
+    @author Julien Michel,Gaetano Calabro and Antonia Mey
 */
 class SIREMOVE_EXPORT OpenMMFrEnergyST
         : public SireBase::ConcreteProperty<OpenMMFrEnergyST,Integrator>
@@ -189,13 +189,6 @@ public:
     SireUnits::Dimension::Time getTimetoSkip(void);
     void setTimetoSkip(SireUnits::Dimension::Time);
 
-    //void setMinimization(bool);
-
-    //double getMinimizeTol(void);
-    //void setMinimizeTol(double);
-
-    //int getMinimizeIterations(void);
-    //void setMinimizeIterations(int);
 
     int getEquilib_iterations(void);
     void setEquilib_iterations(int);
@@ -284,12 +277,6 @@ private:
 
     SireUnits::Dimension::Time timeskip;
 
-    //bool minimize;
-
-    //double minimize_tol;
-    //int minimize_iterations;
-
-
     int equilib_iterations;
     SireUnits::Dimension::Time equilib_time_step;
 
@@ -297,6 +284,8 @@ private:
 
     double GF_acc;
     double GB_acc;
+    
+    bool Debug;
 
 
 };
