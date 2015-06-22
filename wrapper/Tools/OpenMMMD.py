@@ -465,7 +465,7 @@ def atomNumVectorListToProperty( list ):
         prop.setProperty("x(%d)" % i, VariantProperty(value[1].x()))
         prop.setProperty("y(%d)" % i, VariantProperty(value[1].y()))
         prop.setProperty("z(%d)" % i, VariantProperty(value[1].z()))
-        prop.setProperty("k(%d)" % i, VariantProperty(value[2]))
+        prop.setProperty("k(%d)" % i, VariantProperty(value[2].val ) )
         i += 1
     
     prop.setProperty("nrestrainedatoms", VariantProperty(i) );
@@ -557,7 +557,7 @@ def setupRestraints(system):
                 continue
             atcoords = at.property("coordinates")
             #print at
-            restrainedAtoms.append( ( atnumber , atcoords, Krestraint) )
+            restrainedAtoms.append( ( atnumber , atcoords, k_restraint) )
             #restrainedAtoms.append( atnumber )
         
         if len(restrainedAtoms) > 0:
