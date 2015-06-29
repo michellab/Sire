@@ -117,7 +117,7 @@ use_restraints = Parameter("use restraints", False, """Whether or not to use har
 
 k_restraint = Parameter("restraint force constant", 100.0, """Force constant to use for the harmonic restaints.""")
 
-heavy_mass_restraint = Parameter("heavy mass restraint", 1.10, """Only restrain solute atoms whose mass is greater than this value.""")
+heavy_mass_restraint = Parameter("heavy mass restraint", 110, """Only restrain solute atoms whose mass is greater than this value.""")
 
 unrestrained_residues = Parameter("unrestrained residues", ["WAT", "HOH"], """Names of residues that are never restrained.""")
 
@@ -125,12 +125,13 @@ freeze_residues = Parameter("freeze residues", True, """Whether or not to freeze
 
 frozen_residues = Parameter("frozen residues", ["LGR", "SIT", "NEG", "POS"], """List of residues to freeze if 'freeze residues' is True.""")
 
-#use_distance_restraints = Parameter("use distance restraints",True, """Whether or not to use restraints distances between pairs of atoms.""") 
 use_distance_restraints = Parameter("use distance restraints",False, """Whether or not to use restraints distances between pairs of atoms.""")
 
-#distance_restraints_dict = Parameter("distance restraints dictionary",{ (17,12):(3.0,10.0, 0.2) }, """Dictionnary of pair of atoms whose distance is restrained, and restraint parameters. Syntax is {(atom0,atom1):(reql, kl, Dl)} where atom0, atom1 are atomic indices. reql the equilibrium distance. Kl the force constant of the restraint. D the flat bottom radius.""")
-
 distance_restraints_dict = Parameter("distance restraints dictionary",{ }, """Dictionnary of pair of atoms whose distance is restrained, and restraint parameters. Syntax is {(atom0,atom1):(reql, kl, Dl)} where atom0, atom1 are atomic indices. reql the equilibrium distance. Kl the force constant of the restraint. D the flat bottom radius. WARNING: PBC distance checks not implemented, avoid restraining pair of atoms that may diffuse out of the box.""")
+
+spec_restraints = Parameter("specific restraints", ["C1", "C2"], """List of atoms to be harmonically restrained. The syntax in configuration file is: specific restraints = "Atom1", "Atom2" and so on.""")
+
+use_spec_restraints = Parameter("use specific restraints", False, """Whether or not to use harmonic restaints on specific solute's atoms. To use with spec_restraints""")
 
 ## Free energy specific keywords 
 
@@ -416,6 +417,9 @@ def setupMoves(system, random_seed, GPUS):
     if use_restraints.val:
         Integrator_OpenMM.setRestraint(True)
 
+    if use_spec_restraints.val:
+        Integrator_OpenMM.setRestraint(True)
+
     if andersen.val:
         Integrator_OpenMM.setTemperature(temperature.val)
         Integrator_OpenMM.setAndersen(andersen.val)
@@ -465,7 +469,7 @@ def atomNumVectorListToProperty( list ):
         prop.setProperty("x(%d)" % i, VariantProperty(value[1].x()))
         prop.setProperty("y(%d)" % i, VariantProperty(value[1].y()))
         prop.setProperty("z(%d)" % i, VariantProperty(value[1].z()))
-        prop.setProperty("k(%d)" % i, VariantProperty(value[2]))
+        prop.setProperty("k(%d)" % i, VariantProperty(value[2].val ) )
         i += 1
     
     prop.setProperty("nrestrainedatoms", VariantProperty(i) );
@@ -488,7 +492,10 @@ def linkbondVectorListToProperty( list ):
 
     prop.setProperty("nbondlinks", VariantProperty(i) );
 
-    return prop
+    return propspec_restraint = Parameter("specific restraint", ["C1", "C2"], """List of solute's atoms to be constrained.""")
+
+use_spec_restraint = Parameter("use specific restraint", False, """Whether or not to use harmonic restaints on specific solute's atoms.""")
+
 
 
 def propertyToAtomNumList( prop ):
@@ -557,7 +564,7 @@ def setupRestraints(system):
                 continue
             atcoords = at.property("coordinates")
             #print at
-            restrainedAtoms.append( ( atnumber , atcoords, Krestraint) )
+            restrainedAtoms.append( ( atnumber , atcoords, k_restraint) )
             #restrainedAtoms.append( atnumber )
         
         if len(restrainedAtoms) > 0:
@@ -607,6 +614,44 @@ def setupDistanceRestraints(system):
     return system
 
 
+def specificRestraints(system):
+
+    molecules = system[ MGName("all") ].molecules()
+
+    molnums = molecules.molNums()
+    molnums.sort()
+    atoms_restr = spec_restraints.val
+    #print(spec_restraint.val)
+    
+
+    for molnum in molnums:
+        mol = molecules.molecule(molnum).molecule()
+        nats = mol.nAtoms()
+        atoms = mol.atoms()
+        
+        restrainedAtoms = []
+
+	#Application of restrained on atoms specified in spec_restraints list
+        for x in range(0,nats):
+            at = atoms[x]
+            atnumber = at.number()
+            atcoords = at.property("coordinates")
+            if (at.name().value() in atoms_restr or at.property("mass").value() > heavy_mass_restraint.val):
+                restrainedAtoms.append( ( atnumber , atcoords, k_restraint) )
+                #print(restrainedAtoms)
+                #print(at.name().value())
+            elif (at.name().value() in atoms_restr):
+                restrainedAtoms.append( ( atnumber , atcoords, k_restraint) )
+            else:
+                continue    
+            
+        if len(restrainedAtoms) > 0:
+            mol = mol.edit().setProperty("restrainedatoms", atomNumVectorListToProperty(restrainedAtoms)).commit()
+            #print ("restrained atoms %s" % restrainedAtoms)
+            #print propertyToAtomNumVectorList( mol.property("restrainedatoms") )
+            system.update(mol)
+
+    return system
 
 def freezeResidues(system):
    
@@ -1009,6 +1054,9 @@ def setupMovesFreeEnergy(system,random_seed,GPUS,lam_val):
     if use_restraints.val:
         Integrator_OpenMM.setRestraint(True)
 
+    if use_spec_restraints.val:
+        Integrator_OpenMM.setRestraint(True)
+
     if andersen.val:
         Integrator_OpenMM.setTemperature(temperature.val)
         Integrator_OpenMM.setAndersen(andersen.val)
@@ -1104,6 +1152,8 @@ def run():
         if use_restraints.val:
             system = setupRestraints(system)
         
+        if use_spec_restraints.val:
+            system = specificRestraints(system)
         # Note that this just set the mass to zero which freezes residues in OpenMM but Sire doesn't known that
         if freeze_residues.val:
             system = freezeResidues(system)
@@ -1211,6 +1261,9 @@ def runFreeNrg():
         if use_distance_restraints.val:
             system = setupDistanceRestraints(system)
 
+        if use_spec_restraints.val:
+            system = specificRestraints(system)
+
         # Note that this just set the mass to zero which freezes residues in OpenMM but Sire doesn't known that
         if freeze_residues.val:
             system = freezeResidues(system)
@@ -1293,4 +1346,3 @@ def runFreeNrg():
     os.system(cmd)
     print ("Saving new restart")
     Sire.Stream.save( [system, moves], restart_file.val )
-
