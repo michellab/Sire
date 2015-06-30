@@ -1,0 +1,10 @@
+language: cpp
+compiler:
+  - clang
+
+script:
+  - mkdir build
+  - cd build
+  - cmake -DSIRE_DISABLE_AVX=ON ../corelib
+  - make -j 4
+  - make install
