@@ -994,7 +994,14 @@ def setupMovesFreeEnergy(system,random_seed,GPUS,lam_val):
     Integrator_OpenMM.setMinimization(minimize.val)
     Integrator_OpenMM.setMinimizeTol(minimize_tol.val)
     Integrator_OpenMM.setMinimizeIterations(minimize_max_iter.val)
-
+ 
+    
+    if equilibrate.val:
+        Integrator_OpenMM.setEquilib_iterations(equil_iterations.val)
+    else:
+        Integrator_OpenMM.setEquilib_iterations(0)
+  
+    Integrator_OpenMM.setEquilib_time_step(equil_timestep.val)
 
     Integrator_OpenMM.setBufferFrequency(buffered_coords_freq.val)
 
@@ -1293,4 +1300,5 @@ def runFreeNrg():
     os.system(cmd)
     print ("Saving new restart")
     Sire.Stream.save( [system, moves], restart_file.val )
+
 
