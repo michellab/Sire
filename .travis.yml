@@ -1,28 +1,17 @@
 language: cpp
 compiler:
   - clang
-# use travis-ci docker based infrastructure
-sudo: false
-
-cache:
-  directories:
-    - $HOME/.ccache
-
-addons:
-  apt:
-    sources:
-    - kubuntu-backports
-    - llvm-toolchain-precise-3.5
-    - ubuntu-toolchain-r-test
-    packages:
-    - autoconf
-    - ccache
-    - clang-3.5
-    - cmake
-    - g++-4.6
 
 before_install:
-- if [ "$CC" = "gcc" ]; then export CC="gcc-4.6" CXX="g++-4.6"; fi
+  - sudo apt-get update -qq
+  - sudo add-apt-repository ppa:kubuntu-backports/ppa -y
+  - sudo add-apt-repository ppa:llvm-toolchain-precise-3.5/ppa -y
+  - sudo add-apt-repository ppa:rmcgibbo/openmm/ppa -y
+  - sudo apt-get update -q
+  - sudo apt-get install cmake
+  - sudo apt-get install g++-4.6
+  - sudo apt-get install openmm
+  - if [ "$CC" = "gcc" ]; then export CC="gcc-4.6" CXX="g++-4.6"; fi
 
 install:
   - mkdir build
