@@ -1,13 +1,13 @@
 import os, sys
 from nose.tools import assert_almost_equal
 
-top = "protein_case/new.top"
-crd = "protein_case/min00001.rst7"
-traj = "protein_case/protein.dcd"
+top = "../io/nautilus-protein-case/new.top"
+crd = "../io/nautilus-protein-case/min00001.rst7"
+traj = "../io/nautilus-protein-case/protein.dcd"
 cell = "cell"
 regionfile = "grid/all.region"
 gridforces = "grid/grid.forces"
-cfg = "protein_case/nautilus.cfg"
+cfg = "../io/nautilus-protein-case/nautilus.cfg"
 start = 0
 end = 5
 neighcut = 1.5
@@ -34,7 +34,7 @@ def test_traj2cell():
 
     file1 = open("cell0.dat", "r")
     stream1 = file1.readlines()
-    file2 = open("protein_case/cell0.dat", "r")
+    file2 = open("../io/nautilus-protein-case/cell0.dat", "r")
     stream2 = file2.readlines()
 
         ### Dictionaries where variables for water1 of frame0 are to be compared for their
@@ -84,7 +84,7 @@ def test_cell2grid():
 
     ### Correspondence diff test
 
-    os.system("diff -b grid protein_case/grid-expected > griddiff.dat")
+    os.system("diff -b grid ../io/nautilus-protein-case/grid-expected > griddiff.dat")
     file = open("griddiff.dat", "r")
     stream = file.read().strip()
     if not stream:
@@ -93,7 +93,7 @@ def test_cell2grid():
         print ("\ngrid files are not identical, error with cell2grid\n")
         sys.exit(-1)
 
-    file1 = open("protein_case/grid-oldcode.dat", "r")
+    file1 = open("../io/nautilus-protein-case/grid-oldcode.dat", "r")
     stream1 = file1.readlines()
     file2 = open("grid.dat", "r")
     stream2 = file2.readlines()
@@ -152,7 +152,7 @@ def test_regionproperties():
 
     file1 = open("cell0.dat", "r")
     stream1 = file1.readlines()
-    file2 = open("protein_case/cell0.dat", "r")
+    file2 = open("../io/nautilus-protein-case/cell0.dat", "r")
     stream2 = file2.readlines()
 
         ### Dictionaries where variables for water1 of frame0 are to be compared for their
@@ -201,7 +201,7 @@ def test_regionproperties():
         print ("Comparing the region_property parameters, %s, from gridforces file %s.\n" % (parameterindex[i], gridforces))
         assert_almost_equal(dict1[i], dict2[i], 5)
 
-    os.system("diff -b protein_case/region_test/all_properties.dat all_properties.dat > regiondiff.dat")
+    os.system("diff -b ../io/nautilus-protein-case/region_test/all_properties.dat all_properties.dat > regiondiff.dat")
     file = open("regiondiff.dat", "r")
     stream = file.read().strip()
     if not stream:
@@ -211,13 +211,13 @@ def test_regionproperties():
         sys.exit(-1)
 
 def test_avggrids():
-    cmd = '''%s/bin/nautilus-avggrids -gs "%s" ''' % (SIRE, ['protein_case/dx_sub_avg_test/grid_DG_rep1.dx','protein_case/dx_sub_avg_test/grid_DG_rep2.dx','protein_case/dx_sub_avg_test/grid_DG_rep3.dx'])
+    cmd = '''%s/bin/nautilus-avggrids -gs "%s" ''' % (SIRE, ['../io/nautilus-protein-case/dx_sub_avg_test/grid_DG_rep1.dx','../io/nautilus-protein-case/dx_sub_avg_test/grid_DG_rep2.dx','../io/nautilus-protein-case/dx_sub_avg_test/grid_DG_rep3.dx'])
     print (cmd)
     os.system(cmd)
 
     file1 = open("avg.dx", "r")
     stream1 = file1.readlines()
-    file2 = open("protein_case/dx_sub_avg_test/avg.dx", "r")
+    file2 = open("../io/nautilus-protein-case/dx_sub_avg_test/avg.dx", "r")
     stream2 = file2.readlines()
 
     ### make sure there is correspondence
@@ -258,13 +258,13 @@ def test_avggrids():
             print ("avg dx values match\n" )
 
 def test_subgrids():
-    cmd = '''%s/bin/nautilus-subgrids -gf '%s' -gl '%s' ''' % (SIRE, 'protein_case/dx_sub_avg_test/grid_DG_rep1.dx','protein_case/dx_sub_avg_test/grid_DG_rep2.dx')
+    cmd = '''%s/bin/nautilus-subgrids -gf '%s' -gl '%s' ''' % (SIRE, '../io/nautilus-protein-case/dx_sub_avg_test/grid_DG_rep1.dx','../io/nautilus-protein-case/dx_sub_avg_test/grid_DG_rep2.dx')
     print (cmd)
     os.system(cmd)
 
     file1 = open("diff.dx", "r")
     stream1 = file1.readlines()
-    file2 = open("protein_case/dx_sub_avg_test/diff.dx", "r")
+    file2 = open("../io/nautilus-protein-case/dx_sub_avg_test/diff.dx", "r")
     stream2 = file2.readlines()
 
     ### make sure there is correspondence
@@ -306,9 +306,9 @@ def test_clustergrids():
     print (cmd)
     os.system(cmd)
 
-    file1 = open("sites/centroids.csv", "r")
+    file1 = open("sites/centroids.csv", "r")#TOCHECK
     stream1 = file1.readlines()
-    file2 = open("protein_case/centroids.csv", "r")
+    file2 = open("../io/nautilus-protein-case/centroids.csv", "r")
     stream2 = file2.readlines()
 
     for i in range(len(stream1)):
@@ -330,13 +330,13 @@ def test_clustergrids():
     os.system(cmd)
 
 def test_protocol():
-    cmd = ''' %s/bin/nautilus-protocol -C %s ''' % (SIRE, 'protein_case/nautilus-protocol.cfg')
+    cmd = ''' %s/bin/nautilus-protocol -C %s ''' % (SIRE, '../io/nautilus-protein-case/nautilus-protocol.cfg')
     print (cmd)
     os.system(cmd)
 
     file1 = open("sites/centroids.csv", "r")
     stream1 = file1.readlines()
-    file2 = open("protein_case/sites/centroids.csv", "r")
+    file2 = open("../io/nautilus-protein-case/sites/centroids.csv", "r")
     stream2 = file2.readlines()
 
     for i in range(len(stream1)):

@@ -51,12 +51,25 @@ from Sire.Move import *
 
 import itertools
 import operator
-import mdtraj
-import numpy as np
 import io  # For compatibility with old open style for binary files
 import copy
 import csv
 
+
+#
+# Python dependencies
+#
+try:
+    import mdtraj
+except ImportError:
+    raise "Nautilus depends on a working install of the python module mdtraj. Please install mdtraj in your sire python."
+    sys.exit(-1)
+
+try:
+    import numpy as np
+except ImportError:
+    raise "Nautilus depends on a working install of the python module numpy. Please install numpy in your sire python"
+    sys.exit(-1)
 #
 # #### VARIABLES #######
 #
