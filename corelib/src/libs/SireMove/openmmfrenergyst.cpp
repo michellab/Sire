@@ -98,7 +98,9 @@ using namespace std;
 enum {
     NOCUTOFF = 0,
     CUTOFFNONPERIODIC = 1,
-    CUTOFFPERIODIC = 2
+    CUTOFFPERIODIC = 2,
+    //EWALD = 3,
+    //PME = 4
 };
 
 enum {
@@ -122,6 +124,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const OpenMMFrEnergyST 
 
     sds << velver.frequent_save_velocities << velver.molgroup << velver.solute << velver.solutehard << velver.solutetodummy << velver.solutefromdummy
         << velver.CutoffType << velver.cutoff_distance << velver.field_dielectric
+        //<< velver.tollerance_ewald_pme
         << velver.Andersen_flag <<  velver.Andersen_frequency 
         << velver.MCBarostat_flag << velver.MCBarostat_frequency << velver.ConstraintType << velver.Pressure << velver.Temperature
         << velver.platform_type << velver.Restraint_flag << velver.CMMremoval_frequency << velver.buffer_frequency << velver.energy_frequency
@@ -146,11 +149,12 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, OpenMMFrEnergyST &velve
 
         sds >> velver.frequent_save_velocities >> velver.molgroup >> velver.solute >>velver.solutehard >> velver.solutetodummy >> velver.solutefromdummy
         >> velver.CutoffType >> velver.cutoff_distance >> velver.field_dielectric
+        //>> velver.tollerance_ewald_pme
         >> velver.Andersen_flag >>  velver.Andersen_frequency 
         >> velver.MCBarostat_flag >> velver.MCBarostat_frequency >> velver.ConstraintType >> velver.Pressure >> velver.Temperature 
         >> velver.platform_type >> velver.Restraint_flag >> velver.CMMremoval_frequency >> velver.buffer_frequency >> velver.energy_frequency
         >> velver.device_index >> velver.precision >> velver.Alchemical_value >> velver.coulomb_power >> velver.shift_delta >> velver.delta_alchemical
-        >> velver.gradients >> velver.energies >> velver.perturbed_energies >> velver.Integrator_type >> velver.friction 
+        >> velver.gradients >> velver.energies >> velver.perturbed_energies >> velver.Integrator_type >> velver.friction
         >> velver.integration_tol >> velver.timeskip >> velver.minimize >> velver.minimize_tol >> velver.equilib_iterations >> velver.equilib_time_step
         >> velver.minimize_iterations >> velver.reinetialize_context >> velver.GF_acc >> velver.GB_acc
         >> static_cast<Integrator&>(velver);
@@ -175,7 +179,7 @@ OpenMMFrEnergyST::OpenMMFrEnergyST(bool frequent_save)
                 frequent_save_velocities(frequent_save), 
                 molgroup(MoleculeGroup()), solute(MoleculeGroup()) ,solutehard(MoleculeGroup()), solutetodummy(MoleculeGroup()), solutefromdummy(MoleculeGroup()),
                 openmm_system(0), openmm_context(0), isSystemInitialised(false),isContextInitialised(false), 
-                CutoffType("nocutoff"), cutoff_distance(1.0 * nanometer),field_dielectric(78.3),
+                CutoffType("nocutoff"), cutoff_distance(1.0 * nanometer),field_dielectric(78.3),//tollerance_ewald_pme(0.0001),
                 Andersen_flag(false),Andersen_frequency(90.0), MCBarostat_flag(false),
                 MCBarostat_frequency(25),ConstraintType("none"),
                 Pressure(1.0 * bar),Temperature(300.0 * kelvin),platform_type("Reference"),Restraint_flag(false),
@@ -192,7 +196,7 @@ OpenMMFrEnergyST::OpenMMFrEnergyST(const MoleculeGroup &molecule_group, const Mo
                 frequent_save_velocities(frequent_save), 
                 molgroup(molecule_group), solute(solute_group),solutehard(solute_hard), solutetodummy(solute_todummy),solutefromdummy(solute_fromdummy),
                 openmm_system(0),openmm_context(0), isSystemInitialised(false), isContextInitialised(false), 
-                CutoffType("nocutoff"), cutoff_distance(1.0 * nanometer),field_dielectric(78.3),
+                CutoffType("nocutoff"), cutoff_distance(1.0 * nanometer),field_dielectric(78.3),//tollerance_ewald_pme(0.0001),
                 Andersen_flag(false),Andersen_frequency(90.0), MCBarostat_flag(false),
                 MCBarostat_frequency(25),ConstraintType("none"),
                 Pressure(1.0 * bar),Temperature(300.0 * kelvin),platform_type("Reference"),Restraint_flag(false),
@@ -212,7 +216,8 @@ OpenMMFrEnergyST::OpenMMFrEnergyST(const OpenMMFrEnergyST &other)
                 openmm_system(other.openmm_system), openmm_context(other.openmm_context), isSystemInitialised(other.isSystemInitialised), 
                 isContextInitialised(other.isContextInitialised),
                 CutoffType(other.CutoffType),cutoff_distance(other.cutoff_distance),
-                field_dielectric(other.field_dielectric), Andersen_flag(other.Andersen_flag),
+                field_dielectric(other.field_dielectric),//tollerance_ewald_pme(other.tollerance_ewald_pme),
+                Andersen_flag(other.Andersen_flag),
                 Andersen_frequency(other.Andersen_frequency), MCBarostat_flag(other.MCBarostat_flag),
                 MCBarostat_frequency(other.MCBarostat_frequency),ConstraintType(other.ConstraintType), 
                 Pressure(other.Pressure), Temperature(other.Temperature),platform_type(other.platform_type),
@@ -251,6 +256,7 @@ OpenMMFrEnergyST& OpenMMFrEnergyST::operator=(const OpenMMFrEnergyST &other)
     CutoffType = other.CutoffType;
     cutoff_distance = other.cutoff_distance;
     field_dielectric = other.field_dielectric;
+    //tollerance_ewald_pme = other.tollerance_ewald_pme;
     Andersen_flag = other.Andersen_flag;
     Andersen_frequency = other.Andersen_frequency;
     MCBarostat_flag = other.MCBarostat_flag;
@@ -297,6 +303,7 @@ bool OpenMMFrEnergyST::operator==(const OpenMMFrEnergyST &other) const
     and CutoffType == other.CutoffType
     and cutoff_distance == other.cutoff_distance
     and field_dielectric == other.field_dielectric
+    //and tollerance_ewald_pme == other.tollerance_ewald_pme
     and Andersen_flag == other.Andersen_flag
     and Andersen_frequency == other.Andersen_frequency
     and MCBarostat_flag == other.MCBarostat_flag
@@ -401,6 +408,10 @@ void OpenMMFrEnergyST::initialise()  {
         flag_cutoff = CUTOFFNONPERIODIC;
     else if (CutoffType == "cutoffperiodic")
         flag_cutoff = CUTOFFPERIODIC;
+    //else if (CutoffType == "ewald")
+       // flag_cutoff = EWALD;
+    //else if (CutoffType == "pme")
+        //flag_cutoff = PME;
     else
         throw SireError::program_bug(QObject::tr("The CutOff method has not been specified. Possible choises: nocutoff, cutoffnonperiodic, cutoffperiodic"), CODELOC);
 
@@ -433,8 +444,9 @@ void OpenMMFrEnergyST::initialise()  {
     //The Standard Non Bonded is only defined to extract 1-2,1-3,1-4 pairs from the system 
     OpenMM::NonbondedForce * nonbond_openmm = new OpenMM::NonbondedForce();
 
+    //system_openmm-|addForce(nonbond_openmm);
     nonbond_openmm->setUseDispersionCorrection(false);
-
+    
     //CUSTOM NON BONDED FORCE FIELD
 
     OpenMM::CustomNonbondedForce * custom_force_field = NULL;
@@ -910,14 +922,25 @@ void OpenMMFrEnergyST::initialise()  {
         custom_intra_14_clj->addGlobalParameter("krf",kvalue);
         custom_intra_14_clj->addGlobalParameter("crf",cvalue);*/
         
-        
+        //if(flag_cutoff == EWALD){
+          ///      nonbond_openmm->setNonbondedMethod(OpenMM::NonbondedForce::Ewald);
+	//	nonbond_openmm->setEwaldErrorTolerance(tollerance_ewald_pme);
+
+        //}
+       // else if (flag_cutoff == PME){
+       //         nonbond_openmm->setNonbondedMethod(OpenMM::NonbondedForce::PME);
+	//	nonbond_openmm->setEwaldErrorTolerance(tollerance_ewald_pme);
+
+
+       //}
         
         if (true) {
             qDebug() << "\nCut off type = " << CutoffType;
             qDebug() << "CutOff distance = " << converted_cutoff_distance  << " Nm";
             qDebug() << "Dielectric constant = " << field_dielectric;
             qDebug() << "Lambda = " << Alchemical_value << " Coulomb Power = " << coulomb_power << " Delta Shift = " << shift_delta;
-            
+            //else if(flag_cutoff == EWALD || flag_cutoff == PME)
+                //qDebug() << "Tollerance EWALD/PME = " << tollerance_ewald_pme << " \n\n";
         }
         
     }
@@ -929,7 +952,7 @@ void OpenMMFrEnergyST::initialise()  {
         OpenMM::AndersenThermostat * thermostat = new OpenMM::AndersenThermostat(converted_Temperature, Andersen_frequency);
 
         //Set The random seed
-        //thermostat->setRandomNumberSeed(1234567);
+        //thermostat->setRandomNumberSeed(1234567);    ativa questa linea quando devi provare ad avere gli stesis risultati
 
         system_openmm->addForce(thermostat);
 
@@ -949,7 +972,7 @@ void OpenMMFrEnergyST::initialise()  {
         OpenMM::MonteCarloBarostat * barostat = new OpenMM::MonteCarloBarostat(converted_Pressure, converted_Temperature, MCBarostat_frequency);
 
         //Set The random seed
-        //barostat->setRandomNumberSeed(1234567);
+        //barostat->setRandomNumberSeed(1234567);  attiva questa linea qunado devi provar eada vre gli stessi riusltati 
 
         system_openmm->addForce(barostat);
 
@@ -1013,15 +1036,6 @@ void OpenMMFrEnergyST::initialise()  {
             qDebug() << "\n\nRestraint is ON\n\n";
     }
 
-    /****************************************BOND LINK POTENTIAL*****************************/
-    /* !! CustomBondForce does not (OpenMM 6.2) apply PBC checks so code will be buggy is restraints involve one atom that diffuses 
-       out of the box. */
-    
-    OpenMM::CustomBondForce * custom_link_bond = new OpenMM::CustomBondForce("kl*max(0,d-dl*dl);"
-                                                                             "d=(r-reql)*(r-reql)");
-    custom_link_bond->addPerBondParameter("reql");    
-    custom_link_bond->addPerBondParameter("kl");
-    custom_link_bond->addPerBondParameter("dl");
 
     //OpenMM vector coordinate
     std::vector<OpenMM::Vec3> positions_openmm(nats);
@@ -1615,7 +1629,7 @@ void OpenMMFrEnergyST::initialise()  {
                                double pert_eq_distance = solute_bond_perturbation_params[3] * Alchemical_value + (1.0 - Alchemical_value) * solute_bond_perturbation_params[2];
                                system_openmm->addConstraint(idx0,idx1, pert_eq_distance);
                                
-                               if(Debug){
+                               if(true){
                                     qDebug() << "Two/one bond atom(s) start(s) or end(s) with h/H" ;
                                     qDebug() << "bond start distance = " << solute_bond_perturbation_params[2] << " Nm";
                                     qDebug() << "bond end distance = " << solute_bond_perturbation_params[3] << " Nm";
@@ -2503,59 +2517,7 @@ void OpenMMFrEnergyST::initialise()  {
     perturbed_energies = perturbed_energies_tmp;
 
     //IMPORTANT: PERTURBED ENERGY TORSIONS ARE ADDED ABOVE
-    bool UseLink_flag = true;
-
-    //Distance Restaint. All the information are stored in the first molecule only.
-
-    if(UseLink_flag == true){
-
-        Molecule molecule = moleculegroup.moleculeAt(0).molecule();
-
-        bool haslinkinfo = molecule.hasProperty("linkbonds");
-
-        if(haslinkinfo){
-
-            std::vector<double> custom_bond_link_par(3);
-
-            Properties linkprop = molecule.property("linkbonds").asA<Properties>();
-
-            int nlinks = linkprop.property(QString("nbondlinks")).asA<VariantProperty>().toInt();
-
-            if (true)
-                qDebug() << "Number of constraint links = " << nlinks ;
-
-            for (int i=0; i < nlinks ; i++){
-
-                int atomnum0 = linkprop.property(QString("AtomNum0(%1)").arg(i)).asA<VariantProperty>().toInt();
-                int atomnum1 = linkprop.property(QString("AtomNum1(%1)").arg(i)).asA<VariantProperty>().toInt();
-                double reql = linkprop.property(QString("reql(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                double kl = linkprop.property(QString("kl(%1)").arg(i)).asA<VariantProperty>().toDouble();
-                double dl = linkprop.property(QString("dl(%1)").arg(i)).asA<VariantProperty>().toDouble();
-
-                int openmmindex0 = AtomNumToOpenMMIndex[atomnum0];
-                int openmmindex1 = AtomNumToOpenMMIndex[atomnum1];
-
-                custom_bond_link_par[0]=reql * OpenMM::NmPerAngstrom;//req
-                custom_bond_link_par[1]=kl * ( OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm );//k
-                custom_bond_link_par[2]=dl * OpenMM::NmPerAngstrom;//dl
-
-                if (true) {
-                    qDebug() << "atomnum0 = " << atomnum0 << " openmmindex0 =" << openmmindex0;
-                    qDebug() << "atomnum1 = " << atomnum1 << " openmmindex1 =" << openmmindex1;
-                    qDebug() << "Req = " << reql << " kl = " << kl << " dl = " << dl;
-                }
-
-                custom_link_bond->addBond(openmmindex0,openmmindex1,custom_bond_link_par);
-
-            }
-
-            system_openmm->addForce(custom_link_bond);
-        }
-
-    }//end of bond link flag
     
-
-
     this->openmm_system = system_openmm;
     this->isSystemInitialised = true;
     
@@ -2564,7 +2526,6 @@ void OpenMMFrEnergyST::initialise()  {
 
 
 void OpenMMFrEnergyST::createContext(IntegratorWorkspace &workspace,SireUnits::Dimension::Time timestep, int nmoves, bool record_stats){
-  
     bool Debug = false;
     
     if (Debug)
@@ -2667,7 +2628,7 @@ void OpenMMFrEnergyST::createContext(IntegratorWorkspace &workspace,SireUnits::D
     // Now update coordinates / velocities / dimensions with sire data
     AtomicVelocityWorkspace &ws = workspace.asA<AtomicVelocityWorkspace>();
     
-    if ( CutoffType == "cutoffperiodic" ){
+    if ( CutoffType == "cutoffperiodic" || CutoffType == "ewald" || CutoffType == "pme"){
         
         const System & ptr_sys = ws.system();
         const PropertyName &space_property = PropertyName("space");
@@ -2777,7 +2738,7 @@ MolarEnergy OpenMMFrEnergyST::getPotentialEnergy(const System &system)
     return nrg;
 }
 
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace, const Symbol &nrg_component, SireUnits::Dimension::Time timestep, int nmoves, bool record_stats) {
 
 
@@ -2856,7 +2817,7 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace, const Symbol &n
 
 
     //state_openmm=openmm_context->getState(infoMask);
-    //qDebug() << "TOTAL Energy = " <<  state_openmm.getPotentialEnergy() * OpenMM::KcalPerKJ + state_openmm.getKineticEnergy() * OpenMM::KcalPerKJ << " kcal/mol";
+    //qDebug() <<"TOTAL Energy = " <<  state_openmm.getPotentialEnergy() * OpenMM::KcalPerKJ + state_openmm.getKineticEnergy() * OpenMM::KcalPerKJ << " kcal/mol";
     //qDebug() << "Potential Energy = " <<  state_openmm.getPotentialEnergy() * OpenMM::KcalPerKJ << " kcal/mol";
     //qDebug() << "Kinetic Energy = " <<  state_openmm.getKineticEnergy() * OpenMM::KcalPerKJ << " kcal/mol";
 
@@ -2877,6 +2838,7 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace, const Symbol &n
     std::vector<OpenMM::Vec3> positions_openmm(nats);
     //OpenMM vector momenta
     std::vector<OpenMM::Vec3> velocities_openmm(nats);
+    
     
 
     if(minimize){
@@ -2899,7 +2861,7 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace, const Symbol &n
         int max = ceil(Alchemical_value/0.1);
 
         double lam=0.0;
-
+        
         for(int i=0;i<max+1;i++){
 
             if(true)
@@ -2984,14 +2946,19 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace, const Symbol &n
     
     double double_increment = increment_plus - increment_minus;
     
-    //double coefficient = -1.0/(double_increment*beta);
+    double coefficient = -1.0/(double_increment*beta);
     
     double minv_beta = -1.0/beta;
-    
+
+    double actual_gradient = 0.0;
+
+    gradients.clear(); //reinitialitation of gradients
+    energies.clear();  //reinitialization of energies
+ 
     Debug = false;
     
-    //if(true)
-    //   printf("\nepsm = %.8f increment = %.5f double increment = %.5f\n",epsm, increment, double_increment);
+    if(Debug)
+       printf("increment = %.5f double increment = %.5f\n", increment, double_increment);
     
     while(sample_count <= n_samples){
         
@@ -3018,6 +2985,10 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace, const Symbol &n
         double plus;
         
         double minus;
+     
+        //printf("Potential energy lambda = %.5f \n potentialenergy pls delta = %.5f \n minus delta = %.5f \n", potential_energy_lambda, potential_energy_lambda_plus_delta, potential_energy_lambda_minus_delta);
+
+        
     
         // Because looping from 1 to n_samples
         int modulo = 1;
@@ -3132,6 +3103,7 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace, const Symbol &n
             
             plus = exp(-beta * (potential_energy_lambda_plus_delta - potential_energy_lambda));
             minus = exp(beta * (potential_energy_lambda_plus_delta - potential_energy_lambda));
+         
             
             if(Debug){
                 printf("Lambda + increment = %f Potential energy plus  = %.5f kcal/mol (SP = off)\n", increment_plus,  potential_energy_lambda_plus_delta * OpenMM::KcalPerKJ );
@@ -3143,48 +3115,56 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace, const Symbol &n
         
         else{
             
+             
             plus = exp(-beta * (potential_energy_lambda_plus_delta - potential_energy_lambda));
             minus = exp(-beta * (potential_energy_lambda_minus_delta - potential_energy_lambda));
             
+            
+            
+           
+            
             if(Debug){
-                
-                
-                printf("Lambda + increment = %f Potential energy plus  = %.5f kcal/mol (SP = off)\n", increment_plus,  potential_energy_lambda_plus_delta * OpenMM::KcalPerKJ );
-                printf("Lambda - increment = %f Potential energy plus  = %.5f kcal/mol (SP = off)\n", increment_minus,  potential_energy_lambda_minus_delta * OpenMM::KcalPerKJ );
-                
+                //printf(" Actual Gradient = %.7f kcal/mol \n", actual_gradient * OpenMM::KcalPerKJ);
+                //printf(" Actual Gradient in foward direction = %.7f kcal/mol \n", actual_grad_plus * OpenMM::KcalPerKJ);
+                //printf(" Actual Gradient in backward direction = %.7f kcal/mol \n", actual_grad_minus * OpenMM::KcalPerKJ); 
+                //printf(" Potential energy lambda = %.7f kcal/mol \n", potential_energy_lambda * OpenMM::KcalPerKJ);
+                //printf(" plus = %.7f kcal/mol \n", plus * OpenMM::KcalPerKJ);
+                //printf(" minus = %.7f kcal/mol \n", minus * OpenMM::KcalPerKJ);
             }
             
         }
         
-        
-        GF_acc = GF_acc + plus;
-        GB_acc = GB_acc + minus;
 
+         
+        
+        actual_gradient = (minv_beta *log((plus)/(minus)))/double_increment; //FEP part
+        
+        
         pot_energy_acc = pot_energy_acc + potential_energy_lambda;
+       
         
         double avg_pot_energy_lambda = pot_energy_acc / (sample_count);
         
-        double avg_GF = GF_acc /(sample_count);
-        double avg_GB = GB_acc /(sample_count);
-        double Energy_GF = minv_beta*log(avg_GF);
-        double Energy_GB = minv_beta*log(avg_GB);
-        double Energy_Gradient_lamda = (Energy_GF - Energy_GB) / double_increment ;
-        
-        
-        //double Energy_Gradient_lamda = coefficient * log(GF_acc / GB_acc);
         
         if(Debug){
             //qDebug()<< "Total Time = " << state_openmm.getTime() << " ps";
-            printf("Cumulative Energy Gradient = %.5f kcal/mol\n", Energy_Gradient_lamda * OpenMM::KcalPerKJ);
+            printf("Actual gradient = %.5f kcal/mol\n", actual_gradient* OpenMM::KcalPerKJ);
             //qDebug() << "Istantaneus Energy Gradient = " << coefficient * log(plus / minus) * OpenMM::KcalPerKJ << " kcal/(mol lambda)";
         }
         
         if(sample_count!=(n_samples)){
+            //printf("Sample count = %d \n", sample_count);
             energies.append(avg_pot_energy_lambda * OpenMM::KcalPerKJ);
+            gradients.append(actual_gradient * OpenMM::KcalPerKJ); // all istantaneous gradient are appended here
+            
         }
         if(sample_count==(n_samples)){
-            gradients.append(Energy_Gradient_lamda * OpenMM::KcalPerKJ);
+            //Probably need to comment out the line of code below
+            gradients.append(actual_gradient * OpenMM::KcalPerKJ);// and the final one of course! then in python we perform a numpy.average for having the average one
+            //gradients.append(Energy_Gradient_lamda * OpenMM::KcalPerKJ); old code for having the average gradient every cycle
             energies.append(avg_pot_energy_lambda * OpenMM::KcalPerKJ);
+            
+            //qDebug() << my value of Energy_Gradient_lamda ....
         }
         
         
@@ -3627,8 +3607,6 @@ QVector<double> OpenMMFrEnergyST::getGradients(void){
     return gradients;
 
 }
-
-
 
 /** Average energies*/
 QVector<double> OpenMMFrEnergyST::getEnergies(void){
