@@ -4,7 +4,6 @@ compiler:
 
 before_install:
   - sudo apt-get update -qq
-  - sudo add-apt-repository ppa:kubuntu-backports/ppa -y
   - sudo add-apt-repository ppa:rmcgibbo/openmm/ppa -y
   - sudo add-apt-repository ppa:george-edison55/cmake-3.x -y
   - sudo apt-get update -qq
