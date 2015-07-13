@@ -8,15 +8,15 @@ before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y cmake
   - sudo apt-get install g++-4.6
-#  - wget http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
-#  - bash Miniconda3-latest-Linux-x86_64.sh -b
-#  - PIP_ARGS="-U"
-#  - export PATH=$HOME/miniconda3/bin:$PATH
-#  - conda config --add channels http://conda.binstar.org/omnia
-#  - conda create --yes -n py3 python=3 --file requirements-conda.txt
-#  - source activate py3
-#  - $HOME/miniconda3/envs/py3/bin/pip install $PIP_ARGS nose-exclude
-#  - conda install --yes openmm runipy
+  - wget http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+  - bash Miniconda3-latest-Linux-x86_64.sh -b
+  - PIP_ARGS="-U"
+  - export PATH=$HOME/miniconda3/bin:$PATH
+  - conda config --add channels http://conda.binstar.org/omnia
+  - conda create --yes -n py3 python=3 --file requirements-conda.txt
+  - source activate py3
+  - $HOME/miniconda3/envs/py3/bin/pip install $PIP_ARGS nose-exclude
+  - conda install --yes openmm runipy
   - if [ "$CC" = "gcc" ]; then export CC="gcc-4.6" CXX="g++-4.6"; fi
 
 install:
