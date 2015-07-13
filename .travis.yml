@@ -2,12 +2,13 @@ language: cpp
 compiler:
   - clang
 
-before_install:
+before_script:
   - sudo apt-get update -qq
   - sudo add-apt-repository ppa:george-edison55/cmake-3.x -y
   - sudo apt-get update -qq
   - sudo apt-get install cmake
   - sudo apt-get install g++-4.6
+before_install:
   - wget http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
   - bash Miniconda3-latest-Linux-x86_64.sh -b
   - PIP_ARGS="-U"
