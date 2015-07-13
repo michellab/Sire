@@ -4,7 +4,7 @@ compiler:
 
 before_install:
   - sudo apt-get update -qq
-  - sudo add-apt-repository --yes ppa:george-edison55/cmake-3.x
+  - sudo add-apt-repository --yes ppa:kubuntu-ppa/backports 
   - sudo apt-get update -qq
   - sudo apt-get install -y cmake
   - sudo apt-get install g++-4.6
