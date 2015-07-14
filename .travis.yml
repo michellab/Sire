@@ -19,6 +19,7 @@ before_install:
   - sudo add-apt-repository --yes ppa:kubuntu-ppa/backports 
   - sudo apt-get update -qq
   - sudo apt-get install -y cmake
+  - sudo apt-get install build-essentials
   - sudo apt-get install g++-4.6
   - wget http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
   - bash Miniconda3-latest-Linux-x86_64.sh -b
@@ -47,4 +48,4 @@ install:
   - cd build
   - cmake -DSIRE_DISABLE_AVX=ON ../corelib
   - make -j 2
-  - make install
+
