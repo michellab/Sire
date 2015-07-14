@@ -1,6 +1,9 @@
 language: cpp
 compiler:
   - clang
+env:
+  global:
+    - PATH=$HOME/miniconda3/bin:$HOME/miniconda3/envs/ci/bin/:$PATH
 
 before_install:
   - sudo apt-get update -qq
