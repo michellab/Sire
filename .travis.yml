@@ -1,6 +1,6 @@
 language: cpp
 compiler:
-  - clang
+  - gcc
 env:
   global:
     - PATH=$HOME/miniconda3/bin:$HOME/miniconda3/envs/ci/bin/:$PATH
