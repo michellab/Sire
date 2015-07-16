@@ -3,16 +3,16 @@ compiler:
   - gcc
 env:
   global:
-    - PATH=$HOME/miniconda3/bin:$HOME/miniconda3/envs/ci/bin/:$PATH
-    - LD_LIBRARY_PATH=$HOME/miniconda3/lib/:$LD_LIBRARY_PATH 
-    - LIBRARY_PATH=$HOME/miniconda3/lib/:$LIBRARY_PATH
-    - OPENMM_PLUGIN_DIR=$HOME/miniconda3/lib/plugins
-    - OPENMM_ROOT_DIR=$HOME/miniconda3
-    - PYTHONPATH=$HOME/miniconda3/lib/python2.7/site-packages:$PYTHONPATH
-    - OPENMM_INCLUDE_PATH=$HOME/miniconda3/include 
-    - OPENMM_LIB_PATH=$HOME/miniconda3/lib/
-    - CPLUS_INCLUDE_PATH=$HOME/miniconda3/include 
-    - OPENMMDIR=$HOME/miniconda3/include 
+    - PATH=$HOME/miniconda/bin:$PATH
+    - LD_LIBRARY_PATH=$HOME/miniconda/lib/:$LD_LIBRARY_PATH 
+    - LIBRARY_PATH=$HOME/miniconda/lib/:$LIBRARY_PATH
+    - OPENMM_PLUGIN_DIR=$HOME/miniconda/lib/plugins
+    - OPENMM_ROOT_DIR=$HOME/miniconda
+    - PYTHONPATH=$HOME/miniconda/lib/python2.7/site-packages:$PYTHONPATH
+    - OPENMM_INCLUDE_PATH=$HOME/miniconda/include 
+    - OPENMM_LIB_PATH=$HOME/miniconda/lib/
+    - CPLUS_INCLUDE_PATH=$HOME/miniconda/include 
+    - OPENMMDIR=$HOME/miniconda/include 
     
 before_install:
   - sudo apt-get update -qq
@@ -23,15 +23,13 @@ before_install:
   - sudo apt-get install libgtk2.0-dev 
   - sudo apt-get install libgl1-mesa-dev
   - sudo apt-get install g++-4.6
-  - wget http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
-  - bash Miniconda3-latest-Linux-x86_64.sh -b
-  - PIP_ARGS="-U"
-  - export PATH=$HOME/miniconda3/bin:$PATH
+  - wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - bash Miniconda-latest-Linux-x86_64.sh -b
+  - export PATH=$HOME/miniconda/bin:$PATH
   - conda config --add channels http://conda.binstar.org/omnia
-  - conda create --yes -n py3 python=3 --file requirements-conda.txt
-  - source activate py3
-  - $HOME/miniconda3/envs/py3/bin/pip install $PIP_ARGS nose-exclude
-  - conda install --yes openmm runipy
+  - conda install --yes openmm 
   - if [ "$CC" = "gcc" ]; then export CC="gcc-4.6" CXX="g++-4.6"; fi
   
   - echo $PATH
