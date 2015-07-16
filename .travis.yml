@@ -22,7 +22,6 @@ before_install:
   - sudo apt-get install build-essential
   - sudo apt-get install libgtk2.0-dev 
   - sudo apt-get install libgl1-mesa-dev
-  - sudo apt-get install g++-4.6
   - wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
@@ -30,9 +29,13 @@ before_install:
   - conda install --yes openmm 
   - if [ "$CC" = "gcc" ]; then export CC="gcc-4.6" CXX="g++-4.6"; fi
 
-install:
+script:
   - mkdir build
   - cd build
   - cmake -DSIRE_DISABLE_AVX=ON ../corelib
   - make -j 2
+  - make install
+
+after_success:
+  - echo "Time to go home and have a cup of tea! :)"
 
