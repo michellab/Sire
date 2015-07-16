@@ -34,15 +34,15 @@ before_install:
   - conda install --yes openmm runipy
   - if [ "$CC" = "gcc" ]; then export CC="gcc-4.6" CXX="g++-4.6"; fi
   
-  - ls $PATH
-  - ls $LD_LIBRARY_PATH
-  - ls $LIBRARY_PATH
+  - echo $PATH
+  - echo $LD_LIBRARY_PATH
+  - echo $LIBRARY_PATH
   - ls $OPENMM_PLUGIN_DIR
   - ls $OPENMM_ROOT_DIR
-  - ls $PYTHONPATH
+  - echo $PYTHONPATH
   - ls $OPENMM_INCLUDE_PATH
   - ls $OPENMM_LIB_PATH
-  - ls $CPLUS_INCLUDE_PATH
+  - echo $CPLUS_INCLUDE_PATH
   - ls $OPENMMDIR
 
 install:
