@@ -13,7 +13,7 @@ env:
     - OPENMM_LIB_PATH=$HOME/miniconda3/lib/
     - CPLUS_INCLUDE_PATH=$HOME/miniconda3/include 
     - OPENMMDIR=$HOME/miniconda3/include 
-
+    
 before_install:
   - sudo apt-get update -qq
   - sudo add-apt-repository --yes ppa:kubuntu-ppa/backports 
@@ -34,20 +34,20 @@ before_install:
   - conda install --yes openmm runipy
   - if [ "$CC" = "gcc" ]; then export CC="gcc-4.6" CXX="g++-4.6"; fi
   
-  - echo $PATH
-  - echo $LD_LIBRARY_PATH
-  - echo $LIBRARY_PATH
-  - echo $OPENMM_PLUGIN_DIR
+  - ls $PATH
+  - ls $LD_LIBRARY_PATH
+  - ls $LIBRARY_PATH
+  - ls $OPENMM_PLUGIN_DIR
   - ls $OPENMM_ROOT_DIR
-  - echo $PYTHONPATH
-  - echo $OPENMM_INCLUDE_PATH
-  - echo $OPENMM_LIB_PATH
-  - echo $CPLUS_INCLUDE_PATH
-  - echo $OPENMMDIR
+  - ls $PYTHONPATH
+  - ls $OPENMM_INCLUDE_PATH
+  - ls $OPENMM_LIB_PATH
+  - ls $CPLUS_INCLUDE_PATH
+  - ls $OPENMMDIR
 
 install:
   - mkdir build
-  - cd build
-  - cmake -DSIRE_DISABLE_AVX=ON ../corelib
-  - make -j 2
+  #- cd build
+  #- cmake -DSIRE_DISABLE_AVX=ON ../corelib
+  #- make -j 2
 
