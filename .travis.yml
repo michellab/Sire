@@ -29,21 +29,10 @@ before_install:
   - conda config --add channels http://conda.binstar.org/omnia
   - conda install --yes openmm 
   - if [ "$CC" = "gcc" ]; then export CC="gcc-4.6" CXX="g++-4.6"; fi
-  
-  - echo $PATH
-  - echo $LD_LIBRARY_PATH
-  - echo $LIBRARY_PATH
-  - ls $OPENMM_PLUGIN_DIR
-  - ls $OPENMM_ROOT_DIR
-  - echo $PYTHONPATH
-  - ls $OPENMM_INCLUDE_PATH
-  - ls $OPENMM_LIB_PATH
-  - echo $CPLUS_INCLUDE_PATH
-  - ls $OPENMMDIR
 
 install:
   - mkdir build
-  #- cd build
-  #- cmake -DSIRE_DISABLE_AVX=ON ../corelib
-  #- make -j 2
+  - cd build
+  - cmake -DSIRE_DISABLE_AVX=ON ../corelib
+  - make -j 2
 
