@@ -26,8 +26,6 @@ before_install:
   - wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
-  - bash Miniconda-latest-Linux-x86_64.sh -b
-  - export PATH=$HOME/miniconda/bin:$PATH
   - conda config --add channels http://conda.binstar.org/omnia
   - conda install --yes openmm 
   - if [ "$CC" = "gcc" ]; then export CC="gcc-4.6" CXX="g++-4.6"; fi
