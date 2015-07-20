@@ -106,8 +106,6 @@ public:
     IntegratorWorkspacePtr createWorkspace(const PropertyMap &map = PropertyMap()) const;
     IntegratorWorkspacePtr createWorkspace(const MoleculeGroup &molgroup,const PropertyMap &map = PropertyMap()) const;
 
-
-
     QString getCutoffType(void);
     void setCutoffType(QString);
 
@@ -203,6 +201,8 @@ public:
 
     void setReinitializeContext(bool);
 
+    int getRandomSeed(void);
+    void setRandomSeed(int);
 
 private:
     void createContext(IntegratorWorkspace &workspace,
@@ -296,6 +296,7 @@ private:
     double GF_acc;
     double GB_acc;
 
+    int random_seed;
 
 };
 

@@ -350,7 +350,7 @@ QString OpenMMFrEnergyST::toString() const
 
 void OpenMMFrEnergyST::initialise()  {
 
-    bool Debug = false;
+    bool Debug = true;
 
     if (true){
         qDebug() << "Initialising OpenMMFrEnergyST";
@@ -929,7 +929,7 @@ void OpenMMFrEnergyST::initialise()  {
         OpenMM::AndersenThermostat * thermostat = new OpenMM::AndersenThermostat(converted_Temperature, Andersen_frequency);
 
         //Set The random seed
-        //thermostat->setRandomNumberSeed(1234567);
+        thermostat->setRandomNumberSeed(random_seed);
 
         system_openmm->addForce(thermostat);
 
@@ -949,7 +949,7 @@ void OpenMMFrEnergyST::initialise()  {
         OpenMM::MonteCarloBarostat * barostat = new OpenMM::MonteCarloBarostat(converted_Pressure, converted_Temperature, MCBarostat_frequency);
 
         //Set The random seed
-        //barostat->setRandomNumberSeed(1234567);
+        barostat->setRandomNumberSeed(random_seed);
 
         system_openmm->addForce(barostat);
 
@@ -2841,7 +2841,7 @@ System OpenMMFrEnergyST::minimizer( System &system, double max_iteration=1, doub
 void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace, const Symbol &nrg_component, SireUnits::Dimension::Time timestep, int nmoves, bool record_stats) {
 
 
-    bool Debug = false;
+    bool Debug = true;
     
     createContext(workspace, timestep, nmoves, record_stats);
     
@@ -3461,6 +3461,20 @@ void OpenMMFrEnergyST::setAndersen_frequency(double freq){
     Andersen_frequency=freq;
     
 }
+/** Get the Integrator random seed */
+int OpenMMFrEnergyST::getRandomSeed(void){
+    
+    return random_seed;
+    
+}
+
+/** Set the Integrator random seed */
+void OpenMMFrEnergyST::setRandomSeed(int seed){
+    
+    random_seed = seed;
+    
+}
+
 
 /** Get the bath Temperature */
 SireUnits::Dimension::Temperature OpenMMFrEnergyST::getTemperature(void){
