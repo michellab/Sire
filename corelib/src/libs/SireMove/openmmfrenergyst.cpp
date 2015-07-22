@@ -2878,10 +2878,11 @@ System OpenMMFrEnergyST::annealLambda(System &system, double stepSize=0.005, int
         exit(1);
     }
 
+    workspace.edit().setSystem(system);
     SireUnits::Dimension::Time timestep = stepSize * picosecond;
     createContext(workspace.edit(), timestep);
 
-    workspace.edit().setSystem(system);
+
 
 
     int max = ceil(Alchemical_value / 0.1);
