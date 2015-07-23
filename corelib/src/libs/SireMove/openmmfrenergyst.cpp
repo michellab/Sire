@@ -2863,7 +2863,9 @@ System OpenMMFrEnergyST::minimizeEnergy(System &system, double tolerance=1.0, in
  * This method will slowly anneal the system to a given lambda value. 
  */
 
-System OpenMMFrEnergyST::annealLambda(System &system, SireUnits::Dimension::Time timestep, int annealingSteps){
+System OpenMMFrEnergyST::annealLambda(System &system, 
+                                      SireUnits::Dimension::Time annealStepSize,
+                                      int annealingSteps){
 
     const double AKMAPerPs = 0.04888821;
     
@@ -2876,8 +2878,8 @@ System OpenMMFrEnergyST::annealLambda(System &system, SireUnits::Dimension::Time
     }
 
     workspace.edit().setSystem(system);
-    SireUnits::Dimension::Time timestep = stepSize * picosecond;
-    createContext(workspace.edit(), timestep);
+    //SireUnits::Dimension::Time timestep = stepSize * picosecond;
+    createContext(workspace.edit(), annealStepSize);
 
 
 
