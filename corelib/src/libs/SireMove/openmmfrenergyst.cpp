@@ -352,9 +352,6 @@ QString OpenMMFrEnergyST::toString() const
 
 
 void OpenMMFrEnergyST::initialise()  {
-    cout<<"++++++++++++++++++++++++++"<<endl;
-    cout<<Debug<<endl;
-    cout<<"++++++++++++++++++++++++++"<<endl;
 
     if (Debug){
         qDebug() << "Initialising OpenMMFrEnergyST";
@@ -2866,7 +2863,7 @@ System OpenMMFrEnergyST::minimizeEnergy(System &system, double tolerance=1.0, in
  * This method will slowly anneal the system to a given lambda value. 
  */
 
-System OpenMMFrEnergyST::annealLambda(System &system, double stepSize=0.005, int annealingSteps=10){
+System OpenMMFrEnergyST::annealLambda(System &system, SireUnits::Dimension::Time timestep, int annealingSteps){
 
     const double AKMAPerPs = 0.04888821;
     
@@ -3076,74 +3073,6 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
     //OpenMM vector momenta
     std::vector<OpenMM::Vec3> velocities_openmm(nats);
     
-
-/*    if(minimize){
-
-        //New time step for minimization and equilibartion in ps
-        double dtm = convertTo( equilib_time_step.value(), picosecond);
-
-        if(true){
-            qDebug() << "\nStarting Minimization and Equilibration";
-            qDebug() << "Minimization tollerance = " << minimize_tol;
-            qDebug() << "Max number of minimization iterations (0 = untill tollerance is reached) = " << minimize_iterations;
-            qDebug() << "Max number of equilibration iterations = " << equilib_iterations;
-            qDebug() << "Equilibration time step = " << dtm << " ps"; 
-            qDebug() << "Total equilibration Time per Lambda = " << dtm * equilib_iterations << " ps \n";
-        }
-
-        (openmm_context->getIntegrator()).setStepSize(dtm);
-        OpenMM::LocalEnergyMinimizer::minimize(*openmm_context,minimize_tol,minimize_iterations);
-        
-
-        int max = ceil(Alchemical_value/0.1);
-
-        double lam=0.0;
-
-        for(int i=0;i<max+1;i++){
-
-            if(true)
-                qDebug() << "Lambda = " << lam;
-
-            //NON BONDED TERMS
-            if(perturbed_energies[0])
-                openmm_context->setParameter("lam",lam);//1-5 HD
-            //1-4 Interactions
-            if(perturbed_energies[1])
-                openmm_context->setParameter("lamhd",lam);//1-4 HD
-            if(perturbed_energies[2])
-                openmm_context->setParameter("lamtd",1.0 - lam);//1-4 To Dummy
-            if(perturbed_energies[3])
-                openmm_context->setParameter("lamfd",lam);//1-4 From Dummy
-            if(perturbed_energies[4])
-                openmm_context->setParameter("lamftd",lam);//1-4 From Dummy to Dummy
-
-            //BONDED PERTURBED TERMS
-            if(perturbed_energies[5])
-                openmm_context->setParameter("lambond",lam);//Bonds
-            if(perturbed_energies[6])
-                openmm_context->setParameter("lamangle",lam);//Angles
-            if(perturbed_energies[7])
-                openmm_context->setParameter("lamdih",lam);//Torsions
-
-            (openmm_context->getIntegrator()).step(equilib_iterations);
-
-            if(i == max-1)
-                lam = Alchemical_value;
-            else
-                lam = lam + 0.1;
-        }
-
-        (openmm_context->getIntegrator()).setStepSize(dt);
-        openmm_context->setTime(0.0);
-
-        if(true){
-            qDebug() << "End Equilibration";
-            qDebug() << "\nStarting Production run";
-        }
-    }
- */
-
-
     //Time skipping
     const double time_skip = convertTo( timeskip.value(), picosecond);
 
@@ -3891,43 +3820,6 @@ void OpenMMFrEnergyST::setTimetoSkip(SireUnits::Dimension::Time skip){
 
 }
 
-
-
-/** Set Minimization stage on/off*/
-/*void OpenMMFrEnergyST::setMinimization(bool on_off){
-
-    minimize = on_off;
-
-}*/
-
-
-/** Get Minimization Tollerance*/
-/*double OpenMMFrEnergyST::getMinimizeTol(void){
-
-    return minimize_tol;
-
-}*/
-
-/** Set Minimization Tollerance*/
-/*void OpenMMFrEnergyST::setMinimizeTol(double tollerance){
-
-    minimize_tol =  tollerance;
-
-}*/
-
-/** Get the maximum number of iterations in the minimization stage*/
-/*int OpenMMFrEnergyST::getMinimizeIterations(void){
-
-    return minimize_iterations;
-
-}*/
-
-/** Get the maximum number of iterations in the minimization stage*/
-/*void OpenMMFrEnergyST::setMinimizeIterations(int iterations){
-
-    minimize_iterations = iterations;
-
-}*/
 
 
 /** Get the total number of iterations used to perform the equilibration stage*/
