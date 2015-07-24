@@ -91,13 +91,13 @@ void register_OpenMMFrEnergyST_class(){
         OpenMMFrEnergyST_exposer.def( bp::init< SireMove::OpenMMFrEnergyST const & >(( bp::arg("other") )) );
         { //::SireMove::OpenMMFrEnergyST::annealLambda
         
-            typedef ::SireSystem::System ( ::SireMove::OpenMMFrEnergyST::*annealLambda_function_type )( ::SireSystem::System &,double,int ) ;
+            typedef ::SireSystem::System ( ::SireMove::OpenMMFrEnergyST::*annealLambda_function_type )( ::SireSystem::System &,::SireUnits::Dimension::Time,int ) ;
             annealLambda_function_type annealLambda_function_value( &::SireMove::OpenMMFrEnergyST::annealLambda );
             
             OpenMMFrEnergyST_exposer.def( 
                 "annealLambda"
                 , annealLambda_function_value
-                , ( bp::arg("system"), bp::arg("stepSize"), bp::arg("annealingSteps") ) );
+                , ( bp::arg("system"), bp::arg("timestep"), bp::arg("annealingSteps") ) );
         
         }
         { //::SireMove::OpenMMFrEnergyST::createWorkspace
