@@ -465,7 +465,7 @@ def atomNumVectorListToProperty( list ):
         prop.setProperty("x(%d)" % i, VariantProperty(value[1].x()))
         prop.setProperty("y(%d)" % i, VariantProperty(value[1].y()))
         prop.setProperty("z(%d)" % i, VariantProperty(value[1].z()))
-        prop.setProperty("k(%d)" % i, VariantProperty(value[2]))
+        prop.setProperty("k(%d)" % i, VariantProperty(value[2].val ) )
         i += 1
     
     prop.setProperty("nrestrainedatoms", VariantProperty(i) );
@@ -557,7 +557,7 @@ def setupRestraints(system):
                 continue
             atcoords = at.property("coordinates")
             #print at
-            restrainedAtoms.append( ( atnumber , atcoords, Krestraint) )
+            restrainedAtoms.append( ( atnumber , atcoords, k_restraint) )
             #restrainedAtoms.append( atnumber )
         
         if len(restrainedAtoms) > 0:
@@ -994,7 +994,14 @@ def setupMovesFreeEnergy(system,random_seed,GPUS,lam_val):
     Integrator_OpenMM.setMinimization(minimize.val)
     Integrator_OpenMM.setMinimizeTol(minimize_tol.val)
     Integrator_OpenMM.setMinimizeIterations(minimize_max_iter.val)
-
+ 
+    
+    if equilibrate.val:
+        Integrator_OpenMM.setEquilib_iterations(equil_iterations.val)
+    else:
+        Integrator_OpenMM.setEquilib_iterations(0)
+  
+    Integrator_OpenMM.setEquilib_time_step(equil_timestep.val)
 
     Integrator_OpenMM.setBufferFrequency(buffered_coords_freq.val)
 
@@ -1228,6 +1235,13 @@ def runFreeNrg():
 
         print("Saving restart")
         Sire.Stream.save( [system, moves], restart_file.val )
+        system = moves.move(system, nmoves.val, True)
+        mdmoves = moves.moves()[0]
+        integrator = mdmoves.integrator()
+        energyfreq = integrator.getEnergyFrequency()  
+        num_moves = moves.nMoves() 
+        coeff_a = 0
+        time_s =(coeff_a+freq)*timestep.val.to(picosecond)
     else:
         system, moves = Sire.Stream.load( restart_file.val )
         move0 =  moves.moves()[0]
@@ -1236,6 +1250,12 @@ def runFreeNrg():
         move0.setIntegrator(integrator)
         moves = WeightedMoves()
         moves.add(move0)
+        cycle_start = int(moves.nMoves() / nmoves.val)
+        cycle_end = cycle_start + ncycles.val
+        difference = cycle_end - cycle_start
+        energyfreq = integrator.getEnergyFrequency()
+        coeff_a = (num_moves - (energyfreq*difference))*timestep.val.to(picosecond)
+        time_s =coeff_a + (energyfreq*timestep.val.to(picosecond))
         print("Index GPU = %s " % moves.moves()[0].integrator().getDeviceIndex())
         print("Loaded a restart file on wich we have performed %d moves." % moves.nMoves())
 
@@ -1245,6 +1265,10 @@ def runFreeNrg():
     lam_str = "%7.5f" % lambda_val.val
     outgradients = open("gradients.dat","a", 1)
     outgradients.write("# lambba_val.val %s\n" % lam_str)
+
+    actualgradients = open("actual_gradient.dat","a", 1)
+    actualgradients.write("# lambba_val.val %s\n" % lam_str)
+    actualgradients.write("#time (ps)      gradients (kcal/mol*lam) \n")
 
     if (save_coords.val):
         trajectory = setupDCD(dcd_root.val, system)
@@ -1269,8 +1293,13 @@ def runFreeNrg():
         mdmoves = moves.moves()[0]
         integrator = mdmoves.integrator()
         gradients = integrator.getGradients()
-        outgradients.write("%5d %20.10f\n" % (i, gradients[i-1]))
-        grads[lambda_val.val].accumulate( gradients[i-1] )
+        mean_gradient = numpy.average(gradients)
+        outgradients.write("%5d %20.10f\n" % (i, mean_gradient))
+
+        for gradient in gradients:
+            grads[lambda_val.val].accumulate( gradients[i-1] )
+            actualgradients.write("  %.3f    %20.10f \n" % (time_s, gradient)) 
+            time_s +=energyfreq*timestep.val.to(picosecond)
 
     s2 = timer.elapsed()/1000.
     print("Simulation took %d s " % ( s2 - s1))
@@ -1293,4 +1322,5 @@ def runFreeNrg():
     os.system(cmd)
     print ("Saving new restart")
     Sire.Stream.save( [system, moves], restart_file.val )
+
 

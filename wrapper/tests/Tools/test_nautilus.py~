@@ -1,0 +1,360 @@
+import os, sys
+from nose.tools import assert_almost_equal
+
+top = "protein_case/new.top"
+crd = "protein_case/min00001.rst7"
+traj = "protein_case/protein.dcd"
+cell = "cell"
+regionfile = "grid/all.region"
+gridforces = "grid/grid.forces"
+cfg = "protein_case/nautilus.cfg"
+start = 0
+end = 5
+neighcut = 1.5
+lowt = 100
+SIRE="/home/$USER/sire.app"
+
+########################
+### test functions
+def test_traj2cell():
+    # traj2cell
+    cmd = "%s/bin/nautilus-traj2cell -C %s -t %s -c %s -d %s -s %s -e %s" % (SIRE, cfg, top, crd, traj, start, end)
+    print (cmd)
+    os.system(cmd)
+
+    #### simple diff test
+    #os.system("diff -b cell protein_case/cell-expected > celldiff.dat")
+    #file = open("celldiff.dat", "r")
+    #stream = file.read()
+    #if not stream:
+    #    print ("\ncell files are identical\n")
+    #else:
+    #    print ("\ncell files are not identical, error with traj2cell\n")
+    #    sys.exit(-1)
+
+    file1 = open("cell0.dat", "r")
+    stream1 = file1.readlines()
+    file2 = open("protein_case/cell0.dat", "r")
+    stream2 = file2.readlines()
+
+        ### Dictionaries where variables for water1 of frame0 are to be compared for their
+    ### cell values against the original code
+
+    dict1 = {}
+    dict2 = {}
+    ### parameter list waters, 1 if water, etc....
+    parameterindex = ['k', 'waterflag', 'energies', 'fx', 'fy', 'fz', 'tx', 'ty', 'tz', 'ox', 'oy', 'oz', 'ori' ]
+
+    #### cell values for old code of first water
+
+    #print (stream1, stream2)
+
+    for line in stream1:
+        ### each file has parameters:
+        elems = line.split()
+        for i in range(13):
+            dict1[i] = elems[i]
+
+    #### cell values for the new code of first water
+
+    for line in stream2:
+        elems = line.split()
+        for i in range(13):
+            try:
+                print (elems, i)
+                dict2[i] = elems[i]
+            except:
+                print ("too many  cell values")
+                sys.exit(-1)
+
+    #### compare expected(old code) and actual(new code) using the nose python module at 8 decimal points
+    for i in range(13):
+        #####               expected,  actual, precision of float number
+        #print (dict1, dict2)
+        #print (parameterindex[i], dict1[0])
+        print ("Comparing the averaged parameter, %s, from frames 1 to %s.\n" % (parameterindex[i], dict1[0]))
+        assert_almost_equal(dict1[i], dict2[i], 5)
+
+def test_cell2grid():
+
+    # cell2grid
+    cmd = "%s/bin/nautilus-cell2grid -C %s -c %s -s %s -e %s " % (SIRE,cfg, cell, start, end)
+    print (cmd)
+    os.system(cmd)
+
+    ### Correspondence diff test
+
+    os.system("diff -b grid protein_case/grid-expected > griddiff.dat")
+    file = open("griddiff.dat", "r")
+    stream = file.read().strip()
+    if not stream:
+        print ("\ngrid files are identical\n")
+    else:
+        print ("\ngrid files are not identical, error with cell2grid\n")
+        sys.exit(-1)
+
+    file1 = open("protein_case/grid-oldcode.dat", "r")
+    stream1 = file1.readlines()
+    file2 = open("grid.dat", "r")
+    stream2 = file2.readlines()
+
+    ### Dictionaries where variables for water1 of frame0 are to be compared for their
+    ### cell values against the original code
+
+    dict1 = {}
+    dict2 = {}
+    parameterindex = {}
+
+    #### grid values for old code of average water parameters
+
+    print (stream1, stream2)
+
+    for line in stream1:
+        if line.startswith("#Frame"):
+            parms = line.split()
+            for i in range(17):
+                parameterindex[i] = parms[i]
+
+        if line.startswith("#") or line.strip() == "":
+            continue
+        elems = line.split()
+        for i in range(17):
+            dict1[i] = elems[i]
+
+    #### grid values for the new code of average water parameters
+
+    for line in stream2:
+        if line.startswith("#") or line.strip() == "":
+            continue
+        elems = line.split()
+        for i in range(17):
+            try:
+                #print (elems[i], i)
+                dict2[i] = elems[i]
+            except:
+                print ("too many grid values")
+                sys.exit(-1)
+
+    #### compare expected(old code) and actual(new code) using the nose python module at 8 decimal points
+    for i in range(1, 17):
+        #####               expected,  actual, precision of float number
+        print (float(dict1[i]), float(dict2[i]))
+        	#sys.exit(-1)
+        #print (parameterindex[i], dict1[0])
+        print ("Comparing the averaged grid parameter, %s\n" % (parameterindex[i]))
+        assert_almost_equal(float(dict1[i]), float(dict2[i]), 6)
+
+def test_regionproperties():
+    # regionproperties
+    cmd = "%s/bin/nautilus-regionproperties -g %s -r %s" % (SIRE, gridforces, regionfile)
+    print (cmd)
+    os.system(cmd)
+
+    file1 = open("cell0.dat", "r")
+    stream1 = file1.readlines()
+    file2 = open("protein_case/cell0.dat", "r")
+    stream2 = file2.readlines()
+
+        ### Dictionaries where variables for water1 of frame0 are to be compared for their
+    ### cell values against the original code
+
+    dict1 = {}
+    dict2 = {}
+    ### parameter list waters, 1 if water, etc....
+
+    parameterindex = {}
+
+    #### cell values for old code of first water
+
+    #print (stream1, stream2)
+    count = 0
+    for line in stream1:
+        if line.startswith("#") or line.strip() == "":
+            continue
+        elems = line.split()
+
+        ### grab parameter type
+        parameterindex[count]= elems[0]
+        ### grab value
+        dict1[count] = elems[2]
+
+        count += 1
+
+    #### cell values for the new code of first water
+    count = 0
+
+    for line in stream2:
+        if line.startswith("#") or line.strip() == "":
+            continue
+        elems = line.split()
+        ### grab value
+        dict2[count] = elems[2]
+
+        count += 1
+
+    #### compare expected(old code) and actual(new code) using the nose python module at 8 decimal points
+    for i in range(len(list(dict1.keys()))):
+
+        #####               expected,  actual, precision of float number
+        #print (dict1, dict2)
+        #print (parameterindex[i], dict1[0])
+        print ("Comparing the region_property parameters, %s, from gridforces file %s.\n" % (parameterindex[i], gridforces))
+        assert_almost_equal(dict1[i], dict2[i], 5)
+
+    os.system("diff -b protein_case/region_test/all_properties.dat all_properties.dat > regiondiff.dat")
+    file = open("regiondiff.dat", "r")
+    stream = file.read().strip()
+    if not stream:
+        print ("\nregion properties are identical\n")
+    else:
+        print ("\nregionproperties has failed\n")
+        sys.exit(-1)
+
+def test_avggrids():
+    cmd = '''%s/bin/nautilus-avggrids -gs "%s" ''' % (SIRE, ['protein_case/dx_sub_avg_test/grid_DG_rep1.dx','protein_case/dx_sub_avg_test/grid_DG_rep2.dx','protein_case/dx_sub_avg_test/grid_DG_rep3.dx'])
+    print (cmd)
+    os.system(cmd)
+
+    file1 = open("avg.dx", "r")
+    stream1 = file1.readlines()
+    file2 = open("protein_case/dx_sub_avg_test/avg.dx", "r")
+    stream2 = file2.readlines()
+
+    ### make sure there is correspondence
+    # object 1 class gridpositions counts 56 56 56
+    #origin 34.00 14.03 18.34
+    #delta 0.50 0 0
+    #delta 0 0.50 0
+    #delta 0 0 0.50
+    #object 2 class gridconnections counts 56.00 56.00 56.00
+    #object 3 class array type double rank 0 items 175616 data follows
+    #-0.16463 -0.29267  0.10463
+
+    ### dx values against expected avg output
+
+    for i in range(8):
+        line_comp = stream1[i].strip()
+        line_exp = stream2[i].strip()
+        print ( line_comp, line_exp)
+
+        if  i == 0 and line_comp == line_exp:
+            print ("grid counts match\n")
+        if  i == 1 and line_comp == line_exp:
+            print ("same origin\n")
+        if  i == 2 and line_comp == line_exp:
+            print ("matching step size\n")
+        if  i == 3 and line_comp == line_exp:
+            print ("matching step size\n")
+        if  i == 4 and line_comp == line_exp:
+            print ("matching step size\n")
+
+
+
+        if  i == 6 and line_comp == line_exp:
+            elems = line_comp.split()
+            print ( elems[9])
+            print ("same number of grid points, %s\n" % elems[9])
+        if i == 7 and line_comp == line_exp:
+            print ("avg dx values match\n" )
+
+def test_subgrids():
+    cmd = '''%s/bin/nautilus-subgrids -gf '%s' -gl '%s' ''' % (SIRE, 'protein_case/dx_sub_avg_test/grid_DG_rep1.dx','protein_case/dx_sub_avg_test/grid_DG_rep2.dx')
+    print (cmd)
+    os.system(cmd)
+
+    file1 = open("diff.dx", "r")
+    stream1 = file1.readlines()
+    file2 = open("protein_case/dx_sub_avg_test/diff.dx", "r")
+    stream2 = file2.readlines()
+
+    ### make sure there is correspondence
+    #object 1 class gridpositions counts 56 56 56
+    #origin 34.00 14.03 18.34
+    #delta 0.50 0 0
+    #delta 0 0.50 0
+    #delta 0 0 0.50
+    #object 2 class gridconnections counts 56.00 56.00 56.00
+    #object 3 class array type double rank 0 items 175616 data follows
+    #-0.01960 -0.97210  0.14110
+
+    ### dx values against expected diff output
+
+    for i in range(8):
+        line_comp = stream1[i].strip()
+        line_exp = stream2[i].strip()
+        print ( line_comp, line_exp)
+
+        if  i == 0 and line_comp == line_exp:
+            print ("grid counts match\n")
+        if  i == 1 and line_comp == line_exp:
+            print ("same origin\n")
+        if  i == 2 and line_comp == line_exp:
+            print ("matching step size\n")
+        if  i == 3 and line_comp == line_exp:
+            print ("matching step size\n")
+        if  i == 4 and line_comp == line_exp:
+            print ("matching step size\n")
+        if  i == 6 and line_comp == line_exp:
+            elems = line_comp.split()
+            print ( elems[9])
+            print ("same number of grid points, %s\n" % elems[9])
+        if i == 7 and line_comp == line_exp:
+            print ("sub dx values match\n" )
+
+def test_clustergrids():
+    cmd = ''' %s/bin/nautilus-clustergrids -g %s  -n %8.5f -lt  %8.5f ''' % (SIRE, 'grid/grid.forces', neighcut, lowt)
+    print (cmd)
+    os.system(cmd)
+
+    file1 = open("sites/centroids.csv", "r")
+    stream1 = file1.readlines()
+    file2 = open("protein_case/centroids.csv", "r")
+    stream2 = file2.readlines()
+
+    for i in range(len(stream1)):
+        #print (i)
+        ### check if header is the same!
+        if i == 0 and stream1[0] == stream2[0]:
+            print ("header is identical")
+
+        ### check if each value corresponds within a 0.5 kcal for the free energy/entropy/enthalpy
+        ### also check how the different coordinates are.
+        if i > 0:
+            elems1 = stream1[i].strip().split(",")
+            elems2 = stream2[i].strip().split(",")
+
+            for j in range(len(elems1)):
+                print (elems1[j],elems2[j] )
+                assert_almost_equal(elems1[j], elems2[j], 2)
+    #cmd = "rm -rf grid.dat avg.dx  diff.dx cell0.dat frame-0.pdb cell grid all_properties.dat all.pdb griddiff.dat celldiff.dat regiondiff.dat sites" # UPDATE WITH ADDITIONAL OUTPUT FOLDERS (grid, xe-waterbox_properties.dat etc...
+    #os.system(cmd)
+
+def test_protocol():
+    cmd = ''' %s/bin/nautilus-protocol -C %s ''' % (SIRE, 'protein_case/nautilus-protocol.cfg')
+    print (cmd)
+    os.system(cmd)
+
+    file1 = open("sites/centroids.csv", "r")
+    stream1 = file1.readlines()
+    file2 = open("protein_case/sites/centroids.csv", "r")
+    stream2 = file2.readlines()
+
+    for i in range(len(stream1)):
+        #print (i)
+        ### check if header is the same!
+        if i == 0 and stream1[0] == stream2[0]:
+            print ("header is identical")
+
+        ### check if each value corresponds within a 0.5 kcal for the free energy/entropy/enthalpy
+        ### also check how the different coordinates are.
+        if i > 0:
+            elems1 = stream1[i].strip().split(",")
+            elems2 = stream2[i].strip().split(",")
+
+            for j in range(len(elems1)):
+                print (elems1[j],elems2[j] )
+                assert_almost_equal(elems1[j], elems2[j], 5)
+
+    cmd = "rm -rf grid.dat avg.dx  diff.dx cell0.dat frame-0.pdb cell grid all_properties.dat all.pdb griddiff.dat celldiff.dat regiondiff.dat sites"
+    os.system(cmd)
+

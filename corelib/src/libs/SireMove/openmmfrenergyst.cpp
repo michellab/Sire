@@ -150,9 +150,9 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, OpenMMFrEnergyST &velve
         >> velver.MCBarostat_flag >> velver.MCBarostat_frequency >> velver.ConstraintType >> velver.Pressure >> velver.Temperature 
         >> velver.platform_type >> velver.Restraint_flag >> velver.CMMremoval_frequency >> velver.buffer_frequency >> velver.energy_frequency
         >> velver.device_index >> velver.precision >> velver.Alchemical_value >> velver.coulomb_power >> velver.shift_delta >> velver.delta_alchemical
-        >> velver.gradients >> velver.energies >> velver.perturbed_energies >> velver.Integrator_type >> velver.friction 
-        >> velver.integration_tol >> velver.timeskip >> velver.minimize >> velver.minimize_tol >> velver.equilib_iterations >> velver.equilib_time_step
-        >> velver.minimize_iterations >> velver.reinetialize_context >> velver.GF_acc >> velver.GB_acc
+        >> velver.gradients >> velver.energies >> velver.perturbed_energies >> velver.Integrator_type >> velver.friction >> velver.integration_tol 
+        >> velver.timeskip >> velver.minimize >> velver.minimize_tol >> velver.minimize_iterations >>  velver.equilib_iterations >> velver.equilib_time_step
+        >> velver.reinetialize_context >> velver.GF_acc >> velver.GB_acc
         >> static_cast<Integrator&>(velver);
 
         // Maybe....need to reinitialise from molgroup because openmm system was not serialised...
@@ -350,7 +350,7 @@ QString OpenMMFrEnergyST::toString() const
 
 void OpenMMFrEnergyST::initialise()  {
 
-    bool Debug = false;
+    bool Debug = true;
 
     if (true){
         qDebug() << "Initialising OpenMMFrEnergyST";
@@ -929,7 +929,7 @@ void OpenMMFrEnergyST::initialise()  {
         OpenMM::AndersenThermostat * thermostat = new OpenMM::AndersenThermostat(converted_Temperature, Andersen_frequency);
 
         //Set The random seed
-        //thermostat->setRandomNumberSeed(1234567);
+        thermostat->setRandomNumberSeed(random_seed);
 
         system_openmm->addForce(thermostat);
 
@@ -949,7 +949,7 @@ void OpenMMFrEnergyST::initialise()  {
         OpenMM::MonteCarloBarostat * barostat = new OpenMM::MonteCarloBarostat(converted_Pressure, converted_Temperature, MCBarostat_frequency);
 
         //Set The random seed
-        //barostat->setRandomNumberSeed(1234567);
+        barostat->setRandomNumberSeed(random_seed);
 
         system_openmm->addForce(barostat);
 
@@ -2568,7 +2568,7 @@ void OpenMMFrEnergyST::createContext(IntegratorWorkspace &workspace,SireUnits::D
     bool Debug = false;
     
     if (Debug)
-        qDebug() << "In OpenMMFrEnergyST::integrate()\n\n" ;
+        qDebug() << "In OpenMMFrEnergyST::createContext()\n\n" ;
     
     // Check that the openmm system has been initialised
     // !! Should check that the workspace is compatible with molgroup
@@ -2777,11 +2777,71 @@ MolarEnergy OpenMMFrEnergyST::getPotentialEnergy(const System &system)
     return nrg;
 }
 
+/** This method will update the position of the atoms in the molecule group used to initialise the integrator.  using the optional settings. It will return an updated Sire system object. **/
+System OpenMMFrEnergyST::minimizer( System &system, double max_iteration=1, double tolerance=1 )
+{
+  bool debug = false;
+  // Step 1 create a workspace from the stored molecule group. 
+  // JM FIXME: This duplicates code used in ::initialize(). should we store an intergrator workspace at the end of initialisation ? 
+  // moleculegroup is the molgroup we initialised the integrator with
+  const MoleculeGroup moleculegroup = this->molgroup.read();
+  IntegratorWorkspacePtr workspace = this->createWorkspace(moleculegroup);
+  // JM FIXME: Should have some error checking in place to make sure that the passed system is compatible with the molgroup used to initialise 
+  // the integrator. Basic tests would check if same number of atoms...
+  workspace.edit().setSystem(system);
+  // Use helper function to create a Context
+  // JM 04/15 FIXME: Gac was re-using a pointer stored in OpenMMFrENergyST (?) Might be more sensible to pass around and delete contexts as needed. It looks 
+  // like the code wouldn't cope with more than one context being defined at a given time. 
+  // Note that context is setup with integrator and platform defined at initialisation, but these won't actually matter for a minimization
+  SireUnits::Dimension::Time timestep = 0.0 * picosecond;
+  // FIXME: Are nmoves and record_states used at all by createContext??
+  int nmoves = 0;
+  bool record_stats = false;
+  createContext(workspace.edit(), timestep, nmoves, record_stats);
+  // Step 2 minimize
+  OpenMM::LocalEnergyMinimizer::minimize(*openmm_context, tolerance , max_iteration);
+  // Step 3 update the positions in the system
+  int infoMask = OpenMM::State::Positions;
+  OpenMM::State state_openmm = openmm_context->getState(infoMask);
+  std::vector<OpenMM::Vec3> positions_openmm = state_openmm.getPositions();
+  // Recast to atomicvelocityworkspace because want to use commitCoordinates() method to update system
+  AtomicVelocityWorkspace &ws = workspace.edit().asA<AtomicVelocityWorkspace>();
+ 
+  const int nmols = ws.nMolecules();  
+  int k=0;
+
+  for(int i=0; i<nmols;i++){
+
+    Vector *sire_coords = ws.coordsArray(i);
+ 
+    for(int j=0; j < ws.nAtoms(i) ; j++){
+
+      sire_coords[j] = Vector(positions_openmm[j+k][0] * (OpenMM::AngstromsPerNm),
+			      positions_openmm[j+k][1] * (OpenMM::AngstromsPerNm),
+			      positions_openmm[j+k][2] * (OpenMM::AngstromsPerNm));
+      if(debug)
+	qDebug() << "X = " << positions_openmm[j+k][0] * OpenMM::AngstromsPerNm << " A" << 
+	  " Y = " << positions_openmm[j+k][1] * OpenMM::AngstromsPerNm << " A" <<
+	  " Z = " << positions_openmm[j+k][2] * OpenMM::AngstromsPerNm << " A";
+      
+    }
+    k= k + ws.nAtoms(i);
+  }
+
+  // This causes the workspace to update the system coordinates with the contents of *sire_coords. Note that velocities aren't touched.
+  ws.commitCoordinates();
+  // Step 4 delete the context
+  // JM 04/15 FIXME: See comment above at step 1
+  destroyContext();
+  // Step 5. Return pointer to the workspace's system 
+  const System & ptr_sys = ws.system();
+  return ptr_sys;
+}
 
 void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace, const Symbol &nrg_component, SireUnits::Dimension::Time timestep, int nmoves, bool record_stats) {
 
 
-    bool Debug = false;
+    bool Debug = true;
     
     createContext(workspace, timestep, nmoves, record_stats);
     
@@ -2987,6 +3047,8 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace, const Symbol &n
     //double coefficient = -1.0/(double_increment*beta);
     
     double minv_beta = -1.0/beta;
+
+    double actual_gradient = 0.0;
     
     Debug = false;
     
@@ -3156,7 +3218,8 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace, const Symbol &n
             
         }
         
-        
+        actual_gradient = (minv_beta*log((plus)/(minus)))/double_increment;
+
         GF_acc = GF_acc + plus;
         GB_acc = GB_acc + minus;
 
@@ -3181,9 +3244,10 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace, const Symbol &n
         
         if(sample_count!=(n_samples)){
             energies.append(avg_pot_energy_lambda * OpenMM::KcalPerKJ);
+            gradients.append(actual_gradient * OpenMM::KcalPerKJ)
         }
         if(sample_count==(n_samples)){
-            gradients.append(Energy_Gradient_lamda * OpenMM::KcalPerKJ);
+            gradients.append(actual_gradient * OpenMM::KcalPerKJ);
             energies.append(avg_pot_energy_lambda * OpenMM::KcalPerKJ);
         }
         
@@ -3401,6 +3465,20 @@ void OpenMMFrEnergyST::setAndersen_frequency(double freq){
     Andersen_frequency=freq;
     
 }
+/** Get the Integrator random seed */
+int OpenMMFrEnergyST::getRandomSeed(void){
+    
+    return random_seed;
+    
+}
+
+/** Set the Integrator random seed */
+void OpenMMFrEnergyST::setRandomSeed(int seed){
+    
+    random_seed = seed;
+    
+}
+
 
 /** Get the bath Temperature */
 SireUnits::Dimension::Temperature OpenMMFrEnergyST::getTemperature(void){
