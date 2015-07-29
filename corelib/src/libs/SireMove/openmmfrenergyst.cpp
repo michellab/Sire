@@ -3047,6 +3047,8 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace, const Symbol &n
     //double coefficient = -1.0/(double_increment*beta);
     
     double minv_beta = -1.0/beta;
+
+    double actual_gradient = 0.0;
     
     Debug = false;
     
@@ -3216,7 +3218,8 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace, const Symbol &n
             
         }
         
-        
+        actual_gradient = (minv_beta*log((plus)/(minus)))/double_increment;
+
         GF_acc = GF_acc + plus;
         GB_acc = GB_acc + minus;
 
@@ -3241,9 +3244,10 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace, const Symbol &n
         
         if(sample_count!=(n_samples)){
             energies.append(avg_pot_energy_lambda * OpenMM::KcalPerKJ);
+            gradients.append(actual_gradient * OpenMM::KcalPerKJ)
         }
         if(sample_count==(n_samples)){
-            gradients.append(Energy_Gradient_lamda * OpenMM::KcalPerKJ);
+            gradients.append(actual_gradient * OpenMM::KcalPerKJ);
             energies.append(avg_pot_energy_lambda * OpenMM::KcalPerKJ);
         }
         
