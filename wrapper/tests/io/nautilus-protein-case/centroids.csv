@@ -1,0 +1,3 @@
+cluster_no,x,y,z,Delta_G,Delta_H,-T*Delta_S,Delta_Hw,Delta_Hx,-T*Delta_Svib,-T*Delta_Slib,-T*Delta_Sori,Relative_Density,Average_number_of_water_molecules,Volume
+000001,43.0,32.03,37.34,-4.8498,-4.329,-0.5208,2.3044,-6.6334,-0.8401,-0.2471,0.5663,2.0682,0.8,11.625
+000002,51.0,36.53,31.84,-15.5444,-14.6151,-0.9294,-2.038,-12.5771,-1.0031,-0.0966,0.1704,2.5852,1.0,11.625

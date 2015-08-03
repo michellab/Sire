@@ -37,6 +37,7 @@ from Sire.Analysis import *
 from Sire.Tools.DCDFile import *
 from Sire.Tools import Parameter, resolveParameters
 import Sire.Stream
+import numpy as np
 
 
 ####################################################################################################
@@ -61,7 +62,7 @@ crdfile = Parameter("crdfile", "SYSTEM.crd",
                        system to be simulated.""")
 
 s3file = Parameter("s3file", "SYSTEM.s3",
-                   """Filename for the system state file. The system state after topolgy and and coordinates
+                   """Filename for the system state file. The system state after topology and and coordinates
                    were loaded are saved in this file.""")
 
 restart_file = Parameter("restart file", "sim_restart.s3",
@@ -89,7 +90,7 @@ time_to_skip = Parameter("time to skip", 0 * picosecond, """Time to skip in pico
 
 minimize = Parameter("minimize", False, """Whether or not to perform minimization before the simulation.""")
 
-minimize_tol = Parameter("minimize tolerance", 1e-8, """Tolerance used to know when minimization is complete.""")
+minimize_tol = Parameter("minimize tolerance", 1, """Tolerance used to know when minimization is complete.""")
 
 minimize_max_iter = Parameter("minimize maximum iterations", 1000, """Maximum number of iterations for minimization.""")
 
@@ -148,7 +149,7 @@ heavy_mass_restraint = Parameter("heavy mass restraint", 1.10,
 unrestrained_residues = Parameter("unrestrained residues", ["WAT", "HOH"],
                                   """Names of residues that are never restrained.""")
 
-freeze_residues = Parameter("freeze residues", True, """Whether or not to freeze certain residues.""")
+freeze_residues = Parameter("freeze residues", False, """Whether or not to freeze certain residues.""")
 
 frozen_residues = Parameter("frozen residues", ["LGR", "SIT", "NEG", "POS"],
                             """List of residues to freeze if 'freeze residues' is True.""")
@@ -182,7 +183,7 @@ coulomb_power = Parameter("coulomb power", 0,
 
 energy_frequency = Parameter("energy frequency", 1,
                              """The number of time steps between evaluation of free energy gradients.""")
-verbose = Parameter("verbose", False, """Print debug output""")
+verbose = Parameter("verbose", True, """Print debug output""")
 
 
 ####################################################################################################
@@ -501,7 +502,7 @@ def atomNumVectorListToProperty(list):
         prop.setProperty("x(%d)" % i, VariantProperty(value[1].x()))
         prop.setProperty("y(%d)" % i, VariantProperty(value[1].y()))
         prop.setProperty("z(%d)" % i, VariantProperty(value[1].z()))
-        prop.setProperty("k(%d)" % i, VariantProperty(value[2]))
+        prop.setProperty("k(%d)" % i, VariantProperty(value[2].val ) )
         i += 1
 
     prop.setProperty("nrestrainedatoms", VariantProperty(i));
@@ -589,7 +590,8 @@ def setupRestraints(system):
                 continue
             atcoords = at.property("coordinates")
             #print at
-            restrainedAtoms.append(( atnumber, atcoords, Krestraint))
+            restrainedAtoms.append((atnumber, atcoords, k_restraint))
+
             #restrainedAtoms.append( atnumber )
 
         if len(restrainedAtoms) > 0:
@@ -1042,10 +1044,13 @@ def setup_moves_free_energy(system, random_seed, GPUS, lam_val):
     Integrator_OpenMM.setDeltatAlchemical(delta_lambda.val)
     Integrator_OpenMM.setPrecision(precision.val)
     Integrator_OpenMM.setTimetoSkip(time_to_skip.val)
-    #Integrator_OpenMM.setMinimization(minimize.val)
-    #Integrator_OpenMM.setMinimizeTol(minimize_tol.val)
-    #Integrator_OpenMM.setMinimizeIterations(minimize_max_iter.val)
 
+    if equilibrate.val:
+        Integrator_OpenMM.setEquilib_iterations(equil_iterations.val)
+    else:
+        Integrator_OpenMM.setEquilib_iterations(0)
+
+    Integrator_OpenMM.setEquilib_time_step(equil_timestep.val)
 
     Integrator_OpenMM.setBufferFrequency(buffered_coords_freq.val)
 
@@ -1288,6 +1293,7 @@ def runFreeNrg():
 
         print("Saving restart")
         Sire.Stream.save([system, moves], restart_file.val)
+
     else:
         system, moves = Sire.Stream.load(restart_file.val)
         move0 = moves.moves()[0]
@@ -1296,6 +1302,8 @@ def runFreeNrg():
         move0.setIntegrator(integrator)
         moves = WeightedMoves()
         moves.add(move0)
+        cycle_start = int(moves.nMoves() / nmoves.val)
+        cycle_end = cycle_start + ncycles.val
         print("Index GPU = %s " % moves.moves()[0].integrator().getDeviceIndex())
         print("Loaded a restart file on which we have performed %d moves." % moves.nMoves())
         restart = True
@@ -1307,13 +1315,14 @@ def runFreeNrg():
     outgradients = open("gradients.dat", "a", 1)
     outgradients.write("# lambda_val.val %s\n" % lam_str)
 
+
     if (save_coords.val):
         trajectory = setupDCD(system)
 
     mdmoves = moves.moves()[0]
     integrator = mdmoves.integrator()
     print ("###===========================================================###\n")
-    if minimize:
+    if minimize.val:
         print("###=======================Minimization========================###")
         print('Running minimization.')
         if verbose.val:
@@ -1327,7 +1336,7 @@ def runFreeNrg():
             print ("Energy minimization done.")
         print("###===========================================================###\n")
 
-    if equilibrate:
+    if equilibrate.val:
         print("###======================Equilibration========================###")
         print ('Running lambda equilibration to lambda=%s.' %lambda_val.val)
         # Here we anneal lambda (To be determined)
@@ -1358,9 +1367,11 @@ def runFreeNrg():
         mdmoves = moves.moves()[0]
         integrator = mdmoves.integrator()
         gradients = integrator.getGradients()
-        outgradients.write("%5d %20.10f\n" % (i, gradients[i - 1]))
-        grads[lambda_val.val].accumulate(gradients[i - 1])
+        mean_gradient = np.average(gradients)
+        outgradients.write("%5d %20.10f\n" % (i, mean_gradient))
 
+        for gradient in gradients:
+            grads[lambda_val.val].accumulate( gradients[i-1] )
     s2 = timer.elapsed() / 1000.
     print("Simulation took %d s " % ( s2 - s1))
     print("###===========================================================###\n")

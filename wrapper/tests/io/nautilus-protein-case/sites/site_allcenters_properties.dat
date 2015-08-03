@@ -1,0 +1,13 @@
+#Excess Thermodynamic properties of water within region
+
+Delta_G =  -9.5696 kcal/mol
+Delta_H =  -8.8011 kcal/mol
+-T*Delta_S =  -0.7686 kcal/mol
+Delta_Hw =   3.3264 kcal/mol
+Delta_Hx = -12.1274 kcal/mol
+-T*Delta_Svib =  -0.7598 kcal/mol
+-T*Delta_Slib =  -0.9999 kcal/mol
+-T*Delta_Sori =   0.9911 kcal/mol
+Relative_Density =  14.0249
+Average_number_of_water_molecules =   1.4000
+Volume =   3.0000 A^3

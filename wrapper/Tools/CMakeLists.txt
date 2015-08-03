@@ -12,7 +12,7 @@ set ( SCRIPTS
         DCDFile.py
         FDTISingleBound.py
         FDTISingleFree.py
-#        Nautilus.py 
+        Nautilus.py 
         QuantumToMM.py
         OpenMMMD.py
         Plot.py

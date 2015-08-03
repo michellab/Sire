@@ -393,6 +393,16 @@ void register_OpenMMFrEnergyST_class(){
                 , getPressure_function_value );
         
         }
+        { //::SireMove::OpenMMFrEnergyST::getRandomSeed
+        
+            typedef int ( ::SireMove::OpenMMFrEnergyST::*getRandomSeed_function_type )(  ) ;
+            getRandomSeed_function_type getRandomSeed_function_value( &::SireMove::OpenMMFrEnergyST::getRandomSeed );
+            
+            OpenMMFrEnergyST_exposer.def( 
+                "getRandomSeed"
+                , getRandomSeed_function_value );
+        
+        }
         { //::SireMove::OpenMMFrEnergyST::getRestraint
         
             typedef bool ( ::SireMove::OpenMMFrEnergyST::*getRestraint_function_type )(  ) ;
@@ -739,6 +749,17 @@ void register_OpenMMFrEnergyST_class(){
             OpenMMFrEnergyST_exposer.def( 
                 "setPressure"
                 , setPressure_function_value
+                , ( bp::arg("arg0") ) );
+        
+        }
+        { //::SireMove::OpenMMFrEnergyST::setRandomSeed
+        
+            typedef void ( ::SireMove::OpenMMFrEnergyST::*setRandomSeed_function_type )( int ) ;
+            setRandomSeed_function_type setRandomSeed_function_value( &::SireMove::OpenMMFrEnergyST::setRandomSeed );
+            
+            OpenMMFrEnergyST_exposer.def( 
+                "setRandomSeed"
+                , setRandomSeed_function_value
                 , ( bp::arg("arg0") ) );
         
         }
