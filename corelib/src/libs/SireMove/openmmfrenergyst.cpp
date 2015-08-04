@@ -3978,13 +3978,13 @@ void OpenMMFrEnergyST::setFriction(SireUnits::Dimension::Time thefriction)
 }
 
 /** Get the integration tolerance */
-double OpenMMFrEnergyST::getIntegration_tolerance(void)
+double OpenMMFrEnergyST::getIntegrationTolerance(void)
 {
     return integration_tol;
 }
 
 /** Set the integration tolerance*/
-void OpenMMFrEnergyST::setIntegration_tolerance(double tolerance)
+void OpenMMFrEnergyST::setIntegrationTolerance(double tolerance)
 {
     integration_tol = tolerance;
 }

@@ -2005,7 +2005,7 @@ void OpenMMMDIntegrator::setReinitialiseContext(bool reinitialise)
 }
 
 /** Get the integration tolerance */
-double OpenMMMDIntegrator::getIntegration_tolerance(void)
+double OpenMMMDIntegrator::getIntegrationTolerance(void)
 {
 
     return integration_tol;
@@ -2013,7 +2013,7 @@ double OpenMMMDIntegrator::getIntegration_tolerance(void)
 }
 
 /** Set the integration tolerance*/
-void OpenMMMDIntegrator::setIntegration_tolerance(double tolerance)
+void OpenMMMDIntegrator::setIntegrationTolerance(double tolerance)
 {
     integration_tol = tolerance;
 }

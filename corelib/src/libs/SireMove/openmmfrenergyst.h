@@ -178,8 +178,8 @@ namespace SireMove {
 
         void setFriction(SireUnits::Dimension::Time);
 
-        double getIntegration_tolerance(void);
-        void setIntegration_tolerance(double tollerance);
+        double getIntegrationTolerance(void);
+        void setIntegrationTolerance(double tollerance);
 
         SireUnits::Dimension::Time getTimetoSkip(void);
         void setTimetoSkip(SireUnits::Dimension::Time);
