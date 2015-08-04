@@ -3065,9 +3065,6 @@ System OpenMMFrEnergyST::annealLambda(System &system,
     //SireUnits::Dimension::Time timestep = stepSize * picosecond;
     createContext(workspace.edit(), annealStepSize);
 
-
-
-
     int max = ceil(Alchemical_value / 0.1);
 
     double lam = 0.0;
