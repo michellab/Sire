@@ -1,29 +1,29 @@
 /********************************************\
-  *
-  *  Sire - Molecular Simulation Framework
-  *
-  *  Copyright (C) 2009  Christopher Woods
-  *
-  *  This program is free software; you can redistribute it and/or modify
-  *  it under the terms of the GNU General Public License as published by
-  *  the Free Software Foundation; either version 2 of the License, or
-  *  (at your option) any later version.
-  *
-  *  This program is distributed in the hope that it will be useful,
-  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  *  GNU General Public License for more details.
-  *
-  *  You should have received a copy of the GNU General Public License
-  *  along with this program; if not, write to the Free Software
-  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-  *
-  *  For full details of the license please see the COPYING file
-  *  that should have come with this distribution.
-  *
-  *  You can contact the authors via the developer's mailing list
-  *  at http://siremol.org
-  *
+ *
+ *  Sire - Molecular Simulation Framework
+ *
+ *  Copyright (C) 2009  Christopher Woods
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ *  For full details of the license please see the COPYING file
+ *  that should have come with this distribution.
+ *
+ *  You can contact the authors via the developer's mailing list
+ *  at http://siremol.org
+ *
 \*********************************************/
 
 #ifndef SIREMOVE_OPENMMFRENERGYST_H
@@ -32,7 +32,7 @@
 #include "integrator.h"
 
 #ifdef SIRE_USE_OPENMM
-  #include <OpenMM.h>   // CONDITIONAL_INCLUDE
+#include <OpenMM.h>   // CONDITIONAL_INCLUDE
 #endif
 
 #include <cstdio>
@@ -42,282 +42,283 @@ SIRE_BEGIN_HEADER
 
 #ifdef SIRE_USE_OPENMM
 
-namespace SireMove
-{
-class OpenMMFrEnergyST;
+        namespace SireMove {
+    class OpenMMFrEnergyST;
 }
 
 QDataStream& operator<<(QDataStream&, const SireMove::OpenMMFrEnergyST&);
 QDataStream& operator>>(QDataStream&, SireMove::OpenMMFrEnergyST&);
 
-namespace SireMove
-{
+namespace SireMove {
 
-/** This class implements single topology a free energy method using OpenMM. 
+    /** This class implements single topology a free energy method using OpenMM. 
  
-    @author Julien Michel,Gaetano Calabro and Antonia Mey
-*/
-class SIREMOVE_EXPORT OpenMMFrEnergyST
-        : public SireBase::ConcreteProperty<OpenMMFrEnergyST,Integrator>
-{
+        @author Julien Michel,Gaetano Calabro and Antonia Mey
+     */
+    class SIREMOVE_EXPORT OpenMMFrEnergyST
+    : public SireBase::ConcreteProperty<OpenMMFrEnergyST, Integrator> {
+        friend QDataStream& ::operator<<(QDataStream&, const OpenMMFrEnergyST&);
+        friend QDataStream& ::operator>>(QDataStream&, OpenMMFrEnergyST&);
 
-friend QDataStream& ::operator<<(QDataStream&, const OpenMMFrEnergyST&);
-friend QDataStream& ::operator>>(QDataStream&, OpenMMFrEnergyST&);
+    public:
+        OpenMMFrEnergyST(bool frequent_save_velocities = false);
 
-public:
-    OpenMMFrEnergyST(bool frequent_save_velocities = false);
+        OpenMMFrEnergyST(const MoleculeGroup &molecule_group,
+                const MoleculeGroup &solutes,
+                const MoleculeGroup &solute_hard,
+                const MoleculeGroup &solute_todummy,
+                const MoleculeGroup & solute_fromdummy,
+                bool frequent_save_velocities = false);
 
-    OpenMMFrEnergyST(const MoleculeGroup &molecule_group,
-		     const MoleculeGroup &solutes,
-		     const MoleculeGroup &solute_hard, 
-		     const MoleculeGroup &solute_todummy, 
-		     const MoleculeGroup & solute_fromdummy,
-		     bool frequent_save_velocities = false);
+        OpenMMFrEnergyST(const OpenMMFrEnergyST &other);
 
-    OpenMMFrEnergyST(const OpenMMFrEnergyST &other);
+        ~OpenMMFrEnergyST();
 
-    ~OpenMMFrEnergyST();
+        OpenMMFrEnergyST& operator=(const OpenMMFrEnergyST &other);
 
-    OpenMMFrEnergyST& operator=(const OpenMMFrEnergyST &other);
+        bool operator==(const OpenMMFrEnergyST &other) const;
+        bool operator!=(const OpenMMFrEnergyST &other) const;
 
-    bool operator==(const OpenMMFrEnergyST &other) const;
-    bool operator!=(const OpenMMFrEnergyST &other) const;
+        static const char* typeName();
 
-    static const char* typeName();
+        QString toString() const;
 
-    QString toString() const;
+        Ensemble ensemble() const;
 
-    Ensemble ensemble() const;
+        bool isTimeReversible() const;
 
-    bool isTimeReversible() const;
+        void initialise();
 
-    void initialise();
-    
-    
-    SireUnits::Dimension::MolarEnergy getPotentialEnergy(const System &system);
-    
-    System minimizeEnergy(System &system, double tolerance, int max_iteration); 
-    
-    System annealLambda(System &system, SireUnits::Dimension::Time timestep, 
-                        int annealingSteps);
 
-    void integrate(IntegratorWorkspace &workspace,
-                   const Symbol &nrg_component,
-                   SireUnits::Dimension::Time timestep,
-                   int nmoves, bool record_stats) ;
+        SireUnits::Dimension::MolarEnergy getPotentialEnergy(const System &system);
 
-    IntegratorWorkspacePtr createWorkspace(const PropertyMap &map = PropertyMap()) const;
-    IntegratorWorkspacePtr createWorkspace(const MoleculeGroup &molgroup,const PropertyMap &map = PropertyMap()) const;
+        System minimiseEnergy(System &system, double tolerance, int max_iteration);
 
-    QString getCutoffType(void);
-    void setCutoffType(QString);
+        System annealLambda(System &system, SireUnits::Dimension::Time timestep,
+                int annealingSteps);
 
-    SireUnits::Dimension::Length getCutoff_distance(void);
-    void setCutoff_distance(SireUnits::Dimension::Length);
+        void integrate(IntegratorWorkspace &workspace,
+                const Symbol &nrg_component,
+                SireUnits::Dimension::Time timestep,
+                int nmoves, bool record_stats);
 
-    double getField_dielectric(void);
-    void setField_dielectric(double);
+        IntegratorWorkspacePtr createWorkspace(const PropertyMap &map = PropertyMap()) const;
+        IntegratorWorkspacePtr createWorkspace(const MoleculeGroup &molgroup, const PropertyMap &map = PropertyMap()) const;
 
-    bool getAndersen(void);
-    void setAndersen(bool);
+        QString getCutoffType(void);
+        void setCutoffType(QString);
 
-    double getAndersen_frequency(void);
-    void setAndersen_frequency(double);
+        SireUnits::Dimension::Length getCutoff_distance(void);
+        void setCutoff_distance(SireUnits::Dimension::Length);
 
-    bool getMCBarostat(void);
-    void setMCBarostat(bool);
+        double getField_dielectric(void);
+        void setField_dielectric(double);
 
-    void setMCBarostat_frequency(int);
-    int getMCBarostat_frequency(void);
+        bool getAndersen(void);
+        void setAndersen(bool);
 
-    QString getConstraintType(void);
-    void setConstraintType(QString);
+        double getAndersen_frequency(void);
+        void setAndersen_frequency(double);
 
-    SireUnits::Dimension::Pressure getPressure(void);
-    void setPressure(SireUnits::Dimension::Pressure);
+        bool getMCBarostat(void);
+        void setMCBarostat(bool);
 
-    SireUnits::Dimension::Temperature getTemperature(void);
-    void setTemperature(SireUnits::Dimension::Temperature);
+        void setMCBarostat_frequency(int);
+        int getMCBarostat_frequency(void);
 
-    QString getPlatform(void);
-    void setPlatform(QString);
+        QString getConstraintType(void);
+        void setConstraintType(QString);
 
-    bool getRestraint(void);
-    void setRestraint(bool);
+        SireUnits::Dimension::Pressure getPressure(void);
+        void setPressure(SireUnits::Dimension::Pressure);
 
-    int getCMMremoval_frequency(void);
-    void setCMMremoval_frequency(int);
+        SireUnits::Dimension::Temperature getTemperature(void);
+        void setTemperature(SireUnits::Dimension::Temperature);
 
-    int getBufferFrequency();
-    void setBufferFrequency(int);
+        QString getPlatform(void);
+        void setPlatform(QString);
 
-    int getEnergyFrequency();
-    void setEnergyFrequency(int);
+        bool getRestraint(void);
+        void setRestraint(bool);
 
-    void setDeviceIndex(QString);
-    QString getDeviceIndex(void);
+        int getCMMremoval_frequency(void);
+        void setCMMremoval_frequency(int);
 
-    void setPrecision(QString);
-    QString getPrecision(void);
+        int getBufferFrequency();
+        void setBufferFrequency(int);
 
-    double getAlchemical_value(void);
-    void setAlchemical_value(double);
+        int getEnergyFrequency();
+        void setEnergyFrequency(int);
 
-    float getCoulomb_power(void);
-    void setCoulomb_power(float);
+        void setDeviceIndex(QString);
+        QString getDeviceIndex(void);
 
-    double getShift_delta(void);
-    void setShift_delta(double);
+        void setPrecision(QString);
+        QString getPrecision(void);
 
-    double getDeltaAlchemical(void);
-    void setDeltatAlchemical(double);
+        double getAlchemical_value(void);
+        void setAlchemical_value(double);
 
-    QVector<double> getGradients(void);
-    QVector<double> getEnergies(void);
+        float getCoulomb_power(void);
+        void setCoulomb_power(float);
 
-    QString getIntegrator(void);
-    void setIntegrator(QString);
+        double getShift_delta(void);
+        void setShift_delta(double);
 
-    SireUnits::Dimension::Time getFriction(void);
+        double getDeltaAlchemical(void);
+        void setDeltatAlchemical(double);
 
-    void setFriction(SireUnits::Dimension::Time);
+        QVector<double> getGradients(void);
+        QVector<double> getEnergies(void);
 
-    double getIntegration_tollerance(void);
-    void setIntegration_tollerance(double tollerance);
+        QString getIntegrator(void);
+        void setIntegrator(QString);
 
-    SireUnits::Dimension::Time getTimetoSkip(void);
-    void setTimetoSkip(SireUnits::Dimension::Time);
+        SireUnits::Dimension::Time getFriction(void);
 
+        void setFriction(SireUnits::Dimension::Time);
 
-    int getEquilib_iterations(void);
-    void setEquilib_iterations(int);
+        double getIntegration_tollerance(void);
+        void setIntegration_tollerance(double tollerance);
 
-    SireUnits::Dimension::Time getEquilib_time_step(void);
-    void setEquilib_time_step(SireUnits::Dimension::Time);
+        SireUnits::Dimension::Time getTimetoSkip(void);
+        void setTimetoSkip(SireUnits::Dimension::Time);
 
-    void setReinitializeContext(bool);
 
-    int getRandomSeed(void);
-    void setRandomSeed(int);
+        int getEquilib_iterations(void);
+        void setEquilib_iterations(int);
 
-private:
-    void createContext(IntegratorWorkspace &workspace,
-                       SireUnits::Dimension::Time timestep);
-    void destroyContext();
-    
-    /** Whether or not to save the velocities after every step, or to save them at the end of all of the steps */
-    bool frequent_save_velocities;
-    /** The Molecule Group on which the integrator operates */
-    MolGroupPtr molgroup;
-    /** The solute group on which the integrator operates */
-    MolGroupPtr solute;
-    /** The Solute hard Group on which the integrator operates */
-    MolGroupPtr solutehard;
-    /** The To Dummy Solute Group on which the integrator operates */
-    MolGroupPtr solutetodummy;
-    /** The From Dummy Solute Group on which the integrator operates */
-    MolGroupPtr solutefromdummy;
+        SireUnits::Dimension::Time getEquilib_time_step(void);
+        void setEquilib_time_step(SireUnits::Dimension::Time);
 
-    /**Try instead to...keep a copy of OpenMM::System */
-    OpenMM::System* openmm_system;
+        void setReinitialiseContext(bool);
 
-    OpenMM::Context* openmm_context;
+        int getRandomSeed(void);
+        void setRandomSeed(int);
 
-    /** Whether the openmm system and the context have been initialised*/
-    bool isSystemInitialised;
-    bool isContextInitialised;
+    private:
+        void createContext(IntegratorWorkspace &workspace,
+                SireUnits::Dimension::Time timestep);
+        void destroyContext();
 
-    QString CutoffType;
-    SireUnits::Dimension::Length cutoff_distance;
-    double field_dielectric;
+        /** Whether or not to save the velocities after every step, or to save them at the end of all of the steps */
+        bool frequent_save_velocities;
+        /** The Molecule Group on which the integrator operates */
+        MolGroupPtr molgroup;
+        /** The solute group on which the integrator operates */
+        MolGroupPtr solute;
+        /** The Solute hard Group on which the integrator operates */
+        MolGroupPtr solutehard;
+        /** The To Dummy Solute Group on which the integrator operates */
+        MolGroupPtr solutetodummy;
+        /** The From Dummy Solute Group on which the integrator operates */
+        MolGroupPtr solutefromdummy;
 
-    bool Andersen_flag;
-    double Andersen_frequency;
+        /**Try instead to...keep a copy of OpenMM::System */
+        OpenMM::System* openmm_system;
 
-    bool MCBarostat_flag;
-    int MCBarostat_frequency;
+        OpenMM::Context* openmm_context;
 
-    QString ConstraintType;
+        /** Whether the openmm system and the context have been initialised*/
+        bool isSystemInitialised;
+        bool isContextInitialised;
 
-    SireUnits::Dimension::Pressure Pressure;
-    SireUnits::Dimension::Temperature Temperature;
+        QString CutoffType;
+        SireUnits::Dimension::Length cutoff_distance;
+        double field_dielectric;
 
-    QString platform_type;
+        bool Andersen_flag;
+        double Andersen_frequency;
 
-    bool Restraint_flag;
+        bool MCBarostat_flag;
+        int MCBarostat_frequency;
 
-    int CMMremoval_frequency;
-   
-    int buffer_frequency;
+        QString ConstraintType;
 
-    int energy_frequency;
+        SireUnits::Dimension::Pressure Pressure;
+        SireUnits::Dimension::Temperature Temperature;
 
-    QString device_index;
-    
-    QString precision;
+        QString platform_type;
 
-    double Alchemical_value;
+        bool Restraint_flag;
 
-    float coulomb_power;
+        int CMMremoval_frequency;
 
-    double shift_delta;
+        int buffer_frequency;
 
-    double delta_alchemical;
+        int energy_frequency;
 
-    QVector<double> gradients;
+        QString device_index;
 
-    QVector<double> energies; 
+        QString precision;
 
-    QVector<bool> perturbed_energies;
+        double Alchemical_value;
 
-    QString Integrator_type;
+        float coulomb_power;
 
-    SireUnits::Dimension::Time friction;
+        double shift_delta;
 
-    double integration_tol;
+        double delta_alchemical;
 
-    SireUnits::Dimension::Time timeskip;
+        QVector<double> gradients;
 
-    int equilib_iterations;
-    SireUnits::Dimension::Time equilib_time_step;
+        QVector<double> energies;
 
-    bool reinetialize_context;
+        QVector<bool> perturbed_energies;
 
-    double GF_acc;
-    double GB_acc;
-    
-    bool Debug;
+        QString Integrator_type;
 
-    int random_seed;
+        SireUnits::Dimension::Time friction;
 
-};
+        double integration_tol;
+
+        SireUnits::Dimension::Time timeskip;
+
+        int equilib_iterations;
+        SireUnits::Dimension::Time equilib_time_step;
+
+        bool reinetialise_context;
+
+        double GF_acc;
+        double GB_acc;
+
+        bool Debug;
+
+        int random_seed;
+
+    };
 
 
 }
 
-Q_DECLARE_METATYPE( SireMove::OpenMMFrEnergyST )
+Q_DECLARE_METATYPE(SireMove::OpenMMFrEnergyST)
 
-SIRE_EXPOSE_CLASS( SireMove::OpenMMFrEnergyST )
+SIRE_EXPOSE_CLASS(SireMove::OpenMMFrEnergyST)
 
 SIRE_END_HEADER
 
 #else // SIRE_USE_OPENMM
 
-namespace SireMove
-{
+        namespace SireMove {
 
-    class OpenMMFrEnergyST{
-        public:
-            OpenMMFrEnergyST(){}
-            ~OpenMMFrEnergyST(){}
+    class OpenMMFrEnergyST {
+    public:
 
-            static const char* typeName(){ return "SireMM::OpenMMFrEnergyST"; }
+        OpenMMFrEnergyST() {
+        }
+
+        ~OpenMMFrEnergyST() {
+        }
+
+        static const char* typeName() {
+            return "SireMM::OpenMMFrEnergyST";
+        }
 
     };
 
 }
 
-Q_DECLARE_METATYPE( SireMove::OpenMMFrEnergyST )
+Q_DECLARE_METATYPE(SireMove::OpenMMFrEnergyST)
 
 #endif // SIRE_USE_OPENMM
 
