@@ -109,11 +109,11 @@ namespace SireMove {
         QString getCutoffType(void);
         void setCutoffType(QString);
 
-        SireUnits::Dimension::Length getCutoff_distance(void);
-        void setCutoff_distance(SireUnits::Dimension::Length);
+        SireUnits::Dimension::Length getCutoffDistance(void);
+        void setCutoffDistance(SireUnits::Dimension::Length);
 
-        double getField_dielectric(void);
-        void setField_dielectric(double);
+        double getFieldDielectric(void);
+        void setFieldDielectric(double);
 
         double getToleranceEwaldPME(void);
         void setToleranceEwaldPME(double);
@@ -121,14 +121,14 @@ namespace SireMove {
         bool getAndersen(void);
         void setAndersen(bool);
 
-        double getAndersen_frequency(void);
-        void setAndersen_frequency(double);
+        double getAndersenFrequency(void);
+        void setAndersenFrequency(double);
 
         bool getMCBarostat(void);
         void setMCBarostat(bool);
 
-        void setMCBarostat_frequency(int);
-        int getMCBarostat_frequency(void);
+        void setMCBarostatFrequency(int);
+        int getMCBarostatFrequency(void);
 
         QString getConstraintType(void);
         void setConstraintType(QString);
@@ -145,8 +145,8 @@ namespace SireMove {
         bool getRestraint(void);
         void setRestraint(bool);
 
-        int getCMMremoval_frequency(void);
-        void setCMMremoval_frequency(int);
+        int getCMMremovalFrequency(void);
+        void setCMMremovalFrequency(int);
 
         int getBufferFrequency();
         void setBufferFrequency(int);

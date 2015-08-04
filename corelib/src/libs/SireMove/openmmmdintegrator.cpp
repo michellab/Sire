@@ -1775,25 +1775,25 @@ void OpenMMMDIntegrator::setCutoffType(QString cutoff_type)
 }
 
 /** Get the cutoff distance in A */
-SireUnits::Dimension::Length OpenMMMDIntegrator::getCutoff_distance(void)
+SireUnits::Dimension::Length OpenMMMDIntegrator::getCutoffDistance(void)
 {
     return cutoff_distance;
 }
 
 /** Set the cutoff distance in A */
-void OpenMMMDIntegrator::setCutoff_distance(SireUnits::Dimension::Length distance)
+void OpenMMMDIntegrator::setCutoffDistance(SireUnits::Dimension::Length distance)
 {
     cutoff_distance = distance;
 }
 
 /** Get the dielectric constant */
-double OpenMMMDIntegrator::getField_dielectric(void)
+double OpenMMMDIntegrator::getFieldDielectric(void)
 {
     return field_dielectric;
 }
 
 /** Set the dielectric constant */
-void OpenMMMDIntegrator::setField_dielectric(double dielectric)
+void OpenMMMDIntegrator::setFieldDielectric(double dielectric)
 {
     field_dielectric = dielectric;
 }
@@ -1823,13 +1823,13 @@ bool OpenMMMDIntegrator::getAndersen(void)
 }
 
 /** Get the Andersen Thermostat frequency collision */
-double OpenMMMDIntegrator::getAndersen_frequency(void)
+double OpenMMMDIntegrator::getAndersenFrequency(void)
 {
     return Andersen_frequency;
 }
 
 /** Set the Andersen Thermostat frequency collision */
-void OpenMMMDIntegrator::setAndersen_frequency(double freq)
+void OpenMMMDIntegrator::setAndersenFrequency(double freq)
 {
     Andersen_frequency = freq;
 }
@@ -1859,13 +1859,13 @@ bool OpenMMMDIntegrator::getMCBarostat(void)
 }
 
 /** Get the Monte Carlo Barostat frequency in time speps */
-int OpenMMMDIntegrator::getMCBarostat_frequency(void)
+int OpenMMMDIntegrator::getMCBarostatFrequency(void)
 {
     return MCBarostat_frequency;
 }
 
 /** Set the Monte Carlo Barostat frequency in time speps */
-void OpenMMMDIntegrator::setMCBarostat_frequency(int freq)
+void OpenMMMDIntegrator::setMCBarostatFrequency(int freq)
 {
     MCBarostat_frequency = freq;
 }
@@ -1966,7 +1966,7 @@ void OpenMMMDIntegrator::setRestraint(bool Restraint)
 }
 
 /** Get the Center of Mass motion removal frequency */
-int OpenMMMDIntegrator::getCMMremoval_frequency(void)
+int OpenMMMDIntegrator::getCMMremovalFrequency(void)
 {
 
     return CMMremoval_frequency;
@@ -1974,7 +1974,7 @@ int OpenMMMDIntegrator::getCMMremoval_frequency(void)
 }
 
 /** Set the Center of Mass motion removal frequency */
-void OpenMMMDIntegrator::setCMMremoval_frequency(int frequency)
+void OpenMMMDIntegrator::setCMMremovalFrequency(int frequency)
 {
 
     CMMremoval_frequency = frequency;

@@ -231,7 +231,7 @@ coulomb_power(other.coulomb_power), shift_delta(other.shift_delta),
 delta_alchemical(other.delta_alchemical), gradients(other.gradients), energies(other.energies),
 perturbed_energies(other.perturbed_energies),
 Integrator_type(other.Integrator_type), friction(other.friction), integration_tol(other.integration_tol), timeskip(other.timeskip),
-equilib_iterations(other.equilib_iterations), equilib_time_step(other.equilib_time_step),
+//equilib_iterations(other.equilib_iterations), equilib_time_step(other.equilib_time_step),
 reinetialise_context(other.reinetialise_context), GF_acc(other.GF_acc), GB_acc(other.GB_acc), Debug(other.Debug)
 {
 }
@@ -284,8 +284,8 @@ OpenMMFrEnergyST& OpenMMFrEnergyST::operator=(const OpenMMFrEnergyST &other)
     friction = other.friction;
     integration_tol = other.integration_tol;
     timeskip = other.timeskip;
-    equilib_iterations = other.equilib_iterations;
-    equilib_time_step = other.equilib_time_step;
+//    equilib_iterations = other.equilib_iterations;
+//    equilib_time_step = other.equilib_time_step;
     reinetialise_context = other.reinetialise_context;
     GF_acc = other.GF_acc;
     GB_acc = other.GB_acc;
@@ -331,8 +331,8 @@ bool OpenMMFrEnergyST::operator==(const OpenMMFrEnergyST &other) const
         and friction == other.friction
         and integration_tol == other.integration_tol
         and timeskip == other.timeskip
-        and equilib_iterations == other.equilib_iterations
-        and equilib_time_step == other.equilib_time_step
+//        and equilib_iterations == other.equilib_iterations
+//        and equilib_time_step == other.equilib_time_step
         and reinetialise_context == other.reinetialise_context
         and GF_acc == other.GF_acc
         and GB_acc == other.GB_acc
@@ -3045,9 +3045,9 @@ System OpenMMFrEnergyST::minimiseEnergy(System &system, double tolerance = 1.0e-
  * velocities.
  */
 
-System OpenMMFrEnergyST::annealLambda(System &system,
-                                      SireUnits::Dimension::Time annealStepSize,
-                                      int annealingSteps)
+System OpenMMFrEnergyST::annealSystemToLambda(System &system,
+                                      SireUnits::Dimension::Time anneal_step_size,
+                                      int annealing_steps)
 {
     bool Debug = false;
     const double AKMAPerPs = 0.04888821;
@@ -3063,7 +3063,7 @@ System OpenMMFrEnergyST::annealLambda(System &system,
 
     workspace.edit().setSystem(system);
     //SireUnits::Dimension::Time timestep = stepSize * picosecond;
-    createContext(workspace.edit(), annealStepSize);
+    createContext(workspace.edit(), anneal_step_size);
 
     int max = ceil(Alchemical_value / 0.1);
 
@@ -3093,7 +3093,7 @@ System OpenMMFrEnergyST::annealLambda(System &system,
         if (perturbed_energies[7])
             openmm_context->setParameter("lamdih", lam); //Torsions
 
-        (openmm_context->getIntegrator()).step(annealingSteps);
+        (openmm_context->getIntegrator()).step(annealing_steps);
 
         if (i == max - 1)
             lam = Alchemical_value;
@@ -3673,25 +3673,25 @@ void OpenMMFrEnergyST::setCutoffType(QString cutoff_type)
 }
 
 /** Get the cutoff distance in A */
-SireUnits::Dimension::Length OpenMMFrEnergyST::getCutoff_distance(void)
+SireUnits::Dimension::Length OpenMMFrEnergyST::getCutoffDistance(void)
 {
     return cutoff_distance;
 }
 
 /** Set the cutoff distance in A */
-void OpenMMFrEnergyST::setCutoff_distance(SireUnits::Dimension::Length distance)
+void OpenMMFrEnergyST::setCutoffDistance(SireUnits::Dimension::Length distance)
 {
     cutoff_distance = distance;
 }
 
 /** Get the dielectric constant */
-double OpenMMFrEnergyST::getField_dielectric(void)
+double OpenMMFrEnergyST::getFieldDielectric(void)
 {
     return field_dielectric;
 }
 
 /** Set the dielectric constant */
-void OpenMMFrEnergyST::setField_dielectric(double dielectric)
+void OpenMMFrEnergyST::setFieldDielectric(double dielectric)
 {
     field_dielectric = dielectric;
 }
@@ -3712,13 +3712,13 @@ bool OpenMMFrEnergyST::getAndersen(void)
 }
 
 /** Get the Andersen Thermostat frequency collision */
-double OpenMMFrEnergyST::getAndersen_frequency(void)
+double OpenMMFrEnergyST::getAndersenFrequency(void)
 {
     return Andersen_frequency;
 }
 
 /** Set the Andersen Thermostat frequency collision */
-void OpenMMFrEnergyST::setAndersen_frequency(double freq)
+void OpenMMFrEnergyST::setAndersenFrequency(double freq)
 {
     Andersen_frequency = freq;
 }
@@ -3761,13 +3761,13 @@ bool OpenMMFrEnergyST::getMCBarostat(void)
 }
 
 /** Get the Monte Carlo Barostat frequency in time speps */
-int OpenMMFrEnergyST::getMCBarostat_frequency(void)
+int OpenMMFrEnergyST::getMCBarostatFrequency(void)
 {
     return MCBarostat_frequency;
 }
 
 /** Set the Monte Carlo Barostat frequency in time speps */
-void OpenMMFrEnergyST::setMCBarostat_frequency(int freq)
+void OpenMMFrEnergyST::setMCBarostatFrequency(int freq)
 {
     MCBarostat_frequency = freq;
 
@@ -3846,13 +3846,13 @@ void OpenMMFrEnergyST::setRestraint(bool Restraint)
 }
 
 /** Get the Center of Mass motion removal frequency */
-int OpenMMFrEnergyST::getCMMremoval_frequency(void)
+int OpenMMFrEnergyST::getCMMremovalFrequency(void)
 {
     return CMMremoval_frequency;
 }
 
 /** Set the Center of Mass motion removal frequency */
-void OpenMMFrEnergyST::setCMMremoval_frequency(int frequency)
+void OpenMMFrEnergyST::setCMMremovalFrequency(int frequency)
 {
     CMMremoval_frequency = frequency;
 }
@@ -3882,13 +3882,13 @@ void OpenMMFrEnergyST::setEnergyFrequency(int frequency)
 }
 
 /** Get the alchemical value used to calculate the free energy change via TI method*/
-double OpenMMFrEnergyST::getAlchemical_value(void)
+double OpenMMFrEnergyST::getAlchemicalValue(void)
 {
     return Alchemical_value;
 }
 
 /** Set the alchemical value used to calculate the free energy change via TI method*/
-void OpenMMFrEnergyST::setAlchemical_value(double lambda_value)
+void OpenMMFrEnergyST::setAlchemicalValue(double lambda_value)
 {
     Alchemical_value = max(0.0, min(1.0, lambda_value));
 }
@@ -3896,7 +3896,7 @@ void OpenMMFrEnergyST::setAlchemical_value(double lambda_value)
 /** Get the coulomb power used in the soft core potential*/
 //int OpenMMFrEnergyST::getCoulomb_power(void)
 
-float OpenMMFrEnergyST::getCoulomb_power(void)
+float OpenMMFrEnergyST::getCoulombPower(void)
 {
     return coulomb_power;
 }
@@ -3904,13 +3904,13 @@ float OpenMMFrEnergyST::getCoulomb_power(void)
 /** Set the coulomb power used in the soft core potential*/
 //void OpenMMFrEnergyST::setCoulomb_power(int coulomb)
 
-void OpenMMFrEnergyST::setCoulomb_power(float coulomb)
+void OpenMMFrEnergyST::setCoulombPower(float coulomb)
 {
     coulomb_power = coulomb;
 }
 
 /** Get the shift used in the soft core potential*/
-double OpenMMFrEnergyST::getShift_delta(void)
+double OpenMMFrEnergyST::getShiftDelta(void)
 {
     return shift_delta;
 }
@@ -3919,7 +3919,7 @@ double OpenMMFrEnergyST::getShift_delta(void)
  * <Set the shift used in the soft core potential>
  * @param shiftdelta
  */
-void OpenMMFrEnergyST::setShift_delta(double shiftdelta)
+void OpenMMFrEnergyST::setShiftDelta(double shiftdelta)
 {
 
     shift_delta = shiftdelta;
@@ -4001,29 +4001,29 @@ void OpenMMFrEnergyST::setTimetoSkip(SireUnits::Dimension::Time skip)
     timeskip = skip;
 }
 
-/** Get the total number of iterations used to perform the equilibration stage*/
-int OpenMMFrEnergyST::getEquilib_iterations(void)
-{
-    return equilib_iterations;
-}
-
-/** Set the total number of iterations used to perform the equilibration stage*/
-void OpenMMFrEnergyST::setEquilib_iterations(int iterations)
-{
-    equilib_iterations = iterations;
-}
-
-/** Get the time step used to perform the equilibration stage*/
-SireUnits::Dimension::Time OpenMMFrEnergyST::getEquilib_time_step(void)
-{
-    return equilib_time_step;
-}
-
-/** Set the time step used to perform the equilibration stage*/
-void OpenMMFrEnergyST::setEquilib_time_step(SireUnits::Dimension::Time timestep)
-{
-    equilib_time_step = timestep;
-}
+///** Get the total number of iterations used to perform the equilibration stage*/
+//int OpenMMFrEnergyST::getEquilib_iterations(void)
+//{
+//    return equilib_iterations;
+//}
+//
+///** Set the total number of iterations used to perform the equilibration stage*/
+//void OpenMMFrEnergyST::setEquilib_iterations(int iterations)
+//{
+//    equilib_iterations = iterations;
+//}
+//
+///** Get the time step used to perform the equilibration stage*/
+//SireUnits::Dimension::Time OpenMMFrEnergyST::getEquilib_time_step(void)
+//{
+//    return equilib_time_step;
+//}
+//
+///** Set the time step used to perform the equilibration stage*/
+//void OpenMMFrEnergyST::setEquilib_time_step(SireUnits::Dimension::Time timestep)
+//{
+//    equilib_time_step = timestep;
+//}
 
 /** Set the flag to reinitialise the context*/
 void OpenMMFrEnergyST::setReinitialiseContext(bool reinitialise)

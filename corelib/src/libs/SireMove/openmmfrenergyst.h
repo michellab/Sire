@@ -94,8 +94,8 @@ namespace SireMove {
 
         System minimiseEnergy(System &system, double tolerance, int max_iteration);
 
-        System annealLambda(System &system, SireUnits::Dimension::Time timestep,
-                int annealingSteps);
+        System annealSystemToLambda(System &system, SireUnits::Dimension::Time anneal_step_size,
+                int annealing_steps);
 
         void integrate(IntegratorWorkspace &workspace,
                 const Symbol &nrg_component,
@@ -108,23 +108,23 @@ namespace SireMove {
         QString getCutoffType(void);
         void setCutoffType(QString);
 
-        SireUnits::Dimension::Length getCutoff_distance(void);
-        void setCutoff_distance(SireUnits::Dimension::Length);
+        SireUnits::Dimension::Length getCutoffDistance(void);
+        void setCutoffDistance(SireUnits::Dimension::Length);
 
-        double getField_dielectric(void);
-        void setField_dielectric(double);
+        double getFieldDielectric(void);
+        void setFieldDielectric(double);
 
         bool getAndersen(void);
         void setAndersen(bool);
 
-        double getAndersen_frequency(void);
-        void setAndersen_frequency(double);
+        double getAndersenFrequency(void);
+        void setAndersenFrequency(double);
 
         bool getMCBarostat(void);
         void setMCBarostat(bool);
 
-        void setMCBarostat_frequency(int);
-        int getMCBarostat_frequency(void);
+        void setMCBarostatFrequency(int);
+        int getMCBarostatFrequency(void);
 
         QString getConstraintType(void);
         void setConstraintType(QString);
@@ -141,8 +141,8 @@ namespace SireMove {
         bool getRestraint(void);
         void setRestraint(bool);
 
-        int getCMMremoval_frequency(void);
-        void setCMMremoval_frequency(int);
+        int getCMMremovalFrequency(void);
+        void setCMMremovalFrequency(int);
 
         int getBufferFrequency();
         void setBufferFrequency(int);
@@ -156,14 +156,14 @@ namespace SireMove {
         void setPrecision(QString);
         QString getPrecision(void);
 
-        double getAlchemical_value(void);
-        void setAlchemical_value(double);
+        double getAlchemicalValue(void);
+        void setAlchemicalValue(double);
 
-        float getCoulomb_power(void);
-        void setCoulomb_power(float);
+        float getCoulombPower(void);
+        void setCoulombPower(float);
 
-        double getShift_delta(void);
-        void setShift_delta(double);
+        double getShiftDelta(void);
+        void setShiftDelta(double);
 
         double getDeltaAlchemical(void);
         void setDeltatAlchemical(double);
@@ -183,13 +183,13 @@ namespace SireMove {
 
         SireUnits::Dimension::Time getTimetoSkip(void);
         void setTimetoSkip(SireUnits::Dimension::Time);
-
-
-        int getEquilib_iterations(void);
-        void setEquilib_iterations(int);
-
-        SireUnits::Dimension::Time getEquilib_time_step(void);
-        void setEquilib_time_step(SireUnits::Dimension::Time);
+//
+//
+//        int getEquilib_iterations(void);
+//        void setEquilib_iterations(int);
+//
+//        SireUnits::Dimension::Time getEquilib_time_step(void);
+//        void setEquilib_time_step(SireUnits::Dimension::Time);
 
         void setReinitialiseContext(bool);
 
