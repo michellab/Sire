@@ -69,13 +69,9 @@
 
 #include "NullVolumeChanger.pypp.hpp"
 
-#include "OpenMMAMDIntegrator.pypp.hpp"
-
 #include "OpenMMFrEnergyDT.pypp.hpp"
 
 #include "OpenMMFrEnergyST.pypp.hpp"
-
-#include "OpenMMIntegrator.pypp.hpp"
 
 #include "OpenMMMDIntegrator.pypp.hpp"
 
@@ -246,13 +242,9 @@ BOOST_PYTHON_MODULE(_Move){
 
     register_NullVolumeChanger_class();
 
-    register_OpenMMAMDIntegrator_class();
-
     register_OpenMMFrEnergyDT_class();
 
     register_OpenMMFrEnergyST_class();
-
-    register_OpenMMIntegrator_class();
 
     register_OpenMMMDIntegrator_class();
 
@@ -334,4 +326,3 @@ BOOST_PYTHON_MODULE(_Move){
 
     register_ZMatrixCoordsLine_class();
 }
-

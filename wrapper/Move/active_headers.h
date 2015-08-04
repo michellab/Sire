@@ -24,7 +24,6 @@
 #include "openmmacceleratedmdintegrator.h"
 #include "openmmfrenergydt.h"
 #include "openmmfrenergyst.h"
-#include "openmmintegrator.h"
 #include "openmmmdintegrator.h"
 #include "prefsampler.h"
 #include "rbworkspace.h"

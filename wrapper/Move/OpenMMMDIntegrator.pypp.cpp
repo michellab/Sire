@@ -117,6 +117,17 @@ void register_OpenMMMDIntegrator_class(){
                 , ensemble_function_value );
 
         }
+        { //::SireMove::OpenMMMDIntegrator::equilibrateSystem
+
+            typedef ::SireSystem::System ( ::SireMove::OpenMMMDIntegrator::*equilibrateSystem_function_type )( ::SireSystem::System &,::SireUnits::Dimension::Time,int ) ;
+            equilibrateSystem_function_type equilibrateSystem_function_value( &::SireMove::OpenMMMDIntegrator::equilibrateSystem );
+
+            OpenMMMDIntegrator_exposer.def(
+                "equilibrateSystem"
+                , equilibrateSystem_function_value
+                , ( bp::arg("system"), bp::arg("timestep"), bp::arg("annealingSteps") ) );
+
+        }
         { //::SireMove::OpenMMMDIntegrator::getAndersen
 
             typedef bool ( ::SireMove::OpenMMMDIntegrator::*getAndersen_function_type )(  ) ;
@@ -127,14 +138,14 @@ void register_OpenMMMDIntegrator_class(){
                 , getAndersen_function_value );
 
         }
-        { //::SireMove::OpenMMMDIntegrator::getAndersen_frequency
+        { //::SireMove::OpenMMMDIntegrator::getAndersenFrequency
 
-            typedef double ( ::SireMove::OpenMMMDIntegrator::*getAndersen_frequency_function_type )(  ) ;
-            getAndersen_frequency_function_type getAndersen_frequency_function_value( &::SireMove::OpenMMMDIntegrator::getAndersen_frequency );
+            typedef double ( ::SireMove::OpenMMMDIntegrator::*getAndersenFrequency_function_type )(  ) ;
+            getAndersenFrequency_function_type getAndersenFrequency_function_value( &::SireMove::OpenMMMDIntegrator::getAndersenFrequency );
 
             OpenMMMDIntegrator_exposer.def(
-                "getAndersen_frequency"
-                , getAndersen_frequency_function_value );
+                "getAndersenFrequency"
+                , getAndersenFrequency_function_value );
 
         }
         { //::SireMove::OpenMMMDIntegrator::getBufferFrequency
@@ -147,14 +158,14 @@ void register_OpenMMMDIntegrator_class(){
                 , getBufferFrequency_function_value );
 
         }
-        { //::SireMove::OpenMMMDIntegrator::getCMMremoval_frequency
+        { //::SireMove::OpenMMMDIntegrator::getCMMremovalFrequency
 
-            typedef int ( ::SireMove::OpenMMMDIntegrator::*getCMMremoval_frequency_function_type )(  ) ;
-            getCMMremoval_frequency_function_type getCMMremoval_frequency_function_value( &::SireMove::OpenMMMDIntegrator::getCMMremoval_frequency );
+            typedef int ( ::SireMove::OpenMMMDIntegrator::*getCMMremovalFrequency_function_type )(  ) ;
+            getCMMremovalFrequency_function_type getCMMremovalFrequency_function_value( &::SireMove::OpenMMMDIntegrator::getCMMremovalFrequency );
 
             OpenMMMDIntegrator_exposer.def(
-                "getCMMremoval_frequency"
-                , getCMMremoval_frequency_function_value );
+                "getCMMremovalFrequency"
+                , getCMMremovalFrequency_function_value );
 
         }
         { //::SireMove::OpenMMMDIntegrator::getConstraintType
@@ -177,14 +188,14 @@ void register_OpenMMMDIntegrator_class(){
                 , getCutoffType_function_value );
 
         }
-        { //::SireMove::OpenMMMDIntegrator::getCutoff_distance
+        { //::SireMove::OpenMMMDIntegrator::getCutoffDistance
 
-            typedef ::SireUnits::Dimension::Length ( ::SireMove::OpenMMMDIntegrator::*getCutoff_distance_function_type )(  ) ;
-            getCutoff_distance_function_type getCutoff_distance_function_value( &::SireMove::OpenMMMDIntegrator::getCutoff_distance );
+            typedef ::SireUnits::Dimension::Length ( ::SireMove::OpenMMMDIntegrator::*getCutoffDistance_function_type )(  ) ;
+            getCutoffDistance_function_type getCutoffDistance_function_value( &::SireMove::OpenMMMDIntegrator::getCutoffDistance );
 
             OpenMMMDIntegrator_exposer.def(
-                "getCutoff_distance"
-                , getCutoff_distance_function_value );
+                "getCutoffDistance"
+                , getCutoffDistance_function_value );
 
         }
         { //::SireMove::OpenMMMDIntegrator::getDeviceIndex
@@ -197,34 +208,14 @@ void register_OpenMMMDIntegrator_class(){
                 , getDeviceIndex_function_value );
 
         }
-        { //::SireMove::OpenMMMDIntegrator::getEquilib_iterations
+        { //::SireMove::OpenMMMDIntegrator::getFieldDielectric
 
-            typedef int ( ::SireMove::OpenMMMDIntegrator::*getEquilib_iterations_function_type )(  ) ;
-            getEquilib_iterations_function_type getEquilib_iterations_function_value( &::SireMove::OpenMMMDIntegrator::getEquilib_iterations );
-
-            OpenMMMDIntegrator_exposer.def(
-                "getEquilib_iterations"
-                , getEquilib_iterations_function_value );
-
-        }
-        { //::SireMove::OpenMMMDIntegrator::getEquilib_time_step
-
-            typedef ::SireUnits::Dimension::Time ( ::SireMove::OpenMMMDIntegrator::*getEquilib_time_step_function_type )(  ) ;
-            getEquilib_time_step_function_type getEquilib_time_step_function_value( &::SireMove::OpenMMMDIntegrator::getEquilib_time_step );
+            typedef double ( ::SireMove::OpenMMMDIntegrator::*getFieldDielectric_function_type )(  ) ;
+            getFieldDielectric_function_type getFieldDielectric_function_value( &::SireMove::OpenMMMDIntegrator::getFieldDielectric );
 
             OpenMMMDIntegrator_exposer.def(
-                "getEquilib_time_step"
-                , getEquilib_time_step_function_value );
-
-        }
-        { //::SireMove::OpenMMMDIntegrator::getField_dielectric
-
-            typedef double ( ::SireMove::OpenMMMDIntegrator::*getField_dielectric_function_type )(  ) ;
-            getField_dielectric_function_type getField_dielectric_function_value( &::SireMove::OpenMMMDIntegrator::getField_dielectric );
-
-            OpenMMMDIntegrator_exposer.def(
-                "getField_dielectric"
-                , getField_dielectric_function_value );
+                "getFieldDielectric"
+                , getFieldDielectric_function_value );
 
         }
         { //::SireMove::OpenMMMDIntegrator::getFriction
@@ -237,14 +228,14 @@ void register_OpenMMMDIntegrator_class(){
                 , getFriction_function_value );
 
         }
-        { //::SireMove::OpenMMMDIntegrator::getIntegration_tolerance
+        { //::SireMove::OpenMMMDIntegrator::getIntegrationTolerance
 
-            typedef double ( ::SireMove::OpenMMMDIntegrator::*getIntegration_tolerance_function_type )(  ) ;
-            getIntegration_tolerance_function_type getIntegration_tolerance_function_value( &::SireMove::OpenMMMDIntegrator::getIntegration_tolerance );
+            typedef double ( ::SireMove::OpenMMMDIntegrator::*getIntegrationTolerance_function_type )(  ) ;
+            getIntegrationTolerance_function_type getIntegrationTolerance_function_value( &::SireMove::OpenMMMDIntegrator::getIntegrationTolerance );
 
             OpenMMMDIntegrator_exposer.def(
-                "getIntegration_tolerance"
-                , getIntegration_tolerance_function_value );
+                "getIntegrationTolerance"
+                , getIntegrationTolerance_function_value );
 
         }
         { //::SireMove::OpenMMMDIntegrator::getIntegrator
@@ -277,34 +268,14 @@ void register_OpenMMMDIntegrator_class(){
                 , getMCBarostat_function_value );
 
         }
-        { //::SireMove::OpenMMMDIntegrator::getMCBarostat_frequency
+        { //::SireMove::OpenMMMDIntegrator::getMCBarostatFrequency
 
-            typedef int ( ::SireMove::OpenMMMDIntegrator::*getMCBarostat_frequency_function_type )(  ) ;
-            getMCBarostat_frequency_function_type getMCBarostat_frequency_function_value( &::SireMove::OpenMMMDIntegrator::getMCBarostat_frequency );
-
-            OpenMMMDIntegrator_exposer.def(
-                "getMCBarostat_frequency"
-                , getMCBarostat_frequency_function_value );
-
-        }
-        { //::SireMove::OpenMMMDIntegrator::getMinimIterations
-
-            typedef int ( ::SireMove::OpenMMMDIntegrator::*getMinimiseIterations_function_type )(  ) ;
-            getMinimiseIterations_function_type getMinimiseIterations_function_value( &::SireMove::OpenMMMDIntegrator::getMinimiseIterations );
+            typedef int ( ::SireMove::OpenMMMDIntegrator::*getMCBarostatFrequency_function_type )(  ) ;
+            getMCBarostatFrequency_function_type getMCBarostatFrequency_function_value( &::SireMove::OpenMMMDIntegrator::getMCBarostatFrequency );
 
             OpenMMMDIntegrator_exposer.def(
-                "getMinimiseIterations"
-                , getMinimiseIterations_function_value );
-
-        }
-        { //::SireMove::OpenMMMDIntegrator::getMinimiseTol
-
-            typedef double ( ::SireMove::OpenMMMDIntegrator::*getMinimiseTol_function_type )(  ) ;
-            getMinimiseTol_function_type getMinimiseTol_function_value( &::SireMove::OpenMMMDIntegrator::getMinimiseTol );
-
-            OpenMMMDIntegrator_exposer.def(
-                "getMinimiseTol"
-                , getMinimiseTol_function_value );
+                "getMCBarostatFrequency"
+                , getMCBarostatFrequency_function_value );
 
         }
         { //::SireMove::OpenMMMDIntegrator::getPlatform
@@ -378,14 +349,14 @@ void register_OpenMMMDIntegrator_class(){
                 , getTimetoSkip_function_value );
 
         }
-        { //::SireMove::OpenMMMDIntegrator::gettoleranceEwaldPME
+        { //::SireMove::OpenMMMDIntegrator::getToleranceEwaldPME
 
-            typedef double ( ::SireMove::OpenMMMDIntegrator::*gettoleranceEwaldPME_function_type )(  ) ;
-            gettoleranceEwaldPME_function_type gettoleranceEwaldPME_function_value( &::SireMove::OpenMMMDIntegrator::gettoleranceEwaldPME );
+            typedef double ( ::SireMove::OpenMMMDIntegrator::*getToleranceEwaldPME_function_type )(  ) ;
+            getToleranceEwaldPME_function_type getToleranceEwaldPME_function_value( &::SireMove::OpenMMMDIntegrator::getToleranceEwaldPME );
 
             OpenMMMDIntegrator_exposer.def(
-                "gettoleranceEwaldPME"
-                , gettoleranceEwaldPME_function_value );
+                "getToleranceEwaldPME"
+                , getToleranceEwaldPME_function_value );
 
         }
         { //::SireMove::OpenMMMDIntegrator::initialise
@@ -419,6 +390,17 @@ void register_OpenMMMDIntegrator_class(){
                 , isTimeReversible_function_value );
 
         }
+        { //::SireMove::OpenMMMDIntegrator::minimiseEnergy
+
+            typedef ::SireSystem::System ( ::SireMove::OpenMMMDIntegrator::*minimiseEnergy_function_type )( ::SireSystem::System &,double,int ) ;
+            minimiseEnergy_function_type minimiseEnergy_function_value( &::SireMove::OpenMMMDIntegrator::minimiseEnergy );
+
+            OpenMMMDIntegrator_exposer.def(
+                "minimiseEnergy"
+                , minimiseEnergy_function_value
+                , ( bp::arg("system"), bp::arg("tolerance"), bp::arg("max_iteration") ) );
+
+        }
         OpenMMMDIntegrator_exposer.def( bp::self != bp::self );
         { //::SireMove::OpenMMMDIntegrator::operator=
 
@@ -444,14 +426,14 @@ void register_OpenMMMDIntegrator_class(){
                 , ( bp::arg("arg0") ) );
 
         }
-        { //::SireMove::OpenMMMDIntegrator::setAndersen_frequency
+        { //::SireMove::OpenMMMDIntegrator::setAndersenFrequency
 
-            typedef void ( ::SireMove::OpenMMMDIntegrator::*setAndersen_frequency_function_type )( double ) ;
-            setAndersen_frequency_function_type setAndersen_frequency_function_value( &::SireMove::OpenMMMDIntegrator::setAndersen_frequency );
+            typedef void ( ::SireMove::OpenMMMDIntegrator::*setAndersenFrequency_function_type )( double ) ;
+            setAndersenFrequency_function_type setAndersenFrequency_function_value( &::SireMove::OpenMMMDIntegrator::setAndersenFrequency );
 
             OpenMMMDIntegrator_exposer.def(
-                "setAndersen_frequency"
-                , setAndersen_frequency_function_value
+                "setAndersenFrequency"
+                , setAndersenFrequency_function_value
                 , ( bp::arg("arg0") ) );
 
         }
@@ -466,14 +448,14 @@ void register_OpenMMMDIntegrator_class(){
                 , ( bp::arg("arg0") ) );
 
         }
-        { //::SireMove::OpenMMMDIntegrator::setCMMremoval_frequency
+        { //::SireMove::OpenMMMDIntegrator::setCMMremovalFrequency
 
-            typedef void ( ::SireMove::OpenMMMDIntegrator::*setCMMremoval_frequency_function_type )( int ) ;
-            setCMMremoval_frequency_function_type setCMMremoval_frequency_function_value( &::SireMove::OpenMMMDIntegrator::setCMMremoval_frequency );
+            typedef void ( ::SireMove::OpenMMMDIntegrator::*setCMMremovalFrequency_function_type )( int ) ;
+            setCMMremovalFrequency_function_type setCMMremovalFrequency_function_value( &::SireMove::OpenMMMDIntegrator::setCMMremovalFrequency );
 
             OpenMMMDIntegrator_exposer.def(
-                "setCMMremoval_frequency"
-                , setCMMremoval_frequency_function_value
+                "setCMMremovalFrequency"
+                , setCMMremovalFrequency_function_value
                 , ( bp::arg("arg0") ) );
 
         }
@@ -499,14 +481,14 @@ void register_OpenMMMDIntegrator_class(){
                 , ( bp::arg("arg0") ) );
 
         }
-        { //::SireMove::OpenMMMDIntegrator::setCutoff_distance
+        { //::SireMove::OpenMMMDIntegrator::setCutoffDistance
 
-            typedef void ( ::SireMove::OpenMMMDIntegrator::*setCutoff_distance_function_type )( ::SireUnits::Dimension::Length ) ;
-            setCutoff_distance_function_type setCutoff_distance_function_value( &::SireMove::OpenMMMDIntegrator::setCutoff_distance );
+            typedef void ( ::SireMove::OpenMMMDIntegrator::*setCutoffDistance_function_type )( ::SireUnits::Dimension::Length ) ;
+            setCutoffDistance_function_type setCutoffDistance_function_value( &::SireMove::OpenMMMDIntegrator::setCutoffDistance );
 
             OpenMMMDIntegrator_exposer.def(
-                "setCutoff_distance"
-                , setCutoff_distance_function_value
+                "setCutoffDistance"
+                , setCutoffDistance_function_value
                 , ( bp::arg("arg0") ) );
 
         }
@@ -521,36 +503,14 @@ void register_OpenMMMDIntegrator_class(){
                 , ( bp::arg("arg0") ) );
 
         }
-        { //::SireMove::OpenMMMDIntegrator::setEquilib_iterations
+        { //::SireMove::OpenMMMDIntegrator::setFieldDielectric
 
-            typedef void ( ::SireMove::OpenMMMDIntegrator::*setEquilib_iterations_function_type )( int ) ;
-            setEquilib_iterations_function_type setEquilib_iterations_function_value( &::SireMove::OpenMMMDIntegrator::setEquilib_iterations );
-
-            OpenMMMDIntegrator_exposer.def(
-                "setEquilib_iterations"
-                , setEquilib_iterations_function_value
-                , ( bp::arg("arg0") ) );
-
-        }
-        { //::SireMove::OpenMMMDIntegrator::setEquilib_time_step
-
-            typedef void ( ::SireMove::OpenMMMDIntegrator::*setEquilib_time_step_function_type )( ::SireUnits::Dimension::Time ) ;
-            setEquilib_time_step_function_type setEquilib_time_step_function_value( &::SireMove::OpenMMMDIntegrator::setEquilib_time_step );
+            typedef void ( ::SireMove::OpenMMMDIntegrator::*setFieldDielectric_function_type )( double ) ;
+            setFieldDielectric_function_type setFieldDielectric_function_value( &::SireMove::OpenMMMDIntegrator::setFieldDielectric );
 
             OpenMMMDIntegrator_exposer.def(
-                "setEquilib_time_step"
-                , setEquilib_time_step_function_value
-                , ( bp::arg("arg0") ) );
-
-        }
-        { //::SireMove::OpenMMMDIntegrator::setField_dielectric
-
-            typedef void ( ::SireMove::OpenMMMDIntegrator::*setField_dielectric_function_type )( double ) ;
-            setField_dielectric_function_type setField_dielectric_function_value( &::SireMove::OpenMMMDIntegrator::setField_dielectric );
-
-            OpenMMMDIntegrator_exposer.def(
-                "setField_dielectric"
-                , setField_dielectric_function_value
+                "setFieldDielectric"
+                , setFieldDielectric_function_value
                 , ( bp::arg("arg0") ) );
 
         }
@@ -565,14 +525,14 @@ void register_OpenMMMDIntegrator_class(){
                 , ( bp::arg("arg0") ) );
 
         }
-        { //::SireMove::OpenMMMDIntegrator::setIntegration_tolerance
+        { //::SireMove::OpenMMMDIntegrator::setIntegrationTolerance
 
-            typedef void ( ::SireMove::OpenMMMDIntegrator::*setIntegration_tolerance_function_type )( double ) ;
-            setIntegration_tolerance_function_type setIntegration_tolerance_function_value( &::SireMove::OpenMMMDIntegrator::setIntegration_tolerance );
+            typedef void ( ::SireMove::OpenMMMDIntegrator::*setIntegrationTolerance_function_type )( double ) ;
+            setIntegrationTolerance_function_type setIntegrationTolerance_function_value( &::SireMove::OpenMMMDIntegrator::setIntegrationTolerance );
 
             OpenMMMDIntegrator_exposer.def(
-                "setIntegration_tolerance"
-                , setIntegration_tolerance_function_value
+                "setIntegrationTolerance"
+                , setIntegrationTolerance_function_value
                 , ( bp::arg("tolerance") ) );
 
         }
@@ -609,47 +569,14 @@ void register_OpenMMMDIntegrator_class(){
                 , ( bp::arg("arg0") ) );
 
         }
-        { //::SireMove::OpenMMMDIntegrator::setMCBarostat_frequency
+        { //::SireMove::OpenMMMDIntegrator::setMCBarostatFrequency
 
-            typedef void ( ::SireMove::OpenMMMDIntegrator::*setMCBarostat_frequency_function_type )( int ) ;
-            setMCBarostat_frequency_function_type setMCBarostat_frequency_function_value( &::SireMove::OpenMMMDIntegrator::setMCBarostat_frequency );
-
-            OpenMMMDIntegrator_exposer.def(
-                "setMCBarostat_frequency"
-                , setMCBarostat_frequency_function_value
-                , ( bp::arg("arg0") ) );
-
-        }
-        { //::SireMove::OpenMMMDIntegrator::setMinimization
-
-            typedef void ( ::SireMove::OpenMMMDIntegrator::*setMinimization_function_type )( bool ) ;
-            setMinimization_function_type setMinimization_function_value( &::SireMove::OpenMMMDIntegrator::setMinimization );
+            typedef void ( ::SireMove::OpenMMMDIntegrator::*setMCBarostatFrequency_function_type )( int ) ;
+            setMCBarostatFrequency_function_type setMCBarostatFrequency_function_value( &::SireMove::OpenMMMDIntegrator::setMCBarostatFrequency );
 
             OpenMMMDIntegrator_exposer.def(
-                "setMinimization"
-                , setMinimization_function_value
-                , ( bp::arg("arg0") ) );
-
-        }
-        { //::SireMove::OpenMMMDIntegrator::setMinimiseIterations
-
-            typedef void ( ::SireMove::OpenMMMDIntegrator::*setMinimiseIterations_function_type )( int ) ;
-            setMinimiseIterations_function_type setMinimiseIterations_function_value( &::SireMove::OpenMMMDIntegrator::setMinimiseIterations );
-
-            OpenMMMDIntegrator_exposer.def(
-                "setMinimiseIterations"
-                , setMinimiseIterations_function_value
-                , ( bp::arg("arg0") ) );
-
-        }
-        { //::SireMove::OpenMMMDIntegrator::setMinimiseTol
-
-            typedef void ( ::SireMove::OpenMMMDIntegrator::*setMinimiseTol_function_type )( double ) ;
-            setMinimiseTol_function_type setMinimiseTol_function_value( &::SireMove::OpenMMMDIntegrator::setMinimiseTol );
-
-            OpenMMMDIntegrator_exposer.def(
-                "setMinimiseTol"
-                , setMinimiseTol_function_value
+                "setMCBarostatFrequency"
+                , setMCBarostatFrequency_function_value
                 , ( bp::arg("arg0") ) );
 
         }

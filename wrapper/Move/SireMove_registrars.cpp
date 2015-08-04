@@ -10,7 +10,6 @@
 #include "rigidbodymc.h"
 #include "mtsmc.h"
 #include "integrator.h"
-#include "openmmacceleratedmdintegrator.h"
 #include "prefsampler.h"
 #include "openmmfrenergydt.h"
 #include "zmatmove.h"
@@ -33,7 +32,6 @@
 #include "integratorworkspace.h"
 #include "volumechanger.h"
 #include "repexmove.h"
-#include "openmmintegrator.h"
 #include "volumemove.h"
 #include "integratorworkspacejm.h"
 #include "uniformsampler.h"
@@ -64,8 +62,6 @@ void register_SireMove_objects()
     ObjectRegistry::registerConverterFor< SireMove::RigidBodyMC >();
     ObjectRegistry::registerConverterFor< SireMove::MTSMC >();
     ObjectRegistry::registerConverterFor< SireMove::NullIntegrator >();
-    ObjectRegistry::registerConverterFor< SireMove::OpenMMAMDIntegrator >();
-    ObjectRegistry::registerConverterFor< SireMove::OpenMMAMDIntegrator >();
     ObjectRegistry::registerConverterFor< SireMove::PrefSampler >();
     ObjectRegistry::registerConverterFor< SireMove::OpenMMFrEnergyDT >();
     ObjectRegistry::registerConverterFor< SireMove::OpenMMFrEnergyDT >();
@@ -102,8 +98,6 @@ void register_SireMove_objects()
     ObjectRegistry::registerConverterFor< SireMove::ScaleVolumeFromCenter >();
     ObjectRegistry::registerConverterFor< SireMove::RepExMove >();
     ObjectRegistry::registerConverterFor< SireMove::RepExSubMove >();
-    ObjectRegistry::registerConverterFor< SireMove::OpenMMIntegrator >();
-    ObjectRegistry::registerConverterFor< SireMove::OpenMMIntegrator >();
     ObjectRegistry::registerConverterFor< SireMove::VolumeMove >();
     ObjectRegistry::registerConverterFor< SireMove::NullIntegratorWorkspaceJM >();
     ObjectRegistry::registerConverterFor< SireMove::AtomicVelocityWorkspaceJM >();
@@ -128,4 +122,3 @@ void register_SireMove_objects()
     ObjectRegistry::registerConverterFor< SireMove::DLMRigidBody >();
 
 }
-
