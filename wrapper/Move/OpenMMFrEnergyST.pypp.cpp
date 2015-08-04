@@ -89,6 +89,17 @@ void register_OpenMMFrEnergyST_class(){
         bp::scope OpenMMFrEnergyST_scope( OpenMMFrEnergyST_exposer );
         OpenMMFrEnergyST_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireMol::MoleculeGroup const &, SireMol::MoleculeGroup const &, SireMol::MoleculeGroup const &, SireMol::MoleculeGroup const &, bp::optional< bool > >(( bp::arg("molecule_group"), bp::arg("solutes"), bp::arg("solute_hard"), bp::arg("solute_todummy"), bp::arg("solute_fromdummy"), bp::arg("frequent_save_velocities")=(bool)(false) )) );
         OpenMMFrEnergyST_exposer.def( bp::init< SireMove::OpenMMFrEnergyST const & >(( bp::arg("other") )) );
+        { //::SireMove::OpenMMFrEnergyST::annealLambda
+        
+            typedef ::SireSystem::System ( ::SireMove::OpenMMFrEnergyST::*annealLambda_function_type )( ::SireSystem::System &,::SireUnits::Dimension::Time,int ) ;
+            annealLambda_function_type annealLambda_function_value( &::SireMove::OpenMMFrEnergyST::annealLambda );
+            
+            OpenMMFrEnergyST_exposer.def( 
+                "annealLambda"
+                , annealLambda_function_value
+                , ( bp::arg("system"), bp::arg("timestep"), bp::arg("annealingSteps") ) );
+        
+        }
         { //::SireMove::OpenMMFrEnergyST::createWorkspace
         
             typedef ::SireMove::IntegratorWorkspacePtr ( ::SireMove::OpenMMFrEnergyST::*createWorkspace_function_type )( ::SireBase::PropertyMap const & ) const;
@@ -341,26 +352,6 @@ void register_OpenMMFrEnergyST_class(){
                 , getMCBarostat_frequency_function_value );
         
         }
-        { //::SireMove::OpenMMFrEnergyST::getMinimizeIterations
-        
-            typedef int ( ::SireMove::OpenMMFrEnergyST::*getMinimizeIterations_function_type )(  ) ;
-            getMinimizeIterations_function_type getMinimizeIterations_function_value( &::SireMove::OpenMMFrEnergyST::getMinimizeIterations );
-            
-            OpenMMFrEnergyST_exposer.def( 
-                "getMinimizeIterations"
-                , getMinimizeIterations_function_value );
-        
-        }
-        { //::SireMove::OpenMMFrEnergyST::getMinimizeTol
-        
-            typedef double ( ::SireMove::OpenMMFrEnergyST::*getMinimizeTol_function_type )(  ) ;
-            getMinimizeTol_function_type getMinimizeTol_function_value( &::SireMove::OpenMMFrEnergyST::getMinimizeTol );
-            
-            OpenMMFrEnergyST_exposer.def( 
-                "getMinimizeTol"
-                , getMinimizeTol_function_value );
-        
-        }
         { //::SireMove::OpenMMFrEnergyST::getPlatform
         
             typedef ::QString ( ::SireMove::OpenMMFrEnergyST::*getPlatform_function_type )(  ) ;
@@ -483,15 +474,15 @@ void register_OpenMMFrEnergyST_class(){
                 , isTimeReversible_function_value );
         
         }
-        { //::SireMove::OpenMMFrEnergyST::minimizer
+        { //::SireMove::OpenMMFrEnergyST::minimizeEnergy
         
-            typedef ::SireSystem::System ( ::SireMove::OpenMMFrEnergyST::*minimizer_function_type )( ::SireSystem::System &,double,double ) ;
-            minimizer_function_type minimizer_function_value( &::SireMove::OpenMMFrEnergyST::minimizer );
+            typedef ::SireSystem::System ( ::SireMove::OpenMMFrEnergyST::*minimizeEnergy_function_type )( ::SireSystem::System &,double,int ) ;
+            minimizeEnergy_function_type minimizeEnergy_function_value( &::SireMove::OpenMMFrEnergyST::minimizeEnergy );
             
             OpenMMFrEnergyST_exposer.def( 
-                "minimizer"
-                , minimizer_function_value
-                , ( bp::arg("system"), bp::arg("max_iteration"), bp::arg("tolerance") ) );
+                "minimizeEnergy"
+                , minimizeEnergy_function_value
+                , ( bp::arg("system"), bp::arg("tolerance"), bp::arg("max_iteration") ) );
         
         }
         OpenMMFrEnergyST_exposer.def( bp::self != bp::self );
@@ -725,39 +716,6 @@ void register_OpenMMFrEnergyST_class(){
             OpenMMFrEnergyST_exposer.def( 
                 "setMCBarostat_frequency"
                 , setMCBarostat_frequency_function_value
-                , ( bp::arg("arg0") ) );
-        
-        }
-        { //::SireMove::OpenMMFrEnergyST::setMinimization
-        
-            typedef void ( ::SireMove::OpenMMFrEnergyST::*setMinimization_function_type )( bool ) ;
-            setMinimization_function_type setMinimization_function_value( &::SireMove::OpenMMFrEnergyST::setMinimization );
-            
-            OpenMMFrEnergyST_exposer.def( 
-                "setMinimization"
-                , setMinimization_function_value
-                , ( bp::arg("arg0") ) );
-        
-        }
-        { //::SireMove::OpenMMFrEnergyST::setMinimizeIterations
-        
-            typedef void ( ::SireMove::OpenMMFrEnergyST::*setMinimizeIterations_function_type )( int ) ;
-            setMinimizeIterations_function_type setMinimizeIterations_function_value( &::SireMove::OpenMMFrEnergyST::setMinimizeIterations );
-            
-            OpenMMFrEnergyST_exposer.def( 
-                "setMinimizeIterations"
-                , setMinimizeIterations_function_value
-                , ( bp::arg("arg0") ) );
-        
-        }
-        { //::SireMove::OpenMMFrEnergyST::setMinimizeTol
-        
-            typedef void ( ::SireMove::OpenMMFrEnergyST::*setMinimizeTol_function_type )( double ) ;
-            setMinimizeTol_function_type setMinimizeTol_function_value( &::SireMove::OpenMMFrEnergyST::setMinimizeTol );
-            
-            OpenMMFrEnergyST_exposer.def( 
-                "setMinimizeTol"
-                , setMinimizeTol_function_value
                 , ( bp::arg("arg0") ) );
         
         }

@@ -53,9 +53,9 @@ QDataStream& operator>>(QDataStream&, SireMove::OpenMMFrEnergyST&);
 namespace SireMove
 {
 
-/** This class implements single topology a free energy method Using OpenMM. 
+/** This class implements single topology a free energy method using OpenMM. 
  
-    @author Julien Michel and Gaetano Calabro
+    @author Julien Michel,Gaetano Calabro and Antonia Mey
 */
 class SIREMOVE_EXPORT OpenMMFrEnergyST
         : public SireBase::ConcreteProperty<OpenMMFrEnergyST,Integrator>
@@ -96,7 +96,10 @@ public:
     
     SireUnits::Dimension::MolarEnergy getPotentialEnergy(const System &system);
     
-    System minimizer( System &system, double max_iteration, double tolerance ); 
+    System minimizeEnergy(System &system, double tolerance, int max_iteration); 
+    
+    System annealLambda(System &system, SireUnits::Dimension::Time timestep, 
+                        int annealingSteps);
 
     void integrate(IntegratorWorkspace &workspace,
                    const Symbol &nrg_component,
@@ -185,13 +188,6 @@ public:
     SireUnits::Dimension::Time getTimetoSkip(void);
     void setTimetoSkip(SireUnits::Dimension::Time);
 
-    void setMinimization(bool);
-
-    double getMinimizeTol(void);
-    void setMinimizeTol(double);
-
-    int getMinimizeIterations(void);
-    void setMinimizeIterations(int);
 
     int getEquilib_iterations(void);
     void setEquilib_iterations(int);
@@ -206,7 +202,7 @@ public:
 
 private:
     void createContext(IntegratorWorkspace &workspace,
-                       SireUnits::Dimension::Time timestep, int nmoves, bool record_stats);
+                       SireUnits::Dimension::Time timestep);
     void destroyContext();
     
     /** Whether or not to save the velocities after every step, or to save them at the end of all of the steps */
@@ -282,12 +278,6 @@ private:
 
     SireUnits::Dimension::Time timeskip;
 
-    bool minimize;
-
-    double minimize_tol;
-    int minimize_iterations;
-
-
     int equilib_iterations;
     SireUnits::Dimension::Time equilib_time_step;
 
@@ -295,6 +285,8 @@ private:
 
     double GF_acc;
     double GB_acc;
+    
+    bool Debug;
 
     int random_seed;
 
