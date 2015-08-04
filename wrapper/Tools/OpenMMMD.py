@@ -88,11 +88,11 @@ buffered_coords_freq = Parameter("buffered coordinates frequency", 1,
 
 time_to_skip = Parameter("time to skip", 0 * picosecond, """Time to skip in picoseconds""")
 
-minimize = Parameter("minimize", False, """Whether or not to perform minimization before the simulation.""")
+minimise = Parameter("minimise", False, """Whether or not to perform minimization before the simulation.""")
 
-minimize_tol = Parameter("minimize tolerance", 1, """Tolerance used to know when minimization is complete.""")
+minimise_tol = Parameter("minimise tolerance", 1, """Tolerance used to know when minimization is complete.""")
 
-minimize_max_iter = Parameter("minimize maximum iterations", 1000, """Maximum number of iterations for minimization.""")
+minimise_max_iter = Parameter("minimise maximum iterations", 1000, """Maximum number of iterations for minimization.""")
 
 equilibrate = Parameter("equilibrate", False , """Whether or not to perform equilibration before dynamics.""")
 
@@ -159,7 +159,7 @@ use_distance_restraints = Parameter("use distance restraints", False,
                                     """Whether or not to use restraints distances between pairs of atoms.""")
 
 distance_restraints_dict = Parameter("distance restraints dictionary", {},
-                                     """Dictionnary of pair of atoms whose distance is restrained, and restraint
+                                     """Dictionary of pair of atoms whose distance is restrained, and restraint
                                      parameters. Syntax is {(atom0,atom1):(reql, kl, Dl)} where atom0, atom1 are atomic
                                      indices. reql the equilibrium distance. Kl the force constant of the restraint.
                                      D the flat bottom radius. WARNING: PBC distance checks not implemented, avoid
@@ -176,10 +176,10 @@ delta_lambda = Parameter("delta_lambda", 0.001,
                          """Value of the lambda interval used to evaluate free energy gradients by finite difference.""")
 
 shift_delta = Parameter("shift delta", 2.0,
-                        """Value of the Lennard-Jones softcore parameter.""")
+                        """Value of the Lennard-Jones soft-core parameter.""")
 
 coulomb_power = Parameter("coulomb power", 0,
-                          """Value of the Coulombic softcore parameter.""")
+                          """Value of the Coulombic soft-core parameter.""")
 
 energy_frequency = Parameter("energy frequency", 1,
                              """The number of time steps between evaluation of free energy gradients.""")
@@ -422,9 +422,9 @@ def setupMoves(system, random_seed, GPUS):
     Integrator_OpenMM.setFriction(inverse_friction.val)  # Only meaningful for Langevin/Brownian integrators
     Integrator_OpenMM.setPrecision(precision.val)
     Integrator_OpenMM.setTimetoSkip(time_to_skip.val)
-    #Integrator_OpenMM.setMinimization(minimize.val)
-    #Integrator_OpenMM.setMinimizeTol(minimize_tol.val)
-    #Integrator_OpenMM.setMinimizeIterations(minimize_max_iter.val)
+    Integrator_OpenMM.setMinimization(minimisese.val)
+    Integrator_OpenMM.setMinimiseTol(minimise_tol.val)
+    Integrator_OpenMM.setMinimiseIterations(minimise_max_iter.val)
 
     if equilibrate.val:
         Integrator_OpenMM.setEquilib_iterations(equil_iterations.val)
@@ -1322,14 +1322,14 @@ def runFreeNrg():
     mdmoves = moves.moves()[0]
     integrator = mdmoves.integrator()
     print ("###===========================================================###\n")
-    if minimize.val:
-        print("###=======================Minimization========================###")
-        print('Running minimization.')
+    if minimise.val:
+        print("###=======================Minimisation========================###")
+        print('Running minimisation.')
         if verbose.val:
-            print ("Energy before the minimization: " + str(system.energy()))
-            print ('Tolerance for minimization: ' + str(minimize_tol.val))
-            print ('Maximum number of minimization iterations: ' + str(minimize_max_iter.val))
-        system = integrator.minimizeEnergy(system, minimize_tol.val, minimize_max_iter.val)
+            print ("Energy before the minimisation: " + str(system.energy()))
+            print ('Tolerance for minimisation: ' + str(minimise_tol.val))
+            print ('Maximum number of minimisation iterations: ' + str(minimise_max_iter.val))
+        system = integrator.minimiseEnergy(system, minimise_tol.val, minimise_max_iter.val)
         system.mustNowRecalculateFromScratch()
         if verbose.val:
             print ("Energy after the minimization: " + str(system.energy()))
