@@ -122,15 +122,17 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const OpenMMMDIntegrato
     sds << velver.frequent_save_velocities << velver.molgroup
         << velver.Integrator_type << velver.friction
         << velver.CutoffType << velver.cutoff_distance << velver.field_dielectric
-        << velver.tollerance_ewald_pme
+        << velver.tolerance_ewald_pme
         << velver.Andersen_flag << velver.Andersen_frequency
         << velver.MCBarostat_flag << velver.MCBarostat_frequency << velver.ConstraintType
         << velver.Pressure << velver.Temperature
         << velver.platform_type << velver.Restraint_flag << velver.CMMremoval_frequency
         << velver.buffer_frequency
         << velver.device_index << velver.LJ_dispersion << velver.precision << velver.integration_tol
-        << velver.timeskip << velver.minimise << velver.minimise_tol << velver.minimise_iterations
-        << velver.equilib_iterations << velver.equilib_time_step << velver.reinetialise_context
+        << velver.timeskip 
+//        << velver.minimise << velver.minimise_tol << velver.minimise_iterations
+//        << velver.equilib_iterations << velver.equilib_time_step 
+        << velver.reinetialise_context
         << velver.is_periodic
         << static_cast<const Integrator&> (velver);
 
@@ -152,7 +154,7 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, OpenMMMDIntegrator &vel
         sds >> velver.frequent_save_velocities >> velver.molgroup
             >> velver.Integrator_type >> velver.friction
             >> velver.CutoffType >> velver.cutoff_distance >> velver.field_dielectric
-            >> velver.tollerance_ewald_pme
+            >> velver.tolerance_ewald_pme
             >> velver.Andersen_flag >> velver.Andersen_frequency
             >> velver.MCBarostat_flag >> velver.MCBarostat_frequency >> velver.ConstraintType
             >> velver.Pressure >> velver.Temperature
@@ -160,9 +162,10 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, OpenMMMDIntegrator &vel
             >> velver.buffer_frequency
             >> velver.device_index >> velver.LJ_dispersion >> velver.precision
             >> velver.integration_tol
-            >> velver.timeskip >> velver.minimise >> velver.minimise_tol
-            >> velver.minimise_iterations
-            >> velver.equilib_iterations >> velver.equilib_time_step
+            >> velver.timeskip 
+//            >> velver.minimise >> velver.minimise_tol
+//            >> velver.minimise_iterations
+//            >> velver.equilib_iterations >> velver.equilib_time_step
             >> velver.reinetialise_context
             >> velver.is_periodic
             >> static_cast<Integrator&> (velver);
@@ -184,7 +187,7 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, OpenMMMDIntegrator &vel
         sds >> velver.frequent_save_velocities >> velver.molgroup
             >> velver.Integrator_type >> velver.friction
             >> velver.CutoffType >> velver.cutoff_distance >> velver.field_dielectric
-            >> velver.tollerance_ewald_pme
+            >> velver.tolerance_ewald_pme
             >> velver.Andersen_flag >> velver.Andersen_frequency
             >> velver.MCBarostat_flag >> velver.MCBarostat_frequency >> velver.ConstraintType
             >> velver.Pressure >> velver.Temperature
@@ -192,9 +195,10 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, OpenMMMDIntegrator &vel
             >> velver.buffer_frequency
             >> velver.device_index >> velver.LJ_dispersion >> velver.precision
             >> velver.integration_tol
-            >> velver.timeskip >> velver.minimize >> velver.minimise_tol
-            >> velver.minimise_iterations
-            >> velver.equilib_iterations >> velver.equilib_time_step
+            >> velver.timeskip 
+//            >> velver.minimise >> velver.minimise_tol
+//            >> velver.minimise_iterations
+//            >> velver.equilib_iterations >> velver.equilib_time_step
             >> velver.reinetialise_context
             >> static_cast<Integrator&> (velver);
 
@@ -228,8 +232,8 @@ Restraint_flag(false),
 CMMremoval_frequency(0), buffer_frequency(0), device_index("0"),
 LJ_dispersion(true), precision("single"),
 reinetialise_context(false), integration_tol(0.001), timeskip(0.0 * picosecond),
-minimise(false), minimise_tol(1.0), minimise_iterations(0),
-equilib_iterations(5000), equilib_time_step(0.0005 * picosecond),
+//minimise(false), minimise_tol(1.0), minimise_iterations(0),
+//equilib_iterations(5000), equilib_time_step(0.0005 * picosecond),
 is_periodic(false)
 {
 }
@@ -250,8 +254,8 @@ Restraint_flag(false),
 CMMremoval_frequency(0), buffer_frequency(0), device_index("0"),
 LJ_dispersion(true), precision("single"),
 reinetialise_context(false), integration_tol(0.001), timeskip(0.0 * picosecond),
-minimise(false), minimise_tol(1.0), minimise_iterations(0),
-equilib_iterations(5000), equilib_time_step(0.0005 * picosecond),
+//minimise(false), minimise_tol(1.0), minimise_iterations(0),
+//equilib_iterations(5000), equilib_time_step(0.0005 * picosecond),
 is_periodic(false)
 {
 }
@@ -281,10 +285,10 @@ buffer_frequency(other.buffer_frequency), device_index(other.device_index),
 LJ_dispersion(other.LJ_dispersion), precision(other.precision),
 reinetialise_context(other.reinetialise_context),
 integration_tol(other.integration_tol), timeskip(other.timeskip),
-minimise(other.minimise), minimise_tol(other.minimise_tol),
-minimise_iterations(other.minimise_iterations),
-equilib_iterations(other.equilib_iterations),
-equilib_time_step(other.equilib_time_step),
+//minimise(other.minimise), minimise_tol(other.minimise_tol),
+//minimise_iterations(other.minimise_iterations),
+//equilib_iterations(other.equilib_iterations),
+//equilib_time_step(other.equilib_time_step),
 is_periodic(other.is_periodic)
 {
 }
@@ -328,11 +332,11 @@ OpenMMMDIntegrator& OpenMMMDIntegrator::operator=(const OpenMMMDIntegrator &othe
     reinetialise_context = other.reinetialise_context;
     integration_tol = other.integration_tol;
     timeskip = other.timeskip;
-    minimise = other.minimise;
-    minimise_tol = other.minimise_tol;
-    minimise_iterations = other.minimise_iterations;
-    equilib_iterations = other.equilib_iterations;
-    equilib_time_step = other.equilib_time_step;
+//    minimise = other.minimise;
+//    minimise_tol = other.minimise_tol;
+//    minimise_iterations = other.minimise_iterations;
+//    equilib_iterations = other.equilib_iterations;
+//    equilib_time_step = other.equilib_time_step;
     is_periodic = other.is_periodic;
 
     return *this;
@@ -365,11 +369,11 @@ bool OpenMMMDIntegrator::operator==(const OpenMMMDIntegrator &other) const
         and friction == other.friction
         and integration_tol == other.integration_tol
         and timeskip == other.timeskip
-        and minimise == other.minimise
-        and minimise_tol == other.minimise_tol
-        and minimise_iterations == other.minimise_iterations
-        and equilib_iterations == other.equilib_iterations
-        and equilib_time_step == other.equilib_time_step
+//        and minimise == other.minimise
+//        and minimise_tol == other.minimise_tol
+//        and minimise_iterations == other.minimise_iterations
+//        and equilib_iterations == other.equilib_iterations
+//        and equilib_time_step == other.equilib_time_step
         and reinetialise_context == other.reinetialise_context
         and is_periodic == other.is_periodic
         and Integrator::operator==(other);
@@ -521,7 +525,7 @@ void OpenMMMDIntegrator::initialise()
             if (flag_cutoff == CUTOFFNONPERIODIC || flag_cutoff == CUTOFFPERIODIC)
                 qDebug() << "Dielectric constant = " << field_dielectric << "\n\n";
             else if (flag_cutoff == EWALD || flag_cutoff == PME)
-                qDebug() << "Tollerance EWALD/PME = " << tolerance_ewald_pme << "\n\n";
+                qDebug() << "Tolerance EWALD/PME = " << tolerance_ewald_pme << "\n\n";
         }
     }
 
@@ -1085,8 +1089,7 @@ void OpenMMMDIntegrator::initialise()
 }
 
 void OpenMMMDIntegrator::createContext(IntegratorWorkspace &workspace,
-                                       SireUnits::Dimension::Time timestep,
-                                       int nmoves, bool record_stats)
+                                       SireUnits::Dimension::Time timestep)
 {
     bool Debug = false;
 
@@ -1304,7 +1307,7 @@ MolarEnergy OpenMMMDIntegrator::getPotentialEnergy(const System &system)
     IntegratorWorkspacePtr ws = this->createWorkspace(molgroup);
     ws.edit().setSystem(system);
 
-    createContext(ws.edit(), 2 * femtosecond, 0, false);
+    createContext(ws.edit(), 2 * femtosecond);
 
     int infoMask = 0;
     infoMask = infoMask + OpenMM::State::Energy;
@@ -1317,13 +1320,157 @@ MolarEnergy OpenMMMDIntegrator::getPotentialEnergy(const System &system)
     return nrg;
 }
 
+
+/**
+ * <Runs an energy Minimisation on the current system.>
+ * minimizeEnergy will find the nearest local potential energy minimum,
+ * given the current Sire::System. It calls the
+ * LocalEnergyMinimizer :: minimize() function of OpenMM.
+ * @param system                Sire System including molegroup, forcefield
+ *                              positions etc
+ * @param tolerance             Default = 1. This specifies how precisely the
+ * energy minimum must be located. Minimisation will be halted once the
+ * root-mean-square value of all force components reaches this tolerance.
+ * @param max_iteration         Default = 1000. this specifies the number of
+ * iterations are run for the minimisation. If max_iteration = 0, the
+ * iteration will run until convergence.
+ *
+ * @return                      Sire System, with the updated energy
+ * minimised coordinates.
+ */
+System OpenMMMDIntegrator::minimiseEnergy(System &system, double tolerance = 1, int max_iteration = 100)
+{
+    bool Debug = false;
+    const MoleculeGroup moleculegroup = this->molgroup.read();
+    IntegratorWorkspacePtr workspace = this->createWorkspace(moleculegroup);
+    if (system.nMolecules() != moleculegroup.nMolecules())
+    {
+        std::cerr << "Number of molecules in do not agree!";
+        exit(1);
+    }
+    workspace.edit().setSystem(system);
+    // Use helper function to create a Context
+    SireUnits::Dimension::Time timestep = 0.0 * picosecond;
+    createContext(workspace.edit(), timestep);
+    // Step 2 minimise
+    OpenMM::LocalEnergyMinimizer::minimize(*openmm_context, tolerance, max_iteration);
+    // Step 3 update the positions in the system
+    int infoMask = OpenMM::State::Positions;
+    OpenMM::State state_openmm = openmm_context->getState(infoMask);
+    std::vector<OpenMM::Vec3> positions_openmm = state_openmm.getPositions();
+    // Recast to atomicvelocityworkspace because want to use commitCoordinates() method to update system
+    AtomicVelocityWorkspace &ws = workspace.edit().asA<AtomicVelocityWorkspace>();
+    const int nmols = ws.nMolecules();
+    int k = 0;
+
+    for (int i = 0; i < nmols; i++)
+    {
+        Vector *sire_coords = ws.coordsArray(i);
+        for (int j = 0; j < ws.nAtoms(i); j++)
+        {
+            sire_coords[j] = Vector(positions_openmm[j + k][0] * (OpenMM::AngstromsPerNm),
+                                    positions_openmm[j + k][1] * (OpenMM::AngstromsPerNm),
+                                    positions_openmm[j + k][2] * (OpenMM::AngstromsPerNm));
+            if (Debug)
+            {
+                std::cout << "X = " << positions_openmm[j + k][0] * OpenMM::AngstromsPerNm << " A" <<
+                    " Y = " << positions_openmm[j + k][1] * OpenMM::AngstromsPerNm << " A" <<
+                    " Z = " << positions_openmm[j + k][2] * OpenMM::AngstromsPerNm << " A";
+            }
+        }
+        k = k + ws.nAtoms(i);
+    }
+
+    // This causes the workspace to update the system coordinates with the
+    // contents of *sire_coords. Note that velocities aren't touched.
+    ws.commitCoordinates();
+    // Step 4 delete the context
+    // JM 04/15 FIXME: See comment above at step 1
+    this->destroyContext();
+    // Step 5. Return pointer to the workspace's system
+    const System & ptr_sys = ws.system();
+    return ptr_sys;
+}
+
+/**
+ * annealLambda will equilibrate the system to the current alchemical lambda
+ * value of the system
+ * @param system                Sire System including molegroup, forcefield
+ *                              positions etc
+ * @param timestep              Default = 0.005. Time step used of the
+ * equilibration to the desired lambda
+ * @param annealingSteps        Default = 1000. Number of steps used for the
+ * annealing
+ * @return                      Sire system with updated coordinates and
+ * velocities.
+ */
+
+System OpenMMMDIntegrator::equilibrateSystem(System &system,
+                                      SireUnits::Dimension::Time equib_time_step,
+                                      int equib_steps)
+{
+    bool Debug = false;
+    const double AKMAPerPs = 0.04888821;
+
+    const MoleculeGroup moleculegroup = this->molgroup.read();
+    IntegratorWorkspacePtr workspace = this->createWorkspace(moleculegroup);
+    //TODO: Add some sanity checks here.
+    if (system.nMolecules() != moleculegroup.nMolecules())
+    {
+        std::cerr << "Number of molecules in do not agree!";
+        exit(1);
+    }
+
+    workspace.edit().setSystem(system);
+    createContext(workspace.edit(), equib_time_step);
+    (openmm_context->getIntegrator()).step(equib_steps);
+    
+        int infoMask = OpenMM::State::Positions;
+    infoMask = infoMask + OpenMM::State::Velocities;
+    OpenMM::State state_openmm = openmm_context->getState(infoMask);
+    std::vector<OpenMM::Vec3> positions_openmm = state_openmm.getPositions();
+    std::vector<OpenMM::Vec3> velocities_openmm = state_openmm.getVelocities();
+
+    // Recast to atomicvelocityworkspace because want to use commitCoordinates() method to update system
+    AtomicVelocityWorkspace &ws = workspace.edit().asA<AtomicVelocityWorkspace>();
+
+    const int nmols = ws.nMolecules();
+    int k = 0;
+
+    for (int i = 0; i < nmols; i++)
+    {
+
+        Vector *sire_coords = ws.coordsArray(i);
+        Vector *sire_momenta = ws.momentaArray(i);
+        const double *m = ws.massArray(i);
+
+        for (int j = 0; j < ws.nAtoms(i); j++)
+        {
+            sire_coords[j] = Vector(positions_openmm[j + k][0] * (OpenMM::AngstromsPerNm),
+                                    positions_openmm[j + k][1] * (OpenMM::AngstromsPerNm),
+                                    positions_openmm[j + k][2] * (OpenMM::AngstromsPerNm));
+
+            sire_momenta[j] = Vector(velocities_openmm[j + k][0] * m[j] * (OpenMM::AngstromsPerNm) * AKMAPerPs,
+                                     velocities_openmm[j + k][1] * m[j] * (OpenMM::AngstromsPerNm) * AKMAPerPs,
+                                     velocities_openmm[j + k][2] * m[j] * (OpenMM::AngstromsPerNm) * AKMAPerPs);
+        }
+        k = k + ws.nAtoms(i);
+    }
+
+    ws.commitCoordinatesAndVelocities();
+    this->destroyContext();
+    const System & ptr_sys = ws.system();
+    return ptr_sys;
+}
+
+
 void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol &nrg_component,
                                    SireUnits::Dimension::Time timestep,
                                    int nmoves, bool record_stats)
 {
     bool Debug = false;
 
-    createContext(workspace, timestep, nmoves, record_stats);
+    createContext(workspace, timestep);
 
     const int nats = openmm_system->getNumParticles();
 
@@ -1389,36 +1536,36 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
     if (Debug)
         qDebug() << " pot nrg bef dyn " << mypotential_energy;
 
-    if (minimise)
-    {
-        //New time step for minimization and equilibartion in ps
-        double dtm = convertTo(equilib_time_step.value(), picosecond);
-
-        if (true)
-        {
-            qDebug() << "\nStarting Minimization and Equilibration";
-            qDebug() << "Minimization tollerance = " << minimise_tol;
-            qDebug() << "Max number of minimization iterations (0 = untill tollerance is reached) = " << minimise_iterations;
-            qDebug() << "Max number of equilibration iterations = " << equilib_iterations;
-            qDebug() << "Equilibration time step = " << dtm << " ps";
-            qDebug() << "Total equilibration Time per Lambda = " << dtm * equilib_iterations << " ps \n";
-        }
-
-        (openmm_context->getIntegrator()).setStepSize(dtm);
-        OpenMM::LocalEnergyMinimizer::minimize(*openmm_context, minimise_tol, minimise_iterations);
-
-        (openmm_context->getIntegrator()).step(equilib_iterations);
-
-        (openmm_context->getIntegrator()).setStepSize(dt);
-        openmm_context->setTime(0.0);
-
-        if (true)
-        {
-            qDebug() << "End Equilibration";
-            qDebug() << "\nStarting Production run";
-        }
-
-    }
+//    if (minimise)
+//    {
+//        //New time step for minimization and equilibartion in ps
+//        double dtm = convertTo(equilib_time_step.value(), picosecond);
+//
+//        if (true)
+//        {
+//            qDebug() << "\nStarting Minimization and Equilibration";
+//            qDebug() << "Minimization tolerance = " << minimise_tol;
+//            qDebug() << "Max number of minimization iterations (0 = until tolerance is reached) = " << minimise_iterations;
+//            qDebug() << "Max number of equilibration iterations = " << equilib_iterations;
+//            qDebug() << "Equilibration time step = " << dtm << " ps";
+//            qDebug() << "Total equilibration Time per Lambda = " << dtm * equilib_iterations << " ps \n";
+//        }
+//
+//        (openmm_context->getIntegrator()).setStepSize(dtm);
+//        OpenMM::LocalEnergyMinimizer::minimize(*openmm_context, minimise_tol, minimise_iterations);
+//
+//        (openmm_context->getIntegrator()).step(equilib_iterations);
+//
+//        (openmm_context->getIntegrator()).setStepSize(dt);
+//        openmm_context->setTime(0.0);
+//
+//        if (true)
+//        {
+//            qDebug() << "End Equilibration";
+//            qDebug() << "\nStarting Production run";
+//        }
+//
+//    }
 
     //Time skipping
     const double time_skip = convertTo(timeskip.value(), picosecond);
@@ -1474,8 +1621,8 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
     }
 
     //Disable Minimisation because of multiple cycles
-    if (minimise)
-        minimise = false;
+//    if (minimise)
+//        minimise = false;
     //Disable Time to Skip because of multiple cycles
     if (time_skip != 0)
     {
@@ -1884,70 +2031,70 @@ void OpenMMMDIntegrator::setTimetoSkip(SireUnits::Dimension::Time skip)
 }
 
 /** Set Minimisation stage on/off*/
-void OpenMMMDIntegrator::setMinimization(bool on_off)
-{
-    minimise = on_off;
-}
+//void OpenMMMDIntegrator::setMinimization(bool on_off)
+//{
+//    minimise = on_off;
+//}
 
-/** Get Minimisation Tolerance*/
-double OpenMMMDIntegrator::getMinimiseTol(void)
-{
-    return minimise_tol;
-}
+///** Get Minimisation Tolerance*/
+//double OpenMMMDIntegrator::getMinimiseTol(void)
+//{
+//    return minimise_tol;
+//}
+//
+///** Set Minimisation Tolerance*/
+//void OpenMMMDIntegrator::setMinimiseTol(double tolerance)
+//{
+//    minimise_tol = tolerance;
+//}
+//
+///** Get the maximum number of iterations in the minimisation stage*/
+//int OpenMMMDIntegrator::getMinimiseIterations(void)
+//{
+//
+//    return minimise_iterations;
+//
+//}
+//
+///** Get the maximum number of iterations in the minimisation stage*/
+//void OpenMMMDIntegrator::setMinimiseIterations(int iterations)
+//{
+//
+//    minimise_iterations = iterations;
+//
+//}
 
-/** Set Minimisation Tolerance*/
-void OpenMMMDIntegrator::setMinimiseTol(double tolerance)
-{
-    minimise_tol = tolerance;
-}
-
-/** Get the maximum number of iterations in the minimisation stage*/
-int OpenMMMDIntegrator::getMinimiseIterations(void)
-{
-
-    return minimise_iterations;
-
-}
-
-/** Get the maximum number of iterations in the minimisation stage*/
-void OpenMMMDIntegrator::setMinimiseIterations(int iterations)
-{
-
-    minimise_iterations = iterations;
-
-}
-
-/** Get the total number of iterations used to perform the equilibration stage*/
-int OpenMMMDIntegrator::getEquilib_iterations(void)
-{
-
-    return equilib_iterations;
-
-}
-
-/** Set the total number of iterations used to perform the equilibration stage*/
-void OpenMMMDIntegrator::setEquilib_iterations(int iterations)
-{
-
-    equilib_iterations = iterations;
-
-}
-
-/** Get the time step used to perform the equilibration stage*/
-SireUnits::Dimension::Time OpenMMMDIntegrator::getEquilib_time_step(void)
-{
-
-    return equilib_time_step;
-
-}
-
-/** Set the time step used to perform the equilibration stage*/
-void OpenMMMDIntegrator::setEquilib_time_step(SireUnits::Dimension::Time timestep)
-{
-
-    equilib_time_step = timestep;
-
-}
+///** Get the total number of iterations used to perform the equilibration stage*/
+//int OpenMMMDIntegrator::getEquilib_iterations(void)
+//{
+//
+//    return equilib_iterations;
+//
+//}
+//
+///** Set the total number of iterations used to perform the equilibration stage*/
+//void OpenMMMDIntegrator::setEquilib_iterations(int iterations)
+//{
+//
+//    equilib_iterations = iterations;
+//
+//}
+//
+///** Get the time step used to perform the equilibration stage*/
+//SireUnits::Dimension::Time OpenMMMDIntegrator::getEquilib_time_step(void)
+//{
+//
+//    return equilib_time_step;
+//
+//}
+//
+///** Set the time step used to perform the equilibration stage*/
+//void OpenMMMDIntegrator::setEquilib_time_step(SireUnits::Dimension::Time timestep)
+//{
+//
+//    equilib_time_step = timestep;
+//
+//}
 
 /** Create an empty workspace */
 IntegratorWorkspacePtr OpenMMMDIntegrator::createWorkspace(const PropertyMap &map) const

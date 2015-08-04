@@ -51,7 +51,8 @@ QDataStream& operator>>(QDataStream&, SireMove::OpenMMMDIntegrator&);
 
 namespace SireMove {
 
-    /** This class implements a "pure" MD integrator using OpenMM. No free energy methods are supported.
+    /** This class implements a "pure" MD integrator using OpenMM. 
+     * No free energy methods are supported.
 
         @author Julien Michel and Gaetano Calabro
      */
@@ -85,6 +86,11 @@ namespace SireMove {
         void initialise();
 
         SireUnits::Dimension::MolarEnergy getPotentialEnergy(const System &system);
+
+        System minimiseEnergy(System &system, double tolerance, int max_iteration);
+
+        System equilibrateSystem(System &system, SireUnits::Dimension::Time equib_time_step,
+                int equib_steps);
 
         void integrate(IntegratorWorkspace &workspace,
                 const Symbol &nrg_component,
@@ -162,24 +168,24 @@ namespace SireMove {
         SireUnits::Dimension::Time getTimetoSkip(void);
         void setTimetoSkip(SireUnits::Dimension::Time);
 
-        void setMinimization(bool);
+//        void setMinimization(bool);
+//
+//        double getMinimiseTol(void);
+//        void setMinimiseTol(double);
+//
+//        int getMinimiseIterations(void);
+//        void setMinimiseIterations(int);
+//
+//        int getEquilib_iterations(void);
+//        void setEquilib_iterations(int);
 
-        double getMinimiseTol(void);
-        void setMinimiseTol(double);
-
-        int getMinimiseIterations(void);
-        void setMinimiseIterations(int);
-
-        int getEquilib_iterations(void);
-        void setEquilib_iterations(int);
-
-        SireUnits::Dimension::Time getEquilib_time_step(void);
-        void setEquilib_time_step(SireUnits::Dimension::Time);
+//        SireUnits::Dimension::Time getEquilib_time_step(void);
+//        void setEquilib_time_step(SireUnits::Dimension::Time);
 
 
     private:
         void createContext(IntegratorWorkspace &workspace,
-                SireUnits::Dimension::Time timestep, int nmoves, bool record_stats);
+                SireUnits::Dimension::Time timestep);
         void destroyContext();
 
         /** Whether or not to save the velocities after every step, or to save them at the end of all of the steps */
@@ -238,14 +244,14 @@ namespace SireMove {
 
         SireUnits::Dimension::Time timeskip;
 
-        bool minimise;
+        //bool minimise;
 
-        double minimise_tol;
-        int minimise_iterations;
+        //double minimise_tol;
+        //int minimise_iterations;
 
 
-        int equilib_iterations;
-        SireUnits::Dimension::Time equilib_time_step;
+        //int equilib_iterations;
+        //SireUnits::Dimension::Time equilib_time_step;
 
         bool is_periodic;
 
