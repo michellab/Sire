@@ -220,7 +220,7 @@ openmm_system(0), openmm_context(0), isSystemInitialised(false),
 isContextInitialised(false),
 Integrator_type("leapfrogverlet"), friction(1.0 / picosecond),
 CutoffType("nocutoff"), cutoff_distance(1.0 * nanometer), field_dielectric(78.3),
-tollerance_ewald_pme(0.0001),
+tolerance_ewald_pme(0.0001),
 Andersen_flag(false), Andersen_frequency(90.0), MCBarostat_flag(false),
 MCBarostat_frequency(25), ConstraintType("none"),
 Pressure(1.0 * bar), Temperature(300.0 * kelvin), platform_type("Reference"),
@@ -242,7 +242,7 @@ openmm_system(0), openmm_context(0), isSystemInitialised(false),
 isContextInitialised(false),
 Integrator_type("leapfrogverlet"), friction(1.0 / picosecond),
 CutoffType("nocutoff"), cutoff_distance(1.0 * nanometer), field_dielectric(78.3),
-tollerance_ewald_pme(0.0001),
+tolerance_ewald_pme(0.0001),
 Andersen_flag(false), Andersen_frequency(90.0), MCBarostat_flag(false),
 MCBarostat_frequency(25), ConstraintType("none"),
 Pressure(1.0 * bar), Temperature(300.0 * kelvin), platform_type("Reference"),
@@ -267,7 +267,7 @@ isContextInitialised(other.isContextInitialised),
 Integrator_type(other.Integrator_type), friction(other.friction),
 CutoffType(other.CutoffType), cutoff_distance(other.cutoff_distance),
 field_dielectric(other.field_dielectric),
-tollerance_ewald_pme(other.tollerance_ewald_pme),
+tolerance_ewald_pme(other.tolerance_ewald_pme),
 Andersen_flag(other.Andersen_flag),
 Andersen_frequency(other.Andersen_frequency),
 MCBarostat_flag(other.MCBarostat_flag),
@@ -310,7 +310,7 @@ OpenMMMDIntegrator& OpenMMMDIntegrator::operator=(const OpenMMMDIntegrator &othe
     CutoffType = other.CutoffType;
     cutoff_distance = other.cutoff_distance;
     field_dielectric = other.field_dielectric;
-    tollerance_ewald_pme = other.tollerance_ewald_pme;
+    tolerance_ewald_pme = other.tolerance_ewald_pme;
     Andersen_flag = other.Andersen_flag;
     Andersen_frequency = other.Andersen_frequency;
     MCBarostat_flag = other.MCBarostat_flag;
@@ -504,12 +504,12 @@ void OpenMMMDIntegrator::initialise()
         else if (flag_cutoff == EWALD)
         {
             nonbond_openmm->setNonbondedMethod(OpenMM::NonbondedForce::Ewald);
-            nonbond_openmm->setEwaldErrorTolerance(tollerance_ewald_pme);
+            nonbond_openmm->setEwaldErrorTolerance(tolerance_ewald_pme);
         }
         else if (flag_cutoff == PME)
         {
             nonbond_openmm->setNonbondedMethod(OpenMM::NonbondedForce::PME);
-            nonbond_openmm->setEwaldErrorTolerance(tollerance_ewald_pme);
+            nonbond_openmm->setEwaldErrorTolerance(tolerance_ewald_pme);
         }
 
         nonbond_openmm->setCutoffDistance(converted_cutoff_distance);
@@ -521,7 +521,7 @@ void OpenMMMDIntegrator::initialise()
             if (flag_cutoff == CUTOFFNONPERIODIC || flag_cutoff == CUTOFFPERIODIC)
                 qDebug() << "Dielectric constant = " << field_dielectric << "\n\n";
             else if (flag_cutoff == EWALD || flag_cutoff == PME)
-                qDebug() << "Tollerance EWALD/PME = " << tollerance_ewald_pme << "\n\n";
+                qDebug() << "Tollerance EWALD/PME = " << tolerance_ewald_pme << "\n\n";
         }
     }
 
@@ -1473,8 +1473,7 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
         (openmm_context->getIntegrator()).step(nmoves);
     }
 
-
-    //Disable Minimization because of multiple cycles
+    //Disable Minimisation because of multiple cycles
     if (minimise)
         minimise = false;
     //Disable Time to Skip because of multiple cycles
@@ -1482,8 +1481,6 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
     {
         timeskip = SireUnits::Dimension::Time(0.0);
     }
-
-
     bool IsFiniteNumber = true;
 
     state_openmm = openmm_context->getState(infoMask);
@@ -1621,208 +1618,157 @@ void OpenMMMDIntegrator::setFriction(SireUnits::Dimension::Time thefriction)
 /** Get the cufott type: nocutoff, cutoffnonperiodic, cutoffperiodic */
 QString OpenMMMDIntegrator::getCutoffType(void)
 {
-
     return CutoffType;
-
 }
 
 /** Set the cufott type: nocutoff, cutoffnonperiodic, cutoffperiodic */
 void OpenMMMDIntegrator::setCutoffType(QString cutoff_type)
 {
-
     CutoffType = cutoff_type;
-
 }
 
 /** Get the cutoff distance in A */
 SireUnits::Dimension::Length OpenMMMDIntegrator::getCutoff_distance(void)
 {
-
     return cutoff_distance;
-
 }
 
 /** Set the cutoff distance in A */
 void OpenMMMDIntegrator::setCutoff_distance(SireUnits::Dimension::Length distance)
 {
-
     cutoff_distance = distance;
-
 }
 
 /** Get the dielectric constant */
 double OpenMMMDIntegrator::getField_dielectric(void)
 {
-
     return field_dielectric;
-
 }
 
 /** Set the dielectric constant */
 void OpenMMMDIntegrator::setField_dielectric(double dielectric)
 {
-
     field_dielectric = dielectric;
-
 }
 
-/** Set the Ewald or PME tollerance */
-double OpenMMMDIntegrator::getTollerandeEwaldPME(void)
+/** Set the Ewald or PME tolerance */
+double OpenMMMDIntegrator::getToleranceEwaldPME(void)
 {
-
-    return tollerance_ewald_pme;
-
+    return tolerance_ewald_pme;
 }
 
-void OpenMMMDIntegrator::setTollerandeEwaldPME(double toll)
+void OpenMMMDIntegrator::setToleranceEwaldPME(double toll)
 {
-
-    tollerance_ewald_pme = toll;
-
+    tolerance_ewald_pme = toll;
 }
 
 /** Set Andersen thermostat */
 
 void OpenMMMDIntegrator::setAndersen(bool andersen)
 {
-
     Andersen_flag = andersen;
-
 }
 
 /** Get Andersen thermostat status on/off */
 bool OpenMMMDIntegrator::getAndersen(void)
 {
-
     return Andersen_flag;
-
 }
 
 /** Get the Andersen Thermostat frequency collision */
 double OpenMMMDIntegrator::getAndersen_frequency(void)
 {
-
     return Andersen_frequency;
-
 }
 
 /** Set the Andersen Thermostat frequency collision */
 void OpenMMMDIntegrator::setAndersen_frequency(double freq)
 {
-
     Andersen_frequency = freq;
-
 }
 
 /** Get the bath Temperature */
 SireUnits::Dimension::Temperature OpenMMMDIntegrator::getTemperature(void)
 {
-
     return Temperature;
-
 }
 
 /** Set the Temperature */
 void OpenMMMDIntegrator::setTemperature(SireUnits::Dimension::Temperature temperature)
 {
-
     Temperature = temperature;
-
 }
 
 /** Set Monte Carlo Barostat on/off */
 void OpenMMMDIntegrator::setMCBarostat(bool MCBarostat)
 {
-
     MCBarostat_flag = MCBarostat;
-
 }
 
 /** Get Andersen thermostat status on/off */
 bool OpenMMMDIntegrator::getMCBarostat(void)
 {
-
     return MCBarostat_flag;
-
 }
 
 /** Get the Monte Carlo Barostat frequency in time speps */
 int OpenMMMDIntegrator::getMCBarostat_frequency(void)
 {
-
     return MCBarostat_frequency;
-
 }
 
 /** Set the Monte Carlo Barostat frequency in time speps */
 void OpenMMMDIntegrator::setMCBarostat_frequency(int freq)
 {
-
     MCBarostat_frequency = freq;
-
 }
 
 /** Get the Presure */
 SireUnits::Dimension::Pressure OpenMMMDIntegrator::getPressure(void)
 {
-
     return Pressure;
 }
 
 /** Set the Pressure */
 void OpenMMMDIntegrator::setPressure(SireUnits::Dimension::Pressure pressure)
 {
-
     Pressure = pressure;
-
 }
 
 /** Get the Constraint type: none, hbonds, allbonds, hangles */
 QString OpenMMMDIntegrator::getConstraintType(void)
 {
-
     return ConstraintType;
-
 }
 
 /** Set the Constraint type: none, hbonds, allbonds, hangles */
 void OpenMMMDIntegrator::setConstraintType(QString constrain)
 {
-
     ConstraintType = constrain;
-
 }
 
 /** Get the OpenMMMD Platform: CUDA, OpenCL, CPU */
 QString OpenMMMDIntegrator::getPlatform(void)
 {
-
     return platform_type;
-
 }
 
 /** Set the OpenMM Platform: CUDA, OpenCL, CPU */
 void OpenMMMDIntegrator::setPlatform(QString platform)
 {
-
     platform_type = platform;
-
 }
 
 /** Get the OpenMMMD Platform: CUDA, OpenCL, CPU */
 QString OpenMMMDIntegrator::getDeviceIndex(void)
 {
-
     return device_index;
-
 }
 
 /** Set the OpenMM Platform: CUDA, OpenCL, CPU */
 void OpenMMMDIntegrator::setDeviceIndex(QString deviceidx)
 {
-
     device_index = deviceidx;
-
 }
 
 /** Set the OpenMM Precision */
@@ -1912,7 +1858,7 @@ void OpenMMMDIntegrator::setReinitialiseContext(bool reinitialise)
 }
 
 /** Get the integration tolerance */
-double OpenMMMDIntegrator::getIntegration_tollerance(void)
+double OpenMMMDIntegrator::getIntegration_tolerance(void)
 {
 
     return integration_tol;
@@ -1920,51 +1866,39 @@ double OpenMMMDIntegrator::getIntegration_tollerance(void)
 }
 
 /** Set the integration tolerance*/
-void OpenMMMDIntegrator::setIntegration_tollerance(double tollerance)
+void OpenMMMDIntegrator::setIntegration_tolerance(double tolerance)
 {
-
-    integration_tol = tollerance;
-
+    integration_tol = tolerance;
 }
 
 /** Get total time to skip*/
 SireUnits::Dimension::Time OpenMMMDIntegrator::getTimetoSkip(void)
 {
-
     return timeskip;
-
 }
 
 /** Get total time to skip*/
 void OpenMMMDIntegrator::setTimetoSkip(SireUnits::Dimension::Time skip)
 {
-
     timeskip = skip;
-
 }
 
 /** Set Minimisation stage on/off*/
 void OpenMMMDIntegrator::setMinimization(bool on_off)
 {
-
     minimise = on_off;
-
 }
 
 /** Get Minimisation Tolerance*/
 double OpenMMMDIntegrator::getMinimiseTol(void)
 {
-
     return minimise_tol;
-
 }
 
 /** Set Minimisation Tolerance*/
-void OpenMMMDIntegrator::setMinimiseTol(double tollerance)
+void OpenMMMDIntegrator::setMinimiseTol(double tolerance)
 {
-
-    minimise_tol = tollerance;
-
+    minimise_tol = tolerance;
 }
 
 /** Get the maximum number of iterations in the minimisation stage*/

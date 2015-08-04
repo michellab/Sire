@@ -109,8 +109,8 @@ namespace SireMove {
         double getField_dielectric(void);
         void setField_dielectric(double);
 
-        double getTollerandeEwaldPME(void);
-        void setTollerandeEwaldPME(double);
+        double getToleranceEwaldPME(void);
+        void setToleranceEwaldPME(double);
 
         bool getAndersen(void);
         void setAndersen(bool);
@@ -156,8 +156,8 @@ namespace SireMove {
 
         void setReinitialiseContext(bool);
 
-        double getIntegration_tollerance(void);
-        void setIntegration_tollerance(double tollerance);
+        double getIntegration_tolerance(void);
+        void setIntegration_tolerance(double tollerance);
 
         SireUnits::Dimension::Time getTimetoSkip(void);
         void setTimetoSkip(SireUnits::Dimension::Time);
@@ -205,7 +205,7 @@ namespace SireMove {
         SireUnits::Dimension::Length cutoff_distance;
         double field_dielectric;
 
-        double tollerance_ewald_pme;
+        double tolerance_ewald_pme;
 
         bool Andersen_flag;
         double Andersen_frequency;

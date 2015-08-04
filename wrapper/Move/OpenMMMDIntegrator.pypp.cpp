@@ -237,14 +237,14 @@ void register_OpenMMMDIntegrator_class(){
                 , getFriction_function_value );
 
         }
-        { //::SireMove::OpenMMMDIntegrator::getIntegration_tollerance
+        { //::SireMove::OpenMMMDIntegrator::getIntegration_tolerance
 
-            typedef double ( ::SireMove::OpenMMMDIntegrator::*getIntegration_tollerance_function_type )(  ) ;
-            getIntegration_tollerance_function_type getIntegration_tollerance_function_value( &::SireMove::OpenMMMDIntegrator::getIntegration_tollerance );
+            typedef double ( ::SireMove::OpenMMMDIntegrator::*getIntegration_tolerance_function_type )(  ) ;
+            getIntegration_tolerance_function_type getIntegration_tolerance_function_value( &::SireMove::OpenMMMDIntegrator::getIntegration_tolerance );
 
             OpenMMMDIntegrator_exposer.def(
-                "getIntegration_tollerance"
-                , getIntegration_tollerance_function_value );
+                "getIntegration_tolerance"
+                , getIntegration_tolerance_function_value );
 
         }
         { //::SireMove::OpenMMMDIntegrator::getIntegrator
@@ -378,14 +378,14 @@ void register_OpenMMMDIntegrator_class(){
                 , getTimetoSkip_function_value );
 
         }
-        { //::SireMove::OpenMMMDIntegrator::getTollerandeEwaldPME
+        { //::SireMove::OpenMMMDIntegrator::gettoleranceEwaldPME
 
-            typedef double ( ::SireMove::OpenMMMDIntegrator::*getTollerandeEwaldPME_function_type )(  ) ;
-            getTollerandeEwaldPME_function_type getTollerandeEwaldPME_function_value( &::SireMove::OpenMMMDIntegrator::getTollerandeEwaldPME );
+            typedef double ( ::SireMove::OpenMMMDIntegrator::*gettoleranceEwaldPME_function_type )(  ) ;
+            gettoleranceEwaldPME_function_type gettoleranceEwaldPME_function_value( &::SireMove::OpenMMMDIntegrator::gettoleranceEwaldPME );
 
             OpenMMMDIntegrator_exposer.def(
-                "getTollerandeEwaldPME"
-                , getTollerandeEwaldPME_function_value );
+                "gettoleranceEwaldPME"
+                , gettoleranceEwaldPME_function_value );
 
         }
         { //::SireMove::OpenMMMDIntegrator::initialise
@@ -565,15 +565,15 @@ void register_OpenMMMDIntegrator_class(){
                 , ( bp::arg("arg0") ) );
 
         }
-        { //::SireMove::OpenMMMDIntegrator::setIntegration_tollerance
+        { //::SireMove::OpenMMMDIntegrator::setIntegration_tolerance
 
-            typedef void ( ::SireMove::OpenMMMDIntegrator::*setIntegration_tollerance_function_type )( double ) ;
-            setIntegration_tollerance_function_type setIntegration_tollerance_function_value( &::SireMove::OpenMMMDIntegrator::setIntegration_tollerance );
+            typedef void ( ::SireMove::OpenMMMDIntegrator::*setIntegration_tolerance_function_type )( double ) ;
+            setIntegration_tolerance_function_type setIntegration_tolerance_function_value( &::SireMove::OpenMMMDIntegrator::setIntegration_tolerance );
 
             OpenMMMDIntegrator_exposer.def(
-                "setIntegration_tollerance"
-                , setIntegration_tollerance_function_value
-                , ( bp::arg("tollerance") ) );
+                "setIntegration_tolerance"
+                , setIntegration_tolerance_function_value
+                , ( bp::arg("tolerance") ) );
 
         }
         { //::SireMove::OpenMMMDIntegrator::setIntegrator
@@ -730,14 +730,14 @@ void register_OpenMMMDIntegrator_class(){
                 , ( bp::arg("arg0") ) );
 
         }
-        { //::SireMove::OpenMMMDIntegrator::setTollerandeEwaldPME
+        { //::SireMove::OpenMMMDIntegrator::setToleranceEwaldPME
 
-            typedef void ( ::SireMove::OpenMMMDIntegrator::*setTollerandeEwaldPME_function_type )( double ) ;
-            setTollerandeEwaldPME_function_type setTollerandeEwaldPME_function_value( &::SireMove::OpenMMMDIntegrator::setTollerandeEwaldPME );
+            typedef void ( ::SireMove::OpenMMMDIntegrator::*setToleranceEwaldPME_function_type )( double ) ;
+            setToleranceEwaldPME_function_type setToleranceEwaldPME_function_value( &::SireMove::OpenMMMDIntegrator::setToleranceEwaldPME );
 
             OpenMMMDIntegrator_exposer.def(
-                "setTollerandeEwaldPME"
-                , setTollerandeEwaldPME_function_value
+                "setToleranceEwaldPME"
+                , setToleranceEwaldPME_function_value
                 , ( bp::arg("arg0") ) );
 
         }

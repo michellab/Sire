@@ -312,14 +312,14 @@ void register_OpenMMFrEnergyST_class(){
                 , getGradients_function_value );
 
         }
-        { //::SireMove::OpenMMFrEnergyST::getIntegration_tollerance
+        { //::SireMove::OpenMMFrEnergyST::getIntegration_tolerance
 
-            typedef double ( ::SireMove::OpenMMFrEnergyST::*getIntegration_tollerance_function_type )(  ) ;
-            getIntegration_tollerance_function_type getIntegration_tollerance_function_value( &::SireMove::OpenMMFrEnergyST::getIntegration_tollerance );
+            typedef double ( ::SireMove::OpenMMFrEnergyST::*getIntegration_tolerance_function_type )(  ) ;
+            getIntegration_tolerance_function_type getIntegration_tolerance_function_value( &::SireMove::OpenMMFrEnergyST::getIntegration_tolerance );
 
             OpenMMFrEnergyST_exposer.def(
-                "getIntegration_tollerance"
-                , getIntegration_tollerance_function_value );
+                "getIntegration_tolerance"
+                , getIntegration_tolerance_function_value );
 
         }
         { //::SireMove::OpenMMFrEnergyST::getIntegrator
@@ -675,15 +675,15 @@ void register_OpenMMFrEnergyST_class(){
                 , ( bp::arg("arg0") ) );
 
         }
-        { //::SireMove::OpenMMFrEnergyST::setIntegration_tollerance
+        { //::SireMove::OpenMMFrEnergyST::setIntegration_tolerance
 
-            typedef void ( ::SireMove::OpenMMFrEnergyST::*setIntegration_tollerance_function_type )( double ) ;
-            setIntegration_tollerance_function_type setIntegration_tollerance_function_value( &::SireMove::OpenMMFrEnergyST::setIntegration_tollerance );
+            typedef void ( ::SireMove::OpenMMFrEnergyST::*setIntegration_tolerance_function_type )( double ) ;
+            setIntegration_tolerance_function_type setIntegration_tolerance_function_value( &::SireMove::OpenMMFrEnergyST::setIntegration_tolerance );
 
             OpenMMFrEnergyST_exposer.def(
-                "setIntegration_tollerance"
-                , setIntegration_tollerance_function_value
-                , ( bp::arg("tollerance") ) );
+                "setIntegration_tolerance"
+                , setIntegration_tolerance_function_value
+                , ( bp::arg("tolerance") ) );
 
         }
         { //::SireMove::OpenMMFrEnergyST::setIntegrator

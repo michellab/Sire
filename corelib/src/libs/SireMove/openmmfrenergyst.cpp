@@ -3661,54 +3661,42 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
     ptr_sys.mustNowRecalculateFromScratch();
 
     return;
-
 }
 
-/** Get the cufott type: nocutoff, cutoffnonperiodic, cutoffperiodic */
+/** Get the cutoff type: nocutoff, cutoffnonperiodic, cutoffperiodic */
 QString OpenMMFrEnergyST::getCutoffType(void)
 {
-
     return CutoffType;
-
 }
 
-/** Set the cufott type: nocutoff, cutoffnonperiodic, cutoffperiodic */
+/** Set the cutoff type: nocutoff, cutoffnonperiodic, cutoffperiodic */
 void OpenMMFrEnergyST::setCutoffType(QString cutoff_type)
 {
-
     CutoffType = cutoff_type;
-
 }
 
 /** Get the cutoff distance in A */
 SireUnits::Dimension::Length OpenMMFrEnergyST::getCutoff_distance(void)
 {
-
     return cutoff_distance;
-
 }
 
 /** Set the cutoff distance in A */
 void OpenMMFrEnergyST::setCutoff_distance(SireUnits::Dimension::Length distance)
 {
-
     cutoff_distance = distance;
-
 }
 
 /** Get the dielectric constant */
 double OpenMMFrEnergyST::getField_dielectric(void)
 {
-
     return field_dielectric;
 }
 
 /** Set the dielectric constant */
 void OpenMMFrEnergyST::setField_dielectric(double dielectric)
 {
-
     field_dielectric = dielectric;
-
 }
 
 /** Set Andersen thermostat */
@@ -3729,46 +3717,36 @@ bool OpenMMFrEnergyST::getAndersen(void)
 /** Get the Andersen Thermostat frequency collision */
 double OpenMMFrEnergyST::getAndersen_frequency(void)
 {
-
     return Andersen_frequency;
-
 }
 
 /** Set the Andersen Thermostat frequency collision */
 void OpenMMFrEnergyST::setAndersen_frequency(double freq)
 {
-
     Andersen_frequency = freq;
-
 }
 
 /** Get the Integrator random seed */
 int OpenMMFrEnergyST::getRandomSeed(void)
 {
-
     return random_seed;
-
 }
 
 /** Set the Integrator random seed */
 void OpenMMFrEnergyST::setRandomSeed(int seed)
 {
-
     random_seed = seed;
-
 }
 
 /** Get the bath Temperature */
 SireUnits::Dimension::Temperature OpenMMFrEnergyST::getTemperature(void)
 {
-
     return Temperature;
 }
 
 /** Set the Temperature */
 void OpenMMFrEnergyST::setTemperature(SireUnits::Dimension::Temperature temperature)
 {
-
     Temperature = temperature;
 }
 
@@ -3782,23 +3760,18 @@ void OpenMMFrEnergyST::setMCBarostat(bool MCBarostat)
 /** Get Andersen thermostat status on/off */
 bool OpenMMFrEnergyST::getMCBarostat(void)
 {
-
     return MCBarostat_flag;
-
 }
 
 /** Get the Monte Carlo Barostat frequency in time speps */
 int OpenMMFrEnergyST::getMCBarostat_frequency(void)
 {
-
     return MCBarostat_frequency;
-
 }
 
 /** Set the Monte Carlo Barostat frequency in time speps */
 void OpenMMFrEnergyST::setMCBarostat_frequency(int freq)
 {
-
     MCBarostat_frequency = freq;
 
 }
@@ -3806,152 +3779,121 @@ void OpenMMFrEnergyST::setMCBarostat_frequency(int freq)
 /** Get the Presure */
 SireUnits::Dimension::Pressure OpenMMFrEnergyST::getPressure(void)
 {
-
     return Pressure;
 }
 
 /** Set the Pressure */
 void OpenMMFrEnergyST::setPressure(SireUnits::Dimension::Pressure pressure)
 {
-
     Pressure = pressure;
 }
 
 /** Get the Constraint type: none, hbonds, allbonds, hangles */
 QString OpenMMFrEnergyST::getConstraintType(void)
 {
-
     return ConstraintType;
-
 }
 
 /** Set the Constraint type: none, hbonds, allbonds, hangles */
 void OpenMMFrEnergyST::setConstraintType(QString constrain)
 {
-
     ConstraintType = constrain;
-
 }
 
 /** Get the OpenMMMD Platform: CUDA, OpenCL, CPU */
 QString OpenMMFrEnergyST::getPlatform(void)
 {
-
     return platform_type;
-
 }
 
 /** Set the OpenMM Platform: CUDA, OpenCL, CPU */
 void OpenMMFrEnergyST::setPlatform(QString platform)
 {
-
     platform_type = platform;
-
 }
 
 /** Get the OpenMMMD Platform: CUDA, OpenCL, CPU */
 QString OpenMMFrEnergyST::getDeviceIndex(void)
 {
-
     return device_index;
-
 }
 
 /** Set the OpenMM Precision */
 void OpenMMFrEnergyST::setPrecision(QString prec)
 {
-
     precision = prec;
-
 }
 
 /** Get the OpenMMMD Precision */
 QString OpenMMFrEnergyST::getPrecision(void)
 {
-
     return precision;
-
 }
 
 /** Set the OpenMM Platform: CUDA, OpenCL, CPU */
 void OpenMMFrEnergyST::setDeviceIndex(QString deviceidx)
 {
-
     device_index = deviceidx;
-
 }
 
 /** Get the Restaint mode*/
 bool OpenMMFrEnergyST::getRestraint(void)
 {
-
     return Restraint_flag;
-
 }
 
 /** Set the Retraint mode */
 void OpenMMFrEnergyST::setRestraint(bool Restraint)
 {
-
     Restraint_flag = Restraint;
 }
 
 /** Get the Center of Mass motion removal frequency */
 int OpenMMFrEnergyST::getCMMremoval_frequency(void)
 {
-
     return CMMremoval_frequency;
 }
 
 /** Set the Center of Mass motion removal frequency */
 void OpenMMFrEnergyST::setCMMremoval_frequency(int frequency)
 {
-
     CMMremoval_frequency = frequency;
 }
 
 /** Get the frequency of buffering coordinates */
 int OpenMMFrEnergyST::getBufferFrequency()
 {
-
     return buffer_frequency;
 }
 
 /** Set the Center of Mass motion removal frequency */
 void OpenMMFrEnergyST::setBufferFrequency(int frequency)
 {
-
     buffer_frequency = frequency;
 }
 
 /** Get the frequency of buffering coordinates */
 int OpenMMFrEnergyST::getEnergyFrequency()
 {
-
     return energy_frequency;
 }
 
 /** Set the Center of Mass motion removal frequency */
 void OpenMMFrEnergyST::setEnergyFrequency(int frequency)
 {
-
     energy_frequency = frequency;
 }
 
 /** Get the alchemical value used to calculate the free energy change via TI method*/
 double OpenMMFrEnergyST::getAlchemical_value(void)
 {
-
     return Alchemical_value;
-
 }
 
 /** Set the alchemical value used to calculate the free energy change via TI method*/
 void OpenMMFrEnergyST::setAlchemical_value(double lambda_value)
 {
-
     Alchemical_value = max(0.0, min(1.0, lambda_value));
-
 }
 
 /** Get the coulomb power used in the soft core potential*/
@@ -3959,9 +3901,7 @@ void OpenMMFrEnergyST::setAlchemical_value(double lambda_value)
 
 float OpenMMFrEnergyST::getCoulomb_power(void)
 {
-
     return coulomb_power;
-
 }
 
 /** Set the coulomb power used in the soft core potential*/
@@ -3969,17 +3909,13 @@ float OpenMMFrEnergyST::getCoulomb_power(void)
 
 void OpenMMFrEnergyST::setCoulomb_power(float coulomb)
 {
-
     coulomb_power = coulomb;
-
 }
 
 /** Get the shift used in the soft core potential*/
 double OpenMMFrEnergyST::getShift_delta(void)
 {
-
     return shift_delta;
-
 }
 
 /**
@@ -3996,9 +3932,7 @@ void OpenMMFrEnergyST::setShift_delta(double shiftdelta)
 /** Get the delta alchemical used in the FEP method*/
 double OpenMMFrEnergyST::getDeltaAlchemical(void)
 {
-
     return delta_alchemical;
-
 }
 
 /**
@@ -4007,25 +3941,19 @@ double OpenMMFrEnergyST::getDeltaAlchemical(void)
  */
 void OpenMMFrEnergyST::setDeltatAlchemical(double deltaalchemical)
 {
-
     delta_alchemical = deltaalchemical;
-
 }
 
 /** Calculated Gradients*/
 QVector<double> OpenMMFrEnergyST::getGradients(void)
 {
-
     return gradients;
-
 }
 
 /** Average energies*/
 QVector<double> OpenMMFrEnergyST::getEnergies(void)
 {
-
     return energies;
-
 }
 
 /** Get the Integrator type*/
@@ -4053,75 +3981,57 @@ void OpenMMFrEnergyST::setFriction(SireUnits::Dimension::Time thefriction)
 }
 
 /** Get the integration tolerance */
-double OpenMMFrEnergyST::getIntegration_tollerance(void)
+double OpenMMFrEnergyST::getIntegration_tolerance(void)
 {
-
     return integration_tol;
-
 }
 
 /** Set the integration tolerance*/
-void OpenMMFrEnergyST::setIntegration_tollerance(double tollerance)
+void OpenMMFrEnergyST::setIntegration_tolerance(double tolerance)
 {
-
-    integration_tol = tollerance;
-
+    integration_tol = tolerance;
 }
 
 /** Get total time to skip*/
 SireUnits::Dimension::Time OpenMMFrEnergyST::getTimetoSkip(void)
 {
-
     return timeskip;
-
 }
 
 /** Get total time to skip*/
 void OpenMMFrEnergyST::setTimetoSkip(SireUnits::Dimension::Time skip)
 {
-
     timeskip = skip;
-
 }
 
 /** Get the total number of iterations used to perform the equilibration stage*/
 int OpenMMFrEnergyST::getEquilib_iterations(void)
 {
-
     return equilib_iterations;
-
 }
 
 /** Set the total number of iterations used to perform the equilibration stage*/
 void OpenMMFrEnergyST::setEquilib_iterations(int iterations)
 {
-
     equilib_iterations = iterations;
-
 }
 
 /** Get the time step used to perform the equilibration stage*/
 SireUnits::Dimension::Time OpenMMFrEnergyST::getEquilib_time_step(void)
 {
-
     return equilib_time_step;
-
 }
 
 /** Set the time step used to perform the equilibration stage*/
 void OpenMMFrEnergyST::setEquilib_time_step(SireUnits::Dimension::Time timestep)
 {
-
     equilib_time_step = timestep;
-
 }
 
 /** Set the flag to reinitialise the context*/
 void OpenMMFrEnergyST::setReinitialiseContext(bool reinitialise)
 {
-
     reinetialise_context = reinitialise;
-
 }
 
 /** Create an empty workspace */
