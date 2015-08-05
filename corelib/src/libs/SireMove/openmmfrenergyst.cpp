@@ -231,7 +231,6 @@ coulomb_power(other.coulomb_power), shift_delta(other.shift_delta),
 delta_alchemical(other.delta_alchemical), gradients(other.gradients), energies(other.energies),
 perturbed_energies(other.perturbed_energies),
 Integrator_type(other.Integrator_type), friction(other.friction), integration_tol(other.integration_tol), timeskip(other.timeskip),
-//equilib_iterations(other.equilib_iterations), equilib_time_step(other.equilib_time_step),
 reinetialise_context(other.reinetialise_context), GF_acc(other.GF_acc), GB_acc(other.GB_acc), Debug(other.Debug)
 {
 }
@@ -284,8 +283,6 @@ OpenMMFrEnergyST& OpenMMFrEnergyST::operator=(const OpenMMFrEnergyST &other)
     friction = other.friction;
     integration_tol = other.integration_tol;
     timeskip = other.timeskip;
-//    equilib_iterations = other.equilib_iterations;
-//    equilib_time_step = other.equilib_time_step;
     reinetialise_context = other.reinetialise_context;
     GF_acc = other.GF_acc;
     GB_acc = other.GB_acc;
@@ -331,8 +328,6 @@ bool OpenMMFrEnergyST::operator==(const OpenMMFrEnergyST &other) const
         and friction == other.friction
         and integration_tol == other.integration_tol
         and timeskip == other.timeskip
-//        and equilib_iterations == other.equilib_iterations
-//        and equilib_time_step == other.equilib_time_step
         and reinetialise_context == other.reinetialise_context
         and GF_acc == other.GF_acc
         and GB_acc == other.GB_acc
@@ -4000,30 +3995,6 @@ void OpenMMFrEnergyST::setTimetoSkip(SireUnits::Dimension::Time skip)
 {
     timeskip = skip;
 }
-
-///** Get the total number of iterations used to perform the equilibration stage*/
-//int OpenMMFrEnergyST::getEquilib_iterations(void)
-//{
-//    return equilib_iterations;
-//}
-//
-///** Set the total number of iterations used to perform the equilibration stage*/
-//void OpenMMFrEnergyST::setEquilib_iterations(int iterations)
-//{
-//    equilib_iterations = iterations;
-//}
-//
-///** Get the time step used to perform the equilibration stage*/
-//SireUnits::Dimension::Time OpenMMFrEnergyST::getEquilib_time_step(void)
-//{
-//    return equilib_time_step;
-//}
-//
-///** Set the time step used to perform the equilibration stage*/
-//void OpenMMFrEnergyST::setEquilib_time_step(SireUnits::Dimension::Time timestep)
-//{
-//    equilib_time_step = timestep;
-//}
 
 /** Set the flag to reinitialise the context*/
 void OpenMMFrEnergyST::setReinitialiseContext(bool reinitialise)

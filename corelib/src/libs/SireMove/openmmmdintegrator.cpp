@@ -130,8 +130,6 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const OpenMMMDIntegrato
         << velver.buffer_frequency
         << velver.device_index << velver.LJ_dispersion << velver.precision << velver.integration_tol
         << velver.timeskip 
-//        << velver.minimise << velver.minimise_tol << velver.minimise_iterations
-//        << velver.equilib_iterations << velver.equilib_time_step 
         << velver.reinetialise_context
         << velver.is_periodic
         << static_cast<const Integrator&> (velver);
@@ -163,9 +161,6 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, OpenMMMDIntegrator &vel
             >> velver.device_index >> velver.LJ_dispersion >> velver.precision
             >> velver.integration_tol
             >> velver.timeskip 
-//            >> velver.minimise >> velver.minimise_tol
-//            >> velver.minimise_iterations
-//            >> velver.equilib_iterations >> velver.equilib_time_step
             >> velver.reinetialise_context
             >> velver.is_periodic
             >> static_cast<Integrator&> (velver);
@@ -196,9 +191,6 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, OpenMMMDIntegrator &vel
             >> velver.device_index >> velver.LJ_dispersion >> velver.precision
             >> velver.integration_tol
             >> velver.timeskip 
-//            >> velver.minimise >> velver.minimise_tol
-//            >> velver.minimise_iterations
-//            >> velver.equilib_iterations >> velver.equilib_time_step
             >> velver.reinetialise_context
             >> static_cast<Integrator&> (velver);
 
@@ -285,10 +277,6 @@ buffer_frequency(other.buffer_frequency), device_index(other.device_index),
 LJ_dispersion(other.LJ_dispersion), precision(other.precision),
 reinetialise_context(other.reinetialise_context),
 integration_tol(other.integration_tol), timeskip(other.timeskip),
-//minimise(other.minimise), minimise_tol(other.minimise_tol),
-//minimise_iterations(other.minimise_iterations),
-//equilib_iterations(other.equilib_iterations),
-//equilib_time_step(other.equilib_time_step),
 is_periodic(other.is_periodic)
 {
 }
@@ -332,11 +320,6 @@ OpenMMMDIntegrator& OpenMMMDIntegrator::operator=(const OpenMMMDIntegrator &othe
     reinetialise_context = other.reinetialise_context;
     integration_tol = other.integration_tol;
     timeskip = other.timeskip;
-//    minimise = other.minimise;
-//    minimise_tol = other.minimise_tol;
-//    minimise_iterations = other.minimise_iterations;
-//    equilib_iterations = other.equilib_iterations;
-//    equilib_time_step = other.equilib_time_step;
     is_periodic = other.is_periodic;
 
     return *this;
@@ -369,11 +352,6 @@ bool OpenMMMDIntegrator::operator==(const OpenMMMDIntegrator &other) const
         and friction == other.friction
         and integration_tol == other.integration_tol
         and timeskip == other.timeskip
-//        and minimise == other.minimise
-//        and minimise_tol == other.minimise_tol
-//        and minimise_iterations == other.minimise_iterations
-//        and equilib_iterations == other.equilib_iterations
-//        and equilib_time_step == other.equilib_time_step
         and reinetialise_context == other.reinetialise_context
         and is_periodic == other.is_periodic
         and Integrator::operator==(other);
@@ -1134,7 +1112,7 @@ void OpenMMMDIntegrator::createContext(IntegratorWorkspace &workspace,
         else
             throw SireError::program_bug(QObject::tr("The user defined Integrator type is not supported. Available types are leapfrogverlet, variableleapfrogverlet, langevin, variablelangevin, brownian"), CODELOC);
 
-        if (true)
+        if (Debug)
         {
             qDebug() << "Using Integrator: " << Integrator_type;
 
@@ -1188,7 +1166,7 @@ void OpenMMMDIntegrator::createContext(IntegratorWorkspace &workspace,
 
     }
 
-    if (true)
+    if (Debug)
         qDebug() << "\n Using OpenMM platform = " << openmm_context->getPlatform().getName().c_str() << "\n";
 
     // Now update coordinates / velocities / dimensions with sire data
@@ -1536,36 +1514,6 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
     if (Debug)
         qDebug() << " pot nrg bef dyn " << mypotential_energy;
 
-//    if (minimise)
-//    {
-//        //New time step for minimization and equilibartion in ps
-//        double dtm = convertTo(equilib_time_step.value(), picosecond);
-//
-//        if (true)
-//        {
-//            qDebug() << "\nStarting Minimization and Equilibration";
-//            qDebug() << "Minimization tolerance = " << minimise_tol;
-//            qDebug() << "Max number of minimization iterations (0 = until tolerance is reached) = " << minimise_iterations;
-//            qDebug() << "Max number of equilibration iterations = " << equilib_iterations;
-//            qDebug() << "Equilibration time step = " << dtm << " ps";
-//            qDebug() << "Total equilibration Time per Lambda = " << dtm * equilib_iterations << " ps \n";
-//        }
-//
-//        (openmm_context->getIntegrator()).setStepSize(dtm);
-//        OpenMM::LocalEnergyMinimizer::minimize(*openmm_context, minimise_tol, minimise_iterations);
-//
-//        (openmm_context->getIntegrator()).step(equilib_iterations);
-//
-//        (openmm_context->getIntegrator()).setStepSize(dt);
-//        openmm_context->setTime(0.0);
-//
-//        if (true)
-//        {
-//            qDebug() << "End Equilibration";
-//            qDebug() << "\nStarting Production run";
-//        }
-//
-//    }
 
     //Time skipping
     const double time_skip = convertTo(timeskip.value(), picosecond);
@@ -2029,72 +1977,6 @@ void OpenMMMDIntegrator::setTimetoSkip(SireUnits::Dimension::Time skip)
 {
     timeskip = skip;
 }
-
-/** Set Minimisation stage on/off*/
-//void OpenMMMDIntegrator::setMinimization(bool on_off)
-//{
-//    minimise = on_off;
-//}
-
-///** Get Minimisation Tolerance*/
-//double OpenMMMDIntegrator::getMinimiseTol(void)
-//{
-//    return minimise_tol;
-//}
-//
-///** Set Minimisation Tolerance*/
-//void OpenMMMDIntegrator::setMinimiseTol(double tolerance)
-//{
-//    minimise_tol = tolerance;
-//}
-//
-///** Get the maximum number of iterations in the minimisation stage*/
-//int OpenMMMDIntegrator::getMinimiseIterations(void)
-//{
-//
-//    return minimise_iterations;
-//
-//}
-//
-///** Get the maximum number of iterations in the minimisation stage*/
-//void OpenMMMDIntegrator::setMinimiseIterations(int iterations)
-//{
-//
-//    minimise_iterations = iterations;
-//
-//}
-
-///** Get the total number of iterations used to perform the equilibration stage*/
-//int OpenMMMDIntegrator::getEquilib_iterations(void)
-//{
-//
-//    return equilib_iterations;
-//
-//}
-//
-///** Set the total number of iterations used to perform the equilibration stage*/
-//void OpenMMMDIntegrator::setEquilib_iterations(int iterations)
-//{
-//
-//    equilib_iterations = iterations;
-//
-//}
-//
-///** Get the time step used to perform the equilibration stage*/
-//SireUnits::Dimension::Time OpenMMMDIntegrator::getEquilib_time_step(void)
-//{
-//
-//    return equilib_time_step;
-//
-//}
-//
-///** Set the time step used to perform the equilibration stage*/
-//void OpenMMMDIntegrator::setEquilib_time_step(SireUnits::Dimension::Time timestep)
-//{
-//
-//    equilib_time_step = timestep;
-//
-//}
 
 /** Create an empty workspace */
 IntegratorWorkspacePtr OpenMMMDIntegrator::createWorkspace(const PropertyMap &map) const

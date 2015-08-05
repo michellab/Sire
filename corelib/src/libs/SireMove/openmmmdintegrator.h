@@ -168,21 +168,6 @@ namespace SireMove {
         SireUnits::Dimension::Time getTimetoSkip(void);
         void setTimetoSkip(SireUnits::Dimension::Time);
 
-//        void setMinimization(bool);
-//
-//        double getMinimiseTol(void);
-//        void setMinimiseTol(double);
-//
-//        int getMinimiseIterations(void);
-//        void setMinimiseIterations(int);
-//
-//        int getEquilib_iterations(void);
-//        void setEquilib_iterations(int);
-
-//        SireUnits::Dimension::Time getEquilib_time_step(void);
-//        void setEquilib_time_step(SireUnits::Dimension::Time);
-
-
     private:
         void createContext(IntegratorWorkspace &workspace,
                 SireUnits::Dimension::Time timestep);
@@ -243,15 +228,6 @@ namespace SireMove {
         double integration_tol;
 
         SireUnits::Dimension::Time timeskip;
-
-        //bool minimise;
-
-        //double minimise_tol;
-        //int minimise_iterations;
-
-
-        //int equilib_iterations;
-        //SireUnits::Dimension::Time equilib_time_step;
 
         bool is_periodic;
 

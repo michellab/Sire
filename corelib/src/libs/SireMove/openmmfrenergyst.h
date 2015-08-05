@@ -183,13 +183,6 @@ namespace SireMove {
 
         SireUnits::Dimension::Time getTimetoSkip(void);
         void setTimetoSkip(SireUnits::Dimension::Time);
-//
-//
-//        int getEquilib_iterations(void);
-//        void setEquilib_iterations(int);
-//
-//        SireUnits::Dimension::Time getEquilib_time_step(void);
-//        void setEquilib_time_step(SireUnits::Dimension::Time);
 
         void setReinitialiseContext(bool);
 
@@ -274,8 +267,6 @@ namespace SireMove {
 
         SireUnits::Dimension::Time timeskip;
 
-        int equilib_iterations;
-        SireUnits::Dimension::Time equilib_time_step;
 
         bool reinetialise_context;
 
