@@ -169,7 +169,7 @@ distance_restraints_dict = Parameter("distance restraints dictionary", {},
 morphfile = Parameter("morphfile", "MORPH.pert",
                       """Name of the morph file containing the perturbation to apply to the system.""")
 
-lambda_val = Parameter("lambda_val", 0.5,
+lambda_val = Parameter("lambda_val", 0.0,
                        """Value of the lambda parameter at which to evaluate free energy gradients.""")
 
 delta_lambda = Parameter("delta_lambda", 0.001,
@@ -183,7 +183,7 @@ coulomb_power = Parameter("coulomb power", 0,
 
 energy_frequency = Parameter("energy frequency", 1,
                              """The number of time steps between evaluation of free energy gradients.""")
-verbose = Parameter("verbose", True, """Print debug output""")
+verbose = Parameter("verbose", False, """Print debug output""")
 
 
 ####################################################################################################
@@ -388,8 +388,6 @@ def setupForcefields(system, space):
     system.setProperty("space", space)
     system.setProperty("switchingFunction", CHARMMSwitchingFunction(cutoff_dist.val))
     system.setProperty("combiningRules", VariantProperty(combining_rules.val))
-    #system.setProperty( "useReactionField", VariantProperty(True) )
-    #system.setProperty( "reactionFieldDielectric", VariantProperty(rf_dielectric.val) )
 
     total_nrg = internonbondedff.components().total() + \
                 intranonbondedff.components().total() + intrabondedff.components().total() + \
@@ -422,30 +420,16 @@ def setupMoves(system, random_seed, GPUS):
     Integrator_OpenMM.setFriction(inverse_friction.val)  # Only meaningful for Langevin/Brownian integrators
     Integrator_OpenMM.setPrecision(precision.val)
     Integrator_OpenMM.setTimetoSkip(time_to_skip.val)
-    Integrator_OpenMM.setMinimization(minimisese.val)
-    Integrator_OpenMM.setMinimiseTol(minimise_tol.val)
-    Integrator_OpenMM.setMinimiseIterations(minimise_max_iter.val)
 
-    if equilibrate.val:
-        Integrator_OpenMM.setEquilib_iterations(equil_iterations.val)
-    else:
-        Integrator_OpenMM.setEquilib_iterations(0)
-
-    Integrator_OpenMM.setEquilib_time_step(equil_timestep.val)
     Integrator_OpenMM.setDeviceIndex(str(GPUS))
     Integrator_OpenMM.setLJDispersion(lj_dispersion.val)
 
     if cutoff_type.val != "nocutoff":
-        Integrator_OpenMM.setCutoff_distance(cutoff_dist.val)
+        Integrator_OpenMM.setCutoffDistance(cutoff_dist.val)
     if cutoff_type.val == "cutoffperiodic":
-        Integrator_OpenMM.setField_dielectric(rf_dielectric.val)
+        Integrator_OpenMM.setFieldDielectric(rf_dielectric.val)
 
-    Integrator_OpenMM.setCMMremoval_frequency(cmm_removal.val)
-
-    #if (save_coords.val):
-    #    buffer_freq = 500
-    #else:
-    #    buffer_freq = 0
+    Integrator_OpenMM.setCMMremovalFrequency(cmm_removal.val)
 
     Integrator_OpenMM.setBufferFrequency(buffered_coords_freq.val)
 
@@ -455,12 +439,12 @@ def setupMoves(system, random_seed, GPUS):
     if andersen.val:
         Integrator_OpenMM.setTemperature(temperature.val)
         Integrator_OpenMM.setAndersen(andersen.val)
-        Integrator_OpenMM.setAndersen_frequency(andersen_frequency.val)
+        Integrator_OpenMM.setAndersenFrequency(andersen_frequency.val)
 
     if barostat.val:
         Integrator_OpenMM.setPressure(pressure.val)
         Integrator_OpenMM.setMCBarostat(barostat.val)
-        Integrator_OpenMM.setMCBarostat_frequency(barostat_frequency.val)
+        Integrator_OpenMM.setMCBarostatFrequency(barostat_frequency.val)
 
     #print Integrator_OpenMM.getDeviceIndex()
     Integrator_OpenMM.initialise()
@@ -529,7 +513,7 @@ def linkbondVectorListToProperty(list):
     return prop
 
 
-def property_to_atom_num_list(prop):
+def propertyToAtomNumList(prop):
     list = []
     i = 0
     try:
@@ -540,7 +524,7 @@ def property_to_atom_num_list(prop):
         pass
     return list
 
-def property_to_atom_num_vector_list(prop):
+def propertyToAtomNumVectorList(prop):
     list = []
     i = 0
     try:
@@ -685,7 +669,7 @@ def getDummies(molecule):
     return to_dummies, from_dummies
 
 
-def create_system_free_energy(molecules):
+def createSystemFreeEnergy(molecules):
     r"""creates the system for free energy calculation
     Parameters
     ----------
@@ -939,15 +923,6 @@ def setupForeceFieldsFreeEnergy(system, space):
                    solventff, solvent_intraclj,
                    solute_hard_solventff, solute_todummy_solventff, solute_fromdummy_solventff]
 
-    # BONDED
-    #   forcefields =  [ solute_intraff, solvent_intraff ]
-
-    # NON BONDED
-    #    forcefields =  [solute_hard_intraclj, solute_todummy_intraclj, solute_fromdummy_intraclj,
-    #                 solute_hard_todummy_intraclj, solute_hard_fromdummy_intraclj,
-    #                 solute_todummy_fromdummy_intraclj,
-    #                 solventff, solvent_intraclj,
-    #                 solute_hard_solventff, solute_todummy_solventff, solute_fromdummy_solventff ]
 
     for forcefield in forcefields:
         system.add(forcefield)
@@ -962,8 +937,6 @@ def setupForeceFieldsFreeEnergy(system, space):
     system.setProperty("combiningRules", VariantProperty(combining_rules.val))
     system.setProperty("coulombPower", VariantProperty(coulomb_power.val))
     system.setProperty("shiftDelta", VariantProperty(shift_delta.val))
-    #system.setProperty( "useReactionField", VariantProperty(True) )
-    #system.setProperty( "reactionFieldDielectric", VariantProperty(rf_dielectric.val) )
 
     # TOTAL
     total_nrg = solute_intraff.components().total() + solute_hard_intraclj.components().total() + \
@@ -976,21 +949,6 @@ def setupForeceFieldsFreeEnergy(system, space):
                 solute_hard_solventff.components().total() + \
                 solute_todummy_solventff.components().total(0) + \
                 solute_fromdummy_solventff.components().total(0)
-
-    # BONDED
-    #   total_nrg = solute_intraff.components().total() + solvent_intraff.components().total()
-
-
-    # NON BONDED
-    #   total_nrg = solute_hard_intraclj.components().total() +\
-    #     solute_todummy_intraclj.components().total(0) + solute_fromdummy_intraclj.components().total(0) +\
-    #     solute_hard_todummy_intraclj.components().total(0) + solute_hard_fromdummy_intraclj.components().total(0) +\
-    #     solute_todummy_fromdummy_intraclj.components().total(0) +\
-    #     solventff.components().total() +\
-    #     solute_hard_solventff.components().total() +\
-    #     solute_todummy_solventff.components().total(0) +\
-    #     solute_fromdummy_solventff.components().total(0)
-
 
     e_total = system.totalComponent()
 
@@ -1019,7 +977,7 @@ def setupForeceFieldsFreeEnergy(system, space):
     return system
 
 
-def setup_moves_free_energy(system, random_seed, GPUS, lam_val):
+def setupMovesFreeEnergy(system, random_seed, GPUS, lam_val):
 
     print ("Setting up moves...")
 
@@ -1036,28 +994,20 @@ def setup_moves_free_energy(system, random_seed, GPUS, lam_val):
     Integrator_OpenMM.setPlatform(platform.val)
     Integrator_OpenMM.setConstraintType(constraint.val)
     Integrator_OpenMM.setCutoffType(cutoff_type.val)
-    Integrator_OpenMM.setField_dielectric(rf_dielectric.val)
-    Integrator_OpenMM.setAlchemical_value(lambda_val.val)
+    Integrator_OpenMM.setFieldDielectric(rf_dielectric.val)
+    Integrator_OpenMM.setAlchemicalValue(lambda_val.val)
     Integrator_OpenMM.setDeviceIndex(str(GPUS))
-    Integrator_OpenMM.setCoulomb_power(coulomb_power.val)
-    Integrator_OpenMM.setShift_delta(shift_delta.val)
+    Integrator_OpenMM.setCoulombPower(coulomb_power.val)
+    Integrator_OpenMM.setShiftDelta(shift_delta.val)
     Integrator_OpenMM.setDeltatAlchemical(delta_lambda.val)
     Integrator_OpenMM.setPrecision(precision.val)
     Integrator_OpenMM.setTimetoSkip(time_to_skip.val)
-
-    if equilibrate.val:
-        Integrator_OpenMM.setEquilib_iterations(equil_iterations.val)
-    else:
-        Integrator_OpenMM.setEquilib_iterations(0)
-
-    Integrator_OpenMM.setEquilib_time_step(equil_timestep.val)
-
     Integrator_OpenMM.setBufferFrequency(buffered_coords_freq.val)
 
     if cutoff_type != "nocutoff":
-        Integrator_OpenMM.setCutoff_distance(cutoff_dist.val)
+        Integrator_OpenMM.setCutoffDistance(cutoff_dist.val)
 
-    Integrator_OpenMM.setCMMremoval_frequency(cmm_removal.val)
+    Integrator_OpenMM.setCMMremovalFrequency(cmm_removal.val)
 
     Integrator_OpenMM.setEnergyFrequency(energy_frequency.val)
 
@@ -1067,20 +1017,18 @@ def setup_moves_free_energy(system, random_seed, GPUS, lam_val):
     if andersen.val:
         Integrator_OpenMM.setTemperature(temperature.val)
         Integrator_OpenMM.setAndersen(andersen.val)
-        Integrator_OpenMM.setAndersen_frequency(andersen_frequency.val)
+        Integrator_OpenMM.setAndersenFrequency(andersen_frequency.val)
 
     if barostat.val:
         Integrator_OpenMM.setPressure(pressure.val)
         Integrator_OpenMM.setMCBarostat(barostat.val)
-        Integrator_OpenMM.setMCBarostat_frequency(barostat_frequency.val)
+        Integrator_OpenMM.setMCBarostatFrequency(barostat_frequency.val)
 
     #This calls the OpenMMFrEnergyST initialise function
     Integrator_OpenMM.initialise()
 
     mdmove = MolecularDynamics(molecules, Integrator_OpenMM, timestep.val,
                                {"velocity generator": MaxwellBoltzmann(temperature.val)})
-
-    #mdmove = MolecularDynamics(molecules, Integrator_OpenMM, time_step)
 
     print("Created a MD move that uses OpenMM for all molecules on %s " % GPUS)
 
@@ -1142,13 +1090,17 @@ def run():
     except KeyError:
         host = "unknown"
 
-    print(" ### Running Molecular Dynamics on %s ### " % host)
+    print("\n### Running Molecular Dynamics simulation on %s ###" % host)
+    if verbose.val:
+        print("###================= Simulation Parameters=====================###")
+        Parameter.printAll()
+        print ("###===========================================================###\n")
 
     timer = QTime()
     timer.start()
 
     # Setup the system from scratch if no restart file is available
-
+    print("###================Setting up calculation=====================###")
     if not os.path.exists(restart_file.val):
 
         print("New run. Loading input and creating restart")
@@ -1195,7 +1147,12 @@ def run():
         moves = WeightedMoves()
         moves.add(move0)
         print("Index GPU = %s " % moves.moves()[0].integrator().getDeviceIndex())
-        print("Loaded a restart file on wich we have performed %d moves." % moves.nMoves())
+        print("Loaded a restart file on which we have performed %d moves." % moves.nMoves())
+        #Maybe include a runtime error here!
+        if minimise.val:
+            print ('WARNING: You are trying to minimise from a restart! Revise your config file!')
+        if equilibrate.val:
+            print ('WARNING: You are trying to equilibrate from a restart! Revise your config file!')
 
     cycle_start = int(moves.nMoves() / nmoves.val) + 1
     cycle_end = cycle_start + ncycles.val
@@ -1203,20 +1160,48 @@ def run():
     if (save_coords.val):
         trajectory = setupDCD(system)
 
+    mdmoves = moves.moves()[0]
+    integrator = mdmoves.integrator()
+
+    print ("###===========================================================###\n")
+
+    if minimise.val:
+        print("###=======================Minimisation========================###")
+        print('Running minimisation.')
+        if verbose.val:
+            print ("Energy before the minimisation: " + str(system.energy()))
+            print ('Tolerance for minimisation: ' + str(minimise_tol.val))
+            print ('Maximum number of minimisation iterations: ' + str(minimise_max_iter.val))
+        system = integrator.minimiseEnergy(system, minimise_tol.val, minimise_max_iter.val)
+        system.mustNowRecalculateFromScratch()
+        if verbose.val:
+            print ("Energy after the minimization: " + str(system.energy()))
+            print ("Energy minimization done.")
+        print("###===========================================================###\n")
+
+    if equilibrate.val:
+        print("###======================Equilibration========================###")
+        print ('Running equilibration.')
+        # Here we anneal lambda (To be determined)
+        if verbose.val:
+            print ('Equilibration timestep ' + str(equil_timestep.val))
+            print ('Number of equilibration steps: ' + str(equil_iterations.val))
+        system = integrator.equilibrateSystem(system, equil_timestep.val, equil_iterations.val)
+        system.mustNowRecalculateFromScratch()
+        if verbose.val:
+            print ("Energy after the equilibration: " + str(system.energy()))
+            print ('Equilibration done.\n')
+        print("###===========================================================###\n")
+
+    simtime=nmoves.val*ncycles.val*timestep.val
+    print("###=======================somd run============================###")
+    print ("Starting somd run...")
+    print ("%s moves %s cycles, %s simulation time" %(nmoves.val, ncycles.val, simtime))
+
     s1 = timer.elapsed() / 1000.
-
-    # Jm debug 14/10/14
-    PDB().write(system[MGName("all")], "frame-0.pdb")
-
-    print("Running MD simulation ")
-
     for i in range(cycle_start, cycle_end):
-        print("\nCycle = ", i, "\n")
-
-        #print("Energy before = %s kJ mol-1" % (system.energy().to(kJ_per_mol)))
-        # import ipdb; ipdb.set_trace()
+        print("\nCycle = ", i )
         system = moves.move(system, nmoves.val, True)
-        #print("Energy after = %s kJ mol-1" % (system.energy().to(kJ_per_mol)))
 
         if (save_coords.val):
             writeSystemData(system, moves, trajectory, i)
@@ -1241,15 +1226,15 @@ def runFreeNrg():
         host = "unknown"
 
     print("### Running Single Topology Molecular Dynamics Free Energy on %s ###" % host)
-    print("###================= Simulation Parameters=====================###")
-    Parameter.printAll()
-    print ("###===========================================================###\n")
+    if verbose.val:
+        print("###================= Simulation Parameters=====================###")
+        Parameter.printAll()
+        print ("###===========================================================###\n")
 
     timer = QTime()
     timer.start()
 
     # Setup the system from scratch if no restart file is available
-    restart = False
     print("###================Setting up calculation=====================###")
     if not os.path.exists(restart_file.val):
 
@@ -1265,7 +1250,7 @@ def runFreeNrg():
             (molecules, space) = amber.readCrdTop(crdfile.val, topfile.val)
             Sire.Stream.save((molecules, space), s3file.val)
 
-        system = create_system_free_energy(molecules)
+        system = createSystemFreeEnergy(molecules)
 
         if (center_solute.val):
             system = centerSolute(system, space)
@@ -1289,7 +1274,7 @@ def runFreeNrg():
 
         print("Setting up the simulation with random seed %s" % ranseed)
 
-        moves = setup_moves_free_energy(system, ranseed, gpu.val, lambda_val.val)
+        moves = setupMovesFreeEnergy(system, ranseed, gpu.val, lambda_val.val)
 
         print("Saving restart")
         Sire.Stream.save([system, moves], restart_file.val)
@@ -1343,7 +1328,7 @@ def runFreeNrg():
         if verbose.val:
             print ('Equilibration timestep ' + str(equil_timestep.val))
             print ('Number of equilibration steps: ' + str(equil_iterations.val))
-        system = integrator.annealLambda(system, equil_timestep.val, equil_iterations.val)
+        system = integrator.annealSystemToLambda(system, equil_timestep.val, equil_iterations.val)
         system.mustNowRecalculateFromScratch()
         if verbose.val:
             print ("Energy after the annealing: " + str(system.energy()))

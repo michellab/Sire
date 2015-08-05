@@ -112,7 +112,7 @@ if not (os.path.exists(coord_file) and os.path.exists(top_file)):
 
     sys.exit(-1)
 
-print("\nRunning a somd calculation using files %s and %s." % (top_file, coord_file))
+#print("\nRunning a somd calculation using files %s and %s." % (top_file, coord_file))
 
 # Now lets run the OpenMMMD calculation
 OpenMMMD.run(params)
