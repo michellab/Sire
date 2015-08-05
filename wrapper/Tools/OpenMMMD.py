@@ -165,6 +165,11 @@ distance_restraints_dict = Parameter("distance restraints dictionary", {},
                                      D the flat bottom radius. WARNING: PBC distance checks not implemented, avoid
                                      restraining pair of atoms that may diffuse out of the box.""")
 
+hydrogen_mass_repartitioning_factor = Parameter("hydrogen mass repartitioning factor",None, 
+                                     """If not None and is a number, all hydrogen atoms in the molecule will 
+                                        have their mass increased by the input factor. The atomic mass of the heavy atom 
+                                        bonded to the hydrogen is decreased to keep the mass constant.""")
+
 ## Free energy specific keywords
 morphfile = Parameter("morphfile", "MORPH.pert",
                       """Name of the morph file containing the perturbation to apply to the system.""")
@@ -642,6 +647,110 @@ def freezeResidues(system):
                 mol = at.edit().setProperty("mass", 0 * g_per_mol).molecule()
 
         system.update(mol)
+
+    return system
+
+def repartitionMasses(system, hmassfactor=4.0):
+    """
+    Increase the mass of hydrogen atoms to hmass times * amu, and subtract the mass increase from the heavy atom 
+    the hydrogen is bonded to.  
+    """
+   
+    print ("Applying Hydrogen Mass repartition to input using a factor of %s " % hmassfactor)
+
+    molecules = system[ MGName("all") ].molecules()
+
+    molnums = molecules.molNums()
+
+    for molnum in molnums:
+        mol = molecules.molecule(molnum).molecule()
+        nats = mol.nAtoms()
+        atoms = mol.atoms()
+
+        if nats == 1:
+            connect = None
+        else:
+            connect = mol.property("connectivity")
+
+        atom_masses = {}
+
+        #
+        # First pass. Initialise changes in atom_masses to effect
+        #
+        for x in range(0,nats):
+            at = atoms[x]
+            atidx = at.index()
+            atom_masses[ atidx.value() ] = 0 * g_per_mol
+
+        total_delta = 0.0 * g_per_mol
+
+        #
+        # Second pass. Decide how the mass of each atom should change.
+        #
+        for x in range(0,nats):
+            at = atoms[x]
+            atidx = at.index()
+            atmass = at.property("mass")  
+
+            if (atmass.value() < 1.1):# * g_per_mol):
+                # Atoms with a mass < 1.1 g_per_mol are assumed to be hydrogen atoms
+                atmass = at.property("mass")                
+                deltamass = atmass * hmassfactor - atmass
+                #print("Increasing mass %s by %s  " % (at, deltamass))
+                total_delta += deltamass
+                atom_masses[atidx.value()] = deltamass
+                # Skip monoatomic systems without connectivity property
+                if connect is None:
+                    continue
+                bonds = connect.getBonds(atidx)
+                # Get list of atoms that share one bond with this atom. Ignore all atoms that have a 
+                # mass < 1.1 g_mol in the ORIGINAL atoms list
+                # For each atom this was bonded to, substract delta_mass / nbonded 
+                bonded_atoms = []
+                for bond in bonds:
+                    at0 = mol.select(bond.atom0()).index()
+                    at1 = mol.select(bond.atom1()).index()
+                    if at0 == atidx:
+                        heavyatidx = at1
+                    else:
+                        heavyatidx = at0
+                
+                    if heavyatidx in bonded_atoms:
+                        continue
+                    heavyat = mol.select(heavyatidx)
+                    heavyat_mass = heavyat.property("mass")
+                    if heavyat_mass.value() < 1.1: # g_per_mol
+                        continue
+                    bonded_atoms.append(heavyatidx)
+                    
+                for bonded_atom in bonded_atoms:
+                    #print("Increasing mass %s by %s  " % (mol.select(bonded_atom), -deltamass))
+                    total_delta += - deltamass
+                    atom_masses[bonded_atom.value()] += - deltamass
+
+        # Sanity check
+        if total_delta.value() > 0.001:# g_per_mol
+            print ("WARNING ! The mass repartitioning algorithm is not conserving atomic masses for molecule %s
+                    (total delta is %s). Report bug to a Sire developer." % molnum,total_delta )
+            sys.exit(-1)
+
+        # Now that have worked out mass changes per molecule, update molecule
+        for x in range(0,nats):
+            at = atoms[x]
+            atidx = at.index()
+            atmass = at.property("mass")            
+            newmass = atmass + atom_masses[ atidx.value() ]
+            # Sanity check. Note this is likely to occur if hmassfactor > 4
+            if ( newmass.value() < 0.0 ):
+                print ("WARNING ! The mass of atom %s is less than zero after hydrogen mass repartitioning. 
+                        This should not happen ! Decrease hydrogen mass repartitioning factor in your cfg file 
+                        and try again.")
+                sys.exit(-1)
+            
+            mol = mol.edit().atom(atidx).setProperty("mass", newmass ).molecule()
+         
+        system.update(mol)
+        #import pdb; pdb.set_trace()   
 
     return system
 
@@ -1260,6 +1369,9 @@ def runFreeNrg():
 
         if use_distance_restraints.val:
             system = setupDistanceRestraints(system)
+
+        if hydrogen_mass_repartitioning_factor.val is not None:
+            system = repartitionMasses(system, hmassfactor=hydrogen_mass_repartitioning_factor.val)
 
         # Note that this just set the mass to zero which freezes residues in OpenMM but Sire doesn't known that
         if freeze_residues.val:
