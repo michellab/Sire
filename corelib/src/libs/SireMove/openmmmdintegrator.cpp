@@ -1451,12 +1451,6 @@ System OpenMMMDIntegrator::equilibrateSystem(System &system,
 
     }
     
-    if (Debug)
-    {
-        PeriodicBox sp = ws.system().property("space").asA<PeriodicBox>();
-        cout << "Box dimensions after are: "<< sp.dimensions()[0]<< " "<< 
-            sp.dimensions()[1]<<" " << sp.dimensions()[2]<<endl;
-    }
     this->destroyContext();
     const System & ptr_sys = ws.system();
     return ptr_sys;

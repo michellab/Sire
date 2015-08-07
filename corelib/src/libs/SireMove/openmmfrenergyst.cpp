@@ -3044,7 +3044,7 @@ System OpenMMFrEnergyST::annealSystemToLambda(System &system,
                                       SireUnits::Dimension::Time anneal_step_size,
                                       int annealing_steps)
 {
-    bool Debug = false;
+    bool Debug = true;
     const double AKMAPerPs = 0.04888821;
 
     const MoleculeGroup moleculegroup = this->molgroup.read();
@@ -3131,11 +3131,15 @@ System OpenMMFrEnergyST::annealSystemToLambda(System &system,
 
 
     ws.commitCoordinatesAndVelocities();
-    this->destroyContext();
-    if (Debug)
+    //Now we also want to update the systems box in case it is very different!
+    if(MCBarostat_flag)
     {
-        qDebug() << "initialised system " << isContextInitialised;
+        // dummy buffered dimensions vector, maybe there is better solution
+        //to this than just passing an empty vector
+        QVector< Vector> dimensions;
+        updateBoxDimensions(state_openmm, dimensions, Debug, ws);
     }
+    this->destroyContext();
     // Step 5. Return pointer to the workspace's system
     const System & ptr_sys = ws.system();
     return ptr_sys;
@@ -3612,35 +3616,22 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
 
     //Now the box dimensions
 
+    if (Debug)
+    {
+        PeriodicBox sp = ws.system().property("space").asA<PeriodicBox>();
+        cout << "Box dimensions before are: "<< sp.dimensions()[0]<< " "<< 
+            sp.dimensions()[1]<<" " << sp.dimensions()[2]<<endl;
+    }
     if (MCBarostat_flag == true)
     {
 
-        state_openmm.getPeriodicBoxVectors(a, b, c);
-
-        Vector new_dims = Vector(a[0] * OpenMM::AngstromsPerNm, b[1] * OpenMM::AngstromsPerNm, c[2] * OpenMM::AngstromsPerNm);
-
-        System & ptr_sys = ws.nonConstsystem();
-        PeriodicBox sp = ptr_sys.property("space").asA<PeriodicBox>();
-
-        sp.setDimensions(new_dims);
-        const QString string = "space";
-        ptr_sys.setProperty(string, sp);
-
-        // Buffer dimensions if necessary
-        for (int k = 0; k < buffered_dimensions.size(); k++)
-        {
-
-            const QString buffered_space = "buffered_space_" + QString::number(k);
-
-            PeriodicBox buff_space = PeriodicBox(buffered_dimensions[k]);
-
-            ptr_sys.setProperty(buffered_space, buff_space);
-
-        }
-
-        if (Debug)
-            qDebug() << "NEW BOX DIMENSIONS [A] = (" << a[0] * OpenMM::AngstromsPerNm << ", " << b[1] * OpenMM::AngstromsPerNm << ", " << c[2] * OpenMM::AngstromsPerNm << ")\n\n";
-
+        updateBoxDimensions(state_openmm, buffered_dimensions, Debug, ws);
+    }
+    if (Debug)
+    {
+        PeriodicBox sp = ws.system().property("space").asA<PeriodicBox>();
+        cout << "Box dimensions after are: "<< sp.dimensions()[0]<< " "<< 
+            sp.dimensions()[1]<<" " << sp.dimensions()[2]<<endl;
     }
 
     // Clear all buffers
@@ -3653,6 +3644,35 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
     ptr_sys.mustNowRecalculateFromScratch();
 
     return;
+}
+
+void OpenMMFrEnergyST::updateBoxDimensions(OpenMM::State &state_openmm, 
+                                             QVector< Vector> &buffered_dimensions, 
+                                             bool Debug, AtomicVelocityWorkspace &ws)
+{
+    OpenMM::Vec3 a;
+    OpenMM::Vec3 b;
+    OpenMM::Vec3 c;
+
+    state_openmm.getPeriodicBoxVectors(a, b, c);
+    Vector new_dims = Vector(a[0] * OpenMM::AngstromsPerNm, b[1] * OpenMM::AngstromsPerNm, c[2] * OpenMM::AngstromsPerNm);
+    if (Debug)
+        qDebug() << " a " << a[0] << " b " << b[1] << " c " << c[2];
+
+    System & ptr_sys = ws.nonConstsystem();
+    PeriodicBox sp = ptr_sys.property("space").asA<PeriodicBox>();
+
+    sp.setDimensions(new_dims);
+    const QString string = "space";
+    ptr_sys.setProperty(string, sp);
+
+    /** Buffer dimensions if necessary */
+    for (int k = 0; k < buffered_dimensions.size(); k++)
+    {
+        const QString buffered_space = "buffered_space_" + QString::number(k);
+        PeriodicBox buff_space = PeriodicBox(buffered_dimensions[k]);
+        ptr_sys.setProperty(buffered_space, buff_space);
+    }
 }
 
 /** Get the cutoff type: nocutoff, cutoffnonperiodic, cutoffperiodic */
