@@ -730,8 +730,8 @@ def repartitionMasses(system, hmassfactor=4.0):
 
         # Sanity check
         if total_delta.value() > 0.001:# g_per_mol
-            print ("WARNING ! The mass repartitioning algorithm is not conserving atomic masses for molecule %s
-                    (total delta is %s). Report bug to a Sire developer." % molnum,total_delta )
+            print ("""WARNING ! The mass repartitioning algorithm is not conserving atomic masses for molecule %s
+                    (total delta is %s). Report bug to a Sire developer.""" % molnum,total_delta )
             sys.exit(-1)
 
         # Now that have worked out mass changes per molecule, update molecule
@@ -742,9 +742,9 @@ def repartitionMasses(system, hmassfactor=4.0):
             newmass = atmass + atom_masses[ atidx.value() ]
             # Sanity check. Note this is likely to occur if hmassfactor > 4
             if ( newmass.value() < 0.0 ):
-                print ("WARNING ! The mass of atom %s is less than zero after hydrogen mass repartitioning. 
+                print ("""WARNING ! The mass of atom %s is less than zero after hydrogen mass repartitioning. 
                         This should not happen ! Decrease hydrogen mass repartitioning factor in your cfg file 
-                        and try again.")
+                        and try again.""")
                 sys.exit(-1)
             
             mol = mol.edit().atom(atidx).setProperty("mass", newmass ).molecule()
@@ -1229,6 +1229,12 @@ def run():
 
         if use_restraints.val:
             system = setupRestraints(system)
+
+        if use_distance_restraints.val:
+            system = setupDistanceRestraints(system)
+
+        if hydrogen_mass_repartitioning_factor.val is not None:
+            system = repartitionMasses(system, hmassfactor=hydrogen_mass_repartitioning_factor.val)
 
         # Note that this just set the mass to zero which freezes residues in OpenMM but Sire doesn't known that
         if freeze_residues.val:
