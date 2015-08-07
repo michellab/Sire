@@ -3044,7 +3044,7 @@ System OpenMMFrEnergyST::annealSystemToLambda(System &system,
                                       SireUnits::Dimension::Time anneal_step_size,
                                       int annealing_steps)
 {
-    bool Debug = true;
+    bool Debug = false;
     const double AKMAPerPs = 0.04888821;
 
     const MoleculeGroup moleculegroup = this->molgroup.read();
