@@ -795,8 +795,8 @@ def createSystemFreeEnergy(molecules):
     return system
 
 
-def setupForeceFieldsFreeEnergy(system, space):
-    r"""sets up the force field for the free energy claculation
+def setupForceFieldsFreeEnergy(system, space):
+    r"""sets up the force field for the free energy calculation
     Parameters
     ----------
     system : Sire.system
@@ -988,7 +988,7 @@ def setupMovesFreeEnergy(system, random_seed, GPUS, lam_val):
     solute_fromdummy = system[MGName("solute_ref_fromdummy")]
 
     Integrator_OpenMM = OpenMMFrEnergyST(molecules, solute, solute_hard, solute_todummy, solute_fromdummy)
-
+    Integrator_OpenMM.setRandomSeed(random_seed)
     Integrator_OpenMM.setIntegrator(integrator_type.val)
     Integrator_OpenMM.setFriction(inverse_friction.val)  # Only meaningful for Langevin/Brownian integrators
     Integrator_OpenMM.setPlatform(platform.val)
@@ -1026,9 +1026,11 @@ def setupMovesFreeEnergy(system, random_seed, GPUS, lam_val):
 
     #This calls the OpenMMFrEnergyST initialise function
     Integrator_OpenMM.initialise()
+    velocity_generator = MaxwellBoltzmann(temperature.val)
+    velocity_generator.setGenerator(RanGenerator(random_seed))
 
     mdmove = MolecularDynamics(molecules, Integrator_OpenMM, timestep.val,
-                               {"velocity generator": MaxwellBoltzmann(temperature.val)})
+                              {"velocity generator":velocity_generator})
 
     print("Created a MD move that uses OpenMM for all molecules on %s " % GPUS)
 
@@ -1265,7 +1267,7 @@ def runFreeNrg():
         if freeze_residues.val:
             system = freezeResidues(system)
 
-        system = setupForeceFieldsFreeEnergy(system, space)
+        system = setupForceFieldsFreeEnergy(system, space)
 
         if random_seed.val:
             ranseed = random_seed.val
@@ -1360,6 +1362,7 @@ def runFreeNrg():
     s2 = timer.elapsed() / 1000.
     print("Simulation took %d s " % ( s2 - s1))
     print("###===========================================================###\n")
+
 
     if os.path.exists("gradients.s3"):
         siregrads = Sire.Stream.load("gradients.s3")
