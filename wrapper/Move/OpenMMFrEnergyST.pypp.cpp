@@ -479,6 +479,18 @@ void register_OpenMMFrEnergyST_class(){
 
         }
         OpenMMFrEnergyST_exposer.def( bp::self == bp::self );
+        { //::SireMove::OpenMMFrEnergyST::setAlchemicalArray
+
+            typedef void ( ::SireMove::OpenMMFrEnergyST::*setAlchemicalArray_function_type )( ::QVector<double> ) ;
+            setAlchemicalArray_function_type setAlchemicalArray_function_value( &::SireMove::OpenMMFrEnergyST::setAlchemicalArray );
+
+            OpenMMFrEnergyST_exposer.def(
+                "setAlchemicalArray"
+                , setAlchemicalArray_function_value
+                , ( bp::arg("arg0") ) );
+
+        }
+        OpenMMFrEnergyST_exposer.def( bp::self == bp::self );
         { //::SireMove::OpenMMFrEnergyST::setAlchemicalValue
 
             typedef void ( ::SireMove::OpenMMFrEnergyST::*setAlchemicalValue_function_type )( double ) ;
