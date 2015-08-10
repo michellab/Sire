@@ -201,6 +201,8 @@ namespace SireMove {
         
         double getPotentialEnergyAtLambda(double lambda);
         void updateOpenMMContextLambda(double lambda);
+        double calculateGradient(double increment_plus, double increment_minus,
+        double potential_energy_lambda);
 
         /** Whether or not to save the velocities after every step, or to save them at the end of all of the steps */
         bool frequent_save_velocities;
@@ -279,9 +281,6 @@ namespace SireMove {
 
 
         bool reinetialise_context;
-
-        double GF_acc;
-        double GB_acc;
 
         bool Debug;
 
