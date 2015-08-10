@@ -3070,28 +3070,7 @@ System OpenMMFrEnergyST::annealSystemToLambda(System &system,
 
     for (int i = 0; i < max + 1; i++)
     {
-
-        //NON BONDED TERMS
-        if (perturbed_energies[0])
-            openmm_context->setParameter("lam", lam); //1-5 HD
-        //1-4 Interactions
-        if (perturbed_energies[1])
-            openmm_context->setParameter("lamhd", lam); //1-4 HD
-        if (perturbed_energies[2])
-            openmm_context->setParameter("lamtd", 1.0 - lam); //1-4 To Dummy
-        if (perturbed_energies[3])
-            openmm_context->setParameter("lamfd", lam); //1-4 From Dummy
-        if (perturbed_energies[4])
-            openmm_context->setParameter("lamftd", lam); //1-4 From Dummy to Dummy
-
-        //BONDED PERTURBED TERMS
-        if (perturbed_energies[5])
-            openmm_context->setParameter("lambond", lam); //Bonds
-        if (perturbed_energies[6])
-            openmm_context->setParameter("lamangle", lam); //Angles
-        if (perturbed_energies[7])
-            openmm_context->setParameter("lamdih", lam); //Torsions
-
+        updateOpenMMContextLambda(lam);
         (openmm_context->getIntegrator()).step(annealing_steps);
 
         if (i == max - 1)
