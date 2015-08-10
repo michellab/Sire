@@ -159,6 +159,8 @@ namespace SireMove {
         double getAlchemicalValue(void);
         void setAlchemicalValue(double);
 
+        void setAlchemicalArray(QVector<double>);
+
         float getCoulombPower(void);
         void setCoulombPower(float);
 
@@ -196,6 +198,9 @@ namespace SireMove {
         void updateBoxDimensions(OpenMM::State &state_openmm, 
         QVector< Vector> &buffered_dimensions, bool Debug, 
         AtomicVelocityWorkspace &ws);
+        
+        double getPotentialEnergyAtLambda(double lambda);
+        void updateOpenMMContextLambda(double lambda);
 
         /** Whether or not to save the velocities after every step, or to save them at the end of all of the steps */
         bool frequent_save_velocities;
@@ -255,6 +260,8 @@ namespace SireMove {
         double shift_delta;
 
         double delta_alchemical;
+
+        QVector<double> alchemical_array;
 
         QVector<double> gradients;
 
