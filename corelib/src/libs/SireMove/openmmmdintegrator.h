@@ -172,6 +172,9 @@ namespace SireMove {
         void createContext(IntegratorWorkspace &workspace,
                 SireUnits::Dimension::Time timestep);
         void destroyContext();
+        void updateBoxDimensions(OpenMM::State &state_openmm, 
+        QVector< Vector> &buffered_dimensions, bool Debug, 
+        AtomicVelocityWorkspace &ws);
 
         /** Whether or not to save the velocities after every step, or to save them at the end of all of the steps */
         bool frequent_save_velocities;

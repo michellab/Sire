@@ -1387,7 +1387,7 @@ System OpenMMMDIntegrator::equilibrateSystem(System &system,
                                       SireUnits::Dimension::Time equib_time_step,
                                       int equib_steps)
 {
-    bool Debug = false;
+    bool Debug = true;
     const double AKMAPerPs = 0.04888821;
 
     const MoleculeGroup moleculegroup = this->molgroup.read();
@@ -1398,12 +1398,17 @@ System OpenMMMDIntegrator::equilibrateSystem(System &system,
         std::cerr << "Number of molecules in do not agree!";
         exit(1);
     }
-
+    if (Debug)
+    {
+        PeriodicBox sp = system.property("space").asA<PeriodicBox>();
+        cout << "Box dimensions are: "<< sp.dimensions()[0]<< " "<< 
+            sp.dimensions()[1]<<" " << sp.dimensions()[2]<<endl;
+    }
     workspace.edit().setSystem(system);
     createContext(workspace.edit(), equib_time_step);
     (openmm_context->getIntegrator()).step(equib_steps);
     
-        int infoMask = OpenMM::State::Positions;
+    int infoMask = OpenMM::State::Positions;
     infoMask = infoMask + OpenMM::State::Velocities;
     OpenMM::State state_openmm = openmm_context->getState(infoMask);
     std::vector<OpenMM::Vec3> positions_openmm = state_openmm.getPositions();
@@ -1436,6 +1441,16 @@ System OpenMMMDIntegrator::equilibrateSystem(System &system,
     }
 
     ws.commitCoordinatesAndVelocities();
+    // update periodic box
+    if(is_periodic)
+    {
+        // dummy buffered dimensions vector, maybe there is better solution
+        //to this than just passing an empty vector
+        QVector< Vector> dimensions;
+        updateBoxDimensions(state_openmm, dimensions, Debug, ws);
+
+    }
+    
     this->destroyContext();
     const System & ptr_sys = ws.system();
     return ptr_sys;
@@ -1446,7 +1461,7 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
                                    SireUnits::Dimension::Time timestep,
                                    int nmoves, bool record_stats)
 {
-    bool Debug = false;
+    bool Debug = true;
 
     createContext(workspace, timestep);
 
@@ -1521,7 +1536,7 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
     if (time_skip != 0.0)
     {
 
-        if (true)
+        if (Debug)
             qDebug() << "Time to Skip = " << time_skip << "ps";
 
         int new_nmoves = time_skip / dt;
@@ -1540,7 +1555,6 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
             nframes = nmoves / coord_freq;
 
     }
-
     if (coord_freq > 0)
     {/** Break nmoves in several steps to buffer coordinates*/
         for (int i = 0; i < nmoves; i = i + coord_freq)
@@ -1568,10 +1582,6 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
         (openmm_context->getIntegrator()).step(nmoves);
     }
 
-    //Disable Minimisation because of multiple cycles
-//    if (minimise)
-//        minimise = false;
-    //Disable Time to Skip because of multiple cycles
     if (time_skip != 0)
     {
         timeskip = SireUnits::Dimension::Time(0.0);
@@ -1653,25 +1663,7 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
     /** Now the box dimensions (if the simulation used a periodic space) */
     if (is_periodic)
     {
-        state_openmm.getPeriodicBoxVectors(a, b, c);
-        Vector new_dims = Vector(a[0] * OpenMM::AngstromsPerNm, b[1] * OpenMM::AngstromsPerNm, c[2] * OpenMM::AngstromsPerNm);
-        if (Debug)
-            qDebug() << " a " << a[0] << " b " << b[1] << " c " << c[2];
-
-        System & ptr_sys = ws.nonConstsystem();
-        PeriodicBox sp = ptr_sys.property("space").asA<PeriodicBox>();
-
-        sp.setDimensions(new_dims);
-        const QString string = "space";
-        ptr_sys.setProperty(string, sp);
-
-        /** Buffer dimensions if necessary */
-        for (int k = 0; k < buffered_dimensions.size(); k++)
-        {
-            const QString buffered_space = "buffered_space_" + QString::number(k);
-            PeriodicBox buff_space = PeriodicBox(buffered_dimensions[k]);
-            ptr_sys.setProperty(buffered_space, buff_space);
-        }
+        updateBoxDimensions(state_openmm, buffered_dimensions, true, ws);
     }
 
     if (ws.system().contains(molgroup.read().number()))
@@ -1688,6 +1680,35 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
     buffered_dimensions.clear();
 
     return;
+}
+
+void OpenMMMDIntegrator::updateBoxDimensions(OpenMM::State &state_openmm, 
+                                             QVector< Vector> &buffered_dimensions, 
+                                             bool Debug, AtomicVelocityWorkspace &ws)
+{
+    OpenMM::Vec3 a;
+    OpenMM::Vec3 b;
+    OpenMM::Vec3 c;
+
+    state_openmm.getPeriodicBoxVectors(a, b, c);
+    Vector new_dims = Vector(a[0] * OpenMM::AngstromsPerNm, b[1] * OpenMM::AngstromsPerNm, c[2] * OpenMM::AngstromsPerNm);
+    if (Debug)
+        qDebug() << " a " << a[0] << " b " << b[1] << " c " << c[2];
+
+    System & ptr_sys = ws.nonConstsystem();
+    PeriodicBox sp = ptr_sys.property("space").asA<PeriodicBox>();
+
+    sp.setDimensions(new_dims);
+    const QString string = "space";
+    ptr_sys.setProperty(string, sp);
+
+    /** Buffer dimensions if necessary */
+    for (int k = 0; k < buffered_dimensions.size(); k++)
+    {
+        const QString buffered_space = "buffered_space_" + QString::number(k);
+        PeriodicBox buff_space = PeriodicBox(buffered_dimensions[k]);
+        ptr_sys.setProperty(buffered_space, buff_space);
+    }
 }
 
 QString OpenMMMDIntegrator::getIntegrator(void)
