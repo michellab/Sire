@@ -165,9 +165,9 @@ distance_restraints_dict = Parameter("distance restraints dictionary", {},
                                      D the flat bottom radius. WARNING: PBC distance checks not implemented, avoid
                                      restraining pair of atoms that may diffuse out of the box.""")
 
-hydrogen_mass_repartitioning_factor = Parameter("hydrogen mass repartitioning factor",None, 
-                                     """If not None and is a number, all hydrogen atoms in the molecule will 
-                                        have their mass increased by the input factor. The atomic mass of the heavy atom 
+hydrogen_mass_repartitioning_factor = Parameter("hydrogen mass repartitioning factor",None,
+                                     """If not None and is a number, all hydrogen atoms in the molecule will
+                                        have their mass increased by the input factor. The atomic mass of the heavy atom
                                         bonded to the hydrogen is decreased to keep the mass constant.""")
 
 ## Free energy specific keywords
@@ -652,13 +652,13 @@ def freezeResidues(system):
 
 def repartitionMasses(system, hmassfactor=4.0):
     """
-    Increase the mass of hydrogen atoms to hmass times * amu, and subtract the mass increase from the heavy atom 
-    the hydrogen is bonded to.  
+    Increase the mass of hydrogen atoms to hmass times * amu, and subtract the mass 
+increase from the heavy atom the hydrogen is bonded to.
     """
-   
+
     print ("Applying Hydrogen Mass repartition to input using a factor of %s " % hmassfactor)
 
-    molecules = system[ MGName("all") ].molecules()
+    molecules = system[MGName("all")].molecules()
 
     molnums = molecules.molNums()
 
@@ -680,7 +680,7 @@ def repartitionMasses(system, hmassfactor=4.0):
         for x in range(0,nats):
             at = atoms[x]
             atidx = at.index()
-            atom_masses[ atidx.value() ] = 0 * g_per_mol
+            atom_masses[atidx.value()] = 0 * g_per_mol
 
         total_delta = 0.0 * g_per_mol
 
@@ -690,11 +690,12 @@ def repartitionMasses(system, hmassfactor=4.0):
         for x in range(0,nats):
             at = atoms[x]
             atidx = at.index()
-            atmass = at.property("mass")  
+            atmass = at.property("mass")
 
-            if (atmass.value() < 1.1):# * g_per_mol):
+            # units are in g_per_mol
+            if (atmass.value() < 1.1):
                 # Atoms with a mass < 1.1 g_per_mol are assumed to be hydrogen atoms
-                atmass = at.property("mass")                
+                atmass = at.property("mass")
                 deltamass = atmass * hmassfactor - atmass
                 #print("Increasing mass %s by %s  " % (at, deltamass))
                 total_delta += deltamass
@@ -703,9 +704,9 @@ def repartitionMasses(system, hmassfactor=4.0):
                 if connect is None:
                     continue
                 bonds = connect.getBonds(atidx)
-                # Get list of atoms that share one bond with this atom. Ignore all atoms that have a 
+                # Get list of atoms that share one bond with this atom. Ignore all atoms that have a
                 # mass < 1.1 g_mol in the ORIGINAL atoms list
-                # For each atom this was bonded to, substract delta_mass / nbonded 
+                # For each atom this was bonded to, substract delta_mass / nbonded
                 bonded_atoms = []
                 for bond in bonds:
                     at0 = mol.select(bond.atom0()).index()
@@ -714,43 +715,44 @@ def repartitionMasses(system, hmassfactor=4.0):
                         heavyatidx = at1
                     else:
                         heavyatidx = at0
-                
+
                     if heavyatidx in bonded_atoms:
                         continue
                     heavyat = mol.select(heavyatidx)
                     heavyat_mass = heavyat.property("mass")
-                    if heavyat_mass.value() < 1.1: # g_per_mol
+                    # units are in g_per_mol
+                    if heavyat_mass.value() < 1.1:
                         continue
                     bonded_atoms.append(heavyatidx)
-                    
+
                 for bonded_atom in bonded_atoms:
                     #print("Increasing mass %s by %s  " % (mol.select(bonded_atom), -deltamass))
                     total_delta += - deltamass
                     atom_masses[bonded_atom.value()] += - deltamass
 
-        # Sanity check
-        if total_delta.value() > 0.001:# g_per_mol
-            print ("""WARNING ! The mass repartitioning algorithm is not conserving atomic masses for molecule %s
-                    (total delta is %s). Report bug to a Sire developer.""" % molnum,total_delta )
+        # Sanity check (g_per_mol)
+        if total_delta.value() > 0.001:
+            print ("WARNING ! The mass repartitioning algorithm is not conserving atomic masses for",
+                   "molecule %s (total delta is %s). Report bug to a Sire developer." % molnum,total_delta )
             sys.exit(-1)
 
         # Now that have worked out mass changes per molecule, update molecule
         for x in range(0,nats):
             at = atoms[x]
             atidx = at.index()
-            atmass = at.property("mass")            
-            newmass = atmass + atom_masses[ atidx.value() ]
+            atmass = at.property("mass")
+            newmass = atmass + atom_masses[atidx.value()]
             # Sanity check. Note this is likely to occur if hmassfactor > 4
-            if ( newmass.value() < 0.0 ):
-                print ("""WARNING ! The mass of atom %s is less than zero after hydrogen mass repartitioning. 
-                        This should not happen ! Decrease hydrogen mass repartitioning factor in your cfg file 
+            if (newmass.value() < 0.0):
+                print ("""WARNING ! The mass of atom %s is less than zero after hydrogen mass repartitioning.
+                        This should not happen ! Decrease hydrogen mass repartitioning factor in your cfg file
                         and try again.""")
                 sys.exit(-1)
-            
+
             mol = mol.edit().atom(atidx).setProperty("mass", newmass ).molecule()
-         
+
         system.update(mol)
-        #import pdb; pdb.set_trace()   
+        #import pdb; pdb.set_trace()
 
     return system
 
