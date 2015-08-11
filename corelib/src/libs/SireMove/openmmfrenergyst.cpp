@@ -130,8 +130,9 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const OpenMMFrEnergyST 
         << velver.energy_frequency
         << velver.device_index << velver.precision << velver.Alchemical_value
         << velver.coulomb_power << velver.shift_delta << velver.delta_alchemical
-        << velver.alchemical_array << velver.gradients << velver.energies
-        << velver.perturbed_energies << velver.Integrator_type 
+        << velver.alchemical_array << velver.finite_diff_gradients << velver.pot_energies
+        << velver.perturbed_energies << velver.reduced_perturbed_energies
+        << velver.forward_Metropolis << velver.backward_Metropolis << velver.Integrator_type 
         << velver.friction << velver.integration_tol
         << velver.timeskip << velver.reinetialise_context 
         << static_cast<const Integrator&> (velver);
@@ -159,9 +160,10 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, OpenMMFrEnergyST &velve
             >> velver.buffer_frequency >> velver.energy_frequency
             >> velver.device_index >> velver.precision >> velver.Alchemical_value
             >> velver.coulomb_power >> velver.shift_delta >> velver.delta_alchemical
-            >> velver.alchemical_array >> velver.gradients >> velver.energies 
-            >> velver.perturbed_energies >> velver.Integrator_type 
-            >> velver.friction >> velver.integration_tol
+            >> velver.alchemical_array >> velver.finite_diff_gradients >> velver.pot_energies 
+            >> velver.perturbed_energies >> velver.reduced_perturbed_energies 
+            >> velver.forward_Metropolis >> velver.backward_Metropolis 
+            >> velver.Integrator_type >> velver.friction >> velver.integration_tol
             >> velver.timeskip >> velver.reinetialise_context 
             >> static_cast<Integrator&> (velver);
 
@@ -190,7 +192,9 @@ Andersen_flag(false), Andersen_frequency(90.0), MCBarostat_flag(false),
 MCBarostat_frequency(25), ConstraintType("none"),
 Pressure(1.0 * bar), Temperature(300.0 * kelvin), platform_type("Reference"), Restraint_flag(false),
 CMMremoval_frequency(0), buffer_frequency(0), energy_frequency(100), device_index("0"), precision("single"), Alchemical_value(0.5), coulomb_power(0),
-shift_delta(2.0), delta_alchemical(0.001), alchemical_array(), gradients(), energies(), perturbed_energies(),
+shift_delta(2.0), delta_alchemical(0.001), alchemical_array(), 
+    finite_diff_gradients(), pot_energies(), perturbed_energies(), reduced_perturbed_energies(),
+    forward_Metropolis(), backward_Metropolis(),
 Integrator_type("leapfrogverlet"), friction(1.0 / picosecond), integration_tol(0.001), timeskip(0.0 * picosecond),
 reinetialise_context(false), Debug(false)
 {
@@ -207,7 +211,8 @@ Andersen_flag(false), Andersen_frequency(90.0), MCBarostat_flag(false),
 MCBarostat_frequency(25), ConstraintType("none"),
 Pressure(1.0 * bar), Temperature(300.0 * kelvin), platform_type("Reference"), Restraint_flag(false),
 CMMremoval_frequency(0), buffer_frequency(0), energy_frequency(100), device_index("0"), precision("single"), Alchemical_value(0.5), coulomb_power(0),
-shift_delta(2.0), delta_alchemical(0.001), alchemical_array(), gradients(), energies(), perturbed_energies(),
+shift_delta(2.0), delta_alchemical(0.001), alchemical_array(), finite_diff_gradients(), pot_energies(), perturbed_energies(),
+    reduced_perturbed_energies(), forward_Metropolis(), backward_Metropolis(),
 Integrator_type("leapfrogverlet"), friction(1.0 / picosecond), integration_tol(0.001), timeskip(0.0 * picosecond),
 reinetialise_context(false), Debug(false)
 {
@@ -230,8 +235,9 @@ Restraint_flag(other.Restraint_flag), CMMremoval_frequency(other.CMMremoval_freq
 buffer_frequency(other.buffer_frequency), energy_frequency(other.energy_frequency), device_index(other.device_index),
 precision(other.precision), Alchemical_value(other.Alchemical_value),
 coulomb_power(other.coulomb_power), shift_delta(other.shift_delta),
-delta_alchemical(other.delta_alchemical), alchemical_array(other.alchemical_array), gradients(other.gradients), energies(other.energies),
-perturbed_energies(other.perturbed_energies),
+delta_alchemical(other.delta_alchemical), alchemical_array(other.alchemical_array), finite_diff_gradients(other.finite_diff_gradients), pot_energies(other.pot_energies),
+perturbed_energies(other.perturbed_energies),reduced_perturbed_energies(other.reduced_perturbed_energies),
+    forward_Metropolis(other.forward_Metropolis), backward_Metropolis(other.backward_Metropolis),
 Integrator_type(other.Integrator_type), friction(other.friction), integration_tol(other.integration_tol), timeskip(other.timeskip),
 reinetialise_context(other.reinetialise_context), Debug(other.Debug)
 {
@@ -279,8 +285,11 @@ OpenMMFrEnergyST& OpenMMFrEnergyST::operator=(const OpenMMFrEnergyST &other)
     shift_delta = other.shift_delta;
     delta_alchemical = other.delta_alchemical;
     alchemical_array = other.alchemical_array;
-    gradients = other.gradients;
-    energies = other.energies;
+    finite_diff_gradients = other.finite_diff_gradients;
+    pot_energies = other.pot_energies;
+    reduced_perturbed_energies = other. reduced_perturbed_energies;
+    forward_Metropolis = other.forward_Metropolis;
+    backward_Metropolis = other.backward_Metropolis;
     perturbed_energies = other.perturbed_energies;
     Integrator_type = other.Integrator_type;
     friction = other.friction;
@@ -323,8 +332,11 @@ bool OpenMMFrEnergyST::operator==(const OpenMMFrEnergyST &other) const
         and shift_delta == other.shift_delta
         and delta_alchemical == other.delta_alchemical
         and alchemical_array == other.alchemical_array
-        and gradients == other.gradients
-        and energies == other.energies
+        and finite_diff_gradients == other.finite_diff_gradients
+        and pot_energies == other.pot_energies
+        and reduced_perturbed_energies == other.reduced_perturbed_energies
+        and forward_Metropolis == other.forward_Metropolis
+        and backward_Metropolis == other. backward_Metropolis
         and perturbed_energies == other.perturbed_energies
         and Integrator_type == other.Integrator_type
         and friction == other.friction
@@ -3218,7 +3230,6 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
 
     OpenMM::State state_openmm; //OpenMM State
 
-    double pot_energy_acc = 0.0;
 
     int sample_count = 1;
 
@@ -3328,25 +3339,19 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
         }
 
         //Let's calculate the gradients
-        actual_gradient = calculateGradient(increment_plus, increment_minus, potential_energy_lambda);
+        actual_gradient = calculateGradient(increment_plus, increment_minus, potential_energy_lambda, beta);
         
         if (alchemical_array.size()>1)
         {
             //Let's calculate the biased energies
-            biased_energies.append(computeBiasedEnergies());
+            reduced_perturbed_energies.append(computeReducedPerturbedEnergies(beta));
         }
         
         //Now we append all the calculated information to the useful accumulation arrays
-        if (sample_count != (n_samples))
-        {
-            energies.append(potential_energy_lambda * OpenMM::KcalPerKJ);
-            gradients.append(actual_gradient * OpenMM::KcalPerKJ);
-        }
-//        if (sample_count == (n_samples))
-//        {
-//            gradients.append(actual_gradient * OpenMM::KcalPerKJ);
-//            energies.append(potential_energy_lambda * OpenMM::KcalPerKJ);
-//        }
+
+        pot_energies.append(potential_energy_lambda * OpenMM::KcalPerKJ);
+        finite_diff_gradients.append(actual_gradient * OpenMM::KcalPerKJ);
+
 
         //RESET coupling parameter to its original value
         if (perturbed_energies[0])
@@ -3482,7 +3487,7 @@ void OpenMMFrEnergyST::updateOpenMMContextLambda(double lambda)
 }
 
 double OpenMMFrEnergyST::calculateGradient(double increment_plus, double increment_minus,
-                                           double potential_energy_lambda)
+                                           double potential_energy_lambda, double beta)
 {
     double double_increment = increment_plus - increment_minus;
     double gradient = 0;
@@ -3499,36 +3504,42 @@ double OpenMMFrEnergyST::calculateGradient(double increment_plus, double increme
     if (increment_minus < 0.0)
     {
         gradient = (potential_energy_lambda_plus_delta-potential_energy_lambda)*2/double_increment;
+        backward_Metropolis.append(exp(beta * (potential_energy_lambda_plus_delta - potential_energy_lambda)));
+        forward_Metropolis.append(exp(-beta * (potential_energy_lambda_plus_delta - potential_energy_lambda)));
     }
     else if(increment_plus > 1.0)
     {
         gradient = (potential_energy_lambda_minus_delta-potential_energy_lambda)*2/double_increment;
+        backward_Metropolis.append(exp(-beta * (potential_energy_lambda_minus_delta - potential_energy_lambda)));
+        forward_Metropolis.append(exp(beta * (potential_energy_lambda_minus_delta - potential_energy_lambda)));
     }
     else
     {
         gradient = (potential_energy_lambda_plus_delta-potential_energy_lambda_minus_delta)/double_increment;
+        backward_Metropolis.append(exp(-beta * (potential_energy_lambda_minus_delta - potential_energy_lambda)));
+        forward_Metropolis.append(exp(-beta * (potential_energy_lambda_plus_delta - potential_energy_lambda)));
     }
 
     return gradient;
 }
 
-QVector<double> OpenMMFrEnergyST::computeBiasedEnergies()
+QVector<double> OpenMMFrEnergyST::computeReducedPerturbedEnergies(double beta)
 {
     bool Debug = false;
-    QVector<double> biased;
+    QVector<double> perturbed;
     QVector<double>::iterator i;
     for (i=alchemical_array.begin(); i!=alchemical_array.end(); i++)
     {
-        biased.append(getPotentialEnergyAtLambda(*i));
+        perturbed.append(getPotentialEnergyAtLambda(*i)*beta);
     }
     if (Debug)
     {
-        for (i=biased.begin(); i!=biased.end(); i++)
+        for (i=perturbed.begin(); i!=perturbed.end(); i++)
         {
             qDebug() <<"bias is: "<<*i<<endl;
         }
     }
-    return biased;
+    return perturbed;
 }
 
 void OpenMMFrEnergyST::updateBoxDimensions(OpenMM::State &state_openmm, 
@@ -3852,18 +3863,20 @@ void OpenMMFrEnergyST::setDeltatAlchemical(double deltaalchemical)
 /** Calculated Gradients*/
 QVector<double> OpenMMFrEnergyST::getGradients(void)
 {
-    return gradients;
+    return finite_diff_gradients;
 }
 
 /** Average energies*/
 QVector<double> OpenMMFrEnergyST::getEnergies(void)
 {
-    return energies;
+    return pot_energies;
 }
 
-QVector<QVector <double> > OpenMMFrEnergyST::getBiases(void)
+QVector<QVector <double> > OpenMMFrEnergyST::getReducedPerturbedEnergies(void)
 {
-    return biased_energies;
+    cout<<"Returning biases"<<endl;
+    cout<<reduced_perturbed_energies.size()<<endl;
+    return reduced_perturbed_energies;
 }
 
 /** Get the Integrator type*/

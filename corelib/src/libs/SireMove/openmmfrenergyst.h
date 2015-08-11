@@ -173,7 +173,7 @@ namespace SireMove {
         QVector<double> getGradients(void);
         QVector<double> getEnergies(void);
 
-        QVector<QVector <double> > getBiases(void);
+        QVector<QVector <double> > getReducedPerturbedEnergies(void);
 
         QString getIntegrator(void);
         void setIntegrator(QString);
@@ -204,8 +204,8 @@ namespace SireMove {
         double getPotentialEnergyAtLambda(double lambda);
         void updateOpenMMContextLambda(double lambda);
         double calculateGradient(double increment_plus, double increment_minus,
-        double potential_energy_lambda);
-        QVector<double> computeBiasedEnergies();
+        double potential_energy_lambda, double beta);
+        QVector<double> computeReducedPerturbedEnergies(double);
 
         /** Whether or not to save the velocities after every step, or to save them at the end of all of the steps */
         bool frequent_save_velocities;
@@ -268,11 +268,15 @@ namespace SireMove {
 
         QVector<double> alchemical_array;
 
-        QVector<double> gradients;
+        QVector<double> finite_diff_gradients;
 
-        QVector<double> energies;
+        QVector<double> pot_energies;
 
-        QVector<QVector <double> > biased_energies;
+        QVector<double> forward_Metropolis;
+        
+        QVector<double> backward_Metropolis;
+
+        QVector<QVector <double> > reduced_perturbed_energies;
 
         QVector<bool> perturbed_energies;
 

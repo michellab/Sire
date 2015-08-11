@@ -162,14 +162,14 @@ void register_OpenMMFrEnergyST_class(){
                 , getAndersenFrequency_function_value );
 
         }
-        { //::SireMove::OpenMMFrEnergyST::getBiases
+        { //::SireMove::OpenMMFrEnergyST::getReducedPerturbedEnergies
 
-            typedef ::QVector< QVector < double > > ( ::SireMove::OpenMMFrEnergyST::*getBiases_function_type )(  ) ;
-            getBiases_function_type getBiases_function_value( &::SireMove::OpenMMFrEnergyST::getBiases );
+            typedef ::QVector< QVector < double > > ( ::SireMove::OpenMMFrEnergyST::*getReducedPerturbedEnergies_function_type )(  ) ;
+            getReducedPerturbedEnergies_function_type getReducedPerturbedEnergies_function_value( &::SireMove::OpenMMFrEnergyST::getReducedPerturbedEnergies );
 
             OpenMMFrEnergyST_exposer.def(
-                "getBiases"
-                , getBiases_function_value );
+                "getReducedPerturbedEnergies"
+                , getReducedPerturbedEnergies_function_value );
 
         }
         { //::SireMove::OpenMMFrEnergyST::getBufferFrequency
