@@ -173,6 +173,8 @@ namespace SireMove {
         QVector<double> getGradients(void);
         QVector<double> getEnergies(void);
 
+        QVector<QVector <double> > getBiases(void);
+
         QString getIntegrator(void);
         void setIntegrator(QString);
 
@@ -203,6 +205,7 @@ namespace SireMove {
         void updateOpenMMContextLambda(double lambda);
         double calculateGradient(double increment_plus, double increment_minus,
         double potential_energy_lambda);
+        QVector<double> computeBiasedEnergies();
 
         /** Whether or not to save the velocities after every step, or to save them at the end of all of the steps */
         bool frequent_save_velocities;
@@ -268,6 +271,8 @@ namespace SireMove {
         QVector<double> gradients;
 
         QVector<double> energies;
+
+        QVector<QVector <double> > biased_energies;
 
         QVector<bool> perturbed_energies;
 

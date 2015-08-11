@@ -3329,18 +3329,24 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
 
         //Let's calculate the gradients
         actual_gradient = calculateGradient(increment_plus, increment_minus, potential_energy_lambda);
-
+        
+        if (alchemical_array.size()>1)
+        {
+            //Let's calculate the biased energies
+            biased_energies.append(computeBiasedEnergies());
+        }
+        
         //Now we append all the calculated information to the useful accumulation arrays
         if (sample_count != (n_samples))
         {
             energies.append(potential_energy_lambda * OpenMM::KcalPerKJ);
             gradients.append(actual_gradient * OpenMM::KcalPerKJ);
         }
-        if (sample_count == (n_samples))
-        {
-            gradients.append(actual_gradient * OpenMM::KcalPerKJ);
-            energies.append(potential_energy_lambda * OpenMM::KcalPerKJ);
-        }
+//        if (sample_count == (n_samples))
+//        {
+//            gradients.append(actual_gradient * OpenMM::KcalPerKJ);
+//            energies.append(potential_energy_lambda * OpenMM::KcalPerKJ);
+//        }
 
         //RESET coupling parameter to its original value
         if (perturbed_energies[0])
@@ -3504,6 +3510,25 @@ double OpenMMFrEnergyST::calculateGradient(double increment_plus, double increme
     }
 
     return gradient;
+}
+
+QVector<double> OpenMMFrEnergyST::computeBiasedEnergies()
+{
+    bool Debug = false;
+    QVector<double> biased;
+    QVector<double>::iterator i;
+    for (i=alchemical_array.begin(); i!=alchemical_array.end(); i++)
+    {
+        biased.append(getPotentialEnergyAtLambda(*i));
+    }
+    if (Debug)
+    {
+        for (i=biased.begin(); i!=biased.end(); i++)
+        {
+            qDebug() <<"bias is: "<<*i<<endl;
+        }
+    }
+    return biased;
 }
 
 void OpenMMFrEnergyST::updateBoxDimensions(OpenMM::State &state_openmm, 
@@ -3834,6 +3859,11 @@ QVector<double> OpenMMFrEnergyST::getGradients(void)
 QVector<double> OpenMMFrEnergyST::getEnergies(void)
 {
     return energies;
+}
+
+QVector<QVector <double> > OpenMMFrEnergyST::getBiases(void)
+{
+    return biased_energies;
 }
 
 /** Get the Integrator type*/
