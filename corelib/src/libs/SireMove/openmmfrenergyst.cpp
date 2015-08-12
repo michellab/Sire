@@ -130,11 +130,13 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const OpenMMFrEnergyST 
         << velver.energy_frequency
         << velver.device_index << velver.precision << velver.Alchemical_value
         << velver.coulomb_power << velver.shift_delta << velver.delta_alchemical
-        << velver.alchemical_array << velver.finite_diff_gradients << velver.pot_energies
-        << velver.perturbed_energies << velver.reduced_perturbed_energies
-        << velver.forward_Metropolis << velver.backward_Metropolis << velver.Integrator_type 
+        << velver.alchemical_array 
+        //<< velver.finite_diff_gradients << velver.pot_energies
+        //<< velver.perturbed_energies << velver.reduced_perturbed_energies
+        //<< velver.forward_Metropolis << velver.backward_Metropolis 
+        << velver.Integrator_type 
         << velver.friction << velver.integration_tol
-        << velver.timeskip << velver.reinetialise_context 
+        << velver.timeskip << velver.reinitialise_context 
         << static_cast<const Integrator&> (velver);
     // Free OpenMM pointers??
 
@@ -160,11 +162,12 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, OpenMMFrEnergyST &velve
             >> velver.buffer_frequency >> velver.energy_frequency
             >> velver.device_index >> velver.precision >> velver.Alchemical_value
             >> velver.coulomb_power >> velver.shift_delta >> velver.delta_alchemical
-            >> velver.alchemical_array >> velver.finite_diff_gradients >> velver.pot_energies 
-            >> velver.perturbed_energies >> velver.reduced_perturbed_energies 
-            >> velver.forward_Metropolis >> velver.backward_Metropolis 
+            >> velver.alchemical_array 
+            //>> velver.finite_diff_gradients >> velver.pot_energies 
+            //>> velver.perturbed_energies >> velver.reduced_perturbed_energies 
+            //>> velver.forward_Metropolis >> velver.backward_Metropolis 
             >> velver.Integrator_type >> velver.friction >> velver.integration_tol
-            >> velver.timeskip >> velver.reinetialise_context 
+            >> velver.timeskip >> velver.reinitialise_context 
             >> static_cast<Integrator&> (velver);
 
         // Maybe....need to reinitialise from molgroup because openmm system was not serialised...
@@ -196,7 +199,7 @@ shift_delta(2.0), delta_alchemical(0.001), alchemical_array(),
     finite_diff_gradients(), pot_energies(), perturbed_energies(), reduced_perturbed_energies(),
     forward_Metropolis(), backward_Metropolis(),
 Integrator_type("leapfrogverlet"), friction(1.0 / picosecond), integration_tol(0.001), timeskip(0.0 * picosecond),
-reinetialise_context(false), Debug(false)
+reinitialise_context(false), Debug(false)
 {
 }
 
@@ -214,7 +217,7 @@ CMMremoval_frequency(0), buffer_frequency(0), energy_frequency(100), device_inde
 shift_delta(2.0), delta_alchemical(0.001), alchemical_array(), finite_diff_gradients(), pot_energies(), perturbed_energies(),
     reduced_perturbed_energies(), forward_Metropolis(), backward_Metropolis(),
 Integrator_type("leapfrogverlet"), friction(1.0 / picosecond), integration_tol(0.001), timeskip(0.0 * picosecond),
-reinetialise_context(false), Debug(false)
+reinitialise_context(false), Debug(false)
 {
 }
 
@@ -239,7 +242,7 @@ delta_alchemical(other.delta_alchemical), alchemical_array(other.alchemical_arra
 perturbed_energies(other.perturbed_energies),reduced_perturbed_energies(other.reduced_perturbed_energies),
     forward_Metropolis(other.forward_Metropolis), backward_Metropolis(other.backward_Metropolis),
 Integrator_type(other.Integrator_type), friction(other.friction), integration_tol(other.integration_tol), timeskip(other.timeskip),
-reinetialise_context(other.reinetialise_context), Debug(other.Debug)
+reinitialise_context(other.reinitialise_context), Debug(other.Debug)
 {
 }
 
@@ -295,7 +298,7 @@ OpenMMFrEnergyST& OpenMMFrEnergyST::operator=(const OpenMMFrEnergyST &other)
     friction = other.friction;
     integration_tol = other.integration_tol;
     timeskip = other.timeskip;
-    reinetialise_context = other.reinetialise_context;
+    reinitialise_context = other.reinitialise_context;
     Debug = other.Debug;
     return *this;
 }
@@ -342,7 +345,7 @@ bool OpenMMFrEnergyST::operator==(const OpenMMFrEnergyST &other) const
         and friction == other.friction
         and integration_tol == other.integration_tol
         and timeskip == other.timeskip
-        and reinetialise_context == other.reinetialise_context
+        and reinitialise_context == other.reinitialise_context
         and Debug == other.Debug
         and Integrator::operator==(other);
 }
@@ -2742,7 +2745,7 @@ void OpenMMFrEnergyST::createContext(IntegratorWorkspace &workspace, SireUnits::
     {
         qDebug() << "In OpenMMFrEnergyST::createContext()\n\n";
         qDebug() << isContextInitialised;
-        qDebug() << reinetialise_context;
+        qDebug() << reinitialise_context;
     }
 
     // Check that the openmm system has been initialised
@@ -2769,7 +2772,7 @@ void OpenMMFrEnergyST::createContext(IntegratorWorkspace &workspace, SireUnits::
     const double converted_Temperature = convertTo(Temperature.value(), kelvin);
     const double converted_friction = convertTo(friction.value(), picosecond);
 
-    if (!isContextInitialised || (isContextInitialised && reinetialise_context))
+    if (!isContextInitialised || (isContextInitialised && reinitialise_context))
     {
         OpenMM::Integrator * integrator_openmm = NULL;
 
@@ -3941,7 +3944,7 @@ void OpenMMFrEnergyST::setTimetoSkip(SireUnits::Dimension::Time skip)
 /** Set the flag to reinitialise the context*/
 void OpenMMFrEnergyST::setReinitialiseContext(bool reinitialise)
 {
-    reinetialise_context = reinitialise;
+    reinitialise_context = reinitialise;
 }
 
 /** Create an empty workspace */

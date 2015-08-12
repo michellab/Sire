@@ -292,7 +292,7 @@ namespace SireMove {
         SireUnits::Dimension::Time timeskip;
 
 
-        bool reinetialise_context;
+        bool reinitialise_context;
 
         bool Debug;
 
