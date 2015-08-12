@@ -3888,7 +3888,6 @@ QVector<double> OpenMMFrEnergyST::getBackwardMetropolis(void)
 
 QVector<QVector <double> > OpenMMFrEnergyST::getReducedPerturbedEnergies(void)
 {
-    cout<<"Returning biases"<<endl;
     cout<<reduced_perturbed_energies.size()<<endl;
     return reduced_perturbed_energies;
 }
