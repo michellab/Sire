@@ -3871,6 +3871,17 @@ QVector<double> OpenMMFrEnergyST::getEnergies(void)
 {
     return pot_energies;
 }
+/** Average energies*/
+QVector<double> OpenMMFrEnergyST::getForwardMetropolis(void)
+{
+    return forward_Metropolis;
+}
+/** Average energies*/
+QVector<double> OpenMMFrEnergyST::getBackwardMetropolis(void)
+{
+    return backward_Metropolis;
+}
+
 
 QVector<QVector <double> > OpenMMFrEnergyST::getReducedPerturbedEnergies(void)
 {

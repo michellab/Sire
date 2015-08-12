@@ -173,6 +173,9 @@ namespace SireMove {
         QVector<double> getGradients(void);
         QVector<double> getEnergies(void);
 
+        QVector<double> getForwardMetropolis(void);
+        QVector<double> getBackwardMetropolis(void);
+
         QVector<QVector <double> > getReducedPerturbedEnergies(void);
 
         QString getIntegrator(void);
