@@ -3236,7 +3236,7 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
 
     int sample_count = 1;
 
-    if (coord_freq > 0)
+    if (coord_freq > 0 && Debug)
         qDebug() << "Saving atom coordinates every " << coord_freq << "\n";
 
 
@@ -3286,7 +3286,7 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
 
 
     double actual_gradient = 0.0;
-
+    emptyContainers();
     while (sample_count <= n_samples)
     {
         //*********************MD STEPS****************************
@@ -3363,7 +3363,6 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
         }
         updateOpenMMContextLambda(Alchemical_value);
         sample_count = sample_count + 1.0;
-
 
     }//end while
     if (time_skip != 0)
@@ -3445,8 +3444,6 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
 
     buffered_workspace.clear();
     buffered_dimensions.clear();
-
-
     System & ptr_sys = ws.nonConstsystem();
     ptr_sys.mustNowRecalculateFromScratch();
 
@@ -3543,6 +3540,15 @@ QVector<double> OpenMMFrEnergyST::computeReducedPerturbedEnergies(double beta)
         }
     }
     return perturbed;
+}
+
+void OpenMMFrEnergyST::emptyContainers()
+{
+    finite_diff_gradients.clear();
+    pot_energies.clear();
+    forward_Metropolis.clear();
+    backward_Metropolis.clear();
+    reduced_perturbed_energies.clear();
 }
 
 void OpenMMFrEnergyST::updateBoxDimensions(OpenMM::State &state_openmm, 
@@ -3888,7 +3894,6 @@ QVector<double> OpenMMFrEnergyST::getBackwardMetropolis(void)
 
 QVector<QVector <double> > OpenMMFrEnergyST::getReducedPerturbedEnergies(void)
 {
-    cout<<reduced_perturbed_energies.size()<<endl;
     return reduced_perturbed_energies;
 }
 

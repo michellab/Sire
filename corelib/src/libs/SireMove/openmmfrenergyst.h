@@ -209,6 +209,7 @@ namespace SireMove {
         double calculateGradient(double increment_plus, double increment_minus,
         double potential_energy_lambda, double beta);
         QVector<double> computeReducedPerturbedEnergies(double);
+        void emptyContainers(void);
 
         /** Whether or not to save the velocities after every step, or to save them at the end of all of the steps */
         bool frequent_save_velocities;

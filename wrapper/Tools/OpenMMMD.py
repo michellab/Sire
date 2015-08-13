@@ -1494,8 +1494,8 @@ def runFreeNrg():
         forward_Metropolis = integrator.getForwardMetropolis()
         backward_Metropolis = integrator.getBackwardMetropolis()
         pot_energies = integrator.getEnergies()
-        beg = (nmoves.val*(i-1))+1
-        end = nmoves.val*(i-1)+nmoves.val+1
+        beg = (nmoves.val*(i-1))
+        end = nmoves.val*(i-1)+nmoves.val
         steps = list(range(beg, end, energy_frequency.val))
         outdata = np.column_stack((steps, pot_energies, gradients,
                                    forward_Metropolis, backward_Metropolis,
@@ -1506,7 +1506,6 @@ def runFreeNrg():
 
         mean_gradient = np.average(gradients)
         outgradients.write("%5d %20.10f\n" % (i, mean_gradient))
-
         for gradient in gradients:
             grads[lambda_val.val].accumulate(gradients[i-1])
     s2 = timer.elapsed() / 1000.
