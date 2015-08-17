@@ -3510,12 +3510,14 @@ double OpenMMFrEnergyST::calculateGradient(double increment_plus, double increme
     else if(increment_plus > 1.0)
     {
         gradient = (potential_energy_lambda_minus_delta-potential_energy_lambda)*2/double_increment;
+
         backward_Metropolis.append(exp(-beta * (potential_energy_lambda_minus_delta - potential_energy_lambda)));
         forward_Metropolis.append(exp(beta * (potential_energy_lambda_minus_delta - potential_energy_lambda)));
     }
     else
     {
         gradient = (potential_energy_lambda_plus_delta-potential_energy_lambda_minus_delta)/double_increment;
+
         backward_Metropolis.append(exp(-beta * (potential_energy_lambda_minus_delta - potential_energy_lambda)));
         forward_Metropolis.append(exp(-beta * (potential_energy_lambda_plus_delta - potential_energy_lambda)));
     }
