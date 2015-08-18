@@ -37,6 +37,7 @@ from Sire.Analysis import *
 from Sire.Tools.DCDFile import *
 from Sire.Tools import Parameter, resolveParameters
 import Sire.Stream
+import time
 import numpy as np
 
 
@@ -1358,6 +1359,7 @@ def runFreeNrg():
     timer.start()
     outfile = open("simfile.dat", "ab")
     lam_str = "%7.5f" % lambda_val.val
+    simtime=nmoves.val*ncycles.val*timestep.val
     # Setup the system from scratch if no restart file is available
     print("###================Setting up calculation=====================###")
     if not os.path.exists(restart_file.val):
@@ -1408,12 +1410,19 @@ def runFreeNrg():
 
         print("Setting up sim file. ")
 
-        outfile.write(b"#This is the awesome data everything file of somd\n")
-        outfile.write(bytes("#generating lambda is " + lam_str+"\n", "UTF-8"))
-        outfile.write(bytes("#Alchemical array is "+ str(lambda_array.val) +"\n", "UTF-8"))
-        outfile.write(bytes("#Generating temperature is "+str(temperature.val)+"\n", "UTF-8"))
-        outfile.write(b"#Something on number of cycles and saving interval\n")
-        outfile.write(b"#[step]\t[potential]\t[gradient]\t[forward_Metropolis]\t[backward_Metropolis]\t[reduced_perturbed_energies]\n")
+        outfile.write(bytes("#This file was generated on "+time.strftime("%c")+"\n", "UTF-8"))
+        outfile.write(bytes("#Using the somd command, which is part of the molecular library Sire\n","UTF-8"))
+        outfile.write(bytes("#For more information visit: https://github.com/michellab/Sire\n#\n","UTF-8"))
+        outfile.write(bytes("#General information on simulation parameters:\n", "UTF-8"))
+        outfile.write(bytes("#Simulation used %s moves, %s cycles and %s of simulation time \n" %(nmoves.val,
+                                                                                        ncycles.val, simtime), "UTF-8"))
+        outfile.write(bytes("#Generating lambda is\t\t " + lam_str+"\n", "UTF-8"))
+        outfile.write(bytes("#Alchemical array is\t\t "+ str(lambda_array.val) +"\n", "UTF-8"))
+        outfile.write(bytes("#Generating temperature is \t"+str(temperature.val)+"\n", "UTF-8"))
+        outfile.write(bytes("#Energy was saved every "+str(energy_frequency.val)+ " steps \n#\n#\n", "UTF-8"))
+        outfile.write(bytes("# %8s %25s %25s %25s %25s %25s" % ("[step]", "[potential kcal/mol]", "[gradient kcal/mol]",
+        "[forward Metropolis]", "[backward Metropolis]", "[u_kl]\n"),
+                            "UTF-8"))
 
     else:
         system, moves = Sire.Stream.load(restart_file.val)
@@ -1471,7 +1480,7 @@ def runFreeNrg():
             print ('Lambda annealing done.\n')
         print("###===========================================================###\n")
 
-    simtime=nmoves.val*ncycles.val*timestep.val
+
     print("###====================somd-freenrg run=======================###")
     print ("Starting somd-freenrg run...")
     print ("%s moves %s cycles, %s simulation time" %(nmoves.val, ncycles.val, simtime))
@@ -1500,7 +1509,7 @@ def runFreeNrg():
         outdata = np.column_stack((steps, pot_energies, gradients,
                                    forward_Metropolis, backward_Metropolis,
                                    reduced_energies))
-        fmt ="\t".join(["%5d"] + ["%10.15e"] * (outdata.shape[1]-1))
+        fmt =" ".join(["%8d"] + ["%25.8e"] + ["%25.8e"] + ["%25.8e"] + ["%25.8e"] + ["%25.15e"]*(len(lambda_array.val)))
         np.savetxt(outfile, outdata, fmt=fmt)
 
 
