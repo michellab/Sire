@@ -3291,6 +3291,22 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
     {
         //*********************MD STEPS****************************
         (openmm_context->getIntegrator()).step(energy_frequency);
+        state_openmm = openmm_context->getState(infoMask, false, 0x01);
+        double potential_energy_lambda = state_openmm.getPotentialEnergy();
+        if (Debug)
+        {
+            printf("Lambda = %f Potential energy = %.5f kcal/mol\n", Alchemical_value, potential_energy_lambda * OpenMM::KcalPerKJ);
+            //exit(-1);
+        }
+        IsFiniteNumber = (potential_energy_lambda <= DBL_MAX && potential_energy_lambda >= -DBL_MAX);
+
+        if (!IsFiniteNumber)
+        {
+            qDebug() << "NaN or Inf has been generated along the simulation";
+            exit(-1);
+        }
+        pot_energies.append(potential_energy_lambda * OpenMM::KcalPerKJ);
+        
         if (perturbed_energies[0])
         {
             openmm_context->setParameter("SPOnOff", 1.0); //Solvent-Solvent and Protein Protein Non Bonded OFF
@@ -3325,21 +3341,9 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
             }
         }
 
-
         //Computing the potential energies and gradients
-        double potential_energy_lambda = state_openmm.getPotentialEnergy();
-        if (Debug)
-        {
-            printf("Lambda = %f Potential energy = %.5f kcal/mol\n", Alchemical_value, potential_energy_lambda * OpenMM::KcalPerKJ);
-            //exit(-1);
-        }
-        IsFiniteNumber = (potential_energy_lambda <= DBL_MAX && potential_energy_lambda >= -DBL_MAX);
+        potential_energy_lambda = state_openmm.getPotentialEnergy();
 
-        if (!IsFiniteNumber)
-        {
-            qDebug() << "NaN or Inf has been generated along the simulation";
-            exit(-1);
-        }
 
         //Let's calculate the gradients
         actual_gradient = calculateGradient(increment_plus, increment_minus, potential_energy_lambda, beta);
@@ -3351,8 +3355,6 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
         }
         
         //Now we append all the calculated information to the useful accumulation arrays
-
-        pot_energies.append(potential_energy_lambda * OpenMM::KcalPerKJ);
         finite_diff_gradients.append(actual_gradient * OpenMM::KcalPerKJ);
 
 

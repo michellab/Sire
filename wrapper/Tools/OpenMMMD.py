@@ -192,6 +192,7 @@ coulomb_power = Parameter("coulomb power", 0,
 
 energy_frequency = Parameter("energy frequency", 1,
                              """The number of time steps between evaluation of free energy gradients.""")
+simfile = Parameter("outdata_file", "simfile.dat", """Filename that records all output needed for the free energy analysis""")
 verbose = Parameter("verbose", False, """Print debug output""")
 
 
@@ -1357,7 +1358,7 @@ def runFreeNrg():
 
     timer = QTime()
     timer.start()
-    outfile = open("simfile.dat", "ab")
+    outfile = open(simfile.val, "ab")
     lam_str = "%7.5f" % lambda_val.val
     simtime=nmoves.val*ncycles.val*timestep.val
     # Setup the system from scratch if no restart file is available
