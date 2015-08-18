@@ -131,9 +131,6 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const OpenMMFrEnergyST 
         << velver.device_index << velver.precision << velver.Alchemical_value
         << velver.coulomb_power << velver.shift_delta << velver.delta_alchemical
         << velver.alchemical_array 
-        //<< velver.finite_diff_gradients << velver.pot_energies
-        //<< velver.perturbed_energies << velver.reduced_perturbed_energies
-        //<< velver.forward_Metropolis << velver.backward_Metropolis 
         << velver.Integrator_type 
         << velver.friction << velver.integration_tol
         << velver.timeskip << velver.reinitialise_context 
@@ -163,9 +160,6 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, OpenMMFrEnergyST &velve
             >> velver.device_index >> velver.precision >> velver.Alchemical_value
             >> velver.coulomb_power >> velver.shift_delta >> velver.delta_alchemical
             >> velver.alchemical_array 
-            //>> velver.finite_diff_gradients >> velver.pot_energies 
-            //>> velver.perturbed_energies >> velver.reduced_perturbed_energies 
-            //>> velver.forward_Metropolis >> velver.backward_Metropolis 
             >> velver.Integrator_type >> velver.friction >> velver.integration_tol
             >> velver.timeskip >> velver.reinitialise_context 
             >> static_cast<Integrator&> (velver);
