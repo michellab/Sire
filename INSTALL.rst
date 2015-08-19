@@ -58,15 +58,15 @@ executable runs, e.g.
    Check that your python3 installed properly, i.e. you didn't get an error
    such as: 
    ::
-   Python build finished, but the necessary bits to build these modules were not found:
-   _ssl _xxx _xxx (some other modules here)
-   To find the necessary bits, look in setup.py in detect_modules() for the module's name.
-  
-   Failed to build these modules:
-   _ssl
+      Python build finished, but the necessary bits to build these modules were not found:
+      _ssl _xxx _xxx (some other modules here)
+      To find the necessary bits, look in setup.py in detect_modules() for the module's name.
+     
+      Failed to build these modules:
+      _ssl
 
 
-If you checked step 1 and 2 there shouldn't be any problems. 
+   If you checked step 1 and 2 there shouldn't be any problems. 
 
 9. Now we can install setuptools and finally pip from the within sire python
 ::
@@ -80,6 +80,7 @@ If you checked step 1 and 2 there shouldn't be any problems.
    ``:-> ~/sire.app/bundled/bin/pip install readline ipython`` 
 
 11. Running Sire
+   
    To run a Sire script, e.g. script.py, simply using the Sire python 
    executable, e.g.
 
