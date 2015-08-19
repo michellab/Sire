@@ -1,0 +1,10 @@
+SIRE changelog
+==============
+
+devel branch:
+
+    Updated gradient compuation in openmmfreenergst to finite differece gradients
+    Allow the computation of reduced perturbed energies in openmmfreenergst of all computed lambda values
+    Separated minimization and equilibration from production run.
+    Implemented mass repartitioning for hydrogens atoms to allow for larger integration timesteps
+    Added nautilus scripts 
