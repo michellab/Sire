@@ -73,6 +73,8 @@
 #include <iostream>
 #include <QDebug>
 #include <QTime>
+#include <boost/tuple/tuple.hpp>
+
 
 
 using namespace SireMove;
@@ -85,14 +87,10 @@ using namespace SireBase;
 using namespace SireStream;
 using namespace SireUnits;
 using namespace SireUnits::Dimension;
-
-//ADDED BY JM
 using namespace SireMM;
 using namespace SireIO;
-
-
-//ADDED BY GAC
 using namespace std;
+using boost::tuples::tuple;
 
 enum
 {
@@ -130,10 +128,11 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const OpenMMFrEnergyST 
         << velver.energy_frequency
         << velver.device_index << velver.precision << velver.Alchemical_value
         << velver.coulomb_power << velver.shift_delta << velver.delta_alchemical
-        << velver.gradients << velver.energies << velver.perturbed_energies
-        << velver.Integrator_type << velver.friction << velver.integration_tol
-        << velver.timeskip << velver.reinetialise_context << velver.GF_acc
-        << velver.GB_acc << static_cast<const Integrator&> (velver);
+        << velver.alchemical_array 
+        << velver.Integrator_type 
+        << velver.friction << velver.integration_tol
+        << velver.timeskip << velver.reinitialise_context 
+        << static_cast<const Integrator&> (velver);
     // Free OpenMM pointers??
 
     return ds;
@@ -158,10 +157,10 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, OpenMMFrEnergyST &velve
             >> velver.buffer_frequency >> velver.energy_frequency
             >> velver.device_index >> velver.precision >> velver.Alchemical_value
             >> velver.coulomb_power >> velver.shift_delta >> velver.delta_alchemical
-            >> velver.gradients >> velver.energies >> velver.perturbed_energies
+            >> velver.alchemical_array 
             >> velver.Integrator_type >> velver.friction >> velver.integration_tol
-            >> velver.timeskip >> velver.reinetialise_context >> velver.GF_acc
-            >> velver.GB_acc >> static_cast<Integrator&> (velver);
+            >> velver.timeskip >> velver.reinitialise_context 
+            >> static_cast<Integrator&> (velver);
 
         // Maybe....need to reinitialise from molgroup because openmm system was not serialised...
         velver.isSystemInitialised = false;
@@ -188,9 +187,11 @@ Andersen_flag(false), Andersen_frequency(90.0), MCBarostat_flag(false),
 MCBarostat_frequency(25), ConstraintType("none"),
 Pressure(1.0 * bar), Temperature(300.0 * kelvin), platform_type("Reference"), Restraint_flag(false),
 CMMremoval_frequency(0), buffer_frequency(0), energy_frequency(100), device_index("0"), precision("single"), Alchemical_value(0.5), coulomb_power(0),
-shift_delta(2.0), delta_alchemical(0.001), gradients(), energies(), perturbed_energies(),
+shift_delta(2.0), delta_alchemical(0.001), alchemical_array(), 
+    finite_diff_gradients(), pot_energies(), perturbed_energies(), reduced_perturbed_energies(),
+    forward_Metropolis(), backward_Metropolis(),
 Integrator_type("leapfrogverlet"), friction(1.0 / picosecond), integration_tol(0.001), timeskip(0.0 * picosecond),
-reinetialise_context(false), GF_acc(0.0), GB_acc(0.0), Debug(false)
+reinitialise_context(false), Debug(false)
 {
 }
 
@@ -205,9 +206,10 @@ Andersen_flag(false), Andersen_frequency(90.0), MCBarostat_flag(false),
 MCBarostat_frequency(25), ConstraintType("none"),
 Pressure(1.0 * bar), Temperature(300.0 * kelvin), platform_type("Reference"), Restraint_flag(false),
 CMMremoval_frequency(0), buffer_frequency(0), energy_frequency(100), device_index("0"), precision("single"), Alchemical_value(0.5), coulomb_power(0),
-shift_delta(2.0), delta_alchemical(0.001), gradients(), energies(), perturbed_energies(),
+shift_delta(2.0), delta_alchemical(0.001), alchemical_array(), finite_diff_gradients(), pot_energies(), perturbed_energies(),
+    reduced_perturbed_energies(), forward_Metropolis(), backward_Metropolis(),
 Integrator_type("leapfrogverlet"), friction(1.0 / picosecond), integration_tol(0.001), timeskip(0.0 * picosecond),
-reinetialise_context(false), GF_acc(0.0), GB_acc(0.0), Debug(false)
+reinitialise_context(false), Debug(false)
 {
 }
 
@@ -228,10 +230,11 @@ Restraint_flag(other.Restraint_flag), CMMremoval_frequency(other.CMMremoval_freq
 buffer_frequency(other.buffer_frequency), energy_frequency(other.energy_frequency), device_index(other.device_index),
 precision(other.precision), Alchemical_value(other.Alchemical_value),
 coulomb_power(other.coulomb_power), shift_delta(other.shift_delta),
-delta_alchemical(other.delta_alchemical), gradients(other.gradients), energies(other.energies),
-perturbed_energies(other.perturbed_energies),
+delta_alchemical(other.delta_alchemical), alchemical_array(other.alchemical_array), finite_diff_gradients(other.finite_diff_gradients), pot_energies(other.pot_energies),
+perturbed_energies(other.perturbed_energies),reduced_perturbed_energies(other.reduced_perturbed_energies),
+    forward_Metropolis(other.forward_Metropolis), backward_Metropolis(other.backward_Metropolis),
 Integrator_type(other.Integrator_type), friction(other.friction), integration_tol(other.integration_tol), timeskip(other.timeskip),
-reinetialise_context(other.reinetialise_context), GF_acc(other.GF_acc), GB_acc(other.GB_acc), Debug(other.Debug)
+reinitialise_context(other.reinitialise_context), Debug(other.Debug)
 {
 }
 
@@ -276,16 +279,18 @@ OpenMMFrEnergyST& OpenMMFrEnergyST::operator=(const OpenMMFrEnergyST &other)
     coulomb_power = other.coulomb_power;
     shift_delta = other.shift_delta;
     delta_alchemical = other.delta_alchemical;
-    gradients = other.gradients;
-    energies = other.energies;
+    alchemical_array = other.alchemical_array;
+    finite_diff_gradients = other.finite_diff_gradients;
+    pot_energies = other.pot_energies;
+    reduced_perturbed_energies = other. reduced_perturbed_energies;
+    forward_Metropolis = other.forward_Metropolis;
+    backward_Metropolis = other.backward_Metropolis;
     perturbed_energies = other.perturbed_energies;
     Integrator_type = other.Integrator_type;
     friction = other.friction;
     integration_tol = other.integration_tol;
     timeskip = other.timeskip;
-    reinetialise_context = other.reinetialise_context;
-    GF_acc = other.GF_acc;
-    GB_acc = other.GB_acc;
+    reinitialise_context = other.reinitialise_context;
     Debug = other.Debug;
     return *this;
 }
@@ -321,16 +326,18 @@ bool OpenMMFrEnergyST::operator==(const OpenMMFrEnergyST &other) const
         and coulomb_power == other.coulomb_power
         and shift_delta == other.shift_delta
         and delta_alchemical == other.delta_alchemical
-        and gradients == other.gradients
-        and energies == other.energies
+        and alchemical_array == other.alchemical_array
+        and finite_diff_gradients == other.finite_diff_gradients
+        and pot_energies == other.pot_energies
+        and reduced_perturbed_energies == other.reduced_perturbed_energies
+        and forward_Metropolis == other.forward_Metropolis
+        and backward_Metropolis == other. backward_Metropolis
         and perturbed_energies == other.perturbed_energies
         and Integrator_type == other.Integrator_type
         and friction == other.friction
         and integration_tol == other.integration_tol
         and timeskip == other.timeskip
-        and reinetialise_context == other.reinetialise_context
-        and GF_acc == other.GF_acc
-        and GB_acc == other.GB_acc
+        and reinitialise_context == other.reinitialise_context
         and Debug == other.Debug
         and Integrator::operator==(other);
 }
@@ -2730,7 +2737,7 @@ void OpenMMFrEnergyST::createContext(IntegratorWorkspace &workspace, SireUnits::
     {
         qDebug() << "In OpenMMFrEnergyST::createContext()\n\n";
         qDebug() << isContextInitialised;
-        qDebug() << reinetialise_context;
+        qDebug() << reinitialise_context;
     }
 
     // Check that the openmm system has been initialised
@@ -2757,7 +2764,7 @@ void OpenMMFrEnergyST::createContext(IntegratorWorkspace &workspace, SireUnits::
     const double converted_Temperature = convertTo(Temperature.value(), kelvin);
     const double converted_friction = convertTo(friction.value(), picosecond);
 
-    if (!isContextInitialised || (isContextInitialised && reinetialise_context))
+    if (!isContextInitialised || (isContextInitialised && reinitialise_context))
     {
         OpenMM::Integrator * integrator_openmm = NULL;
 
@@ -2980,7 +2987,7 @@ System OpenMMFrEnergyST::minimiseEnergy(System &system, double tolerance = 1.0e-
     IntegratorWorkspacePtr workspace = this->createWorkspace(moleculegroup);
     if (system.nMolecules() != moleculegroup.nMolecules())
     {
-        std::cerr << "Number of molecules in do not agree!";
+        std::cerr << "Number of molecules do not agree!";
         exit(1);
     }
     workspace.edit().setSystem(system);
@@ -3028,7 +3035,7 @@ System OpenMMFrEnergyST::minimiseEnergy(System &system, double tolerance = 1.0e-
 }
 
 /**
- * annealLambda will equilibrate the system to the current alchemical lambda
+ * annealSystemToLambda will anneal the system to the current alchemical lambda
  * value of the system
  * @param system                Sire System including molegroup, forcefield
  *                              positions etc
@@ -3066,28 +3073,7 @@ System OpenMMFrEnergyST::annealSystemToLambda(System &system,
 
     for (int i = 0; i < max + 1; i++)
     {
-
-        //NON BONDED TERMS
-        if (perturbed_energies[0])
-            openmm_context->setParameter("lam", lam); //1-5 HD
-        //1-4 Interactions
-        if (perturbed_energies[1])
-            openmm_context->setParameter("lamhd", lam); //1-4 HD
-        if (perturbed_energies[2])
-            openmm_context->setParameter("lamtd", 1.0 - lam); //1-4 To Dummy
-        if (perturbed_energies[3])
-            openmm_context->setParameter("lamfd", lam); //1-4 From Dummy
-        if (perturbed_energies[4])
-            openmm_context->setParameter("lamftd", lam); //1-4 From Dummy to Dummy
-
-        //BONDED PERTURBED TERMS
-        if (perturbed_energies[5])
-            openmm_context->setParameter("lambond", lam); //Bonds
-        if (perturbed_energies[6])
-            openmm_context->setParameter("lamangle", lam); //Angles
-        if (perturbed_energies[7])
-            openmm_context->setParameter("lamdih", lam); //Torsions
-
+        updateOpenMMContextLambda(lam);
         (openmm_context->getIntegrator()).step(annealing_steps);
 
         if (i == max - 1)
@@ -3239,21 +3225,10 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
 
     OpenMM::State state_openmm; //OpenMM State
 
-    double pot_energy_acc = 0.0;
 
     int sample_count = 1;
 
-
-    //state_openmm=openmm_context->getState(infoMask);
-    //qDebug() << "TOTAL Energy = " <<  state_openmm.getPotentialEnergy() * OpenMM::KcalPerKJ + state_openmm.getKineticEnergy() * OpenMM::KcalPerKJ << " kcal/mol";
-    //qDebug() << "Potential Energy = " <<  state_openmm.getPotentialEnergy() * OpenMM::KcalPerKJ << " kcal/mol";
-    //qDebug() << "Kinetic Energy = " <<  state_openmm.getKineticEnergy() * OpenMM::KcalPerKJ << " kcal/mol";
-
-    //qDebug()  <<"*Lambda = " << Alchemical_value << " Potential energy lambda  = " << QString::number(state_openmm.getPotentialEnergy() * OpenMM::KcalPerKJ,'g',9) << " [A + A^2] kcal" << "\n";
-    //exit(-1);
-
-
-    if (coord_freq > 0)
+    if (coord_freq > 0 && Debug)
         qDebug() << "Saving atom coordinates every " << coord_freq << "\n";
 
 
@@ -3297,42 +3272,41 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
     bool IsFiniteNumber = true;
 
 
-    //double epsm = 1e-4;
-
-    //double increment = max(0.001,Alchemical_value)*pow(epsm,1.0/3.0);
-
     double increment = delta_alchemical;
-    double increment_plus = Alchemical_value + increment;
-    double increment_minus = Alchemical_value - increment;
-    double double_increment = increment_plus - increment_minus;
+    double incr_plus = Alchemical_value + increment;
+    double incr_minus = Alchemical_value - increment;
 
-    //double coefficient = -1.0/(double_increment*beta);
 
-    double minv_beta = -1.0 / beta;
     double actual_gradient = 0.0;
-
-    //if(true)
-    //   printf("\nepsm = %.8f increment = %.5f double increment = %.5f\n",epsm, increment, double_increment);
-
+    emptyContainers();
     while (sample_count <= n_samples)
     {
         //*********************MD STEPS****************************
         (openmm_context->getIntegrator()).step(energy_frequency);
+        state_openmm = openmm_context->getState(infoMask, false, 0x01);
+        double p_energy_lambda = state_openmm.getPotentialEnergy();
+        if (Debug)
+        {
+            printf("Lambda = %f Potential energy = %.5f kcal/mol\n", Alchemical_value, p_energy_lambda * OpenMM::KcalPerKJ);
+            //exit(-1);
+        }
+        IsFiniteNumber = (p_energy_lambda <= DBL_MAX && p_energy_lambda >= -DBL_MAX);
+
+        if (!IsFiniteNumber)
+        {
+            qDebug() << "NaN or Inf has been generated along the simulation";
+            exit(-1);
+        }
+        pot_energies.append(p_energy_lambda * OpenMM::KcalPerKJ);
+        
         if (perturbed_energies[0])
         {
             openmm_context->setParameter("SPOnOff", 1.0); //Solvent-Solvent and Protein Protein Non Bonded OFF
         }
         state_openmm = openmm_context->getState(infoMask, false, 0x01);
-        //state_openmm=openmm_context->getState(infoMask);
 
         if (Debug)
             qDebug() << "Total Time = " << state_openmm.getTime() << " ps";
-
-        double potential_energy_lambda = state_openmm.getPotentialEnergy();
-        double potential_energy_lambda_plus_delta;
-        double potential_energy_lambda_minus_delta;
-        double plus;
-        double minus;
 
         // Because looping from 1 to n_samples
         int modulo = 1;
@@ -3359,190 +3333,34 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
             }
         }
 
+        //Computing the potential energies and gradients
+        p_energy_lambda = state_openmm.getPotentialEnergy();
 
-        if (Debug)
+
+        //Let's calculate the gradients
+        double m_forward, m_backward;
+        boost::tuples::tie(actual_gradient, m_forward, m_backward) = calculateGradient(incr_plus, 
+                             incr_minus, p_energy_lambda, beta);
+        
+        if (alchemical_array.size()>1)
         {
-            printf("Lambda = %f Potential energy = %.5f kcal/mol\n", Alchemical_value, potential_energy_lambda * OpenMM::KcalPerKJ);
-            //exit(-1);
+            //Let's calculate the biased energies
+            reduced_perturbed_energies.append(computeReducedPerturbedEnergies(beta));
         }
-
-        IsFiniteNumber = (potential_energy_lambda <= DBL_MAX && potential_energy_lambda >= -DBL_MAX);
-
-        if (!IsFiniteNumber)
-        {
-            qDebug() << "NaN or Inf has been generated along the simulation";
-            exit(-1);
-        }
-
-        if (increment_plus < 1.0)
-        {
-
-            //NON BONDED TERMS
-            if (perturbed_energies[0])
-                openmm_context->setParameter("lam", increment_plus); //1-5 HD
-            //1-4 Interactions
-            if (perturbed_energies[1])
-                openmm_context->setParameter("lamhd", increment_plus); //1-4 HD
-            if (perturbed_energies[2])
-                openmm_context->setParameter("lamtd", 1.0 - increment_plus); //1-4 To Dummy
-            if (perturbed_energies[3])
-                openmm_context->setParameter("lamfd", increment_plus); //1-4 From Dummy
-            if (perturbed_energies[4])
-                openmm_context->setParameter("lamftd", increment_plus); //1-4 From Dummy to Dummy
-
-            //BONDED PERTURBED TERMS
-            if (perturbed_energies[5])
-                openmm_context->setParameter("lambond", increment_plus); //Bonds
-            if (perturbed_energies[6])
-                openmm_context->setParameter("lamangle", increment_plus); //Angles
-            if (perturbed_energies[7])
-                openmm_context->setParameter("lamdih", increment_plus); //Torsions
-
-            state_openmm = openmm_context->getState(infoMask, false, 0x01);
-            //state_openmm=openmm_context->getState(infoMask);
-
-            potential_energy_lambda_plus_delta = state_openmm.getPotentialEnergy();
-
-        }
-        if (increment_minus > 0.0)
-        {
-
-            //NON BONDED TERMS
-            if (perturbed_energies[0])
-                openmm_context->setParameter("lam", increment_minus); //1-5 HD
-            //1-4 Interactions
-            if (perturbed_energies[1])
-                openmm_context->setParameter("lamhd", increment_minus); //1-4 HD
-            if (perturbed_energies[2])
-                openmm_context->setParameter("lamtd", 1.0 - increment_minus); //1-4 To Dummy
-            if (perturbed_energies[3])
-                openmm_context->setParameter("lamfd", increment_minus); //1-4 From Dummy
-            if (perturbed_energies[4])
-                openmm_context->setParameter("lamftd", increment_minus); //1-4 From Dummy to Dummy
-
-            //BONDED PERTURBED TERMS
-            if (perturbed_energies[5])
-                openmm_context->setParameter("lambond", increment_minus); //Bonds
-            if (perturbed_energies[6])
-                openmm_context->setParameter("lamangle", increment_minus); //Angles
-            if (perturbed_energies[7])
-                openmm_context->setParameter("lamdih", increment_minus); //Torsions
-
-            state_openmm = openmm_context->getState(infoMask, false, 0x01);
-            //state_openmm=openmm_context->getState(infoMask);
-
-            potential_energy_lambda_minus_delta = state_openmm.getPotentialEnergy();
-
-
-        }
-
-        if (increment_plus > 1.0)
-        {
-
-            minus = exp(-beta * (potential_energy_lambda_minus_delta - potential_energy_lambda));
-            plus = exp(beta * (potential_energy_lambda_minus_delta - potential_energy_lambda));
-
-            if (Debug)
-            {
-                qDebug() << "Lambda + increment > 1.0";
-                printf("Lambda - increment = %f Potential energy minus  = %.5f kcal/mol (SP = off)\n", increment_minus, potential_energy_lambda_minus_delta * OpenMM::KcalPerKJ);
-
-            }
-
-
-        }
-        else if (increment_minus < 0.0)
-        {
-
-            plus = exp(-beta * (potential_energy_lambda_plus_delta - potential_energy_lambda));
-            minus = exp(beta * (potential_energy_lambda_plus_delta - potential_energy_lambda));
-
-            if (Debug)
-            {
-                printf("Lambda + increment = %f Potential energy plus  = %.5f kcal/mol (SP = off)\n", increment_plus, potential_energy_lambda_plus_delta * OpenMM::KcalPerKJ);
-                qDebug() << "Lambda - increment < 0.0";
-            }
-        }
-        else
-        {
-
-            plus = exp(-beta * (potential_energy_lambda_plus_delta - potential_energy_lambda));
-            minus = exp(-beta * (potential_energy_lambda_minus_delta - potential_energy_lambda));
-
-            if (Debug)
-            {
-                printf("Lambda + increment = %f Potential energy plus  = %.5f kcal/mol (SP = off)\n", increment_plus, potential_energy_lambda_plus_delta * OpenMM::KcalPerKJ);
-                printf("Lambda - increment = %f Potential energy plus  = %.5f kcal/mol (SP = off)\n", increment_minus, potential_energy_lambda_minus_delta * OpenMM::KcalPerKJ);
-            }
-        }
-
-        actual_gradient = (minv_beta * log((plus) / (minus))) / double_increment;
-
-        GF_acc = GF_acc + plus;
-        GB_acc = GB_acc + minus;
-
-        pot_energy_acc = pot_energy_acc + potential_energy_lambda;
-
-        double avg_pot_energy_lambda = pot_energy_acc / (sample_count);
-
-        double avg_GF = GF_acc / (sample_count);
-        double avg_GB = GB_acc / (sample_count);
-        double Energy_GF = minv_beta * log(avg_GF);
-        double Energy_GB = minv_beta * log(avg_GB);
-        double Energy_Gradient_lamda = (Energy_GF - Energy_GB) / double_increment;
-
-
-        //double Energy_Gradient_lamda = coefficient * log(GF_acc / GB_acc);
-
-        if (Debug)
-        {
-            //qDebug()<< "Total Time = " << state_openmm.getTime() << " ps";
-            printf("Cumulative Energy Gradient = %.5f kcal/mol\n", Energy_Gradient_lamda * OpenMM::KcalPerKJ);
-            //qDebug() << "Istantaneus Energy Gradient = " << coefficient * log(plus / minus) * OpenMM::KcalPerKJ << " kcal/(mol lambda)";
-        }
-
-        if (sample_count != (n_samples))
-        {
-            energies.append(avg_pot_energy_lambda * OpenMM::KcalPerKJ);
-            gradients.append(actual_gradient * OpenMM::KcalPerKJ);
-        }
-        if (sample_count == (n_samples))
-        {
-            gradients.append(actual_gradient * OpenMM::KcalPerKJ);
-            energies.append(avg_pot_energy_lambda * OpenMM::KcalPerKJ);
-        }
-
+        
+        //Now we append all the calculated information to the useful accumulation arrays
+        finite_diff_gradients.append(actual_gradient * OpenMM::KcalPerKJ);
+        forward_Metropolis.append(m_forward);
+        backward_Metropolis.append(m_backward);
 
 
         //RESET coupling parameter to its original value
-        //NON BONDED TERMS
         if (perturbed_energies[0])
         {
-            openmm_context->setParameter("lam", Alchemical_value); //1-5 HD
             openmm_context->setParameter("SPOnOff", 0.0); //Solvent-Solvent and Protein Protein Non Bonded ON
         }
-
-
-        //1-4 Interactions
-        if (perturbed_energies[1])
-            openmm_context->setParameter("lamhd", Alchemical_value); //1-4 HD
-        if (perturbed_energies[2])
-            openmm_context->setParameter("lamtd", 1.0 - Alchemical_value); //1-4 To Dummy
-        if (perturbed_energies[3])
-            openmm_context->setParameter("lamfd", Alchemical_value); //1-4 From Dummy
-        if (perturbed_energies[4])
-            openmm_context->setParameter("lamftd", Alchemical_value); //1-4 From Dummy to Dummy
-
-        //BONDED PERTURBED TERMS
-        if (perturbed_energies[5])
-            openmm_context->setParameter("lambond", Alchemical_value); //Bonds
-        if (perturbed_energies[6])
-            openmm_context->setParameter("lamangle", Alchemical_value); //Angles
-        if (perturbed_energies[7])
-            openmm_context->setParameter("lamdih", Alchemical_value); //Torsions
-
+        updateOpenMMContextLambda(Alchemical_value);
         sample_count = sample_count + 1.0;
-
 
     }//end while
     if (time_skip != 0)
@@ -3615,35 +3433,122 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
         ws.commitBufferedCoordinatesAndVelocities(buffered_workspace);
 
     //Now the box dimensions
-
-    if (Debug)
-    {
-        PeriodicBox sp = ws.system().property("space").asA<PeriodicBox>();
-        cout << "Box dimensions before are: "<< sp.dimensions()[0]<< " "<< 
-            sp.dimensions()[1]<<" " << sp.dimensions()[2]<<endl;
-    }
     if (MCBarostat_flag == true)
     {
 
         updateBoxDimensions(state_openmm, buffered_dimensions, Debug, ws);
     }
-    if (Debug)
-    {
-        PeriodicBox sp = ws.system().property("space").asA<PeriodicBox>();
-        cout << "Box dimensions after are: "<< sp.dimensions()[0]<< " "<< 
-            sp.dimensions()[1]<<" " << sp.dimensions()[2]<<endl;
-    }
-
     // Clear all buffers
 
     buffered_workspace.clear();
     buffered_dimensions.clear();
-
-
     System & ptr_sys = ws.nonConstsystem();
     ptr_sys.mustNowRecalculateFromScratch();
 
     return;
+}
+
+double OpenMMFrEnergyST::getPotentialEnergyAtLambda(double lambda)
+{
+    double curr_potential_energy = 0.0;
+    int infoMask = 0;
+    infoMask = infoMask + OpenMM::State::Energy;
+    updateOpenMMContextLambda(lambda);
+    OpenMM::State state_openmm = openmm_context->getState(infoMask);
+    state_openmm = openmm_context->getState(infoMask, false, 0x01);
+    curr_potential_energy = state_openmm.getPotentialEnergy();
+    return curr_potential_energy;
+}
+
+void OpenMMFrEnergyST::updateOpenMMContextLambda(double lambda)
+{
+    //NON BONDED TERMS
+    if (perturbed_energies[0])
+        openmm_context->setParameter("lam", lambda); //1-5 HD
+    //1-4 Interactions
+    if (perturbed_energies[1])
+        openmm_context->setParameter("lamhd", lambda); //1-4 HD
+    if (perturbed_energies[2])
+        openmm_context->setParameter("lamtd", 1.0 - lambda); //1-4 To Dummy
+    if (perturbed_energies[3])
+        openmm_context->setParameter("lamfd", lambda); //1-4 From Dummy
+    if (perturbed_energies[4])
+        openmm_context->setParameter("lamftd", lambda); //1-4 From Dummy to Dummy
+
+    //BONDED PERTURBED TERMS
+    if (perturbed_energies[5])
+        openmm_context->setParameter("lambond", lambda); //Bonds
+    if (perturbed_energies[6])
+        openmm_context->setParameter("lamangle", lambda); //Angles
+    if (perturbed_energies[7])
+        openmm_context->setParameter("lamdih", lambda); //Torsions
+}
+
+tuple<double, double, double> OpenMMFrEnergyST::calculateGradient(
+    double incr_plus, double incr_minus, double p_energy_lambda, double beta)
+{
+    double double_increment = incr_plus - incr_minus;
+    double gradient = 0;
+    double potential_energy_lambda_plus_delta;
+    double potential_energy_lambda_minus_delta;
+    double forward_m;
+    double backward_m;
+    if (incr_plus < 1.0)
+    {
+        potential_energy_lambda_plus_delta = getPotentialEnergyAtLambda(incr_plus);
+    }
+    if (incr_minus > 0.0)
+    {
+        potential_energy_lambda_minus_delta = getPotentialEnergyAtLambda(incr_minus);
+    }
+    if (incr_minus < 0.0)
+    {
+        gradient = (potential_energy_lambda_plus_delta-p_energy_lambda)*2/double_increment;
+        backward_m = exp(beta * (potential_energy_lambda_plus_delta - p_energy_lambda));
+        forward_m = exp(-beta * (potential_energy_lambda_plus_delta - p_energy_lambda));
+    }
+    else if(incr_plus > 1.0)
+    {
+        gradient = -(potential_energy_lambda_minus_delta-p_energy_lambda)*2/double_increment;
+        backward_m = exp(-beta * (potential_energy_lambda_minus_delta - p_energy_lambda));
+        forward_m = exp(beta * (potential_energy_lambda_minus_delta - p_energy_lambda));
+    }
+    else
+    {
+        gradient = (potential_energy_lambda_plus_delta-potential_energy_lambda_minus_delta)/double_increment;
+
+        backward_m = exp(-beta * (potential_energy_lambda_minus_delta - p_energy_lambda));
+        forward_m = exp(-beta * (potential_energy_lambda_plus_delta - p_energy_lambda));
+    }
+    return boost::tuples::make_tuple(gradient, forward_m, backward_m);
+}
+
+QVector<double> OpenMMFrEnergyST::computeReducedPerturbedEnergies(double beta)
+{
+    bool Debug = false;
+    QVector<double> perturbed;
+    QVector<double>::iterator i;
+    for (i=alchemical_array.begin(); i!=alchemical_array.end(); i++)
+    {
+        perturbed.append(getPotentialEnergyAtLambda(*i)*beta);
+    }
+    if (Debug)
+    {
+        for (i=perturbed.begin(); i!=perturbed.end(); i++)
+        {
+            qDebug() <<"bias is: "<<*i<<endl;
+        }
+    }
+    return perturbed;
+}
+
+void OpenMMFrEnergyST::emptyContainers()
+{
+    finite_diff_gradients.clear();
+    pot_energies.clear();
+    forward_Metropolis.clear();
+    backward_Metropolis.clear();
+    reduced_perturbed_energies.clear();
 }
 
 void OpenMMFrEnergyST::updateBoxDimensions(OpenMM::State &state_openmm, 
@@ -3908,6 +3813,14 @@ void OpenMMFrEnergyST::setAlchemicalValue(double lambda_value)
     Alchemical_value = max(0.0, min(1.0, lambda_value));
 }
 
+void OpenMMFrEnergyST::setAlchemicalArray(QVector<double> lambda_array)
+{
+    for (int i =0; i< lambda_array.size(); i++)
+    {
+        alchemical_array.append(max(0.0, min(1.0, lambda_array[i])));
+    }
+}
+
 /** Get the coulomb power used in the soft core potential*/
 //int OpenMMFrEnergyST::getCoulomb_power(void)
 
@@ -3959,13 +3872,29 @@ void OpenMMFrEnergyST::setDeltatAlchemical(double deltaalchemical)
 /** Calculated Gradients*/
 QVector<double> OpenMMFrEnergyST::getGradients(void)
 {
-    return gradients;
+    return finite_diff_gradients;
 }
 
 /** Average energies*/
 QVector<double> OpenMMFrEnergyST::getEnergies(void)
 {
-    return energies;
+    return pot_energies;
+}
+/** Average energies*/
+QVector<double> OpenMMFrEnergyST::getForwardMetropolis(void)
+{
+    return forward_Metropolis;
+}
+/** Average energies*/
+QVector<double> OpenMMFrEnergyST::getBackwardMetropolis(void)
+{
+    return backward_Metropolis;
+}
+
+
+QVector<QVector <double> > OpenMMFrEnergyST::getReducedPerturbedEnergies(void)
+{
+    return reduced_perturbed_energies;
 }
 
 /** Get the Integrator type*/
@@ -4019,7 +3948,7 @@ void OpenMMFrEnergyST::setTimetoSkip(SireUnits::Dimension::Time skip)
 /** Set the flag to reinitialise the context*/
 void OpenMMFrEnergyST::setReinitialiseContext(bool reinitialise)
 {
-    reinetialise_context = reinitialise;
+    reinitialise_context = reinitialise;
 }
 
 /** Create an empty workspace */

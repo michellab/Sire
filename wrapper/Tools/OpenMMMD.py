@@ -37,6 +37,7 @@ from Sire.Analysis import *
 from Sire.Tools.DCDFile import *
 from Sire.Tools import Parameter, resolveParameters
 import Sire.Stream
+import time
 import numpy as np
 
 
@@ -180,6 +181,9 @@ lambda_val = Parameter("lambda_val", 0.0,
 delta_lambda = Parameter("delta_lambda", 0.001,
                          """Value of the lambda interval used to evaluate free energy gradients by finite difference.""")
 
+lambda_array = Parameter("lambda array", [0.0, 0.1, 0.3, 0.6, 0.9, 1.0],
+                        """Array with all lambda values lambda_val needs to be part of the array. """)
+
 shift_delta = Parameter("shift delta", 2.0,
                         """Value of the Lennard-Jones soft-core parameter.""")
 
@@ -188,6 +192,7 @@ coulomb_power = Parameter("coulomb power", 0,
 
 energy_frequency = Parameter("energy frequency", 1,
                              """The number of time steps between evaluation of free energy gradients.""")
+simfile = Parameter("outdata_file", "simfile.dat", """Filename that records all output needed for the free energy analysis""")
 verbose = Parameter("verbose", False, """Print debug output""")
 
 
@@ -1107,6 +1112,7 @@ def setupMovesFreeEnergy(system, random_seed, GPUS, lam_val):
     Integrator_OpenMM.setCutoffType(cutoff_type.val)
     Integrator_OpenMM.setFieldDielectric(rf_dielectric.val)
     Integrator_OpenMM.setAlchemicalValue(lambda_val.val)
+    Integrator_OpenMM.setAlchemicalArray(lambda_array.val)
     Integrator_OpenMM.setDeviceIndex(str(GPUS))
     Integrator_OpenMM.setCoulombPower(coulomb_power.val)
     Integrator_OpenMM.setShiftDelta(shift_delta.val)
@@ -1352,7 +1358,9 @@ def runFreeNrg():
 
     timer = QTime()
     timer.start()
-
+    outfile = open(simfile.val, "ab")
+    lam_str = "%7.5f" % lambda_val.val
+    simtime=nmoves.val*ncycles.val*timestep.val
     # Setup the system from scratch if no restart file is available
     print("###================Setting up calculation=====================###")
     if not os.path.exists(restart_file.val):
@@ -1401,6 +1409,22 @@ def runFreeNrg():
         print("Saving restart")
         Sire.Stream.save([system, moves], restart_file.val)
 
+        print("Setting up sim file. ")
+
+        outfile.write(bytes("#This file was generated on "+time.strftime("%c")+"\n", "UTF-8"))
+        outfile.write(bytes("#Using the somd command, which is part of the molecular library Sire\n","UTF-8"))
+        outfile.write(bytes("#For more information visit: https://github.com/michellab/Sire\n#\n","UTF-8"))
+        outfile.write(bytes("#General information on simulation parameters:\n", "UTF-8"))
+        outfile.write(bytes("#Simulation used %s moves, %s cycles and %s of simulation time \n" %(nmoves.val,
+                                                                                        ncycles.val, simtime), "UTF-8"))
+        outfile.write(bytes("#Generating lambda is\t\t " + lam_str+"\n", "UTF-8"))
+        outfile.write(bytes("#Alchemical array is\t\t "+ str(lambda_array.val) +"\n", "UTF-8"))
+        outfile.write(bytes("#Generating temperature is \t"+str(temperature.val)+"\n", "UTF-8"))
+        outfile.write(bytes("#Energy was saved every "+str(energy_frequency.val)+ " steps \n#\n#\n", "UTF-8"))
+        outfile.write(bytes("# %8s %25s %25s %25s %25s %25s" % ("[step]", "[potential kcal/mol]", "[gradient kcal/mol]",
+        "[forward Metropolis]", "[backward Metropolis]", "[u_kl]\n"),
+                            "UTF-8"))
+
     else:
         system, moves = Sire.Stream.load(restart_file.val)
         move0 = moves.moves()[0]
@@ -1418,7 +1442,7 @@ def runFreeNrg():
     cycle_start = int(moves.nMoves() / nmoves.val) + 1
     cycle_end = cycle_start + ncycles.val
 
-    lam_str = "%7.5f" % lambda_val.val
+
     outgradients = open("gradients.dat", "a", 1)
     outgradients.write("# lambda_val.val %s\n" % lam_str)
 
@@ -1457,7 +1481,7 @@ def runFreeNrg():
             print ('Lambda annealing done.\n')
         print("###===========================================================###\n")
 
-    simtime=nmoves.val*ncycles.val*timestep.val
+
     print("###====================somd-freenrg run=======================###")
     print ("Starting somd-freenrg run...")
     print ("%s moves %s cycles, %s simulation time" %(nmoves.val, ncycles.val, simtime))
@@ -1468,18 +1492,34 @@ def runFreeNrg():
     for i in range(cycle_start, cycle_end):
         print("\nCycle = ", i, "\n")
         system = moves.move(system, nmoves.val, True)
-        if (save_coords.val):
+        if save_coords.val:
             writeSystemData(system, moves, trajectory, i)
 
         mdmoves = moves.moves()[0]
         integrator = mdmoves.integrator()
+
+        #saving all data
         gradients = integrator.getGradients()
+        reduced_energies = integrator.getReducedPerturbedEnergies()
+        forward_Metropolis = integrator.getForwardMetropolis()
+        backward_Metropolis = integrator.getBackwardMetropolis()
+        pot_energies = integrator.getEnergies()
+        beg = (nmoves.val*(i-1))
+        end = nmoves.val*(i-1)+nmoves.val
+        steps = list(range(beg, end, energy_frequency.val))
+        outdata = np.column_stack((steps, pot_energies, gradients,
+                                   forward_Metropolis, backward_Metropolis,
+                                   reduced_energies))
+        fmt =" ".join(["%8d"] + ["%25.8e"] + ["%25.8e"] + ["%25.8e"] + ["%25.8e"] + ["%25.15e"]*(len(lambda_array.val)))
+        np.savetxt(outfile, outdata, fmt=fmt)
+
+
         mean_gradient = np.average(gradients)
         outgradients.write("%5d %20.10f\n" % (i, mean_gradient))
-
         for gradient in gradients:
-            grads[lambda_val.val].accumulate( gradients[i-1] )
+            grads[lambda_val.val].accumulate(gradients[i-1])
     s2 = timer.elapsed() / 1000.
+    outfile.close()
     print("Simulation took %d s " % ( s2 - s1))
     print("###===========================================================###\n")
 

@@ -38,6 +38,7 @@
 #include <cstdio>
 #include "SireUnits/temperature.h"
 #include "SireSystem/system.h"
+#include <boost/tuple/tuple.hpp>
 SIRE_BEGIN_HEADER
 
 #ifdef SIRE_USE_OPENMM
@@ -159,6 +160,8 @@ namespace SireMove {
         double getAlchemicalValue(void);
         void setAlchemicalValue(double);
 
+        void setAlchemicalArray(QVector<double>);
+
         float getCoulombPower(void);
         void setCoulombPower(float);
 
@@ -170,6 +173,11 @@ namespace SireMove {
 
         QVector<double> getGradients(void);
         QVector<double> getEnergies(void);
+
+        QVector<double> getForwardMetropolis(void);
+        QVector<double> getBackwardMetropolis(void);
+
+        QVector<QVector <double> > getReducedPerturbedEnergies(void);
 
         QString getIntegrator(void);
         void setIntegrator(QString);
@@ -196,6 +204,13 @@ namespace SireMove {
         void updateBoxDimensions(OpenMM::State &state_openmm, 
         QVector< Vector> &buffered_dimensions, bool Debug, 
         AtomicVelocityWorkspace &ws);
+        
+        double getPotentialEnergyAtLambda(double lambda);
+        void updateOpenMMContextLambda(double lambda);
+        boost::tuples::tuple<double, double, double> calculateGradient(double increment_plus, 
+        double increment_minus, double potential_energy_lambda, double beta);
+        QVector<double> computeReducedPerturbedEnergies(double);
+        void emptyContainers(void);
 
         /** Whether or not to save the velocities after every step, or to save them at the end of all of the steps */
         bool frequent_save_velocities;
@@ -256,9 +271,17 @@ namespace SireMove {
 
         double delta_alchemical;
 
-        QVector<double> gradients;
+        QVector<double> alchemical_array;
 
-        QVector<double> energies;
+        QVector<double> finite_diff_gradients;
+
+        QVector<double> pot_energies;
+
+        QVector<double> forward_Metropolis;
+        
+        QVector<double> backward_Metropolis;
+
+        QVector<QVector <double> > reduced_perturbed_energies;
 
         QVector<bool> perturbed_energies;
 
@@ -271,10 +294,7 @@ namespace SireMove {
         SireUnits::Dimension::Time timeskip;
 
 
-        bool reinetialise_context;
-
-        double GF_acc;
-        double GB_acc;
+        bool reinitialise_context;
 
         bool Debug;
 

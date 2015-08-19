@@ -162,6 +162,16 @@ void register_OpenMMFrEnergyST_class(){
                 , getAndersenFrequency_function_value );
 
         }
+        { //::SireMove::OpenMMFrEnergyST::getBackwardMetropolis
+
+            typedef ::QVector< double > ( ::SireMove::OpenMMFrEnergyST::*getBackwardMetropolis_function_type )(  ) ;
+            getBackwardMetropolis_function_type getBackwardMetropolis_function_value( &::SireMove::OpenMMFrEnergyST::getBackwardMetropolis );
+
+            OpenMMFrEnergyST_exposer.def(
+                "getBackwardMetropolis"
+                , getBackwardMetropolis_function_value );
+
+        }
         { //::SireMove::OpenMMFrEnergyST::getBufferFrequency
 
             typedef int ( ::SireMove::OpenMMFrEnergyST::*getBufferFrequency_function_type )(  ) ;
@@ -250,6 +260,16 @@ void register_OpenMMFrEnergyST_class(){
             OpenMMFrEnergyST_exposer.def(
                 "getEnergies"
                 , getEnergies_function_value );
+
+        }
+        { //::SireMove::OpenMMFrEnergyST::getForwardMetropolis
+
+            typedef ::QVector< double > ( ::SireMove::OpenMMFrEnergyST::*getForwardMetropolis_function_type )(  ) ;
+            getForwardMetropolis_function_type getForwardMetropolis_function_value( &::SireMove::OpenMMFrEnergyST::getForwardMetropolis );
+
+            OpenMMFrEnergyST_exposer.def(
+                "getForwardMetropolis"
+                , getForwardMetropolis_function_value );
 
         }
         { //::SireMove::OpenMMFrEnergyST::getEnergyFrequency
@@ -383,6 +403,16 @@ void register_OpenMMFrEnergyST_class(){
                 , getRandomSeed_function_value );
 
         }
+        { //::SireMove::OpenMMFrEnergyST::getReducedPerturbedEnergies
+
+            typedef ::QVector< QVector < double > > ( ::SireMove::OpenMMFrEnergyST::*getReducedPerturbedEnergies_function_type )(  ) ;
+            getReducedPerturbedEnergies_function_type getReducedPerturbedEnergies_function_value( &::SireMove::OpenMMFrEnergyST::getReducedPerturbedEnergies );
+
+            OpenMMFrEnergyST_exposer.def(
+                "getReducedPerturbedEnergies"
+                , getReducedPerturbedEnergies_function_value );
+
+        }
         { //::SireMove::OpenMMFrEnergyST::getRestraint
 
             typedef bool ( ::SireMove::OpenMMFrEnergyST::*getRestraint_function_type )(  ) ;
@@ -476,6 +506,18 @@ void register_OpenMMFrEnergyST_class(){
                 , assign_function_value
                 , ( bp::arg("other") )
                 , bp::return_self< >() );
+
+        }
+        OpenMMFrEnergyST_exposer.def( bp::self == bp::self );
+        { //::SireMove::OpenMMFrEnergyST::setAlchemicalArray
+
+            typedef void ( ::SireMove::OpenMMFrEnergyST::*setAlchemicalArray_function_type )( ::QVector<double> ) ;
+            setAlchemicalArray_function_type setAlchemicalArray_function_value( &::SireMove::OpenMMFrEnergyST::setAlchemicalArray );
+
+            OpenMMFrEnergyST_exposer.def(
+                "setAlchemicalArray"
+                , setAlchemicalArray_function_value
+                , ( bp::arg("arg0") ) );
 
         }
         OpenMMFrEnergyST_exposer.def( bp::self == bp::self );
