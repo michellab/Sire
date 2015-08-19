@@ -38,6 +38,7 @@
 #include <cstdio>
 #include "SireUnits/temperature.h"
 #include "SireSystem/system.h"
+#include <boost/tuple/tuple.hpp>
 SIRE_BEGIN_HEADER
 
 #ifdef SIRE_USE_OPENMM
@@ -206,8 +207,8 @@ namespace SireMove {
         
         double getPotentialEnergyAtLambda(double lambda);
         void updateOpenMMContextLambda(double lambda);
-        double calculateGradient(double increment_plus, double increment_minus,
-        double potential_energy_lambda, double beta);
+        boost::tuples::tuple<double, double, double> calculateGradient(double increment_plus, 
+        double increment_minus, double potential_energy_lambda, double beta);
         QVector<double> computeReducedPerturbedEnergies(double);
         void emptyContainers(void);
 

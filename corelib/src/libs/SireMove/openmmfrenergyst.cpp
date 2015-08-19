@@ -73,6 +73,8 @@
 #include <iostream>
 #include <QDebug>
 #include <QTime>
+#include <boost/tuple/tuple.hpp>
+
 
 
 using namespace SireMove;
@@ -85,14 +87,10 @@ using namespace SireBase;
 using namespace SireStream;
 using namespace SireUnits;
 using namespace SireUnits::Dimension;
-
-//ADDED BY JM
 using namespace SireMM;
 using namespace SireIO;
-
-
-//ADDED BY GAC
 using namespace std;
+using boost::tuples::tuple;
 
 enum
 {
@@ -3275,8 +3273,8 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
 
 
     double increment = delta_alchemical;
-    double increment_plus = Alchemical_value + increment;
-    double increment_minus = Alchemical_value - increment;
+    double incr_plus = Alchemical_value + increment;
+    double incr_minus = Alchemical_value - increment;
 
 
     double actual_gradient = 0.0;
@@ -3286,20 +3284,20 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
         //*********************MD STEPS****************************
         (openmm_context->getIntegrator()).step(energy_frequency);
         state_openmm = openmm_context->getState(infoMask, false, 0x01);
-        double potential_energy_lambda = state_openmm.getPotentialEnergy();
+        double p_energy_lambda = state_openmm.getPotentialEnergy();
         if (Debug)
         {
-            printf("Lambda = %f Potential energy = %.5f kcal/mol\n", Alchemical_value, potential_energy_lambda * OpenMM::KcalPerKJ);
+            printf("Lambda = %f Potential energy = %.5f kcal/mol\n", Alchemical_value, p_energy_lambda * OpenMM::KcalPerKJ);
             //exit(-1);
         }
-        IsFiniteNumber = (potential_energy_lambda <= DBL_MAX && potential_energy_lambda >= -DBL_MAX);
+        IsFiniteNumber = (p_energy_lambda <= DBL_MAX && p_energy_lambda >= -DBL_MAX);
 
         if (!IsFiniteNumber)
         {
             qDebug() << "NaN or Inf has been generated along the simulation";
             exit(-1);
         }
-        pot_energies.append(potential_energy_lambda * OpenMM::KcalPerKJ);
+        pot_energies.append(p_energy_lambda * OpenMM::KcalPerKJ);
         
         if (perturbed_energies[0])
         {
@@ -3336,11 +3334,13 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
         }
 
         //Computing the potential energies and gradients
-        potential_energy_lambda = state_openmm.getPotentialEnergy();
+        p_energy_lambda = state_openmm.getPotentialEnergy();
 
 
         //Let's calculate the gradients
-        actual_gradient = calculateGradient(increment_plus, increment_minus, potential_energy_lambda, beta);
+        double m_forward, m_backward;
+        boost::tuples::tie(actual_gradient, m_forward, m_backward) = calculateGradient(incr_plus, 
+                             incr_minus, p_energy_lambda, beta);
         
         if (alchemical_array.size()>1)
         {
@@ -3350,6 +3350,8 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
         
         //Now we append all the calculated information to the useful accumulation arrays
         finite_diff_gradients.append(actual_gradient * OpenMM::KcalPerKJ);
+        forward_Metropolis.append(m_forward);
+        backward_Metropolis.append(m_backward);
 
 
         //RESET coupling parameter to its original value
@@ -3482,42 +3484,43 @@ void OpenMMFrEnergyST::updateOpenMMContextLambda(double lambda)
         openmm_context->setParameter("lamdih", lambda); //Torsions
 }
 
-double OpenMMFrEnergyST::calculateGradient(double increment_plus, double increment_minus,
-                                           double potential_energy_lambda, double beta)
+tuple<double, double, double> OpenMMFrEnergyST::calculateGradient(
+    double incr_plus, double incr_minus, double p_energy_lambda, double beta)
 {
-    double double_increment = increment_plus - increment_minus;
+    double double_increment = incr_plus - incr_minus;
     double gradient = 0;
     double potential_energy_lambda_plus_delta;
     double potential_energy_lambda_minus_delta;
-    if (increment_plus < 1.0)
+    double forward_m;
+    double backward_m;
+    if (incr_plus < 1.0)
     {
-        potential_energy_lambda_plus_delta = getPotentialEnergyAtLambda(increment_plus);
+        potential_energy_lambda_plus_delta = getPotentialEnergyAtLambda(incr_plus);
     }
-    if (increment_minus > 0.0)
+    if (incr_minus > 0.0)
     {
-        potential_energy_lambda_minus_delta = getPotentialEnergyAtLambda(increment_minus);
+        potential_energy_lambda_minus_delta = getPotentialEnergyAtLambda(incr_minus);
     }
-    if (increment_minus < 0.0)
+    if (incr_minus < 0.0)
     {
-        gradient = (potential_energy_lambda_plus_delta-potential_energy_lambda)*2/double_increment;
-        backward_Metropolis.append(exp(beta * (potential_energy_lambda_plus_delta - potential_energy_lambda)));
-        forward_Metropolis.append(exp(-beta * (potential_energy_lambda_plus_delta - potential_energy_lambda)));
+        gradient = (potential_energy_lambda_plus_delta-p_energy_lambda)*2/double_increment;
+        backward_m = exp(beta * (potential_energy_lambda_plus_delta - p_energy_lambda));
+        forward_m = exp(-beta * (potential_energy_lambda_plus_delta - p_energy_lambda));
     }
-    else if(increment_plus > 1.0)
+    else if(incr_plus > 1.0)
     {
-        gradient = -(potential_energy_lambda_minus_delta-potential_energy_lambda)*2/double_increment;
-        backward_Metropolis.append(exp(-beta * (potential_energy_lambda_minus_delta - potential_energy_lambda)));
-        forward_Metropolis.append(exp(beta * (potential_energy_lambda_minus_delta - potential_energy_lambda)));
+        gradient = -(potential_energy_lambda_minus_delta-p_energy_lambda)*2/double_increment;
+        backward_m = exp(-beta * (potential_energy_lambda_minus_delta - p_energy_lambda));
+        forward_m = exp(beta * (potential_energy_lambda_minus_delta - p_energy_lambda));
     }
     else
     {
         gradient = (potential_energy_lambda_plus_delta-potential_energy_lambda_minus_delta)/double_increment;
 
-        backward_Metropolis.append(exp(-beta * (potential_energy_lambda_minus_delta - potential_energy_lambda)));
-        forward_Metropolis.append(exp(-beta * (potential_energy_lambda_plus_delta - potential_energy_lambda)));
+        backward_m = exp(-beta * (potential_energy_lambda_minus_delta - p_energy_lambda));
+        forward_m = exp(-beta * (potential_energy_lambda_plus_delta - p_energy_lambda));
     }
-
-    return gradient;
+    return boost::tuples::make_tuple(gradient, forward_m, backward_m);
 }
 
 QVector<double> OpenMMFrEnergyST::computeReducedPerturbedEnergies(double beta)
