@@ -43,7 +43,7 @@ executable runs, e.g.
 
    (the application should run, print out some help, and then exit)
 
-   7. Create wrapper build directory and build/install
+7. Create wrapper build directory and build/install
 ::
    :-> mkdir build_wrapper
    :-> cmake ../wrapper
@@ -57,7 +57,7 @@ executable runs, e.g.
 
    Check that your python3 installed properly, i.e. you didn't get an error
    such as: 
-::
+   ::
    Python build finished, but the necessary bits to build these modules were not found:
    _ssl _xxx _xxx (some other modules here)
    To find the necessary bits, look in setup.py in detect_modules() for the module's name.
