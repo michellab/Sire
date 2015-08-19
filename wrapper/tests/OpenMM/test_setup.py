@@ -48,22 +48,21 @@ def _pvt_createOpenMM(mols, temperature, pressure):
     openmm.setConstraintType("none")
     openmm.setCutoffType("cutoffperiodic")
     openmm.setIntegrator("leapfrogverlet")
-    openmm.setFriction(0.1 * picosecond) 
+    openmm.setFriction(0.1 * picosecond)
     openmm.setPrecision("double")
     openmm.setTimetoSkip(0*picosecond)
-    openmm.setMinimization(False)
     openmm.setDeviceIndex("0")
     openmm.setLJDispersion(False)
-    openmm.setField_dielectric(rf_diel)
-    openmm.setCMMremoval_frequency(0)
+    openmm.setFieldDielectric(rf_diel)
+    openmm.setCMMremovalFrequency(0)
     openmm.setBufferFrequency(0)
     openmm.setRestraint(False)
     openmm.setTemperature(temperature)
     openmm.setAndersen(True)
-    openmm.setAndersen_frequency(10)
+    openmm.setAndersenFrequency(10)
     openmm.setPressure(pressure)
     openmm.setMCBarostat(True)
-    openmm.setMCBarostat_frequency(25)
+    openmm.setMCBarostatFrequency(25)
     openmm.initialise()
     return openmm
 
@@ -94,4 +93,3 @@ def test_nve(verbose = False):
 
 if __name__ == "__main__":
     test_setup(True)
-

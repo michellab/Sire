@@ -6,7 +6,7 @@
 
 # Third Party dependencies of this module
 include_directories( ${BOOST_INCLUDE_DIR}
-                     ${PYTHON_INCLUDE_DIR} 
+                     ${PYTHON_INCLUDE_DIR}
                      ${SIRE_GSL_INCLUDE_PATH} )
 
 # Sire include paths
@@ -17,9 +17,6 @@ if (${SIRE_OpenMM_FOUND})
     include_directories( ${SIRE_OpenMM_INCLUDE_DIR} )
     add_definitions( "-DSIRE_USE_OPENMM" )
     set( SIRE_OPENMM_LIBRARIES ${SIRE_OpenMM_LIBRARIES} )
-    set( SIRE_OPENMM_WRAPPERS 
-              OpenMMIntegrator.pypp.cpp 
-       )
 
 else()
     set( SIRE_OPENMM_LIBRARIES "" )
@@ -35,7 +32,7 @@ include(CMakeAutogenFile.txt)
 set ( WRAPMOVE_SOURCES
 
       _Move.main.cpp
-     
+
       ${PYPP_SOURCES}
 
       ${SIRE_OPENMM_WRAPPERS}
@@ -52,7 +49,7 @@ set_target_properties (Move
                          PREFIX "_"
                          SUFFIX ${PYTHON_MODULE_EXTENSION}
 		       )
-		       
+
 target_link_libraries (Move
                        SirePython
                        SIRE_SireMove
@@ -72,5 +69,5 @@ install( TARGETS Move
        )
 
 install( FILES __init__.py
-         DESTINATION ${INSTALLDIR} 
+         DESTINATION ${INSTALLDIR}
        )

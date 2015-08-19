@@ -7,7 +7,6 @@ set ( PYPP_SOURCES
        Integrator.pypp.cpp
        RepExSubMove.pypp.cpp
        UniformInserter.pypp.cpp
-       OpenMMIntegrator.pypp.cpp
        NullDeleter.pypp.cpp
        NullGetPoint.pypp.cpp
        PrefSampler.pypp.cpp
@@ -45,7 +44,6 @@ set ( PYPP_SOURCES
        MaxwellBoltzmann.pypp.cpp
        NullInserter.pypp.cpp
        SupraSimPacket.pypp.cpp
-       OpenMMAMDIntegrator.pypp.cpp
        ZMatrix.pypp.cpp
        NullMove.pypp.cpp
        MolecularDynamics.pypp.cpp

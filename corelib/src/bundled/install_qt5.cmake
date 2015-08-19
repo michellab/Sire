@@ -114,7 +114,7 @@ if ( NEED_BUILD_QT )
     endif()
 
     message( STATUS "Patience... Compiling QtCore..." )
-    execute_process( COMMAND ${CMAKE_MAKE_PROGRAM} -k -j ${NCORES}
+    execute_process( COMMAND ${CMAKE_MAKE_PROGRAM} -k -j 1
                      WORKING_DIRECTORY ${QT_BUILD_DIR}
                      RESULT_VARIABLE QT_BUILD_FAILED )
 
