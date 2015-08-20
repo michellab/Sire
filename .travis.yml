@@ -19,7 +19,7 @@ env:
 addons:
   apt:
     sources: 
-      - ppa:kubuntu-ppa/backports
+      - kubuntu-backports
     packages:
       - cmake
       - build-essential
