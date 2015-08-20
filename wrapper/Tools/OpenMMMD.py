@@ -1,7 +1,7 @@
 
 ####################################################################################################
 #                                                                                                  #
-#   RUN SCRIPT to perform a MD simulation in Sire with OpenMM                                      #
+#   RUN SCRIPT to perform an MD simulation in Sire with OpenMM                                     #
 #                                                                                                  #
 #   author: Julien Michel                                                                          #
 #   author: Gaetano Calabro                                                                        #
@@ -1216,7 +1216,7 @@ def getAllData(integrator, steps):
     outdata = None
     l = [len(gradients), len(f_metropolis), len(b_metropolis), len(energies), len(steps)]
     if len(set(l))!=1:
-        print("Whoops somehow the data generated does not agree in their first dimensions...exiting now")
+        print("Whoops somehow the data generated does not agree in their first dimensions...exiting now.")
         exit(-1)
     else:
         if len(gradients) == len(reduced_pot_en):
@@ -1226,9 +1226,9 @@ def getAllData(integrator, steps):
         elif len(reduced_pot_en)==0:
             outdata = np.column_stack((steps, energies, gradients,
                                    f_metropolis, b_metropolis))
-            print("Warning: you didn't specify a lambda array, no reduced perturbed energies can be written to file")
+            print("Warning: you didn't specify a lambda array, no reduced perturbed energies can be written to file.")
         else:
-            print("Whoops somehow the data generated does not agree in their first dimensions...exiting now")
+            print("Whoops somehow the data generated does not agree in their first dimensions...exiting now.")
             exit(-1)
     return outdata
 
@@ -1445,7 +1445,7 @@ def runFreeNrg():
         print("Setting up sim file. ")
 
         outfile.write(bytes("#This file was generated on "+time.strftime("%c")+"\n", "UTF-8"))
-        outfile.write(bytes("#Using the somd command, which is part of the molecular library Sire\n","UTF-8"))
+        outfile.write(bytes("#Using the somd command, of the molecular library Sire version <%s> \n" %Sire.__version__,"UTF-8"))
         outfile.write(bytes("#For more information visit: https://github.com/michellab/Sire\n#\n","UTF-8"))
         outfile.write(bytes("#General information on simulation parameters:\n", "UTF-8"))
         outfile.write(bytes("#Simulation used %s moves, %s cycles and %s of simulation time \n" %(nmoves.val,
@@ -1544,15 +1544,6 @@ def runFreeNrg():
         steps = list(range(beg, end, energy_frequency.val))
         outdata = getAllData(integrator, steps)
         gradients = integrator.getGradients()
-        # reduced_energies = integrator.getReducedPerturbedEnergies()
-        # forward_Metropolis = integrator.getForwardMetropolis()
-        # backward_Metropolis = integrator.getBackwardMetropolis()
-        # pot_energies = integrator.getEnergies()
-
-
-        # outdata = np.column_stack((steps, pot_energies, gradients,
-        #                            forward_Metropolis, backward_Metropolis,
-        #                            reduced_energies))
         fmt =" ".join(["%8d"] + ["%25.8e"] + ["%25.8e"] + ["%25.8e"] + ["%25.8e"] + ["%25.15e"]*(len(lambda_array.val)))
         np.savetxt(outfile, outdata, fmt=fmt)
 
