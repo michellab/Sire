@@ -86,6 +86,8 @@ save_coords = Parameter("save coordinates", True, """Whether or not to save coor
 buffered_coords_freq = Parameter("buffered coordinates frequency", 1,
                                  """The number of time steps between saving of coordinates during
                                  a cycle of MD. 0 disables buffering.""")
+minimal_coordinate_saving = Parameter("minimal coordinate saving", False, "Reduce the number of coordiantes writing for states"
+                                                                    "with lambda in ]0,1[")
 
 time_to_skip = Parameter("time to skip", 0 * picosecond, """Time to skip in picoseconds""")
 
@@ -193,6 +195,7 @@ coulomb_power = Parameter("coulomb power", 0,
 energy_frequency = Parameter("energy frequency", 1,
                              """The number of time steps between evaluation of free energy gradients.""")
 simfile = Parameter("outdata_file", "simfile.dat", """Filename that records all output needed for the free energy analysis""")
+
 verbose = Parameter("verbose", False, """Print debug output""")
 
 
@@ -223,34 +226,40 @@ def setupDCD(system):
     index = len(dcds) + 1
 
     dcd_filename = dcd_root.val + "%0009d" % index + ".dcd"
-
-    Trajectory = DCDFile(dcd_filename, system[MGName("all")], system.property("space"), timestep.val,
+    softcore_almbda = True
+    if lambda_val.val == 1.0 or lambda_val.val == 0.0:
+        softcore_almbda = False
+    if minimal_coordinate_saving.val and softcore_almbda:
+        interval = ncycles.val*nmoves.val
+        Trajectory = DCDFile(dcd_filename, system[MGName("all")], system.property("space"), timestep.val, interval)
+    else:
+        Trajectory = DCDFile(dcd_filename, system[MGName("all")], system.property("space"), timestep.val,
                          interval=buffered_coords_freq.val * ncycles_per_snap.val)
 
     return Trajectory
 
 
-def writeSystemData(system, moves, Trajectory, block):
-    localtimer = QTime()
-    localtimer.start()
+def writeSystemData(system, moves, Trajectory, block, softcore_lambda=False):
 
-    if (block % ncycles_per_snap.val == 0):
-        #PDB().write(system[MGName("all")], "output%0009d.pdb" % block)
-
-        if buffered_coords_freq.val > 0:
-            dimensions = {}
-            sysprops = system.propertyKeys()
-            for prop in sysprops:
-                if prop.startswith("buffered_space"):
-                    dimensions[str(prop)] = system.property(prop)
-            Trajectory.writeBufferedModels(system[MGName("all")], dimensions)
-        else:
+    if softcore_lambda:
+        if block == ncycles.val or block == 1:
             Trajectory.writeModel(system[MGName("all")], system.property("space"))
+    else:
+        if block % ncycles_per_snap.val == 0:
+            if buffered_coords_freq.val > 0:
+                dimensions = {}
+                sysprops = system.propertyKeys()
+                for prop in sysprops:
+                    if prop.startswith("buffered_space"):
+                        dimensions[str(prop)] = system.property(prop)
+                Trajectory.writeBufferedModels(system[MGName("all")], dimensions)
+            else:
+                Trajectory.writeModel(system[MGName("all")], system.property("space"))
 
     moves_file = open("moves.dat", "w")
     print("%s" % moves, file=moves_file)
+    moves_file.close()
 
-    #print(" Time to write coordinates %s ms " % localtimer.elapsed())
 
 
 def centerSolute(system, space):
@@ -1486,6 +1495,13 @@ def runFreeNrg():
     print ("Starting somd-freenrg run...")
     print ("%s moves %s cycles, %s simulation time" %(nmoves.val, ncycles.val, simtime))
 
+    softcore_lambda = False
+    if minimal_coordinate_saving.val:
+        if lambda_val.val == 1.0 or lambda_val.val == 0.0:
+            softcore_lambda = False
+        else:
+            softcore_lambda = True
+
     grads = {}
     grads[lambda_val.val] = AverageAndStddev()
     s1 = timer.elapsed() / 1000.
@@ -1493,7 +1509,7 @@ def runFreeNrg():
         print("\nCycle = ", i, "\n")
         system = moves.move(system, nmoves.val, True)
         if save_coords.val:
-            writeSystemData(system, moves, trajectory, i)
+            writeSystemData(system, moves, trajectory, i, softcore_lambda)
 
         mdmoves = moves.moves()[0]
         integrator = mdmoves.integrator()
