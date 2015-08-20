@@ -1,4 +1,3 @@
-
 description = """
 waterswap is a method developed and implemented using Sire that allows absolute protein-ligand binding free energies to be calculated from first-principles, condensed-phase simulations. The method is described in;
 
@@ -83,7 +82,7 @@ parser.add_argument('-c', '--coordinate_file', nargs="?",
                     help="The Amber coordinate file (with periodic box) giving the coordinates "
                          "of all of the atoms in the passed topology file.")
 
-parser.add_argument('-C', '--config', nargs="?", 
+parser.add_argument('-C', '--config', nargs="?",
                     help='Supply an optional CONFIG file to control the calculation.')
 
 parser.add_argument('--lambda_values', type=float, nargs='+',
@@ -107,9 +106,9 @@ if args.author:
     must_exit = True
 
 if args.version:
-    print("waterswap -- from Sire release version <%s>" %Sire.__version__)
+    print("waterswap -- from Sire release version <%s>" % Sire.__version__)
     print("This particular release can be downloaded here: "
-          "https://github.com/michellab/Sire/releases/tag/v%s" %Sire.__version__)
+          "https://github.com/michellab/Sire/releases/tag/v%s" % Sire.__version__)
     must_exit = True
 
 if args.help_config:
@@ -154,7 +153,7 @@ if not (os.path.exists(coord_file) and os.path.exists(top_file)):
 
     sys.exit(-1)
 
-print("\nRunning a waterswap calculation using files %s and %s." % (top_file,coord_file))
+print("\nRunning a waterswap calculation using files %s and %s." % (top_file, coord_file))
 
 ligand = None
 if args.ligand:
@@ -165,8 +164,8 @@ elif "ligand name" in params:
 
 if ligand:
     print("The absolute binding free energy of the molecule containing residue %s "
-          "will be calculated.\n" % (ligand))
-    
+          "will be calculated.\n" %ligand)
+
 else:
     print("The absolute binding free energy of the first non-protein, non-solvent "
           "molecule will be calculated.\n")
@@ -184,5 +183,5 @@ if nits:
     print("Number of iterations to perform == %d\n" % nits)
     params["nmoves"] = nits
 
-# Now lets run the WSRC calculation
+#  Now lets run the WSRC calculation
 WSRC.run(params)

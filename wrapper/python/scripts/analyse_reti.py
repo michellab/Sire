@@ -1,5 +1,9 @@
 description = """
-analyse_reti is an analysis app that has been designed to analyse the replica exchange trajectory of all RETI simulations in Sire. analyse_reti reads in a Sire Saved Stream (.s3) file that contains a Sire simulation restart file (typically called ???_restart.s3). analyse_reti will extract the replica exchange trajectory and print it out in a format that will allow easy graphing. If you want to analyse the replica exchange moves from iterations 100 to 200 from the files restart.s3 and to write the results out to 'results.txt' then type;
+analyse_reti is an analysis app that has been designed to analyse the replica exchange trajectory of all RETI
+simulations in Sire. analyse_reti reads in a Sire Saved Stream (.s3) file that contains a Sire simulation restart file
+(typically called ???_restart.s3). analyse_reti will extract the replica exchange trajectory and print it out in a
+format that will allow easy graphing. If you want to analyse the replica exchange moves from iterations 100 to 200 from
+the files restart.s3 and to write the results out to 'results.txt' then type;
 
 sire.app/bin/analyse_reti -i restart.s3 -r 100 200 -o results.txt
 
@@ -13,7 +17,8 @@ sire.app/bin/analyse_reti -i restart.s3 -o results.txt
 
 If you don't supply the name of the output file, then the analysis is printed to the screen.
 
-If you need more help understanding or interpreting the results of an analyse_reti analysis then please feel free to get in touch via the Sire users mailing list.
+If you need more help understanding or interpreting the results of an analyse_reti analysis then please feel free to get
+in touch via the Sire users mailing list, or by creating a github issue.
 """
 
 import Sire.Stream
