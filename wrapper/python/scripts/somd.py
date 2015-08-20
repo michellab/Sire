@@ -49,13 +49,14 @@ args = parser.parse_args()
 must_exit = False
 
 if args.author:
-    print("\nsomd was written by Gaetano Calabro, Julien Michel and Christopher Woods (C) 2014")
+    print("\nsomd was written by Gaetano Calabro, Julien Michel, Antonia Mey and Christopher Woods (C) 2015")
     print("It is based on the OpenMMMD module distributed in Sire.")
     must_exit = True
 
 if args.version:
-    print("\somd version 0.1")
-    print(Sire.Config.versionString())
+    print("somd -- from Sire release version <%s>" %Sire.__version__)
+    print("This particular release can be downloaded here: "
+          "https://github.com/michellab/Sire/releases/tag/v%s" %Sire.__version__)
     must_exit = True
 
 if args.help_config:

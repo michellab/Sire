@@ -1,15 +1,19 @@
 description = """
 analyse_reti is an analysis app that has been designed to analyse the replica exchange trajectory of all RETI simulations in Sire. analyse_reti reads in a Sire Saved Stream (.s3) file that contains a Sire simulation restart file (typically called ???_restart.s3). analyse_reti will extract the replica exchange trajectory and print it out in a format that will allow easy graphing. If you want to analyse the replica exchange moves from iterations 100 to 200 from the files restart.s3 and to write the results out to 'results.txt' then type;
-sire.app/bin/analyse_reti -i restart.s3 -r 100 200 -o results.txt
-Alternatively, if you just want to analyse the last 60% of iterations, type;
-sire.app/bin/analyse_reti -i restart.s3 --percent 60 -o results.txt
+
+sire.app/bin/analyse_reti -i restart.s3 -r 100 200 -o results.txt
+
+Alternatively, if you just want to analyse the last 60% of iterations, type;
+
+sire.app/bin/analyse_reti -i restart.s3 --percent 60 -o results.txt
 
 You can also analyse all replica exchange iterations using
 
 sire.app/bin/analyse_reti -i restart.s3 -o results.txt
 
 If you don't supply the name of the output file, then the analysis is printed to the screen.
-If you need more help understanding or interpreting the results of an analyse_reti analysis then please feel free to get in touch via the Sire users mailing list.
+
+If you need more help understanding or interpreting the results of an analyse_reti analysis then please feel free to get in touch via the Sire users mailing list.
 """
 
 import Sire.Stream
@@ -63,8 +67,9 @@ if args.author:
     must_exit = True
 
 if args.version:
-    print("\analyse_reti version 0.1")
-    print(Sire.Config.versionString())
+    print("analyse_reti -- from Sire release version <%s>" %Sire.__version__)
+    print("This particular release can be downloaded here: "
+          "https://github.com/michellab/Sire/releases/tag/v%s" %Sire.__version__)
     must_exit = True
 
 if must_exit:
