@@ -183,7 +183,7 @@ lambda_val = Parameter("lambda_val", 0.0,
 delta_lambda = Parameter("delta_lambda", 0.001,
                          """Value of the lambda interval used to evaluate free energy gradients by finite difference.""")
 
-lambda_array = Parameter("lambda array", [0.0, 0.1, 0.3, 0.6, 0.9, 1.0],
+lambda_array = Parameter("lambda array",[] ,
                         """Array with all lambda values lambda_val needs to be part of the array. """)
 
 shift_delta = Parameter("shift delta", 2.0,
@@ -1207,6 +1207,30 @@ def clearBuffers(system):
 
     return system
 
+def getAllData(integrator, steps):
+    gradients = integrator.getGradients()
+    f_metropolis = integrator.getForwardMetropolis()
+    b_metropolis = integrator.getBackwardMetropolis()
+    energies = integrator.getEnergies()
+    reduced_pot_en = integrator.getReducedPerturbedEnergies()
+    outdata = None
+    l = [len(gradients), len(f_metropolis), len(b_metropolis), len(energies), len(steps)]
+    if len(set(l))!=1:
+        print("Whoops somehow the data generated does not agree in their first dimensions...exiting now")
+        exit(-1)
+    else:
+        if len(gradients) == len(reduced_pot_en):
+            outdata = np.column_stack((steps, energies, gradients,
+                                   f_metropolis, b_metropolis,
+                                   reduced_pot_en))
+        elif len(reduced_pot_en)==0:
+            outdata = np.column_stack((steps, energies, gradients,
+                                   f_metropolis, b_metropolis))
+            print("Warning: you didn't specify a lambda array, no reduced perturbed energies can be written to file")
+        else:
+            print("Whoops somehow the data generated does not agree in their first dimensions...exiting now")
+            exit(-1)
+    return outdata
 
 ######## MAIN SCRIPTS  #############
 
@@ -1515,17 +1539,20 @@ def runFreeNrg():
         integrator = mdmoves.integrator()
 
         #saving all data
-        gradients = integrator.getGradients()
-        reduced_energies = integrator.getReducedPerturbedEnergies()
-        forward_Metropolis = integrator.getForwardMetropolis()
-        backward_Metropolis = integrator.getBackwardMetropolis()
-        pot_energies = integrator.getEnergies()
         beg = (nmoves.val*(i-1))
         end = nmoves.val*(i-1)+nmoves.val
         steps = list(range(beg, end, energy_frequency.val))
-        outdata = np.column_stack((steps, pot_energies, gradients,
-                                   forward_Metropolis, backward_Metropolis,
-                                   reduced_energies))
+        outdata = getAllData(integrator, steps)
+        gradients = integrator.getGradients()
+        # reduced_energies = integrator.getReducedPerturbedEnergies()
+        # forward_Metropolis = integrator.getForwardMetropolis()
+        # backward_Metropolis = integrator.getBackwardMetropolis()
+        # pot_energies = integrator.getEnergies()
+
+
+        # outdata = np.column_stack((steps, pot_energies, gradients,
+        #                            forward_Metropolis, backward_Metropolis,
+        #                            reduced_energies))
         fmt =" ".join(["%8d"] + ["%25.8e"] + ["%25.8e"] + ["%25.8e"] + ["%25.8e"] + ["%25.15e"]*(len(lambda_array.val)))
         np.savetxt(outfile, outdata, fmt=fmt)
 
