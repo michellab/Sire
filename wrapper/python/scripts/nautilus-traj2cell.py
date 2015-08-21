@@ -53,8 +53,9 @@ if args.author:
     must_exit = True
 
 if args.version:
-    print("\nautilus-traj2cell version 1.0")
-    #print(Sire.Config.versionString())
+    print("nautilus-traj2cell -- from Sire release version <%s>" %Sire.__version__)
+    print("This particular release can be downloaded here: "
+          "https://github.com/michellab/Sire/releases/tag/v%s" %Sire.__version__)
     must_exit = True
 
 if must_exit:

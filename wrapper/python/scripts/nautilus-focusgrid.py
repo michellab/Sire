@@ -50,8 +50,9 @@ if args.author:
     must_exit = True
 
 if args.version:
-    print("\n nautilus-focusgrid version 0.1")
-    #print(Sire.Config.versionString())
+    print("nautilus-focusgrids -- from Sire release version <%s>" %Sire.__version__)
+    print("This particular release can be downloaded here: "
+          "https://github.com/michellab/Sire/releases/tag/v%s" %Sire.__version__)
     must_exit = True
 
 if must_exit:

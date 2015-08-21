@@ -1,7 +1,7 @@
 
 ####################################################################################################
 #                                                                                                  #
-#   RUN SCRIPT to perform a MD simulation in Sire with OpenMM                                      #
+#   RUN SCRIPT to perform an MD simulation in Sire with OpenMM                                     #
 #                                                                                                  #
 #   author: Julien Michel                                                                          #
 #   author: Gaetano Calabro                                                                        #
@@ -86,6 +86,8 @@ save_coords = Parameter("save coordinates", True, """Whether or not to save coor
 buffered_coords_freq = Parameter("buffered coordinates frequency", 1,
                                  """The number of time steps between saving of coordinates during
                                  a cycle of MD. 0 disables buffering.""")
+minimal_coordinate_saving = Parameter("minimal coordinate saving", False, "Reduce the number of coordiantes writing for states"
+                                                                    "with lambda in ]0,1[")
 
 time_to_skip = Parameter("time to skip", 0 * picosecond, """Time to skip in picoseconds""")
 
@@ -181,7 +183,7 @@ lambda_val = Parameter("lambda_val", 0.0,
 delta_lambda = Parameter("delta_lambda", 0.001,
                          """Value of the lambda interval used to evaluate free energy gradients by finite difference.""")
 
-lambda_array = Parameter("lambda array", [0.0, 0.1, 0.3, 0.6, 0.9, 1.0],
+lambda_array = Parameter("lambda array",[] ,
                         """Array with all lambda values lambda_val needs to be part of the array. """)
 
 shift_delta = Parameter("shift delta", 2.0,
@@ -193,6 +195,7 @@ coulomb_power = Parameter("coulomb power", 0,
 energy_frequency = Parameter("energy frequency", 1,
                              """The number of time steps between evaluation of free energy gradients.""")
 simfile = Parameter("outdata_file", "simfile.dat", """Filename that records all output needed for the free energy analysis""")
+
 verbose = Parameter("verbose", False, """Print debug output""")
 
 
@@ -223,34 +226,40 @@ def setupDCD(system):
     index = len(dcds) + 1
 
     dcd_filename = dcd_root.val + "%0009d" % index + ".dcd"
-
-    Trajectory = DCDFile(dcd_filename, system[MGName("all")], system.property("space"), timestep.val,
+    softcore_almbda = True
+    if lambda_val.val == 1.0 or lambda_val.val == 0.0:
+        softcore_almbda = False
+    if minimal_coordinate_saving.val and softcore_almbda:
+        interval = ncycles.val*nmoves.val
+        Trajectory = DCDFile(dcd_filename, system[MGName("all")], system.property("space"), timestep.val, interval)
+    else:
+        Trajectory = DCDFile(dcd_filename, system[MGName("all")], system.property("space"), timestep.val,
                          interval=buffered_coords_freq.val * ncycles_per_snap.val)
 
     return Trajectory
 
 
-def writeSystemData(system, moves, Trajectory, block):
-    localtimer = QTime()
-    localtimer.start()
+def writeSystemData(system, moves, Trajectory, block, softcore_lambda=False):
 
-    if (block % ncycles_per_snap.val == 0):
-        #PDB().write(system[MGName("all")], "output%0009d.pdb" % block)
-
-        if buffered_coords_freq.val > 0:
-            dimensions = {}
-            sysprops = system.propertyKeys()
-            for prop in sysprops:
-                if prop.startswith("buffered_space"):
-                    dimensions[str(prop)] = system.property(prop)
-            Trajectory.writeBufferedModels(system[MGName("all")], dimensions)
-        else:
+    if softcore_lambda:
+        if block == ncycles.val or block == 1:
             Trajectory.writeModel(system[MGName("all")], system.property("space"))
+    else:
+        if block % ncycles_per_snap.val == 0:
+            if buffered_coords_freq.val > 0:
+                dimensions = {}
+                sysprops = system.propertyKeys()
+                for prop in sysprops:
+                    if prop.startswith("buffered_space"):
+                        dimensions[str(prop)] = system.property(prop)
+                Trajectory.writeBufferedModels(system[MGName("all")], dimensions)
+            else:
+                Trajectory.writeModel(system[MGName("all")], system.property("space"))
 
     moves_file = open("moves.dat", "w")
     print("%s" % moves, file=moves_file)
+    moves_file.close()
 
-    #print(" Time to write coordinates %s ms " % localtimer.elapsed())
 
 
 def centerSolute(system, space):
@@ -1198,6 +1207,30 @@ def clearBuffers(system):
 
     return system
 
+def getAllData(integrator, steps):
+    gradients = integrator.getGradients()
+    f_metropolis = integrator.getForwardMetropolis()
+    b_metropolis = integrator.getBackwardMetropolis()
+    energies = integrator.getEnergies()
+    reduced_pot_en = integrator.getReducedPerturbedEnergies()
+    outdata = None
+    l = [len(gradients), len(f_metropolis), len(b_metropolis), len(energies), len(steps)]
+    if len(set(l))!=1:
+        print("Whoops somehow the data generated does not agree in their first dimensions...exiting now.")
+        exit(-1)
+    else:
+        if len(gradients) == len(reduced_pot_en):
+            outdata = np.column_stack((steps, energies, gradients,
+                                   f_metropolis, b_metropolis,
+                                   reduced_pot_en))
+        elif len(reduced_pot_en)==0:
+            outdata = np.column_stack((steps, energies, gradients,
+                                   f_metropolis, b_metropolis))
+            print("Warning: you didn't specify a lambda array, no reduced perturbed energies can be written to file.")
+        else:
+            print("Whoops somehow the data generated does not agree in their first dimensions...exiting now.")
+            exit(-1)
+    return outdata
 
 ######## MAIN SCRIPTS  #############
 
@@ -1412,7 +1445,7 @@ def runFreeNrg():
         print("Setting up sim file. ")
 
         outfile.write(bytes("#This file was generated on "+time.strftime("%c")+"\n", "UTF-8"))
-        outfile.write(bytes("#Using the somd command, which is part of the molecular library Sire\n","UTF-8"))
+        outfile.write(bytes("#Using the somd command, of the molecular library Sire version <%s> \n" %Sire.__version__,"UTF-8"))
         outfile.write(bytes("#For more information visit: https://github.com/michellab/Sire\n#\n","UTF-8"))
         outfile.write(bytes("#General information on simulation parameters:\n", "UTF-8"))
         outfile.write(bytes("#Simulation used %s moves, %s cycles and %s of simulation time \n" %(nmoves.val,
@@ -1486,6 +1519,13 @@ def runFreeNrg():
     print ("Starting somd-freenrg run...")
     print ("%s moves %s cycles, %s simulation time" %(nmoves.val, ncycles.val, simtime))
 
+    softcore_lambda = False
+    if minimal_coordinate_saving.val:
+        if lambda_val.val == 1.0 or lambda_val.val == 0.0:
+            softcore_lambda = False
+        else:
+            softcore_lambda = True
+
     grads = {}
     grads[lambda_val.val] = AverageAndStddev()
     s1 = timer.elapsed() / 1000.
@@ -1493,23 +1533,17 @@ def runFreeNrg():
         print("\nCycle = ", i, "\n")
         system = moves.move(system, nmoves.val, True)
         if save_coords.val:
-            writeSystemData(system, moves, trajectory, i)
+            writeSystemData(system, moves, trajectory, i, softcore_lambda)
 
         mdmoves = moves.moves()[0]
         integrator = mdmoves.integrator()
 
         #saving all data
-        gradients = integrator.getGradients()
-        reduced_energies = integrator.getReducedPerturbedEnergies()
-        forward_Metropolis = integrator.getForwardMetropolis()
-        backward_Metropolis = integrator.getBackwardMetropolis()
-        pot_energies = integrator.getEnergies()
         beg = (nmoves.val*(i-1))
         end = nmoves.val*(i-1)+nmoves.val
         steps = list(range(beg, end, energy_frequency.val))
-        outdata = np.column_stack((steps, pot_energies, gradients,
-                                   forward_Metropolis, backward_Metropolis,
-                                   reduced_energies))
+        outdata = getAllData(integrator, steps)
+        gradients = integrator.getGradients()
         fmt =" ".join(["%8d"] + ["%25.8e"] + ["%25.8e"] + ["%25.8e"] + ["%25.8e"] + ["%25.15e"]*(len(lambda_array.val)))
         np.savetxt(outfile, outdata, fmt=fmt)
 
