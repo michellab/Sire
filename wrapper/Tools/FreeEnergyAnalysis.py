@@ -43,13 +43,16 @@ class FreeEnergies(object):
         self._f_k = MBAR_obj.f_k
         (deltaF_ij, dDeltaF_ij, theta_ij) = MBAR_obj.getFreeEnergyDifferences()
         self._deltaF_mbar = deltaF_ij[0,self._lambda_array.shape[0]-1]
+        self._pmf_mbar = np.zeros(shape=(self._lambda_array.shape[0], 2))
+        self._pmf_mbar[:, 0] = self._lambda_array
+        self._pmf_mbar[:, 1] = self._f_k
 
     @property
     def pmf_ti(self):
         return self._pmf_ti
 
     @property
-    def f_k(self):
+    def pmf_mbar(self):
         return self._pmf_mbar
 
     @property
