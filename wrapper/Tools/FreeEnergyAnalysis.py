@@ -7,9 +7,16 @@
 #                                                                                                  #
 ####################################################################################################
 
-import numpy as np
-from pymbar import MBAR
-from pymbar import timeseries
+try:
+    import numpy as np
+except ImportError:
+    raise ImportError('Numpy is not installed. Please install numpy in order to use MBAR for your free energy analysis.')
+try:
+    from pymbar import MBAR
+    from pymbar import timeseries
+except ImportError:
+    raise ImportError('pymbar is not installed. Please install pymbar in order to use MBAR for your free energy '
+                      'analysis.')
 
 class FreeEnergies(object):
     r"""This class contains all the different pmf informations"""
