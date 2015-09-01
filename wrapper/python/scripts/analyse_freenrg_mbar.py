@@ -15,7 +15,7 @@ import sys
 import os
 import numpy as np
 from Sire.Tools.FreeEnergyAnalysis import SubSample
-from Sire.Tools.FreeEnergyAnalysis import FreeEnergy
+from Sire.Tools.FreeEnergyAnalysis import FreeEnergies
 
 parser = argparse.ArgumentParser(description="Analyse free energy files to calculate "
                                              "free energies, PMFs and to view convergence.",
@@ -37,20 +37,16 @@ parser.add_argument('-i', '--input', nargs='*',
                     help="Supply the name of the Sire simulation file/s containing gradients and perturbed energies to "
                          "be analysed. ")
 
-parser.add_argument('-g', '--gradients', nargs='*',
-                    help="Supply the name of the Sire Streamed gradients (.s3) files containing the "
-                         "gradients to be analysed.")
-
 parser.add_argument('-o', '--output', nargs=1,
                     help="""Supply the name of the file in which to write the output.""")
 
-parser.add_argument('--efficiency', action="Store_true",
+parser.add_argument('--efficiency', action="store_true",
                     help="Use statistical inefficiency to subsample the data")
 
 parser.add_argument('--lam', nargs='*',
                     help="The values of lambda at which a PMF should be evaluated.")
 
-parser.add_argument('kT', nargs=1, help= 'kT in either kJ/mol or kcal/mol at which the simulation was generated')
+parser.add_argument('--kT', nargs=1, help= 'kT in either kJ/mol or kcal/mol at which the simulation was generated')
 
 sys.stdout.write("\n")
 args = parser.parse_args()
@@ -95,7 +91,7 @@ if args.kT:
 else:
     kT = None
 
-if len(args.lam)!=0:
+if not args.lam is None:
     assert isinstance(args.lam, np.array)
     lambda_array = args.lam
 else:
