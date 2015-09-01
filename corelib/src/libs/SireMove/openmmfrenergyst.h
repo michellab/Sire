@@ -32,7 +32,7 @@
 #include "integrator.h"
 
 #ifdef SIRE_USE_OPENMM
-#include <OpenMM.h>   // CONDITIONAL_INCLUDE
+    #include <OpenMM.h>   // CONDITIONAL_INCLUDE
 #endif
 
 #include <cstdio>

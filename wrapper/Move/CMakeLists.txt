@@ -18,8 +18,11 @@ if (${SIRE_OpenMM_FOUND})
     add_definitions( "-DSIRE_USE_OPENMM" )
     set( SIRE_OPENMM_LIBRARIES ${SIRE_OpenMM_LIBRARIES} )
 
+
 else()
+    message("OpenMM was not found, installing wrappers without OpenMM support")
     set( SIRE_OPENMM_LIBRARIES "" )
+    message( "${SIRE_OPENMM_WRAPPERS}" )
 endif()
 
 # Other python wrapping directories
