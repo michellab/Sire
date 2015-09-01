@@ -12,16 +12,17 @@ set ( SCRIPTS
         DCDFile.py
         FDTISingleBound.py
         FDTISingleFree.py
-        Nautilus.py 
+        Nautilus.py
         QuantumToMM.py
         OpenMMMD.py
         Plot.py
         WaterChanger.py
         WSRC.py
+        FreeEnergyAnalysis.py
     )
 
 # If your script needs any default files (e.g. parameter or config files)
-# then put those files in a named directory in the Config directory and 
+# then put those files in a named directory in the Config directory and
 # add the name of that directory here. This directory will be copied
 # to the share/Sire/Tools
 set ( CONFIGDIRS
