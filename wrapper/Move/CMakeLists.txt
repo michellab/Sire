@@ -13,13 +13,19 @@ include_directories( ${BOOST_INCLUDE_DIR}
 include_directories( BEFORE ${SIRE_INCLUDE_DIR}/SireMove
                             ${SIRE_INCLUDE_DIR} )
 
-if (${SIRE_OpenMM_FOUND})
-    include_directories( ${SIRE_OpenMM_INCLUDE_DIR} )
-    add_definitions( "-DSIRE_USE_OPENMM" )
-    set( SIRE_OPENMM_LIBRARIES ${SIRE_OpenMM_LIBRARIES} )
-
+if (${SIRE_USE_OPENMM})
+  if (${SIRE_OpenMM_FOUND})
+      include_directories( ${SIRE_OpenMM_INCLUDE_DIR} )
+      add_definitions( "-DSIRE_USE_OPENMM" )
+      set( SIRE_OPENMM_LIBRARIES ${SIRE_OpenMM_LIBRARIES} )
+      include(CMakeOpenMMFile.txt)
+  else()
+      set( SIRE_OPENMM_LIBRARIES "" )
+      set( PYPP_OPENMM_SOURCES "" )
+  endif()
 else()
-    set( SIRE_OPENMM_LIBRARIES "" )
+  set( SIRE_OPENMM_LIBRARIES "" )
+  set( PYPP_OPENMM_SOURCES "" )
 endif()
 
 # Other python wrapping directories
@@ -35,7 +41,7 @@ set ( WRAPMOVE_SOURCES
 
       ${PYPP_SOURCES}
 
-      ${SIRE_OPENMM_WRAPPERS}
+      ${PYPP_OPENMM_SOURCES}
     )
 
 # Create the library that holds all of the class wrappers

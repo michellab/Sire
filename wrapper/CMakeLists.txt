@@ -171,7 +171,7 @@ set (BUILD_SHARED_LIBS ON)
 # set (CMAKE_VERBOSE_MAKEFILE ON)
 
 # We will use the small compiler flags (as the wrappers are too big and don't need optimising)
-message( STATUS "Compiling the python 2 wrappers using a SMALL build." )
+message( STATUS "Compiling the python wrappers using a SMALL build." )
 set( CMAKE_C_FLAGS ${SIRE_C_FLAGS_SMALL} )
 set( CMAKE_CXX_FLAGS ${SIRE_CXX_FLAGS_SMALL} )
 

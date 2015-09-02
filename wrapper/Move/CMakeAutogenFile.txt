@@ -15,7 +15,6 @@ set ( PYPP_SOURCES
        NullSupraSubMove.pypp.cpp
        NullSupraMove.pypp.cpp
        Dynamics.pypp.cpp
-       OpenMMMDIntegrator.pypp.cpp
        HMCGenerator.pypp.cpp
        MolDeleter.pypp.cpp
        DofID.pypp.cpp
@@ -32,7 +31,6 @@ set ( PYPP_SOURCES
        Replica.pypp.cpp
        MonteCarlo.pypp.cpp
        GetCOGPoint.pypp.cpp
-       OpenMMFrEnergyDT.pypp.cpp
        SupraSubSimPacket.pypp.cpp
        MTSMC.pypp.cpp
        SameMoves.pypp.cpp
@@ -63,7 +61,6 @@ set ( PYPP_SOURCES
        MolInserter.pypp.cpp
        ZMatMove.pypp.cpp
        HMCVelGen.pypp.cpp
-       OpenMMFrEnergyST.pypp.cpp
        GetPoint.pypp.cpp
        VelocityGenerator.pypp.cpp
        SupraMoves.pypp.cpp

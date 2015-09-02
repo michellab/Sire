@@ -206,6 +206,10 @@ endif()
 #  on the head node, and yet you still want to run tests!)
 option( SIRE_DISABLE_MPI "Turn off MPI compilation and linking" ON )
 
+# Add an option to say whether or not to use OpenMM
+option( SIRE_USE_OPENMM "Set whether or not to compile in support for OpenMM" )
+save_sire_variable( "SIRE_USE_OPENMM" "${SIRE_USE_OPENMM}" )
+
 #############
 ############# PLATFORM TESTS
 #############
@@ -637,23 +641,28 @@ if ( NOT ${SIRE_FOUND_QT} )
     find_package( Qt5Core REQUIRED )
 endif()
 
-if ( NOT ${SIRE_FOUND_OPENMM} )
-    # look for OpenMM in the system
-    # Now look for OpenMM
-    option (OPENMM_HOME "The location of the OpenMM installation" "/usr/local/openmm")
-    set(OpenMM_ROOT_DIR "${OPENMM_HOME}")
-    FIND_PACKAGE( OpenMM )
+if ( SIRE_USE_OPENMM )
+  if ( NOT ${SIRE_FOUND_OPENMM} )
+      # look for OpenMM in the system
+      # Now look for OpenMM
+      option (OPENMM_HOME "The location of the OpenMM installation" "/usr/local/openmm")
+      set(OpenMM_ROOT_DIR "${OPENMM_HOME}")
+      FIND_PACKAGE( OpenMM )
 
-    save_sire_variable( "SIRE_OpenMM_FOUND" "${OpenMM_FOUND}" )
+      save_sire_variable( "SIRE_OpenMM_FOUND" "${OpenMM_FOUND}" )
 
-    if ( ${OpenMM_FOUND} )
-       message( STATUS "Found OpenMM at ${OpenMM_ROOT_DIR}" )
-       save_sire_variable( "SIRE_OpenMM_INCLUDE_DIR" "${OpenMM_INCLUDE_DIR}" )
-       save_sire_variable( "SIRE_OpenMM_LIBRARIES" "${OpenMM_LIBRARIES}" )
-       save_sire_variable( "SIRE_OpenMM_LIBRARY_DIR" "${OpenMM_LIBRARY_DIR}" )
-    else()
-       message( STATUS "Could not find OpenMM. OpenMM support is disabled." )
-    endif()
+      if ( ${OpenMM_FOUND} )
+         message( STATUS "Found OpenMM at ${OpenMM_ROOT_DIR}" )
+         save_sire_variable( "SIRE_OpenMM_INCLUDE_DIR" "${OpenMM_INCLUDE_DIR}" )
+         save_sire_variable( "SIRE_OpenMM_LIBRARIES" "${OpenMM_LIBRARIES}" )
+         save_sire_variable( "SIRE_OpenMM_LIBRARY_DIR" "${OpenMM_LIBRARY_DIR}" )
+      else()
+         message( STATUS "Could not find OpenMM. OpenMM support is disabled." )
+      endif()
+  else()
+    message( STATUS "Disabling use of OpenMM at user request.")
+    save_sire_variable( "SIRE_OpenMM_FOUND" "${SIRE_USE_OPENMM}" )
+  endif()
 endif()
 
 get_target_property(QT5_LOCATION Qt5::Core LOCATION)

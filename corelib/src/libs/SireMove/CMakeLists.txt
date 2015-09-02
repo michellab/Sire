@@ -11,7 +11,6 @@ include_directories(${CMAKE_SOURCE_DIR}/src/libs)
 
 # Define the headers in SireMove
 set ( SIREMOVE_HEADERS
-      dcd_writer.h
       dlmrigidbody.h
       dynamics.h
       ensemble.h
@@ -71,7 +70,6 @@ set ( SIREMOVE_SOURCES
 
       register_siremove.cpp
 
-      dcd_writer.cpp
       dlmrigidbody.cpp
       dynamics.cpp
       ensemble.cpp
@@ -141,16 +139,21 @@ set ( SIREMOVE_OPENMM_SOURCES
       dcd_writer.cpp
     )
 
-if ( ${OpenMM_FOUND} )
+if ( ${SIRE_USE_OPENMM} )
+  if ( ${OpenMM_FOUND} )
     message ( STATUS "Adding in OpenMM support to SireMove using OpenMM ${OpenMM_ROOT_DIR}" )
     set ( SIREMOVE_SOURCES  ${SIREMOVE_SOURCES} ${SIREMOVE_OPENMM_SOURCES} ${SIREMOVE_OPENMM_HEADERS} )
     set ( SIREMOVE_HEADERS  ${SIREMOVE_HEADERS} ${SIREMOVE_OPENMM_HEADERS} )
     set ( SIRE_OPENMM_LIBRARIES ${OpenMM_LIBRARIES} )
     include_directories(${OpenMM_INCLUDE_DIR})
     add_definitions( "-DSIRE_USE_OPENMM" )
-else()
+  else()
     message ( STATUS "OpenMM not found, so OpenMM support is disabled." )
     set ( SIRE_OPENMM_LIBRARIES "" )
+  endif()
+else()
+  message( STATUS "OpenMM support disabled by user" )
+  set ( SIRE_OPENMM_LIBRARIES "" )
 endif()
 
 add_library (SireMove ${SIREMOVE_SOURCES})
