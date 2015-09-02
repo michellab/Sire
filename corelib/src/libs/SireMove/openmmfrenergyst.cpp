@@ -3484,7 +3484,7 @@ void OpenMMFrEnergyST::updateOpenMMContextLambda(double lambda)
         openmm_context->setParameter("lamdih", lambda); //Torsions
 }
 
-tuple<double, double, double> OpenMMFrEnergyST::calculateGradient(
+boost::tuples::tuple<double, double, double> OpenMMFrEnergyST::calculateGradient(
     double incr_plus, double incr_minus, double p_energy_lambda, double beta)
 {
     double double_increment = incr_plus - incr_minus;
