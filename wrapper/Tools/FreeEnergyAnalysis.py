@@ -41,7 +41,9 @@ class FreeEnergies(object):
             means = np.mean(self._gradients_kn, axis=1)
             self._pmf_ti = np.zeros(shape=(self._lambda_array.shape[0], 2))
             self._pmf_ti[:, 0] = self._lambda_array
-            self._pmf_ti[:, 1] = means
+            for i in range(1, self._lambda_array.shape[0]):
+                self._pmf_ti[i-1][1] = np.trapz(means[0:i], self._lambda_array[0:i])
+            self._pmf_ti[-1][1] = np.trapz(means, self._lambda_array)
             self._deltaF_ti = np.trapz(means, self._lambda_array)
 
 
@@ -103,12 +105,12 @@ class SubSample(object):
                   " according to that.")
             #first we compute statistical inefficiency
             g_k = np.zeros(shape=(self._gradients_kn.shape[0]))
-            for i in xrange(g_k.shape[0]):
+            for i in range(g_k.shape[0]):
                 g_k[i] = timeseries.statisticalInefficiency(self._gradients_kn[i,:])
             g = np.max(g_k)
             #now we need to figure out what the indices in the data are for subsampling
             indices_k = []
-            for i in xrange(g_k.shape[0]):
+            for i in range(g_k.shape[0]):
                 indices_k.append(timeseries.subsampleCorrelatedData(self._gradients_kn[i,:], g=g))
             self._subsampled_N_k_gradients = (np.ceil(self._N_k / g)).astype(int)
             N_max = np.max(self._subsampled_N_k_gradients)
@@ -128,13 +130,13 @@ class SubSample(object):
                   " according to that.")
             #first we compute statistical inefficiency
             g_k = np.zeros(shape=(self._energies_kn.shape[0]))
-            for i in xrange(g_k.shape[0]):
+            for i in range(g_k.shape[0]):
                 g_k[i] = timeseries.statisticalInefficiency(self._energies_kn[i,:])
             g = np.max(g_k)
             print (g)
             #now we need to figure out what the indices in the data are for subsampling
             indices_k = []
-            for i in xrange(g_k.shape[0]):
+            for i in range(g_k.shape[0]):
                 indices_k.append(timeseries.subsampleCorrelatedData(self._energies_kn[i,:], g=g))
             self._subsampled_N_k_energies = (np.ceil(self._N_k / g)).astype(int)
             N_max = np.max(self._subsampled_N_k_energies)
