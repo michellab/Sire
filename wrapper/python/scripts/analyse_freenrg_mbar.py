@@ -121,6 +121,8 @@ else:
 
 FILE.write(bytes("# Analysing data contained in file(s) \"%s\"\n" % input_file,  "UTF-8"))
 
+#Todo: add header sanity checks from simfiles
+
 #Now we do some sanity checking
 num_inputfiles = len(input_file)
 if len(lam) != num_inputfiles:
@@ -167,7 +169,6 @@ for k in range(0, len(lam)):
 u_kln=np.array(u_kln)
 
 #now we use the subsampling information to subsample the data.
-print (percentage)
 subsample_obj = SubSample(grad_kn, energies_kn, u_kln, N_k, percentage=percentage, subsample=subsampling)
 subsample_obj.subsample_energies()
 subsample_obj.subsample_gradients()
