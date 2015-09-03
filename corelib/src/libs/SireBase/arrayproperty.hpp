@@ -92,8 +92,6 @@ public:
 
     void insert(int i, T value);
     
-    ArrayProperty<T> mid(int pos, int length=-1) const;
-    
     void move(int from, int to);
     
     void pop_back();
@@ -338,14 +336,6 @@ SIRE_OUTOFLINE_TEMPLATE
 void ArrayProperty<T>::insert(int i, T value)
 {
     a.insert(i, value);
-}
-
-/** Return the subset of the array from a[pos, pos+length] */
-template<class T>
-SIRE_OUTOFLINE_TEMPLATE
-ArrayProperty<T> ArrayProperty<T>::mid(int pos, int length) const
-{
-    return ArrayProperty<T>( a.mid( detail::checkIndex(pos,a.count()), length ) );
 }
 
 /** Move the item at index 'from' to index 'to' */
