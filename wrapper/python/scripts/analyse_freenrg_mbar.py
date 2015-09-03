@@ -2,9 +2,9 @@ description = """
 analyse_freenrg_mbar is an analysis app that has been designed to analyse the output of all free energy calculations in Sire.
  analyse_freenrg_mbar reads simdata.dat files and compute free energy differences for TI and MBAR.
 
-sire.app/bin/analyse_freenrg_mbar -i simdata.dat -o results.txt -efficiency
+sire.app/bin/analyse_freenrg_mbar -i simdata.dat -o results.txt --subsampling timeseries
 
-The option efficiency will take the statistical inefficiency of the data into account and subsample them accordingly.
+The option subsampling will take the statistical inefficiency of the data into account and subsample them accordingly.
 
 If you need more help understanding or interpreting the results of an analyse_freenrg analysis then please feel free to
 get in touch via the Sire users mailing list, or by creating a github issue.
@@ -16,6 +16,7 @@ import os
 import numpy as np
 from Sire.Tools.FreeEnergyAnalysis import SubSample
 from Sire.Tools.FreeEnergyAnalysis import FreeEnergies
+from Sire.Units import *
 
 parser = argparse.ArgumentParser(description="Analyse free energy files to calculate "
                                              "free energies, PMFs and to view convergence.",
@@ -39,14 +40,16 @@ parser.add_argument('-i', '--input', nargs='*',
 parser.add_argument('-o', '--output', nargs=1,
                     help="""Supply the name of the file in which to write the output.""")
 
-parser.add_argument('--efficiency', action="store_true",
-                    help="Use statistical inefficiency to subsample the data")
+parser.add_argument('--subsampling',
+                    help="subsample according to either [timeseries] or [percentage] ")
+
+parser.add_argument('--percentage', type=float,
+                    help="Percentage of the data to be discarded towards equilibration.")
 
 parser.add_argument('--lam', nargs='*', type=float,
                     help="The values of lambda at which a PMF should be evaluated.")
 
-parser.add_argument('--kT', type=float, help= 'kT in either kJ/mol or kcal/mol at which the simulation was '
-                                                       'generated')
+parser.add_argument('--temperature', type=float, help= 'temperature in [Kelvin] at which the simulation was generated.')
 
 sys.stdout.write("\n")
 args = parser.parse_args()
@@ -81,15 +84,20 @@ if args.output:
 else:
     output_file = None
 
-if args.efficiency:
-    efficiency = True
+if args.subsampling:
+    subsampling = args.subsampling
 else:
-    efficiency = False
+    subsampling = 'timeseries'
 
-if args.kT:
-    kT = args.kT
+if args.percentage:
+    percentage = args.percentage
 else:
-    kT = None
+    percentage = 100
+
+if args.temperature:
+    T = args.temperature
+else:
+    T = None
 
 if not args.lam is None:
     lam = np.array(args.lam)
@@ -104,14 +112,16 @@ if not input_file:
 
 if output_file:
     print("# Writing all output to file %s" % output_file)
-    FILE = open(output_file, "w")
+    FILE = open(output_file, "wb")
+
 else:
     print("# Writing all output to stdout")
     FILE = sys.stdout
 
 
-FILE.write("# Analysing data contained in file(s) \"%s\"\n" % input_file)
+FILE.write(bytes("# Analysing data contained in file(s) \"%s\"\n" % input_file,  "UTF-8"))
 
+#Now we do some sanity checking
 num_inputfiles = len(input_file)
 if len(lam) != num_inputfiles:
     print (len(lam))
@@ -119,34 +129,46 @@ if len(lam) != num_inputfiles:
     print ("The lambda array you have provided does not match the number of simulation files provided please revise!")
     sys.exit(-1)
 
+#We will load all the data now
 data = []
 for i in range(num_inputfiles):
     data.append(np.loadtxt(input_file[i]))
 
+#array of generating lambdas to check that they agree with provided lambdas
+lam_sanity = []
 if lam is None:
-    print ("Lambda array was not giving, trying to infer lambda values from simulation files, this however is not yet "
+    print ("Lambda array was not given, trying to infer lambda values from simulation files, this however is not yet "
            "implemented")
     sys.exit(-1)
 
-if kT is None:
-    print("simulation kT was not giving trying to infer kT value from simulation files, this however is not yet "
+#sanity check array of generating temperatures to make sure they are all the same as well as match the  given
+# temperature
+T_sanity = []
+if T is None:
+    print("simulation T was not giving trying to infer T value from simulation files, this however is not yet "
           "implemented")
     sys.exit(-1)
 
-#Now we do the data estimation
+k_boltz_J = 0.0083144621
 data = np.array(data)
-grad_kn = data[:,:,2]
-energies_kn = data[:,:,1]
+grad_kn = data[:,:,2] #extract the reduced gradients
+energies_kn = data[:,:,1] #extract the potential energies
+
+#N_k is the number of samples at generating thermodynamic state (lambda) k
 N_k = np.zeros(shape=lam.shape[0])
 for k in range(0, lam.shape[0]):
     N_k[k] = data[k].shape[0]
 
+#Are the reduced perturbed potential energies generated at thermodynamic state k evaluated at state l, over all n
+# samples. This information is contained as is in the simulation file.
 u_kln = []
 for k in range(0, len(lam)):
     u_kln.append(data[k][:,5:].transpose())
 u_kln=np.array(u_kln)
 
-subsample_obj = SubSample(grad_kn,energies_kn,u_kln,N_k)
+#now we use the subsampling information to subsample the data.
+print (percentage)
+subsample_obj = SubSample(grad_kn, energies_kn, u_kln, N_k, percentage=percentage, subsample=subsampling)
 subsample_obj.subsample_energies()
 subsample_obj.subsample_gradients()
 
@@ -154,20 +176,35 @@ free_energy_obj = FreeEnergies(subsample_obj.u_kln, subsample_obj.N_k_energies, 
 free_energy_obj.run_mbar()
 free_energy_obj.run_ti()
 
+
 pmf_mbar = free_energy_obj.pmf_mbar
-if kT != None:
-    pmf_mbar[:,1] = pmf_mbar[:,1]*kT
-np.savetxt(output_file, pmf_mbar)
+if T != None:
+    pmf_mbar[:,1] = pmf_mbar[:,1]*T*k_boltz
+np.savetxt(FILE, pmf_mbar, fmt=['%f.2', '%f'])
+FILE.close()
 
 pmf_ti = free_energy_obj.pmf_ti
-
+if T != None:
+    #pmf_ti[:,1] = pmf_ti[:,1]*T*k_boltz_J
+    print ('blub')
 
 ti_out = os.path.join(os.path.dirname(output_file),'TI_'+os.path.basename(output_file))
-np.savetxt(ti_out, pmf_ti, fmt=['%d', '%f'])
+np.savetxt(ti_out, pmf_ti, fmt=['%f.2', '%f'])
 
+#writing out free energy differences and errors
+#TODO: rewrite this with a decorator!
 df_mbar_kcal = free_energy_obj.deltaF_mbar
-if kT != None:
-    df_mbar_kcal = df_mbar_kcal*kT
+df_mbar_kJ = free_energy_obj.deltaF_mbar
+df_ti_kcal = free_energy_obj.deltaF_ti
+dDf_mbar_kcal = free_energy_obj.errorF_mbar
+dDf_mbar_kJ = free_energy_obj.errorF_mbar
+if T != None:
+    df_mbar_kcal = df_mbar_kcal*T*k_boltz
+    df_mbar_kJ = df_mbar_kcal*T*k_boltz_J
+    #df_ti_kcal = df_ti_kcal*T*k_boltz
+    dDf_mbar_kcal = dDf_mbar_kcal*T*k_boltz
+    dDf_mbar_kJ = dDf_mbar_kJ*T*k_boltz_J
 
-print("Free energy difference estimated with mbar is: %f kcal/mol" %df_mbar_kcal)
-print("Free energy differences estimated with TI is: %f kcal/mol" %free_energy_obj.deltaF_ti)
+print("Free energy difference estimated with MBAR is: %f kcal/mol +/- %f kcal/mol" %(df_mbar_kcal,dDf_mbar_kcal))
+print("Free energy difference estimated with MBAR is: %f kJ/mol +/- %f kJ/mol" %(df_mbar_kJ,dDf_mbar_kJ))
+print("Free energy difference estimated with TI is: %f kcal/mol" %df_ti_kcal)
