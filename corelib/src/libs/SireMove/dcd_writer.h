@@ -1,9 +1,12 @@
 #include "fastio.h"
 
-#include <OpenMM.h>   // CONDITIONAL_INCLUDE
+#ifdef SIRE_USE_OPENMM
+    #include <OpenMM.h>   // CONDITIONAL_INCLUDE
+#endif
 
 #include "SireMove/integratorworkspace.h"
 
+#ifdef SIRE_USE_OPENMM
 /* defines used by write_dcdstep */
 #define NFILE_POS 8L
 #define NSTEP_POS 20L
@@ -63,3 +66,18 @@ class DCD {
 	    double tstep;
 
 };
+#else
+
+
+    class DCD {
+    public:
+
+        DCD() {
+        }
+
+        ~DCD() {
+        }
+    };
+
+
+#endif // SIRE_USE_OPENMM

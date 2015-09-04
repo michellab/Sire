@@ -54,7 +54,7 @@ set_target_properties (Move
                          OUTPUT_NAME "Move"
                          PREFIX "_"
                          SUFFIX ${PYTHON_MODULE_EXTENSION}
-		       )
+                        )
 
 target_link_libraries (Move
                        SirePython
