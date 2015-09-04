@@ -7,6 +7,13 @@
 #
 ################################
 
+# project version
+set (SIRE_VERSION_MAJOR "0")
+set (SIRE_VERSION_MINOR "0")
+set (SIRE_VERSION_PATCH "1")
+
+set (SIRE_VERSION "${SIRE_VERSION_MAJOR}.${SIRE_VERSION_MINOR}.${SIRE_VERSION_PATCH}")
+
 ############
 ############ SETTING INITIAL SIRE VARIABLES
 ############
@@ -32,9 +39,29 @@ if (NCORES EQUAL 0)
 endif()
 message(STATUS "Configuring on a machine with number of cores = ${NCORES}")
 
-# Option to set the install directory of Sire
-set( SIRE_APP "$ENV{HOME}/sire.app" CACHE PATH
-        "The full path to the sire.app installed Sire application." )
+# Option to compile and install into an anaconda or miniconda directory
+option( ANACONDA_BUILD "Build into an existing anaconda/miniconda installation" OFF )
+
+if ( ANACONDA_BUILD )
+  message( STATUS "Building into an existing Anaconda/Miniconda installation..." )
+  # Where is anaconda installed
+  set( ANACONDA_BASE "$ENV{HOME}/miniconda3" CACHE PATH
+          "Install directory for Anaconda/Miniconda (python3)" )
+
+  # Make sure that there is a python3 executable in the bin directory
+  if ( NOT EXISTS "${ANACONDA_BASE}/bin/python3" )
+    message( FATAL_ERROR "Cannot find ${ANACONDA_BASE}/bin/python3. "
+                         "Please set the full path to the Anaconda or Miniconda "
+                         "installation directory." )
+  endif()
+
+  set( SIRE_APP "${ANACONDA_BASE}/pkgs/sire-${SIRE_VERSION}" CACHE PATH
+          "Install directory for Sire within the Anaconda/Miniconda distribution" )
+else()
+  # Option to set the install directory of Sire
+  set( SIRE_APP "$ENV{HOME}/sire.app" CACHE PATH
+          "The full path to the sire.app installed Sire application." )
+endif()
 
 set( SIRE_INCLUDE_DIR "${SIRE_APP}/include/Sire" )
 
@@ -42,10 +69,15 @@ set ( SIRE_COMP_CMAKE "${SIRE_INCLUDE_DIR}/cmake/SireCompileVariables.cmake" )
 
 # Look for the "SireCompileVariables.cmake" file in the install directory
 if (EXISTS "${SIRE_COMP_CMAKE}")
-  include( "${SIRE_COMP_CMAKE}" )  
+  include( "${SIRE_COMP_CMAKE}" )
 else()
-  message( STATUS "You need to provide the full path to sire.app and check that it contains the file ${SIRE_COMP_CMAKE}" )
-  message( FATAL_ERROR "Do this by running 'cmake -DSIRE_APP=/path/to/sire.app /path/to/python/source'" )
+  if (ANACONDA_BUILD)
+    message( FATAL_ERROR "You don't appear to have built corelib into this"
+               "Anaconda/Miniconda directory. Please build corelib first." )
+  else()
+    message( STATUS "You need to provide the full path to sire.app and check that it contains the file ${SIRE_COMP_CMAKE}" )
+    message( FATAL_ERROR "Do this by running 'cmake -DSIRE_APP=/path/to/sire.app /path/to/python/source'" )
+  endif()
 endif()
 
 # Now set the C++, C and Fortran compilers to be used to compile the wrappers
@@ -56,7 +88,7 @@ set(CMAKE_CXX_COMPILER "${SIRE_CXX_COMPILER}")
 message( STATUS "Setting C compiler to ${SIRE_C_COMPILER} and C++ compiler to ${SIRE_CXX_COMPILER}" )
 
 # name the project
-project (SirePython2 CXX C)
+project (SirePython CXX C)
 
 set(CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
          "Prefix prepended to install directories" FORCE )
@@ -236,7 +268,7 @@ if ( SIRE_PYTHON_ENABLE_BUNDLING )
     include( "bundled/install_python.cmake" )
   endif()
 
-  if (NOT ${SIRE_FOUND_PYTHON})
+  if (NOT SIRE_FOUND_PYTHON)
     # Need to find python before we compile the boost python wrappers
     find_package( PythonLibs 3.2 REQUIRED )
   endif()
@@ -307,13 +339,13 @@ add_subdirectory (System)
 add_subdirectory (Units)
 add_subdirectory (Vol)
 
-add_subdirectory (Tools)
-
 #also install of the unit tests
 add_subdirectory (tests)
 
 #also compile Sire's python executable
 add_subdirectory (python)
+
+add_subdirectory (Tools)
 
 install( FILES __init__.py
          DESTINATION ${SIRE_PYTHON}/Sire 

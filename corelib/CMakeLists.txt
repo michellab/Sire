@@ -6,6 +6,13 @@
 #
 ################################
 
+# project version
+set (SIRE_VERSION_MAJOR "0")
+set (SIRE_VERSION_MINOR "0")
+set (SIRE_VERSION_PATCH "1")             
+
+set (SIRE_VERSION "${SIRE_VERSION_MAJOR}.${SIRE_VERSION_MINOR}.${SIRE_VERSION_PATCH}")
+
 ############
 ############ SETTING INITIAL SIRE VARIABLES
 ############
@@ -26,12 +33,35 @@ if (NCORES EQUAL 0)
 endif()
 message(STATUS "Configuring on a machine with number of cores = ${NCORES}")
 
-# Option to set the install directory of Sire
-set( SIRE_INSTALL_PREFIX "$ENV{HOME}/sire.app" CACHE PATH
-        "Install directory for Sire. This directory can be moved after compilation" )
+# Option to compile and install into an anaconda or miniconda directory
+option( ANACONDA_BUILD "Build into an existing anaconda/miniconda installation" OFF )
 
-set(CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
-         "Prefix prepended to install directories" FORCE ) 
+if ( ANACONDA_BUILD )
+  message( STATUS "Building into an existing Anaconda/Miniconda installation..." )
+  # Where is anaconda installed
+  set( ANACONDA_BASE "$ENV{HOME}/miniconda3" CACHE PATH
+          "Install directory for Anaconda/Miniconda (python3)" )
+
+  # Make sure that there is a python3 executable in the bin directory
+  if ( NOT EXISTS "${ANACONDA_BASE}/bin/python3" )
+    message( FATAL_ERROR "Cannot find ${ANACONDA_BASE}/bin/python3. "
+                         "Please set the full path to the Anaconda or Miniconda "
+                         "installation directory." )
+  endif()
+
+  set( SIRE_INSTALL_PREFIX "${ANACONDA_BASE}/pkgs/sire-${SIRE_VERSION}" CACHE PATH
+          "Install directory for Sire within the Anaconda/Miniconda distribution" )
+
+  set(CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
+           "Prefix prepended to install directories" FORCE )
+else()
+  # Option to set the install directory of Sire
+  set( SIRE_INSTALL_PREFIX "$ENV{HOME}/sire.app" CACHE PATH
+          "Install directory for Sire. This directory can be moved after compilation" )
+
+  set(CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
+           "Prefix prepended to install directories" FORCE ) 
+endif()
 
 message( STATUS "Sire will be compiled and installed to directory ${CMAKE_INSTALL_PREFIX}" )
 
@@ -58,13 +88,6 @@ macro( SAVE_SIRE_VARIABLE _var _value )
         "set( ${_var} \"${_value}\" )\n")
 endmacro (SAVE_SIRE_VARIABLE)
 
-# project version
-set (SIRE_VERSION_MAJOR "0")
-set (SIRE_VERSION_MINOR "0")
-set (SIRE_VERSION_PATCH "1")
-
-set (SIRE_VERSION "${SIRE_VERSION_MAJOR}.${SIRE_VERSION_MINOR}.${SIRE_VERSION_PATCH}")
-
 math (EXPR SIRE_VERSION_NUMBER 
       "${SIRE_VERSION_MAJOR}*100000 + ${SIRE_VERSION_MINOR}*100 + ${SIRE_VERSION_PATCH}")
 
@@ -76,6 +99,12 @@ save_sire_variable( "SIRE_VERSION_PATCH" "${SIRE_VERSION_PATCH}" )
 save_sire_variable( "SIRE_VERSION" "${SIRE_VERSION}" )
 save_sire_variable( "SIRE_VERSION_STRING" "${SIRE_VERSION_STRING}" )
 save_sire_variable( "SIRE_APP_DIR" "${CMAKE_INSTALL_PREFIX}" )
+
+save_sire_variable( "SIRE_ANACONDA_BUILD" "${ANACONDA_BUILD}" )
+
+if (ANACONDA_BUILD)
+  save_sire_variable( "SIRE_ANACONDA_BASE" "${ANACONDA_BASE}" )
+endif()
 
 # Ensure that the Sire's directories are searched for header files
 # before the system directories - this prevents problems in case
@@ -108,6 +137,11 @@ set (SIRE_INCLUDES "include/Sire")
 set (SIRE_CMAKEFILES "include/Sire/cmake")
 # Sire share directory (for parameters etc.)
 set (SIRE_SHARE "share/Sire")
+
+if (ANACONDA_BUILD)
+  set( SIRE_SHARE "${ANACONDA_BASE}/share/Sire" )
+endif()
+
 # Where will the test files be saved?
 set (SIRE_TEST "test")
 
