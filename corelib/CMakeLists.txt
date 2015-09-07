@@ -128,7 +128,15 @@ set (SIRE_BIN "bin")
 set (SIRE_LIBS "lib")
 # Where to install all bundled components
 set (SIRE_BUNDLED_DIR "bundled" )
-set (SIRE_BUNDLED_LIBS "${SIRE_BUNDLED_DIR}/lib")
+
+if (ANACONDA_BUILD)
+  # For an anaconda build, we copy all of the bundled
+  # libraries into the anaconda lib directory
+  set (SIRE_BUNDLED_LIBS "${ANACONDA_BASE}/lib")
+else()
+  set (SIRE_BUNDLED_LIBS "${SIRE_BUNDLED_DIR}/lib")
+endif()
+
 # Static library install dir
 set (SIRE_ARCHIVES "lib/static")
 # Include (header) files install dir
@@ -241,7 +249,7 @@ endif()
 option( SIRE_DISABLE_MPI "Turn off MPI compilation and linking" ON )
 
 # Add an option to say whether or not to use OpenMM
-option( SIRE_USE_OPENMM "Set whether or not to compile in support for OpenMM" )
+option( SIRE_USE_OPENMM "Set whether or not to compile in support for OpenMM", ON )
 save_sire_variable( "SIRE_USE_OPENMM" "${SIRE_USE_OPENMM}" )
 
 #############
@@ -679,9 +687,14 @@ if ( SIRE_USE_OPENMM )
   if ( NOT ${SIRE_FOUND_OPENMM} )
       # look for OpenMM in the system
       # Now look for OpenMM
-      option (OPENMM_HOME "The location of the OpenMM installation" "/usr/local/openmm")
-      set(OpenMM_ROOT_DIR "${OPENMM_HOME}")
-      FIND_PACKAGE( OpenMM )
+      if (ANACONDA_BUILD)
+        set(OpenMM_ROOT_DIR "${ANACONDA_BASE}")
+        FIND_PACKAGE( OpenMM )
+      else()
+        option (OPENMM_HOME "The location of the OpenMM installation" "/usr/local/openmm")
+        set(OpenMM_ROOT_DIR "${OPENMM_HOME}")
+        FIND_PACKAGE( OpenMM )
+      endif()
 
       save_sire_variable( "SIRE_OpenMM_FOUND" "${OpenMM_FOUND}" )
 

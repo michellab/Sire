@@ -53,37 +53,9 @@ with tempfile.TemporaryDirectory() as tempdir:
                 os.remove(filename)
     print("...files removed. Saved %d MB of space" % (py_saved_space/(1024*1024)))
 
-    # Extract the development files and package them up
-    print("Using 'makeself' to create a self-extracting installer for the development files...")
-    develdir = join(tempdir,"devel")
-    os.makedirs(develdir)
-    os.makedirs(join(develdir,"bundled"))
-    os.makedirs(join(develdir,"bundled","lib"))
-
-    print("Moving development files to %s" % develdir)
-    shutil.move(join(tempdir,"tmp_sire.app","include"), develdir)
-    shutil.move(join(tempdir,"tmp_sire.app","bundled","include"), join(develdir,"bundled"))
-    shutil.move(join(tempdir,"tmp_sire.app","bundled","mkspecs"), join(develdir,"bundled"))
-    shutil.move(join(tempdir,"tmp_sire.app","bundled","lib","pkgconfig"), join(develdir,"bundled","lib"))
-    
-    for lib in glob.glob(join(tempdir,"tmp_sire.app","bundled","lib","*debug*")):
-        shutil.move(lib, join(develdir,"bundled","lib"))
-
-    devel_saved_space = 0
-    for root, dirs, files in os.walk(develdir):
-        for file in files:
-            devel_saved_space += getsize(join(root,file))
-
-    os.system("%s --current %s %s \"Sire Development Files\" echo \"Unpacked files\"" \
-                % (makeself, develdir, join(tempdir,"tmp_sire.app","sire_devel.run")))
-
-    print("...package made. Saved %d MB of space" % (devel_saved_space/(1024*1024)))
-
-    # remove the devel directory
-    shutil.rmtree(develdir, ignore_errors=True)
-
     print("Using 'makeself' to create the self-extracting installer...")
     os.system("%s --current %s %s \"Sire Molecular Simulation Framework\" ./tmp_sire.app/share/Sire/build/install_sire.sh" \
                    % (makeself, tempdir, sire_run))
 
 print( "\nAll done :-). Just type %s to install Sire." % sire_run )
+

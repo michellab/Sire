@@ -13,6 +13,15 @@ naming convention of Sire, you can choose $HOME/sire.app
 Now, you should have a python in $HOME/sire.app/bin/python. Test it.
 Can you run a simple python script?
 
+(1a) (OPTIONAL) Download and install OpenMM
+
+If you want OpenMM support, install OpenMM into miniconda using the commands
+
+$HOME/sire.app/conda config --add channels http://conda.binstar.org/omnia
+$HOME/sire.app/conda install openmm
+
+(this assumes that you installed miniconda into $HOME/sire.app)
+
 (2) Download the Sire source
 
 You can get this from git, e.g. grab the devel branch. I am going
@@ -39,7 +48,8 @@ cd build/corelib
 cmake -D ANACONDA_BUILD=on -D ANACONDA_BASE=$HOME/sire.app $HOME/Sire/corelib
 
 (this assumes that you have installed anaconda into $HOME/sire.app and
- you have the corelib source in $HOME/Sire/corelib)
+ you have the corelib source in $HOME/Sire/corelib. Note that this will
+autodetect and use OpenMM if you have installed it using step 1a.)
 
 This will now configure the corelib for installation into the anaconda distribution
 in $HOME/sire.app
