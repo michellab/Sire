@@ -161,6 +161,7 @@ public:
     };
 
     CLJAtoms();
+    CLJAtoms(const CLJAtom &atom);
     CLJAtoms(const QVector<CLJAtom> &atoms);
     CLJAtoms(const QList<CLJAtom> &atoms);
     CLJAtoms(const CLJAtom *atoms, int natoms);

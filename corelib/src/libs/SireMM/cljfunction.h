@@ -50,6 +50,7 @@ class CLJFunction;
 class CLJCutoffFunction;
 class CLJIntraFunction;
 class CLJSoftFunction;
+class CLJSoftIntraFunction;
 class NullCLJFunction;
 }
 
@@ -67,6 +68,9 @@ QDataStream& operator>>(QDataStream&, SireMM::CLJIntraFunction&);
 
 QDataStream& operator<<(QDataStream&, const SireMM::CLJSoftFunction&);
 QDataStream& operator>>(QDataStream&, SireMM::CLJSoftFunction&);
+
+QDataStream& operator<<(QDataStream&, const SireMM::CLJSoftIntraFunction&);
+QDataStream& operator>>(QDataStream&, SireMM::CLJSoftIntraFunction&);
 
 namespace SireVol
 {
@@ -523,6 +527,19 @@ friend QDataStream& ::operator>>(QDataStream&, CLJSoftFunction&);
 
 public:
     CLJSoftFunction();
+    CLJSoftFunction(Length cutoff);
+    CLJSoftFunction(Length coul_cutoff, Length lj_cutoff);
+    
+    CLJSoftFunction(const Space &space, Length cutoff);
+    CLJSoftFunction(const Space &space, Length coul_cutoff, Length lj_cutoff);
+    
+    CLJSoftFunction(Length cutoff, COMBINING_RULES combining_rules);
+    CLJSoftFunction(Length coul_cutoff, Length lj_cutoff, COMBINING_RULES combining_rules);
+    
+    CLJSoftFunction(const Space &space, COMBINING_RULES combining_rules);
+    CLJSoftFunction(const Space &space, Length cutoff, COMBINING_RULES combining_rules);
+    CLJSoftFunction(const Space &space, Length coul_cutoff, Length lj_cutoff,
+                    COMBINING_RULES combining_rules);
     
     CLJSoftFunction(const CLJSoftFunction &other);
     
@@ -552,6 +569,78 @@ protected:
     CLJSoftFunction& operator=(const CLJSoftFunction &other);
     
     bool operator==(const CLJSoftFunction &other) const;
+
+    float oneMinusAlphaToN() const;
+    float alphaTimesShiftDelta() const;
+
+    /** The value of alpha to use */
+    float alpha_value;
+    
+    /** The value of shift-delta */
+    float shift_delta;
+    
+    /** The value of coulomb power */
+    float coulomb_power;
+};
+
+
+/** This is the base class of all intramolecular soft-core CLJ functions that have a cutoff
+
+    @author Christopher Woods
+*/
+class SIREMM_EXPORT CLJSoftIntraFunction : public CLJIntraFunction
+{
+
+friend QDataStream& ::operator<<(QDataStream&, const CLJSoftIntraFunction&);
+friend QDataStream& ::operator>>(QDataStream&, CLJSoftIntraFunction&);
+
+public:
+    CLJSoftIntraFunction();
+    CLJSoftIntraFunction(Length cutoff);
+    CLJSoftIntraFunction(Length coul_cutoff, Length lj_cutoff);
+    
+    CLJSoftIntraFunction(const Space &space, Length cutoff);
+    CLJSoftIntraFunction(const Space &space, Length coul_cutoff, Length lj_cutoff);
+    
+    CLJSoftIntraFunction(Length cutoff, COMBINING_RULES combining_rules);
+    CLJSoftIntraFunction(Length coul_cutoff, Length lj_cutoff, COMBINING_RULES combining_rules);
+    
+    CLJSoftIntraFunction(const Space &space, COMBINING_RULES combining_rules);
+    CLJSoftIntraFunction(const Space &space, Length cutoff, COMBINING_RULES combining_rules);
+    CLJSoftIntraFunction(const Space &space, Length coul_cutoff, Length lj_cutoff,
+                         COMBINING_RULES combining_rules);
+    
+    CLJSoftIntraFunction(const CLJSoftIntraFunction &other);
+    
+    ~CLJSoftIntraFunction();
+
+    static const char* typeName();
+
+    bool isSoftened() const;
+
+    Properties properties() const;
+    CLJFunctionPtr setProperty(const QString &name, const Property &value) const;
+    PropertyPtr property(const QString &name) const;
+    bool containsProperty(const QString &name) const;
+    
+    float alpha() const;
+    float shiftDelta() const;
+    float coulombPower() const;
+    
+    void setAlpha(float alpha);
+    void setShiftDelta(float shift);
+    void setCoulombPower(float power);
+    
+private:
+    void pvt_set(float alpha, float shift, float power);
+    
+protected:
+    CLJSoftIntraFunction& operator=(const CLJSoftIntraFunction &other);
+    
+    bool operator==(const CLJSoftIntraFunction &other) const;
+
+    float oneMinusAlphaToN() const;
+    float alphaTimesShiftDelta() const;
 
     /** The value of alpha to use */
     float alpha_value;
@@ -638,6 +727,7 @@ SIRE_EXPOSE_CLASS( SireMM::NullCLJFunction )
 SIRE_EXPOSE_CLASS( SireMM::CLJCutoffFunction )
 SIRE_EXPOSE_CLASS( SireMM::CLJSoftFunction )
 SIRE_EXPOSE_CLASS( SireMM::CLJIntraFunction )
+SIRE_EXPOSE_CLASS( SireMM::CLJSoftIntraFunction )
 
 SIRE_EXPOSE_PROPERTY( SireMM::CLJFunctionPtr, SireMM::CLJFunction )
 

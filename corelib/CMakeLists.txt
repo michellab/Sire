@@ -7,9 +7,9 @@
 ################################
 
 # project version
-set (SIRE_VERSION_MAJOR "0")
+set (SIRE_VERSION_MAJOR "2015")
 set (SIRE_VERSION_MINOR "0")
-set (SIRE_VERSION_PATCH "1")             
+set (SIRE_VERSION_PATCH "0")             
 
 set (SIRE_VERSION "${SIRE_VERSION_MAJOR}.${SIRE_VERSION_MINOR}.${SIRE_VERSION_PATCH}")
 
@@ -24,13 +24,20 @@ cmake_policy(VERSION 2.8)
 # use loose loop syntax in CMakeLists files
 set( CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE )
 
+# Option used to control the number of cores for the compile
+option( BUILD_NCORES "The number of cores used to compile Sire "
+                     "Leave this at 0 to automatically work this out." 0 )
+
 # get the number of cores on this machine - useful for
 # compiling dependencies
-include(ProcessorCount)
-ProcessorCount(NCORES)
-if (NCORES EQUAL 0)
+if ( BUILD_NCORES EQ 0 )
+  include(ProcessorCount)
+  ProcessorCount(NCORES)
+  if (NCORES EQUAL 0)
     set( NCORES 1 )
+  endif()
 endif()
+
 message(STATUS "Configuring on a machine with number of cores = ${NCORES}")
 
 # Option to compile and install into an anaconda or miniconda directory

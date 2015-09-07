@@ -26,8 +26,8 @@
   *
 \*********************************************/
 
-#ifndef SIREMM_CLJSHIFTFUNCTION_H
-#define SIREMM_CLJSHIFTFUNCTION_H
+#ifndef SIREMM_CLJRSFUNCTION_H
+#define SIREMM_CLJRSFUNCTION_H
 
 #include "cljfunction.h"
 
@@ -35,74 +35,82 @@
 
 namespace SireMM
 {
-class CLJShiftFunction;
-class CLJIntraShiftFunction;
-class CLJSoftShiftFunction;
-class CLJSoftIntraShiftFunction;
+class CLJRFFunction;
+class CLJIntraRFFunction;
+class CLJSoftRFFunction;
+class CLJSoftIntraRFFunction;
 }
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJShiftFunction&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJShiftFunction&);
+QDataStream& operator<<(QDataStream&, const SireMM::CLJRFFunction&);
+QDataStream& operator>>(QDataStream&, SireMM::CLJRFFunction&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJIntraShiftFunction&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJIntraShiftFunction&);
+QDataStream& operator<<(QDataStream&, const SireMM::CLJIntraRFFunction&);
+QDataStream& operator>>(QDataStream&, SireMM::CLJIntraRFFunction&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJSoftShiftFunction&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJSoftShiftFunction&);
+QDataStream& operator<<(QDataStream&, const SireMM::CLJSoftRFFunction&);
+QDataStream& operator>>(QDataStream&, SireMM::CLJSoftRFFunction&);
 
-QDataStream& operator<<(QDataStream&, const SireMM::CLJSoftIntraShiftFunction&);
-QDataStream& operator>>(QDataStream&, SireMM::CLJSoftIntraShiftFunction&);
+QDataStream& operator<<(QDataStream&, const SireMM::CLJSoftIntraRFFunction&);
+QDataStream& operator>>(QDataStream&, SireMM::CLJSoftIntraRFFunction&);
 
 namespace SireMM
 {
 
 /** This CLJFunction calculates the intermolecular coulomb and LJ energy of the passed
-    CLJAtoms using a force shifted electrostatics cutoff
+    CLJAtoms using a reaction field cutoff
     
     @author Christopher Woods
 */
-class SIREMM_EXPORT CLJShiftFunction
-        : public SireBase::ConcreteProperty<CLJShiftFunction,CLJCutoffFunction>
+class SIREMM_EXPORT CLJRFFunction
+        : public SireBase::ConcreteProperty<CLJRFFunction,CLJCutoffFunction>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJShiftFunction&);
-friend QDataStream& ::operator>>(QDataStream&, CLJShiftFunction&);
+friend QDataStream& ::operator<<(QDataStream&, const CLJRFFunction&);
+friend QDataStream& ::operator>>(QDataStream&, CLJRFFunction&);
 
 public:
-    CLJShiftFunction();
-    CLJShiftFunction(Length cutoff);
-    CLJShiftFunction(Length coul_cutoff, Length lj_cutoff);
+    CLJRFFunction();
+    CLJRFFunction(Length cutoff);
+    CLJRFFunction(Length coul_cutoff, Length lj_cutoff);
     
-    CLJShiftFunction(const Space &space, Length cutoff);
-    CLJShiftFunction(const Space &space, Length coul_cutoff, Length lj_cutoff);
+    CLJRFFunction(const Space &space, Length cutoff);
+    CLJRFFunction(const Space &space, Length coul_cutoff, Length lj_cutoff);
     
-    CLJShiftFunction(Length cutoff, COMBINING_RULES combining_rules);
-    CLJShiftFunction(Length coul_cutoff, Length lj_cutoff, COMBINING_RULES combining_rules);
+    CLJRFFunction(Length cutoff, COMBINING_RULES combining_rules);
+    CLJRFFunction(Length coul_cutoff, Length lj_cutoff, COMBINING_RULES combining_rules);
     
-    CLJShiftFunction(const Space &space, COMBINING_RULES combining_rules);
-    CLJShiftFunction(const Space &space, Length cutoff, COMBINING_RULES combining_rules);
-    CLJShiftFunction(const Space &space, Length coul_cutoff, Length lj_cutoff,
+    CLJRFFunction(const Space &space, COMBINING_RULES combining_rules);
+    CLJRFFunction(const Space &space, Length cutoff, COMBINING_RULES combining_rules);
+    CLJRFFunction(const Space &space, Length coul_cutoff, Length lj_cutoff,
                      COMBINING_RULES combining_rules);
     
-    CLJShiftFunction(const CLJShiftFunction &other);
+    CLJRFFunction(const CLJRFFunction &other);
     
-    ~CLJShiftFunction();
+    ~CLJRFFunction();
     
-    CLJShiftFunction& operator=(const CLJShiftFunction &other);
+    CLJRFFunction& operator=(const CLJRFFunction &other);
     
-    bool operator==(const CLJShiftFunction &other) const;
-    bool operator!=(const CLJShiftFunction &other) const;
+    bool operator==(const CLJRFFunction &other) const;
+    bool operator!=(const CLJRFFunction &other) const;
     
     static const char* typeName();
     const char* what() const;
     
     QString toString() const;
     
-    CLJShiftFunction* clone() const;
+    CLJRFFunction* clone() const;
+
+    Properties properties() const;
+    CLJFunctionPtr setProperty(const QString &name, const Property &value) const;
+    PropertyPtr property(const QString &name) const;
+    bool containsProperty(const QString &name) const;
+
+    void setDielectric(float dielectric);
+    float dielectric() const;
 
     bool supportsGridCalculation() const;
 
-    static CLJFunctionPtr defaultShiftFunction();
+    static CLJFunctionPtr defaultRFFunction();
 
 protected:
     void calcVacEnergyAri(const CLJAtoms &atoms,
@@ -145,51 +153,63 @@ protected:
     void calcBoxGrid(const CLJAtoms &atoms, const GridInfo &gridinfo,
                      const Vector &box_dimensions,
                      const int start, const int end, float *gridpot) const;
+
+private:
+    /** The dielectric constant */
+    float diel;
 };
 
 /** This CLJFunction calculates the intramolecular coulomb and LJ energy of the passed
-    CLJAtoms using a force shifted electrostatics cutoff
+    CLJAtoms using a reaction field cutoff
     
     @author Christopher Woods
 */
-class SIREMM_EXPORT CLJIntraShiftFunction
-        : public SireBase::ConcreteProperty<CLJIntraShiftFunction,CLJIntraFunction>
+class SIREMM_EXPORT CLJIntraRFFunction
+        : public SireBase::ConcreteProperty<CLJIntraRFFunction,CLJIntraFunction>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJIntraShiftFunction&);
-friend QDataStream& ::operator>>(QDataStream&, CLJIntraShiftFunction&);
+friend QDataStream& ::operator<<(QDataStream&, const CLJIntraRFFunction&);
+friend QDataStream& ::operator>>(QDataStream&, CLJIntraRFFunction&);
 
 public:
-    CLJIntraShiftFunction();
-    CLJIntraShiftFunction(Length cutoff);
-    CLJIntraShiftFunction(Length coul_cutoff, Length lj_cutoff);
+    CLJIntraRFFunction();
+    CLJIntraRFFunction(Length cutoff);
+    CLJIntraRFFunction(Length coul_cutoff, Length lj_cutoff);
     
-    CLJIntraShiftFunction(const Space &space, Length cutoff);
-    CLJIntraShiftFunction(const Space &space, Length coul_cutoff, Length lj_cutoff);
+    CLJIntraRFFunction(const Space &space, Length cutoff);
+    CLJIntraRFFunction(const Space &space, Length coul_cutoff, Length lj_cutoff);
     
-    CLJIntraShiftFunction(Length cutoff, COMBINING_RULES combining_rules);
-    CLJIntraShiftFunction(Length coul_cutoff, Length lj_cutoff, COMBINING_RULES combining_rules);
+    CLJIntraRFFunction(Length cutoff, COMBINING_RULES combining_rules);
+    CLJIntraRFFunction(Length coul_cutoff, Length lj_cutoff, COMBINING_RULES combining_rules);
     
-    CLJIntraShiftFunction(const Space &space, COMBINING_RULES combining_rules);
-    CLJIntraShiftFunction(const Space &space, Length cutoff, COMBINING_RULES combining_rules);
-    CLJIntraShiftFunction(const Space &space, Length coul_cutoff, Length lj_cutoff,
+    CLJIntraRFFunction(const Space &space, COMBINING_RULES combining_rules);
+    CLJIntraRFFunction(const Space &space, Length cutoff, COMBINING_RULES combining_rules);
+    CLJIntraRFFunction(const Space &space, Length coul_cutoff, Length lj_cutoff,
                           COMBINING_RULES combining_rules);
     
-    CLJIntraShiftFunction(const CLJIntraShiftFunction &other);
+    CLJIntraRFFunction(const CLJIntraRFFunction &other);
     
-    ~CLJIntraShiftFunction();
+    ~CLJIntraRFFunction();
     
-    CLJIntraShiftFunction& operator=(const CLJIntraShiftFunction &other);
+    CLJIntraRFFunction& operator=(const CLJIntraRFFunction &other);
     
-    bool operator==(const CLJIntraShiftFunction &other) const;
-    bool operator!=(const CLJIntraShiftFunction &other) const;
+    bool operator==(const CLJIntraRFFunction &other) const;
+    bool operator!=(const CLJIntraRFFunction &other) const;
     
     static const char* typeName();
     const char* what() const;
     
-    CLJIntraShiftFunction* clone() const;
+    CLJIntraRFFunction* clone() const;
 
-    static CLJFunctionPtr defaultShiftFunction();
+    Properties properties() const;
+    CLJFunctionPtr setProperty(const QString &name, const Property &value) const;
+    PropertyPtr property(const QString &name) const;
+    bool containsProperty(const QString &name) const;
+
+    void setDielectric(float dielectric);
+    float dielectric() const;
+
+    static CLJFunctionPtr defaultRFFunction();
 
 protected:
     void calcVacEnergyAri(const CLJAtoms &atoms,
@@ -217,55 +237,67 @@ protected:
     void calcBoxEnergyGeo(const CLJAtoms &atoms0, const CLJAtoms &atoms1,
                           const Vector &box_dimensions, double &cnrg, double &ljnrg,
                           float min_distance) const;
+
+private:
+    /** The dielectric constant */
+    float diel;
 };
 
 
 /** This CLJFunction calculates the intermolecular coulomb and LJ energy of the passed
-    CLJAtoms using a force shifted electrostatics cutoff, and provides a soft-core
+    CLJAtoms using a reaction field cutoff, and provides a soft-core
     potential that can soften molecules that are involved in free energy calculations
     
     @author Christopher Woods
 */
-class SIREMM_EXPORT CLJSoftShiftFunction
-        : public SireBase::ConcreteProperty<CLJSoftShiftFunction,CLJSoftFunction>
+class SIREMM_EXPORT CLJSoftRFFunction
+        : public SireBase::ConcreteProperty<CLJSoftRFFunction,CLJSoftFunction>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJSoftShiftFunction&);
-friend QDataStream& ::operator>>(QDataStream&, CLJSoftShiftFunction&);
+friend QDataStream& ::operator<<(QDataStream&, const CLJSoftRFFunction&);
+friend QDataStream& ::operator>>(QDataStream&, CLJSoftRFFunction&);
 
 public:
-    CLJSoftShiftFunction();
-    CLJSoftShiftFunction(Length cutoff);
-    CLJSoftShiftFunction(Length coul_cutoff, Length lj_cutoff);
+    CLJSoftRFFunction();
+    CLJSoftRFFunction(Length cutoff);
+    CLJSoftRFFunction(Length coul_cutoff, Length lj_cutoff);
     
-    CLJSoftShiftFunction(const Space &space, Length cutoff);
-    CLJSoftShiftFunction(const Space &space, Length coul_cutoff, Length lj_cutoff);
+    CLJSoftRFFunction(const Space &space, Length cutoff);
+    CLJSoftRFFunction(const Space &space, Length coul_cutoff, Length lj_cutoff);
     
-    CLJSoftShiftFunction(Length cutoff, COMBINING_RULES combining_rules);
-    CLJSoftShiftFunction(Length coul_cutoff, Length lj_cutoff, COMBINING_RULES combining_rules);
+    CLJSoftRFFunction(Length cutoff, COMBINING_RULES combining_rules);
+    CLJSoftRFFunction(Length coul_cutoff, Length lj_cutoff, COMBINING_RULES combining_rules);
     
-    CLJSoftShiftFunction(const Space &space, COMBINING_RULES combining_rules);
-    CLJSoftShiftFunction(const Space &space, Length cutoff, COMBINING_RULES combining_rules);
-    CLJSoftShiftFunction(const Space &space, Length coul_cutoff, Length lj_cutoff,
+    CLJSoftRFFunction(const Space &space, COMBINING_RULES combining_rules);
+    CLJSoftRFFunction(const Space &space, Length cutoff, COMBINING_RULES combining_rules);
+    CLJSoftRFFunction(const Space &space, Length coul_cutoff, Length lj_cutoff,
                      COMBINING_RULES combining_rules);
     
-    CLJSoftShiftFunction(const CLJSoftShiftFunction &other);
+    CLJSoftRFFunction(const CLJSoftRFFunction &other);
     
-    ~CLJSoftShiftFunction();
+    ~CLJSoftRFFunction();
     
-    CLJSoftShiftFunction& operator=(const CLJSoftShiftFunction &other);
+    CLJSoftRFFunction& operator=(const CLJSoftRFFunction &other);
     
-    bool operator==(const CLJSoftShiftFunction &other) const;
-    bool operator!=(const CLJSoftShiftFunction &other) const;
+    bool operator==(const CLJSoftRFFunction &other) const;
+    bool operator!=(const CLJSoftRFFunction &other) const;
     
     static const char* typeName();
     const char* what() const;
     
     QString toString() const;
     
-    CLJSoftShiftFunction* clone() const;
+    CLJSoftRFFunction* clone() const;
 
-    static CLJFunctionPtr defaultShiftFunction();
+    Properties properties() const;
+    CLJFunctionPtr setProperty(const QString &name, const Property &value) const;
+    PropertyPtr property(const QString &name) const;
+    bool containsProperty(const QString &name) const;
+
+    void setDielectric(float dielectric);
+    float dielectric() const;
+
+    static CLJFunctionPtr defaultRFFunction();
 
 protected:
     void calcVacEnergyAri(const CLJAtoms &atoms,
@@ -293,53 +325,65 @@ protected:
     void calcBoxEnergyGeo(const CLJAtoms &atoms0, const CLJAtoms &atoms1,
                           const Vector &box_dimensions, double &cnrg, double &ljnrg,
                           float min_distance) const;
+
+private:
+    /** The dielectric constant */
+    float diel;
 };
 
 /** This CLJFunction calculates the intramolecular coulomb and LJ energy of the passed
-    CLJAtoms using a force shifted electrostatics cutoff, and provides a soft-core
+    CLJAtoms using a reaction field cutoff, and provides a soft-core
     potential that can soften molecules that are involved in free energy calculations
     
     @author Christopher Woods
 */
-class SIREMM_EXPORT CLJSoftIntraShiftFunction
-        : public SireBase::ConcreteProperty<CLJSoftIntraShiftFunction,CLJSoftIntraFunction>
+class SIREMM_EXPORT CLJSoftIntraRFFunction
+        : public SireBase::ConcreteProperty<CLJSoftIntraRFFunction,CLJSoftIntraFunction>
 {
 
-friend QDataStream& ::operator<<(QDataStream&, const CLJSoftIntraShiftFunction&);
-friend QDataStream& ::operator>>(QDataStream&, CLJSoftIntraShiftFunction&);
+friend QDataStream& ::operator<<(QDataStream&, const CLJSoftIntraRFFunction&);
+friend QDataStream& ::operator>>(QDataStream&, CLJSoftIntraRFFunction&);
 
 public:
-    CLJSoftIntraShiftFunction();
-    CLJSoftIntraShiftFunction(Length cutoff);
-    CLJSoftIntraShiftFunction(Length coul_cutoff, Length lj_cutoff);
+    CLJSoftIntraRFFunction();
+    CLJSoftIntraRFFunction(Length cutoff);
+    CLJSoftIntraRFFunction(Length coul_cutoff, Length lj_cutoff);
     
-    CLJSoftIntraShiftFunction(const Space &space, Length cutoff);
-    CLJSoftIntraShiftFunction(const Space &space, Length coul_cutoff, Length lj_cutoff);
+    CLJSoftIntraRFFunction(const Space &space, Length cutoff);
+    CLJSoftIntraRFFunction(const Space &space, Length coul_cutoff, Length lj_cutoff);
     
-    CLJSoftIntraShiftFunction(Length cutoff, COMBINING_RULES combining_rules);
-    CLJSoftIntraShiftFunction(Length coul_cutoff, Length lj_cutoff,
+    CLJSoftIntraRFFunction(Length cutoff, COMBINING_RULES combining_rules);
+    CLJSoftIntraRFFunction(Length coul_cutoff, Length lj_cutoff,
                               COMBINING_RULES combining_rules);
     
-    CLJSoftIntraShiftFunction(const Space &space, COMBINING_RULES combining_rules);
-    CLJSoftIntraShiftFunction(const Space &space, Length cutoff, COMBINING_RULES combining_rules);
-    CLJSoftIntraShiftFunction(const Space &space, Length coul_cutoff, Length lj_cutoff,
+    CLJSoftIntraRFFunction(const Space &space, COMBINING_RULES combining_rules);
+    CLJSoftIntraRFFunction(const Space &space, Length cutoff, COMBINING_RULES combining_rules);
+    CLJSoftIntraRFFunction(const Space &space, Length coul_cutoff, Length lj_cutoff,
                               COMBINING_RULES combining_rules);
     
-    CLJSoftIntraShiftFunction(const CLJSoftIntraShiftFunction &other);
+    CLJSoftIntraRFFunction(const CLJSoftIntraRFFunction &other);
     
-    ~CLJSoftIntraShiftFunction();
+    ~CLJSoftIntraRFFunction();
     
-    CLJSoftIntraShiftFunction& operator=(const CLJSoftIntraShiftFunction &other);
+    CLJSoftIntraRFFunction& operator=(const CLJSoftIntraRFFunction &other);
     
-    bool operator==(const CLJSoftIntraShiftFunction &other) const;
-    bool operator!=(const CLJSoftIntraShiftFunction &other) const;
+    bool operator==(const CLJSoftIntraRFFunction &other) const;
+    bool operator!=(const CLJSoftIntraRFFunction &other) const;
     
     static const char* typeName();
     const char* what() const;
     
-    CLJSoftIntraShiftFunction* clone() const;
+    CLJSoftIntraRFFunction* clone() const;
 
-    static CLJFunctionPtr defaultShiftFunction();
+    Properties properties() const;
+    CLJFunctionPtr setProperty(const QString &name, const Property &value) const;
+    PropertyPtr property(const QString &name) const;
+    bool containsProperty(const QString &name) const;
+
+    void setDielectric(float dielectric);
+    float dielectric() const;
+
+    static CLJFunctionPtr defaultRFFunction();
 
 protected:
     void calcVacEnergyAri(const CLJAtoms &atoms,
@@ -367,20 +411,24 @@ protected:
     void calcBoxEnergyGeo(const CLJAtoms &atoms0, const CLJAtoms &atoms1,
                           const Vector &box_dimensions, double &cnrg, double &ljnrg,
                           float min_distance) const;
+
+private:
+    /** The dielectric constant */
+    float diel;
 };
 
 }
 
-Q_DECLARE_METATYPE( SireMM::CLJShiftFunction )
-Q_DECLARE_METATYPE( SireMM::CLJIntraShiftFunction )
+Q_DECLARE_METATYPE( SireMM::CLJRFFunction )
+Q_DECLARE_METATYPE( SireMM::CLJIntraRFFunction )
 
-Q_DECLARE_METATYPE( SireMM::CLJSoftShiftFunction )
-Q_DECLARE_METATYPE( SireMM::CLJSoftIntraShiftFunction );
+Q_DECLARE_METATYPE( SireMM::CLJSoftRFFunction )
+Q_DECLARE_METATYPE( SireMM::CLJSoftIntraRFFunction );
 
-SIRE_EXPOSE_CLASS( SireMM::CLJShiftFunction )
-SIRE_EXPOSE_CLASS( SireMM::CLJIntraShiftFunction )
+SIRE_EXPOSE_CLASS( SireMM::CLJRFFunction )
+SIRE_EXPOSE_CLASS( SireMM::CLJIntraRFFunction )
 
-SIRE_EXPOSE_CLASS( SireMM::CLJSoftShiftFunction )
-SIRE_EXPOSE_CLASS( SireMM::CLJSoftIntraShiftFunction )
+SIRE_EXPOSE_CLASS( SireMM::CLJSoftRFFunction )
+SIRE_EXPOSE_CLASS( SireMM::CLJSoftIntraRFFunction )
 
 #endif

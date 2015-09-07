@@ -1,0 +1,21 @@
+Ran svn merge from 2677 to 2731 from devel into julien branch in corelib and python
+(julien has his in python2, but it is really python)
+
+svn merge -r 2677:2731 ../../devel .
+svn merge -r 2677:2731 ../../../../python/branches/devel/ .
+
+Now, I am going to copy the files that have changed from the julien
+branch into the github directory, doing this library by library 
+for corelib...
+
+I then used the finddiff.pl script to find differences between the 
+github repository and julien's branch, first using corelib,
+using the command,
+
+(CWD = github repository)
+perl build/finddiff.pl . ../../../sire/corelib/branches/users/julien
+
+This found lots of diffs. I have been working through these from the
+top to the bottom and am now at the point of completing them all 
+through SireMM.
+

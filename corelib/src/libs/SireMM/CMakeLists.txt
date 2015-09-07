@@ -16,6 +16,7 @@ set ( SIREMM_HEADERS
       atomfunctions.h
       atomljs.h
       atompairs.hpp
+      clj14group.h
       cljatoms.h
       cljboxes.h
       cljcalculator.h
@@ -29,6 +30,7 @@ set ( SIREMM_HEADERS
       cljpotential.h
       cljprobe.h
       cljnbpairs.h
+      cljrffunction.h
       cljshiftfunction.h
       cljworkspace.h
       coulombpotential.h
@@ -50,6 +52,8 @@ set ( SIREMM_HEADERS
       intersoftcljff.h
       intracljff.h
       intracoulombff.h
+      intraff.h
+      intragroupff.h
       intraljff.h
       intrasoftcljff.h
       ljfunction.h
@@ -82,6 +86,7 @@ set ( SIREMM_SOURCES
       anglerestraint.cpp
       atomfunctions.cpp
       atomljs.cpp
+      clj14group.cpp
       cljatoms.cpp
       cljboxes.cpp
       cljcalculator.cpp
@@ -95,6 +100,7 @@ set ( SIREMM_SOURCES
       cljpotential.cpp
       cljprobe.cpp
       cljnbpairs.cpp
+      cljrffunction.cpp
       cljshiftfunction.cpp
       cljworkspace.cpp
       coulombpotential.cpp
@@ -116,6 +122,8 @@ set ( SIREMM_SOURCES
       intersoftcljff.cpp
       intracljff.cpp
       intracoulombff.cpp
+      intraff.cpp
+      intragroupff.cpp
       intraljff.cpp
       intrasoftcljff.cpp
       ljpair.cpp
