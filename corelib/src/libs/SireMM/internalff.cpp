@@ -2675,8 +2675,8 @@ void InternalFF::recalculateEnergy()
         {
             //need to set clean so that we can get the old CLJ energy
             this->setClean();
-            double old_cnrg = this->energy(this->components().intra14Coulomb());
-            double old_ljnrg = this->energy(this->components().intra14LJ());
+            double old_cnrg = FF::energy(this->components().intra14Coulomb());
+            double old_ljnrg = FF::energy(this->components().intra14LJ());
             this->setDirty();
             
             old_nrg += Intra14Energy(old_cnrg, old_ljnrg);

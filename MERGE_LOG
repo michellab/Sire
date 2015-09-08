@@ -16,7 +16,8 @@ using the command,
 perl build/finddiff.pl . ../../../sire/corelib/branches/users/julien
 
 This found lots of diffs. I have now merged all of the diffs and
-am working through a compile. I have issues with .energy again in 
-InternalFF etc. that I must fix...
+am working through a compile. All of corelib now compiles. Next
+thing is to regenerate the python wrappers and merge the rest
+of the python tools in...
 
 
