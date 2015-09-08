@@ -15,7 +15,8 @@ using the command,
 (CWD = github repository)
 perl build/finddiff.pl . ../../../sire/corelib/branches/users/julien
 
-This found lots of diffs. I have been working through these from the
-top to the bottom and am now at the point of completing them all 
-through SireMM.
+This found lots of diffs. I have now merged all of the diffs and
+am working through a compile. I have issues with .energy again in 
+InternalFF etc. that I must fix...
+
 

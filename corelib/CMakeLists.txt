@@ -25,12 +25,15 @@ cmake_policy(VERSION 2.8)
 set( CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE )
 
 # Option used to control the number of cores for the compile
-option( BUILD_NCORES "The number of cores used to compile Sire "
-                     "Leave this at 0 to automatically work this out." 0 )
+set ( BUILD_NCORES "0" 
+      CACHE STRING 
+      "The number of cores used to compile Sire. Leave this at 0 to automatically work this out." )
+
+string(REGEX MATCH "[0-9]+" NCORES ${BUILD_NCORES})
 
 # get the number of cores on this machine - useful for
 # compiling dependencies
-if ( BUILD_NCORES EQ 0 )
+if ( NCORES EQUAL 0 )
   include(ProcessorCount)
   ProcessorCount(NCORES)
   if (NCORES EQUAL 0)
@@ -108,6 +111,7 @@ save_sire_variable( "SIRE_VERSION_STRING" "${SIRE_VERSION_STRING}" )
 save_sire_variable( "SIRE_APP_DIR" "${CMAKE_INSTALL_PREFIX}" )
 
 save_sire_variable( "SIRE_ANACONDA_BUILD" "${ANACONDA_BUILD}" )
+save_sire_variable( "BUILD_NCORES" "${NCORES}" )
 
 if (ANACONDA_BUILD)
   save_sire_variable( "SIRE_ANACONDA_BASE" "${ANACONDA_BASE}" )
@@ -256,7 +260,7 @@ endif()
 option( SIRE_DISABLE_MPI "Turn off MPI compilation and linking" ON )
 
 # Add an option to say whether or not to use OpenMM
-option( SIRE_USE_OPENMM "Set whether or not to compile in support for OpenMM", ON )
+option( SIRE_USE_OPENMM "Set whether or not to compile in support for OpenMM" ON )
 save_sire_variable( "SIRE_USE_OPENMM" "${SIRE_USE_OPENMM}" )
 
 #############

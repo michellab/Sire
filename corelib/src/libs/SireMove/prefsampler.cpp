@@ -1012,6 +1012,12 @@ const PropertyName& PrefSampler::spaceProperty() const
     return space_property;
 }
 
+/** The preferential sampler is definitely biased! */
+bool PrefSampler::isBiased() const
+{
+    return true;
+}
+
 const char* PrefSampler::typeName()
 {
     return QMetaType::typeName( qMetaTypeId<PrefSampler>() );
