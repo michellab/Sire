@@ -2,7 +2,7 @@ language: cpp
 compiler:
   - gcc
 
-sudo: false
+sudo: required
 
 addons:
   apt:
