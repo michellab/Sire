@@ -1,5 +1,8 @@
 build_core
 build_wrapper
+build/corelib/*
+build/wrapper/*
+build/downloads/*
 #files for wrapper
 module_info
 active_headers.data
