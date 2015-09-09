@@ -64,7 +64,7 @@ bash build/miniconda.sh -b -p ${INSTALL_DIR}
 # Now run the python install script
 if [ -e "${INSTALL_DIR}/bin/python" ]; then
     ${INSTALL_DIR}/bin/python build/build_sire.py
-    exit 0
+    exit $?
 else
     echo "** FATAL **"
     echo "** Cannot find ${INSTALL_DIR}/bin/python **"

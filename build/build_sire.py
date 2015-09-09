@@ -82,6 +82,9 @@ if not os.path.isdir(coredir):
 
 os.chdir(coredir)
 
+os.system("which cmake")
+os.system("locate cmake")
+
 if os.path.exists("CMakeCache.txt"):
     # we have run cmake in this directory before. Run it again.
     status = os.system("cmake .")
