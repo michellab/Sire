@@ -20,4 +20,8 @@ am working through a compile. All of corelib now compiles. Next
 thing is to regenerate the python wrappers and merge the rest
 of the python tools in...
 
+Ok - I've now fixed the python wrapper generator so that it can
+generate wrappers on any linux. Have regenerated all of the wrappers
+and have then copied across all of the scripts from 2014.4 to
+this one. I think that everything is now merged.
 

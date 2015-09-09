@@ -1,5 +1,6 @@
 build_core
 build_wrapper
+build/miniconda.sh
 build/corelib/*
 build/wrapper/*
 build/downloads/*

@@ -48,14 +48,14 @@ elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
 fi
 
 # Download miniconda if it is not already in build/downloads
-if [ ! -e "build/downloads/miniconda.sh" ]; then
+if [ ! -e "build/miniconda.sh" ]; then
     echo "Downloading miniconda from ${MINICONDA}..."
-    wget ${MINICONDA} -O build/downloads/miniconda.sh
+    wget ${MINICONDA} -O build/miniconda.sh
 fi
 
 # Now unpack miniconda and install it into the requested directory
 echo "Unpacking miniconda into ${INSTALL_DIR}..."
-bash build/downloads/miniconda.sh -b -p ${INSTALL_DIR}
+bash build/miniconda.sh -b -p ${INSTALL_DIR}
 
 # Now run the python install script
 if [ -e "${INSTALL_DIR}/bin/python" ]; then
