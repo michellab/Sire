@@ -69,4 +69,5 @@ else
     echo "** FATAL **"
     echo "** Cannot find ${INSTALL_DIR}/bin/python **"
     echo "** Something went wrong with the miniconda install! **"
+    exit -1
 fi
