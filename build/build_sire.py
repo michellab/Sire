@@ -172,3 +172,6 @@ except:
     print("Something went wrong when trying to test the Sire installation.")
     print("Please check things manually yourself...")
     sys.exit(-1)
+
+print("=================================")
+print("Congratulations. Everything has installed :-)")
