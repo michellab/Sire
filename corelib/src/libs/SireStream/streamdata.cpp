@@ -1189,7 +1189,7 @@ QByteArray SIRESTREAM_EXPORT streamDataSave(
         //version 1 of the format uses Qt 4.2 datastream format
         ds2.setVersion( QDataStream::Qt_4_2 );
         
-        std::auto_ptr<SharedDataStream> sds;
+        std::unique_ptr<SharedDataStream> sds;
         
         if (nobjects > 1)
             //create a shared data stream so that sub-objects in 
@@ -1302,7 +1302,7 @@ QByteArray SIRESTREAM_EXPORT streamDataSave(
         //version 1 of the format uses Qt 4.2 datastream format
         ds2.setVersion( QDataStream::Qt_4_2 );
         
-        std::auto_ptr<SharedDataStream> sds;
+        std::unique_ptr<SharedDataStream> sds;
         
         if (nobjects > 1)
             //create a shared data stream so that sub-objects in 
@@ -1524,7 +1524,7 @@ QList< tuple<shared_ptr<void>,QString> > SIRESTREAM_EXPORT load(const QByteArray
 
         int nobjects = header.dataTypes().count();
         
-        std::auto_ptr<SharedDataStream> sds;
+        std::unique_ptr<SharedDataStream> sds;
         
         if (nobjects > 1)
             sds.reset( new SharedDataStream(ds2) );

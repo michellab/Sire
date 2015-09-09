@@ -42,7 +42,7 @@ void register_HMCGenerator_class(){
         HMCGenerator_exposer.def( bp::init< SireMove::HMCGenerator const & >(( bp::arg("other") )) );
         { //::SireMove::HMCGenerator::generate
         
-            typedef double ( ::SireMove::HMCGenerator::*generate_function_type )( ::SireSystem::System const &,::SireMove::MolecularDynamics & ) ;
+            typedef double ( ::SireMove::HMCGenerator::*generate_function_type)( ::SireSystem::System const &,::SireMove::MolecularDynamics & ) ;
             generate_function_type generate_function_value( &::SireMove::HMCGenerator::generate );
             
             HMCGenerator_exposer.def( 
@@ -53,7 +53,7 @@ void register_HMCGenerator_class(){
         }
         { //::SireMove::HMCGenerator::generate
         
-            typedef ::SireMol::AtomVelocities ( ::SireMove::HMCGenerator::*generate_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::AtomVelocities ( ::SireMove::HMCGenerator::*generate_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             generate_function_type generate_function_value( &::SireMove::HMCGenerator::generate );
             
             HMCGenerator_exposer.def( 
@@ -64,7 +64,7 @@ void register_HMCGenerator_class(){
         }
         { //::SireMove::HMCGenerator::getBias
         
-            typedef double ( ::SireMove::HMCGenerator::*getBias_function_type )( ::SireMove::MolecularDynamics const & ) ;
+            typedef double ( ::SireMove::HMCGenerator::*getBias_function_type)( ::SireMove::MolecularDynamics const & ) ;
             getBias_function_type getBias_function_value( &::SireMove::HMCGenerator::getBias );
             
             HMCGenerator_exposer.def( 
@@ -76,7 +76,7 @@ void register_HMCGenerator_class(){
         HMCGenerator_exposer.def( bp::self != bp::self );
         { //::SireMove::HMCGenerator::operator=
         
-            typedef ::SireMove::HMCGenerator & ( ::SireMove::HMCGenerator::*assign_function_type )( ::SireMove::HMCGenerator const & ) ;
+            typedef ::SireMove::HMCGenerator & ( ::SireMove::HMCGenerator::*assign_function_type)( ::SireMove::HMCGenerator const & ) ;
             assign_function_type assign_function_value( &::SireMove::HMCGenerator::operator= );
             
             HMCGenerator_exposer.def( 

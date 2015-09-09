@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "CLJGrid.pypp.hpp"
 
 namespace bp = boost::python;
@@ -54,7 +53,7 @@ void register_CLJGrid_class(){
         CLJGrid_exposer.def( bp::init< SireMM::CLJGrid const & >(( bp::arg("other") )) );
         { //::SireMM::CLJGrid::addFixedAtoms
         
-            typedef void ( ::SireMM::CLJGrid::*addFixedAtoms_function_type )( ::SireMM::CLJAtoms const & ) ;
+            typedef void ( ::SireMM::CLJGrid::*addFixedAtoms_function_type)( ::SireMM::CLJAtoms const & ) ;
             addFixedAtoms_function_type addFixedAtoms_function_value( &::SireMM::CLJGrid::addFixedAtoms );
             
             CLJGrid_exposer.def( 
@@ -65,7 +64,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::calculate
         
-            typedef ::boost::tuples::tuple< double, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJGrid::*calculate_function_type )( ::SireMM::CLJAtoms const & ) const;
+            typedef ::boost::tuples::tuple< double, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJGrid::*calculate_function_type)( ::SireMM::CLJAtoms const & ) const;
             calculate_function_type calculate_function_value( &::SireMM::CLJGrid::calculate );
             
             CLJGrid_exposer.def( 
@@ -76,7 +75,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::calculate
         
-            typedef ::boost::tuples::tuple< double, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJGrid::*calculate_function_type )( ::SireMM::CLJBoxes const & ) const;
+            typedef ::boost::tuples::tuple< double, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJGrid::*calculate_function_type)( ::SireMM::CLJBoxes const & ) const;
             calculate_function_type calculate_function_value( &::SireMM::CLJGrid::calculate );
             
             CLJGrid_exposer.def( 
@@ -87,18 +86,18 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::cljFunction
         
-            typedef ::SireMM::CLJFunction const & ( ::SireMM::CLJGrid::*cljFunction_function_type )(  ) const;
+            typedef ::SireMM::CLJFunction const & ( ::SireMM::CLJGrid::*cljFunction_function_type)(  ) const;
             cljFunction_function_type cljFunction_function_value( &::SireMM::CLJGrid::cljFunction );
             
             CLJGrid_exposer.def( 
                 "cljFunction"
                 , cljFunction_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::CLJGrid::coulomb
         
-            typedef double ( ::SireMM::CLJGrid::*coulomb_function_type )( ::SireMM::CLJAtoms const & ) const;
+            typedef double ( ::SireMM::CLJGrid::*coulomb_function_type)( ::SireMM::CLJAtoms const & ) const;
             coulomb_function_type coulomb_function_value( &::SireMM::CLJGrid::coulomb );
             
             CLJGrid_exposer.def( 
@@ -109,7 +108,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::coulomb
         
-            typedef double ( ::SireMM::CLJGrid::*coulomb_function_type )( ::SireMM::CLJBoxes const & ) const;
+            typedef double ( ::SireMM::CLJGrid::*coulomb_function_type)( ::SireMM::CLJBoxes const & ) const;
             coulomb_function_type coulomb_function_value( &::SireMM::CLJGrid::coulomb );
             
             CLJGrid_exposer.def( 
@@ -120,7 +119,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::disableGrid
         
-            typedef void ( ::SireMM::CLJGrid::*disableGrid_function_type )(  ) ;
+            typedef void ( ::SireMM::CLJGrid::*disableGrid_function_type)(  ) ;
             disableGrid_function_type disableGrid_function_value( &::SireMM::CLJGrid::disableGrid );
             
             CLJGrid_exposer.def( 
@@ -130,7 +129,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::disableParallelCalculation
         
-            typedef void ( ::SireMM::CLJGrid::*disableParallelCalculation_function_type )(  ) ;
+            typedef void ( ::SireMM::CLJGrid::*disableParallelCalculation_function_type)(  ) ;
             disableParallelCalculation_function_type disableParallelCalculation_function_value( &::SireMM::CLJGrid::disableParallelCalculation );
             
             CLJGrid_exposer.def( 
@@ -140,7 +139,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::disableReproducibleCalculation
         
-            typedef void ( ::SireMM::CLJGrid::*disableReproducibleCalculation_function_type )(  ) ;
+            typedef void ( ::SireMM::CLJGrid::*disableReproducibleCalculation_function_type)(  ) ;
             disableReproducibleCalculation_function_type disableReproducibleCalculation_function_value( &::SireMM::CLJGrid::disableReproducibleCalculation );
             
             CLJGrid_exposer.def( 
@@ -150,7 +149,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::enableGrid
         
-            typedef void ( ::SireMM::CLJGrid::*enableGrid_function_type )(  ) ;
+            typedef void ( ::SireMM::CLJGrid::*enableGrid_function_type)(  ) ;
             enableGrid_function_type enableGrid_function_value( &::SireMM::CLJGrid::enableGrid );
             
             CLJGrid_exposer.def( 
@@ -160,7 +159,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::enableParallelCalculation
         
-            typedef void ( ::SireMM::CLJGrid::*enableParallelCalculation_function_type )(  ) ;
+            typedef void ( ::SireMM::CLJGrid::*enableParallelCalculation_function_type)(  ) ;
             enableParallelCalculation_function_type enableParallelCalculation_function_value( &::SireMM::CLJGrid::enableParallelCalculation );
             
             CLJGrid_exposer.def( 
@@ -170,7 +169,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::enableReproducibleCalculation
         
-            typedef void ( ::SireMM::CLJGrid::*enableReproducibleCalculation_function_type )(  ) ;
+            typedef void ( ::SireMM::CLJGrid::*enableReproducibleCalculation_function_type)(  ) ;
             enableReproducibleCalculation_function_type enableReproducibleCalculation_function_value( &::SireMM::CLJGrid::enableReproducibleCalculation );
             
             CLJGrid_exposer.def( 
@@ -180,7 +179,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::fixedAtoms
         
-            typedef ::SireMM::CLJAtoms ( ::SireMM::CLJGrid::*fixedAtoms_function_type )(  ) const;
+            typedef ::SireMM::CLJAtoms ( ::SireMM::CLJGrid::*fixedAtoms_function_type)(  ) const;
             fixedAtoms_function_type fixedAtoms_function_value( &::SireMM::CLJGrid::fixedAtoms );
             
             CLJGrid_exposer.def( 
@@ -190,7 +189,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::functionSupportsGrid
         
-            typedef bool ( ::SireMM::CLJGrid::*functionSupportsGrid_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJGrid::*functionSupportsGrid_function_type)(  ) const;
             functionSupportsGrid_function_type functionSupportsGrid_function_value( &::SireMM::CLJGrid::functionSupportsGrid );
             
             CLJGrid_exposer.def( 
@@ -200,7 +199,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::grid
         
-            typedef ::SireVol::GridInfo ( ::SireMM::CLJGrid::*grid_function_type )(  ) const;
+            typedef ::SireVol::GridInfo ( ::SireMM::CLJGrid::*grid_function_type)(  ) const;
             grid_function_type grid_function_value( &::SireMM::CLJGrid::grid );
             
             CLJGrid_exposer.def( 
@@ -210,7 +209,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::gridBuffer
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMM::CLJGrid::*gridBuffer_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::CLJGrid::*gridBuffer_function_type)(  ) const;
             gridBuffer_function_type gridBuffer_function_value( &::SireMM::CLJGrid::gridBuffer );
             
             CLJGrid_exposer.def( 
@@ -220,7 +219,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::gridDimensions
         
-            typedef ::SireVol::AABox ( ::SireMM::CLJGrid::*gridDimensions_function_type )(  ) const;
+            typedef ::SireVol::AABox ( ::SireMM::CLJGrid::*gridDimensions_function_type)(  ) const;
             gridDimensions_function_type gridDimensions_function_value( &::SireMM::CLJGrid::gridDimensions );
             
             CLJGrid_exposer.def( 
@@ -230,7 +229,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::gridSpacing
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMM::CLJGrid::*gridSpacing_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::CLJGrid::*gridSpacing_function_type)(  ) const;
             gridSpacing_function_type gridSpacing_function_value( &::SireMM::CLJGrid::gridSpacing );
             
             CLJGrid_exposer.def( 
@@ -250,7 +249,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::isEmpty
         
-            typedef bool ( ::SireMM::CLJGrid::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJGrid::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMM::CLJGrid::isEmpty );
             
             CLJGrid_exposer.def( 
@@ -260,7 +259,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::lj
         
-            typedef double ( ::SireMM::CLJGrid::*lj_function_type )( ::SireMM::CLJAtoms const & ) const;
+            typedef double ( ::SireMM::CLJGrid::*lj_function_type)( ::SireMM::CLJAtoms const & ) const;
             lj_function_type lj_function_value( &::SireMM::CLJGrid::lj );
             
             CLJGrid_exposer.def( 
@@ -271,7 +270,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::lj
         
-            typedef double ( ::SireMM::CLJGrid::*lj_function_type )( ::SireMM::CLJBoxes const & ) const;
+            typedef double ( ::SireMM::CLJGrid::*lj_function_type)( ::SireMM::CLJBoxes const & ) const;
             lj_function_type lj_function_value( &::SireMM::CLJGrid::lj );
             
             CLJGrid_exposer.def( 
@@ -282,7 +281,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::nFixedAtoms
         
-            typedef int ( ::SireMM::CLJGrid::*nFixedAtoms_function_type )(  ) const;
+            typedef int ( ::SireMM::CLJGrid::*nFixedAtoms_function_type)(  ) const;
             nFixedAtoms_function_type nFixedAtoms_function_value( &::SireMM::CLJGrid::nFixedAtoms );
             
             CLJGrid_exposer.def( 
@@ -293,7 +292,7 @@ void register_CLJGrid_class(){
         CLJGrid_exposer.def( bp::self != bp::self );
         { //::SireMM::CLJGrid::operator=
         
-            typedef ::SireMM::CLJGrid & ( ::SireMM::CLJGrid::*assign_function_type )( ::SireMM::CLJGrid const & ) ;
+            typedef ::SireMM::CLJGrid & ( ::SireMM::CLJGrid::*assign_function_type)( ::SireMM::CLJGrid const & ) ;
             assign_function_type assign_function_value( &::SireMM::CLJGrid::operator= );
             
             CLJGrid_exposer.def( 
@@ -306,7 +305,7 @@ void register_CLJGrid_class(){
         CLJGrid_exposer.def( bp::self == bp::self );
         { //::SireMM::CLJGrid::setCLJFunction
         
-            typedef void ( ::SireMM::CLJGrid::*setCLJFunction_function_type )( ::SireMM::CLJFunction const & ) ;
+            typedef void ( ::SireMM::CLJGrid::*setCLJFunction_function_type)( ::SireMM::CLJFunction const & ) ;
             setCLJFunction_function_type setCLJFunction_function_value( &::SireMM::CLJGrid::setCLJFunction );
             
             CLJGrid_exposer.def( 
@@ -317,7 +316,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::setFixedAtoms
         
-            typedef void ( ::SireMM::CLJGrid::*setFixedAtoms_function_type )( ::SireMM::CLJAtoms const & ) ;
+            typedef void ( ::SireMM::CLJGrid::*setFixedAtoms_function_type)( ::SireMM::CLJAtoms const & ) ;
             setFixedAtoms_function_type setFixedAtoms_function_value( &::SireMM::CLJGrid::setFixedAtoms );
             
             CLJGrid_exposer.def( 
@@ -328,7 +327,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::setFixedAtoms
         
-            typedef void ( ::SireMM::CLJGrid::*setFixedAtoms_function_type )( ::SireMM::CLJBoxes const & ) ;
+            typedef void ( ::SireMM::CLJGrid::*setFixedAtoms_function_type)( ::SireMM::CLJBoxes const & ) ;
             setFixedAtoms_function_type setFixedAtoms_function_value( &::SireMM::CLJGrid::setFixedAtoms );
             
             CLJGrid_exposer.def( 
@@ -339,7 +338,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::setGrid
         
-            typedef void ( ::SireMM::CLJGrid::*setGrid_function_type )( ::SireVol::GridInfo const & ) ;
+            typedef void ( ::SireMM::CLJGrid::*setGrid_function_type)( ::SireVol::GridInfo const & ) ;
             setGrid_function_type setGrid_function_value( &::SireMM::CLJGrid::setGrid );
             
             CLJGrid_exposer.def( 
@@ -350,7 +349,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::setGridBuffer
         
-            typedef void ( ::SireMM::CLJGrid::*setGridBuffer_function_type )( ::SireUnits::Dimension::Length ) ;
+            typedef void ( ::SireMM::CLJGrid::*setGridBuffer_function_type)( ::SireUnits::Dimension::Length ) ;
             setGridBuffer_function_type setGridBuffer_function_value( &::SireMM::CLJGrid::setGridBuffer );
             
             CLJGrid_exposer.def( 
@@ -361,7 +360,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::setGridDimensions
         
-            typedef void ( ::SireMM::CLJGrid::*setGridDimensions_function_type )( ::SireVol::AABox const & ) ;
+            typedef void ( ::SireMM::CLJGrid::*setGridDimensions_function_type)( ::SireVol::AABox const & ) ;
             setGridDimensions_function_type setGridDimensions_function_value( &::SireMM::CLJGrid::setGridDimensions );
             
             CLJGrid_exposer.def( 
@@ -372,7 +371,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::setGridDimensions
         
-            typedef void ( ::SireMM::CLJGrid::*setGridDimensions_function_type )( ::SireMM::CLJAtoms const & ) ;
+            typedef void ( ::SireMM::CLJGrid::*setGridDimensions_function_type)( ::SireMM::CLJAtoms const & ) ;
             setGridDimensions_function_type setGridDimensions_function_value( &::SireMM::CLJGrid::setGridDimensions );
             
             CLJGrid_exposer.def( 
@@ -383,7 +382,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::setGridDimensions
         
-            typedef void ( ::SireMM::CLJGrid::*setGridDimensions_function_type )( ::SireMM::CLJAtoms const &,::SireUnits::Dimension::Length ) ;
+            typedef void ( ::SireMM::CLJGrid::*setGridDimensions_function_type)( ::SireMM::CLJAtoms const &,::SireUnits::Dimension::Length ) ;
             setGridDimensions_function_type setGridDimensions_function_value( &::SireMM::CLJGrid::setGridDimensions );
             
             CLJGrid_exposer.def( 
@@ -394,7 +393,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::setGridDimensions
         
-            typedef void ( ::SireMM::CLJGrid::*setGridDimensions_function_type )( ::SireMM::CLJAtoms const &,::SireUnits::Dimension::Length,::SireUnits::Dimension::Length ) ;
+            typedef void ( ::SireMM::CLJGrid::*setGridDimensions_function_type)( ::SireMM::CLJAtoms const &,::SireUnits::Dimension::Length,::SireUnits::Dimension::Length ) ;
             setGridDimensions_function_type setGridDimensions_function_value( &::SireMM::CLJGrid::setGridDimensions );
             
             CLJGrid_exposer.def( 
@@ -405,7 +404,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::setGridSpacing
         
-            typedef void ( ::SireMM::CLJGrid::*setGridSpacing_function_type )( ::SireUnits::Dimension::Length ) ;
+            typedef void ( ::SireMM::CLJGrid::*setGridSpacing_function_type)( ::SireUnits::Dimension::Length ) ;
             setGridSpacing_function_type setGridSpacing_function_value( &::SireMM::CLJGrid::setGridSpacing );
             
             CLJGrid_exposer.def( 
@@ -416,7 +415,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::setUseGrid
         
-            typedef void ( ::SireMM::CLJGrid::*setUseGrid_function_type )( bool ) ;
+            typedef void ( ::SireMM::CLJGrid::*setUseGrid_function_type)( bool ) ;
             setUseGrid_function_type setUseGrid_function_value( &::SireMM::CLJGrid::setUseGrid );
             
             CLJGrid_exposer.def( 
@@ -427,7 +426,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::setUseParallelCalculation
         
-            typedef void ( ::SireMM::CLJGrid::*setUseParallelCalculation_function_type )( bool ) ;
+            typedef void ( ::SireMM::CLJGrid::*setUseParallelCalculation_function_type)( bool ) ;
             setUseParallelCalculation_function_type setUseParallelCalculation_function_value( &::SireMM::CLJGrid::setUseParallelCalculation );
             
             CLJGrid_exposer.def( 
@@ -438,7 +437,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::setUseReproducibleCalculation
         
-            typedef void ( ::SireMM::CLJGrid::*setUseReproducibleCalculation_function_type )( bool ) ;
+            typedef void ( ::SireMM::CLJGrid::*setUseReproducibleCalculation_function_type)( bool ) ;
             setUseReproducibleCalculation_function_type setUseReproducibleCalculation_function_value( &::SireMM::CLJGrid::setUseReproducibleCalculation );
             
             CLJGrid_exposer.def( 
@@ -449,7 +448,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::toString
         
-            typedef ::QString ( ::SireMM::CLJGrid::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMM::CLJGrid::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMM::CLJGrid::toString );
             
             CLJGrid_exposer.def( 
@@ -459,7 +458,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::total
         
-            typedef void ( ::SireMM::CLJGrid::*total_function_type )( ::SireMM::CLJAtoms const &,double &,double & ) const;
+            typedef void ( ::SireMM::CLJGrid::*total_function_type)( ::SireMM::CLJAtoms const &,double &,double & ) const;
             total_function_type total_function_value( &::SireMM::CLJGrid::total );
             
             CLJGrid_exposer.def( 
@@ -470,7 +469,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::total
         
-            typedef void ( ::SireMM::CLJGrid::*total_function_type )( ::SireMM::CLJBoxes const &,double &,double & ) const;
+            typedef void ( ::SireMM::CLJGrid::*total_function_type)( ::SireMM::CLJBoxes const &,double &,double & ) const;
             total_function_type total_function_value( &::SireMM::CLJGrid::total );
             
             CLJGrid_exposer.def( 
@@ -491,7 +490,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::usesGrid
         
-            typedef bool ( ::SireMM::CLJGrid::*usesGrid_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJGrid::*usesGrid_function_type)(  ) const;
             usesGrid_function_type usesGrid_function_value( &::SireMM::CLJGrid::usesGrid );
             
             CLJGrid_exposer.def( 
@@ -501,7 +500,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::usesParallelCalculation
         
-            typedef bool ( ::SireMM::CLJGrid::*usesParallelCalculation_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJGrid::*usesParallelCalculation_function_type)(  ) const;
             usesParallelCalculation_function_type usesParallelCalculation_function_value( &::SireMM::CLJGrid::usesParallelCalculation );
             
             CLJGrid_exposer.def( 
@@ -511,7 +510,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::usesReproducibleCalculation
         
-            typedef bool ( ::SireMM::CLJGrid::*usesReproducibleCalculation_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJGrid::*usesReproducibleCalculation_function_type)(  ) const;
             usesReproducibleCalculation_function_type usesReproducibleCalculation_function_value( &::SireMM::CLJGrid::usesReproducibleCalculation );
             
             CLJGrid_exposer.def( 
@@ -521,7 +520,7 @@ void register_CLJGrid_class(){
         }
         { //::SireMM::CLJGrid::what
         
-            typedef char const * ( ::SireMM::CLJGrid::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::CLJGrid::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::CLJGrid::what );
             
             CLJGrid_exposer.def( 

@@ -32,7 +32,7 @@ void register_LJNBPairs_class(){
         LJNBPairs_exposer.def( bp::self != bp::self );
         { //::SireMM::LJNBPairs::operator=
         
-            typedef ::SireMM::LJNBPairs & ( ::SireMM::LJNBPairs::*assign_function_type )( ::SireMM::LJNBPairs const & ) ;
+            typedef ::SireMM::LJNBPairs & ( ::SireMM::LJNBPairs::*assign_function_type)( ::SireMM::LJNBPairs const & ) ;
             assign_function_type assign_function_value( &::SireMM::LJNBPairs::operator= );
             
             LJNBPairs_exposer.def( 
@@ -44,7 +44,7 @@ void register_LJNBPairs_class(){
         }
         { //::SireMM::LJNBPairs::operator=
         
-            typedef ::SireMM::LJNBPairs & ( ::SireMM::LJNBPairs::*assign_function_type )( ::SireMM::CLJNBPairs const & ) ;
+            typedef ::SireMM::LJNBPairs & ( ::SireMM::LJNBPairs::*assign_function_type)( ::SireMM::CLJNBPairs const & ) ;
             assign_function_type assign_function_value( &::SireMM::LJNBPairs::operator= );
             
             LJNBPairs_exposer.def( 

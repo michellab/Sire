@@ -27,7 +27,7 @@ void register_Celsius_class(){
         Celsius_exposer.def( bp::init< SireUnits::Celsius const & >(( bp::arg("other") )) );
         { //::SireUnits::Celsius::convertFromInternal
         
-            typedef double ( ::SireUnits::Celsius::*convertFromInternal_function_type )( double ) const;
+            typedef double ( ::SireUnits::Celsius::*convertFromInternal_function_type)( double ) const;
             convertFromInternal_function_type convertFromInternal_function_value( &::SireUnits::Celsius::convertFromInternal );
             
             Celsius_exposer.def( 
@@ -38,7 +38,7 @@ void register_Celsius_class(){
         }
         { //::SireUnits::Celsius::convertFromInternal
         
-            typedef double ( ::SireUnits::Celsius::*convertFromInternal_function_type )(  ) const;
+            typedef double ( ::SireUnits::Celsius::*convertFromInternal_function_type)(  ) const;
             convertFromInternal_function_type convertFromInternal_function_value( &::SireUnits::Celsius::convertFromInternal );
             
             Celsius_exposer.def( 
@@ -48,7 +48,7 @@ void register_Celsius_class(){
         }
         { //::SireUnits::Celsius::convertToInternal
         
-            typedef double ( ::SireUnits::Celsius::*convertToInternal_function_type )( double ) const;
+            typedef double ( ::SireUnits::Celsius::*convertToInternal_function_type)( double ) const;
             convertToInternal_function_type convertToInternal_function_value( &::SireUnits::Celsius::convertToInternal );
             
             Celsius_exposer.def( 
@@ -68,7 +68,7 @@ void register_Celsius_class(){
         Celsius_exposer.def( bp::self / bp::other< int >() );
         { //::SireUnits::Celsius::operator=
         
-            typedef ::SireUnits::Celsius & ( ::SireUnits::Celsius::*assign_function_type )( ::SireUnits::Celsius const & ) ;
+            typedef ::SireUnits::Celsius & ( ::SireUnits::Celsius::*assign_function_type)( ::SireUnits::Celsius const & ) ;
             assign_function_type assign_function_value( &::SireUnits::Celsius::operator= );
             
             Celsius_exposer.def( 
@@ -80,7 +80,7 @@ void register_Celsius_class(){
         }
         { //::SireUnits::Celsius::operator=
         
-            typedef ::SireUnits::Celsius & ( ::SireUnits::Celsius::*assign_function_type )( ::SireUnits::Dimension::Temperature const & ) ;
+            typedef ::SireUnits::Celsius & ( ::SireUnits::Celsius::*assign_function_type)( ::SireUnits::Dimension::Temperature const & ) ;
             assign_function_type assign_function_value( &::SireUnits::Celsius::operator= );
             
             Celsius_exposer.def( 

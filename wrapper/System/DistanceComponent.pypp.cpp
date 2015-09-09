@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "DistanceComponent.pypp.hpp"
 
 namespace bp = boost::python;
@@ -41,7 +40,7 @@ void register_DistanceComponent_class(){
         DistanceComponent_exposer.def( bp::init< SireSystem::DistanceComponent const & >(( bp::arg("other") )) );
         { //::SireSystem::DistanceComponent::nPoints
         
-            typedef int ( ::SireSystem::DistanceComponent::*nPoints_function_type )(  ) const;
+            typedef int ( ::SireSystem::DistanceComponent::*nPoints_function_type)(  ) const;
             nPoints_function_type nPoints_function_value( &::SireSystem::DistanceComponent::nPoints );
             
             DistanceComponent_exposer.def( 
@@ -52,7 +51,7 @@ void register_DistanceComponent_class(){
         DistanceComponent_exposer.def( bp::self != bp::self );
         { //::SireSystem::DistanceComponent::operator=
         
-            typedef ::SireSystem::DistanceComponent & ( ::SireSystem::DistanceComponent::*assign_function_type )( ::SireSystem::DistanceComponent const & ) ;
+            typedef ::SireSystem::DistanceComponent & ( ::SireSystem::DistanceComponent::*assign_function_type)( ::SireSystem::DistanceComponent const & ) ;
             assign_function_type assign_function_value( &::SireSystem::DistanceComponent::operator= );
             
             DistanceComponent_exposer.def( 
@@ -65,36 +64,36 @@ void register_DistanceComponent_class(){
         DistanceComponent_exposer.def( bp::self == bp::self );
         { //::SireSystem::DistanceComponent::point
         
-            typedef ::SireFF::Point const & ( ::SireSystem::DistanceComponent::*point_function_type )( int ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::DistanceComponent::*point_function_type)( int ) const;
             point_function_type point_function_value( &::SireSystem::DistanceComponent::point );
             
             DistanceComponent_exposer.def( 
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::DistanceComponent::point0
         
-            typedef ::SireFF::Point const & ( ::SireSystem::DistanceComponent::*point0_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::DistanceComponent::*point0_function_type)(  ) const;
             point0_function_type point0_function_value( &::SireSystem::DistanceComponent::point0 );
             
             DistanceComponent_exposer.def( 
                 "point0"
                 , point0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::DistanceComponent::point1
         
-            typedef ::SireFF::Point const & ( ::SireSystem::DistanceComponent::*point1_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::DistanceComponent::*point1_function_type)(  ) const;
             point1_function_type point1_function_value( &::SireSystem::DistanceComponent::point1 );
             
             DistanceComponent_exposer.def( 
                 "point1"
                 , point1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::DistanceComponent::r
@@ -105,12 +104,12 @@ void register_DistanceComponent_class(){
             DistanceComponent_exposer.def( 
                 "r"
                 , r_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::DistanceComponent::toString
         
-            typedef ::QString ( ::SireSystem::DistanceComponent::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireSystem::DistanceComponent::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireSystem::DistanceComponent::toString );
             
             DistanceComponent_exposer.def( 

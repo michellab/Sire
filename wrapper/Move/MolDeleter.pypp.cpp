@@ -35,7 +35,7 @@ void register_MolDeleter_class(){
         bp::scope MolDeleter_scope( MolDeleter_exposer );
         { //::SireMove::MolDeleter::deleteFrom
         
-            typedef ::boost::tuples::tuple< SireMol::Molecule, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMove::MolDeleter::*deleteFrom_function_type )( ::SireSystem::System & ) ;
+            typedef ::boost::tuples::tuple< SireMol::Molecule, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMove::MolDeleter::*deleteFrom_function_type)( ::SireSystem::System & ) ;
             deleteFrom_function_type deleteFrom_function_value( &::SireMove::MolDeleter::deleteFrom );
             
             MolDeleter_exposer.def( 
@@ -46,7 +46,7 @@ void register_MolDeleter_class(){
         }
         { //::SireMove::MolDeleter::generator
         
-            typedef ::SireMaths::RanGenerator const & ( ::SireMove::MolDeleter::*generator_function_type )(  ) const;
+            typedef ::SireMaths::RanGenerator const & ( ::SireMove::MolDeleter::*generator_function_type)(  ) const;
             generator_function_type generator_function_value( &::SireMove::MolDeleter::generator );
             
             MolDeleter_exposer.def( 
@@ -68,7 +68,7 @@ void register_MolDeleter_class(){
         }
         { //::SireMove::MolDeleter::setGenerator
         
-            typedef void ( ::SireMove::MolDeleter::*setGenerator_function_type )( ::SireMaths::RanGenerator const & ) ;
+            typedef void ( ::SireMove::MolDeleter::*setGenerator_function_type)( ::SireMaths::RanGenerator const & ) ;
             setGenerator_function_type setGenerator_function_value( &::SireMove::MolDeleter::setGenerator );
             
             MolDeleter_exposer.def( 

@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "TripleDistanceRestraint.pypp.hpp"
 
 namespace bp = boost::python;
@@ -47,7 +46,7 @@ void register_TripleDistanceRestraint_class(){
         TripleDistanceRestraint_exposer.def( bp::init< SireMM::TripleDistanceRestraint const & >(( bp::arg("other") )) );
         { //::SireMM::TripleDistanceRestraint::builtinSymbols
         
-            typedef ::SireCAS::Symbols ( ::SireMM::TripleDistanceRestraint::*builtinSymbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireMM::TripleDistanceRestraint::*builtinSymbols_function_type)(  ) const;
             builtinSymbols_function_type builtinSymbols_function_value( &::SireMM::TripleDistanceRestraint::builtinSymbols );
             
             TripleDistanceRestraint_exposer.def( 
@@ -57,7 +56,7 @@ void register_TripleDistanceRestraint_class(){
         }
         { //::SireMM::TripleDistanceRestraint::builtinValues
         
-            typedef ::SireCAS::Values ( ::SireMM::TripleDistanceRestraint::*builtinValues_function_type )(  ) const;
+            typedef ::SireCAS::Values ( ::SireMM::TripleDistanceRestraint::*builtinValues_function_type)(  ) const;
             builtinValues_function_type builtinValues_function_value( &::SireMM::TripleDistanceRestraint::builtinValues );
             
             TripleDistanceRestraint_exposer.def( 
@@ -67,7 +66,7 @@ void register_TripleDistanceRestraint_class(){
         }
         { //::SireMM::TripleDistanceRestraint::contains
         
-            typedef bool ( ::SireMM::TripleDistanceRestraint::*contains_function_type )( ::SireMol::MolNum ) const;
+            typedef bool ( ::SireMM::TripleDistanceRestraint::*contains_function_type)( ::SireMol::MolNum ) const;
             contains_function_type contains_function_value( &::SireMM::TripleDistanceRestraint::contains );
             
             TripleDistanceRestraint_exposer.def( 
@@ -78,7 +77,7 @@ void register_TripleDistanceRestraint_class(){
         }
         { //::SireMM::TripleDistanceRestraint::contains
         
-            typedef bool ( ::SireMM::TripleDistanceRestraint::*contains_function_type )( ::SireMol::MolID const & ) const;
+            typedef bool ( ::SireMM::TripleDistanceRestraint::*contains_function_type)( ::SireMol::MolID const & ) const;
             contains_function_type contains_function_value( &::SireMM::TripleDistanceRestraint::contains );
             
             TripleDistanceRestraint_exposer.def( 
@@ -89,7 +88,7 @@ void register_TripleDistanceRestraint_class(){
         }
         { //::SireMM::TripleDistanceRestraint::differentialRestraintFunction01
         
-            typedef ::SireCAS::Expression const & ( ::SireMM::TripleDistanceRestraint::*differentialRestraintFunction01_function_type )(  ) const;
+            typedef ::SireCAS::Expression const & ( ::SireMM::TripleDistanceRestraint::*differentialRestraintFunction01_function_type)(  ) const;
             differentialRestraintFunction01_function_type differentialRestraintFunction01_function_value( &::SireMM::TripleDistanceRestraint::differentialRestraintFunction01 );
             
             TripleDistanceRestraint_exposer.def( 
@@ -100,7 +99,7 @@ void register_TripleDistanceRestraint_class(){
         }
         { //::SireMM::TripleDistanceRestraint::differentialRestraintFunction23
         
-            typedef ::SireCAS::Expression const & ( ::SireMM::TripleDistanceRestraint::*differentialRestraintFunction23_function_type )(  ) const;
+            typedef ::SireCAS::Expression const & ( ::SireMM::TripleDistanceRestraint::*differentialRestraintFunction23_function_type)(  ) const;
             differentialRestraintFunction23_function_type differentialRestraintFunction23_function_value( &::SireMM::TripleDistanceRestraint::differentialRestraintFunction23 );
             
             TripleDistanceRestraint_exposer.def( 
@@ -111,7 +110,7 @@ void register_TripleDistanceRestraint_class(){
         }
         { //::SireMM::TripleDistanceRestraint::differentialRestraintFunction45
         
-            typedef ::SireCAS::Expression const & ( ::SireMM::TripleDistanceRestraint::*differentialRestraintFunction45_function_type )(  ) const;
+            typedef ::SireCAS::Expression const & ( ::SireMM::TripleDistanceRestraint::*differentialRestraintFunction45_function_type)(  ) const;
             differentialRestraintFunction45_function_type differentialRestraintFunction45_function_value( &::SireMM::TripleDistanceRestraint::differentialRestraintFunction45 );
             
             TripleDistanceRestraint_exposer.def( 
@@ -122,7 +121,7 @@ void register_TripleDistanceRestraint_class(){
         }
         { //::SireMM::TripleDistanceRestraint::differentiate
         
-            typedef ::SireMM::RestraintPtr ( ::SireMM::TripleDistanceRestraint::*differentiate_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireMM::RestraintPtr ( ::SireMM::TripleDistanceRestraint::*differentiate_function_type)( ::SireCAS::Symbol const & ) const;
             differentiate_function_type differentiate_function_value( &::SireMM::TripleDistanceRestraint::differentiate );
             
             TripleDistanceRestraint_exposer.def( 
@@ -133,7 +132,7 @@ void register_TripleDistanceRestraint_class(){
         }
         { //::SireMM::TripleDistanceRestraint::force
         
-            typedef void ( ::SireMM::TripleDistanceRestraint::*force_function_type )( ::SireFF::MolForceTable &,double ) const;
+            typedef void ( ::SireMM::TripleDistanceRestraint::*force_function_type)( ::SireFF::MolForceTable &,double ) const;
             force_function_type force_function_value( &::SireMM::TripleDistanceRestraint::force );
             
             TripleDistanceRestraint_exposer.def( 
@@ -144,7 +143,7 @@ void register_TripleDistanceRestraint_class(){
         }
         { //::SireMM::TripleDistanceRestraint::force
         
-            typedef void ( ::SireMM::TripleDistanceRestraint::*force_function_type )( ::SireFF::ForceTable &,double ) const;
+            typedef void ( ::SireMM::TripleDistanceRestraint::*force_function_type)( ::SireFF::ForceTable &,double ) const;
             force_function_type force_function_value( &::SireMM::TripleDistanceRestraint::force );
             
             TripleDistanceRestraint_exposer.def( 
@@ -155,7 +154,7 @@ void register_TripleDistanceRestraint_class(){
         }
         { //::SireMM::TripleDistanceRestraint::molecules
         
-            typedef ::SireMol::Molecules ( ::SireMM::TripleDistanceRestraint::*molecules_function_type )(  ) const;
+            typedef ::SireMol::Molecules ( ::SireMM::TripleDistanceRestraint::*molecules_function_type)(  ) const;
             molecules_function_type molecules_function_value( &::SireMM::TripleDistanceRestraint::molecules );
             
             TripleDistanceRestraint_exposer.def( 
@@ -165,7 +164,7 @@ void register_TripleDistanceRestraint_class(){
         }
         { //::SireMM::TripleDistanceRestraint::nPoints
         
-            typedef int ( ::SireMM::TripleDistanceRestraint::*nPoints_function_type )(  ) const;
+            typedef int ( ::SireMM::TripleDistanceRestraint::*nPoints_function_type)(  ) const;
             nPoints_function_type nPoints_function_value( &::SireMM::TripleDistanceRestraint::nPoints );
             
             TripleDistanceRestraint_exposer.def( 
@@ -176,7 +175,7 @@ void register_TripleDistanceRestraint_class(){
         TripleDistanceRestraint_exposer.def( bp::self != bp::self );
         { //::SireMM::TripleDistanceRestraint::operator=
         
-            typedef ::SireMM::TripleDistanceRestraint & ( ::SireMM::TripleDistanceRestraint::*assign_function_type )( ::SireMM::TripleDistanceRestraint const & ) ;
+            typedef ::SireMM::TripleDistanceRestraint & ( ::SireMM::TripleDistanceRestraint::*assign_function_type)( ::SireMM::TripleDistanceRestraint const & ) ;
             assign_function_type assign_function_value( &::SireMM::TripleDistanceRestraint::operator= );
             
             TripleDistanceRestraint_exposer.def( 
@@ -189,80 +188,80 @@ void register_TripleDistanceRestraint_class(){
         TripleDistanceRestraint_exposer.def( bp::self == bp::self );
         { //::SireMM::TripleDistanceRestraint::point
         
-            typedef ::SireFF::Point const & ( ::SireMM::TripleDistanceRestraint::*point_function_type )( int ) const;
+            typedef ::SireFF::Point const & ( ::SireMM::TripleDistanceRestraint::*point_function_type)( int ) const;
             point_function_type point_function_value( &::SireMM::TripleDistanceRestraint::point );
             
             TripleDistanceRestraint_exposer.def( 
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::TripleDistanceRestraint::point0
         
-            typedef ::SireFF::Point const & ( ::SireMM::TripleDistanceRestraint::*point0_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireMM::TripleDistanceRestraint::*point0_function_type)(  ) const;
             point0_function_type point0_function_value( &::SireMM::TripleDistanceRestraint::point0 );
             
             TripleDistanceRestraint_exposer.def( 
                 "point0"
                 , point0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::TripleDistanceRestraint::point1
         
-            typedef ::SireFF::Point const & ( ::SireMM::TripleDistanceRestraint::*point1_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireMM::TripleDistanceRestraint::*point1_function_type)(  ) const;
             point1_function_type point1_function_value( &::SireMM::TripleDistanceRestraint::point1 );
             
             TripleDistanceRestraint_exposer.def( 
                 "point1"
                 , point1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::TripleDistanceRestraint::point2
         
-            typedef ::SireFF::Point const & ( ::SireMM::TripleDistanceRestraint::*point2_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireMM::TripleDistanceRestraint::*point2_function_type)(  ) const;
             point2_function_type point2_function_value( &::SireMM::TripleDistanceRestraint::point2 );
             
             TripleDistanceRestraint_exposer.def( 
                 "point2"
                 , point2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::TripleDistanceRestraint::point3
         
-            typedef ::SireFF::Point const & ( ::SireMM::TripleDistanceRestraint::*point3_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireMM::TripleDistanceRestraint::*point3_function_type)(  ) const;
             point3_function_type point3_function_value( &::SireMM::TripleDistanceRestraint::point3 );
             
             TripleDistanceRestraint_exposer.def( 
                 "point3"
                 , point3_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::TripleDistanceRestraint::point4
         
-            typedef ::SireFF::Point const & ( ::SireMM::TripleDistanceRestraint::*point4_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireMM::TripleDistanceRestraint::*point4_function_type)(  ) const;
             point4_function_type point4_function_value( &::SireMM::TripleDistanceRestraint::point4 );
             
             TripleDistanceRestraint_exposer.def( 
                 "point4"
                 , point4_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::TripleDistanceRestraint::point5
         
-            typedef ::SireFF::Point const & ( ::SireMM::TripleDistanceRestraint::*point5_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireMM::TripleDistanceRestraint::*point5_function_type)(  ) const;
             point5_function_type point5_function_value( &::SireMM::TripleDistanceRestraint::point5 );
             
             TripleDistanceRestraint_exposer.def( 
                 "point5"
                 , point5_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::TripleDistanceRestraint::r01
@@ -273,7 +272,7 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "r01"
                 , r01_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::TripleDistanceRestraint::r23
@@ -284,7 +283,7 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "r23"
                 , r23_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::TripleDistanceRestraint::r45
@@ -295,12 +294,12 @@ void register_TripleDistanceRestraint_class(){
             TripleDistanceRestraint_exposer.def( 
                 "r45"
                 , r45_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::TripleDistanceRestraint::setSpace
         
-            typedef void ( ::SireMM::TripleDistanceRestraint::*setSpace_function_type )( ::SireVol::Space const & ) ;
+            typedef void ( ::SireMM::TripleDistanceRestraint::*setSpace_function_type)( ::SireVol::Space const & ) ;
             setSpace_function_type setSpace_function_value( &::SireMM::TripleDistanceRestraint::setSpace );
             
             TripleDistanceRestraint_exposer.def( 
@@ -321,7 +320,7 @@ void register_TripleDistanceRestraint_class(){
         }
         { //::SireMM::TripleDistanceRestraint::update
         
-            typedef void ( ::SireMM::TripleDistanceRestraint::*update_function_type )( ::SireMol::MoleculeData const & ) ;
+            typedef void ( ::SireMM::TripleDistanceRestraint::*update_function_type)( ::SireMol::MoleculeData const & ) ;
             update_function_type update_function_value( &::SireMM::TripleDistanceRestraint::update );
             
             TripleDistanceRestraint_exposer.def( 
@@ -332,7 +331,7 @@ void register_TripleDistanceRestraint_class(){
         }
         { //::SireMM::TripleDistanceRestraint::update
         
-            typedef void ( ::SireMM::TripleDistanceRestraint::*update_function_type )( ::SireMol::Molecules const & ) ;
+            typedef void ( ::SireMM::TripleDistanceRestraint::*update_function_type)( ::SireMol::Molecules const & ) ;
             update_function_type update_function_value( &::SireMM::TripleDistanceRestraint::update );
             
             TripleDistanceRestraint_exposer.def( 
@@ -343,7 +342,7 @@ void register_TripleDistanceRestraint_class(){
         }
         { //::SireMM::TripleDistanceRestraint::usesMoleculesIn
         
-            typedef bool ( ::SireMM::TripleDistanceRestraint::*usesMoleculesIn_function_type )( ::SireFF::ForceTable const & ) const;
+            typedef bool ( ::SireMM::TripleDistanceRestraint::*usesMoleculesIn_function_type)( ::SireFF::ForceTable const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireMM::TripleDistanceRestraint::usesMoleculesIn );
             
             TripleDistanceRestraint_exposer.def( 
@@ -354,7 +353,7 @@ void register_TripleDistanceRestraint_class(){
         }
         { //::SireMM::TripleDistanceRestraint::usesMoleculesIn
         
-            typedef bool ( ::SireMM::TripleDistanceRestraint::*usesMoleculesIn_function_type )( ::SireMol::Molecules const & ) const;
+            typedef bool ( ::SireMM::TripleDistanceRestraint::*usesMoleculesIn_function_type)( ::SireMol::Molecules const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireMM::TripleDistanceRestraint::usesMoleculesIn );
             
             TripleDistanceRestraint_exposer.def( 

@@ -39,7 +39,7 @@ void register_UniformSampler_class(){
         UniformSampler_exposer.def( bp::init< SireMove::UniformSampler const & >(( bp::arg("other") )) );
         { //::SireMove::UniformSampler::operator=
         
-            typedef ::SireMove::UniformSampler & ( ::SireMove::UniformSampler::*assign_function_type )( ::SireMove::UniformSampler const & ) ;
+            typedef ::SireMove::UniformSampler & ( ::SireMove::UniformSampler::*assign_function_type)( ::SireMove::UniformSampler const & ) ;
             assign_function_type assign_function_value( &::SireMove::UniformSampler::operator= );
             
             UniformSampler_exposer.def( 
@@ -51,7 +51,7 @@ void register_UniformSampler_class(){
         }
         { //::SireMove::UniformSampler::probabilityOf
         
-            typedef double ( ::SireMove::UniformSampler::*probabilityOf_function_type )( ::SireMol::PartialMolecule const & ) const;
+            typedef double ( ::SireMove::UniformSampler::*probabilityOf_function_type)( ::SireMol::PartialMolecule const & ) const;
             probabilityOf_function_type probabilityOf_function_value( &::SireMove::UniformSampler::probabilityOf );
             
             UniformSampler_exposer.def( 
@@ -62,7 +62,7 @@ void register_UniformSampler_class(){
         }
         { //::SireMove::UniformSampler::probabilityOfMolecule
         
-            typedef double ( ::SireMove::UniformSampler::*probabilityOfMolecule_function_type )( ::SireMol::Molecule const & ) const;
+            typedef double ( ::SireMove::UniformSampler::*probabilityOfMolecule_function_type)( ::SireMol::Molecule const & ) const;
             probabilityOfMolecule_function_type probabilityOfMolecule_function_value( &::SireMove::UniformSampler::probabilityOfMolecule );
             
             UniformSampler_exposer.def( 
@@ -73,7 +73,7 @@ void register_UniformSampler_class(){
         }
         { //::SireMove::UniformSampler::sample
         
-            typedef ::boost::tuples::tuple< SireMol::PartialMolecule, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMove::UniformSampler::*sample_function_type )(  ) const;
+            typedef ::boost::tuples::tuple< SireMol::PartialMolecule, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMove::UniformSampler::*sample_function_type)(  ) const;
             sample_function_type sample_function_value( &::SireMove::UniformSampler::sample );
             
             UniformSampler_exposer.def( 
@@ -83,7 +83,7 @@ void register_UniformSampler_class(){
         }
         { //::SireMove::UniformSampler::sampleMolecule
         
-            typedef ::boost::tuples::tuple< SireMol::Molecule, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMove::UniformSampler::*sampleMolecule_function_type )(  ) const;
+            typedef ::boost::tuples::tuple< SireMol::Molecule, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMove::UniformSampler::*sampleMolecule_function_type)(  ) const;
             sampleMolecule_function_type sampleMolecule_function_value( &::SireMove::UniformSampler::sampleMolecule );
             
             UniformSampler_exposer.def( 

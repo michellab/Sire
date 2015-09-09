@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "CutGroup.pypp.hpp"
 
 namespace bp = boost::python;
@@ -84,7 +83,7 @@ void register_CutGroup_class(){
         CutGroup_exposer.def( bp::init< SireMol::CutGroup const & >(( bp::arg("other") )) );
         { //::SireMol::CutGroup::assertContainsMetadata
         
-            typedef void ( ::SireMol::CutGroup::*assertContainsMetadata_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef void ( ::SireMol::CutGroup::*assertContainsMetadata_function_type)( ::SireBase::PropertyName const & ) const;
             assertContainsMetadata_function_type assertContainsMetadata_function_value( &::SireMol::CutGroup::assertContainsMetadata );
             
             CutGroup_exposer.def( 
@@ -95,7 +94,7 @@ void register_CutGroup_class(){
         }
         { //::SireMol::CutGroup::assertContainsMetadata
         
-            typedef void ( ::SireMol::CutGroup::*assertContainsMetadata_function_type )( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
+            typedef void ( ::SireMol::CutGroup::*assertContainsMetadata_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
             assertContainsMetadata_function_type assertContainsMetadata_function_value( &::SireMol::CutGroup::assertContainsMetadata );
             
             CutGroup_exposer.def( 
@@ -106,7 +105,7 @@ void register_CutGroup_class(){
         }
         { //::SireMol::CutGroup::assertContainsProperty
         
-            typedef void ( ::SireMol::CutGroup::*assertContainsProperty_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef void ( ::SireMol::CutGroup::*assertContainsProperty_function_type)( ::SireBase::PropertyName const & ) const;
             assertContainsProperty_function_type assertContainsProperty_function_value( &::SireMol::CutGroup::assertContainsProperty );
             
             CutGroup_exposer.def( 
@@ -117,7 +116,7 @@ void register_CutGroup_class(){
         }
         { //::SireMol::CutGroup::atomIdxs
         
-            typedef ::QList< SireMol::AtomIdx > const & ( ::SireMol::CutGroup::*atomIdxs_function_type )(  ) const;
+            typedef ::QList< SireMol::AtomIdx > const & ( ::SireMol::CutGroup::*atomIdxs_function_type)(  ) const;
             atomIdxs_function_type atomIdxs_function_value( &::SireMol::CutGroup::atomIdxs );
             
             CutGroup_exposer.def( 
@@ -128,7 +127,7 @@ void register_CutGroup_class(){
         }
         { //::SireMol::CutGroup::contains
         
-            typedef bool ( ::SireMol::CutGroup::*contains_function_type )( ::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMol::CutGroup::*contains_function_type)( ::SireMol::AtomID const & ) const;
             contains_function_type contains_function_value( &::SireMol::CutGroup::contains );
             
             CutGroup_exposer.def( 
@@ -139,7 +138,7 @@ void register_CutGroup_class(){
         }
         { //::SireMol::CutGroup::contains
         
-            typedef bool ( ::SireMol::CutGroup::*contains_function_type )( ::SireMol::AtomIdx ) const;
+            typedef bool ( ::SireMol::CutGroup::*contains_function_type)( ::SireMol::AtomIdx ) const;
             contains_function_type contains_function_value( &::SireMol::CutGroup::contains );
             
             CutGroup_exposer.def( 
@@ -150,7 +149,7 @@ void register_CutGroup_class(){
         }
         { //::SireMol::CutGroup::edit
         
-            typedef ::SireMol::CGEditor ( ::SireMol::CutGroup::*edit_function_type )(  ) const;
+            typedef ::SireMol::CGEditor ( ::SireMol::CutGroup::*edit_function_type)(  ) const;
             edit_function_type edit_function_value( &::SireMol::CutGroup::edit );
             
             CutGroup_exposer.def( 
@@ -160,7 +159,7 @@ void register_CutGroup_class(){
         }
         { //::SireMol::CutGroup::evaluate
         
-            typedef ::SireMol::Evaluator ( ::SireMol::CutGroup::*evaluate_function_type )(  ) const;
+            typedef ::SireMol::Evaluator ( ::SireMol::CutGroup::*evaluate_function_type)(  ) const;
             evaluate_function_type evaluate_function_value( &::SireMol::CutGroup::evaluate );
             
             CutGroup_exposer.def( 
@@ -170,7 +169,7 @@ void register_CutGroup_class(){
         }
         { //::SireMol::CutGroup::hasMetadata
         
-            typedef bool ( ::SireMol::CutGroup::*hasMetadata_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::CutGroup::*hasMetadata_function_type)( ::SireBase::PropertyName const & ) const;
             hasMetadata_function_type hasMetadata_function_value( &::SireMol::CutGroup::hasMetadata );
             
             CutGroup_exposer.def( 
@@ -181,7 +180,7 @@ void register_CutGroup_class(){
         }
         { //::SireMol::CutGroup::hasMetadata
         
-            typedef bool ( ::SireMol::CutGroup::*hasMetadata_function_type )( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::CutGroup::*hasMetadata_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
             hasMetadata_function_type hasMetadata_function_value( &::SireMol::CutGroup::hasMetadata );
             
             CutGroup_exposer.def( 
@@ -192,7 +191,7 @@ void register_CutGroup_class(){
         }
         { //::SireMol::CutGroup::hasProperty
         
-            typedef bool ( ::SireMol::CutGroup::*hasProperty_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::CutGroup::*hasProperty_function_type)( ::SireBase::PropertyName const & ) const;
             hasProperty_function_type hasProperty_function_value( &::SireMol::CutGroup::hasProperty );
             
             CutGroup_exposer.def( 
@@ -203,7 +202,7 @@ void register_CutGroup_class(){
         }
         { //::SireMol::CutGroup::index
         
-            typedef ::SireMol::CGIdx ( ::SireMol::CutGroup::*index_function_type )(  ) const;
+            typedef ::SireMol::CGIdx ( ::SireMol::CutGroup::*index_function_type)(  ) const;
             index_function_type index_function_value( &::SireMol::CutGroup::index );
             
             CutGroup_exposer.def( 
@@ -213,7 +212,7 @@ void register_CutGroup_class(){
         }
         { //::SireMol::CutGroup::intersects
         
-            typedef bool ( ::SireMol::CutGroup::*intersects_function_type )( ::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMol::CutGroup::*intersects_function_type)( ::SireMol::AtomID const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::CutGroup::intersects );
             
             CutGroup_exposer.def( 
@@ -224,7 +223,7 @@ void register_CutGroup_class(){
         }
         { //::SireMol::CutGroup::isEmpty
         
-            typedef bool ( ::SireMol::CutGroup::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::CutGroup::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::CutGroup::isEmpty );
             
             CutGroup_exposer.def( 
@@ -234,7 +233,7 @@ void register_CutGroup_class(){
         }
         { //::SireMol::CutGroup::metadataKeys
         
-            typedef ::QStringList ( ::SireMol::CutGroup::*metadataKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireMol::CutGroup::*metadataKeys_function_type)(  ) const;
             metadataKeys_function_type metadataKeys_function_value( &::SireMol::CutGroup::metadataKeys );
             
             CutGroup_exposer.def( 
@@ -244,7 +243,7 @@ void register_CutGroup_class(){
         }
         { //::SireMol::CutGroup::metadataKeys
         
-            typedef ::QStringList ( ::SireMol::CutGroup::*metadataKeys_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef ::QStringList ( ::SireMol::CutGroup::*metadataKeys_function_type)( ::SireBase::PropertyName const & ) const;
             metadataKeys_function_type metadataKeys_function_value( &::SireMol::CutGroup::metadataKeys );
             
             CutGroup_exposer.def( 
@@ -255,7 +254,7 @@ void register_CutGroup_class(){
         }
         { //::SireMol::CutGroup::move
         
-            typedef ::SireMol::Mover< SireMol::CutGroup > ( ::SireMol::CutGroup::*move_function_type )(  ) const;
+            typedef ::SireMol::Mover< SireMol::CutGroup > ( ::SireMol::CutGroup::*move_function_type)(  ) const;
             move_function_type move_function_value( &::SireMol::CutGroup::move );
             
             CutGroup_exposer.def( 
@@ -265,7 +264,7 @@ void register_CutGroup_class(){
         }
         { //::SireMol::CutGroup::nAtoms
         
-            typedef int ( ::SireMol::CutGroup::*nAtoms_function_type )(  ) const;
+            typedef int ( ::SireMol::CutGroup::*nAtoms_function_type)(  ) const;
             nAtoms_function_type nAtoms_function_value( &::SireMol::CutGroup::nAtoms );
             
             CutGroup_exposer.def( 
@@ -275,19 +274,19 @@ void register_CutGroup_class(){
         }
         { //::SireMol::CutGroup::name
         
-            typedef ::SireMol::CGName const & ( ::SireMol::CutGroup::*name_function_type )(  ) const;
+            typedef ::SireMol::CGName const & ( ::SireMol::CutGroup::*name_function_type)(  ) const;
             name_function_type name_function_value( &::SireMol::CutGroup::name );
             
             CutGroup_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         CutGroup_exposer.def( bp::self != bp::self );
         { //::SireMol::CutGroup::operator=
         
-            typedef ::SireMol::CutGroup & ( ::SireMol::CutGroup::*assign_function_type )( ::SireMol::CutGroup const & ) ;
+            typedef ::SireMol::CutGroup & ( ::SireMol::CutGroup::*assign_function_type)( ::SireMol::CutGroup const & ) ;
             assign_function_type assign_function_value( &::SireMol::CutGroup::operator= );
             
             CutGroup_exposer.def( 
@@ -300,7 +299,7 @@ void register_CutGroup_class(){
         CutGroup_exposer.def( bp::self == bp::self );
         { //::SireMol::CutGroup::propertyKeys
         
-            typedef ::QStringList ( ::SireMol::CutGroup::*propertyKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireMol::CutGroup::*propertyKeys_function_type)(  ) const;
             propertyKeys_function_type propertyKeys_function_value( &::SireMol::CutGroup::propertyKeys );
             
             CutGroup_exposer.def( 
@@ -310,7 +309,7 @@ void register_CutGroup_class(){
         }
         { //::SireMol::CutGroup::selectedAll
         
-            typedef bool ( ::SireMol::CutGroup::*selectedAll_function_type )(  ) const;
+            typedef bool ( ::SireMol::CutGroup::*selectedAll_function_type)(  ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::CutGroup::selectedAll );
             
             CutGroup_exposer.def( 
@@ -320,7 +319,7 @@ void register_CutGroup_class(){
         }
         { //::SireMol::CutGroup::selection
         
-            typedef ::SireMol::AtomSelection ( ::SireMol::CutGroup::*selection_function_type )(  ) const;
+            typedef ::SireMol::AtomSelection ( ::SireMol::CutGroup::*selection_function_type)(  ) const;
             selection_function_type selection_function_value( &::SireMol::CutGroup::selection );
             
             CutGroup_exposer.def( 
@@ -330,7 +329,7 @@ void register_CutGroup_class(){
         }
         { //::SireMol::CutGroup::selector
         
-            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::CutGroup::*selector_function_type )(  ) const;
+            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::CutGroup::*selector_function_type)(  ) const;
             selector_function_type selector_function_value( &::SireMol::CutGroup::selector );
             
             CutGroup_exposer.def( 
@@ -340,7 +339,7 @@ void register_CutGroup_class(){
         }
         { //::SireMol::CutGroup::toString
         
-            typedef ::QString ( ::SireMol::CutGroup::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::CutGroup::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::CutGroup::toString );
             
             CutGroup_exposer.def( 
@@ -360,7 +359,7 @@ void register_CutGroup_class(){
         }
         { //::SireMol::CutGroup::update
         
-            typedef void ( ::SireMol::CutGroup::*update_function_type )( ::SireMol::MoleculeData const & ) ;
+            typedef void ( ::SireMol::CutGroup::*update_function_type)( ::SireMol::MoleculeData const & ) ;
             update_function_type update_function_value( &::SireMol::CutGroup::update );
             
             CutGroup_exposer.def( 

@@ -35,7 +35,7 @@ void register_Triangle_class(){
         Triangle_exposer.def( bp::init< SireMaths::Triangle const & >(( bp::arg("other") )) );
         { //::SireMaths::Triangle::angle
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMaths::Triangle::*angle_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMaths::Triangle::*angle_function_type)(  ) const;
             angle_function_type angle_function_value( &::SireMaths::Triangle::angle );
             
             Triangle_exposer.def( 
@@ -45,7 +45,7 @@ void register_Triangle_class(){
         }
         { //::SireMaths::Triangle::angle0
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMaths::Triangle::*angle0_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMaths::Triangle::*angle0_function_type)(  ) const;
             angle0_function_type angle0_function_value( &::SireMaths::Triangle::angle0 );
             
             Triangle_exposer.def( 
@@ -55,7 +55,7 @@ void register_Triangle_class(){
         }
         { //::SireMaths::Triangle::angle1
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMaths::Triangle::*angle1_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMaths::Triangle::*angle1_function_type)(  ) const;
             angle1_function_type angle1_function_value( &::SireMaths::Triangle::angle1 );
             
             Triangle_exposer.def( 
@@ -65,7 +65,7 @@ void register_Triangle_class(){
         }
         { //::SireMaths::Triangle::angle2
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMaths::Triangle::*angle2_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMaths::Triangle::*angle2_function_type)(  ) const;
             angle2_function_type angle2_function_value( &::SireMaths::Triangle::angle2 );
             
             Triangle_exposer.def( 
@@ -75,7 +75,7 @@ void register_Triangle_class(){
         }
         { //::SireMaths::Triangle::at
         
-            typedef ::SireMaths::Vector const & ( ::SireMaths::Triangle::*at_function_type )( int ) const;
+            typedef ::SireMaths::Vector const & ( ::SireMaths::Triangle::*at_function_type)( int ) const;
             at_function_type at_function_value( &::SireMaths::Triangle::at );
             
             Triangle_exposer.def( 
@@ -87,7 +87,7 @@ void register_Triangle_class(){
         }
         { //::SireMaths::Triangle::count
         
-            typedef int ( ::SireMaths::Triangle::*count_function_type )(  ) const;
+            typedef int ( ::SireMaths::Triangle::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMaths::Triangle::count );
             
             Triangle_exposer.def( 
@@ -97,7 +97,7 @@ void register_Triangle_class(){
         }
         { //::SireMaths::Triangle::line0
         
-            typedef ::SireMaths::Line ( ::SireMaths::Triangle::*line0_function_type )(  ) const;
+            typedef ::SireMaths::Line ( ::SireMaths::Triangle::*line0_function_type)(  ) const;
             line0_function_type line0_function_value( &::SireMaths::Triangle::line0 );
             
             Triangle_exposer.def( 
@@ -107,7 +107,7 @@ void register_Triangle_class(){
         }
         { //::SireMaths::Triangle::line1
         
-            typedef ::SireMaths::Line ( ::SireMaths::Triangle::*line1_function_type )(  ) const;
+            typedef ::SireMaths::Line ( ::SireMaths::Triangle::*line1_function_type)(  ) const;
             line1_function_type line1_function_value( &::SireMaths::Triangle::line1 );
             
             Triangle_exposer.def( 
@@ -117,7 +117,7 @@ void register_Triangle_class(){
         }
         { //::SireMaths::Triangle::line2
         
-            typedef ::SireMaths::Line ( ::SireMaths::Triangle::*line2_function_type )(  ) const;
+            typedef ::SireMaths::Line ( ::SireMaths::Triangle::*line2_function_type)(  ) const;
             line2_function_type line2_function_value( &::SireMaths::Triangle::line2 );
             
             Triangle_exposer.def( 
@@ -127,7 +127,7 @@ void register_Triangle_class(){
         }
         { //::SireMaths::Triangle::operator[]
         
-            typedef ::SireMaths::Vector const & ( ::SireMaths::Triangle::*__getitem___function_type )( int ) const;
+            typedef ::SireMaths::Vector const & ( ::SireMaths::Triangle::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMaths::Triangle::operator[] );
             
             Triangle_exposer.def( 
@@ -139,7 +139,7 @@ void register_Triangle_class(){
         }
         { //::SireMaths::Triangle::point
         
-            typedef ::SireMaths::Vector const & ( ::SireMaths::Triangle::*point_function_type )( int ) const;
+            typedef ::SireMaths::Vector const & ( ::SireMaths::Triangle::*point_function_type)( int ) const;
             point_function_type point_function_value( &::SireMaths::Triangle::point );
             
             Triangle_exposer.def( 
@@ -151,7 +151,7 @@ void register_Triangle_class(){
         }
         { //::SireMaths::Triangle::toString
         
-            typedef ::QString ( ::SireMaths::Triangle::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMaths::Triangle::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMaths::Triangle::toString );
             
             Triangle_exposer.def( 
@@ -171,7 +171,7 @@ void register_Triangle_class(){
         }
         { //::SireMaths::Triangle::vector
         
-            typedef ::SireMaths::Vector ( ::SireMaths::Triangle::*vector_function_type )(  ) const;
+            typedef ::SireMaths::Vector ( ::SireMaths::Triangle::*vector_function_type)(  ) const;
             vector_function_type vector_function_value( &::SireMaths::Triangle::vector );
             
             Triangle_exposer.def( 
@@ -181,7 +181,7 @@ void register_Triangle_class(){
         }
         { //::SireMaths::Triangle::vector0
         
-            typedef ::SireMaths::Vector ( ::SireMaths::Triangle::*vector0_function_type )(  ) const;
+            typedef ::SireMaths::Vector ( ::SireMaths::Triangle::*vector0_function_type)(  ) const;
             vector0_function_type vector0_function_value( &::SireMaths::Triangle::vector0 );
             
             Triangle_exposer.def( 
@@ -191,7 +191,7 @@ void register_Triangle_class(){
         }
         { //::SireMaths::Triangle::vector1
         
-            typedef ::SireMaths::Vector ( ::SireMaths::Triangle::*vector1_function_type )(  ) const;
+            typedef ::SireMaths::Vector ( ::SireMaths::Triangle::*vector1_function_type)(  ) const;
             vector1_function_type vector1_function_value( &::SireMaths::Triangle::vector1 );
             
             Triangle_exposer.def( 
@@ -201,7 +201,7 @@ void register_Triangle_class(){
         }
         { //::SireMaths::Triangle::vector2
         
-            typedef ::SireMaths::Vector ( ::SireMaths::Triangle::*vector2_function_type )(  ) const;
+            typedef ::SireMaths::Vector ( ::SireMaths::Triangle::*vector2_function_type)(  ) const;
             vector2_function_type vector2_function_value( &::SireMaths::Triangle::vector2 );
             
             Triangle_exposer.def( 
@@ -211,7 +211,7 @@ void register_Triangle_class(){
         }
         { //::SireMaths::Triangle::what
         
-            typedef char const * ( ::SireMaths::Triangle::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMaths::Triangle::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMaths::Triangle::what );
             
             Triangle_exposer.def( 

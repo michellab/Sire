@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "ImproperID.pypp.hpp"
 
 namespace bp = boost::python;
@@ -44,51 +43,51 @@ void register_ImproperID_class(){
         ImproperID_exposer.def( bp::init< SireMol::ImproperID const & >(( bp::arg("other") )) );
         { //::SireMol::ImproperID::atom0
         
-            typedef ::SireMol::AtomID const & ( ::SireMol::ImproperID::*atom0_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMol::ImproperID::*atom0_function_type)(  ) const;
             atom0_function_type atom0_function_value( &::SireMol::ImproperID::atom0 );
             
             ImproperID_exposer.def( 
                 "atom0"
                 , atom0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMol::ImproperID::atom1
         
-            typedef ::SireMol::AtomID const & ( ::SireMol::ImproperID::*atom1_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMol::ImproperID::*atom1_function_type)(  ) const;
             atom1_function_type atom1_function_value( &::SireMol::ImproperID::atom1 );
             
             ImproperID_exposer.def( 
                 "atom1"
                 , atom1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMol::ImproperID::atom2
         
-            typedef ::SireMol::AtomID const & ( ::SireMol::ImproperID::*atom2_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMol::ImproperID::*atom2_function_type)(  ) const;
             atom2_function_type atom2_function_value( &::SireMol::ImproperID::atom2 );
             
             ImproperID_exposer.def( 
                 "atom2"
                 , atom2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMol::ImproperID::atom3
         
-            typedef ::SireMol::AtomID const & ( ::SireMol::ImproperID::*atom3_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMol::ImproperID::*atom3_function_type)(  ) const;
             atom3_function_type atom3_function_value( &::SireMol::ImproperID::atom3 );
             
             ImproperID_exposer.def( 
                 "atom3"
                 , atom3_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMol::ImproperID::hash
         
-            typedef ::uint ( ::SireMol::ImproperID::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::ImproperID::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::ImproperID::hash );
             
             ImproperID_exposer.def( 
@@ -98,7 +97,7 @@ void register_ImproperID_class(){
         }
         { //::SireMol::ImproperID::isNull
         
-            typedef bool ( ::SireMol::ImproperID::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::ImproperID::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::ImproperID::isNull );
             
             ImproperID_exposer.def( 
@@ -108,7 +107,7 @@ void register_ImproperID_class(){
         }
         { //::SireMol::ImproperID::map
         
-            typedef ::boost::tuples::tuple< SireMol::AtomIdx, SireMol::AtomIdx, SireMol::AtomIdx, SireMol::AtomIdx, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ImproperID::*map_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomIdx, SireMol::AtomIdx, SireMol::AtomIdx, SireMol::AtomIdx, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ImproperID::*map_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             map_function_type map_function_value( &::SireMol::ImproperID::map );
             
             ImproperID_exposer.def( 
@@ -119,7 +118,7 @@ void register_ImproperID_class(){
         }
         { //::SireMol::ImproperID::map
         
-            typedef ::boost::tuples::tuple< SireMol::AtomIdx, SireMol::AtomIdx, SireMol::AtomIdx, SireMol::AtomIdx, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ImproperID::*map_function_type )( ::SireMol::MoleculeInfoData const &,::SireMol::MoleculeInfoData const &,::SireMol::MoleculeInfoData const &,::SireMol::MoleculeInfoData const & ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomIdx, SireMol::AtomIdx, SireMol::AtomIdx, SireMol::AtomIdx, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ImproperID::*map_function_type)( ::SireMol::MoleculeInfoData const &,::SireMol::MoleculeInfoData const &,::SireMol::MoleculeInfoData const &,::SireMol::MoleculeInfoData const & ) const;
             map_function_type map_function_value( &::SireMol::ImproperID::map );
             
             ImproperID_exposer.def( 
@@ -131,7 +130,7 @@ void register_ImproperID_class(){
         ImproperID_exposer.def( bp::self != bp::self );
         { //::SireMol::ImproperID::operator=
         
-            typedef ::SireMol::ImproperID & ( ::SireMol::ImproperID::*assign_function_type )( ::SireMol::ImproperID const & ) ;
+            typedef ::SireMol::ImproperID & ( ::SireMol::ImproperID::*assign_function_type)( ::SireMol::ImproperID const & ) ;
             assign_function_type assign_function_value( &::SireMol::ImproperID::operator= );
             
             ImproperID_exposer.def( 
@@ -145,7 +144,7 @@ void register_ImproperID_class(){
         ImproperID_exposer.def( bp::self == bp::self );
         { //::SireMol::ImproperID::size
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMol::ImproperID::*size_function_type )( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMol::ImproperID::*size_function_type)( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             size_function_type size_function_value( &::SireMol::ImproperID::size );
             
             ImproperID_exposer.def( 
@@ -156,7 +155,7 @@ void register_ImproperID_class(){
         }
         { //::SireMol::ImproperID::size
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMol::ImproperID::*size_function_type )( ::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMol::ImproperID::*size_function_type)( ::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             size_function_type size_function_value( &::SireMol::ImproperID::size );
             
             ImproperID_exposer.def( 
@@ -167,7 +166,7 @@ void register_ImproperID_class(){
         }
         { //::SireMol::ImproperID::size
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMol::ImproperID::*size_function_type )( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMol::ImproperID::*size_function_type)( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             size_function_type size_function_value( &::SireMol::ImproperID::size );
             
             ImproperID_exposer.def( 
@@ -178,7 +177,7 @@ void register_ImproperID_class(){
         }
         { //::SireMol::ImproperID::toString
         
-            typedef ::QString ( ::SireMol::ImproperID::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::ImproperID::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::ImproperID::toString );
             
             ImproperID_exposer.def( 
@@ -188,7 +187,7 @@ void register_ImproperID_class(){
         }
         { //::SireMol::ImproperID::torsion
         
-            typedef ::SireMaths::Torsion ( ::SireMol::ImproperID::*torsion_function_type )( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::Torsion ( ::SireMol::ImproperID::*torsion_function_type)( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             torsion_function_type torsion_function_value( &::SireMol::ImproperID::torsion );
             
             ImproperID_exposer.def( 
@@ -199,7 +198,7 @@ void register_ImproperID_class(){
         }
         { //::SireMol::ImproperID::torsion
         
-            typedef ::SireMaths::Torsion ( ::SireMol::ImproperID::*torsion_function_type )( ::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::Torsion ( ::SireMol::ImproperID::*torsion_function_type)( ::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             torsion_function_type torsion_function_value( &::SireMol::ImproperID::torsion );
             
             ImproperID_exposer.def( 
@@ -210,7 +209,7 @@ void register_ImproperID_class(){
         }
         { //::SireMol::ImproperID::torsion
         
-            typedef ::SireMaths::Torsion ( ::SireMol::ImproperID::*torsion_function_type )( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::Torsion ( ::SireMol::ImproperID::*torsion_function_type)( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             torsion_function_type torsion_function_value( &::SireMol::ImproperID::torsion );
             
             ImproperID_exposer.def( 
@@ -231,7 +230,7 @@ void register_ImproperID_class(){
         }
         { //::SireMol::ImproperID::what
         
-            typedef char const * ( ::SireMol::ImproperID::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::ImproperID::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::ImproperID::what );
             
             ImproperID_exposer.def( 

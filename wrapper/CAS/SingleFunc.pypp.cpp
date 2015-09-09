@@ -33,7 +33,7 @@ void register_SingleFunc_class(){
         bp::scope SingleFunc_scope( SingleFunc_exposer );
         { //::SireCAS::SingleFunc::argument
         
-            typedef ::SireCAS::Expression const & ( ::SireCAS::SingleFunc::*argument_function_type )(  ) const;
+            typedef ::SireCAS::Expression const & ( ::SireCAS::SingleFunc::*argument_function_type)(  ) const;
             argument_function_type argument_function_value( &::SireCAS::SingleFunc::argument );
             
             SingleFunc_exposer.def( 
@@ -44,7 +44,7 @@ void register_SingleFunc_class(){
         }
         { //::SireCAS::SingleFunc::children
         
-            typedef ::SireCAS::Expressions ( ::SireCAS::SingleFunc::*children_function_type )(  ) const;
+            typedef ::SireCAS::Expressions ( ::SireCAS::SingleFunc::*children_function_type)(  ) const;
             children_function_type children_function_value( &::SireCAS::SingleFunc::children );
             
             SingleFunc_exposer.def( 
@@ -54,7 +54,7 @@ void register_SingleFunc_class(){
         }
         { //::SireCAS::SingleFunc::conjugate
         
-            typedef ::SireCAS::Expression ( ::SireCAS::SingleFunc::*conjugate_function_type )(  ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::SingleFunc::*conjugate_function_type)(  ) const;
             conjugate_function_type conjugate_function_value( &::SireCAS::SingleFunc::conjugate );
             
             SingleFunc_exposer.def( 
@@ -64,7 +64,7 @@ void register_SingleFunc_class(){
         }
         { //::SireCAS::SingleFunc::differentiate
         
-            typedef ::SireCAS::Expression ( ::SireCAS::SingleFunc::*differentiate_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::SingleFunc::*differentiate_function_type)( ::SireCAS::Symbol const & ) const;
             differentiate_function_type differentiate_function_value( &::SireCAS::SingleFunc::differentiate );
             
             SingleFunc_exposer.def( 
@@ -75,7 +75,7 @@ void register_SingleFunc_class(){
         }
         { //::SireCAS::SingleFunc::expand
         
-            typedef ::QList< SireCAS::Factor > ( ::SireCAS::SingleFunc::*expand_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::QList< SireCAS::Factor > ( ::SireCAS::SingleFunc::*expand_function_type)( ::SireCAS::Symbol const & ) const;
             expand_function_type expand_function_value( &::SireCAS::SingleFunc::expand );
             
             SingleFunc_exposer.def( 
@@ -86,7 +86,7 @@ void register_SingleFunc_class(){
         }
         { //::SireCAS::SingleFunc::functions
         
-            typedef ::SireCAS::Functions ( ::SireCAS::SingleFunc::*functions_function_type )(  ) const;
+            typedef ::SireCAS::Functions ( ::SireCAS::SingleFunc::*functions_function_type)(  ) const;
             functions_function_type functions_function_value( &::SireCAS::SingleFunc::functions );
             
             SingleFunc_exposer.def( 
@@ -96,7 +96,7 @@ void register_SingleFunc_class(){
         }
         { //::SireCAS::SingleFunc::hash
         
-            typedef ::uint ( ::SireCAS::SingleFunc::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireCAS::SingleFunc::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireCAS::SingleFunc::hash );
             
             SingleFunc_exposer.def( 
@@ -106,7 +106,7 @@ void register_SingleFunc_class(){
         }
         { //::SireCAS::SingleFunc::integrate
         
-            typedef ::SireCAS::Expression ( ::SireCAS::SingleFunc::*integrate_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::SingleFunc::*integrate_function_type)( ::SireCAS::Symbol const & ) const;
             integrate_function_type integrate_function_value( &::SireCAS::SingleFunc::integrate );
             
             SingleFunc_exposer.def( 
@@ -117,7 +117,7 @@ void register_SingleFunc_class(){
         }
         { //::SireCAS::SingleFunc::isComplex
         
-            typedef bool ( ::SireCAS::SingleFunc::*isComplex_function_type )(  ) const;
+            typedef bool ( ::SireCAS::SingleFunc::*isComplex_function_type)(  ) const;
             isComplex_function_type isComplex_function_value( &::SireCAS::SingleFunc::isComplex );
             
             SingleFunc_exposer.def( 
@@ -127,7 +127,7 @@ void register_SingleFunc_class(){
         }
         { //::SireCAS::SingleFunc::isCompound
         
-            typedef bool ( ::SireCAS::SingleFunc::*isCompound_function_type )(  ) const;
+            typedef bool ( ::SireCAS::SingleFunc::*isCompound_function_type)(  ) const;
             isCompound_function_type isCompound_function_value( &::SireCAS::SingleFunc::isCompound );
             
             SingleFunc_exposer.def( 
@@ -137,7 +137,7 @@ void register_SingleFunc_class(){
         }
         { //::SireCAS::SingleFunc::isConstant
         
-            typedef bool ( ::SireCAS::SingleFunc::*isConstant_function_type )(  ) const;
+            typedef bool ( ::SireCAS::SingleFunc::*isConstant_function_type)(  ) const;
             isConstant_function_type isConstant_function_value( &::SireCAS::SingleFunc::isConstant );
             
             SingleFunc_exposer.def( 
@@ -147,7 +147,7 @@ void register_SingleFunc_class(){
         }
         { //::SireCAS::SingleFunc::isFunction
         
-            typedef bool ( ::SireCAS::SingleFunc::*isFunction_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef bool ( ::SireCAS::SingleFunc::*isFunction_function_type)( ::SireCAS::Symbol const & ) const;
             isFunction_function_type isFunction_function_value( &::SireCAS::SingleFunc::isFunction );
             
             SingleFunc_exposer.def( 
@@ -158,7 +158,7 @@ void register_SingleFunc_class(){
         }
         { //::SireCAS::SingleFunc::operator=
         
-            typedef ::SireCAS::SingleFunc & ( ::SireCAS::SingleFunc::*assign_function_type )( ::SireCAS::SingleFunc const & ) ;
+            typedef ::SireCAS::SingleFunc & ( ::SireCAS::SingleFunc::*assign_function_type)( ::SireCAS::SingleFunc const & ) ;
             assign_function_type assign_function_value( &::SireCAS::SingleFunc::operator= );
             
             SingleFunc_exposer.def( 
@@ -170,7 +170,7 @@ void register_SingleFunc_class(){
         }
         { //::SireCAS::SingleFunc::substitute
         
-            typedef ::SireCAS::Expression ( ::SireCAS::SingleFunc::*substitute_function_type )( ::SireCAS::Identities const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::SingleFunc::*substitute_function_type)( ::SireCAS::Identities const & ) const;
             substitute_function_type substitute_function_value( &::SireCAS::SingleFunc::substitute );
             
             SingleFunc_exposer.def( 
@@ -181,7 +181,7 @@ void register_SingleFunc_class(){
         }
         { //::SireCAS::SingleFunc::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireCAS::SingleFunc::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireCAS::SingleFunc::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireCAS::SingleFunc::symbols );
             
             SingleFunc_exposer.def( 
@@ -191,7 +191,7 @@ void register_SingleFunc_class(){
         }
         { //::SireCAS::SingleFunc::toOpenMMString
         
-            typedef ::QString ( ::SireCAS::SingleFunc::*toOpenMMString_function_type )(  ) const;
+            typedef ::QString ( ::SireCAS::SingleFunc::*toOpenMMString_function_type)(  ) const;
             toOpenMMString_function_type toOpenMMString_function_value( &::SireCAS::SingleFunc::toOpenMMString );
             
             SingleFunc_exposer.def( 
@@ -201,7 +201,7 @@ void register_SingleFunc_class(){
         }
         { //::SireCAS::SingleFunc::toString
         
-            typedef ::QString ( ::SireCAS::SingleFunc::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireCAS::SingleFunc::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireCAS::SingleFunc::toString );
             
             SingleFunc_exposer.def( 
@@ -211,7 +211,7 @@ void register_SingleFunc_class(){
         }
         { //::SireCAS::SingleFunc::x
         
-            typedef ::SireCAS::Expression const & ( ::SireCAS::SingleFunc::*x_function_type )(  ) const;
+            typedef ::SireCAS::Expression const & ( ::SireCAS::SingleFunc::*x_function_type)(  ) const;
             x_function_type x_function_value( &::SireCAS::SingleFunc::x );
             
             SingleFunc_exposer.def( 

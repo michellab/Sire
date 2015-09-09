@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "MolecularDynamics.pypp.hpp"
 
 namespace bp = boost::python;
@@ -47,7 +46,7 @@ void register_MolecularDynamics_class(){
         MolecularDynamics_exposer.def( bp::init< SireMove::MolecularDynamics const & >(( bp::arg("other") )) );
         { //::SireMove::MolecularDynamics::clearStatistics
         
-            typedef void ( ::SireMove::MolecularDynamics::*clearStatistics_function_type )(  ) ;
+            typedef void ( ::SireMove::MolecularDynamics::*clearStatistics_function_type)(  ) ;
             clearStatistics_function_type clearStatistics_function_value( &::SireMove::MolecularDynamics::clearStatistics );
             
             MolecularDynamics_exposer.def( 
@@ -57,7 +56,7 @@ void register_MolecularDynamics_class(){
         }
         { //::SireMove::MolecularDynamics::coordinatesProperty
         
-            typedef ::SireBase::PropertyName ( ::SireMove::MolecularDynamics::*coordinatesProperty_function_type )(  ) const;
+            typedef ::SireBase::PropertyName ( ::SireMove::MolecularDynamics::*coordinatesProperty_function_type)(  ) const;
             coordinatesProperty_function_type coordinatesProperty_function_value( &::SireMove::MolecularDynamics::coordinatesProperty );
             
             MolecularDynamics_exposer.def( 
@@ -67,7 +66,7 @@ void register_MolecularDynamics_class(){
         }
         { //::SireMove::MolecularDynamics::elementsProperty
         
-            typedef ::SireBase::PropertyName ( ::SireMove::MolecularDynamics::*elementsProperty_function_type )(  ) const;
+            typedef ::SireBase::PropertyName ( ::SireMove::MolecularDynamics::*elementsProperty_function_type)(  ) const;
             elementsProperty_function_type elementsProperty_function_value( &::SireMove::MolecularDynamics::elementsProperty );
             
             MolecularDynamics_exposer.def( 
@@ -77,18 +76,18 @@ void register_MolecularDynamics_class(){
         }
         { //::SireMove::MolecularDynamics::integrator
         
-            typedef ::SireMove::Integrator const & ( ::SireMove::MolecularDynamics::*integrator_function_type )(  ) const;
+            typedef ::SireMove::Integrator const & ( ::SireMove::MolecularDynamics::*integrator_function_type)(  ) const;
             integrator_function_type integrator_function_value( &::SireMove::MolecularDynamics::integrator );
             
             MolecularDynamics_exposer.def( 
                 "integrator"
                 , integrator_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMove::MolecularDynamics::kineticEnergy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::MolecularDynamics::*kineticEnergy_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::MolecularDynamics::*kineticEnergy_function_type)(  ) const;
             kineticEnergy_function_type kineticEnergy_function_value( &::SireMove::MolecularDynamics::kineticEnergy );
             
             MolecularDynamics_exposer.def( 
@@ -98,7 +97,7 @@ void register_MolecularDynamics_class(){
         }
         { //::SireMove::MolecularDynamics::massesProperty
         
-            typedef ::SireBase::PropertyName ( ::SireMove::MolecularDynamics::*massesProperty_function_type )(  ) const;
+            typedef ::SireBase::PropertyName ( ::SireMove::MolecularDynamics::*massesProperty_function_type)(  ) const;
             massesProperty_function_type massesProperty_function_value( &::SireMove::MolecularDynamics::massesProperty );
             
             MolecularDynamics_exposer.def( 
@@ -108,18 +107,18 @@ void register_MolecularDynamics_class(){
         }
         { //::SireMove::MolecularDynamics::moleculeGroup
         
-            typedef ::SireMol::MoleculeGroup const & ( ::SireMove::MolecularDynamics::*moleculeGroup_function_type )(  ) const;
+            typedef ::SireMol::MoleculeGroup const & ( ::SireMove::MolecularDynamics::*moleculeGroup_function_type)(  ) const;
             moleculeGroup_function_type moleculeGroup_function_value( &::SireMove::MolecularDynamics::moleculeGroup );
             
             MolecularDynamics_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMove::MolecularDynamics::move
         
-            typedef void ( ::SireMove::MolecularDynamics::*move_function_type )( ::SireSystem::System &,int,bool ) ;
+            typedef void ( ::SireMove::MolecularDynamics::*move_function_type)( ::SireSystem::System &,int,bool ) ;
             move_function_type move_function_value( &::SireMove::MolecularDynamics::move );
             
             MolecularDynamics_exposer.def( 
@@ -130,7 +129,7 @@ void register_MolecularDynamics_class(){
         }
         { //::SireMove::MolecularDynamics::nMoves
         
-            typedef int ( ::SireMove::MolecularDynamics::*nMoves_function_type )(  ) const;
+            typedef int ( ::SireMove::MolecularDynamics::*nMoves_function_type)(  ) const;
             nMoves_function_type nMoves_function_value( &::SireMove::MolecularDynamics::nMoves );
             
             MolecularDynamics_exposer.def( 
@@ -141,7 +140,7 @@ void register_MolecularDynamics_class(){
         MolecularDynamics_exposer.def( bp::self != bp::self );
         { //::SireMove::MolecularDynamics::operator=
         
-            typedef ::SireMove::MolecularDynamics & ( ::SireMove::MolecularDynamics::*assign_function_type )( ::SireMove::MolecularDynamics const & ) ;
+            typedef ::SireMove::MolecularDynamics & ( ::SireMove::MolecularDynamics::*assign_function_type)( ::SireMove::MolecularDynamics const & ) ;
             assign_function_type assign_function_value( &::SireMove::MolecularDynamics::operator= );
             
             MolecularDynamics_exposer.def( 
@@ -154,7 +153,7 @@ void register_MolecularDynamics_class(){
         MolecularDynamics_exposer.def( bp::self == bp::self );
         { //::SireMove::MolecularDynamics::regenerateVelocities
         
-            typedef void ( ::SireMove::MolecularDynamics::*regenerateVelocities_function_type )( ::SireSystem::System const &,::SireMove::VelocityGenerator const & ) ;
+            typedef void ( ::SireMove::MolecularDynamics::*regenerateVelocities_function_type)( ::SireSystem::System const &,::SireMove::VelocityGenerator const & ) ;
             regenerateVelocities_function_type regenerateVelocities_function_value( &::SireMove::MolecularDynamics::regenerateVelocities );
             
             MolecularDynamics_exposer.def( 
@@ -165,7 +164,7 @@ void register_MolecularDynamics_class(){
         }
         { //::SireMove::MolecularDynamics::setCoordinatesProperty
         
-            typedef void ( ::SireMove::MolecularDynamics::*setCoordinatesProperty_function_type )( ::SireBase::PropertyName const & ) ;
+            typedef void ( ::SireMove::MolecularDynamics::*setCoordinatesProperty_function_type)( ::SireBase::PropertyName const & ) ;
             setCoordinatesProperty_function_type setCoordinatesProperty_function_value( &::SireMove::MolecularDynamics::setCoordinatesProperty );
             
             MolecularDynamics_exposer.def( 
@@ -176,7 +175,7 @@ void register_MolecularDynamics_class(){
         }
         { //::SireMove::MolecularDynamics::setElementsProperty
         
-            typedef void ( ::SireMove::MolecularDynamics::*setElementsProperty_function_type )( ::SireBase::PropertyName const & ) ;
+            typedef void ( ::SireMove::MolecularDynamics::*setElementsProperty_function_type)( ::SireBase::PropertyName const & ) ;
             setElementsProperty_function_type setElementsProperty_function_value( &::SireMove::MolecularDynamics::setElementsProperty );
             
             MolecularDynamics_exposer.def( 
@@ -187,7 +186,7 @@ void register_MolecularDynamics_class(){
         }
         { //::SireMove::MolecularDynamics::setGenerator
         
-            typedef void ( ::SireMove::MolecularDynamics::*setGenerator_function_type )( ::SireMaths::RanGenerator const & ) ;
+            typedef void ( ::SireMove::MolecularDynamics::*setGenerator_function_type)( ::SireMaths::RanGenerator const & ) ;
             setGenerator_function_type setGenerator_function_value( &::SireMove::MolecularDynamics::setGenerator );
             
             MolecularDynamics_exposer.def( 
@@ -198,7 +197,7 @@ void register_MolecularDynamics_class(){
         }
         { //::SireMove::MolecularDynamics::setIntegrator
         
-            typedef void ( ::SireMove::MolecularDynamics::*setIntegrator_function_type )( ::SireMove::Integrator const & ) ;
+            typedef void ( ::SireMove::MolecularDynamics::*setIntegrator_function_type)( ::SireMove::Integrator const & ) ;
             setIntegrator_function_type setIntegrator_function_value( &::SireMove::MolecularDynamics::setIntegrator );
             
             MolecularDynamics_exposer.def( 
@@ -209,7 +208,7 @@ void register_MolecularDynamics_class(){
         }
         { //::SireMove::MolecularDynamics::setMassesProperty
         
-            typedef void ( ::SireMove::MolecularDynamics::*setMassesProperty_function_type )( ::SireBase::PropertyName const & ) ;
+            typedef void ( ::SireMove::MolecularDynamics::*setMassesProperty_function_type)( ::SireBase::PropertyName const & ) ;
             setMassesProperty_function_type setMassesProperty_function_value( &::SireMove::MolecularDynamics::setMassesProperty );
             
             MolecularDynamics_exposer.def( 
@@ -220,7 +219,7 @@ void register_MolecularDynamics_class(){
         }
         { //::SireMove::MolecularDynamics::setMoleculeGroup
         
-            typedef void ( ::SireMove::MolecularDynamics::*setMoleculeGroup_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireMove::MolecularDynamics::*setMoleculeGroup_function_type)( ::SireMol::MoleculeGroup const & ) ;
             setMoleculeGroup_function_type setMoleculeGroup_function_value( &::SireMove::MolecularDynamics::setMoleculeGroup );
             
             MolecularDynamics_exposer.def( 
@@ -231,7 +230,7 @@ void register_MolecularDynamics_class(){
         }
         { //::SireMove::MolecularDynamics::setMoleculeGroup
         
-            typedef void ( ::SireMove::MolecularDynamics::*setMoleculeGroup_function_type )( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMove::MolecularDynamics::*setMoleculeGroup_function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
             setMoleculeGroup_function_type setMoleculeGroup_function_value( &::SireMove::MolecularDynamics::setMoleculeGroup );
             
             MolecularDynamics_exposer.def( 
@@ -242,7 +241,7 @@ void register_MolecularDynamics_class(){
         }
         { //::SireMove::MolecularDynamics::setSpaceProperty
         
-            typedef void ( ::SireMove::MolecularDynamics::*setSpaceProperty_function_type )( ::SireBase::PropertyName const & ) ;
+            typedef void ( ::SireMove::MolecularDynamics::*setSpaceProperty_function_type)( ::SireBase::PropertyName const & ) ;
             setSpaceProperty_function_type setSpaceProperty_function_value( &::SireMove::MolecularDynamics::setSpaceProperty );
             
             MolecularDynamics_exposer.def( 
@@ -253,7 +252,7 @@ void register_MolecularDynamics_class(){
         }
         { //::SireMove::MolecularDynamics::setTimeStep
         
-            typedef void ( ::SireMove::MolecularDynamics::*setTimeStep_function_type )( ::SireUnits::Dimension::Time const & ) ;
+            typedef void ( ::SireMove::MolecularDynamics::*setTimeStep_function_type)( ::SireUnits::Dimension::Time const & ) ;
             setTimeStep_function_type setTimeStep_function_value( &::SireMove::MolecularDynamics::setTimeStep );
             
             MolecularDynamics_exposer.def( 
@@ -264,7 +263,7 @@ void register_MolecularDynamics_class(){
         }
         { //::SireMove::MolecularDynamics::setVelocitiesProperty
         
-            typedef void ( ::SireMove::MolecularDynamics::*setVelocitiesProperty_function_type )( ::SireBase::PropertyName const & ) ;
+            typedef void ( ::SireMove::MolecularDynamics::*setVelocitiesProperty_function_type)( ::SireBase::PropertyName const & ) ;
             setVelocitiesProperty_function_type setVelocitiesProperty_function_value( &::SireMove::MolecularDynamics::setVelocitiesProperty );
             
             MolecularDynamics_exposer.def( 
@@ -275,7 +274,7 @@ void register_MolecularDynamics_class(){
         }
         { //::SireMove::MolecularDynamics::setVelocityGeneratorProperty
         
-            typedef void ( ::SireMove::MolecularDynamics::*setVelocityGeneratorProperty_function_type )( ::SireBase::PropertyName const & ) ;
+            typedef void ( ::SireMove::MolecularDynamics::*setVelocityGeneratorProperty_function_type)( ::SireBase::PropertyName const & ) ;
             setVelocityGeneratorProperty_function_type setVelocityGeneratorProperty_function_value( &::SireMove::MolecularDynamics::setVelocityGeneratorProperty );
             
             MolecularDynamics_exposer.def( 
@@ -286,7 +285,7 @@ void register_MolecularDynamics_class(){
         }
         { //::SireMove::MolecularDynamics::spaceProperty
         
-            typedef ::SireBase::PropertyName ( ::SireMove::MolecularDynamics::*spaceProperty_function_type )(  ) const;
+            typedef ::SireBase::PropertyName ( ::SireMove::MolecularDynamics::*spaceProperty_function_type)(  ) const;
             spaceProperty_function_type spaceProperty_function_value( &::SireMove::MolecularDynamics::spaceProperty );
             
             MolecularDynamics_exposer.def( 
@@ -296,7 +295,7 @@ void register_MolecularDynamics_class(){
         }
         { //::SireMove::MolecularDynamics::temperature
         
-            typedef ::SireUnits::Dimension::Temperature ( ::SireMove::MolecularDynamics::*temperature_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Temperature ( ::SireMove::MolecularDynamics::*temperature_function_type)(  ) const;
             temperature_function_type temperature_function_value( &::SireMove::MolecularDynamics::temperature );
             
             MolecularDynamics_exposer.def( 
@@ -306,7 +305,7 @@ void register_MolecularDynamics_class(){
         }
         { //::SireMove::MolecularDynamics::timeStep
         
-            typedef ::SireUnits::Dimension::Time ( ::SireMove::MolecularDynamics::*timeStep_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Time ( ::SireMove::MolecularDynamics::*timeStep_function_type)(  ) const;
             timeStep_function_type timeStep_function_value( &::SireMove::MolecularDynamics::timeStep );
             
             MolecularDynamics_exposer.def( 
@@ -316,7 +315,7 @@ void register_MolecularDynamics_class(){
         }
         { //::SireMove::MolecularDynamics::toString
         
-            typedef ::QString ( ::SireMove::MolecularDynamics::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMove::MolecularDynamics::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMove::MolecularDynamics::toString );
             
             MolecularDynamics_exposer.def( 
@@ -326,7 +325,7 @@ void register_MolecularDynamics_class(){
         }
         { //::SireMove::MolecularDynamics::totalTime
         
-            typedef ::SireUnits::Dimension::Time ( ::SireMove::MolecularDynamics::*totalTime_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Time ( ::SireMove::MolecularDynamics::*totalTime_function_type)(  ) const;
             totalTime_function_type totalTime_function_value( &::SireMove::MolecularDynamics::totalTime );
             
             MolecularDynamics_exposer.def( 
@@ -346,7 +345,7 @@ void register_MolecularDynamics_class(){
         }
         { //::SireMove::MolecularDynamics::velocitiesProperty
         
-            typedef ::SireBase::PropertyName ( ::SireMove::MolecularDynamics::*velocitiesProperty_function_type )(  ) const;
+            typedef ::SireBase::PropertyName ( ::SireMove::MolecularDynamics::*velocitiesProperty_function_type)(  ) const;
             velocitiesProperty_function_type velocitiesProperty_function_value( &::SireMove::MolecularDynamics::velocitiesProperty );
             
             MolecularDynamics_exposer.def( 
@@ -356,7 +355,7 @@ void register_MolecularDynamics_class(){
         }
         { //::SireMove::MolecularDynamics::velocityGeneratorProperty
         
-            typedef ::SireBase::PropertyName ( ::SireMove::MolecularDynamics::*velocityGeneratorProperty_function_type )(  ) const;
+            typedef ::SireBase::PropertyName ( ::SireMove::MolecularDynamics::*velocityGeneratorProperty_function_type)(  ) const;
             velocityGeneratorProperty_function_type velocityGeneratorProperty_function_value( &::SireMove::MolecularDynamics::velocityGeneratorProperty );
             
             MolecularDynamics_exposer.def( 

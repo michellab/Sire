@@ -32,7 +32,7 @@ void register_TrimString_class(){
         TrimString_exposer.def( bp::init< SireBase::TrimString const & >(( bp::arg("other") )) );
         { //::SireBase::TrimString::mangle
         
-            typedef ::QString ( ::SireBase::TrimString::*mangle_function_type )( ::QString const & ) const;
+            typedef ::QString ( ::SireBase::TrimString::*mangle_function_type)( ::QString const & ) const;
             mangle_function_type mangle_function_value( &::SireBase::TrimString::mangle );
             
             TrimString_exposer.def( 
@@ -44,7 +44,7 @@ void register_TrimString_class(){
         TrimString_exposer.def( bp::self != bp::self );
         { //::SireBase::TrimString::operator=
         
-            typedef ::SireBase::TrimString & ( ::SireBase::TrimString::*assign_function_type )( ::SireBase::TrimString const & ) ;
+            typedef ::SireBase::TrimString & ( ::SireBase::TrimString::*assign_function_type)( ::SireBase::TrimString const & ) ;
             assign_function_type assign_function_value( &::SireBase::TrimString::operator= );
             
             TrimString_exposer.def( 

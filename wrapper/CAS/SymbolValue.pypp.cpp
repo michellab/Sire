@@ -25,7 +25,7 @@ void register_SymbolValue_class(){
         bp::scope SymbolValue_scope( SymbolValue_exposer );
         { //::SireCAS::SymbolValue::ID
         
-            typedef ::SireCAS::SymbolID ( ::SireCAS::SymbolValue::*ID_function_type )(  ) const;
+            typedef ::SireCAS::SymbolID ( ::SireCAS::SymbolValue::*ID_function_type)(  ) const;
             ID_function_type ID_function_value( &::SireCAS::SymbolValue::ID );
             
             SymbolValue_exposer.def( 
@@ -35,7 +35,7 @@ void register_SymbolValue_class(){
         }
         { //::SireCAS::SymbolValue::value
         
-            typedef double ( ::SireCAS::SymbolValue::*value_function_type )(  ) const;
+            typedef double ( ::SireCAS::SymbolValue::*value_function_type)(  ) const;
             value_function_type value_function_value( &::SireCAS::SymbolValue::value );
             
             SymbolValue_exposer.def( 

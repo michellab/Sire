@@ -45,7 +45,7 @@ void register_PowerFunction_class(){
         bp::scope PowerFunction_scope( PowerFunction_exposer );
         { //::SireCAS::PowerFunction::children
         
-            typedef ::SireCAS::Expressions ( ::SireCAS::PowerFunction::*children_function_type )(  ) const;
+            typedef ::SireCAS::Expressions ( ::SireCAS::PowerFunction::*children_function_type)(  ) const;
             children_function_type children_function_value( &::SireCAS::PowerFunction::children );
             
             PowerFunction_exposer.def( 
@@ -55,7 +55,7 @@ void register_PowerFunction_class(){
         }
         { //::SireCAS::PowerFunction::core
         
-            typedef ::SireCAS::Expression ( ::SireCAS::PowerFunction::*core_function_type )(  ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::PowerFunction::*core_function_type)(  ) const;
             core_function_type core_function_value( &::SireCAS::PowerFunction::core );
             
             PowerFunction_exposer.def( 
@@ -65,7 +65,7 @@ void register_PowerFunction_class(){
         }
         { //::SireCAS::PowerFunction::differentiate
         
-            typedef ::SireCAS::Expression ( ::SireCAS::PowerFunction::*differentiate_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::PowerFunction::*differentiate_function_type)( ::SireCAS::Symbol const & ) const;
             differentiate_function_type differentiate_function_value( &::SireCAS::PowerFunction::differentiate );
             
             PowerFunction_exposer.def( 
@@ -76,7 +76,7 @@ void register_PowerFunction_class(){
         }
         { //::SireCAS::PowerFunction::expand
         
-            typedef ::QList< SireCAS::Factor > ( ::SireCAS::PowerFunction::*expand_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::QList< SireCAS::Factor > ( ::SireCAS::PowerFunction::*expand_function_type)( ::SireCAS::Symbol const & ) const;
             expand_function_type expand_function_value( &::SireCAS::PowerFunction::expand );
             
             PowerFunction_exposer.def( 
@@ -87,7 +87,7 @@ void register_PowerFunction_class(){
         }
         { //::SireCAS::PowerFunction::functions
         
-            typedef ::SireCAS::Functions ( ::SireCAS::PowerFunction::*functions_function_type )(  ) const;
+            typedef ::SireCAS::Functions ( ::SireCAS::PowerFunction::*functions_function_type)(  ) const;
             functions_function_type functions_function_value( &::SireCAS::PowerFunction::functions );
             
             PowerFunction_exposer.def( 
@@ -97,7 +97,7 @@ void register_PowerFunction_class(){
         }
         { //::SireCAS::PowerFunction::integrate
         
-            typedef ::SireCAS::Expression ( ::SireCAS::PowerFunction::*integrate_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::PowerFunction::*integrate_function_type)( ::SireCAS::Symbol const & ) const;
             integrate_function_type integrate_function_value( &::SireCAS::PowerFunction::integrate );
             
             PowerFunction_exposer.def( 
@@ -108,7 +108,7 @@ void register_PowerFunction_class(){
         }
         { //::SireCAS::PowerFunction::isCompound
         
-            typedef bool ( ::SireCAS::PowerFunction::*isCompound_function_type )(  ) const;
+            typedef bool ( ::SireCAS::PowerFunction::*isCompound_function_type)(  ) const;
             isCompound_function_type isCompound_function_value( &::SireCAS::PowerFunction::isCompound );
             
             PowerFunction_exposer.def( 
@@ -118,7 +118,7 @@ void register_PowerFunction_class(){
         }
         { //::SireCAS::PowerFunction::isConstant
         
-            typedef bool ( ::SireCAS::PowerFunction::*isConstant_function_type )(  ) const;
+            typedef bool ( ::SireCAS::PowerFunction::*isConstant_function_type)(  ) const;
             isConstant_function_type isConstant_function_value( &::SireCAS::PowerFunction::isConstant );
             
             PowerFunction_exposer.def( 
@@ -128,7 +128,7 @@ void register_PowerFunction_class(){
         }
         { //::SireCAS::PowerFunction::isFunction
         
-            typedef bool ( ::SireCAS::PowerFunction::*isFunction_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef bool ( ::SireCAS::PowerFunction::*isFunction_function_type)( ::SireCAS::Symbol const & ) const;
             isFunction_function_type isFunction_function_value( &::SireCAS::PowerFunction::isFunction );
             
             PowerFunction_exposer.def( 
@@ -139,7 +139,7 @@ void register_PowerFunction_class(){
         }
         { //::SireCAS::PowerFunction::power
         
-            typedef ::SireCAS::Expression ( ::SireCAS::PowerFunction::*power_function_type )(  ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::PowerFunction::*power_function_type)(  ) const;
             power_function_type power_function_value( &::SireCAS::PowerFunction::power );
             
             PowerFunction_exposer.def( 
@@ -149,7 +149,7 @@ void register_PowerFunction_class(){
         }
         { //::SireCAS::PowerFunction::reduce
         
-            typedef ::SireCAS::Expression ( ::SireCAS::PowerFunction::*reduce_function_type )(  ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::PowerFunction::*reduce_function_type)(  ) const;
             reduce_function_type reduce_function_value( &::SireCAS::PowerFunction::reduce );
             
             PowerFunction_exposer.def( 
@@ -159,7 +159,7 @@ void register_PowerFunction_class(){
         }
         { //::SireCAS::PowerFunction::substitute
         
-            typedef ::SireCAS::Expression ( ::SireCAS::PowerFunction::*substitute_function_type )( ::SireCAS::Identities const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::PowerFunction::*substitute_function_type)( ::SireCAS::Identities const & ) const;
             substitute_function_type substitute_function_value( &::SireCAS::PowerFunction::substitute );
             
             PowerFunction_exposer.def( 
@@ -170,7 +170,7 @@ void register_PowerFunction_class(){
         }
         { //::SireCAS::PowerFunction::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireCAS::PowerFunction::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireCAS::PowerFunction::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireCAS::PowerFunction::symbols );
             
             PowerFunction_exposer.def( 
@@ -180,7 +180,7 @@ void register_PowerFunction_class(){
         }
         { //::SireCAS::PowerFunction::toOpenMMString
         
-            typedef ::QString ( ::SireCAS::PowerFunction::*toOpenMMString_function_type )(  ) const;
+            typedef ::QString ( ::SireCAS::PowerFunction::*toOpenMMString_function_type)(  ) const;
             toOpenMMString_function_type toOpenMMString_function_value( &::SireCAS::PowerFunction::toOpenMMString );
             
             PowerFunction_exposer.def( 
@@ -190,7 +190,7 @@ void register_PowerFunction_class(){
         }
         { //::SireCAS::PowerFunction::toString
         
-            typedef ::QString ( ::SireCAS::PowerFunction::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireCAS::PowerFunction::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireCAS::PowerFunction::toString );
             
             PowerFunction_exposer.def( 

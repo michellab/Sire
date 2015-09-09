@@ -59,7 +59,7 @@ void register_SegID_class(){
         bp::scope SegID_scope( SegID_exposer );
         { //::SireMol::SegID::atom
         
-            typedef ::SireMol::AtomsIn< SireMol::SegID > ( ::SireMol::SegID::*atom_function_type )( int ) const;
+            typedef ::SireMol::AtomsIn< SireMol::SegID > ( ::SireMol::SegID::*atom_function_type)( int ) const;
             atom_function_type atom_function_value( &::SireMol::SegID::atom );
             
             SegID_exposer.def( 
@@ -70,7 +70,7 @@ void register_SegID_class(){
         }
         { //::SireMol::SegID::atoms
         
-            typedef ::SireMol::AtomsIn< SireMol::SegID > ( ::SireMol::SegID::*atoms_function_type )(  ) const;
+            typedef ::SireMol::AtomsIn< SireMol::SegID > ( ::SireMol::SegID::*atoms_function_type)(  ) const;
             atoms_function_type atoms_function_value( &::SireMol::SegID::atoms );
             
             SegID_exposer.def( 
@@ -80,7 +80,7 @@ void register_SegID_class(){
         }
         { //::SireMol::SegID::atoms
         
-            typedef ::SireMol::AtomsIn< SireMol::SegID > ( ::SireMol::SegID::*atoms_function_type )( int,int ) const;
+            typedef ::SireMol::AtomsIn< SireMol::SegID > ( ::SireMol::SegID::*atoms_function_type)( int,int ) const;
             atoms_function_type atoms_function_value( &::SireMol::SegID::atoms );
             
             SegID_exposer.def( 
@@ -91,7 +91,7 @@ void register_SegID_class(){
         }
         { //::SireMol::SegID::map
         
-            typedef ::QList< SireMol::SegIdx > ( ::SireMol::SegID::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::SegIdx > ( ::SireMol::SegID::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireMol::SegID::map );
             
             SegID_exposer.def( 
@@ -102,7 +102,7 @@ void register_SegID_class(){
         }
         { //::SireMol::SegID::map
         
-            typedef ::QList< SireMol::SegIdx > ( ::SireMol::SegID::*map_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QList< SireMol::SegIdx > ( ::SireMol::SegID::*map_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             map_function_type map_function_value( &::SireMol::SegID::map );
             
             SegID_exposer.def( 
@@ -118,7 +118,7 @@ void register_SegID_class(){
         SegID_exposer.def( bp::self & bp::other< SireMol::ChainID >() );
         { //::SireMol::SegID::operator()
         
-            typedef ::SireID::Specify< SireMol::SegID > ( ::SireMol::SegID::*__call___function_type )( int ) const;
+            typedef ::SireID::Specify< SireMol::SegID > ( ::SireMol::SegID::*__call___function_type)( int ) const;
             __call___function_type __call___function_value( &::SireMol::SegID::operator() );
             
             SegID_exposer.def( 
@@ -129,7 +129,7 @@ void register_SegID_class(){
         }
         { //::SireMol::SegID::operator()
         
-            typedef ::SireID::Specify< SireMol::SegID > ( ::SireMol::SegID::*__call___function_type )( int,int ) const;
+            typedef ::SireID::Specify< SireMol::SegID > ( ::SireMol::SegID::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireMol::SegID::operator() );
             
             SegID_exposer.def( 
@@ -146,7 +146,7 @@ void register_SegID_class(){
         SegID_exposer.def( bp::self + bp::other< SireMol::ChainID >() );
         { //::SireMol::SegID::operator[]
         
-            typedef ::SireID::Specify< SireMol::SegID > ( ::SireMol::SegID::*__getitem___function_type )( int ) const;
+            typedef ::SireID::Specify< SireMol::SegID > ( ::SireMol::SegID::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::SegID::operator[] );
             
             SegID_exposer.def( 
@@ -158,7 +158,7 @@ void register_SegID_class(){
         SegID_exposer.def( bp::self | bp::self );
         { //::SireMol::SegID::selectAllFrom
         
-            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::SegID::*selectAllFrom_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::SegID::*selectAllFrom_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             selectAllFrom_function_type selectAllFrom_function_value( &::SireMol::SegID::selectAllFrom );
             
             SegID_exposer.def( 
@@ -169,7 +169,7 @@ void register_SegID_class(){
         }
         { //::SireMol::SegID::selectAllFrom
         
-            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Segment > > ( ::SireMol::SegID::*selectAllFrom_function_type )( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Segment > > ( ::SireMol::SegID::*selectAllFrom_function_type)( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) const;
             selectAllFrom_function_type selectAllFrom_function_value( &::SireMol::SegID::selectAllFrom );
             
             SegID_exposer.def( 
@@ -180,7 +180,7 @@ void register_SegID_class(){
         }
         { //::SireMol::SegID::selectAllFrom
         
-            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Segment > > ( ::SireMol::SegID::*selectAllFrom_function_type )( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Segment > > ( ::SireMol::SegID::*selectAllFrom_function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
             selectAllFrom_function_type selectAllFrom_function_value( &::SireMol::SegID::selectAllFrom );
             
             SegID_exposer.def( 
@@ -191,7 +191,7 @@ void register_SegID_class(){
         }
         { //::SireMol::SegID::selectAllFrom
         
-            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Segment > > ( ::SireMol::SegID::*selectAllFrom_function_type )( ::SireMol::MolGroupsBase const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Segment > > ( ::SireMol::SegID::*selectAllFrom_function_type)( ::SireMol::MolGroupsBase const &,::SireBase::PropertyMap const & ) const;
             selectAllFrom_function_type selectAllFrom_function_value( &::SireMol::SegID::selectAllFrom );
             
             SegID_exposer.def( 
@@ -202,7 +202,7 @@ void register_SegID_class(){
         }
         { //::SireMol::SegID::selectFrom
         
-            typedef ::SireMol::Segment ( ::SireMol::SegID::*selectFrom_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::Segment ( ::SireMol::SegID::*selectFrom_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             selectFrom_function_type selectFrom_function_value( &::SireMol::SegID::selectFrom );
             
             SegID_exposer.def( 
@@ -213,7 +213,7 @@ void register_SegID_class(){
         }
         { //::SireMol::SegID::selectFrom
         
-            typedef ::SireMol::Segment ( ::SireMol::SegID::*selectFrom_function_type )( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::Segment ( ::SireMol::SegID::*selectFrom_function_type)( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) const;
             selectFrom_function_type selectFrom_function_value( &::SireMol::SegID::selectFrom );
             
             SegID_exposer.def( 
@@ -224,7 +224,7 @@ void register_SegID_class(){
         }
         { //::SireMol::SegID::selectFrom
         
-            typedef ::SireMol::Segment ( ::SireMol::SegID::*selectFrom_function_type )( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::Segment ( ::SireMol::SegID::*selectFrom_function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
             selectFrom_function_type selectFrom_function_value( &::SireMol::SegID::selectFrom );
             
             SegID_exposer.def( 
@@ -235,7 +235,7 @@ void register_SegID_class(){
         }
         { //::SireMol::SegID::selectFrom
         
-            typedef ::SireMol::Segment ( ::SireMol::SegID::*selectFrom_function_type )( ::SireMol::MolGroupsBase const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::Segment ( ::SireMol::SegID::*selectFrom_function_type)( ::SireMol::MolGroupsBase const &,::SireBase::PropertyMap const & ) const;
             selectFrom_function_type selectFrom_function_value( &::SireMol::SegID::selectFrom );
             
             SegID_exposer.def( 

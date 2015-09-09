@@ -38,7 +38,7 @@ void register_MGName_class(){
         MGName_exposer.def( bp::init< SireMol::MGName const & >(( bp::arg("other") )) );
         { //::SireMol::MGName::hash
         
-            typedef ::uint ( ::SireMol::MGName::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::MGName::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::MGName::hash );
             
             MGName_exposer.def( 
@@ -48,7 +48,7 @@ void register_MGName_class(){
         }
         { //::SireMol::MGName::isNull
         
-            typedef bool ( ::SireMol::MGName::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::MGName::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::MGName::isNull );
             
             MGName_exposer.def( 
@@ -58,7 +58,7 @@ void register_MGName_class(){
         }
         { //::SireMol::MGName::map
         
-            typedef ::QList< SireMol::MGNum > ( ::SireMol::MGName::*map_function_type )( ::SireMol::MolGroupsBase const & ) const;
+            typedef ::QList< SireMol::MGNum > ( ::SireMol::MGName::*map_function_type)( ::SireMol::MolGroupsBase const & ) const;
             map_function_type map_function_value( &::SireMol::MGName::map );
             
             MGName_exposer.def( 
@@ -70,7 +70,7 @@ void register_MGName_class(){
         MGName_exposer.def( bp::self != bp::self );
         { //::SireMol::MGName::operator=
         
-            typedef ::SireMol::MGName & ( ::SireMol::MGName::*assign_function_type )( ::SireMol::MGName const & ) ;
+            typedef ::SireMol::MGName & ( ::SireMol::MGName::*assign_function_type)( ::SireMol::MGName const & ) ;
             assign_function_type assign_function_value( &::SireMol::MGName::operator= );
             
             MGName_exposer.def( 
@@ -84,7 +84,7 @@ void register_MGName_class(){
         MGName_exposer.def( bp::self == bp::self );
         { //::SireMol::MGName::toString
         
-            typedef ::QString ( ::SireMol::MGName::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::MGName::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::MGName::toString );
             
             MGName_exposer.def( 
@@ -104,7 +104,7 @@ void register_MGName_class(){
         }
         { //::SireMol::MGName::what
         
-            typedef char const * ( ::SireMol::MGName::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::MGName::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::MGName::what );
             
             MGName_exposer.def( 

@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "StretchBendTorsionComponent.pypp.hpp"
 
 namespace bp = boost::python;
@@ -32,7 +31,7 @@ void register_StretchBendTorsionComponent_class(){
         StretchBendTorsionComponent_exposer.def( bp::init< SireMM::StretchBendTorsionComponent const & >(( bp::arg("other") )) );
         { //::SireMM::StretchBendTorsionComponent::changeEnergy
         
-            typedef void ( ::SireMM::StretchBendTorsionComponent::*changeEnergy_function_type )( ::SireFF::FF &,::SireMM::StretchBendTorsionEnergy const & ) const;
+            typedef void ( ::SireMM::StretchBendTorsionComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::StretchBendTorsionEnergy const & ) const;
             changeEnergy_function_type changeEnergy_function_value( &::SireMM::StretchBendTorsionComponent::changeEnergy );
             
             StretchBendTorsionComponent_exposer.def( 
@@ -43,7 +42,7 @@ void register_StretchBendTorsionComponent_class(){
         }
         { //::SireMM::StretchBendTorsionComponent::setEnergy
         
-            typedef void ( ::SireMM::StretchBendTorsionComponent::*setEnergy_function_type )( ::SireFF::FF &,::SireMM::StretchBendTorsionEnergy const & ) const;
+            typedef void ( ::SireMM::StretchBendTorsionComponent::*setEnergy_function_type)( ::SireFF::FF &,::SireMM::StretchBendTorsionEnergy const & ) const;
             setEnergy_function_type setEnergy_function_value( &::SireMM::StretchBendTorsionComponent::setEnergy );
             
             StretchBendTorsionComponent_exposer.def( 
@@ -54,7 +53,7 @@ void register_StretchBendTorsionComponent_class(){
         }
         { //::SireMM::StretchBendTorsionComponent::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireMM::StretchBendTorsionComponent::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireMM::StretchBendTorsionComponent::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireMM::StretchBendTorsionComponent::symbols );
             
             StretchBendTorsionComponent_exposer.def( 
@@ -64,13 +63,13 @@ void register_StretchBendTorsionComponent_class(){
         }
         { //::SireMM::StretchBendTorsionComponent::total
         
-            typedef ::SireMM::StretchBendTorsionComponent const & ( ::SireMM::StretchBendTorsionComponent::*total_function_type )(  ) const;
+            typedef ::SireMM::StretchBendTorsionComponent const & ( ::SireMM::StretchBendTorsionComponent::*total_function_type)(  ) const;
             total_function_type total_function_value( &::SireMM::StretchBendTorsionComponent::total );
             
             StretchBendTorsionComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::StretchBendTorsionComponent::typeName
@@ -85,7 +84,7 @@ void register_StretchBendTorsionComponent_class(){
         }
         { //::SireMM::StretchBendTorsionComponent::what
         
-            typedef char const * ( ::SireMM::StretchBendTorsionComponent::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::StretchBendTorsionComponent::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::StretchBendTorsionComponent::what );
             
             StretchBendTorsionComponent_exposer.def( 

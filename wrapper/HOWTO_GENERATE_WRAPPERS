@@ -1,0 +1,115 @@
+
+== Step 1 - Install anaconda/miniconda and the Sire corelib ==
+
+First, you must have a working installation of the corelib of
+Sire into an anaconda/miniconda install. Note that you only
+need to go as far as installing the corelib. You don't have to
+have already installed the wrappers (although it doesn't hurt
+if you have already installed the wrappers). I am going to assume
+that you have installed Sire into $HOME/sire.app. This means that
+you should have a directory called $HOME/sire.app/pkgs/sire-[VERSION], 
+e.g.
+
+ls $HOME/sire.app/pkgs/sire-2015.0.0/bundled
+
+should show 
+
+bin     doc     include lib     mkspecs plugins share
+
+If it does, then everything is ok.
+
+== Step 2. Install gccxml ==
+
+Next, you must install gccxml onto your computer. This can be 
+installed via yum, e.g.
+
+yum install gccxml
+
+or
+
+apt-get gccxml
+
+If your distribution doesn't come with gccxml then you can
+download it from here
+
+<http://gccxml.github.io/HTML/Index.html>
+
+via
+
+git clone git://github.com/gccxml/gccxml.git
+
+If you have had to download gccxml, then you will need to compile
+it and install it according to the instructions contained in 
+this distribution.
+
+Once you have installed, test it by typing;
+
+gccxml --help
+
+If it works, then you should see some nice help text :-)
+
+== Step 3. Install pygccxml ==
+
+pygccxml is available from pip. Install it using;
+
+$HOME/sire.app/bin/conda install pip
+$HOME/sire.app/bin/pip install pygccxml
+
+== Step 4. Install Py++ ==
+
+Download Py++ from here
+
+<https://bitbucket.org/ompl/pyplusplus/downloads>
+
+e.g. <https://bitbucket.org/ompl/pyplusplus/downloads/pyplusplus-r1247.tgz>
+
+Unpack this directory using
+
+tar -zxvf pyplusplus-r1247.tgz
+
+Then install it using
+
+cd pyplusplus
+$HOME/sire.app/bin/python setup.py build 
+$HOME/sire.app/bin/python setup.py install
+
+This should install everything.
+
+== Step 5. Scan the list of Sire headers to wrap ==
+
+Now, I am assuming that you have checked out the 
+Sire source to $HOME/Sire, so that you have
+$HOME/Sire/corelib and $HOME/Sire/wrapper. You need to scan
+for changes in the wrappers using the command
+
+cd $HOME/Sire/wrapper
+$HOME/sire.app/bin/python AutoGenerate/scanheaders.py $HOME/Sire/corelib/src/libs .
+
+This should complete quickly with no errors.
+
+== Step 6. Autogenerate the wrappers for each module ==
+
+For each module you want to regenerate, use the command
+
+cd $HOME/Sire/wrapper/[MODULE]
+$HOME/sire.app/bin/python ../AutoGenerate/create_wrappers.py
+
+e.g. for the Mol module, you would type
+
+cd $HOME/Sire/wrapper/Mol
+$HOME/sire.app/bin/python ../AutoGenerate/create_wrappers.py
+
+This will take about 10-30 seconds, depending on the speed of your
+machine, and you will see a lot of messages printed to the screen.
+If the autogeneration is successful, then you should have something
+like;
+
+file "AtomEditorBase.pypp.cpp" - updated( 0.000000 seconds )
+
+(one line for each file that is updated. Note that if nothing needs
+ to be updated, then the autogeneration will just exit)
+
+NOTE - You cannot regenerate the wrappers for the Error or Qt modules.
+       These contain hand-generated wrappers that cannot be changed.
+
+

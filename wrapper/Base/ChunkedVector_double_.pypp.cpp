@@ -35,7 +35,7 @@ void register_ChunkedVector_double__class(){
             const_iterator_exposer.def( bp::self != bp::self );
             { //::SireBase::ChunkedVector< double, 100 >::const_iterator::operator=
             
-                typedef ::SireBase::ChunkedVector< double, 100 >::const_iterator & ( ::SireBase::ChunkedVector< double, 100 >::const_iterator::*assign_function_type )( ::SireBase::ChunkedVector< double, 100 >::const_iterator const & ) ;
+                typedef ::SireBase::ChunkedVector< double, 100 >::const_iterator & ( ::SireBase::ChunkedVector< double, 100 >::const_iterator::*assign_function_type)( ::SireBase::ChunkedVector< double, 100 >::const_iterator const & ) ;
                 assign_function_type assign_function_value( &::SireBase::ChunkedVector< double, 100 >::const_iterator::operator= );
                 
                 const_iterator_exposer.def( 
@@ -55,7 +55,7 @@ void register_ChunkedVector_double__class(){
             iterator_exposer.def( bp::self != bp::self );
             { //::SireBase::ChunkedVector< double, 100 >::iterator::operator=
             
-                typedef ::SireBase::ChunkedVector< double, 100 >::iterator & ( ::SireBase::ChunkedVector< double, 100 >::iterator::*assign_function_type )( ::SireBase::ChunkedVector< double, 100 >::iterator const & ) ;
+                typedef ::SireBase::ChunkedVector< double, 100 >::iterator & ( ::SireBase::ChunkedVector< double, 100 >::iterator::*assign_function_type)( ::SireBase::ChunkedVector< double, 100 >::iterator const & ) ;
                 assign_function_type assign_function_value( &::SireBase::ChunkedVector< double, 100 >::iterator::operator= );
                 
                 iterator_exposer.def( 
@@ -73,7 +73,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::append
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef void ( ::SireBase::ChunkedVector< double, 100 >::*append_function_type )( double const & ) ;
+            typedef void ( ::SireBase::ChunkedVector< double, 100 >::*append_function_type)( double const & ) ;
             append_function_type append_function_value( &::SireBase::ChunkedVector< double, 100 >::append );
             
             ChunkedVector_double__exposer.def( 
@@ -85,7 +85,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::at
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef double const & ( ::SireBase::ChunkedVector< double, 100 >::*at_function_type )( int ) const;
+            typedef double const & ( ::SireBase::ChunkedVector< double, 100 >::*at_function_type)( int ) const;
             at_function_type at_function_value( &::SireBase::ChunkedVector< double, 100 >::at );
             
             ChunkedVector_double__exposer.def( 
@@ -98,7 +98,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::begin
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef ::SireBase::ChunkedVector< double, 100 >::iterator ( ::SireBase::ChunkedVector< double, 100 >::*begin_function_type )(  ) ;
+            typedef ::SireBase::ChunkedVector< double, 100 >::iterator ( ::SireBase::ChunkedVector< double, 100 >::*begin_function_type)(  ) ;
             begin_function_type begin_function_value( &::SireBase::ChunkedVector< double, 100 >::begin );
             
             ChunkedVector_double__exposer.def( 
@@ -109,7 +109,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::begin
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef ::SireBase::ChunkedVector< double, 100 >::const_iterator ( ::SireBase::ChunkedVector< double, 100 >::*begin_function_type )(  ) const;
+            typedef ::SireBase::ChunkedVector< double, 100 >::const_iterator ( ::SireBase::ChunkedVector< double, 100 >::*begin_function_type)(  ) const;
             begin_function_type begin_function_value( &::SireBase::ChunkedVector< double, 100 >::begin );
             
             ChunkedVector_double__exposer.def( 
@@ -120,7 +120,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::capacity
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef int ( ::SireBase::ChunkedVector< double, 100 >::*capacity_function_type )(  ) const;
+            typedef int ( ::SireBase::ChunkedVector< double, 100 >::*capacity_function_type)(  ) const;
             capacity_function_type capacity_function_value( &::SireBase::ChunkedVector< double, 100 >::capacity );
             
             ChunkedVector_double__exposer.def( 
@@ -131,7 +131,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::clear
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef void ( ::SireBase::ChunkedVector< double, 100 >::*clear_function_type )(  ) ;
+            typedef void ( ::SireBase::ChunkedVector< double, 100 >::*clear_function_type)(  ) ;
             clear_function_type clear_function_value( &::SireBase::ChunkedVector< double, 100 >::clear );
             
             ChunkedVector_double__exposer.def( 
@@ -142,7 +142,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::constBegin
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef ::SireBase::ChunkedVector< double, 100 >::const_iterator ( ::SireBase::ChunkedVector< double, 100 >::*constBegin_function_type )(  ) const;
+            typedef ::SireBase::ChunkedVector< double, 100 >::const_iterator ( ::SireBase::ChunkedVector< double, 100 >::*constBegin_function_type)(  ) const;
             constBegin_function_type constBegin_function_value( &::SireBase::ChunkedVector< double, 100 >::constBegin );
             
             ChunkedVector_double__exposer.def( 
@@ -153,7 +153,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::constEnd
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef ::SireBase::ChunkedVector< double, 100 >::const_iterator ( ::SireBase::ChunkedVector< double, 100 >::*constEnd_function_type )(  ) const;
+            typedef ::SireBase::ChunkedVector< double, 100 >::const_iterator ( ::SireBase::ChunkedVector< double, 100 >::*constEnd_function_type)(  ) const;
             constEnd_function_type constEnd_function_value( &::SireBase::ChunkedVector< double, 100 >::constEnd );
             
             ChunkedVector_double__exposer.def( 
@@ -164,7 +164,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::count
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef int ( ::SireBase::ChunkedVector< double, 100 >::*count_function_type )(  ) const;
+            typedef int ( ::SireBase::ChunkedVector< double, 100 >::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireBase::ChunkedVector< double, 100 >::count );
             
             ChunkedVector_double__exposer.def( 
@@ -175,7 +175,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::count
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef int ( ::SireBase::ChunkedVector< double, 100 >::*count_function_type )( double const & ) const;
+            typedef int ( ::SireBase::ChunkedVector< double, 100 >::*count_function_type)( double const & ) const;
             count_function_type count_function_value( &::SireBase::ChunkedVector< double, 100 >::count );
             
             ChunkedVector_double__exposer.def( 
@@ -187,7 +187,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::end
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef ::SireBase::ChunkedVector< double, 100 >::iterator ( ::SireBase::ChunkedVector< double, 100 >::*end_function_type )(  ) ;
+            typedef ::SireBase::ChunkedVector< double, 100 >::iterator ( ::SireBase::ChunkedVector< double, 100 >::*end_function_type)(  ) ;
             end_function_type end_function_value( &::SireBase::ChunkedVector< double, 100 >::end );
             
             ChunkedVector_double__exposer.def( 
@@ -198,7 +198,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::end
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef ::SireBase::ChunkedVector< double, 100 >::const_iterator ( ::SireBase::ChunkedVector< double, 100 >::*end_function_type )(  ) const;
+            typedef ::SireBase::ChunkedVector< double, 100 >::const_iterator ( ::SireBase::ChunkedVector< double, 100 >::*end_function_type)(  ) const;
             end_function_type end_function_value( &::SireBase::ChunkedVector< double, 100 >::end );
             
             ChunkedVector_double__exposer.def( 
@@ -245,7 +245,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::isEmpty
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef bool ( ::SireBase::ChunkedVector< double, 100 >::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireBase::ChunkedVector< double, 100 >::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireBase::ChunkedVector< double, 100 >::isEmpty );
             
             ChunkedVector_double__exposer.def( 
@@ -257,7 +257,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::operator=
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef ::SireBase::ChunkedVector< double, 100 > & ( ::SireBase::ChunkedVector< double, 100 >::*assign_function_type )( ::SireBase::ChunkedVector< double, 100 > const & ) ;
+            typedef ::SireBase::ChunkedVector< double, 100 > & ( ::SireBase::ChunkedVector< double, 100 >::*assign_function_type)( ::SireBase::ChunkedVector< double, 100 > const & ) ;
             assign_function_type assign_function_value( &::SireBase::ChunkedVector< double, 100 >::operator= );
             
             ChunkedVector_double__exposer.def( 
@@ -271,7 +271,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::operator[]
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef double & ( ::SireBase::ChunkedVector< double, 100 >::*__getitem___function_type )( int ) ;
+            typedef double & ( ::SireBase::ChunkedVector< double, 100 >::*__getitem___function_type)( int ) ;
             __getitem___function_type __getitem___function_value( &::SireBase::ChunkedVector< double, 100 >::operator[] );
             
             ChunkedVector_double__exposer.def( 
@@ -284,7 +284,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::operator[]
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef double const & ( ::SireBase::ChunkedVector< double, 100 >::*__getitem___function_type )( int ) const;
+            typedef double const & ( ::SireBase::ChunkedVector< double, 100 >::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireBase::ChunkedVector< double, 100 >::operator[] );
             
             ChunkedVector_double__exposer.def( 
@@ -297,7 +297,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::remove
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef void ( ::SireBase::ChunkedVector< double, 100 >::*remove_function_type )( int ) ;
+            typedef void ( ::SireBase::ChunkedVector< double, 100 >::*remove_function_type)( int ) ;
             remove_function_type remove_function_value( &::SireBase::ChunkedVector< double, 100 >::remove );
             
             ChunkedVector_double__exposer.def( 
@@ -309,7 +309,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::remove
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef void ( ::SireBase::ChunkedVector< double, 100 >::*remove_function_type )( int,int ) ;
+            typedef void ( ::SireBase::ChunkedVector< double, 100 >::*remove_function_type)( int,int ) ;
             remove_function_type remove_function_value( &::SireBase::ChunkedVector< double, 100 >::remove );
             
             ChunkedVector_double__exposer.def( 
@@ -321,7 +321,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::reserve
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef void ( ::SireBase::ChunkedVector< double, 100 >::*reserve_function_type )( int ) ;
+            typedef void ( ::SireBase::ChunkedVector< double, 100 >::*reserve_function_type)( int ) ;
             reserve_function_type reserve_function_value( &::SireBase::ChunkedVector< double, 100 >::reserve );
             
             ChunkedVector_double__exposer.def( 
@@ -333,7 +333,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::resize
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef void ( ::SireBase::ChunkedVector< double, 100 >::*resize_function_type )( int ) ;
+            typedef void ( ::SireBase::ChunkedVector< double, 100 >::*resize_function_type)( int ) ;
             resize_function_type resize_function_value( &::SireBase::ChunkedVector< double, 100 >::resize );
             
             ChunkedVector_double__exposer.def( 
@@ -345,7 +345,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::size
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef int ( ::SireBase::ChunkedVector< double, 100 >::*size_function_type )(  ) const;
+            typedef int ( ::SireBase::ChunkedVector< double, 100 >::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireBase::ChunkedVector< double, 100 >::size );
             
             ChunkedVector_double__exposer.def( 
@@ -356,7 +356,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::squeeze
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef void ( ::SireBase::ChunkedVector< double, 100 >::*squeeze_function_type )(  ) ;
+            typedef void ( ::SireBase::ChunkedVector< double, 100 >::*squeeze_function_type)(  ) ;
             squeeze_function_type squeeze_function_value( &::SireBase::ChunkedVector< double, 100 >::squeeze );
             
             ChunkedVector_double__exposer.def( 
@@ -367,7 +367,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::toList
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef ::QList< double > ( ::SireBase::ChunkedVector< double, 100 >::*toList_function_type )(  ) const;
+            typedef ::QList< double > ( ::SireBase::ChunkedVector< double, 100 >::*toList_function_type)(  ) const;
             toList_function_type toList_function_value( &::SireBase::ChunkedVector< double, 100 >::toList );
             
             ChunkedVector_double__exposer.def( 
@@ -378,7 +378,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::toStdVector
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef ::std::vector< double > ( ::SireBase::ChunkedVector< double, 100 >::*toStdVector_function_type )(  ) const;
+            typedef ::std::vector< double > ( ::SireBase::ChunkedVector< double, 100 >::*toStdVector_function_type)(  ) const;
             toStdVector_function_type toStdVector_function_value( &::SireBase::ChunkedVector< double, 100 >::toStdVector );
             
             ChunkedVector_double__exposer.def( 
@@ -389,7 +389,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::toVector
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef ::QVector< double > ( ::SireBase::ChunkedVector< double, 100 >::*toVector_function_type )(  ) const;
+            typedef ::QVector< double > ( ::SireBase::ChunkedVector< double, 100 >::*toVector_function_type)(  ) const;
             toVector_function_type toVector_function_value( &::SireBase::ChunkedVector< double, 100 >::toVector );
             
             ChunkedVector_double__exposer.def( 
@@ -400,7 +400,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::value
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef double ( ::SireBase::ChunkedVector< double, 100 >::*value_function_type )( int ) const;
+            typedef double ( ::SireBase::ChunkedVector< double, 100 >::*value_function_type)( int ) const;
             value_function_type value_function_value( &::SireBase::ChunkedVector< double, 100 >::value );
             
             ChunkedVector_double__exposer.def( 
@@ -412,7 +412,7 @@ void register_ChunkedVector_double__class(){
         { //::SireBase::ChunkedVector< double, 100 >::value
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef double ( ::SireBase::ChunkedVector< double, 100 >::*value_function_type )( int,double const & ) const;
+            typedef double ( ::SireBase::ChunkedVector< double, 100 >::*value_function_type)( int,double const & ) const;
             value_function_type value_function_value( &::SireBase::ChunkedVector< double, 100 >::value );
             
             ChunkedVector_double__exposer.def( 

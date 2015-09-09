@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "FourAtomFunction.pypp.hpp"
 
 namespace bp = boost::python;
@@ -44,52 +43,52 @@ void register_FourAtomFunction_class(){
         FourAtomFunction_exposer.def( bp::init< SireMM::FourAtomFunction const & >(( bp::arg("other") )) );
         { //::SireMM::FourAtomFunction::atom0
         
-            typedef ::SireMol::CGAtomIdx const & ( ::SireMM::FourAtomFunction::*atom0_function_type )(  ) const;
+            typedef ::SireMol::CGAtomIdx const & ( ::SireMM::FourAtomFunction::*atom0_function_type)(  ) const;
             atom0_function_type atom0_function_value( &::SireMM::FourAtomFunction::atom0 );
             
             FourAtomFunction_exposer.def( 
                 "atom0"
                 , atom0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::FourAtomFunction::atom1
         
-            typedef ::SireMol::CGAtomIdx const & ( ::SireMM::FourAtomFunction::*atom1_function_type )(  ) const;
+            typedef ::SireMol::CGAtomIdx const & ( ::SireMM::FourAtomFunction::*atom1_function_type)(  ) const;
             atom1_function_type atom1_function_value( &::SireMM::FourAtomFunction::atom1 );
             
             FourAtomFunction_exposer.def( 
                 "atom1"
                 , atom1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::FourAtomFunction::atom2
         
-            typedef ::SireMol::CGAtomIdx const & ( ::SireMM::FourAtomFunction::*atom2_function_type )(  ) const;
+            typedef ::SireMol::CGAtomIdx const & ( ::SireMM::FourAtomFunction::*atom2_function_type)(  ) const;
             atom2_function_type atom2_function_value( &::SireMM::FourAtomFunction::atom2 );
             
             FourAtomFunction_exposer.def( 
                 "atom2"
                 , atom2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::FourAtomFunction::atom3
         
-            typedef ::SireMol::CGAtomIdx const & ( ::SireMM::FourAtomFunction::*atom3_function_type )(  ) const;
+            typedef ::SireMol::CGAtomIdx const & ( ::SireMM::FourAtomFunction::*atom3_function_type)(  ) const;
             atom3_function_type atom3_function_value( &::SireMM::FourAtomFunction::atom3 );
             
             FourAtomFunction_exposer.def( 
                 "atom3"
                 , atom3_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         FourAtomFunction_exposer.def( bp::self != bp::self );
         { //::SireMM::FourAtomFunction::operator=
         
-            typedef ::SireMM::FourAtomFunction & ( ::SireMM::FourAtomFunction::*assign_function_type )( ::SireMM::FourAtomFunction const & ) ;
+            typedef ::SireMM::FourAtomFunction & ( ::SireMM::FourAtomFunction::*assign_function_type)( ::SireMM::FourAtomFunction const & ) ;
             assign_function_type assign_function_value( &::SireMM::FourAtomFunction::operator= );
             
             FourAtomFunction_exposer.def( 
@@ -102,7 +101,7 @@ void register_FourAtomFunction_class(){
         FourAtomFunction_exposer.def( bp::self == bp::self );
         { //::SireMM::FourAtomFunction::toString
         
-            typedef ::QString ( ::SireMM::FourAtomFunction::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMM::FourAtomFunction::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMM::FourAtomFunction::toString );
             
             FourAtomFunction_exposer.def( 

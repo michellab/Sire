@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "PerturbationSymbols.pypp.hpp"
 
 namespace bp = boost::python;
@@ -40,35 +39,35 @@ void register_PerturbationSymbols_class(){
         bp::scope PerturbationSymbols_scope( PerturbationSymbols_exposer );
         { //::SireMol::PerturbationSymbols::final
         
-            typedef ::SireCAS::Symbol const & ( ::SireMol::PerturbationSymbols::*final_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMol::PerturbationSymbols::*final_function_type)(  ) const;
             final_function_type final_function_value( &::SireMol::PerturbationSymbols::final );
             
             PerturbationSymbols_exposer.def( 
                 "final"
                 , final_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMol::PerturbationSymbols::initial
         
-            typedef ::SireCAS::Symbol const & ( ::SireMol::PerturbationSymbols::*initial_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMol::PerturbationSymbols::*initial_function_type)(  ) const;
             initial_function_type initial_function_value( &::SireMol::PerturbationSymbols::initial );
             
             PerturbationSymbols_exposer.def( 
                 "initial"
                 , initial_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMol::PerturbationSymbols::lambda
         
-            typedef ::SireCAS::Symbol const & ( ::SireMol::PerturbationSymbols::*Lambda_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMol::PerturbationSymbols::*Lambda_function_type)(  ) const;
             Lambda_function_type Lambda_function_value( &::SireMol::PerturbationSymbols::lambda );
             
             PerturbationSymbols_exposer.def( 
                 "Lambda"
                 , Lambda_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         PerturbationSymbols_exposer.def( "__copy__", &__copy__);

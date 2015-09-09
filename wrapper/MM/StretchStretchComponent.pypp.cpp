@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "StretchStretchComponent.pypp.hpp"
 
 namespace bp = boost::python;
@@ -32,7 +31,7 @@ void register_StretchStretchComponent_class(){
         StretchStretchComponent_exposer.def( bp::init< SireMM::StretchStretchComponent const & >(( bp::arg("other") )) );
         { //::SireMM::StretchStretchComponent::changeEnergy
         
-            typedef void ( ::SireMM::StretchStretchComponent::*changeEnergy_function_type )( ::SireFF::FF &,::SireMM::StretchStretchEnergy const & ) const;
+            typedef void ( ::SireMM::StretchStretchComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::StretchStretchEnergy const & ) const;
             changeEnergy_function_type changeEnergy_function_value( &::SireMM::StretchStretchComponent::changeEnergy );
             
             StretchStretchComponent_exposer.def( 
@@ -43,7 +42,7 @@ void register_StretchStretchComponent_class(){
         }
         { //::SireMM::StretchStretchComponent::setEnergy
         
-            typedef void ( ::SireMM::StretchStretchComponent::*setEnergy_function_type )( ::SireFF::FF &,::SireMM::StretchStretchEnergy const & ) const;
+            typedef void ( ::SireMM::StretchStretchComponent::*setEnergy_function_type)( ::SireFF::FF &,::SireMM::StretchStretchEnergy const & ) const;
             setEnergy_function_type setEnergy_function_value( &::SireMM::StretchStretchComponent::setEnergy );
             
             StretchStretchComponent_exposer.def( 
@@ -54,7 +53,7 @@ void register_StretchStretchComponent_class(){
         }
         { //::SireMM::StretchStretchComponent::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireMM::StretchStretchComponent::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireMM::StretchStretchComponent::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireMM::StretchStretchComponent::symbols );
             
             StretchStretchComponent_exposer.def( 
@@ -64,13 +63,13 @@ void register_StretchStretchComponent_class(){
         }
         { //::SireMM::StretchStretchComponent::total
         
-            typedef ::SireMM::StretchStretchComponent const & ( ::SireMM::StretchStretchComponent::*total_function_type )(  ) const;
+            typedef ::SireMM::StretchStretchComponent const & ( ::SireMM::StretchStretchComponent::*total_function_type)(  ) const;
             total_function_type total_function_value( &::SireMM::StretchStretchComponent::total );
             
             StretchStretchComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::StretchStretchComponent::typeName
@@ -85,7 +84,7 @@ void register_StretchStretchComponent_class(){
         }
         { //::SireMM::StretchStretchComponent::what
         
-            typedef char const * ( ::SireMM::StretchStretchComponent::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::StretchStretchComponent::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::StretchStretchComponent::what );
             
             StretchStretchComponent_exposer.def( 

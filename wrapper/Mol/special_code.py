@@ -13,14 +13,14 @@ from pyplusplus.module_builder import call_policies
 sys.path.append("../AutoGenerate")
 from scanheaders import *
 
-atomprops = pickle.load( open("atomprops.data") )
-chainprops = pickle.load( open("chainprops.data") )
-cgprops = pickle.load( open("cgprops.data") )
-resprops = pickle.load( open("resprops.data") )
-segprops = pickle.load( open("segprops.data") )
-beadprops = pickle.load( open("beadprops.data") )
+atomprops = pickle.load( open("atomprops.data", "rb") )
+chainprops = pickle.load( open("chainprops.data", "rb") )
+cgprops = pickle.load( open("cgprops.data", "rb") )
+resprops = pickle.load( open("resprops.data", "rb") )
+segprops = pickle.load( open("segprops.data", "rb") )
+beadprops = pickle.load( open("beadprops.data", "rb") )
 
-active_headers = pickle.load( open("active_headers.data") )
+active_headers = pickle.load( open("active_headers.data", "rb") )
 
 return_const = "bp::return_value_policy<bp::copy_const_reference>()"
 return_self = "bp::return_self< >()"

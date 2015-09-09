@@ -325,7 +325,7 @@ void RestraintFF::updateRestraints(const MoleculeData &moldata)
     }
     else
     {
-        std::auto_ptr<RestraintFF> old_state( this->clone() );
+        std::unique_ptr<RestraintFF> old_state( this->clone() );
         
         try
         {
@@ -398,7 +398,7 @@ void RestraintFF::updateRestraints(const Molecules &molecules)
     }
     else
     {
-        std::auto_ptr<RestraintFF> old_state( this->clone() );
+        std::unique_ptr<RestraintFF> old_state( this->clone() );
         
         try
         {
@@ -818,7 +818,7 @@ bool RestraintFF::add(const Restraint3D &restraint)
     if (not this->contains(new_restraint))
     {
         //we don't - add the new restraint
-        std::auto_ptr<RestraintFF> old_state( this->clone() );
+        std::unique_ptr<RestraintFF> old_state( this->clone() );
         
         try
         {
@@ -872,7 +872,7 @@ void RestraintFF::removeRestraintAt(int i)
 {
     i = Index(i).map( this->nRestraints() );
     
-    std::auto_ptr<RestraintFF> old_state( this->clone() );
+    std::unique_ptr<RestraintFF> old_state( this->clone() );
     
     try
     {

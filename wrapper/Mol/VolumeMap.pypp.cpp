@@ -65,7 +65,7 @@ void register_VolumeMap_class(){
         VolumeMap_exposer.def( bp::init< SireMol::VolumeMap const & >(( bp::arg("other") )) );
         { //::SireMol::VolumeMap::add
         
-            typedef void ( ::SireMol::VolumeMap::*add_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMol::VolumeMap::*add_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireMol::VolumeMap::add );
             
             VolumeMap_exposer.def( 
@@ -76,7 +76,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::add
         
-            typedef void ( ::SireMol::VolumeMap::*add_function_type )( ::SireMol::MoleculeView const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMol::VolumeMap::*add_function_type)( ::SireMol::MoleculeView const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireMol::VolumeMap::add );
             
             VolumeMap_exposer.def( 
@@ -87,7 +87,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::add
         
-            typedef void ( ::SireMol::VolumeMap::*add_function_type )( ::QList< SireMol::PartialMolecule > const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMol::VolumeMap::*add_function_type)( ::QList< SireMol::PartialMolecule > const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireMol::VolumeMap::add );
             
             VolumeMap_exposer.def( 
@@ -98,7 +98,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::add
         
-            typedef void ( ::SireMol::VolumeMap::*add_function_type )( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMol::VolumeMap::*add_function_type)( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireMol::VolumeMap::add );
             
             VolumeMap_exposer.def( 
@@ -109,7 +109,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::add
         
-            typedef void ( ::SireMol::VolumeMap::*add_function_type )( ::SireMol::Molecules const &,::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMol::VolumeMap::*add_function_type)( ::SireMol::Molecules const &,::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireMol::VolumeMap::add );
             
             VolumeMap_exposer.def( 
@@ -120,7 +120,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::add
         
-            typedef void ( ::SireMol::VolumeMap::*add_function_type )( ::QList< SireMol::Molecules > const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMol::VolumeMap::*add_function_type)( ::QList< SireMol::Molecules > const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireMol::VolumeMap::add );
             
             VolumeMap_exposer.def( 
@@ -131,7 +131,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::add
         
-            typedef void ( ::SireMol::VolumeMap::*add_function_type )( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMol::VolumeMap::*add_function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireMol::VolumeMap::add );
             
             VolumeMap_exposer.def( 
@@ -142,7 +142,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::add
         
-            typedef void ( ::SireMol::VolumeMap::*add_function_type )( ::SireMol::MoleculeGroup const &,::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMol::VolumeMap::*add_function_type)( ::SireMol::MoleculeGroup const &,::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireMol::VolumeMap::add );
             
             VolumeMap_exposer.def( 
@@ -153,7 +153,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::add
         
-            typedef void ( ::SireMol::VolumeMap::*add_function_type )( ::QList< SireMol::MoleculeGroup > const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMol::VolumeMap::*add_function_type)( ::QList< SireMol::MoleculeGroup > const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireMol::VolumeMap::add );
             
             VolumeMap_exposer.def( 
@@ -164,7 +164,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::add
         
-            typedef void ( ::SireMol::VolumeMap::*add_function_type )( ::SireMol::VolumeMap const & ) ;
+            typedef void ( ::SireMol::VolumeMap::*add_function_type)( ::SireMol::VolumeMap const & ) ;
             add_function_type add_function_value( &::SireMol::VolumeMap::add );
             
             VolumeMap_exposer.def( 
@@ -175,7 +175,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::add
         
-            typedef void ( ::SireMol::VolumeMap::*add_function_type )( ::SireVol::GridInfo const &,::QVector< float > const & ) ;
+            typedef void ( ::SireMol::VolumeMap::*add_function_type)( ::SireVol::GridInfo const &,::QVector< float > const & ) ;
             add_function_type add_function_value( &::SireMol::VolumeMap::add );
             
             VolumeMap_exposer.def( 
@@ -186,7 +186,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::clear
         
-            typedef void ( ::SireMol::VolumeMap::*clear_function_type )(  ) ;
+            typedef void ( ::SireMol::VolumeMap::*clear_function_type)(  ) ;
             clear_function_type clear_function_value( &::SireMol::VolumeMap::clear );
             
             VolumeMap_exposer.def( 
@@ -196,7 +196,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::clearMask
         
-            typedef void ( ::SireMol::VolumeMap::*clearMask_function_type )(  ) ;
+            typedef void ( ::SireMol::VolumeMap::*clearMask_function_type)(  ) ;
             clearMask_function_type clearMask_function_value( &::SireMol::VolumeMap::clearMask );
             
             VolumeMap_exposer.def( 
@@ -206,7 +206,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::fillType
         
-            typedef ::SireMol::VolumeMap::FillType ( ::SireMol::VolumeMap::*fillType_function_type )(  ) const;
+            typedef ::SireMol::VolumeMap::FillType ( ::SireMol::VolumeMap::*fillType_function_type)(  ) const;
             fillType_function_type fillType_function_value( &::SireMol::VolumeMap::fillType );
             
             VolumeMap_exposer.def( 
@@ -216,7 +216,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::gridInfo
         
-            typedef ::SireVol::GridInfo const & ( ::SireMol::VolumeMap::*gridInfo_function_type )(  ) const;
+            typedef ::SireVol::GridInfo const & ( ::SireMol::VolumeMap::*gridInfo_function_type)(  ) const;
             gridInfo_function_type gridInfo_function_value( &::SireMol::VolumeMap::gridInfo );
             
             VolumeMap_exposer.def( 
@@ -227,7 +227,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::gridSpacing
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMol::VolumeMap::*gridSpacing_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMol::VolumeMap::*gridSpacing_function_type)(  ) const;
             gridSpacing_function_type gridSpacing_function_value( &::SireMol::VolumeMap::gridSpacing );
             
             VolumeMap_exposer.def( 
@@ -237,7 +237,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::isEmpty
         
-            typedef bool ( ::SireMol::VolumeMap::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::VolumeMap::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::VolumeMap::isEmpty );
             
             VolumeMap_exposer.def( 
@@ -247,7 +247,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::isMasked
         
-            typedef bool ( ::SireMol::VolumeMap::*isMasked_function_type )(  ) const;
+            typedef bool ( ::SireMol::VolumeMap::*isMasked_function_type)(  ) const;
             isMasked_function_type isMasked_function_value( &::SireMol::VolumeMap::isMasked );
             
             VolumeMap_exposer.def( 
@@ -257,7 +257,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::mapType
         
-            typedef ::SireMol::VolumeMap::MapType ( ::SireMol::VolumeMap::*mapType_function_type )(  ) const;
+            typedef ::SireMol::VolumeMap::MapType ( ::SireMol::VolumeMap::*mapType_function_type)(  ) const;
             mapType_function_type mapType_function_value( &::SireMol::VolumeMap::mapType );
             
             VolumeMap_exposer.def( 
@@ -267,7 +267,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::maskDistance
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMol::VolumeMap::*maskDistance_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMol::VolumeMap::*maskDistance_function_type)(  ) const;
             maskDistance_function_type maskDistance_function_value( &::SireMol::VolumeMap::maskDistance );
             
             VolumeMap_exposer.def( 
@@ -277,7 +277,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::maskPoints
         
-            typedef ::QVector< SireMaths::Vector > ( ::SireMol::VolumeMap::*maskPoints_function_type )(  ) const;
+            typedef ::QVector< SireMaths::Vector > ( ::SireMol::VolumeMap::*maskPoints_function_type)(  ) const;
             maskPoints_function_type maskPoints_function_value( &::SireMol::VolumeMap::maskPoints );
             
             VolumeMap_exposer.def( 
@@ -287,7 +287,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::nGridPoints
         
-            typedef int ( ::SireMol::VolumeMap::*nGridPoints_function_type )(  ) const;
+            typedef int ( ::SireMol::VolumeMap::*nGridPoints_function_type)(  ) const;
             nGridPoints_function_type nGridPoints_function_value( &::SireMol::VolumeMap::nGridPoints );
             
             VolumeMap_exposer.def( 
@@ -297,7 +297,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::nMaxGridPoints
         
-            typedef int ( ::SireMol::VolumeMap::*nMaxGridPoints_function_type )(  ) const;
+            typedef int ( ::SireMol::VolumeMap::*nMaxGridPoints_function_type)(  ) const;
             nMaxGridPoints_function_type nMaxGridPoints_function_value( &::SireMol::VolumeMap::nMaxGridPoints );
             
             VolumeMap_exposer.def( 
@@ -307,7 +307,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::nSamples
         
-            typedef ::qint64 ( ::SireMol::VolumeMap::*nSamples_function_type )(  ) const;
+            typedef ::qint64 ( ::SireMol::VolumeMap::*nSamples_function_type)(  ) const;
             nSamples_function_type nSamples_function_value( &::SireMol::VolumeMap::nSamples );
             
             VolumeMap_exposer.def( 
@@ -317,7 +317,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::occupancy
         
-            typedef ::QVector< float > const & ( ::SireMol::VolumeMap::*occupancy_function_type )(  ) const;
+            typedef ::QVector< float > const & ( ::SireMol::VolumeMap::*occupancy_function_type)(  ) const;
             occupancy_function_type occupancy_function_value( &::SireMol::VolumeMap::occupancy );
             
             VolumeMap_exposer.def( 
@@ -329,7 +329,7 @@ void register_VolumeMap_class(){
         VolumeMap_exposer.def( bp::self != bp::self );
         { //::SireMol::VolumeMap::operator=
         
-            typedef ::SireMol::VolumeMap & ( ::SireMol::VolumeMap::*assign_function_type )( ::SireMol::VolumeMap const & ) ;
+            typedef ::SireMol::VolumeMap & ( ::SireMol::VolumeMap::*assign_function_type)( ::SireMol::VolumeMap const & ) ;
             assign_function_type assign_function_value( &::SireMol::VolumeMap::operator= );
             
             VolumeMap_exposer.def( 
@@ -342,7 +342,7 @@ void register_VolumeMap_class(){
         VolumeMap_exposer.def( bp::self == bp::self );
         { //::SireMol::VolumeMap::setFillType
         
-            typedef void ( ::SireMol::VolumeMap::*setFillType_function_type )( ::SireMol::VolumeMap::FillType ) ;
+            typedef void ( ::SireMol::VolumeMap::*setFillType_function_type)( ::SireMol::VolumeMap::FillType ) ;
             setFillType_function_type setFillType_function_value( &::SireMol::VolumeMap::setFillType );
             
             VolumeMap_exposer.def( 
@@ -353,7 +353,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::setGridSpacing
         
-            typedef void ( ::SireMol::VolumeMap::*setGridSpacing_function_type )( ::SireUnits::Dimension::Length ) ;
+            typedef void ( ::SireMol::VolumeMap::*setGridSpacing_function_type)( ::SireUnits::Dimension::Length ) ;
             setGridSpacing_function_type setGridSpacing_function_value( &::SireMol::VolumeMap::setGridSpacing );
             
             VolumeMap_exposer.def( 
@@ -364,7 +364,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::setMapType
         
-            typedef void ( ::SireMol::VolumeMap::*setMapType_function_type )( ::SireMol::VolumeMap::MapType ) ;
+            typedef void ( ::SireMol::VolumeMap::*setMapType_function_type)( ::SireMol::VolumeMap::MapType ) ;
             setMapType_function_type setMapType_function_value( &::SireMol::VolumeMap::setMapType );
             
             VolumeMap_exposer.def( 
@@ -375,7 +375,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::setMaskWithinDistance
         
-            typedef void ( ::SireMol::VolumeMap::*setMaskWithinDistance_function_type )( ::SireUnits::Dimension::Length,::SireMaths::Vector const &,bool ) ;
+            typedef void ( ::SireMol::VolumeMap::*setMaskWithinDistance_function_type)( ::SireUnits::Dimension::Length,::SireMaths::Vector const &,bool ) ;
             setMaskWithinDistance_function_type setMaskWithinDistance_function_value( &::SireMol::VolumeMap::setMaskWithinDistance );
             
             VolumeMap_exposer.def( 
@@ -386,7 +386,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::setMaskWithinDistance
         
-            typedef void ( ::SireMol::VolumeMap::*setMaskWithinDistance_function_type )( ::SireUnits::Dimension::Length,::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMol::VolumeMap::*setMaskWithinDistance_function_type)( ::SireUnits::Dimension::Length,::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
             setMaskWithinDistance_function_type setMaskWithinDistance_function_value( &::SireMol::VolumeMap::setMaskWithinDistance );
             
             VolumeMap_exposer.def( 
@@ -397,7 +397,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::setMaskWithinDistance
         
-            typedef void ( ::SireMol::VolumeMap::*setMaskWithinDistance_function_type )( ::SireUnits::Dimension::Length,::SireMol::MoleculeView const &,bool,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMol::VolumeMap::*setMaskWithinDistance_function_type)( ::SireUnits::Dimension::Length,::SireMol::MoleculeView const &,bool,::SireBase::PropertyMap const & ) ;
             setMaskWithinDistance_function_type setMaskWithinDistance_function_value( &::SireMol::VolumeMap::setMaskWithinDistance );
             
             VolumeMap_exposer.def( 
@@ -408,7 +408,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::setNMaxGridPoints
         
-            typedef void ( ::SireMol::VolumeMap::*setNMaxGridPoints_function_type )( int ) ;
+            typedef void ( ::SireMol::VolumeMap::*setNMaxGridPoints_function_type)( int ) ;
             setNMaxGridPoints_function_type setNMaxGridPoints_function_value( &::SireMol::VolumeMap::setNMaxGridPoints );
             
             VolumeMap_exposer.def( 
@@ -419,7 +419,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::setSkipLightAtoms
         
-            typedef void ( ::SireMol::VolumeMap::*setSkipLightAtoms_function_type )( bool ) ;
+            typedef void ( ::SireMol::VolumeMap::*setSkipLightAtoms_function_type)( bool ) ;
             setSkipLightAtoms_function_type setSkipLightAtoms_function_value( &::SireMol::VolumeMap::setSkipLightAtoms );
             
             VolumeMap_exposer.def( 
@@ -430,7 +430,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::skipLightAtoms
         
-            typedef bool ( ::SireMol::VolumeMap::*skipLightAtoms_function_type )(  ) const;
+            typedef bool ( ::SireMol::VolumeMap::*skipLightAtoms_function_type)(  ) const;
             skipLightAtoms_function_type skipLightAtoms_function_value( &::SireMol::VolumeMap::skipLightAtoms );
             
             VolumeMap_exposer.def( 
@@ -440,7 +440,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::toString
         
-            typedef ::QString ( ::SireMol::VolumeMap::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::VolumeMap::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::VolumeMap::toString );
             
             VolumeMap_exposer.def( 
@@ -460,7 +460,7 @@ void register_VolumeMap_class(){
         }
         { //::SireMol::VolumeMap::what
         
-            typedef char const * ( ::SireMol::VolumeMap::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::VolumeMap::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::VolumeMap::what );
             
             VolumeMap_exposer.def( 

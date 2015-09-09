@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "MajorMinorVersion.pypp.hpp"
 
 namespace bp = boost::python;
@@ -29,7 +28,7 @@ void register_MajorMinorVersion_class(){
         MajorMinorVersion_exposer.def( bp::init< SireBase::MajorMinorVersion const & >(( bp::arg("other") )) );
         { //::SireBase::MajorMinorVersion::incrementMajor
         
-            typedef void ( ::SireBase::MajorMinorVersion::*incrementMajor_function_type )(  ) ;
+            typedef void ( ::SireBase::MajorMinorVersion::*incrementMajor_function_type)(  ) ;
             incrementMajor_function_type incrementMajor_function_value( &::SireBase::MajorMinorVersion::incrementMajor );
             
             MajorMinorVersion_exposer.def( 
@@ -39,7 +38,7 @@ void register_MajorMinorVersion_class(){
         }
         { //::SireBase::MajorMinorVersion::incrementMinor
         
-            typedef void ( ::SireBase::MajorMinorVersion::*incrementMinor_function_type )(  ) ;
+            typedef void ( ::SireBase::MajorMinorVersion::*incrementMinor_function_type)(  ) ;
             incrementMinor_function_type incrementMinor_function_value( &::SireBase::MajorMinorVersion::incrementMinor );
             
             MajorMinorVersion_exposer.def( 
@@ -49,7 +48,7 @@ void register_MajorMinorVersion_class(){
         }
         { //::SireBase::MajorMinorVersion::majorVersion
         
-            typedef ::quint64 ( ::SireBase::MajorMinorVersion::*majorVersion_function_type )(  ) const;
+            typedef ::quint64 ( ::SireBase::MajorMinorVersion::*majorVersion_function_type)(  ) const;
             majorVersion_function_type majorVersion_function_value( &::SireBase::MajorMinorVersion::majorVersion );
             
             MajorMinorVersion_exposer.def( 
@@ -59,7 +58,7 @@ void register_MajorMinorVersion_class(){
         }
         { //::SireBase::MajorMinorVersion::minorVersion
         
-            typedef ::quint64 ( ::SireBase::MajorMinorVersion::*minorVersion_function_type )(  ) const;
+            typedef ::quint64 ( ::SireBase::MajorMinorVersion::*minorVersion_function_type)(  ) const;
             minorVersion_function_type minorVersion_function_value( &::SireBase::MajorMinorVersion::minorVersion );
             
             MajorMinorVersion_exposer.def( 
@@ -70,7 +69,7 @@ void register_MajorMinorVersion_class(){
         MajorMinorVersion_exposer.def( bp::self != bp::self );
         { //::SireBase::MajorMinorVersion::operator=
         
-            typedef ::SireBase::MajorMinorVersion & ( ::SireBase::MajorMinorVersion::*assign_function_type )( ::SireBase::MajorMinorVersion const & ) ;
+            typedef ::SireBase::MajorMinorVersion & ( ::SireBase::MajorMinorVersion::*assign_function_type)( ::SireBase::MajorMinorVersion const & ) ;
             assign_function_type assign_function_value( &::SireBase::MajorMinorVersion::operator= );
             
             MajorMinorVersion_exposer.def( 
@@ -93,18 +92,18 @@ void register_MajorMinorVersion_class(){
         }
         { //::SireBase::MajorMinorVersion::version
         
-            typedef ::SireBase::Version const & ( ::SireBase::MajorMinorVersion::*version_function_type )(  ) const;
+            typedef ::SireBase::Version const & ( ::SireBase::MajorMinorVersion::*version_function_type)(  ) const;
             version_function_type version_function_value( &::SireBase::MajorMinorVersion::version );
             
             MajorMinorVersion_exposer.def( 
                 "version"
                 , version_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireBase::MajorMinorVersion::what
         
-            typedef char const * ( ::SireBase::MajorMinorVersion::*what_function_type )(  ) const;
+            typedef char const * ( ::SireBase::MajorMinorVersion::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireBase::MajorMinorVersion::what );
             
             MajorMinorVersion_exposer.def( 

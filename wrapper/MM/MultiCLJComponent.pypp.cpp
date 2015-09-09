@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "MultiCLJComponent.pypp.hpp"
 
 namespace bp = boost::python;
@@ -33,7 +32,7 @@ void register_MultiCLJComponent_class(){
         MultiCLJComponent_exposer.def( bp::init< SireMM::MultiCLJComponent const & >(( bp::arg("other") )) );
         { //::SireMM::MultiCLJComponent::add
         
-            typedef int ( ::SireMM::MultiCLJComponent::*add_function_type )( ::QString ) ;
+            typedef int ( ::SireMM::MultiCLJComponent::*add_function_type)( ::QString ) ;
             add_function_type add_function_value( &::SireMM::MultiCLJComponent::add );
             
             MultiCLJComponent_exposer.def( 
@@ -44,7 +43,7 @@ void register_MultiCLJComponent_class(){
         }
         { //::SireMM::MultiCLJComponent::changeEnergy
         
-            typedef void ( ::SireMM::MultiCLJComponent::*changeEnergy_function_type )( ::SireFF::FF &,::SireMM::MultiCLJEnergy const & ) const;
+            typedef void ( ::SireMM::MultiCLJComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::MultiCLJEnergy const & ) const;
             changeEnergy_function_type changeEnergy_function_value( &::SireMM::MultiCLJComponent::changeEnergy );
             
             MultiCLJComponent_exposer.def( 
@@ -55,30 +54,30 @@ void register_MultiCLJComponent_class(){
         }
         { //::SireMM::MultiCLJComponent::coulomb
         
-            typedef ::SireMM::CoulombComponent const & ( ::SireMM::MultiCLJComponent::*coulomb_function_type )(  ) const;
+            typedef ::SireMM::CoulombComponent const & ( ::SireMM::MultiCLJComponent::*coulomb_function_type)(  ) const;
             coulomb_function_type coulomb_function_value( &::SireMM::MultiCLJComponent::coulomb );
             
             MultiCLJComponent_exposer.def( 
                 "coulomb"
                 , coulomb_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::MultiCLJComponent::coulomb
         
-            typedef ::SireMM::CoulombComponent const & ( ::SireMM::MultiCLJComponent::*coulomb_function_type )( ::QString ) const;
+            typedef ::SireMM::CoulombComponent const & ( ::SireMM::MultiCLJComponent::*coulomb_function_type)( ::QString ) const;
             coulomb_function_type coulomb_function_value( &::SireMM::MultiCLJComponent::coulomb );
             
             MultiCLJComponent_exposer.def( 
                 "coulomb"
                 , coulomb_function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::MultiCLJComponent::count
         
-            typedef int ( ::SireMM::MultiCLJComponent::*count_function_type )(  ) const;
+            typedef int ( ::SireMM::MultiCLJComponent::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMM::MultiCLJComponent::count );
             
             MultiCLJComponent_exposer.def( 
@@ -88,7 +87,7 @@ void register_MultiCLJComponent_class(){
         }
         { //::SireMM::MultiCLJComponent::indexOf
         
-            typedef int ( ::SireMM::MultiCLJComponent::*indexOf_function_type )( ::QString ) const;
+            typedef int ( ::SireMM::MultiCLJComponent::*indexOf_function_type)( ::QString ) const;
             indexOf_function_type indexOf_function_value( &::SireMM::MultiCLJComponent::indexOf );
             
             MultiCLJComponent_exposer.def( 
@@ -99,7 +98,7 @@ void register_MultiCLJComponent_class(){
         }
         { //::SireMM::MultiCLJComponent::keys
         
-            typedef ::QStringList ( ::SireMM::MultiCLJComponent::*keys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireMM::MultiCLJComponent::*keys_function_type)(  ) const;
             keys_function_type keys_function_value( &::SireMM::MultiCLJComponent::keys );
             
             MultiCLJComponent_exposer.def( 
@@ -109,30 +108,30 @@ void register_MultiCLJComponent_class(){
         }
         { //::SireMM::MultiCLJComponent::lj
         
-            typedef ::SireMM::LJComponent const & ( ::SireMM::MultiCLJComponent::*lj_function_type )(  ) const;
+            typedef ::SireMM::LJComponent const & ( ::SireMM::MultiCLJComponent::*lj_function_type)(  ) const;
             lj_function_type lj_function_value( &::SireMM::MultiCLJComponent::lj );
             
             MultiCLJComponent_exposer.def( 
                 "lj"
                 , lj_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::MultiCLJComponent::lj
         
-            typedef ::SireMM::LJComponent const & ( ::SireMM::MultiCLJComponent::*lj_function_type )( ::QString ) const;
+            typedef ::SireMM::LJComponent const & ( ::SireMM::MultiCLJComponent::*lj_function_type)( ::QString ) const;
             lj_function_type lj_function_value( &::SireMM::MultiCLJComponent::lj );
             
             MultiCLJComponent_exposer.def( 
                 "lj"
                 , lj_function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::MultiCLJComponent::nKeys
         
-            typedef int ( ::SireMM::MultiCLJComponent::*nKeys_function_type )(  ) const;
+            typedef int ( ::SireMM::MultiCLJComponent::*nKeys_function_type)(  ) const;
             nKeys_function_type nKeys_function_value( &::SireMM::MultiCLJComponent::nKeys );
             
             MultiCLJComponent_exposer.def( 
@@ -143,7 +142,7 @@ void register_MultiCLJComponent_class(){
         MultiCLJComponent_exposer.def( bp::self != bp::self );
         { //::SireMM::MultiCLJComponent::operator=
         
-            typedef ::SireMM::MultiCLJComponent & ( ::SireMM::MultiCLJComponent::*assign_function_type )( ::SireMM::MultiCLJComponent const & ) ;
+            typedef ::SireMM::MultiCLJComponent & ( ::SireMM::MultiCLJComponent::*assign_function_type)( ::SireMM::MultiCLJComponent const & ) ;
             assign_function_type assign_function_value( &::SireMM::MultiCLJComponent::operator= );
             
             MultiCLJComponent_exposer.def( 
@@ -156,7 +155,7 @@ void register_MultiCLJComponent_class(){
         MultiCLJComponent_exposer.def( bp::self == bp::self );
         { //::SireMM::MultiCLJComponent::remove
         
-            typedef int ( ::SireMM::MultiCLJComponent::*remove_function_type )( ::QString ) ;
+            typedef int ( ::SireMM::MultiCLJComponent::*remove_function_type)( ::QString ) ;
             remove_function_type remove_function_value( &::SireMM::MultiCLJComponent::remove );
             
             MultiCLJComponent_exposer.def( 
@@ -167,7 +166,7 @@ void register_MultiCLJComponent_class(){
         }
         { //::SireMM::MultiCLJComponent::removeAll
         
-            typedef void ( ::SireMM::MultiCLJComponent::*removeAll_function_type )(  ) ;
+            typedef void ( ::SireMM::MultiCLJComponent::*removeAll_function_type)(  ) ;
             removeAll_function_type removeAll_function_value( &::SireMM::MultiCLJComponent::removeAll );
             
             MultiCLJComponent_exposer.def( 
@@ -177,7 +176,7 @@ void register_MultiCLJComponent_class(){
         }
         { //::SireMM::MultiCLJComponent::rename
         
-            typedef ::SireMM::MultiCLJComponent ( ::SireMM::MultiCLJComponent::*rename_function_type )( ::SireFF::FFName const & ) const;
+            typedef ::SireMM::MultiCLJComponent ( ::SireMM::MultiCLJComponent::*rename_function_type)( ::SireFF::FFName const & ) const;
             rename_function_type rename_function_value( &::SireMM::MultiCLJComponent::rename );
             
             MultiCLJComponent_exposer.def( 
@@ -188,7 +187,7 @@ void register_MultiCLJComponent_class(){
         }
         { //::SireMM::MultiCLJComponent::setEnergy
         
-            typedef void ( ::SireMM::MultiCLJComponent::*setEnergy_function_type )( ::SireFF::FF &,::SireMM::MultiCLJEnergy const & ) const;
+            typedef void ( ::SireMM::MultiCLJComponent::*setEnergy_function_type)( ::SireFF::FF &,::SireMM::MultiCLJEnergy const & ) const;
             setEnergy_function_type setEnergy_function_value( &::SireMM::MultiCLJComponent::setEnergy );
             
             MultiCLJComponent_exposer.def( 
@@ -199,7 +198,7 @@ void register_MultiCLJComponent_class(){
         }
         { //::SireMM::MultiCLJComponent::size
         
-            typedef int ( ::SireMM::MultiCLJComponent::*size_function_type )(  ) const;
+            typedef int ( ::SireMM::MultiCLJComponent::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireMM::MultiCLJComponent::size );
             
             MultiCLJComponent_exposer.def( 
@@ -209,7 +208,7 @@ void register_MultiCLJComponent_class(){
         }
         { //::SireMM::MultiCLJComponent::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireMM::MultiCLJComponent::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireMM::MultiCLJComponent::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireMM::MultiCLJComponent::symbols );
             
             MultiCLJComponent_exposer.def( 
@@ -219,7 +218,7 @@ void register_MultiCLJComponent_class(){
         }
         { //::SireMM::MultiCLJComponent::toString
         
-            typedef ::QString ( ::SireMM::MultiCLJComponent::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMM::MultiCLJComponent::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMM::MultiCLJComponent::toString );
             
             MultiCLJComponent_exposer.def( 
@@ -229,25 +228,25 @@ void register_MultiCLJComponent_class(){
         }
         { //::SireMM::MultiCLJComponent::total
         
-            typedef ::SireMM::CLJComponent const & ( ::SireMM::MultiCLJComponent::*total_function_type )(  ) const;
+            typedef ::SireMM::CLJComponent const & ( ::SireMM::MultiCLJComponent::*total_function_type)(  ) const;
             total_function_type total_function_value( &::SireMM::MultiCLJComponent::total );
             
             MultiCLJComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::MultiCLJComponent::total
         
-            typedef ::SireMM::CLJComponent const & ( ::SireMM::MultiCLJComponent::*total_function_type )( ::QString ) const;
+            typedef ::SireMM::CLJComponent const & ( ::SireMM::MultiCLJComponent::*total_function_type)( ::QString ) const;
             total_function_type total_function_value( &::SireMM::MultiCLJComponent::total );
             
             MultiCLJComponent_exposer.def( 
                 "total"
                 , total_function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::MultiCLJComponent::typeName
@@ -262,7 +261,7 @@ void register_MultiCLJComponent_class(){
         }
         { //::SireMM::MultiCLJComponent::what
         
-            typedef char const * ( ::SireMM::MultiCLJComponent::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::MultiCLJComponent::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::MultiCLJComponent::what );
             
             MultiCLJComponent_exposer.def( 

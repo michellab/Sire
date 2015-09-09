@@ -11,6 +11,8 @@ namespace bp = boost::python;
 
 #include "SireBase/property.h"
 
+#include "SireBase/stringproperty.h"
+
 #include "SireError/errors.h"
 
 #include "SireFF/detail/atomiccoords3d.h"
@@ -55,7 +57,7 @@ void register_UreyBradleyParameterName_class(){
         bp::scope UreyBradleyParameterName_scope( UreyBradleyParameterName_exposer );
         { //::SireMM::UreyBradleyParameterName::ureyBradley
         
-            typedef ::SireBase::PropertyName const & ( ::SireMM::UreyBradleyParameterName::*ureyBradley_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireMM::UreyBradleyParameterName::*ureyBradley_function_type)(  ) const;
             ureyBradley_function_type ureyBradley_function_value( &::SireMM::UreyBradleyParameterName::ureyBradley );
             
             UreyBradleyParameterName_exposer.def( 

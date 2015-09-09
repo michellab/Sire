@@ -31,7 +31,7 @@ void register_AxisSet_class(){
         AxisSet_exposer.def( bp::init< SireMaths::AxisSet const & >(( bp::arg("other") )) );
         { //::SireMaths::AxisSet::fromFrame
         
-            typedef ::SireMaths::Vector ( ::SireMaths::AxisSet::*fromFrame_function_type )( ::SireMaths::AxisSet const &,::SireMaths::Vector const & ) const;
+            typedef ::SireMaths::Vector ( ::SireMaths::AxisSet::*fromFrame_function_type)( ::SireMaths::AxisSet const &,::SireMaths::Vector const & ) const;
             fromFrame_function_type fromFrame_function_value( &::SireMaths::AxisSet::fromFrame );
             
             AxisSet_exposer.def( 
@@ -42,7 +42,7 @@ void register_AxisSet_class(){
         }
         { //::SireMaths::AxisSet::fromIdentity
         
-            typedef ::SireMaths::Vector ( ::SireMaths::AxisSet::*fromIdentity_function_type )( ::SireMaths::Vector const & ) const;
+            typedef ::SireMaths::Vector ( ::SireMaths::AxisSet::*fromIdentity_function_type)( ::SireMaths::Vector const & ) const;
             fromIdentity_function_type fromIdentity_function_value( &::SireMaths::AxisSet::fromIdentity );
             
             AxisSet_exposer.def( 
@@ -53,7 +53,7 @@ void register_AxisSet_class(){
         }
         { //::SireMaths::AxisSet::fromIdentity
         
-            typedef ::QVector< SireMaths::Vector > ( ::SireMaths::AxisSet::*fromIdentity_function_type )( ::QVector< SireMaths::Vector > const & ) const;
+            typedef ::QVector< SireMaths::Vector > ( ::SireMaths::AxisSet::*fromIdentity_function_type)( ::QVector< SireMaths::Vector > const & ) const;
             fromIdentity_function_type fromIdentity_function_value( &::SireMaths::AxisSet::fromIdentity );
             
             AxisSet_exposer.def( 
@@ -64,7 +64,7 @@ void register_AxisSet_class(){
         }
         { //::SireMaths::AxisSet::fromIdentity
         
-            typedef ::SireMaths::Vector ( ::SireMaths::AxisSet::*fromIdentity_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            typedef ::SireMaths::Vector ( ::SireMaths::AxisSet::*fromIdentity_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
             fromIdentity_function_type fromIdentity_function_value( &::SireMaths::AxisSet::fromIdentity );
             
             AxisSet_exposer.def( 
@@ -75,7 +75,7 @@ void register_AxisSet_class(){
         }
         { //::SireMaths::AxisSet::fromIdentity
         
-            typedef ::QVector< SireMaths::Vector > ( ::SireMaths::AxisSet::*fromIdentity_function_type )( ::QVector< SireMaths::Vector > const &,::SireMaths::Vector const & ) const;
+            typedef ::QVector< SireMaths::Vector > ( ::SireMaths::AxisSet::*fromIdentity_function_type)( ::QVector< SireMaths::Vector > const &,::SireMaths::Vector const & ) const;
             fromIdentity_function_type fromIdentity_function_value( &::SireMaths::AxisSet::fromIdentity );
             
             AxisSet_exposer.def( 
@@ -86,7 +86,7 @@ void register_AxisSet_class(){
         }
         { //::SireMaths::AxisSet::invMatrix
         
-            typedef ::SireMaths::Matrix const & ( ::SireMaths::AxisSet::*invMatrix_function_type )(  ) const;
+            typedef ::SireMaths::Matrix const & ( ::SireMaths::AxisSet::*invMatrix_function_type)(  ) const;
             invMatrix_function_type invMatrix_function_value( &::SireMaths::AxisSet::invMatrix );
             
             AxisSet_exposer.def( 
@@ -97,7 +97,7 @@ void register_AxisSet_class(){
         }
         { //::SireMaths::AxisSet::matrix
         
-            typedef ::SireMaths::Matrix const & ( ::SireMaths::AxisSet::*matrix_function_type )(  ) const;
+            typedef ::SireMaths::Matrix const & ( ::SireMaths::AxisSet::*matrix_function_type)(  ) const;
             matrix_function_type matrix_function_value( &::SireMaths::AxisSet::matrix );
             
             AxisSet_exposer.def( 
@@ -108,7 +108,7 @@ void register_AxisSet_class(){
         }
         { //::SireMaths::AxisSet::origin
         
-            typedef ::SireMaths::Vector const & ( ::SireMaths::AxisSet::*origin_function_type )(  ) const;
+            typedef ::SireMaths::Vector const & ( ::SireMaths::AxisSet::*origin_function_type)(  ) const;
             origin_function_type origin_function_value( &::SireMaths::AxisSet::origin );
             
             AxisSet_exposer.def( 
@@ -119,7 +119,7 @@ void register_AxisSet_class(){
         }
         { //::SireMaths::AxisSet::toFrame
         
-            typedef ::SireMaths::Vector ( ::SireMaths::AxisSet::*toFrame_function_type )( ::SireMaths::AxisSet const &,::SireMaths::Vector const & ) const;
+            typedef ::SireMaths::Vector ( ::SireMaths::AxisSet::*toFrame_function_type)( ::SireMaths::AxisSet const &,::SireMaths::Vector const & ) const;
             toFrame_function_type toFrame_function_value( &::SireMaths::AxisSet::toFrame );
             
             AxisSet_exposer.def( 
@@ -130,7 +130,7 @@ void register_AxisSet_class(){
         }
         { //::SireMaths::AxisSet::toIdentity
         
-            typedef ::SireMaths::Vector ( ::SireMaths::AxisSet::*toIdentity_function_type )( ::SireMaths::Vector const & ) const;
+            typedef ::SireMaths::Vector ( ::SireMaths::AxisSet::*toIdentity_function_type)( ::SireMaths::Vector const & ) const;
             toIdentity_function_type toIdentity_function_value( &::SireMaths::AxisSet::toIdentity );
             
             AxisSet_exposer.def( 
@@ -141,7 +141,7 @@ void register_AxisSet_class(){
         }
         { //::SireMaths::AxisSet::toString
         
-            typedef ::QString ( ::SireMaths::AxisSet::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMaths::AxisSet::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMaths::AxisSet::toString );
             
             AxisSet_exposer.def( 
@@ -161,7 +161,7 @@ void register_AxisSet_class(){
         }
         { //::SireMaths::AxisSet::what
         
-            typedef char const * ( ::SireMaths::AxisSet::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMaths::AxisSet::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMaths::AxisSet::what );
             
             AxisSet_exposer.def( 

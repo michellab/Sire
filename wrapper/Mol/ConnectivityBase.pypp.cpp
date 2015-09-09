@@ -57,7 +57,7 @@ void register_ConnectivityBase_class(){
         bp::scope ConnectivityBase_scope( ConnectivityBase_exposer );
         { //::SireMol::ConnectivityBase::areAngled
         
-            typedef bool ( ::SireMol::ConnectivityBase::*areAngled_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
+            typedef bool ( ::SireMol::ConnectivityBase::*areAngled_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
             areAngled_function_type areAngled_function_value( &::SireMol::ConnectivityBase::areAngled );
             
             ConnectivityBase_exposer.def( 
@@ -68,7 +68,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::areAngled
         
-            typedef bool ( ::SireMol::ConnectivityBase::*areAngled_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMol::ConnectivityBase::*areAngled_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             areAngled_function_type areAngled_function_value( &::SireMol::ConnectivityBase::areAngled );
             
             ConnectivityBase_exposer.def( 
@@ -79,7 +79,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::areBonded
         
-            typedef bool ( ::SireMol::ConnectivityBase::*areBonded_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
+            typedef bool ( ::SireMol::ConnectivityBase::*areBonded_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
             areBonded_function_type areBonded_function_value( &::SireMol::ConnectivityBase::areBonded );
             
             ConnectivityBase_exposer.def( 
@@ -90,7 +90,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::areBonded
         
-            typedef bool ( ::SireMol::ConnectivityBase::*areBonded_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMol::ConnectivityBase::*areBonded_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             areBonded_function_type areBonded_function_value( &::SireMol::ConnectivityBase::areBonded );
             
             ConnectivityBase_exposer.def( 
@@ -101,7 +101,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::areConnected
         
-            typedef bool ( ::SireMol::ConnectivityBase::*areConnected_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
+            typedef bool ( ::SireMol::ConnectivityBase::*areConnected_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
             areConnected_function_type areConnected_function_value( &::SireMol::ConnectivityBase::areConnected );
             
             ConnectivityBase_exposer.def( 
@@ -112,7 +112,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::areConnected
         
-            typedef bool ( ::SireMol::ConnectivityBase::*areConnected_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMol::ConnectivityBase::*areConnected_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             areConnected_function_type areConnected_function_value( &::SireMol::ConnectivityBase::areConnected );
             
             ConnectivityBase_exposer.def( 
@@ -123,7 +123,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::areConnected
         
-            typedef bool ( ::SireMol::ConnectivityBase::*areConnected_function_type )( ::SireMol::ResIdx,::SireMol::ResIdx ) const;
+            typedef bool ( ::SireMol::ConnectivityBase::*areConnected_function_type)( ::SireMol::ResIdx,::SireMol::ResIdx ) const;
             areConnected_function_type areConnected_function_value( &::SireMol::ConnectivityBase::areConnected );
             
             ConnectivityBase_exposer.def( 
@@ -134,7 +134,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::areConnected
         
-            typedef bool ( ::SireMol::ConnectivityBase::*areConnected_function_type )( ::SireMol::ResID const &,::SireMol::ResID const & ) const;
+            typedef bool ( ::SireMol::ConnectivityBase::*areConnected_function_type)( ::SireMol::ResID const &,::SireMol::ResID const & ) const;
             areConnected_function_type areConnected_function_value( &::SireMol::ConnectivityBase::areConnected );
             
             ConnectivityBase_exposer.def( 
@@ -145,7 +145,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::areDihedraled
         
-            typedef bool ( ::SireMol::ConnectivityBase::*areDihedraled_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
+            typedef bool ( ::SireMol::ConnectivityBase::*areDihedraled_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
             areDihedraled_function_type areDihedraled_function_value( &::SireMol::ConnectivityBase::areDihedraled );
             
             ConnectivityBase_exposer.def( 
@@ -156,7 +156,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::areDihedraled
         
-            typedef bool ( ::SireMol::ConnectivityBase::*areDihedraled_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMol::ConnectivityBase::*areDihedraled_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             areDihedraled_function_type areDihedraled_function_value( &::SireMol::ConnectivityBase::areDihedraled );
             
             ConnectivityBase_exposer.def( 
@@ -167,7 +167,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::connectionsTo
         
-            typedef ::QSet< SireMol::AtomIdx > const & ( ::SireMol::ConnectivityBase::*connectionsTo_function_type )( ::SireMol::AtomIdx ) const;
+            typedef ::QSet< SireMol::AtomIdx > const & ( ::SireMol::ConnectivityBase::*connectionsTo_function_type)( ::SireMol::AtomIdx ) const;
             connectionsTo_function_type connectionsTo_function_value( &::SireMol::ConnectivityBase::connectionsTo );
             
             ConnectivityBase_exposer.def( 
@@ -179,7 +179,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::connectionsTo
         
-            typedef ::QSet< SireMol::AtomIdx > const & ( ::SireMol::ConnectivityBase::*connectionsTo_function_type )( ::SireMol::AtomID const & ) const;
+            typedef ::QSet< SireMol::AtomIdx > const & ( ::SireMol::ConnectivityBase::*connectionsTo_function_type)( ::SireMol::AtomID const & ) const;
             connectionsTo_function_type connectionsTo_function_value( &::SireMol::ConnectivityBase::connectionsTo );
             
             ConnectivityBase_exposer.def( 
@@ -191,7 +191,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::connectionsTo
         
-            typedef ::QSet< SireMol::ResIdx > const & ( ::SireMol::ConnectivityBase::*connectionsTo_function_type )( ::SireMol::ResIdx ) const;
+            typedef ::QSet< SireMol::ResIdx > const & ( ::SireMol::ConnectivityBase::*connectionsTo_function_type)( ::SireMol::ResIdx ) const;
             connectionsTo_function_type connectionsTo_function_value( &::SireMol::ConnectivityBase::connectionsTo );
             
             ConnectivityBase_exposer.def( 
@@ -203,7 +203,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::connectionsTo
         
-            typedef ::QSet< SireMol::ResIdx > const & ( ::SireMol::ConnectivityBase::*connectionsTo_function_type )( ::SireMol::ResID const & ) const;
+            typedef ::QSet< SireMol::ResIdx > const & ( ::SireMol::ConnectivityBase::*connectionsTo_function_type)( ::SireMol::ResID const & ) const;
             connectionsTo_function_type connectionsTo_function_value( &::SireMol::ConnectivityBase::connectionsTo );
             
             ConnectivityBase_exposer.def( 
@@ -215,7 +215,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::findPath
         
-            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::ConnectivityBase::*findPath_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::ConnectivityBase::*findPath_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
             findPath_function_type findPath_function_value( &::SireMol::ConnectivityBase::findPath );
             
             ConnectivityBase_exposer.def( 
@@ -226,7 +226,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::findPath
         
-            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::ConnectivityBase::*findPath_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::ConnectivityBase::*findPath_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             findPath_function_type findPath_function_value( &::SireMol::ConnectivityBase::findPath );
             
             ConnectivityBase_exposer.def( 
@@ -237,7 +237,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::findPaths
         
-            typedef ::QList< QList< SireMol::AtomIdx > > ( ::SireMol::ConnectivityBase::*findPaths_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
+            typedef ::QList< QList< SireMol::AtomIdx > > ( ::SireMol::ConnectivityBase::*findPaths_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
             findPaths_function_type findPaths_function_value( &::SireMol::ConnectivityBase::findPaths );
             
             ConnectivityBase_exposer.def( 
@@ -248,7 +248,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::findPaths
         
-            typedef ::QList< QList< SireMol::AtomIdx > > ( ::SireMol::ConnectivityBase::*findPaths_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef ::QList< QList< SireMol::AtomIdx > > ( ::SireMol::ConnectivityBase::*findPaths_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             findPaths_function_type findPaths_function_value( &::SireMol::ConnectivityBase::findPaths );
             
             ConnectivityBase_exposer.def( 
@@ -259,7 +259,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::getAngles
         
-            typedef ::QList< SireMol::AngleID > ( ::SireMol::ConnectivityBase::*getAngles_function_type )(  ) const;
+            typedef ::QList< SireMol::AngleID > ( ::SireMol::ConnectivityBase::*getAngles_function_type)(  ) const;
             getAngles_function_type getAngles_function_value( &::SireMol::ConnectivityBase::getAngles );
             
             ConnectivityBase_exposer.def( 
@@ -269,7 +269,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::getAngles
         
-            typedef ::QList< SireMol::AngleID > ( ::SireMol::ConnectivityBase::*getAngles_function_type )( ::SireMol::AtomID const & ) const;
+            typedef ::QList< SireMol::AngleID > ( ::SireMol::ConnectivityBase::*getAngles_function_type)( ::SireMol::AtomID const & ) const;
             getAngles_function_type getAngles_function_value( &::SireMol::ConnectivityBase::getAngles );
             
             ConnectivityBase_exposer.def( 
@@ -280,7 +280,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::getAngles
         
-            typedef ::QList< SireMol::AngleID > ( ::SireMol::ConnectivityBase::*getAngles_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef ::QList< SireMol::AngleID > ( ::SireMol::ConnectivityBase::*getAngles_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             getAngles_function_type getAngles_function_value( &::SireMol::ConnectivityBase::getAngles );
             
             ConnectivityBase_exposer.def( 
@@ -291,7 +291,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::getBondMatrix
         
-            typedef ::QVector< QVector< bool > > ( ::SireMol::ConnectivityBase::*getBondMatrix_function_type )( int ) const;
+            typedef ::QVector< QVector< bool > > ( ::SireMol::ConnectivityBase::*getBondMatrix_function_type)( int ) const;
             getBondMatrix_function_type getBondMatrix_function_value( &::SireMol::ConnectivityBase::getBondMatrix );
             
             ConnectivityBase_exposer.def( 
@@ -302,7 +302,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::getBondMatrix
         
-            typedef ::QVector< QVector< bool > > ( ::SireMol::ConnectivityBase::*getBondMatrix_function_type )( int,int ) const;
+            typedef ::QVector< QVector< bool > > ( ::SireMol::ConnectivityBase::*getBondMatrix_function_type)( int,int ) const;
             getBondMatrix_function_type getBondMatrix_function_value( &::SireMol::ConnectivityBase::getBondMatrix );
             
             ConnectivityBase_exposer.def( 
@@ -313,7 +313,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::getBonds
         
-            typedef ::QList< SireMol::BondID > ( ::SireMol::ConnectivityBase::*getBonds_function_type )(  ) const;
+            typedef ::QList< SireMol::BondID > ( ::SireMol::ConnectivityBase::*getBonds_function_type)(  ) const;
             getBonds_function_type getBonds_function_value( &::SireMol::ConnectivityBase::getBonds );
             
             ConnectivityBase_exposer.def( 
@@ -323,7 +323,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::getBonds
         
-            typedef ::QList< SireMol::BondID > ( ::SireMol::ConnectivityBase::*getBonds_function_type )( ::SireMol::AtomID const & ) const;
+            typedef ::QList< SireMol::BondID > ( ::SireMol::ConnectivityBase::*getBonds_function_type)( ::SireMol::AtomID const & ) const;
             getBonds_function_type getBonds_function_value( &::SireMol::ConnectivityBase::getBonds );
             
             ConnectivityBase_exposer.def( 
@@ -334,7 +334,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::getDihedrals
         
-            typedef ::QList< SireMol::DihedralID > ( ::SireMol::ConnectivityBase::*getDihedrals_function_type )(  ) const;
+            typedef ::QList< SireMol::DihedralID > ( ::SireMol::ConnectivityBase::*getDihedrals_function_type)(  ) const;
             getDihedrals_function_type getDihedrals_function_value( &::SireMol::ConnectivityBase::getDihedrals );
             
             ConnectivityBase_exposer.def( 
@@ -344,7 +344,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::getDihedrals
         
-            typedef ::QList< SireMol::DihedralID > ( ::SireMol::ConnectivityBase::*getDihedrals_function_type )( ::SireMol::AtomID const & ) const;
+            typedef ::QList< SireMol::DihedralID > ( ::SireMol::ConnectivityBase::*getDihedrals_function_type)( ::SireMol::AtomID const & ) const;
             getDihedrals_function_type getDihedrals_function_value( &::SireMol::ConnectivityBase::getDihedrals );
             
             ConnectivityBase_exposer.def( 
@@ -355,7 +355,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::getDihedrals
         
-            typedef ::QList< SireMol::DihedralID > ( ::SireMol::ConnectivityBase::*getDihedrals_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef ::QList< SireMol::DihedralID > ( ::SireMol::ConnectivityBase::*getDihedrals_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             getDihedrals_function_type getDihedrals_function_value( &::SireMol::ConnectivityBase::getDihedrals );
             
             ConnectivityBase_exposer.def( 
@@ -366,7 +366,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::getDihedrals
         
-            typedef ::QList< SireMol::DihedralID > ( ::SireMol::ConnectivityBase::*getDihedrals_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef ::QList< SireMol::DihedralID > ( ::SireMol::ConnectivityBase::*getDihedrals_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             getDihedrals_function_type getDihedrals_function_value( &::SireMol::ConnectivityBase::getDihedrals );
             
             ConnectivityBase_exposer.def( 
@@ -377,7 +377,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::inRing
         
-            typedef bool ( ::SireMol::ConnectivityBase::*inRing_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
+            typedef bool ( ::SireMol::ConnectivityBase::*inRing_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
             inRing_function_type inRing_function_value( &::SireMol::ConnectivityBase::inRing );
             
             ConnectivityBase_exposer.def( 
@@ -388,7 +388,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::inRing
         
-            typedef bool ( ::SireMol::ConnectivityBase::*inRing_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
+            typedef bool ( ::SireMol::ConnectivityBase::*inRing_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
             inRing_function_type inRing_function_value( &::SireMol::ConnectivityBase::inRing );
             
             ConnectivityBase_exposer.def( 
@@ -399,7 +399,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::inRing
         
-            typedef bool ( ::SireMol::ConnectivityBase::*inRing_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
+            typedef bool ( ::SireMol::ConnectivityBase::*inRing_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
             inRing_function_type inRing_function_value( &::SireMol::ConnectivityBase::inRing );
             
             ConnectivityBase_exposer.def( 
@@ -410,7 +410,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::inRing
         
-            typedef bool ( ::SireMol::ConnectivityBase::*inRing_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMol::ConnectivityBase::*inRing_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             inRing_function_type inRing_function_value( &::SireMol::ConnectivityBase::inRing );
             
             ConnectivityBase_exposer.def( 
@@ -421,7 +421,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::inRing
         
-            typedef bool ( ::SireMol::ConnectivityBase::*inRing_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMol::ConnectivityBase::*inRing_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             inRing_function_type inRing_function_value( &::SireMol::ConnectivityBase::inRing );
             
             ConnectivityBase_exposer.def( 
@@ -432,7 +432,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::inRing
         
-            typedef bool ( ::SireMol::ConnectivityBase::*inRing_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMol::ConnectivityBase::*inRing_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             inRing_function_type inRing_function_value( &::SireMol::ConnectivityBase::inRing );
             
             ConnectivityBase_exposer.def( 
@@ -443,7 +443,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::inRing
         
-            typedef bool ( ::SireMol::ConnectivityBase::*inRing_function_type )( ::SireMol::BondID const & ) const;
+            typedef bool ( ::SireMol::ConnectivityBase::*inRing_function_type)( ::SireMol::BondID const & ) const;
             inRing_function_type inRing_function_value( &::SireMol::ConnectivityBase::inRing );
             
             ConnectivityBase_exposer.def( 
@@ -454,7 +454,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::inRing
         
-            typedef bool ( ::SireMol::ConnectivityBase::*inRing_function_type )( ::SireMol::AngleID const & ) const;
+            typedef bool ( ::SireMol::ConnectivityBase::*inRing_function_type)( ::SireMol::AngleID const & ) const;
             inRing_function_type inRing_function_value( &::SireMol::ConnectivityBase::inRing );
             
             ConnectivityBase_exposer.def( 
@@ -465,7 +465,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::inRing
         
-            typedef bool ( ::SireMol::ConnectivityBase::*inRing_function_type )( ::SireMol::DihedralID const & ) const;
+            typedef bool ( ::SireMol::ConnectivityBase::*inRing_function_type)( ::SireMol::DihedralID const & ) const;
             inRing_function_type inRing_function_value( &::SireMol::ConnectivityBase::inRing );
             
             ConnectivityBase_exposer.def( 
@@ -476,7 +476,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::isCompatibleWith
         
-            typedef bool ( ::SireMol::ConnectivityBase::*isCompatibleWith_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef bool ( ::SireMol::ConnectivityBase::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::ConnectivityBase::isCompatibleWith );
             
             ConnectivityBase_exposer.def( 
@@ -487,7 +487,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::nConnections
         
-            typedef int ( ::SireMol::ConnectivityBase::*nConnections_function_type )(  ) const;
+            typedef int ( ::SireMol::ConnectivityBase::*nConnections_function_type)(  ) const;
             nConnections_function_type nConnections_function_value( &::SireMol::ConnectivityBase::nConnections );
             
             ConnectivityBase_exposer.def( 
@@ -497,7 +497,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::nConnections
         
-            typedef int ( ::SireMol::ConnectivityBase::*nConnections_function_type )( ::SireMol::AtomIdx ) const;
+            typedef int ( ::SireMol::ConnectivityBase::*nConnections_function_type)( ::SireMol::AtomIdx ) const;
             nConnections_function_type nConnections_function_value( &::SireMol::ConnectivityBase::nConnections );
             
             ConnectivityBase_exposer.def( 
@@ -508,7 +508,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::nConnections
         
-            typedef int ( ::SireMol::ConnectivityBase::*nConnections_function_type )( ::SireMol::AtomID const & ) const;
+            typedef int ( ::SireMol::ConnectivityBase::*nConnections_function_type)( ::SireMol::AtomID const & ) const;
             nConnections_function_type nConnections_function_value( &::SireMol::ConnectivityBase::nConnections );
             
             ConnectivityBase_exposer.def( 
@@ -519,7 +519,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::nConnections
         
-            typedef int ( ::SireMol::ConnectivityBase::*nConnections_function_type )( ::SireMol::ResIdx ) const;
+            typedef int ( ::SireMol::ConnectivityBase::*nConnections_function_type)( ::SireMol::ResIdx ) const;
             nConnections_function_type nConnections_function_value( &::SireMol::ConnectivityBase::nConnections );
             
             ConnectivityBase_exposer.def( 
@@ -530,7 +530,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::nConnections
         
-            typedef int ( ::SireMol::ConnectivityBase::*nConnections_function_type )( ::SireMol::ResID const & ) const;
+            typedef int ( ::SireMol::ConnectivityBase::*nConnections_function_type)( ::SireMol::ResID const & ) const;
             nConnections_function_type nConnections_function_value( &::SireMol::ConnectivityBase::nConnections );
             
             ConnectivityBase_exposer.def( 
@@ -541,7 +541,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::nConnections
         
-            typedef int ( ::SireMol::ConnectivityBase::*nConnections_function_type )( ::SireMol::ResIdx,::SireMol::ResIdx ) const;
+            typedef int ( ::SireMol::ConnectivityBase::*nConnections_function_type)( ::SireMol::ResIdx,::SireMol::ResIdx ) const;
             nConnections_function_type nConnections_function_value( &::SireMol::ConnectivityBase::nConnections );
             
             ConnectivityBase_exposer.def( 
@@ -552,7 +552,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::nConnections
         
-            typedef int ( ::SireMol::ConnectivityBase::*nConnections_function_type )( ::SireMol::ResID const &,::SireMol::ResID const & ) const;
+            typedef int ( ::SireMol::ConnectivityBase::*nConnections_function_type)( ::SireMol::ResID const &,::SireMol::ResID const & ) const;
             nConnections_function_type nConnections_function_value( &::SireMol::ConnectivityBase::nConnections );
             
             ConnectivityBase_exposer.def( 
@@ -563,7 +563,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::split
         
-            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
             split_function_type split_function_value( &::SireMol::ConnectivityBase::split );
             
             ConnectivityBase_exposer.def( 
@@ -574,7 +574,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::split
         
-            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             split_function_type split_function_value( &::SireMol::ConnectivityBase::split );
             
             ConnectivityBase_exposer.def( 
@@ -585,7 +585,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::split
         
-            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type )( ::SireMol::BondID const & ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type)( ::SireMol::BondID const & ) const;
             split_function_type split_function_value( &::SireMol::ConnectivityBase::split );
             
             ConnectivityBase_exposer.def( 
@@ -596,7 +596,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::split
         
-            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomSelection const & ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomSelection const & ) const;
             split_function_type split_function_value( &::SireMol::ConnectivityBase::split );
             
             ConnectivityBase_exposer.def( 
@@ -607,7 +607,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::split
         
-            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomSelection const & ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomSelection const & ) const;
             split_function_type split_function_value( &::SireMol::ConnectivityBase::split );
             
             ConnectivityBase_exposer.def( 
@@ -618,7 +618,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::split
         
-            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type )( ::SireMol::BondID const &,::SireMol::AtomSelection const & ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type)( ::SireMol::BondID const &,::SireMol::AtomSelection const & ) const;
             split_function_type split_function_value( &::SireMol::ConnectivityBase::split );
             
             ConnectivityBase_exposer.def( 
@@ -629,7 +629,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::split
         
-            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
             split_function_type split_function_value( &::SireMol::ConnectivityBase::split );
             
             ConnectivityBase_exposer.def( 
@@ -640,7 +640,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::split
         
-            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             split_function_type split_function_value( &::SireMol::ConnectivityBase::split );
             
             ConnectivityBase_exposer.def( 
@@ -651,7 +651,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::split
         
-            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type )( ::SireMol::AngleID const & ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type)( ::SireMol::AngleID const & ) const;
             split_function_type split_function_value( &::SireMol::ConnectivityBase::split );
             
             ConnectivityBase_exposer.def( 
@@ -662,7 +662,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::split
         
-            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomSelection const & ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomSelection const & ) const;
             split_function_type split_function_value( &::SireMol::ConnectivityBase::split );
             
             ConnectivityBase_exposer.def( 
@@ -673,7 +673,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::split
         
-            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomSelection const & ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomSelection const & ) const;
             split_function_type split_function_value( &::SireMol::ConnectivityBase::split );
             
             ConnectivityBase_exposer.def( 
@@ -684,7 +684,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::split
         
-            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type )( ::SireMol::AngleID const &,::SireMol::AtomSelection const & ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type)( ::SireMol::AngleID const &,::SireMol::AtomSelection const & ) const;
             split_function_type split_function_value( &::SireMol::ConnectivityBase::split );
             
             ConnectivityBase_exposer.def( 
@@ -695,7 +695,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::split
         
-            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
             split_function_type split_function_value( &::SireMol::ConnectivityBase::split );
             
             ConnectivityBase_exposer.def( 
@@ -706,7 +706,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::split
         
-            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             split_function_type split_function_value( &::SireMol::ConnectivityBase::split );
             
             ConnectivityBase_exposer.def( 
@@ -717,7 +717,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::split
         
-            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type )( ::SireMol::DihedralID const & ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type)( ::SireMol::DihedralID const & ) const;
             split_function_type split_function_value( &::SireMol::ConnectivityBase::split );
             
             ConnectivityBase_exposer.def( 
@@ -728,7 +728,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::split
         
-            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomSelection const & ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomSelection const & ) const;
             split_function_type split_function_value( &::SireMol::ConnectivityBase::split );
             
             ConnectivityBase_exposer.def( 
@@ -739,7 +739,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::split
         
-            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomSelection const & ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomSelection const & ) const;
             split_function_type split_function_value( &::SireMol::ConnectivityBase::split );
             
             ConnectivityBase_exposer.def( 
@@ -750,7 +750,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::split
         
-            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type )( ::SireMol::DihedralID const &,::SireMol::AtomSelection const & ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type)( ::SireMol::DihedralID const &,::SireMol::AtomSelection const & ) const;
             split_function_type split_function_value( &::SireMol::ConnectivityBase::split );
             
             ConnectivityBase_exposer.def( 
@@ -761,7 +761,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::split
         
-            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type )( ::SireMol::ImproperID const & ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type)( ::SireMol::ImproperID const & ) const;
             split_function_type split_function_value( &::SireMol::ConnectivityBase::split );
             
             ConnectivityBase_exposer.def( 
@@ -772,7 +772,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::split
         
-            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type )( ::SireMol::ImproperID const &,::SireMol::AtomSelection const & ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomSelection, SireMol::AtomSelection, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::ConnectivityBase::*split_function_type)( ::SireMol::ImproperID const &,::SireMol::AtomSelection const & ) const;
             split_function_type split_function_value( &::SireMol::ConnectivityBase::split );
             
             ConnectivityBase_exposer.def( 
@@ -783,7 +783,7 @@ void register_ConnectivityBase_class(){
         }
         { //::SireMol::ConnectivityBase::toString
         
-            typedef ::QString ( ::SireMol::ConnectivityBase::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::ConnectivityBase::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::ConnectivityBase::toString );
             
             ConnectivityBase_exposer.def( 

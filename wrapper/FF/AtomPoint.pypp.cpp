@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "AtomPoint.pypp.hpp"
 
 namespace bp = boost::python;
@@ -50,7 +49,7 @@ void register_AtomPoint_class(){
         AtomPoint_exposer.def( bp::init< SireFF::AtomPoint const & >(( bp::arg("other") )) );
         { //::SireFF::AtomPoint::addForce
         
-            typedef bool ( ::SireFF::AtomPoint::*addForce_function_type )( ::SireFF::MolForceTable &,::SireMaths::Vector const & ) const;
+            typedef bool ( ::SireFF::AtomPoint::*addForce_function_type)( ::SireFF::MolForceTable &,::SireMaths::Vector const & ) const;
             addForce_function_type addForce_function_value( &::SireFF::AtomPoint::addForce );
             
             AtomPoint_exposer.def( 
@@ -61,7 +60,7 @@ void register_AtomPoint_class(){
         }
         { //::SireFF::AtomPoint::addForce
         
-            typedef bool ( ::SireFF::AtomPoint::*addForce_function_type )( ::SireFF::ForceTable &,::SireMaths::Vector const & ) const;
+            typedef bool ( ::SireFF::AtomPoint::*addForce_function_type)( ::SireFF::ForceTable &,::SireMaths::Vector const & ) const;
             addForce_function_type addForce_function_value( &::SireFF::AtomPoint::addForce );
             
             AtomPoint_exposer.def( 
@@ -72,18 +71,18 @@ void register_AtomPoint_class(){
         }
         { //::SireFF::AtomPoint::atom
         
-            typedef ::SireMol::Atom const & ( ::SireFF::AtomPoint::*atom_function_type )(  ) const;
+            typedef ::SireMol::Atom const & ( ::SireFF::AtomPoint::*atom_function_type)(  ) const;
             atom_function_type atom_function_value( &::SireFF::AtomPoint::atom );
             
             AtomPoint_exposer.def( 
                 "atom"
                 , atom_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireFF::AtomPoint::contains
         
-            typedef bool ( ::SireFF::AtomPoint::*contains_function_type )( ::SireMol::MolNum ) const;
+            typedef bool ( ::SireFF::AtomPoint::*contains_function_type)( ::SireMol::MolNum ) const;
             contains_function_type contains_function_value( &::SireFF::AtomPoint::contains );
             
             AtomPoint_exposer.def( 
@@ -94,7 +93,7 @@ void register_AtomPoint_class(){
         }
         { //::SireFF::AtomPoint::contains
         
-            typedef bool ( ::SireFF::AtomPoint::*contains_function_type )( ::SireMol::MolID const & ) const;
+            typedef bool ( ::SireFF::AtomPoint::*contains_function_type)( ::SireMol::MolID const & ) const;
             contains_function_type contains_function_value( &::SireFF::AtomPoint::contains );
             
             AtomPoint_exposer.def( 
@@ -105,7 +104,7 @@ void register_AtomPoint_class(){
         }
         { //::SireFF::AtomPoint::isExtraMoleculePoint
         
-            typedef bool ( ::SireFF::AtomPoint::*isExtraMoleculePoint_function_type )(  ) const;
+            typedef bool ( ::SireFF::AtomPoint::*isExtraMoleculePoint_function_type)(  ) const;
             isExtraMoleculePoint_function_type isExtraMoleculePoint_function_value( &::SireFF::AtomPoint::isExtraMoleculePoint );
             
             AtomPoint_exposer.def( 
@@ -115,7 +114,7 @@ void register_AtomPoint_class(){
         }
         { //::SireFF::AtomPoint::isInterMoleculePoint
         
-            typedef bool ( ::SireFF::AtomPoint::*isInterMoleculePoint_function_type )(  ) const;
+            typedef bool ( ::SireFF::AtomPoint::*isInterMoleculePoint_function_type)(  ) const;
             isInterMoleculePoint_function_type isInterMoleculePoint_function_value( &::SireFF::AtomPoint::isInterMoleculePoint );
             
             AtomPoint_exposer.def( 
@@ -125,7 +124,7 @@ void register_AtomPoint_class(){
         }
         { //::SireFF::AtomPoint::isIntraMoleculePoint
         
-            typedef bool ( ::SireFF::AtomPoint::*isIntraMoleculePoint_function_type )(  ) const;
+            typedef bool ( ::SireFF::AtomPoint::*isIntraMoleculePoint_function_type)(  ) const;
             isIntraMoleculePoint_function_type isIntraMoleculePoint_function_value( &::SireFF::AtomPoint::isIntraMoleculePoint );
             
             AtomPoint_exposer.def( 
@@ -135,7 +134,7 @@ void register_AtomPoint_class(){
         }
         { //::SireFF::AtomPoint::molecules
         
-            typedef ::SireMol::Molecules ( ::SireFF::AtomPoint::*molecules_function_type )(  ) const;
+            typedef ::SireMol::Molecules ( ::SireFF::AtomPoint::*molecules_function_type)(  ) const;
             molecules_function_type molecules_function_value( &::SireFF::AtomPoint::molecules );
             
             AtomPoint_exposer.def( 
@@ -145,7 +144,7 @@ void register_AtomPoint_class(){
         }
         { //::SireFF::AtomPoint::nMolecules
         
-            typedef int ( ::SireFF::AtomPoint::*nMolecules_function_type )(  ) const;
+            typedef int ( ::SireFF::AtomPoint::*nMolecules_function_type)(  ) const;
             nMolecules_function_type nMolecules_function_value( &::SireFF::AtomPoint::nMolecules );
             
             AtomPoint_exposer.def( 
@@ -156,7 +155,7 @@ void register_AtomPoint_class(){
         AtomPoint_exposer.def( bp::self != bp::self );
         { //::SireFF::AtomPoint::operator=
         
-            typedef ::SireFF::AtomPoint & ( ::SireFF::AtomPoint::*assign_function_type )( ::SireFF::AtomPoint const & ) ;
+            typedef ::SireFF::AtomPoint & ( ::SireFF::AtomPoint::*assign_function_type)( ::SireFF::AtomPoint const & ) ;
             assign_function_type assign_function_value( &::SireFF::AtomPoint::operator= );
             
             AtomPoint_exposer.def( 
@@ -169,7 +168,7 @@ void register_AtomPoint_class(){
         AtomPoint_exposer.def( bp::self == bp::self );
         { //::SireFF::AtomPoint::toString
         
-            typedef ::QString ( ::SireFF::AtomPoint::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireFF::AtomPoint::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireFF::AtomPoint::toString );
             
             AtomPoint_exposer.def( 
@@ -189,7 +188,7 @@ void register_AtomPoint_class(){
         }
         { //::SireFF::AtomPoint::update
         
-            typedef bool ( ::SireFF::AtomPoint::*update_function_type )( ::SireMol::MoleculeData const & ) ;
+            typedef bool ( ::SireFF::AtomPoint::*update_function_type)( ::SireMol::MoleculeData const & ) ;
             update_function_type update_function_value( &::SireFF::AtomPoint::update );
             
             AtomPoint_exposer.def( 
@@ -200,7 +199,7 @@ void register_AtomPoint_class(){
         }
         { //::SireFF::AtomPoint::update
         
-            typedef bool ( ::SireFF::AtomPoint::*update_function_type )( ::SireMol::Molecules const & ) ;
+            typedef bool ( ::SireFF::AtomPoint::*update_function_type)( ::SireMol::Molecules const & ) ;
             update_function_type update_function_value( &::SireFF::AtomPoint::update );
             
             AtomPoint_exposer.def( 
@@ -211,7 +210,7 @@ void register_AtomPoint_class(){
         }
         { //::SireFF::AtomPoint::update
         
-            typedef bool ( ::SireFF::AtomPoint::*update_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef bool ( ::SireFF::AtomPoint::*update_function_type)( ::SireMol::MoleculeGroup const & ) ;
             update_function_type update_function_value( &::SireFF::AtomPoint::update );
             
             AtomPoint_exposer.def( 
@@ -222,7 +221,7 @@ void register_AtomPoint_class(){
         }
         { //::SireFF::AtomPoint::update
         
-            typedef bool ( ::SireFF::AtomPoint::*update_function_type )( ::SireMol::MolGroupsBase const & ) ;
+            typedef bool ( ::SireFF::AtomPoint::*update_function_type)( ::SireMol::MolGroupsBase const & ) ;
             update_function_type update_function_value( &::SireFF::AtomPoint::update );
             
             AtomPoint_exposer.def( 
@@ -233,7 +232,7 @@ void register_AtomPoint_class(){
         }
         { //::SireFF::AtomPoint::usesMoleculesIn
         
-            typedef bool ( ::SireFF::AtomPoint::*usesMoleculesIn_function_type )( ::SireFF::ForceTable const & ) const;
+            typedef bool ( ::SireFF::AtomPoint::*usesMoleculesIn_function_type)( ::SireFF::ForceTable const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireFF::AtomPoint::usesMoleculesIn );
             
             AtomPoint_exposer.def( 
@@ -244,7 +243,7 @@ void register_AtomPoint_class(){
         }
         { //::SireFF::AtomPoint::usesMoleculesIn
         
-            typedef bool ( ::SireFF::AtomPoint::*usesMoleculesIn_function_type )( ::SireMol::Molecules const & ) const;
+            typedef bool ( ::SireFF::AtomPoint::*usesMoleculesIn_function_type)( ::SireMol::Molecules const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireFF::AtomPoint::usesMoleculesIn );
             
             AtomPoint_exposer.def( 
@@ -255,7 +254,7 @@ void register_AtomPoint_class(){
         }
         { //::SireFF::AtomPoint::usesMoleculesIn
         
-            typedef bool ( ::SireFF::AtomPoint::*usesMoleculesIn_function_type )( ::SireMol::MoleculeGroup const & ) const;
+            typedef bool ( ::SireFF::AtomPoint::*usesMoleculesIn_function_type)( ::SireMol::MoleculeGroup const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireFF::AtomPoint::usesMoleculesIn );
             
             AtomPoint_exposer.def( 
@@ -266,7 +265,7 @@ void register_AtomPoint_class(){
         }
         { //::SireFF::AtomPoint::usesMoleculesIn
         
-            typedef bool ( ::SireFF::AtomPoint::*usesMoleculesIn_function_type )( ::SireMol::MolGroupsBase const & ) const;
+            typedef bool ( ::SireFF::AtomPoint::*usesMoleculesIn_function_type)( ::SireMol::MolGroupsBase const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireFF::AtomPoint::usesMoleculesIn );
             
             AtomPoint_exposer.def( 
@@ -277,7 +276,7 @@ void register_AtomPoint_class(){
         }
         { //::SireFF::AtomPoint::wouldUpdate
         
-            typedef bool ( ::SireFF::AtomPoint::*wouldUpdate_function_type )( ::SireMol::MoleculeData const & ) const;
+            typedef bool ( ::SireFF::AtomPoint::*wouldUpdate_function_type)( ::SireMol::MoleculeData const & ) const;
             wouldUpdate_function_type wouldUpdate_function_value( &::SireFF::AtomPoint::wouldUpdate );
             
             AtomPoint_exposer.def( 
@@ -288,7 +287,7 @@ void register_AtomPoint_class(){
         }
         { //::SireFF::AtomPoint::wouldUpdate
         
-            typedef bool ( ::SireFF::AtomPoint::*wouldUpdate_function_type )( ::SireMol::Molecules const & ) const;
+            typedef bool ( ::SireFF::AtomPoint::*wouldUpdate_function_type)( ::SireMol::Molecules const & ) const;
             wouldUpdate_function_type wouldUpdate_function_value( &::SireFF::AtomPoint::wouldUpdate );
             
             AtomPoint_exposer.def( 
@@ -299,7 +298,7 @@ void register_AtomPoint_class(){
         }
         { //::SireFF::AtomPoint::wouldUpdate
         
-            typedef bool ( ::SireFF::AtomPoint::*wouldUpdate_function_type )( ::SireMol::MoleculeGroup const & ) const;
+            typedef bool ( ::SireFF::AtomPoint::*wouldUpdate_function_type)( ::SireMol::MoleculeGroup const & ) const;
             wouldUpdate_function_type wouldUpdate_function_value( &::SireFF::AtomPoint::wouldUpdate );
             
             AtomPoint_exposer.def( 
@@ -310,7 +309,7 @@ void register_AtomPoint_class(){
         }
         { //::SireFF::AtomPoint::wouldUpdate
         
-            typedef bool ( ::SireFF::AtomPoint::*wouldUpdate_function_type )( ::SireMol::MolGroupsBase const & ) const;
+            typedef bool ( ::SireFF::AtomPoint::*wouldUpdate_function_type)( ::SireMol::MolGroupsBase const & ) const;
             wouldUpdate_function_type wouldUpdate_function_value( &::SireFF::AtomPoint::wouldUpdate );
             
             AtomPoint_exposer.def( 

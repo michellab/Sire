@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "UreyBradleyComponent.pypp.hpp"
 
 namespace bp = boost::python;
@@ -32,7 +31,7 @@ void register_UreyBradleyComponent_class(){
         UreyBradleyComponent_exposer.def( bp::init< SireMM::UreyBradleyComponent const & >(( bp::arg("other") )) );
         { //::SireMM::UreyBradleyComponent::changeEnergy
         
-            typedef void ( ::SireMM::UreyBradleyComponent::*changeEnergy_function_type )( ::SireFF::FF &,::SireMM::UreyBradleyEnergy const & ) const;
+            typedef void ( ::SireMM::UreyBradleyComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::UreyBradleyEnergy const & ) const;
             changeEnergy_function_type changeEnergy_function_value( &::SireMM::UreyBradleyComponent::changeEnergy );
             
             UreyBradleyComponent_exposer.def( 
@@ -43,7 +42,7 @@ void register_UreyBradleyComponent_class(){
         }
         { //::SireMM::UreyBradleyComponent::setEnergy
         
-            typedef void ( ::SireMM::UreyBradleyComponent::*setEnergy_function_type )( ::SireFF::FF &,::SireMM::UreyBradleyEnergy const & ) const;
+            typedef void ( ::SireMM::UreyBradleyComponent::*setEnergy_function_type)( ::SireFF::FF &,::SireMM::UreyBradleyEnergy const & ) const;
             setEnergy_function_type setEnergy_function_value( &::SireMM::UreyBradleyComponent::setEnergy );
             
             UreyBradleyComponent_exposer.def( 
@@ -54,7 +53,7 @@ void register_UreyBradleyComponent_class(){
         }
         { //::SireMM::UreyBradleyComponent::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireMM::UreyBradleyComponent::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireMM::UreyBradleyComponent::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireMM::UreyBradleyComponent::symbols );
             
             UreyBradleyComponent_exposer.def( 
@@ -64,13 +63,13 @@ void register_UreyBradleyComponent_class(){
         }
         { //::SireMM::UreyBradleyComponent::total
         
-            typedef ::SireMM::UreyBradleyComponent const & ( ::SireMM::UreyBradleyComponent::*total_function_type )(  ) const;
+            typedef ::SireMM::UreyBradleyComponent const & ( ::SireMM::UreyBradleyComponent::*total_function_type)(  ) const;
             total_function_type total_function_value( &::SireMM::UreyBradleyComponent::total );
             
             UreyBradleyComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::UreyBradleyComponent::typeName
@@ -85,7 +84,7 @@ void register_UreyBradleyComponent_class(){
         }
         { //::SireMM::UreyBradleyComponent::what
         
-            typedef char const * ( ::SireMM::UreyBradleyComponent::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::UreyBradleyComponent::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::UreyBradleyComponent::what );
             
             UreyBradleyComponent_exposer.def( 

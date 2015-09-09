@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "CoulombComponent.pypp.hpp"
 
 namespace bp = boost::python;
@@ -31,7 +30,7 @@ void register_CoulombComponent_class(){
         CoulombComponent_exposer.def( bp::init< SireMM::CoulombComponent const & >(( bp::arg("other") )) );
         { //::SireMM::CoulombComponent::changeEnergy
         
-            typedef void ( ::SireMM::CoulombComponent::*changeEnergy_function_type )( ::SireFF::FF &,::SireMM::CoulombEnergy const & ) const;
+            typedef void ( ::SireMM::CoulombComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::CoulombEnergy const & ) const;
             changeEnergy_function_type changeEnergy_function_value( &::SireMM::CoulombComponent::changeEnergy );
             
             CoulombComponent_exposer.def( 
@@ -42,7 +41,7 @@ void register_CoulombComponent_class(){
         }
         { //::SireMM::CoulombComponent::setEnergy
         
-            typedef void ( ::SireMM::CoulombComponent::*setEnergy_function_type )( ::SireFF::FF &,::SireMM::CoulombEnergy const & ) const;
+            typedef void ( ::SireMM::CoulombComponent::*setEnergy_function_type)( ::SireFF::FF &,::SireMM::CoulombEnergy const & ) const;
             setEnergy_function_type setEnergy_function_value( &::SireMM::CoulombComponent::setEnergy );
             
             CoulombComponent_exposer.def( 
@@ -53,7 +52,7 @@ void register_CoulombComponent_class(){
         }
         { //::SireMM::CoulombComponent::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireMM::CoulombComponent::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireMM::CoulombComponent::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireMM::CoulombComponent::symbols );
             
             CoulombComponent_exposer.def( 
@@ -63,13 +62,13 @@ void register_CoulombComponent_class(){
         }
         { //::SireMM::CoulombComponent::total
         
-            typedef ::SireMM::CoulombComponent const & ( ::SireMM::CoulombComponent::*total_function_type )(  ) const;
+            typedef ::SireMM::CoulombComponent const & ( ::SireMM::CoulombComponent::*total_function_type)(  ) const;
             total_function_type total_function_value( &::SireMM::CoulombComponent::total );
             
             CoulombComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::CoulombComponent::typeName
@@ -84,7 +83,7 @@ void register_CoulombComponent_class(){
         }
         { //::SireMM::CoulombComponent::what
         
-            typedef char const * ( ::SireMM::CoulombComponent::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::CoulombComponent::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::CoulombComponent::what );
             
             CoulombComponent_exposer.def( 

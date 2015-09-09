@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "GetCOGPoint.pypp.hpp"
 
 namespace bp = boost::python;
@@ -52,18 +51,18 @@ void register_GetCOGPoint_class(){
         GetCOGPoint_exposer.def( bp::init< SireMove::GetCOGPoint const & >(( bp::arg("other") )) );
         { //::SireMove::GetCOGPoint::atomID
         
-            typedef ::SireMol::AtomID const & ( ::SireMove::GetCOGPoint::*atomID_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMove::GetCOGPoint::*atomID_function_type)(  ) const;
             atomID_function_type atomID_function_value( &::SireMove::GetCOGPoint::atomID );
             
             GetCOGPoint_exposer.def( 
                 "atomID"
                 , atomID_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMove::GetCOGPoint::getPoint
         
-            typedef ::SireMaths::Vector ( ::SireMove::GetCOGPoint::*getPoint_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::Vector ( ::SireMove::GetCOGPoint::*getPoint_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             getPoint_function_type getPoint_function_value( &::SireMove::GetCOGPoint::getPoint );
             
             GetCOGPoint_exposer.def( 
@@ -75,7 +74,7 @@ void register_GetCOGPoint_class(){
         GetCOGPoint_exposer.def( bp::self != bp::self );
         { //::SireMove::GetCOGPoint::operator=
         
-            typedef ::SireMove::GetCOGPoint & ( ::SireMove::GetCOGPoint::*assign_function_type )( ::SireMove::GetCOGPoint const & ) ;
+            typedef ::SireMove::GetCOGPoint & ( ::SireMove::GetCOGPoint::*assign_function_type)( ::SireMove::GetCOGPoint const & ) ;
             assign_function_type assign_function_value( &::SireMove::GetCOGPoint::operator= );
             
             GetCOGPoint_exposer.def( 

@@ -32,7 +32,7 @@ void register_PointCharge_class(){
         PointCharge_exposer.def( bp::init< Squire::PointCharge const & >(( bp::arg("other") )) );
         { //::Squire::PointCharge::center
         
-            typedef ::SireMaths::Vector const & ( ::Squire::PointCharge::*center_function_type )(  ) const;
+            typedef ::SireMaths::Vector const & ( ::Squire::PointCharge::*center_function_type)(  ) const;
             center_function_type center_function_value( &::Squire::PointCharge::center );
             
             PointCharge_exposer.def( 
@@ -43,7 +43,7 @@ void register_PointCharge_class(){
         }
         { //::Squire::PointCharge::charge
         
-            typedef double ( ::Squire::PointCharge::*charge_function_type )(  ) const;
+            typedef double ( ::Squire::PointCharge::*charge_function_type)(  ) const;
             charge_function_type charge_function_value( &::Squire::PointCharge::charge );
             
             PointCharge_exposer.def( 
@@ -54,7 +54,7 @@ void register_PointCharge_class(){
         PointCharge_exposer.def( bp::self != bp::self );
         { //::Squire::PointCharge::operator=
         
-            typedef ::Squire::PointCharge & ( ::Squire::PointCharge::*assign_function_type )( ::Squire::PointCharge const & ) ;
+            typedef ::Squire::PointCharge & ( ::Squire::PointCharge::*assign_function_type)( ::Squire::PointCharge const & ) ;
             assign_function_type assign_function_value( &::Squire::PointCharge::operator= );
             
             PointCharge_exposer.def( 

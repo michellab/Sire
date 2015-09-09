@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "InterCLJFFBase.pypp.hpp"
 
 namespace bp = boost::python;
@@ -35,19 +34,19 @@ void register_InterCLJFFBase_class(){
         { //::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::components
         
             typedef SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > > exported_class_t;
-            typedef ::SireMM::CLJComponent const & ( ::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::*components_function_type )(  ) const;
+            typedef ::SireMM::CLJComponent const & ( ::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::*components_function_type)(  ) const;
             components_function_type components_function_value( &::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::components );
             
             InterCLJFFBase_exposer.def( 
                 "components"
                 , components_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::containsProperty
         
             typedef SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > > exported_class_t;
-            typedef bool ( ::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::*containsProperty_function_type )( ::QString const & ) const;
+            typedef bool ( ::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::*containsProperty_function_type)( ::QString const & ) const;
             containsProperty_function_type containsProperty_function_value( &::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::containsProperty );
             
             InterCLJFFBase_exposer.def( 
@@ -59,7 +58,7 @@ void register_InterCLJFFBase_class(){
         { //::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::mustNowRecalculateFromScratch
         
             typedef SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > > exported_class_t;
-            typedef void ( ::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::*mustNowRecalculateFromScratch_function_type )(  ) ;
+            typedef void ( ::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::*mustNowRecalculateFromScratch_function_type)(  ) ;
             mustNowRecalculateFromScratch_function_type mustNowRecalculateFromScratch_function_value( &::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::mustNowRecalculateFromScratch );
             
             InterCLJFFBase_exposer.def( 
@@ -71,7 +70,7 @@ void register_InterCLJFFBase_class(){
         { //::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::operator=
         
             typedef SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > > exported_class_t;
-            typedef ::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > > & ( ::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::*assign_function_type )( ::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > > const & ) ;
+            typedef ::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > > & ( ::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::*assign_function_type)( ::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > > const & ) ;
             assign_function_type assign_function_value( &::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::operator= );
             
             InterCLJFFBase_exposer.def( 
@@ -85,7 +84,7 @@ void register_InterCLJFFBase_class(){
         { //::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::properties
         
             typedef SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > > exported_class_t;
-            typedef ::SireBase::Properties const & ( ::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::*properties_function_type )(  ) const;
+            typedef ::SireBase::Properties const & ( ::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::*properties_function_type)(  ) const;
             properties_function_type properties_function_value( &::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::properties );
             
             InterCLJFFBase_exposer.def( 
@@ -97,20 +96,20 @@ void register_InterCLJFFBase_class(){
         { //::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::property
         
             typedef SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > > exported_class_t;
-            typedef ::SireBase::Property const & ( ::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::*property_function_type )( ::QString const & ) const;
+            typedef ::SireBase::Property const & ( ::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::*property_function_type)( ::QString const & ) const;
             property_function_type property_function_value( &::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::property );
             
             InterCLJFFBase_exposer.def( 
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::setProperty
         
             typedef SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > > exported_class_t;
-            typedef bool ( ::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::*setProperty_function_type )( ::QString const &,::SireBase::Property const & ) ;
+            typedef bool ( ::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::*setProperty_function_type)( ::QString const &,::SireBase::Property const & ) ;
             setProperty_function_type setProperty_function_value( &::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::setProperty );
             
             InterCLJFFBase_exposer.def( 
@@ -133,7 +132,7 @@ void register_InterCLJFFBase_class(){
         { //::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::what
         
             typedef SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > > exported_class_t;
-            typedef char const * ( ::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::*what_function_type )(  ) const;
+            typedef char const * ( ::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireFF::Inter2BFF< SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > >::what );
             
             InterCLJFFBase_exposer.def( 

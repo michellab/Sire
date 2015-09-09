@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "ThreeAtomPerturbation.pypp.hpp"
 
 namespace bp = boost::python;
@@ -49,41 +48,41 @@ void register_ThreeAtomPerturbation_class(){
         ThreeAtomPerturbation_exposer.def( bp::init< SireMM::ThreeAtomPerturbation const & >(( bp::arg("other") )) );
         { //::SireMM::ThreeAtomPerturbation::atom0
         
-            typedef ::SireMol::AtomID const & ( ::SireMM::ThreeAtomPerturbation::*atom0_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMM::ThreeAtomPerturbation::*atom0_function_type)(  ) const;
             atom0_function_type atom0_function_value( &::SireMM::ThreeAtomPerturbation::atom0 );
             
             ThreeAtomPerturbation_exposer.def( 
                 "atom0"
                 , atom0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::ThreeAtomPerturbation::atom1
         
-            typedef ::SireMol::AtomID const & ( ::SireMM::ThreeAtomPerturbation::*atom1_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMM::ThreeAtomPerturbation::*atom1_function_type)(  ) const;
             atom1_function_type atom1_function_value( &::SireMM::ThreeAtomPerturbation::atom1 );
             
             ThreeAtomPerturbation_exposer.def( 
                 "atom1"
                 , atom1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::ThreeAtomPerturbation::atom2
         
-            typedef ::SireMol::AtomID const & ( ::SireMM::ThreeAtomPerturbation::*atom2_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMM::ThreeAtomPerturbation::*atom2_function_type)(  ) const;
             atom2_function_type atom2_function_value( &::SireMM::ThreeAtomPerturbation::atom2 );
             
             ThreeAtomPerturbation_exposer.def( 
                 "atom2"
                 , atom2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         ThreeAtomPerturbation_exposer.def( bp::self != bp::self );
         { //::SireMM::ThreeAtomPerturbation::operator=
         
-            typedef ::SireMM::ThreeAtomPerturbation & ( ::SireMM::ThreeAtomPerturbation::*assign_function_type )( ::SireMM::ThreeAtomPerturbation const & ) ;
+            typedef ::SireMM::ThreeAtomPerturbation & ( ::SireMM::ThreeAtomPerturbation::*assign_function_type)( ::SireMM::ThreeAtomPerturbation const & ) ;
             assign_function_type assign_function_value( &::SireMM::ThreeAtomPerturbation::operator= );
             
             ThreeAtomPerturbation_exposer.def( 
@@ -96,7 +95,7 @@ void register_ThreeAtomPerturbation_class(){
         ThreeAtomPerturbation_exposer.def( bp::self == bp::self );
         { //::SireMM::ThreeAtomPerturbation::requiredProperties
         
-            typedef ::QSet< QString > ( ::SireMM::ThreeAtomPerturbation::*requiredProperties_function_type )(  ) const;
+            typedef ::QSet< QString > ( ::SireMM::ThreeAtomPerturbation::*requiredProperties_function_type)(  ) const;
             requiredProperties_function_type requiredProperties_function_value( &::SireMM::ThreeAtomPerturbation::requiredProperties );
             
             ThreeAtomPerturbation_exposer.def( 
@@ -106,7 +105,7 @@ void register_ThreeAtomPerturbation_class(){
         }
         { //::SireMM::ThreeAtomPerturbation::toString
         
-            typedef ::QString ( ::SireMM::ThreeAtomPerturbation::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMM::ThreeAtomPerturbation::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMM::ThreeAtomPerturbation::toString );
             
             ThreeAtomPerturbation_exposer.def( 
@@ -126,7 +125,7 @@ void register_ThreeAtomPerturbation_class(){
         }
         { //::SireMM::ThreeAtomPerturbation::wouldChange
         
-            typedef bool ( ::SireMM::ThreeAtomPerturbation::*wouldChange_function_type )( ::SireMol::Molecule const &,::SireCAS::Values const & ) const;
+            typedef bool ( ::SireMM::ThreeAtomPerturbation::*wouldChange_function_type)( ::SireMol::Molecule const &,::SireCAS::Values const & ) const;
             wouldChange_function_type wouldChange_function_value( &::SireMM::ThreeAtomPerturbation::wouldChange );
             
             ThreeAtomPerturbation_exposer.def( 

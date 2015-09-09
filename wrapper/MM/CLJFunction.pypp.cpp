@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "CLJFunction.pypp.hpp"
 
 namespace bp = boost::python;
@@ -67,7 +66,7 @@ void register_CLJFunction_class(){
             ;
         { //::SireMM::CLJFunction::calculate
         
-            typedef ::boost::tuples::tuple< double, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJFunction::*calculate_function_type )( ::SireMM::CLJAtoms const & ) const;
+            typedef ::boost::tuples::tuple< double, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJFunction::*calculate_function_type)( ::SireMM::CLJAtoms const & ) const;
             calculate_function_type calculate_function_value( &::SireMM::CLJFunction::calculate );
             
             CLJFunction_exposer.def( 
@@ -78,7 +77,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::calculate
         
-            typedef ::boost::tuples::tuple< double, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJFunction::*calculate_function_type )( ::SireMM::CLJAtoms const &,::SireMM::CLJAtoms const &,float ) const;
+            typedef ::boost::tuples::tuple< double, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJFunction::*calculate_function_type)( ::SireMM::CLJAtoms const &,::SireMM::CLJAtoms const &,float ) const;
             calculate_function_type calculate_function_value( &::SireMM::CLJFunction::calculate );
             
             CLJFunction_exposer.def( 
@@ -89,7 +88,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::calculate
         
-            typedef ::boost::tuples::tuple< double, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJFunction::*calculate_function_type )( ::SireMM::CLJBoxes const & ) const;
+            typedef ::boost::tuples::tuple< double, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJFunction::*calculate_function_type)( ::SireMM::CLJBoxes const & ) const;
             calculate_function_type calculate_function_value( &::SireMM::CLJFunction::calculate );
             
             CLJFunction_exposer.def( 
@@ -100,7 +99,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::calculate
         
-            typedef ::boost::tuples::tuple< double, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJFunction::*calculate_function_type )( ::SireMM::CLJBoxes const &,::SireMM::CLJBoxes const & ) const;
+            typedef ::boost::tuples::tuple< double, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJFunction::*calculate_function_type)( ::SireMM::CLJBoxes const &,::SireMM::CLJBoxes const & ) const;
             calculate_function_type calculate_function_value( &::SireMM::CLJFunction::calculate );
             
             CLJFunction_exposer.def( 
@@ -111,7 +110,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::calculate
         
-            typedef ::boost::tuples::tuple< double, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJFunction::*calculate_function_type )( ::SireMM::CLJAtoms const &,::SireMM::CLJBoxes const & ) const;
+            typedef ::boost::tuples::tuple< double, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJFunction::*calculate_function_type)( ::SireMM::CLJAtoms const &,::SireMM::CLJBoxes const & ) const;
             calculate_function_type calculate_function_value( &::SireMM::CLJFunction::calculate );
             
             CLJFunction_exposer.def( 
@@ -122,7 +121,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::calculate
         
-            typedef ::QVector< float > ( ::SireMM::CLJFunction::*calculate_function_type )( ::SireMM::CLJAtoms const &,::SireVol::GridInfo const & ) const;
+            typedef ::QVector< float > ( ::SireMM::CLJFunction::*calculate_function_type)( ::SireMM::CLJAtoms const &,::SireVol::GridInfo const & ) const;
             calculate_function_type calculate_function_value( &::SireMM::CLJFunction::calculate );
             
             CLJFunction_exposer.def( 
@@ -133,7 +132,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::combiningRules
         
-            typedef ::SireMM::CLJFunction::COMBINING_RULES ( ::SireMM::CLJFunction::*combiningRules_function_type )(  ) const;
+            typedef ::SireMM::CLJFunction::COMBINING_RULES ( ::SireMM::CLJFunction::*combiningRules_function_type)(  ) const;
             combiningRules_function_type combiningRules_function_value( &::SireMM::CLJFunction::combiningRules );
             
             CLJFunction_exposer.def( 
@@ -143,7 +142,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::containsProperty
         
-            typedef bool ( ::SireMM::CLJFunction::*containsProperty_function_type )( ::QString const & ) const;
+            typedef bool ( ::SireMM::CLJFunction::*containsProperty_function_type)( ::QString const & ) const;
             containsProperty_function_type containsProperty_function_value( &::SireMM::CLJFunction::containsProperty );
             
             CLJFunction_exposer.def( 
@@ -154,7 +153,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::coulomb
         
-            typedef double ( ::SireMM::CLJFunction::*coulomb_function_type )( ::SireMM::CLJAtoms const & ) const;
+            typedef double ( ::SireMM::CLJFunction::*coulomb_function_type)( ::SireMM::CLJAtoms const & ) const;
             coulomb_function_type coulomb_function_value( &::SireMM::CLJFunction::coulomb );
             
             CLJFunction_exposer.def( 
@@ -165,7 +164,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::coulomb
         
-            typedef double ( ::SireMM::CLJFunction::*coulomb_function_type )( ::SireMM::CLJAtoms const &,::SireMM::CLJAtoms const &,float ) const;
+            typedef double ( ::SireMM::CLJFunction::*coulomb_function_type)( ::SireMM::CLJAtoms const &,::SireMM::CLJAtoms const &,float ) const;
             coulomb_function_type coulomb_function_value( &::SireMM::CLJFunction::coulomb );
             
             CLJFunction_exposer.def( 
@@ -176,7 +175,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::coulomb
         
-            typedef double ( ::SireMM::CLJFunction::*coulomb_function_type )( ::SireMM::CLJBoxes const & ) const;
+            typedef double ( ::SireMM::CLJFunction::*coulomb_function_type)( ::SireMM::CLJBoxes const & ) const;
             coulomb_function_type coulomb_function_value( &::SireMM::CLJFunction::coulomb );
             
             CLJFunction_exposer.def( 
@@ -187,7 +186,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::coulomb
         
-            typedef double ( ::SireMM::CLJFunction::*coulomb_function_type )( ::SireMM::CLJBoxes const &,::SireMM::CLJBoxes const & ) const;
+            typedef double ( ::SireMM::CLJFunction::*coulomb_function_type)( ::SireMM::CLJBoxes const &,::SireMM::CLJBoxes const & ) const;
             coulomb_function_type coulomb_function_value( &::SireMM::CLJFunction::coulomb );
             
             CLJFunction_exposer.def( 
@@ -198,7 +197,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::coulombCutoff
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMM::CLJFunction::*coulombCutoff_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::CLJFunction::*coulombCutoff_function_type)(  ) const;
             coulombCutoff_function_type coulombCutoff_function_value( &::SireMM::CLJFunction::coulombCutoff );
             
             CLJFunction_exposer.def( 
@@ -208,7 +207,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::hasCutoff
         
-            typedef bool ( ::SireMM::CLJFunction::*hasCutoff_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJFunction::*hasCutoff_function_type)(  ) const;
             hasCutoff_function_type hasCutoff_function_value( &::SireMM::CLJFunction::hasCutoff );
             
             CLJFunction_exposer.def( 
@@ -218,7 +217,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::isPeriodic
         
-            typedef bool ( ::SireMM::CLJFunction::*isPeriodic_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJFunction::*isPeriodic_function_type)(  ) const;
             isPeriodic_function_type isPeriodic_function_value( &::SireMM::CLJFunction::isPeriodic );
             
             CLJFunction_exposer.def( 
@@ -228,7 +227,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::isSoftened
         
-            typedef bool ( ::SireMM::CLJFunction::*isSoftened_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJFunction::*isSoftened_function_type)(  ) const;
             isSoftened_function_type isSoftened_function_value( &::SireMM::CLJFunction::isSoftened );
             
             CLJFunction_exposer.def( 
@@ -238,7 +237,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::lj
         
-            typedef double ( ::SireMM::CLJFunction::*lj_function_type )( ::SireMM::CLJAtoms const & ) const;
+            typedef double ( ::SireMM::CLJFunction::*lj_function_type)( ::SireMM::CLJAtoms const & ) const;
             lj_function_type lj_function_value( &::SireMM::CLJFunction::lj );
             
             CLJFunction_exposer.def( 
@@ -249,7 +248,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::lj
         
-            typedef double ( ::SireMM::CLJFunction::*lj_function_type )( ::SireMM::CLJAtoms const &,::SireMM::CLJAtoms const &,float ) const;
+            typedef double ( ::SireMM::CLJFunction::*lj_function_type)( ::SireMM::CLJAtoms const &,::SireMM::CLJAtoms const &,float ) const;
             lj_function_type lj_function_value( &::SireMM::CLJFunction::lj );
             
             CLJFunction_exposer.def( 
@@ -260,7 +259,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::lj
         
-            typedef double ( ::SireMM::CLJFunction::*lj_function_type )( ::SireMM::CLJBoxes const & ) const;
+            typedef double ( ::SireMM::CLJFunction::*lj_function_type)( ::SireMM::CLJBoxes const & ) const;
             lj_function_type lj_function_value( &::SireMM::CLJFunction::lj );
             
             CLJFunction_exposer.def( 
@@ -271,7 +270,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::lj
         
-            typedef double ( ::SireMM::CLJFunction::*lj_function_type )( ::SireMM::CLJBoxes const &,::SireMM::CLJBoxes const & ) const;
+            typedef double ( ::SireMM::CLJFunction::*lj_function_type)( ::SireMM::CLJBoxes const &,::SireMM::CLJBoxes const & ) const;
             lj_function_type lj_function_value( &::SireMM::CLJFunction::lj );
             
             CLJFunction_exposer.def( 
@@ -282,7 +281,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::ljCutoff
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMM::CLJFunction::*ljCutoff_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::CLJFunction::*ljCutoff_function_type)(  ) const;
             ljCutoff_function_type ljCutoff_function_value( &::SireMM::CLJFunction::ljCutoff );
             
             CLJFunction_exposer.def( 
@@ -358,7 +357,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::operator()
         
-            typedef void ( ::SireMM::CLJFunction::*__call___function_type )( ::SireMM::CLJAtoms const &,double &,double & ) const;
+            typedef void ( ::SireMM::CLJFunction::*__call___function_type)( ::SireMM::CLJAtoms const &,double &,double & ) const;
             __call___function_type __call___function_value( &::SireMM::CLJFunction::operator() );
             
             CLJFunction_exposer.def( 
@@ -369,7 +368,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::operator()
         
-            typedef void ( ::SireMM::CLJFunction::*__call___function_type )( ::SireMM::CLJAtoms const &,::SireMM::CLJAtoms const &,double &,double &,float ) const;
+            typedef void ( ::SireMM::CLJFunction::*__call___function_type)( ::SireMM::CLJAtoms const &,::SireMM::CLJAtoms const &,double &,double &,float ) const;
             __call___function_type __call___function_value( &::SireMM::CLJFunction::operator() );
             
             CLJFunction_exposer.def( 
@@ -380,7 +379,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::operator()
         
-            typedef void ( ::SireMM::CLJFunction::*__call___function_type )( ::SireMM::CLJBoxes const &,double &,double & ) const;
+            typedef void ( ::SireMM::CLJFunction::*__call___function_type)( ::SireMM::CLJBoxes const &,double &,double & ) const;
             __call___function_type __call___function_value( &::SireMM::CLJFunction::operator() );
             
             CLJFunction_exposer.def( 
@@ -391,7 +390,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::operator()
         
-            typedef void ( ::SireMM::CLJFunction::*__call___function_type )( ::SireMM::CLJBoxes const &,::SireMM::CLJBoxes const &,double &,double & ) const;
+            typedef void ( ::SireMM::CLJFunction::*__call___function_type)( ::SireMM::CLJBoxes const &,::SireMM::CLJBoxes const &,double &,double & ) const;
             __call___function_type __call___function_value( &::SireMM::CLJFunction::operator() );
             
             CLJFunction_exposer.def( 
@@ -402,7 +401,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::operator()
         
-            typedef void ( ::SireMM::CLJFunction::*__call___function_type )( ::SireMM::CLJAtoms const &,::SireMM::CLJBoxes const &,double &,double & ) const;
+            typedef void ( ::SireMM::CLJFunction::*__call___function_type)( ::SireMM::CLJAtoms const &,::SireMM::CLJBoxes const &,double &,double & ) const;
             __call___function_type __call___function_value( &::SireMM::CLJFunction::operator() );
             
             CLJFunction_exposer.def( 
@@ -413,7 +412,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::properties
         
-            typedef ::SireBase::Properties ( ::SireMM::CLJFunction::*properties_function_type )(  ) const;
+            typedef ::SireBase::Properties ( ::SireMM::CLJFunction::*properties_function_type)(  ) const;
             properties_function_type properties_function_value( &::SireMM::CLJFunction::properties );
             
             CLJFunction_exposer.def( 
@@ -423,7 +422,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::property
         
-            typedef ::SireBase::PropertyPtr ( ::SireMM::CLJFunction::*property_function_type )( ::QString const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMM::CLJFunction::*property_function_type)( ::QString const & ) const;
             property_function_type property_function_value( &::SireMM::CLJFunction::property );
             
             CLJFunction_exposer.def( 
@@ -434,7 +433,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::setArithmeticCombiningRules
         
-            typedef void ( ::SireMM::CLJFunction::*setArithmeticCombiningRules_function_type )( bool ) ;
+            typedef void ( ::SireMM::CLJFunction::*setArithmeticCombiningRules_function_type)( bool ) ;
             setArithmeticCombiningRules_function_type setArithmeticCombiningRules_function_value( &::SireMM::CLJFunction::setArithmeticCombiningRules );
             
             CLJFunction_exposer.def( 
@@ -445,7 +444,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::setCombiningRules
         
-            typedef void ( ::SireMM::CLJFunction::*setCombiningRules_function_type )( ::SireMM::CLJFunction::COMBINING_RULES ) ;
+            typedef void ( ::SireMM::CLJFunction::*setCombiningRules_function_type)( ::SireMM::CLJFunction::COMBINING_RULES ) ;
             setCombiningRules_function_type setCombiningRules_function_value( &::SireMM::CLJFunction::setCombiningRules );
             
             CLJFunction_exposer.def( 
@@ -456,7 +455,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::setCoulombCutoff
         
-            typedef void ( ::SireMM::CLJFunction::*setCoulombCutoff_function_type )( ::SireUnits::Dimension::Length ) ;
+            typedef void ( ::SireMM::CLJFunction::*setCoulombCutoff_function_type)( ::SireUnits::Dimension::Length ) ;
             setCoulombCutoff_function_type setCoulombCutoff_function_value( &::SireMM::CLJFunction::setCoulombCutoff );
             
             CLJFunction_exposer.def( 
@@ -467,7 +466,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::setCutoff
         
-            typedef void ( ::SireMM::CLJFunction::*setCutoff_function_type )( ::SireUnits::Dimension::Length ) ;
+            typedef void ( ::SireMM::CLJFunction::*setCutoff_function_type)( ::SireUnits::Dimension::Length ) ;
             setCutoff_function_type setCutoff_function_value( &::SireMM::CLJFunction::setCutoff );
             
             CLJFunction_exposer.def( 
@@ -478,7 +477,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::setCutoff
         
-            typedef void ( ::SireMM::CLJFunction::*setCutoff_function_type )( ::SireUnits::Dimension::Length,::SireUnits::Dimension::Length ) ;
+            typedef void ( ::SireMM::CLJFunction::*setCutoff_function_type)( ::SireUnits::Dimension::Length,::SireUnits::Dimension::Length ) ;
             setCutoff_function_type setCutoff_function_value( &::SireMM::CLJFunction::setCutoff );
             
             CLJFunction_exposer.def( 
@@ -489,7 +488,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::setGeometricCombiningRules
         
-            typedef void ( ::SireMM::CLJFunction::*setGeometricCombiningRules_function_type )( bool ) ;
+            typedef void ( ::SireMM::CLJFunction::*setGeometricCombiningRules_function_type)( bool ) ;
             setGeometricCombiningRules_function_type setGeometricCombiningRules_function_value( &::SireMM::CLJFunction::setGeometricCombiningRules );
             
             CLJFunction_exposer.def( 
@@ -500,7 +499,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::setLJCutoff
         
-            typedef void ( ::SireMM::CLJFunction::*setLJCutoff_function_type )( ::SireUnits::Dimension::Length ) ;
+            typedef void ( ::SireMM::CLJFunction::*setLJCutoff_function_type)( ::SireUnits::Dimension::Length ) ;
             setLJCutoff_function_type setLJCutoff_function_value( &::SireMM::CLJFunction::setLJCutoff );
             
             CLJFunction_exposer.def( 
@@ -511,7 +510,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::setProperty
         
-            typedef ::SireMM::CLJFunctionPtr ( ::SireMM::CLJFunction::*setProperty_function_type )( ::QString const &,::SireBase::Property const & ) const;
+            typedef ::SireMM::CLJFunctionPtr ( ::SireMM::CLJFunction::*setProperty_function_type)( ::QString const &,::SireBase::Property const & ) const;
             setProperty_function_type setProperty_function_value( &::SireMM::CLJFunction::setProperty );
             
             CLJFunction_exposer.def( 
@@ -522,7 +521,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::setSpace
         
-            typedef void ( ::SireMM::CLJFunction::*setSpace_function_type )( ::SireVol::Space const & ) ;
+            typedef void ( ::SireMM::CLJFunction::*setSpace_function_type)( ::SireVol::Space const & ) ;
             setSpace_function_type setSpace_function_value( &::SireMM::CLJFunction::setSpace );
             
             CLJFunction_exposer.def( 
@@ -533,18 +532,18 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::space
         
-            typedef ::SireVol::Space const & ( ::SireMM::CLJFunction::*space_function_type )(  ) const;
+            typedef ::SireVol::Space const & ( ::SireMM::CLJFunction::*space_function_type)(  ) const;
             space_function_type space_function_value( &::SireMM::CLJFunction::space );
             
             CLJFunction_exposer.def( 
                 "space"
                 , space_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::CLJFunction::supportsGridCalculation
         
-            typedef bool ( ::SireMM::CLJFunction::*supportsGridCalculation_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJFunction::*supportsGridCalculation_function_type)(  ) const;
             supportsGridCalculation_function_type supportsGridCalculation_function_value( &::SireMM::CLJFunction::supportsGridCalculation );
             
             CLJFunction_exposer.def( 
@@ -554,7 +553,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::total
         
-            typedef void ( ::SireMM::CLJFunction::*total_function_type )( ::SireMM::CLJAtoms const &,double &,double & ) const;
+            typedef void ( ::SireMM::CLJFunction::*total_function_type)( ::SireMM::CLJAtoms const &,double &,double & ) const;
             total_function_type total_function_value( &::SireMM::CLJFunction::total );
             
             CLJFunction_exposer.def( 
@@ -565,7 +564,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::total
         
-            typedef void ( ::SireMM::CLJFunction::*total_function_type )( ::SireMM::CLJAtoms const &,::SireMM::CLJAtoms const &,double &,double &,float ) const;
+            typedef void ( ::SireMM::CLJFunction::*total_function_type)( ::SireMM::CLJAtoms const &,::SireMM::CLJAtoms const &,double &,double &,float ) const;
             total_function_type total_function_value( &::SireMM::CLJFunction::total );
             
             CLJFunction_exposer.def( 
@@ -576,7 +575,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::total
         
-            typedef void ( ::SireMM::CLJFunction::*total_function_type )( ::SireMM::CLJBoxes const &,double &,double & ) const;
+            typedef void ( ::SireMM::CLJFunction::*total_function_type)( ::SireMM::CLJBoxes const &,double &,double & ) const;
             total_function_type total_function_value( &::SireMM::CLJFunction::total );
             
             CLJFunction_exposer.def( 
@@ -587,7 +586,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::total
         
-            typedef void ( ::SireMM::CLJFunction::*total_function_type )( ::SireMM::CLJBoxes const &,::SireMM::CLJBoxes const &,double &,double & ) const;
+            typedef void ( ::SireMM::CLJFunction::*total_function_type)( ::SireMM::CLJBoxes const &,::SireMM::CLJBoxes const &,double &,double & ) const;
             total_function_type total_function_value( &::SireMM::CLJFunction::total );
             
             CLJFunction_exposer.def( 
@@ -608,7 +607,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::usingArithmeticCombiningRules
         
-            typedef bool ( ::SireMM::CLJFunction::*usingArithmeticCombiningRules_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJFunction::*usingArithmeticCombiningRules_function_type)(  ) const;
             usingArithmeticCombiningRules_function_type usingArithmeticCombiningRules_function_value( &::SireMM::CLJFunction::usingArithmeticCombiningRules );
             
             CLJFunction_exposer.def( 
@@ -618,7 +617,7 @@ void register_CLJFunction_class(){
         }
         { //::SireMM::CLJFunction::usingGeometricCombiningRules
         
-            typedef bool ( ::SireMM::CLJFunction::*usingGeometricCombiningRules_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJFunction::*usingGeometricCombiningRules_function_type)(  ) const;
             usingGeometricCombiningRules_function_type usingGeometricCombiningRules_function_value( &::SireMM::CLJFunction::usingGeometricCombiningRules );
             
             CLJFunction_exposer.def( 

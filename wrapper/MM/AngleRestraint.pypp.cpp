@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "AngleRestraint.pypp.hpp"
 
 namespace bp = boost::python;
@@ -51,7 +50,7 @@ void register_AngleRestraint_class(){
         AngleRestraint_exposer.def( bp::init< SireMM::AngleRestraint const & >(( bp::arg("other") )) );
         { //::SireMM::AngleRestraint::builtinSymbols
         
-            typedef ::SireCAS::Symbols ( ::SireMM::AngleRestraint::*builtinSymbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireMM::AngleRestraint::*builtinSymbols_function_type)(  ) const;
             builtinSymbols_function_type builtinSymbols_function_value( &::SireMM::AngleRestraint::builtinSymbols );
             
             AngleRestraint_exposer.def( 
@@ -61,7 +60,7 @@ void register_AngleRestraint_class(){
         }
         { //::SireMM::AngleRestraint::builtinValues
         
-            typedef ::SireCAS::Values ( ::SireMM::AngleRestraint::*builtinValues_function_type )(  ) const;
+            typedef ::SireCAS::Values ( ::SireMM::AngleRestraint::*builtinValues_function_type)(  ) const;
             builtinValues_function_type builtinValues_function_value( &::SireMM::AngleRestraint::builtinValues );
             
             AngleRestraint_exposer.def( 
@@ -71,7 +70,7 @@ void register_AngleRestraint_class(){
         }
         { //::SireMM::AngleRestraint::contains
         
-            typedef bool ( ::SireMM::AngleRestraint::*contains_function_type )( ::SireMol::MolNum ) const;
+            typedef bool ( ::SireMM::AngleRestraint::*contains_function_type)( ::SireMol::MolNum ) const;
             contains_function_type contains_function_value( &::SireMM::AngleRestraint::contains );
             
             AngleRestraint_exposer.def( 
@@ -82,7 +81,7 @@ void register_AngleRestraint_class(){
         }
         { //::SireMM::AngleRestraint::contains
         
-            typedef bool ( ::SireMM::AngleRestraint::*contains_function_type )( ::SireMol::MolID const & ) const;
+            typedef bool ( ::SireMM::AngleRestraint::*contains_function_type)( ::SireMol::MolID const & ) const;
             contains_function_type contains_function_value( &::SireMM::AngleRestraint::contains );
             
             AngleRestraint_exposer.def( 
@@ -93,7 +92,7 @@ void register_AngleRestraint_class(){
         }
         { //::SireMM::AngleRestraint::differentialRestraintFunction
         
-            typedef ::SireCAS::Expression const & ( ::SireMM::AngleRestraint::*differentialRestraintFunction_function_type )(  ) const;
+            typedef ::SireCAS::Expression const & ( ::SireMM::AngleRestraint::*differentialRestraintFunction_function_type)(  ) const;
             differentialRestraintFunction_function_type differentialRestraintFunction_function_value( &::SireMM::AngleRestraint::differentialRestraintFunction );
             
             AngleRestraint_exposer.def( 
@@ -104,7 +103,7 @@ void register_AngleRestraint_class(){
         }
         { //::SireMM::AngleRestraint::differentiate
         
-            typedef ::SireMM::RestraintPtr ( ::SireMM::AngleRestraint::*differentiate_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireMM::RestraintPtr ( ::SireMM::AngleRestraint::*differentiate_function_type)( ::SireCAS::Symbol const & ) const;
             differentiate_function_type differentiate_function_value( &::SireMM::AngleRestraint::differentiate );
             
             AngleRestraint_exposer.def( 
@@ -115,7 +114,7 @@ void register_AngleRestraint_class(){
         }
         { //::SireMM::AngleRestraint::force
         
-            typedef void ( ::SireMM::AngleRestraint::*force_function_type )( ::SireFF::MolForceTable &,double ) const;
+            typedef void ( ::SireMM::AngleRestraint::*force_function_type)( ::SireFF::MolForceTable &,double ) const;
             force_function_type force_function_value( &::SireMM::AngleRestraint::force );
             
             AngleRestraint_exposer.def( 
@@ -126,7 +125,7 @@ void register_AngleRestraint_class(){
         }
         { //::SireMM::AngleRestraint::force
         
-            typedef void ( ::SireMM::AngleRestraint::*force_function_type )( ::SireFF::ForceTable &,double ) const;
+            typedef void ( ::SireMM::AngleRestraint::*force_function_type)( ::SireFF::ForceTable &,double ) const;
             force_function_type force_function_value( &::SireMM::AngleRestraint::force );
             
             AngleRestraint_exposer.def( 
@@ -159,7 +158,7 @@ void register_AngleRestraint_class(){
         }
         { //::SireMM::AngleRestraint::molecules
         
-            typedef ::SireMol::Molecules ( ::SireMM::AngleRestraint::*molecules_function_type )(  ) const;
+            typedef ::SireMol::Molecules ( ::SireMM::AngleRestraint::*molecules_function_type)(  ) const;
             molecules_function_type molecules_function_value( &::SireMM::AngleRestraint::molecules );
             
             AngleRestraint_exposer.def( 
@@ -169,7 +168,7 @@ void register_AngleRestraint_class(){
         }
         { //::SireMM::AngleRestraint::nPoints
         
-            typedef int ( ::SireMM::AngleRestraint::*nPoints_function_type )(  ) const;
+            typedef int ( ::SireMM::AngleRestraint::*nPoints_function_type)(  ) const;
             nPoints_function_type nPoints_function_value( &::SireMM::AngleRestraint::nPoints );
             
             AngleRestraint_exposer.def( 
@@ -180,7 +179,7 @@ void register_AngleRestraint_class(){
         AngleRestraint_exposer.def( bp::self != bp::self );
         { //::SireMM::AngleRestraint::operator=
         
-            typedef ::SireMM::AngleRestraint & ( ::SireMM::AngleRestraint::*assign_function_type )( ::SireMM::AngleRestraint const & ) ;
+            typedef ::SireMM::AngleRestraint & ( ::SireMM::AngleRestraint::*assign_function_type)( ::SireMM::AngleRestraint const & ) ;
             assign_function_type assign_function_value( &::SireMM::AngleRestraint::operator= );
             
             AngleRestraint_exposer.def( 
@@ -193,52 +192,52 @@ void register_AngleRestraint_class(){
         AngleRestraint_exposer.def( bp::self == bp::self );
         { //::SireMM::AngleRestraint::point
         
-            typedef ::SireFF::Point const & ( ::SireMM::AngleRestraint::*point_function_type )( int ) const;
+            typedef ::SireFF::Point const & ( ::SireMM::AngleRestraint::*point_function_type)( int ) const;
             point_function_type point_function_value( &::SireMM::AngleRestraint::point );
             
             AngleRestraint_exposer.def( 
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::AngleRestraint::point0
         
-            typedef ::SireFF::Point const & ( ::SireMM::AngleRestraint::*point0_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireMM::AngleRestraint::*point0_function_type)(  ) const;
             point0_function_type point0_function_value( &::SireMM::AngleRestraint::point0 );
             
             AngleRestraint_exposer.def( 
                 "point0"
                 , point0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::AngleRestraint::point1
         
-            typedef ::SireFF::Point const & ( ::SireMM::AngleRestraint::*point1_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireMM::AngleRestraint::*point1_function_type)(  ) const;
             point1_function_type point1_function_value( &::SireMM::AngleRestraint::point1 );
             
             AngleRestraint_exposer.def( 
                 "point1"
                 , point1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::AngleRestraint::point2
         
-            typedef ::SireFF::Point const & ( ::SireMM::AngleRestraint::*point2_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireMM::AngleRestraint::*point2_function_type)(  ) const;
             point2_function_type point2_function_value( &::SireMM::AngleRestraint::point2 );
             
             AngleRestraint_exposer.def( 
                 "point2"
                 , point2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::AngleRestraint::setSpace
         
-            typedef void ( ::SireMM::AngleRestraint::*setSpace_function_type )( ::SireVol::Space const & ) ;
+            typedef void ( ::SireMM::AngleRestraint::*setSpace_function_type)( ::SireVol::Space const & ) ;
             setSpace_function_type setSpace_function_value( &::SireMM::AngleRestraint::setSpace );
             
             AngleRestraint_exposer.def( 
@@ -255,7 +254,7 @@ void register_AngleRestraint_class(){
             AngleRestraint_exposer.def( 
                 "theta"
                 , theta_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::AngleRestraint::typeName
@@ -270,7 +269,7 @@ void register_AngleRestraint_class(){
         }
         { //::SireMM::AngleRestraint::update
         
-            typedef void ( ::SireMM::AngleRestraint::*update_function_type )( ::SireMol::MoleculeData const & ) ;
+            typedef void ( ::SireMM::AngleRestraint::*update_function_type)( ::SireMol::MoleculeData const & ) ;
             update_function_type update_function_value( &::SireMM::AngleRestraint::update );
             
             AngleRestraint_exposer.def( 
@@ -281,7 +280,7 @@ void register_AngleRestraint_class(){
         }
         { //::SireMM::AngleRestraint::update
         
-            typedef void ( ::SireMM::AngleRestraint::*update_function_type )( ::SireMol::Molecules const & ) ;
+            typedef void ( ::SireMM::AngleRestraint::*update_function_type)( ::SireMol::Molecules const & ) ;
             update_function_type update_function_value( &::SireMM::AngleRestraint::update );
             
             AngleRestraint_exposer.def( 
@@ -292,7 +291,7 @@ void register_AngleRestraint_class(){
         }
         { //::SireMM::AngleRestraint::usesMoleculesIn
         
-            typedef bool ( ::SireMM::AngleRestraint::*usesMoleculesIn_function_type )( ::SireFF::ForceTable const & ) const;
+            typedef bool ( ::SireMM::AngleRestraint::*usesMoleculesIn_function_type)( ::SireFF::ForceTable const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireMM::AngleRestraint::usesMoleculesIn );
             
             AngleRestraint_exposer.def( 
@@ -303,7 +302,7 @@ void register_AngleRestraint_class(){
         }
         { //::SireMM::AngleRestraint::usesMoleculesIn
         
-            typedef bool ( ::SireMM::AngleRestraint::*usesMoleculesIn_function_type )( ::SireMol::Molecules const & ) const;
+            typedef bool ( ::SireMM::AngleRestraint::*usesMoleculesIn_function_type)( ::SireMol::Molecules const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireMM::AngleRestraint::usesMoleculesIn );
             
             AngleRestraint_exposer.def( 

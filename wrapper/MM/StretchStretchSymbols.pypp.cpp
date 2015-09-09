@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "StretchStretchSymbols.pypp.hpp"
 
 namespace bp = boost::python;
@@ -44,35 +43,35 @@ void register_StretchStretchSymbols_class(){
         bp::scope StretchStretchSymbols_scope( StretchStretchSymbols_exposer );
         { //::SireMM::StretchStretchSymbols::r01
         
-            typedef ::SireCAS::Symbol const & ( ::SireMM::StretchStretchSymbols::*r01_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMM::StretchStretchSymbols::*r01_function_type)(  ) const;
             r01_function_type r01_function_value( &::SireMM::StretchStretchSymbols::r01 );
             
             StretchStretchSymbols_exposer.def( 
                 "r01"
                 , r01_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::StretchStretchSymbols::r12
         
-            typedef ::SireCAS::Symbol const & ( ::SireMM::StretchStretchSymbols::*r12_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMM::StretchStretchSymbols::*r12_function_type)(  ) const;
             r12_function_type r12_function_value( &::SireMM::StretchStretchSymbols::r12 );
             
             StretchStretchSymbols_exposer.def( 
                 "r12"
                 , r12_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::StretchStretchSymbols::r21
         
-            typedef ::SireCAS::Symbol const & ( ::SireMM::StretchStretchSymbols::*r21_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMM::StretchStretchSymbols::*r21_function_type)(  ) const;
             r21_function_type r21_function_value( &::SireMM::StretchStretchSymbols::r21 );
             
             StretchStretchSymbols_exposer.def( 
                 "r21"
                 , r21_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         StretchStretchSymbols_exposer.def( "__copy__", &__copy__);

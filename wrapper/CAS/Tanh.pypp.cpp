@@ -39,7 +39,7 @@ void register_Tanh_class(){
         Tanh_exposer.def( bp::init< SireCAS::Tanh const & >(( bp::arg("other") )) );
         { //::SireCAS::Tanh::evaluate
         
-            typedef double ( ::SireCAS::Tanh::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::Tanh::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Tanh::evaluate );
             
             Tanh_exposer.def( 
@@ -50,7 +50,7 @@ void register_Tanh_class(){
         }
         { //::SireCAS::Tanh::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::Tanh::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::Tanh::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Tanh::evaluate );
             
             Tanh_exposer.def( 
@@ -72,7 +72,7 @@ void register_Tanh_class(){
         }
         { //::SireCAS::Tanh::what
         
-            typedef char const * ( ::SireCAS::Tanh::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::Tanh::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::Tanh::what );
             
             Tanh_exposer.def( 

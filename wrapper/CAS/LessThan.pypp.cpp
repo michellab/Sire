@@ -49,7 +49,7 @@ void register_LessThan_class(){
         LessThan_exposer.def( bp::init< SireCAS::LessThan const & >(( bp::arg("other") )) );
         { //::SireCAS::LessThan::alwaysFalse
         
-            typedef bool ( ::SireCAS::LessThan::*alwaysFalse_function_type )(  ) const;
+            typedef bool ( ::SireCAS::LessThan::*alwaysFalse_function_type)(  ) const;
             alwaysFalse_function_type alwaysFalse_function_value( &::SireCAS::LessThan::alwaysFalse );
             
             LessThan_exposer.def( 
@@ -59,7 +59,7 @@ void register_LessThan_class(){
         }
         { //::SireCAS::LessThan::alwaysTrue
         
-            typedef bool ( ::SireCAS::LessThan::*alwaysTrue_function_type )(  ) const;
+            typedef bool ( ::SireCAS::LessThan::*alwaysTrue_function_type)(  ) const;
             alwaysTrue_function_type alwaysTrue_function_value( &::SireCAS::LessThan::alwaysTrue );
             
             LessThan_exposer.def( 
@@ -69,7 +69,7 @@ void register_LessThan_class(){
         }
         { //::SireCAS::LessThan::operator=
         
-            typedef ::SireCAS::LessThan & ( ::SireCAS::LessThan::*assign_function_type )( ::SireCAS::LessThan const & ) ;
+            typedef ::SireCAS::LessThan & ( ::SireCAS::LessThan::*assign_function_type)( ::SireCAS::LessThan const & ) ;
             assign_function_type assign_function_value( &::SireCAS::LessThan::operator= );
             
             LessThan_exposer.def( 
@@ -93,7 +93,7 @@ void register_LessThan_class(){
         }
         { //::SireCAS::LessThan::what
         
-            typedef char const * ( ::SireCAS::LessThan::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::LessThan::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::LessThan::what );
             
             LessThan_exposer.def( 

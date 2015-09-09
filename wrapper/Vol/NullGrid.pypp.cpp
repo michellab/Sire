@@ -39,7 +39,7 @@ void register_NullGrid_class(){
         NullGrid_exposer.def( bp::self != bp::self );
         { //::SireVol::NullGrid::operator=
         
-            typedef ::SireVol::NullGrid & ( ::SireVol::NullGrid::*assign_function_type )( ::SireVol::NullGrid const & ) ;
+            typedef ::SireVol::NullGrid & ( ::SireVol::NullGrid::*assign_function_type)( ::SireVol::NullGrid const & ) ;
             assign_function_type assign_function_value( &::SireVol::NullGrid::operator= );
             
             NullGrid_exposer.def( 
@@ -52,7 +52,7 @@ void register_NullGrid_class(){
         NullGrid_exposer.def( bp::self == bp::self );
         { //::SireVol::NullGrid::recenter
         
-            typedef ::SireVol::GridPtr ( ::SireVol::NullGrid::*recenter_function_type )( ::SireMaths::Vector const & ) const;
+            typedef ::SireVol::GridPtr ( ::SireVol::NullGrid::*recenter_function_type)( ::SireMaths::Vector const & ) const;
             recenter_function_type recenter_function_value( &::SireVol::NullGrid::recenter );
             
             NullGrid_exposer.def( 
@@ -63,7 +63,7 @@ void register_NullGrid_class(){
         }
         { //::SireVol::NullGrid::rotate
         
-            typedef ::SireVol::GridPtr ( ::SireVol::NullGrid::*rotate_function_type )( ::SireMaths::Matrix const &,::SireMaths::Vector const & ) const;
+            typedef ::SireVol::GridPtr ( ::SireVol::NullGrid::*rotate_function_type)( ::SireMaths::Matrix const &,::SireMaths::Vector const & ) const;
             rotate_function_type rotate_function_value( &::SireVol::NullGrid::rotate );
             
             NullGrid_exposer.def( 
@@ -74,7 +74,7 @@ void register_NullGrid_class(){
         }
         { //::SireVol::NullGrid::rotate
         
-            typedef ::SireVol::GridPtr ( ::SireVol::NullGrid::*rotate_function_type )( ::SireMaths::Quaternion const &,::SireMaths::Vector const & ) const;
+            typedef ::SireVol::GridPtr ( ::SireVol::NullGrid::*rotate_function_type)( ::SireMaths::Quaternion const &,::SireMaths::Vector const & ) const;
             rotate_function_type rotate_function_value( &::SireVol::NullGrid::rotate );
             
             NullGrid_exposer.def( 
@@ -85,7 +85,7 @@ void register_NullGrid_class(){
         }
         { //::SireVol::NullGrid::scale
         
-            typedef ::SireVol::GridPtr ( ::SireVol::NullGrid::*scale_function_type )( double ) const;
+            typedef ::SireVol::GridPtr ( ::SireVol::NullGrid::*scale_function_type)( double ) const;
             scale_function_type scale_function_value( &::SireVol::NullGrid::scale );
             
             NullGrid_exposer.def( 
@@ -96,7 +96,7 @@ void register_NullGrid_class(){
         }
         { //::SireVol::NullGrid::translate
         
-            typedef ::SireVol::GridPtr ( ::SireVol::NullGrid::*translate_function_type )( ::SireMaths::Vector const & ) const;
+            typedef ::SireVol::GridPtr ( ::SireVol::NullGrid::*translate_function_type)( ::SireMaths::Vector const & ) const;
             translate_function_type translate_function_value( &::SireVol::NullGrid::translate );
             
             NullGrid_exposer.def( 

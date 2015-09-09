@@ -7,8 +7,6 @@
 
 #include "boost/python/suite/indexing/vector_indexing_suite.hpp"
 
-#include "Helpers/clone_const_reference.hpp"
-
 #include "Array2DBase.pypp.hpp"
 
 #include "Array2D_double_.pypp.hpp"

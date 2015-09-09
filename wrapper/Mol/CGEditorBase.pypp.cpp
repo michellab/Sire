@@ -96,7 +96,7 @@ void register_CGEditorBase_class(){
         { //::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::atom
         
             typedef SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::AtomEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*atom_function_type )(  ) ;
+            typedef ::SireMol::AtomEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*atom_function_type)(  ) ;
             atom_function_type atom_function_value( &::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::atom );
             
             CGEditorBase_exposer.def( 
@@ -107,7 +107,7 @@ void register_CGEditorBase_class(){
         { //::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::atom
         
             typedef SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::AtomEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*atom_function_type )( ::SireMol::AtomID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::AtomEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*atom_function_type)( ::SireMol::AtomID const &,::SireBase::PropertyMap const & ) ;
             atom_function_type atom_function_value( &::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::atom );
             
             CGEditorBase_exposer.def( 
@@ -119,7 +119,7 @@ void register_CGEditorBase_class(){
         { //::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::chain
         
             typedef SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::ChainEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*chain_function_type )(  ) ;
+            typedef ::SireMol::ChainEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*chain_function_type)(  ) ;
             chain_function_type chain_function_value( &::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::chain );
             
             CGEditorBase_exposer.def( 
@@ -130,7 +130,7 @@ void register_CGEditorBase_class(){
         { //::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::chain
         
             typedef SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::ChainEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*chain_function_type )( ::SireMol::ChainID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::ChainEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*chain_function_type)( ::SireMol::ChainID const &,::SireBase::PropertyMap const & ) ;
             chain_function_type chain_function_value( &::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::chain );
             
             CGEditorBase_exposer.def( 
@@ -142,7 +142,7 @@ void register_CGEditorBase_class(){
         { //::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::cutGroup
         
             typedef SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::CGEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*cutGroup_function_type )(  ) ;
+            typedef ::SireMol::CGEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*cutGroup_function_type)(  ) ;
             cutGroup_function_type cutGroup_function_value( &::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::cutGroup );
             
             CGEditorBase_exposer.def( 
@@ -153,7 +153,7 @@ void register_CGEditorBase_class(){
         { //::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::cutGroup
         
             typedef SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::CGEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*cutGroup_function_type )( ::SireMol::CGID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::CGEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*cutGroup_function_type)( ::SireMol::CGID const &,::SireBase::PropertyMap const & ) ;
             cutGroup_function_type cutGroup_function_value( &::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::cutGroup );
             
             CGEditorBase_exposer.def( 
@@ -165,7 +165,7 @@ void register_CGEditorBase_class(){
         { //::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::molecule
         
             typedef SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::MolEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*molecule_function_type )(  ) ;
+            typedef ::SireMol::MolEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*molecule_function_type)(  ) ;
             molecule_function_type molecule_function_value( &::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::molecule );
             
             CGEditorBase_exposer.def( 
@@ -176,7 +176,7 @@ void register_CGEditorBase_class(){
         { //::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::operator=
         
             typedef SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > & ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*assign_function_type )( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > const & ) ;
+            typedef ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > & ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*assign_function_type)( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > const & ) ;
             assign_function_type assign_function_value( &::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::operator= );
             
             CGEditorBase_exposer.def( 
@@ -189,7 +189,7 @@ void register_CGEditorBase_class(){
         { //::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::operator=
         
             typedef SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > & ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*assign_function_type )( ::SireMol::CutGroup const & ) ;
+            typedef ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > & ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*assign_function_type)( ::SireMol::CutGroup const & ) ;
             assign_function_type assign_function_value( &::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::operator= );
             
             CGEditorBase_exposer.def( 
@@ -202,7 +202,7 @@ void register_CGEditorBase_class(){
         { //::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::removeMetadata
         
             typedef SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::CGEditor & ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*removeMetadata_function_type )( ::SireBase::PropertyName const & ) ;
+            typedef ::SireMol::CGEditor & ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*removeMetadata_function_type)( ::SireBase::PropertyName const & ) ;
             removeMetadata_function_type removeMetadata_function_value( &::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::removeMetadata );
             
             CGEditorBase_exposer.def( 
@@ -215,7 +215,7 @@ void register_CGEditorBase_class(){
         { //::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::removeMetadata
         
             typedef SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::CGEditor & ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*removeMetadata_function_type )( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) ;
+            typedef ::SireMol::CGEditor & ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*removeMetadata_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) ;
             removeMetadata_function_type removeMetadata_function_value( &::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::removeMetadata );
             
             CGEditorBase_exposer.def( 
@@ -228,7 +228,7 @@ void register_CGEditorBase_class(){
         { //::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::removeProperty
         
             typedef SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::CGEditor & ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*removeProperty_function_type )( ::SireBase::PropertyName const & ) ;
+            typedef ::SireMol::CGEditor & ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*removeProperty_function_type)( ::SireBase::PropertyName const & ) ;
             removeProperty_function_type removeProperty_function_value( &::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::removeProperty );
             
             CGEditorBase_exposer.def( 
@@ -241,7 +241,7 @@ void register_CGEditorBase_class(){
         { //::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::residue
         
             typedef SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::ResEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*residue_function_type )(  ) ;
+            typedef ::SireMol::ResEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*residue_function_type)(  ) ;
             residue_function_type residue_function_value( &::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::residue );
             
             CGEditorBase_exposer.def( 
@@ -252,7 +252,7 @@ void register_CGEditorBase_class(){
         { //::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::residue
         
             typedef SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::ResEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*residue_function_type )( ::SireMol::ResID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::ResEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*residue_function_type)( ::SireMol::ResID const &,::SireBase::PropertyMap const & ) ;
             residue_function_type residue_function_value( &::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::residue );
             
             CGEditorBase_exposer.def( 
@@ -264,7 +264,7 @@ void register_CGEditorBase_class(){
         { //::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::segment
         
             typedef SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::SegEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*segment_function_type )(  ) ;
+            typedef ::SireMol::SegEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*segment_function_type)(  ) ;
             segment_function_type segment_function_value( &::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::segment );
             
             CGEditorBase_exposer.def( 
@@ -275,7 +275,7 @@ void register_CGEditorBase_class(){
         { //::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::segment
         
             typedef SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::SegEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*segment_function_type )( ::SireMol::SegID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::SegEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*segment_function_type)( ::SireMol::SegID const &,::SireBase::PropertyMap const & ) ;
             segment_function_type segment_function_value( &::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::segment );
             
             CGEditorBase_exposer.def( 
@@ -287,7 +287,7 @@ void register_CGEditorBase_class(){
         { //::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::select
         
             typedef SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::AtomEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*select_function_type )( ::SireMol::AtomID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::AtomEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*select_function_type)( ::SireMol::AtomID const &,::SireBase::PropertyMap const & ) ;
             select_function_type select_function_value( &::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::select );
             
             CGEditorBase_exposer.def( 
@@ -299,7 +299,7 @@ void register_CGEditorBase_class(){
         { //::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::select
         
             typedef SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::CGEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*select_function_type )( ::SireMol::CGID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::CGEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*select_function_type)( ::SireMol::CGID const &,::SireBase::PropertyMap const & ) ;
             select_function_type select_function_value( &::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::select );
             
             CGEditorBase_exposer.def( 
@@ -311,7 +311,7 @@ void register_CGEditorBase_class(){
         { //::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::select
         
             typedef SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::ResEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*select_function_type )( ::SireMol::ResID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::ResEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*select_function_type)( ::SireMol::ResID const &,::SireBase::PropertyMap const & ) ;
             select_function_type select_function_value( &::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::select );
             
             CGEditorBase_exposer.def( 
@@ -323,7 +323,7 @@ void register_CGEditorBase_class(){
         { //::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::select
         
             typedef SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::ChainEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*select_function_type )( ::SireMol::ChainID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::ChainEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*select_function_type)( ::SireMol::ChainID const &,::SireBase::PropertyMap const & ) ;
             select_function_type select_function_value( &::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::select );
             
             CGEditorBase_exposer.def( 
@@ -335,7 +335,7 @@ void register_CGEditorBase_class(){
         { //::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::select
         
             typedef SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::SegEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*select_function_type )( ::SireMol::SegID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::SegEditor ( ::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::*select_function_type)( ::SireMol::SegID const &,::SireBase::PropertyMap const & ) ;
             select_function_type select_function_value( &::SireMol::Editor< SireMol::CGEditor, SireMol::CutGroup >::select );
             
             CGEditorBase_exposer.def( 

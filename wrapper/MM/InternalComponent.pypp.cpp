@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "InternalComponent.pypp.hpp"
 
 namespace bp = boost::python;
@@ -32,40 +31,40 @@ void register_InternalComponent_class(){
         InternalComponent_exposer.def( bp::init< SireMM::InternalComponent const & >(( bp::arg("other") )) );
         { //::SireMM::InternalComponent::angle
         
-            typedef ::SireMM::AngleComponent const & ( ::SireMM::InternalComponent::*angle_function_type )(  ) const;
+            typedef ::SireMM::AngleComponent const & ( ::SireMM::InternalComponent::*angle_function_type)(  ) const;
             angle_function_type angle_function_value( &::SireMM::InternalComponent::angle );
             
             InternalComponent_exposer.def( 
                 "angle"
                 , angle_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::InternalComponent::bendBend
         
-            typedef ::SireMM::BendBendComponent const & ( ::SireMM::InternalComponent::*bendBend_function_type )(  ) const;
+            typedef ::SireMM::BendBendComponent const & ( ::SireMM::InternalComponent::*bendBend_function_type)(  ) const;
             bendBend_function_type bendBend_function_value( &::SireMM::InternalComponent::bendBend );
             
             InternalComponent_exposer.def( 
                 "bendBend"
                 , bendBend_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::InternalComponent::bond
         
-            typedef ::SireMM::BondComponent const & ( ::SireMM::InternalComponent::*bond_function_type )(  ) const;
+            typedef ::SireMM::BondComponent const & ( ::SireMM::InternalComponent::*bond_function_type)(  ) const;
             bond_function_type bond_function_value( &::SireMM::InternalComponent::bond );
             
             InternalComponent_exposer.def( 
                 "bond"
                 , bond_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::InternalComponent::changeEnergy
         
-            typedef void ( ::SireMM::InternalComponent::*changeEnergy_function_type )( ::SireFF::FF &,::SireMM::InternalEnergy const & ) const;
+            typedef void ( ::SireMM::InternalComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::InternalEnergy const & ) const;
             changeEnergy_function_type changeEnergy_function_value( &::SireMM::InternalComponent::changeEnergy );
             
             InternalComponent_exposer.def( 
@@ -76,29 +75,62 @@ void register_InternalComponent_class(){
         }
         { //::SireMM::InternalComponent::dihedral
         
-            typedef ::SireMM::DihedralComponent const & ( ::SireMM::InternalComponent::*dihedral_function_type )(  ) const;
+            typedef ::SireMM::DihedralComponent const & ( ::SireMM::InternalComponent::*dihedral_function_type)(  ) const;
             dihedral_function_type dihedral_function_value( &::SireMM::InternalComponent::dihedral );
             
             InternalComponent_exposer.def( 
                 "dihedral"
                 , dihedral_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::InternalComponent::improper
         
-            typedef ::SireMM::ImproperComponent const & ( ::SireMM::InternalComponent::*improper_function_type )(  ) const;
+            typedef ::SireMM::ImproperComponent const & ( ::SireMM::InternalComponent::*improper_function_type)(  ) const;
             improper_function_type improper_function_value( &::SireMM::InternalComponent::improper );
             
             InternalComponent_exposer.def( 
                 "improper"
                 , improper_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
+        
+        }
+        { //::SireMM::InternalComponent::intra14
+        
+            typedef ::SireMM::Intra14Component const & ( ::SireMM::InternalComponent::*intra14_function_type)(  ) const;
+            intra14_function_type intra14_function_value( &::SireMM::InternalComponent::intra14 );
+            
+            InternalComponent_exposer.def( 
+                "intra14"
+                , intra14_function_value
+                , bp::return_value_policy< bp::copy_const_reference >() );
+        
+        }
+        { //::SireMM::InternalComponent::intra14Coulomb
+        
+            typedef ::SireMM::Intra14CoulombComponent const & ( ::SireMM::InternalComponent::*intra14Coulomb_function_type)(  ) const;
+            intra14Coulomb_function_type intra14Coulomb_function_value( &::SireMM::InternalComponent::intra14Coulomb );
+            
+            InternalComponent_exposer.def( 
+                "intra14Coulomb"
+                , intra14Coulomb_function_value
+                , bp::return_value_policy< bp::copy_const_reference >() );
+        
+        }
+        { //::SireMM::InternalComponent::intra14LJ
+        
+            typedef ::SireMM::Intra14LJComponent const & ( ::SireMM::InternalComponent::*intra14LJ_function_type)(  ) const;
+            intra14LJ_function_type intra14LJ_function_value( &::SireMM::InternalComponent::intra14LJ );
+            
+            InternalComponent_exposer.def( 
+                "intra14LJ"
+                , intra14LJ_function_value
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::InternalComponent::setEnergy
         
-            typedef void ( ::SireMM::InternalComponent::*setEnergy_function_type )( ::SireFF::FF &,::SireMM::InternalEnergy const & ) const;
+            typedef void ( ::SireMM::InternalComponent::*setEnergy_function_type)( ::SireFF::FF &,::SireMM::InternalEnergy const & ) const;
             setEnergy_function_type setEnergy_function_value( &::SireMM::InternalComponent::setEnergy );
             
             InternalComponent_exposer.def( 
@@ -109,40 +141,40 @@ void register_InternalComponent_class(){
         }
         { //::SireMM::InternalComponent::stretchBend
         
-            typedef ::SireMM::StretchBendComponent const & ( ::SireMM::InternalComponent::*stretchBend_function_type )(  ) const;
+            typedef ::SireMM::StretchBendComponent const & ( ::SireMM::InternalComponent::*stretchBend_function_type)(  ) const;
             stretchBend_function_type stretchBend_function_value( &::SireMM::InternalComponent::stretchBend );
             
             InternalComponent_exposer.def( 
                 "stretchBend"
                 , stretchBend_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::InternalComponent::stretchBendTorsion
         
-            typedef ::SireMM::StretchBendTorsionComponent const & ( ::SireMM::InternalComponent::*stretchBendTorsion_function_type )(  ) const;
+            typedef ::SireMM::StretchBendTorsionComponent const & ( ::SireMM::InternalComponent::*stretchBendTorsion_function_type)(  ) const;
             stretchBendTorsion_function_type stretchBendTorsion_function_value( &::SireMM::InternalComponent::stretchBendTorsion );
             
             InternalComponent_exposer.def( 
                 "stretchBendTorsion"
                 , stretchBendTorsion_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::InternalComponent::stretchStretch
         
-            typedef ::SireMM::StretchStretchComponent const & ( ::SireMM::InternalComponent::*stretchStretch_function_type )(  ) const;
+            typedef ::SireMM::StretchStretchComponent const & ( ::SireMM::InternalComponent::*stretchStretch_function_type)(  ) const;
             stretchStretch_function_type stretchStretch_function_value( &::SireMM::InternalComponent::stretchStretch );
             
             InternalComponent_exposer.def( 
                 "stretchStretch"
                 , stretchStretch_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::InternalComponent::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireMM::InternalComponent::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireMM::InternalComponent::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireMM::InternalComponent::symbols );
             
             InternalComponent_exposer.def( 
@@ -152,13 +184,13 @@ void register_InternalComponent_class(){
         }
         { //::SireMM::InternalComponent::total
         
-            typedef ::SireMM::InternalComponent const & ( ::SireMM::InternalComponent::*total_function_type )(  ) const;
+            typedef ::SireMM::InternalComponent const & ( ::SireMM::InternalComponent::*total_function_type)(  ) const;
             total_function_type total_function_value( &::SireMM::InternalComponent::total );
             
             InternalComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::InternalComponent::typeName
@@ -173,18 +205,18 @@ void register_InternalComponent_class(){
         }
         { //::SireMM::InternalComponent::ureyBradley
         
-            typedef ::SireMM::UreyBradleyComponent const & ( ::SireMM::InternalComponent::*ureyBradley_function_type )(  ) const;
+            typedef ::SireMM::UreyBradleyComponent const & ( ::SireMM::InternalComponent::*ureyBradley_function_type)(  ) const;
             ureyBradley_function_type ureyBradley_function_value( &::SireMM::InternalComponent::ureyBradley );
             
             InternalComponent_exposer.def( 
                 "ureyBradley"
                 , ureyBradley_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::InternalComponent::what
         
-            typedef char const * ( ::SireMM::InternalComponent::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::InternalComponent::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::InternalComponent::what );
             
             InternalComponent_exposer.def( 

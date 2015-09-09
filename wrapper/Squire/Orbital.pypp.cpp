@@ -27,7 +27,7 @@ void register_Orbital_class(){
         bp::scope Orbital_scope( Orbital_exposer );
         { //::Squire::Orbital::toString
         
-            typedef ::QString ( ::Squire::Orbital::*toString_function_type )(  ) const;
+            typedef ::QString ( ::Squire::Orbital::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::Squire::Orbital::toString );
             
             Orbital_exposer.def( 

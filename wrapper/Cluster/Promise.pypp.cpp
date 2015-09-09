@@ -40,7 +40,7 @@ void register_Promise_class(){
         Promise_exposer.def( bp::init< SireCluster::Promise const & >(( bp::arg("other") )) );
         { //::SireCluster::Promise::abort
         
-            typedef void ( ::SireCluster::Promise::*abort_function_type )(  ) ;
+            typedef void ( ::SireCluster::Promise::*abort_function_type)(  ) ;
             abort_function_type abort_function_value( &::SireCluster::Promise::abort );
             
             Promise_exposer.def( 
@@ -50,7 +50,7 @@ void register_Promise_class(){
         }
         { //::SireCluster::Promise::input
         
-            typedef ::SireCluster::WorkPacket ( ::SireCluster::Promise::*input_function_type )(  ) ;
+            typedef ::SireCluster::WorkPacket ( ::SireCluster::Promise::*input_function_type)(  ) ;
             input_function_type input_function_value( &::SireCluster::Promise::input );
             
             Promise_exposer.def( 
@@ -60,7 +60,7 @@ void register_Promise_class(){
         }
         { //::SireCluster::Promise::interimResult
         
-            typedef ::SireCluster::WorkPacket ( ::SireCluster::Promise::*interimResult_function_type )(  ) ;
+            typedef ::SireCluster::WorkPacket ( ::SireCluster::Promise::*interimResult_function_type)(  ) ;
             interimResult_function_type interimResult_function_value( &::SireCluster::Promise::interimResult );
             
             Promise_exposer.def( 
@@ -70,7 +70,7 @@ void register_Promise_class(){
         }
         { //::SireCluster::Promise::isError
         
-            typedef bool ( ::SireCluster::Promise::*isError_function_type )(  ) ;
+            typedef bool ( ::SireCluster::Promise::*isError_function_type)(  ) ;
             isError_function_type isError_function_value( &::SireCluster::Promise::isError );
             
             Promise_exposer.def( 
@@ -80,7 +80,7 @@ void register_Promise_class(){
         }
         { //::SireCluster::Promise::isNull
         
-            typedef bool ( ::SireCluster::Promise::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireCluster::Promise::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireCluster::Promise::isNull );
             
             Promise_exposer.def( 
@@ -90,7 +90,7 @@ void register_Promise_class(){
         }
         { //::SireCluster::Promise::isRunning
         
-            typedef bool ( ::SireCluster::Promise::*isRunning_function_type )(  ) ;
+            typedef bool ( ::SireCluster::Promise::*isRunning_function_type)(  ) ;
             isRunning_function_type isRunning_function_value( &::SireCluster::Promise::isRunning );
             
             Promise_exposer.def( 
@@ -101,7 +101,7 @@ void register_Promise_class(){
         Promise_exposer.def( bp::self != bp::self );
         { //::SireCluster::Promise::operator=
         
-            typedef ::SireCluster::Promise & ( ::SireCluster::Promise::*assign_function_type )( ::SireCluster::Promise const & ) ;
+            typedef ::SireCluster::Promise & ( ::SireCluster::Promise::*assign_function_type)( ::SireCluster::Promise const & ) ;
             assign_function_type assign_function_value( &::SireCluster::Promise::operator= );
             
             Promise_exposer.def( 
@@ -114,7 +114,7 @@ void register_Promise_class(){
         Promise_exposer.def( bp::self == bp::self );
         { //::SireCluster::Promise::progress
         
-            typedef float ( ::SireCluster::Promise::*progress_function_type )(  ) ;
+            typedef float ( ::SireCluster::Promise::*progress_function_type)(  ) ;
             progress_function_type progress_function_value( &::SireCluster::Promise::progress );
             
             Promise_exposer.def( 
@@ -124,7 +124,7 @@ void register_Promise_class(){
         }
         { //::SireCluster::Promise::result
         
-            typedef ::SireCluster::WorkPacket ( ::SireCluster::Promise::*result_function_type )(  ) ;
+            typedef ::SireCluster::WorkPacket ( ::SireCluster::Promise::*result_function_type)(  ) ;
             result_function_type result_function_value( &::SireCluster::Promise::result );
             
             Promise_exposer.def( 
@@ -134,7 +134,7 @@ void register_Promise_class(){
         }
         { //::SireCluster::Promise::stop
         
-            typedef void ( ::SireCluster::Promise::*stop_function_type )(  ) ;
+            typedef void ( ::SireCluster::Promise::*stop_function_type)(  ) ;
             stop_function_type stop_function_value( &::SireCluster::Promise::stop );
             
             Promise_exposer.def( 
@@ -144,7 +144,7 @@ void register_Promise_class(){
         }
         { //::SireCluster::Promise::throwError
         
-            typedef void ( ::SireCluster::Promise::*throwError_function_type )(  ) ;
+            typedef void ( ::SireCluster::Promise::*throwError_function_type)(  ) ;
             throwError_function_type throwError_function_value( &::SireCluster::Promise::throwError );
             
             Promise_exposer.def( 
@@ -154,7 +154,7 @@ void register_Promise_class(){
         }
         { //::SireCluster::Promise::wait
         
-            typedef void ( ::SireCluster::Promise::*wait_function_type )(  ) ;
+            typedef void ( ::SireCluster::Promise::*wait_function_type)(  ) ;
             wait_function_type wait_function_value( &::SireCluster::Promise::wait );
             
             Promise_exposer.def( 
@@ -164,7 +164,7 @@ void register_Promise_class(){
         }
         { //::SireCluster::Promise::wait
         
-            typedef bool ( ::SireCluster::Promise::*wait_function_type )( int ) ;
+            typedef bool ( ::SireCluster::Promise::*wait_function_type)( int ) ;
             wait_function_type wait_function_value( &::SireCluster::Promise::wait );
             
             Promise_exposer.def( 
@@ -175,7 +175,7 @@ void register_Promise_class(){
         }
         { //::SireCluster::Promise::wasAborted
         
-            typedef bool ( ::SireCluster::Promise::*wasAborted_function_type )(  ) ;
+            typedef bool ( ::SireCluster::Promise::*wasAborted_function_type)(  ) ;
             wasAborted_function_type wasAborted_function_value( &::SireCluster::Promise::wasAborted );
             
             Promise_exposer.def( 
@@ -185,7 +185,7 @@ void register_Promise_class(){
         }
         { //::SireCluster::Promise::wasStopped
         
-            typedef bool ( ::SireCluster::Promise::*wasStopped_function_type )(  ) ;
+            typedef bool ( ::SireCluster::Promise::*wasStopped_function_type)(  ) ;
             wasStopped_function_type wasStopped_function_value( &::SireCluster::Promise::wasStopped );
             
             Promise_exposer.def( 

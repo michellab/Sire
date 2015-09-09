@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "AngleComponent.pypp.hpp"
 
 namespace bp = boost::python;
@@ -32,7 +31,7 @@ void register_AngleComponent_class(){
         AngleComponent_exposer.def( bp::init< SireMM::AngleComponent const & >(( bp::arg("other") )) );
         { //::SireMM::AngleComponent::changeEnergy
         
-            typedef void ( ::SireMM::AngleComponent::*changeEnergy_function_type )( ::SireFF::FF &,::SireMM::AngleEnergy const & ) const;
+            typedef void ( ::SireMM::AngleComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::AngleEnergy const & ) const;
             changeEnergy_function_type changeEnergy_function_value( &::SireMM::AngleComponent::changeEnergy );
             
             AngleComponent_exposer.def( 
@@ -43,7 +42,7 @@ void register_AngleComponent_class(){
         }
         { //::SireMM::AngleComponent::setEnergy
         
-            typedef void ( ::SireMM::AngleComponent::*setEnergy_function_type )( ::SireFF::FF &,::SireMM::AngleEnergy const & ) const;
+            typedef void ( ::SireMM::AngleComponent::*setEnergy_function_type)( ::SireFF::FF &,::SireMM::AngleEnergy const & ) const;
             setEnergy_function_type setEnergy_function_value( &::SireMM::AngleComponent::setEnergy );
             
             AngleComponent_exposer.def( 
@@ -54,7 +53,7 @@ void register_AngleComponent_class(){
         }
         { //::SireMM::AngleComponent::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireMM::AngleComponent::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireMM::AngleComponent::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireMM::AngleComponent::symbols );
             
             AngleComponent_exposer.def( 
@@ -64,13 +63,13 @@ void register_AngleComponent_class(){
         }
         { //::SireMM::AngleComponent::total
         
-            typedef ::SireMM::AngleComponent const & ( ::SireMM::AngleComponent::*total_function_type )(  ) const;
+            typedef ::SireMM::AngleComponent const & ( ::SireMM::AngleComponent::*total_function_type)(  ) const;
             total_function_type total_function_value( &::SireMM::AngleComponent::total );
             
             AngleComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::AngleComponent::typeName
@@ -85,7 +84,7 @@ void register_AngleComponent_class(){
         }
         { //::SireMM::AngleComponent::what
         
-            typedef char const * ( ::SireMM::AngleComponent::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::AngleComponent::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::AngleComponent::what );
             
             AngleComponent_exposer.def( 

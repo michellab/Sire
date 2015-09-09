@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "DihedralRestraint.pypp.hpp"
 
 namespace bp = boost::python;
@@ -51,7 +50,7 @@ void register_DihedralRestraint_class(){
         DihedralRestraint_exposer.def( bp::init< SireMM::DihedralRestraint const & >(( bp::arg("other") )) );
         { //::SireMM::DihedralRestraint::builtinSymbols
         
-            typedef ::SireCAS::Symbols ( ::SireMM::DihedralRestraint::*builtinSymbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireMM::DihedralRestraint::*builtinSymbols_function_type)(  ) const;
             builtinSymbols_function_type builtinSymbols_function_value( &::SireMM::DihedralRestraint::builtinSymbols );
             
             DihedralRestraint_exposer.def( 
@@ -61,7 +60,7 @@ void register_DihedralRestraint_class(){
         }
         { //::SireMM::DihedralRestraint::builtinValues
         
-            typedef ::SireCAS::Values ( ::SireMM::DihedralRestraint::*builtinValues_function_type )(  ) const;
+            typedef ::SireCAS::Values ( ::SireMM::DihedralRestraint::*builtinValues_function_type)(  ) const;
             builtinValues_function_type builtinValues_function_value( &::SireMM::DihedralRestraint::builtinValues );
             
             DihedralRestraint_exposer.def( 
@@ -71,7 +70,7 @@ void register_DihedralRestraint_class(){
         }
         { //::SireMM::DihedralRestraint::contains
         
-            typedef bool ( ::SireMM::DihedralRestraint::*contains_function_type )( ::SireMol::MolNum ) const;
+            typedef bool ( ::SireMM::DihedralRestraint::*contains_function_type)( ::SireMol::MolNum ) const;
             contains_function_type contains_function_value( &::SireMM::DihedralRestraint::contains );
             
             DihedralRestraint_exposer.def( 
@@ -82,7 +81,7 @@ void register_DihedralRestraint_class(){
         }
         { //::SireMM::DihedralRestraint::contains
         
-            typedef bool ( ::SireMM::DihedralRestraint::*contains_function_type )( ::SireMol::MolID const & ) const;
+            typedef bool ( ::SireMM::DihedralRestraint::*contains_function_type)( ::SireMol::MolID const & ) const;
             contains_function_type contains_function_value( &::SireMM::DihedralRestraint::contains );
             
             DihedralRestraint_exposer.def( 
@@ -93,7 +92,7 @@ void register_DihedralRestraint_class(){
         }
         { //::SireMM::DihedralRestraint::differentialRestraintFunction
         
-            typedef ::SireCAS::Expression const & ( ::SireMM::DihedralRestraint::*differentialRestraintFunction_function_type )(  ) const;
+            typedef ::SireCAS::Expression const & ( ::SireMM::DihedralRestraint::*differentialRestraintFunction_function_type)(  ) const;
             differentialRestraintFunction_function_type differentialRestraintFunction_function_value( &::SireMM::DihedralRestraint::differentialRestraintFunction );
             
             DihedralRestraint_exposer.def( 
@@ -104,7 +103,7 @@ void register_DihedralRestraint_class(){
         }
         { //::SireMM::DihedralRestraint::differentiate
         
-            typedef ::SireMM::RestraintPtr ( ::SireMM::DihedralRestraint::*differentiate_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireMM::RestraintPtr ( ::SireMM::DihedralRestraint::*differentiate_function_type)( ::SireCAS::Symbol const & ) const;
             differentiate_function_type differentiate_function_value( &::SireMM::DihedralRestraint::differentiate );
             
             DihedralRestraint_exposer.def( 
@@ -115,7 +114,7 @@ void register_DihedralRestraint_class(){
         }
         { //::SireMM::DihedralRestraint::force
         
-            typedef void ( ::SireMM::DihedralRestraint::*force_function_type )( ::SireFF::MolForceTable &,double ) const;
+            typedef void ( ::SireMM::DihedralRestraint::*force_function_type)( ::SireFF::MolForceTable &,double ) const;
             force_function_type force_function_value( &::SireMM::DihedralRestraint::force );
             
             DihedralRestraint_exposer.def( 
@@ -126,7 +125,7 @@ void register_DihedralRestraint_class(){
         }
         { //::SireMM::DihedralRestraint::force
         
-            typedef void ( ::SireMM::DihedralRestraint::*force_function_type )( ::SireFF::ForceTable &,double ) const;
+            typedef void ( ::SireMM::DihedralRestraint::*force_function_type)( ::SireFF::ForceTable &,double ) const;
             force_function_type force_function_value( &::SireMM::DihedralRestraint::force );
             
             DihedralRestraint_exposer.def( 
@@ -159,7 +158,7 @@ void register_DihedralRestraint_class(){
         }
         { //::SireMM::DihedralRestraint::molecules
         
-            typedef ::SireMol::Molecules ( ::SireMM::DihedralRestraint::*molecules_function_type )(  ) const;
+            typedef ::SireMol::Molecules ( ::SireMM::DihedralRestraint::*molecules_function_type)(  ) const;
             molecules_function_type molecules_function_value( &::SireMM::DihedralRestraint::molecules );
             
             DihedralRestraint_exposer.def( 
@@ -169,7 +168,7 @@ void register_DihedralRestraint_class(){
         }
         { //::SireMM::DihedralRestraint::nPoints
         
-            typedef int ( ::SireMM::DihedralRestraint::*nPoints_function_type )(  ) const;
+            typedef int ( ::SireMM::DihedralRestraint::*nPoints_function_type)(  ) const;
             nPoints_function_type nPoints_function_value( &::SireMM::DihedralRestraint::nPoints );
             
             DihedralRestraint_exposer.def( 
@@ -180,7 +179,7 @@ void register_DihedralRestraint_class(){
         DihedralRestraint_exposer.def( bp::self != bp::self );
         { //::SireMM::DihedralRestraint::operator=
         
-            typedef ::SireMM::DihedralRestraint & ( ::SireMM::DihedralRestraint::*assign_function_type )( ::SireMM::DihedralRestraint const & ) ;
+            typedef ::SireMM::DihedralRestraint & ( ::SireMM::DihedralRestraint::*assign_function_type)( ::SireMM::DihedralRestraint const & ) ;
             assign_function_type assign_function_value( &::SireMM::DihedralRestraint::operator= );
             
             DihedralRestraint_exposer.def( 
@@ -199,68 +198,68 @@ void register_DihedralRestraint_class(){
             DihedralRestraint_exposer.def( 
                 "phi"
                 , phi_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::DihedralRestraint::point
         
-            typedef ::SireFF::Point const & ( ::SireMM::DihedralRestraint::*point_function_type )( int ) const;
+            typedef ::SireFF::Point const & ( ::SireMM::DihedralRestraint::*point_function_type)( int ) const;
             point_function_type point_function_value( &::SireMM::DihedralRestraint::point );
             
             DihedralRestraint_exposer.def( 
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::DihedralRestraint::point0
         
-            typedef ::SireFF::Point const & ( ::SireMM::DihedralRestraint::*point0_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireMM::DihedralRestraint::*point0_function_type)(  ) const;
             point0_function_type point0_function_value( &::SireMM::DihedralRestraint::point0 );
             
             DihedralRestraint_exposer.def( 
                 "point0"
                 , point0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::DihedralRestraint::point1
         
-            typedef ::SireFF::Point const & ( ::SireMM::DihedralRestraint::*point1_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireMM::DihedralRestraint::*point1_function_type)(  ) const;
             point1_function_type point1_function_value( &::SireMM::DihedralRestraint::point1 );
             
             DihedralRestraint_exposer.def( 
                 "point1"
                 , point1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::DihedralRestraint::point2
         
-            typedef ::SireFF::Point const & ( ::SireMM::DihedralRestraint::*point2_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireMM::DihedralRestraint::*point2_function_type)(  ) const;
             point2_function_type point2_function_value( &::SireMM::DihedralRestraint::point2 );
             
             DihedralRestraint_exposer.def( 
                 "point2"
                 , point2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::DihedralRestraint::point3
         
-            typedef ::SireFF::Point const & ( ::SireMM::DihedralRestraint::*point3_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireMM::DihedralRestraint::*point3_function_type)(  ) const;
             point3_function_type point3_function_value( &::SireMM::DihedralRestraint::point3 );
             
             DihedralRestraint_exposer.def( 
                 "point3"
                 , point3_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::DihedralRestraint::setSpace
         
-            typedef void ( ::SireMM::DihedralRestraint::*setSpace_function_type )( ::SireVol::Space const & ) ;
+            typedef void ( ::SireMM::DihedralRestraint::*setSpace_function_type)( ::SireVol::Space const & ) ;
             setSpace_function_type setSpace_function_value( &::SireMM::DihedralRestraint::setSpace );
             
             DihedralRestraint_exposer.def( 
@@ -281,7 +280,7 @@ void register_DihedralRestraint_class(){
         }
         { //::SireMM::DihedralRestraint::update
         
-            typedef void ( ::SireMM::DihedralRestraint::*update_function_type )( ::SireMol::MoleculeData const & ) ;
+            typedef void ( ::SireMM::DihedralRestraint::*update_function_type)( ::SireMol::MoleculeData const & ) ;
             update_function_type update_function_value( &::SireMM::DihedralRestraint::update );
             
             DihedralRestraint_exposer.def( 
@@ -292,7 +291,7 @@ void register_DihedralRestraint_class(){
         }
         { //::SireMM::DihedralRestraint::update
         
-            typedef void ( ::SireMM::DihedralRestraint::*update_function_type )( ::SireMol::Molecules const & ) ;
+            typedef void ( ::SireMM::DihedralRestraint::*update_function_type)( ::SireMol::Molecules const & ) ;
             update_function_type update_function_value( &::SireMM::DihedralRestraint::update );
             
             DihedralRestraint_exposer.def( 
@@ -303,7 +302,7 @@ void register_DihedralRestraint_class(){
         }
         { //::SireMM::DihedralRestraint::usesMoleculesIn
         
-            typedef bool ( ::SireMM::DihedralRestraint::*usesMoleculesIn_function_type )( ::SireFF::ForceTable const & ) const;
+            typedef bool ( ::SireMM::DihedralRestraint::*usesMoleculesIn_function_type)( ::SireFF::ForceTable const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireMM::DihedralRestraint::usesMoleculesIn );
             
             DihedralRestraint_exposer.def( 
@@ -314,7 +313,7 @@ void register_DihedralRestraint_class(){
         }
         { //::SireMM::DihedralRestraint::usesMoleculesIn
         
-            typedef bool ( ::SireMM::DihedralRestraint::*usesMoleculesIn_function_type )( ::SireMol::Molecules const & ) const;
+            typedef bool ( ::SireMM::DihedralRestraint::*usesMoleculesIn_function_type)( ::SireMol::Molecules const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireMM::DihedralRestraint::usesMoleculesIn );
             
             DihedralRestraint_exposer.def( 

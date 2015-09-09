@@ -28,7 +28,7 @@ void register_Simulation_class(){
         Simulation_exposer.def( bp::init< SireMove::Simulation const & >(( bp::arg("other") )) );
         { //::SireMove::Simulation::abort
         
-            typedef void ( ::SireMove::Simulation::*abort_function_type )(  ) ;
+            typedef void ( ::SireMove::Simulation::*abort_function_type)(  ) ;
             abort_function_type abort_function_value( &::SireMove::Simulation::abort );
             
             Simulation_exposer.def( 
@@ -38,7 +38,7 @@ void register_Simulation_class(){
         }
         { //::SireMove::Simulation::hasFinished
         
-            typedef bool ( ::SireMove::Simulation::*hasFinished_function_type )(  ) ;
+            typedef bool ( ::SireMove::Simulation::*hasFinished_function_type)(  ) ;
             hasFinished_function_type hasFinished_function_value( &::SireMove::Simulation::hasFinished );
             
             Simulation_exposer.def( 
@@ -48,7 +48,7 @@ void register_Simulation_class(){
         }
         { //::SireMove::Simulation::initialMoves
         
-            typedef ::SireMove::MovesPtr ( ::SireMove::Simulation::*initialMoves_function_type )(  ) ;
+            typedef ::SireMove::MovesPtr ( ::SireMove::Simulation::*initialMoves_function_type)(  ) ;
             initialMoves_function_type initialMoves_function_value( &::SireMove::Simulation::initialMoves );
             
             Simulation_exposer.def( 
@@ -58,7 +58,7 @@ void register_Simulation_class(){
         }
         { //::SireMove::Simulation::initialSystem
         
-            typedef ::SireSystem::System ( ::SireMove::Simulation::*initialSystem_function_type )(  ) ;
+            typedef ::SireSystem::System ( ::SireMove::Simulation::*initialSystem_function_type)(  ) ;
             initialSystem_function_type initialSystem_function_value( &::SireMove::Simulation::initialSystem );
             
             Simulation_exposer.def( 
@@ -68,7 +68,7 @@ void register_Simulation_class(){
         }
         { //::SireMove::Simulation::input
         
-            typedef ::SireMove::SimPacket ( ::SireMove::Simulation::*input_function_type )(  ) ;
+            typedef ::SireMove::SimPacket ( ::SireMove::Simulation::*input_function_type)(  ) ;
             input_function_type input_function_value( &::SireMove::Simulation::input );
             
             Simulation_exposer.def( 
@@ -78,7 +78,7 @@ void register_Simulation_class(){
         }
         { //::SireMove::Simulation::interimMoves
         
-            typedef ::SireMove::MovesPtr ( ::SireMove::Simulation::*interimMoves_function_type )(  ) ;
+            typedef ::SireMove::MovesPtr ( ::SireMove::Simulation::*interimMoves_function_type)(  ) ;
             interimMoves_function_type interimMoves_function_value( &::SireMove::Simulation::interimMoves );
             
             Simulation_exposer.def( 
@@ -88,7 +88,7 @@ void register_Simulation_class(){
         }
         { //::SireMove::Simulation::interimResult
         
-            typedef ::SireMove::SimPacket ( ::SireMove::Simulation::*interimResult_function_type )(  ) ;
+            typedef ::SireMove::SimPacket ( ::SireMove::Simulation::*interimResult_function_type)(  ) ;
             interimResult_function_type interimResult_function_value( &::SireMove::Simulation::interimResult );
             
             Simulation_exposer.def( 
@@ -98,7 +98,7 @@ void register_Simulation_class(){
         }
         { //::SireMove::Simulation::interimSystem
         
-            typedef ::SireSystem::System ( ::SireMove::Simulation::*interimSystem_function_type )(  ) ;
+            typedef ::SireSystem::System ( ::SireMove::Simulation::*interimSystem_function_type)(  ) ;
             interimSystem_function_type interimSystem_function_value( &::SireMove::Simulation::interimSystem );
             
             Simulation_exposer.def( 
@@ -108,7 +108,7 @@ void register_Simulation_class(){
         }
         { //::SireMove::Simulation::isError
         
-            typedef bool ( ::SireMove::Simulation::*isError_function_type )(  ) ;
+            typedef bool ( ::SireMove::Simulation::*isError_function_type)(  ) ;
             isError_function_type isError_function_value( &::SireMove::Simulation::isError );
             
             Simulation_exposer.def( 
@@ -118,7 +118,7 @@ void register_Simulation_class(){
         }
         { //::SireMove::Simulation::isRunning
         
-            typedef bool ( ::SireMove::Simulation::*isRunning_function_type )(  ) ;
+            typedef bool ( ::SireMove::Simulation::*isRunning_function_type)(  ) ;
             isRunning_function_type isRunning_function_value( &::SireMove::Simulation::isRunning );
             
             Simulation_exposer.def( 
@@ -128,7 +128,7 @@ void register_Simulation_class(){
         }
         { //::SireMove::Simulation::moves
         
-            typedef ::SireMove::MovesPtr ( ::SireMove::Simulation::*moves_function_type )(  ) ;
+            typedef ::SireMove::MovesPtr ( ::SireMove::Simulation::*moves_function_type)(  ) ;
             moves_function_type moves_function_value( &::SireMove::Simulation::moves );
             
             Simulation_exposer.def( 
@@ -139,7 +139,7 @@ void register_Simulation_class(){
         Simulation_exposer.def( bp::self != bp::self );
         { //::SireMove::Simulation::operator=
         
-            typedef ::SireMove::Simulation & ( ::SireMove::Simulation::*assign_function_type )( ::SireMove::Simulation const & ) ;
+            typedef ::SireMove::Simulation & ( ::SireMove::Simulation::*assign_function_type)( ::SireMove::Simulation const & ) ;
             assign_function_type assign_function_value( &::SireMove::Simulation::operator= );
             
             Simulation_exposer.def( 
@@ -152,7 +152,7 @@ void register_Simulation_class(){
         Simulation_exposer.def( bp::self == bp::self );
         { //::SireMove::Simulation::progress
         
-            typedef float ( ::SireMove::Simulation::*progress_function_type )(  ) ;
+            typedef float ( ::SireMove::Simulation::*progress_function_type)(  ) ;
             progress_function_type progress_function_value( &::SireMove::Simulation::progress );
             
             Simulation_exposer.def( 
@@ -162,7 +162,7 @@ void register_Simulation_class(){
         }
         { //::SireMove::Simulation::result
         
-            typedef ::SireMove::SimPacket ( ::SireMove::Simulation::*result_function_type )(  ) ;
+            typedef ::SireMove::SimPacket ( ::SireMove::Simulation::*result_function_type)(  ) ;
             result_function_type result_function_value( &::SireMove::Simulation::result );
             
             Simulation_exposer.def( 
@@ -326,7 +326,7 @@ void register_Simulation_class(){
         }
         { //::SireMove::Simulation::stop
         
-            typedef void ( ::SireMove::Simulation::*stop_function_type )(  ) ;
+            typedef void ( ::SireMove::Simulation::*stop_function_type)(  ) ;
             stop_function_type stop_function_value( &::SireMove::Simulation::stop );
             
             Simulation_exposer.def( 
@@ -336,7 +336,7 @@ void register_Simulation_class(){
         }
         { //::SireMove::Simulation::system
         
-            typedef ::SireSystem::System ( ::SireMove::Simulation::*system_function_type )(  ) ;
+            typedef ::SireSystem::System ( ::SireMove::Simulation::*system_function_type)(  ) ;
             system_function_type system_function_value( &::SireMove::Simulation::system );
             
             Simulation_exposer.def( 
@@ -346,7 +346,7 @@ void register_Simulation_class(){
         }
         { //::SireMove::Simulation::throwError
         
-            typedef void ( ::SireMove::Simulation::*throwError_function_type )(  ) ;
+            typedef void ( ::SireMove::Simulation::*throwError_function_type)(  ) ;
             throwError_function_type throwError_function_value( &::SireMove::Simulation::throwError );
             
             Simulation_exposer.def( 
@@ -356,7 +356,7 @@ void register_Simulation_class(){
         }
         { //::SireMove::Simulation::wait
         
-            typedef void ( ::SireMove::Simulation::*wait_function_type )(  ) ;
+            typedef void ( ::SireMove::Simulation::*wait_function_type)(  ) ;
             wait_function_type wait_function_value( &::SireMove::Simulation::wait );
             
             Simulation_exposer.def( 
@@ -366,7 +366,7 @@ void register_Simulation_class(){
         }
         { //::SireMove::Simulation::wait
         
-            typedef bool ( ::SireMove::Simulation::*wait_function_type )( int ) ;
+            typedef bool ( ::SireMove::Simulation::*wait_function_type)( int ) ;
             wait_function_type wait_function_value( &::SireMove::Simulation::wait );
             
             Simulation_exposer.def( 
@@ -377,7 +377,7 @@ void register_Simulation_class(){
         }
         { //::SireMove::Simulation::wasAborted
         
-            typedef bool ( ::SireMove::Simulation::*wasAborted_function_type )(  ) ;
+            typedef bool ( ::SireMove::Simulation::*wasAborted_function_type)(  ) ;
             wasAborted_function_type wasAborted_function_value( &::SireMove::Simulation::wasAborted );
             
             Simulation_exposer.def( 
@@ -387,7 +387,7 @@ void register_Simulation_class(){
         }
         { //::SireMove::Simulation::wasStopped
         
-            typedef bool ( ::SireMove::Simulation::*wasStopped_function_type )(  ) ;
+            typedef bool ( ::SireMove::Simulation::*wasStopped_function_type)(  ) ;
             wasStopped_function_type wasStopped_function_value( &::SireMove::Simulation::wasStopped );
             
             Simulation_exposer.def( 

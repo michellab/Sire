@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "DoubleDistanceComponent.pypp.hpp"
 
 namespace bp = boost::python;
@@ -41,7 +40,7 @@ void register_DoubleDistanceComponent_class(){
         DoubleDistanceComponent_exposer.def( bp::init< SireSystem::DoubleDistanceComponent const & >(( bp::arg("other") )) );
         { //::SireSystem::DoubleDistanceComponent::nPoints
         
-            typedef int ( ::SireSystem::DoubleDistanceComponent::*nPoints_function_type )(  ) const;
+            typedef int ( ::SireSystem::DoubleDistanceComponent::*nPoints_function_type)(  ) const;
             nPoints_function_type nPoints_function_value( &::SireSystem::DoubleDistanceComponent::nPoints );
             
             DoubleDistanceComponent_exposer.def( 
@@ -52,7 +51,7 @@ void register_DoubleDistanceComponent_class(){
         DoubleDistanceComponent_exposer.def( bp::self != bp::self );
         { //::SireSystem::DoubleDistanceComponent::operator=
         
-            typedef ::SireSystem::DoubleDistanceComponent & ( ::SireSystem::DoubleDistanceComponent::*assign_function_type )( ::SireSystem::DoubleDistanceComponent const & ) ;
+            typedef ::SireSystem::DoubleDistanceComponent & ( ::SireSystem::DoubleDistanceComponent::*assign_function_type)( ::SireSystem::DoubleDistanceComponent const & ) ;
             assign_function_type assign_function_value( &::SireSystem::DoubleDistanceComponent::operator= );
             
             DoubleDistanceComponent_exposer.def( 
@@ -65,58 +64,58 @@ void register_DoubleDistanceComponent_class(){
         DoubleDistanceComponent_exposer.def( bp::self == bp::self );
         { //::SireSystem::DoubleDistanceComponent::point
         
-            typedef ::SireFF::Point const & ( ::SireSystem::DoubleDistanceComponent::*point_function_type )( int ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::DoubleDistanceComponent::*point_function_type)( int ) const;
             point_function_type point_function_value( &::SireSystem::DoubleDistanceComponent::point );
             
             DoubleDistanceComponent_exposer.def( 
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::DoubleDistanceComponent::point0
         
-            typedef ::SireFF::Point const & ( ::SireSystem::DoubleDistanceComponent::*point0_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::DoubleDistanceComponent::*point0_function_type)(  ) const;
             point0_function_type point0_function_value( &::SireSystem::DoubleDistanceComponent::point0 );
             
             DoubleDistanceComponent_exposer.def( 
                 "point0"
                 , point0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::DoubleDistanceComponent::point1
         
-            typedef ::SireFF::Point const & ( ::SireSystem::DoubleDistanceComponent::*point1_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::DoubleDistanceComponent::*point1_function_type)(  ) const;
             point1_function_type point1_function_value( &::SireSystem::DoubleDistanceComponent::point1 );
             
             DoubleDistanceComponent_exposer.def( 
                 "point1"
                 , point1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::DoubleDistanceComponent::point2
         
-            typedef ::SireFF::Point const & ( ::SireSystem::DoubleDistanceComponent::*point2_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::DoubleDistanceComponent::*point2_function_type)(  ) const;
             point2_function_type point2_function_value( &::SireSystem::DoubleDistanceComponent::point2 );
             
             DoubleDistanceComponent_exposer.def( 
                 "point2"
                 , point2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::DoubleDistanceComponent::point3
         
-            typedef ::SireFF::Point const & ( ::SireSystem::DoubleDistanceComponent::*point3_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::DoubleDistanceComponent::*point3_function_type)(  ) const;
             point3_function_type point3_function_value( &::SireSystem::DoubleDistanceComponent::point3 );
             
             DoubleDistanceComponent_exposer.def( 
                 "point3"
                 , point3_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::DoubleDistanceComponent::r01
@@ -127,7 +126,7 @@ void register_DoubleDistanceComponent_class(){
             DoubleDistanceComponent_exposer.def( 
                 "r01"
                 , r01_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::DoubleDistanceComponent::r23
@@ -138,12 +137,12 @@ void register_DoubleDistanceComponent_class(){
             DoubleDistanceComponent_exposer.def( 
                 "r23"
                 , r23_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::DoubleDistanceComponent::toString
         
-            typedef ::QString ( ::SireSystem::DoubleDistanceComponent::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireSystem::DoubleDistanceComponent::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireSystem::DoubleDistanceComponent::toString );
             
             DoubleDistanceComponent_exposer.def( 

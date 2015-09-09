@@ -28,7 +28,7 @@ void register_LJScaleFactor_class(){
         LJScaleFactor_exposer.def( bp::init< SireMM::LJScaleFactor const & >(( bp::arg("other") )) );
         { //::SireMM::LJScaleFactor::lj
         
-            typedef double ( ::SireMM::LJScaleFactor::*lj_function_type )(  ) const;
+            typedef double ( ::SireMM::LJScaleFactor::*lj_function_type)(  ) const;
             lj_function_type lj_function_value( &::SireMM::LJScaleFactor::lj );
             
             LJScaleFactor_exposer.def( 
@@ -39,7 +39,7 @@ void register_LJScaleFactor_class(){
         LJScaleFactor_exposer.def( bp::self != bp::self );
         { //::SireMM::LJScaleFactor::operator=
         
-            typedef ::SireMM::LJScaleFactor & ( ::SireMM::LJScaleFactor::*assign_function_type )( ::SireMM::LJScaleFactor const & ) ;
+            typedef ::SireMM::LJScaleFactor & ( ::SireMM::LJScaleFactor::*assign_function_type)( ::SireMM::LJScaleFactor const & ) ;
             assign_function_type assign_function_value( &::SireMM::LJScaleFactor::operator= );
             
             LJScaleFactor_exposer.def( 
@@ -62,7 +62,7 @@ void register_LJScaleFactor_class(){
         }
         { //::SireMM::LJScaleFactor::what
         
-            typedef char const * ( ::SireMM::LJScaleFactor::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::LJScaleFactor::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::LJScaleFactor::what );
             
             LJScaleFactor_exposer.def( 

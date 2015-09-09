@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "PerturbationConstraint.pypp.hpp"
 
 namespace bp = boost::python;
@@ -50,19 +49,19 @@ void register_PerturbationConstraint_class(){
         PerturbationConstraint_exposer.def( bp::init< SireSystem::PerturbationConstraint const & >(( bp::arg("other") )) );
         { //::SireSystem::PerturbationConstraint::moleculeGroup
         
-            typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::PerturbationConstraint::*moleculeGroup_function_type )(  ) const;
+            typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::PerturbationConstraint::*moleculeGroup_function_type)(  ) const;
             moleculeGroup_function_type moleculeGroup_function_value( &::SireSystem::PerturbationConstraint::moleculeGroup );
             
             PerturbationConstraint_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         PerturbationConstraint_exposer.def( bp::self != bp::self );
         { //::SireSystem::PerturbationConstraint::operator=
         
-            typedef ::SireSystem::PerturbationConstraint & ( ::SireSystem::PerturbationConstraint::*assign_function_type )( ::SireSystem::PerturbationConstraint const & ) ;
+            typedef ::SireSystem::PerturbationConstraint & ( ::SireSystem::PerturbationConstraint::*assign_function_type)( ::SireSystem::PerturbationConstraint const & ) ;
             assign_function_type assign_function_value( &::SireSystem::PerturbationConstraint::operator= );
             
             PerturbationConstraint_exposer.def( 
@@ -75,7 +74,7 @@ void register_PerturbationConstraint_class(){
         PerturbationConstraint_exposer.def( bp::self == bp::self );
         { //::SireSystem::PerturbationConstraint::perturbationProperty
         
-            typedef ::SireBase::PropertyName ( ::SireSystem::PerturbationConstraint::*perturbationProperty_function_type )(  ) const;
+            typedef ::SireBase::PropertyName ( ::SireSystem::PerturbationConstraint::*perturbationProperty_function_type)(  ) const;
             perturbationProperty_function_type perturbationProperty_function_value( &::SireSystem::PerturbationConstraint::perturbationProperty );
             
             PerturbationConstraint_exposer.def( 
@@ -85,7 +84,7 @@ void register_PerturbationConstraint_class(){
         }
         { //::SireSystem::PerturbationConstraint::toString
         
-            typedef ::QString ( ::SireSystem::PerturbationConstraint::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireSystem::PerturbationConstraint::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireSystem::PerturbationConstraint::toString );
             
             PerturbationConstraint_exposer.def( 

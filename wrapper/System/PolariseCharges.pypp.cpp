@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "PolariseCharges.pypp.hpp"
 
 namespace bp = boost::python;
@@ -77,7 +76,7 @@ void register_PolariseCharges_class(){
         PolariseCharges_exposer.def( bp::init< SireSystem::PolariseCharges const & >(( bp::arg("other") )) );
         { //::SireSystem::PolariseCharges::convergenceLimit
         
-            typedef double ( ::SireSystem::PolariseCharges::*convergenceLimit_function_type )(  ) const;
+            typedef double ( ::SireSystem::PolariseCharges::*convergenceLimit_function_type)(  ) const;
             convergenceLimit_function_type convergenceLimit_function_value( &::SireSystem::PolariseCharges::convergenceLimit );
             
             PolariseCharges_exposer.def( 
@@ -87,19 +86,19 @@ void register_PolariseCharges_class(){
         }
         { //::SireSystem::PolariseCharges::fieldComponent
         
-            typedef ::SireCAS::Symbol const & ( ::SireSystem::PolariseCharges::*fieldComponent_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireSystem::PolariseCharges::*fieldComponent_function_type)(  ) const;
             fieldComponent_function_type fieldComponent_function_value( &::SireSystem::PolariseCharges::fieldComponent );
             
             PolariseCharges_exposer.def( 
                 "fieldComponent"
                 , fieldComponent_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         PolariseCharges_exposer.def( bp::self != bp::self );
         { //::SireSystem::PolariseCharges::operator=
         
-            typedef ::SireSystem::PolariseCharges & ( ::SireSystem::PolariseCharges::*assign_function_type )( ::SireSystem::PolariseCharges const & ) ;
+            typedef ::SireSystem::PolariseCharges & ( ::SireSystem::PolariseCharges::*assign_function_type)( ::SireSystem::PolariseCharges const & ) ;
             assign_function_type assign_function_value( &::SireSystem::PolariseCharges::operator= );
             
             PolariseCharges_exposer.def( 
@@ -112,7 +111,7 @@ void register_PolariseCharges_class(){
         PolariseCharges_exposer.def( bp::self == bp::self );
         { //::SireSystem::PolariseCharges::probe
         
-            typedef ::SireMM::CoulombProbe const & ( ::SireSystem::PolariseCharges::*probe_function_type )(  ) const;
+            typedef ::SireMM::CoulombProbe const & ( ::SireSystem::PolariseCharges::*probe_function_type)(  ) const;
             probe_function_type probe_function_value( &::SireSystem::PolariseCharges::probe );
             
             PolariseCharges_exposer.def( 
@@ -123,7 +122,7 @@ void register_PolariseCharges_class(){
         }
         { //::SireSystem::PolariseCharges::selfEnergyFF
         
-            typedef ::SireSystem::PolariseChargesFF ( ::SireSystem::PolariseCharges::*selfEnergyFF_function_type )(  ) const;
+            typedef ::SireSystem::PolariseChargesFF ( ::SireSystem::PolariseCharges::*selfEnergyFF_function_type)(  ) const;
             selfEnergyFF_function_type selfEnergyFF_function_value( &::SireSystem::PolariseCharges::selfEnergyFF );
             
             PolariseCharges_exposer.def( 
@@ -133,7 +132,7 @@ void register_PolariseCharges_class(){
         }
         { //::SireSystem::PolariseCharges::setConvergenceLimit
         
-            typedef void ( ::SireSystem::PolariseCharges::*setConvergenceLimit_function_type )( double ) ;
+            typedef void ( ::SireSystem::PolariseCharges::*setConvergenceLimit_function_type)( double ) ;
             setConvergenceLimit_function_type setConvergenceLimit_function_value( &::SireSystem::PolariseCharges::setConvergenceLimit );
             
             PolariseCharges_exposer.def( 
@@ -144,7 +143,7 @@ void register_PolariseCharges_class(){
         }
         { //::SireSystem::PolariseCharges::toString
         
-            typedef ::QString ( ::SireSystem::PolariseCharges::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireSystem::PolariseCharges::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireSystem::PolariseCharges::toString );
             
             PolariseCharges_exposer.def( 

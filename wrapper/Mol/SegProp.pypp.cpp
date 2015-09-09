@@ -23,7 +23,7 @@ void register_SegProp_class(){
         bp::scope SegProp_scope( SegProp_exposer );
         { //::SireMol::SegProp::assertCanConvert
         
-            typedef void ( ::SireMol::SegProp::*assertCanConvert_function_type )( ::QVariant const & ) const;
+            typedef void ( ::SireMol::SegProp::*assertCanConvert_function_type)( ::QVariant const & ) const;
             assertCanConvert_function_type assertCanConvert_function_value( &::SireMol::SegProp::assertCanConvert );
             
             SegProp_exposer.def( 
@@ -34,7 +34,7 @@ void register_SegProp_class(){
         }
         { //::SireMol::SegProp::assignFrom
         
-            typedef void ( ::SireMol::SegProp::*assignFrom_function_type )( ::SireMol::SegProperty< QVariant > const & ) ;
+            typedef void ( ::SireMol::SegProp::*assignFrom_function_type)( ::SireMol::SegProperty< QVariant > const & ) ;
             assignFrom_function_type assignFrom_function_value( &::SireMol::SegProp::assignFrom );
             
             SegProp_exposer.def( 
@@ -45,7 +45,7 @@ void register_SegProp_class(){
         }
         { //::SireMol::SegProp::canConvert
         
-            typedef bool ( ::SireMol::SegProp::*canConvert_function_type )( ::QVariant const & ) const;
+            typedef bool ( ::SireMol::SegProp::*canConvert_function_type)( ::QVariant const & ) const;
             canConvert_function_type canConvert_function_value( &::SireMol::SegProp::canConvert );
             
             SegProp_exposer.def( 
@@ -56,7 +56,7 @@ void register_SegProp_class(){
         }
         { //::SireMol::SegProp::toVariant
         
-            typedef ::SireMol::SegProperty< QVariant > ( ::SireMol::SegProp::*toVariant_function_type )(  ) const;
+            typedef ::SireMol::SegProperty< QVariant > ( ::SireMol::SegProp::*toVariant_function_type)(  ) const;
             toVariant_function_type toVariant_function_value( &::SireMol::SegProp::toVariant );
             
             SegProp_exposer.def( 

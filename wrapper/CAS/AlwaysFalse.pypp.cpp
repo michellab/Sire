@@ -48,7 +48,7 @@ void register_AlwaysFalse_class(){
         AlwaysFalse_exposer.def( bp::init< SireCAS::AlwaysFalse const & >(( bp::arg("other") )) );
         { //::SireCAS::AlwaysFalse::alwaysFalse
         
-            typedef bool ( ::SireCAS::AlwaysFalse::*alwaysFalse_function_type )(  ) const;
+            typedef bool ( ::SireCAS::AlwaysFalse::*alwaysFalse_function_type)(  ) const;
             alwaysFalse_function_type alwaysFalse_function_value( &::SireCAS::AlwaysFalse::alwaysFalse );
             
             AlwaysFalse_exposer.def( 
@@ -58,7 +58,7 @@ void register_AlwaysFalse_class(){
         }
         { //::SireCAS::AlwaysFalse::alwaysTrue
         
-            typedef bool ( ::SireCAS::AlwaysFalse::*alwaysTrue_function_type )(  ) const;
+            typedef bool ( ::SireCAS::AlwaysFalse::*alwaysTrue_function_type)(  ) const;
             alwaysTrue_function_type alwaysTrue_function_value( &::SireCAS::AlwaysFalse::alwaysTrue );
             
             AlwaysFalse_exposer.def( 
@@ -68,7 +68,7 @@ void register_AlwaysFalse_class(){
         }
         { //::SireCAS::AlwaysFalse::children
         
-            typedef ::SireCAS::Expressions ( ::SireCAS::AlwaysFalse::*children_function_type )(  ) const;
+            typedef ::SireCAS::Expressions ( ::SireCAS::AlwaysFalse::*children_function_type)(  ) const;
             children_function_type children_function_value( &::SireCAS::AlwaysFalse::children );
             
             AlwaysFalse_exposer.def( 
@@ -78,7 +78,7 @@ void register_AlwaysFalse_class(){
         }
         { //::SireCAS::AlwaysFalse::evaluate
         
-            typedef double ( ::SireCAS::AlwaysFalse::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::AlwaysFalse::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::AlwaysFalse::evaluate );
             
             AlwaysFalse_exposer.def( 
@@ -89,7 +89,7 @@ void register_AlwaysFalse_class(){
         }
         { //::SireCAS::AlwaysFalse::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::AlwaysFalse::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::AlwaysFalse::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::AlwaysFalse::evaluate );
             
             AlwaysFalse_exposer.def( 
@@ -100,7 +100,7 @@ void register_AlwaysFalse_class(){
         }
         { //::SireCAS::AlwaysFalse::evaluateCondition
         
-            typedef bool ( ::SireCAS::AlwaysFalse::*evaluateCondition_function_type )( ::SireCAS::Values const & ) const;
+            typedef bool ( ::SireCAS::AlwaysFalse::*evaluateCondition_function_type)( ::SireCAS::Values const & ) const;
             evaluateCondition_function_type evaluateCondition_function_value( &::SireCAS::AlwaysFalse::evaluateCondition );
             
             AlwaysFalse_exposer.def( 
@@ -111,7 +111,7 @@ void register_AlwaysFalse_class(){
         }
         { //::SireCAS::AlwaysFalse::evaluateCondition
         
-            typedef bool ( ::SireCAS::AlwaysFalse::*evaluateCondition_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef bool ( ::SireCAS::AlwaysFalse::*evaluateCondition_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluateCondition_function_type evaluateCondition_function_value( &::SireCAS::AlwaysFalse::evaluateCondition );
             
             AlwaysFalse_exposer.def( 
@@ -122,7 +122,7 @@ void register_AlwaysFalse_class(){
         }
         { //::SireCAS::AlwaysFalse::expand
         
-            typedef ::QList< SireCAS::Factor > ( ::SireCAS::AlwaysFalse::*expand_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::QList< SireCAS::Factor > ( ::SireCAS::AlwaysFalse::*expand_function_type)( ::SireCAS::Symbol const & ) const;
             expand_function_type expand_function_value( &::SireCAS::AlwaysFalse::expand );
             
             AlwaysFalse_exposer.def( 
@@ -133,7 +133,7 @@ void register_AlwaysFalse_class(){
         }
         { //::SireCAS::AlwaysFalse::functions
         
-            typedef ::SireCAS::Functions ( ::SireCAS::AlwaysFalse::*functions_function_type )(  ) const;
+            typedef ::SireCAS::Functions ( ::SireCAS::AlwaysFalse::*functions_function_type)(  ) const;
             functions_function_type functions_function_value( &::SireCAS::AlwaysFalse::functions );
             
             AlwaysFalse_exposer.def( 
@@ -143,7 +143,7 @@ void register_AlwaysFalse_class(){
         }
         { //::SireCAS::AlwaysFalse::hash
         
-            typedef ::uint ( ::SireCAS::AlwaysFalse::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireCAS::AlwaysFalse::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireCAS::AlwaysFalse::hash );
             
             AlwaysFalse_exposer.def( 
@@ -153,7 +153,7 @@ void register_AlwaysFalse_class(){
         }
         { //::SireCAS::AlwaysFalse::isComplex
         
-            typedef bool ( ::SireCAS::AlwaysFalse::*isComplex_function_type )(  ) const;
+            typedef bool ( ::SireCAS::AlwaysFalse::*isComplex_function_type)(  ) const;
             isComplex_function_type isComplex_function_value( &::SireCAS::AlwaysFalse::isComplex );
             
             AlwaysFalse_exposer.def( 
@@ -163,7 +163,7 @@ void register_AlwaysFalse_class(){
         }
         { //::SireCAS::AlwaysFalse::isCompound
         
-            typedef bool ( ::SireCAS::AlwaysFalse::*isCompound_function_type )(  ) const;
+            typedef bool ( ::SireCAS::AlwaysFalse::*isCompound_function_type)(  ) const;
             isCompound_function_type isCompound_function_value( &::SireCAS::AlwaysFalse::isCompound );
             
             AlwaysFalse_exposer.def( 
@@ -173,7 +173,7 @@ void register_AlwaysFalse_class(){
         }
         { //::SireCAS::AlwaysFalse::isConstant
         
-            typedef bool ( ::SireCAS::AlwaysFalse::*isConstant_function_type )(  ) const;
+            typedef bool ( ::SireCAS::AlwaysFalse::*isConstant_function_type)(  ) const;
             isConstant_function_type isConstant_function_value( &::SireCAS::AlwaysFalse::isConstant );
             
             AlwaysFalse_exposer.def( 
@@ -183,7 +183,7 @@ void register_AlwaysFalse_class(){
         }
         { //::SireCAS::AlwaysFalse::isFunction
         
-            typedef bool ( ::SireCAS::AlwaysFalse::*isFunction_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef bool ( ::SireCAS::AlwaysFalse::*isFunction_function_type)( ::SireCAS::Symbol const & ) const;
             isFunction_function_type isFunction_function_value( &::SireCAS::AlwaysFalse::isFunction );
             
             AlwaysFalse_exposer.def( 
@@ -194,7 +194,7 @@ void register_AlwaysFalse_class(){
         }
         { //::SireCAS::AlwaysFalse::isNull
         
-            typedef bool ( ::SireCAS::AlwaysFalse::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireCAS::AlwaysFalse::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireCAS::AlwaysFalse::isNull );
             
             AlwaysFalse_exposer.def( 
@@ -204,7 +204,7 @@ void register_AlwaysFalse_class(){
         }
         { //::SireCAS::AlwaysFalse::operator=
         
-            typedef ::SireCAS::AlwaysFalse & ( ::SireCAS::AlwaysFalse::*assign_function_type )( ::SireCAS::AlwaysFalse const & ) ;
+            typedef ::SireCAS::AlwaysFalse & ( ::SireCAS::AlwaysFalse::*assign_function_type)( ::SireCAS::AlwaysFalse const & ) ;
             assign_function_type assign_function_value( &::SireCAS::AlwaysFalse::operator= );
             
             AlwaysFalse_exposer.def( 
@@ -218,7 +218,7 @@ void register_AlwaysFalse_class(){
         AlwaysFalse_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
         { //::SireCAS::AlwaysFalse::simplify
         
-            typedef ::SireCAS::Expression ( ::SireCAS::AlwaysFalse::*simplify_function_type )( int ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::AlwaysFalse::*simplify_function_type)( int ) const;
             simplify_function_type simplify_function_value( &::SireCAS::AlwaysFalse::simplify );
             
             AlwaysFalse_exposer.def( 
@@ -229,7 +229,7 @@ void register_AlwaysFalse_class(){
         }
         { //::SireCAS::AlwaysFalse::substitute
         
-            typedef ::SireCAS::Expression ( ::SireCAS::AlwaysFalse::*substitute_function_type )( ::SireCAS::Identities const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::AlwaysFalse::*substitute_function_type)( ::SireCAS::Identities const & ) const;
             substitute_function_type substitute_function_value( &::SireCAS::AlwaysFalse::substitute );
             
             AlwaysFalse_exposer.def( 
@@ -240,7 +240,7 @@ void register_AlwaysFalse_class(){
         }
         { //::SireCAS::AlwaysFalse::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireCAS::AlwaysFalse::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireCAS::AlwaysFalse::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireCAS::AlwaysFalse::symbols );
             
             AlwaysFalse_exposer.def( 
@@ -250,7 +250,7 @@ void register_AlwaysFalse_class(){
         }
         { //::SireCAS::AlwaysFalse::toString
         
-            typedef ::QString ( ::SireCAS::AlwaysFalse::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireCAS::AlwaysFalse::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireCAS::AlwaysFalse::toString );
             
             AlwaysFalse_exposer.def( 
@@ -270,7 +270,7 @@ void register_AlwaysFalse_class(){
         }
         { //::SireCAS::AlwaysFalse::what
         
-            typedef char const * ( ::SireCAS::AlwaysFalse::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::AlwaysFalse::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::AlwaysFalse::what );
             
             AlwaysFalse_exposer.def( 

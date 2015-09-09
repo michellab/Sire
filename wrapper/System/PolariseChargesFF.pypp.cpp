@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "PolariseChargesFF.pypp.hpp"
 
 namespace bp = boost::python;
@@ -77,18 +76,18 @@ void register_PolariseChargesFF_class(){
         PolariseChargesFF_exposer.def( bp::init< SireSystem::PolariseChargesFF const & >(( bp::arg("other") )) );
         { //::SireSystem::PolariseChargesFF::components
         
-            typedef ::SireFF::SingleComponent const & ( ::SireSystem::PolariseChargesFF::*components_function_type )(  ) const;
+            typedef ::SireFF::SingleComponent const & ( ::SireSystem::PolariseChargesFF::*components_function_type)(  ) const;
             components_function_type components_function_value( &::SireSystem::PolariseChargesFF::components );
             
             PolariseChargesFF_exposer.def( 
                 "components"
                 , components_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::PolariseChargesFF::containsProperty
         
-            typedef bool ( ::SireSystem::PolariseChargesFF::*containsProperty_function_type )( ::QString const & ) const;
+            typedef bool ( ::SireSystem::PolariseChargesFF::*containsProperty_function_type)( ::QString const & ) const;
             containsProperty_function_type containsProperty_function_value( &::SireSystem::PolariseChargesFF::containsProperty );
             
             PolariseChargesFF_exposer.def( 
@@ -99,7 +98,7 @@ void register_PolariseChargesFF_class(){
         }
         { //::SireSystem::PolariseChargesFF::mustNowRecalculateFromScratch
         
-            typedef void ( ::SireSystem::PolariseChargesFF::*mustNowRecalculateFromScratch_function_type )(  ) ;
+            typedef void ( ::SireSystem::PolariseChargesFF::*mustNowRecalculateFromScratch_function_type)(  ) ;
             mustNowRecalculateFromScratch_function_type mustNowRecalculateFromScratch_function_value( &::SireSystem::PolariseChargesFF::mustNowRecalculateFromScratch );
             
             PolariseChargesFF_exposer.def( 
@@ -110,7 +109,7 @@ void register_PolariseChargesFF_class(){
         PolariseChargesFF_exposer.def( bp::self != bp::self );
         { //::SireSystem::PolariseChargesFF::operator=
         
-            typedef ::SireSystem::PolariseChargesFF & ( ::SireSystem::PolariseChargesFF::*assign_function_type )( ::SireSystem::PolariseChargesFF const & ) ;
+            typedef ::SireSystem::PolariseChargesFF & ( ::SireSystem::PolariseChargesFF::*assign_function_type)( ::SireSystem::PolariseChargesFF const & ) ;
             assign_function_type assign_function_value( &::SireSystem::PolariseChargesFF::operator= );
             
             PolariseChargesFF_exposer.def( 
@@ -123,7 +122,7 @@ void register_PolariseChargesFF_class(){
         PolariseChargesFF_exposer.def( bp::self == bp::self );
         { //::SireSystem::PolariseChargesFF::properties
         
-            typedef ::SireBase::Properties const & ( ::SireSystem::PolariseChargesFF::*properties_function_type )(  ) const;
+            typedef ::SireBase::Properties const & ( ::SireSystem::PolariseChargesFF::*properties_function_type)(  ) const;
             properties_function_type properties_function_value( &::SireSystem::PolariseChargesFF::properties );
             
             PolariseChargesFF_exposer.def( 
@@ -134,19 +133,19 @@ void register_PolariseChargesFF_class(){
         }
         { //::SireSystem::PolariseChargesFF::property
         
-            typedef ::SireBase::Property const & ( ::SireSystem::PolariseChargesFF::*property_function_type )( ::QString const & ) const;
+            typedef ::SireBase::Property const & ( ::SireSystem::PolariseChargesFF::*property_function_type)( ::QString const & ) const;
             property_function_type property_function_value( &::SireSystem::PolariseChargesFF::property );
             
             PolariseChargesFF_exposer.def( 
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::PolariseChargesFF::setProperty
         
-            typedef bool ( ::SireSystem::PolariseChargesFF::*setProperty_function_type )( ::QString const &,::SireBase::Property const & ) ;
+            typedef bool ( ::SireSystem::PolariseChargesFF::*setProperty_function_type)( ::QString const &,::SireBase::Property const & ) ;
             setProperty_function_type setProperty_function_value( &::SireSystem::PolariseChargesFF::setProperty );
             
             PolariseChargesFF_exposer.def( 

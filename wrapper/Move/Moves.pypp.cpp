@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "Moves.pypp.hpp"
 
 namespace bp = boost::python;
@@ -54,7 +53,7 @@ void register_Moves_class(){
         bp::scope Moves_scope( Moves_exposer );
         { //::SireMove::Moves::chemicalPotential
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::Moves::*chemicalPotential_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::Moves::*chemicalPotential_function_type)(  ) const;
             chemicalPotential_function_type chemicalPotential_function_value( &::SireMove::Moves::chemicalPotential );
             
             Moves_exposer.def( 
@@ -64,7 +63,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::clearStatistics
         
-            typedef void ( ::SireMove::Moves::*clearStatistics_function_type )(  ) ;
+            typedef void ( ::SireMove::Moves::*clearStatistics_function_type)(  ) ;
             clearStatistics_function_type clearStatistics_function_value( &::SireMove::Moves::clearStatistics );
             
             Moves_exposer.def( 
@@ -74,7 +73,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::count
         
-            typedef int ( ::SireMove::Moves::*count_function_type )(  ) const;
+            typedef int ( ::SireMove::Moves::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMove::Moves::count );
             
             Moves_exposer.def( 
@@ -84,7 +83,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::Moves::*energy_function_type )( ::SireSystem::System & ) const;
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::Moves::*energy_function_type)( ::SireSystem::System & ) const;
             energy_function_type energy_function_value( &::SireMove::Moves::energy );
             
             Moves_exposer.def( 
@@ -95,18 +94,18 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::energyComponent
         
-            typedef ::SireCAS::Symbol const & ( ::SireMove::Moves::*energyComponent_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMove::Moves::*energyComponent_function_type)(  ) const;
             energyComponent_function_type energyComponent_function_value( &::SireMove::Moves::energyComponent );
             
             Moves_exposer.def( 
                 "energyComponent"
                 , energyComponent_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMove::Moves::ensemble
         
-            typedef ::SireMove::Ensemble ( ::SireMove::Moves::*ensemble_function_type )(  ) const;
+            typedef ::SireMove::Ensemble ( ::SireMove::Moves::*ensemble_function_type)(  ) const;
             ensemble_function_type ensemble_function_value( &::SireMove::Moves::ensemble );
             
             Moves_exposer.def( 
@@ -116,7 +115,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::fugacity
         
-            typedef ::SireUnits::Dimension::Pressure ( ::SireMove::Moves::*fugacity_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Pressure ( ::SireMove::Moves::*fugacity_function_type)(  ) const;
             fugacity_function_type fugacity_function_value( &::SireMove::Moves::fugacity );
             
             Moves_exposer.def( 
@@ -126,7 +125,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::isConstantChemicalPotential
         
-            typedef bool ( ::SireMove::Moves::*isConstantChemicalPotential_function_type )(  ) const;
+            typedef bool ( ::SireMove::Moves::*isConstantChemicalPotential_function_type)(  ) const;
             isConstantChemicalPotential_function_type isConstantChemicalPotential_function_value( &::SireMove::Moves::isConstantChemicalPotential );
             
             Moves_exposer.def( 
@@ -136,7 +135,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::isConstantEnergy
         
-            typedef bool ( ::SireMove::Moves::*isConstantEnergy_function_type )(  ) const;
+            typedef bool ( ::SireMove::Moves::*isConstantEnergy_function_type)(  ) const;
             isConstantEnergy_function_type isConstantEnergy_function_value( &::SireMove::Moves::isConstantEnergy );
             
             Moves_exposer.def( 
@@ -146,7 +145,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::isConstantFugacity
         
-            typedef bool ( ::SireMove::Moves::*isConstantFugacity_function_type )(  ) const;
+            typedef bool ( ::SireMove::Moves::*isConstantFugacity_function_type)(  ) const;
             isConstantFugacity_function_type isConstantFugacity_function_value( &::SireMove::Moves::isConstantFugacity );
             
             Moves_exposer.def( 
@@ -156,7 +155,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::isConstantLambda
         
-            typedef bool ( ::SireMove::Moves::*isConstantLambda_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef bool ( ::SireMove::Moves::*isConstantLambda_function_type)( ::SireCAS::Symbol const & ) const;
             isConstantLambda_function_type isConstantLambda_function_value( &::SireMove::Moves::isConstantLambda );
             
             Moves_exposer.def( 
@@ -167,7 +166,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::isConstantPressure
         
-            typedef bool ( ::SireMove::Moves::*isConstantPressure_function_type )(  ) const;
+            typedef bool ( ::SireMove::Moves::*isConstantPressure_function_type)(  ) const;
             isConstantPressure_function_type isConstantPressure_function_value( &::SireMove::Moves::isConstantPressure );
             
             Moves_exposer.def( 
@@ -177,7 +176,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::isConstantTemperature
         
-            typedef bool ( ::SireMove::Moves::*isConstantTemperature_function_type )(  ) const;
+            typedef bool ( ::SireMove::Moves::*isConstantTemperature_function_type)(  ) const;
             isConstantTemperature_function_type isConstantTemperature_function_value( &::SireMove::Moves::isConstantTemperature );
             
             Moves_exposer.def( 
@@ -187,7 +186,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::isConstantVolume
         
-            typedef bool ( ::SireMove::Moves::*isConstantVolume_function_type )(  ) const;
+            typedef bool ( ::SireMove::Moves::*isConstantVolume_function_type)(  ) const;
             isConstantVolume_function_type isConstantVolume_function_value( &::SireMove::Moves::isConstantVolume );
             
             Moves_exposer.def( 
@@ -197,7 +196,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::move
         
-            typedef ::SireSystem::System ( ::SireMove::Moves::*move_function_type )( ::SireSystem::System const &,int,bool ) ;
+            typedef ::SireSystem::System ( ::SireMove::Moves::*move_function_type)( ::SireSystem::System const &,int,bool ) ;
             move_function_type move_function_value( &::SireMove::Moves::move );
             
             Moves_exposer.def( 
@@ -208,7 +207,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::moves
         
-            typedef ::QList< SireBase::PropPtr< SireMove::Move > > ( ::SireMove::Moves::*moves_function_type )(  ) const;
+            typedef ::QList< SireBase::PropPtr< SireMove::Move > > ( ::SireMove::Moves::*moves_function_type)(  ) const;
             moves_function_type moves_function_value( &::SireMove::Moves::moves );
             
             Moves_exposer.def( 
@@ -218,7 +217,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::nMoveTypes
         
-            typedef int ( ::SireMove::Moves::*nMoveTypes_function_type )(  ) const;
+            typedef int ( ::SireMove::Moves::*nMoveTypes_function_type)(  ) const;
             nMoveTypes_function_type nMoveTypes_function_value( &::SireMove::Moves::nMoveTypes );
             
             Moves_exposer.def( 
@@ -228,7 +227,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::nMoves
         
-            typedef int ( ::SireMove::Moves::*nMoves_function_type )(  ) const;
+            typedef int ( ::SireMove::Moves::*nMoves_function_type)(  ) const;
             nMoves_function_type nMoves_function_value( &::SireMove::Moves::nMoves );
             
             Moves_exposer.def( 
@@ -244,24 +243,24 @@ void register_Moves_class(){
             Moves_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMove::Moves::operator[]
         
-            typedef ::SireMove::Move const & ( ::SireMove::Moves::*__getitem___function_type )( int ) const;
+            typedef ::SireMove::Move const & ( ::SireMove::Moves::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMove::Moves::operator[] );
             
             Moves_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMove::Moves::pressure
         
-            typedef ::SireUnits::Dimension::Pressure ( ::SireMove::Moves::*pressure_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Pressure ( ::SireMove::Moves::*pressure_function_type)(  ) const;
             pressure_function_type pressure_function_value( &::SireMove::Moves::pressure );
             
             Moves_exposer.def( 
@@ -271,7 +270,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::setChemicalPotential
         
-            typedef void ( ::SireMove::Moves::*setChemicalPotential_function_type )( ::SireUnits::Dimension::MolarEnergy const & ) ;
+            typedef void ( ::SireMove::Moves::*setChemicalPotential_function_type)( ::SireUnits::Dimension::MolarEnergy const & ) ;
             setChemicalPotential_function_type setChemicalPotential_function_value( &::SireMove::Moves::setChemicalPotential );
             
             Moves_exposer.def( 
@@ -282,7 +281,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::setEnergyComponent
         
-            typedef void ( ::SireMove::Moves::*setEnergyComponent_function_type )( ::SireCAS::Symbol const & ) ;
+            typedef void ( ::SireMove::Moves::*setEnergyComponent_function_type)( ::SireCAS::Symbol const & ) ;
             setEnergyComponent_function_type setEnergyComponent_function_value( &::SireMove::Moves::setEnergyComponent );
             
             Moves_exposer.def( 
@@ -293,7 +292,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::setFugacity
         
-            typedef void ( ::SireMove::Moves::*setFugacity_function_type )( ::SireUnits::Dimension::Pressure const & ) ;
+            typedef void ( ::SireMove::Moves::*setFugacity_function_type)( ::SireUnits::Dimension::Pressure const & ) ;
             setFugacity_function_type setFugacity_function_value( &::SireMove::Moves::setFugacity );
             
             Moves_exposer.def( 
@@ -304,7 +303,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::setGenerator
         
-            typedef void ( ::SireMove::Moves::*setGenerator_function_type )( ::SireMaths::RanGenerator const & ) ;
+            typedef void ( ::SireMove::Moves::*setGenerator_function_type)( ::SireMaths::RanGenerator const & ) ;
             setGenerator_function_type setGenerator_function_value( &::SireMove::Moves::setGenerator );
             
             Moves_exposer.def( 
@@ -315,7 +314,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::setPressure
         
-            typedef void ( ::SireMove::Moves::*setPressure_function_type )( ::SireUnits::Dimension::Pressure const & ) ;
+            typedef void ( ::SireMove::Moves::*setPressure_function_type)( ::SireUnits::Dimension::Pressure const & ) ;
             setPressure_function_type setPressure_function_value( &::SireMove::Moves::setPressure );
             
             Moves_exposer.def( 
@@ -326,7 +325,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::setSpaceProperty
         
-            typedef void ( ::SireMove::Moves::*setSpaceProperty_function_type )( ::SireBase::PropertyName const & ) ;
+            typedef void ( ::SireMove::Moves::*setSpaceProperty_function_type)( ::SireBase::PropertyName const & ) ;
             setSpaceProperty_function_type setSpaceProperty_function_value( &::SireMove::Moves::setSpaceProperty );
             
             Moves_exposer.def( 
@@ -337,7 +336,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::setTemperature
         
-            typedef void ( ::SireMove::Moves::*setTemperature_function_type )( ::SireUnits::Dimension::Temperature const & ) ;
+            typedef void ( ::SireMove::Moves::*setTemperature_function_type)( ::SireUnits::Dimension::Temperature const & ) ;
             setTemperature_function_type setTemperature_function_value( &::SireMove::Moves::setTemperature );
             
             Moves_exposer.def( 
@@ -348,7 +347,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::size
         
-            typedef int ( ::SireMove::Moves::*size_function_type )(  ) const;
+            typedef int ( ::SireMove::Moves::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireMove::Moves::size );
             
             Moves_exposer.def( 
@@ -358,7 +357,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::spaceProperty
         
-            typedef ::SireBase::PropertyName const & ( ::SireMove::Moves::*spaceProperty_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireMove::Moves::*spaceProperty_function_type)(  ) const;
             spaceProperty_function_type spaceProperty_function_value( &::SireMove::Moves::spaceProperty );
             
             Moves_exposer.def( 
@@ -369,7 +368,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::temperature
         
-            typedef ::SireUnits::Dimension::Temperature ( ::SireMove::Moves::*temperature_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Temperature ( ::SireMove::Moves::*temperature_function_type)(  ) const;
             temperature_function_type temperature_function_value( &::SireMove::Moves::temperature );
             
             Moves_exposer.def( 
@@ -379,7 +378,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::toString
         
-            typedef ::QString ( ::SireMove::Moves::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMove::Moves::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMove::Moves::toString );
             
             Moves_exposer.def( 
@@ -399,7 +398,7 @@ void register_Moves_class(){
         }
         { //::SireMove::Moves::volume
         
-            typedef ::SireUnits::Dimension::Volume ( ::SireMove::Moves::*volume_function_type )( ::SireSystem::System const & ) const;
+            typedef ::SireUnits::Dimension::Volume ( ::SireMove::Moves::*volume_function_type)( ::SireSystem::System const & ) const;
             volume_function_type volume_function_value( &::SireMove::Moves::volume );
             
             Moves_exposer.def( 

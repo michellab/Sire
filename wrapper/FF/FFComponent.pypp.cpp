@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "FFComponent.pypp.hpp"
 
 namespace bp = boost::python;
@@ -32,7 +31,7 @@ void register_FFComponent_class(){
         bp::scope FFComponent_scope( FFComponent_exposer );
         { //::SireFF::FFComponent::componentName
         
-            typedef ::QString ( ::SireFF::FFComponent::*componentName_function_type )(  ) const;
+            typedef ::QString ( ::SireFF::FFComponent::*componentName_function_type)(  ) const;
             componentName_function_type componentName_function_value( &::SireFF::FFComponent::componentName );
             
             FFComponent_exposer.def( 
@@ -42,7 +41,7 @@ void register_FFComponent_class(){
         }
         { //::SireFF::FFComponent::forceFieldName
         
-            typedef ::SireFF::FFName ( ::SireFF::FFComponent::*forceFieldName_function_type )(  ) const;
+            typedef ::SireFF::FFName ( ::SireFF::FFComponent::*forceFieldName_function_type)(  ) const;
             forceFieldName_function_type forceFieldName_function_value( &::SireFF::FFComponent::forceFieldName );
             
             FFComponent_exposer.def( 
@@ -52,7 +51,7 @@ void register_FFComponent_class(){
         }
         { //::SireFF::FFComponent::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireFF::FFComponent::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireFF::FFComponent::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireFF::FFComponent::symbols );
             
             FFComponent_exposer.def( 
@@ -62,13 +61,13 @@ void register_FFComponent_class(){
         }
         { //::SireFF::FFComponent::total
         
-            typedef ::SireFF::FFComponent const & ( ::SireFF::FFComponent::*total_function_type )(  ) const;
+            typedef ::SireFF::FFComponent const & ( ::SireFF::FFComponent::*total_function_type)(  ) const;
             total_function_type total_function_value( &::SireFF::FFComponent::total );
             
             FFComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireFF::FFComponent::typeName
@@ -83,7 +82,7 @@ void register_FFComponent_class(){
         }
         { //::SireFF::FFComponent::what
         
-            typedef char const * ( ::SireFF::FFComponent::*what_function_type )(  ) const;
+            typedef char const * ( ::SireFF::FFComponent::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireFF::FFComponent::what );
             
             FFComponent_exposer.def( 

@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "GridFieldTable.pypp.hpp"
 
 namespace bp = boost::python;
@@ -48,7 +47,7 @@ void register_GridFieldTable_class(){
         GridFieldTable_exposer.def( bp::init< SireFF::GridFieldTable const & >(( bp::arg("other") )) );
         { //::SireFF::GridFieldTable::add
         
-            typedef void ( ::SireFF::GridFieldTable::*add_function_type )( int,::SireMaths::Vector const & ) ;
+            typedef void ( ::SireFF::GridFieldTable::*add_function_type)( int,::SireMaths::Vector const & ) ;
             add_function_type add_function_value( &::SireFF::GridFieldTable::add );
             
             GridFieldTable_exposer.def( 
@@ -59,7 +58,7 @@ void register_GridFieldTable_class(){
         }
         { //::SireFF::GridFieldTable::add
         
-            typedef void ( ::SireFF::GridFieldTable::*add_function_type )( ::SireFF::GridFieldTable const & ) ;
+            typedef void ( ::SireFF::GridFieldTable::*add_function_type)( ::SireFF::GridFieldTable const & ) ;
             add_function_type add_function_value( &::SireFF::GridFieldTable::add );
             
             GridFieldTable_exposer.def( 
@@ -70,7 +69,7 @@ void register_GridFieldTable_class(){
         }
         { //::SireFF::GridFieldTable::add
         
-            typedef void ( ::SireFF::GridFieldTable::*add_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireFF::GridFieldTable::*add_function_type)( ::SireMaths::Vector const & ) ;
             add_function_type add_function_value( &::SireFF::GridFieldTable::add );
             
             GridFieldTable_exposer.def( 
@@ -81,7 +80,7 @@ void register_GridFieldTable_class(){
         }
         { //::SireFF::GridFieldTable::at
         
-            typedef ::SireMaths::Vector const & ( ::SireFF::GridFieldTable::*at_function_type )( int ) const;
+            typedef ::SireMaths::Vector const & ( ::SireFF::GridFieldTable::*at_function_type)( int ) const;
             at_function_type at_function_value( &::SireFF::GridFieldTable::at );
             
             GridFieldTable_exposer.def( 
@@ -93,7 +92,7 @@ void register_GridFieldTable_class(){
         }
         { //::SireFF::GridFieldTable::count
         
-            typedef int ( ::SireFF::GridFieldTable::*count_function_type )(  ) const;
+            typedef int ( ::SireFF::GridFieldTable::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireFF::GridFieldTable::count );
             
             GridFieldTable_exposer.def( 
@@ -103,7 +102,7 @@ void register_GridFieldTable_class(){
         }
         { //::SireFF::GridFieldTable::divide
         
-            typedef void ( ::SireFF::GridFieldTable::*divide_function_type )( double ) ;
+            typedef void ( ::SireFF::GridFieldTable::*divide_function_type)( double ) ;
             divide_function_type divide_function_value( &::SireFF::GridFieldTable::divide );
             
             GridFieldTable_exposer.def( 
@@ -114,18 +113,18 @@ void register_GridFieldTable_class(){
         }
         { //::SireFF::GridFieldTable::grid
         
-            typedef ::SireVol::Grid const & ( ::SireFF::GridFieldTable::*grid_function_type )(  ) const;
+            typedef ::SireVol::Grid const & ( ::SireFF::GridFieldTable::*grid_function_type)(  ) const;
             grid_function_type grid_function_value( &::SireFF::GridFieldTable::grid );
             
             GridFieldTable_exposer.def( 
                 "grid"
                 , grid_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireFF::GridFieldTable::initialise
         
-            typedef void ( ::SireFF::GridFieldTable::*initialise_function_type )(  ) ;
+            typedef void ( ::SireFF::GridFieldTable::*initialise_function_type)(  ) ;
             initialise_function_type initialise_function_value( &::SireFF::GridFieldTable::initialise );
             
             GridFieldTable_exposer.def( 
@@ -135,7 +134,7 @@ void register_GridFieldTable_class(){
         }
         { //::SireFF::GridFieldTable::multiply
         
-            typedef void ( ::SireFF::GridFieldTable::*multiply_function_type )( double ) ;
+            typedef void ( ::SireFF::GridFieldTable::*multiply_function_type)( double ) ;
             multiply_function_type multiply_function_value( &::SireFF::GridFieldTable::multiply );
             
             GridFieldTable_exposer.def( 
@@ -146,7 +145,7 @@ void register_GridFieldTable_class(){
         }
         { //::SireFF::GridFieldTable::nPoints
         
-            typedef int ( ::SireFF::GridFieldTable::*nPoints_function_type )(  ) const;
+            typedef int ( ::SireFF::GridFieldTable::*nPoints_function_type)(  ) const;
             nPoints_function_type nPoints_function_value( &::SireFF::GridFieldTable::nPoints );
             
             GridFieldTable_exposer.def( 
@@ -164,7 +163,7 @@ void register_GridFieldTable_class(){
         GridFieldTable_exposer.def( bp::self / bp::other< double >() );
         { //::SireFF::GridFieldTable::operator=
         
-            typedef ::SireFF::GridFieldTable & ( ::SireFF::GridFieldTable::*assign_function_type )( ::SireFF::GridFieldTable const & ) ;
+            typedef ::SireFF::GridFieldTable & ( ::SireFF::GridFieldTable::*assign_function_type)( ::SireFF::GridFieldTable const & ) ;
             assign_function_type assign_function_value( &::SireFF::GridFieldTable::operator= );
             
             GridFieldTable_exposer.def( 
@@ -176,7 +175,7 @@ void register_GridFieldTable_class(){
         }
         { //::SireFF::GridFieldTable::operator=
         
-            typedef ::SireFF::GridFieldTable & ( ::SireFF::GridFieldTable::*assign_function_type )( ::SireMaths::Vector const & ) ;
+            typedef ::SireFF::GridFieldTable & ( ::SireFF::GridFieldTable::*assign_function_type)( ::SireMaths::Vector const & ) ;
             assign_function_type assign_function_value( &::SireFF::GridFieldTable::operator= );
             
             GridFieldTable_exposer.def( 
@@ -189,7 +188,7 @@ void register_GridFieldTable_class(){
         GridFieldTable_exposer.def( bp::self == bp::self );
         { //::SireFF::GridFieldTable::operator[]
         
-            typedef ::SireMaths::Vector & ( ::SireFF::GridFieldTable::*__getitem___function_type )( int ) ;
+            typedef ::SireMaths::Vector & ( ::SireFF::GridFieldTable::*__getitem___function_type)( int ) ;
             __getitem___function_type __getitem___function_value( &::SireFF::GridFieldTable::operator[] );
             
             GridFieldTable_exposer.def( 
@@ -201,7 +200,7 @@ void register_GridFieldTable_class(){
         }
         { //::SireFF::GridFieldTable::operator[]
         
-            typedef ::SireMaths::Vector const & ( ::SireFF::GridFieldTable::*__getitem___function_type )( int ) const;
+            typedef ::SireMaths::Vector const & ( ::SireFF::GridFieldTable::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireFF::GridFieldTable::operator[] );
             
             GridFieldTable_exposer.def( 
@@ -213,7 +212,7 @@ void register_GridFieldTable_class(){
         }
         { //::SireFF::GridFieldTable::setAll
         
-            typedef void ( ::SireFF::GridFieldTable::*setAll_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireFF::GridFieldTable::*setAll_function_type)( ::SireMaths::Vector const & ) ;
             setAll_function_type setAll_function_value( &::SireFF::GridFieldTable::setAll );
             
             GridFieldTable_exposer.def( 
@@ -224,7 +223,7 @@ void register_GridFieldTable_class(){
         }
         { //::SireFF::GridFieldTable::subtract
         
-            typedef void ( ::SireFF::GridFieldTable::*subtract_function_type )( int,::SireMaths::Vector const & ) ;
+            typedef void ( ::SireFF::GridFieldTable::*subtract_function_type)( int,::SireMaths::Vector const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::GridFieldTable::subtract );
             
             GridFieldTable_exposer.def( 
@@ -235,7 +234,7 @@ void register_GridFieldTable_class(){
         }
         { //::SireFF::GridFieldTable::subtract
         
-            typedef void ( ::SireFF::GridFieldTable::*subtract_function_type )( ::SireFF::GridFieldTable const & ) ;
+            typedef void ( ::SireFF::GridFieldTable::*subtract_function_type)( ::SireFF::GridFieldTable const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::GridFieldTable::subtract );
             
             GridFieldTable_exposer.def( 
@@ -246,7 +245,7 @@ void register_GridFieldTable_class(){
         }
         { //::SireFF::GridFieldTable::subtract
         
-            typedef void ( ::SireFF::GridFieldTable::*subtract_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireFF::GridFieldTable::*subtract_function_type)( ::SireMaths::Vector const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::GridFieldTable::subtract );
             
             GridFieldTable_exposer.def( 
@@ -257,7 +256,7 @@ void register_GridFieldTable_class(){
         }
         { //::SireFF::GridFieldTable::toVector
         
-            typedef ::QVector< SireMaths::Vector > ( ::SireFF::GridFieldTable::*toVector_function_type )(  ) const;
+            typedef ::QVector< SireMaths::Vector > ( ::SireFF::GridFieldTable::*toVector_function_type)(  ) const;
             toVector_function_type toVector_function_value( &::SireFF::GridFieldTable::toVector );
             
             GridFieldTable_exposer.def( 

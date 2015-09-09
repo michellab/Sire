@@ -17,25 +17,25 @@ def findGlobals():
     
     FILE = open("_Units_global_variables.pyman.hpp", "w")
     
-    print >>FILE, "#ifndef _Units_global_variables_hpp"
-    print >>FILE, "#define _Units_global_variables_hpp"
-    print >>FILE, "\nvoid register_man_global_variables();\n"
-    print >>FILE, "#endif"
+    print("#ifndef _Units_global_variables_hpp", file=FILE)
+    print("#define _Units_global_variables_hpp", file=FILE)
+    print("\nvoid register_man_global_variables();\n", file=FILE)
+    print("#endif", file=FILE)
      
     FILE.close()
 
     FILE = open("_Units_global_variables.pyman.cpp", "w")
     
-    print >>FILE, "\n#include \"_Units_global_variables.pyman.hpp\""
-    print >>FILE, "#include <boost/python.hpp>"
-    print >>FILE, "#include \"SireUnits/units.h\""
-    print >>FILE, "#include \"SireUnits/temperature.h\""
-    print >>FILE, "\nusing namespace boost::python;"
-    print >>FILE, "using namespace SireUnits;"
-    print >>FILE, "using namespace SireUnits::Dimension;\n"
+    print("\n#include \"_Units_global_variables.pyman.hpp\"", file=FILE)
+    print("#include <boost/python.hpp>", file=FILE)
+    print("#include \"SireUnits/units.h\"", file=FILE)
+    print("#include \"SireUnits/temperature.h\"", file=FILE)
+    print("\nusing namespace boost::python;", file=FILE)
+    print("using namespace SireUnits;", file=FILE)
+    print("using namespace SireUnits::Dimension;\n", file=FILE)
     
-    print >>FILE, "void register_man_global_variables()"
-    print >>FILE, "{"
+    print("void register_man_global_variables()", file=FILE)
+    print("{", file=FILE)
     
     
     for line in lines:
@@ -43,21 +43,21 @@ def findGlobals():
     
         if match:
             name = match.group(2)
-            print >>FILE, "    scope().attr(\"%s\") = %s;\n" % (name,name)
+            print("    scope().attr(\"%s\") = %s;\n" % (name,name), file=FILE)
         else:
             match = re.search(r"const double\s+(\w+)", line)
             
             if match:
                 name = match.group(1)
-                print >>FILE, "    scope().attr(\"%s\") = %s;\n" % (name,name)
+                print("    scope().attr(\"%s\") = %s;\n" % (name,name), file=FILE)
 
 
 
     #add Celsius and Fahrenheit manually
-    print >>FILE, "    scope().attr(\"celsius\") = celsius;\n"
-    print >>FILE, "    scope().attr(\"fahrenheit\") = fahrenheit;\n"
+    print("    scope().attr(\"celsius\") = celsius;\n", file=FILE)
+    print("    scope().attr(\"fahrenheit\") = fahrenheit;\n", file=FILE)
 
-    print >>FILE, "}\n"
+    print("}\n", file=FILE)
 
 def fix_GeneralUnit(c):
     c.add_registration_code("def( bp::other<double>() * bp::self )")

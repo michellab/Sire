@@ -44,7 +44,7 @@ void register_TI_class(){
         TI_exposer.def( bp::init< SireAnalysis::TI const & >(( bp::arg("other") )) );
         { //::SireAnalysis::TI::add
         
-            typedef void ( ::SireAnalysis::TI::*add_function_type )( ::QMap< double, SireMaths::AverageAndStddev > const & ) ;
+            typedef void ( ::SireAnalysis::TI::*add_function_type)( ::QMap< double, SireMaths::AverageAndStddev > const & ) ;
             add_function_type add_function_value( &::SireAnalysis::TI::add );
             
             TI_exposer.def( 
@@ -55,7 +55,7 @@ void register_TI_class(){
         }
         { //::SireAnalysis::TI::add
         
-            typedef void ( ::SireAnalysis::TI::*add_function_type )( ::QMap< double, SireMaths::FreeEnergyAverage > const & ) ;
+            typedef void ( ::SireAnalysis::TI::*add_function_type)( ::QMap< double, SireMaths::FreeEnergyAverage > const & ) ;
             add_function_type add_function_value( &::SireAnalysis::TI::add );
             
             TI_exposer.def( 
@@ -66,7 +66,7 @@ void register_TI_class(){
         }
         { //::SireAnalysis::TI::add
         
-            typedef void ( ::SireAnalysis::TI::*add_function_type )( ::QMap< double, SireMaths::FreeEnergyAverage > const &,double ) ;
+            typedef void ( ::SireAnalysis::TI::*add_function_type)( ::QMap< double, SireMaths::FreeEnergyAverage > const &,double ) ;
             add_function_type add_function_value( &::SireAnalysis::TI::add );
             
             TI_exposer.def( 
@@ -77,7 +77,7 @@ void register_TI_class(){
         }
         { //::SireAnalysis::TI::add
         
-            typedef void ( ::SireAnalysis::TI::*add_function_type )( ::QMap< double, SireMaths::FreeEnergyAverage > const &,::QMap< double, SireMaths::FreeEnergyAverage > const &,double ) ;
+            typedef void ( ::SireAnalysis::TI::*add_function_type)( ::QMap< double, SireMaths::FreeEnergyAverage > const &,::QMap< double, SireMaths::FreeEnergyAverage > const &,double ) ;
             add_function_type add_function_value( &::SireAnalysis::TI::add );
             
             TI_exposer.def( 
@@ -88,7 +88,7 @@ void register_TI_class(){
         }
         { //::SireAnalysis::TI::add
         
-            typedef void ( ::SireAnalysis::TI::*add_function_type )( ::SireAnalysis::Gradients const & ) ;
+            typedef void ( ::SireAnalysis::TI::*add_function_type)( ::SireAnalysis::Gradients const & ) ;
             add_function_type add_function_value( &::SireAnalysis::TI::add );
             
             TI_exposer.def( 
@@ -99,7 +99,7 @@ void register_TI_class(){
         }
         { //::SireAnalysis::TI::at
         
-            typedef ::SireAnalysis::Gradients ( ::SireAnalysis::TI::*at_function_type )( int ) const;
+            typedef ::SireAnalysis::Gradients ( ::SireAnalysis::TI::*at_function_type)( int ) const;
             at_function_type at_function_value( &::SireAnalysis::TI::at );
             
             TI_exposer.def( 
@@ -110,7 +110,7 @@ void register_TI_class(){
         }
         { //::SireAnalysis::TI::clear
         
-            typedef void ( ::SireAnalysis::TI::*clear_function_type )(  ) ;
+            typedef void ( ::SireAnalysis::TI::*clear_function_type)(  ) ;
             clear_function_type clear_function_value( &::SireAnalysis::TI::clear );
             
             TI_exposer.def( 
@@ -120,7 +120,7 @@ void register_TI_class(){
         }
         { //::SireAnalysis::TI::count
         
-            typedef int ( ::SireAnalysis::TI::*count_function_type )(  ) const;
+            typedef int ( ::SireAnalysis::TI::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireAnalysis::TI::count );
             
             TI_exposer.def( 
@@ -130,7 +130,7 @@ void register_TI_class(){
         }
         { //::SireAnalysis::TI::gradients
         
-            typedef ::QList< SireAnalysis::Gradients > ( ::SireAnalysis::TI::*gradients_function_type )(  ) const;
+            typedef ::QList< SireAnalysis::Gradients > ( ::SireAnalysis::TI::*gradients_function_type)(  ) const;
             gradients_function_type gradients_function_value( &::SireAnalysis::TI::gradients );
             
             TI_exposer.def( 
@@ -140,7 +140,7 @@ void register_TI_class(){
         }
         { //::SireAnalysis::TI::lambdaValues
         
-            typedef ::QList< double > ( ::SireAnalysis::TI::*lambdaValues_function_type )(  ) const;
+            typedef ::QList< double > ( ::SireAnalysis::TI::*lambdaValues_function_type)(  ) const;
             lambdaValues_function_type lambdaValues_function_value( &::SireAnalysis::TI::lambdaValues );
             
             TI_exposer.def( 
@@ -150,7 +150,7 @@ void register_TI_class(){
         }
         { //::SireAnalysis::TI::merge
         
-            typedef ::SireAnalysis::Gradients ( ::SireAnalysis::TI::*merge_function_type )( int,int ) const;
+            typedef ::SireAnalysis::Gradients ( ::SireAnalysis::TI::*merge_function_type)( int,int ) const;
             merge_function_type merge_function_value( &::SireAnalysis::TI::merge );
             
             TI_exposer.def( 
@@ -161,7 +161,7 @@ void register_TI_class(){
         }
         { //::SireAnalysis::TI::merge
         
-            typedef ::SireAnalysis::Gradients ( ::SireAnalysis::TI::*merge_function_type )( ::QList< int > ) const;
+            typedef ::SireAnalysis::Gradients ( ::SireAnalysis::TI::*merge_function_type)( ::QList< int > ) const;
             merge_function_type merge_function_value( &::SireAnalysis::TI::merge );
             
             TI_exposer.def( 
@@ -172,7 +172,7 @@ void register_TI_class(){
         }
         { //::SireAnalysis::TI::nIterations
         
-            typedef int ( ::SireAnalysis::TI::*nIterations_function_type )(  ) const;
+            typedef int ( ::SireAnalysis::TI::*nIterations_function_type)(  ) const;
             nIterations_function_type nIterations_function_value( &::SireAnalysis::TI::nIterations );
             
             TI_exposer.def( 
@@ -182,7 +182,7 @@ void register_TI_class(){
         }
         { //::SireAnalysis::TI::nLambdaValues
         
-            typedef int ( ::SireAnalysis::TI::*nLambdaValues_function_type )(  ) const;
+            typedef int ( ::SireAnalysis::TI::*nLambdaValues_function_type)(  ) const;
             nLambdaValues_function_type nLambdaValues_function_value( &::SireAnalysis::TI::nLambdaValues );
             
             TI_exposer.def( 
@@ -192,7 +192,7 @@ void register_TI_class(){
         }
         { //::SireAnalysis::TI::nSamples
         
-            typedef ::qint64 ( ::SireAnalysis::TI::*nSamples_function_type )(  ) const;
+            typedef ::qint64 ( ::SireAnalysis::TI::*nSamples_function_type)(  ) const;
             nSamples_function_type nSamples_function_value( &::SireAnalysis::TI::nSamples );
             
             TI_exposer.def( 
@@ -203,7 +203,7 @@ void register_TI_class(){
         TI_exposer.def( bp::self != bp::self );
         { //::SireAnalysis::TI::operator=
         
-            typedef ::SireAnalysis::TI & ( ::SireAnalysis::TI::*assign_function_type )( ::SireAnalysis::TI const & ) ;
+            typedef ::SireAnalysis::TI & ( ::SireAnalysis::TI::*assign_function_type)( ::SireAnalysis::TI const & ) ;
             assign_function_type assign_function_value( &::SireAnalysis::TI::operator= );
             
             TI_exposer.def( 
@@ -216,7 +216,7 @@ void register_TI_class(){
         TI_exposer.def( bp::self == bp::self );
         { //::SireAnalysis::TI::operator[]
         
-            typedef ::SireAnalysis::Gradients ( ::SireAnalysis::TI::*__getitem___function_type )( int ) const;
+            typedef ::SireAnalysis::Gradients ( ::SireAnalysis::TI::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireAnalysis::TI::operator[] );
             
             TI_exposer.def( 
@@ -227,7 +227,7 @@ void register_TI_class(){
         }
         { //::SireAnalysis::TI::removeAt
         
-            typedef void ( ::SireAnalysis::TI::*removeAt_function_type )( int ) ;
+            typedef void ( ::SireAnalysis::TI::*removeAt_function_type)( int ) ;
             removeAt_function_type removeAt_function_value( &::SireAnalysis::TI::removeAt );
             
             TI_exposer.def( 
@@ -238,7 +238,7 @@ void register_TI_class(){
         }
         { //::SireAnalysis::TI::removeRange
         
-            typedef void ( ::SireAnalysis::TI::*removeRange_function_type )( int,int ) ;
+            typedef void ( ::SireAnalysis::TI::*removeRange_function_type)( int,int ) ;
             removeRange_function_type removeRange_function_value( &::SireAnalysis::TI::removeRange );
             
             TI_exposer.def( 
@@ -249,7 +249,7 @@ void register_TI_class(){
         }
         { //::SireAnalysis::TI::rollingAverage
         
-            typedef ::QList< SireAnalysis::Gradients > ( ::SireAnalysis::TI::*rollingAverage_function_type )( int ) const;
+            typedef ::QList< SireAnalysis::Gradients > ( ::SireAnalysis::TI::*rollingAverage_function_type)( int ) const;
             rollingAverage_function_type rollingAverage_function_value( &::SireAnalysis::TI::rollingAverage );
             
             TI_exposer.def( 
@@ -260,7 +260,7 @@ void register_TI_class(){
         }
         { //::SireAnalysis::TI::set
         
-            typedef void ( ::SireAnalysis::TI::*set_function_type )( int,::QMap< double, SireMaths::AverageAndStddev > const & ) ;
+            typedef void ( ::SireAnalysis::TI::*set_function_type)( int,::QMap< double, SireMaths::AverageAndStddev > const & ) ;
             set_function_type set_function_value( &::SireAnalysis::TI::set );
             
             TI_exposer.def( 
@@ -271,7 +271,7 @@ void register_TI_class(){
         }
         { //::SireAnalysis::TI::set
         
-            typedef void ( ::SireAnalysis::TI::*set_function_type )( int,::QMap< double, SireMaths::FreeEnergyAverage > const & ) ;
+            typedef void ( ::SireAnalysis::TI::*set_function_type)( int,::QMap< double, SireMaths::FreeEnergyAverage > const & ) ;
             set_function_type set_function_value( &::SireAnalysis::TI::set );
             
             TI_exposer.def( 
@@ -282,7 +282,7 @@ void register_TI_class(){
         }
         { //::SireAnalysis::TI::set
         
-            typedef void ( ::SireAnalysis::TI::*set_function_type )( int,::QMap< double, SireMaths::FreeEnergyAverage > const &,double ) ;
+            typedef void ( ::SireAnalysis::TI::*set_function_type)( int,::QMap< double, SireMaths::FreeEnergyAverage > const &,double ) ;
             set_function_type set_function_value( &::SireAnalysis::TI::set );
             
             TI_exposer.def( 
@@ -293,7 +293,7 @@ void register_TI_class(){
         }
         { //::SireAnalysis::TI::set
         
-            typedef void ( ::SireAnalysis::TI::*set_function_type )( int,::QMap< double, SireMaths::FreeEnergyAverage > const &,::QMap< double, SireMaths::FreeEnergyAverage > const &,double ) ;
+            typedef void ( ::SireAnalysis::TI::*set_function_type)( int,::QMap< double, SireMaths::FreeEnergyAverage > const &,::QMap< double, SireMaths::FreeEnergyAverage > const &,double ) ;
             set_function_type set_function_value( &::SireAnalysis::TI::set );
             
             TI_exposer.def( 
@@ -304,7 +304,7 @@ void register_TI_class(){
         }
         { //::SireAnalysis::TI::set
         
-            typedef void ( ::SireAnalysis::TI::*set_function_type )( int,::SireAnalysis::Gradients const & ) ;
+            typedef void ( ::SireAnalysis::TI::*set_function_type)( int,::SireAnalysis::Gradients const & ) ;
             set_function_type set_function_value( &::SireAnalysis::TI::set );
             
             TI_exposer.def( 
@@ -315,7 +315,7 @@ void register_TI_class(){
         }
         { //::SireAnalysis::TI::size
         
-            typedef int ( ::SireAnalysis::TI::*size_function_type )(  ) const;
+            typedef int ( ::SireAnalysis::TI::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireAnalysis::TI::size );
             
             TI_exposer.def( 
@@ -325,7 +325,7 @@ void register_TI_class(){
         }
         { //::SireAnalysis::TI::toString
         
-            typedef ::QString ( ::SireAnalysis::TI::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireAnalysis::TI::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireAnalysis::TI::toString );
             
             TI_exposer.def( 
@@ -345,7 +345,7 @@ void register_TI_class(){
         }
         { //::SireAnalysis::TI::what
         
-            typedef char const * ( ::SireAnalysis::TI::*what_function_type )(  ) const;
+            typedef char const * ( ::SireAnalysis::TI::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireAnalysis::TI::what );
             
             TI_exposer.def( 

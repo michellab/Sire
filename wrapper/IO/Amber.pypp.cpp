@@ -96,7 +96,7 @@ void register_Amber_class(){
         Amber_exposer.def( bp::init< SireIO::Amber const & >(( bp::arg("other") )) );
         { //::SireIO::Amber::coulomb14Factor
         
-            typedef double ( ::SireIO::Amber::*coulomb14Factor_function_type )(  ) const;
+            typedef double ( ::SireIO::Amber::*coulomb14Factor_function_type)(  ) const;
             coulomb14Factor_function_type coulomb14Factor_function_value( &::SireIO::Amber::coulomb14Factor );
             
             Amber_exposer.def( 
@@ -106,7 +106,7 @@ void register_Amber_class(){
         }
         { //::SireIO::Amber::lj14Factor
         
-            typedef double ( ::SireIO::Amber::*lj14Factor_function_type )(  ) const;
+            typedef double ( ::SireIO::Amber::*lj14Factor_function_type)(  ) const;
             lj14Factor_function_type lj14Factor_function_value( &::SireIO::Amber::lj14Factor );
             
             Amber_exposer.def( 
@@ -117,7 +117,7 @@ void register_Amber_class(){
         Amber_exposer.def( bp::self != bp::self );
         { //::SireIO::Amber::operator=
         
-            typedef ::SireIO::Amber & ( ::SireIO::Amber::*assign_function_type )( ::SireIO::Amber const & ) ;
+            typedef ::SireIO::Amber & ( ::SireIO::Amber::*assign_function_type)( ::SireIO::Amber const & ) ;
             assign_function_type assign_function_value( &::SireIO::Amber::operator= );
             
             Amber_exposer.def( 
@@ -130,7 +130,7 @@ void register_Amber_class(){
         Amber_exposer.def( bp::self == bp::self );
         { //::SireIO::Amber::readCrdTop
         
-            typedef ::boost::tuples::tuple< SireMol::MoleculeGroup, SireBase::PropPtr< SireVol::Space >, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireIO::Amber::*readCrdTop_function_type )( ::QString const &,::QString const &,::QString ) const;
+            typedef ::boost::tuples::tuple< SireMol::MoleculeGroup, SireBase::PropPtr< SireVol::Space >, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireIO::Amber::*readCrdTop_function_type)( ::QString const &,::QString const &,::QString ) const;
             readCrdTop_function_type readCrdTop_function_value( &::SireIO::Amber::readCrdTop );
             
             Amber_exposer.def( 
@@ -141,7 +141,7 @@ void register_Amber_class(){
         }
         { //::SireIO::Amber::set14Factors
         
-            typedef void ( ::SireIO::Amber::*set14Factors_function_type )( double,double ) ;
+            typedef void ( ::SireIO::Amber::*set14Factors_function_type)( double,double ) ;
             set14Factors_function_type set14Factors_function_value( &::SireIO::Amber::set14Factors );
             
             Amber_exposer.def( 
@@ -162,7 +162,7 @@ void register_Amber_class(){
         }
         { //::SireIO::Amber::what
         
-            typedef char const * ( ::SireIO::Amber::*what_function_type )(  ) const;
+            typedef char const * ( ::SireIO::Amber::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireIO::Amber::what );
             
             Amber_exposer.def( 

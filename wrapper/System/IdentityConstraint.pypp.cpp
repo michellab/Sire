@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "IdentityConstraint.pypp.hpp"
 
 namespace bp = boost::python;
@@ -100,19 +99,19 @@ void register_IdentityConstraint_class(){
         }
         { //::SireSystem::IdentityConstraint::moleculeGroup
         
-            typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::IdentityConstraint::*moleculeGroup_function_type )(  ) const;
+            typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::IdentityConstraint::*moleculeGroup_function_type)(  ) const;
             moleculeGroup_function_type moleculeGroup_function_value( &::SireSystem::IdentityConstraint::moleculeGroup );
             
             IdentityConstraint_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         IdentityConstraint_exposer.def( bp::self != bp::self );
         { //::SireSystem::IdentityConstraint::operator=
         
-            typedef ::SireSystem::IdentityConstraint & ( ::SireSystem::IdentityConstraint::*assign_function_type )( ::SireSystem::IdentityConstraint const & ) ;
+            typedef ::SireSystem::IdentityConstraint & ( ::SireSystem::IdentityConstraint::*assign_function_type)( ::SireSystem::IdentityConstraint const & ) ;
             assign_function_type assign_function_value( &::SireSystem::IdentityConstraint::operator= );
             
             IdentityConstraint_exposer.def( 
@@ -125,7 +124,7 @@ void register_IdentityConstraint_class(){
         IdentityConstraint_exposer.def( bp::self == bp::self );
         { //::SireSystem::IdentityConstraint::points
         
-            typedef ::QVector< SireBase::PropPtr< SireFF::Point > > ( ::SireSystem::IdentityConstraint::*points_function_type )(  ) const;
+            typedef ::QVector< SireBase::PropPtr< SireFF::Point > > ( ::SireSystem::IdentityConstraint::*points_function_type)(  ) const;
             points_function_type points_function_value( &::SireSystem::IdentityConstraint::points );
             
             IdentityConstraint_exposer.def( 
@@ -135,7 +134,7 @@ void register_IdentityConstraint_class(){
         }
         { //::SireSystem::IdentityConstraint::propertyMap
         
-            typedef ::SireBase::PropertyMap const & ( ::SireSystem::IdentityConstraint::*propertyMap_function_type )(  ) const;
+            typedef ::SireBase::PropertyMap const & ( ::SireSystem::IdentityConstraint::*propertyMap_function_type)(  ) const;
             propertyMap_function_type propertyMap_function_value( &::SireSystem::IdentityConstraint::propertyMap );
             
             IdentityConstraint_exposer.def( 
@@ -146,7 +145,7 @@ void register_IdentityConstraint_class(){
         }
         { //::SireSystem::IdentityConstraint::toString
         
-            typedef ::QString ( ::SireSystem::IdentityConstraint::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireSystem::IdentityConstraint::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireSystem::IdentityConstraint::toString );
             
             IdentityConstraint_exposer.def( 
@@ -166,7 +165,7 @@ void register_IdentityConstraint_class(){
         }
         { //::SireSystem::IdentityConstraint::useFewPointsAlgorithm
         
-            typedef void ( ::SireSystem::IdentityConstraint::*useFewPointsAlgorithm_function_type )(  ) ;
+            typedef void ( ::SireSystem::IdentityConstraint::*useFewPointsAlgorithm_function_type)(  ) ;
             useFewPointsAlgorithm_function_type useFewPointsAlgorithm_function_value( &::SireSystem::IdentityConstraint::useFewPointsAlgorithm );
             
             IdentityConstraint_exposer.def( 
@@ -176,7 +175,7 @@ void register_IdentityConstraint_class(){
         }
         { //::SireSystem::IdentityConstraint::useManyPointsAlgorithm
         
-            typedef void ( ::SireSystem::IdentityConstraint::*useManyPointsAlgorithm_function_type )(  ) ;
+            typedef void ( ::SireSystem::IdentityConstraint::*useManyPointsAlgorithm_function_type)(  ) ;
             useManyPointsAlgorithm_function_type useManyPointsAlgorithm_function_value( &::SireSystem::IdentityConstraint::useManyPointsAlgorithm );
             
             IdentityConstraint_exposer.def( 
@@ -186,7 +185,7 @@ void register_IdentityConstraint_class(){
         }
         { //::SireSystem::IdentityConstraint::useSinglePointAlgorithm
         
-            typedef void ( ::SireSystem::IdentityConstraint::*useSinglePointAlgorithm_function_type )(  ) ;
+            typedef void ( ::SireSystem::IdentityConstraint::*useSinglePointAlgorithm_function_type)(  ) ;
             useSinglePointAlgorithm_function_type useSinglePointAlgorithm_function_value( &::SireSystem::IdentityConstraint::useSinglePointAlgorithm );
             
             IdentityConstraint_exposer.def( 

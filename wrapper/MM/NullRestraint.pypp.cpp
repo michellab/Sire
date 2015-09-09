@@ -50,7 +50,7 @@ void register_NullRestraint_class(){
         NullRestraint_exposer.def( bp::init< SireMM::NullRestraint const & >(( bp::arg("other") )) );
         { //::SireMM::NullRestraint::builtinSymbols
         
-            typedef ::SireCAS::Symbols ( ::SireMM::NullRestraint::*builtinSymbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireMM::NullRestraint::*builtinSymbols_function_type)(  ) const;
             builtinSymbols_function_type builtinSymbols_function_value( &::SireMM::NullRestraint::builtinSymbols );
             
             NullRestraint_exposer.def( 
@@ -60,7 +60,7 @@ void register_NullRestraint_class(){
         }
         { //::SireMM::NullRestraint::builtinValues
         
-            typedef ::SireCAS::Values ( ::SireMM::NullRestraint::*builtinValues_function_type )(  ) const;
+            typedef ::SireCAS::Values ( ::SireMM::NullRestraint::*builtinValues_function_type)(  ) const;
             builtinValues_function_type builtinValues_function_value( &::SireMM::NullRestraint::builtinValues );
             
             NullRestraint_exposer.def( 
@@ -70,7 +70,7 @@ void register_NullRestraint_class(){
         }
         { //::SireMM::NullRestraint::contains
         
-            typedef bool ( ::SireMM::NullRestraint::*contains_function_type )( ::SireMol::MolNum ) const;
+            typedef bool ( ::SireMM::NullRestraint::*contains_function_type)( ::SireMol::MolNum ) const;
             contains_function_type contains_function_value( &::SireMM::NullRestraint::contains );
             
             NullRestraint_exposer.def( 
@@ -81,7 +81,7 @@ void register_NullRestraint_class(){
         }
         { //::SireMM::NullRestraint::contains
         
-            typedef bool ( ::SireMM::NullRestraint::*contains_function_type )( ::SireMol::MolID const & ) const;
+            typedef bool ( ::SireMM::NullRestraint::*contains_function_type)( ::SireMol::MolID const & ) const;
             contains_function_type contains_function_value( &::SireMM::NullRestraint::contains );
             
             NullRestraint_exposer.def( 
@@ -92,7 +92,7 @@ void register_NullRestraint_class(){
         }
         { //::SireMM::NullRestraint::differentiate
         
-            typedef ::SireMM::RestraintPtr ( ::SireMM::NullRestraint::*differentiate_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireMM::RestraintPtr ( ::SireMM::NullRestraint::*differentiate_function_type)( ::SireCAS::Symbol const & ) const;
             differentiate_function_type differentiate_function_value( &::SireMM::NullRestraint::differentiate );
             
             NullRestraint_exposer.def( 
@@ -103,7 +103,7 @@ void register_NullRestraint_class(){
         }
         { //::SireMM::NullRestraint::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::NullRestraint::*energy_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::NullRestraint::*energy_function_type)(  ) const;
             energy_function_type energy_function_value( &::SireMM::NullRestraint::energy );
             
             NullRestraint_exposer.def( 
@@ -113,7 +113,7 @@ void register_NullRestraint_class(){
         }
         { //::SireMM::NullRestraint::force
         
-            typedef void ( ::SireMM::NullRestraint::*force_function_type )( ::SireFF::MolForceTable &,double ) const;
+            typedef void ( ::SireMM::NullRestraint::*force_function_type)( ::SireFF::MolForceTable &,double ) const;
             force_function_type force_function_value( &::SireMM::NullRestraint::force );
             
             NullRestraint_exposer.def( 
@@ -124,7 +124,7 @@ void register_NullRestraint_class(){
         }
         { //::SireMM::NullRestraint::force
         
-            typedef void ( ::SireMM::NullRestraint::*force_function_type )( ::SireFF::ForceTable &,double ) const;
+            typedef void ( ::SireMM::NullRestraint::*force_function_type)( ::SireFF::ForceTable &,double ) const;
             force_function_type force_function_value( &::SireMM::NullRestraint::force );
             
             NullRestraint_exposer.def( 
@@ -135,7 +135,7 @@ void register_NullRestraint_class(){
         }
         { //::SireMM::NullRestraint::getValue
         
-            typedef double ( ::SireMM::NullRestraint::*getValue_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef double ( ::SireMM::NullRestraint::*getValue_function_type)( ::SireCAS::Symbol const & ) const;
             getValue_function_type getValue_function_value( &::SireMM::NullRestraint::getValue );
             
             NullRestraint_exposer.def( 
@@ -146,7 +146,7 @@ void register_NullRestraint_class(){
         }
         { //::SireMM::NullRestraint::hasValue
         
-            typedef bool ( ::SireMM::NullRestraint::*hasValue_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef bool ( ::SireMM::NullRestraint::*hasValue_function_type)( ::SireCAS::Symbol const & ) const;
             hasValue_function_type hasValue_function_value( &::SireMM::NullRestraint::hasValue );
             
             NullRestraint_exposer.def( 
@@ -157,7 +157,7 @@ void register_NullRestraint_class(){
         }
         { //::SireMM::NullRestraint::molecules
         
-            typedef ::SireMol::Molecules ( ::SireMM::NullRestraint::*molecules_function_type )(  ) const;
+            typedef ::SireMol::Molecules ( ::SireMM::NullRestraint::*molecules_function_type)(  ) const;
             molecules_function_type molecules_function_value( &::SireMM::NullRestraint::molecules );
             
             NullRestraint_exposer.def( 
@@ -168,7 +168,7 @@ void register_NullRestraint_class(){
         NullRestraint_exposer.def( bp::self != bp::self );
         { //::SireMM::NullRestraint::operator=
         
-            typedef ::SireMM::NullRestraint & ( ::SireMM::NullRestraint::*assign_function_type )( ::SireMM::NullRestraint const & ) ;
+            typedef ::SireMM::NullRestraint & ( ::SireMM::NullRestraint::*assign_function_type)( ::SireMM::NullRestraint const & ) ;
             assign_function_type assign_function_value( &::SireMM::NullRestraint::operator= );
             
             NullRestraint_exposer.def( 
@@ -181,7 +181,7 @@ void register_NullRestraint_class(){
         NullRestraint_exposer.def( bp::self == bp::self );
         { //::SireMM::NullRestraint::setValue
         
-            typedef void ( ::SireMM::NullRestraint::*setValue_function_type )( ::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::SireMM::NullRestraint::*setValue_function_type)( ::SireCAS::Symbol const &,double ) ;
             setValue_function_type setValue_function_value( &::SireMM::NullRestraint::setValue );
             
             NullRestraint_exposer.def( 
@@ -192,7 +192,7 @@ void register_NullRestraint_class(){
         }
         { //::SireMM::NullRestraint::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireMM::NullRestraint::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireMM::NullRestraint::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireMM::NullRestraint::symbols );
             
             NullRestraint_exposer.def( 
@@ -202,7 +202,7 @@ void register_NullRestraint_class(){
         }
         { //::SireMM::NullRestraint::toString
         
-            typedef ::QString ( ::SireMM::NullRestraint::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMM::NullRestraint::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMM::NullRestraint::toString );
             
             NullRestraint_exposer.def( 
@@ -222,7 +222,7 @@ void register_NullRestraint_class(){
         }
         { //::SireMM::NullRestraint::update
         
-            typedef void ( ::SireMM::NullRestraint::*update_function_type )( ::SireMol::MoleculeData const & ) ;
+            typedef void ( ::SireMM::NullRestraint::*update_function_type)( ::SireMol::MoleculeData const & ) ;
             update_function_type update_function_value( &::SireMM::NullRestraint::update );
             
             NullRestraint_exposer.def( 
@@ -233,7 +233,7 @@ void register_NullRestraint_class(){
         }
         { //::SireMM::NullRestraint::update
         
-            typedef void ( ::SireMM::NullRestraint::*update_function_type )( ::SireMol::Molecules const & ) ;
+            typedef void ( ::SireMM::NullRestraint::*update_function_type)( ::SireMol::Molecules const & ) ;
             update_function_type update_function_value( &::SireMM::NullRestraint::update );
             
             NullRestraint_exposer.def( 
@@ -244,7 +244,7 @@ void register_NullRestraint_class(){
         }
         { //::SireMM::NullRestraint::userSymbols
         
-            typedef ::SireCAS::Symbols ( ::SireMM::NullRestraint::*userSymbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireMM::NullRestraint::*userSymbols_function_type)(  ) const;
             userSymbols_function_type userSymbols_function_value( &::SireMM::NullRestraint::userSymbols );
             
             NullRestraint_exposer.def( 
@@ -254,7 +254,7 @@ void register_NullRestraint_class(){
         }
         { //::SireMM::NullRestraint::userValues
         
-            typedef ::SireCAS::Values ( ::SireMM::NullRestraint::*userValues_function_type )(  ) const;
+            typedef ::SireCAS::Values ( ::SireMM::NullRestraint::*userValues_function_type)(  ) const;
             userValues_function_type userValues_function_value( &::SireMM::NullRestraint::userValues );
             
             NullRestraint_exposer.def( 
@@ -264,7 +264,7 @@ void register_NullRestraint_class(){
         }
         { //::SireMM::NullRestraint::usesMoleculesIn
         
-            typedef bool ( ::SireMM::NullRestraint::*usesMoleculesIn_function_type )( ::SireFF::ForceTable const & ) const;
+            typedef bool ( ::SireMM::NullRestraint::*usesMoleculesIn_function_type)( ::SireFF::ForceTable const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireMM::NullRestraint::usesMoleculesIn );
             
             NullRestraint_exposer.def( 
@@ -275,7 +275,7 @@ void register_NullRestraint_class(){
         }
         { //::SireMM::NullRestraint::usesMoleculesIn
         
-            typedef bool ( ::SireMM::NullRestraint::*usesMoleculesIn_function_type )( ::SireMol::Molecules const & ) const;
+            typedef bool ( ::SireMM::NullRestraint::*usesMoleculesIn_function_type)( ::SireMol::Molecules const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireMM::NullRestraint::usesMoleculesIn );
             
             NullRestraint_exposer.def( 
@@ -286,7 +286,7 @@ void register_NullRestraint_class(){
         }
         { //::SireMM::NullRestraint::values
         
-            typedef ::SireCAS::Values ( ::SireMM::NullRestraint::*values_function_type )(  ) const;
+            typedef ::SireCAS::Values ( ::SireMM::NullRestraint::*values_function_type)(  ) const;
             values_function_type values_function_value( &::SireMM::NullRestraint::values );
             
             NullRestraint_exposer.def( 

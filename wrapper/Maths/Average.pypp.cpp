@@ -42,7 +42,7 @@ void register_Average_class(){
         Average_exposer.def( bp::init< SireMaths::Average const & >(( bp::arg("other") )) );
         { //::SireMaths::Average::accumulate
         
-            typedef void ( ::SireMaths::Average::*accumulate_function_type )( double ) ;
+            typedef void ( ::SireMaths::Average::*accumulate_function_type)( double ) ;
             accumulate_function_type accumulate_function_value( &::SireMaths::Average::accumulate );
             
             Average_exposer.def( 
@@ -53,7 +53,7 @@ void register_Average_class(){
         }
         { //::SireMaths::Average::average
         
-            typedef double ( ::SireMaths::Average::*average_function_type )(  ) const;
+            typedef double ( ::SireMaths::Average::*average_function_type)(  ) const;
             average_function_type average_function_value( &::SireMaths::Average::average );
             
             Average_exposer.def( 
@@ -63,7 +63,7 @@ void register_Average_class(){
         }
         { //::SireMaths::Average::clear
         
-            typedef void ( ::SireMaths::Average::*clear_function_type )(  ) ;
+            typedef void ( ::SireMaths::Average::*clear_function_type)(  ) ;
             clear_function_type clear_function_value( &::SireMaths::Average::clear );
             
             Average_exposer.def( 
@@ -75,7 +75,7 @@ void register_Average_class(){
         Average_exposer.def( bp::self + bp::self );
         { //::SireMaths::Average::operator=
         
-            typedef ::SireMaths::Average & ( ::SireMaths::Average::*assign_function_type )( ::SireMaths::Average const & ) ;
+            typedef ::SireMaths::Average & ( ::SireMaths::Average::*assign_function_type)( ::SireMaths::Average const & ) ;
             assign_function_type assign_function_value( &::SireMaths::Average::operator= );
             
             Average_exposer.def( 

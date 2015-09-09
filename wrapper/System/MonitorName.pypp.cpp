@@ -31,7 +31,7 @@ void register_MonitorName_class(){
         MonitorName_exposer.def( bp::init< SireSystem::MonitorName const & >(( bp::arg("other") )) );
         { //::SireSystem::MonitorName::hash
         
-            typedef ::uint ( ::SireSystem::MonitorName::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireSystem::MonitorName::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireSystem::MonitorName::hash );
             
             MonitorName_exposer.def( 
@@ -41,7 +41,7 @@ void register_MonitorName_class(){
         }
         { //::SireSystem::MonitorName::isNull
         
-            typedef bool ( ::SireSystem::MonitorName::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireSystem::MonitorName::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireSystem::MonitorName::isNull );
             
             MonitorName_exposer.def( 
@@ -51,7 +51,7 @@ void register_MonitorName_class(){
         }
         { //::SireSystem::MonitorName::map
         
-            typedef ::QList< SireSystem::MonitorName > ( ::SireSystem::MonitorName::*map_function_type )( ::SireSystem::SystemMonitors const & ) const;
+            typedef ::QList< SireSystem::MonitorName > ( ::SireSystem::MonitorName::*map_function_type)( ::SireSystem::SystemMonitors const & ) const;
             map_function_type map_function_value( &::SireSystem::MonitorName::map );
             
             MonitorName_exposer.def( 
@@ -63,7 +63,7 @@ void register_MonitorName_class(){
         MonitorName_exposer.def( bp::self != bp::self );
         { //::SireSystem::MonitorName::operator=
         
-            typedef ::SireSystem::MonitorName & ( ::SireSystem::MonitorName::*assign_function_type )( ::SireSystem::MonitorName const & ) ;
+            typedef ::SireSystem::MonitorName & ( ::SireSystem::MonitorName::*assign_function_type)( ::SireSystem::MonitorName const & ) ;
             assign_function_type assign_function_value( &::SireSystem::MonitorName::operator= );
             
             MonitorName_exposer.def( 
@@ -77,7 +77,7 @@ void register_MonitorName_class(){
         MonitorName_exposer.def( bp::self == bp::self );
         { //::SireSystem::MonitorName::toString
         
-            typedef ::QString ( ::SireSystem::MonitorName::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireSystem::MonitorName::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireSystem::MonitorName::toString );
             
             MonitorName_exposer.def( 
@@ -97,7 +97,7 @@ void register_MonitorName_class(){
         }
         { //::SireSystem::MonitorName::what
         
-            typedef char const * ( ::SireSystem::MonitorName::*what_function_type )(  ) const;
+            typedef char const * ( ::SireSystem::MonitorName::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireSystem::MonitorName::what );
             
             MonitorName_exposer.def( 

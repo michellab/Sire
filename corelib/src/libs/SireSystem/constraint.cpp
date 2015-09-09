@@ -230,7 +230,7 @@ bool Constraint::isSatisfied(const System &system) const
 
     else
     {
-        std::auto_ptr<Constraint> copy( this->clone() );
+        std::unique_ptr<Constraint> copy( this->clone() );
         
         copy->setSystem(system);
         

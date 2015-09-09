@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "AtomBeads.pypp.hpp"
 
 namespace bp = boost::python;
@@ -36,7 +35,7 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::array
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef ::SireBase::PackedArray2D< SireMol::BeadNum > const & ( ::SireMol::AtomProperty< SireMol::BeadNum >::*array_function_type )(  ) const;
+            typedef ::SireBase::PackedArray2D< SireMol::BeadNum > const & ( ::SireMol::AtomProperty< SireMol::BeadNum >::*array_function_type)(  ) const;
             array_function_type array_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::array );
             
             AtomBeads_exposer.def( 
@@ -48,7 +47,7 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::assertCanConvert
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMol::BeadNum >::*assertCanConvert_function_type )( ::QVariant const & ) const;
+            typedef void ( ::SireMol::AtomProperty< SireMol::BeadNum >::*assertCanConvert_function_type)( ::QVariant const & ) const;
             assertCanConvert_function_type assertCanConvert_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::assertCanConvert );
             
             AtomBeads_exposer.def( 
@@ -60,7 +59,7 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::assignFrom
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMol::BeadNum >::*assignFrom_function_type )( ::SireMol::AtomProperty< QVariant > const & ) ;
+            typedef void ( ::SireMol::AtomProperty< SireMol::BeadNum >::*assignFrom_function_type)( ::SireMol::AtomProperty< QVariant > const & ) ;
             assignFrom_function_type assignFrom_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::assignFrom );
             
             AtomBeads_exposer.def( 
@@ -72,7 +71,7 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::at
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< SireMol::BeadNum > const & ( ::SireMol::AtomProperty< SireMol::BeadNum >::*at_function_type )( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::detail::PackedArray2D_Array< SireMol::BeadNum > const & ( ::SireMol::AtomProperty< SireMol::BeadNum >::*at_function_type)( ::SireMol::CGIdx ) const;
             at_function_type at_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::at );
             
             AtomBeads_exposer.def( 
@@ -85,20 +84,20 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::at
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef ::SireMol::BeadNum const & ( ::SireMol::AtomProperty< SireMol::BeadNum >::*at_function_type )( ::SireMol::CGAtomIdx const & ) const;
+            typedef ::SireMol::BeadNum const & ( ::SireMol::AtomProperty< SireMol::BeadNum >::*at_function_type)( ::SireMol::CGAtomIdx const & ) const;
             at_function_type at_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::at );
             
             AtomBeads_exposer.def( 
                 "at"
                 , at_function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::canConvert
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef bool ( ::SireMol::AtomProperty< SireMol::BeadNum >::*canConvert_function_type )( ::QVariant const & ) const;
+            typedef bool ( ::SireMol::AtomProperty< SireMol::BeadNum >::*canConvert_function_type)( ::QVariant const & ) const;
             canConvert_function_type canConvert_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::canConvert );
             
             AtomBeads_exposer.def( 
@@ -110,7 +109,7 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::copyFrom
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMol::BeadNum >::*copyFrom_function_type )( ::QVector< SireMol::BeadNum > const & ) ;
+            typedef void ( ::SireMol::AtomProperty< SireMol::BeadNum >::*copyFrom_function_type)( ::QVector< SireMol::BeadNum > const & ) ;
             copyFrom_function_type copyFrom_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::copyFrom );
             
             AtomBeads_exposer.def( 
@@ -122,7 +121,7 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::copyFrom
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMol::BeadNum >::*copyFrom_function_type )( ::QVector< SireMol::BeadNum > const &,::SireMol::AtomSelection const & ) ;
+            typedef void ( ::SireMol::AtomProperty< SireMol::BeadNum >::*copyFrom_function_type)( ::QVector< SireMol::BeadNum > const &,::SireMol::AtomSelection const & ) ;
             copyFrom_function_type copyFrom_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::copyFrom );
             
             AtomBeads_exposer.def( 
@@ -134,7 +133,7 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::count
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< SireMol::BeadNum >::*count_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomProperty< SireMol::BeadNum >::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::count );
             
             AtomBeads_exposer.def( 
@@ -145,7 +144,7 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::divide
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMol::BeadNum >::*divide_function_type )( ::QVector< SireMol::AtomSelection > const & ) const;
+            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMol::BeadNum >::*divide_function_type)( ::QVector< SireMol::AtomSelection > const & ) const;
             divide_function_type divide_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::divide );
             
             AtomBeads_exposer.def( 
@@ -157,7 +156,7 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::divideByResidue
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMol::BeadNum >::*divideByResidue_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMol::BeadNum >::*divideByResidue_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             divideByResidue_function_type divideByResidue_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::divideByResidue );
             
             AtomBeads_exposer.def( 
@@ -181,7 +180,7 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::get
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< SireMol::BeadNum > const & ( ::SireMol::AtomProperty< SireMol::BeadNum >::*get_function_type )( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::detail::PackedArray2D_Array< SireMol::BeadNum > const & ( ::SireMol::AtomProperty< SireMol::BeadNum >::*get_function_type)( ::SireMol::CGIdx ) const;
             get_function_type get_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::get );
             
             AtomBeads_exposer.def( 
@@ -194,20 +193,20 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::get
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef ::SireMol::BeadNum const & ( ::SireMol::AtomProperty< SireMol::BeadNum >::*get_function_type )( ::SireMol::CGAtomIdx const & ) const;
+            typedef ::SireMol::BeadNum const & ( ::SireMol::AtomProperty< SireMol::BeadNum >::*get_function_type)( ::SireMol::CGAtomIdx const & ) const;
             get_function_type get_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::get );
             
             AtomBeads_exposer.def( 
                 "get"
                 , get_function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::isCompatibleWith
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef bool ( ::SireMol::AtomProperty< SireMol::BeadNum >::*isCompatibleWith_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef bool ( ::SireMol::AtomProperty< SireMol::BeadNum >::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::isCompatibleWith );
             
             AtomBeads_exposer.def( 
@@ -219,7 +218,7 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::isEmpty
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef bool ( ::SireMol::AtomProperty< SireMol::BeadNum >::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::AtomProperty< SireMol::BeadNum >::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::isEmpty );
             
             AtomBeads_exposer.def( 
@@ -230,7 +229,7 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::matchToSelection
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef ::SireMol::AtomProperty< SireMol::BeadNum > ( ::SireMol::AtomProperty< SireMol::BeadNum >::*matchToSelection_function_type )( ::SireMol::AtomSelection const & ) const;
+            typedef ::SireMol::AtomProperty< SireMol::BeadNum > ( ::SireMol::AtomProperty< SireMol::BeadNum >::*matchToSelection_function_type)( ::SireMol::AtomSelection const & ) const;
             matchToSelection_function_type matchToSelection_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::matchToSelection );
             
             AtomBeads_exposer.def( 
@@ -242,7 +241,7 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::merge
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMol::BeadNum >::*merge_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMol::BeadNum >::*merge_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             merge_function_type merge_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::merge );
             
             AtomBeads_exposer.def( 
@@ -254,7 +253,7 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::nAtoms
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< SireMol::BeadNum >::*nAtoms_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomProperty< SireMol::BeadNum >::*nAtoms_function_type)(  ) const;
             nAtoms_function_type nAtoms_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::nAtoms );
             
             AtomBeads_exposer.def( 
@@ -265,7 +264,7 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::nAtoms
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< SireMol::BeadNum >::*nAtoms_function_type )( ::SireMol::CGIdx ) const;
+            typedef int ( ::SireMol::AtomProperty< SireMol::BeadNum >::*nAtoms_function_type)( ::SireMol::CGIdx ) const;
             nAtoms_function_type nAtoms_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::nAtoms );
             
             AtomBeads_exposer.def( 
@@ -277,7 +276,7 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::nCutGroups
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< SireMol::BeadNum >::*nCutGroups_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomProperty< SireMol::BeadNum >::*nCutGroups_function_type)(  ) const;
             nCutGroups_function_type nCutGroups_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::nCutGroups );
             
             AtomBeads_exposer.def( 
@@ -289,7 +288,7 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::operator=
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef ::SireMol::AtomProperty< SireMol::BeadNum > & ( ::SireMol::AtomProperty< SireMol::BeadNum >::*assign_function_type )( ::SireMol::AtomProperty< SireMol::BeadNum > const & ) ;
+            typedef ::SireMol::AtomProperty< SireMol::BeadNum > & ( ::SireMol::AtomProperty< SireMol::BeadNum >::*assign_function_type)( ::SireMol::AtomProperty< SireMol::BeadNum > const & ) ;
             assign_function_type assign_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::operator= );
             
             AtomBeads_exposer.def( 
@@ -303,7 +302,7 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::operator[]
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< SireMol::BeadNum > const & ( ::SireMol::AtomProperty< SireMol::BeadNum >::*__getitem___function_type )( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::detail::PackedArray2D_Array< SireMol::BeadNum > const & ( ::SireMol::AtomProperty< SireMol::BeadNum >::*__getitem___function_type)( ::SireMol::CGIdx ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::operator[] );
             
             AtomBeads_exposer.def( 
@@ -316,20 +315,20 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::operator[]
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef ::SireMol::BeadNum const & ( ::SireMol::AtomProperty< SireMol::BeadNum >::*__getitem___function_type )( ::SireMol::CGAtomIdx const & ) const;
+            typedef ::SireMol::BeadNum const & ( ::SireMol::AtomProperty< SireMol::BeadNum >::*__getitem___function_type)( ::SireMol::CGAtomIdx const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::operator[] );
             
             AtomBeads_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::set
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef ::SireMol::AtomProperty< SireMol::BeadNum > & ( ::SireMol::AtomProperty< SireMol::BeadNum >::*set_function_type )( ::SireMol::CGAtomIdx const &,::SireMol::BeadNum const & ) ;
+            typedef ::SireMol::AtomProperty< SireMol::BeadNum > & ( ::SireMol::AtomProperty< SireMol::BeadNum >::*set_function_type)( ::SireMol::CGAtomIdx const &,::SireMol::BeadNum const & ) ;
             set_function_type set_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::set );
             
             AtomBeads_exposer.def( 
@@ -342,7 +341,7 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::set
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef ::SireMol::AtomProperty< SireMol::BeadNum > & ( ::SireMol::AtomProperty< SireMol::BeadNum >::*set_function_type )( ::SireMol::CGIdx,::QVector< SireMol::BeadNum > const & ) ;
+            typedef ::SireMol::AtomProperty< SireMol::BeadNum > & ( ::SireMol::AtomProperty< SireMol::BeadNum >::*set_function_type)( ::SireMol::CGIdx,::QVector< SireMol::BeadNum > const & ) ;
             set_function_type set_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::set );
             
             AtomBeads_exposer.def( 
@@ -355,7 +354,7 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::size
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< SireMol::BeadNum >::*size_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomProperty< SireMol::BeadNum >::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::size );
             
             AtomBeads_exposer.def( 
@@ -366,7 +365,7 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::toString
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef ::QString ( ::SireMol::AtomProperty< SireMol::BeadNum >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::AtomProperty< SireMol::BeadNum >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::toString );
             
             AtomBeads_exposer.def( 
@@ -377,7 +376,7 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::toVariant
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef ::SireMol::AtomProperty< QVariant > ( ::SireMol::AtomProperty< SireMol::BeadNum >::*toVariant_function_type )(  ) const;
+            typedef ::SireMol::AtomProperty< QVariant > ( ::SireMol::AtomProperty< SireMol::BeadNum >::*toVariant_function_type)(  ) const;
             toVariant_function_type toVariant_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::toVariant );
             
             AtomBeads_exposer.def( 
@@ -388,7 +387,7 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::toVector
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef ::QVector< SireMol::BeadNum > ( ::SireMol::AtomProperty< SireMol::BeadNum >::*toVector_function_type )(  ) const;
+            typedef ::QVector< SireMol::BeadNum > ( ::SireMol::AtomProperty< SireMol::BeadNum >::*toVector_function_type)(  ) const;
             toVector_function_type toVector_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::toVector );
             
             AtomBeads_exposer.def( 
@@ -399,7 +398,7 @@ void register_AtomBeads_class(){
         { //::SireMol::AtomProperty< SireMol::BeadNum >::toVector
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
-            typedef ::QVector< SireMol::BeadNum > ( ::SireMol::AtomProperty< SireMol::BeadNum >::*toVector_function_type )( ::SireMol::AtomSelection const & ) const;
+            typedef ::QVector< SireMol::BeadNum > ( ::SireMol::AtomProperty< SireMol::BeadNum >::*toVector_function_type)( ::SireMol::AtomSelection const & ) const;
             toVector_function_type toVector_function_value( &::SireMol::AtomProperty< SireMol::BeadNum >::toVector );
             
             AtomBeads_exposer.def( 

@@ -23,12 +23,12 @@ void register_Version_class(){
 
     { //::SireBase::Version
         typedef bp::class_< SireBase::Version > Version_exposer_t;
-        Version_exposer_t Version_exposer = Version_exposer_t( "Version", bp::init< bp::optional< quint64, quint64 > >(( bp::arg("major")=(long long unsigned int)(0), bp::arg("minor")=(long long unsigned int)(0) )) );
+        Version_exposer_t Version_exposer = Version_exposer_t( "Version", bp::init< bp::optional< quint64, quint64 > >(( bp::arg("major")=(::quint64)(0), bp::arg("minor")=(::quint64)(0) )) );
         bp::scope Version_scope( Version_exposer );
         Version_exposer.def( bp::init< SireBase::Version const & >(( bp::arg("other") )) );
         { //::SireBase::Version::majorVersion
         
-            typedef ::quint64 ( ::SireBase::Version::*majorVersion_function_type )(  ) const;
+            typedef ::quint64 ( ::SireBase::Version::*majorVersion_function_type)(  ) const;
             majorVersion_function_type majorVersion_function_value( &::SireBase::Version::majorVersion );
             
             Version_exposer.def( 
@@ -38,7 +38,7 @@ void register_Version_class(){
         }
         { //::SireBase::Version::minorVersion
         
-            typedef ::quint64 ( ::SireBase::Version::*minorVersion_function_type )(  ) const;
+            typedef ::quint64 ( ::SireBase::Version::*minorVersion_function_type)(  ) const;
             minorVersion_function_type minorVersion_function_value( &::SireBase::Version::minorVersion );
             
             Version_exposer.def( 
@@ -49,7 +49,7 @@ void register_Version_class(){
         Version_exposer.def( bp::self != bp::self );
         { //::SireBase::Version::operator=
         
-            typedef ::SireBase::Version & ( ::SireBase::Version::*assign_function_type )( ::SireBase::Version const & ) ;
+            typedef ::SireBase::Version & ( ::SireBase::Version::*assign_function_type)( ::SireBase::Version const & ) ;
             assign_function_type assign_function_value( &::SireBase::Version::operator= );
             
             Version_exposer.def( 
@@ -62,7 +62,7 @@ void register_Version_class(){
         Version_exposer.def( bp::self == bp::self );
         { //::SireBase::Version::toString
         
-            typedef ::QString ( ::SireBase::Version::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireBase::Version::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireBase::Version::toString );
             
             Version_exposer.def( 
@@ -82,7 +82,7 @@ void register_Version_class(){
         }
         { //::SireBase::Version::what
         
-            typedef char const * ( ::SireBase::Version::*what_function_type )(  ) const;
+            typedef char const * ( ::SireBase::Version::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireBase::Version::what );
             
             Version_exposer.def( 

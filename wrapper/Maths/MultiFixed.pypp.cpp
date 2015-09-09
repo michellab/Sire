@@ -40,7 +40,7 @@ void register_MultiFixed_class(){
         MultiFixed_exposer.def( bp::init< SireMaths::MultiFixed const & >(( bp::arg("other") )) );
         { //::SireMaths::MultiFixed::compareEqual
         
-            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*compareEqual_function_type )( ::SireMaths::MultiFixed const & ) const;
+            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*compareEqual_function_type)( ::SireMaths::MultiFixed const & ) const;
             compareEqual_function_type compareEqual_function_value( &::SireMaths::MultiFixed::compareEqual );
             
             MultiFixed_exposer.def( 
@@ -51,7 +51,7 @@ void register_MultiFixed_class(){
         }
         { //::SireMaths::MultiFixed::compareGreater
         
-            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*compareGreater_function_type )( ::SireMaths::MultiFixed const & ) const;
+            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*compareGreater_function_type)( ::SireMaths::MultiFixed const & ) const;
             compareGreater_function_type compareGreater_function_value( &::SireMaths::MultiFixed::compareGreater );
             
             MultiFixed_exposer.def( 
@@ -62,7 +62,7 @@ void register_MultiFixed_class(){
         }
         { //::SireMaths::MultiFixed::compareGreaterEqual
         
-            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*compareGreaterEqual_function_type )( ::SireMaths::MultiFixed const & ) const;
+            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*compareGreaterEqual_function_type)( ::SireMaths::MultiFixed const & ) const;
             compareGreaterEqual_function_type compareGreaterEqual_function_value( &::SireMaths::MultiFixed::compareGreaterEqual );
             
             MultiFixed_exposer.def( 
@@ -73,7 +73,7 @@ void register_MultiFixed_class(){
         }
         { //::SireMaths::MultiFixed::compareLess
         
-            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*compareLess_function_type )( ::SireMaths::MultiFixed const & ) const;
+            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*compareLess_function_type)( ::SireMaths::MultiFixed const & ) const;
             compareLess_function_type compareLess_function_value( &::SireMaths::MultiFixed::compareLess );
             
             MultiFixed_exposer.def( 
@@ -84,7 +84,7 @@ void register_MultiFixed_class(){
         }
         { //::SireMaths::MultiFixed::compareLessEqual
         
-            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*compareLessEqual_function_type )( ::SireMaths::MultiFixed const & ) const;
+            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*compareLessEqual_function_type)( ::SireMaths::MultiFixed const & ) const;
             compareLessEqual_function_type compareLessEqual_function_value( &::SireMaths::MultiFixed::compareLessEqual );
             
             MultiFixed_exposer.def( 
@@ -95,7 +95,7 @@ void register_MultiFixed_class(){
         }
         { //::SireMaths::MultiFixed::compareNotEqual
         
-            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*compareNotEqual_function_type )( ::SireMaths::MultiFixed const & ) const;
+            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*compareNotEqual_function_type)( ::SireMaths::MultiFixed const & ) const;
             compareNotEqual_function_type compareNotEqual_function_value( &::SireMaths::MultiFixed::compareNotEqual );
             
             MultiFixed_exposer.def( 
@@ -127,7 +127,7 @@ void register_MultiFixed_class(){
         }
         { //::SireMaths::MultiFixed::get
         
-            typedef double ( ::SireMaths::MultiFixed::*get_function_type )( int ) const;
+            typedef double ( ::SireMaths::MultiFixed::*get_function_type)( int ) const;
             get_function_type get_function_value( &::SireMaths::MultiFixed::get );
             
             MultiFixed_exposer.def( 
@@ -138,7 +138,7 @@ void register_MultiFixed_class(){
         }
         { //::SireMaths::MultiFixed::logicalAnd
         
-            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*logicalAnd_function_type )( ::SireMaths::MultiFixed const & ) const;
+            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*logicalAnd_function_type)( ::SireMaths::MultiFixed const & ) const;
             logicalAnd_function_type logicalAnd_function_value( &::SireMaths::MultiFixed::logicalAnd );
             
             MultiFixed_exposer.def( 
@@ -149,7 +149,7 @@ void register_MultiFixed_class(){
         }
         { //::SireMaths::MultiFixed::logicalAndNot
         
-            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*logicalAndNot_function_type )( ::SireMaths::MultiFixed const & ) const;
+            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*logicalAndNot_function_type)( ::SireMaths::MultiFixed const & ) const;
             logicalAndNot_function_type logicalAndNot_function_value( &::SireMaths::MultiFixed::logicalAndNot );
             
             MultiFixed_exposer.def( 
@@ -160,7 +160,7 @@ void register_MultiFixed_class(){
         }
         { //::SireMaths::MultiFixed::logicalNot
         
-            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*logicalNot_function_type )(  ) const;
+            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*logicalNot_function_type)(  ) const;
             logicalNot_function_type logicalNot_function_value( &::SireMaths::MultiFixed::logicalNot );
             
             MultiFixed_exposer.def( 
@@ -170,7 +170,7 @@ void register_MultiFixed_class(){
         }
         { //::SireMaths::MultiFixed::logicalOr
         
-            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*logicalOr_function_type )( ::SireMaths::MultiFixed const & ) const;
+            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*logicalOr_function_type)( ::SireMaths::MultiFixed const & ) const;
             logicalOr_function_type logicalOr_function_value( &::SireMaths::MultiFixed::logicalOr );
             
             MultiFixed_exposer.def( 
@@ -181,7 +181,7 @@ void register_MultiFixed_class(){
         }
         { //::SireMaths::MultiFixed::logicalXor
         
-            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*logicalXor_function_type )( ::SireMaths::MultiFixed const & ) const;
+            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*logicalXor_function_type)( ::SireMaths::MultiFixed const & ) const;
             logicalXor_function_type logicalXor_function_value( &::SireMaths::MultiFixed::logicalXor );
             
             MultiFixed_exposer.def( 
@@ -192,7 +192,7 @@ void register_MultiFixed_class(){
         }
         { //::SireMaths::MultiFixed::max
         
-            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*max_function_type )( ::SireMaths::MultiFixed const & ) const;
+            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*max_function_type)( ::SireMaths::MultiFixed const & ) const;
             max_function_type max_function_value( &::SireMaths::MultiFixed::max );
             
             MultiFixed_exposer.def( 
@@ -203,7 +203,7 @@ void register_MultiFixed_class(){
         }
         { //::SireMaths::MultiFixed::min
         
-            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*min_function_type )( ::SireMaths::MultiFixed const & ) const;
+            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*min_function_type)( ::SireMaths::MultiFixed const & ) const;
             min_function_type min_function_value( &::SireMaths::MultiFixed::min );
             
             MultiFixed_exposer.def( 
@@ -214,7 +214,7 @@ void register_MultiFixed_class(){
         }
         { //::SireMaths::MultiFixed::multiplyAdd
         
-            typedef ::SireMaths::MultiFixed & ( ::SireMaths::MultiFixed::*multiplyAdd_function_type )( ::SireMaths::MultiFixed const &,::SireMaths::MultiFixed const & ) ;
+            typedef ::SireMaths::MultiFixed & ( ::SireMaths::MultiFixed::*multiplyAdd_function_type)( ::SireMaths::MultiFixed const &,::SireMaths::MultiFixed const & ) ;
             multiplyAdd_function_type multiplyAdd_function_value( &::SireMaths::MultiFixed::multiplyAdd );
             
             MultiFixed_exposer.def( 
@@ -236,7 +236,7 @@ void register_MultiFixed_class(){
         MultiFixed_exposer.def( bp::self <= bp::self );
         { //::SireMaths::MultiFixed::operator=
         
-            typedef ::SireMaths::MultiFixed & ( ::SireMaths::MultiFixed::*assign_function_type )( ::SireMaths::MultiFixed const & ) ;
+            typedef ::SireMaths::MultiFixed & ( ::SireMaths::MultiFixed::*assign_function_type)( ::SireMaths::MultiFixed const & ) ;
             assign_function_type assign_function_value( &::SireMaths::MultiFixed::operator= );
             
             MultiFixed_exposer.def( 
@@ -251,7 +251,7 @@ void register_MultiFixed_class(){
         MultiFixed_exposer.def( bp::self >= bp::self );
         { //::SireMaths::MultiFixed::operator[]
         
-            typedef double ( ::SireMaths::MultiFixed::*__getitem___function_type )( int ) const;
+            typedef double ( ::SireMaths::MultiFixed::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMaths::MultiFixed::operator[] );
             
             MultiFixed_exposer.def( 
@@ -264,7 +264,7 @@ void register_MultiFixed_class(){
         MultiFixed_exposer.def( bp::self | bp::self );
         { //::SireMaths::MultiFixed::reciprocal
         
-            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*reciprocal_function_type )(  ) const;
+            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*reciprocal_function_type)(  ) const;
             reciprocal_function_type reciprocal_function_value( &::SireMaths::MultiFixed::reciprocal );
             
             MultiFixed_exposer.def( 
@@ -274,7 +274,7 @@ void register_MultiFixed_class(){
         }
         { //::SireMaths::MultiFixed::rotate
         
-            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*rotate_function_type )(  ) const;
+            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*rotate_function_type)(  ) const;
             rotate_function_type rotate_function_value( &::SireMaths::MultiFixed::rotate );
             
             MultiFixed_exposer.def( 
@@ -284,7 +284,7 @@ void register_MultiFixed_class(){
         }
         { //::SireMaths::MultiFixed::rsqrt
         
-            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*rsqrt_function_type )(  ) const;
+            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*rsqrt_function_type)(  ) const;
             rsqrt_function_type rsqrt_function_value( &::SireMaths::MultiFixed::rsqrt );
             
             MultiFixed_exposer.def( 
@@ -294,7 +294,7 @@ void register_MultiFixed_class(){
         }
         { //::SireMaths::MultiFixed::set
         
-            typedef void ( ::SireMaths::MultiFixed::*set_function_type )( int,double ) ;
+            typedef void ( ::SireMaths::MultiFixed::*set_function_type)( int,double ) ;
             set_function_type set_function_value( &::SireMaths::MultiFixed::set );
             
             MultiFixed_exposer.def( 
@@ -315,7 +315,7 @@ void register_MultiFixed_class(){
         }
         { //::SireMaths::MultiFixed::sqrt
         
-            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*sqrt_function_type )(  ) const;
+            typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*sqrt_function_type)(  ) const;
             sqrt_function_type sqrt_function_value( &::SireMaths::MultiFixed::sqrt );
             
             MultiFixed_exposer.def( 
@@ -325,7 +325,7 @@ void register_MultiFixed_class(){
         }
         { //::SireMaths::MultiFixed::sum
         
-            typedef double ( ::SireMaths::MultiFixed::*sum_function_type )(  ) const;
+            typedef double ( ::SireMaths::MultiFixed::*sum_function_type)(  ) const;
             sum_function_type sum_function_value( &::SireMaths::MultiFixed::sum );
             
             MultiFixed_exposer.def( 
@@ -346,7 +346,7 @@ void register_MultiFixed_class(){
         }
         { //::SireMaths::MultiFixed::toBinaryString
         
-            typedef ::QString ( ::SireMaths::MultiFixed::*toBinaryString_function_type )(  ) const;
+            typedef ::QString ( ::SireMaths::MultiFixed::*toBinaryString_function_type)(  ) const;
             toBinaryString_function_type toBinaryString_function_value( &::SireMaths::MultiFixed::toBinaryString );
             
             MultiFixed_exposer.def( 
@@ -356,7 +356,7 @@ void register_MultiFixed_class(){
         }
         { //::SireMaths::MultiFixed::toString
         
-            typedef ::QString ( ::SireMaths::MultiFixed::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMaths::MultiFixed::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMaths::MultiFixed::toString );
             
             MultiFixed_exposer.def( 
@@ -376,7 +376,7 @@ void register_MultiFixed_class(){
         }
         { //::SireMaths::MultiFixed::what
         
-            typedef char const * ( ::SireMaths::MultiFixed::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMaths::MultiFixed::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMaths::MultiFixed::what );
             
             MultiFixed_exposer.def( 

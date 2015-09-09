@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "LinkToProperty.pypp.hpp"
 
 namespace bp = boost::python;
@@ -33,18 +32,18 @@ void register_LinkToProperty_class(){
         LinkToProperty_exposer.def( bp::init< SireBase::LinkToProperty const & >(( bp::arg("other") )) );
         { //::SireBase::LinkToProperty::filter
         
-            typedef ::SireID::ID const & ( ::SireBase::LinkToProperty::*filter_function_type )(  ) const;
+            typedef ::SireID::ID const & ( ::SireBase::LinkToProperty::*filter_function_type)(  ) const;
             filter_function_type filter_function_value( &::SireBase::LinkToProperty::filter );
             
             LinkToProperty_exposer.def( 
                 "filter"
                 , filter_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireBase::LinkToProperty::isFiltered
         
-            typedef bool ( ::SireBase::LinkToProperty::*isFiltered_function_type )(  ) const;
+            typedef bool ( ::SireBase::LinkToProperty::*isFiltered_function_type)(  ) const;
             isFiltered_function_type isFiltered_function_value( &::SireBase::LinkToProperty::isFiltered );
             
             LinkToProperty_exposer.def( 
@@ -55,7 +54,7 @@ void register_LinkToProperty_class(){
         LinkToProperty_exposer.def( bp::self != bp::self );
         { //::SireBase::LinkToProperty::operator=
         
-            typedef ::SireBase::LinkToProperty & ( ::SireBase::LinkToProperty::*assign_function_type )( ::SireBase::LinkToProperty const & ) ;
+            typedef ::SireBase::LinkToProperty & ( ::SireBase::LinkToProperty::*assign_function_type)( ::SireBase::LinkToProperty const & ) ;
             assign_function_type assign_function_value( &::SireBase::LinkToProperty::operator= );
             
             LinkToProperty_exposer.def( 
@@ -68,7 +67,7 @@ void register_LinkToProperty_class(){
         LinkToProperty_exposer.def( bp::self == bp::self );
         { //::SireBase::LinkToProperty::target
         
-            typedef ::SireBase::PropertyName const & ( ::SireBase::LinkToProperty::*target_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireBase::LinkToProperty::*target_function_type)(  ) const;
             target_function_type target_function_value( &::SireBase::LinkToProperty::target );
             
             LinkToProperty_exposer.def( 
@@ -79,7 +78,7 @@ void register_LinkToProperty_class(){
         }
         { //::SireBase::LinkToProperty::toString
         
-            typedef ::QString ( ::SireBase::LinkToProperty::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireBase::LinkToProperty::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireBase::LinkToProperty::toString );
             
             LinkToProperty_exposer.def( 

@@ -35,7 +35,7 @@ void register_CLJDelta_class(){
         CLJDelta_exposer.def( bp::init< SireMM::CLJDelta const & >(( bp::arg("other") )) );
         { //::SireMM::CLJDelta::ID
         
-            typedef ::qint32 ( ::SireMM::CLJDelta::*ID_function_type )(  ) const;
+            typedef ::qint32 ( ::SireMM::CLJDelta::*ID_function_type)(  ) const;
             ID_function_type ID_function_value( &::SireMM::CLJDelta::ID );
             
             CLJDelta_exposer.def( 
@@ -45,7 +45,7 @@ void register_CLJDelta_class(){
         }
         { //::SireMM::CLJDelta::assertIdenticalTo
         
-            typedef void ( ::SireMM::CLJDelta::*assertIdenticalTo_function_type )( ::SireMM::CLJDelta const & ) const;
+            typedef void ( ::SireMM::CLJDelta::*assertIdenticalTo_function_type)( ::SireMM::CLJDelta const & ) const;
             assertIdenticalTo_function_type assertIdenticalTo_function_value( &::SireMM::CLJDelta::assertIdenticalTo );
             
             CLJDelta_exposer.def( 
@@ -56,7 +56,7 @@ void register_CLJDelta_class(){
         }
         { //::SireMM::CLJDelta::changedAtoms
         
-            typedef ::SireMM::CLJAtoms ( ::SireMM::CLJDelta::*changedAtoms_function_type )(  ) const;
+            typedef ::SireMM::CLJAtoms ( ::SireMM::CLJDelta::*changedAtoms_function_type)(  ) const;
             changedAtoms_function_type changedAtoms_function_value( &::SireMM::CLJDelta::changedAtoms );
             
             CLJDelta_exposer.def( 
@@ -66,7 +66,7 @@ void register_CLJDelta_class(){
         }
         { //::SireMM::CLJDelta::isEmpty
         
-            typedef bool ( ::SireMM::CLJDelta::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJDelta::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMM::CLJDelta::isEmpty );
             
             CLJDelta_exposer.def( 
@@ -76,7 +76,7 @@ void register_CLJDelta_class(){
         }
         { //::SireMM::CLJDelta::isNull
         
-            typedef bool ( ::SireMM::CLJDelta::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJDelta::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMM::CLJDelta::isNull );
             
             CLJDelta_exposer.def( 
@@ -174,7 +174,7 @@ void register_CLJDelta_class(){
         }
         { //::SireMM::CLJDelta::newAtoms
         
-            typedef ::SireMM::CLJAtoms ( ::SireMM::CLJDelta::*newAtoms_function_type )(  ) const;
+            typedef ::SireMM::CLJAtoms ( ::SireMM::CLJDelta::*newAtoms_function_type)(  ) const;
             newAtoms_function_type newAtoms_function_value( &::SireMM::CLJDelta::newAtoms );
             
             CLJDelta_exposer.def( 
@@ -184,7 +184,7 @@ void register_CLJDelta_class(){
         }
         { //::SireMM::CLJDelta::oldAtoms
         
-            typedef ::SireMM::CLJAtoms ( ::SireMM::CLJDelta::*oldAtoms_function_type )(  ) const;
+            typedef ::SireMM::CLJAtoms ( ::SireMM::CLJDelta::*oldAtoms_function_type)(  ) const;
             oldAtoms_function_type oldAtoms_function_value( &::SireMM::CLJDelta::oldAtoms );
             
             CLJDelta_exposer.def( 
@@ -195,7 +195,7 @@ void register_CLJDelta_class(){
         CLJDelta_exposer.def( bp::self != bp::self );
         { //::SireMM::CLJDelta::operator=
         
-            typedef ::SireMM::CLJDelta & ( ::SireMM::CLJDelta::*assign_function_type )( ::SireMM::CLJDelta const & ) ;
+            typedef ::SireMM::CLJDelta & ( ::SireMM::CLJDelta::*assign_function_type)( ::SireMM::CLJDelta const & ) ;
             assign_function_type assign_function_value( &::SireMM::CLJDelta::operator= );
             
             CLJDelta_exposer.def( 
@@ -208,7 +208,7 @@ void register_CLJDelta_class(){
         CLJDelta_exposer.def( bp::self == bp::self );
         { //::SireMM::CLJDelta::toString
         
-            typedef ::QString ( ::SireMM::CLJDelta::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMM::CLJDelta::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMM::CLJDelta::toString );
             
             CLJDelta_exposer.def( 
@@ -228,7 +228,7 @@ void register_CLJDelta_class(){
         }
         { //::SireMM::CLJDelta::what
         
-            typedef char const * ( ::SireMM::CLJDelta::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::CLJDelta::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::CLJDelta::what );
             
             CLJDelta_exposer.def( 

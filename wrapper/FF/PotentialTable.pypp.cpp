@@ -49,7 +49,7 @@ void register_PotentialTable_class(){
         PotentialTable_exposer.def( bp::init< SireFF::PotentialTable const & >(( bp::arg("other") )) );
         { //::SireFF::PotentialTable::add
         
-            typedef void ( ::SireFF::PotentialTable::*add_function_type )( ::SireFF::PotentialTable const & ) ;
+            typedef void ( ::SireFF::PotentialTable::*add_function_type)( ::SireFF::PotentialTable const & ) ;
             add_function_type add_function_value( &::SireFF::PotentialTable::add );
             
             PotentialTable_exposer.def( 
@@ -60,7 +60,7 @@ void register_PotentialTable_class(){
         }
         { //::SireFF::PotentialTable::add
         
-            typedef void ( ::SireFF::PotentialTable::*add_function_type )( ::SireUnits::Dimension::MolarEnergy const & ) ;
+            typedef void ( ::SireFF::PotentialTable::*add_function_type)( ::SireUnits::Dimension::MolarEnergy const & ) ;
             add_function_type add_function_value( &::SireFF::PotentialTable::add );
             
             PotentialTable_exposer.def( 
@@ -71,7 +71,7 @@ void register_PotentialTable_class(){
         }
         { //::SireFF::PotentialTable::assertContainsTableFor
         
-            typedef void ( ::SireFF::PotentialTable::*assertContainsTableFor_function_type )( ::SireMol::MolNum ) const;
+            typedef void ( ::SireFF::PotentialTable::*assertContainsTableFor_function_type)( ::SireMol::MolNum ) const;
             assertContainsTableFor_function_type assertContainsTableFor_function_value( &::SireFF::PotentialTable::assertContainsTableFor );
             
             PotentialTable_exposer.def( 
@@ -82,7 +82,7 @@ void register_PotentialTable_class(){
         }
         { //::SireFF::PotentialTable::assertContainsTableFor
         
-            typedef void ( ::SireFF::PotentialTable::*assertContainsTableFor_function_type )( ::SireVol::Grid const & ) const;
+            typedef void ( ::SireFF::PotentialTable::*assertContainsTableFor_function_type)( ::SireVol::Grid const & ) const;
             assertContainsTableFor_function_type assertContainsTableFor_function_value( &::SireFF::PotentialTable::assertContainsTableFor );
             
             PotentialTable_exposer.def( 
@@ -93,7 +93,7 @@ void register_PotentialTable_class(){
         }
         { //::SireFF::PotentialTable::constGetTable
         
-            typedef ::SireFF::MolPotentialTable const & ( ::SireFF::PotentialTable::*constGetTable_function_type )( ::SireMol::MolNum ) const;
+            typedef ::SireFF::MolPotentialTable const & ( ::SireFF::PotentialTable::*constGetTable_function_type)( ::SireMol::MolNum ) const;
             constGetTable_function_type constGetTable_function_value( &::SireFF::PotentialTable::constGetTable );
             
             PotentialTable_exposer.def( 
@@ -105,7 +105,7 @@ void register_PotentialTable_class(){
         }
         { //::SireFF::PotentialTable::constGetTable
         
-            typedef ::SireFF::GridPotentialTable const & ( ::SireFF::PotentialTable::*constGetTable_function_type )( ::SireVol::Grid const & ) const;
+            typedef ::SireFF::GridPotentialTable const & ( ::SireFF::PotentialTable::*constGetTable_function_type)( ::SireVol::Grid const & ) const;
             constGetTable_function_type constGetTable_function_value( &::SireFF::PotentialTable::constGetTable );
             
             PotentialTable_exposer.def( 
@@ -117,7 +117,7 @@ void register_PotentialTable_class(){
         }
         { //::SireFF::PotentialTable::contains
         
-            typedef bool ( ::SireFF::PotentialTable::*contains_function_type )( ::SireMol::MolNum ) const;
+            typedef bool ( ::SireFF::PotentialTable::*contains_function_type)( ::SireMol::MolNum ) const;
             contains_function_type contains_function_value( &::SireFF::PotentialTable::contains );
             
             PotentialTable_exposer.def( 
@@ -128,7 +128,7 @@ void register_PotentialTable_class(){
         }
         { //::SireFF::PotentialTable::contains
         
-            typedef bool ( ::SireFF::PotentialTable::*contains_function_type )( ::SireVol::Grid const & ) const;
+            typedef bool ( ::SireFF::PotentialTable::*contains_function_type)( ::SireVol::Grid const & ) const;
             contains_function_type contains_function_value( &::SireFF::PotentialTable::contains );
             
             PotentialTable_exposer.def( 
@@ -139,7 +139,7 @@ void register_PotentialTable_class(){
         }
         { //::SireFF::PotentialTable::divide
         
-            typedef void ( ::SireFF::PotentialTable::*divide_function_type )( double ) ;
+            typedef void ( ::SireFF::PotentialTable::*divide_function_type)( double ) ;
             divide_function_type divide_function_value( &::SireFF::PotentialTable::divide );
             
             PotentialTable_exposer.def( 
@@ -150,7 +150,7 @@ void register_PotentialTable_class(){
         }
         { //::SireFF::PotentialTable::getTable
         
-            typedef ::SireFF::MolPotentialTable const & ( ::SireFF::PotentialTable::*getTable_function_type )( ::SireMol::MolNum ) const;
+            typedef ::SireFF::MolPotentialTable const & ( ::SireFF::PotentialTable::*getTable_function_type)( ::SireMol::MolNum ) const;
             getTable_function_type getTable_function_value( &::SireFF::PotentialTable::getTable );
             
             PotentialTable_exposer.def( 
@@ -162,7 +162,7 @@ void register_PotentialTable_class(){
         }
         { //::SireFF::PotentialTable::getTable
         
-            typedef ::SireFF::GridPotentialTable const & ( ::SireFF::PotentialTable::*getTable_function_type )( ::SireVol::Grid const & ) const;
+            typedef ::SireFF::GridPotentialTable const & ( ::SireFF::PotentialTable::*getTable_function_type)( ::SireVol::Grid const & ) const;
             getTable_function_type getTable_function_value( &::SireFF::PotentialTable::getTable );
             
             PotentialTable_exposer.def( 
@@ -174,7 +174,7 @@ void register_PotentialTable_class(){
         }
         { //::SireFF::PotentialTable::index
         
-            typedef ::QHash< SireMol::MolNum, int > const & ( ::SireFF::PotentialTable::*index_function_type )(  ) const;
+            typedef ::QHash< SireMol::MolNum, int > const & ( ::SireFF::PotentialTable::*index_function_type)(  ) const;
             index_function_type index_function_value( &::SireFF::PotentialTable::index );
             
             PotentialTable_exposer.def( 
@@ -185,7 +185,7 @@ void register_PotentialTable_class(){
         }
         { //::SireFF::PotentialTable::indexOf
         
-            typedef int ( ::SireFF::PotentialTable::*indexOf_function_type )( ::SireMol::MolNum ) const;
+            typedef int ( ::SireFF::PotentialTable::*indexOf_function_type)( ::SireMol::MolNum ) const;
             indexOf_function_type indexOf_function_value( &::SireFF::PotentialTable::indexOf );
             
             PotentialTable_exposer.def( 
@@ -196,7 +196,7 @@ void register_PotentialTable_class(){
         }
         { //::SireFF::PotentialTable::initialiseTable
         
-            typedef void ( ::SireFF::PotentialTable::*initialiseTable_function_type )( ::SireMol::MolNum ) ;
+            typedef void ( ::SireFF::PotentialTable::*initialiseTable_function_type)( ::SireMol::MolNum ) ;
             initialiseTable_function_type initialiseTable_function_value( &::SireFF::PotentialTable::initialiseTable );
             
             PotentialTable_exposer.def( 
@@ -207,7 +207,7 @@ void register_PotentialTable_class(){
         }
         { //::SireFF::PotentialTable::initialiseTable
         
-            typedef void ( ::SireFF::PotentialTable::*initialiseTable_function_type )( ::SireVol::Grid const & ) ;
+            typedef void ( ::SireFF::PotentialTable::*initialiseTable_function_type)( ::SireVol::Grid const & ) ;
             initialiseTable_function_type initialiseTable_function_value( &::SireFF::PotentialTable::initialiseTable );
             
             PotentialTable_exposer.def( 
@@ -218,7 +218,7 @@ void register_PotentialTable_class(){
         }
         { //::SireFF::PotentialTable::initialiseTables
         
-            typedef void ( ::SireFF::PotentialTable::*initialiseTables_function_type )(  ) ;
+            typedef void ( ::SireFF::PotentialTable::*initialiseTables_function_type)(  ) ;
             initialiseTables_function_type initialiseTables_function_value( &::SireFF::PotentialTable::initialiseTables );
             
             PotentialTable_exposer.def( 
@@ -228,7 +228,7 @@ void register_PotentialTable_class(){
         }
         { //::SireFF::PotentialTable::isEmpty
         
-            typedef bool ( ::SireFF::PotentialTable::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireFF::PotentialTable::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireFF::PotentialTable::isEmpty );
             
             PotentialTable_exposer.def( 
@@ -238,7 +238,7 @@ void register_PotentialTable_class(){
         }
         { //::SireFF::PotentialTable::molNums
         
-            typedef ::QList< SireMol::MolNum > ( ::SireFF::PotentialTable::*molNums_function_type )(  ) const;
+            typedef ::QList< SireMol::MolNum > ( ::SireFF::PotentialTable::*molNums_function_type)(  ) const;
             molNums_function_type molNums_function_value( &::SireFF::PotentialTable::molNums );
             
             PotentialTable_exposer.def( 
@@ -248,7 +248,7 @@ void register_PotentialTable_class(){
         }
         { //::SireFF::PotentialTable::multiply
         
-            typedef void ( ::SireFF::PotentialTable::*multiply_function_type )( double ) ;
+            typedef void ( ::SireFF::PotentialTable::*multiply_function_type)( double ) ;
             multiply_function_type multiply_function_value( &::SireFF::PotentialTable::multiply );
             
             PotentialTable_exposer.def( 
@@ -259,7 +259,7 @@ void register_PotentialTable_class(){
         }
         { //::SireFF::PotentialTable::nGrids
         
-            typedef int ( ::SireFF::PotentialTable::*nGrids_function_type )(  ) const;
+            typedef int ( ::SireFF::PotentialTable::*nGrids_function_type)(  ) const;
             nGrids_function_type nGrids_function_value( &::SireFF::PotentialTable::nGrids );
             
             PotentialTable_exposer.def( 
@@ -269,7 +269,7 @@ void register_PotentialTable_class(){
         }
         { //::SireFF::PotentialTable::nMolecules
         
-            typedef int ( ::SireFF::PotentialTable::*nMolecules_function_type )(  ) const;
+            typedef int ( ::SireFF::PotentialTable::*nMolecules_function_type)(  ) const;
             nMolecules_function_type nMolecules_function_value( &::SireFF::PotentialTable::nMolecules );
             
             PotentialTable_exposer.def( 
@@ -287,7 +287,7 @@ void register_PotentialTable_class(){
         PotentialTable_exposer.def( bp::self / bp::other< double >() );
         { //::SireFF::PotentialTable::operator=
         
-            typedef ::SireFF::PotentialTable & ( ::SireFF::PotentialTable::*assign_function_type )( ::SireFF::PotentialTable const & ) ;
+            typedef ::SireFF::PotentialTable & ( ::SireFF::PotentialTable::*assign_function_type)( ::SireFF::PotentialTable const & ) ;
             assign_function_type assign_function_value( &::SireFF::PotentialTable::operator= );
             
             PotentialTable_exposer.def( 
@@ -299,7 +299,7 @@ void register_PotentialTable_class(){
         }
         { //::SireFF::PotentialTable::operator=
         
-            typedef ::SireFF::PotentialTable & ( ::SireFF::PotentialTable::*assign_function_type )( ::SireUnits::Dimension::MolarEnergy const & ) ;
+            typedef ::SireFF::PotentialTable & ( ::SireFF::PotentialTable::*assign_function_type)( ::SireUnits::Dimension::MolarEnergy const & ) ;
             assign_function_type assign_function_value( &::SireFF::PotentialTable::operator= );
             
             PotentialTable_exposer.def( 
@@ -312,7 +312,7 @@ void register_PotentialTable_class(){
         PotentialTable_exposer.def( bp::self == bp::self );
         { //::SireFF::PotentialTable::setAll
         
-            typedef void ( ::SireFF::PotentialTable::*setAll_function_type )( ::SireUnits::Dimension::MolarEnergy const & ) ;
+            typedef void ( ::SireFF::PotentialTable::*setAll_function_type)( ::SireUnits::Dimension::MolarEnergy const & ) ;
             setAll_function_type setAll_function_value( &::SireFF::PotentialTable::setAll );
             
             PotentialTable_exposer.def( 
@@ -323,7 +323,7 @@ void register_PotentialTable_class(){
         }
         { //::SireFF::PotentialTable::subtract
         
-            typedef void ( ::SireFF::PotentialTable::*subtract_function_type )( ::SireFF::PotentialTable const & ) ;
+            typedef void ( ::SireFF::PotentialTable::*subtract_function_type)( ::SireFF::PotentialTable const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::PotentialTable::subtract );
             
             PotentialTable_exposer.def( 
@@ -334,7 +334,7 @@ void register_PotentialTable_class(){
         }
         { //::SireFF::PotentialTable::subtract
         
-            typedef void ( ::SireFF::PotentialTable::*subtract_function_type )( ::SireUnits::Dimension::MolarEnergy const & ) ;
+            typedef void ( ::SireFF::PotentialTable::*subtract_function_type)( ::SireUnits::Dimension::MolarEnergy const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::PotentialTable::subtract );
             
             PotentialTable_exposer.def( 
@@ -355,7 +355,7 @@ void register_PotentialTable_class(){
         }
         { //::SireFF::PotentialTable::what
         
-            typedef char const * ( ::SireFF::PotentialTable::*what_function_type )(  ) const;
+            typedef char const * ( ::SireFF::PotentialTable::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireFF::PotentialTable::what );
             
             PotentialTable_exposer.def( 

@@ -51,7 +51,7 @@ void register_AtomMatchInverter_class(){
         AtomMatchInverter_exposer.def( bp::init< SireMol::AtomMatchInverter const & >(( bp::arg("other") )) );
         { //::SireMol::AtomMatchInverter::isNull
         
-            typedef bool ( ::SireMol::AtomMatchInverter::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::AtomMatchInverter::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::AtomMatchInverter::isNull );
             
             AtomMatchInverter_exposer.def( 
@@ -62,7 +62,7 @@ void register_AtomMatchInverter_class(){
         AtomMatchInverter_exposer.def( bp::self != bp::self );
         { //::SireMol::AtomMatchInverter::operator=
         
-            typedef ::SireMol::AtomMatchInverter & ( ::SireMol::AtomMatchInverter::*assign_function_type )( ::SireMol::AtomMatchInverter const & ) ;
+            typedef ::SireMol::AtomMatchInverter & ( ::SireMol::AtomMatchInverter::*assign_function_type)( ::SireMol::AtomMatchInverter const & ) ;
             assign_function_type assign_function_value( &::SireMol::AtomMatchInverter::operator= );
             
             AtomMatchInverter_exposer.def( 
@@ -75,7 +75,7 @@ void register_AtomMatchInverter_class(){
         AtomMatchInverter_exposer.def( bp::self == bp::self );
         { //::SireMol::AtomMatchInverter::toString
         
-            typedef ::QString ( ::SireMol::AtomMatchInverter::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::AtomMatchInverter::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::AtomMatchInverter::toString );
             
             AtomMatchInverter_exposer.def( 
@@ -95,7 +95,7 @@ void register_AtomMatchInverter_class(){
         }
         { //::SireMol::AtomMatchInverter::what
         
-            typedef char const * ( ::SireMol::AtomMatchInverter::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::AtomMatchInverter::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::AtomMatchInverter::what );
             
             AtomMatchInverter_exposer.def( 

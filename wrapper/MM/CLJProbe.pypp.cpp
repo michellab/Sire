@@ -36,7 +36,7 @@ void register_CLJProbe_class(){
         CLJProbe_exposer.def( bp::init< SireMM::CLJProbe const & >(( bp::arg("cljprobe") )) );
         { //::SireMM::CLJProbe::charge
         
-            typedef ::SireUnits::Dimension::Charge ( ::SireMM::CLJProbe::*charge_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Charge ( ::SireMM::CLJProbe::*charge_function_type)(  ) const;
             charge_function_type charge_function_value( &::SireMM::CLJProbe::charge );
             
             CLJProbe_exposer.def( 
@@ -46,7 +46,7 @@ void register_CLJProbe_class(){
         }
         { //::SireMM::CLJProbe::lj
         
-            typedef ::SireMM::LJParameter const & ( ::SireMM::CLJProbe::*lj_function_type )(  ) const;
+            typedef ::SireMM::LJParameter const & ( ::SireMM::CLJProbe::*lj_function_type)(  ) const;
             lj_function_type lj_function_value( &::SireMM::CLJProbe::lj );
             
             CLJProbe_exposer.def( 
@@ -58,7 +58,7 @@ void register_CLJProbe_class(){
         CLJProbe_exposer.def( bp::self != bp::self );
         { //::SireMM::CLJProbe::operator=
         
-            typedef ::SireMM::CLJProbe & ( ::SireMM::CLJProbe::*assign_function_type )( ::SireMM::CLJProbe const & ) ;
+            typedef ::SireMM::CLJProbe & ( ::SireMM::CLJProbe::*assign_function_type)( ::SireMM::CLJProbe const & ) ;
             assign_function_type assign_function_value( &::SireMM::CLJProbe::operator= );
             
             CLJProbe_exposer.def( 
@@ -71,7 +71,7 @@ void register_CLJProbe_class(){
         CLJProbe_exposer.def( bp::self == bp::self );
         { //::SireMM::CLJProbe::reducedCharge
         
-            typedef double ( ::SireMM::CLJProbe::*reducedCharge_function_type )(  ) const;
+            typedef double ( ::SireMM::CLJProbe::*reducedCharge_function_type)(  ) const;
             reducedCharge_function_type reducedCharge_function_value( &::SireMM::CLJProbe::reducedCharge );
             
             CLJProbe_exposer.def( 

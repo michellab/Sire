@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "Constraints.pypp.hpp"
 
 namespace bp = boost::python;
@@ -54,7 +53,7 @@ void register_Constraints_class(){
         Constraints_exposer.def( bp::init< SireSystem::Constraints const & >(( bp::arg("other") )) );
         { //::SireSystem::Constraints::add
         
-            typedef void ( ::SireSystem::Constraints::*add_function_type )( ::SireSystem::Constraint const & ) ;
+            typedef void ( ::SireSystem::Constraints::*add_function_type)( ::SireSystem::Constraint const & ) ;
             add_function_type add_function_value( &::SireSystem::Constraints::add );
             
             Constraints_exposer.def( 
@@ -65,7 +64,7 @@ void register_Constraints_class(){
         }
         { //::SireSystem::Constraints::add
         
-            typedef void ( ::SireSystem::Constraints::*add_function_type )( ::SireSystem::Constraints const & ) ;
+            typedef void ( ::SireSystem::Constraints::*add_function_type)( ::SireSystem::Constraints const & ) ;
             add_function_type add_function_value( &::SireSystem::Constraints::add );
             
             Constraints_exposer.def( 
@@ -76,7 +75,7 @@ void register_Constraints_class(){
         }
         { //::SireSystem::Constraints::apply
         
-            typedef ::SireSystem::System ( ::SireSystem::Constraints::*apply_function_type )( ::SireSystem::System const & ) ;
+            typedef ::SireSystem::System ( ::SireSystem::Constraints::*apply_function_type)( ::SireSystem::System const & ) ;
             apply_function_type apply_function_value( &::SireSystem::Constraints::apply );
             
             Constraints_exposer.def( 
@@ -87,7 +86,7 @@ void register_Constraints_class(){
         }
         { //::SireSystem::Constraints::areSatisfied
         
-            typedef bool ( ::SireSystem::Constraints::*areSatisfied_function_type )( ::SireSystem::System const & ) const;
+            typedef bool ( ::SireSystem::Constraints::*areSatisfied_function_type)( ::SireSystem::System const & ) const;
             areSatisfied_function_type areSatisfied_function_value( &::SireSystem::Constraints::areSatisfied );
             
             Constraints_exposer.def( 
@@ -98,7 +97,7 @@ void register_Constraints_class(){
         }
         { //::SireSystem::Constraints::assertSatisfied
         
-            typedef void ( ::SireSystem::Constraints::*assertSatisfied_function_type )( ::SireSystem::System const & ) const;
+            typedef void ( ::SireSystem::Constraints::*assertSatisfied_function_type)( ::SireSystem::System const & ) const;
             assertSatisfied_function_type assertSatisfied_function_value( &::SireSystem::Constraints::assertSatisfied );
             
             Constraints_exposer.def( 
@@ -109,7 +108,7 @@ void register_Constraints_class(){
         }
         { //::SireSystem::Constraints::constraints
         
-            typedef ::QVector< SireBase::PropPtr< SireSystem::Constraint > > ( ::SireSystem::Constraints::*constraints_function_type )(  ) const;
+            typedef ::QVector< SireBase::PropPtr< SireSystem::Constraint > > ( ::SireSystem::Constraints::*constraints_function_type)(  ) const;
             constraints_function_type constraints_function_value( &::SireSystem::Constraints::constraints );
             
             Constraints_exposer.def( 
@@ -119,7 +118,7 @@ void register_Constraints_class(){
         }
         { //::SireSystem::Constraints::count
         
-            typedef int ( ::SireSystem::Constraints::*count_function_type )(  ) const;
+            typedef int ( ::SireSystem::Constraints::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireSystem::Constraints::count );
             
             Constraints_exposer.def( 
@@ -129,7 +128,7 @@ void register_Constraints_class(){
         }
         { //::SireSystem::Constraints::isEmpty
         
-            typedef bool ( ::SireSystem::Constraints::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireSystem::Constraints::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireSystem::Constraints::isEmpty );
             
             Constraints_exposer.def( 
@@ -139,7 +138,7 @@ void register_Constraints_class(){
         }
         { //::SireSystem::Constraints::nConstraints
         
-            typedef int ( ::SireSystem::Constraints::*nConstraints_function_type )(  ) const;
+            typedef int ( ::SireSystem::Constraints::*nConstraints_function_type)(  ) const;
             nConstraints_function_type nConstraints_function_value( &::SireSystem::Constraints::nConstraints );
             
             Constraints_exposer.def( 
@@ -150,7 +149,7 @@ void register_Constraints_class(){
         Constraints_exposer.def( bp::self != bp::self );
         { //::SireSystem::Constraints::operator=
         
-            typedef ::SireSystem::Constraints & ( ::SireSystem::Constraints::*assign_function_type )( ::SireSystem::Constraints const & ) ;
+            typedef ::SireSystem::Constraints & ( ::SireSystem::Constraints::*assign_function_type)( ::SireSystem::Constraints const & ) ;
             assign_function_type assign_function_value( &::SireSystem::Constraints::operator= );
             
             Constraints_exposer.def( 
@@ -163,19 +162,19 @@ void register_Constraints_class(){
         Constraints_exposer.def( bp::self == bp::self );
         { //::SireSystem::Constraints::operator[]
         
-            typedef ::SireSystem::Constraint const & ( ::SireSystem::Constraints::*__getitem___function_type )( int ) const;
+            typedef ::SireSystem::Constraint const & ( ::SireSystem::Constraints::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireSystem::Constraints::operator[] );
             
             Constraints_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::Constraints::remove
         
-            typedef void ( ::SireSystem::Constraints::*remove_function_type )( ::SireSystem::Constraint const & ) ;
+            typedef void ( ::SireSystem::Constraints::*remove_function_type)( ::SireSystem::Constraint const & ) ;
             remove_function_type remove_function_value( &::SireSystem::Constraints::remove );
             
             Constraints_exposer.def( 
@@ -186,7 +185,7 @@ void register_Constraints_class(){
         }
         { //::SireSystem::Constraints::remove
         
-            typedef void ( ::SireSystem::Constraints::*remove_function_type )( ::SireSystem::Constraints const & ) ;
+            typedef void ( ::SireSystem::Constraints::*remove_function_type)( ::SireSystem::Constraints const & ) ;
             remove_function_type remove_function_value( &::SireSystem::Constraints::remove );
             
             Constraints_exposer.def( 
@@ -197,7 +196,7 @@ void register_Constraints_class(){
         }
         { //::SireSystem::Constraints::removeAt
         
-            typedef void ( ::SireSystem::Constraints::*removeAt_function_type )( int ) ;
+            typedef void ( ::SireSystem::Constraints::*removeAt_function_type)( int ) ;
             removeAt_function_type removeAt_function_value( &::SireSystem::Constraints::removeAt );
             
             Constraints_exposer.def( 
@@ -208,7 +207,7 @@ void register_Constraints_class(){
         }
         { //::SireSystem::Constraints::size
         
-            typedef int ( ::SireSystem::Constraints::*size_function_type )(  ) const;
+            typedef int ( ::SireSystem::Constraints::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireSystem::Constraints::size );
             
             Constraints_exposer.def( 
@@ -228,7 +227,7 @@ void register_Constraints_class(){
         }
         { //::SireSystem::Constraints::what
         
-            typedef char const * ( ::SireSystem::Constraints::*what_function_type )(  ) const;
+            typedef char const * ( ::SireSystem::Constraints::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireSystem::Constraints::what );
             
             Constraints_exposer.def( 

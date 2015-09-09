@@ -47,7 +47,7 @@ void register_AtomMatcher_class(){
         bp::scope AtomMatcher_scope( AtomMatcher_exposer );
         { //::SireMol::AtomMatcher::add
         
-            typedef ::SireMol::AtomMultiMatcher ( ::SireMol::AtomMatcher::*add_function_type )( ::SireMol::AtomMatcher const & ) const;
+            typedef ::SireMol::AtomMultiMatcher ( ::SireMol::AtomMatcher::*add_function_type)( ::SireMol::AtomMatcher const & ) const;
             add_function_type add_function_value( &::SireMol::AtomMatcher::add );
             
             AtomMatcher_exposer.def( 
@@ -58,7 +58,7 @@ void register_AtomMatcher_class(){
         }
         { //::SireMol::AtomMatcher::changesOrder
         
-            typedef bool ( ::SireMol::AtomMatcher::*changesOrder_function_type )( ::SireMol::MoleculeInfoData const &,::SireMol::MoleculeInfoData const & ) const;
+            typedef bool ( ::SireMol::AtomMatcher::*changesOrder_function_type)( ::SireMol::MoleculeInfoData const &,::SireMol::MoleculeInfoData const & ) const;
             changesOrder_function_type changesOrder_function_value( &::SireMol::AtomMatcher::changesOrder );
             
             AtomMatcher_exposer.def( 
@@ -69,7 +69,7 @@ void register_AtomMatcher_class(){
         }
         { //::SireMol::AtomMatcher::changesOrder
         
-            typedef bool ( ::SireMol::AtomMatcher::*changesOrder_function_type )( ::SireMol::MoleculeView const &,::SireMol::MoleculeView const & ) const;
+            typedef bool ( ::SireMol::AtomMatcher::*changesOrder_function_type)( ::SireMol::MoleculeView const &,::SireMol::MoleculeView const & ) const;
             changesOrder_function_type changesOrder_function_value( &::SireMol::AtomMatcher::changesOrder );
             
             AtomMatcher_exposer.def( 
@@ -80,7 +80,7 @@ void register_AtomMatcher_class(){
         }
         { //::SireMol::AtomMatcher::changesOrder
         
-            typedef bool ( ::SireMol::AtomMatcher::*changesOrder_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef bool ( ::SireMol::AtomMatcher::*changesOrder_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             changesOrder_function_type changesOrder_function_value( &::SireMol::AtomMatcher::changesOrder );
             
             AtomMatcher_exposer.def( 
@@ -91,7 +91,7 @@ void register_AtomMatcher_class(){
         }
         { //::SireMol::AtomMatcher::changesOrder
         
-            typedef bool ( ::SireMol::AtomMatcher::*changesOrder_function_type )( ::SireMol::MoleculeView const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef bool ( ::SireMol::AtomMatcher::*changesOrder_function_type)( ::SireMol::MoleculeView const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             changesOrder_function_type changesOrder_function_value( &::SireMol::AtomMatcher::changesOrder );
             
             AtomMatcher_exposer.def( 
@@ -102,7 +102,7 @@ void register_AtomMatcher_class(){
         }
         { //::SireMol::AtomMatcher::isNull
         
-            typedef bool ( ::SireMol::AtomMatcher::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::AtomMatcher::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::AtomMatcher::isNull );
             
             AtomMatcher_exposer.def( 
@@ -112,7 +112,7 @@ void register_AtomMatcher_class(){
         }
         { //::SireMol::AtomMatcher::match
         
-            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::AtomMatcher::*match_function_type )( ::SireMol::MoleculeInfoData const &,::SireMol::MoleculeInfoData const & ) const;
+            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::AtomMatcher::*match_function_type)( ::SireMol::MoleculeInfoData const &,::SireMol::MoleculeInfoData const & ) const;
             match_function_type match_function_value( &::SireMol::AtomMatcher::match );
             
             AtomMatcher_exposer.def( 
@@ -123,7 +123,7 @@ void register_AtomMatcher_class(){
         }
         { //::SireMol::AtomMatcher::match
         
-            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::AtomMatcher::*match_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::AtomMatcher::*match_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             match_function_type match_function_value( &::SireMol::AtomMatcher::match );
             
             AtomMatcher_exposer.def( 
@@ -134,7 +134,7 @@ void register_AtomMatcher_class(){
         }
         { //::SireMol::AtomMatcher::match
         
-            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::AtomMatcher::*match_function_type )( ::SireMol::MoleculeView const &,::SireMol::MoleculeView const & ) const;
+            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::AtomMatcher::*match_function_type)( ::SireMol::MoleculeView const &,::SireMol::MoleculeView const & ) const;
             match_function_type match_function_value( &::SireMol::AtomMatcher::match );
             
             AtomMatcher_exposer.def( 
@@ -145,7 +145,7 @@ void register_AtomMatcher_class(){
         }
         { //::SireMol::AtomMatcher::match
         
-            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::AtomMatcher::*match_function_type )( ::SireMol::MoleculeView const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::AtomMatcher::*match_function_type)( ::SireMol::MoleculeView const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             match_function_type match_function_value( &::SireMol::AtomMatcher::match );
             
             AtomMatcher_exposer.def( 

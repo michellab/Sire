@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "BeadProp.pypp.hpp"
 
 namespace bp = boost::python;
@@ -24,7 +23,7 @@ void register_BeadProp_class(){
         bp::scope BeadProp_scope( BeadProp_exposer );
         { //::SireMol::BeadProp::assertCanConvert
         
-            typedef void ( ::SireMol::BeadProp::*assertCanConvert_function_type )( ::QVariant const & ) const;
+            typedef void ( ::SireMol::BeadProp::*assertCanConvert_function_type)( ::QVariant const & ) const;
             assertCanConvert_function_type assertCanConvert_function_value( &::SireMol::BeadProp::assertCanConvert );
             
             BeadProp_exposer.def( 
@@ -35,7 +34,7 @@ void register_BeadProp_class(){
         }
         { //::SireMol::BeadProp::assignFrom
         
-            typedef void ( ::SireMol::BeadProp::*assignFrom_function_type )( ::SireMol::BeadProperty< QVariant > const & ) ;
+            typedef void ( ::SireMol::BeadProp::*assignFrom_function_type)( ::SireMol::BeadProperty< QVariant > const & ) ;
             assignFrom_function_type assignFrom_function_value( &::SireMol::BeadProp::assignFrom );
             
             BeadProp_exposer.def( 
@@ -46,18 +45,18 @@ void register_BeadProp_class(){
         }
         { //::SireMol::BeadProp::beading
         
-            typedef ::SireMol::Beading const & ( ::SireMol::BeadProp::*beading_function_type )(  ) const;
+            typedef ::SireMol::Beading const & ( ::SireMol::BeadProp::*beading_function_type)(  ) const;
             beading_function_type beading_function_value( &::SireMol::BeadProp::beading );
             
             BeadProp_exposer.def( 
                 "beading"
                 , beading_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMol::BeadProp::canConvert
         
-            typedef bool ( ::SireMol::BeadProp::*canConvert_function_type )( ::QVariant const & ) const;
+            typedef bool ( ::SireMol::BeadProp::*canConvert_function_type)( ::QVariant const & ) const;
             canConvert_function_type canConvert_function_value( &::SireMol::BeadProp::canConvert );
             
             BeadProp_exposer.def( 
@@ -68,7 +67,7 @@ void register_BeadProp_class(){
         }
         { //::SireMol::BeadProp::setBeading
         
-            typedef void ( ::SireMol::BeadProp::*setBeading_function_type )( ::SireMol::Beading const & ) ;
+            typedef void ( ::SireMol::BeadProp::*setBeading_function_type)( ::SireMol::Beading const & ) ;
             setBeading_function_type setBeading_function_value( &::SireMol::BeadProp::setBeading );
             
             BeadProp_exposer.def( 
@@ -79,7 +78,7 @@ void register_BeadProp_class(){
         }
         { //::SireMol::BeadProp::toVariant
         
-            typedef ::SireMol::BeadProperty< QVariant > ( ::SireMol::BeadProp::*toVariant_function_type )(  ) const;
+            typedef ::SireMol::BeadProperty< QVariant > ( ::SireMol::BeadProp::*toVariant_function_type)(  ) const;
             toVariant_function_type toVariant_function_value( &::SireMol::BeadProp::toVariant );
             
             BeadProp_exposer.def( 

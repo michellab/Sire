@@ -39,7 +39,7 @@ void register_Specify_MonitorID__class(){
         { //::SireID::Specify< SireSystem::MonitorID >::hash
         
             typedef SireID::Specify< SireSystem::MonitorID > exported_class_t;
-            typedef ::uint ( ::SireID::Specify< SireSystem::MonitorID >::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireID::Specify< SireSystem::MonitorID >::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireID::Specify< SireSystem::MonitorID >::hash );
             
             Specify_MonitorID__exposer.def( 
@@ -50,7 +50,7 @@ void register_Specify_MonitorID__class(){
         { //::SireID::Specify< SireSystem::MonitorID >::isNull
         
             typedef SireID::Specify< SireSystem::MonitorID > exported_class_t;
-            typedef bool ( ::SireID::Specify< SireSystem::MonitorID >::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireID::Specify< SireSystem::MonitorID >::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireID::Specify< SireSystem::MonitorID >::isNull );
             
             Specify_MonitorID__exposer.def( 
@@ -61,7 +61,7 @@ void register_Specify_MonitorID__class(){
         { //::SireID::Specify< SireSystem::MonitorID >::map
         
             typedef SireID::Specify< SireSystem::MonitorID > exported_class_t;
-            typedef ::QList< SireSystem::MonitorName > ( ::SireID::Specify< SireSystem::MonitorID >::*map_function_type )( ::SireSystem::SystemMonitors const & ) const;
+            typedef ::QList< SireSystem::MonitorName > ( ::SireID::Specify< SireSystem::MonitorID >::*map_function_type)( ::SireSystem::SystemMonitors const & ) const;
             map_function_type map_function_value( &::SireID::Specify< SireSystem::MonitorID >::map );
             
             Specify_MonitorID__exposer.def( 
@@ -75,7 +75,7 @@ void register_Specify_MonitorID__class(){
         { //::SireID::Specify< SireSystem::MonitorID >::operator()
         
             typedef SireID::Specify< SireSystem::MonitorID > exported_class_t;
-            typedef ::SireID::Specify< SireSystem::MonitorID > ( ::SireID::Specify< SireSystem::MonitorID >::*__call___function_type )( int ) const;
+            typedef ::SireID::Specify< SireSystem::MonitorID > ( ::SireID::Specify< SireSystem::MonitorID >::*__call___function_type)( int ) const;
             __call___function_type __call___function_value( &::SireID::Specify< SireSystem::MonitorID >::operator() );
             
             Specify_MonitorID__exposer.def( 
@@ -87,7 +87,7 @@ void register_Specify_MonitorID__class(){
         { //::SireID::Specify< SireSystem::MonitorID >::operator()
         
             typedef SireID::Specify< SireSystem::MonitorID > exported_class_t;
-            typedef ::SireID::Specify< SireSystem::MonitorID > ( ::SireID::Specify< SireSystem::MonitorID >::*__call___function_type )( int,int ) const;
+            typedef ::SireID::Specify< SireSystem::MonitorID > ( ::SireID::Specify< SireSystem::MonitorID >::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireID::Specify< SireSystem::MonitorID >::operator() );
             
             Specify_MonitorID__exposer.def( 
@@ -99,7 +99,7 @@ void register_Specify_MonitorID__class(){
         { //::SireID::Specify< SireSystem::MonitorID >::operator=
         
             typedef SireID::Specify< SireSystem::MonitorID > exported_class_t;
-            typedef ::SireID::Specify< SireSystem::MonitorID > & ( ::SireID::Specify< SireSystem::MonitorID >::*assign_function_type )( ::SireID::Specify< SireSystem::MonitorID > const & ) ;
+            typedef ::SireID::Specify< SireSystem::MonitorID > & ( ::SireID::Specify< SireSystem::MonitorID >::*assign_function_type)( ::SireID::Specify< SireSystem::MonitorID > const & ) ;
             assign_function_type assign_function_value( &::SireID::Specify< SireSystem::MonitorID >::operator= );
             
             Specify_MonitorID__exposer.def( 
@@ -114,7 +114,7 @@ void register_Specify_MonitorID__class(){
         { //::SireID::Specify< SireSystem::MonitorID >::operator[]
         
             typedef SireID::Specify< SireSystem::MonitorID > exported_class_t;
-            typedef ::SireID::Specify< SireSystem::MonitorID > ( ::SireID::Specify< SireSystem::MonitorID >::*__getitem___function_type )( int ) const;
+            typedef ::SireID::Specify< SireSystem::MonitorID > ( ::SireID::Specify< SireSystem::MonitorID >::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireID::Specify< SireSystem::MonitorID >::operator[] );
             
             Specify_MonitorID__exposer.def( 
@@ -126,7 +126,7 @@ void register_Specify_MonitorID__class(){
         { //::SireID::Specify< SireSystem::MonitorID >::toString
         
             typedef SireID::Specify< SireSystem::MonitorID > exported_class_t;
-            typedef ::QString ( ::SireID::Specify< SireSystem::MonitorID >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireID::Specify< SireSystem::MonitorID >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireID::Specify< SireSystem::MonitorID >::toString );
             
             Specify_MonitorID__exposer.def( 
@@ -148,7 +148,7 @@ void register_Specify_MonitorID__class(){
         { //::SireID::Specify< SireSystem::MonitorID >::what
         
             typedef SireID::Specify< SireSystem::MonitorID > exported_class_t;
-            typedef char const * ( ::SireID::Specify< SireSystem::MonitorID >::*what_function_type )(  ) const;
+            typedef char const * ( ::SireID::Specify< SireSystem::MonitorID >::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireID::Specify< SireSystem::MonitorID >::what );
             
             Specify_MonitorID__exposer.def( 

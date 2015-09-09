@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "DihedralPerturbation.pypp.hpp"
 
 namespace bp = boost::python;
@@ -47,18 +46,18 @@ void register_DihedralPerturbation_class(){
         DihedralPerturbation_exposer.def( bp::init< SireMol::DihedralPerturbation const & >(( bp::arg("other") )) );
         { //::SireMol::DihedralPerturbation::dihedral
         
-            typedef ::SireMol::DihedralID const & ( ::SireMol::DihedralPerturbation::*dihedral_function_type )(  ) const;
+            typedef ::SireMol::DihedralID const & ( ::SireMol::DihedralPerturbation::*dihedral_function_type)(  ) const;
             dihedral_function_type dihedral_function_value( &::SireMol::DihedralPerturbation::dihedral );
             
             DihedralPerturbation_exposer.def( 
                 "dihedral"
                 , dihedral_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMol::DihedralPerturbation::end
         
-            typedef ::SireUnits::Dimension::Angle const & ( ::SireMol::DihedralPerturbation::*end_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Angle const & ( ::SireMol::DihedralPerturbation::*end_function_type)(  ) const;
             end_function_type end_function_value( &::SireMol::DihedralPerturbation::end );
             
             DihedralPerturbation_exposer.def( 
@@ -70,7 +69,7 @@ void register_DihedralPerturbation_class(){
         DihedralPerturbation_exposer.def( bp::self != bp::self );
         { //::SireMol::DihedralPerturbation::operator=
         
-            typedef ::SireMol::DihedralPerturbation & ( ::SireMol::DihedralPerturbation::*assign_function_type )( ::SireMol::DihedralPerturbation const & ) ;
+            typedef ::SireMol::DihedralPerturbation & ( ::SireMol::DihedralPerturbation::*assign_function_type)( ::SireMol::DihedralPerturbation const & ) ;
             assign_function_type assign_function_value( &::SireMol::DihedralPerturbation::operator= );
             
             DihedralPerturbation_exposer.def( 
@@ -83,7 +82,7 @@ void register_DihedralPerturbation_class(){
         DihedralPerturbation_exposer.def( bp::self == bp::self );
         { //::SireMol::DihedralPerturbation::start
         
-            typedef ::SireUnits::Dimension::Angle const & ( ::SireMol::DihedralPerturbation::*start_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Angle const & ( ::SireMol::DihedralPerturbation::*start_function_type)(  ) const;
             start_function_type start_function_value( &::SireMol::DihedralPerturbation::start );
             
             DihedralPerturbation_exposer.def( 
@@ -94,7 +93,7 @@ void register_DihedralPerturbation_class(){
         }
         { //::SireMol::DihedralPerturbation::toString
         
-            typedef ::QString ( ::SireMol::DihedralPerturbation::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::DihedralPerturbation::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::DihedralPerturbation::toString );
             
             DihedralPerturbation_exposer.def( 
@@ -114,7 +113,7 @@ void register_DihedralPerturbation_class(){
         }
         { //::SireMol::DihedralPerturbation::wouldChange
         
-            typedef bool ( ::SireMol::DihedralPerturbation::*wouldChange_function_type )( ::SireMol::Molecule const &,::SireCAS::Values const & ) const;
+            typedef bool ( ::SireMol::DihedralPerturbation::*wouldChange_function_type)( ::SireMol::Molecule const &,::SireCAS::Values const & ) const;
             wouldChange_function_type wouldChange_function_value( &::SireMol::DihedralPerturbation::wouldChange );
             
             DihedralPerturbation_exposer.def( 

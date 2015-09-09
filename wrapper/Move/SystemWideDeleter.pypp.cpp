@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "SystemWideDeleter.pypp.hpp"
 
 namespace bp = boost::python;
@@ -41,7 +40,7 @@ void register_SystemWideDeleter_class(){
         SystemWideDeleter_exposer.def( bp::init< SireMove::SystemWideDeleter const & >(( bp::arg("other") )) );
         { //::SireMove::SystemWideDeleter::deleteFrom
         
-            typedef ::boost::tuples::tuple< SireMol::Molecule, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMove::SystemWideDeleter::*deleteFrom_function_type )( ::SireSystem::System & ) ;
+            typedef ::boost::tuples::tuple< SireMol::Molecule, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMove::SystemWideDeleter::*deleteFrom_function_type)( ::SireSystem::System & ) ;
             deleteFrom_function_type deleteFrom_function_value( &::SireMove::SystemWideDeleter::deleteFrom );
             
             SystemWideDeleter_exposer.def( 
@@ -52,7 +51,7 @@ void register_SystemWideDeleter_class(){
         }
         { //::SireMove::SystemWideDeleter::generator
         
-            typedef ::SireMaths::RanGenerator const & ( ::SireMove::SystemWideDeleter::*generator_function_type )(  ) const;
+            typedef ::SireMaths::RanGenerator const & ( ::SireMove::SystemWideDeleter::*generator_function_type)(  ) const;
             generator_function_type generator_function_value( &::SireMove::SystemWideDeleter::generator );
             
             SystemWideDeleter_exposer.def( 
@@ -63,19 +62,19 @@ void register_SystemWideDeleter_class(){
         }
         { //::SireMove::SystemWideDeleter::group
         
-            typedef ::SireMol::MoleculeGroup const & ( ::SireMove::SystemWideDeleter::*group_function_type )(  ) const;
+            typedef ::SireMol::MoleculeGroup const & ( ::SireMove::SystemWideDeleter::*group_function_type)(  ) const;
             group_function_type group_function_value( &::SireMove::SystemWideDeleter::group );
             
             SystemWideDeleter_exposer.def( 
                 "group"
                 , group_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         SystemWideDeleter_exposer.def( bp::self != bp::self );
         { //::SireMove::SystemWideDeleter::operator=
         
-            typedef ::SireMove::SystemWideDeleter & ( ::SireMove::SystemWideDeleter::*assign_function_type )( ::SireMove::SystemWideDeleter const & ) ;
+            typedef ::SireMove::SystemWideDeleter & ( ::SireMove::SystemWideDeleter::*assign_function_type)( ::SireMove::SystemWideDeleter const & ) ;
             assign_function_type assign_function_value( &::SireMove::SystemWideDeleter::operator= );
             
             SystemWideDeleter_exposer.def( 
@@ -88,18 +87,18 @@ void register_SystemWideDeleter_class(){
         SystemWideDeleter_exposer.def( bp::self == bp::self );
         { //::SireMove::SystemWideDeleter::sampler
         
-            typedef ::SireMove::Sampler const & ( ::SireMove::SystemWideDeleter::*sampler_function_type )(  ) const;
+            typedef ::SireMove::Sampler const & ( ::SireMove::SystemWideDeleter::*sampler_function_type)(  ) const;
             sampler_function_type sampler_function_value( &::SireMove::SystemWideDeleter::sampler );
             
             SystemWideDeleter_exposer.def( 
                 "sampler"
                 , sampler_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMove::SystemWideDeleter::setGenerator
         
-            typedef void ( ::SireMove::SystemWideDeleter::*setGenerator_function_type )( ::SireMaths::RanGenerator const & ) ;
+            typedef void ( ::SireMove::SystemWideDeleter::*setGenerator_function_type)( ::SireMaths::RanGenerator const & ) ;
             setGenerator_function_type setGenerator_function_value( &::SireMove::SystemWideDeleter::setGenerator );
             
             SystemWideDeleter_exposer.def( 
@@ -110,7 +109,7 @@ void register_SystemWideDeleter_class(){
         }
         { //::SireMove::SystemWideDeleter::setGroup
         
-            typedef void ( ::SireMove::SystemWideDeleter::*setGroup_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireMove::SystemWideDeleter::*setGroup_function_type)( ::SireMol::MoleculeGroup const & ) ;
             setGroup_function_type setGroup_function_value( &::SireMove::SystemWideDeleter::setGroup );
             
             SystemWideDeleter_exposer.def( 
@@ -121,7 +120,7 @@ void register_SystemWideDeleter_class(){
         }
         { //::SireMove::SystemWideDeleter::setSampler
         
-            typedef void ( ::SireMove::SystemWideDeleter::*setSampler_function_type )( ::SireMove::Sampler const & ) ;
+            typedef void ( ::SireMove::SystemWideDeleter::*setSampler_function_type)( ::SireMove::Sampler const & ) ;
             setSampler_function_type setSampler_function_value( &::SireMove::SystemWideDeleter::setSampler );
             
             SystemWideDeleter_exposer.def( 
@@ -132,7 +131,7 @@ void register_SystemWideDeleter_class(){
         }
         { //::SireMove::SystemWideDeleter::setSampler
         
-            typedef void ( ::SireMove::SystemWideDeleter::*setSampler_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireMove::SystemWideDeleter::*setSampler_function_type)( ::SireMol::MoleculeGroup const & ) ;
             setSampler_function_type setSampler_function_value( &::SireMove::SystemWideDeleter::setSampler );
             
             SystemWideDeleter_exposer.def( 

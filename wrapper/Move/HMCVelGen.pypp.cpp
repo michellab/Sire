@@ -39,7 +39,7 @@ void register_HMCVelGen_class(){
         bp::scope HMCVelGen_scope( HMCVelGen_exposer );
         { //::SireMove::HMCVelGen::generate
         
-            typedef double ( ::SireMove::HMCVelGen::*generate_function_type )( ::SireSystem::System const &,::SireMove::MolecularDynamics & ) ;
+            typedef double ( ::SireMove::HMCVelGen::*generate_function_type)( ::SireSystem::System const &,::SireMove::MolecularDynamics & ) ;
             generate_function_type generate_function_value( &::SireMove::HMCVelGen::generate );
             
             HMCVelGen_exposer.def( 
@@ -50,7 +50,7 @@ void register_HMCVelGen_class(){
         }
         { //::SireMove::HMCVelGen::getBias
         
-            typedef double ( ::SireMove::HMCVelGen::*getBias_function_type )( ::SireMove::MolecularDynamics const & ) ;
+            typedef double ( ::SireMove::HMCVelGen::*getBias_function_type)( ::SireMove::MolecularDynamics const & ) ;
             getBias_function_type getBias_function_value( &::SireMove::HMCVelGen::getBias );
             
             HMCVelGen_exposer.def( 
@@ -61,7 +61,7 @@ void register_HMCVelGen_class(){
         }
         { //::SireMove::HMCVelGen::setGenerator
         
-            typedef void ( ::SireMove::HMCVelGen::*setGenerator_function_type )( ::SireMaths::RanGenerator const & ) ;
+            typedef void ( ::SireMove::HMCVelGen::*setGenerator_function_type)( ::SireMaths::RanGenerator const & ) ;
             setGenerator_function_type setGenerator_function_value( &::SireMove::HMCVelGen::setGenerator );
             
             HMCVelGen_exposer.def( 
@@ -72,7 +72,7 @@ void register_HMCVelGen_class(){
         }
         { //::SireMove::HMCVelGen::setTemperature
         
-            typedef void ( ::SireMove::HMCVelGen::*setTemperature_function_type )( ::SireUnits::Dimension::Temperature ) ;
+            typedef void ( ::SireMove::HMCVelGen::*setTemperature_function_type)( ::SireUnits::Dimension::Temperature ) ;
             setTemperature_function_type setTemperature_function_value( &::SireMove::HMCVelGen::setTemperature );
             
             HMCVelGen_exposer.def( 
@@ -83,7 +83,7 @@ void register_HMCVelGen_class(){
         }
         { //::SireMove::HMCVelGen::temperature
         
-            typedef ::SireUnits::Dimension::Temperature ( ::SireMove::HMCVelGen::*temperature_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Temperature ( ::SireMove::HMCVelGen::*temperature_function_type)(  ) const;
             temperature_function_type temperature_function_value( &::SireMove::HMCVelGen::temperature );
             
             HMCVelGen_exposer.def( 

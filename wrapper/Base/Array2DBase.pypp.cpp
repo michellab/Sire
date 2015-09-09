@@ -29,7 +29,7 @@ void register_Array2DBase_class(){
         bp::scope Array2DBase_scope( Array2DBase_exposer );
         { //::SireBase::Array2DBase::assertValidIndex
         
-            typedef void ( ::SireBase::Array2DBase::*assertValidIndex_function_type )( int,int ) const;
+            typedef void ( ::SireBase::Array2DBase::*assertValidIndex_function_type)( int,int ) const;
             assertValidIndex_function_type assertValidIndex_function_value( &::SireBase::Array2DBase::assertValidIndex );
             
             Array2DBase_exposer.def( 
@@ -40,7 +40,7 @@ void register_Array2DBase_class(){
         }
         { //::SireBase::Array2DBase::checkedOffset
         
-            typedef int ( ::SireBase::Array2DBase::*checkedOffset_function_type )( int,int ) const;
+            typedef int ( ::SireBase::Array2DBase::*checkedOffset_function_type)( int,int ) const;
             checkedOffset_function_type checkedOffset_function_value( &::SireBase::Array2DBase::checkedOffset );
             
             Array2DBase_exposer.def( 
@@ -51,7 +51,7 @@ void register_Array2DBase_class(){
         }
         { //::SireBase::Array2DBase::map
         
-            typedef int ( ::SireBase::Array2DBase::*map_function_type )( int,int ) const;
+            typedef int ( ::SireBase::Array2DBase::*map_function_type)( int,int ) const;
             map_function_type map_function_value( &::SireBase::Array2DBase::map );
             
             Array2DBase_exposer.def( 
@@ -62,7 +62,7 @@ void register_Array2DBase_class(){
         }
         { //::SireBase::Array2DBase::nColumns
         
-            typedef int ( ::SireBase::Array2DBase::*nColumns_function_type )(  ) const;
+            typedef int ( ::SireBase::Array2DBase::*nColumns_function_type)(  ) const;
             nColumns_function_type nColumns_function_value( &::SireBase::Array2DBase::nColumns );
             
             Array2DBase_exposer.def( 
@@ -72,7 +72,7 @@ void register_Array2DBase_class(){
         }
         { //::SireBase::Array2DBase::nRows
         
-            typedef int ( ::SireBase::Array2DBase::*nRows_function_type )(  ) const;
+            typedef int ( ::SireBase::Array2DBase::*nRows_function_type)(  ) const;
             nRows_function_type nRows_function_value( &::SireBase::Array2DBase::nRows );
             
             Array2DBase_exposer.def( 
@@ -82,7 +82,7 @@ void register_Array2DBase_class(){
         }
         { //::SireBase::Array2DBase::offset
         
-            typedef int ( ::SireBase::Array2DBase::*offset_function_type )( int,int ) const;
+            typedef int ( ::SireBase::Array2DBase::*offset_function_type)( int,int ) const;
             offset_function_type offset_function_value( &::SireBase::Array2DBase::offset );
             
             Array2DBase_exposer.def( 

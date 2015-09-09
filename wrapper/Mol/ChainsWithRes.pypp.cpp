@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "ChainsWithRes.pypp.hpp"
 
 namespace bp = boost::python;
@@ -32,7 +31,7 @@ void register_ChainsWithRes_class(){
         ChainsWithRes_exposer.def( bp::init< SireMol::ChainsWithRes const & >(( bp::arg("other") )) );
         { //::SireMol::ChainsWithRes::hash
         
-            typedef ::uint ( ::SireMol::ChainsWithRes::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::ChainsWithRes::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::ChainsWithRes::hash );
             
             ChainsWithRes_exposer.def( 
@@ -42,7 +41,7 @@ void register_ChainsWithRes_class(){
         }
         { //::SireMol::ChainsWithRes::isNull
         
-            typedef bool ( ::SireMol::ChainsWithRes::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::ChainsWithRes::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::ChainsWithRes::isNull );
             
             ChainsWithRes_exposer.def( 
@@ -52,7 +51,7 @@ void register_ChainsWithRes_class(){
         }
         { //::SireMol::ChainsWithRes::map
         
-            typedef ::QList< SireMol::ChainIdx > ( ::SireMol::ChainsWithRes::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::ChainIdx > ( ::SireMol::ChainsWithRes::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireMol::ChainsWithRes::map );
             
             ChainsWithRes_exposer.def( 
@@ -64,7 +63,7 @@ void register_ChainsWithRes_class(){
         ChainsWithRes_exposer.def( bp::self != bp::self );
         { //::SireMol::ChainsWithRes::operator=
         
-            typedef ::SireMol::ChainsWithRes & ( ::SireMol::ChainsWithRes::*assign_function_type )( ::SireMol::ChainsWithRes const & ) ;
+            typedef ::SireMol::ChainsWithRes & ( ::SireMol::ChainsWithRes::*assign_function_type)( ::SireMol::ChainsWithRes const & ) ;
             assign_function_type assign_function_value( &::SireMol::ChainsWithRes::operator= );
             
             ChainsWithRes_exposer.def( 
@@ -78,18 +77,18 @@ void register_ChainsWithRes_class(){
         ChainsWithRes_exposer.def( bp::self == bp::self );
         { //::SireMol::ChainsWithRes::resID
         
-            typedef ::SireMol::ResID const & ( ::SireMol::ChainsWithRes::*resID_function_type )(  ) const;
+            typedef ::SireMol::ResID const & ( ::SireMol::ChainsWithRes::*resID_function_type)(  ) const;
             resID_function_type resID_function_value( &::SireMol::ChainsWithRes::resID );
             
             ChainsWithRes_exposer.def( 
                 "resID"
                 , resID_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMol::ChainsWithRes::toString
         
-            typedef ::QString ( ::SireMol::ChainsWithRes::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::ChainsWithRes::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::ChainsWithRes::toString );
             
             ChainsWithRes_exposer.def( 
@@ -109,7 +108,7 @@ void register_ChainsWithRes_class(){
         }
         { //::SireMol::ChainsWithRes::what
         
-            typedef char const * ( ::SireMol::ChainsWithRes::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::ChainsWithRes::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::ChainsWithRes::what );
             
             ChainsWithRes_exposer.def( 

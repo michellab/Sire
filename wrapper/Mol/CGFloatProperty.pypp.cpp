@@ -33,7 +33,7 @@ void register_CGFloatProperty_class(){
         { //::SireMol::CGProperty< double >::array
         
             typedef SireMol::CGProperty< double > exported_class_t;
-            typedef ::QVector< double > const & ( ::SireMol::CGProperty< double >::*array_function_type )(  ) const;
+            typedef ::QVector< double > const & ( ::SireMol::CGProperty< double >::*array_function_type)(  ) const;
             array_function_type array_function_value( &::SireMol::CGProperty< double >::array );
             
             CGFloatProperty_exposer.def( 
@@ -45,7 +45,7 @@ void register_CGFloatProperty_class(){
         { //::SireMol::CGProperty< double >::assertCanConvert
         
             typedef SireMol::CGProperty< double > exported_class_t;
-            typedef void ( ::SireMol::CGProperty< double >::*assertCanConvert_function_type )( ::QVariant const & ) const;
+            typedef void ( ::SireMol::CGProperty< double >::*assertCanConvert_function_type)( ::QVariant const & ) const;
             assertCanConvert_function_type assertCanConvert_function_value( &::SireMol::CGProperty< double >::assertCanConvert );
             
             CGFloatProperty_exposer.def( 
@@ -57,7 +57,7 @@ void register_CGFloatProperty_class(){
         { //::SireMol::CGProperty< double >::assignFrom
         
             typedef SireMol::CGProperty< double > exported_class_t;
-            typedef void ( ::SireMol::CGProperty< double >::*assignFrom_function_type )( ::SireMol::CGProperty< QVariant > const & ) ;
+            typedef void ( ::SireMol::CGProperty< double >::*assignFrom_function_type)( ::SireMol::CGProperty< QVariant > const & ) ;
             assignFrom_function_type assignFrom_function_value( &::SireMol::CGProperty< double >::assignFrom );
             
             CGFloatProperty_exposer.def( 
@@ -69,7 +69,7 @@ void register_CGFloatProperty_class(){
         { //::SireMol::CGProperty< double >::at
         
             typedef SireMol::CGProperty< double > exported_class_t;
-            typedef double const & ( ::SireMol::CGProperty< double >::*at_function_type )( ::SireMol::CGIdx const & ) const;
+            typedef double const & ( ::SireMol::CGProperty< double >::*at_function_type)( ::SireMol::CGIdx const & ) const;
             at_function_type at_function_value( &::SireMol::CGProperty< double >::at );
             
             CGFloatProperty_exposer.def( 
@@ -82,7 +82,7 @@ void register_CGFloatProperty_class(){
         { //::SireMol::CGProperty< double >::canConvert
         
             typedef SireMol::CGProperty< double > exported_class_t;
-            typedef bool ( ::SireMol::CGProperty< double >::*canConvert_function_type )( ::QVariant const & ) const;
+            typedef bool ( ::SireMol::CGProperty< double >::*canConvert_function_type)( ::QVariant const & ) const;
             canConvert_function_type canConvert_function_value( &::SireMol::CGProperty< double >::canConvert );
             
             CGFloatProperty_exposer.def( 
@@ -94,7 +94,7 @@ void register_CGFloatProperty_class(){
         { //::SireMol::CGProperty< double >::count
         
             typedef SireMol::CGProperty< double > exported_class_t;
-            typedef int ( ::SireMol::CGProperty< double >::*count_function_type )(  ) const;
+            typedef int ( ::SireMol::CGProperty< double >::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMol::CGProperty< double >::count );
             
             CGFloatProperty_exposer.def( 
@@ -117,7 +117,7 @@ void register_CGFloatProperty_class(){
         { //::SireMol::CGProperty< double >::get
         
             typedef SireMol::CGProperty< double > exported_class_t;
-            typedef double const & ( ::SireMol::CGProperty< double >::*get_function_type )( ::SireMol::CGIdx const & ) const;
+            typedef double const & ( ::SireMol::CGProperty< double >::*get_function_type)( ::SireMol::CGIdx const & ) const;
             get_function_type get_function_value( &::SireMol::CGProperty< double >::get );
             
             CGFloatProperty_exposer.def( 
@@ -130,7 +130,7 @@ void register_CGFloatProperty_class(){
         { //::SireMol::CGProperty< double >::isCompatibleWith
         
             typedef SireMol::CGProperty< double > exported_class_t;
-            typedef bool ( ::SireMol::CGProperty< double >::*isCompatibleWith_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef bool ( ::SireMol::CGProperty< double >::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::CGProperty< double >::isCompatibleWith );
             
             CGFloatProperty_exposer.def( 
@@ -142,7 +142,7 @@ void register_CGFloatProperty_class(){
         { //::SireMol::CGProperty< double >::isEmpty
         
             typedef SireMol::CGProperty< double > exported_class_t;
-            typedef bool ( ::SireMol::CGProperty< double >::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::CGProperty< double >::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::CGProperty< double >::isEmpty );
             
             CGFloatProperty_exposer.def( 
@@ -153,7 +153,7 @@ void register_CGFloatProperty_class(){
         { //::SireMol::CGProperty< double >::nCutGroups
         
             typedef SireMol::CGProperty< double > exported_class_t;
-            typedef int ( ::SireMol::CGProperty< double >::*nCutGroups_function_type )(  ) const;
+            typedef int ( ::SireMol::CGProperty< double >::*nCutGroups_function_type)(  ) const;
             nCutGroups_function_type nCutGroups_function_value( &::SireMol::CGProperty< double >::nCutGroups );
             
             CGFloatProperty_exposer.def( 
@@ -165,7 +165,7 @@ void register_CGFloatProperty_class(){
         { //::SireMol::CGProperty< double >::operator=
         
             typedef SireMol::CGProperty< double > exported_class_t;
-            typedef ::SireMol::CGProperty< double > & ( ::SireMol::CGProperty< double >::*assign_function_type )( ::SireMol::CGProperty< double > const & ) ;
+            typedef ::SireMol::CGProperty< double > & ( ::SireMol::CGProperty< double >::*assign_function_type)( ::SireMol::CGProperty< double > const & ) ;
             assign_function_type assign_function_value( &::SireMol::CGProperty< double >::operator= );
             
             CGFloatProperty_exposer.def( 
@@ -179,7 +179,7 @@ void register_CGFloatProperty_class(){
         { //::SireMol::CGProperty< double >::operator[]
         
             typedef SireMol::CGProperty< double > exported_class_t;
-            typedef double const & ( ::SireMol::CGProperty< double >::*__getitem___function_type )( ::SireMol::CGIdx const & ) const;
+            typedef double const & ( ::SireMol::CGProperty< double >::*__getitem___function_type)( ::SireMol::CGIdx const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::CGProperty< double >::operator[] );
             
             CGFloatProperty_exposer.def( 
@@ -192,7 +192,7 @@ void register_CGFloatProperty_class(){
         { //::SireMol::CGProperty< double >::set
         
             typedef SireMol::CGProperty< double > exported_class_t;
-            typedef ::SireMol::CGProperty< double > & ( ::SireMol::CGProperty< double >::*set_function_type )( ::SireMol::CGIdx,double const & ) ;
+            typedef ::SireMol::CGProperty< double > & ( ::SireMol::CGProperty< double >::*set_function_type)( ::SireMol::CGIdx,double const & ) ;
             set_function_type set_function_value( &::SireMol::CGProperty< double >::set );
             
             CGFloatProperty_exposer.def( 
@@ -205,7 +205,7 @@ void register_CGFloatProperty_class(){
         { //::SireMol::CGProperty< double >::size
         
             typedef SireMol::CGProperty< double > exported_class_t;
-            typedef int ( ::SireMol::CGProperty< double >::*size_function_type )(  ) const;
+            typedef int ( ::SireMol::CGProperty< double >::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireMol::CGProperty< double >::size );
             
             CGFloatProperty_exposer.def( 
@@ -216,7 +216,7 @@ void register_CGFloatProperty_class(){
         { //::SireMol::CGProperty< double >::toString
         
             typedef SireMol::CGProperty< double > exported_class_t;
-            typedef ::QString ( ::SireMol::CGProperty< double >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::CGProperty< double >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::CGProperty< double >::toString );
             
             CGFloatProperty_exposer.def( 
@@ -227,7 +227,7 @@ void register_CGFloatProperty_class(){
         { //::SireMol::CGProperty< double >::toVariant
         
             typedef SireMol::CGProperty< double > exported_class_t;
-            typedef ::SireMol::CGProperty< QVariant > ( ::SireMol::CGProperty< double >::*toVariant_function_type )(  ) const;
+            typedef ::SireMol::CGProperty< QVariant > ( ::SireMol::CGProperty< double >::*toVariant_function_type)(  ) const;
             toVariant_function_type toVariant_function_value( &::SireMol::CGProperty< double >::toVariant );
             
             CGFloatProperty_exposer.def( 

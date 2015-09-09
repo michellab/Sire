@@ -40,7 +40,7 @@ void register_TitrationMove_class(){
         TitrationMove_exposer.def( bp::init< SireMove::TitrationMove const & >(( bp::arg("other") )) );
         { //::SireMove::TitrationMove::move
         
-            typedef void ( ::SireMove::TitrationMove::*move_function_type )( ::SireSystem::System &,int,bool ) ;
+            typedef void ( ::SireMove::TitrationMove::*move_function_type)( ::SireSystem::System &,int,bool ) ;
             move_function_type move_function_value( &::SireMove::TitrationMove::move );
             
             TitrationMove_exposer.def( 
@@ -52,7 +52,7 @@ void register_TitrationMove_class(){
         TitrationMove_exposer.def( bp::self != bp::self );
         { //::SireMove::TitrationMove::operator=
         
-            typedef ::SireMove::TitrationMove & ( ::SireMove::TitrationMove::*assign_function_type )( ::SireMove::TitrationMove const & ) ;
+            typedef ::SireMove::TitrationMove & ( ::SireMove::TitrationMove::*assign_function_type)( ::SireMove::TitrationMove const & ) ;
             assign_function_type assign_function_value( &::SireMove::TitrationMove::operator= );
             
             TitrationMove_exposer.def( 
@@ -65,7 +65,7 @@ void register_TitrationMove_class(){
         TitrationMove_exposer.def( bp::self == bp::self );
         { //::SireMove::TitrationMove::toString
         
-            typedef ::QString ( ::SireMove::TitrationMove::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMove::TitrationMove::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMove::TitrationMove::toString );
             
             TitrationMove_exposer.def( 
@@ -85,7 +85,7 @@ void register_TitrationMove_class(){
         }
         { //::SireMove::TitrationMove::what
         
-            typedef char const * ( ::SireMove::TitrationMove::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMove::TitrationMove::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMove::TitrationMove::what );
             
             TitrationMove_exposer.def( 

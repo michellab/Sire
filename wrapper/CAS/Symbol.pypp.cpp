@@ -50,7 +50,7 @@ void register_Symbol_class(){
         Symbol_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("other") )) );
         { //::SireCAS::Symbol::ID
         
-            typedef ::SireCAS::SymbolID ( ::SireCAS::Symbol::*ID_function_type )(  ) const;
+            typedef ::SireCAS::SymbolID ( ::SireCAS::Symbol::*ID_function_type)(  ) const;
             ID_function_type ID_function_value( &::SireCAS::Symbol::ID );
             
             Symbol_exposer.def( 
@@ -60,7 +60,7 @@ void register_Symbol_class(){
         }
         { //::SireCAS::Symbol::children
         
-            typedef ::SireCAS::Expressions ( ::SireCAS::Symbol::*children_function_type )(  ) const;
+            typedef ::SireCAS::Expressions ( ::SireCAS::Symbol::*children_function_type)(  ) const;
             children_function_type children_function_value( &::SireCAS::Symbol::children );
             
             Symbol_exposer.def( 
@@ -70,7 +70,7 @@ void register_Symbol_class(){
         }
         { //::SireCAS::Symbol::differentiate
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Symbol::*differentiate_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Symbol::*differentiate_function_type)( ::SireCAS::Symbol const & ) const;
             differentiate_function_type differentiate_function_value( &::SireCAS::Symbol::differentiate );
             
             Symbol_exposer.def( 
@@ -81,7 +81,7 @@ void register_Symbol_class(){
         }
         { //::SireCAS::Symbol::evaluate
         
-            typedef double ( ::SireCAS::Symbol::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::Symbol::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Symbol::evaluate );
             
             Symbol_exposer.def( 
@@ -92,7 +92,7 @@ void register_Symbol_class(){
         }
         { //::SireCAS::Symbol::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::Symbol::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::Symbol::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Symbol::evaluate );
             
             Symbol_exposer.def( 
@@ -103,7 +103,7 @@ void register_Symbol_class(){
         }
         { //::SireCAS::Symbol::expand
         
-            typedef ::QList< SireCAS::Factor > ( ::SireCAS::Symbol::*expand_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::QList< SireCAS::Factor > ( ::SireCAS::Symbol::*expand_function_type)( ::SireCAS::Symbol const & ) const;
             expand_function_type expand_function_value( &::SireCAS::Symbol::expand );
             
             Symbol_exposer.def( 
@@ -114,7 +114,7 @@ void register_Symbol_class(){
         }
         { //::SireCAS::Symbol::functions
         
-            typedef ::SireCAS::Functions ( ::SireCAS::Symbol::*functions_function_type )(  ) const;
+            typedef ::SireCAS::Functions ( ::SireCAS::Symbol::*functions_function_type)(  ) const;
             functions_function_type functions_function_value( &::SireCAS::Symbol::functions );
             
             Symbol_exposer.def( 
@@ -124,7 +124,7 @@ void register_Symbol_class(){
         }
         { //::SireCAS::Symbol::hash
         
-            typedef ::uint ( ::SireCAS::Symbol::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireCAS::Symbol::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireCAS::Symbol::hash );
             
             Symbol_exposer.def( 
@@ -134,7 +134,7 @@ void register_Symbol_class(){
         }
         { //::SireCAS::Symbol::integrate
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Symbol::*integrate_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Symbol::*integrate_function_type)( ::SireCAS::Symbol const & ) const;
             integrate_function_type integrate_function_value( &::SireCAS::Symbol::integrate );
             
             Symbol_exposer.def( 
@@ -145,7 +145,7 @@ void register_Symbol_class(){
         }
         { //::SireCAS::Symbol::isConstant
         
-            typedef bool ( ::SireCAS::Symbol::*isConstant_function_type )(  ) const;
+            typedef bool ( ::SireCAS::Symbol::*isConstant_function_type)(  ) const;
             isConstant_function_type isConstant_function_value( &::SireCAS::Symbol::isConstant );
             
             Symbol_exposer.def( 
@@ -155,7 +155,7 @@ void register_Symbol_class(){
         }
         { //::SireCAS::Symbol::isFunction
         
-            typedef bool ( ::SireCAS::Symbol::*isFunction_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef bool ( ::SireCAS::Symbol::*isFunction_function_type)( ::SireCAS::Symbol const & ) const;
             isFunction_function_type isFunction_function_value( &::SireCAS::Symbol::isFunction );
             
             Symbol_exposer.def( 
@@ -166,7 +166,7 @@ void register_Symbol_class(){
         }
         { //::SireCAS::Symbol::isNull
         
-            typedef bool ( ::SireCAS::Symbol::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireCAS::Symbol::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireCAS::Symbol::isNull );
             
             Symbol_exposer.def( 
@@ -178,7 +178,7 @@ void register_Symbol_class(){
         Symbol_exposer.def( bp::self <= bp::self );
         { //::SireCAS::Symbol::operator=
         
-            typedef ::SireCAS::Symbol & ( ::SireCAS::Symbol::*assign_function_type )( ::SireCAS::Symbol const & ) ;
+            typedef ::SireCAS::Symbol & ( ::SireCAS::Symbol::*assign_function_type)( ::SireCAS::Symbol const & ) ;
             assign_function_type assign_function_value( &::SireCAS::Symbol::operator= );
             
             Symbol_exposer.def( 
@@ -190,7 +190,7 @@ void register_Symbol_class(){
         }
         { //::SireCAS::Symbol::operator=
         
-            typedef ::SireCAS::Symbol & ( ::SireCAS::Symbol::*assign_function_type )( ::SireCAS::SymbolID ) ;
+            typedef ::SireCAS::Symbol & ( ::SireCAS::Symbol::*assign_function_type)( ::SireCAS::SymbolID ) ;
             assign_function_type assign_function_value( &::SireCAS::Symbol::operator= );
             
             Symbol_exposer.def( 
@@ -209,7 +209,7 @@ void register_Symbol_class(){
         Symbol_exposer.def( bp::self >= bp::self );
         { //::SireCAS::Symbol::substitute
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Symbol::*substitute_function_type )( ::SireCAS::Identities const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Symbol::*substitute_function_type)( ::SireCAS::Identities const & ) const;
             substitute_function_type substitute_function_value( &::SireCAS::Symbol::substitute );
             
             Symbol_exposer.def( 
@@ -220,7 +220,7 @@ void register_Symbol_class(){
         }
         { //::SireCAS::Symbol::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireCAS::Symbol::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireCAS::Symbol::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireCAS::Symbol::symbols );
             
             Symbol_exposer.def( 
@@ -230,7 +230,7 @@ void register_Symbol_class(){
         }
         { //::SireCAS::Symbol::toString
         
-            typedef ::QString ( ::SireCAS::Symbol::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireCAS::Symbol::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireCAS::Symbol::toString );
             
             Symbol_exposer.def( 
@@ -250,7 +250,7 @@ void register_Symbol_class(){
         }
         { //::SireCAS::Symbol::what
         
-            typedef char const * ( ::SireCAS::Symbol::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::Symbol::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::Symbol::what );
             
             Symbol_exposer.def( 

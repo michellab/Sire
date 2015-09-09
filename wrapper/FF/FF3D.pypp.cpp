@@ -23,7 +23,7 @@ void register_FF3D_class(){
         bp::scope FF3D_scope( FF3D_exposer );
         { //::SireFF::FF3D::energy
         
-            typedef void ( ::SireFF::FF3D::*energy_function_type )( ::SireFF::EnergyTable &,double ) ;
+            typedef void ( ::SireFF::FF3D::*energy_function_type)( ::SireFF::EnergyTable &,double ) ;
             energy_function_type energy_function_value( &::SireFF::FF3D::energy );
             
             FF3D_exposer.def( 
@@ -34,7 +34,7 @@ void register_FF3D_class(){
         }
         { //::SireFF::FF3D::energy
         
-            typedef void ( ::SireFF::FF3D::*energy_function_type )( ::SireFF::EnergyTable &,::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::SireFF::FF3D::*energy_function_type)( ::SireFF::EnergyTable &,::SireCAS::Symbol const &,double ) ;
             energy_function_type energy_function_value( &::SireFF::FF3D::energy );
             
             FF3D_exposer.def( 
@@ -45,7 +45,7 @@ void register_FF3D_class(){
         }
         { //::SireFF::FF3D::field
         
-            typedef void ( ::SireFF::FF3D::*field_function_type )( ::SireFF::FieldTable &,double ) ;
+            typedef void ( ::SireFF::FF3D::*field_function_type)( ::SireFF::FieldTable &,double ) ;
             field_function_type field_function_value( &::SireFF::FF3D::field );
             
             FF3D_exposer.def( 
@@ -56,7 +56,7 @@ void register_FF3D_class(){
         }
         { //::SireFF::FF3D::field
         
-            typedef void ( ::SireFF::FF3D::*field_function_type )( ::SireFF::FieldTable &,::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::SireFF::FF3D::*field_function_type)( ::SireFF::FieldTable &,::SireCAS::Symbol const &,double ) ;
             field_function_type field_function_value( &::SireFF::FF3D::field );
             
             FF3D_exposer.def( 
@@ -67,7 +67,7 @@ void register_FF3D_class(){
         }
         { //::SireFF::FF3D::field
         
-            typedef void ( ::SireFF::FF3D::*field_function_type )( ::SireFF::FieldTable &,::SireFF::Probe const &,double ) ;
+            typedef void ( ::SireFF::FF3D::*field_function_type)( ::SireFF::FieldTable &,::SireFF::Probe const &,double ) ;
             field_function_type field_function_value( &::SireFF::FF3D::field );
             
             FF3D_exposer.def( 
@@ -78,7 +78,7 @@ void register_FF3D_class(){
         }
         { //::SireFF::FF3D::field
         
-            typedef void ( ::SireFF::FF3D::*field_function_type )( ::SireFF::FieldTable &,::SireCAS::Symbol const &,::SireFF::Probe const &,double ) ;
+            typedef void ( ::SireFF::FF3D::*field_function_type)( ::SireFF::FieldTable &,::SireCAS::Symbol const &,::SireFF::Probe const &,double ) ;
             field_function_type field_function_value( &::SireFF::FF3D::field );
             
             FF3D_exposer.def( 
@@ -89,7 +89,7 @@ void register_FF3D_class(){
         }
         { //::SireFF::FF3D::force
         
-            typedef void ( ::SireFF::FF3D::*force_function_type )( ::SireFF::ForceTable &,double ) ;
+            typedef void ( ::SireFF::FF3D::*force_function_type)( ::SireFF::ForceTable &,double ) ;
             force_function_type force_function_value( &::SireFF::FF3D::force );
             
             FF3D_exposer.def( 
@@ -100,7 +100,7 @@ void register_FF3D_class(){
         }
         { //::SireFF::FF3D::force
         
-            typedef void ( ::SireFF::FF3D::*force_function_type )( ::SireFF::ForceTable &,::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::SireFF::FF3D::*force_function_type)( ::SireFF::ForceTable &,::SireCAS::Symbol const &,double ) ;
             force_function_type force_function_value( &::SireFF::FF3D::force );
             
             FF3D_exposer.def( 
@@ -111,7 +111,7 @@ void register_FF3D_class(){
         }
         { //::SireFF::FF3D::potential
         
-            typedef void ( ::SireFF::FF3D::*potential_function_type )( ::SireFF::PotentialTable &,double ) ;
+            typedef void ( ::SireFF::FF3D::*potential_function_type)( ::SireFF::PotentialTable &,double ) ;
             potential_function_type potential_function_value( &::SireFF::FF3D::potential );
             
             FF3D_exposer.def( 
@@ -122,7 +122,7 @@ void register_FF3D_class(){
         }
         { //::SireFF::FF3D::potential
         
-            typedef void ( ::SireFF::FF3D::*potential_function_type )( ::SireFF::PotentialTable &,::SireFF::Probe const &,double ) ;
+            typedef void ( ::SireFF::FF3D::*potential_function_type)( ::SireFF::PotentialTable &,::SireFF::Probe const &,double ) ;
             potential_function_type potential_function_value( &::SireFF::FF3D::potential );
             
             FF3D_exposer.def( 
@@ -133,7 +133,7 @@ void register_FF3D_class(){
         }
         { //::SireFF::FF3D::potential
         
-            typedef void ( ::SireFF::FF3D::*potential_function_type )( ::SireFF::PotentialTable &,::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::SireFF::FF3D::*potential_function_type)( ::SireFF::PotentialTable &,::SireCAS::Symbol const &,double ) ;
             potential_function_type potential_function_value( &::SireFF::FF3D::potential );
             
             FF3D_exposer.def( 
@@ -144,7 +144,7 @@ void register_FF3D_class(){
         }
         { //::SireFF::FF3D::potential
         
-            typedef void ( ::SireFF::FF3D::*potential_function_type )( ::SireFF::PotentialTable &,::SireCAS::Symbol const &,::SireFF::Probe const &,double ) ;
+            typedef void ( ::SireFF::FF3D::*potential_function_type)( ::SireFF::PotentialTable &,::SireCAS::Symbol const &,::SireFF::Probe const &,double ) ;
             potential_function_type potential_function_value( &::SireFF::FF3D::potential );
             
             FF3D_exposer.def( 

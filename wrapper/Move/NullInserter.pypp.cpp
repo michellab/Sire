@@ -44,7 +44,7 @@ void register_NullInserter_class(){
         NullInserter_exposer.def( bp::init< SireMove::NullInserter const & >(( bp::arg("other") )) );
         { //::SireMove::NullInserter::insert
         
-            typedef double ( ::SireMove::NullInserter::*insert_function_type )( ::SireMol::Molecule const &,::SireSystem::System &,::SireVol::Space const & ) ;
+            typedef double ( ::SireMove::NullInserter::*insert_function_type)( ::SireMol::Molecule const &,::SireSystem::System &,::SireVol::Space const & ) ;
             insert_function_type insert_function_value( &::SireMove::NullInserter::insert );
             
             NullInserter_exposer.def( 
@@ -55,7 +55,7 @@ void register_NullInserter_class(){
         }
         { //::SireMove::NullInserter::insert
         
-            typedef double ( ::SireMove::NullInserter::*insert_function_type )( ::SireMol::PartialMolecule const &,::SireSystem::System &,::SireVol::Space const & ) ;
+            typedef double ( ::SireMove::NullInserter::*insert_function_type)( ::SireMol::PartialMolecule const &,::SireSystem::System &,::SireVol::Space const & ) ;
             insert_function_type insert_function_value( &::SireMove::NullInserter::insert );
             
             NullInserter_exposer.def( 
@@ -67,7 +67,7 @@ void register_NullInserter_class(){
         NullInserter_exposer.def( bp::self != bp::self );
         { //::SireMove::NullInserter::operator=
         
-            typedef ::SireMove::NullInserter & ( ::SireMove::NullInserter::*assign_function_type )( ::SireMove::NullInserter const & ) ;
+            typedef ::SireMove::NullInserter & ( ::SireMove::NullInserter::*assign_function_type)( ::SireMove::NullInserter const & ) ;
             assign_function_type assign_function_value( &::SireMove::NullInserter::operator= );
             
             NullInserter_exposer.def( 

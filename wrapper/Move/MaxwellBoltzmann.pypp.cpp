@@ -51,7 +51,7 @@ void register_MaxwellBoltzmann_class(){
         MaxwellBoltzmann_exposer.def( bp::init< SireMove::MaxwellBoltzmann const & >(( bp::arg("other") )) );
         { //::SireMove::MaxwellBoltzmann::generate
         
-            typedef ::SireMol::AtomVelocities ( ::SireMove::MaxwellBoltzmann::*generate_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::AtomVelocities ( ::SireMove::MaxwellBoltzmann::*generate_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             generate_function_type generate_function_value( &::SireMove::MaxwellBoltzmann::generate );
             
             MaxwellBoltzmann_exposer.def( 
@@ -62,7 +62,7 @@ void register_MaxwellBoltzmann_class(){
         }
         { //::SireMove::MaxwellBoltzmann::generator
         
-            typedef ::SireMaths::RanGenerator const & ( ::SireMove::MaxwellBoltzmann::*generator_function_type )(  ) const;
+            typedef ::SireMaths::RanGenerator const & ( ::SireMove::MaxwellBoltzmann::*generator_function_type)(  ) const;
             generator_function_type generator_function_value( &::SireMove::MaxwellBoltzmann::generator );
             
             MaxwellBoltzmann_exposer.def( 
@@ -74,7 +74,7 @@ void register_MaxwellBoltzmann_class(){
         MaxwellBoltzmann_exposer.def( bp::self != bp::self );
         { //::SireMove::MaxwellBoltzmann::operator=
         
-            typedef ::SireMove::MaxwellBoltzmann & ( ::SireMove::MaxwellBoltzmann::*assign_function_type )( ::SireMove::MaxwellBoltzmann const & ) ;
+            typedef ::SireMove::MaxwellBoltzmann & ( ::SireMove::MaxwellBoltzmann::*assign_function_type)( ::SireMove::MaxwellBoltzmann const & ) ;
             assign_function_type assign_function_value( &::SireMove::MaxwellBoltzmann::operator= );
             
             MaxwellBoltzmann_exposer.def( 
@@ -87,7 +87,7 @@ void register_MaxwellBoltzmann_class(){
         MaxwellBoltzmann_exposer.def( bp::self == bp::self );
         { //::SireMove::MaxwellBoltzmann::setGenerator
         
-            typedef void ( ::SireMove::MaxwellBoltzmann::*setGenerator_function_type )( ::SireMaths::RanGenerator const & ) ;
+            typedef void ( ::SireMove::MaxwellBoltzmann::*setGenerator_function_type)( ::SireMaths::RanGenerator const & ) ;
             setGenerator_function_type setGenerator_function_value( &::SireMove::MaxwellBoltzmann::setGenerator );
             
             MaxwellBoltzmann_exposer.def( 
@@ -98,7 +98,7 @@ void register_MaxwellBoltzmann_class(){
         }
         { //::SireMove::MaxwellBoltzmann::setTemperature
         
-            typedef void ( ::SireMove::MaxwellBoltzmann::*setTemperature_function_type )( ::SireUnits::Dimension::Temperature ) ;
+            typedef void ( ::SireMove::MaxwellBoltzmann::*setTemperature_function_type)( ::SireUnits::Dimension::Temperature ) ;
             setTemperature_function_type setTemperature_function_value( &::SireMove::MaxwellBoltzmann::setTemperature );
             
             MaxwellBoltzmann_exposer.def( 
@@ -109,7 +109,7 @@ void register_MaxwellBoltzmann_class(){
         }
         { //::SireMove::MaxwellBoltzmann::temperature
         
-            typedef ::SireUnits::Dimension::Temperature ( ::SireMove::MaxwellBoltzmann::*temperature_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Temperature ( ::SireMove::MaxwellBoltzmann::*temperature_function_type)(  ) const;
             temperature_function_type temperature_function_value( &::SireMove::MaxwellBoltzmann::temperature );
             
             MaxwellBoltzmann_exposer.def( 

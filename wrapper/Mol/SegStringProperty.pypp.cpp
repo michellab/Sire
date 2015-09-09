@@ -33,7 +33,7 @@ void register_SegStringProperty_class(){
         { //::SireMol::SegProperty< QString >::array
         
             typedef SireMol::SegProperty< QString > exported_class_t;
-            typedef ::QVector< QString > const & ( ::SireMol::SegProperty< QString >::*array_function_type )(  ) const;
+            typedef ::QVector< QString > const & ( ::SireMol::SegProperty< QString >::*array_function_type)(  ) const;
             array_function_type array_function_value( &::SireMol::SegProperty< QString >::array );
             
             SegStringProperty_exposer.def( 
@@ -45,7 +45,7 @@ void register_SegStringProperty_class(){
         { //::SireMol::SegProperty< QString >::assertCanConvert
         
             typedef SireMol::SegProperty< QString > exported_class_t;
-            typedef void ( ::SireMol::SegProperty< QString >::*assertCanConvert_function_type )( ::QVariant const & ) const;
+            typedef void ( ::SireMol::SegProperty< QString >::*assertCanConvert_function_type)( ::QVariant const & ) const;
             assertCanConvert_function_type assertCanConvert_function_value( &::SireMol::SegProperty< QString >::assertCanConvert );
             
             SegStringProperty_exposer.def( 
@@ -57,7 +57,7 @@ void register_SegStringProperty_class(){
         { //::SireMol::SegProperty< QString >::assignFrom
         
             typedef SireMol::SegProperty< QString > exported_class_t;
-            typedef void ( ::SireMol::SegProperty< QString >::*assignFrom_function_type )( ::SireMol::SegProperty< QVariant > const & ) ;
+            typedef void ( ::SireMol::SegProperty< QString >::*assignFrom_function_type)( ::SireMol::SegProperty< QVariant > const & ) ;
             assignFrom_function_type assignFrom_function_value( &::SireMol::SegProperty< QString >::assignFrom );
             
             SegStringProperty_exposer.def( 
@@ -69,7 +69,7 @@ void register_SegStringProperty_class(){
         { //::SireMol::SegProperty< QString >::at
         
             typedef SireMol::SegProperty< QString > exported_class_t;
-            typedef ::QString const & ( ::SireMol::SegProperty< QString >::*at_function_type )( ::SireMol::SegIdx const & ) const;
+            typedef ::QString const & ( ::SireMol::SegProperty< QString >::*at_function_type)( ::SireMol::SegIdx const & ) const;
             at_function_type at_function_value( &::SireMol::SegProperty< QString >::at );
             
             SegStringProperty_exposer.def( 
@@ -82,7 +82,7 @@ void register_SegStringProperty_class(){
         { //::SireMol::SegProperty< QString >::canConvert
         
             typedef SireMol::SegProperty< QString > exported_class_t;
-            typedef bool ( ::SireMol::SegProperty< QString >::*canConvert_function_type )( ::QVariant const & ) const;
+            typedef bool ( ::SireMol::SegProperty< QString >::*canConvert_function_type)( ::QVariant const & ) const;
             canConvert_function_type canConvert_function_value( &::SireMol::SegProperty< QString >::canConvert );
             
             SegStringProperty_exposer.def( 
@@ -94,7 +94,7 @@ void register_SegStringProperty_class(){
         { //::SireMol::SegProperty< QString >::count
         
             typedef SireMol::SegProperty< QString > exported_class_t;
-            typedef int ( ::SireMol::SegProperty< QString >::*count_function_type )(  ) const;
+            typedef int ( ::SireMol::SegProperty< QString >::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMol::SegProperty< QString >::count );
             
             SegStringProperty_exposer.def( 
@@ -117,7 +117,7 @@ void register_SegStringProperty_class(){
         { //::SireMol::SegProperty< QString >::get
         
             typedef SireMol::SegProperty< QString > exported_class_t;
-            typedef ::QString const & ( ::SireMol::SegProperty< QString >::*get_function_type )( ::SireMol::SegIdx const & ) const;
+            typedef ::QString const & ( ::SireMol::SegProperty< QString >::*get_function_type)( ::SireMol::SegIdx const & ) const;
             get_function_type get_function_value( &::SireMol::SegProperty< QString >::get );
             
             SegStringProperty_exposer.def( 
@@ -130,7 +130,7 @@ void register_SegStringProperty_class(){
         { //::SireMol::SegProperty< QString >::isCompatibleWith
         
             typedef SireMol::SegProperty< QString > exported_class_t;
-            typedef bool ( ::SireMol::SegProperty< QString >::*isCompatibleWith_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef bool ( ::SireMol::SegProperty< QString >::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::SegProperty< QString >::isCompatibleWith );
             
             SegStringProperty_exposer.def( 
@@ -142,7 +142,7 @@ void register_SegStringProperty_class(){
         { //::SireMol::SegProperty< QString >::isEmpty
         
             typedef SireMol::SegProperty< QString > exported_class_t;
-            typedef bool ( ::SireMol::SegProperty< QString >::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::SegProperty< QString >::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::SegProperty< QString >::isEmpty );
             
             SegStringProperty_exposer.def( 
@@ -153,7 +153,7 @@ void register_SegStringProperty_class(){
         { //::SireMol::SegProperty< QString >::nSegments
         
             typedef SireMol::SegProperty< QString > exported_class_t;
-            typedef int ( ::SireMol::SegProperty< QString >::*nSegments_function_type )(  ) const;
+            typedef int ( ::SireMol::SegProperty< QString >::*nSegments_function_type)(  ) const;
             nSegments_function_type nSegments_function_value( &::SireMol::SegProperty< QString >::nSegments );
             
             SegStringProperty_exposer.def( 
@@ -165,7 +165,7 @@ void register_SegStringProperty_class(){
         { //::SireMol::SegProperty< QString >::operator=
         
             typedef SireMol::SegProperty< QString > exported_class_t;
-            typedef ::SireMol::SegProperty< QString > & ( ::SireMol::SegProperty< QString >::*assign_function_type )( ::SireMol::SegProperty< QString > const & ) ;
+            typedef ::SireMol::SegProperty< QString > & ( ::SireMol::SegProperty< QString >::*assign_function_type)( ::SireMol::SegProperty< QString > const & ) ;
             assign_function_type assign_function_value( &::SireMol::SegProperty< QString >::operator= );
             
             SegStringProperty_exposer.def( 
@@ -179,7 +179,7 @@ void register_SegStringProperty_class(){
         { //::SireMol::SegProperty< QString >::operator[]
         
             typedef SireMol::SegProperty< QString > exported_class_t;
-            typedef ::QString const & ( ::SireMol::SegProperty< QString >::*__getitem___function_type )( ::SireMol::SegIdx const & ) const;
+            typedef ::QString const & ( ::SireMol::SegProperty< QString >::*__getitem___function_type)( ::SireMol::SegIdx const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::SegProperty< QString >::operator[] );
             
             SegStringProperty_exposer.def( 
@@ -192,7 +192,7 @@ void register_SegStringProperty_class(){
         { //::SireMol::SegProperty< QString >::set
         
             typedef SireMol::SegProperty< QString > exported_class_t;
-            typedef ::SireMol::SegProperty< QString > & ( ::SireMol::SegProperty< QString >::*set_function_type )( ::SireMol::SegIdx,::QString const & ) ;
+            typedef ::SireMol::SegProperty< QString > & ( ::SireMol::SegProperty< QString >::*set_function_type)( ::SireMol::SegIdx,::QString const & ) ;
             set_function_type set_function_value( &::SireMol::SegProperty< QString >::set );
             
             SegStringProperty_exposer.def( 
@@ -205,7 +205,7 @@ void register_SegStringProperty_class(){
         { //::SireMol::SegProperty< QString >::size
         
             typedef SireMol::SegProperty< QString > exported_class_t;
-            typedef int ( ::SireMol::SegProperty< QString >::*size_function_type )(  ) const;
+            typedef int ( ::SireMol::SegProperty< QString >::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireMol::SegProperty< QString >::size );
             
             SegStringProperty_exposer.def( 
@@ -216,7 +216,7 @@ void register_SegStringProperty_class(){
         { //::SireMol::SegProperty< QString >::toString
         
             typedef SireMol::SegProperty< QString > exported_class_t;
-            typedef ::QString ( ::SireMol::SegProperty< QString >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::SegProperty< QString >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::SegProperty< QString >::toString );
             
             SegStringProperty_exposer.def( 
@@ -227,7 +227,7 @@ void register_SegStringProperty_class(){
         { //::SireMol::SegProperty< QString >::toVariant
         
             typedef SireMol::SegProperty< QString > exported_class_t;
-            typedef ::SireMol::SegProperty< QVariant > ( ::SireMol::SegProperty< QString >::*toVariant_function_type )(  ) const;
+            typedef ::SireMol::SegProperty< QVariant > ( ::SireMol::SegProperty< QString >::*toVariant_function_type)(  ) const;
             toVariant_function_type toVariant_function_value( &::SireMol::SegProperty< QString >::toVariant );
             
             SegStringProperty_exposer.def( 

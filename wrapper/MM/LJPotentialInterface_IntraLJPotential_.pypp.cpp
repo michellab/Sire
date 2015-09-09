@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "LJPotentialInterface_IntraLJPotential_.pypp.hpp"
 
 namespace bp = boost::python;
@@ -29,7 +28,7 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
         { //::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::combiningRules
         
             typedef SireMM::LJPotentialInterface< SireMM::IntraLJPotential > exported_class_t;
-            typedef ::QString const & ( ::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::*combiningRules_function_type )(  ) const;
+            typedef ::QString const & ( ::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::*combiningRules_function_type)(  ) const;
             combiningRules_function_type combiningRules_function_value( &::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::combiningRules );
             
             LJPotentialInterface_IntraLJPotential__exposer.def( 
@@ -41,7 +40,7 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
         { //::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::containsProperty
         
             typedef SireMM::LJPotentialInterface< SireMM::IntraLJPotential > exported_class_t;
-            typedef bool ( ::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::*containsProperty_function_type )( ::QString const & ) const;
+            typedef bool ( ::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::*containsProperty_function_type)( ::QString const & ) const;
             containsProperty_function_type containsProperty_function_value( &::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::containsProperty );
             
             LJPotentialInterface_IntraLJPotential__exposer.def( 
@@ -64,7 +63,7 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
         { //::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::properties
         
             typedef SireMM::LJPotentialInterface< SireMM::IntraLJPotential > exported_class_t;
-            typedef ::SireBase::Properties const & ( ::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::*properties_function_type )(  ) const;
+            typedef ::SireBase::Properties const & ( ::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::*properties_function_type)(  ) const;
             properties_function_type properties_function_value( &::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::properties );
             
             LJPotentialInterface_IntraLJPotential__exposer.def( 
@@ -76,20 +75,20 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
         { //::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::property
         
             typedef SireMM::LJPotentialInterface< SireMM::IntraLJPotential > exported_class_t;
-            typedef ::SireBase::Property const & ( ::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::*property_function_type )( ::QString const & ) const;
+            typedef ::SireBase::Property const & ( ::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::*property_function_type)( ::QString const & ) const;
             property_function_type property_function_value( &::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::property );
             
             LJPotentialInterface_IntraLJPotential__exposer.def( 
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::setCombiningRules
         
             typedef SireMM::LJPotentialInterface< SireMM::IntraLJPotential > exported_class_t;
-            typedef bool ( ::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::*setCombiningRules_function_type )( ::QString const & ) ;
+            typedef bool ( ::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::*setCombiningRules_function_type)( ::QString const & ) ;
             setCombiningRules_function_type setCombiningRules_function_value( &::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::setCombiningRules );
             
             LJPotentialInterface_IntraLJPotential__exposer.def( 
@@ -101,7 +100,7 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
         { //::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::setProperty
         
             typedef SireMM::LJPotentialInterface< SireMM::IntraLJPotential > exported_class_t;
-            typedef bool ( ::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::*setProperty_function_type )( ::QString const &,::SireBase::Property const & ) ;
+            typedef bool ( ::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::*setProperty_function_type)( ::QString const &,::SireBase::Property const & ) ;
             setProperty_function_type setProperty_function_value( &::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::setProperty );
             
             LJPotentialInterface_IntraLJPotential__exposer.def( 
@@ -113,7 +112,7 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
         { //::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::setSpace
         
             typedef SireMM::LJPotentialInterface< SireMM::IntraLJPotential > exported_class_t;
-            typedef bool ( ::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::*setSpace_function_type )( ::SireVol::Space const & ) ;
+            typedef bool ( ::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::*setSpace_function_type)( ::SireVol::Space const & ) ;
             setSpace_function_type setSpace_function_value( &::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::setSpace );
             
             LJPotentialInterface_IntraLJPotential__exposer.def( 
@@ -125,7 +124,7 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
         { //::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::setSwitchingFunction
         
             typedef SireMM::LJPotentialInterface< SireMM::IntraLJPotential > exported_class_t;
-            typedef bool ( ::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::*setSwitchingFunction_function_type )( ::SireMM::SwitchingFunction const & ) ;
+            typedef bool ( ::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::*setSwitchingFunction_function_type)( ::SireMM::SwitchingFunction const & ) ;
             setSwitchingFunction_function_type setSwitchingFunction_function_value( &::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::setSwitchingFunction );
             
             LJPotentialInterface_IntraLJPotential__exposer.def( 
@@ -137,25 +136,25 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
         { //::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::space
         
             typedef SireMM::LJPotentialInterface< SireMM::IntraLJPotential > exported_class_t;
-            typedef ::SireVol::Space const & ( ::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::*space_function_type )(  ) const;
+            typedef ::SireVol::Space const & ( ::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::*space_function_type)(  ) const;
             space_function_type space_function_value( &::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::space );
             
             LJPotentialInterface_IntraLJPotential__exposer.def( 
                 "space"
                 , space_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::switchingFunction
         
             typedef SireMM::LJPotentialInterface< SireMM::IntraLJPotential > exported_class_t;
-            typedef ::SireMM::SwitchingFunction const & ( ::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::*switchingFunction_function_type )(  ) const;
+            typedef ::SireMM::SwitchingFunction const & ( ::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::*switchingFunction_function_type)(  ) const;
             switchingFunction_function_type switchingFunction_function_value( &::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::switchingFunction );
             
             LJPotentialInterface_IntraLJPotential__exposer.def( 
                 "switchingFunction"
                 , switchingFunction_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         LJPotentialInterface_IntraLJPotential__exposer.staticmethod( "parameters" );

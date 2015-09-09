@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "System.pypp.hpp"
 
 namespace bp = boost::python;
@@ -82,7 +81,7 @@ void register_System_class(){
         System_exposer.def( bp::init< SireSystem::System const & >(( bp::arg("other") )) );
         { //::SireSystem::System::UID
         
-            typedef ::QUuid const & ( ::SireSystem::System::*UID_function_type )(  ) const;
+            typedef ::QUuid const & ( ::SireSystem::System::*UID_function_type)(  ) const;
             UID_function_type UID_function_value( &::SireSystem::System::UID );
             
             System_exposer.def( 
@@ -93,7 +92,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::accept
         
-            typedef void ( ::SireSystem::System::*accept_function_type )(  ) ;
+            typedef void ( ::SireSystem::System::*accept_function_type)(  ) ;
             accept_function_type accept_function_value( &::SireSystem::System::accept );
             
             System_exposer.def( 
@@ -103,7 +102,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::add
         
-            typedef void ( ::SireSystem::System::*add_function_type )( ::QString const &,::SireSystem::SystemMonitor const &,int ) ;
+            typedef void ( ::SireSystem::System::*add_function_type)( ::QString const &,::SireSystem::SystemMonitor const &,int ) ;
             add_function_type add_function_value( &::SireSystem::System::add );
             
             System_exposer.def( 
@@ -114,7 +113,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::add
         
-            typedef void ( ::SireSystem::System::*add_function_type )( ::SireSystem::SystemMonitors const & ) ;
+            typedef void ( ::SireSystem::System::*add_function_type)( ::SireSystem::SystemMonitors const & ) ;
             add_function_type add_function_value( &::SireSystem::System::add );
             
             System_exposer.def( 
@@ -125,7 +124,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::add
         
-            typedef void ( ::SireSystem::System::*add_function_type )( ::SireSystem::SystemMonitors const &,int ) ;
+            typedef void ( ::SireSystem::System::*add_function_type)( ::SireSystem::SystemMonitors const &,int ) ;
             add_function_type add_function_value( &::SireSystem::System::add );
             
             System_exposer.def( 
@@ -136,7 +135,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::add
         
-            typedef void ( ::SireSystem::System::*add_function_type )( ::SireFF::FF const & ) ;
+            typedef void ( ::SireSystem::System::*add_function_type)( ::SireFF::FF const & ) ;
             add_function_type add_function_value( &::SireSystem::System::add );
             
             System_exposer.def( 
@@ -147,7 +146,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::add
         
-            typedef void ( ::SireSystem::System::*add_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireSystem::System::*add_function_type)( ::SireMol::MoleculeGroup const & ) ;
             add_function_type add_function_value( &::SireSystem::System::add );
             
             System_exposer.def( 
@@ -158,7 +157,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::add
         
-            typedef void ( ::SireSystem::System::*add_function_type )( ::SireSystem::Constraint const & ) ;
+            typedef void ( ::SireSystem::System::*add_function_type)( ::SireSystem::Constraint const & ) ;
             add_function_type add_function_value( &::SireSystem::System::add );
             
             System_exposer.def( 
@@ -169,7 +168,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::add
         
-            typedef void ( ::SireSystem::System::*add_function_type )( ::SireSystem::Constraints const & ) ;
+            typedef void ( ::SireSystem::System::*add_function_type)( ::SireSystem::Constraints const & ) ;
             add_function_type add_function_value( &::SireSystem::System::add );
             
             System_exposer.def( 
@@ -180,7 +179,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::add
         
-            typedef void ( ::SireSystem::System::*add_function_type )( ::SireMol::MoleculeView const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireSystem::System::*add_function_type)( ::SireMol::MoleculeView const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireSystem::System::add );
             
             System_exposer.def( 
@@ -191,7 +190,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::add
         
-            typedef void ( ::SireSystem::System::*add_function_type )( ::SireMol::ViewsOfMol const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireSystem::System::*add_function_type)( ::SireMol::ViewsOfMol const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireSystem::System::add );
             
             System_exposer.def( 
@@ -202,7 +201,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::add
         
-            typedef void ( ::SireSystem::System::*add_function_type )( ::SireMol::Molecules const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireSystem::System::*add_function_type)( ::SireMol::Molecules const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireSystem::System::add );
             
             System_exposer.def( 
@@ -213,7 +212,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::add
         
-            typedef void ( ::SireSystem::System::*add_function_type )( ::SireMol::MoleculeGroup const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireSystem::System::*add_function_type)( ::SireMol::MoleculeGroup const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireSystem::System::add );
             
             System_exposer.def( 
@@ -224,7 +223,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::add
         
-            typedef void ( ::SireSystem::System::*add_function_type )( ::SireMol::MoleculeView const &,::SireMol::MGID const & ) ;
+            typedef void ( ::SireSystem::System::*add_function_type)( ::SireMol::MoleculeView const &,::SireMol::MGID const & ) ;
             add_function_type add_function_value( &::SireSystem::System::add );
             
             System_exposer.def( 
@@ -235,7 +234,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::add
         
-            typedef void ( ::SireSystem::System::*add_function_type )( ::SireMol::ViewsOfMol const &,::SireMol::MGID const & ) ;
+            typedef void ( ::SireSystem::System::*add_function_type)( ::SireMol::ViewsOfMol const &,::SireMol::MGID const & ) ;
             add_function_type add_function_value( &::SireSystem::System::add );
             
             System_exposer.def( 
@@ -246,7 +245,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::add
         
-            typedef void ( ::SireSystem::System::*add_function_type )( ::SireMol::Molecules const &,::SireMol::MGID const & ) ;
+            typedef void ( ::SireSystem::System::*add_function_type)( ::SireMol::Molecules const &,::SireMol::MGID const & ) ;
             add_function_type add_function_value( &::SireSystem::System::add );
             
             System_exposer.def( 
@@ -257,7 +256,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::add
         
-            typedef void ( ::SireSystem::System::*add_function_type )( ::SireMol::MoleculeGroup const &,::SireMol::MGID const & ) ;
+            typedef void ( ::SireSystem::System::*add_function_type)( ::SireMol::MoleculeGroup const &,::SireMol::MGID const & ) ;
             add_function_type add_function_value( &::SireSystem::System::add );
             
             System_exposer.def( 
@@ -268,7 +267,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::addIfUnique
         
-            typedef void ( ::SireSystem::System::*addIfUnique_function_type )( ::SireMol::MoleculeView const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireSystem::System::*addIfUnique_function_type)( ::SireMol::MoleculeView const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireSystem::System::addIfUnique );
             
             System_exposer.def( 
@@ -279,7 +278,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::addIfUnique
         
-            typedef void ( ::SireSystem::System::*addIfUnique_function_type )( ::SireMol::ViewsOfMol const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireSystem::System::*addIfUnique_function_type)( ::SireMol::ViewsOfMol const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireSystem::System::addIfUnique );
             
             System_exposer.def( 
@@ -290,7 +289,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::addIfUnique
         
-            typedef void ( ::SireSystem::System::*addIfUnique_function_type )( ::SireMol::Molecules const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireSystem::System::*addIfUnique_function_type)( ::SireMol::Molecules const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireSystem::System::addIfUnique );
             
             System_exposer.def( 
@@ -301,7 +300,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::addIfUnique
         
-            typedef void ( ::SireSystem::System::*addIfUnique_function_type )( ::SireMol::MoleculeGroup const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireSystem::System::*addIfUnique_function_type)( ::SireMol::MoleculeGroup const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireSystem::System::addIfUnique );
             
             System_exposer.def( 
@@ -312,7 +311,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::addIfUnique
         
-            typedef void ( ::SireSystem::System::*addIfUnique_function_type )( ::SireMol::MoleculeView const &,::SireMol::MGID const & ) ;
+            typedef void ( ::SireSystem::System::*addIfUnique_function_type)( ::SireMol::MoleculeView const &,::SireMol::MGID const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireSystem::System::addIfUnique );
             
             System_exposer.def( 
@@ -323,7 +322,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::addIfUnique
         
-            typedef void ( ::SireSystem::System::*addIfUnique_function_type )( ::SireMol::ViewsOfMol const &,::SireMol::MGID const & ) ;
+            typedef void ( ::SireSystem::System::*addIfUnique_function_type)( ::SireMol::ViewsOfMol const &,::SireMol::MGID const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireSystem::System::addIfUnique );
             
             System_exposer.def( 
@@ -334,7 +333,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::addIfUnique
         
-            typedef void ( ::SireSystem::System::*addIfUnique_function_type )( ::SireMol::Molecules const &,::SireMol::MGID const & ) ;
+            typedef void ( ::SireSystem::System::*addIfUnique_function_type)( ::SireMol::Molecules const &,::SireMol::MGID const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireSystem::System::addIfUnique );
             
             System_exposer.def( 
@@ -345,7 +344,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::addIfUnique
         
-            typedef void ( ::SireSystem::System::*addIfUnique_function_type )( ::SireMol::MoleculeGroup const &,::SireMol::MGID const & ) ;
+            typedef void ( ::SireSystem::System::*addIfUnique_function_type)( ::SireMol::MoleculeGroup const &,::SireMol::MGID const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireSystem::System::addIfUnique );
             
             System_exposer.def( 
@@ -356,7 +355,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::applyConstraints
         
-            typedef void ( ::SireSystem::System::*applyConstraints_function_type )(  ) ;
+            typedef void ( ::SireSystem::System::*applyConstraints_function_type)(  ) ;
             applyConstraints_function_type applyConstraints_function_value( &::SireSystem::System::applyConstraints );
             
             System_exposer.def( 
@@ -366,43 +365,43 @@ void register_System_class(){
         }
         { //::SireSystem::System::at
         
-            typedef ::SireFF::FF const & ( ::SireSystem::System::*at_function_type )( ::SireFF::FFID const & ) const;
+            typedef ::SireFF::FF const & ( ::SireSystem::System::*at_function_type)( ::SireFF::FFID const & ) const;
             at_function_type at_function_value( &::SireSystem::System::at );
             
             System_exposer.def( 
                 "at"
                 , at_function_value
                 , ( bp::arg("ffid") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::System::at
         
-            typedef ::SireSystem::SystemMonitor const & ( ::SireSystem::System::*at_function_type )( ::SireSystem::MonitorID const & ) const;
+            typedef ::SireSystem::SystemMonitor const & ( ::SireSystem::System::*at_function_type)( ::SireSystem::MonitorID const & ) const;
             at_function_type at_function_value( &::SireSystem::System::at );
             
             System_exposer.def( 
                 "at"
                 , at_function_value
                 , ( bp::arg("monid") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::System::at
         
-            typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::System::*at_function_type )( ::SireMol::MGNum ) const;
+            typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::System::*at_function_type)( ::SireMol::MGNum ) const;
             at_function_type at_function_value( &::SireSystem::System::at );
             
             System_exposer.def( 
                 "at"
                 , at_function_value
                 , ( bp::arg("mgnum") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::System::builtinProperties
         
-            typedef ::SireBase::Properties ( ::SireSystem::System::*builtinProperties_function_type )(  ) const;
+            typedef ::SireBase::Properties ( ::SireSystem::System::*builtinProperties_function_type)(  ) const;
             builtinProperties_function_type builtinProperties_function_value( &::SireSystem::System::builtinProperties );
             
             System_exposer.def( 
@@ -412,19 +411,19 @@ void register_System_class(){
         }
         { //::SireSystem::System::builtinProperty
         
-            typedef ::SireBase::Property const & ( ::SireSystem::System::*builtinProperty_function_type )( ::QString const & ) const;
+            typedef ::SireBase::Property const & ( ::SireSystem::System::*builtinProperty_function_type)( ::QString const & ) const;
             builtinProperty_function_type builtinProperty_function_value( &::SireSystem::System::builtinProperty );
             
             System_exposer.def( 
                 "builtinProperty"
                 , builtinProperty_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::System::clearStatistics
         
-            typedef void ( ::SireSystem::System::*clearStatistics_function_type )(  ) ;
+            typedef void ( ::SireSystem::System::*clearStatistics_function_type)(  ) ;
             clearStatistics_function_type clearStatistics_function_value( &::SireSystem::System::clearStatistics );
             
             System_exposer.def( 
@@ -434,7 +433,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::clearStatistics
         
-            typedef void ( ::SireSystem::System::*clearStatistics_function_type )( ::SireSystem::MonitorID const & ) ;
+            typedef void ( ::SireSystem::System::*clearStatistics_function_type)( ::SireSystem::MonitorID const & ) ;
             clearStatistics_function_type clearStatistics_function_value( &::SireSystem::System::clearStatistics );
             
             System_exposer.def( 
@@ -445,7 +444,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::collectStats
         
-            typedef void ( ::SireSystem::System::*collectStats_function_type )(  ) ;
+            typedef void ( ::SireSystem::System::*collectStats_function_type)(  ) ;
             collectStats_function_type collectStats_function_value( &::SireSystem::System::collectStats );
             
             System_exposer.def( 
@@ -455,7 +454,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::componentExpression
         
-            typedef ::SireCAS::Expression ( ::SireSystem::System::*componentExpression_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireSystem::System::*componentExpression_function_type)( ::SireCAS::Symbol const & ) const;
             componentExpression_function_type componentExpression_function_value( &::SireSystem::System::componentExpression );
             
             System_exposer.def( 
@@ -466,7 +465,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::componentExpressions
         
-            typedef ::QHash< SireCAS::Symbol, SireCAS::Expression > ( ::SireSystem::System::*componentExpressions_function_type )( ::QSet< SireCAS::Symbol > const & ) const;
+            typedef ::QHash< SireCAS::Symbol, SireCAS::Expression > ( ::SireSystem::System::*componentExpressions_function_type)( ::QSet< SireCAS::Symbol > const & ) const;
             componentExpressions_function_type componentExpressions_function_value( &::SireSystem::System::componentExpressions );
             
             System_exposer.def( 
@@ -477,7 +476,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::componentExpressions
         
-            typedef ::QHash< SireCAS::Symbol, SireCAS::Expression > ( ::SireSystem::System::*componentExpressions_function_type )(  ) const;
+            typedef ::QHash< SireCAS::Symbol, SireCAS::Expression > ( ::SireSystem::System::*componentExpressions_function_type)(  ) const;
             componentExpressions_function_type componentExpressions_function_value( &::SireSystem::System::componentExpressions );
             
             System_exposer.def( 
@@ -487,7 +486,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::componentSymbols
         
-            typedef ::QSet< SireCAS::Symbol > ( ::SireSystem::System::*componentSymbols_function_type )(  ) const;
+            typedef ::QSet< SireCAS::Symbol > ( ::SireSystem::System::*componentSymbols_function_type)(  ) const;
             componentSymbols_function_type componentSymbols_function_value( &::SireSystem::System::componentSymbols );
             
             System_exposer.def( 
@@ -497,7 +496,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::componentValue
         
-            typedef double ( ::SireSystem::System::*componentValue_function_type )( ::SireCAS::Symbol const & ) ;
+            typedef double ( ::SireSystem::System::*componentValue_function_type)( ::SireCAS::Symbol const & ) ;
             componentValue_function_type componentValue_function_value( &::SireSystem::System::componentValue );
             
             System_exposer.def( 
@@ -508,7 +507,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::componentValues
         
-            typedef ::SireCAS::Values ( ::SireSystem::System::*componentValues_function_type )(  ) ;
+            typedef ::SireCAS::Values ( ::SireSystem::System::*componentValues_function_type)(  ) ;
             componentValues_function_type componentValues_function_value( &::SireSystem::System::componentValues );
             
             System_exposer.def( 
@@ -518,7 +517,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::componentValues
         
-            typedef ::SireCAS::Values ( ::SireSystem::System::*componentValues_function_type )( ::QSet< SireCAS::Symbol > const & ) ;
+            typedef ::SireCAS::Values ( ::SireSystem::System::*componentValues_function_type)( ::QSet< SireCAS::Symbol > const & ) ;
             componentValues_function_type componentValues_function_value( &::SireSystem::System::componentValues );
             
             System_exposer.def( 
@@ -529,19 +528,19 @@ void register_System_class(){
         }
         { //::SireSystem::System::compoundProperty
         
-            typedef ::SireBase::Property const & ( ::SireSystem::System::*compoundProperty_function_type )( ::QString const & ) const;
+            typedef ::SireBase::Property const & ( ::SireSystem::System::*compoundProperty_function_type)( ::QString const & ) const;
             compoundProperty_function_type compoundProperty_function_value( &::SireSystem::System::compoundProperty );
             
             System_exposer.def( 
                 "compoundProperty"
                 , compoundProperty_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::System::constant
         
-            typedef double ( ::SireSystem::System::*constant_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef double ( ::SireSystem::System::*constant_function_type)( ::SireCAS::Symbol const & ) const;
             constant_function_type constant_function_value( &::SireSystem::System::constant );
             
             System_exposer.def( 
@@ -552,7 +551,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::constantComponents
         
-            typedef ::SireCAS::Values ( ::SireSystem::System::*constantComponents_function_type )(  ) const;
+            typedef ::SireCAS::Values ( ::SireSystem::System::*constantComponents_function_type)(  ) const;
             constantComponents_function_type constantComponents_function_value( &::SireSystem::System::constantComponents );
             
             System_exposer.def( 
@@ -562,7 +561,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::constantExpression
         
-            typedef ::SireCAS::Expression ( ::SireSystem::System::*constantExpression_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireSystem::System::*constantExpression_function_type)( ::SireCAS::Symbol const & ) const;
             constantExpression_function_type constantExpression_function_value( &::SireSystem::System::constantExpression );
             
             System_exposer.def( 
@@ -573,7 +572,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::constantExpressions
         
-            typedef ::QHash< SireCAS::Symbol, SireCAS::Expression > ( ::SireSystem::System::*constantExpressions_function_type )( ::QSet< SireCAS::Symbol > const & ) const;
+            typedef ::QHash< SireCAS::Symbol, SireCAS::Expression > ( ::SireSystem::System::*constantExpressions_function_type)( ::QSet< SireCAS::Symbol > const & ) const;
             constantExpressions_function_type constantExpressions_function_value( &::SireSystem::System::constantExpressions );
             
             System_exposer.def( 
@@ -584,7 +583,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::constantExpressions
         
-            typedef ::QHash< SireCAS::Symbol, SireCAS::Expression > ( ::SireSystem::System::*constantExpressions_function_type )(  ) const;
+            typedef ::QHash< SireCAS::Symbol, SireCAS::Expression > ( ::SireSystem::System::*constantExpressions_function_type)(  ) const;
             constantExpressions_function_type constantExpressions_function_value( &::SireSystem::System::constantExpressions );
             
             System_exposer.def( 
@@ -594,7 +593,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::constantSymbols
         
-            typedef ::QSet< SireCAS::Symbol > ( ::SireSystem::System::*constantSymbols_function_type )(  ) const;
+            typedef ::QSet< SireCAS::Symbol > ( ::SireSystem::System::*constantSymbols_function_type)(  ) const;
             constantSymbols_function_type constantSymbols_function_value( &::SireSystem::System::constantSymbols );
             
             System_exposer.def( 
@@ -604,7 +603,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::constants
         
-            typedef ::SireCAS::Values ( ::SireSystem::System::*constants_function_type )(  ) const;
+            typedef ::SireCAS::Values ( ::SireSystem::System::*constants_function_type)(  ) const;
             constants_function_type constants_function_value( &::SireSystem::System::constants );
             
             System_exposer.def( 
@@ -614,7 +613,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::constants
         
-            typedef ::SireCAS::Values ( ::SireSystem::System::*constants_function_type )( ::QSet< SireCAS::Symbol > const & ) const;
+            typedef ::SireCAS::Values ( ::SireSystem::System::*constants_function_type)( ::QSet< SireCAS::Symbol > const & ) const;
             constants_function_type constants_function_value( &::SireSystem::System::constants );
             
             System_exposer.def( 
@@ -625,7 +624,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::constraints
         
-            typedef ::SireSystem::Constraints const & ( ::SireSystem::System::*constraints_function_type )(  ) const;
+            typedef ::SireSystem::Constraints const & ( ::SireSystem::System::*constraints_function_type)(  ) const;
             constraints_function_type constraints_function_value( &::SireSystem::System::constraints );
             
             System_exposer.def( 
@@ -636,7 +635,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::constraintsSatisfied
         
-            typedef bool ( ::SireSystem::System::*constraintsSatisfied_function_type )(  ) const;
+            typedef bool ( ::SireSystem::System::*constraintsSatisfied_function_type)(  ) const;
             constraintsSatisfied_function_type constraintsSatisfied_function_value( &::SireSystem::System::constraintsSatisfied );
             
             System_exposer.def( 
@@ -646,7 +645,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::containsProperty
         
-            typedef bool ( ::SireSystem::System::*containsProperty_function_type )( ::QString const & ) const;
+            typedef bool ( ::SireSystem::System::*containsProperty_function_type)( ::QString const & ) const;
             containsProperty_function_type containsProperty_function_value( &::SireSystem::System::containsProperty );
             
             System_exposer.def( 
@@ -657,7 +656,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::containsProperty
         
-            typedef bool ( ::SireSystem::System::*containsProperty_function_type )( ::SireFF::FFID const &,::QString const & ) const;
+            typedef bool ( ::SireSystem::System::*containsProperty_function_type)( ::SireFF::FFID const &,::QString const & ) const;
             containsProperty_function_type containsProperty_function_value( &::SireSystem::System::containsProperty );
             
             System_exposer.def( 
@@ -668,7 +667,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::containsProperty
         
-            typedef bool ( ::SireSystem::System::*containsProperty_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireSystem::System::*containsProperty_function_type)( ::SireBase::PropertyName const & ) const;
             containsProperty_function_type containsProperty_function_value( &::SireSystem::System::containsProperty );
             
             System_exposer.def( 
@@ -679,7 +678,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::containsProperty
         
-            typedef bool ( ::SireSystem::System::*containsProperty_function_type )( ::SireFF::FFID const &,::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireSystem::System::*containsProperty_function_type)( ::SireFF::FFID const &,::SireBase::PropertyName const & ) const;
             containsProperty_function_type containsProperty_function_value( &::SireSystem::System::containsProperty );
             
             System_exposer.def( 
@@ -690,7 +689,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::energies
         
-            typedef ::SireCAS::Values ( ::SireSystem::System::*energies_function_type )(  ) ;
+            typedef ::SireCAS::Values ( ::SireSystem::System::*energies_function_type)(  ) ;
             energies_function_type energies_function_value( &::SireSystem::System::energies );
             
             System_exposer.def( 
@@ -700,7 +699,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::energies
         
-            typedef ::SireCAS::Values ( ::SireSystem::System::*energies_function_type )( ::QSet< SireCAS::Symbol > const & ) ;
+            typedef ::SireCAS::Values ( ::SireSystem::System::*energies_function_type)( ::QSet< SireCAS::Symbol > const & ) ;
             energies_function_type energies_function_value( &::SireSystem::System::energies );
             
             System_exposer.def( 
@@ -711,7 +710,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireSystem::System::*energy_function_type )(  ) ;
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireSystem::System::*energy_function_type)(  ) ;
             energy_function_type energy_function_value( &::SireSystem::System::energy );
             
             System_exposer.def( 
@@ -721,7 +720,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireSystem::System::*energy_function_type )( ::SireCAS::Symbol const & ) ;
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireSystem::System::*energy_function_type)( ::SireCAS::Symbol const & ) ;
             energy_function_type energy_function_value( &::SireSystem::System::energy );
             
             System_exposer.def( 
@@ -732,7 +731,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::energy
         
-            typedef void ( ::SireSystem::System::*energy_function_type )( ::SireFF::EnergyTable &,double ) ;
+            typedef void ( ::SireSystem::System::*energy_function_type)( ::SireFF::EnergyTable &,double ) ;
             energy_function_type energy_function_value( &::SireSystem::System::energy );
             
             System_exposer.def( 
@@ -743,7 +742,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::energy
         
-            typedef void ( ::SireSystem::System::*energy_function_type )( ::SireFF::EnergyTable &,::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::SireSystem::System::*energy_function_type)( ::SireFF::EnergyTable &,::SireCAS::Symbol const &,double ) ;
             energy_function_type energy_function_value( &::SireSystem::System::energy );
             
             System_exposer.def( 
@@ -754,7 +753,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::energyComponents
         
-            typedef ::SireCAS::Values ( ::SireSystem::System::*energyComponents_function_type )(  ) ;
+            typedef ::SireCAS::Values ( ::SireSystem::System::*energyComponents_function_type)(  ) ;
             energyComponents_function_type energyComponents_function_value( &::SireSystem::System::energyComponents );
             
             System_exposer.def( 
@@ -764,7 +763,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::energyExpression
         
-            typedef ::SireCAS::Expression ( ::SireSystem::System::*energyExpression_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireSystem::System::*energyExpression_function_type)( ::SireCAS::Symbol const & ) const;
             energyExpression_function_type energyExpression_function_value( &::SireSystem::System::energyExpression );
             
             System_exposer.def( 
@@ -775,7 +774,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::energyExpressions
         
-            typedef ::QHash< SireCAS::Symbol, SireCAS::Expression > ( ::SireSystem::System::*energyExpressions_function_type )( ::QSet< SireCAS::Symbol > const & ) const;
+            typedef ::QHash< SireCAS::Symbol, SireCAS::Expression > ( ::SireSystem::System::*energyExpressions_function_type)( ::QSet< SireCAS::Symbol > const & ) const;
             energyExpressions_function_type energyExpressions_function_value( &::SireSystem::System::energyExpressions );
             
             System_exposer.def( 
@@ -786,7 +785,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::energyExpressions
         
-            typedef ::QHash< SireCAS::Symbol, SireCAS::Expression > ( ::SireSystem::System::*energyExpressions_function_type )(  ) const;
+            typedef ::QHash< SireCAS::Symbol, SireCAS::Expression > ( ::SireSystem::System::*energyExpressions_function_type)(  ) const;
             energyExpressions_function_type energyExpressions_function_value( &::SireSystem::System::energyExpressions );
             
             System_exposer.def( 
@@ -796,7 +795,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::energySymbols
         
-            typedef ::QSet< SireCAS::Symbol > ( ::SireSystem::System::*energySymbols_function_type )(  ) const;
+            typedef ::QSet< SireCAS::Symbol > ( ::SireSystem::System::*energySymbols_function_type)(  ) const;
             energySymbols_function_type energySymbols_function_value( &::SireSystem::System::energySymbols );
             
             System_exposer.def( 
@@ -806,18 +805,18 @@ void register_System_class(){
         }
         { //::SireSystem::System::extraGroups
         
-            typedef ::SireMol::MoleculeGroups const & ( ::SireSystem::System::*extraGroups_function_type )(  ) const;
+            typedef ::SireMol::MoleculeGroups const & ( ::SireSystem::System::*extraGroups_function_type)(  ) const;
             extraGroups_function_type extraGroups_function_value( &::SireSystem::System::extraGroups );
             
             System_exposer.def( 
                 "extraGroups"
                 , extraGroups_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::System::ffIdx
         
-            typedef ::SireFF::FFIdx ( ::SireSystem::System::*ffIdx_function_type )( ::SireFF::FFID const & ) const;
+            typedef ::SireFF::FFIdx ( ::SireSystem::System::*ffIdx_function_type)( ::SireFF::FFID const & ) const;
             ffIdx_function_type ffIdx_function_value( &::SireSystem::System::ffIdx );
             
             System_exposer.def( 
@@ -828,19 +827,19 @@ void register_System_class(){
         }
         { //::SireSystem::System::ffName
         
-            typedef ::SireFF::FFName const & ( ::SireSystem::System::*ffName_function_type )( ::SireFF::FFID const & ) const;
+            typedef ::SireFF::FFName const & ( ::SireSystem::System::*ffName_function_type)( ::SireFF::FFID const & ) const;
             ffName_function_type ffName_function_value( &::SireSystem::System::ffName );
             
             System_exposer.def( 
                 "ffName"
                 , ffName_function_value
                 , ( bp::arg("ffid") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::System::field
         
-            typedef void ( ::SireSystem::System::*field_function_type )( ::SireFF::FieldTable &,double ) ;
+            typedef void ( ::SireSystem::System::*field_function_type)( ::SireFF::FieldTable &,double ) ;
             field_function_type field_function_value( &::SireSystem::System::field );
             
             System_exposer.def( 
@@ -851,7 +850,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::field
         
-            typedef void ( ::SireSystem::System::*field_function_type )( ::SireFF::FieldTable &,::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::SireSystem::System::*field_function_type)( ::SireFF::FieldTable &,::SireCAS::Symbol const &,double ) ;
             field_function_type field_function_value( &::SireSystem::System::field );
             
             System_exposer.def( 
@@ -862,7 +861,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::field
         
-            typedef void ( ::SireSystem::System::*field_function_type )( ::SireFF::FieldTable &,::SireFF::Probe const &,double ) ;
+            typedef void ( ::SireSystem::System::*field_function_type)( ::SireFF::FieldTable &,::SireFF::Probe const &,double ) ;
             field_function_type field_function_value( &::SireSystem::System::field );
             
             System_exposer.def( 
@@ -873,7 +872,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::field
         
-            typedef void ( ::SireSystem::System::*field_function_type )( ::SireFF::FieldTable &,::SireCAS::Symbol const &,::SireFF::Probe const &,double ) ;
+            typedef void ( ::SireSystem::System::*field_function_type)( ::SireFF::FieldTable &,::SireCAS::Symbol const &,::SireFF::Probe const &,double ) ;
             field_function_type field_function_value( &::SireSystem::System::field );
             
             System_exposer.def( 
@@ -884,7 +883,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::force
         
-            typedef void ( ::SireSystem::System::*force_function_type )( ::SireFF::ForceTable &,double ) ;
+            typedef void ( ::SireSystem::System::*force_function_type)( ::SireFF::ForceTable &,double ) ;
             force_function_type force_function_value( &::SireSystem::System::force );
             
             System_exposer.def( 
@@ -895,7 +894,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::force
         
-            typedef void ( ::SireSystem::System::*force_function_type )( ::SireFF::ForceTable &,::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::SireSystem::System::*force_function_type)( ::SireFF::ForceTable &,::SireCAS::Symbol const &,double ) ;
             force_function_type force_function_value( &::SireSystem::System::force );
             
             System_exposer.def( 
@@ -906,31 +905,31 @@ void register_System_class(){
         }
         { //::SireSystem::System::forceField
         
-            typedef ::SireFF::FF const & ( ::SireSystem::System::*forceField_function_type )( ::SireFF::FFID const & ) const;
+            typedef ::SireFF::FF const & ( ::SireSystem::System::*forceField_function_type)( ::SireFF::FFID const & ) const;
             forceField_function_type forceField_function_value( &::SireSystem::System::forceField );
             
             System_exposer.def( 
                 "forceField"
                 , forceField_function_value
                 , ( bp::arg("ffid") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::System::forceField
         
-            typedef ::SireFF::FF const & ( ::SireSystem::System::*forceField_function_type )( ::SireMol::MGID const & ) const;
+            typedef ::SireFF::FF const & ( ::SireSystem::System::*forceField_function_type)( ::SireMol::MGID const & ) const;
             forceField_function_type forceField_function_value( &::SireSystem::System::forceField );
             
             System_exposer.def( 
                 "forceField"
                 , forceField_function_value
                 , ( bp::arg("mgid") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::System::forceFields
         
-            typedef ::SireFF::ForceFields const & ( ::SireSystem::System::*forceFields_function_type )(  ) const;
+            typedef ::SireFF::ForceFields const & ( ::SireSystem::System::*forceFields_function_type)(  ) const;
             forceFields_function_type forceFields_function_value( &::SireSystem::System::forceFields );
             
             System_exposer.def( 
@@ -941,7 +940,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::hasComponent
         
-            typedef bool ( ::SireSystem::System::*hasComponent_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef bool ( ::SireSystem::System::*hasComponent_function_type)( ::SireCAS::Symbol const & ) const;
             hasComponent_function_type hasComponent_function_value( &::SireSystem::System::hasComponent );
             
             System_exposer.def( 
@@ -952,7 +951,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::hasConstantComponent
         
-            typedef bool ( ::SireSystem::System::*hasConstantComponent_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef bool ( ::SireSystem::System::*hasConstantComponent_function_type)( ::SireCAS::Symbol const & ) const;
             hasConstantComponent_function_type hasConstantComponent_function_value( &::SireSystem::System::hasConstantComponent );
             
             System_exposer.def( 
@@ -963,7 +962,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::hasEnergyComponent
         
-            typedef bool ( ::SireSystem::System::*hasEnergyComponent_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef bool ( ::SireSystem::System::*hasEnergyComponent_function_type)( ::SireCAS::Symbol const & ) const;
             hasEnergyComponent_function_type hasEnergyComponent_function_value( &::SireSystem::System::hasEnergyComponent );
             
             System_exposer.def( 
@@ -974,7 +973,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::isBuiltinProperty
         
-            typedef bool ( ::SireSystem::System::*isBuiltinProperty_function_type )( ::QString const & ) const;
+            typedef bool ( ::SireSystem::System::*isBuiltinProperty_function_type)( ::QString const & ) const;
             isBuiltinProperty_function_type isBuiltinProperty_function_value( &::SireSystem::System::isBuiltinProperty );
             
             System_exposer.def( 
@@ -985,7 +984,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::isClean
         
-            typedef bool ( ::SireSystem::System::*isClean_function_type )(  ) const;
+            typedef bool ( ::SireSystem::System::*isClean_function_type)(  ) const;
             isClean_function_type isClean_function_value( &::SireSystem::System::isClean );
             
             System_exposer.def( 
@@ -995,7 +994,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::isCompoundProperty
         
-            typedef bool ( ::SireSystem::System::*isCompoundProperty_function_type )( ::QString const & ) const;
+            typedef bool ( ::SireSystem::System::*isCompoundProperty_function_type)( ::QString const & ) const;
             isCompoundProperty_function_type isCompoundProperty_function_value( &::SireSystem::System::isCompoundProperty );
             
             System_exposer.def( 
@@ -1006,7 +1005,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::isConstantComponent
         
-            typedef bool ( ::SireSystem::System::*isConstantComponent_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef bool ( ::SireSystem::System::*isConstantComponent_function_type)( ::SireCAS::Symbol const & ) const;
             isConstantComponent_function_type isConstantComponent_function_value( &::SireSystem::System::isConstantComponent );
             
             System_exposer.def( 
@@ -1017,7 +1016,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::isDirty
         
-            typedef bool ( ::SireSystem::System::*isDirty_function_type )(  ) const;
+            typedef bool ( ::SireSystem::System::*isDirty_function_type)(  ) const;
             isDirty_function_type isDirty_function_value( &::SireSystem::System::isDirty );
             
             System_exposer.def( 
@@ -1027,7 +1026,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::isEnergyComponent
         
-            typedef bool ( ::SireSystem::System::*isEnergyComponent_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef bool ( ::SireSystem::System::*isEnergyComponent_function_type)( ::SireCAS::Symbol const & ) const;
             isEnergyComponent_function_type isEnergyComponent_function_value( &::SireSystem::System::isEnergyComponent );
             
             System_exposer.def( 
@@ -1038,7 +1037,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::isUserProperty
         
-            typedef bool ( ::SireSystem::System::*isUserProperty_function_type )( ::QString const & ) const;
+            typedef bool ( ::SireSystem::System::*isUserProperty_function_type)( ::QString const & ) const;
             isUserProperty_function_type isUserProperty_function_value( &::SireSystem::System::isUserProperty );
             
             System_exposer.def( 
@@ -1049,19 +1048,19 @@ void register_System_class(){
         }
         { //::SireSystem::System::monitor
         
-            typedef ::SireSystem::SystemMonitor const & ( ::SireSystem::System::*monitor_function_type )( ::SireSystem::MonitorID const & ) const;
+            typedef ::SireSystem::SystemMonitor const & ( ::SireSystem::System::*monitor_function_type)( ::SireSystem::MonitorID const & ) const;
             monitor_function_type monitor_function_value( &::SireSystem::System::monitor );
             
             System_exposer.def( 
                 "monitor"
                 , monitor_function_value
                 , ( bp::arg("monid") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::System::monitorName
         
-            typedef ::SireSystem::MonitorName ( ::SireSystem::System::*monitorName_function_type )( ::SireSystem::MonitorID const & ) const;
+            typedef ::SireSystem::MonitorName ( ::SireSystem::System::*monitorName_function_type)( ::SireSystem::MonitorID const & ) const;
             monitorName_function_type monitorName_function_value( &::SireSystem::System::monitorName );
             
             System_exposer.def( 
@@ -1072,7 +1071,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::monitors
         
-            typedef ::QList< SireBase::PropPtr< SireSystem::SystemMonitor > > ( ::SireSystem::System::*monitors_function_type )( ::SireSystem::MonitorID const & ) const;
+            typedef ::QList< SireBase::PropPtr< SireSystem::SystemMonitor > > ( ::SireSystem::System::*monitors_function_type)( ::SireSystem::MonitorID const & ) const;
             monitors_function_type monitors_function_value( &::SireSystem::System::monitors );
             
             System_exposer.def( 
@@ -1083,7 +1082,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::monitors
         
-            typedef ::SireSystem::SystemMonitors const & ( ::SireSystem::System::*monitors_function_type )(  ) const;
+            typedef ::SireSystem::SystemMonitors const & ( ::SireSystem::System::*monitors_function_type)(  ) const;
             monitors_function_type monitors_function_value( &::SireSystem::System::monitors );
             
             System_exposer.def( 
@@ -1094,7 +1093,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::mustNowRecalculateFromScratch
         
-            typedef void ( ::SireSystem::System::*mustNowRecalculateFromScratch_function_type )(  ) ;
+            typedef void ( ::SireSystem::System::*mustNowRecalculateFromScratch_function_type)(  ) ;
             mustNowRecalculateFromScratch_function_type mustNowRecalculateFromScratch_function_value( &::SireSystem::System::mustNowRecalculateFromScratch );
             
             System_exposer.def( 
@@ -1104,7 +1103,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::nConstraints
         
-            typedef int ( ::SireSystem::System::*nConstraints_function_type )(  ) const;
+            typedef int ( ::SireSystem::System::*nConstraints_function_type)(  ) const;
             nConstraints_function_type nConstraints_function_value( &::SireSystem::System::nConstraints );
             
             System_exposer.def( 
@@ -1114,7 +1113,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::nForceFields
         
-            typedef int ( ::SireSystem::System::*nForceFields_function_type )(  ) const;
+            typedef int ( ::SireSystem::System::*nForceFields_function_type)(  ) const;
             nForceFields_function_type nForceFields_function_value( &::SireSystem::System::nForceFields );
             
             System_exposer.def( 
@@ -1124,7 +1123,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::nMonitors
         
-            typedef int ( ::SireSystem::System::*nMonitors_function_type )(  ) const;
+            typedef int ( ::SireSystem::System::*nMonitors_function_type)(  ) const;
             nMonitors_function_type nMonitors_function_value( &::SireSystem::System::nMonitors );
             
             System_exposer.def( 
@@ -1134,18 +1133,18 @@ void register_System_class(){
         }
         { //::SireSystem::System::name
         
-            typedef ::SireSystem::SysName const & ( ::SireSystem::System::*name_function_type )(  ) const;
+            typedef ::SireSystem::SysName const & ( ::SireSystem::System::*name_function_type)(  ) const;
             name_function_type name_function_value( &::SireSystem::System::name );
             
             System_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::System::needsAccepting
         
-            typedef bool ( ::SireSystem::System::*needsAccepting_function_type )(  ) const;
+            typedef bool ( ::SireSystem::System::*needsAccepting_function_type)(  ) const;
             needsAccepting_function_type needsAccepting_function_value( &::SireSystem::System::needsAccepting );
             
             System_exposer.def( 
@@ -1167,7 +1166,7 @@ void register_System_class(){
         System_exposer.def( bp::self != bp::self );
         { //::SireSystem::System::operator=
         
-            typedef ::SireSystem::System & ( ::SireSystem::System::*assign_function_type )( ::SireSystem::System const & ) ;
+            typedef ::SireSystem::System & ( ::SireSystem::System::*assign_function_type)( ::SireSystem::System const & ) ;
             assign_function_type assign_function_value( &::SireSystem::System::operator= );
             
             System_exposer.def( 
@@ -1180,43 +1179,43 @@ void register_System_class(){
         System_exposer.def( bp::self == bp::self );
         { //::SireSystem::System::operator[]
         
-            typedef ::SireFF::FF const & ( ::SireSystem::System::*__getitem___function_type )( ::SireFF::FFID const & ) const;
+            typedef ::SireFF::FF const & ( ::SireSystem::System::*__getitem___function_type)( ::SireFF::FFID const & ) const;
             __getitem___function_type __getitem___function_value( &::SireSystem::System::operator[] );
             
             System_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("ffid") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::System::operator[]
         
-            typedef ::SireSystem::SystemMonitor const & ( ::SireSystem::System::*__getitem___function_type )( ::SireSystem::MonitorID const & ) const;
+            typedef ::SireSystem::SystemMonitor const & ( ::SireSystem::System::*__getitem___function_type)( ::SireSystem::MonitorID const & ) const;
             __getitem___function_type __getitem___function_value( &::SireSystem::System::operator[] );
             
             System_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("monid") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::System::operator[]
         
-            typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::System::*__getitem___function_type )( ::SireMol::MGID const & ) const;
+            typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::System::*__getitem___function_type)( ::SireMol::MGID const & ) const;
             __getitem___function_type __getitem___function_value( &::SireSystem::System::operator[] );
             
             System_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("mgid") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::System::operator[]
         
-            typedef ::SireMol::ViewsOfMol ( ::SireSystem::System::*__getitem___function_type )( ::SireMol::MolNum ) const;
+            typedef ::SireMol::ViewsOfMol ( ::SireSystem::System::*__getitem___function_type)( ::SireMol::MolNum ) const;
             __getitem___function_type __getitem___function_value( &::SireSystem::System::operator[] );
             
             System_exposer.def( 
@@ -1227,7 +1226,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::operator[]
         
-            typedef ::SireMol::ViewsOfMol ( ::SireSystem::System::*__getitem___function_type )( ::SireMol::MolID const & ) const;
+            typedef ::SireMol::ViewsOfMol ( ::SireSystem::System::*__getitem___function_type)( ::SireMol::MolID const & ) const;
             __getitem___function_type __getitem___function_value( &::SireSystem::System::operator[] );
             
             System_exposer.def( 
@@ -1238,7 +1237,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::potential
         
-            typedef void ( ::SireSystem::System::*potential_function_type )( ::SireFF::PotentialTable &,::SireFF::Probe const &,double ) ;
+            typedef void ( ::SireSystem::System::*potential_function_type)( ::SireFF::PotentialTable &,::SireFF::Probe const &,double ) ;
             potential_function_type potential_function_value( &::SireSystem::System::potential );
             
             System_exposer.def( 
@@ -1249,7 +1248,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::potential
         
-            typedef void ( ::SireSystem::System::*potential_function_type )( ::SireFF::PotentialTable &,::SireCAS::Symbol const &,::SireFF::Probe const &,double ) ;
+            typedef void ( ::SireSystem::System::*potential_function_type)( ::SireFF::PotentialTable &,::SireCAS::Symbol const &,::SireFF::Probe const &,double ) ;
             potential_function_type potential_function_value( &::SireSystem::System::potential );
             
             System_exposer.def( 
@@ -1260,7 +1259,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::potential
         
-            typedef void ( ::SireSystem::System::*potential_function_type )( ::SireFF::PotentialTable &,double ) ;
+            typedef void ( ::SireSystem::System::*potential_function_type)( ::SireFF::PotentialTable &,double ) ;
             potential_function_type potential_function_value( &::SireSystem::System::potential );
             
             System_exposer.def( 
@@ -1271,7 +1270,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::potential
         
-            typedef void ( ::SireSystem::System::*potential_function_type )( ::SireFF::PotentialTable &,::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::SireSystem::System::*potential_function_type)( ::SireFF::PotentialTable &,::SireCAS::Symbol const &,double ) ;
             potential_function_type potential_function_value( &::SireSystem::System::potential );
             
             System_exposer.def( 
@@ -1282,7 +1281,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::properties
         
-            typedef ::SireBase::Properties ( ::SireSystem::System::*properties_function_type )(  ) const;
+            typedef ::SireBase::Properties ( ::SireSystem::System::*properties_function_type)(  ) const;
             properties_function_type properties_function_value( &::SireSystem::System::properties );
             
             System_exposer.def( 
@@ -1292,7 +1291,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::properties
         
-            typedef ::SireBase::Properties ( ::SireSystem::System::*properties_function_type )( ::SireFF::FFID const & ) const;
+            typedef ::SireBase::Properties ( ::SireSystem::System::*properties_function_type)( ::SireFF::FFID const & ) const;
             properties_function_type properties_function_value( &::SireSystem::System::properties );
             
             System_exposer.def( 
@@ -1303,31 +1302,31 @@ void register_System_class(){
         }
         { //::SireSystem::System::property
         
-            typedef ::SireBase::Property const & ( ::SireSystem::System::*property_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef ::SireBase::Property const & ( ::SireSystem::System::*property_function_type)( ::SireBase::PropertyName const & ) const;
             property_function_type property_function_value( &::SireSystem::System::property );
             
             System_exposer.def( 
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::System::property
         
-            typedef ::SireBase::Property const & ( ::SireSystem::System::*property_function_type )( ::SireFF::FFID const &,::SireBase::PropertyName const & ) const;
+            typedef ::SireBase::Property const & ( ::SireSystem::System::*property_function_type)( ::SireFF::FFID const &,::SireBase::PropertyName const & ) const;
             property_function_type property_function_value( &::SireSystem::System::property );
             
             System_exposer.def( 
                 "property"
                 , property_function_value
                 , ( bp::arg("ffid"), bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::System::propertyKeys
         
-            typedef ::QStringList ( ::SireSystem::System::*propertyKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireSystem::System::*propertyKeys_function_type)(  ) const;
             propertyKeys_function_type propertyKeys_function_value( &::SireSystem::System::propertyKeys );
             
             System_exposer.def( 
@@ -1337,7 +1336,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::propertyKeys
         
-            typedef ::QStringList ( ::SireSystem::System::*propertyKeys_function_type )( ::SireFF::FFID const & ) const;
+            typedef ::QStringList ( ::SireSystem::System::*propertyKeys_function_type)( ::SireFF::FFID const & ) const;
             propertyKeys_function_type propertyKeys_function_value( &::SireSystem::System::propertyKeys );
             
             System_exposer.def( 
@@ -1348,7 +1347,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::remove
         
-            typedef void ( ::SireSystem::System::*remove_function_type )( ::SireSystem::MonitorID const & ) ;
+            typedef void ( ::SireSystem::System::*remove_function_type)( ::SireSystem::MonitorID const & ) ;
             remove_function_type remove_function_value( &::SireSystem::System::remove );
             
             System_exposer.def( 
@@ -1359,7 +1358,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::remove
         
-            typedef void ( ::SireSystem::System::*remove_function_type )( ::SireFF::FFID const & ) ;
+            typedef void ( ::SireSystem::System::*remove_function_type)( ::SireFF::FFID const & ) ;
             remove_function_type remove_function_value( &::SireSystem::System::remove );
             
             System_exposer.def( 
@@ -1370,7 +1369,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::remove
         
-            typedef void ( ::SireSystem::System::*remove_function_type )( ::SireFF::FF const & ) ;
+            typedef void ( ::SireSystem::System::*remove_function_type)( ::SireFF::FF const & ) ;
             remove_function_type remove_function_value( &::SireSystem::System::remove );
             
             System_exposer.def( 
@@ -1381,7 +1380,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::remove
         
-            typedef bool ( ::SireSystem::System::*remove_function_type )( ::SireMol::MGID const & ) ;
+            typedef bool ( ::SireSystem::System::*remove_function_type)( ::SireMol::MGID const & ) ;
             remove_function_type remove_function_value( &::SireSystem::System::remove );
             
             System_exposer.def( 
@@ -1392,7 +1391,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::remove
         
-            typedef bool ( ::SireSystem::System::*remove_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef bool ( ::SireSystem::System::*remove_function_type)( ::SireMol::MoleculeGroup const & ) ;
             remove_function_type remove_function_value( &::SireSystem::System::remove );
             
             System_exposer.def( 
@@ -1403,7 +1402,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::remove
         
-            typedef bool ( ::SireSystem::System::*remove_function_type )( ::SireMol::MolID const & ) ;
+            typedef bool ( ::SireSystem::System::*remove_function_type)( ::SireMol::MolID const & ) ;
             remove_function_type remove_function_value( &::SireSystem::System::remove );
             
             System_exposer.def( 
@@ -1414,7 +1413,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::remove
         
-            typedef void ( ::SireSystem::System::*remove_function_type )( ::SireSystem::Constraint const & ) ;
+            typedef void ( ::SireSystem::System::*remove_function_type)( ::SireSystem::Constraint const & ) ;
             remove_function_type remove_function_value( &::SireSystem::System::remove );
             
             System_exposer.def( 
@@ -1425,7 +1424,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::remove
         
-            typedef void ( ::SireSystem::System::*remove_function_type )( ::SireSystem::Constraints const & ) ;
+            typedef void ( ::SireSystem::System::*remove_function_type)( ::SireSystem::Constraints const & ) ;
             remove_function_type remove_function_value( &::SireSystem::System::remove );
             
             System_exposer.def( 
@@ -1436,7 +1435,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::remove
         
-            typedef bool ( ::SireSystem::System::*remove_function_type )( ::SireMol::MoleculeView const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireSystem::System::*remove_function_type)( ::SireMol::MoleculeView const &,::SireMol::MGID const & ) ;
             remove_function_type remove_function_value( &::SireSystem::System::remove );
             
             System_exposer.def( 
@@ -1447,7 +1446,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::remove
         
-            typedef bool ( ::SireSystem::System::*remove_function_type )( ::SireMol::ViewsOfMol const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireSystem::System::*remove_function_type)( ::SireMol::ViewsOfMol const &,::SireMol::MGID const & ) ;
             remove_function_type remove_function_value( &::SireSystem::System::remove );
             
             System_exposer.def( 
@@ -1458,7 +1457,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::remove
         
-            typedef bool ( ::SireSystem::System::*remove_function_type )( ::SireMol::Molecules const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireSystem::System::*remove_function_type)( ::SireMol::Molecules const &,::SireMol::MGID const & ) ;
             remove_function_type remove_function_value( &::SireSystem::System::remove );
             
             System_exposer.def( 
@@ -1469,7 +1468,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::remove
         
-            typedef bool ( ::SireSystem::System::*remove_function_type )( ::SireMol::MoleculeGroup const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireSystem::System::*remove_function_type)( ::SireMol::MoleculeGroup const &,::SireMol::MGID const & ) ;
             remove_function_type remove_function_value( &::SireSystem::System::remove );
             
             System_exposer.def( 
@@ -1480,7 +1479,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::remove
         
-            typedef bool ( ::SireSystem::System::*remove_function_type )( ::SireMol::MolNum,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireSystem::System::*remove_function_type)( ::SireMol::MolNum,::SireMol::MGID const & ) ;
             remove_function_type remove_function_value( &::SireSystem::System::remove );
             
             System_exposer.def( 
@@ -1491,7 +1490,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::remove
         
-            typedef bool ( ::SireSystem::System::*remove_function_type )( ::QSet< SireMol::MolNum > const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireSystem::System::*remove_function_type)( ::QSet< SireMol::MolNum > const &,::SireMol::MGID const & ) ;
             remove_function_type remove_function_value( &::SireSystem::System::remove );
             
             System_exposer.def( 
@@ -1502,7 +1501,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::removeAll
         
-            typedef bool ( ::SireSystem::System::*removeAll_function_type )( ::SireMol::MGID const & ) ;
+            typedef bool ( ::SireSystem::System::*removeAll_function_type)( ::SireMol::MGID const & ) ;
             removeAll_function_type removeAll_function_value( &::SireSystem::System::removeAll );
             
             System_exposer.def( 
@@ -1513,7 +1512,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::removeAll
         
-            typedef bool ( ::SireSystem::System::*removeAll_function_type )( ::SireMol::MoleculeView const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireSystem::System::*removeAll_function_type)( ::SireMol::MoleculeView const &,::SireMol::MGID const & ) ;
             removeAll_function_type removeAll_function_value( &::SireSystem::System::removeAll );
             
             System_exposer.def( 
@@ -1524,7 +1523,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::removeAll
         
-            typedef bool ( ::SireSystem::System::*removeAll_function_type )( ::SireMol::ViewsOfMol const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireSystem::System::*removeAll_function_type)( ::SireMol::ViewsOfMol const &,::SireMol::MGID const & ) ;
             removeAll_function_type removeAll_function_value( &::SireSystem::System::removeAll );
             
             System_exposer.def( 
@@ -1535,7 +1534,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::removeAll
         
-            typedef bool ( ::SireSystem::System::*removeAll_function_type )( ::SireMol::Molecules const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireSystem::System::*removeAll_function_type)( ::SireMol::Molecules const &,::SireMol::MGID const & ) ;
             removeAll_function_type removeAll_function_value( &::SireSystem::System::removeAll );
             
             System_exposer.def( 
@@ -1546,7 +1545,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::removeAll
         
-            typedef bool ( ::SireSystem::System::*removeAll_function_type )( ::SireMol::MoleculeGroup const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireSystem::System::*removeAll_function_type)( ::SireMol::MoleculeGroup const &,::SireMol::MGID const & ) ;
             removeAll_function_type removeAll_function_value( &::SireSystem::System::removeAll );
             
             System_exposer.def( 
@@ -1557,7 +1556,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::removeAllConstraints
         
-            typedef void ( ::SireSystem::System::*removeAllConstraints_function_type )(  ) ;
+            typedef void ( ::SireSystem::System::*removeAllConstraints_function_type)(  ) ;
             removeAllConstraints_function_type removeAllConstraints_function_value( &::SireSystem::System::removeAllConstraints );
             
             System_exposer.def( 
@@ -1567,7 +1566,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::removeAllForceFields
         
-            typedef void ( ::SireSystem::System::*removeAllForceFields_function_type )(  ) ;
+            typedef void ( ::SireSystem::System::*removeAllForceFields_function_type)(  ) ;
             removeAllForceFields_function_type removeAllForceFields_function_value( &::SireSystem::System::removeAllForceFields );
             
             System_exposer.def( 
@@ -1577,7 +1576,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::removeAllMoleculeGroups
         
-            typedef void ( ::SireSystem::System::*removeAllMoleculeGroups_function_type )(  ) ;
+            typedef void ( ::SireSystem::System::*removeAllMoleculeGroups_function_type)(  ) ;
             removeAllMoleculeGroups_function_type removeAllMoleculeGroups_function_value( &::SireSystem::System::removeAllMoleculeGroups );
             
             System_exposer.def( 
@@ -1587,7 +1586,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::removeAllMolecules
         
-            typedef bool ( ::SireSystem::System::*removeAllMolecules_function_type )(  ) ;
+            typedef bool ( ::SireSystem::System::*removeAllMolecules_function_type)(  ) ;
             removeAllMolecules_function_type removeAllMolecules_function_value( &::SireSystem::System::removeAllMolecules );
             
             System_exposer.def( 
@@ -1597,7 +1596,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::removeAllMonitors
         
-            typedef void ( ::SireSystem::System::*removeAllMonitors_function_type )(  ) ;
+            typedef void ( ::SireSystem::System::*removeAllMonitors_function_type)(  ) ;
             removeAllMonitors_function_type removeAllMonitors_function_value( &::SireSystem::System::removeAllMonitors );
             
             System_exposer.def( 
@@ -1607,7 +1606,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::removeProperty
         
-            typedef void ( ::SireSystem::System::*removeProperty_function_type )( ::QString const & ) ;
+            typedef void ( ::SireSystem::System::*removeProperty_function_type)( ::QString const & ) ;
             removeProperty_function_type removeProperty_function_value( &::SireSystem::System::removeProperty );
             
             System_exposer.def( 
@@ -1618,7 +1617,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::setComponent
         
-            typedef void ( ::SireSystem::System::*setComponent_function_type )( ::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::SireSystem::System::*setComponent_function_type)( ::SireCAS::Symbol const &,double ) ;
             setComponent_function_type setComponent_function_value( &::SireSystem::System::setComponent );
             
             System_exposer.def( 
@@ -1629,7 +1628,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::setComponent
         
-            typedef void ( ::SireSystem::System::*setComponent_function_type )( ::SireCAS::Symbol const &,::SireCAS::Expression const & ) ;
+            typedef void ( ::SireSystem::System::*setComponent_function_type)( ::SireCAS::Symbol const &,::SireCAS::Expression const & ) ;
             setComponent_function_type setComponent_function_value( &::SireSystem::System::setComponent );
             
             System_exposer.def( 
@@ -1640,7 +1639,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::setConstant
         
-            typedef void ( ::SireSystem::System::*setConstant_function_type )( ::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::SireSystem::System::*setConstant_function_type)( ::SireCAS::Symbol const &,double ) ;
             setConstant_function_type setConstant_function_value( &::SireSystem::System::setConstant );
             
             System_exposer.def( 
@@ -1651,7 +1650,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::setConstant
         
-            typedef void ( ::SireSystem::System::*setConstant_function_type )( ::SireCAS::Symbol const &,::SireCAS::Expression const & ) ;
+            typedef void ( ::SireSystem::System::*setConstant_function_type)( ::SireCAS::Symbol const &,::SireCAS::Expression const & ) ;
             setConstant_function_type setConstant_function_value( &::SireSystem::System::setConstant );
             
             System_exposer.def( 
@@ -1662,7 +1661,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::setConstantComponent
         
-            typedef void ( ::SireSystem::System::*setConstantComponent_function_type )( ::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::SireSystem::System::*setConstantComponent_function_type)( ::SireCAS::Symbol const &,double ) ;
             setConstantComponent_function_type setConstantComponent_function_value( &::SireSystem::System::setConstantComponent );
             
             System_exposer.def( 
@@ -1673,7 +1672,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::setConstantComponent
         
-            typedef void ( ::SireSystem::System::*setConstantComponent_function_type )( ::SireCAS::Symbol const &,::SireCAS::Expression const & ) ;
+            typedef void ( ::SireSystem::System::*setConstantComponent_function_type)( ::SireCAS::Symbol const &,::SireCAS::Expression const & ) ;
             setConstantComponent_function_type setConstantComponent_function_value( &::SireSystem::System::setConstantComponent );
             
             System_exposer.def( 
@@ -1684,7 +1683,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::setConstraints
         
-            typedef void ( ::SireSystem::System::*setConstraints_function_type )( ::SireSystem::Constraints const & ) ;
+            typedef void ( ::SireSystem::System::*setConstraints_function_type)( ::SireSystem::Constraints const & ) ;
             setConstraints_function_type setConstraints_function_value( &::SireSystem::System::setConstraints );
             
             System_exposer.def( 
@@ -1695,7 +1694,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::setContents
         
-            typedef void ( ::SireSystem::System::*setContents_function_type )( ::SireMol::MGID const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireSystem::System::*setContents_function_type)( ::SireMol::MGID const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
             setContents_function_type setContents_function_value( &::SireSystem::System::setContents );
             
             System_exposer.def( 
@@ -1706,7 +1705,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::setContents
         
-            typedef void ( ::SireSystem::System::*setContents_function_type )( ::SireMol::MGID const &,::SireMol::ViewsOfMol const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireSystem::System::*setContents_function_type)( ::SireMol::MGID const &,::SireMol::ViewsOfMol const &,::SireBase::PropertyMap const & ) ;
             setContents_function_type setContents_function_value( &::SireSystem::System::setContents );
             
             System_exposer.def( 
@@ -1717,7 +1716,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::setContents
         
-            typedef void ( ::SireSystem::System::*setContents_function_type )( ::SireMol::MGID const &,::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireSystem::System::*setContents_function_type)( ::SireMol::MGID const &,::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
             setContents_function_type setContents_function_value( &::SireSystem::System::setContents );
             
             System_exposer.def( 
@@ -1728,7 +1727,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::setContents
         
-            typedef void ( ::SireSystem::System::*setContents_function_type )( ::SireMol::MGID const &,::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireSystem::System::*setContents_function_type)( ::SireMol::MGID const &,::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
             setContents_function_type setContents_function_value( &::SireSystem::System::setContents );
             
             System_exposer.def( 
@@ -1739,7 +1738,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::setContents
         
-            typedef void ( ::SireSystem::System::*setContents_function_type )( ::SireMol::MGID const &,::SireMol::MoleculeView const & ) ;
+            typedef void ( ::SireSystem::System::*setContents_function_type)( ::SireMol::MGID const &,::SireMol::MoleculeView const & ) ;
             setContents_function_type setContents_function_value( &::SireSystem::System::setContents );
             
             System_exposer.def( 
@@ -1750,7 +1749,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::setContents
         
-            typedef void ( ::SireSystem::System::*setContents_function_type )( ::SireMol::MGID const &,::SireMol::ViewsOfMol const & ) ;
+            typedef void ( ::SireSystem::System::*setContents_function_type)( ::SireMol::MGID const &,::SireMol::ViewsOfMol const & ) ;
             setContents_function_type setContents_function_value( &::SireSystem::System::setContents );
             
             System_exposer.def( 
@@ -1761,7 +1760,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::setContents
         
-            typedef void ( ::SireSystem::System::*setContents_function_type )( ::SireMol::MGID const &,::SireMol::Molecules const & ) ;
+            typedef void ( ::SireSystem::System::*setContents_function_type)( ::SireMol::MGID const &,::SireMol::Molecules const & ) ;
             setContents_function_type setContents_function_value( &::SireSystem::System::setContents );
             
             System_exposer.def( 
@@ -1772,7 +1771,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::setContents
         
-            typedef void ( ::SireSystem::System::*setContents_function_type )( ::SireMol::MGID const &,::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireSystem::System::*setContents_function_type)( ::SireMol::MGID const &,::SireMol::MoleculeGroup const & ) ;
             setContents_function_type setContents_function_value( &::SireSystem::System::setContents );
             
             System_exposer.def( 
@@ -1783,7 +1782,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::setEnergyComponent
         
-            typedef void ( ::SireSystem::System::*setEnergyComponent_function_type )( ::SireCAS::Symbol const &,::SireCAS::Expression const & ) ;
+            typedef void ( ::SireSystem::System::*setEnergyComponent_function_type)( ::SireCAS::Symbol const &,::SireCAS::Expression const & ) ;
             setEnergyComponent_function_type setEnergyComponent_function_value( &::SireSystem::System::setEnergyComponent );
             
             System_exposer.def( 
@@ -1794,7 +1793,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::setMonitors
         
-            typedef void ( ::SireSystem::System::*setMonitors_function_type )( ::SireSystem::SystemMonitors const & ) ;
+            typedef void ( ::SireSystem::System::*setMonitors_function_type)( ::SireSystem::SystemMonitors const & ) ;
             setMonitors_function_type setMonitors_function_value( &::SireSystem::System::setMonitors );
             
             System_exposer.def( 
@@ -1805,7 +1804,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::setMonitors
         
-            typedef void ( ::SireSystem::System::*setMonitors_function_type )( ::SireSystem::SystemMonitors const &,int ) ;
+            typedef void ( ::SireSystem::System::*setMonitors_function_type)( ::SireSystem::SystemMonitors const &,int ) ;
             setMonitors_function_type setMonitors_function_value( &::SireSystem::System::setMonitors );
             
             System_exposer.def( 
@@ -1816,7 +1815,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::setName
         
-            typedef void ( ::SireSystem::System::*setName_function_type )( ::QString const & ) ;
+            typedef void ( ::SireSystem::System::*setName_function_type)( ::QString const & ) ;
             setName_function_type setName_function_value( &::SireSystem::System::setName );
             
             System_exposer.def( 
@@ -1827,7 +1826,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::setProperty
         
-            typedef void ( ::SireSystem::System::*setProperty_function_type )( ::QString const &,::SireBase::Property const & ) ;
+            typedef void ( ::SireSystem::System::*setProperty_function_type)( ::QString const &,::SireBase::Property const & ) ;
             setProperty_function_type setProperty_function_value( &::SireSystem::System::setProperty );
             
             System_exposer.def( 
@@ -1838,7 +1837,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::setProperty
         
-            typedef void ( ::SireSystem::System::*setProperty_function_type )( ::SireFF::FFID const &,::QString const &,::SireBase::Property const & ) ;
+            typedef void ( ::SireSystem::System::*setProperty_function_type)( ::SireFF::FFID const &,::QString const &,::SireBase::Property const & ) ;
             setProperty_function_type setProperty_function_value( &::SireSystem::System::setProperty );
             
             System_exposer.def( 
@@ -1849,7 +1848,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::subVersion
         
-            typedef ::quint32 ( ::SireSystem::System::*subVersion_function_type )(  ) const;
+            typedef ::quint32 ( ::SireSystem::System::*subVersion_function_type)(  ) const;
             subVersion_function_type subVersion_function_value( &::SireSystem::System::subVersion );
             
             System_exposer.def( 
@@ -1859,7 +1858,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::toString
         
-            typedef ::QString ( ::SireSystem::System::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireSystem::System::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireSystem::System::toString );
             
             System_exposer.def( 
@@ -1869,13 +1868,13 @@ void register_System_class(){
         }
         { //::SireSystem::System::totalComponent
         
-            typedef ::SireCAS::Symbol const & ( ::SireSystem::System::*totalComponent_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireSystem::System::*totalComponent_function_type)(  ) const;
             totalComponent_function_type totalComponent_function_value( &::SireSystem::System::totalComponent );
             
             System_exposer.def( 
                 "totalComponent"
                 , totalComponent_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::System::typeName
@@ -1890,7 +1889,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::update
         
-            typedef void ( ::SireSystem::System::*update_function_type )( ::SireMol::MoleculeData const &,bool ) ;
+            typedef void ( ::SireSystem::System::*update_function_type)( ::SireMol::MoleculeData const &,bool ) ;
             update_function_type update_function_value( &::SireSystem::System::update );
             
             System_exposer.def( 
@@ -1901,7 +1900,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::update
         
-            typedef void ( ::SireSystem::System::*update_function_type )( ::SireMol::Molecules const &,bool ) ;
+            typedef void ( ::SireSystem::System::*update_function_type)( ::SireMol::Molecules const &,bool ) ;
             update_function_type update_function_value( &::SireSystem::System::update );
             
             System_exposer.def( 
@@ -1912,7 +1911,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::update
         
-            typedef void ( ::SireSystem::System::*update_function_type )( ::SireMol::MoleculeGroup const &,bool ) ;
+            typedef void ( ::SireSystem::System::*update_function_type)( ::SireMol::MoleculeGroup const &,bool ) ;
             update_function_type update_function_value( &::SireSystem::System::update );
             
             System_exposer.def( 
@@ -1923,7 +1922,7 @@ void register_System_class(){
         }
         { //::SireSystem::System::userProperties
         
-            typedef ::SireBase::Properties ( ::SireSystem::System::*userProperties_function_type )(  ) const;
+            typedef ::SireBase::Properties ( ::SireSystem::System::*userProperties_function_type)(  ) const;
             userProperties_function_type userProperties_function_value( &::SireSystem::System::userProperties );
             
             System_exposer.def( 
@@ -1933,25 +1932,25 @@ void register_System_class(){
         }
         { //::SireSystem::System::userProperty
         
-            typedef ::SireBase::Property const & ( ::SireSystem::System::*userProperty_function_type )( ::QString const & ) const;
+            typedef ::SireBase::Property const & ( ::SireSystem::System::*userProperty_function_type)( ::QString const & ) const;
             userProperty_function_type userProperty_function_value( &::SireSystem::System::userProperty );
             
             System_exposer.def( 
                 "userProperty"
                 , userProperty_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::System::version
         
-            typedef ::SireBase::Version const & ( ::SireSystem::System::*version_function_type )(  ) const;
+            typedef ::SireBase::Version const & ( ::SireSystem::System::*version_function_type)(  ) const;
             version_function_type version_function_value( &::SireSystem::System::version );
             
             System_exposer.def( 
                 "version"
                 , version_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         System_exposer.staticmethod( "null" );

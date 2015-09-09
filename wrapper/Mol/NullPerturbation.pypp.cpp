@@ -43,7 +43,7 @@ void register_NullPerturbation_class(){
         NullPerturbation_exposer.def( bp::self != bp::self );
         { //::SireMol::NullPerturbation::operator=
         
-            typedef ::SireMol::NullPerturbation & ( ::SireMol::NullPerturbation::*assign_function_type )( ::SireMol::NullPerturbation const & ) ;
+            typedef ::SireMol::NullPerturbation & ( ::SireMol::NullPerturbation::*assign_function_type)( ::SireMol::NullPerturbation const & ) ;
             assign_function_type assign_function_value( &::SireMol::NullPerturbation::operator= );
             
             NullPerturbation_exposer.def( 
@@ -56,7 +56,7 @@ void register_NullPerturbation_class(){
         NullPerturbation_exposer.def( bp::self == bp::self );
         { //::SireMol::NullPerturbation::requiredProperties
         
-            typedef ::QSet< QString > ( ::SireMol::NullPerturbation::*requiredProperties_function_type )(  ) const;
+            typedef ::QSet< QString > ( ::SireMol::NullPerturbation::*requiredProperties_function_type)(  ) const;
             requiredProperties_function_type requiredProperties_function_value( &::SireMol::NullPerturbation::requiredProperties );
             
             NullPerturbation_exposer.def( 
@@ -66,7 +66,7 @@ void register_NullPerturbation_class(){
         }
         { //::SireMol::NullPerturbation::requiredSymbols
         
-            typedef ::QSet< SireCAS::Symbol > ( ::SireMol::NullPerturbation::*requiredSymbols_function_type )(  ) const;
+            typedef ::QSet< SireCAS::Symbol > ( ::SireMol::NullPerturbation::*requiredSymbols_function_type)(  ) const;
             requiredSymbols_function_type requiredSymbols_function_value( &::SireMol::NullPerturbation::requiredSymbols );
             
             NullPerturbation_exposer.def( 
@@ -86,7 +86,7 @@ void register_NullPerturbation_class(){
         }
         { //::SireMol::NullPerturbation::wouldChange
         
-            typedef bool ( ::SireMol::NullPerturbation::*wouldChange_function_type )( ::SireMol::Molecule const &,::SireCAS::Values const & ) const;
+            typedef bool ( ::SireMol::NullPerturbation::*wouldChange_function_type)( ::SireMol::Molecule const &,::SireCAS::Values const & ) const;
             wouldChange_function_type wouldChange_function_value( &::SireMol::NullPerturbation::wouldChange );
             
             NullPerturbation_exposer.def( 

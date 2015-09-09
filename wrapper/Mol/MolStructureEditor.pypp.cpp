@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "MolStructureEditor.pypp.hpp"
 
 namespace bp = boost::python;
@@ -57,7 +56,7 @@ void register_MolStructureEditor_class(){
         MolStructureEditor_exposer.def( bp::init< SireMol::MolStructureEditor const & >(( bp::arg("other") )) );
         { //::SireMol::MolStructureEditor::add
         
-            typedef ::SireMol::AtomStructureEditor ( ::SireMol::MolStructureEditor::*add_function_type )( ::SireMol::AtomName const & ) ;
+            typedef ::SireMol::AtomStructureEditor ( ::SireMol::MolStructureEditor::*add_function_type)( ::SireMol::AtomName const & ) ;
             add_function_type add_function_value( &::SireMol::MolStructureEditor::add );
             
             MolStructureEditor_exposer.def( 
@@ -68,7 +67,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::add
         
-            typedef ::SireMol::AtomStructureEditor ( ::SireMol::MolStructureEditor::*add_function_type )( ::SireMol::AtomNum const & ) ;
+            typedef ::SireMol::AtomStructureEditor ( ::SireMol::MolStructureEditor::*add_function_type)( ::SireMol::AtomNum const & ) ;
             add_function_type add_function_value( &::SireMol::MolStructureEditor::add );
             
             MolStructureEditor_exposer.def( 
@@ -79,7 +78,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::add
         
-            typedef ::SireMol::ResStructureEditor ( ::SireMol::MolStructureEditor::*add_function_type )( ::SireMol::ResName const & ) ;
+            typedef ::SireMol::ResStructureEditor ( ::SireMol::MolStructureEditor::*add_function_type)( ::SireMol::ResName const & ) ;
             add_function_type add_function_value( &::SireMol::MolStructureEditor::add );
             
             MolStructureEditor_exposer.def( 
@@ -90,7 +89,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::add
         
-            typedef ::SireMol::ResStructureEditor ( ::SireMol::MolStructureEditor::*add_function_type )( ::SireMol::ResNum const & ) ;
+            typedef ::SireMol::ResStructureEditor ( ::SireMol::MolStructureEditor::*add_function_type)( ::SireMol::ResNum const & ) ;
             add_function_type add_function_value( &::SireMol::MolStructureEditor::add );
             
             MolStructureEditor_exposer.def( 
@@ -101,7 +100,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::add
         
-            typedef ::SireMol::CGStructureEditor ( ::SireMol::MolStructureEditor::*add_function_type )( ::SireMol::CGName const & ) ;
+            typedef ::SireMol::CGStructureEditor ( ::SireMol::MolStructureEditor::*add_function_type)( ::SireMol::CGName const & ) ;
             add_function_type add_function_value( &::SireMol::MolStructureEditor::add );
             
             MolStructureEditor_exposer.def( 
@@ -112,7 +111,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::add
         
-            typedef ::SireMol::ChainStructureEditor ( ::SireMol::MolStructureEditor::*add_function_type )( ::SireMol::ChainName const & ) ;
+            typedef ::SireMol::ChainStructureEditor ( ::SireMol::MolStructureEditor::*add_function_type)( ::SireMol::ChainName const & ) ;
             add_function_type add_function_value( &::SireMol::MolStructureEditor::add );
             
             MolStructureEditor_exposer.def( 
@@ -123,7 +122,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::add
         
-            typedef ::SireMol::SegStructureEditor ( ::SireMol::MolStructureEditor::*add_function_type )( ::SireMol::SegName const & ) ;
+            typedef ::SireMol::SegStructureEditor ( ::SireMol::MolStructureEditor::*add_function_type)( ::SireMol::SegName const & ) ;
             add_function_type add_function_value( &::SireMol::MolStructureEditor::add );
             
             MolStructureEditor_exposer.def( 
@@ -134,7 +133,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::atom
         
-            typedef ::SireMol::AtomStructureEditor ( ::SireMol::MolStructureEditor::*atom_function_type )( ::SireMol::AtomID const & ) ;
+            typedef ::SireMol::AtomStructureEditor ( ::SireMol::MolStructureEditor::*atom_function_type)( ::SireMol::AtomID const & ) ;
             atom_function_type atom_function_value( &::SireMol::MolStructureEditor::atom );
             
             MolStructureEditor_exposer.def( 
@@ -145,7 +144,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::chain
         
-            typedef ::SireMol::ChainStructureEditor ( ::SireMol::MolStructureEditor::*chain_function_type )( ::SireMol::ChainID const & ) ;
+            typedef ::SireMol::ChainStructureEditor ( ::SireMol::MolStructureEditor::*chain_function_type)( ::SireMol::ChainID const & ) ;
             chain_function_type chain_function_value( &::SireMol::MolStructureEditor::chain );
             
             MolStructureEditor_exposer.def( 
@@ -156,7 +155,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::commit
         
-            typedef ::SireMol::Molecule ( ::SireMol::MolStructureEditor::*commit_function_type )(  ) const;
+            typedef ::SireMol::Molecule ( ::SireMol::MolStructureEditor::*commit_function_type)(  ) const;
             commit_function_type commit_function_value( &::SireMol::MolStructureEditor::commit );
             
             MolStructureEditor_exposer.def( 
@@ -166,7 +165,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::cutGroup
         
-            typedef ::SireMol::CGStructureEditor ( ::SireMol::MolStructureEditor::*cutGroup_function_type )( ::SireMol::CGID const & ) ;
+            typedef ::SireMol::CGStructureEditor ( ::SireMol::MolStructureEditor::*cutGroup_function_type)( ::SireMol::CGID const & ) ;
             cutGroup_function_type cutGroup_function_value( &::SireMol::MolStructureEditor::cutGroup );
             
             MolStructureEditor_exposer.def( 
@@ -177,7 +176,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::nAtoms
         
-            typedef int ( ::SireMol::MolStructureEditor::*nAtoms_function_type )(  ) const;
+            typedef int ( ::SireMol::MolStructureEditor::*nAtoms_function_type)(  ) const;
             nAtoms_function_type nAtoms_function_value( &::SireMol::MolStructureEditor::nAtoms );
             
             MolStructureEditor_exposer.def( 
@@ -187,7 +186,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::nChains
         
-            typedef int ( ::SireMol::MolStructureEditor::*nChains_function_type )(  ) const;
+            typedef int ( ::SireMol::MolStructureEditor::*nChains_function_type)(  ) const;
             nChains_function_type nChains_function_value( &::SireMol::MolStructureEditor::nChains );
             
             MolStructureEditor_exposer.def( 
@@ -197,7 +196,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::nCutGroups
         
-            typedef int ( ::SireMol::MolStructureEditor::*nCutGroups_function_type )(  ) const;
+            typedef int ( ::SireMol::MolStructureEditor::*nCutGroups_function_type)(  ) const;
             nCutGroups_function_type nCutGroups_function_value( &::SireMol::MolStructureEditor::nCutGroups );
             
             MolStructureEditor_exposer.def( 
@@ -207,7 +206,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::nResidues
         
-            typedef int ( ::SireMol::MolStructureEditor::*nResidues_function_type )(  ) const;
+            typedef int ( ::SireMol::MolStructureEditor::*nResidues_function_type)(  ) const;
             nResidues_function_type nResidues_function_value( &::SireMol::MolStructureEditor::nResidues );
             
             MolStructureEditor_exposer.def( 
@@ -217,7 +216,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::nSegments
         
-            typedef int ( ::SireMol::MolStructureEditor::*nSegments_function_type )(  ) const;
+            typedef int ( ::SireMol::MolStructureEditor::*nSegments_function_type)(  ) const;
             nSegments_function_type nSegments_function_value( &::SireMol::MolStructureEditor::nSegments );
             
             MolStructureEditor_exposer.def( 
@@ -227,18 +226,18 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::name
         
-            typedef ::SireMol::MolName const & ( ::SireMol::MolStructureEditor::*name_function_type )(  ) const;
+            typedef ::SireMol::MolName const & ( ::SireMol::MolStructureEditor::*name_function_type)(  ) const;
             name_function_type name_function_value( &::SireMol::MolStructureEditor::name );
             
             MolStructureEditor_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMol::MolStructureEditor::number
         
-            typedef ::SireMol::MolNum ( ::SireMol::MolStructureEditor::*number_function_type )(  ) const;
+            typedef ::SireMol::MolNum ( ::SireMol::MolStructureEditor::*number_function_type)(  ) const;
             number_function_type number_function_value( &::SireMol::MolStructureEditor::number );
             
             MolStructureEditor_exposer.def( 
@@ -248,7 +247,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::operator=
         
-            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*assign_function_type )( ::SireMol::MoleculeView const & ) ;
+            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*assign_function_type)( ::SireMol::MoleculeView const & ) ;
             assign_function_type assign_function_value( &::SireMol::MolStructureEditor::operator= );
             
             MolStructureEditor_exposer.def( 
@@ -260,7 +259,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::operator=
         
-            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*assign_function_type )( ::SireMol::StructureEditor const & ) ;
+            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*assign_function_type)( ::SireMol::StructureEditor const & ) ;
             assign_function_type assign_function_value( &::SireMol::MolStructureEditor::operator= );
             
             MolStructureEditor_exposer.def( 
@@ -272,7 +271,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::operator=
         
-            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*assign_function_type )( ::SireMol::MolStructureEditor const & ) ;
+            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*assign_function_type)( ::SireMol::MolStructureEditor const & ) ;
             assign_function_type assign_function_value( &::SireMol::MolStructureEditor::operator= );
             
             MolStructureEditor_exposer.def( 
@@ -284,7 +283,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::remove
         
-            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*remove_function_type )( ::SireMol::AtomID const & ) ;
+            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*remove_function_type)( ::SireMol::AtomID const & ) ;
             remove_function_type remove_function_value( &::SireMol::MolStructureEditor::remove );
             
             MolStructureEditor_exposer.def( 
@@ -296,7 +295,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::remove
         
-            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*remove_function_type )( ::SireMol::CGID const & ) ;
+            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*remove_function_type)( ::SireMol::CGID const & ) ;
             remove_function_type remove_function_value( &::SireMol::MolStructureEditor::remove );
             
             MolStructureEditor_exposer.def( 
@@ -308,7 +307,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::remove
         
-            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*remove_function_type )( ::SireMol::ResID const & ) ;
+            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*remove_function_type)( ::SireMol::ResID const & ) ;
             remove_function_type remove_function_value( &::SireMol::MolStructureEditor::remove );
             
             MolStructureEditor_exposer.def( 
@@ -320,7 +319,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::remove
         
-            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*remove_function_type )( ::SireMol::ChainID const & ) ;
+            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*remove_function_type)( ::SireMol::ChainID const & ) ;
             remove_function_type remove_function_value( &::SireMol::MolStructureEditor::remove );
             
             MolStructureEditor_exposer.def( 
@@ -332,7 +331,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::remove
         
-            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*remove_function_type )( ::SireMol::SegID const & ) ;
+            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*remove_function_type)( ::SireMol::SegID const & ) ;
             remove_function_type remove_function_value( &::SireMol::MolStructureEditor::remove );
             
             MolStructureEditor_exposer.def( 
@@ -344,7 +343,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::removeAllAtoms
         
-            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*removeAllAtoms_function_type )(  ) ;
+            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*removeAllAtoms_function_type)(  ) ;
             removeAllAtoms_function_type removeAllAtoms_function_value( &::SireMol::MolStructureEditor::removeAllAtoms );
             
             MolStructureEditor_exposer.def( 
@@ -355,7 +354,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::removeAllChains
         
-            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*removeAllChains_function_type )(  ) ;
+            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*removeAllChains_function_type)(  ) ;
             removeAllChains_function_type removeAllChains_function_value( &::SireMol::MolStructureEditor::removeAllChains );
             
             MolStructureEditor_exposer.def( 
@@ -366,7 +365,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::removeAllCutGroups
         
-            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*removeAllCutGroups_function_type )(  ) ;
+            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*removeAllCutGroups_function_type)(  ) ;
             removeAllCutGroups_function_type removeAllCutGroups_function_value( &::SireMol::MolStructureEditor::removeAllCutGroups );
             
             MolStructureEditor_exposer.def( 
@@ -377,7 +376,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::removeAllResidues
         
-            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*removeAllResidues_function_type )(  ) ;
+            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*removeAllResidues_function_type)(  ) ;
             removeAllResidues_function_type removeAllResidues_function_value( &::SireMol::MolStructureEditor::removeAllResidues );
             
             MolStructureEditor_exposer.def( 
@@ -388,7 +387,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::removeAllSegments
         
-            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*removeAllSegments_function_type )(  ) ;
+            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*removeAllSegments_function_type)(  ) ;
             removeAllSegments_function_type removeAllSegments_function_value( &::SireMol::MolStructureEditor::removeAllSegments );
             
             MolStructureEditor_exposer.def( 
@@ -399,7 +398,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::rename
         
-            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*rename_function_type )( ::SireMol::MolName const & ) ;
+            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*rename_function_type)( ::SireMol::MolName const & ) ;
             rename_function_type rename_function_value( &::SireMol::MolStructureEditor::rename );
             
             MolStructureEditor_exposer.def( 
@@ -411,7 +410,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::renumber
         
-            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*renumber_function_type )( ::SireMol::MolNum ) ;
+            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*renumber_function_type)( ::SireMol::MolNum ) ;
             renumber_function_type renumber_function_value( &::SireMol::MolStructureEditor::renumber );
             
             MolStructureEditor_exposer.def( 
@@ -423,7 +422,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::renumber
         
-            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*renumber_function_type )(  ) ;
+            typedef ::SireMol::MolStructureEditor & ( ::SireMol::MolStructureEditor::*renumber_function_type)(  ) ;
             renumber_function_type renumber_function_value( &::SireMol::MolStructureEditor::renumber );
             
             MolStructureEditor_exposer.def( 
@@ -434,7 +433,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::residue
         
-            typedef ::SireMol::ResStructureEditor ( ::SireMol::MolStructureEditor::*residue_function_type )( ::SireMol::ResID const & ) ;
+            typedef ::SireMol::ResStructureEditor ( ::SireMol::MolStructureEditor::*residue_function_type)( ::SireMol::ResID const & ) ;
             residue_function_type residue_function_value( &::SireMol::MolStructureEditor::residue );
             
             MolStructureEditor_exposer.def( 
@@ -445,7 +444,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::segment
         
-            typedef ::SireMol::SegStructureEditor ( ::SireMol::MolStructureEditor::*segment_function_type )( ::SireMol::SegID const & ) ;
+            typedef ::SireMol::SegStructureEditor ( ::SireMol::MolStructureEditor::*segment_function_type)( ::SireMol::SegID const & ) ;
             segment_function_type segment_function_value( &::SireMol::MolStructureEditor::segment );
             
             MolStructureEditor_exposer.def( 
@@ -456,7 +455,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::select
         
-            typedef ::SireMol::AtomStructureEditor ( ::SireMol::MolStructureEditor::*select_function_type )( ::SireMol::AtomID const & ) ;
+            typedef ::SireMol::AtomStructureEditor ( ::SireMol::MolStructureEditor::*select_function_type)( ::SireMol::AtomID const & ) ;
             select_function_type select_function_value( &::SireMol::MolStructureEditor::select );
             
             MolStructureEditor_exposer.def( 
@@ -467,7 +466,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::select
         
-            typedef ::SireMol::CGStructureEditor ( ::SireMol::MolStructureEditor::*select_function_type )( ::SireMol::CGID const & ) ;
+            typedef ::SireMol::CGStructureEditor ( ::SireMol::MolStructureEditor::*select_function_type)( ::SireMol::CGID const & ) ;
             select_function_type select_function_value( &::SireMol::MolStructureEditor::select );
             
             MolStructureEditor_exposer.def( 
@@ -478,7 +477,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::select
         
-            typedef ::SireMol::ResStructureEditor ( ::SireMol::MolStructureEditor::*select_function_type )( ::SireMol::ResID const & ) ;
+            typedef ::SireMol::ResStructureEditor ( ::SireMol::MolStructureEditor::*select_function_type)( ::SireMol::ResID const & ) ;
             select_function_type select_function_value( &::SireMol::MolStructureEditor::select );
             
             MolStructureEditor_exposer.def( 
@@ -489,7 +488,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::select
         
-            typedef ::SireMol::ChainStructureEditor ( ::SireMol::MolStructureEditor::*select_function_type )( ::SireMol::ChainID const & ) ;
+            typedef ::SireMol::ChainStructureEditor ( ::SireMol::MolStructureEditor::*select_function_type)( ::SireMol::ChainID const & ) ;
             select_function_type select_function_value( &::SireMol::MolStructureEditor::select );
             
             MolStructureEditor_exposer.def( 
@@ -500,7 +499,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::select
         
-            typedef ::SireMol::SegStructureEditor ( ::SireMol::MolStructureEditor::*select_function_type )( ::SireMol::SegID const & ) ;
+            typedef ::SireMol::SegStructureEditor ( ::SireMol::MolStructureEditor::*select_function_type)( ::SireMol::SegID const & ) ;
             select_function_type select_function_value( &::SireMol::MolStructureEditor::select );
             
             MolStructureEditor_exposer.def( 
@@ -511,7 +510,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::selectedAll
         
-            typedef bool ( ::SireMol::MolStructureEditor::*selectedAll_function_type )(  ) const;
+            typedef bool ( ::SireMol::MolStructureEditor::*selectedAll_function_type)(  ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::MolStructureEditor::selectedAll );
             
             MolStructureEditor_exposer.def( 
@@ -521,7 +520,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::toString
         
-            typedef ::QString ( ::SireMol::MolStructureEditor::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::MolStructureEditor::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::MolStructureEditor::toString );
             
             MolStructureEditor_exposer.def( 
@@ -541,7 +540,7 @@ void register_MolStructureEditor_class(){
         }
         { //::SireMol::MolStructureEditor::what
         
-            typedef char const * ( ::SireMol::MolStructureEditor::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::MolStructureEditor::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::MolStructureEditor::what );
             
             MolStructureEditor_exposer.def( 

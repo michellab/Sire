@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "SoftCLJComponent.pypp.hpp"
 
 namespace bp = boost::python;
@@ -37,7 +36,7 @@ void register_SoftCLJComponent_class(){
         SoftCLJComponent_exposer.def( bp::init< SireMM::SoftCLJComponent const & >(( bp::arg("other") )) );
         { //::SireMM::SoftCLJComponent::changeEnergy
         
-            typedef void ( ::SireMM::SoftCLJComponent::*changeEnergy_function_type )( ::SireFF::FF &,::SireMM::CLJEnergy const & ) const;
+            typedef void ( ::SireMM::SoftCLJComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::CLJEnergy const & ) const;
             changeEnergy_function_type changeEnergy_function_value( &::SireMM::SoftCLJComponent::changeEnergy );
             
             SoftCLJComponent_exposer.def( 
@@ -48,7 +47,7 @@ void register_SoftCLJComponent_class(){
         }
         { //::SireMM::SoftCLJComponent::changeEnergy
         
-            typedef void ( ::SireMM::SoftCLJComponent::*changeEnergy_function_type )( ::SireFF::FF &,::SireMM::SoftCLJEnergy const & ) const;
+            typedef void ( ::SireMM::SoftCLJComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::SoftCLJEnergy const & ) const;
             changeEnergy_function_type changeEnergy_function_value( &::SireMM::SoftCLJComponent::changeEnergy );
             
             SoftCLJComponent_exposer.def( 
@@ -59,48 +58,48 @@ void register_SoftCLJComponent_class(){
         }
         { //::SireMM::SoftCLJComponent::coulomb
         
-            typedef ::SireMM::CoulombComponent const & ( ::SireMM::SoftCLJComponent::*coulomb_function_type )(  ) const;
+            typedef ::SireMM::CoulombComponent const & ( ::SireMM::SoftCLJComponent::*coulomb_function_type)(  ) const;
             coulomb_function_type coulomb_function_value( &::SireMM::SoftCLJComponent::coulomb );
             
             SoftCLJComponent_exposer.def( 
                 "coulomb"
                 , coulomb_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::SoftCLJComponent::coulomb
         
-            typedef ::SireMM::CoulombComponent const & ( ::SireMM::SoftCLJComponent::*coulomb_function_type )( int ) const;
+            typedef ::SireMM::CoulombComponent const & ( ::SireMM::SoftCLJComponent::*coulomb_function_type)( int ) const;
             coulomb_function_type coulomb_function_value( &::SireMM::SoftCLJComponent::coulomb );
             
             SoftCLJComponent_exposer.def( 
                 "coulomb"
                 , coulomb_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::SoftCLJComponent::lj
         
-            typedef ::SireMM::LJComponent const & ( ::SireMM::SoftCLJComponent::*lj_function_type )(  ) const;
+            typedef ::SireMM::LJComponent const & ( ::SireMM::SoftCLJComponent::*lj_function_type)(  ) const;
             lj_function_type lj_function_value( &::SireMM::SoftCLJComponent::lj );
             
             SoftCLJComponent_exposer.def( 
                 "lj"
                 , lj_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::SoftCLJComponent::lj
         
-            typedef ::SireMM::LJComponent const & ( ::SireMM::SoftCLJComponent::*lj_function_type )( int ) const;
+            typedef ::SireMM::LJComponent const & ( ::SireMM::SoftCLJComponent::*lj_function_type)( int ) const;
             lj_function_type lj_function_value( &::SireMM::SoftCLJComponent::lj );
             
             SoftCLJComponent_exposer.def( 
                 "lj"
                 , lj_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::SoftCLJComponent::nAlphaValues
@@ -115,7 +114,7 @@ void register_SoftCLJComponent_class(){
         }
         { //::SireMM::SoftCLJComponent::operator=
         
-            typedef ::SireMM::SoftCLJComponent & ( ::SireMM::SoftCLJComponent::*assign_function_type )( ::SireMM::SoftCLJComponent const & ) ;
+            typedef ::SireMM::SoftCLJComponent & ( ::SireMM::SoftCLJComponent::*assign_function_type)( ::SireMM::SoftCLJComponent const & ) ;
             assign_function_type assign_function_value( &::SireMM::SoftCLJComponent::operator= );
             
             SoftCLJComponent_exposer.def( 
@@ -127,7 +126,7 @@ void register_SoftCLJComponent_class(){
         }
         { //::SireMM::SoftCLJComponent::setEnergy
         
-            typedef void ( ::SireMM::SoftCLJComponent::*setEnergy_function_type )( ::SireFF::FF &,::SireMM::CLJEnergy const & ) const;
+            typedef void ( ::SireMM::SoftCLJComponent::*setEnergy_function_type)( ::SireFF::FF &,::SireMM::CLJEnergy const & ) const;
             setEnergy_function_type setEnergy_function_value( &::SireMM::SoftCLJComponent::setEnergy );
             
             SoftCLJComponent_exposer.def( 
@@ -138,7 +137,7 @@ void register_SoftCLJComponent_class(){
         }
         { //::SireMM::SoftCLJComponent::setEnergy
         
-            typedef void ( ::SireMM::SoftCLJComponent::*setEnergy_function_type )( ::SireFF::FF &,::SireMM::SoftCLJEnergy const & ) const;
+            typedef void ( ::SireMM::SoftCLJComponent::*setEnergy_function_type)( ::SireFF::FF &,::SireMM::SoftCLJEnergy const & ) const;
             setEnergy_function_type setEnergy_function_value( &::SireMM::SoftCLJComponent::setEnergy );
             
             SoftCLJComponent_exposer.def( 
@@ -149,7 +148,7 @@ void register_SoftCLJComponent_class(){
         }
         { //::SireMM::SoftCLJComponent::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireMM::SoftCLJComponent::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireMM::SoftCLJComponent::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireMM::SoftCLJComponent::symbols );
             
             SoftCLJComponent_exposer.def( 
@@ -159,25 +158,25 @@ void register_SoftCLJComponent_class(){
         }
         { //::SireMM::SoftCLJComponent::total
         
-            typedef ::SireMM::CLJComponent const & ( ::SireMM::SoftCLJComponent::*total_function_type )(  ) const;
+            typedef ::SireMM::CLJComponent const & ( ::SireMM::SoftCLJComponent::*total_function_type)(  ) const;
             total_function_type total_function_value( &::SireMM::SoftCLJComponent::total );
             
             SoftCLJComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::SoftCLJComponent::total
         
-            typedef ::SireMM::CLJComponent const & ( ::SireMM::SoftCLJComponent::*total_function_type )( int ) const;
+            typedef ::SireMM::CLJComponent const & ( ::SireMM::SoftCLJComponent::*total_function_type)( int ) const;
             total_function_type total_function_value( &::SireMM::SoftCLJComponent::total );
             
             SoftCLJComponent_exposer.def( 
                 "total"
                 , total_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::SoftCLJComponent::typeName
@@ -192,7 +191,7 @@ void register_SoftCLJComponent_class(){
         }
         { //::SireMM::SoftCLJComponent::what
         
-            typedef char const * ( ::SireMM::SoftCLJComponent::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::SoftCLJComponent::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::SoftCLJComponent::what );
             
             SoftCLJComponent_exposer.def( 

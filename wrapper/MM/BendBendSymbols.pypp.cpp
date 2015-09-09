@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "BendBendSymbols.pypp.hpp"
 
 namespace bp = boost::python;
@@ -44,35 +43,35 @@ void register_BendBendSymbols_class(){
         bp::scope BendBendSymbols_scope( BendBendSymbols_exposer );
         { //::SireMM::BendBendSymbols::theta012
         
-            typedef ::SireCAS::Symbol const & ( ::SireMM::BendBendSymbols::*theta012_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMM::BendBendSymbols::*theta012_function_type)(  ) const;
             theta012_function_type theta012_function_value( &::SireMM::BendBendSymbols::theta012 );
             
             BendBendSymbols_exposer.def( 
                 "theta012"
                 , theta012_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::BendBendSymbols::theta213
         
-            typedef ::SireCAS::Symbol const & ( ::SireMM::BendBendSymbols::*theta213_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMM::BendBendSymbols::*theta213_function_type)(  ) const;
             theta213_function_type theta213_function_value( &::SireMM::BendBendSymbols::theta213 );
             
             BendBendSymbols_exposer.def( 
                 "theta213"
                 , theta213_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::BendBendSymbols::theta310
         
-            typedef ::SireCAS::Symbol const & ( ::SireMM::BendBendSymbols::*theta310_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMM::BendBendSymbols::*theta310_function_type)(  ) const;
             theta310_function_type theta310_function_value( &::SireMM::BendBendSymbols::theta310 );
             
             BendBendSymbols_exposer.def( 
                 "theta310"
                 , theta310_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         BendBendSymbols_exposer.def( "__copy__", &__copy__);

@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "MolResID.pypp.hpp"
 
 namespace bp = boost::python;
@@ -50,7 +49,7 @@ void register_MolResID_class(){
         MolResID_exposer.def( bp::init< SireMol::MolResID const & >(( bp::arg("other") )) );
         { //::SireMol::MolResID::hash
         
-            typedef ::uint ( ::SireMol::MolResID::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::MolResID::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::MolResID::hash );
             
             MolResID_exposer.def( 
@@ -60,7 +59,7 @@ void register_MolResID_class(){
         }
         { //::SireMol::MolResID::isNull
         
-            typedef bool ( ::SireMol::MolResID::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::MolResID::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::MolResID::isNull );
             
             MolResID_exposer.def( 
@@ -70,7 +69,7 @@ void register_MolResID_class(){
         }
         { //::SireMol::MolResID::map
         
-            typedef ::QList< SireMol::ResIdx > ( ::SireMol::MolResID::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::ResIdx > ( ::SireMol::MolResID::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireMol::MolResID::map );
             
             MolResID_exposer.def( 
@@ -81,19 +80,19 @@ void register_MolResID_class(){
         }
         { //::SireMol::MolResID::molID
         
-            typedef ::SireMol::MolID const & ( ::SireMol::MolResID::*molID_function_type )(  ) const;
+            typedef ::SireMol::MolID const & ( ::SireMol::MolResID::*molID_function_type)(  ) const;
             molID_function_type molID_function_value( &::SireMol::MolResID::molID );
             
             MolResID_exposer.def( 
                 "molID"
                 , molID_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         MolResID_exposer.def( bp::self != bp::self );
         { //::SireMol::MolResID::operator=
         
-            typedef ::SireMol::MolResID & ( ::SireMol::MolResID::*assign_function_type )( ::SireMol::MolResID const & ) ;
+            typedef ::SireMol::MolResID & ( ::SireMol::MolResID::*assign_function_type)( ::SireMol::MolResID const & ) ;
             assign_function_type assign_function_value( &::SireMol::MolResID::operator= );
             
             MolResID_exposer.def( 
@@ -107,18 +106,18 @@ void register_MolResID_class(){
         MolResID_exposer.def( bp::self == bp::self );
         { //::SireMol::MolResID::resID
         
-            typedef ::SireMol::ResID const & ( ::SireMol::MolResID::*resID_function_type )(  ) const;
+            typedef ::SireMol::ResID const & ( ::SireMol::MolResID::*resID_function_type)(  ) const;
             resID_function_type resID_function_value( &::SireMol::MolResID::resID );
             
             MolResID_exposer.def( 
                 "resID"
                 , resID_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMol::MolResID::selectAllFrom
         
-            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Residue > > ( ::SireMol::MolResID::*selectAllFrom_function_type )( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Residue > > ( ::SireMol::MolResID::*selectAllFrom_function_type)( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) const;
             selectAllFrom_function_type selectAllFrom_function_value( &::SireMol::MolResID::selectAllFrom );
             
             MolResID_exposer.def( 
@@ -129,7 +128,7 @@ void register_MolResID_class(){
         }
         { //::SireMol::MolResID::selectAllFrom
         
-            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Residue > > ( ::SireMol::MolResID::*selectAllFrom_function_type )( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Residue > > ( ::SireMol::MolResID::*selectAllFrom_function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
             selectAllFrom_function_type selectAllFrom_function_value( &::SireMol::MolResID::selectAllFrom );
             
             MolResID_exposer.def( 
@@ -140,7 +139,7 @@ void register_MolResID_class(){
         }
         { //::SireMol::MolResID::selectAllFrom
         
-            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Residue > > ( ::SireMol::MolResID::*selectAllFrom_function_type )( ::SireMol::MolGroupsBase const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Residue > > ( ::SireMol::MolResID::*selectAllFrom_function_type)( ::SireMol::MolGroupsBase const &,::SireBase::PropertyMap const & ) const;
             selectAllFrom_function_type selectAllFrom_function_value( &::SireMol::MolResID::selectAllFrom );
             
             MolResID_exposer.def( 
@@ -151,7 +150,7 @@ void register_MolResID_class(){
         }
         { //::SireMol::MolResID::toString
         
-            typedef ::QString ( ::SireMol::MolResID::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::MolResID::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::MolResID::toString );
             
             MolResID_exposer.def( 
@@ -171,7 +170,7 @@ void register_MolResID_class(){
         }
         { //::SireMol::MolResID::what
         
-            typedef char const * ( ::SireMol::MolResID::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::MolResID::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::MolResID::what );
             
             MolResID_exposer.def( 

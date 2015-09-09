@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "PropertyName.pypp.hpp"
 
 namespace bp = boost::python;
@@ -37,7 +36,7 @@ void register_PropertyName_class(){
         PropertyName_exposer.def( bp::init< SireBase::PropertyName const & >(( bp::arg("other") )) );
         { //::SireBase::PropertyName::hasDefaultValue
         
-            typedef bool ( ::SireBase::PropertyName::*hasDefaultValue_function_type )(  ) const;
+            typedef bool ( ::SireBase::PropertyName::*hasDefaultValue_function_type)(  ) const;
             hasDefaultValue_function_type hasDefaultValue_function_value( &::SireBase::PropertyName::hasDefaultValue );
             
             PropertyName_exposer.def( 
@@ -47,7 +46,7 @@ void register_PropertyName_class(){
         }
         { //::SireBase::PropertyName::hasSource
         
-            typedef bool ( ::SireBase::PropertyName::*hasSource_function_type )(  ) const;
+            typedef bool ( ::SireBase::PropertyName::*hasSource_function_type)(  ) const;
             hasSource_function_type hasSource_function_value( &::SireBase::PropertyName::hasSource );
             
             PropertyName_exposer.def( 
@@ -57,7 +56,7 @@ void register_PropertyName_class(){
         }
         { //::SireBase::PropertyName::hasValue
         
-            typedef bool ( ::SireBase::PropertyName::*hasValue_function_type )(  ) const;
+            typedef bool ( ::SireBase::PropertyName::*hasValue_function_type)(  ) const;
             hasValue_function_type hasValue_function_value( &::SireBase::PropertyName::hasValue );
             
             PropertyName_exposer.def( 
@@ -67,7 +66,7 @@ void register_PropertyName_class(){
         }
         { //::SireBase::PropertyName::isNull
         
-            typedef bool ( ::SireBase::PropertyName::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireBase::PropertyName::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireBase::PropertyName::isNull );
             
             PropertyName_exposer.def( 
@@ -88,7 +87,7 @@ void register_PropertyName_class(){
         PropertyName_exposer.def( bp::self != bp::self );
         { //::SireBase::PropertyName::operator=
         
-            typedef ::SireBase::PropertyName & ( ::SireBase::PropertyName::*assign_function_type )( ::SireBase::PropertyName const & ) ;
+            typedef ::SireBase::PropertyName & ( ::SireBase::PropertyName::*assign_function_type)( ::SireBase::PropertyName const & ) ;
             assign_function_type assign_function_value( &::SireBase::PropertyName::operator= );
             
             PropertyName_exposer.def( 
@@ -101,7 +100,7 @@ void register_PropertyName_class(){
         PropertyName_exposer.def( bp::self == bp::self );
         { //::SireBase::PropertyName::source
         
-            typedef ::QString const & ( ::SireBase::PropertyName::*source_function_type )(  ) const;
+            typedef ::QString const & ( ::SireBase::PropertyName::*source_function_type)(  ) const;
             source_function_type source_function_value( &::SireBase::PropertyName::source );
             
             PropertyName_exposer.def( 
@@ -112,7 +111,7 @@ void register_PropertyName_class(){
         }
         { //::SireBase::PropertyName::toString
         
-            typedef ::QString ( ::SireBase::PropertyName::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireBase::PropertyName::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireBase::PropertyName::toString );
             
             PropertyName_exposer.def( 
@@ -132,18 +131,18 @@ void register_PropertyName_class(){
         }
         { //::SireBase::PropertyName::value
         
-            typedef ::SireBase::Property const & ( ::SireBase::PropertyName::*value_function_type )(  ) const;
+            typedef ::SireBase::Property const & ( ::SireBase::PropertyName::*value_function_type)(  ) const;
             value_function_type value_function_value( &::SireBase::PropertyName::value );
             
             PropertyName_exposer.def( 
                 "value"
                 , value_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireBase::PropertyName::what
         
-            typedef char const * ( ::SireBase::PropertyName::*what_function_type )(  ) const;
+            typedef char const * ( ::SireBase::PropertyName::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireBase::PropertyName::what );
             
             PropertyName_exposer.def( 

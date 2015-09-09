@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "Segment.pypp.hpp"
 
 namespace bp = boost::python;
@@ -80,7 +79,7 @@ void register_Segment_class(){
         Segment_exposer.def( bp::init< SireMol::Segment const & >(( bp::arg("other") )) );
         { //::SireMol::Segment::assertContainsMetadata
         
-            typedef void ( ::SireMol::Segment::*assertContainsMetadata_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef void ( ::SireMol::Segment::*assertContainsMetadata_function_type)( ::SireBase::PropertyName const & ) const;
             assertContainsMetadata_function_type assertContainsMetadata_function_value( &::SireMol::Segment::assertContainsMetadata );
             
             Segment_exposer.def( 
@@ -91,7 +90,7 @@ void register_Segment_class(){
         }
         { //::SireMol::Segment::assertContainsMetadata
         
-            typedef void ( ::SireMol::Segment::*assertContainsMetadata_function_type )( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
+            typedef void ( ::SireMol::Segment::*assertContainsMetadata_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
             assertContainsMetadata_function_type assertContainsMetadata_function_value( &::SireMol::Segment::assertContainsMetadata );
             
             Segment_exposer.def( 
@@ -102,7 +101,7 @@ void register_Segment_class(){
         }
         { //::SireMol::Segment::assertContainsProperty
         
-            typedef void ( ::SireMol::Segment::*assertContainsProperty_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef void ( ::SireMol::Segment::*assertContainsProperty_function_type)( ::SireBase::PropertyName const & ) const;
             assertContainsProperty_function_type assertContainsProperty_function_value( &::SireMol::Segment::assertContainsProperty );
             
             Segment_exposer.def( 
@@ -113,7 +112,7 @@ void register_Segment_class(){
         }
         { //::SireMol::Segment::atomIdxs
         
-            typedef ::QList< SireMol::AtomIdx > const & ( ::SireMol::Segment::*atomIdxs_function_type )(  ) const;
+            typedef ::QList< SireMol::AtomIdx > const & ( ::SireMol::Segment::*atomIdxs_function_type)(  ) const;
             atomIdxs_function_type atomIdxs_function_value( &::SireMol::Segment::atomIdxs );
             
             Segment_exposer.def( 
@@ -124,7 +123,7 @@ void register_Segment_class(){
         }
         { //::SireMol::Segment::contains
         
-            typedef bool ( ::SireMol::Segment::*contains_function_type )( ::SireMol::AtomIdx ) const;
+            typedef bool ( ::SireMol::Segment::*contains_function_type)( ::SireMol::AtomIdx ) const;
             contains_function_type contains_function_value( &::SireMol::Segment::contains );
             
             Segment_exposer.def( 
@@ -135,7 +134,7 @@ void register_Segment_class(){
         }
         { //::SireMol::Segment::contains
         
-            typedef bool ( ::SireMol::Segment::*contains_function_type )( ::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMol::Segment::*contains_function_type)( ::SireMol::AtomID const & ) const;
             contains_function_type contains_function_value( &::SireMol::Segment::contains );
             
             Segment_exposer.def( 
@@ -146,7 +145,7 @@ void register_Segment_class(){
         }
         { //::SireMol::Segment::edit
         
-            typedef ::SireMol::SegEditor ( ::SireMol::Segment::*edit_function_type )(  ) const;
+            typedef ::SireMol::SegEditor ( ::SireMol::Segment::*edit_function_type)(  ) const;
             edit_function_type edit_function_value( &::SireMol::Segment::edit );
             
             Segment_exposer.def( 
@@ -156,7 +155,7 @@ void register_Segment_class(){
         }
         { //::SireMol::Segment::evaluate
         
-            typedef ::SireMol::Evaluator ( ::SireMol::Segment::*evaluate_function_type )(  ) const;
+            typedef ::SireMol::Evaluator ( ::SireMol::Segment::*evaluate_function_type)(  ) const;
             evaluate_function_type evaluate_function_value( &::SireMol::Segment::evaluate );
             
             Segment_exposer.def( 
@@ -166,7 +165,7 @@ void register_Segment_class(){
         }
         { //::SireMol::Segment::hasMetadata
         
-            typedef bool ( ::SireMol::Segment::*hasMetadata_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Segment::*hasMetadata_function_type)( ::SireBase::PropertyName const & ) const;
             hasMetadata_function_type hasMetadata_function_value( &::SireMol::Segment::hasMetadata );
             
             Segment_exposer.def( 
@@ -177,7 +176,7 @@ void register_Segment_class(){
         }
         { //::SireMol::Segment::hasMetadata
         
-            typedef bool ( ::SireMol::Segment::*hasMetadata_function_type )( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Segment::*hasMetadata_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
             hasMetadata_function_type hasMetadata_function_value( &::SireMol::Segment::hasMetadata );
             
             Segment_exposer.def( 
@@ -188,7 +187,7 @@ void register_Segment_class(){
         }
         { //::SireMol::Segment::hasProperty
         
-            typedef bool ( ::SireMol::Segment::*hasProperty_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Segment::*hasProperty_function_type)( ::SireBase::PropertyName const & ) const;
             hasProperty_function_type hasProperty_function_value( &::SireMol::Segment::hasProperty );
             
             Segment_exposer.def( 
@@ -199,7 +198,7 @@ void register_Segment_class(){
         }
         { //::SireMol::Segment::index
         
-            typedef ::SireMol::SegIdx ( ::SireMol::Segment::*index_function_type )(  ) const;
+            typedef ::SireMol::SegIdx ( ::SireMol::Segment::*index_function_type)(  ) const;
             index_function_type index_function_value( &::SireMol::Segment::index );
             
             Segment_exposer.def( 
@@ -209,7 +208,7 @@ void register_Segment_class(){
         }
         { //::SireMol::Segment::intersects
         
-            typedef bool ( ::SireMol::Segment::*intersects_function_type )( ::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMol::Segment::*intersects_function_type)( ::SireMol::AtomID const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::Segment::intersects );
             
             Segment_exposer.def( 
@@ -220,7 +219,7 @@ void register_Segment_class(){
         }
         { //::SireMol::Segment::isEmpty
         
-            typedef bool ( ::SireMol::Segment::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::Segment::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::Segment::isEmpty );
             
             Segment_exposer.def( 
@@ -230,7 +229,7 @@ void register_Segment_class(){
         }
         { //::SireMol::Segment::metadataKeys
         
-            typedef ::QStringList ( ::SireMol::Segment::*metadataKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireMol::Segment::*metadataKeys_function_type)(  ) const;
             metadataKeys_function_type metadataKeys_function_value( &::SireMol::Segment::metadataKeys );
             
             Segment_exposer.def( 
@@ -240,7 +239,7 @@ void register_Segment_class(){
         }
         { //::SireMol::Segment::metadataKeys
         
-            typedef ::QStringList ( ::SireMol::Segment::*metadataKeys_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef ::QStringList ( ::SireMol::Segment::*metadataKeys_function_type)( ::SireBase::PropertyName const & ) const;
             metadataKeys_function_type metadataKeys_function_value( &::SireMol::Segment::metadataKeys );
             
             Segment_exposer.def( 
@@ -251,7 +250,7 @@ void register_Segment_class(){
         }
         { //::SireMol::Segment::move
         
-            typedef ::SireMol::Mover< SireMol::Segment > ( ::SireMol::Segment::*move_function_type )(  ) const;
+            typedef ::SireMol::Mover< SireMol::Segment > ( ::SireMol::Segment::*move_function_type)(  ) const;
             move_function_type move_function_value( &::SireMol::Segment::move );
             
             Segment_exposer.def( 
@@ -261,7 +260,7 @@ void register_Segment_class(){
         }
         { //::SireMol::Segment::nAtoms
         
-            typedef int ( ::SireMol::Segment::*nAtoms_function_type )(  ) const;
+            typedef int ( ::SireMol::Segment::*nAtoms_function_type)(  ) const;
             nAtoms_function_type nAtoms_function_value( &::SireMol::Segment::nAtoms );
             
             Segment_exposer.def( 
@@ -271,19 +270,19 @@ void register_Segment_class(){
         }
         { //::SireMol::Segment::name
         
-            typedef ::SireMol::SegName const & ( ::SireMol::Segment::*name_function_type )(  ) const;
+            typedef ::SireMol::SegName const & ( ::SireMol::Segment::*name_function_type)(  ) const;
             name_function_type name_function_value( &::SireMol::Segment::name );
             
             Segment_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         Segment_exposer.def( bp::self != bp::self );
         { //::SireMol::Segment::operator=
         
-            typedef ::SireMol::Segment & ( ::SireMol::Segment::*assign_function_type )( ::SireMol::Segment const & ) ;
+            typedef ::SireMol::Segment & ( ::SireMol::Segment::*assign_function_type)( ::SireMol::Segment const & ) ;
             assign_function_type assign_function_value( &::SireMol::Segment::operator= );
             
             Segment_exposer.def( 
@@ -296,7 +295,7 @@ void register_Segment_class(){
         Segment_exposer.def( bp::self == bp::self );
         { //::SireMol::Segment::propertyKeys
         
-            typedef ::QStringList ( ::SireMol::Segment::*propertyKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireMol::Segment::*propertyKeys_function_type)(  ) const;
             propertyKeys_function_type propertyKeys_function_value( &::SireMol::Segment::propertyKeys );
             
             Segment_exposer.def( 
@@ -306,7 +305,7 @@ void register_Segment_class(){
         }
         { //::SireMol::Segment::selectedAll
         
-            typedef bool ( ::SireMol::Segment::*selectedAll_function_type )(  ) const;
+            typedef bool ( ::SireMol::Segment::*selectedAll_function_type)(  ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::Segment::selectedAll );
             
             Segment_exposer.def( 
@@ -316,7 +315,7 @@ void register_Segment_class(){
         }
         { //::SireMol::Segment::selection
         
-            typedef ::SireMol::AtomSelection ( ::SireMol::Segment::*selection_function_type )(  ) const;
+            typedef ::SireMol::AtomSelection ( ::SireMol::Segment::*selection_function_type)(  ) const;
             selection_function_type selection_function_value( &::SireMol::Segment::selection );
             
             Segment_exposer.def( 
@@ -326,7 +325,7 @@ void register_Segment_class(){
         }
         { //::SireMol::Segment::selector
         
-            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Segment::*selector_function_type )(  ) const;
+            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Segment::*selector_function_type)(  ) const;
             selector_function_type selector_function_value( &::SireMol::Segment::selector );
             
             Segment_exposer.def( 
@@ -336,7 +335,7 @@ void register_Segment_class(){
         }
         { //::SireMol::Segment::toString
         
-            typedef ::QString ( ::SireMol::Segment::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::Segment::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::Segment::toString );
             
             Segment_exposer.def( 
@@ -356,7 +355,7 @@ void register_Segment_class(){
         }
         { //::SireMol::Segment::update
         
-            typedef void ( ::SireMol::Segment::*update_function_type )( ::SireMol::MoleculeData const & ) ;
+            typedef void ( ::SireMol::Segment::*update_function_type)( ::SireMol::MoleculeData const & ) ;
             update_function_type update_function_value( &::SireMol::Segment::update );
             
             Segment_exposer.def( 

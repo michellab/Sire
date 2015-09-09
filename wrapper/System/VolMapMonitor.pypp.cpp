@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "VolMapMonitor.pypp.hpp"
 
 namespace bp = boost::python;
@@ -58,7 +57,7 @@ void register_VolMapMonitor_class(){
         VolMapMonitor_exposer.def( bp::init< SireSystem::VolMapMonitor const & >(( bp::arg("other") )) );
         { //::SireSystem::VolMapMonitor::averageOccupancy
         
-            typedef ::QVector< float > ( ::SireSystem::VolMapMonitor::*averageOccupancy_function_type )(  ) const;
+            typedef ::QVector< float > ( ::SireSystem::VolMapMonitor::*averageOccupancy_function_type)(  ) const;
             averageOccupancy_function_type averageOccupancy_function_value( &::SireSystem::VolMapMonitor::averageOccupancy );
             
             VolMapMonitor_exposer.def( 
@@ -68,7 +67,7 @@ void register_VolMapMonitor_class(){
         }
         { //::SireSystem::VolMapMonitor::clearStatistics
         
-            typedef void ( ::SireSystem::VolMapMonitor::*clearStatistics_function_type )(  ) ;
+            typedef void ( ::SireSystem::VolMapMonitor::*clearStatistics_function_type)(  ) ;
             clearStatistics_function_type clearStatistics_function_value( &::SireSystem::VolMapMonitor::clearStatistics );
             
             VolMapMonitor_exposer.def( 
@@ -78,7 +77,7 @@ void register_VolMapMonitor_class(){
         }
         { //::SireSystem::VolMapMonitor::gridInfo
         
-            typedef ::SireVol::GridInfo ( ::SireSystem::VolMapMonitor::*gridInfo_function_type )(  ) const;
+            typedef ::SireVol::GridInfo ( ::SireSystem::VolMapMonitor::*gridInfo_function_type)(  ) const;
             gridInfo_function_type gridInfo_function_value( &::SireSystem::VolMapMonitor::gridInfo );
             
             VolMapMonitor_exposer.def( 
@@ -88,7 +87,7 @@ void register_VolMapMonitor_class(){
         }
         { //::SireSystem::VolMapMonitor::gridSpacing
         
-            typedef ::SireUnits::Dimension::Length ( ::SireSystem::VolMapMonitor::*gridSpacing_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireSystem::VolMapMonitor::*gridSpacing_function_type)(  ) const;
             gridSpacing_function_type gridSpacing_function_value( &::SireSystem::VolMapMonitor::gridSpacing );
             
             VolMapMonitor_exposer.def( 
@@ -98,18 +97,18 @@ void register_VolMapMonitor_class(){
         }
         { //::SireSystem::VolMapMonitor::group
         
-            typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::VolMapMonitor::*group_function_type )(  ) const;
+            typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::VolMapMonitor::*group_function_type)(  ) const;
             group_function_type group_function_value( &::SireSystem::VolMapMonitor::group );
             
             VolMapMonitor_exposer.def( 
                 "group"
                 , group_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::VolMapMonitor::map
         
-            typedef ::SireBase::PropertyMap ( ::SireSystem::VolMapMonitor::*map_function_type )(  ) const;
+            typedef ::SireBase::PropertyMap ( ::SireSystem::VolMapMonitor::*map_function_type)(  ) const;
             map_function_type map_function_value( &::SireSystem::VolMapMonitor::map );
             
             VolMapMonitor_exposer.def( 
@@ -119,7 +118,7 @@ void register_VolMapMonitor_class(){
         }
         { //::SireSystem::VolMapMonitor::monitor
         
-            typedef void ( ::SireSystem::VolMapMonitor::*monitor_function_type )( ::SireSystem::System & ) ;
+            typedef void ( ::SireSystem::VolMapMonitor::*monitor_function_type)( ::SireSystem::System & ) ;
             monitor_function_type monitor_function_value( &::SireSystem::VolMapMonitor::monitor );
             
             VolMapMonitor_exposer.def( 
@@ -130,7 +129,7 @@ void register_VolMapMonitor_class(){
         }
         { //::SireSystem::VolMapMonitor::nSamples
         
-            typedef ::qint64 ( ::SireSystem::VolMapMonitor::*nSamples_function_type )(  ) const;
+            typedef ::qint64 ( ::SireSystem::VolMapMonitor::*nSamples_function_type)(  ) const;
             nSamples_function_type nSamples_function_value( &::SireSystem::VolMapMonitor::nSamples );
             
             VolMapMonitor_exposer.def( 
@@ -141,7 +140,7 @@ void register_VolMapMonitor_class(){
         VolMapMonitor_exposer.def( bp::self != bp::self );
         { //::SireSystem::VolMapMonitor::operator=
         
-            typedef ::SireSystem::VolMapMonitor & ( ::SireSystem::VolMapMonitor::*assign_function_type )( ::SireSystem::VolMapMonitor const & ) ;
+            typedef ::SireSystem::VolMapMonitor & ( ::SireSystem::VolMapMonitor::*assign_function_type)( ::SireSystem::VolMapMonitor const & ) ;
             assign_function_type assign_function_value( &::SireSystem::VolMapMonitor::operator= );
             
             VolMapMonitor_exposer.def( 
@@ -154,7 +153,7 @@ void register_VolMapMonitor_class(){
         VolMapMonitor_exposer.def( bp::self == bp::self );
         { //::SireSystem::VolMapMonitor::setGridSpacing
         
-            typedef void ( ::SireSystem::VolMapMonitor::*setGridSpacing_function_type )( ::SireUnits::Dimension::Length const & ) ;
+            typedef void ( ::SireSystem::VolMapMonitor::*setGridSpacing_function_type)( ::SireUnits::Dimension::Length const & ) ;
             setGridSpacing_function_type setGridSpacing_function_value( &::SireSystem::VolMapMonitor::setGridSpacing );
             
             VolMapMonitor_exposer.def( 
@@ -165,7 +164,7 @@ void register_VolMapMonitor_class(){
         }
         { //::SireSystem::VolMapMonitor::setGroup
         
-            typedef void ( ::SireSystem::VolMapMonitor::*setGroup_function_type )( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireSystem::VolMapMonitor::*setGroup_function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
             setGroup_function_type setGroup_function_value( &::SireSystem::VolMapMonitor::setGroup );
             
             VolMapMonitor_exposer.def( 
@@ -176,7 +175,7 @@ void register_VolMapMonitor_class(){
         }
         { //::SireSystem::VolMapMonitor::setPropertyMap
         
-            typedef void ( ::SireSystem::VolMapMonitor::*setPropertyMap_function_type )( ::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireSystem::VolMapMonitor::*setPropertyMap_function_type)( ::SireBase::PropertyMap const & ) ;
             setPropertyMap_function_type setPropertyMap_function_value( &::SireSystem::VolMapMonitor::setPropertyMap );
             
             VolMapMonitor_exposer.def( 
@@ -187,7 +186,7 @@ void register_VolMapMonitor_class(){
         }
         { //::SireSystem::VolMapMonitor::setSkipLightAtoms
         
-            typedef void ( ::SireSystem::VolMapMonitor::*setSkipLightAtoms_function_type )( bool ) ;
+            typedef void ( ::SireSystem::VolMapMonitor::*setSkipLightAtoms_function_type)( bool ) ;
             setSkipLightAtoms_function_type setSkipLightAtoms_function_value( &::SireSystem::VolMapMonitor::setSkipLightAtoms );
             
             VolMapMonitor_exposer.def( 
@@ -198,7 +197,7 @@ void register_VolMapMonitor_class(){
         }
         { //::SireSystem::VolMapMonitor::skippingLightAtoms
         
-            typedef bool ( ::SireSystem::VolMapMonitor::*skippingLightAtoms_function_type )(  ) const;
+            typedef bool ( ::SireSystem::VolMapMonitor::*skippingLightAtoms_function_type)(  ) const;
             skippingLightAtoms_function_type skippingLightAtoms_function_value( &::SireSystem::VolMapMonitor::skippingLightAtoms );
             
             VolMapMonitor_exposer.def( 
@@ -208,7 +207,7 @@ void register_VolMapMonitor_class(){
         }
         { //::SireSystem::VolMapMonitor::toString
         
-            typedef ::QString ( ::SireSystem::VolMapMonitor::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireSystem::VolMapMonitor::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireSystem::VolMapMonitor::toString );
             
             VolMapMonitor_exposer.def( 
@@ -228,7 +227,7 @@ void register_VolMapMonitor_class(){
         }
         { //::SireSystem::VolMapMonitor::volumeMap
         
-            typedef ::SireMol::VolumeMap ( ::SireSystem::VolMapMonitor::*volumeMap_function_type )(  ) const;
+            typedef ::SireMol::VolumeMap ( ::SireSystem::VolMapMonitor::*volumeMap_function_type)(  ) const;
             volumeMap_function_type volumeMap_function_value( &::SireSystem::VolMapMonitor::volumeMap );
             
             VolMapMonitor_exposer.def( 
@@ -238,7 +237,7 @@ void register_VolMapMonitor_class(){
         }
         { //::SireSystem::VolMapMonitor::what
         
-            typedef char const * ( ::SireSystem::VolMapMonitor::*what_function_type )(  ) const;
+            typedef char const * ( ::SireSystem::VolMapMonitor::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireSystem::VolMapMonitor::what );
             
             VolMapMonitor_exposer.def( 

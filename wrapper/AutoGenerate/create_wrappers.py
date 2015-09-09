@@ -153,10 +153,10 @@ def find_class(mb, classname):
                if str(alias).find("%s [class]" % classname) != -1 or \
                   str(alias).find("%s [struct]" % classname) != -1 or \
                   str(alias).find("%s [typedef]" % classname) != -1:
-                   print "Found %s as alias %s of %s" % (classname, clas, alias)
+                   print("Found %s as alias %s of %s" % (classname, clas, alias))
                    return clas
 
-   print "Cannot find the class %s" % classname
+   print("Cannot find the class %s" % classname)
    raise "Cannot find the class %s" % classname
 
 def export_function(mb, function, includes):
@@ -178,7 +178,7 @@ def export_function(mb, function, includes):
                    for include in includes:
                        f.add_declaration_code("#include %s" % include)
    except:
-       print "Something went wrong exporting %s" % name
+       print("Something went wrong exporting %s" % name)
 
 def has_clone_function(t):
     c = None
@@ -187,7 +187,7 @@ def has_clone_function(t):
         fullname = string.join(str(t.base).split(" ")[0:-1])
         c = find_class(mb, fullname)
     except:
-        print "WARNING!!! Couldn't find the class for %s" % (t)
+        print("WARNING!!! Couldn't find the class for %s" % (t))
         return False
 
     try:
@@ -291,14 +291,14 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
            if o.call_policies is None:
                o.exclude()
    except:
-       print "Class %s has no operators" % classname
+       print("Class %s has no operators" % classname)
 
    #run any class specific code
    if (classname in special_code):
-     print "Running special code for %s" % classname
+     print("Running special code for %s" % classname)
      special_code[classname](c)
    else:
-     print "No special code needed for %s" % classname
+     print("No special code needed for %s" % classname)
 
    #if this is a noncopyable class then remove all constructors!
    if c.noncopyable:
@@ -323,7 +323,7 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
                   if not (class_name in has_copy_function):
                       has_copy_function[class_name] = True
 
-                      print "Creating a copy function for class %s" % class_name
+                      print("Creating a copy function for class %s" % class_name)
                       made_copy_function = True
 
                       c.add_declaration_code( \
@@ -396,7 +396,7 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
 
    #provide an alias for this class
    if (classname in aliases):
-      c.alias = string.join( aliases[classname].split("::")[1:] )
+      c.alias = " ".join( aliases[classname].split("::")[1:] )
 
 def register_implicit_conversions(mb, implicitly_convertible):
     """This function sets the wrapper generator to use only the implicit conversions
@@ -464,36 +464,36 @@ def writePropertyWrappers(mb, sourcedir, active_headers):
    #create the files
    FILE = open("%s_properties.h" % sourcedir, "w")
 
-   print >>FILE,"#ifndef %s_PROPERTIES_H" % sourcedir
-   print >>FILE,"#define %s_PROPERTIES_H\n" % sourcedir
-   print >>FILE,"void register_%s_properties();\n" % sourcedir
-   print >>FILE,"#endif"
+   print("#ifndef %s_PROPERTIES_H" % sourcedir, file=FILE)
+   print("#define %s_PROPERTIES_H\n" % sourcedir, file=FILE)
+   print("void register_%s_properties();\n" % sourcedir, file=FILE)
+   print("#endif", file=FILE)
 
    FILE.close()
 
    FILE = open("%s_properties.cpp" % sourcedir, "w")
 
-   print >>FILE,"#include <Python.h>"
-   print >>FILE,"#include <boost/python.hpp>\n"
-   print >>FILE,"#include \"Base/convertproperty.hpp\""
-   print >>FILE,"#include \"%s_properties.h\"\n" % sourcedir
+   print("#include <Python.h>", file=FILE)
+   print("#include <boost/python.hpp>\n", file=FILE)
+   print("#include \"Base/convertproperty.hpp\"", file=FILE)
+   print("#include \"%s_properties.h\"\n" % sourcedir, file=FILE)
 
    for header in active_headers:
        active_header = active_headers[header]
        if active_header.hasProperties():
            for dependency in active_header.dependencies():
-               print >>FILE,"#include %s" % dependency
+               print("#include %s" % dependency, file=FILE)
 
-   print >>FILE,"void register_%s_properties()" % sourcedir
-   print >>FILE,"{"
+   print("void register_%s_properties()" % sourcedir, file=FILE)
+   print("{", file=FILE)
    
    for header in active_headers:
        active_header = active_headers[header]
        if active_header.hasProperties():
            for property in active_header.properties():
-               print >>FILE,"    register_property_container< %s, %s >();" % (property[0], property[1])
+               print("    register_property_container< %s, %s >();" % (property[0], property[1]), file=FILE)
 
-   print >>FILE,"}"
+   print("}", file=FILE)
 
    FILE.close()
 
@@ -513,10 +513,10 @@ if __name__ == "__main__":
     rootdir = lines[2].split()[1]
 
     #load up the dictionary of all exposed classes
-    all_exposed_classes = pickle.load( open("../classdb.data", "r") )
+    all_exposed_classes = pickle.load( open("../classdb.data", "rb") )
     
     #load up the active headers object
-    active_headers = pickle.load( open("active_headers.data", "r") )
+    active_headers = pickle.load( open("active_headers.data", "rb") )
 
     #get the special code, big classes and implicit conversions
     implicitly_convertible = []
@@ -528,30 +528,40 @@ if __name__ == "__main__":
         from special_code import *
         
     sire_include_dirs = [ rootdir, "%s/%s" % (rootdir,sourcedir) ]
-    homedir = os.getenv("HOME")
-    qtdir = "%s/sire.app/bundled/include" % homedir
+
+    # All of the headers must be installed in the pkgs/sire-*** directory
+    # - lets locate this directory
+    dir = glob( "%s/../pkgs/sire-*" % os.path.dirname(sys.executable) )
+
+    if len(dir) == 0:
+        print("Cannot find the Sire directory. Please use the python that comes with "
+              "the anaconda/miniconda python, and that you have already installed the "
+              "Sire corelib into the anaconda/miniconda distribution.")
+        sys.exit(-1)
+
+    qtdir = "%s/bundled/include" % os.path.abspath(dir[0])
     boostdir = qtdir
     gsldir = qtdir
 
     need_input = False 
 
     if (qtdir is None):
-        print "You must set the environmental variable QTDIR to the location " + \
-              "of the Qt4 header files"
+        print("You must set the environmental variable QTDIR to the location " + \
+              "of the Qt4 header files")
         need_input = True
 
     if (boostdir is None):
-        print "You must set the environmental variable BOOSTDIR to the location " + \
-              "of the boost header files"
+        print("You must set the environmental variable BOOSTDIR to the location " + \
+              "of the boost header files")
         need_input = True
 
     if (gsldir is None):
-        print "You must set the environmental variable GSLDIR to the location " + \
-              "of the GSL header files"
+        print("You must set the environmental variable GSLDIR to the location " + \
+              "of the GSL header files")
         need_input = True
 
     if (need_input):
-        print "Cannot continue as I don't know where the header files are"
+        print("Cannot continue as I don't know where the header files are")
         sys.exit(-1)
 
     qt_include_dirs = []
@@ -564,7 +574,7 @@ if __name__ == "__main__":
 
     if openmm_include_dirs is not None:
         if os.path.exists(openmm_include_dirs):
-            print("Generating wrappers including OpenMM from %s" % openmm_include_dirs)
+            print(("Generating wrappers including OpenMM from %s" % openmm_include_dirs))
             openmm_include_dirs = [ "%s/include" % openmm_include_dirs ]
         else:
             openmm_include_dirs = None
@@ -572,10 +582,10 @@ if __name__ == "__main__":
     if openmm_include_dirs is None:
         #construct a module builder that will build all of the wrappers for this module
         mb = module_builder_t( files = [ "active_headers.h" ],
-                           cflags = "-m64",
+                           cflags = "-m64 -fPIC",
                            include_paths = sire_include_dirs + qt_include_dirs +
                                            boost_include_dirs + gsl_include_dirs,
-                           define_symbols = ["GCCXML_PARSE",
+                           define_symbols = ["GCCXML_PARSE", "__PIE__",
                                              "SIRE_SKIP_INLINE_FUNCTIONS",
                                              "SIREN_SKIP_INLINE_FUNCTIONS",
                                              "SIRE_INSTANTIATE_TEMPLATES",
@@ -583,11 +593,11 @@ if __name__ == "__main__":
     else:
         #construct a module builder that will build all of the wrappers for this module
         mb = module_builder_t( files = [ "active_headers.h" ],
-                           cflags = "-m64",
+                           cflags = "-m64 -fPIC",
                            include_paths = sire_include_dirs + qt_include_dirs +
                                            boost_include_dirs + gsl_include_dirs + 
                                            openmm_include_dirs,
-                           define_symbols = ["GCCXML_PARSE",
+                           define_symbols = ["GCCXML_PARSE", "__PIE__",
                                              "SIRE_USE_OPENMM",
                                              "SIRE_SKIP_INLINE_FUNCTIONS",
                                              "SIREN_SKIP_INLINE_FUNCTIONS",
@@ -620,7 +630,7 @@ if __name__ == "__main__":
         functions = active_headers[header].functions()
 
         for clas in classes:
-            print "Trying to export the class %s" % clas
+            print("Trying to export the class %s" % clas)
             export_class(mb, clas, aliases, includes, special_code)
 
         for func in functions:
@@ -635,33 +645,33 @@ if __name__ == "__main__":
 
         FILE = open("%s_registrars.h" % sourcedir, "w")
 
-        print >>FILE,r"//WARNING - AUTOGENERATED FILE - CONTENTS WILL BE OVERWRITTEN!"
-        print >>FILE,"#ifndef PYWRAP_%s_REGISTRARS_H" % sourcedir
-        print >>FILE,"#define PYWRAP_%s_REGISTRARS_H" % sourcedir
-        print >>FILE,"void register_%s_objects();" % sourcedir
-        print >>FILE,"#endif\n"
+        print(r"//WARNING - AUTOGENERATED FILE - CONTENTS WILL BE OVERWRITTEN!", file=FILE)
+        print("#ifndef PYWRAP_%s_REGISTRARS_H" % sourcedir, file=FILE)
+        print("#define PYWRAP_%s_REGISTRARS_H" % sourcedir, file=FILE)
+        print("void register_%s_objects();" % sourcedir, file=FILE)
+        print("#endif\n", file=FILE)
         FILE.close()
 
         FILE = open("%s_registrars.cpp" % sourcedir, "w")
 
-        print >>FILE,r"//WARNING - AUTOGENERATED FILE - CONTENTS WILL BE OVERWRITTEN!"
-        print >>FILE,"#include <Python.h>\n"
-        print >>FILE,"#include \"%s_registrars.h\"\n" % sourcedir
+        print(r"//WARNING - AUTOGENERATED FILE - CONTENTS WILL BE OVERWRITTEN!", file=FILE)
+        print("#include <Python.h>\n", file=FILE)
+        print("#include \"%s_registrars.h\"\n" % sourcedir, file=FILE)
         
         for header in metaheaders:
-            print >>FILE,"#include \"%s\"" % header
+            print("#include \"%s\"" % header, file=FILE)
 
-        print >>FILE,"\n#include \"Helpers/objectregistry.hpp\"\n"
+        print("\n#include \"Helpers/objectregistry.hpp\"\n", file=FILE)
 
-        print >>FILE,"void register_%s_objects()\n{\n" % sourcedir
+        print("void register_%s_objects()\n{\n" % sourcedir, file=FILE)
 
         for header in metaheaders:
             metatypes = active_headers[header].metaTypes()
 
             for metatype in metatypes:
-                print >>FILE,"    ObjectRegistry::registerConverterFor< %s >();" % metatype
+                print("    ObjectRegistry::registerConverterFor< %s >();" % metatype, file=FILE)
 
-        print >>FILE,"\n}\n"
+        print("\n}\n", file=FILE)
 
         FILE.close()
 
@@ -685,24 +695,24 @@ if __name__ == "__main__":
     #now write a CMakeFile that contains all of the autogenerated files
     FILE = open("CMakeAutogenFile.txt", "w")
 
-    print >>FILE,"# WARNING - AUTOGENERATED FILE - CONTENTS WILL BE OVERWRITTEN!"
-    print >>FILE,"set ( PYPP_SOURCES"
+    print("# WARNING - AUTOGENERATED FILE - CONTENTS WILL BE OVERWRITTEN!", file=FILE)
+    print("set ( PYPP_SOURCES", file=FILE)
 
     pyppfiles = glob("*.pypp.cpp")
 
     for pyppfile in pyppfiles:
-        print >>FILE,"       %s" % pyppfile
+        print("       %s" % pyppfile, file=FILE)
 
     if os.path.exists("%s_containers.cpp" % sourcedir):
-        print >>FILE,"       %s_containers.cpp" % sourcedir
+        print("       %s_containers.cpp" % sourcedir, file=FILE)
 
     if os.path.exists("%s_properties.cpp" % sourcedir):
-        print >>FILE,"       %s_properties.cpp" % sourcedir
+        print("       %s_properties.cpp" % sourcedir, file=FILE)
 
     if os.path.exists("%s_registrars.cpp" % sourcedir):
-        print >>FILE,"       %s_registrars.cpp" % sourcedir
+        print("       %s_registrars.cpp" % sourcedir, file=FILE)
 
-    print >>FILE,"    )"
+    print("    )", file=FILE)
 
     FILE.close()
 

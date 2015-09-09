@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "BondSymbols.pypp.hpp"
 
 namespace bp = boost::python;
@@ -44,13 +43,13 @@ void register_BondSymbols_class(){
         bp::scope BondSymbols_scope( BondSymbols_exposer );
         { //::SireMM::BondSymbols::r
         
-            typedef ::SireCAS::Symbol const & ( ::SireMM::BondSymbols::*r_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMM::BondSymbols::*r_function_type)(  ) const;
             r_function_type r_function_value( &::SireMM::BondSymbols::r );
             
             BondSymbols_exposer.def( 
                 "r"
                 , r_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         BondSymbols_exposer.def( "__copy__", &__copy__);

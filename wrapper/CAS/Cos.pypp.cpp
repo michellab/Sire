@@ -37,7 +37,7 @@ void register_Cos_class(){
         Cos_exposer.def( bp::init< SireCAS::Cos const & >(( bp::arg("other") )) );
         { //::SireCAS::Cos::evaluate
         
-            typedef double ( ::SireCAS::Cos::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::Cos::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Cos::evaluate );
             
             Cos_exposer.def( 
@@ -48,7 +48,7 @@ void register_Cos_class(){
         }
         { //::SireCAS::Cos::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::Cos::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::Cos::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Cos::evaluate );
             
             Cos_exposer.def( 
@@ -70,7 +70,7 @@ void register_Cos_class(){
         }
         { //::SireCAS::Cos::what
         
-            typedef char const * ( ::SireCAS::Cos::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::Cos::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::Cos::what );
             
             Cos_exposer.def( 

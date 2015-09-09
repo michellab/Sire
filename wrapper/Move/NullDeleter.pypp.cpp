@@ -38,7 +38,7 @@ void register_NullDeleter_class(){
         NullDeleter_exposer.def( bp::init< SireMove::NullDeleter const & >(( bp::arg("other") )) );
         { //::SireMove::NullDeleter::deleteFrom
         
-            typedef ::boost::tuples::tuple< SireMol::Molecule, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMove::NullDeleter::*deleteFrom_function_type )( ::SireSystem::System & ) ;
+            typedef ::boost::tuples::tuple< SireMol::Molecule, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMove::NullDeleter::*deleteFrom_function_type)( ::SireSystem::System & ) ;
             deleteFrom_function_type deleteFrom_function_value( &::SireMove::NullDeleter::deleteFrom );
             
             NullDeleter_exposer.def( 
@@ -49,7 +49,7 @@ void register_NullDeleter_class(){
         }
         { //::SireMove::NullDeleter::generator
         
-            typedef ::SireMaths::RanGenerator const & ( ::SireMove::NullDeleter::*generator_function_type )(  ) const;
+            typedef ::SireMaths::RanGenerator const & ( ::SireMove::NullDeleter::*generator_function_type)(  ) const;
             generator_function_type generator_function_value( &::SireMove::NullDeleter::generator );
             
             NullDeleter_exposer.def( 
@@ -61,7 +61,7 @@ void register_NullDeleter_class(){
         NullDeleter_exposer.def( bp::self != bp::self );
         { //::SireMove::NullDeleter::operator=
         
-            typedef ::SireMove::NullDeleter & ( ::SireMove::NullDeleter::*assign_function_type )( ::SireMove::NullDeleter const & ) ;
+            typedef ::SireMove::NullDeleter & ( ::SireMove::NullDeleter::*assign_function_type)( ::SireMove::NullDeleter const & ) ;
             assign_function_type assign_function_value( &::SireMove::NullDeleter::operator= );
             
             NullDeleter_exposer.def( 
@@ -74,7 +74,7 @@ void register_NullDeleter_class(){
         NullDeleter_exposer.def( bp::self == bp::self );
         { //::SireMove::NullDeleter::setGenerator
         
-            typedef void ( ::SireMove::NullDeleter::*setGenerator_function_type )( ::SireMaths::RanGenerator const & ) ;
+            typedef void ( ::SireMove::NullDeleter::*setGenerator_function_type)( ::SireMaths::RanGenerator const & ) ;
             setGenerator_function_type setGenerator_function_value( &::SireMove::NullDeleter::setGenerator );
             
             NullDeleter_exposer.def( 

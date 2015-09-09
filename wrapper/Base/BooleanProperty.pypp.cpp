@@ -34,7 +34,7 @@ void register_BooleanProperty_class(){
         BooleanProperty_exposer.def( bp::self != bp::self );
         { //::SireBase::BooleanProperty::operator=
         
-            typedef ::SireBase::BooleanProperty & ( ::SireBase::BooleanProperty::*assign_function_type )( ::SireBase::BooleanProperty const & ) ;
+            typedef ::SireBase::BooleanProperty & ( ::SireBase::BooleanProperty::*assign_function_type)( ::SireBase::BooleanProperty const & ) ;
             assign_function_type assign_function_value( &::SireBase::BooleanProperty::operator= );
             
             BooleanProperty_exposer.def( 
@@ -47,7 +47,7 @@ void register_BooleanProperty_class(){
         BooleanProperty_exposer.def( bp::self == bp::self );
         { //::SireBase::BooleanProperty::toString
         
-            typedef ::QString ( ::SireBase::BooleanProperty::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireBase::BooleanProperty::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireBase::BooleanProperty::toString );
             
             BooleanProperty_exposer.def( 
@@ -67,7 +67,7 @@ void register_BooleanProperty_class(){
         }
         { //::SireBase::BooleanProperty::value
         
-            typedef bool ( ::SireBase::BooleanProperty::*value_function_type )(  ) const;
+            typedef bool ( ::SireBase::BooleanProperty::*value_function_type)(  ) const;
             value_function_type value_function_value( &::SireBase::BooleanProperty::value );
             
             BooleanProperty_exposer.def( 

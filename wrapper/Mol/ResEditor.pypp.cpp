@@ -57,7 +57,7 @@ void register_ResEditor_class(){
         ResEditor_exposer.def( bp::init< SireMol::ResEditor const & >(( bp::arg("other") )) );
         { //::SireMol::ResEditor::add
         
-            typedef ::SireMol::AtomStructureEditor ( ::SireMol::ResEditor::*add_function_type )( ::SireMol::AtomName const & ) const;
+            typedef ::SireMol::AtomStructureEditor ( ::SireMol::ResEditor::*add_function_type)( ::SireMol::AtomName const & ) const;
             add_function_type add_function_value( &::SireMol::ResEditor::add );
             
             ResEditor_exposer.def( 
@@ -68,7 +68,7 @@ void register_ResEditor_class(){
         }
         { //::SireMol::ResEditor::add
         
-            typedef ::SireMol::AtomStructureEditor ( ::SireMol::ResEditor::*add_function_type )( ::SireMol::AtomNum ) const;
+            typedef ::SireMol::AtomStructureEditor ( ::SireMol::ResEditor::*add_function_type)( ::SireMol::AtomNum ) const;
             add_function_type add_function_value( &::SireMol::ResEditor::add );
             
             ResEditor_exposer.def( 
@@ -79,7 +79,7 @@ void register_ResEditor_class(){
         }
         { //::SireMol::ResEditor::commit
         
-            typedef ::SireMol::Residue ( ::SireMol::ResEditor::*commit_function_type )(  ) const;
+            typedef ::SireMol::Residue ( ::SireMol::ResEditor::*commit_function_type)(  ) const;
             commit_function_type commit_function_value( &::SireMol::ResEditor::commit );
             
             ResEditor_exposer.def( 
@@ -89,7 +89,7 @@ void register_ResEditor_class(){
         }
         { //::SireMol::ResEditor::operator=
         
-            typedef ::SireMol::ResEditor & ( ::SireMol::ResEditor::*assign_function_type )( ::SireMol::Residue const & ) ;
+            typedef ::SireMol::ResEditor & ( ::SireMol::ResEditor::*assign_function_type)( ::SireMol::Residue const & ) ;
             assign_function_type assign_function_value( &::SireMol::ResEditor::operator= );
             
             ResEditor_exposer.def( 
@@ -101,7 +101,7 @@ void register_ResEditor_class(){
         }
         { //::SireMol::ResEditor::operator=
         
-            typedef ::SireMol::ResEditor & ( ::SireMol::ResEditor::*assign_function_type )( ::SireMol::ResEditor const & ) ;
+            typedef ::SireMol::ResEditor & ( ::SireMol::ResEditor::*assign_function_type)( ::SireMol::ResEditor const & ) ;
             assign_function_type assign_function_value( &::SireMol::ResEditor::operator= );
             
             ResEditor_exposer.def( 
@@ -113,7 +113,7 @@ void register_ResEditor_class(){
         }
         { //::SireMol::ResEditor::reindex
         
-            typedef ::SireMol::ResStructureEditor ( ::SireMol::ResEditor::*reindex_function_type )( ::SireMol::ResIdx ) const;
+            typedef ::SireMol::ResStructureEditor ( ::SireMol::ResEditor::*reindex_function_type)( ::SireMol::ResIdx ) const;
             reindex_function_type reindex_function_value( &::SireMol::ResEditor::reindex );
             
             ResEditor_exposer.def( 
@@ -124,7 +124,7 @@ void register_ResEditor_class(){
         }
         { //::SireMol::ResEditor::remove
         
-            typedef ::SireMol::MolStructureEditor ( ::SireMol::ResEditor::*remove_function_type )(  ) const;
+            typedef ::SireMol::MolStructureEditor ( ::SireMol::ResEditor::*remove_function_type)(  ) const;
             remove_function_type remove_function_value( &::SireMol::ResEditor::remove );
             
             ResEditor_exposer.def( 
@@ -134,7 +134,7 @@ void register_ResEditor_class(){
         }
         { //::SireMol::ResEditor::remove
         
-            typedef ::SireMol::ResStructureEditor ( ::SireMol::ResEditor::*remove_function_type )( ::SireMol::AtomID const & ) const;
+            typedef ::SireMol::ResStructureEditor ( ::SireMol::ResEditor::*remove_function_type)( ::SireMol::AtomID const & ) const;
             remove_function_type remove_function_value( &::SireMol::ResEditor::remove );
             
             ResEditor_exposer.def( 
@@ -145,7 +145,7 @@ void register_ResEditor_class(){
         }
         { //::SireMol::ResEditor::remove
         
-            typedef ::SireMol::ResStructureEditor ( ::SireMol::ResEditor::*remove_function_type )( int ) const;
+            typedef ::SireMol::ResStructureEditor ( ::SireMol::ResEditor::*remove_function_type)( int ) const;
             remove_function_type remove_function_value( &::SireMol::ResEditor::remove );
             
             ResEditor_exposer.def( 
@@ -156,7 +156,7 @@ void register_ResEditor_class(){
         }
         { //::SireMol::ResEditor::rename
         
-            typedef ::SireMol::ResEditor & ( ::SireMol::ResEditor::*rename_function_type )( ::SireMol::ResName const & ) ;
+            typedef ::SireMol::ResEditor & ( ::SireMol::ResEditor::*rename_function_type)( ::SireMol::ResName const & ) ;
             rename_function_type rename_function_value( &::SireMol::ResEditor::rename );
             
             ResEditor_exposer.def( 
@@ -168,7 +168,7 @@ void register_ResEditor_class(){
         }
         { //::SireMol::ResEditor::renumber
         
-            typedef ::SireMol::ResEditor & ( ::SireMol::ResEditor::*renumber_function_type )( ::SireMol::ResNum ) ;
+            typedef ::SireMol::ResEditor & ( ::SireMol::ResEditor::*renumber_function_type)( ::SireMol::ResNum ) ;
             renumber_function_type renumber_function_value( &::SireMol::ResEditor::renumber );
             
             ResEditor_exposer.def( 
@@ -180,7 +180,7 @@ void register_ResEditor_class(){
         }
         { //::SireMol::ResEditor::reparent
         
-            typedef ::SireMol::ResStructureEditor ( ::SireMol::ResEditor::*reparent_function_type )( ::SireMol::ChainID const & ) const;
+            typedef ::SireMol::ResStructureEditor ( ::SireMol::ResEditor::*reparent_function_type)( ::SireMol::ChainID const & ) const;
             reparent_function_type reparent_function_value( &::SireMol::ResEditor::reparent );
             
             ResEditor_exposer.def( 
@@ -191,7 +191,7 @@ void register_ResEditor_class(){
         }
         { //::SireMol::ResEditor::toString
         
-            typedef ::QString ( ::SireMol::ResEditor::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::ResEditor::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::ResEditor::toString );
             
             ResEditor_exposer.def( 
@@ -201,7 +201,7 @@ void register_ResEditor_class(){
         }
         { //::SireMol::ResEditor::transfer
         
-            typedef ::SireMol::ResStructureEditor ( ::SireMol::ResEditor::*transfer_function_type )( ::SireMol::AtomID const &,::SireMol::ResID const & ) const;
+            typedef ::SireMol::ResStructureEditor ( ::SireMol::ResEditor::*transfer_function_type)( ::SireMol::AtomID const &,::SireMol::ResID const & ) const;
             transfer_function_type transfer_function_value( &::SireMol::ResEditor::transfer );
             
             ResEditor_exposer.def( 
@@ -212,7 +212,7 @@ void register_ResEditor_class(){
         }
         { //::SireMol::ResEditor::transfer
         
-            typedef ::SireMol::ResStructureEditor ( ::SireMol::ResEditor::*transfer_function_type )( int,::SireMol::ResID const & ) const;
+            typedef ::SireMol::ResStructureEditor ( ::SireMol::ResEditor::*transfer_function_type)( int,::SireMol::ResID const & ) const;
             transfer_function_type transfer_function_value( &::SireMol::ResEditor::transfer );
             
             ResEditor_exposer.def( 
@@ -223,7 +223,7 @@ void register_ResEditor_class(){
         }
         { //::SireMol::ResEditor::transferAll
         
-            typedef ::SireMol::ResStructureEditor ( ::SireMol::ResEditor::*transferAll_function_type )( ::SireMol::ResID const & ) const;
+            typedef ::SireMol::ResStructureEditor ( ::SireMol::ResEditor::*transferAll_function_type)( ::SireMol::ResID const & ) const;
             transferAll_function_type transferAll_function_value( &::SireMol::ResEditor::transferAll );
             
             ResEditor_exposer.def( 

@@ -61,7 +61,7 @@ void register_MolEditorBase_class(){
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::atom
         
             typedef SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > exported_class_t;
-            typedef ::SireMol::AtomEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*atom_function_type )(  ) ;
+            typedef ::SireMol::AtomEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*atom_function_type)(  ) ;
             atom_function_type atom_function_value( &::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::atom );
             
             MolEditorBase_exposer.def( 
@@ -72,7 +72,7 @@ void register_MolEditorBase_class(){
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::atom
         
             typedef SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > exported_class_t;
-            typedef ::SireMol::AtomEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*atom_function_type )( ::SireMol::AtomID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::AtomEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*atom_function_type)( ::SireMol::AtomID const &,::SireBase::PropertyMap const & ) ;
             atom_function_type atom_function_value( &::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::atom );
             
             MolEditorBase_exposer.def( 
@@ -84,7 +84,7 @@ void register_MolEditorBase_class(){
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::chain
         
             typedef SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > exported_class_t;
-            typedef ::SireMol::ChainEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*chain_function_type )(  ) ;
+            typedef ::SireMol::ChainEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*chain_function_type)(  ) ;
             chain_function_type chain_function_value( &::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::chain );
             
             MolEditorBase_exposer.def( 
@@ -95,7 +95,7 @@ void register_MolEditorBase_class(){
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::chain
         
             typedef SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > exported_class_t;
-            typedef ::SireMol::ChainEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*chain_function_type )( ::SireMol::ChainID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::ChainEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*chain_function_type)( ::SireMol::ChainID const &,::SireBase::PropertyMap const & ) ;
             chain_function_type chain_function_value( &::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::chain );
             
             MolEditorBase_exposer.def( 
@@ -107,7 +107,7 @@ void register_MolEditorBase_class(){
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::cutGroup
         
             typedef SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > exported_class_t;
-            typedef ::SireMol::CGEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*cutGroup_function_type )(  ) ;
+            typedef ::SireMol::CGEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*cutGroup_function_type)(  ) ;
             cutGroup_function_type cutGroup_function_value( &::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::cutGroup );
             
             MolEditorBase_exposer.def( 
@@ -118,7 +118,7 @@ void register_MolEditorBase_class(){
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::cutGroup
         
             typedef SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > exported_class_t;
-            typedef ::SireMol::CGEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*cutGroup_function_type )( ::SireMol::CGID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::CGEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*cutGroup_function_type)( ::SireMol::CGID const &,::SireBase::PropertyMap const & ) ;
             cutGroup_function_type cutGroup_function_value( &::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::cutGroup );
             
             MolEditorBase_exposer.def( 
@@ -130,7 +130,7 @@ void register_MolEditorBase_class(){
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::molecule
         
             typedef SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > exported_class_t;
-            typedef ::SireMol::MolEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*molecule_function_type )(  ) ;
+            typedef ::SireMol::MolEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*molecule_function_type)(  ) ;
             molecule_function_type molecule_function_value( &::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::molecule );
             
             MolEditorBase_exposer.def( 
@@ -141,7 +141,7 @@ void register_MolEditorBase_class(){
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::operator=
         
             typedef SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > exported_class_t;
-            typedef ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > & ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*assign_function_type )( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > const & ) ;
+            typedef ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > & ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*assign_function_type)( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > const & ) ;
             assign_function_type assign_function_value( &::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::operator= );
             
             MolEditorBase_exposer.def( 
@@ -154,7 +154,7 @@ void register_MolEditorBase_class(){
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::operator=
         
             typedef SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > exported_class_t;
-            typedef ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > & ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*assign_function_type )( ::SireMol::Molecule const & ) ;
+            typedef ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > & ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*assign_function_type)( ::SireMol::Molecule const & ) ;
             assign_function_type assign_function_value( &::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::operator= );
             
             MolEditorBase_exposer.def( 
@@ -167,7 +167,7 @@ void register_MolEditorBase_class(){
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::removeMetadata
         
             typedef SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > exported_class_t;
-            typedef ::SireMol::MolEditor & ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*removeMetadata_function_type )( ::SireBase::PropertyName const & ) ;
+            typedef ::SireMol::MolEditor & ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*removeMetadata_function_type)( ::SireBase::PropertyName const & ) ;
             removeMetadata_function_type removeMetadata_function_value( &::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::removeMetadata );
             
             MolEditorBase_exposer.def( 
@@ -180,7 +180,7 @@ void register_MolEditorBase_class(){
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::removeMetadata
         
             typedef SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > exported_class_t;
-            typedef ::SireMol::MolEditor & ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*removeMetadata_function_type )( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) ;
+            typedef ::SireMol::MolEditor & ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*removeMetadata_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) ;
             removeMetadata_function_type removeMetadata_function_value( &::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::removeMetadata );
             
             MolEditorBase_exposer.def( 
@@ -193,7 +193,7 @@ void register_MolEditorBase_class(){
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::removeProperty
         
             typedef SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > exported_class_t;
-            typedef ::SireMol::MolEditor & ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*removeProperty_function_type )( ::SireBase::PropertyName const & ) ;
+            typedef ::SireMol::MolEditor & ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*removeProperty_function_type)( ::SireBase::PropertyName const & ) ;
             removeProperty_function_type removeProperty_function_value( &::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::removeProperty );
             
             MolEditorBase_exposer.def( 
@@ -206,7 +206,7 @@ void register_MolEditorBase_class(){
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::residue
         
             typedef SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > exported_class_t;
-            typedef ::SireMol::ResEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*residue_function_type )(  ) ;
+            typedef ::SireMol::ResEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*residue_function_type)(  ) ;
             residue_function_type residue_function_value( &::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::residue );
             
             MolEditorBase_exposer.def( 
@@ -217,7 +217,7 @@ void register_MolEditorBase_class(){
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::residue
         
             typedef SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > exported_class_t;
-            typedef ::SireMol::ResEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*residue_function_type )( ::SireMol::ResID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::ResEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*residue_function_type)( ::SireMol::ResID const &,::SireBase::PropertyMap const & ) ;
             residue_function_type residue_function_value( &::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::residue );
             
             MolEditorBase_exposer.def( 
@@ -229,7 +229,7 @@ void register_MolEditorBase_class(){
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::segment
         
             typedef SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > exported_class_t;
-            typedef ::SireMol::SegEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*segment_function_type )(  ) ;
+            typedef ::SireMol::SegEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*segment_function_type)(  ) ;
             segment_function_type segment_function_value( &::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::segment );
             
             MolEditorBase_exposer.def( 
@@ -240,7 +240,7 @@ void register_MolEditorBase_class(){
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::segment
         
             typedef SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > exported_class_t;
-            typedef ::SireMol::SegEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*segment_function_type )( ::SireMol::SegID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::SegEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*segment_function_type)( ::SireMol::SegID const &,::SireBase::PropertyMap const & ) ;
             segment_function_type segment_function_value( &::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::segment );
             
             MolEditorBase_exposer.def( 
@@ -252,7 +252,7 @@ void register_MolEditorBase_class(){
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::select
         
             typedef SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > exported_class_t;
-            typedef ::SireMol::AtomEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*select_function_type )( ::SireMol::AtomID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::AtomEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*select_function_type)( ::SireMol::AtomID const &,::SireBase::PropertyMap const & ) ;
             select_function_type select_function_value( &::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::select );
             
             MolEditorBase_exposer.def( 
@@ -264,7 +264,7 @@ void register_MolEditorBase_class(){
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::select
         
             typedef SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > exported_class_t;
-            typedef ::SireMol::CGEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*select_function_type )( ::SireMol::CGID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::CGEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*select_function_type)( ::SireMol::CGID const &,::SireBase::PropertyMap const & ) ;
             select_function_type select_function_value( &::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::select );
             
             MolEditorBase_exposer.def( 
@@ -276,7 +276,7 @@ void register_MolEditorBase_class(){
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::select
         
             typedef SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > exported_class_t;
-            typedef ::SireMol::ResEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*select_function_type )( ::SireMol::ResID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::ResEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*select_function_type)( ::SireMol::ResID const &,::SireBase::PropertyMap const & ) ;
             select_function_type select_function_value( &::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::select );
             
             MolEditorBase_exposer.def( 
@@ -288,7 +288,7 @@ void register_MolEditorBase_class(){
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::select
         
             typedef SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > exported_class_t;
-            typedef ::SireMol::ChainEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*select_function_type )( ::SireMol::ChainID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::ChainEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*select_function_type)( ::SireMol::ChainID const &,::SireBase::PropertyMap const & ) ;
             select_function_type select_function_value( &::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::select );
             
             MolEditorBase_exposer.def( 
@@ -300,7 +300,7 @@ void register_MolEditorBase_class(){
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::select
         
             typedef SireMol::Editor< SireMol::MolEditor, SireMol::Molecule > exported_class_t;
-            typedef ::SireMol::SegEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*select_function_type )( ::SireMol::SegID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::SegEditor ( ::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::*select_function_type)( ::SireMol::SegID const &,::SireBase::PropertyMap const & ) ;
             select_function_type select_function_value( &::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::select );
             
             MolEditorBase_exposer.def( 

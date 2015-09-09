@@ -31,7 +31,7 @@ void register_CLJNBPairs_class(){
         CLJNBPairs_exposer.def( bp::self != bp::self );
         { //::SireMM::CLJNBPairs::operator=
         
-            typedef ::SireMM::CLJNBPairs & ( ::SireMM::CLJNBPairs::*assign_function_type )( ::SireMM::CLJNBPairs const & ) ;
+            typedef ::SireMM::CLJNBPairs & ( ::SireMM::CLJNBPairs::*assign_function_type)( ::SireMM::CLJNBPairs const & ) ;
             assign_function_type assign_function_value( &::SireMM::CLJNBPairs::operator= );
             
             CLJNBPairs_exposer.def( 

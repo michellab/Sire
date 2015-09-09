@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "AngleID.pypp.hpp"
 
 namespace bp = boost::python;
@@ -44,40 +43,40 @@ void register_AngleID_class(){
         AngleID_exposer.def( bp::init< SireMol::AngleID const & >(( bp::arg("other") )) );
         { //::SireMol::AngleID::atom0
         
-            typedef ::SireMol::AtomID const & ( ::SireMol::AngleID::*atom0_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMol::AngleID::*atom0_function_type)(  ) const;
             atom0_function_type atom0_function_value( &::SireMol::AngleID::atom0 );
             
             AngleID_exposer.def( 
                 "atom0"
                 , atom0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMol::AngleID::atom1
         
-            typedef ::SireMol::AtomID const & ( ::SireMol::AngleID::*atom1_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMol::AngleID::*atom1_function_type)(  ) const;
             atom1_function_type atom1_function_value( &::SireMol::AngleID::atom1 );
             
             AngleID_exposer.def( 
                 "atom1"
                 , atom1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMol::AngleID::atom2
         
-            typedef ::SireMol::AtomID const & ( ::SireMol::AngleID::*atom2_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMol::AngleID::*atom2_function_type)(  ) const;
             atom2_function_type atom2_function_value( &::SireMol::AngleID::atom2 );
             
             AngleID_exposer.def( 
                 "atom2"
                 , atom2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMol::AngleID::hash
         
-            typedef ::uint ( ::SireMol::AngleID::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::AngleID::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::AngleID::hash );
             
             AngleID_exposer.def( 
@@ -87,7 +86,7 @@ void register_AngleID_class(){
         }
         { //::SireMol::AngleID::isNull
         
-            typedef bool ( ::SireMol::AngleID::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::AngleID::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::AngleID::isNull );
             
             AngleID_exposer.def( 
@@ -97,7 +96,7 @@ void register_AngleID_class(){
         }
         { //::SireMol::AngleID::map
         
-            typedef ::boost::tuples::tuple< SireMol::AtomIdx, SireMol::AtomIdx, SireMol::AtomIdx, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::AngleID::*map_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomIdx, SireMol::AtomIdx, SireMol::AtomIdx, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::AngleID::*map_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             map_function_type map_function_value( &::SireMol::AngleID::map );
             
             AngleID_exposer.def( 
@@ -108,7 +107,7 @@ void register_AngleID_class(){
         }
         { //::SireMol::AngleID::map
         
-            typedef ::boost::tuples::tuple< SireMol::AtomIdx, SireMol::AtomIdx, SireMol::AtomIdx, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::AngleID::*map_function_type )( ::SireMol::MoleculeInfoData const &,::SireMol::MoleculeInfoData const &,::SireMol::MoleculeInfoData const & ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomIdx, SireMol::AtomIdx, SireMol::AtomIdx, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::AngleID::*map_function_type)( ::SireMol::MoleculeInfoData const &,::SireMol::MoleculeInfoData const &,::SireMol::MoleculeInfoData const & ) const;
             map_function_type map_function_value( &::SireMol::AngleID::map );
             
             AngleID_exposer.def( 
@@ -119,7 +118,7 @@ void register_AngleID_class(){
         }
         { //::SireMol::AngleID::mirror
         
-            typedef ::SireMol::AngleID ( ::SireMol::AngleID::*mirror_function_type )(  ) const;
+            typedef ::SireMol::AngleID ( ::SireMol::AngleID::*mirror_function_type)(  ) const;
             mirror_function_type mirror_function_value( &::SireMol::AngleID::mirror );
             
             AngleID_exposer.def( 
@@ -130,7 +129,7 @@ void register_AngleID_class(){
         AngleID_exposer.def( bp::self != bp::self );
         { //::SireMol::AngleID::operator=
         
-            typedef ::SireMol::AngleID & ( ::SireMol::AngleID::*assign_function_type )( ::SireMol::AngleID const & ) ;
+            typedef ::SireMol::AngleID & ( ::SireMol::AngleID::*assign_function_type)( ::SireMol::AngleID const & ) ;
             assign_function_type assign_function_value( &::SireMol::AngleID::operator= );
             
             AngleID_exposer.def( 
@@ -144,7 +143,7 @@ void register_AngleID_class(){
         AngleID_exposer.def( bp::self == bp::self );
         { //::SireMol::AngleID::size
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMol::AngleID::*size_function_type )( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMol::AngleID::*size_function_type)( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             size_function_type size_function_value( &::SireMol::AngleID::size );
             
             AngleID_exposer.def( 
@@ -155,7 +154,7 @@ void register_AngleID_class(){
         }
         { //::SireMol::AngleID::size
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMol::AngleID::*size_function_type )( ::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMol::AngleID::*size_function_type)( ::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             size_function_type size_function_value( &::SireMol::AngleID::size );
             
             AngleID_exposer.def( 
@@ -166,7 +165,7 @@ void register_AngleID_class(){
         }
         { //::SireMol::AngleID::size
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMol::AngleID::*size_function_type )( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMol::AngleID::*size_function_type)( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             size_function_type size_function_value( &::SireMol::AngleID::size );
             
             AngleID_exposer.def( 
@@ -177,7 +176,7 @@ void register_AngleID_class(){
         }
         { //::SireMol::AngleID::toString
         
-            typedef ::QString ( ::SireMol::AngleID::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::AngleID::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::AngleID::toString );
             
             AngleID_exposer.def( 
@@ -187,7 +186,7 @@ void register_AngleID_class(){
         }
         { //::SireMol::AngleID::triangle
         
-            typedef ::SireMaths::Triangle ( ::SireMol::AngleID::*triangle_function_type )( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::Triangle ( ::SireMol::AngleID::*triangle_function_type)( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             triangle_function_type triangle_function_value( &::SireMol::AngleID::triangle );
             
             AngleID_exposer.def( 
@@ -198,7 +197,7 @@ void register_AngleID_class(){
         }
         { //::SireMol::AngleID::triangle
         
-            typedef ::SireMaths::Triangle ( ::SireMol::AngleID::*triangle_function_type )( ::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::Triangle ( ::SireMol::AngleID::*triangle_function_type)( ::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             triangle_function_type triangle_function_value( &::SireMol::AngleID::triangle );
             
             AngleID_exposer.def( 
@@ -209,7 +208,7 @@ void register_AngleID_class(){
         }
         { //::SireMol::AngleID::triangle
         
-            typedef ::SireMaths::Triangle ( ::SireMol::AngleID::*triangle_function_type )( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::Triangle ( ::SireMol::AngleID::*triangle_function_type)( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             triangle_function_type triangle_function_value( &::SireMol::AngleID::triangle );
             
             AngleID_exposer.def( 
@@ -230,7 +229,7 @@ void register_AngleID_class(){
         }
         { //::SireMol::AngleID::vector
         
-            typedef ::SireMaths::Vector ( ::SireMol::AngleID::*vector_function_type )( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::Vector ( ::SireMol::AngleID::*vector_function_type)( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             vector_function_type vector_function_value( &::SireMol::AngleID::vector );
             
             AngleID_exposer.def( 
@@ -241,7 +240,7 @@ void register_AngleID_class(){
         }
         { //::SireMol::AngleID::vector
         
-            typedef ::SireMaths::Vector ( ::SireMol::AngleID::*vector_function_type )( ::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::Vector ( ::SireMol::AngleID::*vector_function_type)( ::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             vector_function_type vector_function_value( &::SireMol::AngleID::vector );
             
             AngleID_exposer.def( 
@@ -252,7 +251,7 @@ void register_AngleID_class(){
         }
         { //::SireMol::AngleID::vector
         
-            typedef ::SireMaths::Vector ( ::SireMol::AngleID::*vector_function_type )( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::Vector ( ::SireMol::AngleID::*vector_function_type)( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             vector_function_type vector_function_value( &::SireMol::AngleID::vector );
             
             AngleID_exposer.def( 
@@ -263,7 +262,7 @@ void register_AngleID_class(){
         }
         { //::SireMol::AngleID::what
         
-            typedef char const * ( ::SireMol::AngleID::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::AngleID::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::AngleID::what );
             
             AngleID_exposer.def( 

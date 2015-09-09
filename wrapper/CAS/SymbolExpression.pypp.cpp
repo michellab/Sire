@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "SymbolExpression.pypp.hpp"
 
 namespace bp = boost::python;
@@ -30,7 +29,7 @@ void register_SymbolExpression_class(){
         bp::scope SymbolExpression_scope( SymbolExpression_exposer );
         { //::SireCAS::SymbolExpression::expression
         
-            typedef ::SireCAS::Expression const & ( ::SireCAS::SymbolExpression::*expression_function_type )(  ) const;
+            typedef ::SireCAS::Expression const & ( ::SireCAS::SymbolExpression::*expression_function_type)(  ) const;
             expression_function_type expression_function_value( &::SireCAS::SymbolExpression::expression );
             
             SymbolExpression_exposer.def( 
@@ -41,18 +40,18 @@ void register_SymbolExpression_class(){
         }
         { //::SireCAS::SymbolExpression::function
         
-            typedef ::SireCAS::Function const & ( ::SireCAS::SymbolExpression::*function_function_type )(  ) const;
+            typedef ::SireCAS::Function const & ( ::SireCAS::SymbolExpression::*function_function_type)(  ) const;
             function_function_type function_function_value( &::SireCAS::SymbolExpression::function );
             
             SymbolExpression_exposer.def( 
                 "function"
                 , function_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireCAS::SymbolExpression::isFunction
         
-            typedef bool ( ::SireCAS::SymbolExpression::*isFunction_function_type )(  ) const;
+            typedef bool ( ::SireCAS::SymbolExpression::*isFunction_function_type)(  ) const;
             isFunction_function_type isFunction_function_value( &::SireCAS::SymbolExpression::isFunction );
             
             SymbolExpression_exposer.def( 
@@ -62,13 +61,13 @@ void register_SymbolExpression_class(){
         }
         { //::SireCAS::SymbolExpression::symbol
         
-            typedef ::SireCAS::Symbol const & ( ::SireCAS::SymbolExpression::*symbol_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireCAS::SymbolExpression::*symbol_function_type)(  ) const;
             symbol_function_type symbol_function_value( &::SireCAS::SymbolExpression::symbol );
             
             SymbolExpression_exposer.def( 
                 "symbol"
                 , symbol_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         SymbolExpression_exposer.def( "__copy__", &__copy__);

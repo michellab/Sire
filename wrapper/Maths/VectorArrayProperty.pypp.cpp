@@ -38,7 +38,7 @@ void register_VectorArrayProperty_class(){
         VectorArrayProperty_exposer.def( bp::self + bp::self );
         { //::SireMaths::VectorArrayProperty::operator=
         
-            typedef ::SireMaths::VectorArrayProperty & ( ::SireMaths::VectorArrayProperty::*assign_function_type )( ::SireMaths::VectorArrayProperty const & ) ;
+            typedef ::SireMaths::VectorArrayProperty & ( ::SireMaths::VectorArrayProperty::*assign_function_type)( ::SireMaths::VectorArrayProperty const & ) ;
             assign_function_type assign_function_value( &::SireMaths::VectorArrayProperty::operator= );
             
             VectorArrayProperty_exposer.def( 

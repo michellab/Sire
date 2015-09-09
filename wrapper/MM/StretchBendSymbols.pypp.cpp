@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "StretchBendSymbols.pypp.hpp"
 
 namespace bp = boost::python;
@@ -44,46 +43,46 @@ void register_StretchBendSymbols_class(){
         bp::scope StretchBendSymbols_scope( StretchBendSymbols_exposer );
         { //::SireMM::StretchBendSymbols::r01
         
-            typedef ::SireCAS::Symbol const & ( ::SireMM::StretchBendSymbols::*r01_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMM::StretchBendSymbols::*r01_function_type)(  ) const;
             r01_function_type r01_function_value( &::SireMM::StretchBendSymbols::r01 );
             
             StretchBendSymbols_exposer.def( 
                 "r01"
                 , r01_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::StretchBendSymbols::r12
         
-            typedef ::SireCAS::Symbol const & ( ::SireMM::StretchBendSymbols::*r12_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMM::StretchBendSymbols::*r12_function_type)(  ) const;
             r12_function_type r12_function_value( &::SireMM::StretchBendSymbols::r12 );
             
             StretchBendSymbols_exposer.def( 
                 "r12"
                 , r12_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::StretchBendSymbols::r21
         
-            typedef ::SireCAS::Symbol const & ( ::SireMM::StretchBendSymbols::*r21_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMM::StretchBendSymbols::*r21_function_type)(  ) const;
             r21_function_type r21_function_value( &::SireMM::StretchBendSymbols::r21 );
             
             StretchBendSymbols_exposer.def( 
                 "r21"
                 , r21_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::StretchBendSymbols::theta
         
-            typedef ::SireCAS::Symbol const & ( ::SireMM::StretchBendSymbols::*theta_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMM::StretchBendSymbols::*theta_function_type)(  ) const;
             theta_function_type theta_function_value( &::SireMM::StretchBendSymbols::theta );
             
             StretchBendSymbols_exposer.def( 
                 "theta"
                 , theta_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         StretchBendSymbols_exposer.def( "__copy__", &__copy__);

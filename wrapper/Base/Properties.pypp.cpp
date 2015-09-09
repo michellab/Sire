@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "Properties.pypp.hpp"
 
 namespace bp = boost::python;
@@ -41,7 +40,7 @@ void register_Properties_class(){
         Properties_exposer.def( bp::init< SireBase::Properties const & >(( bp::arg("other") )) );
         { //::SireBase::Properties::allMetadata
         
-            typedef ::SireBase::Properties const & ( ::SireBase::Properties::*allMetadata_function_type )(  ) const;
+            typedef ::SireBase::Properties const & ( ::SireBase::Properties::*allMetadata_function_type)(  ) const;
             allMetadata_function_type allMetadata_function_value( &::SireBase::Properties::allMetadata );
             
             Properties_exposer.def( 
@@ -52,7 +51,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::allMetadata
         
-            typedef ::SireBase::Properties const & ( ::SireBase::Properties::*allMetadata_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef ::SireBase::Properties const & ( ::SireBase::Properties::*allMetadata_function_type)( ::SireBase::PropertyName const & ) const;
             allMetadata_function_type allMetadata_function_value( &::SireBase::Properties::allMetadata );
             
             Properties_exposer.def( 
@@ -64,7 +63,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::assertContainsMetadata
         
-            typedef void ( ::SireBase::Properties::*assertContainsMetadata_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef void ( ::SireBase::Properties::*assertContainsMetadata_function_type)( ::SireBase::PropertyName const & ) const;
             assertContainsMetadata_function_type assertContainsMetadata_function_value( &::SireBase::Properties::assertContainsMetadata );
             
             Properties_exposer.def( 
@@ -75,7 +74,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::assertContainsMetadata
         
-            typedef void ( ::SireBase::Properties::*assertContainsMetadata_function_type )( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
+            typedef void ( ::SireBase::Properties::*assertContainsMetadata_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
             assertContainsMetadata_function_type assertContainsMetadata_function_value( &::SireBase::Properties::assertContainsMetadata );
             
             Properties_exposer.def( 
@@ -86,7 +85,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::assertContainsProperty
         
-            typedef void ( ::SireBase::Properties::*assertContainsProperty_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef void ( ::SireBase::Properties::*assertContainsProperty_function_type)( ::SireBase::PropertyName const & ) const;
             assertContainsProperty_function_type assertContainsProperty_function_value( &::SireBase::Properties::assertContainsProperty );
             
             Properties_exposer.def( 
@@ -97,7 +96,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::begin
         
-            typedef ::QHash< QString, SireBase::PropPtr< SireBase::Property > >::const_iterator ( ::SireBase::Properties::*begin_function_type )(  ) const;
+            typedef ::QHash< QString, SireBase::PropPtr< SireBase::Property > >::const_iterator ( ::SireBase::Properties::*begin_function_type)(  ) const;
             begin_function_type begin_function_value( &::SireBase::Properties::begin );
             
             Properties_exposer.def( 
@@ -107,7 +106,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::clear
         
-            typedef void ( ::SireBase::Properties::*clear_function_type )(  ) ;
+            typedef void ( ::SireBase::Properties::*clear_function_type)(  ) ;
             clear_function_type clear_function_value( &::SireBase::Properties::clear );
             
             Properties_exposer.def( 
@@ -117,7 +116,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::constBegin
         
-            typedef ::QHash< QString, SireBase::PropPtr< SireBase::Property > >::const_iterator ( ::SireBase::Properties::*constBegin_function_type )(  ) const;
+            typedef ::QHash< QString, SireBase::PropPtr< SireBase::Property > >::const_iterator ( ::SireBase::Properties::*constBegin_function_type)(  ) const;
             constBegin_function_type constBegin_function_value( &::SireBase::Properties::constBegin );
             
             Properties_exposer.def( 
@@ -127,7 +126,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::constEnd
         
-            typedef ::QHash< QString, SireBase::PropPtr< SireBase::Property > >::const_iterator ( ::SireBase::Properties::*constEnd_function_type )(  ) const;
+            typedef ::QHash< QString, SireBase::PropPtr< SireBase::Property > >::const_iterator ( ::SireBase::Properties::*constEnd_function_type)(  ) const;
             constEnd_function_type constEnd_function_value( &::SireBase::Properties::constEnd );
             
             Properties_exposer.def( 
@@ -137,7 +136,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::constFind
         
-            typedef ::QHash< QString, SireBase::PropPtr< SireBase::Property > >::const_iterator ( ::SireBase::Properties::*constFind_function_type )( ::QString const & ) const;
+            typedef ::QHash< QString, SireBase::PropPtr< SireBase::Property > >::const_iterator ( ::SireBase::Properties::*constFind_function_type)( ::QString const & ) const;
             constFind_function_type constFind_function_value( &::SireBase::Properties::constFind );
             
             Properties_exposer.def( 
@@ -148,7 +147,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::count
         
-            typedef int ( ::SireBase::Properties::*count_function_type )(  ) const;
+            typedef int ( ::SireBase::Properties::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireBase::Properties::count );
             
             Properties_exposer.def( 
@@ -158,7 +157,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::end
         
-            typedef ::QHash< QString, SireBase::PropPtr< SireBase::Property > >::const_iterator ( ::SireBase::Properties::*end_function_type )(  ) const;
+            typedef ::QHash< QString, SireBase::PropPtr< SireBase::Property > >::const_iterator ( ::SireBase::Properties::*end_function_type)(  ) const;
             end_function_type end_function_value( &::SireBase::Properties::end );
             
             Properties_exposer.def( 
@@ -168,7 +167,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::find
         
-            typedef ::QHash< QString, SireBase::PropPtr< SireBase::Property > >::const_iterator ( ::SireBase::Properties::*find_function_type )( ::QString const & ) const;
+            typedef ::QHash< QString, SireBase::PropPtr< SireBase::Property > >::const_iterator ( ::SireBase::Properties::*find_function_type)( ::QString const & ) const;
             find_function_type find_function_value( &::SireBase::Properties::find );
             
             Properties_exposer.def( 
@@ -179,7 +178,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::hasMetadata
         
-            typedef bool ( ::SireBase::Properties::*hasMetadata_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireBase::Properties::*hasMetadata_function_type)( ::SireBase::PropertyName const & ) const;
             hasMetadata_function_type hasMetadata_function_value( &::SireBase::Properties::hasMetadata );
             
             Properties_exposer.def( 
@@ -190,7 +189,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::hasMetadata
         
-            typedef bool ( ::SireBase::Properties::*hasMetadata_function_type )( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireBase::Properties::*hasMetadata_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
             hasMetadata_function_type hasMetadata_function_value( &::SireBase::Properties::hasMetadata );
             
             Properties_exposer.def( 
@@ -201,7 +200,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::hasProperty
         
-            typedef bool ( ::SireBase::Properties::*hasProperty_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireBase::Properties::*hasProperty_function_type)( ::SireBase::PropertyName const & ) const;
             hasProperty_function_type hasProperty_function_value( &::SireBase::Properties::hasProperty );
             
             Properties_exposer.def( 
@@ -212,7 +211,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::isEmpty
         
-            typedef bool ( ::SireBase::Properties::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireBase::Properties::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireBase::Properties::isEmpty );
             
             Properties_exposer.def( 
@@ -222,55 +221,55 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::metadata
         
-            typedef ::SireBase::Property const & ( ::SireBase::Properties::*metadata_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef ::SireBase::Property const & ( ::SireBase::Properties::*metadata_function_type)( ::SireBase::PropertyName const & ) const;
             metadata_function_type metadata_function_value( &::SireBase::Properties::metadata );
             
             Properties_exposer.def( 
                 "metadata"
                 , metadata_function_value
                 , ( bp::arg("metakey") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireBase::Properties::metadata
         
-            typedef ::SireBase::Property const & ( ::SireBase::Properties::*metadata_function_type )( ::SireBase::PropertyName const &,::SireBase::Property const & ) const;
+            typedef ::SireBase::Property const & ( ::SireBase::Properties::*metadata_function_type)( ::SireBase::PropertyName const &,::SireBase::Property const & ) const;
             metadata_function_type metadata_function_value( &::SireBase::Properties::metadata );
             
             Properties_exposer.def( 
                 "metadata"
                 , metadata_function_value
                 , ( bp::arg("metakey"), bp::arg("default_value") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireBase::Properties::metadata
         
-            typedef ::SireBase::Property const & ( ::SireBase::Properties::*metadata_function_type )( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
+            typedef ::SireBase::Property const & ( ::SireBase::Properties::*metadata_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
             metadata_function_type metadata_function_value( &::SireBase::Properties::metadata );
             
             Properties_exposer.def( 
                 "metadata"
                 , metadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireBase::Properties::metadata
         
-            typedef ::SireBase::Property const & ( ::SireBase::Properties::*metadata_function_type )( ::SireBase::PropertyName const &,::SireBase::PropertyName const &,::SireBase::Property const & ) const;
+            typedef ::SireBase::Property const & ( ::SireBase::Properties::*metadata_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const &,::SireBase::Property const & ) const;
             metadata_function_type metadata_function_value( &::SireBase::Properties::metadata );
             
             Properties_exposer.def( 
                 "metadata"
                 , metadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey"), bp::arg("default_value") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireBase::Properties::metadataKeys
         
-            typedef ::QStringList ( ::SireBase::Properties::*metadataKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireBase::Properties::*metadataKeys_function_type)(  ) const;
             metadataKeys_function_type metadataKeys_function_value( &::SireBase::Properties::metadataKeys );
             
             Properties_exposer.def( 
@@ -280,7 +279,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::metadataKeys
         
-            typedef ::QStringList ( ::SireBase::Properties::*metadataKeys_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef ::QStringList ( ::SireBase::Properties::*metadataKeys_function_type)( ::SireBase::PropertyName const & ) const;
             metadataKeys_function_type metadataKeys_function_value( &::SireBase::Properties::metadataKeys );
             
             Properties_exposer.def( 
@@ -291,7 +290,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::metadataType
         
-            typedef char const * ( ::SireBase::Properties::*metadataType_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef char const * ( ::SireBase::Properties::*metadataType_function_type)( ::SireBase::PropertyName const & ) const;
             metadataType_function_type metadataType_function_value( &::SireBase::Properties::metadataType );
             
             Properties_exposer.def( 
@@ -302,7 +301,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::metadataType
         
-            typedef char const * ( ::SireBase::Properties::*metadataType_function_type )( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
+            typedef char const * ( ::SireBase::Properties::*metadataType_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
             metadataType_function_type metadataType_function_value( &::SireBase::Properties::metadataType );
             
             Properties_exposer.def( 
@@ -313,7 +312,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::nProperties
         
-            typedef int ( ::SireBase::Properties::*nProperties_function_type )(  ) const;
+            typedef int ( ::SireBase::Properties::*nProperties_function_type)(  ) const;
             nProperties_function_type nProperties_function_value( &::SireBase::Properties::nProperties );
             
             Properties_exposer.def( 
@@ -324,7 +323,7 @@ void register_Properties_class(){
         Properties_exposer.def( bp::self != bp::self );
         { //::SireBase::Properties::operator=
         
-            typedef ::SireBase::Properties & ( ::SireBase::Properties::*assign_function_type )( ::SireBase::Properties const & ) ;
+            typedef ::SireBase::Properties & ( ::SireBase::Properties::*assign_function_type)( ::SireBase::Properties const & ) ;
             assign_function_type assign_function_value( &::SireBase::Properties::operator= );
             
             Properties_exposer.def( 
@@ -337,43 +336,43 @@ void register_Properties_class(){
         Properties_exposer.def( bp::self == bp::self );
         { //::SireBase::Properties::operator[]
         
-            typedef ::SireBase::Property const & ( ::SireBase::Properties::*__getitem___function_type )( ::SireBase::PropertyName const & ) const;
+            typedef ::SireBase::Property const & ( ::SireBase::Properties::*__getitem___function_type)( ::SireBase::PropertyName const & ) const;
             __getitem___function_type __getitem___function_value( &::SireBase::Properties::operator[] );
             
             Properties_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireBase::Properties::property
         
-            typedef ::SireBase::Property const & ( ::SireBase::Properties::*property_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef ::SireBase::Property const & ( ::SireBase::Properties::*property_function_type)( ::SireBase::PropertyName const & ) const;
             property_function_type property_function_value( &::SireBase::Properties::property );
             
             Properties_exposer.def( 
                 "property"
                 , property_function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireBase::Properties::property
         
-            typedef ::SireBase::Property const & ( ::SireBase::Properties::*property_function_type )( ::SireBase::PropertyName const &,::SireBase::Property const & ) const;
+            typedef ::SireBase::Property const & ( ::SireBase::Properties::*property_function_type)( ::SireBase::PropertyName const &,::SireBase::Property const & ) const;
             property_function_type property_function_value( &::SireBase::Properties::property );
             
             Properties_exposer.def( 
                 "property"
                 , property_function_value
                 , ( bp::arg("key"), bp::arg("default_value") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireBase::Properties::propertyKeys
         
-            typedef ::QStringList ( ::SireBase::Properties::*propertyKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireBase::Properties::*propertyKeys_function_type)(  ) const;
             propertyKeys_function_type propertyKeys_function_value( &::SireBase::Properties::propertyKeys );
             
             Properties_exposer.def( 
@@ -383,7 +382,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::propertyType
         
-            typedef char const * ( ::SireBase::Properties::*propertyType_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef char const * ( ::SireBase::Properties::*propertyType_function_type)( ::SireBase::PropertyName const & ) const;
             propertyType_function_type propertyType_function_value( &::SireBase::Properties::propertyType );
             
             Properties_exposer.def( 
@@ -394,7 +393,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::removeAllMetadata
         
-            typedef void ( ::SireBase::Properties::*removeAllMetadata_function_type )(  ) ;
+            typedef void ( ::SireBase::Properties::*removeAllMetadata_function_type)(  ) ;
             removeAllMetadata_function_type removeAllMetadata_function_value( &::SireBase::Properties::removeAllMetadata );
             
             Properties_exposer.def( 
@@ -404,7 +403,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::removeAllMetadata
         
-            typedef void ( ::SireBase::Properties::*removeAllMetadata_function_type )( ::QString const & ) ;
+            typedef void ( ::SireBase::Properties::*removeAllMetadata_function_type)( ::QString const & ) ;
             removeAllMetadata_function_type removeAllMetadata_function_value( &::SireBase::Properties::removeAllMetadata );
             
             Properties_exposer.def( 
@@ -415,7 +414,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::removeMetadata
         
-            typedef void ( ::SireBase::Properties::*removeMetadata_function_type )( ::QString const & ) ;
+            typedef void ( ::SireBase::Properties::*removeMetadata_function_type)( ::QString const & ) ;
             removeMetadata_function_type removeMetadata_function_value( &::SireBase::Properties::removeMetadata );
             
             Properties_exposer.def( 
@@ -426,7 +425,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::removeMetadata
         
-            typedef void ( ::SireBase::Properties::*removeMetadata_function_type )( ::QString const &,::QString const & ) ;
+            typedef void ( ::SireBase::Properties::*removeMetadata_function_type)( ::QString const &,::QString const & ) ;
             removeMetadata_function_type removeMetadata_function_value( &::SireBase::Properties::removeMetadata );
             
             Properties_exposer.def( 
@@ -437,7 +436,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::removeProperty
         
-            typedef void ( ::SireBase::Properties::*removeProperty_function_type )( ::QString const & ) ;
+            typedef void ( ::SireBase::Properties::*removeProperty_function_type)( ::QString const & ) ;
             removeProperty_function_type removeProperty_function_value( &::SireBase::Properties::removeProperty );
             
             Properties_exposer.def( 
@@ -448,7 +447,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::setMetadata
         
-            typedef void ( ::SireBase::Properties::*setMetadata_function_type )( ::QString const &,::SireBase::Property const & ) ;
+            typedef void ( ::SireBase::Properties::*setMetadata_function_type)( ::QString const &,::SireBase::Property const & ) ;
             setMetadata_function_type setMetadata_function_value( &::SireBase::Properties::setMetadata );
             
             Properties_exposer.def( 
@@ -459,7 +458,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::setMetadata
         
-            typedef void ( ::SireBase::Properties::*setMetadata_function_type )( ::QString const &,::QString const &,::SireBase::Property const & ) ;
+            typedef void ( ::SireBase::Properties::*setMetadata_function_type)( ::QString const &,::QString const &,::SireBase::Property const & ) ;
             setMetadata_function_type setMetadata_function_value( &::SireBase::Properties::setMetadata );
             
             Properties_exposer.def( 
@@ -470,7 +469,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::setProperty
         
-            typedef void ( ::SireBase::Properties::*setProperty_function_type )( ::QString const &,::SireBase::Property const & ) ;
+            typedef void ( ::SireBase::Properties::*setProperty_function_type)( ::QString const &,::SireBase::Property const & ) ;
             setProperty_function_type setProperty_function_value( &::SireBase::Properties::setProperty );
             
             Properties_exposer.def( 
@@ -481,7 +480,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::setProperty
         
-            typedef void ( ::SireBase::Properties::*setProperty_function_type )( ::QString const &,::SireBase::Property const &,bool ) ;
+            typedef void ( ::SireBase::Properties::*setProperty_function_type)( ::QString const &,::SireBase::Property const &,bool ) ;
             setProperty_function_type setProperty_function_value( &::SireBase::Properties::setProperty );
             
             Properties_exposer.def( 
@@ -492,7 +491,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::size
         
-            typedef int ( ::SireBase::Properties::*size_function_type )(  ) const;
+            typedef int ( ::SireBase::Properties::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireBase::Properties::size );
             
             Properties_exposer.def( 
@@ -502,7 +501,7 @@ void register_Properties_class(){
         }
         { //::SireBase::Properties::toString
         
-            typedef ::QString ( ::SireBase::Properties::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireBase::Properties::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireBase::Properties::toString );
             
             Properties_exposer.def( 

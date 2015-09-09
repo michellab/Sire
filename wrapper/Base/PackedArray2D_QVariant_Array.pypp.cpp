@@ -32,7 +32,7 @@ void register_PackedArray2D_QVariant_Array_class(){
         { //::SireBase::detail::PackedArray2D_Array< QVariant >::assertValidIndex
         
             typedef SireBase::detail::PackedArray2D_Array< QVariant > exported_class_t;
-            typedef void ( ::SireBase::detail::PackedArray2D_Array< QVariant >::*assertValidIndex_function_type )( ::quint32 ) const;
+            typedef void ( ::SireBase::detail::PackedArray2D_Array< QVariant >::*assertValidIndex_function_type)( ::quint32 ) const;
             assertValidIndex_function_type assertValidIndex_function_value( &::SireBase::detail::PackedArray2D_Array< QVariant >::assertValidIndex );
             
             PackedArray2D_QVariant_Array_exposer.def( 
@@ -44,7 +44,7 @@ void register_PackedArray2D_QVariant_Array_class(){
         { //::SireBase::detail::PackedArray2D_Array< QVariant >::at
         
             typedef SireBase::detail::PackedArray2D_Array< QVariant > exported_class_t;
-            typedef ::QVariant const & ( ::SireBase::detail::PackedArray2D_Array< QVariant >::*at_function_type )( ::quint32 ) const;
+            typedef ::QVariant const & ( ::SireBase::detail::PackedArray2D_Array< QVariant >::*at_function_type)( ::quint32 ) const;
             at_function_type at_function_value( &::SireBase::detail::PackedArray2D_Array< QVariant >::at );
             
             PackedArray2D_QVariant_Array_exposer.def( 
@@ -57,7 +57,7 @@ void register_PackedArray2D_QVariant_Array_class(){
         { //::SireBase::detail::PackedArray2D_Array< QVariant >::count
         
             typedef SireBase::detail::PackedArray2D_Array< QVariant > exported_class_t;
-            typedef int ( ::SireBase::detail::PackedArray2D_Array< QVariant >::*count_function_type )(  ) const;
+            typedef int ( ::SireBase::detail::PackedArray2D_Array< QVariant >::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireBase::detail::PackedArray2D_Array< QVariant >::count );
             
             PackedArray2D_QVariant_Array_exposer.def( 
@@ -68,7 +68,7 @@ void register_PackedArray2D_QVariant_Array_class(){
         { //::SireBase::detail::PackedArray2D_Array< QVariant >::isEmpty
         
             typedef SireBase::detail::PackedArray2D_Array< QVariant > exported_class_t;
-            typedef bool ( ::SireBase::detail::PackedArray2D_Array< QVariant >::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireBase::detail::PackedArray2D_Array< QVariant >::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireBase::detail::PackedArray2D_Array< QVariant >::isEmpty );
             
             PackedArray2D_QVariant_Array_exposer.def( 
@@ -79,7 +79,7 @@ void register_PackedArray2D_QVariant_Array_class(){
         { //::SireBase::detail::PackedArray2D_Array< QVariant >::nValues
         
             typedef SireBase::detail::PackedArray2D_Array< QVariant > exported_class_t;
-            typedef int ( ::SireBase::detail::PackedArray2D_Array< QVariant >::*nValues_function_type )(  ) const;
+            typedef int ( ::SireBase::detail::PackedArray2D_Array< QVariant >::*nValues_function_type)(  ) const;
             nValues_function_type nValues_function_value( &::SireBase::detail::PackedArray2D_Array< QVariant >::nValues );
             
             PackedArray2D_QVariant_Array_exposer.def( 
@@ -91,7 +91,7 @@ void register_PackedArray2D_QVariant_Array_class(){
         { //::SireBase::detail::PackedArray2D_Array< QVariant >::operator=
         
             typedef SireBase::detail::PackedArray2D_Array< QVariant > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< QVariant > & ( ::SireBase::detail::PackedArray2D_Array< QVariant >::*assign_function_type )( ::SireBase::detail::PackedArray2D_Array< QVariant > const & ) ;
+            typedef ::SireBase::detail::PackedArray2D_Array< QVariant > & ( ::SireBase::detail::PackedArray2D_Array< QVariant >::*assign_function_type)( ::SireBase::detail::PackedArray2D_Array< QVariant > const & ) ;
             assign_function_type assign_function_value( &::SireBase::detail::PackedArray2D_Array< QVariant >::operator= );
             
             PackedArray2D_QVariant_Array_exposer.def( 
@@ -105,7 +105,7 @@ void register_PackedArray2D_QVariant_Array_class(){
         { //::SireBase::detail::PackedArray2D_Array< QVariant >::operator[]
         
             typedef SireBase::detail::PackedArray2D_Array< QVariant > exported_class_t;
-            typedef ::QVariant const & ( ::SireBase::detail::PackedArray2D_Array< QVariant >::*__getitem___function_type )( ::quint32 ) const;
+            typedef ::QVariant const & ( ::SireBase::detail::PackedArray2D_Array< QVariant >::*__getitem___function_type)( ::quint32 ) const;
             __getitem___function_type __getitem___function_value( &::SireBase::detail::PackedArray2D_Array< QVariant >::operator[] );
             
             PackedArray2D_QVariant_Array_exposer.def( 
@@ -118,7 +118,7 @@ void register_PackedArray2D_QVariant_Array_class(){
         { //::SireBase::detail::PackedArray2D_Array< QVariant >::operator[]
         
             typedef SireBase::detail::PackedArray2D_Array< QVariant > exported_class_t;
-            typedef ::QVariant & ( ::SireBase::detail::PackedArray2D_Array< QVariant >::*__getitem___function_type )( ::quint32 ) ;
+            typedef ::QVariant & ( ::SireBase::detail::PackedArray2D_Array< QVariant >::*__getitem___function_type)( ::quint32 ) ;
             __getitem___function_type __getitem___function_value( &::SireBase::detail::PackedArray2D_Array< QVariant >::operator[] );
             
             PackedArray2D_QVariant_Array_exposer.def( 
@@ -131,7 +131,7 @@ void register_PackedArray2D_QVariant_Array_class(){
         { //::SireBase::detail::PackedArray2D_Array< QVariant >::size
         
             typedef SireBase::detail::PackedArray2D_Array< QVariant > exported_class_t;
-            typedef int ( ::SireBase::detail::PackedArray2D_Array< QVariant >::*size_function_type )(  ) const;
+            typedef int ( ::SireBase::detail::PackedArray2D_Array< QVariant >::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireBase::detail::PackedArray2D_Array< QVariant >::size );
             
             PackedArray2D_QVariant_Array_exposer.def( 
@@ -142,7 +142,7 @@ void register_PackedArray2D_QVariant_Array_class(){
         { //::SireBase::detail::PackedArray2D_Array< QVariant >::toQVector
         
             typedef SireBase::detail::PackedArray2D_Array< QVariant > exported_class_t;
-            typedef ::QVector< QVariant > ( ::SireBase::detail::PackedArray2D_Array< QVariant >::*toQVector_function_type )(  ) const;
+            typedef ::QVector< QVariant > ( ::SireBase::detail::PackedArray2D_Array< QVariant >::*toQVector_function_type)(  ) const;
             toQVector_function_type toQVector_function_value( &::SireBase::detail::PackedArray2D_Array< QVariant >::toQVector );
             
             PackedArray2D_QVariant_Array_exposer.def( 
@@ -153,7 +153,7 @@ void register_PackedArray2D_QVariant_Array_class(){
         { //::SireBase::detail::PackedArray2D_Array< QVariant >::toString
         
             typedef SireBase::detail::PackedArray2D_Array< QVariant > exported_class_t;
-            typedef ::QString ( ::SireBase::detail::PackedArray2D_Array< QVariant >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireBase::detail::PackedArray2D_Array< QVariant >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireBase::detail::PackedArray2D_Array< QVariant >::toString );
             
             PackedArray2D_QVariant_Array_exposer.def( 
@@ -164,7 +164,7 @@ void register_PackedArray2D_QVariant_Array_class(){
         { //::SireBase::detail::PackedArray2D_Array< QVariant >::update
         
             typedef SireBase::detail::PackedArray2D_Array< QVariant > exported_class_t;
-            typedef void ( ::SireBase::detail::PackedArray2D_Array< QVariant >::*update_function_type )( ::SireBase::detail::PackedArray2D_Array< QVariant > const & ) ;
+            typedef void ( ::SireBase::detail::PackedArray2D_Array< QVariant >::*update_function_type)( ::SireBase::detail::PackedArray2D_Array< QVariant > const & ) ;
             update_function_type update_function_value( &::SireBase::detail::PackedArray2D_Array< QVariant >::update );
             
             PackedArray2D_QVariant_Array_exposer.def( 

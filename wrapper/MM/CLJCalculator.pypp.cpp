@@ -40,7 +40,7 @@ void register_CLJCalculator_class(){
         CLJCalculator_exposer.def( bp::init< SireMM::CLJCalculator const & >(( bp::arg("other") )) );
         { //::SireMM::CLJCalculator::calculate
         
-            typedef ::boost::tuples::tuple< double, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJCalculator::*calculate_function_type )( ::SireMM::CLJFunction const &,::SireMM::CLJBoxes const & ) const;
+            typedef ::boost::tuples::tuple< double, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJCalculator::*calculate_function_type)( ::SireMM::CLJFunction const &,::SireMM::CLJBoxes const & ) const;
             calculate_function_type calculate_function_value( &::SireMM::CLJCalculator::calculate );
             
             CLJCalculator_exposer.def( 
@@ -51,7 +51,7 @@ void register_CLJCalculator_class(){
         }
         { //::SireMM::CLJCalculator::calculate
         
-            typedef ::boost::tuples::tuple< QVector< double >, QVector< double >, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJCalculator::*calculate_function_type )( ::QVector< SireBase::PropPtr< SireMM::CLJFunction > > const &,::SireMM::CLJBoxes const & ) const;
+            typedef ::boost::tuples::tuple< QVector< double >, QVector< double >, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJCalculator::*calculate_function_type)( ::QVector< SireBase::PropPtr< SireMM::CLJFunction > > const &,::SireMM::CLJBoxes const & ) const;
             calculate_function_type calculate_function_value( &::SireMM::CLJCalculator::calculate );
             
             CLJCalculator_exposer.def( 
@@ -62,7 +62,7 @@ void register_CLJCalculator_class(){
         }
         { //::SireMM::CLJCalculator::calculate
         
-            typedef ::boost::tuples::tuple< double, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJCalculator::*calculate_function_type )( ::SireMM::CLJFunction const &,::SireMM::CLJBoxes const &,::SireMM::CLJBoxes const & ) const;
+            typedef ::boost::tuples::tuple< double, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJCalculator::*calculate_function_type)( ::SireMM::CLJFunction const &,::SireMM::CLJBoxes const &,::SireMM::CLJBoxes const & ) const;
             calculate_function_type calculate_function_value( &::SireMM::CLJCalculator::calculate );
             
             CLJCalculator_exposer.def( 
@@ -73,7 +73,7 @@ void register_CLJCalculator_class(){
         }
         { //::SireMM::CLJCalculator::calculate
         
-            typedef ::boost::tuples::tuple< double, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJCalculator::*calculate_function_type )( ::SireMM::CLJFunction const &,::SireMM::CLJAtoms const &,::SireMM::CLJBoxes const & ) const;
+            typedef ::boost::tuples::tuple< double, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJCalculator::*calculate_function_type)( ::SireMM::CLJFunction const &,::SireMM::CLJAtoms const &,::SireMM::CLJBoxes const & ) const;
             calculate_function_type calculate_function_value( &::SireMM::CLJCalculator::calculate );
             
             CLJCalculator_exposer.def( 
@@ -84,7 +84,7 @@ void register_CLJCalculator_class(){
         }
         { //::SireMM::CLJCalculator::calculate
         
-            typedef ::boost::tuples::tuple< QVector< double >, QVector< double >, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJCalculator::*calculate_function_type )( ::QVector< SireBase::PropPtr< SireMM::CLJFunction > > const &,::SireMM::CLJBoxes const &,::SireMM::CLJBoxes const & ) const;
+            typedef ::boost::tuples::tuple< QVector< double >, QVector< double >, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJCalculator::*calculate_function_type)( ::QVector< SireBase::PropPtr< SireMM::CLJFunction > > const &,::SireMM::CLJBoxes const &,::SireMM::CLJBoxes const & ) const;
             calculate_function_type calculate_function_value( &::SireMM::CLJCalculator::calculate );
             
             CLJCalculator_exposer.def( 
@@ -95,7 +95,7 @@ void register_CLJCalculator_class(){
         }
         { //::SireMM::CLJCalculator::calculate
         
-            typedef ::boost::tuples::tuple< QVector< double >, QVector< double >, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJCalculator::*calculate_function_type )( ::QVector< SireBase::PropPtr< SireMM::CLJFunction > > const &,::SireMM::CLJAtoms const &,::SireMM::CLJBoxes const & ) const;
+            typedef ::boost::tuples::tuple< QVector< double >, QVector< double >, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJCalculator::*calculate_function_type)( ::QVector< SireBase::PropPtr< SireMM::CLJFunction > > const &,::SireMM::CLJAtoms const &,::SireMM::CLJBoxes const & ) const;
             calculate_function_type calculate_function_value( &::SireMM::CLJCalculator::calculate );
             
             CLJCalculator_exposer.def( 
@@ -107,7 +107,7 @@ void register_CLJCalculator_class(){
         CLJCalculator_exposer.def( bp::self != bp::self );
         { //::SireMM::CLJCalculator::operator=
         
-            typedef ::SireMM::CLJCalculator & ( ::SireMM::CLJCalculator::*assign_function_type )( ::SireMM::CLJCalculator const & ) ;
+            typedef ::SireMM::CLJCalculator & ( ::SireMM::CLJCalculator::*assign_function_type)( ::SireMM::CLJCalculator const & ) ;
             assign_function_type assign_function_value( &::SireMM::CLJCalculator::operator= );
             
             CLJCalculator_exposer.def( 
@@ -120,7 +120,7 @@ void register_CLJCalculator_class(){
         CLJCalculator_exposer.def( bp::self == bp::self );
         { //::SireMM::CLJCalculator::toString
         
-            typedef ::QString ( ::SireMM::CLJCalculator::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMM::CLJCalculator::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMM::CLJCalculator::toString );
             
             CLJCalculator_exposer.def( 
@@ -140,7 +140,7 @@ void register_CLJCalculator_class(){
         }
         { //::SireMM::CLJCalculator::what
         
-            typedef char const * ( ::SireMM::CLJCalculator::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::CLJCalculator::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::CLJCalculator::what );
             
             CLJCalculator_exposer.def( 

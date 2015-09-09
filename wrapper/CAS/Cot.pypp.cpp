@@ -37,7 +37,7 @@ void register_Cot_class(){
         Cot_exposer.def( bp::init< SireCAS::Cot const & >(( bp::arg("other") )) );
         { //::SireCAS::Cot::evaluate
         
-            typedef double ( ::SireCAS::Cot::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::Cot::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Cot::evaluate );
             
             Cot_exposer.def( 
@@ -48,7 +48,7 @@ void register_Cot_class(){
         }
         { //::SireCAS::Cot::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::Cot::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::Cot::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Cot::evaluate );
             
             Cot_exposer.def( 
@@ -70,7 +70,7 @@ void register_Cot_class(){
         }
         { //::SireCAS::Cot::what
         
-            typedef char const * ( ::SireCAS::Cot::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::Cot::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::Cot::what );
             
             Cot_exposer.def( 

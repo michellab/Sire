@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "DihedralComponent.pypp.hpp"
 
 namespace bp = boost::python;
@@ -45,7 +44,7 @@ void register_DihedralComponent_class(){
         DihedralComponent_exposer.def( bp::init< SireSystem::DihedralComponent const & >(( bp::arg("other") )) );
         { //::SireSystem::DihedralComponent::nPoints
         
-            typedef int ( ::SireSystem::DihedralComponent::*nPoints_function_type )(  ) const;
+            typedef int ( ::SireSystem::DihedralComponent::*nPoints_function_type)(  ) const;
             nPoints_function_type nPoints_function_value( &::SireSystem::DihedralComponent::nPoints );
             
             DihedralComponent_exposer.def( 
@@ -56,7 +55,7 @@ void register_DihedralComponent_class(){
         DihedralComponent_exposer.def( bp::self != bp::self );
         { //::SireSystem::DihedralComponent::operator=
         
-            typedef ::SireSystem::DihedralComponent & ( ::SireSystem::DihedralComponent::*assign_function_type )( ::SireSystem::DihedralComponent const & ) ;
+            typedef ::SireSystem::DihedralComponent & ( ::SireSystem::DihedralComponent::*assign_function_type)( ::SireSystem::DihedralComponent const & ) ;
             assign_function_type assign_function_value( &::SireSystem::DihedralComponent::operator= );
             
             DihedralComponent_exposer.def( 
@@ -75,63 +74,63 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "phi"
                 , phi_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::DihedralComponent::point
         
-            typedef ::SireFF::Point const & ( ::SireSystem::DihedralComponent::*point_function_type )( int ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::DihedralComponent::*point_function_type)( int ) const;
             point_function_type point_function_value( &::SireSystem::DihedralComponent::point );
             
             DihedralComponent_exposer.def( 
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::DihedralComponent::point0
         
-            typedef ::SireFF::Point const & ( ::SireSystem::DihedralComponent::*point0_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::DihedralComponent::*point0_function_type)(  ) const;
             point0_function_type point0_function_value( &::SireSystem::DihedralComponent::point0 );
             
             DihedralComponent_exposer.def( 
                 "point0"
                 , point0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::DihedralComponent::point1
         
-            typedef ::SireFF::Point const & ( ::SireSystem::DihedralComponent::*point1_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::DihedralComponent::*point1_function_type)(  ) const;
             point1_function_type point1_function_value( &::SireSystem::DihedralComponent::point1 );
             
             DihedralComponent_exposer.def( 
                 "point1"
                 , point1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::DihedralComponent::point2
         
-            typedef ::SireFF::Point const & ( ::SireSystem::DihedralComponent::*point2_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::DihedralComponent::*point2_function_type)(  ) const;
             point2_function_type point2_function_value( &::SireSystem::DihedralComponent::point2 );
             
             DihedralComponent_exposer.def( 
                 "point2"
                 , point2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::DihedralComponent::point3
         
-            typedef ::SireFF::Point const & ( ::SireSystem::DihedralComponent::*point3_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::DihedralComponent::*point3_function_type)(  ) const;
             point3_function_type point3_function_value( &::SireSystem::DihedralComponent::point3 );
             
             DihedralComponent_exposer.def( 
                 "point3"
                 , point3_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::DihedralComponent::r01
@@ -142,7 +141,7 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "r01"
                 , r01_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::DihedralComponent::r03
@@ -153,7 +152,7 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "r03"
                 , r03_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::DihedralComponent::r12
@@ -164,7 +163,7 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "r12"
                 , r12_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::DihedralComponent::r23
@@ -175,7 +174,7 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "r23"
                 , r23_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::DihedralComponent::theta012
@@ -186,7 +185,7 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "theta012"
                 , theta012_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::DihedralComponent::theta123
@@ -197,12 +196,12 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "theta123"
                 , theta123_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::DihedralComponent::toString
         
-            typedef ::QString ( ::SireSystem::DihedralComponent::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireSystem::DihedralComponent::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireSystem::DihedralComponent::toString );
             
             DihedralComponent_exposer.def( 

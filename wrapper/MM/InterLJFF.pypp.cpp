@@ -32,7 +32,7 @@ void register_InterLJFF_class(){
         { //::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::energy
         
             typedef SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > > exported_class_t;
-            typedef void ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*energy_function_type )( ::SireFF::EnergyTable &,double ) ;
+            typedef void ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*energy_function_type)( ::SireFF::EnergyTable &,double ) ;
             energy_function_type energy_function_value( &::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::energy );
             
             InterLJFF_exposer.def( 
@@ -44,7 +44,7 @@ void register_InterLJFF_class(){
         { //::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::energy
         
             typedef SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > > exported_class_t;
-            typedef void ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*energy_function_type )( ::SireFF::EnergyTable &,::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*energy_function_type)( ::SireFF::EnergyTable &,::SireCAS::Symbol const &,double ) ;
             energy_function_type energy_function_value( &::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::energy );
             
             InterLJFF_exposer.def( 
@@ -56,7 +56,7 @@ void register_InterLJFF_class(){
         { //::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::field
         
             typedef SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > > exported_class_t;
-            typedef void ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*field_function_type )( ::SireFF::FieldTable &,double ) ;
+            typedef void ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*field_function_type)( ::SireFF::FieldTable &,double ) ;
             field_function_type field_function_value( &::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::field );
             
             InterLJFF_exposer.def( 
@@ -68,7 +68,7 @@ void register_InterLJFF_class(){
         { //::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::field
         
             typedef SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > > exported_class_t;
-            typedef void ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*field_function_type )( ::SireFF::FieldTable &,::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*field_function_type)( ::SireFF::FieldTable &,::SireCAS::Symbol const &,double ) ;
             field_function_type field_function_value( &::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::field );
             
             InterLJFF_exposer.def( 
@@ -80,7 +80,7 @@ void register_InterLJFF_class(){
         { //::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::field
         
             typedef SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > > exported_class_t;
-            typedef void ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*field_function_type )( ::SireFF::FieldTable &,::SireFF::Probe const &,double ) ;
+            typedef void ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*field_function_type)( ::SireFF::FieldTable &,::SireFF::Probe const &,double ) ;
             field_function_type field_function_value( &::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::field );
             
             InterLJFF_exposer.def( 
@@ -92,7 +92,7 @@ void register_InterLJFF_class(){
         { //::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::field
         
             typedef SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > > exported_class_t;
-            typedef void ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*field_function_type )( ::SireFF::FieldTable &,::SireCAS::Symbol const &,::SireFF::Probe const &,double ) ;
+            typedef void ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*field_function_type)( ::SireFF::FieldTable &,::SireCAS::Symbol const &,::SireFF::Probe const &,double ) ;
             field_function_type field_function_value( &::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::field );
             
             InterLJFF_exposer.def( 
@@ -104,7 +104,7 @@ void register_InterLJFF_class(){
         { //::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::force
         
             typedef SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > > exported_class_t;
-            typedef void ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*force_function_type )( ::SireFF::ForceTable &,double ) ;
+            typedef void ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*force_function_type)( ::SireFF::ForceTable &,double ) ;
             force_function_type force_function_value( &::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::force );
             
             InterLJFF_exposer.def( 
@@ -116,7 +116,7 @@ void register_InterLJFF_class(){
         { //::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::force
         
             typedef SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > > exported_class_t;
-            typedef void ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*force_function_type )( ::SireFF::ForceTable &,::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*force_function_type)( ::SireFF::ForceTable &,::SireCAS::Symbol const &,double ) ;
             force_function_type force_function_value( &::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::force );
             
             InterLJFF_exposer.def( 
@@ -129,7 +129,7 @@ void register_InterLJFF_class(){
         { //::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::operator=
         
             typedef SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > > exported_class_t;
-            typedef ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > > & ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*assign_function_type )( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > > const & ) ;
+            typedef ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > > & ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*assign_function_type)( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > > const & ) ;
             assign_function_type assign_function_value( &::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::operator= );
             
             InterLJFF_exposer.def( 
@@ -143,7 +143,7 @@ void register_InterLJFF_class(){
         { //::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::packCoordinates
         
             typedef SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > > exported_class_t;
-            typedef void ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*packCoordinates_function_type )(  ) ;
+            typedef void ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*packCoordinates_function_type)(  ) ;
             packCoordinates_function_type packCoordinates_function_value( &::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::packCoordinates );
             
             InterLJFF_exposer.def( 
@@ -154,7 +154,7 @@ void register_InterLJFF_class(){
         { //::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::potential
         
             typedef SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > > exported_class_t;
-            typedef void ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*potential_function_type )( ::SireFF::PotentialTable &,double ) ;
+            typedef void ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*potential_function_type)( ::SireFF::PotentialTable &,double ) ;
             potential_function_type potential_function_value( &::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::potential );
             
             InterLJFF_exposer.def( 
@@ -166,7 +166,7 @@ void register_InterLJFF_class(){
         { //::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::potential
         
             typedef SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > > exported_class_t;
-            typedef void ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*potential_function_type )( ::SireFF::PotentialTable &,::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*potential_function_type)( ::SireFF::PotentialTable &,::SireCAS::Symbol const &,double ) ;
             potential_function_type potential_function_value( &::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::potential );
             
             InterLJFF_exposer.def( 
@@ -178,7 +178,7 @@ void register_InterLJFF_class(){
         { //::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::potential
         
             typedef SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > > exported_class_t;
-            typedef void ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*potential_function_type )( ::SireFF::PotentialTable &,::SireFF::Probe const &,double ) ;
+            typedef void ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*potential_function_type)( ::SireFF::PotentialTable &,::SireFF::Probe const &,double ) ;
             potential_function_type potential_function_value( &::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::potential );
             
             InterLJFF_exposer.def( 
@@ -190,7 +190,7 @@ void register_InterLJFF_class(){
         { //::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::potential
         
             typedef SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > > exported_class_t;
-            typedef void ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*potential_function_type )( ::SireFF::PotentialTable &,::SireCAS::Symbol const &,::SireFF::Probe const &,double ) ;
+            typedef void ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*potential_function_type)( ::SireFF::PotentialTable &,::SireCAS::Symbol const &,::SireFF::Probe const &,double ) ;
             potential_function_type potential_function_value( &::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::potential );
             
             InterLJFF_exposer.def( 
@@ -213,7 +213,7 @@ void register_InterLJFF_class(){
         { //::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::what
         
             typedef SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > > exported_class_t;
-            typedef char const * ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*what_function_type )(  ) const;
+            typedef char const * ( ::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireFF::Inter2B3DFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::what );
             
             InterLJFF_exposer.def( 

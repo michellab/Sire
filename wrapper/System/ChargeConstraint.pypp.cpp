@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "ChargeConstraint.pypp.hpp"
 
 namespace bp = boost::python;
@@ -38,18 +37,18 @@ void register_ChargeConstraint_class(){
         bp::scope ChargeConstraint_scope( ChargeConstraint_exposer );
         { //::SireSystem::ChargeConstraint::moleculeGroup
         
-            typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::ChargeConstraint::*moleculeGroup_function_type )(  ) const;
+            typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::ChargeConstraint::*moleculeGroup_function_type)(  ) const;
             moleculeGroup_function_type moleculeGroup_function_value( &::SireSystem::ChargeConstraint::moleculeGroup );
             
             ChargeConstraint_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireSystem::ChargeConstraint::propertyMap
         
-            typedef ::SireBase::PropertyMap const & ( ::SireSystem::ChargeConstraint::*propertyMap_function_type )(  ) const;
+            typedef ::SireBase::PropertyMap const & ( ::SireSystem::ChargeConstraint::*propertyMap_function_type)(  ) const;
             propertyMap_function_type propertyMap_function_value( &::SireSystem::ChargeConstraint::propertyMap );
             
             ChargeConstraint_exposer.def( 

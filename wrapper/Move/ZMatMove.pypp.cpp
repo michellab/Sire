@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "ZMatMove.pypp.hpp"
 
 namespace bp = boost::python;
@@ -57,18 +56,18 @@ void register_ZMatMove_class(){
         ZMatMove_exposer.def( bp::init< SireMove::ZMatMove const & >(( bp::arg("other") )) );
         { //::SireMove::ZMatMove::moleculeGroup
         
-            typedef ::SireMol::MoleculeGroup const & ( ::SireMove::ZMatMove::*moleculeGroup_function_type )(  ) const;
+            typedef ::SireMol::MoleculeGroup const & ( ::SireMove::ZMatMove::*moleculeGroup_function_type)(  ) const;
             moleculeGroup_function_type moleculeGroup_function_value( &::SireMove::ZMatMove::moleculeGroup );
             
             ZMatMove_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMove::ZMatMove::move
         
-            typedef void ( ::SireMove::ZMatMove::*move_function_type )( ::SireSystem::System &,int,bool ) ;
+            typedef void ( ::SireMove::ZMatMove::*move_function_type)( ::SireSystem::System &,int,bool ) ;
             move_function_type move_function_value( &::SireMove::ZMatMove::move );
             
             ZMatMove_exposer.def( 
@@ -80,7 +79,7 @@ void register_ZMatMove_class(){
         ZMatMove_exposer.def( bp::self != bp::self );
         { //::SireMove::ZMatMove::operator=
         
-            typedef ::SireMove::ZMatMove & ( ::SireMove::ZMatMove::*assign_function_type )( ::SireMove::ZMatMove const & ) ;
+            typedef ::SireMove::ZMatMove & ( ::SireMove::ZMatMove::*assign_function_type)( ::SireMove::ZMatMove const & ) ;
             assign_function_type assign_function_value( &::SireMove::ZMatMove::operator= );
             
             ZMatMove_exposer.def( 
@@ -93,18 +92,18 @@ void register_ZMatMove_class(){
         ZMatMove_exposer.def( bp::self == bp::self );
         { //::SireMove::ZMatMove::sampler
         
-            typedef ::SireMove::Sampler const & ( ::SireMove::ZMatMove::*sampler_function_type )(  ) const;
+            typedef ::SireMove::Sampler const & ( ::SireMove::ZMatMove::*sampler_function_type)(  ) const;
             sampler_function_type sampler_function_value( &::SireMove::ZMatMove::sampler );
             
             ZMatMove_exposer.def( 
                 "sampler"
                 , sampler_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMove::ZMatMove::setGenerator
         
-            typedef void ( ::SireMove::ZMatMove::*setGenerator_function_type )( ::SireMaths::RanGenerator const & ) ;
+            typedef void ( ::SireMove::ZMatMove::*setGenerator_function_type)( ::SireMaths::RanGenerator const & ) ;
             setGenerator_function_type setGenerator_function_value( &::SireMove::ZMatMove::setGenerator );
             
             ZMatMove_exposer.def( 
@@ -115,7 +114,7 @@ void register_ZMatMove_class(){
         }
         { //::SireMove::ZMatMove::setSampler
         
-            typedef void ( ::SireMove::ZMatMove::*setSampler_function_type )( ::SireMove::Sampler const & ) ;
+            typedef void ( ::SireMove::ZMatMove::*setSampler_function_type)( ::SireMove::Sampler const & ) ;
             setSampler_function_type setSampler_function_value( &::SireMove::ZMatMove::setSampler );
             
             ZMatMove_exposer.def( 
@@ -126,7 +125,7 @@ void register_ZMatMove_class(){
         }
         { //::SireMove::ZMatMove::setSampler
         
-            typedef void ( ::SireMove::ZMatMove::*setSampler_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireMove::ZMatMove::*setSampler_function_type)( ::SireMol::MoleculeGroup const & ) ;
             setSampler_function_type setSampler_function_value( &::SireMove::ZMatMove::setSampler );
             
             ZMatMove_exposer.def( 
@@ -137,7 +136,7 @@ void register_ZMatMove_class(){
         }
         { //::SireMove::ZMatMove::setSynchronisedAngles
         
-            typedef void ( ::SireMove::ZMatMove::*setSynchronisedAngles_function_type )( bool ) ;
+            typedef void ( ::SireMove::ZMatMove::*setSynchronisedAngles_function_type)( bool ) ;
             setSynchronisedAngles_function_type setSynchronisedAngles_function_value( &::SireMove::ZMatMove::setSynchronisedAngles );
             
             ZMatMove_exposer.def( 
@@ -148,7 +147,7 @@ void register_ZMatMove_class(){
         }
         { //::SireMove::ZMatMove::setSynchronisedBonds
         
-            typedef void ( ::SireMove::ZMatMove::*setSynchronisedBonds_function_type )( bool ) ;
+            typedef void ( ::SireMove::ZMatMove::*setSynchronisedBonds_function_type)( bool ) ;
             setSynchronisedBonds_function_type setSynchronisedBonds_function_value( &::SireMove::ZMatMove::setSynchronisedBonds );
             
             ZMatMove_exposer.def( 
@@ -159,7 +158,7 @@ void register_ZMatMove_class(){
         }
         { //::SireMove::ZMatMove::setSynchronisedDihedrals
         
-            typedef void ( ::SireMove::ZMatMove::*setSynchronisedDihedrals_function_type )( bool ) ;
+            typedef void ( ::SireMove::ZMatMove::*setSynchronisedDihedrals_function_type)( bool ) ;
             setSynchronisedDihedrals_function_type setSynchronisedDihedrals_function_value( &::SireMove::ZMatMove::setSynchronisedDihedrals );
             
             ZMatMove_exposer.def( 
@@ -170,7 +169,7 @@ void register_ZMatMove_class(){
         }
         { //::SireMove::ZMatMove::setSynchronisedMotion
         
-            typedef void ( ::SireMove::ZMatMove::*setSynchronisedMotion_function_type )( bool ) ;
+            typedef void ( ::SireMove::ZMatMove::*setSynchronisedMotion_function_type)( bool ) ;
             setSynchronisedMotion_function_type setSynchronisedMotion_function_value( &::SireMove::ZMatMove::setSynchronisedMotion );
             
             ZMatMove_exposer.def( 
@@ -181,7 +180,7 @@ void register_ZMatMove_class(){
         }
         { //::SireMove::ZMatMove::setZMatrixProperty
         
-            typedef void ( ::SireMove::ZMatMove::*setZMatrixProperty_function_type )( ::SireBase::PropertyName const & ) ;
+            typedef void ( ::SireMove::ZMatMove::*setZMatrixProperty_function_type)( ::SireBase::PropertyName const & ) ;
             setZMatrixProperty_function_type setZMatrixProperty_function_value( &::SireMove::ZMatMove::setZMatrixProperty );
             
             ZMatMove_exposer.def( 
@@ -192,7 +191,7 @@ void register_ZMatMove_class(){
         }
         { //::SireMove::ZMatMove::synchronisedAngles
         
-            typedef bool ( ::SireMove::ZMatMove::*synchronisedAngles_function_type )(  ) const;
+            typedef bool ( ::SireMove::ZMatMove::*synchronisedAngles_function_type)(  ) const;
             synchronisedAngles_function_type synchronisedAngles_function_value( &::SireMove::ZMatMove::synchronisedAngles );
             
             ZMatMove_exposer.def( 
@@ -202,7 +201,7 @@ void register_ZMatMove_class(){
         }
         { //::SireMove::ZMatMove::synchronisedBonds
         
-            typedef bool ( ::SireMove::ZMatMove::*synchronisedBonds_function_type )(  ) const;
+            typedef bool ( ::SireMove::ZMatMove::*synchronisedBonds_function_type)(  ) const;
             synchronisedBonds_function_type synchronisedBonds_function_value( &::SireMove::ZMatMove::synchronisedBonds );
             
             ZMatMove_exposer.def( 
@@ -212,7 +211,7 @@ void register_ZMatMove_class(){
         }
         { //::SireMove::ZMatMove::synchronisedDihedrals
         
-            typedef bool ( ::SireMove::ZMatMove::*synchronisedDihedrals_function_type )(  ) const;
+            typedef bool ( ::SireMove::ZMatMove::*synchronisedDihedrals_function_type)(  ) const;
             synchronisedDihedrals_function_type synchronisedDihedrals_function_value( &::SireMove::ZMatMove::synchronisedDihedrals );
             
             ZMatMove_exposer.def( 
@@ -222,7 +221,7 @@ void register_ZMatMove_class(){
         }
         { //::SireMove::ZMatMove::synchronisedMotion
         
-            typedef bool ( ::SireMove::ZMatMove::*synchronisedMotion_function_type )(  ) const;
+            typedef bool ( ::SireMove::ZMatMove::*synchronisedMotion_function_type)(  ) const;
             synchronisedMotion_function_type synchronisedMotion_function_value( &::SireMove::ZMatMove::synchronisedMotion );
             
             ZMatMove_exposer.def( 
@@ -232,7 +231,7 @@ void register_ZMatMove_class(){
         }
         { //::SireMove::ZMatMove::toString
         
-            typedef ::QString ( ::SireMove::ZMatMove::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMove::ZMatMove::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMove::ZMatMove::toString );
             
             ZMatMove_exposer.def( 
@@ -252,7 +251,7 @@ void register_ZMatMove_class(){
         }
         { //::SireMove::ZMatMove::zmatrixProperty
         
-            typedef ::SireBase::PropertyName const & ( ::SireMove::ZMatMove::*zmatrixProperty_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireMove::ZMatMove::*zmatrixProperty_function_type)(  ) const;
             zmatrixProperty_function_type zmatrixProperty_function_value( &::SireMove::ZMatMove::zmatrixProperty );
             
             ZMatMove_exposer.def( 

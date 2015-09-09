@@ -5,8 +5,6 @@
 
 #include "boost/python.hpp"
 
-#include "Helpers/clone_const_reference.hpp"
-
 #include "AABox.pypp.hpp"
 
 #include "BoxPatching.pypp.hpp"

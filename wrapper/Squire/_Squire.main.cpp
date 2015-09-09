@@ -5,8 +5,6 @@
 
 #include "boost/python.hpp"
 
-#include "Helpers/clone_const_reference.hpp"
-
 #include "AM1BCC.pypp.hpp"
 
 #include "ChargeElementParameterNames3D.pypp.hpp"

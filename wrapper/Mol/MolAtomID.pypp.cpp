@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "MolAtomID.pypp.hpp"
 
 namespace bp = boost::python;
@@ -49,18 +48,18 @@ void register_MolAtomID_class(){
         MolAtomID_exposer.def( bp::init< SireMol::MolAtomID const & >(( bp::arg("other") )) );
         { //::SireMol::MolAtomID::atomID
         
-            typedef ::SireMol::AtomID const & ( ::SireMol::MolAtomID::*atomID_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMol::MolAtomID::*atomID_function_type)(  ) const;
             atomID_function_type atomID_function_value( &::SireMol::MolAtomID::atomID );
             
             MolAtomID_exposer.def( 
                 "atomID"
                 , atomID_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMol::MolAtomID::hash
         
-            typedef ::uint ( ::SireMol::MolAtomID::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::MolAtomID::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::MolAtomID::hash );
             
             MolAtomID_exposer.def( 
@@ -70,7 +69,7 @@ void register_MolAtomID_class(){
         }
         { //::SireMol::MolAtomID::isNull
         
-            typedef bool ( ::SireMol::MolAtomID::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::MolAtomID::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::MolAtomID::isNull );
             
             MolAtomID_exposer.def( 
@@ -80,7 +79,7 @@ void register_MolAtomID_class(){
         }
         { //::SireMol::MolAtomID::map
         
-            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::MolAtomID::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::MolAtomID::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireMol::MolAtomID::map );
             
             MolAtomID_exposer.def( 
@@ -91,19 +90,19 @@ void register_MolAtomID_class(){
         }
         { //::SireMol::MolAtomID::molID
         
-            typedef ::SireMol::MolID const & ( ::SireMol::MolAtomID::*molID_function_type )(  ) const;
+            typedef ::SireMol::MolID const & ( ::SireMol::MolAtomID::*molID_function_type)(  ) const;
             molID_function_type molID_function_value( &::SireMol::MolAtomID::molID );
             
             MolAtomID_exposer.def( 
                 "molID"
                 , molID_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         MolAtomID_exposer.def( bp::self != bp::self );
         { //::SireMol::MolAtomID::operator=
         
-            typedef ::SireMol::MolAtomID & ( ::SireMol::MolAtomID::*assign_function_type )( ::SireMol::MolAtomID const & ) ;
+            typedef ::SireMol::MolAtomID & ( ::SireMol::MolAtomID::*assign_function_type)( ::SireMol::MolAtomID const & ) ;
             assign_function_type assign_function_value( &::SireMol::MolAtomID::operator= );
             
             MolAtomID_exposer.def( 
@@ -117,7 +116,7 @@ void register_MolAtomID_class(){
         MolAtomID_exposer.def( bp::self == bp::self );
         { //::SireMol::MolAtomID::selectAllFrom
         
-            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Atom > > ( ::SireMol::MolAtomID::*selectAllFrom_function_type )( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Atom > > ( ::SireMol::MolAtomID::*selectAllFrom_function_type)( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) const;
             selectAllFrom_function_type selectAllFrom_function_value( &::SireMol::MolAtomID::selectAllFrom );
             
             MolAtomID_exposer.def( 
@@ -128,7 +127,7 @@ void register_MolAtomID_class(){
         }
         { //::SireMol::MolAtomID::selectAllFrom
         
-            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Atom > > ( ::SireMol::MolAtomID::*selectAllFrom_function_type )( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Atom > > ( ::SireMol::MolAtomID::*selectAllFrom_function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
             selectAllFrom_function_type selectAllFrom_function_value( &::SireMol::MolAtomID::selectAllFrom );
             
             MolAtomID_exposer.def( 
@@ -139,7 +138,7 @@ void register_MolAtomID_class(){
         }
         { //::SireMol::MolAtomID::selectAllFrom
         
-            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Atom > > ( ::SireMol::MolAtomID::*selectAllFrom_function_type )( ::SireMol::MolGroupsBase const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Atom > > ( ::SireMol::MolAtomID::*selectAllFrom_function_type)( ::SireMol::MolGroupsBase const &,::SireBase::PropertyMap const & ) const;
             selectAllFrom_function_type selectAllFrom_function_value( &::SireMol::MolAtomID::selectAllFrom );
             
             MolAtomID_exposer.def( 
@@ -150,7 +149,7 @@ void register_MolAtomID_class(){
         }
         { //::SireMol::MolAtomID::toString
         
-            typedef ::QString ( ::SireMol::MolAtomID::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::MolAtomID::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::MolAtomID::toString );
             
             MolAtomID_exposer.def( 
@@ -170,7 +169,7 @@ void register_MolAtomID_class(){
         }
         { //::SireMol::MolAtomID::what
         
-            typedef char const * ( ::SireMol::MolAtomID::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::MolAtomID::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::MolAtomID::what );
             
             MolAtomID_exposer.def( 

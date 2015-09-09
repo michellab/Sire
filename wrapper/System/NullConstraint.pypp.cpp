@@ -43,7 +43,7 @@ void register_NullConstraint_class(){
         NullConstraint_exposer.def( bp::self != bp::self );
         { //::SireSystem::NullConstraint::operator=
         
-            typedef ::SireSystem::NullConstraint & ( ::SireSystem::NullConstraint::*assign_function_type )( ::SireSystem::NullConstraint const & ) ;
+            typedef ::SireSystem::NullConstraint & ( ::SireSystem::NullConstraint::*assign_function_type)( ::SireSystem::NullConstraint const & ) ;
             assign_function_type assign_function_value( &::SireSystem::NullConstraint::operator= );
             
             NullConstraint_exposer.def( 
@@ -56,7 +56,7 @@ void register_NullConstraint_class(){
         NullConstraint_exposer.def( bp::self == bp::self );
         { //::SireSystem::NullConstraint::toString
         
-            typedef ::QString ( ::SireSystem::NullConstraint::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireSystem::NullConstraint::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireSystem::NullConstraint::toString );
             
             NullConstraint_exposer.def( 

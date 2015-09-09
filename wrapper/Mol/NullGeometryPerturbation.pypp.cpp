@@ -43,7 +43,7 @@ void register_NullGeometryPerturbation_class(){
         NullGeometryPerturbation_exposer.def( bp::self != bp::self );
         { //::SireMol::NullGeometryPerturbation::operator=
         
-            typedef ::SireMol::NullGeometryPerturbation & ( ::SireMol::NullGeometryPerturbation::*assign_function_type )( ::SireMol::NullGeometryPerturbation const & ) ;
+            typedef ::SireMol::NullGeometryPerturbation & ( ::SireMol::NullGeometryPerturbation::*assign_function_type)( ::SireMol::NullGeometryPerturbation const & ) ;
             assign_function_type assign_function_value( &::SireMol::NullGeometryPerturbation::operator= );
             
             NullGeometryPerturbation_exposer.def( 
@@ -56,7 +56,7 @@ void register_NullGeometryPerturbation_class(){
         NullGeometryPerturbation_exposer.def( bp::self == bp::self );
         { //::SireMol::NullGeometryPerturbation::perturbMolecule
         
-            typedef void ( ::SireMol::NullGeometryPerturbation::*perturbMolecule_function_type )( ::SireMol::MolEditor &,::SireCAS::Values const & ) const;
+            typedef void ( ::SireMol::NullGeometryPerturbation::*perturbMolecule_function_type)( ::SireMol::MolEditor &,::SireCAS::Values const & ) const;
             perturbMolecule_function_type perturbMolecule_function_value( &::SireMol::NullGeometryPerturbation::perturbMolecule );
             
             NullGeometryPerturbation_exposer.def( 
@@ -67,7 +67,7 @@ void register_NullGeometryPerturbation_class(){
         }
         { //::SireMol::NullGeometryPerturbation::requiredProperties
         
-            typedef ::QSet< QString > ( ::SireMol::NullGeometryPerturbation::*requiredProperties_function_type )(  ) const;
+            typedef ::QSet< QString > ( ::SireMol::NullGeometryPerturbation::*requiredProperties_function_type)(  ) const;
             requiredProperties_function_type requiredProperties_function_value( &::SireMol::NullGeometryPerturbation::requiredProperties );
             
             NullGeometryPerturbation_exposer.def( 
@@ -77,7 +77,7 @@ void register_NullGeometryPerturbation_class(){
         }
         { //::SireMol::NullGeometryPerturbation::requiredSymbols
         
-            typedef ::QSet< SireCAS::Symbol > ( ::SireMol::NullGeometryPerturbation::*requiredSymbols_function_type )(  ) const;
+            typedef ::QSet< SireCAS::Symbol > ( ::SireMol::NullGeometryPerturbation::*requiredSymbols_function_type)(  ) const;
             requiredSymbols_function_type requiredSymbols_function_value( &::SireMol::NullGeometryPerturbation::requiredSymbols );
             
             NullGeometryPerturbation_exposer.def( 
@@ -97,7 +97,7 @@ void register_NullGeometryPerturbation_class(){
         }
         { //::SireMol::NullGeometryPerturbation::wouldChange
         
-            typedef bool ( ::SireMol::NullGeometryPerturbation::*wouldChange_function_type )( ::SireMol::Molecule const &,::SireCAS::Values const & ) const;
+            typedef bool ( ::SireMol::NullGeometryPerturbation::*wouldChange_function_type)( ::SireMol::Molecule const &,::SireCAS::Values const & ) const;
             wouldChange_function_type wouldChange_function_value( &::SireMol::NullGeometryPerturbation::wouldChange );
             
             NullGeometryPerturbation_exposer.def( 

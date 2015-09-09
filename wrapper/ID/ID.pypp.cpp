@@ -27,7 +27,7 @@ void register_ID_class(){
         bp::scope ID_scope( ID_exposer );
         { //::SireID::ID::hash
         
-            typedef ::uint ( ::SireID::ID::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireID::ID::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireID::ID::hash );
             
             ID_exposer.def( 
@@ -37,7 +37,7 @@ void register_ID_class(){
         }
         { //::SireID::ID::isNull
         
-            typedef bool ( ::SireID::ID::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireID::ID::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireID::ID::isNull );
             
             ID_exposer.def( 
@@ -49,7 +49,7 @@ void register_ID_class(){
         ID_exposer.def( bp::self == bp::self );
         { //::SireID::ID::toString
         
-            typedef ::QString ( ::SireID::ID::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireID::ID::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireID::ID::toString );
             
             ID_exposer.def( 
@@ -69,7 +69,7 @@ void register_ID_class(){
         }
         { //::SireID::ID::what
         
-            typedef char const * ( ::SireID::ID::*what_function_type )(  ) const;
+            typedef char const * ( ::SireID::ID::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireID::ID::what );
             
             ID_exposer.def( 

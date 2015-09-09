@@ -73,7 +73,7 @@ void register_AtomNum_class(){
         AtomNum_exposer.def( bp::init< SireMol::AtomNum const & >(( bp::arg("other") )) );
         { //::SireMol::AtomNum::hash
         
-            typedef ::uint ( ::SireMol::AtomNum::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::AtomNum::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::AtomNum::hash );
             
             AtomNum_exposer.def( 
@@ -83,7 +83,7 @@ void register_AtomNum_class(){
         }
         { //::SireMol::AtomNum::isNull
         
-            typedef bool ( ::SireMol::AtomNum::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::AtomNum::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::AtomNum::isNull );
             
             AtomNum_exposer.def( 
@@ -93,7 +93,7 @@ void register_AtomNum_class(){
         }
         { //::SireMol::AtomNum::map
         
-            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::AtomNum::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::AtomNum::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireMol::AtomNum::map );
             
             AtomNum_exposer.def( 
@@ -107,7 +107,7 @@ void register_AtomNum_class(){
         AtomNum_exposer.def( bp::self <= bp::self );
         { //::SireMol::AtomNum::operator=
         
-            typedef ::SireMol::AtomNum & ( ::SireMol::AtomNum::*assign_function_type )( ::SireMol::AtomNum const & ) ;
+            typedef ::SireMol::AtomNum & ( ::SireMol::AtomNum::*assign_function_type)( ::SireMol::AtomNum const & ) ;
             assign_function_type assign_function_value( &::SireMol::AtomNum::operator= );
             
             AtomNum_exposer.def( 
@@ -123,7 +123,7 @@ void register_AtomNum_class(){
         AtomNum_exposer.def( bp::self >= bp::self );
         { //::SireMol::AtomNum::toString
         
-            typedef ::QString ( ::SireMol::AtomNum::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::AtomNum::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::AtomNum::toString );
             
             AtomNum_exposer.def( 
@@ -143,7 +143,7 @@ void register_AtomNum_class(){
         }
         { //::SireMol::AtomNum::what
         
-            typedef char const * ( ::SireMol::AtomNum::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::AtomNum::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::AtomNum::what );
             
             AtomNum_exposer.def( 

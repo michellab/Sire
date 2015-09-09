@@ -5,8 +5,6 @@
 
 #include "boost/python.hpp"
 
-#include "Helpers/clone_const_reference.hpp"
-
 #include "AngleComponent.pypp.hpp"
 
 #include "AssignerGroup.pypp.hpp"

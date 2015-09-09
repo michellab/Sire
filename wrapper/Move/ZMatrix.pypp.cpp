@@ -62,7 +62,7 @@ void register_ZMatrix_class(){
         ZMatrix_exposer.def( bp::init< SireMove::ZMatrix const & >(( bp::arg("other") )) );
         { //::SireMove::ZMatrix::add
         
-            typedef void ( ::SireMove::ZMatrix::*add_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) ;
+            typedef void ( ::SireMove::ZMatrix::*add_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) ;
             add_function_type add_function_value( &::SireMove::ZMatrix::add );
             
             ZMatrix_exposer.def( 
@@ -73,7 +73,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::add
         
-            typedef void ( ::SireMove::ZMatrix::*add_function_type )( ::SireMol::DihedralID const & ) ;
+            typedef void ( ::SireMove::ZMatrix::*add_function_type)( ::SireMol::DihedralID const & ) ;
             add_function_type add_function_value( &::SireMove::ZMatrix::add );
             
             ZMatrix_exposer.def( 
@@ -84,7 +84,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::add
         
-            typedef void ( ::SireMove::ZMatrix::*add_function_type )( ::SireMove::ZMatrixLine const & ) ;
+            typedef void ( ::SireMove::ZMatrix::*add_function_type)( ::SireMove::ZMatrixLine const & ) ;
             add_function_type add_function_value( &::SireMove::ZMatrix::add );
             
             ZMatrix_exposer.def( 
@@ -95,7 +95,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::angleDelta
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMove::ZMatrix::*angleDelta_function_type )( ::SireMol::AtomID const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMove::ZMatrix::*angleDelta_function_type)( ::SireMol::AtomID const & ) const;
             angleDelta_function_type angleDelta_function_value( &::SireMove::ZMatrix::angleDelta );
             
             ZMatrix_exposer.def( 
@@ -106,7 +106,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::angleDelta
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMove::ZMatrix::*angleDelta_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMove::ZMatrix::*angleDelta_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             angleDelta_function_type angleDelta_function_value( &::SireMove::ZMatrix::angleDelta );
             
             ZMatrix_exposer.def( 
@@ -117,7 +117,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::at
         
-            typedef ::SireMove::ZMatrixLine const & ( ::SireMove::ZMatrix::*at_function_type )( ::SireMol::AtomID const & ) const;
+            typedef ::SireMove::ZMatrixLine const & ( ::SireMove::ZMatrix::*at_function_type)( ::SireMol::AtomID const & ) const;
             at_function_type at_function_value( &::SireMove::ZMatrix::at );
             
             ZMatrix_exposer.def( 
@@ -129,7 +129,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::atomBuildOrder
         
-            typedef ::QVector< int > const & ( ::SireMove::ZMatrix::*atomBuildOrder_function_type )(  ) const;
+            typedef ::QVector< int > const & ( ::SireMove::ZMatrix::*atomBuildOrder_function_type)(  ) const;
             atomBuildOrder_function_type atomBuildOrder_function_value( &::SireMove::ZMatrix::atomBuildOrder );
             
             ZMatrix_exposer.def( 
@@ -140,7 +140,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::bondDelta
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMove::ZMatrix::*bondDelta_function_type )( ::SireMol::AtomID const & ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMove::ZMatrix::*bondDelta_function_type)( ::SireMol::AtomID const & ) const;
             bondDelta_function_type bondDelta_function_value( &::SireMove::ZMatrix::bondDelta );
             
             ZMatrix_exposer.def( 
@@ -151,7 +151,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::bondDelta
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMove::ZMatrix::*bondDelta_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMove::ZMatrix::*bondDelta_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             bondDelta_function_type bondDelta_function_value( &::SireMove::ZMatrix::bondDelta );
             
             ZMatrix_exposer.def( 
@@ -162,7 +162,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::contains
         
-            typedef bool ( ::SireMove::ZMatrix::*contains_function_type )( ::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMove::ZMatrix::*contains_function_type)( ::SireMol::AtomID const & ) const;
             contains_function_type contains_function_value( &::SireMove::ZMatrix::contains );
             
             ZMatrix_exposer.def( 
@@ -173,7 +173,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::contains
         
-            typedef bool ( ::SireMove::ZMatrix::*contains_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMove::ZMatrix::*contains_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             contains_function_type contains_function_value( &::SireMove::ZMatrix::contains );
             
             ZMatrix_exposer.def( 
@@ -184,7 +184,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::contains
         
-            typedef bool ( ::SireMove::ZMatrix::*contains_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMove::ZMatrix::*contains_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             contains_function_type contains_function_value( &::SireMove::ZMatrix::contains );
             
             ZMatrix_exposer.def( 
@@ -195,7 +195,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::contains
         
-            typedef bool ( ::SireMove::ZMatrix::*contains_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMove::ZMatrix::*contains_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             contains_function_type contains_function_value( &::SireMove::ZMatrix::contains );
             
             ZMatrix_exposer.def( 
@@ -206,7 +206,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::contains
         
-            typedef bool ( ::SireMove::ZMatrix::*contains_function_type )( ::SireMol::BondID const & ) const;
+            typedef bool ( ::SireMove::ZMatrix::*contains_function_type)( ::SireMol::BondID const & ) const;
             contains_function_type contains_function_value( &::SireMove::ZMatrix::contains );
             
             ZMatrix_exposer.def( 
@@ -217,7 +217,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::contains
         
-            typedef bool ( ::SireMove::ZMatrix::*contains_function_type )( ::SireMol::AngleID const & ) const;
+            typedef bool ( ::SireMove::ZMatrix::*contains_function_type)( ::SireMol::AngleID const & ) const;
             contains_function_type contains_function_value( &::SireMove::ZMatrix::contains );
             
             ZMatrix_exposer.def( 
@@ -228,7 +228,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::contains
         
-            typedef bool ( ::SireMove::ZMatrix::*contains_function_type )( ::SireMol::DihedralID const & ) const;
+            typedef bool ( ::SireMove::ZMatrix::*contains_function_type)( ::SireMol::DihedralID const & ) const;
             contains_function_type contains_function_value( &::SireMove::ZMatrix::contains );
             
             ZMatrix_exposer.def( 
@@ -239,7 +239,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::delta
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMove::ZMatrix::*delta_function_type )( ::SireMol::BondID const & ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMove::ZMatrix::*delta_function_type)( ::SireMol::BondID const & ) const;
             delta_function_type delta_function_value( &::SireMove::ZMatrix::delta );
             
             ZMatrix_exposer.def( 
@@ -250,7 +250,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::delta
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMove::ZMatrix::*delta_function_type )( ::SireMol::AngleID const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMove::ZMatrix::*delta_function_type)( ::SireMol::AngleID const & ) const;
             delta_function_type delta_function_value( &::SireMove::ZMatrix::delta );
             
             ZMatrix_exposer.def( 
@@ -261,7 +261,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::delta
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMove::ZMatrix::*delta_function_type )( ::SireMol::DihedralID const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMove::ZMatrix::*delta_function_type)( ::SireMol::DihedralID const & ) const;
             delta_function_type delta_function_value( &::SireMove::ZMatrix::delta );
             
             ZMatrix_exposer.def( 
@@ -272,7 +272,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::dihedralDelta
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMove::ZMatrix::*dihedralDelta_function_type )( ::SireMol::AtomID const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMove::ZMatrix::*dihedralDelta_function_type)( ::SireMol::AtomID const & ) const;
             dihedralDelta_function_type dihedralDelta_function_value( &::SireMove::ZMatrix::dihedralDelta );
             
             ZMatrix_exposer.def( 
@@ -283,7 +283,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::dihedralDelta
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMove::ZMatrix::*dihedralDelta_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMove::ZMatrix::*dihedralDelta_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             dihedralDelta_function_type dihedralDelta_function_value( &::SireMove::ZMatrix::dihedralDelta );
             
             ZMatrix_exposer.def( 
@@ -294,7 +294,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::getIndex
         
-            typedef int ( ::SireMove::ZMatrix::*getIndex_function_type )( ::SireMol::AtomID const & ) const;
+            typedef int ( ::SireMove::ZMatrix::*getIndex_function_type)( ::SireMol::AtomID const & ) const;
             getIndex_function_type getIndex_function_value( &::SireMove::ZMatrix::getIndex );
             
             ZMatrix_exposer.def( 
@@ -305,7 +305,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::getIndex
         
-            typedef int ( ::SireMove::ZMatrix::*getIndex_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef int ( ::SireMove::ZMatrix::*getIndex_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             getIndex_function_type getIndex_function_value( &::SireMove::ZMatrix::getIndex );
             
             ZMatrix_exposer.def( 
@@ -316,7 +316,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::getIndex
         
-            typedef int ( ::SireMove::ZMatrix::*getIndex_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef int ( ::SireMove::ZMatrix::*getIndex_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             getIndex_function_type getIndex_function_value( &::SireMove::ZMatrix::getIndex );
             
             ZMatrix_exposer.def( 
@@ -327,7 +327,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::getIndex
         
-            typedef int ( ::SireMove::ZMatrix::*getIndex_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef int ( ::SireMove::ZMatrix::*getIndex_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             getIndex_function_type getIndex_function_value( &::SireMove::ZMatrix::getIndex );
             
             ZMatrix_exposer.def( 
@@ -338,7 +338,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::getIndex
         
-            typedef int ( ::SireMove::ZMatrix::*getIndex_function_type )( ::SireMol::BondID const & ) const;
+            typedef int ( ::SireMove::ZMatrix::*getIndex_function_type)( ::SireMol::BondID const & ) const;
             getIndex_function_type getIndex_function_value( &::SireMove::ZMatrix::getIndex );
             
             ZMatrix_exposer.def( 
@@ -349,7 +349,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::getIndex
         
-            typedef int ( ::SireMove::ZMatrix::*getIndex_function_type )( ::SireMol::AngleID const & ) const;
+            typedef int ( ::SireMove::ZMatrix::*getIndex_function_type)( ::SireMol::AngleID const & ) const;
             getIndex_function_type getIndex_function_value( &::SireMove::ZMatrix::getIndex );
             
             ZMatrix_exposer.def( 
@@ -360,7 +360,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::getIndex
         
-            typedef int ( ::SireMove::ZMatrix::*getIndex_function_type )( ::SireMol::DihedralID const & ) const;
+            typedef int ( ::SireMove::ZMatrix::*getIndex_function_type)( ::SireMol::DihedralID const & ) const;
             getIndex_function_type getIndex_function_value( &::SireMove::ZMatrix::getIndex );
             
             ZMatrix_exposer.def( 
@@ -371,7 +371,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::index
         
-            typedef ::QHash< SireMol::AtomIdx, int > const & ( ::SireMove::ZMatrix::*index_function_type )(  ) const;
+            typedef ::QHash< SireMol::AtomIdx, int > const & ( ::SireMove::ZMatrix::*index_function_type)(  ) const;
             index_function_type index_function_value( &::SireMove::ZMatrix::index );
             
             ZMatrix_exposer.def( 
@@ -382,7 +382,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::info
         
-            typedef ::SireMol::MoleculeInfoData const & ( ::SireMove::ZMatrix::*info_function_type )(  ) const;
+            typedef ::SireMol::MoleculeInfoData const & ( ::SireMove::ZMatrix::*info_function_type)(  ) const;
             info_function_type info_function_value( &::SireMove::ZMatrix::info );
             
             ZMatrix_exposer.def( 
@@ -393,7 +393,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::isCompatibleWith
         
-            typedef bool ( ::SireMove::ZMatrix::*isCompatibleWith_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef bool ( ::SireMove::ZMatrix::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMove::ZMatrix::isCompatibleWith );
             
             ZMatrix_exposer.def( 
@@ -404,7 +404,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::lines
         
-            typedef ::QVector< SireMove::ZMatrixLine > const & ( ::SireMove::ZMatrix::*lines_function_type )(  ) const;
+            typedef ::QVector< SireMove::ZMatrixLine > const & ( ::SireMove::ZMatrix::*lines_function_type)(  ) const;
             lines_function_type lines_function_value( &::SireMove::ZMatrix::lines );
             
             ZMatrix_exposer.def( 
@@ -415,7 +415,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::matchToSelection
         
-            typedef ::SireMove::ZMatrix ( ::SireMove::ZMatrix::*matchToSelection_function_type )( ::SireMol::AtomSelection const & ) const;
+            typedef ::SireMove::ZMatrix ( ::SireMove::ZMatrix::*matchToSelection_function_type)( ::SireMol::AtomSelection const & ) const;
             matchToSelection_function_type matchToSelection_function_value( &::SireMove::ZMatrix::matchToSelection );
             
             ZMatrix_exposer.def( 
@@ -426,7 +426,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::nLines
         
-            typedef int ( ::SireMove::ZMatrix::*nLines_function_type )(  ) const;
+            typedef int ( ::SireMove::ZMatrix::*nLines_function_type)(  ) const;
             nLines_function_type nLines_function_value( &::SireMove::ZMatrix::nLines );
             
             ZMatrix_exposer.def( 
@@ -437,7 +437,7 @@ void register_ZMatrix_class(){
         ZMatrix_exposer.def( bp::self != bp::self );
         { //::SireMove::ZMatrix::operator=
         
-            typedef ::SireMove::ZMatrix & ( ::SireMove::ZMatrix::*assign_function_type )( ::SireMove::ZMatrix const & ) ;
+            typedef ::SireMove::ZMatrix & ( ::SireMove::ZMatrix::*assign_function_type)( ::SireMove::ZMatrix const & ) ;
             assign_function_type assign_function_value( &::SireMove::ZMatrix::operator= );
             
             ZMatrix_exposer.def( 
@@ -450,7 +450,7 @@ void register_ZMatrix_class(){
         ZMatrix_exposer.def( bp::self == bp::self );
         { //::SireMove::ZMatrix::operator[]
         
-            typedef ::SireMove::ZMatrixLine const & ( ::SireMove::ZMatrix::*__getitem___function_type )( ::SireMol::AtomID const & ) const;
+            typedef ::SireMove::ZMatrixLine const & ( ::SireMove::ZMatrix::*__getitem___function_type)( ::SireMol::AtomID const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMove::ZMatrix::operator[] );
             
             ZMatrix_exposer.def( 
@@ -462,7 +462,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::remove
         
-            typedef void ( ::SireMove::ZMatrix::*remove_function_type )( ::SireMol::AtomID const & ) ;
+            typedef void ( ::SireMove::ZMatrix::*remove_function_type)( ::SireMol::AtomID const & ) ;
             remove_function_type remove_function_value( &::SireMove::ZMatrix::remove );
             
             ZMatrix_exposer.def( 
@@ -473,7 +473,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::remove
         
-            typedef void ( ::SireMove::ZMatrix::*remove_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) ;
+            typedef void ( ::SireMove::ZMatrix::*remove_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) ;
             remove_function_type remove_function_value( &::SireMove::ZMatrix::remove );
             
             ZMatrix_exposer.def( 
@@ -484,7 +484,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::remove
         
-            typedef void ( ::SireMove::ZMatrix::*remove_function_type )( ::SireMol::DihedralID const & ) ;
+            typedef void ( ::SireMove::ZMatrix::*remove_function_type)( ::SireMol::DihedralID const & ) ;
             remove_function_type remove_function_value( &::SireMove::ZMatrix::remove );
             
             ZMatrix_exposer.def( 
@@ -495,7 +495,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::remove
         
-            typedef void ( ::SireMove::ZMatrix::*remove_function_type )( ::SireMove::ZMatrixLine const & ) ;
+            typedef void ( ::SireMove::ZMatrix::*remove_function_type)( ::SireMove::ZMatrixLine const & ) ;
             remove_function_type remove_function_value( &::SireMove::ZMatrix::remove );
             
             ZMatrix_exposer.def( 
@@ -506,7 +506,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::setAngleDelta
         
-            typedef void ( ::SireMove::ZMatrix::*setAngleDelta_function_type )( ::SireMol::AtomID const &,::SireUnits::Dimension::Angle const & ) ;
+            typedef void ( ::SireMove::ZMatrix::*setAngleDelta_function_type)( ::SireMol::AtomID const &,::SireUnits::Dimension::Angle const & ) ;
             setAngleDelta_function_type setAngleDelta_function_value( &::SireMove::ZMatrix::setAngleDelta );
             
             ZMatrix_exposer.def( 
@@ -517,7 +517,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::setAngleDelta
         
-            typedef void ( ::SireMove::ZMatrix::*setAngleDelta_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireUnits::Dimension::Angle const & ) ;
+            typedef void ( ::SireMove::ZMatrix::*setAngleDelta_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireUnits::Dimension::Angle const & ) ;
             setAngleDelta_function_type setAngleDelta_function_value( &::SireMove::ZMatrix::setAngleDelta );
             
             ZMatrix_exposer.def( 
@@ -528,7 +528,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::setBondDelta
         
-            typedef void ( ::SireMove::ZMatrix::*setBondDelta_function_type )( ::SireMol::AtomID const &,::SireUnits::Dimension::Length const & ) ;
+            typedef void ( ::SireMove::ZMatrix::*setBondDelta_function_type)( ::SireMol::AtomID const &,::SireUnits::Dimension::Length const & ) ;
             setBondDelta_function_type setBondDelta_function_value( &::SireMove::ZMatrix::setBondDelta );
             
             ZMatrix_exposer.def( 
@@ -539,7 +539,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::setBondDelta
         
-            typedef void ( ::SireMove::ZMatrix::*setBondDelta_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireUnits::Dimension::Length const & ) ;
+            typedef void ( ::SireMove::ZMatrix::*setBondDelta_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireUnits::Dimension::Length const & ) ;
             setBondDelta_function_type setBondDelta_function_value( &::SireMove::ZMatrix::setBondDelta );
             
             ZMatrix_exposer.def( 
@@ -550,7 +550,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::setDelta
         
-            typedef void ( ::SireMove::ZMatrix::*setDelta_function_type )( ::SireMol::BondID const &,::SireUnits::Dimension::Length const & ) ;
+            typedef void ( ::SireMove::ZMatrix::*setDelta_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::Length const & ) ;
             setDelta_function_type setDelta_function_value( &::SireMove::ZMatrix::setDelta );
             
             ZMatrix_exposer.def( 
@@ -561,7 +561,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::setDelta
         
-            typedef void ( ::SireMove::ZMatrix::*setDelta_function_type )( ::SireMol::AngleID const &,::SireUnits::Dimension::Angle const & ) ;
+            typedef void ( ::SireMove::ZMatrix::*setDelta_function_type)( ::SireMol::AngleID const &,::SireUnits::Dimension::Angle const & ) ;
             setDelta_function_type setDelta_function_value( &::SireMove::ZMatrix::setDelta );
             
             ZMatrix_exposer.def( 
@@ -572,7 +572,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::setDelta
         
-            typedef void ( ::SireMove::ZMatrix::*setDelta_function_type )( ::SireMol::DihedralID const &,::SireUnits::Dimension::Angle const & ) ;
+            typedef void ( ::SireMove::ZMatrix::*setDelta_function_type)( ::SireMol::DihedralID const &,::SireUnits::Dimension::Angle const & ) ;
             setDelta_function_type setDelta_function_value( &::SireMove::ZMatrix::setDelta );
             
             ZMatrix_exposer.def( 
@@ -583,7 +583,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::setDihedralDelta
         
-            typedef void ( ::SireMove::ZMatrix::*setDihedralDelta_function_type )( ::SireMol::AtomID const &,::SireUnits::Dimension::Angle const & ) ;
+            typedef void ( ::SireMove::ZMatrix::*setDihedralDelta_function_type)( ::SireMol::AtomID const &,::SireUnits::Dimension::Angle const & ) ;
             setDihedralDelta_function_type setDihedralDelta_function_value( &::SireMove::ZMatrix::setDihedralDelta );
             
             ZMatrix_exposer.def( 
@@ -594,7 +594,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::setDihedralDelta
         
-            typedef void ( ::SireMove::ZMatrix::*setDihedralDelta_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireUnits::Dimension::Angle const & ) ;
+            typedef void ( ::SireMove::ZMatrix::*setDihedralDelta_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireUnits::Dimension::Angle const & ) ;
             setDihedralDelta_function_type setDihedralDelta_function_value( &::SireMove::ZMatrix::setDihedralDelta );
             
             ZMatrix_exposer.def( 
@@ -605,7 +605,7 @@ void register_ZMatrix_class(){
         }
         { //::SireMove::ZMatrix::toString
         
-            typedef ::QString ( ::SireMove::ZMatrix::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMove::ZMatrix::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMove::ZMatrix::toString );
             
             ZMatrix_exposer.def( 

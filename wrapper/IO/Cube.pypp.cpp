@@ -44,7 +44,7 @@ void register_Cube_class(){
         Cube_exposer.def( bp::self != bp::self );
         { //::SireIO::Cube::operator=
         
-            typedef ::SireIO::Cube & ( ::SireIO::Cube::*assign_function_type )( ::SireIO::Cube const & ) ;
+            typedef ::SireIO::Cube & ( ::SireIO::Cube::*assign_function_type)( ::SireIO::Cube const & ) ;
             assign_function_type assign_function_value( &::SireIO::Cube::operator= );
             
             Cube_exposer.def( 
@@ -57,7 +57,7 @@ void register_Cube_class(){
         Cube_exposer.def( bp::self == bp::self );
         { //::SireIO::Cube::write
         
-            typedef void ( ::SireIO::Cube::*write_function_type )( ::SireFF::PotentialTable const &,::QString const &,::SireBase::PropertyMap const & ) const;
+            typedef void ( ::SireIO::Cube::*write_function_type)( ::SireFF::PotentialTable const &,::QString const &,::SireBase::PropertyMap const & ) const;
             write_function_type write_function_value( &::SireIO::Cube::write );
             
             Cube_exposer.def( 
@@ -68,7 +68,7 @@ void register_Cube_class(){
         }
         { //::SireIO::Cube::write
         
-            typedef void ( ::SireIO::Cube::*write_function_type )( ::SireFF::PotentialTable const &,::SireMol::MoleculeGroup const &,::QString const &,::SireBase::PropertyMap const & ) const;
+            typedef void ( ::SireIO::Cube::*write_function_type)( ::SireFF::PotentialTable const &,::SireMol::MoleculeGroup const &,::QString const &,::SireBase::PropertyMap const & ) const;
             write_function_type write_function_value( &::SireIO::Cube::write );
             
             Cube_exposer.def( 
@@ -79,7 +79,7 @@ void register_Cube_class(){
         }
         { //::SireIO::Cube::write
         
-            typedef void ( ::SireIO::Cube::*write_function_type )( ::SireFF::PotentialTable const &,::SireMol::MolGroupsBase const &,::QString const &,::SireBase::PropertyMap const & ) const;
+            typedef void ( ::SireIO::Cube::*write_function_type)( ::SireFF::PotentialTable const &,::SireMol::MolGroupsBase const &,::QString const &,::SireBase::PropertyMap const & ) const;
             write_function_type write_function_value( &::SireIO::Cube::write );
             
             Cube_exposer.def( 

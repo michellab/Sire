@@ -57,7 +57,7 @@ void register_ChainEditor_class(){
         ChainEditor_exposer.def( bp::init< SireMol::ChainEditor const & >(( bp::arg("other") )) );
         { //::SireMol::ChainEditor::add
         
-            typedef ::SireMol::ResStructureEditor ( ::SireMol::ChainEditor::*add_function_type )( ::SireMol::ResName const & ) const;
+            typedef ::SireMol::ResStructureEditor ( ::SireMol::ChainEditor::*add_function_type)( ::SireMol::ResName const & ) const;
             add_function_type add_function_value( &::SireMol::ChainEditor::add );
             
             ChainEditor_exposer.def( 
@@ -68,7 +68,7 @@ void register_ChainEditor_class(){
         }
         { //::SireMol::ChainEditor::add
         
-            typedef ::SireMol::ResStructureEditor ( ::SireMol::ChainEditor::*add_function_type )( ::SireMol::ResNum ) const;
+            typedef ::SireMol::ResStructureEditor ( ::SireMol::ChainEditor::*add_function_type)( ::SireMol::ResNum ) const;
             add_function_type add_function_value( &::SireMol::ChainEditor::add );
             
             ChainEditor_exposer.def( 
@@ -79,7 +79,7 @@ void register_ChainEditor_class(){
         }
         { //::SireMol::ChainEditor::commit
         
-            typedef ::SireMol::Chain ( ::SireMol::ChainEditor::*commit_function_type )(  ) const;
+            typedef ::SireMol::Chain ( ::SireMol::ChainEditor::*commit_function_type)(  ) const;
             commit_function_type commit_function_value( &::SireMol::ChainEditor::commit );
             
             ChainEditor_exposer.def( 
@@ -89,7 +89,7 @@ void register_ChainEditor_class(){
         }
         { //::SireMol::ChainEditor::operator=
         
-            typedef ::SireMol::ChainEditor & ( ::SireMol::ChainEditor::*assign_function_type )( ::SireMol::Chain const & ) ;
+            typedef ::SireMol::ChainEditor & ( ::SireMol::ChainEditor::*assign_function_type)( ::SireMol::Chain const & ) ;
             assign_function_type assign_function_value( &::SireMol::ChainEditor::operator= );
             
             ChainEditor_exposer.def( 
@@ -101,7 +101,7 @@ void register_ChainEditor_class(){
         }
         { //::SireMol::ChainEditor::operator=
         
-            typedef ::SireMol::ChainEditor & ( ::SireMol::ChainEditor::*assign_function_type )( ::SireMol::ChainEditor const & ) ;
+            typedef ::SireMol::ChainEditor & ( ::SireMol::ChainEditor::*assign_function_type)( ::SireMol::ChainEditor const & ) ;
             assign_function_type assign_function_value( &::SireMol::ChainEditor::operator= );
             
             ChainEditor_exposer.def( 
@@ -113,7 +113,7 @@ void register_ChainEditor_class(){
         }
         { //::SireMol::ChainEditor::reindex
         
-            typedef ::SireMol::ChainStructureEditor ( ::SireMol::ChainEditor::*reindex_function_type )( ::SireMol::ChainIdx ) const;
+            typedef ::SireMol::ChainStructureEditor ( ::SireMol::ChainEditor::*reindex_function_type)( ::SireMol::ChainIdx ) const;
             reindex_function_type reindex_function_value( &::SireMol::ChainEditor::reindex );
             
             ChainEditor_exposer.def( 
@@ -124,7 +124,7 @@ void register_ChainEditor_class(){
         }
         { //::SireMol::ChainEditor::remove
         
-            typedef ::SireMol::MolStructureEditor ( ::SireMol::ChainEditor::*remove_function_type )(  ) const;
+            typedef ::SireMol::MolStructureEditor ( ::SireMol::ChainEditor::*remove_function_type)(  ) const;
             remove_function_type remove_function_value( &::SireMol::ChainEditor::remove );
             
             ChainEditor_exposer.def( 
@@ -134,7 +134,7 @@ void register_ChainEditor_class(){
         }
         { //::SireMol::ChainEditor::remove
         
-            typedef ::SireMol::ChainStructureEditor ( ::SireMol::ChainEditor::*remove_function_type )( ::SireMol::AtomID const & ) const;
+            typedef ::SireMol::ChainStructureEditor ( ::SireMol::ChainEditor::*remove_function_type)( ::SireMol::AtomID const & ) const;
             remove_function_type remove_function_value( &::SireMol::ChainEditor::remove );
             
             ChainEditor_exposer.def( 
@@ -145,7 +145,7 @@ void register_ChainEditor_class(){
         }
         { //::SireMol::ChainEditor::remove
         
-            typedef ::SireMol::ChainStructureEditor ( ::SireMol::ChainEditor::*remove_function_type )( ::SireMol::ResID const & ) const;
+            typedef ::SireMol::ChainStructureEditor ( ::SireMol::ChainEditor::*remove_function_type)( ::SireMol::ResID const & ) const;
             remove_function_type remove_function_value( &::SireMol::ChainEditor::remove );
             
             ChainEditor_exposer.def( 
@@ -156,7 +156,7 @@ void register_ChainEditor_class(){
         }
         { //::SireMol::ChainEditor::remove
         
-            typedef ::SireMol::ChainStructureEditor ( ::SireMol::ChainEditor::*remove_function_type )( int ) const;
+            typedef ::SireMol::ChainStructureEditor ( ::SireMol::ChainEditor::*remove_function_type)( int ) const;
             remove_function_type remove_function_value( &::SireMol::ChainEditor::remove );
             
             ChainEditor_exposer.def( 
@@ -167,7 +167,7 @@ void register_ChainEditor_class(){
         }
         { //::SireMol::ChainEditor::rename
         
-            typedef ::SireMol::ChainEditor & ( ::SireMol::ChainEditor::*rename_function_type )( ::SireMol::ChainName const & ) ;
+            typedef ::SireMol::ChainEditor & ( ::SireMol::ChainEditor::*rename_function_type)( ::SireMol::ChainName const & ) ;
             rename_function_type rename_function_value( &::SireMol::ChainEditor::rename );
             
             ChainEditor_exposer.def( 
@@ -179,7 +179,7 @@ void register_ChainEditor_class(){
         }
         { //::SireMol::ChainEditor::toString
         
-            typedef ::QString ( ::SireMol::ChainEditor::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::ChainEditor::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::ChainEditor::toString );
             
             ChainEditor_exposer.def( 
@@ -189,7 +189,7 @@ void register_ChainEditor_class(){
         }
         { //::SireMol::ChainEditor::transfer
         
-            typedef ::SireMol::ChainStructureEditor ( ::SireMol::ChainEditor::*transfer_function_type )( ::SireMol::ResID const &,::SireMol::ChainID const & ) const;
+            typedef ::SireMol::ChainStructureEditor ( ::SireMol::ChainEditor::*transfer_function_type)( ::SireMol::ResID const &,::SireMol::ChainID const & ) const;
             transfer_function_type transfer_function_value( &::SireMol::ChainEditor::transfer );
             
             ChainEditor_exposer.def( 
@@ -200,7 +200,7 @@ void register_ChainEditor_class(){
         }
         { //::SireMol::ChainEditor::transfer
         
-            typedef ::SireMol::ChainStructureEditor ( ::SireMol::ChainEditor::*transfer_function_type )( int,::SireMol::ChainID const & ) const;
+            typedef ::SireMol::ChainStructureEditor ( ::SireMol::ChainEditor::*transfer_function_type)( int,::SireMol::ChainID const & ) const;
             transfer_function_type transfer_function_value( &::SireMol::ChainEditor::transfer );
             
             ChainEditor_exposer.def( 
@@ -211,7 +211,7 @@ void register_ChainEditor_class(){
         }
         { //::SireMol::ChainEditor::transferAll
         
-            typedef ::SireMol::ChainStructureEditor ( ::SireMol::ChainEditor::*transferAll_function_type )( ::SireMol::ChainID const & ) const;
+            typedef ::SireMol::ChainStructureEditor ( ::SireMol::ChainEditor::*transferAll_function_type)( ::SireMol::ChainID const & ) const;
             transferAll_function_type transferAll_function_value( &::SireMol::ChainEditor::transferAll );
             
             ChainEditor_exposer.def( 

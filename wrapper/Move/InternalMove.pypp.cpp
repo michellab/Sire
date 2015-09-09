@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "InternalMove.pypp.hpp"
 
 namespace bp = boost::python;
@@ -67,7 +66,7 @@ void register_InternalMove_class(){
         InternalMove_exposer.def( bp::init< SireMove::InternalMove const & >(( bp::arg("other") )) );
         { //::SireMove::InternalMove::flexibilityProperty
         
-            typedef ::SireBase::PropertyName const & ( ::SireMove::InternalMove::*flexibilityProperty_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireMove::InternalMove::*flexibilityProperty_function_type)(  ) const;
             flexibilityProperty_function_type flexibilityProperty_function_value( &::SireMove::InternalMove::flexibilityProperty );
             
             InternalMove_exposer.def( 
@@ -78,18 +77,18 @@ void register_InternalMove_class(){
         }
         { //::SireMove::InternalMove::moleculeGroup
         
-            typedef ::SireMol::MoleculeGroup const & ( ::SireMove::InternalMove::*moleculeGroup_function_type )(  ) const;
+            typedef ::SireMol::MoleculeGroup const & ( ::SireMove::InternalMove::*moleculeGroup_function_type)(  ) const;
             moleculeGroup_function_type moleculeGroup_function_value( &::SireMove::InternalMove::moleculeGroup );
             
             InternalMove_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMove::InternalMove::move
         
-            typedef void ( ::SireMove::InternalMove::*move_function_type )( ::SireSystem::System &,int,bool ) ;
+            typedef void ( ::SireMove::InternalMove::*move_function_type)( ::SireSystem::System &,int,bool ) ;
             move_function_type move_function_value( &::SireMove::InternalMove::move );
             
             InternalMove_exposer.def( 
@@ -101,7 +100,7 @@ void register_InternalMove_class(){
         InternalMove_exposer.def( bp::self != bp::self );
         { //::SireMove::InternalMove::operator=
         
-            typedef ::SireMove::InternalMove & ( ::SireMove::InternalMove::*assign_function_type )( ::SireMove::InternalMove const & ) ;
+            typedef ::SireMove::InternalMove & ( ::SireMove::InternalMove::*assign_function_type)( ::SireMove::InternalMove const & ) ;
             assign_function_type assign_function_value( &::SireMove::InternalMove::operator= );
             
             InternalMove_exposer.def( 
@@ -114,18 +113,18 @@ void register_InternalMove_class(){
         InternalMove_exposer.def( bp::self == bp::self );
         { //::SireMove::InternalMove::sampler
         
-            typedef ::SireMove::Sampler const & ( ::SireMove::InternalMove::*sampler_function_type )(  ) const;
+            typedef ::SireMove::Sampler const & ( ::SireMove::InternalMove::*sampler_function_type)(  ) const;
             sampler_function_type sampler_function_value( &::SireMove::InternalMove::sampler );
             
             InternalMove_exposer.def( 
                 "sampler"
                 , sampler_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMove::InternalMove::setFlexibilityProperty
         
-            typedef void ( ::SireMove::InternalMove::*setFlexibilityProperty_function_type )( ::SireBase::PropertyName const & ) ;
+            typedef void ( ::SireMove::InternalMove::*setFlexibilityProperty_function_type)( ::SireBase::PropertyName const & ) ;
             setFlexibilityProperty_function_type setFlexibilityProperty_function_value( &::SireMove::InternalMove::setFlexibilityProperty );
             
             InternalMove_exposer.def( 
@@ -136,7 +135,7 @@ void register_InternalMove_class(){
         }
         { //::SireMove::InternalMove::setGenerator
         
-            typedef void ( ::SireMove::InternalMove::*setGenerator_function_type )( ::SireMaths::RanGenerator const & ) ;
+            typedef void ( ::SireMove::InternalMove::*setGenerator_function_type)( ::SireMaths::RanGenerator const & ) ;
             setGenerator_function_type setGenerator_function_value( &::SireMove::InternalMove::setGenerator );
             
             InternalMove_exposer.def( 
@@ -147,7 +146,7 @@ void register_InternalMove_class(){
         }
         { //::SireMove::InternalMove::setSampler
         
-            typedef void ( ::SireMove::InternalMove::*setSampler_function_type )( ::SireMove::Sampler const & ) ;
+            typedef void ( ::SireMove::InternalMove::*setSampler_function_type)( ::SireMove::Sampler const & ) ;
             setSampler_function_type setSampler_function_value( &::SireMove::InternalMove::setSampler );
             
             InternalMove_exposer.def( 
@@ -158,7 +157,7 @@ void register_InternalMove_class(){
         }
         { //::SireMove::InternalMove::setSampler
         
-            typedef void ( ::SireMove::InternalMove::*setSampler_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireMove::InternalMove::*setSampler_function_type)( ::SireMol::MoleculeGroup const & ) ;
             setSampler_function_type setSampler_function_value( &::SireMove::InternalMove::setSampler );
             
             InternalMove_exposer.def( 
@@ -169,7 +168,7 @@ void register_InternalMove_class(){
         }
         { //::SireMove::InternalMove::toString
         
-            typedef ::QString ( ::SireMove::InternalMove::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMove::InternalMove::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMove::InternalMove::toString );
             
             InternalMove_exposer.def( 

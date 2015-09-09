@@ -49,7 +49,7 @@ void register_ResidueBeading_class(){
         ResidueBeading_exposer.def( bp::self != bp::self );
         { //::SireMol::ResidueBeading::operator=
         
-            typedef ::SireMol::ResidueBeading & ( ::SireMol::ResidueBeading::*assign_function_type )( ::SireMol::ResidueBeading const & ) ;
+            typedef ::SireMol::ResidueBeading & ( ::SireMol::ResidueBeading::*assign_function_type)( ::SireMol::ResidueBeading const & ) ;
             assign_function_type assign_function_value( &::SireMol::ResidueBeading::operator= );
             
             ResidueBeading_exposer.def( 

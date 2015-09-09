@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "FFMolGroup.pypp.hpp"
 
 namespace bp = boost::python;
@@ -55,7 +54,7 @@ void register_FFMolGroup_class(){
         FFMolGroup_exposer.def( bp::init< SireFF::FFMolGroup const & >(( bp::arg("other") )) );
         { //::SireFF::FFMolGroup::accept
         
-            typedef void ( ::SireFF::FFMolGroup::*accept_function_type )(  ) ;
+            typedef void ( ::SireFF::FFMolGroup::*accept_function_type)(  ) ;
             accept_function_type accept_function_value( &::SireFF::FFMolGroup::accept );
             
             FFMolGroup_exposer.def( 
@@ -65,7 +64,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::add
         
-            typedef void ( ::SireFF::FFMolGroup::*add_function_type )( ::SireMol::MoleculeView const & ) ;
+            typedef void ( ::SireFF::FFMolGroup::*add_function_type)( ::SireMol::MoleculeView const & ) ;
             add_function_type add_function_value( &::SireFF::FFMolGroup::add );
             
             FFMolGroup_exposer.def( 
@@ -76,7 +75,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::add
         
-            typedef void ( ::SireFF::FFMolGroup::*add_function_type )( ::SireMol::ViewsOfMol const & ) ;
+            typedef void ( ::SireFF::FFMolGroup::*add_function_type)( ::SireMol::ViewsOfMol const & ) ;
             add_function_type add_function_value( &::SireFF::FFMolGroup::add );
             
             FFMolGroup_exposer.def( 
@@ -87,7 +86,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::add
         
-            typedef void ( ::SireFF::FFMolGroup::*add_function_type )( ::SireMol::Molecules const & ) ;
+            typedef void ( ::SireFF::FFMolGroup::*add_function_type)( ::SireMol::Molecules const & ) ;
             add_function_type add_function_value( &::SireFF::FFMolGroup::add );
             
             FFMolGroup_exposer.def( 
@@ -98,7 +97,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::add
         
-            typedef void ( ::SireFF::FFMolGroup::*add_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireFF::FFMolGroup::*add_function_type)( ::SireMol::MoleculeGroup const & ) ;
             add_function_type add_function_value( &::SireFF::FFMolGroup::add );
             
             FFMolGroup_exposer.def( 
@@ -109,7 +108,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::add
         
-            typedef void ( ::SireFF::FFMolGroup::*add_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::FFMolGroup::*add_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireFF::FFMolGroup::add );
             
             FFMolGroup_exposer.def( 
@@ -120,7 +119,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::add
         
-            typedef void ( ::SireFF::FFMolGroup::*add_function_type )( ::SireMol::ViewsOfMol const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::FFMolGroup::*add_function_type)( ::SireMol::ViewsOfMol const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireFF::FFMolGroup::add );
             
             FFMolGroup_exposer.def( 
@@ -131,7 +130,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::add
         
-            typedef void ( ::SireFF::FFMolGroup::*add_function_type )( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::FFMolGroup::*add_function_type)( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireFF::FFMolGroup::add );
             
             FFMolGroup_exposer.def( 
@@ -142,7 +141,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::add
         
-            typedef void ( ::SireFF::FFMolGroup::*add_function_type )( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::FFMolGroup::*add_function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireFF::FFMolGroup::add );
             
             FFMolGroup_exposer.def( 
@@ -153,7 +152,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::addIfUnique
         
-            typedef bool ( ::SireFF::FFMolGroup::*addIfUnique_function_type )( ::SireMol::MoleculeView const & ) ;
+            typedef bool ( ::SireFF::FFMolGroup::*addIfUnique_function_type)( ::SireMol::MoleculeView const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireFF::FFMolGroup::addIfUnique );
             
             FFMolGroup_exposer.def( 
@@ -164,7 +163,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::addIfUnique
         
-            typedef ::SireMol::ViewsOfMol ( ::SireFF::FFMolGroup::*addIfUnique_function_type )( ::SireMol::ViewsOfMol const & ) ;
+            typedef ::SireMol::ViewsOfMol ( ::SireFF::FFMolGroup::*addIfUnique_function_type)( ::SireMol::ViewsOfMol const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireFF::FFMolGroup::addIfUnique );
             
             FFMolGroup_exposer.def( 
@@ -175,7 +174,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::addIfUnique
         
-            typedef ::QList< SireMol::ViewsOfMol > ( ::SireFF::FFMolGroup::*addIfUnique_function_type )( ::SireMol::Molecules const & ) ;
+            typedef ::QList< SireMol::ViewsOfMol > ( ::SireFF::FFMolGroup::*addIfUnique_function_type)( ::SireMol::Molecules const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireFF::FFMolGroup::addIfUnique );
             
             FFMolGroup_exposer.def( 
@@ -186,7 +185,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::addIfUnique
         
-            typedef ::QList< SireMol::ViewsOfMol > ( ::SireFF::FFMolGroup::*addIfUnique_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef ::QList< SireMol::ViewsOfMol > ( ::SireFF::FFMolGroup::*addIfUnique_function_type)( ::SireMol::MoleculeGroup const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireFF::FFMolGroup::addIfUnique );
             
             FFMolGroup_exposer.def( 
@@ -197,7 +196,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::addIfUnique
         
-            typedef bool ( ::SireFF::FFMolGroup::*addIfUnique_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
+            typedef bool ( ::SireFF::FFMolGroup::*addIfUnique_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireFF::FFMolGroup::addIfUnique );
             
             FFMolGroup_exposer.def( 
@@ -208,7 +207,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::addIfUnique
         
-            typedef ::SireMol::ViewsOfMol ( ::SireFF::FFMolGroup::*addIfUnique_function_type )( ::SireMol::ViewsOfMol const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::ViewsOfMol ( ::SireFF::FFMolGroup::*addIfUnique_function_type)( ::SireMol::ViewsOfMol const &,::SireBase::PropertyMap const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireFF::FFMolGroup::addIfUnique );
             
             FFMolGroup_exposer.def( 
@@ -219,7 +218,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::addIfUnique
         
-            typedef ::QList< SireMol::ViewsOfMol > ( ::SireFF::FFMolGroup::*addIfUnique_function_type )( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
+            typedef ::QList< SireMol::ViewsOfMol > ( ::SireFF::FFMolGroup::*addIfUnique_function_type)( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireFF::FFMolGroup::addIfUnique );
             
             FFMolGroup_exposer.def( 
@@ -230,7 +229,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::addIfUnique
         
-            typedef ::QList< SireMol::ViewsOfMol > ( ::SireFF::FFMolGroup::*addIfUnique_function_type )( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
+            typedef ::QList< SireMol::ViewsOfMol > ( ::SireFF::FFMolGroup::*addIfUnique_function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireFF::FFMolGroup::addIfUnique );
             
             FFMolGroup_exposer.def( 
@@ -241,18 +240,18 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::forceField
         
-            typedef ::SireFF::FF const & ( ::SireFF::FFMolGroup::*forceField_function_type )(  ) const;
+            typedef ::SireFF::FF const & ( ::SireFF::FFMolGroup::*forceField_function_type)(  ) const;
             forceField_function_type forceField_function_value( &::SireFF::FFMolGroup::forceField );
             
             FFMolGroup_exposer.def( 
                 "forceField"
                 , forceField_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireFF::FFMolGroup::index
         
-            typedef ::SireMol::MGIdx ( ::SireFF::FFMolGroup::*index_function_type )(  ) const;
+            typedef ::SireMol::MGIdx ( ::SireFF::FFMolGroup::*index_function_type)(  ) const;
             index_function_type index_function_value( &::SireFF::FFMolGroup::index );
             
             FFMolGroup_exposer.def( 
@@ -262,7 +261,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::needsAccepting
         
-            typedef bool ( ::SireFF::FFMolGroup::*needsAccepting_function_type )(  ) const;
+            typedef bool ( ::SireFF::FFMolGroup::*needsAccepting_function_type)(  ) const;
             needsAccepting_function_type needsAccepting_function_value( &::SireFF::FFMolGroup::needsAccepting );
             
             FFMolGroup_exposer.def( 
@@ -272,7 +271,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::operator=
         
-            typedef ::SireFF::FFMolGroup & ( ::SireFF::FFMolGroup::*assign_function_type )( ::SireFF::FFMolGroup const & ) ;
+            typedef ::SireFF::FFMolGroup & ( ::SireFF::FFMolGroup::*assign_function_type)( ::SireFF::FFMolGroup const & ) ;
             assign_function_type assign_function_value( &::SireFF::FFMolGroup::operator= );
             
             FFMolGroup_exposer.def( 
@@ -284,7 +283,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::operator=
         
-            typedef ::SireFF::FFMolGroup & ( ::SireFF::FFMolGroup::*assign_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef ::SireFF::FFMolGroup & ( ::SireFF::FFMolGroup::*assign_function_type)( ::SireMol::MoleculeGroup const & ) ;
             assign_function_type assign_function_value( &::SireFF::FFMolGroup::operator= );
             
             FFMolGroup_exposer.def( 
@@ -296,7 +295,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::remove
         
-            typedef bool ( ::SireFF::FFMolGroup::*remove_function_type )( ::SireMol::MoleculeView const & ) ;
+            typedef bool ( ::SireFF::FFMolGroup::*remove_function_type)( ::SireMol::MoleculeView const & ) ;
             remove_function_type remove_function_value( &::SireFF::FFMolGroup::remove );
             
             FFMolGroup_exposer.def( 
@@ -307,7 +306,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::remove
         
-            typedef ::SireMol::ViewsOfMol ( ::SireFF::FFMolGroup::*remove_function_type )( ::SireMol::ViewsOfMol const & ) ;
+            typedef ::SireMol::ViewsOfMol ( ::SireFF::FFMolGroup::*remove_function_type)( ::SireMol::ViewsOfMol const & ) ;
             remove_function_type remove_function_value( &::SireFF::FFMolGroup::remove );
             
             FFMolGroup_exposer.def( 
@@ -318,7 +317,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::remove
         
-            typedef ::QList< SireMol::ViewsOfMol > ( ::SireFF::FFMolGroup::*remove_function_type )( ::SireMol::Molecules const & ) ;
+            typedef ::QList< SireMol::ViewsOfMol > ( ::SireFF::FFMolGroup::*remove_function_type)( ::SireMol::Molecules const & ) ;
             remove_function_type remove_function_value( &::SireFF::FFMolGroup::remove );
             
             FFMolGroup_exposer.def( 
@@ -329,7 +328,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::remove
         
-            typedef ::QList< SireMol::ViewsOfMol > ( ::SireFF::FFMolGroup::*remove_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef ::QList< SireMol::ViewsOfMol > ( ::SireFF::FFMolGroup::*remove_function_type)( ::SireMol::MoleculeGroup const & ) ;
             remove_function_type remove_function_value( &::SireFF::FFMolGroup::remove );
             
             FFMolGroup_exposer.def( 
@@ -340,7 +339,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::remove
         
-            typedef ::SireMol::ViewsOfMol ( ::SireFF::FFMolGroup::*remove_function_type )( ::SireMol::MolNum ) ;
+            typedef ::SireMol::ViewsOfMol ( ::SireFF::FFMolGroup::*remove_function_type)( ::SireMol::MolNum ) ;
             remove_function_type remove_function_value( &::SireFF::FFMolGroup::remove );
             
             FFMolGroup_exposer.def( 
@@ -351,7 +350,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::remove
         
-            typedef ::QList< SireMol::ViewsOfMol > ( ::SireFF::FFMolGroup::*remove_function_type )( ::QSet< SireMol::MolNum > const & ) ;
+            typedef ::QList< SireMol::ViewsOfMol > ( ::SireFF::FFMolGroup::*remove_function_type)( ::QSet< SireMol::MolNum > const & ) ;
             remove_function_type remove_function_value( &::SireFF::FFMolGroup::remove );
             
             FFMolGroup_exposer.def( 
@@ -362,7 +361,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::removeAll
         
-            typedef bool ( ::SireFF::FFMolGroup::*removeAll_function_type )( ::SireMol::MoleculeView const & ) ;
+            typedef bool ( ::SireFF::FFMolGroup::*removeAll_function_type)( ::SireMol::MoleculeView const & ) ;
             removeAll_function_type removeAll_function_value( &::SireFF::FFMolGroup::removeAll );
             
             FFMolGroup_exposer.def( 
@@ -373,7 +372,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::removeAll
         
-            typedef ::SireMol::ViewsOfMol ( ::SireFF::FFMolGroup::*removeAll_function_type )( ::SireMol::ViewsOfMol const & ) ;
+            typedef ::SireMol::ViewsOfMol ( ::SireFF::FFMolGroup::*removeAll_function_type)( ::SireMol::ViewsOfMol const & ) ;
             removeAll_function_type removeAll_function_value( &::SireFF::FFMolGroup::removeAll );
             
             FFMolGroup_exposer.def( 
@@ -384,7 +383,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::removeAll
         
-            typedef ::QList< SireMol::ViewsOfMol > ( ::SireFF::FFMolGroup::*removeAll_function_type )( ::SireMol::Molecules const & ) ;
+            typedef ::QList< SireMol::ViewsOfMol > ( ::SireFF::FFMolGroup::*removeAll_function_type)( ::SireMol::Molecules const & ) ;
             removeAll_function_type removeAll_function_value( &::SireFF::FFMolGroup::removeAll );
             
             FFMolGroup_exposer.def( 
@@ -395,7 +394,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::removeAll
         
-            typedef ::QList< SireMol::ViewsOfMol > ( ::SireFF::FFMolGroup::*removeAll_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef ::QList< SireMol::ViewsOfMol > ( ::SireFF::FFMolGroup::*removeAll_function_type)( ::SireMol::MoleculeGroup const & ) ;
             removeAll_function_type removeAll_function_value( &::SireFF::FFMolGroup::removeAll );
             
             FFMolGroup_exposer.def( 
@@ -406,7 +405,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::removeAll
         
-            typedef void ( ::SireFF::FFMolGroup::*removeAll_function_type )(  ) ;
+            typedef void ( ::SireFF::FFMolGroup::*removeAll_function_type)(  ) ;
             removeAll_function_type removeAll_function_value( &::SireFF::FFMolGroup::removeAll );
             
             FFMolGroup_exposer.def( 
@@ -416,7 +415,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::setContents
         
-            typedef bool ( ::SireFF::FFMolGroup::*setContents_function_type )( ::SireMol::MoleculeView const & ) ;
+            typedef bool ( ::SireFF::FFMolGroup::*setContents_function_type)( ::SireMol::MoleculeView const & ) ;
             setContents_function_type setContents_function_value( &::SireFF::FFMolGroup::setContents );
             
             FFMolGroup_exposer.def( 
@@ -427,7 +426,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::setContents
         
-            typedef bool ( ::SireFF::FFMolGroup::*setContents_function_type )( ::SireMol::ViewsOfMol const & ) ;
+            typedef bool ( ::SireFF::FFMolGroup::*setContents_function_type)( ::SireMol::ViewsOfMol const & ) ;
             setContents_function_type setContents_function_value( &::SireFF::FFMolGroup::setContents );
             
             FFMolGroup_exposer.def( 
@@ -438,7 +437,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::setContents
         
-            typedef bool ( ::SireFF::FFMolGroup::*setContents_function_type )( ::SireMol::Molecules const & ) ;
+            typedef bool ( ::SireFF::FFMolGroup::*setContents_function_type)( ::SireMol::Molecules const & ) ;
             setContents_function_type setContents_function_value( &::SireFF::FFMolGroup::setContents );
             
             FFMolGroup_exposer.def( 
@@ -449,7 +448,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::setContents
         
-            typedef bool ( ::SireFF::FFMolGroup::*setContents_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef bool ( ::SireFF::FFMolGroup::*setContents_function_type)( ::SireMol::MoleculeGroup const & ) ;
             setContents_function_type setContents_function_value( &::SireFF::FFMolGroup::setContents );
             
             FFMolGroup_exposer.def( 
@@ -460,7 +459,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::setContents
         
-            typedef bool ( ::SireFF::FFMolGroup::*setContents_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
+            typedef bool ( ::SireFF::FFMolGroup::*setContents_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
             setContents_function_type setContents_function_value( &::SireFF::FFMolGroup::setContents );
             
             FFMolGroup_exposer.def( 
@@ -471,7 +470,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::setContents
         
-            typedef bool ( ::SireFF::FFMolGroup::*setContents_function_type )( ::SireMol::ViewsOfMol const &,::SireBase::PropertyMap const & ) ;
+            typedef bool ( ::SireFF::FFMolGroup::*setContents_function_type)( ::SireMol::ViewsOfMol const &,::SireBase::PropertyMap const & ) ;
             setContents_function_type setContents_function_value( &::SireFF::FFMolGroup::setContents );
             
             FFMolGroup_exposer.def( 
@@ -482,7 +481,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::setContents
         
-            typedef bool ( ::SireFF::FFMolGroup::*setContents_function_type )( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
+            typedef bool ( ::SireFF::FFMolGroup::*setContents_function_type)( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
             setContents_function_type setContents_function_value( &::SireFF::FFMolGroup::setContents );
             
             FFMolGroup_exposer.def( 
@@ -493,7 +492,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::setContents
         
-            typedef bool ( ::SireFF::FFMolGroup::*setContents_function_type )( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
+            typedef bool ( ::SireFF::FFMolGroup::*setContents_function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
             setContents_function_type setContents_function_value( &::SireFF::FFMolGroup::setContents );
             
             FFMolGroup_exposer.def( 
@@ -504,7 +503,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::setName
         
-            typedef void ( ::SireFF::FFMolGroup::*setName_function_type )( ::QString const & ) ;
+            typedef void ( ::SireFF::FFMolGroup::*setName_function_type)( ::QString const & ) ;
             setName_function_type setName_function_value( &::SireFF::FFMolGroup::setName );
             
             FFMolGroup_exposer.def( 
@@ -525,7 +524,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::update
         
-            typedef bool ( ::SireFF::FFMolGroup::*update_function_type )( ::SireMol::MoleculeData const &,bool ) ;
+            typedef bool ( ::SireFF::FFMolGroup::*update_function_type)( ::SireMol::MoleculeData const &,bool ) ;
             update_function_type update_function_value( &::SireFF::FFMolGroup::update );
             
             FFMolGroup_exposer.def( 
@@ -536,7 +535,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::update
         
-            typedef ::QList< SireMol::Molecule > ( ::SireFF::FFMolGroup::*update_function_type )( ::SireMol::Molecules const &,bool ) ;
+            typedef ::QList< SireMol::Molecule > ( ::SireFF::FFMolGroup::*update_function_type)( ::SireMol::Molecules const &,bool ) ;
             update_function_type update_function_value( &::SireFF::FFMolGroup::update );
             
             FFMolGroup_exposer.def( 
@@ -547,7 +546,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::update
         
-            typedef ::QList< SireMol::Molecule > ( ::SireFF::FFMolGroup::*update_function_type )( ::SireMol::MoleculeGroup const &,bool ) ;
+            typedef ::QList< SireMol::Molecule > ( ::SireFF::FFMolGroup::*update_function_type)( ::SireMol::MoleculeGroup const &,bool ) ;
             update_function_type update_function_value( &::SireFF::FFMolGroup::update );
             
             FFMolGroup_exposer.def( 
@@ -558,7 +557,7 @@ void register_FFMolGroup_class(){
         }
         { //::SireFF::FFMolGroup::what
         
-            typedef char const * ( ::SireFF::FFMolGroup::*what_function_type )(  ) const;
+            typedef char const * ( ::SireFF::FFMolGroup::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireFF::FFMolGroup::what );
             
             FFMolGroup_exposer.def( 

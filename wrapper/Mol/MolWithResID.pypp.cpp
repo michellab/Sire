@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "MolWithResID.pypp.hpp"
 
 namespace bp = boost::python;
@@ -45,7 +44,7 @@ void register_MolWithResID_class(){
         MolWithResID_exposer.def( bp::init< SireMol::MolWithResID const & >(( bp::arg("other") )) );
         { //::SireMol::MolWithResID::hash
         
-            typedef ::uint ( ::SireMol::MolWithResID::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::MolWithResID::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::MolWithResID::hash );
             
             MolWithResID_exposer.def( 
@@ -55,7 +54,7 @@ void register_MolWithResID_class(){
         }
         { //::SireMol::MolWithResID::isNull
         
-            typedef bool ( ::SireMol::MolWithResID::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::MolWithResID::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::MolWithResID::isNull );
             
             MolWithResID_exposer.def( 
@@ -65,7 +64,7 @@ void register_MolWithResID_class(){
         }
         { //::SireMol::MolWithResID::map
         
-            typedef ::QList< SireMol::MolNum > ( ::SireMol::MolWithResID::*map_function_type )( ::SireMol::Molecules const & ) const;
+            typedef ::QList< SireMol::MolNum > ( ::SireMol::MolWithResID::*map_function_type)( ::SireMol::Molecules const & ) const;
             map_function_type map_function_value( &::SireMol::MolWithResID::map );
             
             MolWithResID_exposer.def( 
@@ -76,7 +75,7 @@ void register_MolWithResID_class(){
         }
         { //::SireMol::MolWithResID::map
         
-            typedef ::QList< SireMol::MolNum > ( ::SireMol::MolWithResID::*map_function_type )( ::SireMol::MoleculeGroup const & ) const;
+            typedef ::QList< SireMol::MolNum > ( ::SireMol::MolWithResID::*map_function_type)( ::SireMol::MoleculeGroup const & ) const;
             map_function_type map_function_value( &::SireMol::MolWithResID::map );
             
             MolWithResID_exposer.def( 
@@ -87,7 +86,7 @@ void register_MolWithResID_class(){
         }
         { //::SireMol::MolWithResID::map
         
-            typedef ::QList< SireMol::MolNum > ( ::SireMol::MolWithResID::*map_function_type )( ::SireMol::MolGroupsBase const & ) const;
+            typedef ::QList< SireMol::MolNum > ( ::SireMol::MolWithResID::*map_function_type)( ::SireMol::MolGroupsBase const & ) const;
             map_function_type map_function_value( &::SireMol::MolWithResID::map );
             
             MolWithResID_exposer.def( 
@@ -99,7 +98,7 @@ void register_MolWithResID_class(){
         MolWithResID_exposer.def( bp::self != bp::self );
         { //::SireMol::MolWithResID::operator=
         
-            typedef ::SireMol::MolWithResID & ( ::SireMol::MolWithResID::*assign_function_type )( ::SireMol::MolWithResID const & ) ;
+            typedef ::SireMol::MolWithResID & ( ::SireMol::MolWithResID::*assign_function_type)( ::SireMol::MolWithResID const & ) ;
             assign_function_type assign_function_value( &::SireMol::MolWithResID::operator= );
             
             MolWithResID_exposer.def( 
@@ -113,18 +112,18 @@ void register_MolWithResID_class(){
         MolWithResID_exposer.def( bp::self == bp::self );
         { //::SireMol::MolWithResID::resID
         
-            typedef ::SireMol::ResID const & ( ::SireMol::MolWithResID::*resID_function_type )(  ) const;
+            typedef ::SireMol::ResID const & ( ::SireMol::MolWithResID::*resID_function_type)(  ) const;
             resID_function_type resID_function_value( &::SireMol::MolWithResID::resID );
             
             MolWithResID_exposer.def( 
                 "resID"
                 , resID_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMol::MolWithResID::toString
         
-            typedef ::QString ( ::SireMol::MolWithResID::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::MolWithResID::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::MolWithResID::toString );
             
             MolWithResID_exposer.def( 
@@ -144,7 +143,7 @@ void register_MolWithResID_class(){
         }
         { //::SireMol::MolWithResID::what
         
-            typedef char const * ( ::SireMol::MolWithResID::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::MolWithResID::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::MolWithResID::what );
             
             MolWithResID_exposer.def( 

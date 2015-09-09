@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "SimStore.pypp.hpp"
 
 namespace bp = boost::python;
@@ -42,7 +41,7 @@ void register_SimStore_class(){
         SimStore_exposer.def( bp::init< SireMove::SimStore const & >(( bp::arg("other") )) );
         { //::SireMove::SimStore::isPacked
         
-            typedef bool ( ::SireMove::SimStore::*isPacked_function_type )(  ) const;
+            typedef bool ( ::SireMove::SimStore::*isPacked_function_type)(  ) const;
             isPacked_function_type isPacked_function_value( &::SireMove::SimStore::isPacked );
             
             SimStore_exposer.def( 
@@ -52,7 +51,7 @@ void register_SimStore_class(){
         }
         { //::SireMove::SimStore::isPackedToDisk
         
-            typedef bool ( ::SireMove::SimStore::*isPackedToDisk_function_type )(  ) const;
+            typedef bool ( ::SireMove::SimStore::*isPackedToDisk_function_type)(  ) const;
             isPackedToDisk_function_type isPackedToDisk_function_value( &::SireMove::SimStore::isPackedToDisk );
             
             SimStore_exposer.def( 
@@ -62,7 +61,7 @@ void register_SimStore_class(){
         }
         { //::SireMove::SimStore::isPackedToMemory
         
-            typedef bool ( ::SireMove::SimStore::*isPackedToMemory_function_type )(  ) const;
+            typedef bool ( ::SireMove::SimStore::*isPackedToMemory_function_type)(  ) const;
             isPackedToMemory_function_type isPackedToMemory_function_value( &::SireMove::SimStore::isPackedToMemory );
             
             SimStore_exposer.def( 
@@ -72,19 +71,19 @@ void register_SimStore_class(){
         }
         { //::SireMove::SimStore::moves
         
-            typedef ::SireMove::Moves const & ( ::SireMove::SimStore::*moves_function_type )(  ) const;
+            typedef ::SireMove::Moves const & ( ::SireMove::SimStore::*moves_function_type)(  ) const;
             moves_function_type moves_function_value( &::SireMove::SimStore::moves );
             
             SimStore_exposer.def( 
                 "moves"
                 , moves_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         SimStore_exposer.def( bp::self != bp::self );
         { //::SireMove::SimStore::operator=
         
-            typedef ::SireMove::SimStore & ( ::SireMove::SimStore::*assign_function_type )( ::SireMove::SimStore const & ) ;
+            typedef ::SireMove::SimStore & ( ::SireMove::SimStore::*assign_function_type)( ::SireMove::SimStore const & ) ;
             assign_function_type assign_function_value( &::SireMove::SimStore::operator= );
             
             SimStore_exposer.def( 
@@ -97,7 +96,7 @@ void register_SimStore_class(){
         SimStore_exposer.def( bp::self == bp::self );
         { //::SireMove::SimStore::pack
         
-            typedef void ( ::SireMove::SimStore::*pack_function_type )(  ) ;
+            typedef void ( ::SireMove::SimStore::*pack_function_type)(  ) ;
             pack_function_type pack_function_value( &::SireMove::SimStore::pack );
             
             SimStore_exposer.def( 
@@ -107,7 +106,7 @@ void register_SimStore_class(){
         }
         { //::SireMove::SimStore::packToDisk
         
-            typedef void ( ::SireMove::SimStore::*packToDisk_function_type )(  ) ;
+            typedef void ( ::SireMove::SimStore::*packToDisk_function_type)(  ) ;
             packToDisk_function_type packToDisk_function_value( &::SireMove::SimStore::packToDisk );
             
             SimStore_exposer.def( 
@@ -117,7 +116,7 @@ void register_SimStore_class(){
         }
         { //::SireMove::SimStore::packToDisk
         
-            typedef void ( ::SireMove::SimStore::*packToDisk_function_type )( ::QString const & ) ;
+            typedef void ( ::SireMove::SimStore::*packToDisk_function_type)( ::QString const & ) ;
             packToDisk_function_type packToDisk_function_value( &::SireMove::SimStore::packToDisk );
             
             SimStore_exposer.def( 
@@ -128,7 +127,7 @@ void register_SimStore_class(){
         }
         { //::SireMove::SimStore::packToMemory
         
-            typedef void ( ::SireMove::SimStore::*packToMemory_function_type )(  ) ;
+            typedef void ( ::SireMove::SimStore::*packToMemory_function_type)(  ) ;
             packToMemory_function_type packToMemory_function_value( &::SireMove::SimStore::packToMemory );
             
             SimStore_exposer.def( 
@@ -138,7 +137,7 @@ void register_SimStore_class(){
         }
         { //::SireMove::SimStore::setMoves
         
-            typedef void ( ::SireMove::SimStore::*setMoves_function_type )( ::SireMove::Moves const & ) ;
+            typedef void ( ::SireMove::SimStore::*setMoves_function_type)( ::SireMove::Moves const & ) ;
             setMoves_function_type setMoves_function_value( &::SireMove::SimStore::setMoves );
             
             SimStore_exposer.def( 
@@ -149,7 +148,7 @@ void register_SimStore_class(){
         }
         { //::SireMove::SimStore::setSystem
         
-            typedef void ( ::SireMove::SimStore::*setSystem_function_type )( ::SireSystem::System const & ) ;
+            typedef void ( ::SireMove::SimStore::*setSystem_function_type)( ::SireSystem::System const & ) ;
             setSystem_function_type setSystem_function_value( &::SireMove::SimStore::setSystem );
             
             SimStore_exposer.def( 
@@ -160,7 +159,7 @@ void register_SimStore_class(){
         }
         { //::SireMove::SimStore::setSystemAndMoves
         
-            typedef void ( ::SireMove::SimStore::*setSystemAndMoves_function_type )( ::SireSystem::System const &,::SireMove::Moves const & ) ;
+            typedef void ( ::SireMove::SimStore::*setSystemAndMoves_function_type)( ::SireSystem::System const &,::SireMove::Moves const & ) ;
             setSystemAndMoves_function_type setSystemAndMoves_function_value( &::SireMove::SimStore::setSystemAndMoves );
             
             SimStore_exposer.def( 
@@ -171,7 +170,7 @@ void register_SimStore_class(){
         }
         { //::SireMove::SimStore::system
         
-            typedef ::SireSystem::System const & ( ::SireMove::SimStore::*system_function_type )(  ) const;
+            typedef ::SireSystem::System const & ( ::SireMove::SimStore::*system_function_type)(  ) const;
             system_function_type system_function_value( &::SireMove::SimStore::system );
             
             SimStore_exposer.def( 
@@ -192,7 +191,7 @@ void register_SimStore_class(){
         }
         { //::SireMove::SimStore::unpack
         
-            typedef void ( ::SireMove::SimStore::*unpack_function_type )(  ) ;
+            typedef void ( ::SireMove::SimStore::*unpack_function_type)(  ) ;
             unpack_function_type unpack_function_value( &::SireMove::SimStore::unpack );
             
             SimStore_exposer.def( 
@@ -202,7 +201,7 @@ void register_SimStore_class(){
         }
         { //::SireMove::SimStore::what
         
-            typedef char const * ( ::SireMove::SimStore::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMove::SimStore::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMove::SimStore::what );
             
             SimStore_exposer.def( 

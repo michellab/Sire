@@ -43,7 +43,7 @@ void register_CombineSpaces_class(){
         CombineSpaces_exposer.def( bp::self != bp::self );
         { //::SireVol::CombineSpaces::operator=
         
-            typedef ::SireVol::CombineSpaces & ( ::SireVol::CombineSpaces::*assign_function_type )( ::SireVol::CombineSpaces const & ) ;
+            typedef ::SireVol::CombineSpaces & ( ::SireVol::CombineSpaces::*assign_function_type)( ::SireVol::CombineSpaces const & ) ;
             assign_function_type assign_function_value( &::SireVol::CombineSpaces::operator= );
             
             CombineSpaces_exposer.def( 
@@ -66,7 +66,7 @@ void register_CombineSpaces_class(){
         }
         { //::SireVol::CombineSpaces::updateFrom
         
-            typedef void ( ::SireVol::CombineSpaces::*updateFrom_function_type )( ::SireBase::Properties const & ) ;
+            typedef void ( ::SireVol::CombineSpaces::*updateFrom_function_type)( ::SireBase::Properties const & ) ;
             updateFrom_function_type updateFrom_function_value( &::SireVol::CombineSpaces::updateFrom );
             
             CombineSpaces_exposer.def( 

@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "SupraSubSystem.pypp.hpp"
 
 namespace bp = boost::python;
@@ -31,7 +30,7 @@ void register_SupraSubSystem_class(){
         SupraSubSystem_exposer.def( bp::init< SireMove::SupraSubSystem const & >(( bp::arg("other") )) );
         { //::SireMove::SupraSubSystem::clearAllStatistics
         
-            typedef void ( ::SireMove::SupraSubSystem::*clearAllStatistics_function_type )(  ) ;
+            typedef void ( ::SireMove::SupraSubSystem::*clearAllStatistics_function_type)(  ) ;
             clearAllStatistics_function_type clearAllStatistics_function_value( &::SireMove::SupraSubSystem::clearAllStatistics );
             
             SupraSubSystem_exposer.def( 
@@ -41,7 +40,7 @@ void register_SupraSubSystem_class(){
         }
         { //::SireMove::SupraSubSystem::clearStatistics
         
-            typedef void ( ::SireMove::SupraSubSystem::*clearStatistics_function_type )(  ) ;
+            typedef void ( ::SireMove::SupraSubSystem::*clearStatistics_function_type)(  ) ;
             clearStatistics_function_type clearStatistics_function_value( &::SireMove::SupraSubSystem::clearStatistics );
             
             SupraSubSystem_exposer.def( 
@@ -51,7 +50,7 @@ void register_SupraSubSystem_class(){
         }
         { //::SireMove::SupraSubSystem::clearSubStatistics
         
-            typedef void ( ::SireMove::SupraSubSystem::*clearSubStatistics_function_type )(  ) ;
+            typedef void ( ::SireMove::SupraSubSystem::*clearSubStatistics_function_type)(  ) ;
             clearSubStatistics_function_type clearSubStatistics_function_value( &::SireMove::SupraSubSystem::clearSubStatistics );
             
             SupraSubSystem_exposer.def( 
@@ -61,7 +60,7 @@ void register_SupraSubSystem_class(){
         }
         { //::SireMove::SupraSubSystem::isPacked
         
-            typedef bool ( ::SireMove::SupraSubSystem::*isPacked_function_type )(  ) const;
+            typedef bool ( ::SireMove::SupraSubSystem::*isPacked_function_type)(  ) const;
             isPacked_function_type isPacked_function_value( &::SireMove::SupraSubSystem::isPacked );
             
             SupraSubSystem_exposer.def( 
@@ -71,7 +70,7 @@ void register_SupraSubSystem_class(){
         }
         { //::SireMove::SupraSubSystem::isPackedToDisk
         
-            typedef bool ( ::SireMove::SupraSubSystem::*isPackedToDisk_function_type )(  ) const;
+            typedef bool ( ::SireMove::SupraSubSystem::*isPackedToDisk_function_type)(  ) const;
             isPackedToDisk_function_type isPackedToDisk_function_value( &::SireMove::SupraSubSystem::isPackedToDisk );
             
             SupraSubSystem_exposer.def( 
@@ -81,7 +80,7 @@ void register_SupraSubSystem_class(){
         }
         { //::SireMove::SupraSubSystem::isPackedToMemory
         
-            typedef bool ( ::SireMove::SupraSubSystem::*isPackedToMemory_function_type )(  ) const;
+            typedef bool ( ::SireMove::SupraSubSystem::*isPackedToMemory_function_type)(  ) const;
             isPackedToMemory_function_type isPackedToMemory_function_value( &::SireMove::SupraSubSystem::isPackedToMemory );
             
             SupraSubSystem_exposer.def( 
@@ -91,7 +90,7 @@ void register_SupraSubSystem_class(){
         }
         { //::SireMove::SupraSubSystem::monitors
         
-            typedef ::SireSystem::SystemMonitors const & ( ::SireMove::SupraSubSystem::*monitors_function_type )(  ) const;
+            typedef ::SireSystem::SystemMonitors const & ( ::SireMove::SupraSubSystem::*monitors_function_type)(  ) const;
             monitors_function_type monitors_function_value( &::SireMove::SupraSubSystem::monitors );
             
             SupraSubSystem_exposer.def( 
@@ -102,7 +101,7 @@ void register_SupraSubSystem_class(){
         }
         { //::SireMove::SupraSubSystem::mustNowRecalculateFromScratch
         
-            typedef void ( ::SireMove::SupraSubSystem::*mustNowRecalculateFromScratch_function_type )(  ) ;
+            typedef void ( ::SireMove::SupraSubSystem::*mustNowRecalculateFromScratch_function_type)(  ) ;
             mustNowRecalculateFromScratch_function_type mustNowRecalculateFromScratch_function_value( &::SireMove::SupraSubSystem::mustNowRecalculateFromScratch );
             
             SupraSubSystem_exposer.def( 
@@ -112,7 +111,7 @@ void register_SupraSubSystem_class(){
         }
         { //::SireMove::SupraSubSystem::nSubMoves
         
-            typedef int ( ::SireMove::SupraSubSystem::*nSubMoves_function_type )(  ) const;
+            typedef int ( ::SireMove::SupraSubSystem::*nSubMoves_function_type)(  ) const;
             nSubMoves_function_type nSubMoves_function_value( &::SireMove::SupraSubSystem::nSubMoves );
             
             SupraSubSystem_exposer.def( 
@@ -128,13 +127,13 @@ void register_SupraSubSystem_class(){
             SupraSubSystem_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         SupraSubSystem_exposer.def( bp::self != bp::self );
         { //::SireMove::SupraSubSystem::operator=
         
-            typedef ::SireMove::SupraSubSystem & ( ::SireMove::SupraSubSystem::*assign_function_type )( ::SireMove::SupraSubSystem const & ) ;
+            typedef ::SireMove::SupraSubSystem & ( ::SireMove::SupraSubSystem::*assign_function_type)( ::SireMove::SupraSubSystem const & ) ;
             assign_function_type assign_function_value( &::SireMove::SupraSubSystem::operator= );
             
             SupraSubSystem_exposer.def( 
@@ -147,7 +146,7 @@ void register_SupraSubSystem_class(){
         SupraSubSystem_exposer.def( bp::self == bp::self );
         { //::SireMove::SupraSubSystem::pack
         
-            typedef void ( ::SireMove::SupraSubSystem::*pack_function_type )(  ) ;
+            typedef void ( ::SireMove::SupraSubSystem::*pack_function_type)(  ) ;
             pack_function_type pack_function_value( &::SireMove::SupraSubSystem::pack );
             
             SupraSubSystem_exposer.def( 
@@ -157,7 +156,7 @@ void register_SupraSubSystem_class(){
         }
         { //::SireMove::SupraSubSystem::packToDisk
         
-            typedef void ( ::SireMove::SupraSubSystem::*packToDisk_function_type )(  ) ;
+            typedef void ( ::SireMove::SupraSubSystem::*packToDisk_function_type)(  ) ;
             packToDisk_function_type packToDisk_function_value( &::SireMove::SupraSubSystem::packToDisk );
             
             SupraSubSystem_exposer.def( 
@@ -167,7 +166,7 @@ void register_SupraSubSystem_class(){
         }
         { //::SireMove::SupraSubSystem::packToDisk
         
-            typedef void ( ::SireMove::SupraSubSystem::*packToDisk_function_type )( ::QString const & ) ;
+            typedef void ( ::SireMove::SupraSubSystem::*packToDisk_function_type)( ::QString const & ) ;
             packToDisk_function_type packToDisk_function_value( &::SireMove::SupraSubSystem::packToDisk );
             
             SupraSubSystem_exposer.def( 
@@ -178,7 +177,7 @@ void register_SupraSubSystem_class(){
         }
         { //::SireMove::SupraSubSystem::packToMemory
         
-            typedef void ( ::SireMove::SupraSubSystem::*packToMemory_function_type )(  ) ;
+            typedef void ( ::SireMove::SupraSubSystem::*packToMemory_function_type)(  ) ;
             packToMemory_function_type packToMemory_function_value( &::SireMove::SupraSubSystem::packToMemory );
             
             SupraSubSystem_exposer.def( 
@@ -188,7 +187,7 @@ void register_SupraSubSystem_class(){
         }
         { //::SireMove::SupraSubSystem::recordingStatistics
         
-            typedef bool ( ::SireMove::SupraSubSystem::*recordingStatistics_function_type )(  ) const;
+            typedef bool ( ::SireMove::SupraSubSystem::*recordingStatistics_function_type)(  ) const;
             recordingStatistics_function_type recordingStatistics_function_value( &::SireMove::SupraSubSystem::recordingStatistics );
             
             SupraSubSystem_exposer.def( 
@@ -198,7 +197,7 @@ void register_SupraSubSystem_class(){
         }
         { //::SireMove::SupraSubSystem::recordingSubStatistics
         
-            typedef bool ( ::SireMove::SupraSubSystem::*recordingSubStatistics_function_type )(  ) const;
+            typedef bool ( ::SireMove::SupraSubSystem::*recordingSubStatistics_function_type)(  ) const;
             recordingSubStatistics_function_type recordingSubStatistics_function_value( &::SireMove::SupraSubSystem::recordingSubStatistics );
             
             SupraSubSystem_exposer.def( 
@@ -208,7 +207,7 @@ void register_SupraSubSystem_class(){
         }
         { //::SireMove::SupraSubSystem::subMove
         
-            typedef void ( ::SireMove::SupraSubSystem::*subMove_function_type )( bool ) ;
+            typedef void ( ::SireMove::SupraSubSystem::*subMove_function_type)( bool ) ;
             subMove_function_type subMove_function_value( &::SireMove::SupraSubSystem::subMove );
             
             SupraSubSystem_exposer.def( 
@@ -219,18 +218,18 @@ void register_SupraSubSystem_class(){
         }
         { //::SireMove::SupraSubSystem::subMoves
         
-            typedef ::SireMove::Moves const & ( ::SireMove::SupraSubSystem::*subMoves_function_type )(  ) const;
+            typedef ::SireMove::Moves const & ( ::SireMove::SupraSubSystem::*subMoves_function_type)(  ) const;
             subMoves_function_type subMoves_function_value( &::SireMove::SupraSubSystem::subMoves );
             
             SupraSubSystem_exposer.def( 
                 "subMoves"
                 , subMoves_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMove::SupraSubSystem::subSystem
         
-            typedef ::SireSystem::System const & ( ::SireMove::SupraSubSystem::*subSystem_function_type )(  ) const;
+            typedef ::SireSystem::System const & ( ::SireMove::SupraSubSystem::*subSystem_function_type)(  ) const;
             subSystem_function_type subSystem_function_value( &::SireMove::SupraSubSystem::subSystem );
             
             SupraSubSystem_exposer.def( 
@@ -241,13 +240,13 @@ void register_SupraSubSystem_class(){
         }
         { //::SireMove::SupraSubSystem::subSystemAndMoves
         
-            typedef ::SireMove::SimStore const & ( ::SireMove::SupraSubSystem::*subSystemAndMoves_function_type )(  ) const;
+            typedef ::SireMove::SimStore const & ( ::SireMove::SupraSubSystem::*subSystemAndMoves_function_type)(  ) const;
             subSystemAndMoves_function_type subSystemAndMoves_function_value( &::SireMove::SupraSubSystem::subSystemAndMoves );
             
             SupraSubSystem_exposer.def( 
                 "subSystemAndMoves"
                 , subSystemAndMoves_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMove::SupraSubSystem::typeName
@@ -262,7 +261,7 @@ void register_SupraSubSystem_class(){
         }
         { //::SireMove::SupraSubSystem::unpack
         
-            typedef void ( ::SireMove::SupraSubSystem::*unpack_function_type )(  ) ;
+            typedef void ( ::SireMove::SupraSubSystem::*unpack_function_type)(  ) ;
             unpack_function_type unpack_function_value( &::SireMove::SupraSubSystem::unpack );
             
             SupraSubSystem_exposer.def( 

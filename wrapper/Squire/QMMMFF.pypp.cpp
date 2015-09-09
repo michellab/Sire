@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "QMMMFF.pypp.hpp"
 
 namespace bp = boost::python;
@@ -54,7 +53,7 @@ void register_QMMMFF_class(){
         QMMMFF_exposer.def( bp::init< Squire::QMMMFF const & >(( bp::arg("other") )) );
         { //::Squire::QMMMFF::chargeScalingFactor
         
-            typedef double ( ::Squire::QMMMFF::*chargeScalingFactor_function_type )(  ) const;
+            typedef double ( ::Squire::QMMMFF::*chargeScalingFactor_function_type)(  ) const;
             chargeScalingFactor_function_type chargeScalingFactor_function_value( &::Squire::QMMMFF::chargeScalingFactor );
             
             QMMMFF_exposer.def( 
@@ -64,18 +63,18 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::components
         
-            typedef ::Squire::QMComponent const & ( ::Squire::QMMMFF::*components_function_type )(  ) const;
+            typedef ::Squire::QMComponent const & ( ::Squire::QMMMFF::*components_function_type)(  ) const;
             components_function_type components_function_value( &::Squire::QMMMFF::components );
             
             QMMMFF_exposer.def( 
                 "components"
                 , components_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::Squire::QMMMFF::containsProperty
         
-            typedef bool ( ::Squire::QMMMFF::*containsProperty_function_type )( ::QString const & ) const;
+            typedef bool ( ::Squire::QMMMFF::*containsProperty_function_type)( ::QString const & ) const;
             containsProperty_function_type containsProperty_function_value( &::Squire::QMMMFF::containsProperty );
             
             QMMMFF_exposer.def( 
@@ -86,7 +85,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::energy
         
-            typedef void ( ::Squire::QMMMFF::*energy_function_type )( ::SireFF::EnergyTable &,double ) ;
+            typedef void ( ::Squire::QMMMFF::*energy_function_type)( ::SireFF::EnergyTable &,double ) ;
             energy_function_type energy_function_value( &::Squire::QMMMFF::energy );
             
             QMMMFF_exposer.def( 
@@ -97,7 +96,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::energy
         
-            typedef void ( ::Squire::QMMMFF::*energy_function_type )( ::SireFF::EnergyTable &,::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::Squire::QMMMFF::*energy_function_type)( ::SireFF::EnergyTable &,::SireCAS::Symbol const &,double ) ;
             energy_function_type energy_function_value( &::Squire::QMMMFF::energy );
             
             QMMMFF_exposer.def( 
@@ -108,7 +107,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::energyCommandFile
         
-            typedef ::QString ( ::Squire::QMMMFF::*energyCommandFile_function_type )(  ) const;
+            typedef ::QString ( ::Squire::QMMMFF::*energyCommandFile_function_type)(  ) const;
             energyCommandFile_function_type energyCommandFile_function_value( &::Squire::QMMMFF::energyCommandFile );
             
             QMMMFF_exposer.def( 
@@ -118,7 +117,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::field
         
-            typedef void ( ::Squire::QMMMFF::*field_function_type )( ::SireFF::FieldTable &,double ) ;
+            typedef void ( ::Squire::QMMMFF::*field_function_type)( ::SireFF::FieldTable &,double ) ;
             field_function_type field_function_value( &::Squire::QMMMFF::field );
             
             QMMMFF_exposer.def( 
@@ -129,7 +128,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::field
         
-            typedef void ( ::Squire::QMMMFF::*field_function_type )( ::SireFF::FieldTable &,::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::Squire::QMMMFF::*field_function_type)( ::SireFF::FieldTable &,::SireCAS::Symbol const &,double ) ;
             field_function_type field_function_value( &::Squire::QMMMFF::field );
             
             QMMMFF_exposer.def( 
@@ -140,7 +139,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::field
         
-            typedef void ( ::Squire::QMMMFF::*field_function_type )( ::SireFF::FieldTable &,::SireFF::Probe const &,double ) ;
+            typedef void ( ::Squire::QMMMFF::*field_function_type)( ::SireFF::FieldTable &,::SireFF::Probe const &,double ) ;
             field_function_type field_function_value( &::Squire::QMMMFF::field );
             
             QMMMFF_exposer.def( 
@@ -151,7 +150,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::field
         
-            typedef void ( ::Squire::QMMMFF::*field_function_type )( ::SireFF::FieldTable &,::SireCAS::Symbol const &,::SireFF::Probe const &,double ) ;
+            typedef void ( ::Squire::QMMMFF::*field_function_type)( ::SireFF::FieldTable &,::SireCAS::Symbol const &,::SireFF::Probe const &,double ) ;
             field_function_type field_function_value( &::Squire::QMMMFF::field );
             
             QMMMFF_exposer.def( 
@@ -162,7 +161,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::fieldCommandFile
         
-            typedef ::QString ( ::Squire::QMMMFF::*fieldCommandFile_function_type )( ::SireFF::FieldTable const & ) const;
+            typedef ::QString ( ::Squire::QMMMFF::*fieldCommandFile_function_type)( ::SireFF::FieldTable const & ) const;
             fieldCommandFile_function_type fieldCommandFile_function_value( &::Squire::QMMMFF::fieldCommandFile );
             
             QMMMFF_exposer.def( 
@@ -173,7 +172,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::fieldCommandFile
         
-            typedef ::QString ( ::Squire::QMMMFF::*fieldCommandFile_function_type )( ::SireFF::FieldTable const &,::SireFF::Probe const & ) const;
+            typedef ::QString ( ::Squire::QMMMFF::*fieldCommandFile_function_type)( ::SireFF::FieldTable const &,::SireFF::Probe const & ) const;
             fieldCommandFile_function_type fieldCommandFile_function_value( &::Squire::QMMMFF::fieldCommandFile );
             
             QMMMFF_exposer.def( 
@@ -184,7 +183,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::force
         
-            typedef void ( ::Squire::QMMMFF::*force_function_type )( ::SireFF::ForceTable &,double ) ;
+            typedef void ( ::Squire::QMMMFF::*force_function_type)( ::SireFF::ForceTable &,double ) ;
             force_function_type force_function_value( &::Squire::QMMMFF::force );
             
             QMMMFF_exposer.def( 
@@ -195,7 +194,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::force
         
-            typedef void ( ::Squire::QMMMFF::*force_function_type )( ::SireFF::ForceTable &,::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::Squire::QMMMFF::*force_function_type)( ::SireFF::ForceTable &,::SireCAS::Symbol const &,double ) ;
             force_function_type force_function_value( &::Squire::QMMMFF::force );
             
             QMMMFF_exposer.def( 
@@ -206,7 +205,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::forceCommandFile
         
-            typedef ::QString ( ::Squire::QMMMFF::*forceCommandFile_function_type )( ::SireFF::ForceTable const & ) const;
+            typedef ::QString ( ::Squire::QMMMFF::*forceCommandFile_function_type)( ::SireFF::ForceTable const & ) const;
             forceCommandFile_function_type forceCommandFile_function_value( &::Squire::QMMMFF::forceCommandFile );
             
             QMMMFF_exposer.def( 
@@ -217,7 +216,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::isIntermolecularOnly
         
-            typedef bool ( ::Squire::QMMMFF::*isIntermolecularOnly_function_type )(  ) const;
+            typedef bool ( ::Squire::QMMMFF::*isIntermolecularOnly_function_type)(  ) const;
             isIntermolecularOnly_function_type isIntermolecularOnly_function_value( &::Squire::QMMMFF::isIntermolecularOnly );
             
             QMMMFF_exposer.def( 
@@ -227,7 +226,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::mustNowRecalculateFromScratch
         
-            typedef void ( ::Squire::QMMMFF::*mustNowRecalculateFromScratch_function_type )(  ) ;
+            typedef void ( ::Squire::QMMMFF::*mustNowRecalculateFromScratch_function_type)(  ) ;
             mustNowRecalculateFromScratch_function_type mustNowRecalculateFromScratch_function_value( &::Squire::QMMMFF::mustNowRecalculateFromScratch );
             
             QMMMFF_exposer.def( 
@@ -238,7 +237,7 @@ void register_QMMMFF_class(){
         QMMMFF_exposer.def( bp::self != bp::self );
         { //::Squire::QMMMFF::operator=
         
-            typedef ::Squire::QMMMFF & ( ::Squire::QMMMFF::*assign_function_type )( ::Squire::QMMMFF const & ) ;
+            typedef ::Squire::QMMMFF & ( ::Squire::QMMMFF::*assign_function_type)( ::Squire::QMMMFF const & ) ;
             assign_function_type assign_function_value( &::Squire::QMMMFF::operator= );
             
             QMMMFF_exposer.def( 
@@ -251,7 +250,7 @@ void register_QMMMFF_class(){
         QMMMFF_exposer.def( bp::self == bp::self );
         { //::Squire::QMMMFF::parameters
         
-            typedef ::Squire::ChargeElementParameterNames3D ( ::Squire::QMMMFF::*parameters_function_type )(  ) const;
+            typedef ::Squire::ChargeElementParameterNames3D ( ::Squire::QMMMFF::*parameters_function_type)(  ) const;
             parameters_function_type parameters_function_value( &::Squire::QMMMFF::parameters );
             
             QMMMFF_exposer.def( 
@@ -261,7 +260,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::potential
         
-            typedef void ( ::Squire::QMMMFF::*potential_function_type )( ::SireFF::PotentialTable &,double ) ;
+            typedef void ( ::Squire::QMMMFF::*potential_function_type)( ::SireFF::PotentialTable &,double ) ;
             potential_function_type potential_function_value( &::Squire::QMMMFF::potential );
             
             QMMMFF_exposer.def( 
@@ -272,7 +271,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::potential
         
-            typedef void ( ::Squire::QMMMFF::*potential_function_type )( ::SireFF::PotentialTable &,::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::Squire::QMMMFF::*potential_function_type)( ::SireFF::PotentialTable &,::SireCAS::Symbol const &,double ) ;
             potential_function_type potential_function_value( &::Squire::QMMMFF::potential );
             
             QMMMFF_exposer.def( 
@@ -283,7 +282,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::potential
         
-            typedef void ( ::Squire::QMMMFF::*potential_function_type )( ::SireFF::PotentialTable &,::SireFF::Probe const &,double ) ;
+            typedef void ( ::Squire::QMMMFF::*potential_function_type)( ::SireFF::PotentialTable &,::SireFF::Probe const &,double ) ;
             potential_function_type potential_function_value( &::Squire::QMMMFF::potential );
             
             QMMMFF_exposer.def( 
@@ -294,7 +293,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::potential
         
-            typedef void ( ::Squire::QMMMFF::*potential_function_type )( ::SireFF::PotentialTable &,::SireCAS::Symbol const &,::SireFF::Probe const &,double ) ;
+            typedef void ( ::Squire::QMMMFF::*potential_function_type)( ::SireFF::PotentialTable &,::SireCAS::Symbol const &,::SireFF::Probe const &,double ) ;
             potential_function_type potential_function_value( &::Squire::QMMMFF::potential );
             
             QMMMFF_exposer.def( 
@@ -305,7 +304,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::potentialCommandFile
         
-            typedef ::QString ( ::Squire::QMMMFF::*potentialCommandFile_function_type )( ::SireFF::PotentialTable const & ) const;
+            typedef ::QString ( ::Squire::QMMMFF::*potentialCommandFile_function_type)( ::SireFF::PotentialTable const & ) const;
             potentialCommandFile_function_type potentialCommandFile_function_value( &::Squire::QMMMFF::potentialCommandFile );
             
             QMMMFF_exposer.def( 
@@ -316,7 +315,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::potentialCommandFile
         
-            typedef ::QString ( ::Squire::QMMMFF::*potentialCommandFile_function_type )( ::SireFF::PotentialTable const &,::SireFF::Probe const & ) const;
+            typedef ::QString ( ::Squire::QMMMFF::*potentialCommandFile_function_type)( ::SireFF::PotentialTable const &,::SireFF::Probe const & ) const;
             potentialCommandFile_function_type potentialCommandFile_function_value( &::Squire::QMMMFF::potentialCommandFile );
             
             QMMMFF_exposer.def( 
@@ -327,7 +326,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::properties
         
-            typedef ::SireBase::Properties const & ( ::Squire::QMMMFF::*properties_function_type )(  ) const;
+            typedef ::SireBase::Properties const & ( ::Squire::QMMMFF::*properties_function_type)(  ) const;
             properties_function_type properties_function_value( &::Squire::QMMMFF::properties );
             
             QMMMFF_exposer.def( 
@@ -338,30 +337,30 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::property
         
-            typedef ::SireBase::Property const & ( ::Squire::QMMMFF::*property_function_type )( ::QString const & ) const;
+            typedef ::SireBase::Property const & ( ::Squire::QMMMFF::*property_function_type)( ::QString const & ) const;
             property_function_type property_function_value( &::Squire::QMMMFF::property );
             
             QMMMFF_exposer.def( 
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::Squire::QMMMFF::quantumProgram
         
-            typedef ::Squire::QMProgram const & ( ::Squire::QMMMFF::*quantumProgram_function_type )(  ) const;
+            typedef ::Squire::QMProgram const & ( ::Squire::QMMMFF::*quantumProgram_function_type)(  ) const;
             quantumProgram_function_type quantumProgram_function_value( &::Squire::QMMMFF::quantumProgram );
             
             QMMMFF_exposer.def( 
                 "quantumProgram"
                 , quantumProgram_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::Squire::QMMMFF::setChargeScalingFactor
         
-            typedef bool ( ::Squire::QMMMFF::*setChargeScalingFactor_function_type )( double ) ;
+            typedef bool ( ::Squire::QMMMFF::*setChargeScalingFactor_function_type)( double ) ;
             setChargeScalingFactor_function_type setChargeScalingFactor_function_value( &::Squire::QMMMFF::setChargeScalingFactor );
             
             QMMMFF_exposer.def( 
@@ -372,7 +371,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::setIntermolecularOnly
         
-            typedef bool ( ::Squire::QMMMFF::*setIntermolecularOnly_function_type )( bool ) ;
+            typedef bool ( ::Squire::QMMMFF::*setIntermolecularOnly_function_type)( bool ) ;
             setIntermolecularOnly_function_type setIntermolecularOnly_function_value( &::Squire::QMMMFF::setIntermolecularOnly );
             
             QMMMFF_exposer.def( 
@@ -383,7 +382,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::setProperty
         
-            typedef bool ( ::Squire::QMMMFF::*setProperty_function_type )( ::QString const &,::SireBase::Property const & ) ;
+            typedef bool ( ::Squire::QMMMFF::*setProperty_function_type)( ::QString const &,::SireBase::Property const & ) ;
             setProperty_function_type setProperty_function_value( &::Squire::QMMMFF::setProperty );
             
             QMMMFF_exposer.def( 
@@ -394,7 +393,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::setQuantumProgram
         
-            typedef bool ( ::Squire::QMMMFF::*setQuantumProgram_function_type )( ::Squire::QMProgram const & ) ;
+            typedef bool ( ::Squire::QMMMFF::*setQuantumProgram_function_type)( ::Squire::QMProgram const & ) ;
             setQuantumProgram_function_type setQuantumProgram_function_value( &::Squire::QMMMFF::setQuantumProgram );
             
             QMMMFF_exposer.def( 
@@ -405,7 +404,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::setSpace
         
-            typedef bool ( ::Squire::QMMMFF::*setSpace_function_type )( ::SireVol::Space const & ) ;
+            typedef bool ( ::Squire::QMMMFF::*setSpace_function_type)( ::SireVol::Space const & ) ;
             setSpace_function_type setSpace_function_value( &::Squire::QMMMFF::setSpace );
             
             QMMMFF_exposer.def( 
@@ -416,7 +415,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::setSwitchingFunction
         
-            typedef bool ( ::Squire::QMMMFF::*setSwitchingFunction_function_type )( ::SireMM::SwitchingFunction const & ) ;
+            typedef bool ( ::Squire::QMMMFF::*setSwitchingFunction_function_type)( ::SireMM::SwitchingFunction const & ) ;
             setSwitchingFunction_function_type setSwitchingFunction_function_value( &::Squire::QMMMFF::setSwitchingFunction );
             
             QMMMFF_exposer.def( 
@@ -427,7 +426,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::setZeroEnergy
         
-            typedef bool ( ::Squire::QMMMFF::*setZeroEnergy_function_type )( ::SireUnits::Dimension::MolarEnergy ) ;
+            typedef bool ( ::Squire::QMMMFF::*setZeroEnergy_function_type)( ::SireUnits::Dimension::MolarEnergy ) ;
             setZeroEnergy_function_type setZeroEnergy_function_value( &::Squire::QMMMFF::setZeroEnergy );
             
             QMMMFF_exposer.def( 
@@ -438,24 +437,24 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::space
         
-            typedef ::SireVol::Space const & ( ::Squire::QMMMFF::*space_function_type )(  ) const;
+            typedef ::SireVol::Space const & ( ::Squire::QMMMFF::*space_function_type)(  ) const;
             space_function_type space_function_value( &::Squire::QMMMFF::space );
             
             QMMMFF_exposer.def( 
                 "space"
                 , space_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::Squire::QMMMFF::switchingFunction
         
-            typedef ::SireMM::SwitchingFunction const & ( ::Squire::QMMMFF::*switchingFunction_function_type )(  ) const;
+            typedef ::SireMM::SwitchingFunction const & ( ::Squire::QMMMFF::*switchingFunction_function_type)(  ) const;
             switchingFunction_function_type switchingFunction_function_value( &::Squire::QMMMFF::switchingFunction );
             
             QMMMFF_exposer.def( 
                 "switchingFunction"
                 , switchingFunction_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::Squire::QMMMFF::typeName
@@ -470,7 +469,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::what
         
-            typedef char const * ( ::Squire::QMMMFF::*what_function_type )(  ) const;
+            typedef char const * ( ::Squire::QMMMFF::*what_function_type)(  ) const;
             what_function_type what_function_value( &::Squire::QMMMFF::what );
             
             QMMMFF_exposer.def( 
@@ -480,7 +479,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::zeroEnergy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::Squire::QMMMFF::*zeroEnergy_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::Squire::QMMMFF::*zeroEnergy_function_type)(  ) const;
             zeroEnergy_function_type zeroEnergy_function_value( &::Squire::QMMMFF::zeroEnergy );
             
             QMMMFF_exposer.def( 

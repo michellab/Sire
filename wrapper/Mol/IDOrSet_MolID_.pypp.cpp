@@ -64,7 +64,7 @@ void register_IDOrSet_MolID__class(){
         { //::SireID::IDOrSet< SireMol::MolID >::IDs
         
             typedef SireID::IDOrSet< SireMol::MolID > exported_class_t;
-            typedef ::QSet< SireMol::MolIdentifier > const & ( ::SireID::IDOrSet< SireMol::MolID >::*IDs_function_type )(  ) const;
+            typedef ::QSet< SireMol::MolIdentifier > const & ( ::SireID::IDOrSet< SireMol::MolID >::*IDs_function_type)(  ) const;
             IDs_function_type IDs_function_value( &::SireID::IDOrSet< SireMol::MolID >::IDs );
             
             IDOrSet_MolID__exposer.def( 
@@ -76,7 +76,7 @@ void register_IDOrSet_MolID__class(){
         { //::SireID::IDOrSet< SireMol::MolID >::hash
         
             typedef SireID::IDOrSet< SireMol::MolID > exported_class_t;
-            typedef ::uint ( ::SireID::IDOrSet< SireMol::MolID >::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireID::IDOrSet< SireMol::MolID >::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireID::IDOrSet< SireMol::MolID >::hash );
             
             IDOrSet_MolID__exposer.def( 
@@ -87,7 +87,7 @@ void register_IDOrSet_MolID__class(){
         { //::SireID::IDOrSet< SireMol::MolID >::isNull
         
             typedef SireID::IDOrSet< SireMol::MolID > exported_class_t;
-            typedef bool ( ::SireID::IDOrSet< SireMol::MolID >::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireID::IDOrSet< SireMol::MolID >::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireID::IDOrSet< SireMol::MolID >::isNull );
             
             IDOrSet_MolID__exposer.def( 
@@ -98,7 +98,7 @@ void register_IDOrSet_MolID__class(){
         { //::SireID::IDOrSet< SireMol::MolID >::map
         
             typedef SireID::IDOrSet< SireMol::MolID > exported_class_t;
-            typedef ::QList< SireMol::MolNum > ( ::SireID::IDOrSet< SireMol::MolID >::*map_function_type )( ::SireMol::Molecules const & ) const;
+            typedef ::QList< SireMol::MolNum > ( ::SireID::IDOrSet< SireMol::MolID >::*map_function_type)( ::SireMol::Molecules const & ) const;
             map_function_type map_function_value( &::SireID::IDOrSet< SireMol::MolID >::map );
             
             IDOrSet_MolID__exposer.def( 
@@ -110,7 +110,7 @@ void register_IDOrSet_MolID__class(){
         { //::SireID::IDOrSet< SireMol::MolID >::map
         
             typedef SireID::IDOrSet< SireMol::MolID > exported_class_t;
-            typedef ::QList< SireMol::MolNum > ( ::SireID::IDOrSet< SireMol::MolID >::*map_function_type )( ::SireMol::MoleculeGroup const & ) const;
+            typedef ::QList< SireMol::MolNum > ( ::SireID::IDOrSet< SireMol::MolID >::*map_function_type)( ::SireMol::MoleculeGroup const & ) const;
             map_function_type map_function_value( &::SireID::IDOrSet< SireMol::MolID >::map );
             
             IDOrSet_MolID__exposer.def( 
@@ -122,7 +122,7 @@ void register_IDOrSet_MolID__class(){
         { //::SireID::IDOrSet< SireMol::MolID >::map
         
             typedef SireID::IDOrSet< SireMol::MolID > exported_class_t;
-            typedef ::QList< SireMol::MolNum > ( ::SireID::IDOrSet< SireMol::MolID >::*map_function_type )( ::SireMol::MolGroupsBase const & ) const;
+            typedef ::QList< SireMol::MolNum > ( ::SireID::IDOrSet< SireMol::MolID >::*map_function_type)( ::SireMol::MolGroupsBase const & ) const;
             map_function_type map_function_value( &::SireID::IDOrSet< SireMol::MolID >::map );
             
             IDOrSet_MolID__exposer.def( 
@@ -137,7 +137,7 @@ void register_IDOrSet_MolID__class(){
         { //::SireID::IDOrSet< SireMol::MolID >::operator=
         
             typedef SireID::IDOrSet< SireMol::MolID > exported_class_t;
-            typedef ::SireID::IDOrSet< SireMol::MolID > & ( ::SireID::IDOrSet< SireMol::MolID >::*assign_function_type )( ::SireID::IDOrSet< SireMol::MolID > const & ) ;
+            typedef ::SireID::IDOrSet< SireMol::MolID > & ( ::SireID::IDOrSet< SireMol::MolID >::*assign_function_type)( ::SireID::IDOrSet< SireMol::MolID > const & ) ;
             assign_function_type assign_function_value( &::SireID::IDOrSet< SireMol::MolID >::operator= );
             
             IDOrSet_MolID__exposer.def( 
@@ -150,7 +150,7 @@ void register_IDOrSet_MolID__class(){
         { //::SireID::IDOrSet< SireMol::MolID >::operator=
         
             typedef SireID::IDOrSet< SireMol::MolID > exported_class_t;
-            typedef ::SireID::IDOrSet< SireMol::MolID > & ( ::SireID::IDOrSet< SireMol::MolID >::*assign_function_type )( ::SireMol::MolID const & ) ;
+            typedef ::SireID::IDOrSet< SireMol::MolID > & ( ::SireID::IDOrSet< SireMol::MolID >::*assign_function_type)( ::SireMol::MolID const & ) ;
             assign_function_type assign_function_value( &::SireID::IDOrSet< SireMol::MolID >::operator= );
             
             IDOrSet_MolID__exposer.def( 
@@ -166,7 +166,7 @@ void register_IDOrSet_MolID__class(){
         { //::SireID::IDOrSet< SireMol::MolID >::toString
         
             typedef SireID::IDOrSet< SireMol::MolID > exported_class_t;
-            typedef ::QString ( ::SireID::IDOrSet< SireMol::MolID >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireID::IDOrSet< SireMol::MolID >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireID::IDOrSet< SireMol::MolID >::toString );
             
             IDOrSet_MolID__exposer.def( 
@@ -188,7 +188,7 @@ void register_IDOrSet_MolID__class(){
         { //::SireID::IDOrSet< SireMol::MolID >::what
         
             typedef SireID::IDOrSet< SireMol::MolID > exported_class_t;
-            typedef char const * ( ::SireID::IDOrSet< SireMol::MolID >::*what_function_type )(  ) const;
+            typedef char const * ( ::SireID::IDOrSet< SireMol::MolID >::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireID::IDOrSet< SireMol::MolID >::what );
             
             IDOrSet_MolID__exposer.def( 

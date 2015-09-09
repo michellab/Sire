@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "InterFF.pypp.hpp"
 
 namespace bp = boost::python;
@@ -64,7 +63,7 @@ void register_InterFF_class(){
         InterFF_exposer.def( bp::init< SireMM::InterFF const & >(( bp::arg("other") )) );
         { //::SireMM::InterFF::accept
         
-            typedef void ( ::SireMM::InterFF::*accept_function_type )(  ) ;
+            typedef void ( ::SireMM::InterFF::*accept_function_type)(  ) ;
             accept_function_type accept_function_value( &::SireMM::InterFF::accept );
             
             InterFF_exposer.def( 
@@ -74,7 +73,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::addFixedAtoms
         
-            typedef void ( ::SireMM::InterFF::*addFixedAtoms_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMM::InterFF::*addFixedAtoms_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
             addFixedAtoms_function_type addFixedAtoms_function_value( &::SireMM::InterFF::addFixedAtoms );
             
             InterFF_exposer.def( 
@@ -85,7 +84,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::addFixedAtoms
         
-            typedef void ( ::SireMM::InterFF::*addFixedAtoms_function_type )( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMM::InterFF::*addFixedAtoms_function_type)( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
             addFixedAtoms_function_type addFixedAtoms_function_value( &::SireMM::InterFF::addFixedAtoms );
             
             InterFF_exposer.def( 
@@ -96,7 +95,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::addFixedAtoms
         
-            typedef void ( ::SireMM::InterFF::*addFixedAtoms_function_type )( ::SireMM::CLJAtoms const & ) ;
+            typedef void ( ::SireMM::InterFF::*addFixedAtoms_function_type)( ::SireMM::CLJAtoms const & ) ;
             addFixedAtoms_function_type addFixedAtoms_function_value( &::SireMM::InterFF::addFixedAtoms );
             
             InterFF_exposer.def( 
@@ -107,30 +106,30 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::cljFunction
         
-            typedef ::SireMM::CLJFunction const & ( ::SireMM::InterFF::*cljFunction_function_type )(  ) const;
+            typedef ::SireMM::CLJFunction const & ( ::SireMM::InterFF::*cljFunction_function_type)(  ) const;
             cljFunction_function_type cljFunction_function_value( &::SireMM::InterFF::cljFunction );
             
             InterFF_exposer.def( 
                 "cljFunction"
                 , cljFunction_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::InterFF::cljFunction
         
-            typedef ::SireMM::CLJFunction const & ( ::SireMM::InterFF::*cljFunction_function_type )( ::QString ) const;
+            typedef ::SireMM::CLJFunction const & ( ::SireMM::InterFF::*cljFunction_function_type)( ::QString ) const;
             cljFunction_function_type cljFunction_function_value( &::SireMM::InterFF::cljFunction );
             
             InterFF_exposer.def( 
                 "cljFunction"
                 , cljFunction_function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::InterFF::cljFunctionKeys
         
-            typedef ::QStringList ( ::SireMM::InterFF::*cljFunctionKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireMM::InterFF::*cljFunctionKeys_function_type)(  ) const;
             cljFunctionKeys_function_type cljFunctionKeys_function_value( &::SireMM::InterFF::cljFunctionKeys );
             
             InterFF_exposer.def( 
@@ -140,7 +139,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::cljFunctions
         
-            typedef ::QHash< QString, SireBase::PropPtr< SireMM::CLJFunction > > ( ::SireMM::InterFF::*cljFunctions_function_type )(  ) const;
+            typedef ::QHash< QString, SireBase::PropPtr< SireMM::CLJFunction > > ( ::SireMM::InterFF::*cljFunctions_function_type)(  ) const;
             cljFunctions_function_type cljFunctions_function_value( &::SireMM::InterFF::cljFunctions );
             
             InterFF_exposer.def( 
@@ -150,18 +149,18 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::components
         
-            typedef ::SireMM::MultiCLJComponent const & ( ::SireMM::InterFF::*components_function_type )(  ) const;
+            typedef ::SireMM::MultiCLJComponent const & ( ::SireMM::InterFF::*components_function_type)(  ) const;
             components_function_type components_function_value( &::SireMM::InterFF::components );
             
             InterFF_exposer.def( 
                 "components"
                 , components_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::InterFF::containsProperty
         
-            typedef bool ( ::SireMM::InterFF::*containsProperty_function_type )( ::QString const & ) const;
+            typedef bool ( ::SireMM::InterFF::*containsProperty_function_type)( ::QString const & ) const;
             containsProperty_function_type containsProperty_function_value( &::SireMM::InterFF::containsProperty );
             
             InterFF_exposer.def( 
@@ -172,7 +171,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::disableGrid
         
-            typedef void ( ::SireMM::InterFF::*disableGrid_function_type )(  ) ;
+            typedef void ( ::SireMM::InterFF::*disableGrid_function_type)(  ) ;
             disableGrid_function_type disableGrid_function_value( &::SireMM::InterFF::disableGrid );
             
             InterFF_exposer.def( 
@@ -182,7 +181,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::disableParallelCalculation
         
-            typedef void ( ::SireMM::InterFF::*disableParallelCalculation_function_type )(  ) ;
+            typedef void ( ::SireMM::InterFF::*disableParallelCalculation_function_type)(  ) ;
             disableParallelCalculation_function_type disableParallelCalculation_function_value( &::SireMM::InterFF::disableParallelCalculation );
             
             InterFF_exposer.def( 
@@ -192,7 +191,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::disableReproducibleCalculation
         
-            typedef void ( ::SireMM::InterFF::*disableReproducibleCalculation_function_type )(  ) ;
+            typedef void ( ::SireMM::InterFF::*disableReproducibleCalculation_function_type)(  ) ;
             disableReproducibleCalculation_function_type disableReproducibleCalculation_function_value( &::SireMM::InterFF::disableReproducibleCalculation );
             
             InterFF_exposer.def( 
@@ -202,7 +201,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::enableGrid
         
-            typedef void ( ::SireMM::InterFF::*enableGrid_function_type )(  ) ;
+            typedef void ( ::SireMM::InterFF::*enableGrid_function_type)(  ) ;
             enableGrid_function_type enableGrid_function_value( &::SireMM::InterFF::enableGrid );
             
             InterFF_exposer.def( 
@@ -212,7 +211,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::enableParallelCalculation
         
-            typedef void ( ::SireMM::InterFF::*enableParallelCalculation_function_type )(  ) ;
+            typedef void ( ::SireMM::InterFF::*enableParallelCalculation_function_type)(  ) ;
             enableParallelCalculation_function_type enableParallelCalculation_function_value( &::SireMM::InterFF::enableParallelCalculation );
             
             InterFF_exposer.def( 
@@ -222,7 +221,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::enableReproducibleCalculation
         
-            typedef void ( ::SireMM::InterFF::*enableReproducibleCalculation_function_type )(  ) ;
+            typedef void ( ::SireMM::InterFF::*enableReproducibleCalculation_function_type)(  ) ;
             enableReproducibleCalculation_function_type enableReproducibleCalculation_function_value( &::SireMM::InterFF::enableReproducibleCalculation );
             
             InterFF_exposer.def( 
@@ -232,7 +231,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::fixedOnly
         
-            typedef bool ( ::SireMM::InterFF::*fixedOnly_function_type )(  ) const;
+            typedef bool ( ::SireMM::InterFF::*fixedOnly_function_type)(  ) const;
             fixedOnly_function_type fixedOnly_function_value( &::SireMM::InterFF::fixedOnly );
             
             InterFF_exposer.def( 
@@ -242,7 +241,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::grid
         
-            typedef ::SireVol::GridInfo ( ::SireMM::InterFF::*grid_function_type )(  ) const;
+            typedef ::SireVol::GridInfo ( ::SireMM::InterFF::*grid_function_type)(  ) const;
             grid_function_type grid_function_value( &::SireMM::InterFF::grid );
             
             InterFF_exposer.def( 
@@ -252,7 +251,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::gridBuffer
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMM::InterFF::*gridBuffer_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::InterFF::*gridBuffer_function_type)(  ) const;
             gridBuffer_function_type gridBuffer_function_value( &::SireMM::InterFF::gridBuffer );
             
             InterFF_exposer.def( 
@@ -262,7 +261,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::gridSpacing
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMM::InterFF::*gridSpacing_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::InterFF::*gridSpacing_function_type)(  ) const;
             gridSpacing_function_type gridSpacing_function_value( &::SireMM::InterFF::gridSpacing );
             
             InterFF_exposer.def( 
@@ -272,7 +271,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::mustNowRecalculateFromScratch
         
-            typedef void ( ::SireMM::InterFF::*mustNowRecalculateFromScratch_function_type )(  ) ;
+            typedef void ( ::SireMM::InterFF::*mustNowRecalculateFromScratch_function_type)(  ) ;
             mustNowRecalculateFromScratch_function_type mustNowRecalculateFromScratch_function_value( &::SireMM::InterFF::mustNowRecalculateFromScratch );
             
             InterFF_exposer.def( 
@@ -282,7 +281,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::nCLJFunctions
         
-            typedef int ( ::SireMM::InterFF::*nCLJFunctions_function_type )(  ) const;
+            typedef int ( ::SireMM::InterFF::*nCLJFunctions_function_type)(  ) const;
             nCLJFunctions_function_type nCLJFunctions_function_value( &::SireMM::InterFF::nCLJFunctions );
             
             InterFF_exposer.def( 
@@ -292,7 +291,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::needsAccepting
         
-            typedef bool ( ::SireMM::InterFF::*needsAccepting_function_type )(  ) const;
+            typedef bool ( ::SireMM::InterFF::*needsAccepting_function_type)(  ) const;
             needsAccepting_function_type needsAccepting_function_value( &::SireMM::InterFF::needsAccepting );
             
             InterFF_exposer.def( 
@@ -303,7 +302,7 @@ void register_InterFF_class(){
         InterFF_exposer.def( bp::self != bp::self );
         { //::SireMM::InterFF::operator=
         
-            typedef ::SireMM::InterFF & ( ::SireMM::InterFF::*assign_function_type )( ::SireMM::InterFF const & ) ;
+            typedef ::SireMM::InterFF & ( ::SireMM::InterFF::*assign_function_type)( ::SireMM::InterFF const & ) ;
             assign_function_type assign_function_value( &::SireMM::InterFF::operator= );
             
             InterFF_exposer.def( 
@@ -316,7 +315,7 @@ void register_InterFF_class(){
         InterFF_exposer.def( bp::self == bp::self );
         { //::SireMM::InterFF::properties
         
-            typedef ::SireBase::Properties const & ( ::SireMM::InterFF::*properties_function_type )(  ) const;
+            typedef ::SireBase::Properties const & ( ::SireMM::InterFF::*properties_function_type)(  ) const;
             properties_function_type properties_function_value( &::SireMM::InterFF::properties );
             
             InterFF_exposer.def( 
@@ -327,19 +326,19 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::property
         
-            typedef ::SireBase::Property const & ( ::SireMM::InterFF::*property_function_type )( ::QString const & ) const;
+            typedef ::SireBase::Property const & ( ::SireMM::InterFF::*property_function_type)( ::QString const & ) const;
             property_function_type property_function_value( &::SireMM::InterFF::property );
             
             InterFF_exposer.def( 
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMM::InterFF::removeAllCLJFunctions
         
-            typedef void ( ::SireMM::InterFF::*removeAllCLJFunctions_function_type )(  ) ;
+            typedef void ( ::SireMM::InterFF::*removeAllCLJFunctions_function_type)(  ) ;
             removeAllCLJFunctions_function_type removeAllCLJFunctions_function_value( &::SireMM::InterFF::removeAllCLJFunctions );
             
             InterFF_exposer.def( 
@@ -349,7 +348,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::removeCLJFunctionAt
         
-            typedef void ( ::SireMM::InterFF::*removeCLJFunctionAt_function_type )( ::QString ) ;
+            typedef void ( ::SireMM::InterFF::*removeCLJFunctionAt_function_type)( ::QString ) ;
             removeCLJFunctionAt_function_type removeCLJFunctionAt_function_value( &::SireMM::InterFF::removeCLJFunctionAt );
             
             InterFF_exposer.def( 
@@ -360,7 +359,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::setCLJFunction
         
-            typedef void ( ::SireMM::InterFF::*setCLJFunction_function_type )( ::SireMM::CLJFunction const & ) ;
+            typedef void ( ::SireMM::InterFF::*setCLJFunction_function_type)( ::SireMM::CLJFunction const & ) ;
             setCLJFunction_function_type setCLJFunction_function_value( &::SireMM::InterFF::setCLJFunction );
             
             InterFF_exposer.def( 
@@ -371,7 +370,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::setCLJFunction
         
-            typedef void ( ::SireMM::InterFF::*setCLJFunction_function_type )( ::QString,::SireMM::CLJFunction const & ) ;
+            typedef void ( ::SireMM::InterFF::*setCLJFunction_function_type)( ::QString,::SireMM::CLJFunction const & ) ;
             setCLJFunction_function_type setCLJFunction_function_value( &::SireMM::InterFF::setCLJFunction );
             
             InterFF_exposer.def( 
@@ -382,7 +381,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::setFixedAtoms
         
-            typedef void ( ::SireMM::InterFF::*setFixedAtoms_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMM::InterFF::*setFixedAtoms_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
             setFixedAtoms_function_type setFixedAtoms_function_value( &::SireMM::InterFF::setFixedAtoms );
             
             InterFF_exposer.def( 
@@ -393,7 +392,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::setFixedAtoms
         
-            typedef void ( ::SireMM::InterFF::*setFixedAtoms_function_type )( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMM::InterFF::*setFixedAtoms_function_type)( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
             setFixedAtoms_function_type setFixedAtoms_function_value( &::SireMM::InterFF::setFixedAtoms );
             
             InterFF_exposer.def( 
@@ -404,7 +403,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::setFixedAtoms
         
-            typedef void ( ::SireMM::InterFF::*setFixedAtoms_function_type )( ::SireMM::CLJAtoms const & ) ;
+            typedef void ( ::SireMM::InterFF::*setFixedAtoms_function_type)( ::SireMM::CLJAtoms const & ) ;
             setFixedAtoms_function_type setFixedAtoms_function_value( &::SireMM::InterFF::setFixedAtoms );
             
             InterFF_exposer.def( 
@@ -415,7 +414,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::setFixedOnly
         
-            typedef void ( ::SireMM::InterFF::*setFixedOnly_function_type )( bool ) ;
+            typedef void ( ::SireMM::InterFF::*setFixedOnly_function_type)( bool ) ;
             setFixedOnly_function_type setFixedOnly_function_value( &::SireMM::InterFF::setFixedOnly );
             
             InterFF_exposer.def( 
@@ -426,7 +425,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::setGridBuffer
         
-            typedef void ( ::SireMM::InterFF::*setGridBuffer_function_type )( ::SireUnits::Dimension::Length ) ;
+            typedef void ( ::SireMM::InterFF::*setGridBuffer_function_type)( ::SireUnits::Dimension::Length ) ;
             setGridBuffer_function_type setGridBuffer_function_value( &::SireMM::InterFF::setGridBuffer );
             
             InterFF_exposer.def( 
@@ -437,7 +436,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::setGridSpacing
         
-            typedef void ( ::SireMM::InterFF::*setGridSpacing_function_type )( ::SireUnits::Dimension::Length ) ;
+            typedef void ( ::SireMM::InterFF::*setGridSpacing_function_type)( ::SireUnits::Dimension::Length ) ;
             setGridSpacing_function_type setGridSpacing_function_value( &::SireMM::InterFF::setGridSpacing );
             
             InterFF_exposer.def( 
@@ -448,7 +447,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::setProperty
         
-            typedef bool ( ::SireMM::InterFF::*setProperty_function_type )( ::QString const &,::SireBase::Property const & ) ;
+            typedef bool ( ::SireMM::InterFF::*setProperty_function_type)( ::QString const &,::SireBase::Property const & ) ;
             setProperty_function_type setProperty_function_value( &::SireMM::InterFF::setProperty );
             
             InterFF_exposer.def( 
@@ -459,7 +458,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::setUseGrid
         
-            typedef void ( ::SireMM::InterFF::*setUseGrid_function_type )( bool ) ;
+            typedef void ( ::SireMM::InterFF::*setUseGrid_function_type)( bool ) ;
             setUseGrid_function_type setUseGrid_function_value( &::SireMM::InterFF::setUseGrid );
             
             InterFF_exposer.def( 
@@ -470,7 +469,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::setUseParallelCalculation
         
-            typedef void ( ::SireMM::InterFF::*setUseParallelCalculation_function_type )( bool ) ;
+            typedef void ( ::SireMM::InterFF::*setUseParallelCalculation_function_type)( bool ) ;
             setUseParallelCalculation_function_type setUseParallelCalculation_function_value( &::SireMM::InterFF::setUseParallelCalculation );
             
             InterFF_exposer.def( 
@@ -481,7 +480,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::setUseReproducibleCalculation
         
-            typedef void ( ::SireMM::InterFF::*setUseReproducibleCalculation_function_type )( bool ) ;
+            typedef void ( ::SireMM::InterFF::*setUseReproducibleCalculation_function_type)( bool ) ;
             setUseReproducibleCalculation_function_type setUseReproducibleCalculation_function_value( &::SireMM::InterFF::setUseReproducibleCalculation );
             
             InterFF_exposer.def( 
@@ -502,7 +501,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::usesGrid
         
-            typedef bool ( ::SireMM::InterFF::*usesGrid_function_type )(  ) const;
+            typedef bool ( ::SireMM::InterFF::*usesGrid_function_type)(  ) const;
             usesGrid_function_type usesGrid_function_value( &::SireMM::InterFF::usesGrid );
             
             InterFF_exposer.def( 
@@ -512,7 +511,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::usesParallelCalculation
         
-            typedef bool ( ::SireMM::InterFF::*usesParallelCalculation_function_type )(  ) const;
+            typedef bool ( ::SireMM::InterFF::*usesParallelCalculation_function_type)(  ) const;
             usesParallelCalculation_function_type usesParallelCalculation_function_value( &::SireMM::InterFF::usesParallelCalculation );
             
             InterFF_exposer.def( 
@@ -522,7 +521,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::usesReproducibleCalculation
         
-            typedef bool ( ::SireMM::InterFF::*usesReproducibleCalculation_function_type )(  ) const;
+            typedef bool ( ::SireMM::InterFF::*usesReproducibleCalculation_function_type)(  ) const;
             usesReproducibleCalculation_function_type usesReproducibleCalculation_function_value( &::SireMM::InterFF::usesReproducibleCalculation );
             
             InterFF_exposer.def( 
@@ -532,7 +531,7 @@ void register_InterFF_class(){
         }
         { //::SireMM::InterFF::what
         
-            typedef char const * ( ::SireMM::InterFF::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::InterFF::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::InterFF::what );
             
             InterFF_exposer.def( 

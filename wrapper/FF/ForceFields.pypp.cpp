@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "ForceFields.pypp.hpp"
 
 namespace bp = boost::python;
@@ -94,7 +93,7 @@ void register_ForceFields_class(){
         ForceFields_exposer.def( bp::init< SireFF::ForceFields const & >(( bp::arg("other") )) );
         { //::SireFF::ForceFields::accept
         
-            typedef void ( ::SireFF::ForceFields::*accept_function_type )(  ) ;
+            typedef void ( ::SireFF::ForceFields::*accept_function_type)(  ) ;
             accept_function_type accept_function_value( &::SireFF::ForceFields::accept );
             
             ForceFields_exposer.def( 
@@ -104,7 +103,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::add
         
-            typedef void ( ::SireFF::ForceFields::*add_function_type )( ::SireFF::FF const & ) ;
+            typedef void ( ::SireFF::ForceFields::*add_function_type)( ::SireFF::FF const & ) ;
             add_function_type add_function_value( &::SireFF::ForceFields::add );
             
             ForceFields_exposer.def( 
@@ -115,7 +114,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::add
         
-            typedef void ( ::SireFF::ForceFields::*add_function_type )( ::SireMol::MoleculeView const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::ForceFields::*add_function_type)( ::SireMol::MoleculeView const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireFF::ForceFields::add );
             
             ForceFields_exposer.def( 
@@ -126,7 +125,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::add
         
-            typedef void ( ::SireFF::ForceFields::*add_function_type )( ::SireMol::ViewsOfMol const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::ForceFields::*add_function_type)( ::SireMol::ViewsOfMol const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireFF::ForceFields::add );
             
             ForceFields_exposer.def( 
@@ -137,7 +136,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::add
         
-            typedef void ( ::SireFF::ForceFields::*add_function_type )( ::SireMol::Molecules const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::ForceFields::*add_function_type)( ::SireMol::Molecules const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireFF::ForceFields::add );
             
             ForceFields_exposer.def( 
@@ -148,7 +147,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::add
         
-            typedef void ( ::SireFF::ForceFields::*add_function_type )( ::SireMol::MoleculeGroup const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::ForceFields::*add_function_type)( ::SireMol::MoleculeGroup const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireFF::ForceFields::add );
             
             ForceFields_exposer.def( 
@@ -159,7 +158,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::add
         
-            typedef void ( ::SireFF::ForceFields::*add_function_type )( ::SireMol::MoleculeView const &,::SireMol::MGID const & ) ;
+            typedef void ( ::SireFF::ForceFields::*add_function_type)( ::SireMol::MoleculeView const &,::SireMol::MGID const & ) ;
             add_function_type add_function_value( &::SireFF::ForceFields::add );
             
             ForceFields_exposer.def( 
@@ -170,7 +169,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::add
         
-            typedef void ( ::SireFF::ForceFields::*add_function_type )( ::SireMol::ViewsOfMol const &,::SireMol::MGID const & ) ;
+            typedef void ( ::SireFF::ForceFields::*add_function_type)( ::SireMol::ViewsOfMol const &,::SireMol::MGID const & ) ;
             add_function_type add_function_value( &::SireFF::ForceFields::add );
             
             ForceFields_exposer.def( 
@@ -181,7 +180,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::add
         
-            typedef void ( ::SireFF::ForceFields::*add_function_type )( ::SireMol::Molecules const &,::SireMol::MGID const & ) ;
+            typedef void ( ::SireFF::ForceFields::*add_function_type)( ::SireMol::Molecules const &,::SireMol::MGID const & ) ;
             add_function_type add_function_value( &::SireFF::ForceFields::add );
             
             ForceFields_exposer.def( 
@@ -192,7 +191,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::add
         
-            typedef void ( ::SireFF::ForceFields::*add_function_type )( ::SireMol::MoleculeGroup const &,::SireMol::MGID const & ) ;
+            typedef void ( ::SireFF::ForceFields::*add_function_type)( ::SireMol::MoleculeGroup const &,::SireMol::MGID const & ) ;
             add_function_type add_function_value( &::SireFF::ForceFields::add );
             
             ForceFields_exposer.def( 
@@ -203,7 +202,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::addIfUnique
         
-            typedef void ( ::SireFF::ForceFields::*addIfUnique_function_type )( ::SireMol::MoleculeView const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::ForceFields::*addIfUnique_function_type)( ::SireMol::MoleculeView const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireFF::ForceFields::addIfUnique );
             
             ForceFields_exposer.def( 
@@ -214,7 +213,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::addIfUnique
         
-            typedef void ( ::SireFF::ForceFields::*addIfUnique_function_type )( ::SireMol::ViewsOfMol const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::ForceFields::*addIfUnique_function_type)( ::SireMol::ViewsOfMol const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireFF::ForceFields::addIfUnique );
             
             ForceFields_exposer.def( 
@@ -225,7 +224,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::addIfUnique
         
-            typedef void ( ::SireFF::ForceFields::*addIfUnique_function_type )( ::SireMol::Molecules const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::ForceFields::*addIfUnique_function_type)( ::SireMol::Molecules const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireFF::ForceFields::addIfUnique );
             
             ForceFields_exposer.def( 
@@ -236,7 +235,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::addIfUnique
         
-            typedef void ( ::SireFF::ForceFields::*addIfUnique_function_type )( ::SireMol::MoleculeGroup const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::ForceFields::*addIfUnique_function_type)( ::SireMol::MoleculeGroup const &,::SireMol::MGID const &,::SireBase::PropertyMap const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireFF::ForceFields::addIfUnique );
             
             ForceFields_exposer.def( 
@@ -247,7 +246,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::addIfUnique
         
-            typedef void ( ::SireFF::ForceFields::*addIfUnique_function_type )( ::SireMol::MoleculeView const &,::SireMol::MGID const & ) ;
+            typedef void ( ::SireFF::ForceFields::*addIfUnique_function_type)( ::SireMol::MoleculeView const &,::SireMol::MGID const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireFF::ForceFields::addIfUnique );
             
             ForceFields_exposer.def( 
@@ -258,7 +257,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::addIfUnique
         
-            typedef void ( ::SireFF::ForceFields::*addIfUnique_function_type )( ::SireMol::ViewsOfMol const &,::SireMol::MGID const & ) ;
+            typedef void ( ::SireFF::ForceFields::*addIfUnique_function_type)( ::SireMol::ViewsOfMol const &,::SireMol::MGID const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireFF::ForceFields::addIfUnique );
             
             ForceFields_exposer.def( 
@@ -269,7 +268,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::addIfUnique
         
-            typedef void ( ::SireFF::ForceFields::*addIfUnique_function_type )( ::SireMol::Molecules const &,::SireMol::MGID const & ) ;
+            typedef void ( ::SireFF::ForceFields::*addIfUnique_function_type)( ::SireMol::Molecules const &,::SireMol::MGID const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireFF::ForceFields::addIfUnique );
             
             ForceFields_exposer.def( 
@@ -280,7 +279,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::addIfUnique
         
-            typedef void ( ::SireFF::ForceFields::*addIfUnique_function_type )( ::SireMol::MoleculeGroup const &,::SireMol::MGID const & ) ;
+            typedef void ( ::SireFF::ForceFields::*addIfUnique_function_type)( ::SireMol::MoleculeGroup const &,::SireMol::MGID const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireFF::ForceFields::addIfUnique );
             
             ForceFields_exposer.def( 
@@ -291,55 +290,55 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::at
         
-            typedef ::SireFF::FF const & ( ::SireFF::ForceFields::*at_function_type )( ::SireFF::FFName const & ) const;
+            typedef ::SireFF::FF const & ( ::SireFF::ForceFields::*at_function_type)( ::SireFF::FFName const & ) const;
             at_function_type at_function_value( &::SireFF::ForceFields::at );
             
             ForceFields_exposer.def( 
                 "at"
                 , at_function_value
                 , ( bp::arg("ffname") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireFF::ForceFields::at
         
-            typedef ::SireFF::FF const & ( ::SireFF::ForceFields::*at_function_type )( ::SireFF::FFIdx const & ) const;
+            typedef ::SireFF::FF const & ( ::SireFF::ForceFields::*at_function_type)( ::SireFF::FFIdx const & ) const;
             at_function_type at_function_value( &::SireFF::ForceFields::at );
             
             ForceFields_exposer.def( 
                 "at"
                 , at_function_value
                 , ( bp::arg("ffidx") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireFF::ForceFields::at
         
-            typedef ::SireFF::FF const & ( ::SireFF::ForceFields::*at_function_type )( ::SireFF::FFID const & ) const;
+            typedef ::SireFF::FF const & ( ::SireFF::ForceFields::*at_function_type)( ::SireFF::FFID const & ) const;
             at_function_type at_function_value( &::SireFF::ForceFields::at );
             
             ForceFields_exposer.def( 
                 "at"
                 , at_function_value
                 , ( bp::arg("ffid") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireFF::ForceFields::at
         
-            typedef ::SireMol::MoleculeGroup const & ( ::SireFF::ForceFields::*at_function_type )( ::SireMol::MGNum ) const;
+            typedef ::SireMol::MoleculeGroup const & ( ::SireFF::ForceFields::*at_function_type)( ::SireMol::MGNum ) const;
             at_function_type at_function_value( &::SireFF::ForceFields::at );
             
             ForceFields_exposer.def( 
                 "at"
                 , at_function_value
                 , ( bp::arg("mgnum") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireFF::ForceFields::builtinProperties
         
-            typedef ::SireBase::Properties ( ::SireFF::ForceFields::*builtinProperties_function_type )(  ) const;
+            typedef ::SireBase::Properties ( ::SireFF::ForceFields::*builtinProperties_function_type)(  ) const;
             builtinProperties_function_type builtinProperties_function_value( &::SireFF::ForceFields::builtinProperties );
             
             ForceFields_exposer.def( 
@@ -349,19 +348,19 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::builtinProperty
         
-            typedef ::SireBase::Property const & ( ::SireFF::ForceFields::*builtinProperty_function_type )( ::QString const & ) const;
+            typedef ::SireBase::Property const & ( ::SireFF::ForceFields::*builtinProperty_function_type)( ::QString const & ) const;
             builtinProperty_function_type builtinProperty_function_value( &::SireFF::ForceFields::builtinProperty );
             
             ForceFields_exposer.def( 
                 "builtinProperty"
                 , builtinProperty_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireFF::ForceFields::componentExpression
         
-            typedef ::SireCAS::Expression ( ::SireFF::ForceFields::*componentExpression_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireFF::ForceFields::*componentExpression_function_type)( ::SireCAS::Symbol const & ) const;
             componentExpression_function_type componentExpression_function_value( &::SireFF::ForceFields::componentExpression );
             
             ForceFields_exposer.def( 
@@ -372,7 +371,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::componentExpressions
         
-            typedef ::QHash< SireCAS::Symbol, SireCAS::Expression > ( ::SireFF::ForceFields::*componentExpressions_function_type )( ::QSet< SireCAS::Symbol > const & ) const;
+            typedef ::QHash< SireCAS::Symbol, SireCAS::Expression > ( ::SireFF::ForceFields::*componentExpressions_function_type)( ::QSet< SireCAS::Symbol > const & ) const;
             componentExpressions_function_type componentExpressions_function_value( &::SireFF::ForceFields::componentExpressions );
             
             ForceFields_exposer.def( 
@@ -383,7 +382,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::componentExpressions
         
-            typedef ::QHash< SireCAS::Symbol, SireCAS::Expression > ( ::SireFF::ForceFields::*componentExpressions_function_type )(  ) const;
+            typedef ::QHash< SireCAS::Symbol, SireCAS::Expression > ( ::SireFF::ForceFields::*componentExpressions_function_type)(  ) const;
             componentExpressions_function_type componentExpressions_function_value( &::SireFF::ForceFields::componentExpressions );
             
             ForceFields_exposer.def( 
@@ -393,7 +392,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::componentSymbols
         
-            typedef ::QSet< SireCAS::Symbol > ( ::SireFF::ForceFields::*componentSymbols_function_type )(  ) const;
+            typedef ::QSet< SireCAS::Symbol > ( ::SireFF::ForceFields::*componentSymbols_function_type)(  ) const;
             componentSymbols_function_type componentSymbols_function_value( &::SireFF::ForceFields::componentSymbols );
             
             ForceFields_exposer.def( 
@@ -403,7 +402,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::componentValue
         
-            typedef double ( ::SireFF::ForceFields::*componentValue_function_type )( ::SireCAS::Symbol const & ) ;
+            typedef double ( ::SireFF::ForceFields::*componentValue_function_type)( ::SireCAS::Symbol const & ) ;
             componentValue_function_type componentValue_function_value( &::SireFF::ForceFields::componentValue );
             
             ForceFields_exposer.def( 
@@ -414,7 +413,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::componentValues
         
-            typedef ::SireCAS::Values ( ::SireFF::ForceFields::*componentValues_function_type )( ::QSet< SireCAS::Symbol > const & ) ;
+            typedef ::SireCAS::Values ( ::SireFF::ForceFields::*componentValues_function_type)( ::QSet< SireCAS::Symbol > const & ) ;
             componentValues_function_type componentValues_function_value( &::SireFF::ForceFields::componentValues );
             
             ForceFields_exposer.def( 
@@ -425,7 +424,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::componentValues
         
-            typedef ::SireCAS::Values ( ::SireFF::ForceFields::*componentValues_function_type )(  ) ;
+            typedef ::SireCAS::Values ( ::SireFF::ForceFields::*componentValues_function_type)(  ) ;
             componentValues_function_type componentValues_function_value( &::SireFF::ForceFields::componentValues );
             
             ForceFields_exposer.def( 
@@ -435,19 +434,19 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::compoundProperty
         
-            typedef ::SireBase::Property const & ( ::SireFF::ForceFields::*compoundProperty_function_type )( ::QString const & ) const;
+            typedef ::SireBase::Property const & ( ::SireFF::ForceFields::*compoundProperty_function_type)( ::QString const & ) const;
             compoundProperty_function_type compoundProperty_function_value( &::SireFF::ForceFields::compoundProperty );
             
             ForceFields_exposer.def( 
                 "compoundProperty"
                 , compoundProperty_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireFF::ForceFields::constant
         
-            typedef double ( ::SireFF::ForceFields::*constant_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef double ( ::SireFF::ForceFields::*constant_function_type)( ::SireCAS::Symbol const & ) const;
             constant_function_type constant_function_value( &::SireFF::ForceFields::constant );
             
             ForceFields_exposer.def( 
@@ -458,7 +457,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::constantComponents
         
-            typedef ::SireCAS::Values ( ::SireFF::ForceFields::*constantComponents_function_type )(  ) const;
+            typedef ::SireCAS::Values ( ::SireFF::ForceFields::*constantComponents_function_type)(  ) const;
             constantComponents_function_type constantComponents_function_value( &::SireFF::ForceFields::constantComponents );
             
             ForceFields_exposer.def( 
@@ -468,7 +467,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::constantExpression
         
-            typedef ::SireCAS::Expression ( ::SireFF::ForceFields::*constantExpression_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireFF::ForceFields::*constantExpression_function_type)( ::SireCAS::Symbol const & ) const;
             constantExpression_function_type constantExpression_function_value( &::SireFF::ForceFields::constantExpression );
             
             ForceFields_exposer.def( 
@@ -479,7 +478,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::constantExpressions
         
-            typedef ::QHash< SireCAS::Symbol, SireCAS::Expression > ( ::SireFF::ForceFields::*constantExpressions_function_type )( ::QSet< SireCAS::Symbol > const & ) const;
+            typedef ::QHash< SireCAS::Symbol, SireCAS::Expression > ( ::SireFF::ForceFields::*constantExpressions_function_type)( ::QSet< SireCAS::Symbol > const & ) const;
             constantExpressions_function_type constantExpressions_function_value( &::SireFF::ForceFields::constantExpressions );
             
             ForceFields_exposer.def( 
@@ -490,7 +489,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::constantExpressions
         
-            typedef ::QHash< SireCAS::Symbol, SireCAS::Expression > ( ::SireFF::ForceFields::*constantExpressions_function_type )(  ) const;
+            typedef ::QHash< SireCAS::Symbol, SireCAS::Expression > ( ::SireFF::ForceFields::*constantExpressions_function_type)(  ) const;
             constantExpressions_function_type constantExpressions_function_value( &::SireFF::ForceFields::constantExpressions );
             
             ForceFields_exposer.def( 
@@ -500,7 +499,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::constantSymbols
         
-            typedef ::QSet< SireCAS::Symbol > ( ::SireFF::ForceFields::*constantSymbols_function_type )(  ) const;
+            typedef ::QSet< SireCAS::Symbol > ( ::SireFF::ForceFields::*constantSymbols_function_type)(  ) const;
             constantSymbols_function_type constantSymbols_function_value( &::SireFF::ForceFields::constantSymbols );
             
             ForceFields_exposer.def( 
@@ -510,7 +509,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::constants
         
-            typedef ::SireCAS::Values ( ::SireFF::ForceFields::*constants_function_type )(  ) const;
+            typedef ::SireCAS::Values ( ::SireFF::ForceFields::*constants_function_type)(  ) const;
             constants_function_type constants_function_value( &::SireFF::ForceFields::constants );
             
             ForceFields_exposer.def( 
@@ -520,7 +519,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::constants
         
-            typedef ::SireCAS::Values ( ::SireFF::ForceFields::*constants_function_type )( ::QSet< SireCAS::Symbol > const & ) const;
+            typedef ::SireCAS::Values ( ::SireFF::ForceFields::*constants_function_type)( ::QSet< SireCAS::Symbol > const & ) const;
             constants_function_type constants_function_value( &::SireFF::ForceFields::constants );
             
             ForceFields_exposer.def( 
@@ -531,7 +530,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::containsProperty
         
-            typedef bool ( ::SireFF::ForceFields::*containsProperty_function_type )( ::QString const & ) const;
+            typedef bool ( ::SireFF::ForceFields::*containsProperty_function_type)( ::QString const & ) const;
             containsProperty_function_type containsProperty_function_value( &::SireFF::ForceFields::containsProperty );
             
             ForceFields_exposer.def( 
@@ -542,7 +541,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::containsProperty
         
-            typedef bool ( ::SireFF::ForceFields::*containsProperty_function_type )( ::SireFF::FFID const &,::QString const & ) const;
+            typedef bool ( ::SireFF::ForceFields::*containsProperty_function_type)( ::SireFF::FFID const &,::QString const & ) const;
             containsProperty_function_type containsProperty_function_value( &::SireFF::ForceFields::containsProperty );
             
             ForceFields_exposer.def( 
@@ -553,7 +552,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::containsProperty
         
-            typedef bool ( ::SireFF::ForceFields::*containsProperty_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireFF::ForceFields::*containsProperty_function_type)( ::SireBase::PropertyName const & ) const;
             containsProperty_function_type containsProperty_function_value( &::SireFF::ForceFields::containsProperty );
             
             ForceFields_exposer.def( 
@@ -564,7 +563,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::containsProperty
         
-            typedef bool ( ::SireFF::ForceFields::*containsProperty_function_type )( ::SireFF::FFID const &,::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireFF::ForceFields::*containsProperty_function_type)( ::SireFF::FFID const &,::SireBase::PropertyName const & ) const;
             containsProperty_function_type containsProperty_function_value( &::SireFF::ForceFields::containsProperty );
             
             ForceFields_exposer.def( 
@@ -575,7 +574,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::energies
         
-            typedef ::SireCAS::Values ( ::SireFF::ForceFields::*energies_function_type )(  ) ;
+            typedef ::SireCAS::Values ( ::SireFF::ForceFields::*energies_function_type)(  ) ;
             energies_function_type energies_function_value( &::SireFF::ForceFields::energies );
             
             ForceFields_exposer.def( 
@@ -585,7 +584,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::energies
         
-            typedef ::SireCAS::Values ( ::SireFF::ForceFields::*energies_function_type )( ::QSet< SireCAS::Symbol > const & ) ;
+            typedef ::SireCAS::Values ( ::SireFF::ForceFields::*energies_function_type)( ::QSet< SireCAS::Symbol > const & ) ;
             energies_function_type energies_function_value( &::SireFF::ForceFields::energies );
             
             ForceFields_exposer.def( 
@@ -596,7 +595,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireFF::ForceFields::*energy_function_type )(  ) ;
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireFF::ForceFields::*energy_function_type)(  ) ;
             energy_function_type energy_function_value( &::SireFF::ForceFields::energy );
             
             ForceFields_exposer.def( 
@@ -606,7 +605,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireFF::ForceFields::*energy_function_type )( ::SireCAS::Symbol const & ) ;
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireFF::ForceFields::*energy_function_type)( ::SireCAS::Symbol const & ) ;
             energy_function_type energy_function_value( &::SireFF::ForceFields::energy );
             
             ForceFields_exposer.def( 
@@ -617,7 +616,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::energy
         
-            typedef void ( ::SireFF::ForceFields::*energy_function_type )( ::SireFF::EnergyTable &,double ) ;
+            typedef void ( ::SireFF::ForceFields::*energy_function_type)( ::SireFF::EnergyTable &,double ) ;
             energy_function_type energy_function_value( &::SireFF::ForceFields::energy );
             
             ForceFields_exposer.def( 
@@ -628,7 +627,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::energy
         
-            typedef void ( ::SireFF::ForceFields::*energy_function_type )( ::SireFF::EnergyTable &,::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::SireFF::ForceFields::*energy_function_type)( ::SireFF::EnergyTable &,::SireCAS::Symbol const &,double ) ;
             energy_function_type energy_function_value( &::SireFF::ForceFields::energy );
             
             ForceFields_exposer.def( 
@@ -639,7 +638,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::energyComponents
         
-            typedef ::SireCAS::Values ( ::SireFF::ForceFields::*energyComponents_function_type )(  ) ;
+            typedef ::SireCAS::Values ( ::SireFF::ForceFields::*energyComponents_function_type)(  ) ;
             energyComponents_function_type energyComponents_function_value( &::SireFF::ForceFields::energyComponents );
             
             ForceFields_exposer.def( 
@@ -649,7 +648,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::energyExpression
         
-            typedef ::SireCAS::Expression ( ::SireFF::ForceFields::*energyExpression_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireFF::ForceFields::*energyExpression_function_type)( ::SireCAS::Symbol const & ) const;
             energyExpression_function_type energyExpression_function_value( &::SireFF::ForceFields::energyExpression );
             
             ForceFields_exposer.def( 
@@ -660,7 +659,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::energyExpressions
         
-            typedef ::QHash< SireCAS::Symbol, SireCAS::Expression > ( ::SireFF::ForceFields::*energyExpressions_function_type )( ::QSet< SireCAS::Symbol > const & ) const;
+            typedef ::QHash< SireCAS::Symbol, SireCAS::Expression > ( ::SireFF::ForceFields::*energyExpressions_function_type)( ::QSet< SireCAS::Symbol > const & ) const;
             energyExpressions_function_type energyExpressions_function_value( &::SireFF::ForceFields::energyExpressions );
             
             ForceFields_exposer.def( 
@@ -671,7 +670,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::energyExpressions
         
-            typedef ::QHash< SireCAS::Symbol, SireCAS::Expression > ( ::SireFF::ForceFields::*energyExpressions_function_type )(  ) const;
+            typedef ::QHash< SireCAS::Symbol, SireCAS::Expression > ( ::SireFF::ForceFields::*energyExpressions_function_type)(  ) const;
             energyExpressions_function_type energyExpressions_function_value( &::SireFF::ForceFields::energyExpressions );
             
             ForceFields_exposer.def( 
@@ -681,7 +680,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::energySymbols
         
-            typedef ::QSet< SireCAS::Symbol > ( ::SireFF::ForceFields::*energySymbols_function_type )(  ) const;
+            typedef ::QSet< SireCAS::Symbol > ( ::SireFF::ForceFields::*energySymbols_function_type)(  ) const;
             energySymbols_function_type energySymbols_function_value( &::SireFF::ForceFields::energySymbols );
             
             ForceFields_exposer.def( 
@@ -691,7 +690,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::ffIdx
         
-            typedef ::SireFF::FFIdx ( ::SireFF::ForceFields::*ffIdx_function_type )( ::SireFF::FFName const & ) const;
+            typedef ::SireFF::FFIdx ( ::SireFF::ForceFields::*ffIdx_function_type)( ::SireFF::FFName const & ) const;
             ffIdx_function_type ffIdx_function_value( &::SireFF::ForceFields::ffIdx );
             
             ForceFields_exposer.def( 
@@ -702,7 +701,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::ffIdx
         
-            typedef ::SireFF::FFIdx ( ::SireFF::ForceFields::*ffIdx_function_type )( ::SireFF::FFIdx const & ) const;
+            typedef ::SireFF::FFIdx ( ::SireFF::ForceFields::*ffIdx_function_type)( ::SireFF::FFIdx const & ) const;
             ffIdx_function_type ffIdx_function_value( &::SireFF::ForceFields::ffIdx );
             
             ForceFields_exposer.def( 
@@ -713,7 +712,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::ffIdx
         
-            typedef ::SireFF::FFIdx ( ::SireFF::ForceFields::*ffIdx_function_type )( ::SireFF::FFID const & ) const;
+            typedef ::SireFF::FFIdx ( ::SireFF::ForceFields::*ffIdx_function_type)( ::SireFF::FFID const & ) const;
             ffIdx_function_type ffIdx_function_value( &::SireFF::ForceFields::ffIdx );
             
             ForceFields_exposer.def( 
@@ -724,43 +723,43 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::ffName
         
-            typedef ::SireFF::FFName const & ( ::SireFF::ForceFields::*ffName_function_type )( ::SireFF::FFName const & ) const;
+            typedef ::SireFF::FFName const & ( ::SireFF::ForceFields::*ffName_function_type)( ::SireFF::FFName const & ) const;
             ffName_function_type ffName_function_value( &::SireFF::ForceFields::ffName );
             
             ForceFields_exposer.def( 
                 "ffName"
                 , ffName_function_value
                 , ( bp::arg("ffname") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireFF::ForceFields::ffName
         
-            typedef ::SireFF::FFName const & ( ::SireFF::ForceFields::*ffName_function_type )( ::SireFF::FFIdx const & ) const;
+            typedef ::SireFF::FFName const & ( ::SireFF::ForceFields::*ffName_function_type)( ::SireFF::FFIdx const & ) const;
             ffName_function_type ffName_function_value( &::SireFF::ForceFields::ffName );
             
             ForceFields_exposer.def( 
                 "ffName"
                 , ffName_function_value
                 , ( bp::arg("ffidx") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireFF::ForceFields::ffName
         
-            typedef ::SireFF::FFName const & ( ::SireFF::ForceFields::*ffName_function_type )( ::SireFF::FFID const & ) const;
+            typedef ::SireFF::FFName const & ( ::SireFF::ForceFields::*ffName_function_type)( ::SireFF::FFID const & ) const;
             ffName_function_type ffName_function_value( &::SireFF::ForceFields::ffName );
             
             ForceFields_exposer.def( 
                 "ffName"
                 , ffName_function_value
                 , ( bp::arg("ffid") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireFF::ForceFields::ffNames
         
-            typedef ::QList< SireFF::FFName > ( ::SireFF::ForceFields::*ffNames_function_type )(  ) const;
+            typedef ::QList< SireFF::FFName > ( ::SireFF::ForceFields::*ffNames_function_type)(  ) const;
             ffNames_function_type ffNames_function_value( &::SireFF::ForceFields::ffNames );
             
             ForceFields_exposer.def( 
@@ -770,7 +769,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::ffNames
         
-            typedef ::QList< SireFF::FFName > ( ::SireFF::ForceFields::*ffNames_function_type )( ::SireFF::FFID const & ) const;
+            typedef ::QList< SireFF::FFName > ( ::SireFF::ForceFields::*ffNames_function_type)( ::SireFF::FFID const & ) const;
             ffNames_function_type ffNames_function_value( &::SireFF::ForceFields::ffNames );
             
             ForceFields_exposer.def( 
@@ -781,7 +780,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::field
         
-            typedef void ( ::SireFF::ForceFields::*field_function_type )( ::SireFF::FieldTable &,double ) ;
+            typedef void ( ::SireFF::ForceFields::*field_function_type)( ::SireFF::FieldTable &,double ) ;
             field_function_type field_function_value( &::SireFF::ForceFields::field );
             
             ForceFields_exposer.def( 
@@ -792,7 +791,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::field
         
-            typedef void ( ::SireFF::ForceFields::*field_function_type )( ::SireFF::FieldTable &,::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::SireFF::ForceFields::*field_function_type)( ::SireFF::FieldTable &,::SireCAS::Symbol const &,double ) ;
             field_function_type field_function_value( &::SireFF::ForceFields::field );
             
             ForceFields_exposer.def( 
@@ -803,7 +802,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::field
         
-            typedef void ( ::SireFF::ForceFields::*field_function_type )( ::SireFF::FieldTable &,::SireFF::Probe const &,double ) ;
+            typedef void ( ::SireFF::ForceFields::*field_function_type)( ::SireFF::FieldTable &,::SireFF::Probe const &,double ) ;
             field_function_type field_function_value( &::SireFF::ForceFields::field );
             
             ForceFields_exposer.def( 
@@ -814,7 +813,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::field
         
-            typedef void ( ::SireFF::ForceFields::*field_function_type )( ::SireFF::FieldTable &,::SireCAS::Symbol const &,::SireFF::Probe const &,double ) ;
+            typedef void ( ::SireFF::ForceFields::*field_function_type)( ::SireFF::FieldTable &,::SireCAS::Symbol const &,::SireFF::Probe const &,double ) ;
             field_function_type field_function_value( &::SireFF::ForceFields::field );
             
             ForceFields_exposer.def( 
@@ -825,7 +824,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::force
         
-            typedef void ( ::SireFF::ForceFields::*force_function_type )( ::SireFF::ForceTable &,double ) ;
+            typedef void ( ::SireFF::ForceFields::*force_function_type)( ::SireFF::ForceTable &,double ) ;
             force_function_type force_function_value( &::SireFF::ForceFields::force );
             
             ForceFields_exposer.def( 
@@ -836,7 +835,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::force
         
-            typedef void ( ::SireFF::ForceFields::*force_function_type )( ::SireFF::ForceTable &,::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::SireFF::ForceFields::*force_function_type)( ::SireFF::ForceTable &,::SireCAS::Symbol const &,double ) ;
             force_function_type force_function_value( &::SireFF::ForceFields::force );
             
             ForceFields_exposer.def( 
@@ -847,55 +846,55 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::forceField
         
-            typedef ::SireFF::FF const & ( ::SireFF::ForceFields::*forceField_function_type )( ::SireFF::FFName const & ) const;
+            typedef ::SireFF::FF const & ( ::SireFF::ForceFields::*forceField_function_type)( ::SireFF::FFName const & ) const;
             forceField_function_type forceField_function_value( &::SireFF::ForceFields::forceField );
             
             ForceFields_exposer.def( 
                 "forceField"
                 , forceField_function_value
                 , ( bp::arg("ffname") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireFF::ForceFields::forceField
         
-            typedef ::SireFF::FF const & ( ::SireFF::ForceFields::*forceField_function_type )( ::SireFF::FFIdx const & ) const;
+            typedef ::SireFF::FF const & ( ::SireFF::ForceFields::*forceField_function_type)( ::SireFF::FFIdx const & ) const;
             forceField_function_type forceField_function_value( &::SireFF::ForceFields::forceField );
             
             ForceFields_exposer.def( 
                 "forceField"
                 , forceField_function_value
                 , ( bp::arg("ffidx") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireFF::ForceFields::forceField
         
-            typedef ::SireFF::FF const & ( ::SireFF::ForceFields::*forceField_function_type )( ::SireFF::FFID const & ) const;
+            typedef ::SireFF::FF const & ( ::SireFF::ForceFields::*forceField_function_type)( ::SireFF::FFID const & ) const;
             forceField_function_type forceField_function_value( &::SireFF::ForceFields::forceField );
             
             ForceFields_exposer.def( 
                 "forceField"
                 , forceField_function_value
                 , ( bp::arg("ffid") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireFF::ForceFields::forceField
         
-            typedef ::SireFF::FF const & ( ::SireFF::ForceFields::*forceField_function_type )( ::SireMol::MGNum const & ) const;
+            typedef ::SireFF::FF const & ( ::SireFF::ForceFields::*forceField_function_type)( ::SireMol::MGNum const & ) const;
             forceField_function_type forceField_function_value( &::SireFF::ForceFields::forceField );
             
             ForceFields_exposer.def( 
                 "forceField"
                 , forceField_function_value
                 , ( bp::arg("mgnum") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireFF::ForceFields::forceFields
         
-            typedef ::QVector< SireBase::PropPtr< SireFF::FF > > const & ( ::SireFF::ForceFields::*forceFields_function_type )(  ) const;
+            typedef ::QVector< SireBase::PropPtr< SireFF::FF > > const & ( ::SireFF::ForceFields::*forceFields_function_type)(  ) const;
             forceFields_function_type forceFields_function_value( &::SireFF::ForceFields::forceFields );
             
             ForceFields_exposer.def( 
@@ -906,7 +905,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::forceFields
         
-            typedef ::QVector< SireBase::PropPtr< SireFF::FF > > ( ::SireFF::ForceFields::*forceFields_function_type )( ::SireFF::FFID const & ) const;
+            typedef ::QVector< SireBase::PropPtr< SireFF::FF > > ( ::SireFF::ForceFields::*forceFields_function_type)( ::SireFF::FFID const & ) const;
             forceFields_function_type forceFields_function_value( &::SireFF::ForceFields::forceFields );
             
             ForceFields_exposer.def( 
@@ -917,7 +916,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::forceFieldsWithProperty
         
-            typedef ::QVector< SireBase::PropPtr< SireFF::FF > > ( ::SireFF::ForceFields::*forceFieldsWithProperty_function_type )( ::QString const & ) const;
+            typedef ::QVector< SireBase::PropPtr< SireFF::FF > > ( ::SireFF::ForceFields::*forceFieldsWithProperty_function_type)( ::QString const & ) const;
             forceFieldsWithProperty_function_type forceFieldsWithProperty_function_value( &::SireFF::ForceFields::forceFieldsWithProperty );
             
             ForceFields_exposer.def( 
@@ -928,7 +927,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::forceFieldsWithProperty
         
-            typedef ::QVector< SireBase::PropPtr< SireFF::FF > > ( ::SireFF::ForceFields::*forceFieldsWithProperty_function_type )( ::SireFF::FFID const &,::QString const & ) const;
+            typedef ::QVector< SireBase::PropPtr< SireFF::FF > > ( ::SireFF::ForceFields::*forceFieldsWithProperty_function_type)( ::SireFF::FFID const &,::QString const & ) const;
             forceFieldsWithProperty_function_type forceFieldsWithProperty_function_value( &::SireFF::ForceFields::forceFieldsWithProperty );
             
             ForceFields_exposer.def( 
@@ -939,7 +938,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::hasComponent
         
-            typedef bool ( ::SireFF::ForceFields::*hasComponent_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef bool ( ::SireFF::ForceFields::*hasComponent_function_type)( ::SireCAS::Symbol const & ) const;
             hasComponent_function_type hasComponent_function_value( &::SireFF::ForceFields::hasComponent );
             
             ForceFields_exposer.def( 
@@ -950,7 +949,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::hasConstantComponent
         
-            typedef bool ( ::SireFF::ForceFields::*hasConstantComponent_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef bool ( ::SireFF::ForceFields::*hasConstantComponent_function_type)( ::SireCAS::Symbol const & ) const;
             hasConstantComponent_function_type hasConstantComponent_function_value( &::SireFF::ForceFields::hasConstantComponent );
             
             ForceFields_exposer.def( 
@@ -961,7 +960,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::hasEnergyComponent
         
-            typedef bool ( ::SireFF::ForceFields::*hasEnergyComponent_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef bool ( ::SireFF::ForceFields::*hasEnergyComponent_function_type)( ::SireCAS::Symbol const & ) const;
             hasEnergyComponent_function_type hasEnergyComponent_function_value( &::SireFF::ForceFields::hasEnergyComponent );
             
             ForceFields_exposer.def( 
@@ -972,7 +971,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::isBuiltinProperty
         
-            typedef bool ( ::SireFF::ForceFields::*isBuiltinProperty_function_type )( ::QString const & ) const;
+            typedef bool ( ::SireFF::ForceFields::*isBuiltinProperty_function_type)( ::QString const & ) const;
             isBuiltinProperty_function_type isBuiltinProperty_function_value( &::SireFF::ForceFields::isBuiltinProperty );
             
             ForceFields_exposer.def( 
@@ -983,7 +982,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::isClean
         
-            typedef bool ( ::SireFF::ForceFields::*isClean_function_type )(  ) const;
+            typedef bool ( ::SireFF::ForceFields::*isClean_function_type)(  ) const;
             isClean_function_type isClean_function_value( &::SireFF::ForceFields::isClean );
             
             ForceFields_exposer.def( 
@@ -993,7 +992,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::isCompoundProperty
         
-            typedef bool ( ::SireFF::ForceFields::*isCompoundProperty_function_type )( ::QString const & ) const;
+            typedef bool ( ::SireFF::ForceFields::*isCompoundProperty_function_type)( ::QString const & ) const;
             isCompoundProperty_function_type isCompoundProperty_function_value( &::SireFF::ForceFields::isCompoundProperty );
             
             ForceFields_exposer.def( 
@@ -1004,7 +1003,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::isConstantComponent
         
-            typedef bool ( ::SireFF::ForceFields::*isConstantComponent_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef bool ( ::SireFF::ForceFields::*isConstantComponent_function_type)( ::SireCAS::Symbol const & ) const;
             isConstantComponent_function_type isConstantComponent_function_value( &::SireFF::ForceFields::isConstantComponent );
             
             ForceFields_exposer.def( 
@@ -1015,7 +1014,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::isDirty
         
-            typedef bool ( ::SireFF::ForceFields::*isDirty_function_type )(  ) const;
+            typedef bool ( ::SireFF::ForceFields::*isDirty_function_type)(  ) const;
             isDirty_function_type isDirty_function_value( &::SireFF::ForceFields::isDirty );
             
             ForceFields_exposer.def( 
@@ -1025,7 +1024,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::isEnergyComponent
         
-            typedef bool ( ::SireFF::ForceFields::*isEnergyComponent_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef bool ( ::SireFF::ForceFields::*isEnergyComponent_function_type)( ::SireCAS::Symbol const & ) const;
             isEnergyComponent_function_type isEnergyComponent_function_value( &::SireFF::ForceFields::isEnergyComponent );
             
             ForceFields_exposer.def( 
@@ -1036,7 +1035,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::isUserProperty
         
-            typedef bool ( ::SireFF::ForceFields::*isUserProperty_function_type )( ::QString const & ) const;
+            typedef bool ( ::SireFF::ForceFields::*isUserProperty_function_type)( ::QString const & ) const;
             isUserProperty_function_type isUserProperty_function_value( &::SireFF::ForceFields::isUserProperty );
             
             ForceFields_exposer.def( 
@@ -1047,7 +1046,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::list
         
-            typedef ::QVector< SireBase::PropPtr< SireFF::FF > > const & ( ::SireFF::ForceFields::*list_function_type )(  ) const;
+            typedef ::QVector< SireBase::PropPtr< SireFF::FF > > const & ( ::SireFF::ForceFields::*list_function_type)(  ) const;
             list_function_type list_function_value( &::SireFF::ForceFields::list );
             
             ForceFields_exposer.def( 
@@ -1058,7 +1057,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::map
         
-            typedef ::QList< SireFF::FFIdx > ( ::SireFF::ForceFields::*map_function_type )( ::SireFF::FFID const & ) const;
+            typedef ::QList< SireFF::FFIdx > ( ::SireFF::ForceFields::*map_function_type)( ::SireFF::FFID const & ) const;
             map_function_type map_function_value( &::SireFF::ForceFields::map );
             
             ForceFields_exposer.def( 
@@ -1069,7 +1068,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::map
         
-            typedef ::QList< SireFF::FFIdx > ( ::SireFF::ForceFields::*map_function_type )( ::SireFF::FFIdx const & ) const;
+            typedef ::QList< SireFF::FFIdx > ( ::SireFF::ForceFields::*map_function_type)( ::SireFF::FFIdx const & ) const;
             map_function_type map_function_value( &::SireFF::ForceFields::map );
             
             ForceFields_exposer.def( 
@@ -1080,7 +1079,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::map
         
-            typedef ::QList< SireFF::FFIdx > ( ::SireFF::ForceFields::*map_function_type )( ::SireFF::FFName const & ) const;
+            typedef ::QList< SireFF::FFIdx > ( ::SireFF::ForceFields::*map_function_type)( ::SireFF::FFName const & ) const;
             map_function_type map_function_value( &::SireFF::ForceFields::map );
             
             ForceFields_exposer.def( 
@@ -1091,7 +1090,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::mustNowRecalculateFromScratch
         
-            typedef void ( ::SireFF::ForceFields::*mustNowRecalculateFromScratch_function_type )(  ) ;
+            typedef void ( ::SireFF::ForceFields::*mustNowRecalculateFromScratch_function_type)(  ) ;
             mustNowRecalculateFromScratch_function_type mustNowRecalculateFromScratch_function_value( &::SireFF::ForceFields::mustNowRecalculateFromScratch );
             
             ForceFields_exposer.def( 
@@ -1101,7 +1100,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::nForceFields
         
-            typedef int ( ::SireFF::ForceFields::*nForceFields_function_type )(  ) const;
+            typedef int ( ::SireFF::ForceFields::*nForceFields_function_type)(  ) const;
             nForceFields_function_type nForceFields_function_value( &::SireFF::ForceFields::nForceFields );
             
             ForceFields_exposer.def( 
@@ -1111,7 +1110,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::names
         
-            typedef ::QList< SireFF::FFName > ( ::SireFF::ForceFields::*names_function_type )(  ) const;
+            typedef ::QList< SireFF::FFName > ( ::SireFF::ForceFields::*names_function_type)(  ) const;
             names_function_type names_function_value( &::SireFF::ForceFields::names );
             
             ForceFields_exposer.def( 
@@ -1121,7 +1120,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::needsAccepting
         
-            typedef bool ( ::SireFF::ForceFields::*needsAccepting_function_type )(  ) const;
+            typedef bool ( ::SireFF::ForceFields::*needsAccepting_function_type)(  ) const;
             needsAccepting_function_type needsAccepting_function_value( &::SireFF::ForceFields::needsAccepting );
             
             ForceFields_exposer.def( 
@@ -1132,7 +1131,7 @@ void register_ForceFields_class(){
         ForceFields_exposer.def( bp::self != bp::self );
         { //::SireFF::ForceFields::operator=
         
-            typedef ::SireFF::ForceFields & ( ::SireFF::ForceFields::*assign_function_type )( ::SireFF::ForceFields const & ) ;
+            typedef ::SireFF::ForceFields & ( ::SireFF::ForceFields::*assign_function_type)( ::SireFF::ForceFields const & ) ;
             assign_function_type assign_function_value( &::SireFF::ForceFields::operator= );
             
             ForceFields_exposer.def( 
@@ -1145,43 +1144,43 @@ void register_ForceFields_class(){
         ForceFields_exposer.def( bp::self == bp::self );
         { //::SireFF::ForceFields::operator[]
         
-            typedef ::SireFF::FF const & ( ::SireFF::ForceFields::*__getitem___function_type )( ::SireFF::FFName const & ) const;
+            typedef ::SireFF::FF const & ( ::SireFF::ForceFields::*__getitem___function_type)( ::SireFF::FFName const & ) const;
             __getitem___function_type __getitem___function_value( &::SireFF::ForceFields::operator[] );
             
             ForceFields_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("ffname") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireFF::ForceFields::operator[]
         
-            typedef ::SireFF::FF const & ( ::SireFF::ForceFields::*__getitem___function_type )( ::SireFF::FFIdx const & ) const;
+            typedef ::SireFF::FF const & ( ::SireFF::ForceFields::*__getitem___function_type)( ::SireFF::FFIdx const & ) const;
             __getitem___function_type __getitem___function_value( &::SireFF::ForceFields::operator[] );
             
             ForceFields_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("ffidx") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireFF::ForceFields::operator[]
         
-            typedef ::SireFF::FF const & ( ::SireFF::ForceFields::*__getitem___function_type )( ::SireFF::FFID const & ) const;
+            typedef ::SireFF::FF const & ( ::SireFF::ForceFields::*__getitem___function_type)( ::SireFF::FFID const & ) const;
             __getitem___function_type __getitem___function_value( &::SireFF::ForceFields::operator[] );
             
             ForceFields_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("ffid") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireFF::ForceFields::potential
         
-            typedef void ( ::SireFF::ForceFields::*potential_function_type )( ::SireFF::PotentialTable &,::SireFF::Probe const &,double ) ;
+            typedef void ( ::SireFF::ForceFields::*potential_function_type)( ::SireFF::PotentialTable &,::SireFF::Probe const &,double ) ;
             potential_function_type potential_function_value( &::SireFF::ForceFields::potential );
             
             ForceFields_exposer.def( 
@@ -1192,7 +1191,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::potential
         
-            typedef void ( ::SireFF::ForceFields::*potential_function_type )( ::SireFF::PotentialTable &,::SireCAS::Symbol const &,::SireFF::Probe const &,double ) ;
+            typedef void ( ::SireFF::ForceFields::*potential_function_type)( ::SireFF::PotentialTable &,::SireCAS::Symbol const &,::SireFF::Probe const &,double ) ;
             potential_function_type potential_function_value( &::SireFF::ForceFields::potential );
             
             ForceFields_exposer.def( 
@@ -1203,7 +1202,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::potential
         
-            typedef void ( ::SireFF::ForceFields::*potential_function_type )( ::SireFF::PotentialTable &,double ) ;
+            typedef void ( ::SireFF::ForceFields::*potential_function_type)( ::SireFF::PotentialTable &,double ) ;
             potential_function_type potential_function_value( &::SireFF::ForceFields::potential );
             
             ForceFields_exposer.def( 
@@ -1214,7 +1213,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::potential
         
-            typedef void ( ::SireFF::ForceFields::*potential_function_type )( ::SireFF::PotentialTable &,::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::SireFF::ForceFields::*potential_function_type)( ::SireFF::PotentialTable &,::SireCAS::Symbol const &,double ) ;
             potential_function_type potential_function_value( &::SireFF::ForceFields::potential );
             
             ForceFields_exposer.def( 
@@ -1225,7 +1224,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::properties
         
-            typedef ::SireBase::Properties ( ::SireFF::ForceFields::*properties_function_type )(  ) const;
+            typedef ::SireBase::Properties ( ::SireFF::ForceFields::*properties_function_type)(  ) const;
             properties_function_type properties_function_value( &::SireFF::ForceFields::properties );
             
             ForceFields_exposer.def( 
@@ -1235,7 +1234,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::properties
         
-            typedef ::SireBase::Properties ( ::SireFF::ForceFields::*properties_function_type )( ::SireFF::FFID const & ) const;
+            typedef ::SireBase::Properties ( ::SireFF::ForceFields::*properties_function_type)( ::SireFF::FFID const & ) const;
             properties_function_type properties_function_value( &::SireFF::ForceFields::properties );
             
             ForceFields_exposer.def( 
@@ -1246,31 +1245,31 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::property
         
-            typedef ::SireBase::Property const & ( ::SireFF::ForceFields::*property_function_type )( ::QString const & ) const;
+            typedef ::SireBase::Property const & ( ::SireFF::ForceFields::*property_function_type)( ::QString const & ) const;
             property_function_type property_function_value( &::SireFF::ForceFields::property );
             
             ForceFields_exposer.def( 
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireFF::ForceFields::property
         
-            typedef ::SireBase::Property const & ( ::SireFF::ForceFields::*property_function_type )( ::SireFF::FFID const &,::QString const & ) const;
+            typedef ::SireBase::Property const & ( ::SireFF::ForceFields::*property_function_type)( ::SireFF::FFID const &,::QString const & ) const;
             property_function_type property_function_value( &::SireFF::ForceFields::property );
             
             ForceFields_exposer.def( 
                 "property"
                 , property_function_value
                 , ( bp::arg("ffid"), bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireFF::ForceFields::propertyKeys
         
-            typedef ::QStringList ( ::SireFF::ForceFields::*propertyKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireFF::ForceFields::*propertyKeys_function_type)(  ) const;
             propertyKeys_function_type propertyKeys_function_value( &::SireFF::ForceFields::propertyKeys );
             
             ForceFields_exposer.def( 
@@ -1280,7 +1279,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::propertyKeys
         
-            typedef ::QStringList ( ::SireFF::ForceFields::*propertyKeys_function_type )( ::SireFF::FFID const & ) const;
+            typedef ::QStringList ( ::SireFF::ForceFields::*propertyKeys_function_type)( ::SireFF::FFID const & ) const;
             propertyKeys_function_type propertyKeys_function_value( &::SireFF::ForceFields::propertyKeys );
             
             ForceFields_exposer.def( 
@@ -1291,7 +1290,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::remove
         
-            typedef void ( ::SireFF::ForceFields::*remove_function_type )( ::SireFF::FFIdx const & ) ;
+            typedef void ( ::SireFF::ForceFields::*remove_function_type)( ::SireFF::FFIdx const & ) ;
             remove_function_type remove_function_value( &::SireFF::ForceFields::remove );
             
             ForceFields_exposer.def( 
@@ -1302,7 +1301,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::remove
         
-            typedef void ( ::SireFF::ForceFields::*remove_function_type )( ::SireFF::FFName const & ) ;
+            typedef void ( ::SireFF::ForceFields::*remove_function_type)( ::SireFF::FFName const & ) ;
             remove_function_type remove_function_value( &::SireFF::ForceFields::remove );
             
             ForceFields_exposer.def( 
@@ -1313,7 +1312,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::remove
         
-            typedef void ( ::SireFF::ForceFields::*remove_function_type )( ::SireFF::FFID const & ) ;
+            typedef void ( ::SireFF::ForceFields::*remove_function_type)( ::SireFF::FFID const & ) ;
             remove_function_type remove_function_value( &::SireFF::ForceFields::remove );
             
             ForceFields_exposer.def( 
@@ -1324,7 +1323,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::remove
         
-            typedef bool ( ::SireFF::ForceFields::*remove_function_type )( ::SireMol::MoleculeView const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireFF::ForceFields::*remove_function_type)( ::SireMol::MoleculeView const &,::SireMol::MGID const & ) ;
             remove_function_type remove_function_value( &::SireFF::ForceFields::remove );
             
             ForceFields_exposer.def( 
@@ -1335,7 +1334,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::remove
         
-            typedef bool ( ::SireFF::ForceFields::*remove_function_type )( ::SireMol::ViewsOfMol const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireFF::ForceFields::*remove_function_type)( ::SireMol::ViewsOfMol const &,::SireMol::MGID const & ) ;
             remove_function_type remove_function_value( &::SireFF::ForceFields::remove );
             
             ForceFields_exposer.def( 
@@ -1346,7 +1345,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::remove
         
-            typedef bool ( ::SireFF::ForceFields::*remove_function_type )( ::SireMol::Molecules const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireFF::ForceFields::*remove_function_type)( ::SireMol::Molecules const &,::SireMol::MGID const & ) ;
             remove_function_type remove_function_value( &::SireFF::ForceFields::remove );
             
             ForceFields_exposer.def( 
@@ -1357,7 +1356,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::remove
         
-            typedef bool ( ::SireFF::ForceFields::*remove_function_type )( ::SireMol::MoleculeGroup const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireFF::ForceFields::*remove_function_type)( ::SireMol::MoleculeGroup const &,::SireMol::MGID const & ) ;
             remove_function_type remove_function_value( &::SireFF::ForceFields::remove );
             
             ForceFields_exposer.def( 
@@ -1368,7 +1367,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::remove
         
-            typedef bool ( ::SireFF::ForceFields::*remove_function_type )( ::SireMol::MolNum,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireFF::ForceFields::*remove_function_type)( ::SireMol::MolNum,::SireMol::MGID const & ) ;
             remove_function_type remove_function_value( &::SireFF::ForceFields::remove );
             
             ForceFields_exposer.def( 
@@ -1379,7 +1378,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::remove
         
-            typedef bool ( ::SireFF::ForceFields::*remove_function_type )( ::QSet< SireMol::MolNum > const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireFF::ForceFields::*remove_function_type)( ::QSet< SireMol::MolNum > const &,::SireMol::MGID const & ) ;
             remove_function_type remove_function_value( &::SireFF::ForceFields::remove );
             
             ForceFields_exposer.def( 
@@ -1390,7 +1389,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::removeAll
         
-            typedef bool ( ::SireFF::ForceFields::*removeAll_function_type )( ::SireMol::MGID const & ) ;
+            typedef bool ( ::SireFF::ForceFields::*removeAll_function_type)( ::SireMol::MGID const & ) ;
             removeAll_function_type removeAll_function_value( &::SireFF::ForceFields::removeAll );
             
             ForceFields_exposer.def( 
@@ -1401,7 +1400,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::removeAll
         
-            typedef bool ( ::SireFF::ForceFields::*removeAll_function_type )( ::SireMol::MoleculeView const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireFF::ForceFields::*removeAll_function_type)( ::SireMol::MoleculeView const &,::SireMol::MGID const & ) ;
             removeAll_function_type removeAll_function_value( &::SireFF::ForceFields::removeAll );
             
             ForceFields_exposer.def( 
@@ -1412,7 +1411,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::removeAll
         
-            typedef bool ( ::SireFF::ForceFields::*removeAll_function_type )( ::SireMol::ViewsOfMol const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireFF::ForceFields::*removeAll_function_type)( ::SireMol::ViewsOfMol const &,::SireMol::MGID const & ) ;
             removeAll_function_type removeAll_function_value( &::SireFF::ForceFields::removeAll );
             
             ForceFields_exposer.def( 
@@ -1423,7 +1422,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::removeAll
         
-            typedef bool ( ::SireFF::ForceFields::*removeAll_function_type )( ::SireMol::Molecules const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireFF::ForceFields::*removeAll_function_type)( ::SireMol::Molecules const &,::SireMol::MGID const & ) ;
             removeAll_function_type removeAll_function_value( &::SireFF::ForceFields::removeAll );
             
             ForceFields_exposer.def( 
@@ -1434,7 +1433,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::removeAll
         
-            typedef bool ( ::SireFF::ForceFields::*removeAll_function_type )( ::SireMol::MoleculeGroup const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireFF::ForceFields::*removeAll_function_type)( ::SireMol::MoleculeGroup const &,::SireMol::MGID const & ) ;
             removeAll_function_type removeAll_function_value( &::SireFF::ForceFields::removeAll );
             
             ForceFields_exposer.def( 
@@ -1445,7 +1444,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::removeAllForceFields
         
-            typedef void ( ::SireFF::ForceFields::*removeAllForceFields_function_type )(  ) ;
+            typedef void ( ::SireFF::ForceFields::*removeAllForceFields_function_type)(  ) ;
             removeAllForceFields_function_type removeAllForceFields_function_value( &::SireFF::ForceFields::removeAllForceFields );
             
             ForceFields_exposer.def( 
@@ -1455,7 +1454,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::removeProperty
         
-            typedef void ( ::SireFF::ForceFields::*removeProperty_function_type )( ::QString const & ) ;
+            typedef void ( ::SireFF::ForceFields::*removeProperty_function_type)( ::QString const & ) ;
             removeProperty_function_type removeProperty_function_value( &::SireFF::ForceFields::removeProperty );
             
             ForceFields_exposer.def( 
@@ -1466,7 +1465,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::setComponent
         
-            typedef void ( ::SireFF::ForceFields::*setComponent_function_type )( ::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::SireFF::ForceFields::*setComponent_function_type)( ::SireCAS::Symbol const &,double ) ;
             setComponent_function_type setComponent_function_value( &::SireFF::ForceFields::setComponent );
             
             ForceFields_exposer.def( 
@@ -1477,7 +1476,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::setComponent
         
-            typedef void ( ::SireFF::ForceFields::*setComponent_function_type )( ::SireCAS::Symbol const &,::SireCAS::Expression const & ) ;
+            typedef void ( ::SireFF::ForceFields::*setComponent_function_type)( ::SireCAS::Symbol const &,::SireCAS::Expression const & ) ;
             setComponent_function_type setComponent_function_value( &::SireFF::ForceFields::setComponent );
             
             ForceFields_exposer.def( 
@@ -1488,7 +1487,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::setConstantComponent
         
-            typedef void ( ::SireFF::ForceFields::*setConstantComponent_function_type )( ::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::SireFF::ForceFields::*setConstantComponent_function_type)( ::SireCAS::Symbol const &,double ) ;
             setConstantComponent_function_type setConstantComponent_function_value( &::SireFF::ForceFields::setConstantComponent );
             
             ForceFields_exposer.def( 
@@ -1499,7 +1498,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::setConstantComponent
         
-            typedef void ( ::SireFF::ForceFields::*setConstantComponent_function_type )( ::SireCAS::Symbol const &,::SireCAS::Expression const & ) ;
+            typedef void ( ::SireFF::ForceFields::*setConstantComponent_function_type)( ::SireCAS::Symbol const &,::SireCAS::Expression const & ) ;
             setConstantComponent_function_type setConstantComponent_function_value( &::SireFF::ForceFields::setConstantComponent );
             
             ForceFields_exposer.def( 
@@ -1510,7 +1509,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::setContents
         
-            typedef void ( ::SireFF::ForceFields::*setContents_function_type )( ::SireMol::MGID const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::ForceFields::*setContents_function_type)( ::SireMol::MGID const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
             setContents_function_type setContents_function_value( &::SireFF::ForceFields::setContents );
             
             ForceFields_exposer.def( 
@@ -1521,7 +1520,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::setContents
         
-            typedef void ( ::SireFF::ForceFields::*setContents_function_type )( ::SireMol::MGID const &,::SireMol::ViewsOfMol const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::ForceFields::*setContents_function_type)( ::SireMol::MGID const &,::SireMol::ViewsOfMol const &,::SireBase::PropertyMap const & ) ;
             setContents_function_type setContents_function_value( &::SireFF::ForceFields::setContents );
             
             ForceFields_exposer.def( 
@@ -1532,7 +1531,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::setContents
         
-            typedef void ( ::SireFF::ForceFields::*setContents_function_type )( ::SireMol::MGID const &,::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::ForceFields::*setContents_function_type)( ::SireMol::MGID const &,::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
             setContents_function_type setContents_function_value( &::SireFF::ForceFields::setContents );
             
             ForceFields_exposer.def( 
@@ -1543,7 +1542,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::setContents
         
-            typedef void ( ::SireFF::ForceFields::*setContents_function_type )( ::SireMol::MGID const &,::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::ForceFields::*setContents_function_type)( ::SireMol::MGID const &,::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
             setContents_function_type setContents_function_value( &::SireFF::ForceFields::setContents );
             
             ForceFields_exposer.def( 
@@ -1554,7 +1553,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::setContents
         
-            typedef void ( ::SireFF::ForceFields::*setContents_function_type )( ::SireMol::MGID const &,::SireMol::MoleculeView const & ) ;
+            typedef void ( ::SireFF::ForceFields::*setContents_function_type)( ::SireMol::MGID const &,::SireMol::MoleculeView const & ) ;
             setContents_function_type setContents_function_value( &::SireFF::ForceFields::setContents );
             
             ForceFields_exposer.def( 
@@ -1565,7 +1564,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::setContents
         
-            typedef void ( ::SireFF::ForceFields::*setContents_function_type )( ::SireMol::MGID const &,::SireMol::ViewsOfMol const & ) ;
+            typedef void ( ::SireFF::ForceFields::*setContents_function_type)( ::SireMol::MGID const &,::SireMol::ViewsOfMol const & ) ;
             setContents_function_type setContents_function_value( &::SireFF::ForceFields::setContents );
             
             ForceFields_exposer.def( 
@@ -1576,7 +1575,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::setContents
         
-            typedef void ( ::SireFF::ForceFields::*setContents_function_type )( ::SireMol::MGID const &,::SireMol::Molecules const & ) ;
+            typedef void ( ::SireFF::ForceFields::*setContents_function_type)( ::SireMol::MGID const &,::SireMol::Molecules const & ) ;
             setContents_function_type setContents_function_value( &::SireFF::ForceFields::setContents );
             
             ForceFields_exposer.def( 
@@ -1587,7 +1586,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::setContents
         
-            typedef void ( ::SireFF::ForceFields::*setContents_function_type )( ::SireMol::MGID const &,::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireFF::ForceFields::*setContents_function_type)( ::SireMol::MGID const &,::SireMol::MoleculeGroup const & ) ;
             setContents_function_type setContents_function_value( &::SireFF::ForceFields::setContents );
             
             ForceFields_exposer.def( 
@@ -1598,7 +1597,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::setEnergyComponent
         
-            typedef void ( ::SireFF::ForceFields::*setEnergyComponent_function_type )( ::SireCAS::Symbol const &,::SireCAS::Expression const & ) ;
+            typedef void ( ::SireFF::ForceFields::*setEnergyComponent_function_type)( ::SireCAS::Symbol const &,::SireCAS::Expression const & ) ;
             setEnergyComponent_function_type setEnergyComponent_function_value( &::SireFF::ForceFields::setEnergyComponent );
             
             ForceFields_exposer.def( 
@@ -1609,7 +1608,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::setProperty
         
-            typedef void ( ::SireFF::ForceFields::*setProperty_function_type )( ::QString const &,::SireBase::Property const & ) ;
+            typedef void ( ::SireFF::ForceFields::*setProperty_function_type)( ::QString const &,::SireBase::Property const & ) ;
             setProperty_function_type setProperty_function_value( &::SireFF::ForceFields::setProperty );
             
             ForceFields_exposer.def( 
@@ -1620,7 +1619,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::setProperty
         
-            typedef void ( ::SireFF::ForceFields::*setProperty_function_type )( ::SireFF::FFID const &,::QString const &,::SireBase::Property const & ) ;
+            typedef void ( ::SireFF::ForceFields::*setProperty_function_type)( ::SireFF::FFID const &,::QString const &,::SireBase::Property const & ) ;
             setProperty_function_type setProperty_function_value( &::SireFF::ForceFields::setProperty );
             
             ForceFields_exposer.def( 
@@ -1631,7 +1630,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::toString
         
-            typedef ::QString ( ::SireFF::ForceFields::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireFF::ForceFields::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireFF::ForceFields::toString );
             
             ForceFields_exposer.def( 
@@ -1647,7 +1646,7 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "totalComponent"
                 , totalComponent_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireFF::ForceFields::typeName
@@ -1662,7 +1661,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::update
         
-            typedef void ( ::SireFF::ForceFields::*update_function_type )( ::SireMol::MoleculeData const &,bool ) ;
+            typedef void ( ::SireFF::ForceFields::*update_function_type)( ::SireMol::MoleculeData const &,bool ) ;
             update_function_type update_function_value( &::SireFF::ForceFields::update );
             
             ForceFields_exposer.def( 
@@ -1673,7 +1672,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::update
         
-            typedef void ( ::SireFF::ForceFields::*update_function_type )( ::SireMol::Molecules const &,bool ) ;
+            typedef void ( ::SireFF::ForceFields::*update_function_type)( ::SireMol::Molecules const &,bool ) ;
             update_function_type update_function_value( &::SireFF::ForceFields::update );
             
             ForceFields_exposer.def( 
@@ -1684,7 +1683,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::update
         
-            typedef void ( ::SireFF::ForceFields::*update_function_type )( ::SireMol::MoleculeGroup const &,bool ) ;
+            typedef void ( ::SireFF::ForceFields::*update_function_type)( ::SireMol::MoleculeGroup const &,bool ) ;
             update_function_type update_function_value( &::SireFF::ForceFields::update );
             
             ForceFields_exposer.def( 
@@ -1695,7 +1694,7 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::userProperties
         
-            typedef ::SireBase::Properties ( ::SireFF::ForceFields::*userProperties_function_type )(  ) const;
+            typedef ::SireBase::Properties ( ::SireFF::ForceFields::*userProperties_function_type)(  ) const;
             userProperties_function_type userProperties_function_value( &::SireFF::ForceFields::userProperties );
             
             ForceFields_exposer.def( 
@@ -1705,14 +1704,14 @@ void register_ForceFields_class(){
         }
         { //::SireFF::ForceFields::userProperty
         
-            typedef ::SireBase::Property const & ( ::SireFF::ForceFields::*userProperty_function_type )( ::QString const & ) const;
+            typedef ::SireBase::Property const & ( ::SireFF::ForceFields::*userProperty_function_type)( ::QString const & ) const;
             userProperty_function_type userProperty_function_value( &::SireFF::ForceFields::userProperty );
             
             ForceFields_exposer.def( 
                 "userProperty"
                 , userProperty_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         ForceFields_exposer.staticmethod( "totalComponent" );

@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "ScaleVolumeFromCenter.pypp.hpp"
 
 namespace bp = boost::python;
@@ -51,19 +50,19 @@ void register_ScaleVolumeFromCenter_class(){
         ScaleVolumeFromCenter_exposer.def( bp::init< SireMove::ScaleVolumeFromCenter const & >(( bp::arg("other") )) );
         { //::SireMove::ScaleVolumeFromCenter::center
         
-            typedef ::SireFF::Point const & ( ::SireMove::ScaleVolumeFromCenter::*center_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireMove::ScaleVolumeFromCenter::*center_function_type)(  ) const;
             center_function_type center_function_value( &::SireMove::ScaleVolumeFromCenter::center );
             
             ScaleVolumeFromCenter_exposer.def( 
                 "center"
                 , center_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         ScaleVolumeFromCenter_exposer.def( bp::self != bp::self );
         { //::SireMove::ScaleVolumeFromCenter::operator=
         
-            typedef ::SireMove::ScaleVolumeFromCenter & ( ::SireMove::ScaleVolumeFromCenter::*assign_function_type )( ::SireMove::ScaleVolumeFromCenter const & ) ;
+            typedef ::SireMove::ScaleVolumeFromCenter & ( ::SireMove::ScaleVolumeFromCenter::*assign_function_type)( ::SireMove::ScaleVolumeFromCenter const & ) ;
             assign_function_type assign_function_value( &::SireMove::ScaleVolumeFromCenter::operator= );
             
             ScaleVolumeFromCenter_exposer.def( 
@@ -76,7 +75,7 @@ void register_ScaleVolumeFromCenter_class(){
         ScaleVolumeFromCenter_exposer.def( bp::self == bp::self );
         { //::SireMove::ScaleVolumeFromCenter::setCenter
         
-            typedef void ( ::SireMove::ScaleVolumeFromCenter::*setCenter_function_type )( ::SireFF::PointRef const & ) ;
+            typedef void ( ::SireMove::ScaleVolumeFromCenter::*setCenter_function_type)( ::SireFF::PointRef const & ) ;
             setCenter_function_type setCenter_function_value( &::SireMove::ScaleVolumeFromCenter::setCenter );
             
             ScaleVolumeFromCenter_exposer.def( 
@@ -87,7 +86,7 @@ void register_ScaleVolumeFromCenter_class(){
         }
         { //::SireMove::ScaleVolumeFromCenter::setVolume
         
-            typedef int ( ::SireMove::ScaleVolumeFromCenter::*setVolume_function_type )( ::SireSystem::System &,::SireUnits::Dimension::Volume const &,::SireBase::PropertyMap const & ) const;
+            typedef int ( ::SireMove::ScaleVolumeFromCenter::*setVolume_function_type)( ::SireSystem::System &,::SireUnits::Dimension::Volume const &,::SireBase::PropertyMap const & ) const;
             setVolume_function_type setVolume_function_value( &::SireMove::ScaleVolumeFromCenter::setVolume );
             
             ScaleVolumeFromCenter_exposer.def( 

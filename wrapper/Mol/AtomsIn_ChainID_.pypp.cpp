@@ -68,7 +68,7 @@ void register_AtomsIn_ChainID__class(){
         { //::SireMol::AtomsIn< SireMol::ChainID >::hash
         
             typedef SireMol::AtomsIn< SireMol::ChainID > exported_class_t;
-            typedef ::uint ( ::SireMol::AtomsIn< SireMol::ChainID >::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::AtomsIn< SireMol::ChainID >::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::AtomsIn< SireMol::ChainID >::hash );
             
             AtomsIn_ChainID__exposer.def( 
@@ -79,7 +79,7 @@ void register_AtomsIn_ChainID__class(){
         { //::SireMol::AtomsIn< SireMol::ChainID >::isNull
         
             typedef SireMol::AtomsIn< SireMol::ChainID > exported_class_t;
-            typedef bool ( ::SireMol::AtomsIn< SireMol::ChainID >::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::AtomsIn< SireMol::ChainID >::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::AtomsIn< SireMol::ChainID >::isNull );
             
             AtomsIn_ChainID__exposer.def( 
@@ -90,7 +90,7 @@ void register_AtomsIn_ChainID__class(){
         { //::SireMol::AtomsIn< SireMol::ChainID >::map
         
             typedef SireMol::AtomsIn< SireMol::ChainID > exported_class_t;
-            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::AtomsIn< SireMol::ChainID >::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::AtomsIn< SireMol::ChainID >::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireMol::AtomsIn< SireMol::ChainID >::map );
             
             AtomsIn_ChainID__exposer.def( 
@@ -104,7 +104,7 @@ void register_AtomsIn_ChainID__class(){
         { //::SireMol::AtomsIn< SireMol::ChainID >::operator=
         
             typedef SireMol::AtomsIn< SireMol::ChainID > exported_class_t;
-            typedef ::SireMol::AtomsIn< SireMol::ChainID > & ( ::SireMol::AtomsIn< SireMol::ChainID >::*assign_function_type )( ::SireMol::AtomsIn< SireMol::ChainID > const & ) ;
+            typedef ::SireMol::AtomsIn< SireMol::ChainID > & ( ::SireMol::AtomsIn< SireMol::ChainID >::*assign_function_type)( ::SireMol::AtomsIn< SireMol::ChainID > const & ) ;
             assign_function_type assign_function_value( &::SireMol::AtomsIn< SireMol::ChainID >::operator= );
             
             AtomsIn_ChainID__exposer.def( 
@@ -119,7 +119,7 @@ void register_AtomsIn_ChainID__class(){
         { //::SireMol::AtomsIn< SireMol::ChainID >::toString
         
             typedef SireMol::AtomsIn< SireMol::ChainID > exported_class_t;
-            typedef ::QString ( ::SireMol::AtomsIn< SireMol::ChainID >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::AtomsIn< SireMol::ChainID >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::AtomsIn< SireMol::ChainID >::toString );
             
             AtomsIn_ChainID__exposer.def( 
@@ -141,7 +141,7 @@ void register_AtomsIn_ChainID__class(){
         { //::SireMol::AtomsIn< SireMol::ChainID >::what
         
             typedef SireMol::AtomsIn< SireMol::ChainID > exported_class_t;
-            typedef char const * ( ::SireMol::AtomsIn< SireMol::ChainID >::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::AtomsIn< SireMol::ChainID >::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::AtomsIn< SireMol::ChainID >::what );
             
             AtomsIn_ChainID__exposer.def( 

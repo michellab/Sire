@@ -51,7 +51,7 @@ void register_AtomNameMatcher_class(){
         AtomNameMatcher_exposer.def( bp::self != bp::self );
         { //::SireMol::AtomNameMatcher::operator=
         
-            typedef ::SireMol::AtomNameMatcher & ( ::SireMol::AtomNameMatcher::*assign_function_type )( ::SireMol::AtomNameMatcher const & ) ;
+            typedef ::SireMol::AtomNameMatcher & ( ::SireMol::AtomNameMatcher::*assign_function_type)( ::SireMol::AtomNameMatcher const & ) ;
             assign_function_type assign_function_value( &::SireMol::AtomNameMatcher::operator= );
             
             AtomNameMatcher_exposer.def( 
@@ -64,7 +64,7 @@ void register_AtomNameMatcher_class(){
         AtomNameMatcher_exposer.def( bp::self == bp::self );
         { //::SireMol::AtomNameMatcher::toString
         
-            typedef ::QString ( ::SireMol::AtomNameMatcher::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::AtomNameMatcher::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::AtomNameMatcher::toString );
             
             AtomNameMatcher_exposer.def( 
@@ -84,7 +84,7 @@ void register_AtomNameMatcher_class(){
         }
         { //::SireMol::AtomNameMatcher::what
         
-            typedef char const * ( ::SireMol::AtomNameMatcher::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::AtomNameMatcher::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::AtomNameMatcher::what );
             
             AtomNameMatcher_exposer.def( 

@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "Replica.pypp.hpp"
 
 namespace bp = boost::python;
@@ -46,7 +45,7 @@ void register_Replica_class(){
         Replica_exposer.def( bp::init< SireMove::Replica const & >(( bp::arg("other") )) );
         { //::SireMove::Replica::chemicalPotential
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::Replica::*chemicalPotential_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::Replica::*chemicalPotential_function_type)(  ) const;
             chemicalPotential_function_type chemicalPotential_function_value( &::SireMove::Replica::chemicalPotential );
             
             Replica_exposer.def( 
@@ -56,7 +55,7 @@ void register_Replica_class(){
         }
         { //::SireMove::Replica::energy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::Replica::*energy_function_type )(  ) ;
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::Replica::*energy_function_type)(  ) ;
             energy_function_type energy_function_value( &::SireMove::Replica::energy );
             
             Replica_exposer.def( 
@@ -66,29 +65,29 @@ void register_Replica_class(){
         }
         { //::SireMove::Replica::energyComponent
         
-            typedef ::SireCAS::Symbol const & ( ::SireMove::Replica::*energyComponent_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMove::Replica::*energyComponent_function_type)(  ) const;
             energyComponent_function_type energyComponent_function_value( &::SireMove::Replica::energyComponent );
             
             Replica_exposer.def( 
                 "energyComponent"
                 , energyComponent_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMove::Replica::ensemble
         
-            typedef ::SireMove::Ensemble const & ( ::SireMove::Replica::*ensemble_function_type )(  ) const;
+            typedef ::SireMove::Ensemble const & ( ::SireMove::Replica::*ensemble_function_type)(  ) const;
             ensemble_function_type ensemble_function_value( &::SireMove::Replica::ensemble );
             
             Replica_exposer.def( 
                 "ensemble"
                 , ensemble_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMove::Replica::fugacity
         
-            typedef ::SireUnits::Dimension::Pressure ( ::SireMove::Replica::*fugacity_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Pressure ( ::SireMove::Replica::*fugacity_function_type)(  ) const;
             fugacity_function_type fugacity_function_value( &::SireMove::Replica::fugacity );
             
             Replica_exposer.def( 
@@ -98,7 +97,7 @@ void register_Replica_class(){
         }
         { //::SireMove::Replica::isConstantChemicalPotential
         
-            typedef bool ( ::SireMove::Replica::*isConstantChemicalPotential_function_type )(  ) const;
+            typedef bool ( ::SireMove::Replica::*isConstantChemicalPotential_function_type)(  ) const;
             isConstantChemicalPotential_function_type isConstantChemicalPotential_function_value( &::SireMove::Replica::isConstantChemicalPotential );
             
             Replica_exposer.def( 
@@ -108,7 +107,7 @@ void register_Replica_class(){
         }
         { //::SireMove::Replica::isConstantEnergy
         
-            typedef bool ( ::SireMove::Replica::*isConstantEnergy_function_type )(  ) const;
+            typedef bool ( ::SireMove::Replica::*isConstantEnergy_function_type)(  ) const;
             isConstantEnergy_function_type isConstantEnergy_function_value( &::SireMove::Replica::isConstantEnergy );
             
             Replica_exposer.def( 
@@ -118,7 +117,7 @@ void register_Replica_class(){
         }
         { //::SireMove::Replica::isConstantFugacity
         
-            typedef bool ( ::SireMove::Replica::*isConstantFugacity_function_type )(  ) const;
+            typedef bool ( ::SireMove::Replica::*isConstantFugacity_function_type)(  ) const;
             isConstantFugacity_function_type isConstantFugacity_function_value( &::SireMove::Replica::isConstantFugacity );
             
             Replica_exposer.def( 
@@ -128,7 +127,7 @@ void register_Replica_class(){
         }
         { //::SireMove::Replica::isConstantLambda
         
-            typedef bool ( ::SireMove::Replica::*isConstantLambda_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef bool ( ::SireMove::Replica::*isConstantLambda_function_type)( ::SireCAS::Symbol const & ) const;
             isConstantLambda_function_type isConstantLambda_function_value( &::SireMove::Replica::isConstantLambda );
             
             Replica_exposer.def( 
@@ -139,7 +138,7 @@ void register_Replica_class(){
         }
         { //::SireMove::Replica::isConstantNParticles
         
-            typedef bool ( ::SireMove::Replica::*isConstantNParticles_function_type )(  ) const;
+            typedef bool ( ::SireMove::Replica::*isConstantNParticles_function_type)(  ) const;
             isConstantNParticles_function_type isConstantNParticles_function_value( &::SireMove::Replica::isConstantNParticles );
             
             Replica_exposer.def( 
@@ -149,7 +148,7 @@ void register_Replica_class(){
         }
         { //::SireMove::Replica::isConstantPressure
         
-            typedef bool ( ::SireMove::Replica::*isConstantPressure_function_type )(  ) const;
+            typedef bool ( ::SireMove::Replica::*isConstantPressure_function_type)(  ) const;
             isConstantPressure_function_type isConstantPressure_function_value( &::SireMove::Replica::isConstantPressure );
             
             Replica_exposer.def( 
@@ -159,7 +158,7 @@ void register_Replica_class(){
         }
         { //::SireMove::Replica::isConstantTemperature
         
-            typedef bool ( ::SireMove::Replica::*isConstantTemperature_function_type )(  ) const;
+            typedef bool ( ::SireMove::Replica::*isConstantTemperature_function_type)(  ) const;
             isConstantTemperature_function_type isConstantTemperature_function_value( &::SireMove::Replica::isConstantTemperature );
             
             Replica_exposer.def( 
@@ -169,7 +168,7 @@ void register_Replica_class(){
         }
         { //::SireMove::Replica::isConstantVolume
         
-            typedef bool ( ::SireMove::Replica::*isConstantVolume_function_type )(  ) const;
+            typedef bool ( ::SireMove::Replica::*isConstantVolume_function_type)(  ) const;
             isConstantVolume_function_type isConstantVolume_function_value( &::SireMove::Replica::isConstantVolume );
             
             Replica_exposer.def( 
@@ -179,18 +178,18 @@ void register_Replica_class(){
         }
         { //::SireMove::Replica::lambdaComponent
         
-            typedef ::SireCAS::Symbol const & ( ::SireMove::Replica::*lambdaComponent_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMove::Replica::*lambdaComponent_function_type)(  ) const;
             lambdaComponent_function_type lambdaComponent_function_value( &::SireMove::Replica::lambdaComponent );
             
             Replica_exposer.def( 
                 "lambdaComponent"
                 , lambdaComponent_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMove::Replica::lambdaValue
         
-            typedef double ( ::SireMove::Replica::*lambdaValue_function_type )(  ) const;
+            typedef double ( ::SireMove::Replica::*lambdaValue_function_type)(  ) const;
             lambdaValue_function_type lambdaValue_function_value( &::SireMove::Replica::lambdaValue );
             
             Replica_exposer.def( 
@@ -201,7 +200,7 @@ void register_Replica_class(){
         Replica_exposer.def( bp::self != bp::self );
         { //::SireMove::Replica::operator=
         
-            typedef ::SireMove::Replica & ( ::SireMove::Replica::*assign_function_type )( ::SireMove::Replica const & ) ;
+            typedef ::SireMove::Replica & ( ::SireMove::Replica::*assign_function_type)( ::SireMove::Replica const & ) ;
             assign_function_type assign_function_value( &::SireMove::Replica::operator= );
             
             Replica_exposer.def( 
@@ -214,7 +213,7 @@ void register_Replica_class(){
         Replica_exposer.def( bp::self == bp::self );
         { //::SireMove::Replica::pressure
         
-            typedef ::SireUnits::Dimension::Pressure ( ::SireMove::Replica::*pressure_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Pressure ( ::SireMove::Replica::*pressure_function_type)(  ) const;
             pressure_function_type pressure_function_value( &::SireMove::Replica::pressure );
             
             Replica_exposer.def( 
@@ -224,7 +223,7 @@ void register_Replica_class(){
         }
         { //::SireMove::Replica::spaceProperty
         
-            typedef ::SireBase::PropertyName const & ( ::SireMove::Replica::*spaceProperty_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireMove::Replica::*spaceProperty_function_type)(  ) const;
             spaceProperty_function_type spaceProperty_function_value( &::SireMove::Replica::spaceProperty );
             
             Replica_exposer.def( 
@@ -235,7 +234,7 @@ void register_Replica_class(){
         }
         { //::SireMove::Replica::temperature
         
-            typedef ::SireUnits::Dimension::Temperature ( ::SireMove::Replica::*temperature_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Temperature ( ::SireMove::Replica::*temperature_function_type)(  ) const;
             temperature_function_type temperature_function_value( &::SireMove::Replica::temperature );
             
             Replica_exposer.def( 
@@ -255,7 +254,7 @@ void register_Replica_class(){
         }
         { //::SireMove::Replica::volume
         
-            typedef ::SireUnits::Dimension::Volume ( ::SireMove::Replica::*volume_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Volume ( ::SireMove::Replica::*volume_function_type)(  ) const;
             volume_function_type volume_function_value( &::SireMove::Replica::volume );
             
             Replica_exposer.def( 

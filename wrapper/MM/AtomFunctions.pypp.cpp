@@ -31,7 +31,7 @@ void register_AtomFunctions_class(){
         bp::scope AtomFunctions_scope( AtomFunctions_exposer );
         { //::SireMM::AtomFunctions::isCompatibleWith
         
-            typedef bool ( ::SireMM::AtomFunctions::*isCompatibleWith_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef bool ( ::SireMM::AtomFunctions::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMM::AtomFunctions::isCompatibleWith );
             
             AtomFunctions_exposer.def( 
@@ -42,7 +42,7 @@ void register_AtomFunctions_class(){
         }
         { //::SireMM::AtomFunctions::symbols
         
-            typedef ::QSet< SireCAS::Symbol > const & ( ::SireMM::AtomFunctions::*symbols_function_type )(  ) const;
+            typedef ::QSet< SireCAS::Symbol > const & ( ::SireMM::AtomFunctions::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireMM::AtomFunctions::symbols );
             
             AtomFunctions_exposer.def( 

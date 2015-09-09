@@ -30,7 +30,7 @@ void register_Element_class(){
         Element_exposer.def( bp::init< SireMol::Element const & >(( bp::arg("element") )) );
         { //::SireMol::Element::actinide
         
-            typedef bool ( ::SireMol::Element::*actinide_function_type )(  ) const;
+            typedef bool ( ::SireMol::Element::*actinide_function_type)(  ) const;
             actinide_function_type actinide_function_value( &::SireMol::Element::actinide );
             
             Element_exposer.def( 
@@ -40,7 +40,7 @@ void register_Element_class(){
         }
         { //::SireMol::Element::alkaliEarthMetal
         
-            typedef bool ( ::SireMol::Element::*alkaliEarthMetal_function_type )(  ) const;
+            typedef bool ( ::SireMol::Element::*alkaliEarthMetal_function_type)(  ) const;
             alkaliEarthMetal_function_type alkaliEarthMetal_function_value( &::SireMol::Element::alkaliEarthMetal );
             
             Element_exposer.def( 
@@ -50,7 +50,7 @@ void register_Element_class(){
         }
         { //::SireMol::Element::alkaliMetal
         
-            typedef bool ( ::SireMol::Element::*alkaliMetal_function_type )(  ) const;
+            typedef bool ( ::SireMol::Element::*alkaliMetal_function_type)(  ) const;
             alkaliMetal_function_type alkaliMetal_function_value( &::SireMol::Element::alkaliMetal );
             
             Element_exposer.def( 
@@ -60,7 +60,7 @@ void register_Element_class(){
         }
         { //::SireMol::Element::biological
         
-            typedef bool ( ::SireMol::Element::*biological_function_type )(  ) const;
+            typedef bool ( ::SireMol::Element::*biological_function_type)(  ) const;
             biological_function_type biological_function_value( &::SireMol::Element::biological );
             
             Element_exposer.def( 
@@ -81,7 +81,7 @@ void register_Element_class(){
         }
         { //::SireMol::Element::blue
         
-            typedef float ( ::SireMol::Element::*blue_function_type )(  ) const;
+            typedef float ( ::SireMol::Element::*blue_function_type)(  ) const;
             blue_function_type blue_function_value( &::SireMol::Element::blue );
             
             Element_exposer.def( 
@@ -91,7 +91,7 @@ void register_Element_class(){
         }
         { //::SireMol::Element::bondOrderRadius
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMol::Element::*bondOrderRadius_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMol::Element::*bondOrderRadius_function_type)(  ) const;
             bondOrderRadius_function_type bondOrderRadius_function_value( &::SireMol::Element::bondOrderRadius );
             
             Element_exposer.def( 
@@ -101,7 +101,7 @@ void register_Element_class(){
         }
         { //::SireMol::Element::covalentRadius
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMol::Element::*covalentRadius_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMol::Element::*covalentRadius_function_type)(  ) const;
             covalentRadius_function_type covalentRadius_function_value( &::SireMol::Element::covalentRadius );
             
             Element_exposer.def( 
@@ -122,7 +122,7 @@ void register_Element_class(){
         }
         { //::SireMol::Element::green
         
-            typedef float ( ::SireMol::Element::*green_function_type )(  ) const;
+            typedef float ( ::SireMol::Element::*green_function_type)(  ) const;
             green_function_type green_function_value( &::SireMol::Element::green );
             
             Element_exposer.def( 
@@ -132,7 +132,7 @@ void register_Element_class(){
         }
         { //::SireMol::Element::group
         
-            typedef int ( ::SireMol::Element::*group_function_type )(  ) const;
+            typedef int ( ::SireMol::Element::*group_function_type)(  ) const;
             group_function_type group_function_value( &::SireMol::Element::group );
             
             Element_exposer.def( 
@@ -142,7 +142,7 @@ void register_Element_class(){
         }
         { //::SireMol::Element::halogen
         
-            typedef bool ( ::SireMol::Element::*halogen_function_type )(  ) const;
+            typedef bool ( ::SireMol::Element::*halogen_function_type)(  ) const;
             halogen_function_type halogen_function_value( &::SireMol::Element::halogen );
             
             Element_exposer.def( 
@@ -152,7 +152,7 @@ void register_Element_class(){
         }
         { //::SireMol::Element::lanthanide
         
-            typedef bool ( ::SireMol::Element::*lanthanide_function_type )(  ) const;
+            typedef bool ( ::SireMol::Element::*lanthanide_function_type)(  ) const;
             lanthanide_function_type lanthanide_function_value( &::SireMol::Element::lanthanide );
             
             Element_exposer.def( 
@@ -162,7 +162,7 @@ void register_Element_class(){
         }
         { //::SireMol::Element::mass
         
-            typedef ::SireUnits::Dimension::MolarMass ( ::SireMol::Element::*mass_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::MolarMass ( ::SireMol::Element::*mass_function_type)(  ) const;
             mass_function_type mass_function_value( &::SireMol::Element::mass );
             
             Element_exposer.def( 
@@ -172,7 +172,7 @@ void register_Element_class(){
         }
         { //::SireMol::Element::maxBonds
         
-            typedef int ( ::SireMol::Element::*maxBonds_function_type )(  ) const;
+            typedef int ( ::SireMol::Element::*maxBonds_function_type)(  ) const;
             maxBonds_function_type maxBonds_function_value( &::SireMol::Element::maxBonds );
             
             Element_exposer.def( 
@@ -182,7 +182,7 @@ void register_Element_class(){
         }
         { //::SireMol::Element::nProtons
         
-            typedef int ( ::SireMol::Element::*nProtons_function_type )(  ) const;
+            typedef int ( ::SireMol::Element::*nProtons_function_type)(  ) const;
             nProtons_function_type nProtons_function_value( &::SireMol::Element::nProtons );
             
             Element_exposer.def( 
@@ -192,7 +192,7 @@ void register_Element_class(){
         }
         { //::SireMol::Element::name
         
-            typedef ::QString ( ::SireMol::Element::*name_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::Element::*name_function_type)(  ) const;
             name_function_type name_function_value( &::SireMol::Element::name );
             
             Element_exposer.def( 
@@ -202,7 +202,7 @@ void register_Element_class(){
         }
         { //::SireMol::Element::nobleGas
         
-            typedef bool ( ::SireMol::Element::*nobleGas_function_type )(  ) const;
+            typedef bool ( ::SireMol::Element::*nobleGas_function_type)(  ) const;
             nobleGas_function_type nobleGas_function_value( &::SireMol::Element::nobleGas );
             
             Element_exposer.def( 
@@ -215,7 +215,7 @@ void register_Element_class(){
         Element_exposer.def( bp::self <= bp::self );
         { //::SireMol::Element::operator=
         
-            typedef ::SireMol::Element const & ( ::SireMol::Element::*assign_function_type )( ::SireMol::Element const & ) ;
+            typedef ::SireMol::Element const & ( ::SireMol::Element::*assign_function_type)( ::SireMol::Element const & ) ;
             assign_function_type assign_function_value( &::SireMol::Element::operator= );
             
             Element_exposer.def( 
@@ -230,7 +230,7 @@ void register_Element_class(){
         Element_exposer.def( bp::self >= bp::self );
         { //::SireMol::Element::period
         
-            typedef int ( ::SireMol::Element::*period_function_type )(  ) const;
+            typedef int ( ::SireMol::Element::*period_function_type)(  ) const;
             period_function_type period_function_value( &::SireMol::Element::period );
             
             Element_exposer.def( 
@@ -240,7 +240,7 @@ void register_Element_class(){
         }
         { //::SireMol::Element::rareEarth
         
-            typedef bool ( ::SireMol::Element::*rareEarth_function_type )(  ) const;
+            typedef bool ( ::SireMol::Element::*rareEarth_function_type)(  ) const;
             rareEarth_function_type rareEarth_function_value( &::SireMol::Element::rareEarth );
             
             Element_exposer.def( 
@@ -250,7 +250,7 @@ void register_Element_class(){
         }
         { //::SireMol::Element::red
         
-            typedef float ( ::SireMol::Element::*red_function_type )(  ) const;
+            typedef float ( ::SireMol::Element::*red_function_type)(  ) const;
             red_function_type red_function_value( &::SireMol::Element::red );
             
             Element_exposer.def( 
@@ -260,7 +260,7 @@ void register_Element_class(){
         }
         { //::SireMol::Element::symbol
         
-            typedef ::QString ( ::SireMol::Element::*symbol_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::Element::*symbol_function_type)(  ) const;
             symbol_function_type symbol_function_value( &::SireMol::Element::symbol );
             
             Element_exposer.def( 
@@ -270,7 +270,7 @@ void register_Element_class(){
         }
         { //::SireMol::Element::toString
         
-            typedef ::QString ( ::SireMol::Element::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::Element::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::Element::toString );
             
             Element_exposer.def( 
@@ -280,7 +280,7 @@ void register_Element_class(){
         }
         { //::SireMol::Element::transitionMetal
         
-            typedef bool ( ::SireMol::Element::*transitionMetal_function_type )(  ) const;
+            typedef bool ( ::SireMol::Element::*transitionMetal_function_type)(  ) const;
             transitionMetal_function_type transitionMetal_function_value( &::SireMol::Element::transitionMetal );
             
             Element_exposer.def( 
@@ -300,7 +300,7 @@ void register_Element_class(){
         }
         { //::SireMol::Element::vdwRadius
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMol::Element::*vdwRadius_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMol::Element::*vdwRadius_function_type)(  ) const;
             vdwRadius_function_type vdwRadius_function_value( &::SireMol::Element::vdwRadius );
             
             Element_exposer.def( 
@@ -310,7 +310,7 @@ void register_Element_class(){
         }
         { //::SireMol::Element::what
         
-            typedef char const * ( ::SireMol::Element::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::Element::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::Element::what );
             
             Element_exposer.def( 

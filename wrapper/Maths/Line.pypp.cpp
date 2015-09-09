@@ -32,7 +32,7 @@ void register_Line_class(){
         Line_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const & >(( bp::arg("point0"), bp::arg("point1") )) );
         { //::SireMaths::Line::at
         
-            typedef ::SireMaths::Vector const & ( ::SireMaths::Line::*at_function_type )( int ) const;
+            typedef ::SireMaths::Vector const & ( ::SireMaths::Line::*at_function_type)( int ) const;
             at_function_type at_function_value( &::SireMaths::Line::at );
             
             Line_exposer.def( 
@@ -44,7 +44,7 @@ void register_Line_class(){
         }
         { //::SireMaths::Line::count
         
-            typedef int ( ::SireMaths::Line::*count_function_type )(  ) const;
+            typedef int ( ::SireMaths::Line::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMaths::Line::count );
             
             Line_exposer.def( 
@@ -54,7 +54,7 @@ void register_Line_class(){
         }
         { //::SireMaths::Line::length
         
-            typedef double ( ::SireMaths::Line::*length_function_type )(  ) const;
+            typedef double ( ::SireMaths::Line::*length_function_type)(  ) const;
             length_function_type length_function_value( &::SireMaths::Line::length );
             
             Line_exposer.def( 
@@ -64,7 +64,7 @@ void register_Line_class(){
         }
         { //::SireMaths::Line::operator[]
         
-            typedef ::SireMaths::Vector const & ( ::SireMaths::Line::*__getitem___function_type )( int ) const;
+            typedef ::SireMaths::Vector const & ( ::SireMaths::Line::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMaths::Line::operator[] );
             
             Line_exposer.def( 
@@ -76,7 +76,7 @@ void register_Line_class(){
         }
         { //::SireMaths::Line::point
         
-            typedef ::SireMaths::Vector const & ( ::SireMaths::Line::*point_function_type )( int ) const;
+            typedef ::SireMaths::Vector const & ( ::SireMaths::Line::*point_function_type)( int ) const;
             point_function_type point_function_value( &::SireMaths::Line::point );
             
             Line_exposer.def( 
@@ -88,7 +88,7 @@ void register_Line_class(){
         }
         { //::SireMaths::Line::toString
         
-            typedef ::QString ( ::SireMaths::Line::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMaths::Line::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMaths::Line::toString );
             
             Line_exposer.def( 
@@ -108,7 +108,7 @@ void register_Line_class(){
         }
         { //::SireMaths::Line::vector
         
-            typedef ::SireMaths::Vector ( ::SireMaths::Line::*vector_function_type )(  ) const;
+            typedef ::SireMaths::Vector ( ::SireMaths::Line::*vector_function_type)(  ) const;
             vector_function_type vector_function_value( &::SireMaths::Line::vector );
             
             Line_exposer.def( 
@@ -118,7 +118,7 @@ void register_Line_class(){
         }
         { //::SireMaths::Line::what
         
-            typedef char const * ( ::SireMaths::Line::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMaths::Line::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMaths::Line::what );
             
             Line_exposer.def( 

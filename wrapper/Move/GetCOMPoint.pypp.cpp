@@ -3,7 +3,6 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
-#include "Helpers/clone_const_reference.hpp"
 #include "GetCOMPoint.pypp.hpp"
 
 namespace bp = boost::python;
@@ -52,18 +51,18 @@ void register_GetCOMPoint_class(){
         GetCOMPoint_exposer.def( bp::init< SireMove::GetCOMPoint const & >(( bp::arg("other") )) );
         { //::SireMove::GetCOMPoint::atomID
         
-            typedef ::SireMol::AtomID const & ( ::SireMove::GetCOMPoint::*atomID_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMove::GetCOMPoint::*atomID_function_type)(  ) const;
             atomID_function_type atomID_function_value( &::SireMove::GetCOMPoint::atomID );
             
             GetCOMPoint_exposer.def( 
                 "atomID"
                 , atomID_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
         { //::SireMove::GetCOMPoint::getPoint
         
-            typedef ::SireMaths::Vector ( ::SireMove::GetCOMPoint::*getPoint_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::Vector ( ::SireMove::GetCOMPoint::*getPoint_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             getPoint_function_type getPoint_function_value( &::SireMove::GetCOMPoint::getPoint );
             
             GetCOMPoint_exposer.def( 
@@ -75,7 +74,7 @@ void register_GetCOMPoint_class(){
         GetCOMPoint_exposer.def( bp::self != bp::self );
         { //::SireMove::GetCOMPoint::operator=
         
-            typedef ::SireMove::GetCOMPoint & ( ::SireMove::GetCOMPoint::*assign_function_type )( ::SireMove::GetCOMPoint const & ) ;
+            typedef ::SireMove::GetCOMPoint & ( ::SireMove::GetCOMPoint::*assign_function_type)( ::SireMove::GetCOMPoint const & ) ;
             assign_function_type assign_function_value( &::SireMove::GetCOMPoint::operator= );
             
             GetCOMPoint_exposer.def( 
