@@ -8,16 +8,20 @@
 ### and build/python
 ###
 
-# Ask the user where they would like to install sire. By default
-# we will aim for $HOME/sire.app
-echo -n "Where would you like to install Sire? [$HOME/sire.app]: "
-read INSTALL_DIR
+if [ -z "$INSTALL_SIRE_DIR" ]; then
+    # Ask the user where they would like to install sire. By default
+    # we will aim for $HOME/sire.app
+    echo -n "Where would you like to install Sire? [$HOME/sire.app]: "
+    read INSTALL_DIR
 
-if [ ! ${INSTALL_DIR} ]; then
-   INSTALL_DIR=$HOME/sire.app
+    if [ ! ${INSTALL_DIR} ]; then
+        INSTALL_DIR=$HOME/sire.app
+    else
+        # Use eval so that we can expand variables such as $HOME
+        INSTALL_DIR=`eval echo ${INSTALL_DIR}`
+    fi
 else
-   # Use eval so that we can expand variables such as $HOME
-   INSTALL_DIR=`eval echo ${INSTALL_DIR}`
+    INSTALL_DIR=`eval echo ${INSTALL_SIRE_DIR}`
 fi
 
 echo "Installing into directory '${INSTALL_DIR}'"
