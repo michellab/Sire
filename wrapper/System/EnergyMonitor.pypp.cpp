@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "EnergyMonitor.pypp.hpp"
 
 namespace bp = boost::python;
@@ -76,7 +77,7 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "assigner0"
                 , assigner0_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::EnergyMonitor::assigner1
@@ -87,7 +88,7 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "assigner1"
                 , assigner1_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::EnergyMonitor::clearStatistics
@@ -128,7 +129,7 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "group0"
                 , group0_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::EnergyMonitor::group1
@@ -139,7 +140,7 @@ void register_EnergyMonitor_class(){
             EnergyMonitor_exposer.def( 
                 "group1"
                 , group1_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::EnergyMonitor::ljEnergies

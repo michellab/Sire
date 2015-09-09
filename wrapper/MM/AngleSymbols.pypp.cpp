@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "AngleSymbols.pypp.hpp"
 
 namespace bp = boost::python;
@@ -49,7 +50,7 @@ void register_AngleSymbols_class(){
             AngleSymbols_exposer.def( 
                 "theta"
                 , theta_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         AngleSymbols_exposer.def( "__copy__", &__copy__);

@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "NullFF.pypp.hpp"
 
 namespace bp = boost::python;
@@ -69,7 +70,7 @@ void register_NullFF_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("mgnum") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireFF::NullFF::components
@@ -80,7 +81,7 @@ void register_NullFF_class(){
             NullFF_exposer.def( 
                 "components"
                 , components_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireFF::NullFF::containsProperty
@@ -148,7 +149,7 @@ void register_NullFF_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireFF::NullFF::setProperty

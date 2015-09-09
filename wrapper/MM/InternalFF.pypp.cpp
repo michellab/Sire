@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "InternalFF.pypp.hpp"
 
 namespace bp = boost::python;
@@ -79,7 +80,7 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "components"
                 , components_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::InternalFF::containsProperty
@@ -310,7 +311,7 @@ void register_InternalFF_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::InternalFF::setArithmeticCombiningRules

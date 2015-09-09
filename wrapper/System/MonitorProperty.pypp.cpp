@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "MonitorProperty.pypp.hpp"
 
 namespace bp = boost::python;
@@ -65,7 +66,7 @@ void register_MonitorProperty_class(){
             MonitorProperty_exposer.def( 
                 "ffID"
                 , ffID_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::MonitorProperty::mgID
@@ -76,7 +77,7 @@ void register_MonitorProperty_class(){
             MonitorProperty_exposer.def( 
                 "mgID"
                 , mgID_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::MonitorProperty::monitor

@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "Move.pypp.hpp"
 
 namespace bp = boost::python;
@@ -89,7 +90,7 @@ void register_Move_class(){
             Move_exposer.def( 
                 "energyComponent"
                 , energyComponent_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMove::Move::ensemble
@@ -234,7 +235,7 @@ void register_Move_class(){
             Move_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMove::Move::pressure

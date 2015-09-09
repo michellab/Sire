@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "Properties.pypp.hpp"
 
 namespace bp = boost::python;
@@ -228,7 +229,7 @@ void register_Properties_class(){
                 "metadata"
                 , metadata_function_value
                 , ( bp::arg("metakey") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireBase::Properties::metadata
@@ -240,7 +241,7 @@ void register_Properties_class(){
                 "metadata"
                 , metadata_function_value
                 , ( bp::arg("metakey"), bp::arg("default_value") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireBase::Properties::metadata
@@ -252,7 +253,7 @@ void register_Properties_class(){
                 "metadata"
                 , metadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireBase::Properties::metadata
@@ -264,7 +265,7 @@ void register_Properties_class(){
                 "metadata"
                 , metadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey"), bp::arg("default_value") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireBase::Properties::metadataKeys
@@ -343,7 +344,7 @@ void register_Properties_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireBase::Properties::property
@@ -355,7 +356,7 @@ void register_Properties_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireBase::Properties::property
@@ -367,7 +368,7 @@ void register_Properties_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("key"), bp::arg("default_value") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireBase::Properties::propertyKeys

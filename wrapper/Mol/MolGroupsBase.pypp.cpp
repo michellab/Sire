@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "MolGroupsBase.pypp.hpp"
 
 namespace bp = boost::python;
@@ -234,7 +235,7 @@ void register_MolGroupsBase_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("mgnum") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MolGroupsBase::at
@@ -246,7 +247,7 @@ void register_MolGroupsBase_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("mgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MolGroupsBase::at
@@ -258,7 +259,7 @@ void register_MolGroupsBase_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("mgname") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MolGroupsBase::at
@@ -270,7 +271,7 @@ void register_MolGroupsBase_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("mgid") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MolGroupsBase::at
@@ -621,7 +622,7 @@ void register_MolGroupsBase_class(){
                 "group"
                 , group_function_value
                 , ( bp::arg("mgnum") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MolGroupsBase::group
@@ -633,7 +634,7 @@ void register_MolGroupsBase_class(){
                 "group"
                 , group_function_value
                 , ( bp::arg("mgname") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MolGroupsBase::group
@@ -645,7 +646,7 @@ void register_MolGroupsBase_class(){
                 "group"
                 , group_function_value
                 , ( bp::arg("mgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MolGroupsBase::group
@@ -657,7 +658,7 @@ void register_MolGroupsBase_class(){
                 "group"
                 , group_function_value
                 , ( bp::arg("mgid") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MolGroupsBase::groupNames
@@ -1031,7 +1032,7 @@ void register_MolGroupsBase_class(){
             MolGroupsBase_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MolGroupsBase::operator[]
@@ -1043,7 +1044,7 @@ void register_MolGroupsBase_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("mgnum") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MolGroupsBase::operator[]
@@ -1055,7 +1056,7 @@ void register_MolGroupsBase_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("mgname") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MolGroupsBase::operator[]
@@ -1067,7 +1068,7 @@ void register_MolGroupsBase_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("mgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MolGroupsBase::operator[]
@@ -1079,7 +1080,7 @@ void register_MolGroupsBase_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("mgid") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MolGroupsBase::operator[]
@@ -1475,7 +1476,7 @@ void register_MolGroupsBase_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("mgid") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MolGroupsBase::select

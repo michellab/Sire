@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "QMMMFF.pypp.hpp"
 
 namespace bp = boost::python;
@@ -69,7 +70,7 @@ void register_QMMMFF_class(){
             QMMMFF_exposer.def( 
                 "components"
                 , components_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::Squire::QMMMFF::containsProperty
@@ -344,7 +345,7 @@ void register_QMMMFF_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::Squire::QMMMFF::quantumProgram
@@ -355,7 +356,7 @@ void register_QMMMFF_class(){
             QMMMFF_exposer.def( 
                 "quantumProgram"
                 , quantumProgram_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::Squire::QMMMFF::setChargeScalingFactor
@@ -443,7 +444,7 @@ void register_QMMMFF_class(){
             QMMMFF_exposer.def( 
                 "space"
                 , space_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::Squire::QMMMFF::switchingFunction
@@ -454,7 +455,7 @@ void register_QMMMFF_class(){
             QMMMFF_exposer.def( 
                 "switchingFunction"
                 , switchingFunction_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::Squire::QMMMFF::typeName

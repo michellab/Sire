@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "StretchBendTorsionSymbols.pypp.hpp"
 
 namespace bp = boost::python;
@@ -49,7 +50,7 @@ void register_StretchBendTorsionSymbols_class(){
             StretchBendTorsionSymbols_exposer.def( 
                 "phi"
                 , phi_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::StretchBendTorsionSymbols::r01
@@ -60,7 +61,7 @@ void register_StretchBendTorsionSymbols_class(){
             StretchBendTorsionSymbols_exposer.def( 
                 "r01"
                 , r01_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::StretchBendTorsionSymbols::r03
@@ -71,7 +72,7 @@ void register_StretchBendTorsionSymbols_class(){
             StretchBendTorsionSymbols_exposer.def( 
                 "r03"
                 , r03_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::StretchBendTorsionSymbols::r12
@@ -82,7 +83,7 @@ void register_StretchBendTorsionSymbols_class(){
             StretchBendTorsionSymbols_exposer.def( 
                 "r12"
                 , r12_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::StretchBendTorsionSymbols::r32
@@ -93,7 +94,7 @@ void register_StretchBendTorsionSymbols_class(){
             StretchBendTorsionSymbols_exposer.def( 
                 "r32"
                 , r32_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::StretchBendTorsionSymbols::theta012
@@ -104,7 +105,7 @@ void register_StretchBendTorsionSymbols_class(){
             StretchBendTorsionSymbols_exposer.def( 
                 "theta012"
                 , theta012_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::StretchBendTorsionSymbols::theta321
@@ -115,7 +116,7 @@ void register_StretchBendTorsionSymbols_class(){
             StretchBendTorsionSymbols_exposer.def( 
                 "theta321"
                 , theta321_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         StretchBendTorsionSymbols_exposer.def( "__copy__", &__copy__);

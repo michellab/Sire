@@ -184,7 +184,7 @@ def has_clone_function(t):
     c = None
 
     try:
-        fullname = string.join(str(t.base).split(" ")[0:-1])
+        fullname = " ".join(str(t.base).split(" ")[0:-1])
         c = find_class(mb, fullname)
     except:
         print("WARNING!!! Couldn't find the class for %s" % (t))
@@ -256,7 +256,10 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
    except:
        pass
 
+   print("ALL FUNCTIONS: %s" % funs)
+
    for f in funs:
+       print("%s : %s : %s" % (f, f.return_type, has_clone_function(f.return_type)))
        if has_clone_function(f.return_type):
            f.call_policies = call_policies.custom_call_policies( \
                  "bp::return_value_policy<bp::clone_const_reference>", \

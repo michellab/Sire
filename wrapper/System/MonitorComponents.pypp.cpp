@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "MonitorComponents.pypp.hpp"
 
 namespace bp = boost::python;
@@ -49,7 +50,7 @@ void register_MonitorComponents_class(){
                 "accumulator"
                 , accumulator_function_value
                 , ( bp::arg("component") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::MonitorComponents::accumulatorTemplate
@@ -60,7 +61,7 @@ void register_MonitorComponents_class(){
             MonitorComponents_exposer.def( 
                 "accumulatorTemplate"
                 , accumulatorTemplate_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::MonitorComponents::clearStatistics

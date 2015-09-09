@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "ForceFields.pypp.hpp"
 
 namespace bp = boost::python;
@@ -297,7 +298,7 @@ void register_ForceFields_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("ffname") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireFF::ForceFields::at
@@ -309,7 +310,7 @@ void register_ForceFields_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("ffidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireFF::ForceFields::at
@@ -321,7 +322,7 @@ void register_ForceFields_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("ffid") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireFF::ForceFields::at
@@ -333,7 +334,7 @@ void register_ForceFields_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("mgnum") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireFF::ForceFields::builtinProperties
@@ -355,7 +356,7 @@ void register_ForceFields_class(){
                 "builtinProperty"
                 , builtinProperty_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireFF::ForceFields::componentExpression
@@ -441,7 +442,7 @@ void register_ForceFields_class(){
                 "compoundProperty"
                 , compoundProperty_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireFF::ForceFields::constant
@@ -730,7 +731,7 @@ void register_ForceFields_class(){
                 "ffName"
                 , ffName_function_value
                 , ( bp::arg("ffname") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireFF::ForceFields::ffName
@@ -742,7 +743,7 @@ void register_ForceFields_class(){
                 "ffName"
                 , ffName_function_value
                 , ( bp::arg("ffidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireFF::ForceFields::ffName
@@ -754,7 +755,7 @@ void register_ForceFields_class(){
                 "ffName"
                 , ffName_function_value
                 , ( bp::arg("ffid") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireFF::ForceFields::ffNames
@@ -853,7 +854,7 @@ void register_ForceFields_class(){
                 "forceField"
                 , forceField_function_value
                 , ( bp::arg("ffname") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireFF::ForceFields::forceField
@@ -865,7 +866,7 @@ void register_ForceFields_class(){
                 "forceField"
                 , forceField_function_value
                 , ( bp::arg("ffidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireFF::ForceFields::forceField
@@ -877,7 +878,7 @@ void register_ForceFields_class(){
                 "forceField"
                 , forceField_function_value
                 , ( bp::arg("ffid") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireFF::ForceFields::forceField
@@ -889,7 +890,7 @@ void register_ForceFields_class(){
                 "forceField"
                 , forceField_function_value
                 , ( bp::arg("mgnum") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireFF::ForceFields::forceFields
@@ -1151,7 +1152,7 @@ void register_ForceFields_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("ffname") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireFF::ForceFields::operator[]
@@ -1163,7 +1164,7 @@ void register_ForceFields_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("ffidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireFF::ForceFields::operator[]
@@ -1175,7 +1176,7 @@ void register_ForceFields_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("ffid") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireFF::ForceFields::potential
@@ -1252,7 +1253,7 @@ void register_ForceFields_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireFF::ForceFields::property
@@ -1264,7 +1265,7 @@ void register_ForceFields_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("ffid"), bp::arg("name") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireFF::ForceFields::propertyKeys
@@ -1646,7 +1647,7 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "totalComponent"
                 , totalComponent_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireFF::ForceFields::typeName
@@ -1711,7 +1712,7 @@ void register_ForceFields_class(){
                 "userProperty"
                 , userProperty_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         ForceFields_exposer.staticmethod( "totalComponent" );

@@ -5,6 +5,8 @@
 
 #include "boost/python.hpp"
 
+#include "Helpers/clone_const_reference.hpp"
+
 #include "Accumulator.pypp.hpp"
 
 #include "Array2D_Matrix_.pypp.hpp"

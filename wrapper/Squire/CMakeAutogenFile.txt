@@ -2,17 +2,13 @@
 set ( PYPP_SOURCES
        ChargeElementParameterNames3D.pypp.cpp
        ElementParameterName3D.pypp.cpp
-       _Squire_free_functions.pypp.cpp
        QMChargeCalculator.pypp.cpp
        AM1BCC.pypp.cpp
        ElementParameterName.pypp.cpp
        Orbital.pypp.cpp
        OrbitalShell.pypp.cpp
-       GTO.pypp.cpp
        ShellPair.pypp.cpp
-       GTOPair.pypp.cpp
        HF.pypp.cpp
-       QMProgram.pypp.cpp
        Molpro.pypp.cpp
        Mopac.pypp.cpp
        NullQM.pypp.cpp
@@ -24,14 +20,18 @@ set ( PYPP_SOURCES
        P_GTO.pypp.cpp
        PointCharge.pypp.cpp
        PointDipole.pypp.cpp
-       QMChargeConstraint.pypp.cpp
-       QMComponent.pypp.cpp
-       QMFF.pypp.cpp
-       QMMMFF.pypp.cpp
        SQM.pypp.cpp
        SS_GTO.pypp.cpp
        SS_GTOs.pypp.cpp
        S_GTO.pypp.cpp
+       GTO.pypp.cpp
+       GTOPair.pypp.cpp
+       QMProgram.pypp.cpp
+       QMChargeConstraint.pypp.cpp
+       QMComponent.pypp.cpp
+       QMFF.pypp.cpp
+       QMMMFF.pypp.cpp
+       _Squire_free_functions.pypp.cpp
        Squire_containers.cpp
        Squire_properties.cpp
        Squire_registrars.cpp

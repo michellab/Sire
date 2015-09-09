@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "QMFF.pypp.hpp"
 
 namespace bp = boost::python;
@@ -57,7 +58,7 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "components"
                 , components_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::Squire::QMFF::containsProperty
@@ -322,7 +323,7 @@ void register_QMFF_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::Squire::QMFF::quantumProgram
@@ -333,7 +334,7 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "quantumProgram"
                 , quantumProgram_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::Squire::QMFF::setProperty
@@ -388,7 +389,7 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "space"
                 , space_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::Squire::QMFF::typeName

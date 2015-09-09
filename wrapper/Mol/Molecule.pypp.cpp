@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "Molecule.pypp.hpp"
 
 namespace bp = boost::python;
@@ -157,7 +158,7 @@ void register_Molecule_class(){
                 "metadata"
                 , metadata_function_value
                 , ( bp::arg("metakey") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::Molecule::metadata
@@ -169,7 +170,7 @@ void register_Molecule_class(){
                 "metadata"
                 , metadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::Molecule::metadataKeys
@@ -261,7 +262,7 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::Molecule::number
@@ -308,7 +309,7 @@ void register_Molecule_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::Molecule::propertyKeys

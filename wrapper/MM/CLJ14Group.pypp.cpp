@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "CLJ14Group.pypp.hpp"
 
 namespace bp = boost::python;
@@ -116,7 +117,7 @@ void register_CLJ14Group_class(){
             CLJ14Group_exposer.def( 
                 "molecule"
                 , molecule_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::CLJ14Group::mustNowRecalculateFromScratch

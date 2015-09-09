@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "TwoAtomFunction.pypp.hpp"
 
 namespace bp = boost::python;
@@ -51,7 +52,7 @@ void register_TwoAtomFunction_class(){
             TwoAtomFunction_exposer.def( 
                 "atom0"
                 , atom0_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::TwoAtomFunction::atom1
@@ -62,7 +63,7 @@ void register_TwoAtomFunction_class(){
             TwoAtomFunction_exposer.def( 
                 "atom1"
                 , atom1_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         TwoAtomFunction_exposer.def( bp::self != bp::self );

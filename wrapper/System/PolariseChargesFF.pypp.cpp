@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "PolariseChargesFF.pypp.hpp"
 
 namespace bp = boost::python;
@@ -82,7 +83,7 @@ void register_PolariseChargesFF_class(){
             PolariseChargesFF_exposer.def( 
                 "components"
                 , components_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::PolariseChargesFF::containsProperty
@@ -140,7 +141,7 @@ void register_PolariseChargesFF_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::PolariseChargesFF::setProperty

@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "Atom.pypp.hpp"
 
 namespace bp = boost::python;
@@ -45,41 +46,41 @@ namespace bp = boost::python;
 
 #include "atom.h"
 
+#include "SireBase/quickcopy.hpp"
+
 #include "atomforces.h"
 
-#include "atomproperty.hpp"
+#include "SireError/errors.h"
 
-#include "atomvelocities.h"
+#include "SireVol/space.h"
+
+#include "atommasses.h"
 
 #include "atompolarisabilities.h"
 
 #include "SireMaths/align.h"
 
+#include "atomvelocities.h"
+
+#include "atomelements.h"
+
+#include "atombeads.h"
+
+#include "atomproperty.hpp"
+
+#include "SireMaths/vector.h"
+
+#include "SireStream/datastream.h"
+
 #include "atomcoords.h"
 
 #include "atomenergies.h"
 
-#include "SireError/errors.h"
-
-#include "atomelements.h"
-
-#include "SireStream/shareddatastream.h"
-
-#include "SireBase/quickcopy.hpp"
+#include "atomcharges.h"
 
 #include "atomljs.h"
 
-#include "SireMaths/vector.h"
-
-#include "atomcharges.h"
-
-#include "SireVol/space.h"
-
-#include "atombeads.h"
-
-#include "atommasses.h"
-
-#include "SireStream/datastream.h"
+#include "SireStream/shareddatastream.h"
 
 const SireMol::BeadNum& get_Metadata_SireMol_AtomBeads_function1(const SireMol::Atom &atom,
                                    const QString &metakey){ return atom.metadata< SireMol::BeadNum >(metakey); }
@@ -246,7 +247,7 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "cgAtomIdx"
                 , cgAtomIdx_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::Atom::chain

@@ -5,6 +5,8 @@
 
 #include "boost/python.hpp"
 
+#include "Helpers/clone_const_reference.hpp"
+
 #include "DLMRigidBody.pypp.hpp"
 
 #include "DofID.pypp.hpp"

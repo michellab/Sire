@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "DistanceComponent.pypp.hpp"
 
 namespace bp = boost::python;
@@ -71,7 +72,7 @@ void register_DistanceComponent_class(){
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::DistanceComponent::point0
@@ -82,7 +83,7 @@ void register_DistanceComponent_class(){
             DistanceComponent_exposer.def( 
                 "point0"
                 , point0_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::DistanceComponent::point1
@@ -93,7 +94,7 @@ void register_DistanceComponent_class(){
             DistanceComponent_exposer.def( 
                 "point1"
                 , point1_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::DistanceComponent::r
@@ -104,7 +105,7 @@ void register_DistanceComponent_class(){
             DistanceComponent_exposer.def( 
                 "r"
                 , r_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::DistanceComponent::toString

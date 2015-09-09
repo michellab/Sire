@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "ThreeAtomFunction.pypp.hpp"
 
 namespace bp = boost::python;
@@ -49,7 +50,7 @@ void register_ThreeAtomFunction_class(){
             ThreeAtomFunction_exposer.def( 
                 "atom0"
                 , atom0_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::ThreeAtomFunction::atom1
@@ -60,7 +61,7 @@ void register_ThreeAtomFunction_class(){
             ThreeAtomFunction_exposer.def( 
                 "atom1"
                 , atom1_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::ThreeAtomFunction::atom2
@@ -71,7 +72,7 @@ void register_ThreeAtomFunction_class(){
             ThreeAtomFunction_exposer.def( 
                 "atom2"
                 , atom2_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         ThreeAtomFunction_exposer.def( bp::self != bp::self );

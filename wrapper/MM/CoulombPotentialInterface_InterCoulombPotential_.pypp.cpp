@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "CoulombPotentialInterface_InterCoulombPotential_.pypp.hpp"
 
 namespace bp = boost::python;
@@ -70,7 +71,7 @@ void register_CoulombPotentialInterface_InterCoulombPotential__class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::setProperty
@@ -141,7 +142,7 @@ void register_CoulombPotentialInterface_InterCoulombPotential__class(){
             CoulombPotentialInterface_InterCoulombPotential__exposer.def( 
                 "space"
                 , space_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::switchingFunction
@@ -153,7 +154,7 @@ void register_CoulombPotentialInterface_InterCoulombPotential__class(){
             CoulombPotentialInterface_InterCoulombPotential__exposer.def( 
                 "switchingFunction"
                 , switchingFunction_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         CoulombPotentialInterface_InterCoulombPotential__exposer.staticmethod( "parameters" );

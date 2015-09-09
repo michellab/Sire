@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "ChargeConstraint.pypp.hpp"
 
 namespace bp = boost::python;
@@ -43,7 +44,7 @@ void register_ChargeConstraint_class(){
             ChargeConstraint_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::ChargeConstraint::propertyMap

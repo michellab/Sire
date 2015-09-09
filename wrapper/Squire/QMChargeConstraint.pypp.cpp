@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "QMChargeConstraint.pypp.hpp"
 
 namespace bp = boost::python;
@@ -56,7 +57,7 @@ void register_QMChargeConstraint_class(){
             QMChargeConstraint_exposer.def( 
                 "chargeCalculator"
                 , chargeCalculator_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         QMChargeConstraint_exposer.def( bp::self != bp::self );

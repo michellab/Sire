@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "InternalComponent.pypp.hpp"
 
 namespace bp = boost::python;
@@ -37,7 +38,7 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "angle"
                 , angle_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::InternalComponent::bendBend
@@ -48,7 +49,7 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "bendBend"
                 , bendBend_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::InternalComponent::bond
@@ -59,7 +60,7 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "bond"
                 , bond_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::InternalComponent::changeEnergy
@@ -81,7 +82,7 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "dihedral"
                 , dihedral_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::InternalComponent::improper
@@ -92,7 +93,7 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "improper"
                 , improper_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::InternalComponent::intra14
@@ -103,7 +104,7 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "intra14"
                 , intra14_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::InternalComponent::intra14Coulomb
@@ -114,7 +115,7 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "intra14Coulomb"
                 , intra14Coulomb_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::InternalComponent::intra14LJ
@@ -125,7 +126,7 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "intra14LJ"
                 , intra14LJ_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::InternalComponent::setEnergy
@@ -147,7 +148,7 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "stretchBend"
                 , stretchBend_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::InternalComponent::stretchBendTorsion
@@ -158,7 +159,7 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "stretchBendTorsion"
                 , stretchBendTorsion_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::InternalComponent::stretchStretch
@@ -169,7 +170,7 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "stretchStretch"
                 , stretchStretch_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::InternalComponent::symbols
@@ -190,7 +191,7 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::InternalComponent::typeName
@@ -211,7 +212,7 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "ureyBradley"
                 , ureyBradley_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::InternalComponent::what

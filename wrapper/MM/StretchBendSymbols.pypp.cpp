@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "StretchBendSymbols.pypp.hpp"
 
 namespace bp = boost::python;
@@ -49,7 +50,7 @@ void register_StretchBendSymbols_class(){
             StretchBendSymbols_exposer.def( 
                 "r01"
                 , r01_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::StretchBendSymbols::r12
@@ -60,7 +61,7 @@ void register_StretchBendSymbols_class(){
             StretchBendSymbols_exposer.def( 
                 "r12"
                 , r12_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::StretchBendSymbols::r21
@@ -71,7 +72,7 @@ void register_StretchBendSymbols_class(){
             StretchBendSymbols_exposer.def( 
                 "r21"
                 , r21_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::StretchBendSymbols::theta
@@ -82,7 +83,7 @@ void register_StretchBendSymbols_class(){
             StretchBendSymbols_exposer.def( 
                 "theta"
                 , theta_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         StretchBendSymbols_exposer.def( "__copy__", &__copy__);

@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "CombineProperties.pypp.hpp"
 
 namespace bp = boost::python;
@@ -51,7 +52,7 @@ void register_CombineProperties_class(){
             CombineProperties_exposer.def( 
                 "combinedProperty"
                 , combinedProperty_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireBase::CombineProperties::count

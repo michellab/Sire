@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "MolResNum.pypp.hpp"
 
 namespace bp = boost::python;
@@ -83,7 +84,7 @@ void register_MolResNum_class(){
             MolResNum_exposer.def( 
                 "molNum"
                 , molNum_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         MolResNum_exposer.def( bp::self != bp::self );
@@ -109,7 +110,7 @@ void register_MolResNum_class(){
             MolResNum_exposer.def( 
                 "resNum"
                 , resNum_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MolResNum::selectAllFrom

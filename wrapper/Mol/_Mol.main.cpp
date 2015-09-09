@@ -5,6 +5,8 @@
 
 #include "boost/python.hpp"
 
+#include "Helpers/clone_const_reference.hpp"
+
 #include "AbsFromMass.pypp.hpp"
 
 #include "AbsFromNumber.pypp.hpp"

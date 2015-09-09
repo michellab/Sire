@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "MultiCLJComponent.pypp.hpp"
 
 namespace bp = boost::python;
@@ -60,7 +61,7 @@ void register_MultiCLJComponent_class(){
             MultiCLJComponent_exposer.def( 
                 "coulomb"
                 , coulomb_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::MultiCLJComponent::coulomb
@@ -72,7 +73,7 @@ void register_MultiCLJComponent_class(){
                 "coulomb"
                 , coulomb_function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::MultiCLJComponent::count
@@ -114,7 +115,7 @@ void register_MultiCLJComponent_class(){
             MultiCLJComponent_exposer.def( 
                 "lj"
                 , lj_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::MultiCLJComponent::lj
@@ -126,7 +127,7 @@ void register_MultiCLJComponent_class(){
                 "lj"
                 , lj_function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::MultiCLJComponent::nKeys
@@ -234,7 +235,7 @@ void register_MultiCLJComponent_class(){
             MultiCLJComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::MultiCLJComponent::total
@@ -246,7 +247,7 @@ void register_MultiCLJComponent_class(){
                 "total"
                 , total_function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::MultiCLJComponent::typeName

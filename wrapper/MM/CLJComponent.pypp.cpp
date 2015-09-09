@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "CLJComponent.pypp.hpp"
 
 namespace bp = boost::python;
@@ -47,7 +48,7 @@ void register_CLJComponent_class(){
             CLJComponent_exposer.def( 
                 "coulomb"
                 , coulomb_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::CLJComponent::lj
@@ -58,7 +59,7 @@ void register_CLJComponent_class(){
             CLJComponent_exposer.def( 
                 "lj"
                 , lj_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::CLJComponent::setEnergy
@@ -90,7 +91,7 @@ void register_CLJComponent_class(){
             CLJComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::CLJComponent::typeName

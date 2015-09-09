@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "SoftCLJComponent.pypp.hpp"
 
 namespace bp = boost::python;
@@ -64,7 +65,7 @@ void register_SoftCLJComponent_class(){
             SoftCLJComponent_exposer.def( 
                 "coulomb"
                 , coulomb_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::SoftCLJComponent::coulomb
@@ -76,7 +77,7 @@ void register_SoftCLJComponent_class(){
                 "coulomb"
                 , coulomb_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::SoftCLJComponent::lj
@@ -87,7 +88,7 @@ void register_SoftCLJComponent_class(){
             SoftCLJComponent_exposer.def( 
                 "lj"
                 , lj_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::SoftCLJComponent::lj
@@ -99,7 +100,7 @@ void register_SoftCLJComponent_class(){
                 "lj"
                 , lj_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::SoftCLJComponent::nAlphaValues
@@ -164,7 +165,7 @@ void register_SoftCLJComponent_class(){
             SoftCLJComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::SoftCLJComponent::total
@@ -176,7 +177,7 @@ void register_SoftCLJComponent_class(){
                 "total"
                 , total_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::SoftCLJComponent::typeName

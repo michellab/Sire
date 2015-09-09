@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "MolResID.pypp.hpp"
 
 namespace bp = boost::python;
@@ -86,7 +87,7 @@ void register_MolResID_class(){
             MolResID_exposer.def( 
                 "molID"
                 , molID_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         MolResID_exposer.def( bp::self != bp::self );
@@ -112,7 +113,7 @@ void register_MolResID_class(){
             MolResID_exposer.def( 
                 "resID"
                 , resID_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MolResID::selectAllFrom

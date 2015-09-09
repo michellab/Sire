@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "InterGroupFF.pypp.hpp"
 
 namespace bp = boost::python;
@@ -112,7 +113,7 @@ void register_InterGroupFF_class(){
             InterGroupFF_exposer.def( 
                 "cljFunction"
                 , cljFunction_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::InterGroupFF::cljFunction
@@ -124,7 +125,7 @@ void register_InterGroupFF_class(){
                 "cljFunction"
                 , cljFunction_function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::InterGroupFF::cljFunctionKeys
@@ -155,7 +156,7 @@ void register_InterGroupFF_class(){
             InterGroupFF_exposer.def( 
                 "components"
                 , components_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::InterGroupFF::containsProperty
@@ -333,7 +334,7 @@ void register_InterGroupFF_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::InterGroupFF::removeAllCLJFunctions

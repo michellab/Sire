@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "System.pypp.hpp"
 
 namespace bp = boost::python;
@@ -372,7 +373,7 @@ void register_System_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("ffid") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::System::at
@@ -384,7 +385,7 @@ void register_System_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("monid") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::System::at
@@ -396,7 +397,7 @@ void register_System_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("mgnum") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::System::builtinProperties
@@ -418,7 +419,7 @@ void register_System_class(){
                 "builtinProperty"
                 , builtinProperty_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::System::clearStatistics
@@ -535,7 +536,7 @@ void register_System_class(){
                 "compoundProperty"
                 , compoundProperty_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::System::constant
@@ -811,7 +812,7 @@ void register_System_class(){
             System_exposer.def( 
                 "extraGroups"
                 , extraGroups_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::System::ffIdx
@@ -834,7 +835,7 @@ void register_System_class(){
                 "ffName"
                 , ffName_function_value
                 , ( bp::arg("ffid") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::System::field
@@ -912,7 +913,7 @@ void register_System_class(){
                 "forceField"
                 , forceField_function_value
                 , ( bp::arg("ffid") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::System::forceField
@@ -924,7 +925,7 @@ void register_System_class(){
                 "forceField"
                 , forceField_function_value
                 , ( bp::arg("mgid") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::System::forceFields
@@ -1055,7 +1056,7 @@ void register_System_class(){
                 "monitor"
                 , monitor_function_value
                 , ( bp::arg("monid") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::System::monitorName
@@ -1139,7 +1140,7 @@ void register_System_class(){
             System_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::System::needsAccepting
@@ -1186,7 +1187,7 @@ void register_System_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("ffid") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::System::operator[]
@@ -1198,7 +1199,7 @@ void register_System_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("monid") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::System::operator[]
@@ -1210,7 +1211,7 @@ void register_System_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("mgid") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::System::operator[]
@@ -1309,7 +1310,7 @@ void register_System_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::System::property
@@ -1321,7 +1322,7 @@ void register_System_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("ffid"), bp::arg("name") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::System::propertyKeys
@@ -1874,7 +1875,7 @@ void register_System_class(){
             System_exposer.def( 
                 "totalComponent"
                 , totalComponent_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::System::typeName
@@ -1939,7 +1940,7 @@ void register_System_class(){
                 "userProperty"
                 , userProperty_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::System::version
@@ -1950,7 +1951,7 @@ void register_System_class(){
             System_exposer.def( 
                 "version"
                 , version_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         System_exposer.staticmethod( "null" );

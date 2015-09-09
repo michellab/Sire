@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "AngleComponent.pypp.hpp"
 
 namespace bp = boost::python;
@@ -75,7 +76,7 @@ void register_AngleComponent_class(){
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::AngleComponent::point0
@@ -86,7 +87,7 @@ void register_AngleComponent_class(){
             AngleComponent_exposer.def( 
                 "point0"
                 , point0_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::AngleComponent::point1
@@ -97,7 +98,7 @@ void register_AngleComponent_class(){
             AngleComponent_exposer.def( 
                 "point1"
                 , point1_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::AngleComponent::point2
@@ -108,7 +109,7 @@ void register_AngleComponent_class(){
             AngleComponent_exposer.def( 
                 "point2"
                 , point2_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::AngleComponent::r01
@@ -119,7 +120,7 @@ void register_AngleComponent_class(){
             AngleComponent_exposer.def( 
                 "r01"
                 , r01_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::AngleComponent::r02
@@ -130,7 +131,7 @@ void register_AngleComponent_class(){
             AngleComponent_exposer.def( 
                 "r02"
                 , r02_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::AngleComponent::r12
@@ -141,7 +142,7 @@ void register_AngleComponent_class(){
             AngleComponent_exposer.def( 
                 "r12"
                 , r12_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::AngleComponent::theta
@@ -152,7 +153,7 @@ void register_AngleComponent_class(){
             AngleComponent_exposer.def( 
                 "theta"
                 , theta_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::AngleComponent::theta012
@@ -163,7 +164,7 @@ void register_AngleComponent_class(){
             AngleComponent_exposer.def( 
                 "theta012"
                 , theta012_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::AngleComponent::theta021
@@ -174,7 +175,7 @@ void register_AngleComponent_class(){
             AngleComponent_exposer.def( 
                 "theta021"
                 , theta021_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::AngleComponent::theta102
@@ -185,7 +186,7 @@ void register_AngleComponent_class(){
             AngleComponent_exposer.def( 
                 "theta102"
                 , theta102_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::AngleComponent::toString

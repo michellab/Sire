@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "SymbolExpression.pypp.hpp"
 
 namespace bp = boost::python;
@@ -46,7 +47,7 @@ void register_SymbolExpression_class(){
             SymbolExpression_exposer.def( 
                 "function"
                 , function_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireCAS::SymbolExpression::isFunction
@@ -67,7 +68,7 @@ void register_SymbolExpression_class(){
             SymbolExpression_exposer.def( 
                 "symbol"
                 , symbol_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         SymbolExpression_exposer.def( "__copy__", &__copy__);

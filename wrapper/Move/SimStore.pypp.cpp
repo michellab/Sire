@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "SimStore.pypp.hpp"
 
 namespace bp = boost::python;
@@ -77,7 +78,7 @@ void register_SimStore_class(){
             SimStore_exposer.def( 
                 "moves"
                 , moves_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         SimStore_exposer.def( bp::self != bp::self );

@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "DistanceRestraint.pypp.hpp"
 
 namespace bp = boost::python;
@@ -195,7 +196,7 @@ void register_DistanceRestraint_class(){
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::DistanceRestraint::point0
@@ -206,7 +207,7 @@ void register_DistanceRestraint_class(){
             DistanceRestraint_exposer.def( 
                 "point0"
                 , point0_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::DistanceRestraint::point1
@@ -217,7 +218,7 @@ void register_DistanceRestraint_class(){
             DistanceRestraint_exposer.def( 
                 "point1"
                 , point1_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::DistanceRestraint::r
@@ -228,7 +229,7 @@ void register_DistanceRestraint_class(){
             DistanceRestraint_exposer.def( 
                 "r"
                 , r_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::DistanceRestraint::setSpace

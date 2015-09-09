@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "MolecularDynamics.pypp.hpp"
 
 namespace bp = boost::python;
@@ -82,7 +83,7 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "integrator"
                 , integrator_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMove::MolecularDynamics::kineticEnergy
@@ -113,7 +114,7 @@ void register_MolecularDynamics_class(){
             MolecularDynamics_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMove::MolecularDynamics::move

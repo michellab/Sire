@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "RestraintFF.pypp.hpp"
 
 namespace bp = boost::python;
@@ -78,7 +79,7 @@ void register_RestraintFF_class(){
             RestraintFF_exposer.def( 
                 "components"
                 , components_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::RestraintFF::contains
@@ -322,7 +323,7 @@ void register_RestraintFF_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::RestraintFF::remove
@@ -356,7 +357,7 @@ void register_RestraintFF_class(){
                 "restraintAt"
                 , restraintAt_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::RestraintFF::restraints
@@ -410,7 +411,7 @@ void register_RestraintFF_class(){
             RestraintFF_exposer.def( 
                 "space"
                 , space_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::RestraintFF::symbols

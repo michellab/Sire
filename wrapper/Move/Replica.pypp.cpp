@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "Replica.pypp.hpp"
 
 namespace bp = boost::python;
@@ -71,7 +72,7 @@ void register_Replica_class(){
             Replica_exposer.def( 
                 "energyComponent"
                 , energyComponent_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMove::Replica::ensemble
@@ -82,7 +83,7 @@ void register_Replica_class(){
             Replica_exposer.def( 
                 "ensemble"
                 , ensemble_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMove::Replica::fugacity
@@ -184,7 +185,7 @@ void register_Replica_class(){
             Replica_exposer.def( 
                 "lambdaComponent"
                 , lambdaComponent_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMove::Replica::lambdaValue

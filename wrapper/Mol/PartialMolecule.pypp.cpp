@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "PartialMolecule.pypp.hpp"
 
 namespace bp = boost::python;
@@ -130,7 +131,7 @@ void register_PartialMolecule_class(){
                 "metadata"
                 , metadata_function_value
                 , ( bp::arg("metakey") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::PartialMolecule::metadata
@@ -142,7 +143,7 @@ void register_PartialMolecule_class(){
                 "metadata"
                 , metadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::PartialMolecule::metadataKeys
@@ -234,7 +235,7 @@ void register_PartialMolecule_class(){
             PartialMolecule_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::PartialMolecule::number
@@ -282,7 +283,7 @@ void register_PartialMolecule_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::PartialMolecule::propertyKeys

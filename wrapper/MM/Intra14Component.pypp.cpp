@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "Intra14Component.pypp.hpp"
 
 namespace bp = boost::python;
@@ -48,7 +49,7 @@ void register_Intra14Component_class(){
             Intra14Component_exposer.def( 
                 "coulomb"
                 , coulomb_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::Intra14Component::lj
@@ -59,7 +60,7 @@ void register_Intra14Component_class(){
             Intra14Component_exposer.def( 
                 "lj"
                 , lj_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::Intra14Component::setEnergy
@@ -91,7 +92,7 @@ void register_Intra14Component_class(){
             Intra14Component_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::Intra14Component::typeName

@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "AtomVelocities.pypp.hpp"
 
 namespace bp = boost::python;
@@ -91,7 +92,7 @@ void register_AtomVelocities_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > > >::canConvert
@@ -200,7 +201,7 @@ void register_AtomVelocities_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > > >::isCompatibleWith
@@ -322,7 +323,7 @@ void register_AtomVelocities_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > > >::set

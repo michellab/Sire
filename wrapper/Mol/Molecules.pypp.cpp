@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "Molecules.pypp.hpp"
 
 namespace bp = boost::python;
@@ -150,7 +151,7 @@ void register_Molecules_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("molnum") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::Molecules::at
@@ -183,7 +184,7 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "back"
                 , back_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::Molecules::begin
@@ -320,7 +321,7 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "first"
                 , first_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::Molecules::front
@@ -331,7 +332,7 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "front"
                 , front_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::Molecules::intersects
@@ -374,7 +375,7 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "last"
                 , last_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::Molecules::molNums
@@ -396,7 +397,7 @@ void register_Molecules_class(){
                 "molecule"
                 , molecule_function_value
                 , ( bp::arg("molnum") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::Molecules::nMolecules
@@ -455,7 +456,7 @@ void register_Molecules_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("molnum") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::Molecules::operator[]

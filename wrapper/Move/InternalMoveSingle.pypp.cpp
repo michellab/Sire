@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "InternalMoveSingle.pypp.hpp"
 
 namespace bp = boost::python;
@@ -83,7 +84,7 @@ void register_InternalMoveSingle_class(){
             InternalMoveSingle_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMove::InternalMoveSingle::move
@@ -119,7 +120,7 @@ void register_InternalMoveSingle_class(){
             InternalMoveSingle_exposer.def( 
                 "sampler"
                 , sampler_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMove::InternalMoveSingle::setFlexibilityProperty
@@ -185,7 +186,7 @@ void register_InternalMoveSingle_class(){
             InternalMoveSingle_exposer.def( 
                 "synchronisedMols"
                 , synchronisedMols_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMove::InternalMoveSingle::toString

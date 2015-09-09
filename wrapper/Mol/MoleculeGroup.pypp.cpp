@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "MoleculeGroup.pypp.hpp"
 
 namespace bp = boost::python;
@@ -202,7 +203,7 @@ void register_MoleculeGroup_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("molnum") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MoleculeGroup::at
@@ -214,7 +215,7 @@ void register_MoleculeGroup_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("molidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MoleculeGroup::at
@@ -226,7 +227,7 @@ void register_MoleculeGroup_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("molname") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MoleculeGroup::at
@@ -238,7 +239,7 @@ void register_MoleculeGroup_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("molid") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MoleculeGroup::at
@@ -293,7 +294,7 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "back"
                 , back_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MoleculeGroup::begin
@@ -476,7 +477,7 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "first"
                 , first_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MoleculeGroup::front
@@ -487,7 +488,7 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "front"
                 , front_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MoleculeGroup::getMoleculeNumber
@@ -629,7 +630,7 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "last"
                 , last_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MoleculeGroup::majorVersion
@@ -760,7 +761,7 @@ void register_MoleculeGroup_class(){
                 "molecule"
                 , molecule_function_value
                 , ( bp::arg("molnum") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MoleculeGroup::molecule
@@ -772,7 +773,7 @@ void register_MoleculeGroup_class(){
                 "molecule"
                 , molecule_function_value
                 , ( bp::arg("molidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MoleculeGroup::molecule
@@ -784,7 +785,7 @@ void register_MoleculeGroup_class(){
                 "molecule"
                 , molecule_function_value
                 , ( bp::arg("molname") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MoleculeGroup::molecule
@@ -796,7 +797,7 @@ void register_MoleculeGroup_class(){
                 "molecule"
                 , molecule_function_value
                 , ( bp::arg("molid") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MoleculeGroup::moleculeAt
@@ -808,7 +809,7 @@ void register_MoleculeGroup_class(){
                 "moleculeAt"
                 , moleculeAt_function_value
                 , ( bp::arg("idx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MoleculeGroup::molecules
@@ -830,7 +831,7 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "molecules"
                 , molecules_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MoleculeGroup::nMolecules
@@ -894,7 +895,7 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MoleculeGroup::needsAccepting
@@ -915,7 +916,7 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MoleculeGroup::number
@@ -951,7 +952,7 @@ void register_MoleculeGroup_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("molnum") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MoleculeGroup::operator[]
@@ -963,7 +964,7 @@ void register_MoleculeGroup_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("molidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MoleculeGroup::operator[]
@@ -975,7 +976,7 @@ void register_MoleculeGroup_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("molname") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MoleculeGroup::operator[]
@@ -987,7 +988,7 @@ void register_MoleculeGroup_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("molid") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMol::MoleculeGroup::operator[]

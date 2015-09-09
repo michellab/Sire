@@ -112,4 +112,7 @@ file "AtomEditorBase.pypp.cpp" - updated( 0.000000 seconds )
 NOTE - You cannot regenerate the wrappers for the Error or Qt modules.
        These contain hand-generated wrappers that cannot be changed.
 
+NOTE - If you want to regenerate all of the wrappers, just run the 
+       command $HOME/sire.app/bin/python create_all_wrappers.py
+
 

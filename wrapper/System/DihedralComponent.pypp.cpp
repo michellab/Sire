@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "DihedralComponent.pypp.hpp"
 
 namespace bp = boost::python;
@@ -74,7 +75,7 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "phi"
                 , phi_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::DihedralComponent::point
@@ -86,7 +87,7 @@ void register_DihedralComponent_class(){
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::DihedralComponent::point0
@@ -97,7 +98,7 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "point0"
                 , point0_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::DihedralComponent::point1
@@ -108,7 +109,7 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "point1"
                 , point1_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::DihedralComponent::point2
@@ -119,7 +120,7 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "point2"
                 , point2_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::DihedralComponent::point3
@@ -130,7 +131,7 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "point3"
                 , point3_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::DihedralComponent::r01
@@ -141,7 +142,7 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "r01"
                 , r01_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::DihedralComponent::r03
@@ -152,7 +153,7 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "r03"
                 , r03_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::DihedralComponent::r12
@@ -163,7 +164,7 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "r12"
                 , r12_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::DihedralComponent::r23
@@ -174,7 +175,7 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "r23"
                 , r23_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::DihedralComponent::theta012
@@ -185,7 +186,7 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "theta012"
                 , theta012_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::DihedralComponent::theta123
@@ -196,7 +197,7 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "theta123"
                 , theta123_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireSystem::DihedralComponent::toString

@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "LJPotentialInterface_InterLJPotential_.pypp.hpp"
 
 namespace bp = boost::python;
@@ -82,7 +83,7 @@ void register_LJPotentialInterface_InterLJPotential__class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::LJPotentialInterface< SireMM::InterLJPotential >::setCombiningRules
@@ -142,7 +143,7 @@ void register_LJPotentialInterface_InterLJPotential__class(){
             LJPotentialInterface_InterLJPotential__exposer.def( 
                 "space"
                 , space_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMM::LJPotentialInterface< SireMM::InterLJPotential >::switchingFunction
@@ -154,7 +155,7 @@ void register_LJPotentialInterface_InterLJPotential__class(){
             LJPotentialInterface_InterLJPotential__exposer.def( 
                 "switchingFunction"
                 , switchingFunction_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         LJPotentialInterface_InterLJPotential__exposer.staticmethod( "parameters" );

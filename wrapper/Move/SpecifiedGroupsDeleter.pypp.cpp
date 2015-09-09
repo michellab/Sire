@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "SpecifiedGroupsDeleter.pypp.hpp"
 
 namespace bp = boost::python;
@@ -68,7 +69,7 @@ void register_SpecifiedGroupsDeleter_class(){
             SpecifiedGroupsDeleter_exposer.def( 
                 "group"
                 , group_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         SpecifiedGroupsDeleter_exposer.def( bp::self != bp::self );
@@ -93,7 +94,7 @@ void register_SpecifiedGroupsDeleter_class(){
             SpecifiedGroupsDeleter_exposer.def( 
                 "sampler"
                 , sampler_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMove::SpecifiedGroupsDeleter::setGenerator
@@ -159,7 +160,7 @@ void register_SpecifiedGroupsDeleter_class(){
             SpecifiedGroupsDeleter_exposer.def( 
                 "specifiedGroups"
                 , specifiedGroups_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         { //::SireMove::SpecifiedGroupsDeleter::typeName

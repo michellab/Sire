@@ -3,6 +3,7 @@
 // (C) Christopher Woods, GPL >= 2 License
 
 #include "boost/python.hpp"
+#include "Helpers/clone_const_reference.hpp"
 #include "PolariseCharges.pypp.hpp"
 
 namespace bp = boost::python;
@@ -92,7 +93,7 @@ void register_PolariseCharges_class(){
             PolariseCharges_exposer.def( 
                 "fieldComponent"
                 , fieldComponent_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
         PolariseCharges_exposer.def( bp::self != bp::self );
