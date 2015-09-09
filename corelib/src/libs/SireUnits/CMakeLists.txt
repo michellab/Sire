@@ -32,7 +32,7 @@ add_library (SireUnits ${SIREUNITS_SOURCES})
 
 set_target_properties (SireUnits PROPERTIES
                        VERSION ${SIRE_VERSION}
-                       SOVERSION ${SIRE_VERSION_MAJOR}
+                       SOVERSION ${S_VERSION_MAJOR}
                       )
 
 # Link to other Sire libraries

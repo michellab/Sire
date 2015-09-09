@@ -6,12 +6,13 @@
 #
 ################################
 
-# project version
-set (SIRE_VERSION_MAJOR "2015")
-set (SIRE_VERSION_MINOR "0")
-set (SIRE_VERSION_PATCH "0")             
+# project version - cannot use SIRE_VERSION_X as
+# these no longer work with cmake 3
+set (S_VERSION_MAJOR "2015")
+set (S_VERSION_MINOR "0")
+set (S_VERSION_PATCH "0")             
 
-set (SIRE_VERSION "${SIRE_VERSION_MAJOR}.${SIRE_VERSION_MINOR}.${SIRE_VERSION_PATCH}")
+set (SIRE_VERSION "${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}")
 
 ############
 ############ SETTING INITIAL SIRE VARIABLES
@@ -99,14 +100,14 @@ macro( SAVE_SIRE_VARIABLE _var _value )
 endmacro (SAVE_SIRE_VARIABLE)
 
 math (EXPR SIRE_VERSION_NUMBER 
-      "${SIRE_VERSION_MAJOR}*100000 + ${SIRE_VERSION_MINOR}*100 + ${SIRE_VERSION_PATCH}")
+      "${S_VERSION_MAJOR}*100000 + ${S_VERSION_MINOR}*100 + ${S_VERSION_PATCH}")
 
-set (SIRE_VERSION_STRING "${SIRE_VERSION_MAJOR}_${SIRE_VERSION_MINOR}_${SIRE_VERSION_PATCH}")
+set (SIRE_VERSION_STRING "${S_VERSION_MAJOR}_${S_VERSION_MINOR}_${S_VERSION_PATCH}")
 
-save_sire_variable( "SIRE_VERSION_MAJOR" "${SIRE_VERSION_MAJOR}" )
-save_sire_variable( "SIRE_VERSION_MINOR" "${SIRE_VERSION_MINOR}" )
-save_sire_variable( "SIRE_VERSION_PATCH" "${SIRE_VERSION_PATCH}" )
-save_sire_variable( "SIRE_VERSION" "${SIRE_VERSION}" )
+save_sire_variable( "S_VERSION_MAJOR" "${S_VERSION_MAJOR}" )
+save_sire_variable( "S_VERSION_MINOR" "${S_VERSION_MINOR}" )
+save_sire_variable( "S_VERSION_PATCH" "${S_VERSION_PATCH}" )
+save_sire_variable( "SIREE_VERSION" "${SIRE_VERSION}" )
 save_sire_variable( "SIRE_VERSION_STRING" "${SIRE_VERSION_STRING}" )
 save_sire_variable( "SIRE_APP_DIR" "${CMAKE_INSTALL_PREFIX}" )
 

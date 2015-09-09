@@ -17,3 +17,5 @@ sire_repository_url = Sire.Base.getRepositoryURL()
 sire_repository_version = Sire.Base.getRepositoryVersion()
 sire_python_repository_url = "@SVN_REPOSITORY_URL@"
 sire_python_repository_version = "@SVN_VERSION_NUMBER@"
+
+__version__ = "@SIRE_VERSION_MAJOR@.@SIRE_VERSION_MINOR@.@SIRE_VERSION_PATCH@"

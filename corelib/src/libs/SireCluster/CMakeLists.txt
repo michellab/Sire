@@ -92,7 +92,7 @@ add_library (SireCluster ${SIRECLUSTER_SOURCES})
 
 set_target_properties (SireCluster PROPERTIES
                        VERSION ${SIRE_VERSION}
-                       SOVERSION ${SIRE_VERSION_MAJOR}
+                       SOVERSION ${S_VERSION_MAJOR}
                       )
 
 # Link to other Sire libraries
