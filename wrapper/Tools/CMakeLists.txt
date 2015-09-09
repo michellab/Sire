@@ -12,11 +12,13 @@ set ( SCRIPTS
         DCDFile.py
         FDTISingleBound.py
         FDTISingleFree.py
+        LSRC.py
         Nautilus.py 
         QuantumToMM.py
         OpenMMMD.py
         Plot.py
         WaterChanger.py
+        WaterView.py
         WSRC.py
     )
 
