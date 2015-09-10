@@ -13,7 +13,7 @@ namespace bp = boost::python;
 
 SireUnits::Fahrenheit __copy__(const SireUnits::Fahrenheit &other){ return SireUnits::Fahrenheit(other); }
 
-const char* pvt_get_name(const SireUnits::Fahrenheit&){ return "SireUnits::Fahrenheit";}
+#include "Helpers/str.hpp"
 
 void register_Fahrenheit_class(){
 
@@ -95,8 +95,8 @@ void register_Fahrenheit_class(){
         Fahrenheit_exposer.def( "__copy__", &__copy__);
         Fahrenheit_exposer.def( "__deepcopy__", &__copy__);
         Fahrenheit_exposer.def( "clone", &__copy__);
-        Fahrenheit_exposer.def( "__str__", &pvt_get_name);
-        Fahrenheit_exposer.def( "__repr__", &pvt_get_name);
+        Fahrenheit_exposer.def( "__str__", &__str__< ::SireUnits::Fahrenheit > );
+        Fahrenheit_exposer.def( "__repr__", &__str__< ::SireUnits::Fahrenheit > );
     }
 
 }

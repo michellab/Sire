@@ -13,7 +13,7 @@ namespace bp = boost::python;
 
 SireUnits::Celsius __copy__(const SireUnits::Celsius &other){ return SireUnits::Celsius(other); }
 
-const char* pvt_get_name(const SireUnits::Celsius&){ return "SireUnits::Celsius";}
+#include "Helpers/str.hpp"
 
 void register_Celsius_class(){
 
@@ -99,8 +99,8 @@ void register_Celsius_class(){
         Celsius_exposer.def( "__copy__", &__copy__);
         Celsius_exposer.def( "__deepcopy__", &__copy__);
         Celsius_exposer.def( "clone", &__copy__);
-        Celsius_exposer.def( "__str__", &pvt_get_name);
-        Celsius_exposer.def( "__repr__", &pvt_get_name);
+        Celsius_exposer.def( "__str__", &__str__< ::SireUnits::Celsius > );
+        Celsius_exposer.def( "__repr__", &__str__< ::SireUnits::Celsius > );
     }
 
 }

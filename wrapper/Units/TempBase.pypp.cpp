@@ -11,7 +11,7 @@ namespace bp = boost::python;
 
 #include "temperature.h"
 
-const char* pvt_get_name(const SireUnits::Dimension::TempBase&){ return "SireUnits::Dimension::TempBase";}
+#include "Helpers/str.hpp"
 
 void register_TempBase_class(){
 
@@ -112,8 +112,28 @@ void register_TempBase_class(){
                 , ( bp::arg("other") ) );
         
         }
-        TempBase_exposer.def( "__str__", &pvt_get_name);
-        TempBase_exposer.def( "__repr__", &pvt_get_name);
+        { //::SireUnits::Dimension::TempBase::toString
+        
+            typedef ::QString ( ::SireUnits::Dimension::TempBase::*toString_function_type)(  ) const;
+            toString_function_type toString_function_value( &::SireUnits::Dimension::TempBase::toString );
+            
+            TempBase_exposer.def( 
+                "toString"
+                , toString_function_value );
+        
+        }
+        { //::SireUnits::Dimension::TempBase::value
+        
+            typedef double ( ::SireUnits::Dimension::TempBase::*value_function_type)(  ) const;
+            value_function_type value_function_value( &::SireUnits::Dimension::TempBase::value );
+            
+            TempBase_exposer.def( 
+                "value"
+                , value_function_value );
+        
+        }
+        TempBase_exposer.def( "__str__", &__str__< ::SireUnits::Dimension::TempBase > );
+        TempBase_exposer.def( "__repr__", &__str__< ::SireUnits::Dimension::TempBase > );
     }
 
 }
