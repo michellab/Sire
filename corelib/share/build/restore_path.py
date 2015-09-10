@@ -23,7 +23,7 @@ def is_binary(filename):
     """
     with open(filename, 'rb') as f:
         for block in f:
-            if '\0' in block:
+            if b'\x00' in block:
                 return True
     return False
 
@@ -31,18 +31,21 @@ def contains_special(filename):
     if filename.endswith("restore_path.py"):
         return False
 
-    FILE = open(filename, "r")
-
-    line = FILE.readline()
-
-    while line:
-        if line.find(special) != -1:
-            FILE.close()
-            return True
+    try:
+        FILE = open(filename, "r")
 
         line = FILE.readline()
 
-    return False
+        while line:
+            if line.find(special) != -1:
+                FILE.close()
+                return True
+
+            line = FILE.readline()
+
+        return False
+    except:
+        return False
 
 def restore_root(filename, root):
     FILE = open(filename, "r")

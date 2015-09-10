@@ -53,6 +53,9 @@ for file in os.listdir(fromdir):
                (sys.executable,sys.argv[0],sys.argv[1],file,sys.argv[2],file))
 
     if os.path.exists(tofile):
+        if os.path.isdir(tofile):
+            continue
+
         if force:
             os.remove(tofile)
         else:

@@ -26,23 +26,26 @@ def is_binary(filename):
     """
     with open(filename, 'rb') as f:
         for block in f:
-            if '\0' in block:
+            if b'\x00' in block:
                 return True
     return False
 
 def contains_root(filename, root):
-    FILE = open(filename, "r")
-
-    line = FILE.readline()
-
-    while line:
-        if line.find(root) != -1:
-            FILE.close()
-            return True
+    try:
+        FILE = open(filename, "r")
 
         line = FILE.readline()
 
-    return False
+        while line:
+            if line.find(root) != -1:
+                FILE.close()
+                return True
+
+            line = FILE.readline()
+
+        return False
+    except:
+        return False
 
 def remove_root(filename, root):
     FILE = open(filename, "r")

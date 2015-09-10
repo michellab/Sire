@@ -61,6 +61,6 @@ if (ANACONDA_BUILD)
 
   install( CODE "execute_process(COMMAND \"${ANACONDA_BASE}/bin/python\"
                       ${CMAKE_SOURCE_DIR}/build/copy_into_conda.py
-                      ${CMAKE_INSTALL_PREFIX}/share/Sire ${ANACONDA_BASE}/share/Sire
+                      ${CMAKE_INSTALL_PREFIX}/share/Sire ${ANACONDA_BASE}/share/Sire force
                             WORKING_DIRECTORY \"${ANACONDA_BASE}\")" )
 endif()
