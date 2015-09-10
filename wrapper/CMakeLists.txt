@@ -352,7 +352,7 @@ install( FILES __init__.py
        )
 
 # Finally, write the version header file and finish off the component dependencies file
-include( GetSvnVersion )
+include( GetGitVersion )
 
 # Create the sire_python_config.h to tell Sire where the
 # python libraries will be installed
