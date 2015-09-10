@@ -11,7 +11,7 @@ import shutil
 
 special = "{[{ROOT}]}"
 
-root_dir = sys.argv[1]
+root_dir = os.path.abspath(sys.argv[1])
 
 print("Scanning through %s" % (root_dir))
 
