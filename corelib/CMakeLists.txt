@@ -141,13 +141,15 @@ set (SIRE_LIBS "lib")
 # Where to install all bundled components
 set (SIRE_BUNDLED_DIR "bundled" )
 
-if (ANACONDA_BUILD)
-  # For an anaconda build, we copy all of the bundled
-  # libraries into the anaconda lib directory
-  set (SIRE_BUNDLED_LIBS "${ANACONDA_BASE}/lib")
-else()
-  set (SIRE_BUNDLED_LIBS "${SIRE_BUNDLED_DIR}/lib")
-endif()
+#if (ANACONDA_BUILD)
+#  # For an anaconda build, we copy all of the bundled
+#  # libraries into the anaconda lib directory
+#  set (SIRE_BUNDLED_LIBS "${ANACONDA_BASE}/lib")
+#else()
+#  set (SIRE_BUNDLED_LIBS "${SIRE_BUNDLED_DIR}/lib")
+#endif()
+
+set (SIRE_BUNDLED_LIBS "${SIRE_BUNDLED_DIR}/lib")
 
 # Static library install dir
 set (SIRE_ARCHIVES "lib/static")
@@ -158,9 +160,9 @@ set (SIRE_CMAKEFILES "include/Sire/cmake")
 # Sire share directory (for parameters etc.)
 set (SIRE_SHARE "share/Sire")
 
-if (ANACONDA_BUILD)
-  set( SIRE_SHARE "${ANACONDA_BASE}/share/Sire" )
-endif()
+#if (ANACONDA_BUILD)
+#  set( SIRE_SHARE "${ANACONDA_BASE}/share/Sire" )
+#endif()
 
 # Where will the test files be saved?
 set (SIRE_TEST "test")
