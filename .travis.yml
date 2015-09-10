@@ -15,7 +15,7 @@ addons:
       - libgl1-mesa-dev
 
 before_install:
-  - export NCORES=1
+  - export NCORES=2
   - export INSTALL_SIRE_DIR=$HOME/sire.app
   - if [ "$CC" = "gcc" ]; then export CC="gcc-4.6" CXX="g++-4.6"; fi
 

@@ -922,7 +922,7 @@ add_subdirectory (src/apps)
 ################
 
 # Finally, write the version header file and finish off the component dependencies file
-include( GetSvnVersion )
+include( GetGitVersion )
 
 # install the extra includes file in the Sire/cmake directory
 install (FILES ${SIRE_VARIABLES_FILE} 
