@@ -701,6 +701,7 @@ if ( SIRE_USE_OPENMM )
       # Now look for OpenMM
       if (ANACONDA_BUILD)
         set(OpenMM_ROOT_DIR "${ANACONDA_BASE}")
+        set(OPENMM_ROOT_DIR "${ANACONDA_BASE}")
         FIND_PACKAGE( OpenMM )
       else()
         option (OPENMM_HOME "The location of the OpenMM installation" "/usr/local/openmm")

@@ -42,6 +42,8 @@
 #include "SireFF/errors.h"
 #include "SireBase/errors.h"
 
+#include <memory>
+
 using namespace SireMM;
 using namespace SireFF;
 using namespace SireMol;

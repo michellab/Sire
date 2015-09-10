@@ -37,6 +37,8 @@
 
 #include <cstdlib>
 
+#include <memory>
+
 #ifdef Q_OS_UNIX
     #include <unistd.h>
     #include <sys/utsname.h>
