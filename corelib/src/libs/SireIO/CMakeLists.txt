@@ -46,7 +46,7 @@ add_library (SireIO ${SIREIO_SOURCES})
 
 set_target_properties (SireIO PROPERTIES
                        VERSION ${SIRE_VERSION}
-                       SOVERSION ${SIRE_VERSION_MAJOR}
+                       SOVERSION ${S_VERSION_MAJOR}
                       )
 
 # Link to other Sire libraries

@@ -72,7 +72,7 @@ void register_IDAndSet_AtomID__class(){
         { //::SireID::IDAndSet< SireMol::AtomID >::IDs
         
             typedef SireID::IDAndSet< SireMol::AtomID > exported_class_t;
-            typedef ::QSet< SireMol::AtomIdentifier > const & ( ::SireID::IDAndSet< SireMol::AtomID >::*IDs_function_type )(  ) const;
+            typedef ::QSet< SireMol::AtomIdentifier > const & ( ::SireID::IDAndSet< SireMol::AtomID >::*IDs_function_type)(  ) const;
             IDs_function_type IDs_function_value( &::SireID::IDAndSet< SireMol::AtomID >::IDs );
             
             IDAndSet_AtomID__exposer.def( 
@@ -84,7 +84,7 @@ void register_IDAndSet_AtomID__class(){
         { //::SireID::IDAndSet< SireMol::AtomID >::hash
         
             typedef SireID::IDAndSet< SireMol::AtomID > exported_class_t;
-            typedef ::uint ( ::SireID::IDAndSet< SireMol::AtomID >::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireID::IDAndSet< SireMol::AtomID >::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireID::IDAndSet< SireMol::AtomID >::hash );
             
             IDAndSet_AtomID__exposer.def( 
@@ -95,7 +95,7 @@ void register_IDAndSet_AtomID__class(){
         { //::SireID::IDAndSet< SireMol::AtomID >::isNull
         
             typedef SireID::IDAndSet< SireMol::AtomID > exported_class_t;
-            typedef bool ( ::SireID::IDAndSet< SireMol::AtomID >::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireID::IDAndSet< SireMol::AtomID >::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireID::IDAndSet< SireMol::AtomID >::isNull );
             
             IDAndSet_AtomID__exposer.def( 
@@ -106,7 +106,7 @@ void register_IDAndSet_AtomID__class(){
         { //::SireID::IDAndSet< SireMol::AtomID >::map
         
             typedef SireID::IDAndSet< SireMol::AtomID > exported_class_t;
-            typedef ::QList< SireMol::AtomIdx > ( ::SireID::IDAndSet< SireMol::AtomID >::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::AtomIdx > ( ::SireID::IDAndSet< SireMol::AtomID >::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireID::IDAndSet< SireMol::AtomID >::map );
             
             IDAndSet_AtomID__exposer.def( 
@@ -121,7 +121,7 @@ void register_IDAndSet_AtomID__class(){
         { //::SireID::IDAndSet< SireMol::AtomID >::operator=
         
             typedef SireID::IDAndSet< SireMol::AtomID > exported_class_t;
-            typedef ::SireID::IDAndSet< SireMol::AtomID > & ( ::SireID::IDAndSet< SireMol::AtomID >::*assign_function_type )( ::SireID::IDAndSet< SireMol::AtomID > const & ) ;
+            typedef ::SireID::IDAndSet< SireMol::AtomID > & ( ::SireID::IDAndSet< SireMol::AtomID >::*assign_function_type)( ::SireID::IDAndSet< SireMol::AtomID > const & ) ;
             assign_function_type assign_function_value( &::SireID::IDAndSet< SireMol::AtomID >::operator= );
             
             IDAndSet_AtomID__exposer.def( 
@@ -134,7 +134,7 @@ void register_IDAndSet_AtomID__class(){
         { //::SireID::IDAndSet< SireMol::AtomID >::operator=
         
             typedef SireID::IDAndSet< SireMol::AtomID > exported_class_t;
-            typedef ::SireID::IDAndSet< SireMol::AtomID > & ( ::SireID::IDAndSet< SireMol::AtomID >::*assign_function_type )( ::SireMol::AtomID const & ) ;
+            typedef ::SireID::IDAndSet< SireMol::AtomID > & ( ::SireID::IDAndSet< SireMol::AtomID >::*assign_function_type)( ::SireMol::AtomID const & ) ;
             assign_function_type assign_function_value( &::SireID::IDAndSet< SireMol::AtomID >::operator= );
             
             IDAndSet_AtomID__exposer.def( 
@@ -150,7 +150,7 @@ void register_IDAndSet_AtomID__class(){
         { //::SireID::IDAndSet< SireMol::AtomID >::toString
         
             typedef SireID::IDAndSet< SireMol::AtomID > exported_class_t;
-            typedef ::QString ( ::SireID::IDAndSet< SireMol::AtomID >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireID::IDAndSet< SireMol::AtomID >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireID::IDAndSet< SireMol::AtomID >::toString );
             
             IDAndSet_AtomID__exposer.def( 
@@ -172,7 +172,7 @@ void register_IDAndSet_AtomID__class(){
         { //::SireID::IDAndSet< SireMol::AtomID >::what
         
             typedef SireID::IDAndSet< SireMol::AtomID > exported_class_t;
-            typedef char const * ( ::SireID::IDAndSet< SireMol::AtomID >::*what_function_type )(  ) const;
+            typedef char const * ( ::SireID::IDAndSet< SireMol::AtomID >::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireID::IDAndSet< SireMol::AtomID >::what );
             
             IDAndSet_AtomID__exposer.def( 

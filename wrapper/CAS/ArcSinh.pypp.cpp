@@ -45,7 +45,7 @@ void register_ArcSinh_class(){
         ArcSinh_exposer.def( bp::init< SireCAS::ArcSinh const & >(( bp::arg("other") )) );
         { //::SireCAS::ArcSinh::evaluate
         
-            typedef double ( ::SireCAS::ArcSinh::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::ArcSinh::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::ArcSinh::evaluate );
             
             ArcSinh_exposer.def( 
@@ -56,7 +56,7 @@ void register_ArcSinh_class(){
         }
         { //::SireCAS::ArcSinh::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::ArcSinh::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::ArcSinh::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::ArcSinh::evaluate );
             
             ArcSinh_exposer.def( 
@@ -78,7 +78,7 @@ void register_ArcSinh_class(){
         }
         { //::SireCAS::ArcSinh::what
         
-            typedef char const * ( ::SireCAS::ArcSinh::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::ArcSinh::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::ArcSinh::what );
             
             ArcSinh_exposer.def( 

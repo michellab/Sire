@@ -36,7 +36,7 @@ void register_MultiInt_class(){
         MultiInt_exposer.def( bp::init< SireMaths::MultiInt const & >(( bp::arg("other") )) );
         { //::SireMaths::MultiInt::at
         
-            typedef ::qint32 ( ::SireMaths::MultiInt::*at_function_type )( int ) const;
+            typedef ::qint32 ( ::SireMaths::MultiInt::*at_function_type)( int ) const;
             at_function_type at_function_value( &::SireMaths::MultiInt::at );
             
             MultiInt_exposer.def( 
@@ -47,7 +47,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::compareEqual
         
-            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*compareEqual_function_type )( ::SireMaths::MultiInt const & ) const;
+            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*compareEqual_function_type)( ::SireMaths::MultiInt const & ) const;
             compareEqual_function_type compareEqual_function_value( &::SireMaths::MultiInt::compareEqual );
             
             MultiInt_exposer.def( 
@@ -58,7 +58,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::compareGreater
         
-            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*compareGreater_function_type )( ::SireMaths::MultiInt const & ) const;
+            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*compareGreater_function_type)( ::SireMaths::MultiInt const & ) const;
             compareGreater_function_type compareGreater_function_value( &::SireMaths::MultiInt::compareGreater );
             
             MultiInt_exposer.def( 
@@ -69,7 +69,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::compareGreaterEqual
         
-            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*compareGreaterEqual_function_type )( ::SireMaths::MultiInt const & ) const;
+            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*compareGreaterEqual_function_type)( ::SireMaths::MultiInt const & ) const;
             compareGreaterEqual_function_type compareGreaterEqual_function_value( &::SireMaths::MultiInt::compareGreaterEqual );
             
             MultiInt_exposer.def( 
@@ -80,7 +80,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::compareLess
         
-            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*compareLess_function_type )( ::SireMaths::MultiInt const & ) const;
+            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*compareLess_function_type)( ::SireMaths::MultiInt const & ) const;
             compareLess_function_type compareLess_function_value( &::SireMaths::MultiInt::compareLess );
             
             MultiInt_exposer.def( 
@@ -91,7 +91,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::compareLessEqual
         
-            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*compareLessEqual_function_type )( ::SireMaths::MultiInt const & ) const;
+            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*compareLessEqual_function_type)( ::SireMaths::MultiInt const & ) const;
             compareLessEqual_function_type compareLessEqual_function_value( &::SireMaths::MultiInt::compareLessEqual );
             
             MultiInt_exposer.def( 
@@ -102,7 +102,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::compareNotEqual
         
-            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*compareNotEqual_function_type )( ::SireMaths::MultiInt const & ) const;
+            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*compareNotEqual_function_type)( ::SireMaths::MultiInt const & ) const;
             compareNotEqual_function_type compareNotEqual_function_value( &::SireMaths::MultiInt::compareNotEqual );
             
             MultiInt_exposer.def( 
@@ -123,7 +123,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::doubleSum
         
-            typedef ::qint64 ( ::SireMaths::MultiInt::*doubleSum_function_type )(  ) const;
+            typedef ::qint64 ( ::SireMaths::MultiInt::*doubleSum_function_type)(  ) const;
             doubleSum_function_type doubleSum_function_value( &::SireMaths::MultiInt::doubleSum );
             
             MultiInt_exposer.def( 
@@ -155,7 +155,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::get
         
-            typedef ::qint32 ( ::SireMaths::MultiInt::*get_function_type )( int ) const;
+            typedef ::qint32 ( ::SireMaths::MultiInt::*get_function_type)( int ) const;
             get_function_type get_function_value( &::SireMaths::MultiInt::get );
             
             MultiInt_exposer.def( 
@@ -166,7 +166,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::getitem
         
-            typedef ::qint32 ( ::SireMaths::MultiInt::*getitem_function_type )( int ) const;
+            typedef ::qint32 ( ::SireMaths::MultiInt::*getitem_function_type)( int ) const;
             getitem_function_type getitem_function_value( &::SireMaths::MultiInt::getitem );
             
             MultiInt_exposer.def( 
@@ -177,7 +177,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::hasBinaryOne
         
-            typedef bool ( ::SireMaths::MultiInt::*hasBinaryOne_function_type )(  ) const;
+            typedef bool ( ::SireMaths::MultiInt::*hasBinaryOne_function_type)(  ) const;
             hasBinaryOne_function_type hasBinaryOne_function_value( &::SireMaths::MultiInt::hasBinaryOne );
             
             MultiInt_exposer.def( 
@@ -187,7 +187,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::hasBinaryZero
         
-            typedef bool ( ::SireMaths::MultiInt::*hasBinaryZero_function_type )(  ) const;
+            typedef bool ( ::SireMaths::MultiInt::*hasBinaryZero_function_type)(  ) const;
             hasBinaryZero_function_type hasBinaryZero_function_value( &::SireMaths::MultiInt::hasBinaryZero );
             
             MultiInt_exposer.def( 
@@ -197,7 +197,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::isAligned
         
-            typedef bool ( ::SireMaths::MultiInt::*isAligned_function_type )(  ) const;
+            typedef bool ( ::SireMaths::MultiInt::*isAligned_function_type)(  ) const;
             isAligned_function_type isAligned_function_value( &::SireMaths::MultiInt::isAligned );
             
             MultiInt_exposer.def( 
@@ -207,7 +207,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::isBinaryOne
         
-            typedef bool ( ::SireMaths::MultiInt::*isBinaryOne_function_type )(  ) const;
+            typedef bool ( ::SireMaths::MultiInt::*isBinaryOne_function_type)(  ) const;
             isBinaryOne_function_type isBinaryOne_function_value( &::SireMaths::MultiInt::isBinaryOne );
             
             MultiInt_exposer.def( 
@@ -217,7 +217,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::isBinaryZero
         
-            typedef bool ( ::SireMaths::MultiInt::*isBinaryZero_function_type )(  ) const;
+            typedef bool ( ::SireMaths::MultiInt::*isBinaryZero_function_type)(  ) const;
             isBinaryZero_function_type isBinaryZero_function_value( &::SireMaths::MultiInt::isBinaryZero );
             
             MultiInt_exposer.def( 
@@ -227,7 +227,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::isNotBinaryOne
         
-            typedef bool ( ::SireMaths::MultiInt::*isNotBinaryOne_function_type )(  ) const;
+            typedef bool ( ::SireMaths::MultiInt::*isNotBinaryOne_function_type)(  ) const;
             isNotBinaryOne_function_type isNotBinaryOne_function_value( &::SireMaths::MultiInt::isNotBinaryOne );
             
             MultiInt_exposer.def( 
@@ -237,7 +237,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::isNotBinaryZero
         
-            typedef bool ( ::SireMaths::MultiInt::*isNotBinaryZero_function_type )(  ) const;
+            typedef bool ( ::SireMaths::MultiInt::*isNotBinaryZero_function_type)(  ) const;
             isNotBinaryZero_function_type isNotBinaryZero_function_value( &::SireMaths::MultiInt::isNotBinaryZero );
             
             MultiInt_exposer.def( 
@@ -247,7 +247,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::logicalAnd
         
-            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*logicalAnd_function_type )( ::SireMaths::MultiInt const & ) const;
+            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*logicalAnd_function_type)( ::SireMaths::MultiInt const & ) const;
             logicalAnd_function_type logicalAnd_function_value( &::SireMaths::MultiInt::logicalAnd );
             
             MultiInt_exposer.def( 
@@ -258,7 +258,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::logicalAndNot
         
-            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*logicalAndNot_function_type )( ::SireMaths::MultiInt const & ) const;
+            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*logicalAndNot_function_type)( ::SireMaths::MultiInt const & ) const;
             logicalAndNot_function_type logicalAndNot_function_value( &::SireMaths::MultiInt::logicalAndNot );
             
             MultiInt_exposer.def( 
@@ -269,7 +269,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::logicalNot
         
-            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*logicalNot_function_type )(  ) const;
+            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*logicalNot_function_type)(  ) const;
             logicalNot_function_type logicalNot_function_value( &::SireMaths::MultiInt::logicalNot );
             
             MultiInt_exposer.def( 
@@ -279,7 +279,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::logicalOr
         
-            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*logicalOr_function_type )( ::SireMaths::MultiInt const & ) const;
+            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*logicalOr_function_type)( ::SireMaths::MultiInt const & ) const;
             logicalOr_function_type logicalOr_function_value( &::SireMaths::MultiInt::logicalOr );
             
             MultiInt_exposer.def( 
@@ -290,7 +290,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::logicalXor
         
-            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*logicalXor_function_type )( ::SireMaths::MultiInt const & ) const;
+            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*logicalXor_function_type)( ::SireMaths::MultiInt const & ) const;
             logicalXor_function_type logicalXor_function_value( &::SireMaths::MultiInt::logicalXor );
             
             MultiInt_exposer.def( 
@@ -301,7 +301,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::max
         
-            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*max_function_type )( ::SireMaths::MultiInt const & ) const;
+            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*max_function_type)( ::SireMaths::MultiInt const & ) const;
             max_function_type max_function_value( &::SireMaths::MultiInt::max );
             
             MultiInt_exposer.def( 
@@ -312,7 +312,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::min
         
-            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*min_function_type )( ::SireMaths::MultiInt const & ) const;
+            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*min_function_type)( ::SireMaths::MultiInt const & ) const;
             min_function_type min_function_value( &::SireMaths::MultiInt::min );
             
             MultiInt_exposer.def( 
@@ -332,7 +332,7 @@ void register_MultiInt_class(){
         MultiInt_exposer.def( bp::self <= bp::self );
         { //::SireMaths::MultiInt::operator=
         
-            typedef ::SireMaths::MultiInt & ( ::SireMaths::MultiInt::*assign_function_type )( ::SireMaths::MultiInt const & ) ;
+            typedef ::SireMaths::MultiInt & ( ::SireMaths::MultiInt::*assign_function_type)( ::SireMaths::MultiInt const & ) ;
             assign_function_type assign_function_value( &::SireMaths::MultiInt::operator= );
             
             MultiInt_exposer.def( 
@@ -344,7 +344,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::operator=
         
-            typedef ::SireMaths::MultiInt & ( ::SireMaths::MultiInt::*assign_function_type )( ::qint32 ) ;
+            typedef ::SireMaths::MultiInt & ( ::SireMaths::MultiInt::*assign_function_type)( ::qint32 ) ;
             assign_function_type assign_function_value( &::SireMaths::MultiInt::operator= );
             
             MultiInt_exposer.def( 
@@ -356,7 +356,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::operator=
         
-            typedef ::SireMaths::MultiInt & ( ::SireMaths::MultiInt::*assign_function_type )( ::SireMaths::MultiFloat const & ) ;
+            typedef ::SireMaths::MultiInt & ( ::SireMaths::MultiInt::*assign_function_type)( ::SireMaths::MultiFloat const & ) ;
             assign_function_type assign_function_value( &::SireMaths::MultiInt::operator= );
             
             MultiInt_exposer.def( 
@@ -371,7 +371,7 @@ void register_MultiInt_class(){
         MultiInt_exposer.def( bp::self >= bp::self );
         { //::SireMaths::MultiInt::operator[]
         
-            typedef ::qint32 ( ::SireMaths::MultiInt::*__getitem___function_type )( int ) const;
+            typedef ::qint32 ( ::SireMaths::MultiInt::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMaths::MultiInt::operator[] );
             
             MultiInt_exposer.def( 
@@ -384,7 +384,7 @@ void register_MultiInt_class(){
         MultiInt_exposer.def( bp::self | bp::self );
         { //::SireMaths::MultiInt::reinterpretCastToFloat
         
-            typedef ::SireMaths::MultiFloat ( ::SireMaths::MultiInt::*reinterpretCastToFloat_function_type )(  ) const;
+            typedef ::SireMaths::MultiFloat ( ::SireMaths::MultiInt::*reinterpretCastToFloat_function_type)(  ) const;
             reinterpretCastToFloat_function_type reinterpretCastToFloat_function_value( &::SireMaths::MultiInt::reinterpretCastToFloat );
             
             MultiInt_exposer.def( 
@@ -394,7 +394,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::rotate
         
-            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*rotate_function_type )(  ) const;
+            typedef ::SireMaths::MultiInt ( ::SireMaths::MultiInt::*rotate_function_type)(  ) const;
             rotate_function_type rotate_function_value( &::SireMaths::MultiInt::rotate );
             
             MultiInt_exposer.def( 
@@ -404,7 +404,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::set
         
-            typedef void ( ::SireMaths::MultiInt::*set_function_type )( int,::qint32 ) ;
+            typedef void ( ::SireMaths::MultiInt::*set_function_type)( int,::qint32 ) ;
             set_function_type set_function_value( &::SireMaths::MultiInt::set );
             
             MultiInt_exposer.def( 
@@ -425,7 +425,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::sum
         
-            typedef ::qint32 ( ::SireMaths::MultiInt::*sum_function_type )(  ) const;
+            typedef ::qint32 ( ::SireMaths::MultiInt::*sum_function_type)(  ) const;
             sum_function_type sum_function_value( &::SireMaths::MultiInt::sum );
             
             MultiInt_exposer.def( 
@@ -446,7 +446,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::toBinaryString
         
-            typedef ::QString ( ::SireMaths::MultiInt::*toBinaryString_function_type )(  ) const;
+            typedef ::QString ( ::SireMaths::MultiInt::*toBinaryString_function_type)(  ) const;
             toBinaryString_function_type toBinaryString_function_value( &::SireMaths::MultiInt::toBinaryString );
             
             MultiInt_exposer.def( 
@@ -456,7 +456,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::toString
         
-            typedef ::QString ( ::SireMaths::MultiInt::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMaths::MultiInt::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMaths::MultiInt::toString );
             
             MultiInt_exposer.def( 
@@ -476,7 +476,7 @@ void register_MultiInt_class(){
         }
         { //::SireMaths::MultiInt::what
         
-            typedef char const * ( ::SireMaths::MultiInt::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMaths::MultiInt::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMaths::MultiInt::what );
             
             MultiInt_exposer.def( 

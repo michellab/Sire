@@ -97,7 +97,7 @@ void register_PDB_class(){
         PDB_exposer.def( bp::self != bp::self );
         { //::SireIO::PDB::operator=
         
-            typedef ::SireIO::PDB & ( ::SireIO::PDB::*assign_function_type )( ::SireIO::PDB const & ) ;
+            typedef ::SireIO::PDB & ( ::SireIO::PDB::*assign_function_type)( ::SireIO::PDB const & ) ;
             assign_function_type assign_function_value( &::SireIO::PDB::operator= );
             
             PDB_exposer.def( 
@@ -131,7 +131,7 @@ void register_PDB_class(){
         }
         { //::SireIO::PDB::what
         
-            typedef char const * ( ::SireIO::PDB::*what_function_type )(  ) const;
+            typedef char const * ( ::SireIO::PDB::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireIO::PDB::what );
             
             PDB_exposer.def( 

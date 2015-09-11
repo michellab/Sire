@@ -38,7 +38,7 @@ void register_WorkPacket_class(){
         WorkPacket_exposer.def( bp::init< SireCluster::WorkPacket const & >(( bp::arg("other") )) );
         { //::SireCluster::WorkPacket::abort
         
-            typedef void ( ::SireCluster::WorkPacket::*abort_function_type )(  ) ;
+            typedef void ( ::SireCluster::WorkPacket::*abort_function_type)(  ) ;
             abort_function_type abort_function_value( &::SireCluster::WorkPacket::abort );
             
             WorkPacket_exposer.def( 
@@ -48,7 +48,7 @@ void register_WorkPacket_class(){
         }
         { //::SireCluster::WorkPacket::base
         
-            typedef ::SireCluster::WorkPacketBase const & ( ::SireCluster::WorkPacket::*base_function_type )(  ) const;
+            typedef ::SireCluster::WorkPacketBase const & ( ::SireCluster::WorkPacket::*base_function_type)(  ) const;
             base_function_type base_function_value( &::SireCluster::WorkPacket::base );
             
             WorkPacket_exposer.def( 
@@ -59,7 +59,7 @@ void register_WorkPacket_class(){
         }
         { //::SireCluster::WorkPacket::hasFinished
         
-            typedef bool ( ::SireCluster::WorkPacket::*hasFinished_function_type )(  ) const;
+            typedef bool ( ::SireCluster::WorkPacket::*hasFinished_function_type)(  ) const;
             hasFinished_function_type hasFinished_function_value( &::SireCluster::WorkPacket::hasFinished );
             
             WorkPacket_exposer.def( 
@@ -69,7 +69,7 @@ void register_WorkPacket_class(){
         }
         { //::SireCluster::WorkPacket::isError
         
-            typedef bool ( ::SireCluster::WorkPacket::*isError_function_type )(  ) const;
+            typedef bool ( ::SireCluster::WorkPacket::*isError_function_type)(  ) const;
             isError_function_type isError_function_value( &::SireCluster::WorkPacket::isError );
             
             WorkPacket_exposer.def( 
@@ -79,7 +79,7 @@ void register_WorkPacket_class(){
         }
         { //::SireCluster::WorkPacket::isNull
         
-            typedef bool ( ::SireCluster::WorkPacket::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireCluster::WorkPacket::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireCluster::WorkPacket::isNull );
             
             WorkPacket_exposer.def( 
@@ -89,7 +89,7 @@ void register_WorkPacket_class(){
         }
         { //::SireCluster::WorkPacket::operator=
         
-            typedef ::SireCluster::WorkPacket & ( ::SireCluster::WorkPacket::*assign_function_type )( ::SireCluster::WorkPacket const & ) ;
+            typedef ::SireCluster::WorkPacket & ( ::SireCluster::WorkPacket::*assign_function_type)( ::SireCluster::WorkPacket const & ) ;
             assign_function_type assign_function_value( &::SireCluster::WorkPacket::operator= );
             
             WorkPacket_exposer.def( 
@@ -101,7 +101,7 @@ void register_WorkPacket_class(){
         }
         { //::SireCluster::WorkPacket::pack
         
-            typedef ::QByteArray ( ::SireCluster::WorkPacket::*pack_function_type )(  ) const;
+            typedef ::QByteArray ( ::SireCluster::WorkPacket::*pack_function_type)(  ) const;
             pack_function_type pack_function_value( &::SireCluster::WorkPacket::pack );
             
             WorkPacket_exposer.def( 
@@ -111,7 +111,7 @@ void register_WorkPacket_class(){
         }
         { //::SireCluster::WorkPacket::progress
         
-            typedef float ( ::SireCluster::WorkPacket::*progress_function_type )(  ) const;
+            typedef float ( ::SireCluster::WorkPacket::*progress_function_type)(  ) const;
             progress_function_type progress_function_value( &::SireCluster::WorkPacket::progress );
             
             WorkPacket_exposer.def( 
@@ -121,7 +121,7 @@ void register_WorkPacket_class(){
         }
         { //::SireCluster::WorkPacket::runChunk
         
-            typedef void ( ::SireCluster::WorkPacket::*runChunk_function_type )(  ) ;
+            typedef void ( ::SireCluster::WorkPacket::*runChunk_function_type)(  ) ;
             runChunk_function_type runChunk_function_value( &::SireCluster::WorkPacket::runChunk );
             
             WorkPacket_exposer.def( 
@@ -131,7 +131,7 @@ void register_WorkPacket_class(){
         }
         { //::SireCluster::WorkPacket::shouldPack
         
-            typedef bool ( ::SireCluster::WorkPacket::*shouldPack_function_type )(  ) const;
+            typedef bool ( ::SireCluster::WorkPacket::*shouldPack_function_type)(  ) const;
             shouldPack_function_type shouldPack_function_value( &::SireCluster::WorkPacket::shouldPack );
             
             WorkPacket_exposer.def( 
@@ -141,7 +141,7 @@ void register_WorkPacket_class(){
         }
         { //::SireCluster::WorkPacket::throwError
         
-            typedef void ( ::SireCluster::WorkPacket::*throwError_function_type )(  ) const;
+            typedef void ( ::SireCluster::WorkPacket::*throwError_function_type)(  ) const;
             throwError_function_type throwError_function_value( &::SireCluster::WorkPacket::throwError );
             
             WorkPacket_exposer.def( 
@@ -172,7 +172,7 @@ void register_WorkPacket_class(){
         }
         { //::SireCluster::WorkPacket::wasAborted
         
-            typedef bool ( ::SireCluster::WorkPacket::*wasAborted_function_type )(  ) const;
+            typedef bool ( ::SireCluster::WorkPacket::*wasAborted_function_type)(  ) const;
             wasAborted_function_type wasAborted_function_value( &::SireCluster::WorkPacket::wasAborted );
             
             WorkPacket_exposer.def( 
@@ -182,7 +182,7 @@ void register_WorkPacket_class(){
         }
         { //::SireCluster::WorkPacket::what
         
-            typedef char const * ( ::SireCluster::WorkPacket::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCluster::WorkPacket::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCluster::WorkPacket::what );
             
             WorkPacket_exposer.def( 

@@ -46,7 +46,7 @@ void register_GroupInternalParameters_class(){
         GroupInternalParameters_exposer.def( bp::init< SireMM::GroupInternalParameters const & >(( bp::arg("other") )) );
         { //::SireMM::GroupInternalParameters::angleForces
         
-            typedef ::QVector< SireMM::ThreeAtomFunction > const & ( ::SireMM::GroupInternalParameters::*angleForces_function_type )(  ) const;
+            typedef ::QVector< SireMM::ThreeAtomFunction > const & ( ::SireMM::GroupInternalParameters::*angleForces_function_type)(  ) const;
             angleForces_function_type angleForces_function_value( &::SireMM::GroupInternalParameters::angleForces );
             
             GroupInternalParameters_exposer.def( 
@@ -57,7 +57,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::anglePotential
         
-            typedef ::QVector< SireMM::ThreeAtomFunction > const & ( ::SireMM::GroupInternalParameters::*anglePotential_function_type )(  ) const;
+            typedef ::QVector< SireMM::ThreeAtomFunction > const & ( ::SireMM::GroupInternalParameters::*anglePotential_function_type)(  ) const;
             anglePotential_function_type anglePotential_function_value( &::SireMM::GroupInternalParameters::anglePotential );
             
             GroupInternalParameters_exposer.def( 
@@ -68,7 +68,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::bendBendPotential
         
-            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*bendBendPotential_function_type )(  ) const;
+            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*bendBendPotential_function_type)(  ) const;
             bendBendPotential_function_type bendBendPotential_function_value( &::SireMM::GroupInternalParameters::bendBendPotential );
             
             GroupInternalParameters_exposer.def( 
@@ -79,7 +79,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::bendBend_Theta012_Forces
         
-            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*bendBend_Theta012_Forces_function_type )(  ) const;
+            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*bendBend_Theta012_Forces_function_type)(  ) const;
             bendBend_Theta012_Forces_function_type bendBend_Theta012_Forces_function_value( &::SireMM::GroupInternalParameters::bendBend_Theta012_Forces );
             
             GroupInternalParameters_exposer.def( 
@@ -90,7 +90,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::bendBend_Theta213_Forces
         
-            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*bendBend_Theta213_Forces_function_type )(  ) const;
+            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*bendBend_Theta213_Forces_function_type)(  ) const;
             bendBend_Theta213_Forces_function_type bendBend_Theta213_Forces_function_value( &::SireMM::GroupInternalParameters::bendBend_Theta213_Forces );
             
             GroupInternalParameters_exposer.def( 
@@ -101,7 +101,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::bendBend_Theta310_Forces
         
-            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*bendBend_Theta310_Forces_function_type )(  ) const;
+            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*bendBend_Theta310_Forces_function_type)(  ) const;
             bendBend_Theta310_Forces_function_type bendBend_Theta310_Forces_function_value( &::SireMM::GroupInternalParameters::bendBend_Theta310_Forces );
             
             GroupInternalParameters_exposer.def( 
@@ -112,7 +112,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::bondForces
         
-            typedef ::QVector< SireMM::TwoAtomFunction > const & ( ::SireMM::GroupInternalParameters::*bondForces_function_type )(  ) const;
+            typedef ::QVector< SireMM::TwoAtomFunction > const & ( ::SireMM::GroupInternalParameters::*bondForces_function_type)(  ) const;
             bondForces_function_type bondForces_function_value( &::SireMM::GroupInternalParameters::bondForces );
             
             GroupInternalParameters_exposer.def( 
@@ -123,7 +123,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::bondPotential
         
-            typedef ::QVector< SireMM::TwoAtomFunction > const & ( ::SireMM::GroupInternalParameters::*bondPotential_function_type )(  ) const;
+            typedef ::QVector< SireMM::TwoAtomFunction > const & ( ::SireMM::GroupInternalParameters::*bondPotential_function_type)(  ) const;
             bondPotential_function_type bondPotential_function_value( &::SireMM::GroupInternalParameters::bondPotential );
             
             GroupInternalParameters_exposer.def( 
@@ -134,7 +134,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::cgIdx0
         
-            typedef ::SireMol::CGIdx ( ::SireMM::GroupInternalParameters::*cgIdx0_function_type )(  ) const;
+            typedef ::SireMol::CGIdx ( ::SireMM::GroupInternalParameters::*cgIdx0_function_type)(  ) const;
             cgIdx0_function_type cgIdx0_function_value( &::SireMM::GroupInternalParameters::cgIdx0 );
             
             GroupInternalParameters_exposer.def( 
@@ -144,7 +144,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::cgIdx1
         
-            typedef ::SireMol::CGIdx ( ::SireMM::GroupInternalParameters::*cgIdx1_function_type )(  ) const;
+            typedef ::SireMol::CGIdx ( ::SireMM::GroupInternalParameters::*cgIdx1_function_type)(  ) const;
             cgIdx1_function_type cgIdx1_function_value( &::SireMM::GroupInternalParameters::cgIdx1 );
             
             GroupInternalParameters_exposer.def( 
@@ -154,7 +154,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::cgIdx2
         
-            typedef ::SireMol::CGIdx ( ::SireMM::GroupInternalParameters::*cgIdx2_function_type )(  ) const;
+            typedef ::SireMol::CGIdx ( ::SireMM::GroupInternalParameters::*cgIdx2_function_type)(  ) const;
             cgIdx2_function_type cgIdx2_function_value( &::SireMM::GroupInternalParameters::cgIdx2 );
             
             GroupInternalParameters_exposer.def( 
@@ -164,7 +164,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::cgIdx3
         
-            typedef ::SireMol::CGIdx ( ::SireMM::GroupInternalParameters::*cgIdx3_function_type )(  ) const;
+            typedef ::SireMol::CGIdx ( ::SireMM::GroupInternalParameters::*cgIdx3_function_type)(  ) const;
             cgIdx3_function_type cgIdx3_function_value( &::SireMM::GroupInternalParameters::cgIdx3 );
             
             GroupInternalParameters_exposer.def( 
@@ -174,7 +174,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::dihedralForces
         
-            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*dihedralForces_function_type )(  ) const;
+            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*dihedralForces_function_type)(  ) const;
             dihedralForces_function_type dihedralForces_function_value( &::SireMM::GroupInternalParameters::dihedralForces );
             
             GroupInternalParameters_exposer.def( 
@@ -185,7 +185,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::dihedralPotential
         
-            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*dihedralPotential_function_type )(  ) const;
+            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*dihedralPotential_function_type)(  ) const;
             dihedralPotential_function_type dihedralPotential_function_value( &::SireMM::GroupInternalParameters::dihedralPotential );
             
             GroupInternalParameters_exposer.def( 
@@ -196,7 +196,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::hasCrossTerms
         
-            typedef bool ( ::SireMM::GroupInternalParameters::*hasCrossTerms_function_type )(  ) const;
+            typedef bool ( ::SireMM::GroupInternalParameters::*hasCrossTerms_function_type)(  ) const;
             hasCrossTerms_function_type hasCrossTerms_function_value( &::SireMM::GroupInternalParameters::hasCrossTerms );
             
             GroupInternalParameters_exposer.def( 
@@ -206,7 +206,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::hasNonPhysicalParameters
         
-            typedef bool ( ::SireMM::GroupInternalParameters::*hasNonPhysicalParameters_function_type )(  ) const;
+            typedef bool ( ::SireMM::GroupInternalParameters::*hasNonPhysicalParameters_function_type)(  ) const;
             hasNonPhysicalParameters_function_type hasNonPhysicalParameters_function_value( &::SireMM::GroupInternalParameters::hasNonPhysicalParameters );
             
             GroupInternalParameters_exposer.def( 
@@ -216,7 +216,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::hasPhysicalParameters
         
-            typedef bool ( ::SireMM::GroupInternalParameters::*hasPhysicalParameters_function_type )(  ) const;
+            typedef bool ( ::SireMM::GroupInternalParameters::*hasPhysicalParameters_function_type)(  ) const;
             hasPhysicalParameters_function_type hasPhysicalParameters_function_value( &::SireMM::GroupInternalParameters::hasPhysicalParameters );
             
             GroupInternalParameters_exposer.def( 
@@ -226,7 +226,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::improperPotential
         
-            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*improperPotential_function_type )(  ) const;
+            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*improperPotential_function_type)(  ) const;
             improperPotential_function_type improperPotential_function_value( &::SireMM::GroupInternalParameters::improperPotential );
             
             GroupInternalParameters_exposer.def( 
@@ -237,7 +237,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::improper_Phi_Forces
         
-            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*improper_Phi_Forces_function_type )(  ) const;
+            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*improper_Phi_Forces_function_type)(  ) const;
             improper_Phi_Forces_function_type improper_Phi_Forces_function_value( &::SireMM::GroupInternalParameters::improper_Phi_Forces );
             
             GroupInternalParameters_exposer.def( 
@@ -248,7 +248,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::improper_Theta_Forces
         
-            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*improper_Theta_Forces_function_type )(  ) const;
+            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*improper_Theta_Forces_function_type)(  ) const;
             improper_Theta_Forces_function_type improper_Theta_Forces_function_value( &::SireMM::GroupInternalParameters::improper_Theta_Forces );
             
             GroupInternalParameters_exposer.def( 
@@ -259,7 +259,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::isDoubleCutGroup
         
-            typedef bool ( ::SireMM::GroupInternalParameters::*isDoubleCutGroup_function_type )(  ) const;
+            typedef bool ( ::SireMM::GroupInternalParameters::*isDoubleCutGroup_function_type)(  ) const;
             isDoubleCutGroup_function_type isDoubleCutGroup_function_value( &::SireMM::GroupInternalParameters::isDoubleCutGroup );
             
             GroupInternalParameters_exposer.def( 
@@ -269,7 +269,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::isDoubleCutGroup
         
-            typedef bool ( ::SireMM::GroupInternalParameters::*isDoubleCutGroup_function_type )( ::SireMol::CGIdx,::SireMol::CGIdx ) const;
+            typedef bool ( ::SireMM::GroupInternalParameters::*isDoubleCutGroup_function_type)( ::SireMol::CGIdx,::SireMol::CGIdx ) const;
             isDoubleCutGroup_function_type isDoubleCutGroup_function_value( &::SireMM::GroupInternalParameters::isDoubleCutGroup );
             
             GroupInternalParameters_exposer.def( 
@@ -280,7 +280,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::isEmpty
         
-            typedef bool ( ::SireMM::GroupInternalParameters::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMM::GroupInternalParameters::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMM::GroupInternalParameters::isEmpty );
             
             GroupInternalParameters_exposer.def( 
@@ -290,7 +290,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::isQuadrupleCutGroup
         
-            typedef bool ( ::SireMM::GroupInternalParameters::*isQuadrupleCutGroup_function_type )(  ) const;
+            typedef bool ( ::SireMM::GroupInternalParameters::*isQuadrupleCutGroup_function_type)(  ) const;
             isQuadrupleCutGroup_function_type isQuadrupleCutGroup_function_value( &::SireMM::GroupInternalParameters::isQuadrupleCutGroup );
             
             GroupInternalParameters_exposer.def( 
@@ -300,7 +300,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::isQuadrupleCutGroup
         
-            typedef bool ( ::SireMM::GroupInternalParameters::*isQuadrupleCutGroup_function_type )( ::SireMol::CGIdx,::SireMol::CGIdx,::SireMol::CGIdx,::SireMol::CGIdx ) const;
+            typedef bool ( ::SireMM::GroupInternalParameters::*isQuadrupleCutGroup_function_type)( ::SireMol::CGIdx,::SireMol::CGIdx,::SireMol::CGIdx,::SireMol::CGIdx ) const;
             isQuadrupleCutGroup_function_type isQuadrupleCutGroup_function_value( &::SireMM::GroupInternalParameters::isQuadrupleCutGroup );
             
             GroupInternalParameters_exposer.def( 
@@ -311,7 +311,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::isSingleCutGroup
         
-            typedef bool ( ::SireMM::GroupInternalParameters::*isSingleCutGroup_function_type )(  ) const;
+            typedef bool ( ::SireMM::GroupInternalParameters::*isSingleCutGroup_function_type)(  ) const;
             isSingleCutGroup_function_type isSingleCutGroup_function_value( &::SireMM::GroupInternalParameters::isSingleCutGroup );
             
             GroupInternalParameters_exposer.def( 
@@ -321,7 +321,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::isSingleCutGroup
         
-            typedef bool ( ::SireMM::GroupInternalParameters::*isSingleCutGroup_function_type )( ::SireMol::CGIdx ) const;
+            typedef bool ( ::SireMM::GroupInternalParameters::*isSingleCutGroup_function_type)( ::SireMol::CGIdx ) const;
             isSingleCutGroup_function_type isSingleCutGroup_function_value( &::SireMM::GroupInternalParameters::isSingleCutGroup );
             
             GroupInternalParameters_exposer.def( 
@@ -332,7 +332,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::isTripleCutGroup
         
-            typedef bool ( ::SireMM::GroupInternalParameters::*isTripleCutGroup_function_type )(  ) const;
+            typedef bool ( ::SireMM::GroupInternalParameters::*isTripleCutGroup_function_type)(  ) const;
             isTripleCutGroup_function_type isTripleCutGroup_function_value( &::SireMM::GroupInternalParameters::isTripleCutGroup );
             
             GroupInternalParameters_exposer.def( 
@@ -342,7 +342,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::isTripleCutGroup
         
-            typedef bool ( ::SireMM::GroupInternalParameters::*isTripleCutGroup_function_type )( ::SireMol::CGIdx,::SireMol::CGIdx,::SireMol::CGIdx ) const;
+            typedef bool ( ::SireMM::GroupInternalParameters::*isTripleCutGroup_function_type)( ::SireMol::CGIdx,::SireMol::CGIdx,::SireMol::CGIdx ) const;
             isTripleCutGroup_function_type isTripleCutGroup_function_value( &::SireMM::GroupInternalParameters::isTripleCutGroup );
             
             GroupInternalParameters_exposer.def( 
@@ -354,7 +354,7 @@ void register_GroupInternalParameters_class(){
         GroupInternalParameters_exposer.def( bp::self != bp::self );
         { //::SireMM::GroupInternalParameters::operator=
         
-            typedef ::SireMM::GroupInternalParameters & ( ::SireMM::GroupInternalParameters::*assign_function_type )( ::SireMM::GroupInternalParameters const & ) ;
+            typedef ::SireMM::GroupInternalParameters & ( ::SireMM::GroupInternalParameters::*assign_function_type)( ::SireMM::GroupInternalParameters const & ) ;
             assign_function_type assign_function_value( &::SireMM::GroupInternalParameters::operator= );
             
             GroupInternalParameters_exposer.def( 
@@ -367,7 +367,7 @@ void register_GroupInternalParameters_class(){
         GroupInternalParameters_exposer.def( bp::self == bp::self );
         { //::SireMM::GroupInternalParameters::refersTo
         
-            typedef bool ( ::SireMM::GroupInternalParameters::*refersTo_function_type )( ::SireMol::CGIdx ) const;
+            typedef bool ( ::SireMM::GroupInternalParameters::*refersTo_function_type)( ::SireMol::CGIdx ) const;
             refersTo_function_type refersTo_function_value( &::SireMM::GroupInternalParameters::refersTo );
             
             GroupInternalParameters_exposer.def( 
@@ -378,7 +378,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::refersTo
         
-            typedef bool ( ::SireMM::GroupInternalParameters::*refersTo_function_type )( ::QSet< SireMol::CGIdx > const & ) const;
+            typedef bool ( ::SireMM::GroupInternalParameters::*refersTo_function_type)( ::QSet< SireMol::CGIdx > const & ) const;
             refersTo_function_type refersTo_function_value( &::SireMM::GroupInternalParameters::refersTo );
             
             GroupInternalParameters_exposer.def( 
@@ -389,7 +389,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::stretchBendPotential
         
-            typedef ::QVector< SireMM::ThreeAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchBendPotential_function_type )(  ) const;
+            typedef ::QVector< SireMM::ThreeAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchBendPotential_function_type)(  ) const;
             stretchBendPotential_function_type stretchBendPotential_function_value( &::SireMM::GroupInternalParameters::stretchBendPotential );
             
             GroupInternalParameters_exposer.def( 
@@ -400,7 +400,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::stretchBendTorsionPotential
         
-            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchBendTorsionPotential_function_type )(  ) const;
+            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchBendTorsionPotential_function_type)(  ) const;
             stretchBendTorsionPotential_function_type stretchBendTorsionPotential_function_value( &::SireMM::GroupInternalParameters::stretchBendTorsionPotential );
             
             GroupInternalParameters_exposer.def( 
@@ -411,7 +411,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::stretchBendTorsion_Phi_Forces
         
-            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchBendTorsion_Phi_Forces_function_type )(  ) const;
+            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchBendTorsion_Phi_Forces_function_type)(  ) const;
             stretchBendTorsion_Phi_Forces_function_type stretchBendTorsion_Phi_Forces_function_value( &::SireMM::GroupInternalParameters::stretchBendTorsion_Phi_Forces );
             
             GroupInternalParameters_exposer.def( 
@@ -422,7 +422,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::stretchBendTorsion_R01_Forces
         
-            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchBendTorsion_R01_Forces_function_type )(  ) const;
+            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchBendTorsion_R01_Forces_function_type)(  ) const;
             stretchBendTorsion_R01_Forces_function_type stretchBendTorsion_R01_Forces_function_value( &::SireMM::GroupInternalParameters::stretchBendTorsion_R01_Forces );
             
             GroupInternalParameters_exposer.def( 
@@ -433,7 +433,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::stretchBendTorsion_R03_Forces
         
-            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchBendTorsion_R03_Forces_function_type )(  ) const;
+            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchBendTorsion_R03_Forces_function_type)(  ) const;
             stretchBendTorsion_R03_Forces_function_type stretchBendTorsion_R03_Forces_function_value( &::SireMM::GroupInternalParameters::stretchBendTorsion_R03_Forces );
             
             GroupInternalParameters_exposer.def( 
@@ -444,7 +444,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::stretchBendTorsion_R12_Forces
         
-            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchBendTorsion_R12_Forces_function_type )(  ) const;
+            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchBendTorsion_R12_Forces_function_type)(  ) const;
             stretchBendTorsion_R12_Forces_function_type stretchBendTorsion_R12_Forces_function_value( &::SireMM::GroupInternalParameters::stretchBendTorsion_R12_Forces );
             
             GroupInternalParameters_exposer.def( 
@@ -455,7 +455,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::stretchBendTorsion_R32_Forces
         
-            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchBendTorsion_R32_Forces_function_type )(  ) const;
+            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchBendTorsion_R32_Forces_function_type)(  ) const;
             stretchBendTorsion_R32_Forces_function_type stretchBendTorsion_R32_Forces_function_value( &::SireMM::GroupInternalParameters::stretchBendTorsion_R32_Forces );
             
             GroupInternalParameters_exposer.def( 
@@ -466,7 +466,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::stretchBendTorsion_Theta012_Forces
         
-            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchBendTorsion_Theta012_Forces_function_type )(  ) const;
+            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchBendTorsion_Theta012_Forces_function_type)(  ) const;
             stretchBendTorsion_Theta012_Forces_function_type stretchBendTorsion_Theta012_Forces_function_value( &::SireMM::GroupInternalParameters::stretchBendTorsion_Theta012_Forces );
             
             GroupInternalParameters_exposer.def( 
@@ -477,7 +477,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::stretchBendTorsion_Theta321_Forces
         
-            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchBendTorsion_Theta321_Forces_function_type )(  ) const;
+            typedef ::QVector< SireMM::FourAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchBendTorsion_Theta321_Forces_function_type)(  ) const;
             stretchBendTorsion_Theta321_Forces_function_type stretchBendTorsion_Theta321_Forces_function_value( &::SireMM::GroupInternalParameters::stretchBendTorsion_Theta321_Forces );
             
             GroupInternalParameters_exposer.def( 
@@ -488,7 +488,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::stretchBend_R01_Forces
         
-            typedef ::QVector< SireMM::ThreeAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchBend_R01_Forces_function_type )(  ) const;
+            typedef ::QVector< SireMM::ThreeAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchBend_R01_Forces_function_type)(  ) const;
             stretchBend_R01_Forces_function_type stretchBend_R01_Forces_function_value( &::SireMM::GroupInternalParameters::stretchBend_R01_Forces );
             
             GroupInternalParameters_exposer.def( 
@@ -499,7 +499,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::stretchBend_R21_Forces
         
-            typedef ::QVector< SireMM::ThreeAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchBend_R21_Forces_function_type )(  ) const;
+            typedef ::QVector< SireMM::ThreeAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchBend_R21_Forces_function_type)(  ) const;
             stretchBend_R21_Forces_function_type stretchBend_R21_Forces_function_value( &::SireMM::GroupInternalParameters::stretchBend_R21_Forces );
             
             GroupInternalParameters_exposer.def( 
@@ -510,7 +510,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::stretchBend_Theta_Forces
         
-            typedef ::QVector< SireMM::ThreeAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchBend_Theta_Forces_function_type )(  ) const;
+            typedef ::QVector< SireMM::ThreeAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchBend_Theta_Forces_function_type)(  ) const;
             stretchBend_Theta_Forces_function_type stretchBend_Theta_Forces_function_value( &::SireMM::GroupInternalParameters::stretchBend_Theta_Forces );
             
             GroupInternalParameters_exposer.def( 
@@ -521,7 +521,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::stretchStretchPotential
         
-            typedef ::QVector< SireMM::ThreeAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchStretchPotential_function_type )(  ) const;
+            typedef ::QVector< SireMM::ThreeAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchStretchPotential_function_type)(  ) const;
             stretchStretchPotential_function_type stretchStretchPotential_function_value( &::SireMM::GroupInternalParameters::stretchStretchPotential );
             
             GroupInternalParameters_exposer.def( 
@@ -532,7 +532,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::stretchStretch_R01_Forces
         
-            typedef ::QVector< SireMM::ThreeAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchStretch_R01_Forces_function_type )(  ) const;
+            typedef ::QVector< SireMM::ThreeAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchStretch_R01_Forces_function_type)(  ) const;
             stretchStretch_R01_Forces_function_type stretchStretch_R01_Forces_function_value( &::SireMM::GroupInternalParameters::stretchStretch_R01_Forces );
             
             GroupInternalParameters_exposer.def( 
@@ -543,7 +543,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::stretchStretch_R21_Forces
         
-            typedef ::QVector< SireMM::ThreeAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchStretch_R21_Forces_function_type )(  ) const;
+            typedef ::QVector< SireMM::ThreeAtomFunction > const & ( ::SireMM::GroupInternalParameters::*stretchStretch_R21_Forces_function_type)(  ) const;
             stretchStretch_R21_Forces_function_type stretchStretch_R21_Forces_function_value( &::SireMM::GroupInternalParameters::stretchStretch_R21_Forces );
             
             GroupInternalParameters_exposer.def( 
@@ -554,7 +554,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::ureyBradleyForces
         
-            typedef ::QVector< SireMM::TwoAtomFunction > const & ( ::SireMM::GroupInternalParameters::*ureyBradleyForces_function_type )(  ) const;
+            typedef ::QVector< SireMM::TwoAtomFunction > const & ( ::SireMM::GroupInternalParameters::*ureyBradleyForces_function_type)(  ) const;
             ureyBradleyForces_function_type ureyBradleyForces_function_value( &::SireMM::GroupInternalParameters::ureyBradleyForces );
             
             GroupInternalParameters_exposer.def( 
@@ -565,7 +565,7 @@ void register_GroupInternalParameters_class(){
         }
         { //::SireMM::GroupInternalParameters::ureyBradleyPotential
         
-            typedef ::QVector< SireMM::TwoAtomFunction > const & ( ::SireMM::GroupInternalParameters::*ureyBradleyPotential_function_type )(  ) const;
+            typedef ::QVector< SireMM::TwoAtomFunction > const & ( ::SireMM::GroupInternalParameters::*ureyBradleyPotential_function_type)(  ) const;
             ureyBradleyPotential_function_type ureyBradleyPotential_function_value( &::SireMM::GroupInternalParameters::ureyBradleyPotential );
             
             GroupInternalParameters_exposer.def( 

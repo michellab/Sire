@@ -23,7 +23,7 @@ void register_Name_class(){
         bp::scope Name_scope( Name_exposer );
         { //::SireID::Name::hash
         
-            typedef ::uint ( ::SireID::Name::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireID::Name::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireID::Name::hash );
             
             Name_exposer.def( 
@@ -33,7 +33,7 @@ void register_Name_class(){
         }
         { //::SireID::Name::isCaseSensitive
         
-            typedef bool ( ::SireID::Name::*isCaseSensitive_function_type )(  ) const;
+            typedef bool ( ::SireID::Name::*isCaseSensitive_function_type)(  ) const;
             isCaseSensitive_function_type isCaseSensitive_function_value( &::SireID::Name::isCaseSensitive );
             
             Name_exposer.def( 
@@ -43,7 +43,7 @@ void register_Name_class(){
         }
         { //::SireID::Name::isEmpty
         
-            typedef bool ( ::SireID::Name::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireID::Name::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireID::Name::isEmpty );
             
             Name_exposer.def( 
@@ -53,7 +53,7 @@ void register_Name_class(){
         }
         { //::SireID::Name::isNull
         
-            typedef bool ( ::SireID::Name::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireID::Name::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireID::Name::isNull );
             
             Name_exposer.def( 
@@ -63,7 +63,7 @@ void register_Name_class(){
         }
         { //::SireID::Name::value
         
-            typedef ::QString const & ( ::SireID::Name::*value_function_type )(  ) const;
+            typedef ::QString const & ( ::SireID::Name::*value_function_type)(  ) const;
             value_function_type value_function_value( &::SireID::Name::value );
             
             Name_exposer.def( 

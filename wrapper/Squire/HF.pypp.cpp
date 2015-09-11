@@ -49,7 +49,7 @@ void register_HF_class(){
         bp::scope HF_scope( HF_exposer );
         { //::Squire::HF::add
         
-            typedef void ( ::Squire::HF::*add_function_type )( ::Squire::Orbital const & ) ;
+            typedef void ( ::Squire::HF::*add_function_type)( ::Squire::Orbital const & ) ;
             add_function_type add_function_value( &::Squire::HF::add );
             
             HF_exposer.def( 
@@ -60,7 +60,7 @@ void register_HF_class(){
         }
         { //::Squire::HF::add
         
-            typedef void ( ::Squire::HF::*add_function_type )( ::SireMaths::Vector const &,::Squire::Orbital const & ) ;
+            typedef void ( ::Squire::HF::*add_function_type)( ::SireMaths::Vector const &,::Squire::Orbital const & ) ;
             add_function_type add_function_value( &::Squire::HF::add );
             
             HF_exposer.def( 
@@ -71,7 +71,7 @@ void register_HF_class(){
         }
         { //::Squire::HF::add
         
-            typedef void ( ::Squire::HF::*add_function_type )( ::SireMaths::Vector const &,::SireUnits::Dimension::Charge const & ) ;
+            typedef void ( ::Squire::HF::*add_function_type)( ::SireMaths::Vector const &,::SireUnits::Dimension::Charge const & ) ;
             add_function_type add_function_value( &::Squire::HF::add );
             
             HF_exposer.def( 
@@ -82,7 +82,7 @@ void register_HF_class(){
         }
         { //::Squire::HF::add
         
-            typedef void ( ::Squire::HF::*add_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const & ) ;
+            typedef void ( ::Squire::HF::*add_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const & ) ;
             add_function_type add_function_value( &::Squire::HF::add );
             
             HF_exposer.def( 
@@ -93,7 +93,7 @@ void register_HF_class(){
         }
         { //::Squire::HF::solve
         
-            typedef void ( ::Squire::HF::*solve_function_type )(  ) ;
+            typedef void ( ::Squire::HF::*solve_function_type)(  ) ;
             solve_function_type solve_function_value( &::Squire::HF::solve );
             
             HF_exposer.def( 

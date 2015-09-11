@@ -33,7 +33,7 @@ void register_BeadEditor_class(){
         BeadEditor_exposer.def( bp::init< SireMol::BeadEditor const & >(( bp::arg("other") )) );
         { //::SireMol::BeadEditor::commit
         
-            typedef ::SireMol::Bead ( ::SireMol::BeadEditor::*commit_function_type )(  ) const;
+            typedef ::SireMol::Bead ( ::SireMol::BeadEditor::*commit_function_type)(  ) const;
             commit_function_type commit_function_value( &::SireMol::BeadEditor::commit );
             
             BeadEditor_exposer.def( 
@@ -43,7 +43,7 @@ void register_BeadEditor_class(){
         }
         { //::SireMol::BeadEditor::operator=
         
-            typedef ::SireMol::BeadEditor & ( ::SireMol::BeadEditor::*assign_function_type )( ::SireMol::Bead const & ) ;
+            typedef ::SireMol::BeadEditor & ( ::SireMol::BeadEditor::*assign_function_type)( ::SireMol::Bead const & ) ;
             assign_function_type assign_function_value( &::SireMol::BeadEditor::operator= );
             
             BeadEditor_exposer.def( 
@@ -55,7 +55,7 @@ void register_BeadEditor_class(){
         }
         { //::SireMol::BeadEditor::operator=
         
-            typedef ::SireMol::BeadEditor & ( ::SireMol::BeadEditor::*assign_function_type )( ::SireMol::BeadEditor const & ) ;
+            typedef ::SireMol::BeadEditor & ( ::SireMol::BeadEditor::*assign_function_type)( ::SireMol::BeadEditor const & ) ;
             assign_function_type assign_function_value( &::SireMol::BeadEditor::operator= );
             
             BeadEditor_exposer.def( 
@@ -67,7 +67,7 @@ void register_BeadEditor_class(){
         }
         { //::SireMol::BeadEditor::toString
         
-            typedef ::QString ( ::SireMol::BeadEditor::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::BeadEditor::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::BeadEditor::toString );
             
             BeadEditor_exposer.def( 

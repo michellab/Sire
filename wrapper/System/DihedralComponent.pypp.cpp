@@ -45,7 +45,7 @@ void register_DihedralComponent_class(){
         DihedralComponent_exposer.def( bp::init< SireSystem::DihedralComponent const & >(( bp::arg("other") )) );
         { //::SireSystem::DihedralComponent::nPoints
         
-            typedef int ( ::SireSystem::DihedralComponent::*nPoints_function_type )(  ) const;
+            typedef int ( ::SireSystem::DihedralComponent::*nPoints_function_type)(  ) const;
             nPoints_function_type nPoints_function_value( &::SireSystem::DihedralComponent::nPoints );
             
             DihedralComponent_exposer.def( 
@@ -56,7 +56,7 @@ void register_DihedralComponent_class(){
         DihedralComponent_exposer.def( bp::self != bp::self );
         { //::SireSystem::DihedralComponent::operator=
         
-            typedef ::SireSystem::DihedralComponent & ( ::SireSystem::DihedralComponent::*assign_function_type )( ::SireSystem::DihedralComponent const & ) ;
+            typedef ::SireSystem::DihedralComponent & ( ::SireSystem::DihedralComponent::*assign_function_type)( ::SireSystem::DihedralComponent const & ) ;
             assign_function_type assign_function_value( &::SireSystem::DihedralComponent::operator= );
             
             DihedralComponent_exposer.def( 
@@ -80,7 +80,7 @@ void register_DihedralComponent_class(){
         }
         { //::SireSystem::DihedralComponent::point
         
-            typedef ::SireFF::Point const & ( ::SireSystem::DihedralComponent::*point_function_type )( int ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::DihedralComponent::*point_function_type)( int ) const;
             point_function_type point_function_value( &::SireSystem::DihedralComponent::point );
             
             DihedralComponent_exposer.def( 
@@ -92,7 +92,7 @@ void register_DihedralComponent_class(){
         }
         { //::SireSystem::DihedralComponent::point0
         
-            typedef ::SireFF::Point const & ( ::SireSystem::DihedralComponent::*point0_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::DihedralComponent::*point0_function_type)(  ) const;
             point0_function_type point0_function_value( &::SireSystem::DihedralComponent::point0 );
             
             DihedralComponent_exposer.def( 
@@ -103,7 +103,7 @@ void register_DihedralComponent_class(){
         }
         { //::SireSystem::DihedralComponent::point1
         
-            typedef ::SireFF::Point const & ( ::SireSystem::DihedralComponent::*point1_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::DihedralComponent::*point1_function_type)(  ) const;
             point1_function_type point1_function_value( &::SireSystem::DihedralComponent::point1 );
             
             DihedralComponent_exposer.def( 
@@ -114,7 +114,7 @@ void register_DihedralComponent_class(){
         }
         { //::SireSystem::DihedralComponent::point2
         
-            typedef ::SireFF::Point const & ( ::SireSystem::DihedralComponent::*point2_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::DihedralComponent::*point2_function_type)(  ) const;
             point2_function_type point2_function_value( &::SireSystem::DihedralComponent::point2 );
             
             DihedralComponent_exposer.def( 
@@ -125,7 +125,7 @@ void register_DihedralComponent_class(){
         }
         { //::SireSystem::DihedralComponent::point3
         
-            typedef ::SireFF::Point const & ( ::SireSystem::DihedralComponent::*point3_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::DihedralComponent::*point3_function_type)(  ) const;
             point3_function_type point3_function_value( &::SireSystem::DihedralComponent::point3 );
             
             DihedralComponent_exposer.def( 
@@ -202,7 +202,7 @@ void register_DihedralComponent_class(){
         }
         { //::SireSystem::DihedralComponent::toString
         
-            typedef ::QString ( ::SireSystem::DihedralComponent::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireSystem::DihedralComponent::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireSystem::DihedralComponent::toString );
             
             DihedralComponent_exposer.def( 

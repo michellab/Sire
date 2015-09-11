@@ -35,7 +35,7 @@ void register_FFID_class(){
         bp::scope FFID_scope( FFID_exposer );
         { //::SireFF::FFID::map
         
-            typedef ::QList< SireFF::FFIdx > ( ::SireFF::FFID::*map_function_type )( ::SireFF::ForceFields const & ) const;
+            typedef ::QList< SireFF::FFIdx > ( ::SireFF::FFID::*map_function_type)( ::SireFF::ForceFields const & ) const;
             map_function_type map_function_value( &::SireFF::FFID::map );
             
             FFID_exposer.def( 
@@ -47,7 +47,7 @@ void register_FFID_class(){
         FFID_exposer.def( bp::self & bp::self );
         { //::SireFF::FFID::operator()
         
-            typedef ::SireID::Specify< SireFF::FFID > ( ::SireFF::FFID::*__call___function_type )( int ) const;
+            typedef ::SireID::Specify< SireFF::FFID > ( ::SireFF::FFID::*__call___function_type)( int ) const;
             __call___function_type __call___function_value( &::SireFF::FFID::operator() );
             
             FFID_exposer.def( 
@@ -58,7 +58,7 @@ void register_FFID_class(){
         }
         { //::SireFF::FFID::operator()
         
-            typedef ::SireID::Specify< SireFF::FFID > ( ::SireFF::FFID::*__call___function_type )( int,int ) const;
+            typedef ::SireID::Specify< SireFF::FFID > ( ::SireFF::FFID::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireFF::FFID::operator() );
             
             FFID_exposer.def( 
@@ -71,7 +71,7 @@ void register_FFID_class(){
         FFID_exposer.def( bp::self + bp::self );
         { //::SireFF::FFID::operator[]
         
-            typedef ::SireID::Specify< SireFF::FFID > ( ::SireFF::FFID::*__getitem___function_type )( int ) const;
+            typedef ::SireID::Specify< SireFF::FFID > ( ::SireFF::FFID::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireFF::FFID::operator[] );
             
             FFID_exposer.def( 

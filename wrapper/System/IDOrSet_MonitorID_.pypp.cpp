@@ -40,7 +40,7 @@ void register_IDOrSet_MonitorID__class(){
         { //::SireID::IDOrSet< SireSystem::MonitorID >::IDs
         
             typedef SireID::IDOrSet< SireSystem::MonitorID > exported_class_t;
-            typedef ::QSet< SireSystem::MonitorIdentifier > const & ( ::SireID::IDOrSet< SireSystem::MonitorID >::*IDs_function_type )(  ) const;
+            typedef ::QSet< SireSystem::MonitorIdentifier > const & ( ::SireID::IDOrSet< SireSystem::MonitorID >::*IDs_function_type)(  ) const;
             IDs_function_type IDs_function_value( &::SireID::IDOrSet< SireSystem::MonitorID >::IDs );
             
             IDOrSet_MonitorID__exposer.def( 
@@ -52,7 +52,7 @@ void register_IDOrSet_MonitorID__class(){
         { //::SireID::IDOrSet< SireSystem::MonitorID >::hash
         
             typedef SireID::IDOrSet< SireSystem::MonitorID > exported_class_t;
-            typedef ::uint ( ::SireID::IDOrSet< SireSystem::MonitorID >::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireID::IDOrSet< SireSystem::MonitorID >::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireID::IDOrSet< SireSystem::MonitorID >::hash );
             
             IDOrSet_MonitorID__exposer.def( 
@@ -63,7 +63,7 @@ void register_IDOrSet_MonitorID__class(){
         { //::SireID::IDOrSet< SireSystem::MonitorID >::isNull
         
             typedef SireID::IDOrSet< SireSystem::MonitorID > exported_class_t;
-            typedef bool ( ::SireID::IDOrSet< SireSystem::MonitorID >::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireID::IDOrSet< SireSystem::MonitorID >::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireID::IDOrSet< SireSystem::MonitorID >::isNull );
             
             IDOrSet_MonitorID__exposer.def( 
@@ -74,7 +74,7 @@ void register_IDOrSet_MonitorID__class(){
         { //::SireID::IDOrSet< SireSystem::MonitorID >::map
         
             typedef SireID::IDOrSet< SireSystem::MonitorID > exported_class_t;
-            typedef ::QList< SireSystem::MonitorName > ( ::SireID::IDOrSet< SireSystem::MonitorID >::*map_function_type )( ::SireSystem::SystemMonitors const & ) const;
+            typedef ::QList< SireSystem::MonitorName > ( ::SireID::IDOrSet< SireSystem::MonitorID >::*map_function_type)( ::SireSystem::SystemMonitors const & ) const;
             map_function_type map_function_value( &::SireID::IDOrSet< SireSystem::MonitorID >::map );
             
             IDOrSet_MonitorID__exposer.def( 
@@ -89,7 +89,7 @@ void register_IDOrSet_MonitorID__class(){
         { //::SireID::IDOrSet< SireSystem::MonitorID >::operator=
         
             typedef SireID::IDOrSet< SireSystem::MonitorID > exported_class_t;
-            typedef ::SireID::IDOrSet< SireSystem::MonitorID > & ( ::SireID::IDOrSet< SireSystem::MonitorID >::*assign_function_type )( ::SireID::IDOrSet< SireSystem::MonitorID > const & ) ;
+            typedef ::SireID::IDOrSet< SireSystem::MonitorID > & ( ::SireID::IDOrSet< SireSystem::MonitorID >::*assign_function_type)( ::SireID::IDOrSet< SireSystem::MonitorID > const & ) ;
             assign_function_type assign_function_value( &::SireID::IDOrSet< SireSystem::MonitorID >::operator= );
             
             IDOrSet_MonitorID__exposer.def( 
@@ -102,7 +102,7 @@ void register_IDOrSet_MonitorID__class(){
         { //::SireID::IDOrSet< SireSystem::MonitorID >::operator=
         
             typedef SireID::IDOrSet< SireSystem::MonitorID > exported_class_t;
-            typedef ::SireID::IDOrSet< SireSystem::MonitorID > & ( ::SireID::IDOrSet< SireSystem::MonitorID >::*assign_function_type )( ::SireSystem::MonitorID const & ) ;
+            typedef ::SireID::IDOrSet< SireSystem::MonitorID > & ( ::SireID::IDOrSet< SireSystem::MonitorID >::*assign_function_type)( ::SireSystem::MonitorID const & ) ;
             assign_function_type assign_function_value( &::SireID::IDOrSet< SireSystem::MonitorID >::operator= );
             
             IDOrSet_MonitorID__exposer.def( 
@@ -118,7 +118,7 @@ void register_IDOrSet_MonitorID__class(){
         { //::SireID::IDOrSet< SireSystem::MonitorID >::toString
         
             typedef SireID::IDOrSet< SireSystem::MonitorID > exported_class_t;
-            typedef ::QString ( ::SireID::IDOrSet< SireSystem::MonitorID >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireID::IDOrSet< SireSystem::MonitorID >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireID::IDOrSet< SireSystem::MonitorID >::toString );
             
             IDOrSet_MonitorID__exposer.def( 
@@ -140,7 +140,7 @@ void register_IDOrSet_MonitorID__class(){
         { //::SireID::IDOrSet< SireSystem::MonitorID >::what
         
             typedef SireID::IDOrSet< SireSystem::MonitorID > exported_class_t;
-            typedef char const * ( ::SireID::IDOrSet< SireSystem::MonitorID >::*what_function_type )(  ) const;
+            typedef char const * ( ::SireID::IDOrSet< SireSystem::MonitorID >::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireID::IDOrSet< SireSystem::MonitorID >::what );
             
             IDOrSet_MonitorID__exposer.def( 

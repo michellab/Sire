@@ -36,7 +36,7 @@ void register_AbortPacket_class(){
         AbortPacket_exposer.def( bp::init< SireCluster::AbortPacket const & >(( bp::arg("other") )) );
         { //::SireCluster::AbortPacket::hasFinished
         
-            typedef bool ( ::SireCluster::AbortPacket::*hasFinished_function_type )(  ) const;
+            typedef bool ( ::SireCluster::AbortPacket::*hasFinished_function_type)(  ) const;
             hasFinished_function_type hasFinished_function_value( &::SireCluster::AbortPacket::hasFinished );
             
             AbortPacket_exposer.def( 
@@ -46,7 +46,7 @@ void register_AbortPacket_class(){
         }
         { //::SireCluster::AbortPacket::operator=
         
-            typedef ::SireCluster::AbortPacket & ( ::SireCluster::AbortPacket::*assign_function_type )( ::SireCluster::AbortPacket const & ) ;
+            typedef ::SireCluster::AbortPacket & ( ::SireCluster::AbortPacket::*assign_function_type)( ::SireCluster::AbortPacket const & ) ;
             assign_function_type assign_function_value( &::SireCluster::AbortPacket::operator= );
             
             AbortPacket_exposer.def( 
@@ -68,7 +68,7 @@ void register_AbortPacket_class(){
         }
         { //::SireCluster::AbortPacket::wasAborted
         
-            typedef bool ( ::SireCluster::AbortPacket::*wasAborted_function_type )(  ) const;
+            typedef bool ( ::SireCluster::AbortPacket::*wasAborted_function_type)(  ) const;
             wasAborted_function_type wasAborted_function_value( &::SireCluster::AbortPacket::wasAborted );
             
             AbortPacket_exposer.def( 
@@ -78,7 +78,7 @@ void register_AbortPacket_class(){
         }
         { //::SireCluster::AbortPacket::what
         
-            typedef char const * ( ::SireCluster::AbortPacket::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCluster::AbortPacket::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCluster::AbortPacket::what );
             
             AbortPacket_exposer.def( 

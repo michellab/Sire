@@ -37,7 +37,7 @@ void register_NullPatching_class(){
         NullPatching_exposer.def( bp::init< SireVol::NullPatching const & >(( bp::arg("other") )) );
         { //::SireVol::NullPatching::nPatches
         
-            typedef int ( ::SireVol::NullPatching::*nPatches_function_type )(  ) const;
+            typedef int ( ::SireVol::NullPatching::*nPatches_function_type)(  ) const;
             nPatches_function_type nPatches_function_value( &::SireVol::NullPatching::nPatches );
             
             NullPatching_exposer.def( 
@@ -48,7 +48,7 @@ void register_NullPatching_class(){
         NullPatching_exposer.def( bp::self != bp::self );
         { //::SireVol::NullPatching::operator=
         
-            typedef ::SireVol::NullPatching & ( ::SireVol::NullPatching::*assign_function_type )( ::SireVol::NullPatching const & ) ;
+            typedef ::SireVol::NullPatching & ( ::SireVol::NullPatching::*assign_function_type)( ::SireVol::NullPatching const & ) ;
             assign_function_type assign_function_value( &::SireVol::NullPatching::operator= );
             
             NullPatching_exposer.def( 
@@ -61,7 +61,7 @@ void register_NullPatching_class(){
         NullPatching_exposer.def( bp::self == bp::self );
         { //::SireVol::NullPatching::patchIndex
         
-            typedef int ( ::SireVol::NullPatching::*patchIndex_function_type )( ::SireMaths::Vector const & ) const;
+            typedef int ( ::SireVol::NullPatching::*patchIndex_function_type)( ::SireMaths::Vector const & ) const;
             patchIndex_function_type patchIndex_function_value( &::SireVol::NullPatching::patchIndex );
             
             NullPatching_exposer.def( 
@@ -72,7 +72,7 @@ void register_NullPatching_class(){
         }
         { //::SireVol::NullPatching::patchIndexAndCenter
         
-            typedef ::QPair< int, SireMaths::Vector > ( ::SireVol::NullPatching::*patchIndexAndCenter_function_type )( ::SireMaths::Vector const & ) const;
+            typedef ::QPair< int, SireMaths::Vector > ( ::SireVol::NullPatching::*patchIndexAndCenter_function_type)( ::SireMaths::Vector const & ) const;
             patchIndexAndCenter_function_type patchIndexAndCenter_function_value( &::SireVol::NullPatching::patchIndexAndCenter );
             
             NullPatching_exposer.def( 
@@ -83,7 +83,7 @@ void register_NullPatching_class(){
         }
         { //::SireVol::NullPatching::repatch
         
-            typedef ::SireVol::PatchingPtr ( ::SireVol::NullPatching::*repatch_function_type )( ::SireVol::Space const & ) const;
+            typedef ::SireVol::PatchingPtr ( ::SireVol::NullPatching::*repatch_function_type)( ::SireVol::Space const & ) const;
             repatch_function_type repatch_function_value( &::SireVol::NullPatching::repatch );
             
             NullPatching_exposer.def( 

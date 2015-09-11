@@ -23,7 +23,7 @@ void register_CGProp_class(){
         bp::scope CGProp_scope( CGProp_exposer );
         { //::SireMol::CGProp::assertCanConvert
         
-            typedef void ( ::SireMol::CGProp::*assertCanConvert_function_type )( ::QVariant const & ) const;
+            typedef void ( ::SireMol::CGProp::*assertCanConvert_function_type)( ::QVariant const & ) const;
             assertCanConvert_function_type assertCanConvert_function_value( &::SireMol::CGProp::assertCanConvert );
             
             CGProp_exposer.def( 
@@ -34,7 +34,7 @@ void register_CGProp_class(){
         }
         { //::SireMol::CGProp::assignFrom
         
-            typedef void ( ::SireMol::CGProp::*assignFrom_function_type )( ::SireMol::CGProperty< QVariant > const & ) ;
+            typedef void ( ::SireMol::CGProp::*assignFrom_function_type)( ::SireMol::CGProperty< QVariant > const & ) ;
             assignFrom_function_type assignFrom_function_value( &::SireMol::CGProp::assignFrom );
             
             CGProp_exposer.def( 
@@ -45,7 +45,7 @@ void register_CGProp_class(){
         }
         { //::SireMol::CGProp::canConvert
         
-            typedef bool ( ::SireMol::CGProp::*canConvert_function_type )( ::QVariant const & ) const;
+            typedef bool ( ::SireMol::CGProp::*canConvert_function_type)( ::QVariant const & ) const;
             canConvert_function_type canConvert_function_value( &::SireMol::CGProp::canConvert );
             
             CGProp_exposer.def( 
@@ -56,7 +56,7 @@ void register_CGProp_class(){
         }
         { //::SireMol::CGProp::toVariant
         
-            typedef ::SireMol::CGProperty< QVariant > ( ::SireMol::CGProp::*toVariant_function_type )(  ) const;
+            typedef ::SireMol::CGProperty< QVariant > ( ::SireMol::CGProp::*toVariant_function_type)(  ) const;
             toVariant_function_type toVariant_function_value( &::SireMol::CGProp::toVariant );
             
             CGProp_exposer.def( 

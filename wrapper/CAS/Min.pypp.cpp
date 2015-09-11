@@ -37,7 +37,7 @@ void register_Min_class(){
         Min_exposer.def( bp::init< SireCAS::Min const & >(( bp::arg("other") )) );
         { //::SireCAS::Min::evaluate
         
-            typedef double ( ::SireCAS::Min::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::Min::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Min::evaluate );
             
             Min_exposer.def( 
@@ -48,7 +48,7 @@ void register_Min_class(){
         }
         { //::SireCAS::Min::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::Min::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::Min::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Min::evaluate );
             
             Min_exposer.def( 
@@ -70,7 +70,7 @@ void register_Min_class(){
         }
         { //::SireCAS::Min::what
         
-            typedef char const * ( ::SireCAS::Min::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::Min::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::Min::what );
             
             Min_exposer.def( 

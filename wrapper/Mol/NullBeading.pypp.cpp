@@ -49,7 +49,7 @@ void register_NullBeading_class(){
         NullBeading_exposer.def( bp::self != bp::self );
         { //::SireMol::NullBeading::operator=
         
-            typedef ::SireMol::NullBeading & ( ::SireMol::NullBeading::*assign_function_type )( ::SireMol::NullBeading const & ) ;
+            typedef ::SireMol::NullBeading & ( ::SireMol::NullBeading::*assign_function_type)( ::SireMol::NullBeading const & ) ;
             assign_function_type assign_function_value( &::SireMol::NullBeading::operator= );
             
             NullBeading_exposer.def( 

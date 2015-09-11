@@ -39,7 +39,7 @@ void register_ExBase_class(){
         bp::scope ExBase_scope( ExBase_exposer );
         { //::SireCAS::ExBase::children
         
-            typedef ::SireCAS::Expressions ( ::SireCAS::ExBase::*children_function_type )(  ) const;
+            typedef ::SireCAS::Expressions ( ::SireCAS::ExBase::*children_function_type)(  ) const;
             children_function_type children_function_value( &::SireCAS::ExBase::children );
             
             ExBase_exposer.def( 
@@ -49,7 +49,7 @@ void register_ExBase_class(){
         }
         { //::SireCAS::ExBase::conjugate
         
-            typedef ::SireCAS::Expression ( ::SireCAS::ExBase::*conjugate_function_type )(  ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::ExBase::*conjugate_function_type)(  ) const;
             conjugate_function_type conjugate_function_value( &::SireCAS::ExBase::conjugate );
             
             ExBase_exposer.def( 
@@ -59,7 +59,7 @@ void register_ExBase_class(){
         }
         { //::SireCAS::ExBase::differentiate
         
-            typedef ::SireCAS::Expression ( ::SireCAS::ExBase::*differentiate_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::ExBase::*differentiate_function_type)( ::SireCAS::Symbol const & ) const;
             differentiate_function_type differentiate_function_value( &::SireCAS::ExBase::differentiate );
             
             ExBase_exposer.def( 
@@ -70,7 +70,7 @@ void register_ExBase_class(){
         }
         { //::SireCAS::ExBase::evaluate
         
-            typedef double ( ::SireCAS::ExBase::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::ExBase::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::ExBase::evaluate );
             
             ExBase_exposer.def( 
@@ -81,7 +81,7 @@ void register_ExBase_class(){
         }
         { //::SireCAS::ExBase::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::ExBase::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::ExBase::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::ExBase::evaluate );
             
             ExBase_exposer.def( 
@@ -92,7 +92,7 @@ void register_ExBase_class(){
         }
         { //::SireCAS::ExBase::expand
         
-            typedef ::QList< SireCAS::Factor > ( ::SireCAS::ExBase::*expand_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::QList< SireCAS::Factor > ( ::SireCAS::ExBase::*expand_function_type)( ::SireCAS::Symbol const & ) const;
             expand_function_type expand_function_value( &::SireCAS::ExBase::expand );
             
             ExBase_exposer.def( 
@@ -103,7 +103,7 @@ void register_ExBase_class(){
         }
         { //::SireCAS::ExBase::functions
         
-            typedef ::SireCAS::Functions ( ::SireCAS::ExBase::*functions_function_type )(  ) const;
+            typedef ::SireCAS::Functions ( ::SireCAS::ExBase::*functions_function_type)(  ) const;
             functions_function_type functions_function_value( &::SireCAS::ExBase::functions );
             
             ExBase_exposer.def( 
@@ -113,7 +113,7 @@ void register_ExBase_class(){
         }
         { //::SireCAS::ExBase::hash
         
-            typedef ::uint ( ::SireCAS::ExBase::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireCAS::ExBase::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireCAS::ExBase::hash );
             
             ExBase_exposer.def( 
@@ -123,7 +123,7 @@ void register_ExBase_class(){
         }
         { //::SireCAS::ExBase::integrate
         
-            typedef ::SireCAS::Expression ( ::SireCAS::ExBase::*integrate_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::ExBase::*integrate_function_type)( ::SireCAS::Symbol const & ) const;
             integrate_function_type integrate_function_value( &::SireCAS::ExBase::integrate );
             
             ExBase_exposer.def( 
@@ -134,7 +134,7 @@ void register_ExBase_class(){
         }
         { //::SireCAS::ExBase::isComplex
         
-            typedef bool ( ::SireCAS::ExBase::*isComplex_function_type )(  ) const;
+            typedef bool ( ::SireCAS::ExBase::*isComplex_function_type)(  ) const;
             isComplex_function_type isComplex_function_value( &::SireCAS::ExBase::isComplex );
             
             ExBase_exposer.def( 
@@ -144,7 +144,7 @@ void register_ExBase_class(){
         }
         { //::SireCAS::ExBase::isCompound
         
-            typedef bool ( ::SireCAS::ExBase::*isCompound_function_type )(  ) const;
+            typedef bool ( ::SireCAS::ExBase::*isCompound_function_type)(  ) const;
             isCompound_function_type isCompound_function_value( &::SireCAS::ExBase::isCompound );
             
             ExBase_exposer.def( 
@@ -154,7 +154,7 @@ void register_ExBase_class(){
         }
         { //::SireCAS::ExBase::isConstant
         
-            typedef bool ( ::SireCAS::ExBase::*isConstant_function_type )(  ) const;
+            typedef bool ( ::SireCAS::ExBase::*isConstant_function_type)(  ) const;
             isConstant_function_type isConstant_function_value( &::SireCAS::ExBase::isConstant );
             
             ExBase_exposer.def( 
@@ -164,7 +164,7 @@ void register_ExBase_class(){
         }
         { //::SireCAS::ExBase::isFunction
         
-            typedef bool ( ::SireCAS::ExBase::*isFunction_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef bool ( ::SireCAS::ExBase::*isFunction_function_type)( ::SireCAS::Symbol const & ) const;
             isFunction_function_type isFunction_function_value( &::SireCAS::ExBase::isFunction );
             
             ExBase_exposer.def( 
@@ -177,7 +177,7 @@ void register_ExBase_class(){
         ExBase_exposer.def( -bp::self );
         { //::SireCAS::ExBase::operator=
         
-            typedef ::SireCAS::ExBase & ( ::SireCAS::ExBase::*assign_function_type )( ::SireCAS::ExBase const & ) ;
+            typedef ::SireCAS::ExBase & ( ::SireCAS::ExBase::*assign_function_type)( ::SireCAS::ExBase const & ) ;
             assign_function_type assign_function_value( &::SireCAS::ExBase::operator= );
             
             ExBase_exposer.def( 
@@ -190,7 +190,7 @@ void register_ExBase_class(){
         ExBase_exposer.def( bp::self == bp::self );
         { //::SireCAS::ExBase::series
         
-            typedef ::SireCAS::Expression ( ::SireCAS::ExBase::*series_function_type )( ::SireCAS::Symbol const &,int ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::ExBase::*series_function_type)( ::SireCAS::Symbol const &,int ) const;
             series_function_type series_function_value( &::SireCAS::ExBase::series );
             
             ExBase_exposer.def( 
@@ -201,7 +201,7 @@ void register_ExBase_class(){
         }
         { //::SireCAS::ExBase::simplify
         
-            typedef ::SireCAS::Expression ( ::SireCAS::ExBase::*simplify_function_type )( int ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::ExBase::*simplify_function_type)( int ) const;
             simplify_function_type simplify_function_value( &::SireCAS::ExBase::simplify );
             
             ExBase_exposer.def( 
@@ -212,7 +212,7 @@ void register_ExBase_class(){
         }
         { //::SireCAS::ExBase::substitute
         
-            typedef ::SireCAS::Expression ( ::SireCAS::ExBase::*substitute_function_type )( ::SireCAS::Identities const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::ExBase::*substitute_function_type)( ::SireCAS::Identities const & ) const;
             substitute_function_type substitute_function_value( &::SireCAS::ExBase::substitute );
             
             ExBase_exposer.def( 
@@ -223,7 +223,7 @@ void register_ExBase_class(){
         }
         { //::SireCAS::ExBase::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireCAS::ExBase::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireCAS::ExBase::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireCAS::ExBase::symbols );
             
             ExBase_exposer.def( 
@@ -233,7 +233,7 @@ void register_ExBase_class(){
         }
         { //::SireCAS::ExBase::toOpenMMString
         
-            typedef ::QString ( ::SireCAS::ExBase::*toOpenMMString_function_type )(  ) const;
+            typedef ::QString ( ::SireCAS::ExBase::*toOpenMMString_function_type)(  ) const;
             toOpenMMString_function_type toOpenMMString_function_value( &::SireCAS::ExBase::toOpenMMString );
             
             ExBase_exposer.def( 
@@ -243,7 +243,7 @@ void register_ExBase_class(){
         }
         { //::SireCAS::ExBase::toString
         
-            typedef ::QString ( ::SireCAS::ExBase::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireCAS::ExBase::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireCAS::ExBase::toString );
             
             ExBase_exposer.def( 
@@ -263,7 +263,7 @@ void register_ExBase_class(){
         }
         { //::SireCAS::ExBase::what
         
-            typedef char const * ( ::SireCAS::ExBase::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::ExBase::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::ExBase::what );
             
             ExBase_exposer.def( 
@@ -272,25 +272,21 @@ void register_ExBase_class(){
         
         }
         ExBase_exposer.staticmethod( "typeName" );
-        ExBase_exposer.def( bp::other< SireMaths::Complex >() * bp::self );
         ExBase_exposer.def( bp::self * bp::other< SireMaths::Complex >() );
         ExBase_exposer.def( bp::other< double >() * bp::self );
         ExBase_exposer.def( bp::self * bp::other< double >() );
         ExBase_exposer.def( bp::self * bp::other< SireCAS::Expression >() );
         ExBase_exposer.def( bp::self * bp::self );
-        ExBase_exposer.def( bp::other< SireMaths::Complex >() + bp::self );
         ExBase_exposer.def( bp::self + bp::other< SireMaths::Complex >() );
         ExBase_exposer.def( bp::other< double >() + bp::self );
         ExBase_exposer.def( bp::self + bp::other< double >() );
         ExBase_exposer.def( bp::self + bp::other< SireCAS::Expression >() );
         ExBase_exposer.def( bp::self + bp::self );
-        ExBase_exposer.def( bp::other< SireMaths::Complex >() - bp::self );
         ExBase_exposer.def( bp::self - bp::other< SireMaths::Complex >() );
         ExBase_exposer.def( bp::other< double >() - bp::self );
         ExBase_exposer.def( bp::self - bp::other< double >() );
         ExBase_exposer.def( bp::self - bp::other< SireCAS::Expression >() );
         ExBase_exposer.def( bp::self - bp::self );
-        ExBase_exposer.def( bp::other< SireMaths::Complex >() / bp::self );
         ExBase_exposer.def( bp::self / bp::other< SireMaths::Complex >() );
         ExBase_exposer.def( bp::other< double >() / bp::self );
         ExBase_exposer.def( bp::self / bp::other< double >() );

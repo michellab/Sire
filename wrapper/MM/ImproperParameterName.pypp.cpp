@@ -11,6 +11,8 @@ namespace bp = boost::python;
 
 #include "SireBase/property.h"
 
+#include "SireBase/stringproperty.h"
+
 #include "SireError/errors.h"
 
 #include "SireFF/detail/atomiccoords3d.h"
@@ -55,7 +57,7 @@ void register_ImproperParameterName_class(){
         bp::scope ImproperParameterName_scope( ImproperParameterName_exposer );
         { //::SireMM::ImproperParameterName::improper
         
-            typedef ::SireBase::PropertyName const & ( ::SireMM::ImproperParameterName::*improper_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireMM::ImproperParameterName::*improper_function_type)(  ) const;
             improper_function_type improper_function_value( &::SireMM::ImproperParameterName::improper );
             
             ImproperParameterName_exposer.def( 

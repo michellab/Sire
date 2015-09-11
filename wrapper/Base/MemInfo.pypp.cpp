@@ -38,7 +38,7 @@ void register_MemInfo_class(){
         MemInfo_exposer.def( bp::init< SireBase::MemInfo const & >(( bp::arg("other") )) );
         { //::SireBase::MemInfo::allocatedBytes
         
-            typedef ::quint64 ( ::SireBase::MemInfo::*allocatedBytes_function_type )(  ) const;
+            typedef ::quint64 ( ::SireBase::MemInfo::*allocatedBytes_function_type)(  ) const;
             allocatedBytes_function_type allocatedBytes_function_value( &::SireBase::MemInfo::allocatedBytes );
             
             MemInfo_exposer.def( 
@@ -48,7 +48,7 @@ void register_MemInfo_class(){
         }
         { //::SireBase::MemInfo::mMappedBytes
         
-            typedef ::quint64 ( ::SireBase::MemInfo::*mMappedBytes_function_type )(  ) const;
+            typedef ::quint64 ( ::SireBase::MemInfo::*mMappedBytes_function_type)(  ) const;
             mMappedBytes_function_type mMappedBytes_function_value( &::SireBase::MemInfo::mMappedBytes );
             
             MemInfo_exposer.def( 
@@ -58,7 +58,7 @@ void register_MemInfo_class(){
         }
         { //::SireBase::MemInfo::operator=
         
-            typedef ::SireBase::MemInfo & ( ::SireBase::MemInfo::*assign_function_type )( ::SireBase::MemInfo const & ) ;
+            typedef ::SireBase::MemInfo & ( ::SireBase::MemInfo::*assign_function_type)( ::SireBase::MemInfo const & ) ;
             assign_function_type assign_function_value( &::SireBase::MemInfo::operator= );
             
             MemInfo_exposer.def( 
@@ -112,7 +112,7 @@ void register_MemInfo_class(){
         }
         { //::SireBase::MemInfo::toString
         
-            typedef ::QString ( ::SireBase::MemInfo::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireBase::MemInfo::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireBase::MemInfo::toString );
             
             MemInfo_exposer.def( 
@@ -122,7 +122,7 @@ void register_MemInfo_class(){
         }
         { //::SireBase::MemInfo::totalSystemMemory
         
-            typedef ::quint64 ( ::SireBase::MemInfo::*totalSystemMemory_function_type )(  ) const;
+            typedef ::quint64 ( ::SireBase::MemInfo::*totalSystemMemory_function_type)(  ) const;
             totalSystemMemory_function_type totalSystemMemory_function_value( &::SireBase::MemInfo::totalSystemMemory );
             
             MemInfo_exposer.def( 
@@ -132,7 +132,7 @@ void register_MemInfo_class(){
         }
         { //::SireBase::MemInfo::totalVirtualMemory
         
-            typedef ::quint64 ( ::SireBase::MemInfo::*totalVirtualMemory_function_type )(  ) const;
+            typedef ::quint64 ( ::SireBase::MemInfo::*totalVirtualMemory_function_type)(  ) const;
             totalVirtualMemory_function_type totalVirtualMemory_function_value( &::SireBase::MemInfo::totalVirtualMemory );
             
             MemInfo_exposer.def( 
@@ -142,7 +142,7 @@ void register_MemInfo_class(){
         }
         { //::SireBase::MemInfo::usedBytes
         
-            typedef ::quint64 ( ::SireBase::MemInfo::*usedBytes_function_type )(  ) const;
+            typedef ::quint64 ( ::SireBase::MemInfo::*usedBytes_function_type)(  ) const;
             usedBytes_function_type usedBytes_function_value( &::SireBase::MemInfo::usedBytes );
             
             MemInfo_exposer.def( 
@@ -152,7 +152,7 @@ void register_MemInfo_class(){
         }
         { //::SireBase::MemInfo::usedSystemMemory
         
-            typedef ::quint64 ( ::SireBase::MemInfo::*usedSystemMemory_function_type )(  ) const;
+            typedef ::quint64 ( ::SireBase::MemInfo::*usedSystemMemory_function_type)(  ) const;
             usedSystemMemory_function_type usedSystemMemory_function_value( &::SireBase::MemInfo::usedSystemMemory );
             
             MemInfo_exposer.def( 
@@ -162,7 +162,7 @@ void register_MemInfo_class(){
         }
         { //::SireBase::MemInfo::usedVirtualMemory
         
-            typedef ::quint64 ( ::SireBase::MemInfo::*usedVirtualMemory_function_type )(  ) const;
+            typedef ::quint64 ( ::SireBase::MemInfo::*usedVirtualMemory_function_type)(  ) const;
             usedVirtualMemory_function_type usedVirtualMemory_function_value( &::SireBase::MemInfo::usedVirtualMemory );
             
             MemInfo_exposer.def( 

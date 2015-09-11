@@ -40,7 +40,7 @@ void register_AABox_class(){
         AABox_exposer.def( bp::init< SireVol::CoordGroupArrayArray const & >(( bp::arg("cgarrays") )) );
         { //::SireVol::AABox::add
         
-            typedef void ( ::SireVol::AABox::*add_function_type )( ::SireVol::AABox const & ) ;
+            typedef void ( ::SireVol::AABox::*add_function_type)( ::SireVol::AABox const & ) ;
             add_function_type add_function_value( &::SireVol::AABox::add );
             
             AABox_exposer.def( 
@@ -51,7 +51,7 @@ void register_AABox_class(){
         }
         { //::SireVol::AABox::add
         
-            typedef void ( ::SireVol::AABox::*add_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireVol::AABox::*add_function_type)( ::SireMaths::Vector const & ) ;
             add_function_type add_function_value( &::SireVol::AABox::add );
             
             AABox_exposer.def( 
@@ -62,7 +62,7 @@ void register_AABox_class(){
         }
         { //::SireVol::AABox::add
         
-            typedef void ( ::SireVol::AABox::*add_function_type )( ::QVector< SireMaths::Vector > const & ) ;
+            typedef void ( ::SireVol::AABox::*add_function_type)( ::QVector< SireMaths::Vector > const & ) ;
             add_function_type add_function_value( &::SireVol::AABox::add );
             
             AABox_exposer.def( 
@@ -73,7 +73,7 @@ void register_AABox_class(){
         }
         { //::SireVol::AABox::boundingSphere
         
-            typedef ::SireMaths::Sphere ( ::SireVol::AABox::*boundingSphere_function_type )(  ) const;
+            typedef ::SireMaths::Sphere ( ::SireVol::AABox::*boundingSphere_function_type)(  ) const;
             boundingSphere_function_type boundingSphere_function_value( &::SireVol::AABox::boundingSphere );
             
             AABox_exposer.def( 
@@ -83,7 +83,7 @@ void register_AABox_class(){
         }
         { //::SireVol::AABox::center
         
-            typedef ::SireMaths::Vector const & ( ::SireVol::AABox::*center_function_type )(  ) const;
+            typedef ::SireMaths::Vector const & ( ::SireVol::AABox::*center_function_type)(  ) const;
             center_function_type center_function_value( &::SireVol::AABox::center );
             
             AABox_exposer.def( 
@@ -94,7 +94,7 @@ void register_AABox_class(){
         }
         { //::SireVol::AABox::contains
         
-            typedef bool ( ::SireVol::AABox::*contains_function_type )( ::SireVol::AABox const & ) const;
+            typedef bool ( ::SireVol::AABox::*contains_function_type)( ::SireVol::AABox const & ) const;
             contains_function_type contains_function_value( &::SireVol::AABox::contains );
             
             AABox_exposer.def( 
@@ -105,7 +105,7 @@ void register_AABox_class(){
         }
         { //::SireVol::AABox::contains
         
-            typedef bool ( ::SireVol::AABox::*contains_function_type )( ::SireMaths::Vector const & ) const;
+            typedef bool ( ::SireVol::AABox::*contains_function_type)( ::SireMaths::Vector const & ) const;
             contains_function_type contains_function_value( &::SireVol::AABox::contains );
             
             AABox_exposer.def( 
@@ -182,7 +182,7 @@ void register_AABox_class(){
         }
         { //::SireVol::AABox::halfExtents
         
-            typedef ::SireMaths::Vector const & ( ::SireVol::AABox::*halfExtents_function_type )(  ) const;
+            typedef ::SireMaths::Vector const & ( ::SireVol::AABox::*halfExtents_function_type)(  ) const;
             halfExtents_function_type halfExtents_function_value( &::SireVol::AABox::halfExtents );
             
             AABox_exposer.def( 
@@ -193,7 +193,7 @@ void register_AABox_class(){
         }
         { //::SireVol::AABox::intersects
         
-            typedef bool ( ::SireVol::AABox::*intersects_function_type )( ::SireVol::AABox const & ) const;
+            typedef bool ( ::SireVol::AABox::*intersects_function_type)( ::SireVol::AABox const & ) const;
             intersects_function_type intersects_function_value( &::SireVol::AABox::intersects );
             
             AABox_exposer.def( 
@@ -204,7 +204,7 @@ void register_AABox_class(){
         }
         { //::SireVol::AABox::isEmpty
         
-            typedef bool ( ::SireVol::AABox::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireVol::AABox::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireVol::AABox::isEmpty );
             
             AABox_exposer.def( 
@@ -214,7 +214,7 @@ void register_AABox_class(){
         }
         { //::SireVol::AABox::isNull
         
-            typedef bool ( ::SireVol::AABox::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireVol::AABox::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireVol::AABox::isNull );
             
             AABox_exposer.def( 
@@ -224,7 +224,7 @@ void register_AABox_class(){
         }
         { //::SireVol::AABox::maxCoords
         
-            typedef ::SireMaths::Vector ( ::SireVol::AABox::*maxCoords_function_type )(  ) const;
+            typedef ::SireMaths::Vector ( ::SireVol::AABox::*maxCoords_function_type)(  ) const;
             maxCoords_function_type maxCoords_function_value( &::SireVol::AABox::maxCoords );
             
             AABox_exposer.def( 
@@ -234,7 +234,7 @@ void register_AABox_class(){
         }
         { //::SireVol::AABox::minCoords
         
-            typedef ::SireMaths::Vector ( ::SireVol::AABox::*minCoords_function_type )(  ) const;
+            typedef ::SireMaths::Vector ( ::SireVol::AABox::*minCoords_function_type)(  ) const;
             minCoords_function_type minCoords_function_value( &::SireVol::AABox::minCoords );
             
             AABox_exposer.def( 
@@ -248,7 +248,7 @@ void register_AABox_class(){
         AABox_exposer.def( bp::self + bp::other< QVector< SireMaths::Vector > >() );
         { //::SireVol::AABox::operator=
         
-            typedef ::SireVol::AABox const & ( ::SireVol::AABox::*assign_function_type )( ::SireVol::AABox const & ) ;
+            typedef ::SireVol::AABox const & ( ::SireVol::AABox::*assign_function_type)( ::SireVol::AABox const & ) ;
             assign_function_type assign_function_value( &::SireVol::AABox::operator= );
             
             AABox_exposer.def( 
@@ -261,7 +261,7 @@ void register_AABox_class(){
         AABox_exposer.def( bp::self == bp::self );
         { //::SireVol::AABox::radius
         
-            typedef double ( ::SireVol::AABox::*radius_function_type )(  ) const;
+            typedef double ( ::SireVol::AABox::*radius_function_type)(  ) const;
             radius_function_type radius_function_value( &::SireVol::AABox::radius );
             
             AABox_exposer.def( 
@@ -271,7 +271,7 @@ void register_AABox_class(){
         }
         { //::SireVol::AABox::recalculate
         
-            typedef void ( ::SireVol::AABox::*recalculate_function_type )( ::SireVol::CoordGroupBase const & ) ;
+            typedef void ( ::SireVol::AABox::*recalculate_function_type)( ::SireVol::CoordGroupBase const & ) ;
             recalculate_function_type recalculate_function_value( &::SireVol::AABox::recalculate );
             
             AABox_exposer.def( 
@@ -282,7 +282,7 @@ void register_AABox_class(){
         }
         { //::SireVol::AABox::recalculate
         
-            typedef void ( ::SireVol::AABox::*recalculate_function_type )( ::SireVol::CoordGroupArray const & ) ;
+            typedef void ( ::SireVol::AABox::*recalculate_function_type)( ::SireVol::CoordGroupArray const & ) ;
             recalculate_function_type recalculate_function_value( &::SireVol::AABox::recalculate );
             
             AABox_exposer.def( 
@@ -293,7 +293,7 @@ void register_AABox_class(){
         }
         { //::SireVol::AABox::recalculate
         
-            typedef void ( ::SireVol::AABox::*recalculate_function_type )( ::SireVol::CoordGroupArrayArray const & ) ;
+            typedef void ( ::SireVol::AABox::*recalculate_function_type)( ::SireVol::CoordGroupArrayArray const & ) ;
             recalculate_function_type recalculate_function_value( &::SireVol::AABox::recalculate );
             
             AABox_exposer.def( 
@@ -304,7 +304,7 @@ void register_AABox_class(){
         }
         { //::SireVol::AABox::recalculate
         
-            typedef void ( ::SireVol::AABox::*recalculate_function_type )( ::QVector< SireMaths::Vector > const & ) ;
+            typedef void ( ::SireVol::AABox::*recalculate_function_type)( ::QVector< SireMaths::Vector > const & ) ;
             recalculate_function_type recalculate_function_value( &::SireVol::AABox::recalculate );
             
             AABox_exposer.def( 
@@ -315,7 +315,7 @@ void register_AABox_class(){
         }
         { //::SireVol::AABox::toString
         
-            typedef ::QString ( ::SireVol::AABox::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireVol::AABox::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireVol::AABox::toString );
             
             AABox_exposer.def( 
@@ -325,7 +325,7 @@ void register_AABox_class(){
         }
         { //::SireVol::AABox::translate
         
-            typedef void ( ::SireVol::AABox::*translate_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireVol::AABox::*translate_function_type)( ::SireMaths::Vector const & ) ;
             translate_function_type translate_function_value( &::SireVol::AABox::translate );
             
             AABox_exposer.def( 
@@ -346,7 +346,7 @@ void register_AABox_class(){
         }
         { //::SireVol::AABox::what
         
-            typedef char const * ( ::SireVol::AABox::*what_function_type )(  ) const;
+            typedef char const * ( ::SireVol::AABox::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireVol::AABox::what );
             
             AABox_exposer.def( 
@@ -356,7 +356,7 @@ void register_AABox_class(){
         }
         { //::SireVol::AABox::withinDistance
         
-            typedef bool ( ::SireVol::AABox::*withinDistance_function_type )( double,::SireVol::AABox const & ) const;
+            typedef bool ( ::SireVol::AABox::*withinDistance_function_type)( double,::SireVol::AABox const & ) const;
             withinDistance_function_type withinDistance_function_value( &::SireVol::AABox::withinDistance );
             
             AABox_exposer.def( 

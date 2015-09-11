@@ -32,7 +32,7 @@ void register_NullSupraSubMove_class(){
         NullSupraSubMove_exposer.def( bp::init< SireMove::NullSupraSubMove const & >(( bp::arg("other") )) );
         { //::SireMove::NullSupraSubMove::move
         
-            typedef void ( ::SireMove::NullSupraSubMove::*move_function_type )( ::SireMove::SupraSubSystem &,int,int,bool ) ;
+            typedef void ( ::SireMove::NullSupraSubMove::*move_function_type)( ::SireMove::SupraSubSystem &,int,int,bool ) ;
             move_function_type move_function_value( &::SireMove::NullSupraSubMove::move );
             
             NullSupraSubMove_exposer.def( 
@@ -44,7 +44,7 @@ void register_NullSupraSubMove_class(){
         NullSupraSubMove_exposer.def( bp::self != bp::self );
         { //::SireMove::NullSupraSubMove::operator=
         
-            typedef ::SireMove::NullSupraSubMove & ( ::SireMove::NullSupraSubMove::*assign_function_type )( ::SireMove::NullSupraSubMove const & ) ;
+            typedef ::SireMove::NullSupraSubMove & ( ::SireMove::NullSupraSubMove::*assign_function_type)( ::SireMove::NullSupraSubMove const & ) ;
             assign_function_type assign_function_value( &::SireMove::NullSupraSubMove::operator= );
             
             NullSupraSubMove_exposer.def( 
@@ -57,7 +57,7 @@ void register_NullSupraSubMove_class(){
         NullSupraSubMove_exposer.def( bp::self == bp::self );
         { //::SireMove::NullSupraSubMove::toString
         
-            typedef ::QString ( ::SireMove::NullSupraSubMove::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMove::NullSupraSubMove::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMove::NullSupraSubMove::toString );
             
             NullSupraSubMove_exposer.def( 

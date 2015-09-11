@@ -50,7 +50,7 @@ void register_Sum_class(){
         Sum_exposer.def( bp::init< SireCAS::Sum const & >(( bp::arg("other") )) );
         { //::SireCAS::Sum::children
         
-            typedef ::SireCAS::Expressions ( ::SireCAS::Sum::*children_function_type )(  ) const;
+            typedef ::SireCAS::Expressions ( ::SireCAS::Sum::*children_function_type)(  ) const;
             children_function_type children_function_value( &::SireCAS::Sum::children );
             
             Sum_exposer.def( 
@@ -60,7 +60,7 @@ void register_Sum_class(){
         }
         { //::SireCAS::Sum::conjugate
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Sum::*conjugate_function_type )(  ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Sum::*conjugate_function_type)(  ) const;
             conjugate_function_type conjugate_function_value( &::SireCAS::Sum::conjugate );
             
             Sum_exposer.def( 
@@ -70,7 +70,7 @@ void register_Sum_class(){
         }
         { //::SireCAS::Sum::differentiate
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Sum::*differentiate_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Sum::*differentiate_function_type)( ::SireCAS::Symbol const & ) const;
             differentiate_function_type differentiate_function_value( &::SireCAS::Sum::differentiate );
             
             Sum_exposer.def( 
@@ -81,7 +81,7 @@ void register_Sum_class(){
         }
         { //::SireCAS::Sum::evaluate
         
-            typedef double ( ::SireCAS::Sum::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::Sum::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Sum::evaluate );
             
             Sum_exposer.def( 
@@ -92,7 +92,7 @@ void register_Sum_class(){
         }
         { //::SireCAS::Sum::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::Sum::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::Sum::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Sum::evaluate );
             
             Sum_exposer.def( 
@@ -103,7 +103,7 @@ void register_Sum_class(){
         }
         { //::SireCAS::Sum::expand
         
-            typedef ::QList< SireCAS::Factor > ( ::SireCAS::Sum::*expand_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::QList< SireCAS::Factor > ( ::SireCAS::Sum::*expand_function_type)( ::SireCAS::Symbol const & ) const;
             expand_function_type expand_function_value( &::SireCAS::Sum::expand );
             
             Sum_exposer.def( 
@@ -114,7 +114,7 @@ void register_Sum_class(){
         }
         { //::SireCAS::Sum::functions
         
-            typedef ::SireCAS::Functions ( ::SireCAS::Sum::*functions_function_type )(  ) const;
+            typedef ::SireCAS::Functions ( ::SireCAS::Sum::*functions_function_type)(  ) const;
             functions_function_type functions_function_value( &::SireCAS::Sum::functions );
             
             Sum_exposer.def( 
@@ -124,7 +124,7 @@ void register_Sum_class(){
         }
         { //::SireCAS::Sum::hash
         
-            typedef ::uint ( ::SireCAS::Sum::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireCAS::Sum::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireCAS::Sum::hash );
             
             Sum_exposer.def( 
@@ -134,7 +134,7 @@ void register_Sum_class(){
         }
         { //::SireCAS::Sum::integrate
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Sum::*integrate_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Sum::*integrate_function_type)( ::SireCAS::Symbol const & ) const;
             integrate_function_type integrate_function_value( &::SireCAS::Sum::integrate );
             
             Sum_exposer.def( 
@@ -145,7 +145,7 @@ void register_Sum_class(){
         }
         { //::SireCAS::Sum::isComplex
         
-            typedef bool ( ::SireCAS::Sum::*isComplex_function_type )(  ) const;
+            typedef bool ( ::SireCAS::Sum::*isComplex_function_type)(  ) const;
             isComplex_function_type isComplex_function_value( &::SireCAS::Sum::isComplex );
             
             Sum_exposer.def( 
@@ -155,7 +155,7 @@ void register_Sum_class(){
         }
         { //::SireCAS::Sum::isCompound
         
-            typedef bool ( ::SireCAS::Sum::*isCompound_function_type )(  ) const;
+            typedef bool ( ::SireCAS::Sum::*isCompound_function_type)(  ) const;
             isCompound_function_type isCompound_function_value( &::SireCAS::Sum::isCompound );
             
             Sum_exposer.def( 
@@ -165,7 +165,7 @@ void register_Sum_class(){
         }
         { //::SireCAS::Sum::isConstant
         
-            typedef bool ( ::SireCAS::Sum::*isConstant_function_type )(  ) const;
+            typedef bool ( ::SireCAS::Sum::*isConstant_function_type)(  ) const;
             isConstant_function_type isConstant_function_value( &::SireCAS::Sum::isConstant );
             
             Sum_exposer.def( 
@@ -175,7 +175,7 @@ void register_Sum_class(){
         }
         { //::SireCAS::Sum::isFunction
         
-            typedef bool ( ::SireCAS::Sum::*isFunction_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef bool ( ::SireCAS::Sum::*isFunction_function_type)( ::SireCAS::Symbol const & ) const;
             isFunction_function_type isFunction_function_value( &::SireCAS::Sum::isFunction );
             
             Sum_exposer.def( 
@@ -187,7 +187,7 @@ void register_Sum_class(){
         Sum_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
         { //::SireCAS::Sum::reduce
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Sum::*reduce_function_type )(  ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Sum::*reduce_function_type)(  ) const;
             reduce_function_type reduce_function_value( &::SireCAS::Sum::reduce );
             
             Sum_exposer.def( 
@@ -197,7 +197,7 @@ void register_Sum_class(){
         }
         { //::SireCAS::Sum::series
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Sum::*series_function_type )( ::SireCAS::Symbol const &,int ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Sum::*series_function_type)( ::SireCAS::Symbol const &,int ) const;
             series_function_type series_function_value( &::SireCAS::Sum::series );
             
             Sum_exposer.def( 
@@ -208,7 +208,7 @@ void register_Sum_class(){
         }
         { //::SireCAS::Sum::simplify
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Sum::*simplify_function_type )( int ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Sum::*simplify_function_type)( int ) const;
             simplify_function_type simplify_function_value( &::SireCAS::Sum::simplify );
             
             Sum_exposer.def( 
@@ -219,7 +219,7 @@ void register_Sum_class(){
         }
         { //::SireCAS::Sum::substitute
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Sum::*substitute_function_type )( ::SireCAS::Identities const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Sum::*substitute_function_type)( ::SireCAS::Identities const & ) const;
             substitute_function_type substitute_function_value( &::SireCAS::Sum::substitute );
             
             Sum_exposer.def( 
@@ -230,7 +230,7 @@ void register_Sum_class(){
         }
         { //::SireCAS::Sum::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireCAS::Sum::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireCAS::Sum::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireCAS::Sum::symbols );
             
             Sum_exposer.def( 
@@ -240,7 +240,7 @@ void register_Sum_class(){
         }
         { //::SireCAS::Sum::toOpenMMString
         
-            typedef ::QString ( ::SireCAS::Sum::*toOpenMMString_function_type )(  ) const;
+            typedef ::QString ( ::SireCAS::Sum::*toOpenMMString_function_type)(  ) const;
             toOpenMMString_function_type toOpenMMString_function_value( &::SireCAS::Sum::toOpenMMString );
             
             Sum_exposer.def( 
@@ -250,7 +250,7 @@ void register_Sum_class(){
         }
         { //::SireCAS::Sum::toString
         
-            typedef ::QString ( ::SireCAS::Sum::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireCAS::Sum::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireCAS::Sum::toString );
             
             Sum_exposer.def( 
@@ -270,7 +270,7 @@ void register_Sum_class(){
         }
         { //::SireCAS::Sum::what
         
-            typedef char const * ( ::SireCAS::Sum::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::Sum::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::Sum::what );
             
             Sum_exposer.def( 

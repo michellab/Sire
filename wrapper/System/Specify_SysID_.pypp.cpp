@@ -37,7 +37,7 @@ void register_Specify_SysID__class(){
         { //::SireID::Specify< SireSystem::SysID >::hash
         
             typedef SireID::Specify< SireSystem::SysID > exported_class_t;
-            typedef ::uint ( ::SireID::Specify< SireSystem::SysID >::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireID::Specify< SireSystem::SysID >::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireID::Specify< SireSystem::SysID >::hash );
             
             Specify_SysID__exposer.def( 
@@ -48,7 +48,7 @@ void register_Specify_SysID__class(){
         { //::SireID::Specify< SireSystem::SysID >::isNull
         
             typedef SireID::Specify< SireSystem::SysID > exported_class_t;
-            typedef bool ( ::SireID::Specify< SireSystem::SysID >::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireID::Specify< SireSystem::SysID >::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireID::Specify< SireSystem::SysID >::isNull );
             
             Specify_SysID__exposer.def( 
@@ -59,7 +59,7 @@ void register_Specify_SysID__class(){
         { //::SireID::Specify< SireSystem::SysID >::map
         
             typedef SireID::Specify< SireSystem::SysID > exported_class_t;
-            typedef ::QList< SireSystem::SysIdx > ( ::SireID::Specify< SireSystem::SysID >::*map_function_type )( ::SireSystem::Systems const & ) const;
+            typedef ::QList< SireSystem::SysIdx > ( ::SireID::Specify< SireSystem::SysID >::*map_function_type)( ::SireSystem::Systems const & ) const;
             map_function_type map_function_value( &::SireID::Specify< SireSystem::SysID >::map );
             
             Specify_SysID__exposer.def( 
@@ -73,7 +73,7 @@ void register_Specify_SysID__class(){
         { //::SireID::Specify< SireSystem::SysID >::operator()
         
             typedef SireID::Specify< SireSystem::SysID > exported_class_t;
-            typedef ::SireID::Specify< SireSystem::SysID > ( ::SireID::Specify< SireSystem::SysID >::*__call___function_type )( int ) const;
+            typedef ::SireID::Specify< SireSystem::SysID > ( ::SireID::Specify< SireSystem::SysID >::*__call___function_type)( int ) const;
             __call___function_type __call___function_value( &::SireID::Specify< SireSystem::SysID >::operator() );
             
             Specify_SysID__exposer.def( 
@@ -85,7 +85,7 @@ void register_Specify_SysID__class(){
         { //::SireID::Specify< SireSystem::SysID >::operator()
         
             typedef SireID::Specify< SireSystem::SysID > exported_class_t;
-            typedef ::SireID::Specify< SireSystem::SysID > ( ::SireID::Specify< SireSystem::SysID >::*__call___function_type )( int,int ) const;
+            typedef ::SireID::Specify< SireSystem::SysID > ( ::SireID::Specify< SireSystem::SysID >::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireID::Specify< SireSystem::SysID >::operator() );
             
             Specify_SysID__exposer.def( 
@@ -97,7 +97,7 @@ void register_Specify_SysID__class(){
         { //::SireID::Specify< SireSystem::SysID >::operator=
         
             typedef SireID::Specify< SireSystem::SysID > exported_class_t;
-            typedef ::SireID::Specify< SireSystem::SysID > & ( ::SireID::Specify< SireSystem::SysID >::*assign_function_type )( ::SireID::Specify< SireSystem::SysID > const & ) ;
+            typedef ::SireID::Specify< SireSystem::SysID > & ( ::SireID::Specify< SireSystem::SysID >::*assign_function_type)( ::SireID::Specify< SireSystem::SysID > const & ) ;
             assign_function_type assign_function_value( &::SireID::Specify< SireSystem::SysID >::operator= );
             
             Specify_SysID__exposer.def( 
@@ -112,7 +112,7 @@ void register_Specify_SysID__class(){
         { //::SireID::Specify< SireSystem::SysID >::operator[]
         
             typedef SireID::Specify< SireSystem::SysID > exported_class_t;
-            typedef ::SireID::Specify< SireSystem::SysID > ( ::SireID::Specify< SireSystem::SysID >::*__getitem___function_type )( int ) const;
+            typedef ::SireID::Specify< SireSystem::SysID > ( ::SireID::Specify< SireSystem::SysID >::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireID::Specify< SireSystem::SysID >::operator[] );
             
             Specify_SysID__exposer.def( 
@@ -124,7 +124,7 @@ void register_Specify_SysID__class(){
         { //::SireID::Specify< SireSystem::SysID >::toString
         
             typedef SireID::Specify< SireSystem::SysID > exported_class_t;
-            typedef ::QString ( ::SireID::Specify< SireSystem::SysID >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireID::Specify< SireSystem::SysID >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireID::Specify< SireSystem::SysID >::toString );
             
             Specify_SysID__exposer.def( 
@@ -146,7 +146,7 @@ void register_Specify_SysID__class(){
         { //::SireID::Specify< SireSystem::SysID >::what
         
             typedef SireID::Specify< SireSystem::SysID > exported_class_t;
-            typedef char const * ( ::SireID::Specify< SireSystem::SysID >::*what_function_type )(  ) const;
+            typedef char const * ( ::SireID::Specify< SireSystem::SysID >::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireID::Specify< SireSystem::SysID >::what );
             
             Specify_SysID__exposer.def( 

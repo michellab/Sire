@@ -41,7 +41,7 @@ void register_ArcCot_class(){
         ArcCot_exposer.def( bp::init< SireCAS::ArcCot const & >(( bp::arg("other") )) );
         { //::SireCAS::ArcCot::evaluate
         
-            typedef double ( ::SireCAS::ArcCot::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::ArcCot::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::ArcCot::evaluate );
             
             ArcCot_exposer.def( 
@@ -52,7 +52,7 @@ void register_ArcCot_class(){
         }
         { //::SireCAS::ArcCot::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::ArcCot::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::ArcCot::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::ArcCot::evaluate );
             
             ArcCot_exposer.def( 
@@ -74,7 +74,7 @@ void register_ArcCot_class(){
         }
         { //::SireCAS::ArcCot::what
         
-            typedef char const * ( ::SireCAS::ArcCot::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::ArcCot::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::ArcCot::what );
             
             ArcCot_exposer.def( 

@@ -35,7 +35,7 @@ void register_QMChargeCalculator_class(){
         bp::scope QMChargeCalculator_scope( QMChargeCalculator_exposer );
         { //::Squire::QMChargeCalculator::calculate
         
-            typedef ::SireMol::AtomCharges ( ::Squire::QMChargeCalculator::*calculate_function_type )( ::SireMol::PartialMolecule const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::AtomCharges ( ::Squire::QMChargeCalculator::*calculate_function_type)( ::SireMol::PartialMolecule const &,::SireBase::PropertyMap const & ) const;
             calculate_function_type calculate_function_value( &::Squire::QMChargeCalculator::calculate );
             
             QMChargeCalculator_exposer.def( 
@@ -46,7 +46,7 @@ void register_QMChargeCalculator_class(){
         }
         { //::Squire::QMChargeCalculator::mayChangeCharges
         
-            typedef bool ( ::Squire::QMChargeCalculator::*mayChangeCharges_function_type )( ::SireMol::PartialMolecule const &,::SireMol::PartialMolecule const &,::SireBase::PropertyMap const & ) const;
+            typedef bool ( ::Squire::QMChargeCalculator::*mayChangeCharges_function_type)( ::SireMol::PartialMolecule const &,::SireMol::PartialMolecule const &,::SireBase::PropertyMap const & ) const;
             mayChangeCharges_function_type mayChangeCharges_function_value( &::Squire::QMChargeCalculator::mayChangeCharges );
             
             QMChargeCalculator_exposer.def( 
@@ -68,7 +68,7 @@ void register_QMChargeCalculator_class(){
         }
         { //::Squire::QMChargeCalculator::operator()
         
-            typedef ::SireMol::AtomCharges ( ::Squire::QMChargeCalculator::*__call___function_type )( ::SireMol::PartialMolecule const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::AtomCharges ( ::Squire::QMChargeCalculator::*__call___function_type)( ::SireMol::PartialMolecule const &,::SireBase::PropertyMap const & ) const;
             __call___function_type __call___function_value( &::Squire::QMChargeCalculator::operator() );
             
             QMChargeCalculator_exposer.def( 
@@ -79,7 +79,7 @@ void register_QMChargeCalculator_class(){
         }
         { //::Squire::QMChargeCalculator::scaleFactor
         
-            typedef double ( ::Squire::QMChargeCalculator::*scaleFactor_function_type )(  ) const;
+            typedef double ( ::Squire::QMChargeCalculator::*scaleFactor_function_type)(  ) const;
             scaleFactor_function_type scaleFactor_function_value( &::Squire::QMChargeCalculator::scaleFactor );
             
             QMChargeCalculator_exposer.def( 
@@ -89,7 +89,7 @@ void register_QMChargeCalculator_class(){
         }
         { //::Squire::QMChargeCalculator::setScaleFactor
         
-            typedef void ( ::Squire::QMChargeCalculator::*setScaleFactor_function_type )( double ) ;
+            typedef void ( ::Squire::QMChargeCalculator::*setScaleFactor_function_type)( double ) ;
             setScaleFactor_function_type setScaleFactor_function_value( &::Squire::QMChargeCalculator::setScaleFactor );
             
             QMChargeCalculator_exposer.def( 

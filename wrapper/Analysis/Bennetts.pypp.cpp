@@ -46,7 +46,7 @@ void register_Bennetts_class(){
         Bennetts_exposer.def( bp::init< SireAnalysis::Bennetts const & >(( bp::arg("other") )) );
         { //::SireAnalysis::Bennetts::add
         
-            typedef void ( ::SireAnalysis::Bennetts::*add_function_type )( ::QList< double > const &,::QMap< double, SireMaths::BennettsFreeEnergyAverage > const &,::QMap< double, SireMaths::BennettsFreeEnergyAverage > const & ) ;
+            typedef void ( ::SireAnalysis::Bennetts::*add_function_type)( ::QList< double > const &,::QMap< double, SireMaths::BennettsFreeEnergyAverage > const &,::QMap< double, SireMaths::BennettsFreeEnergyAverage > const & ) ;
             add_function_type add_function_value( &::SireAnalysis::Bennetts::add );
             
             Bennetts_exposer.def( 
@@ -57,7 +57,7 @@ void register_Bennetts_class(){
         }
         { //::SireAnalysis::Bennetts::add
         
-            typedef void ( ::SireAnalysis::Bennetts::*add_function_type )( ::SireAnalysis::BennettsRatios const & ) ;
+            typedef void ( ::SireAnalysis::Bennetts::*add_function_type)( ::SireAnalysis::BennettsRatios const & ) ;
             add_function_type add_function_value( &::SireAnalysis::Bennetts::add );
             
             Bennetts_exposer.def( 
@@ -68,7 +68,7 @@ void register_Bennetts_class(){
         }
         { //::SireAnalysis::Bennetts::at
         
-            typedef ::SireAnalysis::BennettsRatios ( ::SireAnalysis::Bennetts::*at_function_type )( int ) const;
+            typedef ::SireAnalysis::BennettsRatios ( ::SireAnalysis::Bennetts::*at_function_type)( int ) const;
             at_function_type at_function_value( &::SireAnalysis::Bennetts::at );
             
             Bennetts_exposer.def( 
@@ -79,7 +79,7 @@ void register_Bennetts_class(){
         }
         { //::SireAnalysis::Bennetts::clear
         
-            typedef void ( ::SireAnalysis::Bennetts::*clear_function_type )(  ) ;
+            typedef void ( ::SireAnalysis::Bennetts::*clear_function_type)(  ) ;
             clear_function_type clear_function_value( &::SireAnalysis::Bennetts::clear );
             
             Bennetts_exposer.def( 
@@ -89,7 +89,7 @@ void register_Bennetts_class(){
         }
         { //::SireAnalysis::Bennetts::count
         
-            typedef int ( ::SireAnalysis::Bennetts::*count_function_type )(  ) const;
+            typedef int ( ::SireAnalysis::Bennetts::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireAnalysis::Bennetts::count );
             
             Bennetts_exposer.def( 
@@ -99,7 +99,7 @@ void register_Bennetts_class(){
         }
         { //::SireAnalysis::Bennetts::lambdaValues
         
-            typedef ::QList< double > ( ::SireAnalysis::Bennetts::*lambdaValues_function_type )(  ) const;
+            typedef ::QList< double > ( ::SireAnalysis::Bennetts::*lambdaValues_function_type)(  ) const;
             lambdaValues_function_type lambdaValues_function_value( &::SireAnalysis::Bennetts::lambdaValues );
             
             Bennetts_exposer.def( 
@@ -109,7 +109,7 @@ void register_Bennetts_class(){
         }
         { //::SireAnalysis::Bennetts::merge
         
-            typedef ::SireAnalysis::BennettsRatios ( ::SireAnalysis::Bennetts::*merge_function_type )( int,int ) const;
+            typedef ::SireAnalysis::BennettsRatios ( ::SireAnalysis::Bennetts::*merge_function_type)( int,int ) const;
             merge_function_type merge_function_value( &::SireAnalysis::Bennetts::merge );
             
             Bennetts_exposer.def( 
@@ -120,7 +120,7 @@ void register_Bennetts_class(){
         }
         { //::SireAnalysis::Bennetts::merge
         
-            typedef ::SireAnalysis::BennettsRatios ( ::SireAnalysis::Bennetts::*merge_function_type )( ::QList< int > ) const;
+            typedef ::SireAnalysis::BennettsRatios ( ::SireAnalysis::Bennetts::*merge_function_type)( ::QList< int > ) const;
             merge_function_type merge_function_value( &::SireAnalysis::Bennetts::merge );
             
             Bennetts_exposer.def( 
@@ -131,7 +131,7 @@ void register_Bennetts_class(){
         }
         { //::SireAnalysis::Bennetts::nIterations
         
-            typedef int ( ::SireAnalysis::Bennetts::*nIterations_function_type )(  ) const;
+            typedef int ( ::SireAnalysis::Bennetts::*nIterations_function_type)(  ) const;
             nIterations_function_type nIterations_function_value( &::SireAnalysis::Bennetts::nIterations );
             
             Bennetts_exposer.def( 
@@ -141,7 +141,7 @@ void register_Bennetts_class(){
         }
         { //::SireAnalysis::Bennetts::nLambdaValues
         
-            typedef int ( ::SireAnalysis::Bennetts::*nLambdaValues_function_type )(  ) const;
+            typedef int ( ::SireAnalysis::Bennetts::*nLambdaValues_function_type)(  ) const;
             nLambdaValues_function_type nLambdaValues_function_value( &::SireAnalysis::Bennetts::nLambdaValues );
             
             Bennetts_exposer.def( 
@@ -151,7 +151,7 @@ void register_Bennetts_class(){
         }
         { //::SireAnalysis::Bennetts::nSamples
         
-            typedef ::qint64 ( ::SireAnalysis::Bennetts::*nSamples_function_type )(  ) const;
+            typedef ::qint64 ( ::SireAnalysis::Bennetts::*nSamples_function_type)(  ) const;
             nSamples_function_type nSamples_function_value( &::SireAnalysis::Bennetts::nSamples );
             
             Bennetts_exposer.def( 
@@ -161,7 +161,7 @@ void register_Bennetts_class(){
         }
         { //::SireAnalysis::Bennetts::nWindows
         
-            typedef int ( ::SireAnalysis::Bennetts::*nWindows_function_type )(  ) const;
+            typedef int ( ::SireAnalysis::Bennetts::*nWindows_function_type)(  ) const;
             nWindows_function_type nWindows_function_value( &::SireAnalysis::Bennetts::nWindows );
             
             Bennetts_exposer.def( 
@@ -172,7 +172,7 @@ void register_Bennetts_class(){
         Bennetts_exposer.def( bp::self != bp::self );
         { //::SireAnalysis::Bennetts::operator=
         
-            typedef ::SireAnalysis::Bennetts & ( ::SireAnalysis::Bennetts::*assign_function_type )( ::SireAnalysis::Bennetts const & ) ;
+            typedef ::SireAnalysis::Bennetts & ( ::SireAnalysis::Bennetts::*assign_function_type)( ::SireAnalysis::Bennetts const & ) ;
             assign_function_type assign_function_value( &::SireAnalysis::Bennetts::operator= );
             
             Bennetts_exposer.def( 
@@ -185,7 +185,7 @@ void register_Bennetts_class(){
         Bennetts_exposer.def( bp::self == bp::self );
         { //::SireAnalysis::Bennetts::operator[]
         
-            typedef ::SireAnalysis::BennettsRatios ( ::SireAnalysis::Bennetts::*__getitem___function_type )( int ) const;
+            typedef ::SireAnalysis::BennettsRatios ( ::SireAnalysis::Bennetts::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireAnalysis::Bennetts::operator[] );
             
             Bennetts_exposer.def( 
@@ -196,7 +196,7 @@ void register_Bennetts_class(){
         }
         { //::SireAnalysis::Bennetts::ratios
         
-            typedef ::QList< SireAnalysis::BennettsRatios > ( ::SireAnalysis::Bennetts::*ratios_function_type )(  ) const;
+            typedef ::QList< SireAnalysis::BennettsRatios > ( ::SireAnalysis::Bennetts::*ratios_function_type)(  ) const;
             ratios_function_type ratios_function_value( &::SireAnalysis::Bennetts::ratios );
             
             Bennetts_exposer.def( 
@@ -206,7 +206,7 @@ void register_Bennetts_class(){
         }
         { //::SireAnalysis::Bennetts::removeAt
         
-            typedef void ( ::SireAnalysis::Bennetts::*removeAt_function_type )( int ) ;
+            typedef void ( ::SireAnalysis::Bennetts::*removeAt_function_type)( int ) ;
             removeAt_function_type removeAt_function_value( &::SireAnalysis::Bennetts::removeAt );
             
             Bennetts_exposer.def( 
@@ -217,7 +217,7 @@ void register_Bennetts_class(){
         }
         { //::SireAnalysis::Bennetts::removeRange
         
-            typedef void ( ::SireAnalysis::Bennetts::*removeRange_function_type )( int,int ) ;
+            typedef void ( ::SireAnalysis::Bennetts::*removeRange_function_type)( int,int ) ;
             removeRange_function_type removeRange_function_value( &::SireAnalysis::Bennetts::removeRange );
             
             Bennetts_exposer.def( 
@@ -228,7 +228,7 @@ void register_Bennetts_class(){
         }
         { //::SireAnalysis::Bennetts::rollingAverage
         
-            typedef ::QList< SireAnalysis::BennettsRatios > ( ::SireAnalysis::Bennetts::*rollingAverage_function_type )( int ) const;
+            typedef ::QList< SireAnalysis::BennettsRatios > ( ::SireAnalysis::Bennetts::*rollingAverage_function_type)( int ) const;
             rollingAverage_function_type rollingAverage_function_value( &::SireAnalysis::Bennetts::rollingAverage );
             
             Bennetts_exposer.def( 
@@ -239,7 +239,7 @@ void register_Bennetts_class(){
         }
         { //::SireAnalysis::Bennetts::set
         
-            typedef void ( ::SireAnalysis::Bennetts::*set_function_type )( int,::QList< double > const &,::QMap< double, SireMaths::BennettsFreeEnergyAverage > const &,::QMap< double, SireMaths::BennettsFreeEnergyAverage > const & ) ;
+            typedef void ( ::SireAnalysis::Bennetts::*set_function_type)( int,::QList< double > const &,::QMap< double, SireMaths::BennettsFreeEnergyAverage > const &,::QMap< double, SireMaths::BennettsFreeEnergyAverage > const & ) ;
             set_function_type set_function_value( &::SireAnalysis::Bennetts::set );
             
             Bennetts_exposer.def( 
@@ -250,7 +250,7 @@ void register_Bennetts_class(){
         }
         { //::SireAnalysis::Bennetts::set
         
-            typedef void ( ::SireAnalysis::Bennetts::*set_function_type )( int,::SireAnalysis::BennettsRatios const & ) ;
+            typedef void ( ::SireAnalysis::Bennetts::*set_function_type)( int,::SireAnalysis::BennettsRatios const & ) ;
             set_function_type set_function_value( &::SireAnalysis::Bennetts::set );
             
             Bennetts_exposer.def( 
@@ -261,7 +261,7 @@ void register_Bennetts_class(){
         }
         { //::SireAnalysis::Bennetts::size
         
-            typedef int ( ::SireAnalysis::Bennetts::*size_function_type )(  ) const;
+            typedef int ( ::SireAnalysis::Bennetts::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireAnalysis::Bennetts::size );
             
             Bennetts_exposer.def( 
@@ -271,7 +271,7 @@ void register_Bennetts_class(){
         }
         { //::SireAnalysis::Bennetts::toString
         
-            typedef ::QString ( ::SireAnalysis::Bennetts::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireAnalysis::Bennetts::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireAnalysis::Bennetts::toString );
             
             Bennetts_exposer.def( 
@@ -291,7 +291,7 @@ void register_Bennetts_class(){
         }
         { //::SireAnalysis::Bennetts::what
         
-            typedef char const * ( ::SireAnalysis::Bennetts::*what_function_type )(  ) const;
+            typedef char const * ( ::SireAnalysis::Bennetts::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireAnalysis::Bennetts::what );
             
             Bennetts_exposer.def( 
@@ -301,7 +301,7 @@ void register_Bennetts_class(){
         }
         { //::SireAnalysis::Bennetts::windows
         
-            typedef ::QList< double > ( ::SireAnalysis::Bennetts::*windows_function_type )(  ) const;
+            typedef ::QList< double > ( ::SireAnalysis::Bennetts::*windows_function_type)(  ) const;
             windows_function_type windows_function_value( &::SireAnalysis::Bennetts::windows );
             
             Bennetts_exposer.def( 

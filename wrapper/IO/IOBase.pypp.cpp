@@ -47,7 +47,7 @@ void register_IOBase_class(){
         }
         { //::SireIO::IOBase::read
         
-            typedef ::SireMol::MoleculeGroup ( ::SireIO::IOBase::*read_function_type )( ::QString const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::MoleculeGroup ( ::SireIO::IOBase::*read_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
             read_function_type read_function_value( &::SireIO::IOBase::read );
             
             IOBase_exposer.def( 
@@ -58,7 +58,7 @@ void register_IOBase_class(){
         }
         { //::SireIO::IOBase::read
         
-            typedef ::SireMol::MoleculeGroup ( ::SireIO::IOBase::*read_function_type )( char const *,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::MoleculeGroup ( ::SireIO::IOBase::*read_function_type)( char const *,::SireBase::PropertyMap const & ) const;
             read_function_type read_function_value( &::SireIO::IOBase::read );
             
             IOBase_exposer.def( 
@@ -69,7 +69,7 @@ void register_IOBase_class(){
         }
         { //::SireIO::IOBase::read
         
-            typedef ::SireMol::MoleculeGroup ( ::SireIO::IOBase::*read_function_type )( ::QIODevice &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::MoleculeGroup ( ::SireIO::IOBase::*read_function_type)( ::QIODevice &,::SireBase::PropertyMap const & ) const;
             read_function_type read_function_value( &::SireIO::IOBase::read );
             
             IOBase_exposer.def( 
@@ -80,7 +80,7 @@ void register_IOBase_class(){
         }
         { //::SireIO::IOBase::read
         
-            typedef ::SireMol::MoleculeGroup ( ::SireIO::IOBase::*read_function_type )( ::QByteArray const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::MoleculeGroup ( ::SireIO::IOBase::*read_function_type)( ::QByteArray const &,::SireBase::PropertyMap const & ) const;
             read_function_type read_function_value( &::SireIO::IOBase::read );
             
             IOBase_exposer.def( 
@@ -91,7 +91,7 @@ void register_IOBase_class(){
         }
         { //::SireIO::IOBase::readMolecule
         
-            typedef ::SireMol::Molecule ( ::SireIO::IOBase::*readMolecule_function_type )( ::QString const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::Molecule ( ::SireIO::IOBase::*readMolecule_function_type)( ::QString const &,::SireBase::PropertyMap const & ) const;
             readMolecule_function_type readMolecule_function_value( &::SireIO::IOBase::readMolecule );
             
             IOBase_exposer.def( 
@@ -102,7 +102,7 @@ void register_IOBase_class(){
         }
         { //::SireIO::IOBase::readMolecule
         
-            typedef ::SireMol::Molecule ( ::SireIO::IOBase::*readMolecule_function_type )( char const *,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::Molecule ( ::SireIO::IOBase::*readMolecule_function_type)( char const *,::SireBase::PropertyMap const & ) const;
             readMolecule_function_type readMolecule_function_value( &::SireIO::IOBase::readMolecule );
             
             IOBase_exposer.def( 
@@ -113,7 +113,7 @@ void register_IOBase_class(){
         }
         { //::SireIO::IOBase::readMolecule
         
-            typedef ::SireMol::Molecule ( ::SireIO::IOBase::*readMolecule_function_type )( ::QIODevice &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::Molecule ( ::SireIO::IOBase::*readMolecule_function_type)( ::QIODevice &,::SireBase::PropertyMap const & ) const;
             readMolecule_function_type readMolecule_function_value( &::SireIO::IOBase::readMolecule );
             
             IOBase_exposer.def( 
@@ -124,7 +124,7 @@ void register_IOBase_class(){
         }
         { //::SireIO::IOBase::readMolecule
         
-            typedef ::SireMol::Molecule ( ::SireIO::IOBase::*readMolecule_function_type )( ::QByteArray const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::Molecule ( ::SireIO::IOBase::*readMolecule_function_type)( ::QByteArray const &,::SireBase::PropertyMap const & ) const;
             readMolecule_function_type readMolecule_function_value( &::SireIO::IOBase::readMolecule );
             
             IOBase_exposer.def( 
@@ -145,7 +145,7 @@ void register_IOBase_class(){
         }
         { //::SireIO::IOBase::write
         
-            typedef void ( ::SireIO::IOBase::*write_function_type )( ::SireMol::MoleculeGroup const &,::QString const &,::SireBase::PropertyMap const & ) const;
+            typedef void ( ::SireIO::IOBase::*write_function_type)( ::SireMol::MoleculeGroup const &,::QString const &,::SireBase::PropertyMap const & ) const;
             write_function_type write_function_value( &::SireIO::IOBase::write );
             
             IOBase_exposer.def( 
@@ -156,7 +156,7 @@ void register_IOBase_class(){
         }
         { //::SireIO::IOBase::write
         
-            typedef void ( ::SireIO::IOBase::*write_function_type )( ::SireMol::Molecules const &,::QString const &,::SireBase::PropertyMap const & ) const;
+            typedef void ( ::SireIO::IOBase::*write_function_type)( ::SireMol::Molecules const &,::QString const &,::SireBase::PropertyMap const & ) const;
             write_function_type write_function_value( &::SireIO::IOBase::write );
             
             IOBase_exposer.def( 
@@ -167,7 +167,7 @@ void register_IOBase_class(){
         }
         { //::SireIO::IOBase::write
         
-            typedef void ( ::SireIO::IOBase::*write_function_type )( ::SireMol::MoleculeView const &,::QString const &,::SireBase::PropertyMap const & ) const;
+            typedef void ( ::SireIO::IOBase::*write_function_type)( ::SireMol::MoleculeView const &,::QString const &,::SireBase::PropertyMap const & ) const;
             write_function_type write_function_value( &::SireIO::IOBase::write );
             
             IOBase_exposer.def( 
@@ -178,7 +178,7 @@ void register_IOBase_class(){
         }
         { //::SireIO::IOBase::write
         
-            typedef void ( ::SireIO::IOBase::*write_function_type )( ::SireMol::MoleculeGroup const &,::QIODevice &,::SireBase::PropertyMap const & ) const;
+            typedef void ( ::SireIO::IOBase::*write_function_type)( ::SireMol::MoleculeGroup const &,::QIODevice &,::SireBase::PropertyMap const & ) const;
             write_function_type write_function_value( &::SireIO::IOBase::write );
             
             IOBase_exposer.def( 
@@ -189,7 +189,7 @@ void register_IOBase_class(){
         }
         { //::SireIO::IOBase::write
         
-            typedef void ( ::SireIO::IOBase::*write_function_type )( ::SireMol::Molecules const &,::QIODevice &,::SireBase::PropertyMap const & ) const;
+            typedef void ( ::SireIO::IOBase::*write_function_type)( ::SireMol::Molecules const &,::QIODevice &,::SireBase::PropertyMap const & ) const;
             write_function_type write_function_value( &::SireIO::IOBase::write );
             
             IOBase_exposer.def( 
@@ -200,7 +200,7 @@ void register_IOBase_class(){
         }
         { //::SireIO::IOBase::write
         
-            typedef void ( ::SireIO::IOBase::*write_function_type )( ::SireMol::MoleculeView const &,::QIODevice &,::SireBase::PropertyMap const & ) const;
+            typedef void ( ::SireIO::IOBase::*write_function_type)( ::SireMol::MoleculeView const &,::QIODevice &,::SireBase::PropertyMap const & ) const;
             write_function_type write_function_value( &::SireIO::IOBase::write );
             
             IOBase_exposer.def( 
@@ -211,7 +211,7 @@ void register_IOBase_class(){
         }
         { //::SireIO::IOBase::write
         
-            typedef ::QByteArray ( ::SireIO::IOBase::*write_function_type )( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QByteArray ( ::SireIO::IOBase::*write_function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
             write_function_type write_function_value( &::SireIO::IOBase::write );
             
             IOBase_exposer.def( 
@@ -222,7 +222,7 @@ void register_IOBase_class(){
         }
         { //::SireIO::IOBase::write
         
-            typedef ::QByteArray ( ::SireIO::IOBase::*write_function_type )( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QByteArray ( ::SireIO::IOBase::*write_function_type)( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) const;
             write_function_type write_function_value( &::SireIO::IOBase::write );
             
             IOBase_exposer.def( 
@@ -233,7 +233,7 @@ void register_IOBase_class(){
         }
         { //::SireIO::IOBase::write
         
-            typedef ::QByteArray ( ::SireIO::IOBase::*write_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QByteArray ( ::SireIO::IOBase::*write_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             write_function_type write_function_value( &::SireIO::IOBase::write );
             
             IOBase_exposer.def( 

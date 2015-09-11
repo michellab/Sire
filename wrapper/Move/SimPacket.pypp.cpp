@@ -34,7 +34,7 @@ void register_SimPacket_class(){
         SimPacket_exposer.def( bp::init< SireMove::SimPacket const & >(( bp::arg("other") )) );
         { //::SireMove::SimPacket::approximatePacketSize
         
-            typedef int ( ::SireMove::SimPacket::*approximatePacketSize_function_type )(  ) const;
+            typedef int ( ::SireMove::SimPacket::*approximatePacketSize_function_type)(  ) const;
             approximatePacketSize_function_type approximatePacketSize_function_value( &::SireMove::SimPacket::approximatePacketSize );
             
             SimPacket_exposer.def( 
@@ -44,7 +44,7 @@ void register_SimPacket_class(){
         }
         { //::SireMove::SimPacket::hasFinished
         
-            typedef bool ( ::SireMove::SimPacket::*hasFinished_function_type )(  ) const;
+            typedef bool ( ::SireMove::SimPacket::*hasFinished_function_type)(  ) const;
             hasFinished_function_type hasFinished_function_value( &::SireMove::SimPacket::hasFinished );
             
             SimPacket_exposer.def( 
@@ -54,7 +54,7 @@ void register_SimPacket_class(){
         }
         { //::SireMove::SimPacket::moves
         
-            typedef ::SireMove::MovesPtr ( ::SireMove::SimPacket::*moves_function_type )(  ) const;
+            typedef ::SireMove::MovesPtr ( ::SireMove::SimPacket::*moves_function_type)(  ) const;
             moves_function_type moves_function_value( &::SireMove::SimPacket::moves );
             
             SimPacket_exposer.def( 
@@ -64,7 +64,7 @@ void register_SimPacket_class(){
         }
         { //::SireMove::SimPacket::nCompleted
         
-            typedef int ( ::SireMove::SimPacket::*nCompleted_function_type )(  ) const;
+            typedef int ( ::SireMove::SimPacket::*nCompleted_function_type)(  ) const;
             nCompleted_function_type nCompleted_function_value( &::SireMove::SimPacket::nCompleted );
             
             SimPacket_exposer.def( 
@@ -74,7 +74,7 @@ void register_SimPacket_class(){
         }
         { //::SireMove::SimPacket::nMoves
         
-            typedef int ( ::SireMove::SimPacket::*nMoves_function_type )(  ) const;
+            typedef int ( ::SireMove::SimPacket::*nMoves_function_type)(  ) const;
             nMoves_function_type nMoves_function_value( &::SireMove::SimPacket::nMoves );
             
             SimPacket_exposer.def( 
@@ -84,7 +84,7 @@ void register_SimPacket_class(){
         }
         { //::SireMove::SimPacket::nMovesPerChunk
         
-            typedef int ( ::SireMove::SimPacket::*nMovesPerChunk_function_type )(  ) const;
+            typedef int ( ::SireMove::SimPacket::*nMovesPerChunk_function_type)(  ) const;
             nMovesPerChunk_function_type nMovesPerChunk_function_value( &::SireMove::SimPacket::nMovesPerChunk );
             
             SimPacket_exposer.def( 
@@ -95,7 +95,7 @@ void register_SimPacket_class(){
         SimPacket_exposer.def( bp::self != bp::self );
         { //::SireMove::SimPacket::operator=
         
-            typedef ::SireMove::SimPacket & ( ::SireMove::SimPacket::*assign_function_type )( ::SireMove::SimPacket const & ) ;
+            typedef ::SireMove::SimPacket & ( ::SireMove::SimPacket::*assign_function_type)( ::SireMove::SimPacket const & ) ;
             assign_function_type assign_function_value( &::SireMove::SimPacket::operator= );
             
             SimPacket_exposer.def( 
@@ -108,7 +108,7 @@ void register_SimPacket_class(){
         SimPacket_exposer.def( bp::self == bp::self );
         { //::SireMove::SimPacket::recordingStatistics
         
-            typedef bool ( ::SireMove::SimPacket::*recordingStatistics_function_type )(  ) const;
+            typedef bool ( ::SireMove::SimPacket::*recordingStatistics_function_type)(  ) const;
             recordingStatistics_function_type recordingStatistics_function_value( &::SireMove::SimPacket::recordingStatistics );
             
             SimPacket_exposer.def( 
@@ -118,7 +118,7 @@ void register_SimPacket_class(){
         }
         { //::SireMove::SimPacket::shouldPack
         
-            typedef bool ( ::SireMove::SimPacket::*shouldPack_function_type )(  ) const;
+            typedef bool ( ::SireMove::SimPacket::*shouldPack_function_type)(  ) const;
             shouldPack_function_type shouldPack_function_value( &::SireMove::SimPacket::shouldPack );
             
             SimPacket_exposer.def( 
@@ -128,7 +128,7 @@ void register_SimPacket_class(){
         }
         { //::SireMove::SimPacket::system
         
-            typedef ::SireSystem::System ( ::SireMove::SimPacket::*system_function_type )(  ) const;
+            typedef ::SireSystem::System ( ::SireMove::SimPacket::*system_function_type)(  ) const;
             system_function_type system_function_value( &::SireMove::SimPacket::system );
             
             SimPacket_exposer.def( 
@@ -138,7 +138,7 @@ void register_SimPacket_class(){
         }
         { //::SireMove::SimPacket::systemAndMoves
         
-            typedef ::SireMove::SimStore ( ::SireMove::SimPacket::*systemAndMoves_function_type )(  ) const;
+            typedef ::SireMove::SimStore ( ::SireMove::SimPacket::*systemAndMoves_function_type)(  ) const;
             systemAndMoves_function_type systemAndMoves_function_value( &::SireMove::SimPacket::systemAndMoves );
             
             SimPacket_exposer.def( 
@@ -158,7 +158,7 @@ void register_SimPacket_class(){
         }
         { //::SireMove::SimPacket::what
         
-            typedef char const * ( ::SireMove::SimPacket::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMove::SimPacket::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMove::SimPacket::what );
             
             SimPacket_exposer.def( 

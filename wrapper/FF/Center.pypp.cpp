@@ -50,7 +50,7 @@ void register_Center_class(){
         Center_exposer.def( bp::init< SireFF::Center const & >(( bp::arg("other") )) );
         { //::SireFF::Center::addForce
         
-            typedef bool ( ::SireFF::Center::*addForce_function_type )( ::SireFF::MolForceTable &,::SireMaths::Vector const & ) const;
+            typedef bool ( ::SireFF::Center::*addForce_function_type)( ::SireFF::MolForceTable &,::SireMaths::Vector const & ) const;
             addForce_function_type addForce_function_value( &::SireFF::Center::addForce );
             
             Center_exposer.def( 
@@ -61,7 +61,7 @@ void register_Center_class(){
         }
         { //::SireFF::Center::addForce
         
-            typedef bool ( ::SireFF::Center::*addForce_function_type )( ::SireFF::ForceTable &,::SireMaths::Vector const & ) const;
+            typedef bool ( ::SireFF::Center::*addForce_function_type)( ::SireFF::ForceTable &,::SireMaths::Vector const & ) const;
             addForce_function_type addForce_function_value( &::SireFF::Center::addForce );
             
             Center_exposer.def( 
@@ -72,7 +72,7 @@ void register_Center_class(){
         }
         { //::SireFF::Center::contains
         
-            typedef bool ( ::SireFF::Center::*contains_function_type )( ::SireMol::MolNum ) const;
+            typedef bool ( ::SireFF::Center::*contains_function_type)( ::SireMol::MolNum ) const;
             contains_function_type contains_function_value( &::SireFF::Center::contains );
             
             Center_exposer.def( 
@@ -83,7 +83,7 @@ void register_Center_class(){
         }
         { //::SireFF::Center::contains
         
-            typedef bool ( ::SireFF::Center::*contains_function_type )( ::SireMol::MolID const & ) const;
+            typedef bool ( ::SireFF::Center::*contains_function_type)( ::SireMol::MolID const & ) const;
             contains_function_type contains_function_value( &::SireFF::Center::contains );
             
             Center_exposer.def( 
@@ -94,7 +94,7 @@ void register_Center_class(){
         }
         { //::SireFF::Center::isExtraMoleculePoint
         
-            typedef bool ( ::SireFF::Center::*isExtraMoleculePoint_function_type )(  ) const;
+            typedef bool ( ::SireFF::Center::*isExtraMoleculePoint_function_type)(  ) const;
             isExtraMoleculePoint_function_type isExtraMoleculePoint_function_value( &::SireFF::Center::isExtraMoleculePoint );
             
             Center_exposer.def( 
@@ -104,7 +104,7 @@ void register_Center_class(){
         }
         { //::SireFF::Center::isInterMoleculePoint
         
-            typedef bool ( ::SireFF::Center::*isInterMoleculePoint_function_type )(  ) const;
+            typedef bool ( ::SireFF::Center::*isInterMoleculePoint_function_type)(  ) const;
             isInterMoleculePoint_function_type isInterMoleculePoint_function_value( &::SireFF::Center::isInterMoleculePoint );
             
             Center_exposer.def( 
@@ -114,7 +114,7 @@ void register_Center_class(){
         }
         { //::SireFF::Center::isIntraMoleculePoint
         
-            typedef bool ( ::SireFF::Center::*isIntraMoleculePoint_function_type )(  ) const;
+            typedef bool ( ::SireFF::Center::*isIntraMoleculePoint_function_type)(  ) const;
             isIntraMoleculePoint_function_type isIntraMoleculePoint_function_value( &::SireFF::Center::isIntraMoleculePoint );
             
             Center_exposer.def( 
@@ -124,7 +124,7 @@ void register_Center_class(){
         }
         { //::SireFF::Center::molecules
         
-            typedef ::SireMol::Molecules ( ::SireFF::Center::*molecules_function_type )(  ) const;
+            typedef ::SireMol::Molecules ( ::SireFF::Center::*molecules_function_type)(  ) const;
             molecules_function_type molecules_function_value( &::SireFF::Center::molecules );
             
             Center_exposer.def( 
@@ -134,7 +134,7 @@ void register_Center_class(){
         }
         { //::SireFF::Center::nMolecules
         
-            typedef int ( ::SireFF::Center::*nMolecules_function_type )(  ) const;
+            typedef int ( ::SireFF::Center::*nMolecules_function_type)(  ) const;
             nMolecules_function_type nMolecules_function_value( &::SireFF::Center::nMolecules );
             
             Center_exposer.def( 
@@ -145,7 +145,7 @@ void register_Center_class(){
         Center_exposer.def( bp::self != bp::self );
         { //::SireFF::Center::operator=
         
-            typedef ::SireFF::Center & ( ::SireFF::Center::*assign_function_type )( ::SireFF::Center const & ) ;
+            typedef ::SireFF::Center & ( ::SireFF::Center::*assign_function_type)( ::SireFF::Center const & ) ;
             assign_function_type assign_function_value( &::SireFF::Center::operator= );
             
             Center_exposer.def( 
@@ -158,7 +158,7 @@ void register_Center_class(){
         Center_exposer.def( bp::self == bp::self );
         { //::SireFF::Center::setSpace
         
-            typedef void ( ::SireFF::Center::*setSpace_function_type )( ::SireVol::Space const & ) ;
+            typedef void ( ::SireFF::Center::*setSpace_function_type)( ::SireVol::Space const & ) ;
             setSpace_function_type setSpace_function_value( &::SireFF::Center::setSpace );
             
             Center_exposer.def( 
@@ -169,7 +169,7 @@ void register_Center_class(){
         }
         { //::SireFF::Center::toString
         
-            typedef ::QString ( ::SireFF::Center::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireFF::Center::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireFF::Center::toString );
             
             Center_exposer.def( 
@@ -189,7 +189,7 @@ void register_Center_class(){
         }
         { //::SireFF::Center::update
         
-            typedef bool ( ::SireFF::Center::*update_function_type )( ::SireMol::MoleculeData const & ) ;
+            typedef bool ( ::SireFF::Center::*update_function_type)( ::SireMol::MoleculeData const & ) ;
             update_function_type update_function_value( &::SireFF::Center::update );
             
             Center_exposer.def( 
@@ -200,7 +200,7 @@ void register_Center_class(){
         }
         { //::SireFF::Center::update
         
-            typedef bool ( ::SireFF::Center::*update_function_type )( ::SireMol::Molecules const & ) ;
+            typedef bool ( ::SireFF::Center::*update_function_type)( ::SireMol::Molecules const & ) ;
             update_function_type update_function_value( &::SireFF::Center::update );
             
             Center_exposer.def( 
@@ -211,7 +211,7 @@ void register_Center_class(){
         }
         { //::SireFF::Center::update
         
-            typedef bool ( ::SireFF::Center::*update_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef bool ( ::SireFF::Center::*update_function_type)( ::SireMol::MoleculeGroup const & ) ;
             update_function_type update_function_value( &::SireFF::Center::update );
             
             Center_exposer.def( 
@@ -222,7 +222,7 @@ void register_Center_class(){
         }
         { //::SireFF::Center::update
         
-            typedef bool ( ::SireFF::Center::*update_function_type )( ::SireMol::MolGroupsBase const & ) ;
+            typedef bool ( ::SireFF::Center::*update_function_type)( ::SireMol::MolGroupsBase const & ) ;
             update_function_type update_function_value( &::SireFF::Center::update );
             
             Center_exposer.def( 
@@ -233,7 +233,7 @@ void register_Center_class(){
         }
         { //::SireFF::Center::usesMoleculesIn
         
-            typedef bool ( ::SireFF::Center::*usesMoleculesIn_function_type )( ::SireFF::ForceTable const & ) const;
+            typedef bool ( ::SireFF::Center::*usesMoleculesIn_function_type)( ::SireFF::ForceTable const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireFF::Center::usesMoleculesIn );
             
             Center_exposer.def( 
@@ -244,7 +244,7 @@ void register_Center_class(){
         }
         { //::SireFF::Center::usesMoleculesIn
         
-            typedef bool ( ::SireFF::Center::*usesMoleculesIn_function_type )( ::SireMol::Molecules const & ) const;
+            typedef bool ( ::SireFF::Center::*usesMoleculesIn_function_type)( ::SireMol::Molecules const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireFF::Center::usesMoleculesIn );
             
             Center_exposer.def( 
@@ -255,7 +255,7 @@ void register_Center_class(){
         }
         { //::SireFF::Center::usesMoleculesIn
         
-            typedef bool ( ::SireFF::Center::*usesMoleculesIn_function_type )( ::SireMol::MoleculeGroup const & ) const;
+            typedef bool ( ::SireFF::Center::*usesMoleculesIn_function_type)( ::SireMol::MoleculeGroup const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireFF::Center::usesMoleculesIn );
             
             Center_exposer.def( 
@@ -266,7 +266,7 @@ void register_Center_class(){
         }
         { //::SireFF::Center::usesMoleculesIn
         
-            typedef bool ( ::SireFF::Center::*usesMoleculesIn_function_type )( ::SireMol::MolGroupsBase const & ) const;
+            typedef bool ( ::SireFF::Center::*usesMoleculesIn_function_type)( ::SireMol::MolGroupsBase const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireFF::Center::usesMoleculesIn );
             
             Center_exposer.def( 
@@ -277,7 +277,7 @@ void register_Center_class(){
         }
         { //::SireFF::Center::wouldUpdate
         
-            typedef bool ( ::SireFF::Center::*wouldUpdate_function_type )( ::SireMol::MoleculeData const & ) const;
+            typedef bool ( ::SireFF::Center::*wouldUpdate_function_type)( ::SireMol::MoleculeData const & ) const;
             wouldUpdate_function_type wouldUpdate_function_value( &::SireFF::Center::wouldUpdate );
             
             Center_exposer.def( 
@@ -288,7 +288,7 @@ void register_Center_class(){
         }
         { //::SireFF::Center::wouldUpdate
         
-            typedef bool ( ::SireFF::Center::*wouldUpdate_function_type )( ::SireMol::Molecules const & ) const;
+            typedef bool ( ::SireFF::Center::*wouldUpdate_function_type)( ::SireMol::Molecules const & ) const;
             wouldUpdate_function_type wouldUpdate_function_value( &::SireFF::Center::wouldUpdate );
             
             Center_exposer.def( 
@@ -299,7 +299,7 @@ void register_Center_class(){
         }
         { //::SireFF::Center::wouldUpdate
         
-            typedef bool ( ::SireFF::Center::*wouldUpdate_function_type )( ::SireMol::MoleculeGroup const & ) const;
+            typedef bool ( ::SireFF::Center::*wouldUpdate_function_type)( ::SireMol::MoleculeGroup const & ) const;
             wouldUpdate_function_type wouldUpdate_function_value( &::SireFF::Center::wouldUpdate );
             
             Center_exposer.def( 
@@ -310,7 +310,7 @@ void register_Center_class(){
         }
         { //::SireFF::Center::wouldUpdate
         
-            typedef bool ( ::SireFF::Center::*wouldUpdate_function_type )( ::SireMol::MolGroupsBase const & ) const;
+            typedef bool ( ::SireFF::Center::*wouldUpdate_function_type)( ::SireMol::MolGroupsBase const & ) const;
             wouldUpdate_function_type wouldUpdate_function_value( &::SireFF::Center::wouldUpdate );
             
             Center_exposer.def( 

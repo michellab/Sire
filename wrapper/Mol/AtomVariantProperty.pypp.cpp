@@ -55,7 +55,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::array
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef ::SireBase::PackedArray2D< QVariant > const & ( ::SireMol::AtomProperty< QVariant >::*array_function_type )(  ) const;
+            typedef ::SireBase::PackedArray2D< QVariant > const & ( ::SireMol::AtomProperty< QVariant >::*array_function_type)(  ) const;
             array_function_type array_function_value( &::SireMol::AtomProperty< QVariant >::array );
             
             AtomVariantProperty_exposer.def( 
@@ -67,7 +67,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::assertCanConvert
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< QVariant >::*assertCanConvert_function_type )( ::QVariant const & ) const;
+            typedef void ( ::SireMol::AtomProperty< QVariant >::*assertCanConvert_function_type)( ::QVariant const & ) const;
             assertCanConvert_function_type assertCanConvert_function_value( &::SireMol::AtomProperty< QVariant >::assertCanConvert );
             
             AtomVariantProperty_exposer.def( 
@@ -79,7 +79,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::assignFrom
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< QVariant >::*assignFrom_function_type )( ::SireMol::AtomProperty< QVariant > const & ) ;
+            typedef void ( ::SireMol::AtomProperty< QVariant >::*assignFrom_function_type)( ::SireMol::AtomProperty< QVariant > const & ) ;
             assignFrom_function_type assignFrom_function_value( &::SireMol::AtomProperty< QVariant >::assignFrom );
             
             AtomVariantProperty_exposer.def( 
@@ -91,7 +91,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::at
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< QVariant > const & ( ::SireMol::AtomProperty< QVariant >::*at_function_type )( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::detail::PackedArray2D_Array< QVariant > const & ( ::SireMol::AtomProperty< QVariant >::*at_function_type)( ::SireMol::CGIdx ) const;
             at_function_type at_function_value( &::SireMol::AtomProperty< QVariant >::at );
             
             AtomVariantProperty_exposer.def( 
@@ -104,7 +104,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::at
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef ::QVariant const & ( ::SireMol::AtomProperty< QVariant >::*at_function_type )( ::SireMol::CGAtomIdx const & ) const;
+            typedef ::QVariant const & ( ::SireMol::AtomProperty< QVariant >::*at_function_type)( ::SireMol::CGAtomIdx const & ) const;
             at_function_type at_function_value( &::SireMol::AtomProperty< QVariant >::at );
             
             AtomVariantProperty_exposer.def( 
@@ -117,7 +117,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::canConvert
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef bool ( ::SireMol::AtomProperty< QVariant >::*canConvert_function_type )( ::QVariant const & ) const;
+            typedef bool ( ::SireMol::AtomProperty< QVariant >::*canConvert_function_type)( ::QVariant const & ) const;
             canConvert_function_type canConvert_function_value( &::SireMol::AtomProperty< QVariant >::canConvert );
             
             AtomVariantProperty_exposer.def( 
@@ -129,7 +129,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::copyFrom
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< QVariant >::*copyFrom_function_type )( ::QVector< QVariant > const & ) ;
+            typedef void ( ::SireMol::AtomProperty< QVariant >::*copyFrom_function_type)( ::QVector< QVariant > const & ) ;
             copyFrom_function_type copyFrom_function_value( &::SireMol::AtomProperty< QVariant >::copyFrom );
             
             AtomVariantProperty_exposer.def( 
@@ -141,7 +141,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::copyFrom
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< QVariant >::*copyFrom_function_type )( ::QVector< QVariant > const &,::SireMol::AtomSelection const & ) ;
+            typedef void ( ::SireMol::AtomProperty< QVariant >::*copyFrom_function_type)( ::QVector< QVariant > const &,::SireMol::AtomSelection const & ) ;
             copyFrom_function_type copyFrom_function_value( &::SireMol::AtomProperty< QVariant >::copyFrom );
             
             AtomVariantProperty_exposer.def( 
@@ -153,7 +153,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::count
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< QVariant >::*count_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomProperty< QVariant >::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMol::AtomProperty< QVariant >::count );
             
             AtomVariantProperty_exposer.def( 
@@ -164,7 +164,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::divide
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< QVariant >::*divide_function_type )( ::QVector< SireMol::AtomSelection > const & ) const;
+            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< QVariant >::*divide_function_type)( ::QVector< SireMol::AtomSelection > const & ) const;
             divide_function_type divide_function_value( &::SireMol::AtomProperty< QVariant >::divide );
             
             AtomVariantProperty_exposer.def( 
@@ -176,7 +176,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::divideByResidue
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< QVariant >::*divideByResidue_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< QVariant >::*divideByResidue_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             divideByResidue_function_type divideByResidue_function_value( &::SireMol::AtomProperty< QVariant >::divideByResidue );
             
             AtomVariantProperty_exposer.def( 
@@ -200,7 +200,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::get
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< QVariant > const & ( ::SireMol::AtomProperty< QVariant >::*get_function_type )( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::detail::PackedArray2D_Array< QVariant > const & ( ::SireMol::AtomProperty< QVariant >::*get_function_type)( ::SireMol::CGIdx ) const;
             get_function_type get_function_value( &::SireMol::AtomProperty< QVariant >::get );
             
             AtomVariantProperty_exposer.def( 
@@ -213,7 +213,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::get
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef ::QVariant const & ( ::SireMol::AtomProperty< QVariant >::*get_function_type )( ::SireMol::CGAtomIdx const & ) const;
+            typedef ::QVariant const & ( ::SireMol::AtomProperty< QVariant >::*get_function_type)( ::SireMol::CGAtomIdx const & ) const;
             get_function_type get_function_value( &::SireMol::AtomProperty< QVariant >::get );
             
             AtomVariantProperty_exposer.def( 
@@ -226,7 +226,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::isCompatibleWith
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef bool ( ::SireMol::AtomProperty< QVariant >::*isCompatibleWith_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef bool ( ::SireMol::AtomProperty< QVariant >::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::AtomProperty< QVariant >::isCompatibleWith );
             
             AtomVariantProperty_exposer.def( 
@@ -238,7 +238,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::isEmpty
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef bool ( ::SireMol::AtomProperty< QVariant >::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::AtomProperty< QVariant >::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::AtomProperty< QVariant >::isEmpty );
             
             AtomVariantProperty_exposer.def( 
@@ -249,7 +249,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::matchToSelection
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef ::SireMol::AtomProperty< QVariant > ( ::SireMol::AtomProperty< QVariant >::*matchToSelection_function_type )( ::SireMol::AtomSelection const & ) const;
+            typedef ::SireMol::AtomProperty< QVariant > ( ::SireMol::AtomProperty< QVariant >::*matchToSelection_function_type)( ::SireMol::AtomSelection const & ) const;
             matchToSelection_function_type matchToSelection_function_value( &::SireMol::AtomProperty< QVariant >::matchToSelection );
             
             AtomVariantProperty_exposer.def( 
@@ -261,7 +261,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::merge
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< QVariant >::*merge_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< QVariant >::*merge_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             merge_function_type merge_function_value( &::SireMol::AtomProperty< QVariant >::merge );
             
             AtomVariantProperty_exposer.def( 
@@ -273,7 +273,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::nAtoms
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< QVariant >::*nAtoms_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomProperty< QVariant >::*nAtoms_function_type)(  ) const;
             nAtoms_function_type nAtoms_function_value( &::SireMol::AtomProperty< QVariant >::nAtoms );
             
             AtomVariantProperty_exposer.def( 
@@ -284,7 +284,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::nAtoms
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< QVariant >::*nAtoms_function_type )( ::SireMol::CGIdx ) const;
+            typedef int ( ::SireMol::AtomProperty< QVariant >::*nAtoms_function_type)( ::SireMol::CGIdx ) const;
             nAtoms_function_type nAtoms_function_value( &::SireMol::AtomProperty< QVariant >::nAtoms );
             
             AtomVariantProperty_exposer.def( 
@@ -296,7 +296,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::nCutGroups
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< QVariant >::*nCutGroups_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomProperty< QVariant >::*nCutGroups_function_type)(  ) const;
             nCutGroups_function_type nCutGroups_function_value( &::SireMol::AtomProperty< QVariant >::nCutGroups );
             
             AtomVariantProperty_exposer.def( 
@@ -308,7 +308,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::operator=
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef ::SireMol::AtomProperty< QVariant > & ( ::SireMol::AtomProperty< QVariant >::*assign_function_type )( ::SireMol::AtomProperty< QVariant > const & ) ;
+            typedef ::SireMol::AtomProperty< QVariant > & ( ::SireMol::AtomProperty< QVariant >::*assign_function_type)( ::SireMol::AtomProperty< QVariant > const & ) ;
             assign_function_type assign_function_value( &::SireMol::AtomProperty< QVariant >::operator= );
             
             AtomVariantProperty_exposer.def( 
@@ -322,7 +322,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::operator[]
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< QVariant > const & ( ::SireMol::AtomProperty< QVariant >::*__getitem___function_type )( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::detail::PackedArray2D_Array< QVariant > const & ( ::SireMol::AtomProperty< QVariant >::*__getitem___function_type)( ::SireMol::CGIdx ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< QVariant >::operator[] );
             
             AtomVariantProperty_exposer.def( 
@@ -335,7 +335,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::operator[]
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef ::QVariant const & ( ::SireMol::AtomProperty< QVariant >::*__getitem___function_type )( ::SireMol::CGAtomIdx const & ) const;
+            typedef ::QVariant const & ( ::SireMol::AtomProperty< QVariant >::*__getitem___function_type)( ::SireMol::CGAtomIdx const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< QVariant >::operator[] );
             
             AtomVariantProperty_exposer.def( 
@@ -348,7 +348,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::set
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef ::SireMol::AtomProperty< QVariant > & ( ::SireMol::AtomProperty< QVariant >::*set_function_type )( ::SireMol::CGAtomIdx const &,::QVariant const & ) ;
+            typedef ::SireMol::AtomProperty< QVariant > & ( ::SireMol::AtomProperty< QVariant >::*set_function_type)( ::SireMol::CGAtomIdx const &,::QVariant const & ) ;
             set_function_type set_function_value( &::SireMol::AtomProperty< QVariant >::set );
             
             AtomVariantProperty_exposer.def( 
@@ -361,7 +361,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::set
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef ::SireMol::AtomProperty< QVariant > & ( ::SireMol::AtomProperty< QVariant >::*set_function_type )( ::SireMol::CGIdx,::QVector< QVariant > const & ) ;
+            typedef ::SireMol::AtomProperty< QVariant > & ( ::SireMol::AtomProperty< QVariant >::*set_function_type)( ::SireMol::CGIdx,::QVector< QVariant > const & ) ;
             set_function_type set_function_value( &::SireMol::AtomProperty< QVariant >::set );
             
             AtomVariantProperty_exposer.def( 
@@ -374,7 +374,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::size
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< QVariant >::*size_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomProperty< QVariant >::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireMol::AtomProperty< QVariant >::size );
             
             AtomVariantProperty_exposer.def( 
@@ -385,7 +385,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::toString
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef ::QString ( ::SireMol::AtomProperty< QVariant >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::AtomProperty< QVariant >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::AtomProperty< QVariant >::toString );
             
             AtomVariantProperty_exposer.def( 
@@ -396,7 +396,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::toVariant
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef ::SireMol::AtomProperty< QVariant > ( ::SireMol::AtomProperty< QVariant >::*toVariant_function_type )(  ) const;
+            typedef ::SireMol::AtomProperty< QVariant > ( ::SireMol::AtomProperty< QVariant >::*toVariant_function_type)(  ) const;
             toVariant_function_type toVariant_function_value( &::SireMol::AtomProperty< QVariant >::toVariant );
             
             AtomVariantProperty_exposer.def( 
@@ -407,7 +407,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::toVector
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef ::QVector< QVariant > ( ::SireMol::AtomProperty< QVariant >::*toVector_function_type )(  ) const;
+            typedef ::QVector< QVariant > ( ::SireMol::AtomProperty< QVariant >::*toVector_function_type)(  ) const;
             toVector_function_type toVector_function_value( &::SireMol::AtomProperty< QVariant >::toVector );
             
             AtomVariantProperty_exposer.def( 
@@ -418,7 +418,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::toVector
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef ::QVector< QVariant > ( ::SireMol::AtomProperty< QVariant >::*toVector_function_type )( ::SireMol::AtomSelection const & ) const;
+            typedef ::QVector< QVariant > ( ::SireMol::AtomProperty< QVariant >::*toVector_function_type)( ::SireMol::AtomSelection const & ) const;
             toVector_function_type toVector_function_value( &::SireMol::AtomProperty< QVariant >::toVector );
             
             AtomVariantProperty_exposer.def( 

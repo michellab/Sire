@@ -69,7 +69,7 @@ void register_ChainIdx_class(){
         ChainIdx_exposer.def( bp::init< SireMol::ChainIdx const & >(( bp::arg("other") )) );
         { //::SireMol::ChainIdx::hash
         
-            typedef ::uint ( ::SireMol::ChainIdx::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::ChainIdx::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::ChainIdx::hash );
             
             ChainIdx_exposer.def( 
@@ -79,7 +79,7 @@ void register_ChainIdx_class(){
         }
         { //::SireMol::ChainIdx::isNull
         
-            typedef bool ( ::SireMol::ChainIdx::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::ChainIdx::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::ChainIdx::isNull );
             
             ChainIdx_exposer.def( 
@@ -89,7 +89,7 @@ void register_ChainIdx_class(){
         }
         { //::SireMol::ChainIdx::map
         
-            typedef ::QList< SireMol::ChainIdx > ( ::SireMol::ChainIdx::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::ChainIdx > ( ::SireMol::ChainIdx::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireMol::ChainIdx::map );
             
             ChainIdx_exposer.def( 
@@ -110,7 +110,7 @@ void register_ChainIdx_class(){
         }
         { //::SireMol::ChainIdx::operator=
         
-            typedef ::SireMol::ChainIdx & ( ::SireMol::ChainIdx::*assign_function_type )( ::SireMol::ChainIdx const & ) ;
+            typedef ::SireMol::ChainIdx & ( ::SireMol::ChainIdx::*assign_function_type)( ::SireMol::ChainIdx const & ) ;
             assign_function_type assign_function_value( &::SireMol::ChainIdx::operator= );
             
             ChainIdx_exposer.def( 
@@ -122,7 +122,7 @@ void register_ChainIdx_class(){
         }
         { //::SireMol::ChainIdx::toString
         
-            typedef ::QString ( ::SireMol::ChainIdx::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::ChainIdx::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::ChainIdx::toString );
             
             ChainIdx_exposer.def( 
@@ -142,7 +142,7 @@ void register_ChainIdx_class(){
         }
         { //::SireMol::ChainIdx::what
         
-            typedef char const * ( ::SireMol::ChainIdx::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::ChainIdx::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::ChainIdx::what );
             
             ChainIdx_exposer.def( 

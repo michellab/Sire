@@ -50,7 +50,7 @@ void register_RanGenerator_class(){
         RanGenerator_exposer.def( bp::init< SireMaths::RanGenerator const & >(( bp::arg("other") )) );
         { //::SireMaths::RanGenerator::getState
         
-            typedef ::QVector< unsigned int > ( ::SireMaths::RanGenerator::*getState_function_type )(  ) const;
+            typedef ::QVector< unsigned int > ( ::SireMaths::RanGenerator::*getState_function_type)(  ) const;
             getState_function_type getState_function_value( &::SireMaths::RanGenerator::getState );
             
             RanGenerator_exposer.def( 
@@ -72,7 +72,7 @@ void register_RanGenerator_class(){
         RanGenerator_exposer.def( bp::self != bp::self );
         { //::SireMaths::RanGenerator::operator=
         
-            typedef ::SireMaths::RanGenerator & ( ::SireMaths::RanGenerator::*assign_function_type )( ::SireMaths::RanGenerator const & ) ;
+            typedef ::SireMaths::RanGenerator & ( ::SireMaths::RanGenerator::*assign_function_type)( ::SireMaths::RanGenerator const & ) ;
             assign_function_type assign_function_value( &::SireMaths::RanGenerator::operator= );
             
             RanGenerator_exposer.def( 
@@ -85,7 +85,7 @@ void register_RanGenerator_class(){
         RanGenerator_exposer.def( bp::self == bp::self );
         { //::SireMaths::RanGenerator::rand
         
-            typedef double ( ::SireMaths::RanGenerator::*rand_function_type )(  ) const;
+            typedef double ( ::SireMaths::RanGenerator::*rand_function_type)(  ) const;
             rand_function_type rand_function_value( &::SireMaths::RanGenerator::rand );
             
             RanGenerator_exposer.def( 
@@ -95,7 +95,7 @@ void register_RanGenerator_class(){
         }
         { //::SireMaths::RanGenerator::rand
         
-            typedef double ( ::SireMaths::RanGenerator::*rand_function_type )( double ) const;
+            typedef double ( ::SireMaths::RanGenerator::*rand_function_type)( double ) const;
             rand_function_type rand_function_value( &::SireMaths::RanGenerator::rand );
             
             RanGenerator_exposer.def( 
@@ -106,7 +106,7 @@ void register_RanGenerator_class(){
         }
         { //::SireMaths::RanGenerator::rand
         
-            typedef double ( ::SireMaths::RanGenerator::*rand_function_type )( double,double ) const;
+            typedef double ( ::SireMaths::RanGenerator::*rand_function_type)( double,double ) const;
             rand_function_type rand_function_value( &::SireMaths::RanGenerator::rand );
             
             RanGenerator_exposer.def( 
@@ -117,7 +117,7 @@ void register_RanGenerator_class(){
         }
         { //::SireMaths::RanGenerator::rand53
         
-            typedef double ( ::SireMaths::RanGenerator::*rand53_function_type )(  ) const;
+            typedef double ( ::SireMaths::RanGenerator::*rand53_function_type)(  ) const;
             rand53_function_type rand53_function_value( &::SireMaths::RanGenerator::rand53 );
             
             RanGenerator_exposer.def( 
@@ -127,7 +127,7 @@ void register_RanGenerator_class(){
         }
         { //::SireMaths::RanGenerator::rand53
         
-            typedef double ( ::SireMaths::RanGenerator::*rand53_function_type )( double ) const;
+            typedef double ( ::SireMaths::RanGenerator::*rand53_function_type)( double ) const;
             rand53_function_type rand53_function_value( &::SireMaths::RanGenerator::rand53 );
             
             RanGenerator_exposer.def( 
@@ -138,7 +138,7 @@ void register_RanGenerator_class(){
         }
         { //::SireMaths::RanGenerator::rand53
         
-            typedef double ( ::SireMaths::RanGenerator::*rand53_function_type )( double,double ) const;
+            typedef double ( ::SireMaths::RanGenerator::*rand53_function_type)( double,double ) const;
             rand53_function_type rand53_function_value( &::SireMaths::RanGenerator::rand53 );
             
             RanGenerator_exposer.def( 
@@ -149,7 +149,7 @@ void register_RanGenerator_class(){
         }
         { //::SireMaths::RanGenerator::randBool
         
-            typedef bool ( ::SireMaths::RanGenerator::*randBool_function_type )(  ) const;
+            typedef bool ( ::SireMaths::RanGenerator::*randBool_function_type)(  ) const;
             randBool_function_type randBool_function_value( &::SireMaths::RanGenerator::randBool );
             
             RanGenerator_exposer.def( 
@@ -159,7 +159,7 @@ void register_RanGenerator_class(){
         }
         { //::SireMaths::RanGenerator::randInt
         
-            typedef ::quint32 ( ::SireMaths::RanGenerator::*randInt_function_type )(  ) const;
+            typedef ::quint32 ( ::SireMaths::RanGenerator::*randInt_function_type)(  ) const;
             randInt_function_type randInt_function_value( &::SireMaths::RanGenerator::randInt );
             
             RanGenerator_exposer.def( 
@@ -169,7 +169,7 @@ void register_RanGenerator_class(){
         }
         { //::SireMaths::RanGenerator::randInt
         
-            typedef ::quint32 ( ::SireMaths::RanGenerator::*randInt_function_type )( ::quint32 ) const;
+            typedef ::quint32 ( ::SireMaths::RanGenerator::*randInt_function_type)( ::quint32 ) const;
             randInt_function_type randInt_function_value( &::SireMaths::RanGenerator::randInt );
             
             RanGenerator_exposer.def( 
@@ -180,7 +180,7 @@ void register_RanGenerator_class(){
         }
         { //::SireMaths::RanGenerator::randInt
         
-            typedef ::qint32 ( ::SireMaths::RanGenerator::*randInt_function_type )( ::qint32,::qint32 ) const;
+            typedef ::qint32 ( ::SireMaths::RanGenerator::*randInt_function_type)( ::qint32,::qint32 ) const;
             randInt_function_type randInt_function_value( &::SireMaths::RanGenerator::randInt );
             
             RanGenerator_exposer.def( 
@@ -191,7 +191,7 @@ void register_RanGenerator_class(){
         }
         { //::SireMaths::RanGenerator::randInt64
         
-            typedef ::quint64 ( ::SireMaths::RanGenerator::*randInt64_function_type )(  ) const;
+            typedef ::quint64 ( ::SireMaths::RanGenerator::*randInt64_function_type)(  ) const;
             randInt64_function_type randInt64_function_value( &::SireMaths::RanGenerator::randInt64 );
             
             RanGenerator_exposer.def( 
@@ -201,7 +201,7 @@ void register_RanGenerator_class(){
         }
         { //::SireMaths::RanGenerator::randInt64
         
-            typedef ::quint64 ( ::SireMaths::RanGenerator::*randInt64_function_type )( ::quint64 ) const;
+            typedef ::quint64 ( ::SireMaths::RanGenerator::*randInt64_function_type)( ::quint64 ) const;
             randInt64_function_type randInt64_function_value( &::SireMaths::RanGenerator::randInt64 );
             
             RanGenerator_exposer.def( 
@@ -212,7 +212,7 @@ void register_RanGenerator_class(){
         }
         { //::SireMaths::RanGenerator::randInt64
         
-            typedef ::qint64 ( ::SireMaths::RanGenerator::*randInt64_function_type )( ::qint64,::qint64 ) const;
+            typedef ::qint64 ( ::SireMaths::RanGenerator::*randInt64_function_type)( ::qint64,::qint64 ) const;
             randInt64_function_type randInt64_function_value( &::SireMaths::RanGenerator::randInt64 );
             
             RanGenerator_exposer.def( 
@@ -223,7 +223,7 @@ void register_RanGenerator_class(){
         }
         { //::SireMaths::RanGenerator::randNorm
         
-            typedef double ( ::SireMaths::RanGenerator::*randNorm_function_type )( double,double ) const;
+            typedef double ( ::SireMaths::RanGenerator::*randNorm_function_type)( double,double ) const;
             randNorm_function_type randNorm_function_value( &::SireMaths::RanGenerator::randNorm );
             
             RanGenerator_exposer.def( 
@@ -234,7 +234,7 @@ void register_RanGenerator_class(){
         }
         { //::SireMaths::RanGenerator::seed
         
-            typedef void ( ::SireMaths::RanGenerator::*seed_function_type )(  ) ;
+            typedef void ( ::SireMaths::RanGenerator::*seed_function_type)(  ) ;
             seed_function_type seed_function_value( &::SireMaths::RanGenerator::seed );
             
             RanGenerator_exposer.def( 
@@ -244,7 +244,7 @@ void register_RanGenerator_class(){
         }
         { //::SireMaths::RanGenerator::seed
         
-            typedef void ( ::SireMaths::RanGenerator::*seed_function_type )( ::quint32 ) ;
+            typedef void ( ::SireMaths::RanGenerator::*seed_function_type)( ::quint32 ) ;
             seed_function_type seed_function_value( &::SireMaths::RanGenerator::seed );
             
             RanGenerator_exposer.def( 
@@ -255,7 +255,7 @@ void register_RanGenerator_class(){
         }
         { //::SireMaths::RanGenerator::seed
         
-            typedef void ( ::SireMaths::RanGenerator::*seed_function_type )( ::QVector< unsigned int > const & ) ;
+            typedef void ( ::SireMaths::RanGenerator::*seed_function_type)( ::QVector< unsigned int > const & ) ;
             seed_function_type seed_function_value( &::SireMaths::RanGenerator::seed );
             
             RanGenerator_exposer.def( 
@@ -266,7 +266,7 @@ void register_RanGenerator_class(){
         }
         { //::SireMaths::RanGenerator::seed
         
-            typedef void ( ::SireMaths::RanGenerator::*seed_function_type )( ::SireMaths::RanGenerator const & ) ;
+            typedef void ( ::SireMaths::RanGenerator::*seed_function_type)( ::SireMaths::RanGenerator const & ) ;
             seed_function_type seed_function_value( &::SireMaths::RanGenerator::seed );
             
             RanGenerator_exposer.def( 
@@ -320,7 +320,7 @@ void register_RanGenerator_class(){
         }
         { //::SireMaths::RanGenerator::setState
         
-            typedef void ( ::SireMaths::RanGenerator::*setState_function_type )( ::QVector< unsigned int > const & ) ;
+            typedef void ( ::SireMaths::RanGenerator::*setState_function_type)( ::QVector< unsigned int > const & ) ;
             setState_function_type setState_function_value( &::SireMaths::RanGenerator::setState );
             
             RanGenerator_exposer.def( 
@@ -341,7 +341,7 @@ void register_RanGenerator_class(){
         }
         { //::SireMaths::RanGenerator::vectorOnSphere
         
-            typedef ::SireMaths::Vector ( ::SireMaths::RanGenerator::*vectorOnSphere_function_type )(  ) const;
+            typedef ::SireMaths::Vector ( ::SireMaths::RanGenerator::*vectorOnSphere_function_type)(  ) const;
             vectorOnSphere_function_type vectorOnSphere_function_value( &::SireMaths::RanGenerator::vectorOnSphere );
             
             RanGenerator_exposer.def( 
@@ -351,7 +351,7 @@ void register_RanGenerator_class(){
         }
         { //::SireMaths::RanGenerator::vectorOnSphere
         
-            typedef ::SireMaths::Vector ( ::SireMaths::RanGenerator::*vectorOnSphere_function_type )( double ) const;
+            typedef ::SireMaths::Vector ( ::SireMaths::RanGenerator::*vectorOnSphere_function_type)( double ) const;
             vectorOnSphere_function_type vectorOnSphere_function_value( &::SireMaths::RanGenerator::vectorOnSphere );
             
             RanGenerator_exposer.def( 
@@ -362,7 +362,7 @@ void register_RanGenerator_class(){
         }
         { //::SireMaths::RanGenerator::what
         
-            typedef char const * ( ::SireMaths::RanGenerator::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMaths::RanGenerator::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMaths::RanGenerator::what );
             
             RanGenerator_exposer.def( 

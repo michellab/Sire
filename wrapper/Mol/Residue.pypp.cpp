@@ -85,7 +85,7 @@ void register_Residue_class(){
         Residue_exposer.def( bp::init< SireMol::Residue const & >(( bp::arg("other") )) );
         { //::SireMol::Residue::assertContainsMetadata
         
-            typedef void ( ::SireMol::Residue::*assertContainsMetadata_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef void ( ::SireMol::Residue::*assertContainsMetadata_function_type)( ::SireBase::PropertyName const & ) const;
             assertContainsMetadata_function_type assertContainsMetadata_function_value( &::SireMol::Residue::assertContainsMetadata );
             
             Residue_exposer.def( 
@@ -96,7 +96,7 @@ void register_Residue_class(){
         }
         { //::SireMol::Residue::assertContainsMetadata
         
-            typedef void ( ::SireMol::Residue::*assertContainsMetadata_function_type )( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
+            typedef void ( ::SireMol::Residue::*assertContainsMetadata_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
             assertContainsMetadata_function_type assertContainsMetadata_function_value( &::SireMol::Residue::assertContainsMetadata );
             
             Residue_exposer.def( 
@@ -107,7 +107,7 @@ void register_Residue_class(){
         }
         { //::SireMol::Residue::assertContainsProperty
         
-            typedef void ( ::SireMol::Residue::*assertContainsProperty_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef void ( ::SireMol::Residue::*assertContainsProperty_function_type)( ::SireBase::PropertyName const & ) const;
             assertContainsProperty_function_type assertContainsProperty_function_value( &::SireMol::Residue::assertContainsProperty );
             
             Residue_exposer.def( 
@@ -118,7 +118,7 @@ void register_Residue_class(){
         }
         { //::SireMol::Residue::atomIdxs
         
-            typedef ::QList< SireMol::AtomIdx > const & ( ::SireMol::Residue::*atomIdxs_function_type )(  ) const;
+            typedef ::QList< SireMol::AtomIdx > const & ( ::SireMol::Residue::*atomIdxs_function_type)(  ) const;
             atomIdxs_function_type atomIdxs_function_value( &::SireMol::Residue::atomIdxs );
             
             Residue_exposer.def( 
@@ -129,7 +129,7 @@ void register_Residue_class(){
         }
         { //::SireMol::Residue::contains
         
-            typedef bool ( ::SireMol::Residue::*contains_function_type )( ::SireMol::AtomIdx ) const;
+            typedef bool ( ::SireMol::Residue::*contains_function_type)( ::SireMol::AtomIdx ) const;
             contains_function_type contains_function_value( &::SireMol::Residue::contains );
             
             Residue_exposer.def( 
@@ -140,7 +140,7 @@ void register_Residue_class(){
         }
         { //::SireMol::Residue::contains
         
-            typedef bool ( ::SireMol::Residue::*contains_function_type )( ::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMol::Residue::*contains_function_type)( ::SireMol::AtomID const & ) const;
             contains_function_type contains_function_value( &::SireMol::Residue::contains );
             
             Residue_exposer.def( 
@@ -151,7 +151,7 @@ void register_Residue_class(){
         }
         { //::SireMol::Residue::edit
         
-            typedef ::SireMol::ResEditor ( ::SireMol::Residue::*edit_function_type )(  ) const;
+            typedef ::SireMol::ResEditor ( ::SireMol::Residue::*edit_function_type)(  ) const;
             edit_function_type edit_function_value( &::SireMol::Residue::edit );
             
             Residue_exposer.def( 
@@ -161,7 +161,7 @@ void register_Residue_class(){
         }
         { //::SireMol::Residue::evaluate
         
-            typedef ::SireMol::Evaluator ( ::SireMol::Residue::*evaluate_function_type )(  ) const;
+            typedef ::SireMol::Evaluator ( ::SireMol::Residue::*evaluate_function_type)(  ) const;
             evaluate_function_type evaluate_function_value( &::SireMol::Residue::evaluate );
             
             Residue_exposer.def( 
@@ -171,7 +171,7 @@ void register_Residue_class(){
         }
         { //::SireMol::Residue::hasMetadata
         
-            typedef bool ( ::SireMol::Residue::*hasMetadata_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Residue::*hasMetadata_function_type)( ::SireBase::PropertyName const & ) const;
             hasMetadata_function_type hasMetadata_function_value( &::SireMol::Residue::hasMetadata );
             
             Residue_exposer.def( 
@@ -182,7 +182,7 @@ void register_Residue_class(){
         }
         { //::SireMol::Residue::hasMetadata
         
-            typedef bool ( ::SireMol::Residue::*hasMetadata_function_type )( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Residue::*hasMetadata_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
             hasMetadata_function_type hasMetadata_function_value( &::SireMol::Residue::hasMetadata );
             
             Residue_exposer.def( 
@@ -193,7 +193,7 @@ void register_Residue_class(){
         }
         { //::SireMol::Residue::hasProperty
         
-            typedef bool ( ::SireMol::Residue::*hasProperty_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Residue::*hasProperty_function_type)( ::SireBase::PropertyName const & ) const;
             hasProperty_function_type hasProperty_function_value( &::SireMol::Residue::hasProperty );
             
             Residue_exposer.def( 
@@ -204,7 +204,7 @@ void register_Residue_class(){
         }
         { //::SireMol::Residue::index
         
-            typedef ::SireMol::ResIdx ( ::SireMol::Residue::*index_function_type )(  ) const;
+            typedef ::SireMol::ResIdx ( ::SireMol::Residue::*index_function_type)(  ) const;
             index_function_type index_function_value( &::SireMol::Residue::index );
             
             Residue_exposer.def( 
@@ -214,7 +214,7 @@ void register_Residue_class(){
         }
         { //::SireMol::Residue::intersects
         
-            typedef bool ( ::SireMol::Residue::*intersects_function_type )( ::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMol::Residue::*intersects_function_type)( ::SireMol::AtomID const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::Residue::intersects );
             
             Residue_exposer.def( 
@@ -225,7 +225,7 @@ void register_Residue_class(){
         }
         { //::SireMol::Residue::isEmpty
         
-            typedef bool ( ::SireMol::Residue::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::Residue::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::Residue::isEmpty );
             
             Residue_exposer.def( 
@@ -235,7 +235,7 @@ void register_Residue_class(){
         }
         { //::SireMol::Residue::isWithinChain
         
-            typedef bool ( ::SireMol::Residue::*isWithinChain_function_type )(  ) const;
+            typedef bool ( ::SireMol::Residue::*isWithinChain_function_type)(  ) const;
             isWithinChain_function_type isWithinChain_function_value( &::SireMol::Residue::isWithinChain );
             
             Residue_exposer.def( 
@@ -245,7 +245,7 @@ void register_Residue_class(){
         }
         { //::SireMol::Residue::metadataKeys
         
-            typedef ::QStringList ( ::SireMol::Residue::*metadataKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireMol::Residue::*metadataKeys_function_type)(  ) const;
             metadataKeys_function_type metadataKeys_function_value( &::SireMol::Residue::metadataKeys );
             
             Residue_exposer.def( 
@@ -255,7 +255,7 @@ void register_Residue_class(){
         }
         { //::SireMol::Residue::metadataKeys
         
-            typedef ::QStringList ( ::SireMol::Residue::*metadataKeys_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef ::QStringList ( ::SireMol::Residue::*metadataKeys_function_type)( ::SireBase::PropertyName const & ) const;
             metadataKeys_function_type metadataKeys_function_value( &::SireMol::Residue::metadataKeys );
             
             Residue_exposer.def( 
@@ -266,7 +266,7 @@ void register_Residue_class(){
         }
         { //::SireMol::Residue::move
         
-            typedef ::SireMol::Mover< SireMol::Residue > ( ::SireMol::Residue::*move_function_type )(  ) const;
+            typedef ::SireMol::Mover< SireMol::Residue > ( ::SireMol::Residue::*move_function_type)(  ) const;
             move_function_type move_function_value( &::SireMol::Residue::move );
             
             Residue_exposer.def( 
@@ -276,7 +276,7 @@ void register_Residue_class(){
         }
         { //::SireMol::Residue::nAtoms
         
-            typedef int ( ::SireMol::Residue::*nAtoms_function_type )(  ) const;
+            typedef int ( ::SireMol::Residue::*nAtoms_function_type)(  ) const;
             nAtoms_function_type nAtoms_function_value( &::SireMol::Residue::nAtoms );
             
             Residue_exposer.def( 
@@ -286,7 +286,7 @@ void register_Residue_class(){
         }
         { //::SireMol::Residue::name
         
-            typedef ::SireMol::ResName ( ::SireMol::Residue::*name_function_type )(  ) const;
+            typedef ::SireMol::ResName ( ::SireMol::Residue::*name_function_type)(  ) const;
             name_function_type name_function_value( &::SireMol::Residue::name );
             
             Residue_exposer.def( 
@@ -296,7 +296,7 @@ void register_Residue_class(){
         }
         { //::SireMol::Residue::number
         
-            typedef ::SireMol::ResNum ( ::SireMol::Residue::*number_function_type )(  ) const;
+            typedef ::SireMol::ResNum ( ::SireMol::Residue::*number_function_type)(  ) const;
             number_function_type number_function_value( &::SireMol::Residue::number );
             
             Residue_exposer.def( 
@@ -307,7 +307,7 @@ void register_Residue_class(){
         Residue_exposer.def( bp::self != bp::self );
         { //::SireMol::Residue::operator=
         
-            typedef ::SireMol::Residue & ( ::SireMol::Residue::*assign_function_type )( ::SireMol::Residue const & ) ;
+            typedef ::SireMol::Residue & ( ::SireMol::Residue::*assign_function_type)( ::SireMol::Residue const & ) ;
             assign_function_type assign_function_value( &::SireMol::Residue::operator= );
             
             Residue_exposer.def( 
@@ -320,7 +320,7 @@ void register_Residue_class(){
         Residue_exposer.def( bp::self == bp::self );
         { //::SireMol::Residue::propertyKeys
         
-            typedef ::QStringList ( ::SireMol::Residue::*propertyKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireMol::Residue::*propertyKeys_function_type)(  ) const;
             propertyKeys_function_type propertyKeys_function_value( &::SireMol::Residue::propertyKeys );
             
             Residue_exposer.def( 
@@ -330,7 +330,7 @@ void register_Residue_class(){
         }
         { //::SireMol::Residue::selectedAll
         
-            typedef bool ( ::SireMol::Residue::*selectedAll_function_type )(  ) const;
+            typedef bool ( ::SireMol::Residue::*selectedAll_function_type)(  ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::Residue::selectedAll );
             
             Residue_exposer.def( 
@@ -340,7 +340,7 @@ void register_Residue_class(){
         }
         { //::SireMol::Residue::selection
         
-            typedef ::SireMol::AtomSelection ( ::SireMol::Residue::*selection_function_type )(  ) const;
+            typedef ::SireMol::AtomSelection ( ::SireMol::Residue::*selection_function_type)(  ) const;
             selection_function_type selection_function_value( &::SireMol::Residue::selection );
             
             Residue_exposer.def( 
@@ -350,7 +350,7 @@ void register_Residue_class(){
         }
         { //::SireMol::Residue::selector
         
-            typedef ::SireMol::Selector< SireMol::Residue > ( ::SireMol::Residue::*selector_function_type )(  ) const;
+            typedef ::SireMol::Selector< SireMol::Residue > ( ::SireMol::Residue::*selector_function_type)(  ) const;
             selector_function_type selector_function_value( &::SireMol::Residue::selector );
             
             Residue_exposer.def( 
@@ -360,7 +360,7 @@ void register_Residue_class(){
         }
         { //::SireMol::Residue::toString
         
-            typedef ::QString ( ::SireMol::Residue::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::Residue::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::Residue::toString );
             
             Residue_exposer.def( 
@@ -380,7 +380,7 @@ void register_Residue_class(){
         }
         { //::SireMol::Residue::update
         
-            typedef void ( ::SireMol::Residue::*update_function_type )( ::SireMol::MoleculeData const & ) ;
+            typedef void ( ::SireMol::Residue::*update_function_type)( ::SireMol::MoleculeData const & ) ;
             update_function_type update_function_value( &::SireMol::Residue::update );
             
             Residue_exposer.def( 

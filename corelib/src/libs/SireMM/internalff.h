@@ -39,6 +39,7 @@
 
 #include "internalcomponent.h"
 #include "internalparameters.h"
+#include "clj14group.h"
 
 namespace SireMM
 {
@@ -258,6 +259,26 @@ private:
     static PropertyName sbt_param;
 };
 
+/** This class provides the default name of the 
+    property that contains the non-bonded 1-4 scale factors */
+class SIREMM_EXPORT IntrascaleParameterName
+{
+public:
+    IntrascaleParameterName()
+    {}
+    
+    ~IntrascaleParameterName()
+    {}
+    
+    const PropertyName& intrascale() const
+    {
+        return intra_param;
+    }
+
+private:
+    static PropertyName intra_param;
+};
+
 /** This class provides the default name of the properties
     that contain the bond, angle, dihedral and Urey-Bradley parameters */
 class SIREMM_EXPORT InternalParameterNames 
@@ -267,7 +288,8 @@ class SIREMM_EXPORT InternalParameterNames
               public StretchStretchParameterName,
               public StretchBendParameterName,
               public BendBendParameterName,
-              public StretchBendTorsionParameterName
+              public StretchBendTorsionParameterName,
+              public IntrascaleParameterName
 {
 public:
     InternalParameterNames() 
@@ -275,7 +297,8 @@ public:
               DihedralParameterName(), 
               ImproperParameterName(), UreyBradleyParameterName(),
               StretchStretchParameterName(), StretchBendParameterName(),
-              BendBendParameterName(), StretchBendTorsionParameterName()
+              BendBendParameterName(), StretchBendTorsionParameterName(),
+              IntrascaleParameterName()
     {}
     
     ~InternalParameterNames()
@@ -468,6 +491,20 @@ public:
     bool setStrict(bool isstrict);
     bool isStrict() const;
 
+    void setArithmeticCombiningRules(bool on);
+    void setGeometricCombiningRules(bool on);
+    
+    CLJFunction::COMBINING_RULES combiningRules() const;
+    bool setCombiningRules(CLJFunction::COMBINING_RULES rules);
+    
+    bool usingArithmeticCombiningRules() const;
+    bool usingGeometricCombiningRules() const;
+
+    void enable14Calculation();
+    void disable14Calculation();
+    bool setUse14Calculation(bool on);
+    bool uses14Calculation() const;
+
     bool setProperty(const QString &name, const Property &property);
     const Property& property(const QString &name) const;
     bool containsProperty(const QString &name) const;
@@ -542,11 +579,21 @@ private:
         molecule at the last energy evaluation. */
     QHash<MolNum,ChangedMolecule> changed_mols;
 
+    /** The CLJ14Group that is used to calculate the 1-4 nonbonded energy
+        of all contained molecules */
+    QHash<MolNum,CLJ14Group> cljgroups;
+
+    /** All of the (non-default) property maps for the molecules */
+    QHash<MolNum,PropertyMap> propmaps;
+
     /** The energy components available for this forcefield */
     Components ffcomponents;
     
     /** The properties of this forcefield */
     Properties props;
+    
+    /** Whether or not to calculate 1-4 nonbonded energies */
+    bool calc_14_nrgs;
 };
 
 #ifndef SIRE_SKIP_INLINE_FUNCTIONS

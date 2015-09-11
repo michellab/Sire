@@ -103,7 +103,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::align
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*align_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*align_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
             align_function_type align_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::align );
             
             Mover_PartialMolecule__exposer.def( 
@@ -116,7 +116,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::align
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*align_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*align_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
             align_function_type align_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::align );
             
             Mover_PartialMolecule__exposer.def( 
@@ -129,7 +129,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::align
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*align_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*align_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
             align_function_type align_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::align );
             
             Mover_PartialMolecule__exposer.def( 
@@ -142,7 +142,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::align
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*align_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*align_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
             align_function_type align_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::align );
             
             Mover_PartialMolecule__exposer.def( 
@@ -155,7 +155,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::alignTo
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*alignTo_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*alignTo_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
             alignTo_function_type alignTo_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::alignTo );
             
             Mover_PartialMolecule__exposer.def( 
@@ -168,7 +168,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::alignTo
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*alignTo_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*alignTo_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
             alignTo_function_type alignTo_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::alignTo );
             
             Mover_PartialMolecule__exposer.def( 
@@ -181,7 +181,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::alignTo
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*alignTo_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomSelection const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*alignTo_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomSelection const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
             alignTo_function_type alignTo_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::alignTo );
             
             Mover_PartialMolecule__exposer.def( 
@@ -194,7 +194,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::alignTo
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*alignTo_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomSelection const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*alignTo_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomSelection const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
             alignTo_function_type alignTo_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::alignTo );
             
             Mover_PartialMolecule__exposer.def( 
@@ -207,7 +207,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::change
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*change_function_type )( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*change_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 >,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::change );
             
             Mover_PartialMolecule__exposer.def( 
@@ -220,7 +220,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::change
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*change_function_type )( ::SireMol::AngleID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*change_function_type)( ::SireMol::AngleID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::change );
             
             Mover_PartialMolecule__exposer.def( 
@@ -233,7 +233,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::change
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*change_function_type )( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*change_function_type)( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::change );
             
             Mover_PartialMolecule__exposer.def( 
@@ -246,7 +246,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::change
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*change_function_type )( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*change_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::change );
             
             Mover_PartialMolecule__exposer.def( 
@@ -259,7 +259,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::change
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*change_function_type )( ::SireMol::ImproperID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*change_function_type)( ::SireMol::ImproperID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::change );
             
             Mover_PartialMolecule__exposer.def( 
@@ -272,7 +272,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::changeFrame
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*changeFrame_function_type )( ::SireMaths::AxisSet const &,::SireMaths::AxisSet const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*changeFrame_function_type)( ::SireMaths::AxisSet const &,::SireMaths::AxisSet const &,::SireBase::PropertyMap const & ) ;
             changeFrame_function_type changeFrame_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::changeFrame );
             
             Mover_PartialMolecule__exposer.def( 
@@ -285,7 +285,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::commit
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::PartialMolecule ( ::SireMol::Mover< SireMol::PartialMolecule >::*commit_function_type )(  ) const;
+            typedef ::SireMol::PartialMolecule ( ::SireMol::Mover< SireMol::PartialMolecule >::*commit_function_type)(  ) const;
             commit_function_type commit_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::commit );
             
             Mover_PartialMolecule__exposer.def( 
@@ -296,7 +296,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::mapInto
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*mapInto_function_type )( ::SireMaths::AxisSet const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*mapInto_function_type)( ::SireMaths::AxisSet const &,::SireBase::PropertyMap const & ) ;
             mapInto_function_type mapInto_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::mapInto );
             
             Mover_PartialMolecule__exposer.def( 
@@ -309,7 +309,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::operator=
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*assign_function_type )( ::SireMol::Mover< SireMol::PartialMolecule > const & ) ;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*assign_function_type)( ::SireMol::Mover< SireMol::PartialMolecule > const & ) ;
             assign_function_type assign_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::operator= );
             
             Mover_PartialMolecule__exposer.def( 
@@ -322,7 +322,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::operator=
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*assign_function_type )( ::SireMol::PartialMolecule const & ) ;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*assign_function_type)( ::SireMol::PartialMolecule const & ) ;
             assign_function_type assign_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::operator= );
             
             Mover_PartialMolecule__exposer.def( 
@@ -335,7 +335,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::rotate
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*rotate_function_type )( ::SireMaths::Quaternion const &,::SireMaths::Vector const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*rotate_function_type)( ::SireMaths::Quaternion const &,::SireMaths::Vector const &,::SireBase::PropertyMap const & ) ;
             rotate_function_type rotate_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::rotate );
             
             Mover_PartialMolecule__exposer.def( 
@@ -348,7 +348,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::rotate
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*rotate_function_type )( ::SireMaths::Matrix const &,::SireMaths::Vector const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*rotate_function_type)( ::SireMaths::Matrix const &,::SireMaths::Vector const &,::SireBase::PropertyMap const & ) ;
             rotate_function_type rotate_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::rotate );
             
             Mover_PartialMolecule__exposer.def( 
@@ -361,7 +361,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::set
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*set_function_type )( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*set_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 >,::SireBase::PropertyMap const & ) ;
             set_function_type set_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::set );
             
             Mover_PartialMolecule__exposer.def( 
@@ -374,7 +374,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::set
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*set_function_type )( ::SireMol::AngleID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*set_function_type)( ::SireMol::AngleID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             set_function_type set_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::set );
             
             Mover_PartialMolecule__exposer.def( 
@@ -387,7 +387,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::set
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*set_function_type )( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*set_function_type)( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             set_function_type set_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::set );
             
             Mover_PartialMolecule__exposer.def( 
@@ -400,7 +400,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::set
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*set_function_type )( ::SireMol::ImproperID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*set_function_type)( ::SireMol::ImproperID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             set_function_type set_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::set );
             
             Mover_PartialMolecule__exposer.def( 
@@ -413,7 +413,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::setAll
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*setAll_function_type )( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*setAll_function_type)( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             setAll_function_type setAll_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::setAll );
             
             Mover_PartialMolecule__exposer.def( 
@@ -426,7 +426,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::toString
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::QString ( ::SireMol::Mover< SireMol::PartialMolecule >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::Mover< SireMol::PartialMolecule >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::toString );
             
             Mover_PartialMolecule__exposer.def( 
@@ -437,7 +437,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::transform
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*transform_function_type )( ::SireMaths::Transform const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*transform_function_type)( ::SireMaths::Transform const &,::SireBase::PropertyMap const & ) ;
             transform_function_type transform_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::transform );
             
             Mover_PartialMolecule__exposer.def( 
@@ -450,7 +450,7 @@ void register_Mover_PartialMolecule__class(){
         { //::SireMol::Mover< SireMol::PartialMolecule >::translate
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*translate_function_type )( ::SireMaths::Vector const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > & ( ::SireMol::Mover< SireMol::PartialMolecule >::*translate_function_type)( ::SireMaths::Vector const &,::SireBase::PropertyMap const & ) ;
             translate_function_type translate_function_value( &::SireMol::Mover< SireMol::PartialMolecule >::translate );
             
             Mover_PartialMolecule__exposer.def( 

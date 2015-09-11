@@ -40,7 +40,7 @@ void register_IDAndSet_FFID__class(){
         { //::SireID::IDAndSet< SireFF::FFID >::IDs
         
             typedef SireID::IDAndSet< SireFF::FFID > exported_class_t;
-            typedef ::QSet< SireFF::FFIdentifier > const & ( ::SireID::IDAndSet< SireFF::FFID >::*IDs_function_type )(  ) const;
+            typedef ::QSet< SireFF::FFIdentifier > const & ( ::SireID::IDAndSet< SireFF::FFID >::*IDs_function_type)(  ) const;
             IDs_function_type IDs_function_value( &::SireID::IDAndSet< SireFF::FFID >::IDs );
             
             IDAndSet_FFID__exposer.def( 
@@ -52,7 +52,7 @@ void register_IDAndSet_FFID__class(){
         { //::SireID::IDAndSet< SireFF::FFID >::hash
         
             typedef SireID::IDAndSet< SireFF::FFID > exported_class_t;
-            typedef ::uint ( ::SireID::IDAndSet< SireFF::FFID >::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireID::IDAndSet< SireFF::FFID >::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireID::IDAndSet< SireFF::FFID >::hash );
             
             IDAndSet_FFID__exposer.def( 
@@ -63,7 +63,7 @@ void register_IDAndSet_FFID__class(){
         { //::SireID::IDAndSet< SireFF::FFID >::isNull
         
             typedef SireID::IDAndSet< SireFF::FFID > exported_class_t;
-            typedef bool ( ::SireID::IDAndSet< SireFF::FFID >::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireID::IDAndSet< SireFF::FFID >::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireID::IDAndSet< SireFF::FFID >::isNull );
             
             IDAndSet_FFID__exposer.def( 
@@ -74,7 +74,7 @@ void register_IDAndSet_FFID__class(){
         { //::SireID::IDAndSet< SireFF::FFID >::map
         
             typedef SireID::IDAndSet< SireFF::FFID > exported_class_t;
-            typedef ::QList< SireFF::FFIdx > ( ::SireID::IDAndSet< SireFF::FFID >::*map_function_type )( ::SireFF::ForceFields const & ) const;
+            typedef ::QList< SireFF::FFIdx > ( ::SireID::IDAndSet< SireFF::FFID >::*map_function_type)( ::SireFF::ForceFields const & ) const;
             map_function_type map_function_value( &::SireID::IDAndSet< SireFF::FFID >::map );
             
             IDAndSet_FFID__exposer.def( 
@@ -89,7 +89,7 @@ void register_IDAndSet_FFID__class(){
         { //::SireID::IDAndSet< SireFF::FFID >::operator=
         
             typedef SireID::IDAndSet< SireFF::FFID > exported_class_t;
-            typedef ::SireID::IDAndSet< SireFF::FFID > & ( ::SireID::IDAndSet< SireFF::FFID >::*assign_function_type )( ::SireID::IDAndSet< SireFF::FFID > const & ) ;
+            typedef ::SireID::IDAndSet< SireFF::FFID > & ( ::SireID::IDAndSet< SireFF::FFID >::*assign_function_type)( ::SireID::IDAndSet< SireFF::FFID > const & ) ;
             assign_function_type assign_function_value( &::SireID::IDAndSet< SireFF::FFID >::operator= );
             
             IDAndSet_FFID__exposer.def( 
@@ -102,7 +102,7 @@ void register_IDAndSet_FFID__class(){
         { //::SireID::IDAndSet< SireFF::FFID >::operator=
         
             typedef SireID::IDAndSet< SireFF::FFID > exported_class_t;
-            typedef ::SireID::IDAndSet< SireFF::FFID > & ( ::SireID::IDAndSet< SireFF::FFID >::*assign_function_type )( ::SireFF::FFID const & ) ;
+            typedef ::SireID::IDAndSet< SireFF::FFID > & ( ::SireID::IDAndSet< SireFF::FFID >::*assign_function_type)( ::SireFF::FFID const & ) ;
             assign_function_type assign_function_value( &::SireID::IDAndSet< SireFF::FFID >::operator= );
             
             IDAndSet_FFID__exposer.def( 
@@ -118,7 +118,7 @@ void register_IDAndSet_FFID__class(){
         { //::SireID::IDAndSet< SireFF::FFID >::toString
         
             typedef SireID::IDAndSet< SireFF::FFID > exported_class_t;
-            typedef ::QString ( ::SireID::IDAndSet< SireFF::FFID >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireID::IDAndSet< SireFF::FFID >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireID::IDAndSet< SireFF::FFID >::toString );
             
             IDAndSet_FFID__exposer.def( 
@@ -140,7 +140,7 @@ void register_IDAndSet_FFID__class(){
         { //::SireID::IDAndSet< SireFF::FFID >::what
         
             typedef SireID::IDAndSet< SireFF::FFID > exported_class_t;
-            typedef char const * ( ::SireID::IDAndSet< SireFF::FFID >::*what_function_type )(  ) const;
+            typedef char const * ( ::SireID::IDAndSet< SireFF::FFID >::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireID::IDAndSet< SireFF::FFID >::what );
             
             IDAndSet_FFID__exposer.def( 

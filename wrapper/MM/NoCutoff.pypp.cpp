@@ -42,7 +42,7 @@ void register_NoCutoff_class(){
         NoCutoff_exposer.def( bp::init< SireMM::NoCutoff const & >(( bp::arg("other") )) );
         { //::SireMM::NoCutoff::dElectrostaticScaleFactor
         
-            typedef double ( ::SireMM::NoCutoff::*dElectrostaticScaleFactor_function_type )( ::SireUnits::Dimension::Length ) const;
+            typedef double ( ::SireMM::NoCutoff::*dElectrostaticScaleFactor_function_type)( ::SireUnits::Dimension::Length ) const;
             dElectrostaticScaleFactor_function_type dElectrostaticScaleFactor_function_value( &::SireMM::NoCutoff::dElectrostaticScaleFactor );
             
             NoCutoff_exposer.def( 
@@ -53,7 +53,7 @@ void register_NoCutoff_class(){
         }
         { //::SireMM::NoCutoff::dVDWScaleFactor
         
-            typedef double ( ::SireMM::NoCutoff::*dVDWScaleFactor_function_type )( ::SireUnits::Dimension::Length ) const;
+            typedef double ( ::SireMM::NoCutoff::*dVDWScaleFactor_function_type)( ::SireUnits::Dimension::Length ) const;
             dVDWScaleFactor_function_type dVDWScaleFactor_function_value( &::SireMM::NoCutoff::dVDWScaleFactor );
             
             NoCutoff_exposer.def( 
@@ -64,7 +64,7 @@ void register_NoCutoff_class(){
         }
         { //::SireMM::NoCutoff::electrostaticScaleFactor
         
-            typedef double ( ::SireMM::NoCutoff::*electrostaticScaleFactor_function_type )( ::SireUnits::Dimension::Length ) const;
+            typedef double ( ::SireMM::NoCutoff::*electrostaticScaleFactor_function_type)( ::SireUnits::Dimension::Length ) const;
             electrostaticScaleFactor_function_type electrostaticScaleFactor_function_value( &::SireMM::NoCutoff::electrostaticScaleFactor );
             
             NoCutoff_exposer.def( 
@@ -76,7 +76,7 @@ void register_NoCutoff_class(){
         NoCutoff_exposer.def( bp::self != bp::self );
         { //::SireMM::NoCutoff::operator=
         
-            typedef ::SireMM::NoCutoff & ( ::SireMM::NoCutoff::*assign_function_type )( ::SireMM::NoCutoff const & ) ;
+            typedef ::SireMM::NoCutoff & ( ::SireMM::NoCutoff::*assign_function_type)( ::SireMM::NoCutoff const & ) ;
             assign_function_type assign_function_value( &::SireMM::NoCutoff::operator= );
             
             NoCutoff_exposer.def( 
@@ -89,7 +89,7 @@ void register_NoCutoff_class(){
         NoCutoff_exposer.def( bp::self == bp::self );
         { //::SireMM::NoCutoff::toString
         
-            typedef ::QString ( ::SireMM::NoCutoff::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMM::NoCutoff::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMM::NoCutoff::toString );
             
             NoCutoff_exposer.def( 
@@ -109,7 +109,7 @@ void register_NoCutoff_class(){
         }
         { //::SireMM::NoCutoff::vdwScaleFactor
         
-            typedef double ( ::SireMM::NoCutoff::*vdwScaleFactor_function_type )( ::SireUnits::Dimension::Length ) const;
+            typedef double ( ::SireMM::NoCutoff::*vdwScaleFactor_function_type)( ::SireUnits::Dimension::Length ) const;
             vdwScaleFactor_function_type vdwScaleFactor_function_value( &::SireMM::NoCutoff::vdwScaleFactor );
             
             NoCutoff_exposer.def( 

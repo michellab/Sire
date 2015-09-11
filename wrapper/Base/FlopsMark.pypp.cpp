@@ -70,7 +70,7 @@ void register_FlopsMark_class(){
         }
         { //::SireBase::FlopsMark::nFlops
         
-            typedef int ( ::SireBase::FlopsMark::*nFlops_function_type )(  ) const;
+            typedef int ( ::SireBase::FlopsMark::*nFlops_function_type)(  ) const;
             nFlops_function_type nFlops_function_value( &::SireBase::FlopsMark::nFlops );
             
             FlopsMark_exposer.def( 
@@ -80,7 +80,7 @@ void register_FlopsMark_class(){
         }
         { //::SireBase::FlopsMark::nThreads
         
-            typedef int ( ::SireBase::FlopsMark::*nThreads_function_type )(  ) const;
+            typedef int ( ::SireBase::FlopsMark::*nThreads_function_type)(  ) const;
             nThreads_function_type nThreads_function_value( &::SireBase::FlopsMark::nThreads );
             
             FlopsMark_exposer.def( 
@@ -91,7 +91,7 @@ void register_FlopsMark_class(){
         FlopsMark_exposer.def( bp::self - bp::self );
         { //::SireBase::FlopsMark::operator=
         
-            typedef ::SireBase::FlopsMark & ( ::SireBase::FlopsMark::*assign_function_type )( ::SireBase::FlopsMark const & ) ;
+            typedef ::SireBase::FlopsMark & ( ::SireBase::FlopsMark::*assign_function_type)( ::SireBase::FlopsMark const & ) ;
             assign_function_type assign_function_value( &::SireBase::FlopsMark::operator= );
             
             FlopsMark_exposer.def( 
@@ -103,7 +103,7 @@ void register_FlopsMark_class(){
         }
         { //::SireBase::FlopsMark::operator[]
         
-            typedef ::SireBase::FlopsMark ( ::SireBase::FlopsMark::*__getitem___function_type )( int ) const;
+            typedef ::SireBase::FlopsMark ( ::SireBase::FlopsMark::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireBase::FlopsMark::operator[] );
             
             FlopsMark_exposer.def( 
@@ -114,7 +114,7 @@ void register_FlopsMark_class(){
         }
         { //::SireBase::FlopsMark::threadFlops
         
-            typedef ::SireBase::FlopsMark ( ::SireBase::FlopsMark::*threadFlops_function_type )( int ) const;
+            typedef ::SireBase::FlopsMark ( ::SireBase::FlopsMark::*threadFlops_function_type)( int ) const;
             threadFlops_function_type threadFlops_function_value( &::SireBase::FlopsMark::threadFlops );
             
             FlopsMark_exposer.def( 

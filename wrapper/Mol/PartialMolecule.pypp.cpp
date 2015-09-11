@@ -61,7 +61,7 @@ void register_PartialMolecule_class(){
         PartialMolecule_exposer.def( bp::init< SireMol::PartialMolecule const & >(( bp::arg("other") )) );
         { //::SireMol::PartialMolecule::evaluate
         
-            typedef ::SireMol::Evaluator ( ::SireMol::PartialMolecule::*evaluate_function_type )(  ) const;
+            typedef ::SireMol::Evaluator ( ::SireMol::PartialMolecule::*evaluate_function_type)(  ) const;
             evaluate_function_type evaluate_function_value( &::SireMol::PartialMolecule::evaluate );
             
             PartialMolecule_exposer.def( 
@@ -71,7 +71,7 @@ void register_PartialMolecule_class(){
         }
         { //::SireMol::PartialMolecule::extract
         
-            typedef ::SireMol::PartialMolecule ( ::SireMol::PartialMolecule::*extract_function_type )(  ) const;
+            typedef ::SireMol::PartialMolecule ( ::SireMol::PartialMolecule::*extract_function_type)(  ) const;
             extract_function_type extract_function_value( &::SireMol::PartialMolecule::extract );
             
             PartialMolecule_exposer.def( 
@@ -81,7 +81,7 @@ void register_PartialMolecule_class(){
         }
         { //::SireMol::PartialMolecule::hasMetadata
         
-            typedef bool ( ::SireMol::PartialMolecule::*hasMetadata_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::PartialMolecule::*hasMetadata_function_type)( ::SireBase::PropertyName const & ) const;
             hasMetadata_function_type hasMetadata_function_value( &::SireMol::PartialMolecule::hasMetadata );
             
             PartialMolecule_exposer.def( 
@@ -92,7 +92,7 @@ void register_PartialMolecule_class(){
         }
         { //::SireMol::PartialMolecule::hasMetadata
         
-            typedef bool ( ::SireMol::PartialMolecule::*hasMetadata_function_type )( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::PartialMolecule::*hasMetadata_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
             hasMetadata_function_type hasMetadata_function_value( &::SireMol::PartialMolecule::hasMetadata );
             
             PartialMolecule_exposer.def( 
@@ -103,7 +103,7 @@ void register_PartialMolecule_class(){
         }
         { //::SireMol::PartialMolecule::hasProperty
         
-            typedef bool ( ::SireMol::PartialMolecule::*hasProperty_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::PartialMolecule::*hasProperty_function_type)( ::SireBase::PropertyName const & ) const;
             hasProperty_function_type hasProperty_function_value( &::SireMol::PartialMolecule::hasProperty );
             
             PartialMolecule_exposer.def( 
@@ -114,7 +114,7 @@ void register_PartialMolecule_class(){
         }
         { //::SireMol::PartialMolecule::isEmpty
         
-            typedef bool ( ::SireMol::PartialMolecule::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::PartialMolecule::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::PartialMolecule::isEmpty );
             
             PartialMolecule_exposer.def( 
@@ -124,7 +124,7 @@ void register_PartialMolecule_class(){
         }
         { //::SireMol::PartialMolecule::metadata
         
-            typedef ::SireBase::Property const & ( ::SireMol::PartialMolecule::*metadata_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef ::SireBase::Property const & ( ::SireMol::PartialMolecule::*metadata_function_type)( ::SireBase::PropertyName const & ) const;
             metadata_function_type metadata_function_value( &::SireMol::PartialMolecule::metadata );
             
             PartialMolecule_exposer.def( 
@@ -136,7 +136,7 @@ void register_PartialMolecule_class(){
         }
         { //::SireMol::PartialMolecule::metadata
         
-            typedef ::SireBase::Property const & ( ::SireMol::PartialMolecule::*metadata_function_type )( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
+            typedef ::SireBase::Property const & ( ::SireMol::PartialMolecule::*metadata_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
             metadata_function_type metadata_function_value( &::SireMol::PartialMolecule::metadata );
             
             PartialMolecule_exposer.def( 
@@ -148,7 +148,7 @@ void register_PartialMolecule_class(){
         }
         { //::SireMol::PartialMolecule::metadataKeys
         
-            typedef ::QStringList ( ::SireMol::PartialMolecule::*metadataKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireMol::PartialMolecule::*metadataKeys_function_type)(  ) const;
             metadataKeys_function_type metadataKeys_function_value( &::SireMol::PartialMolecule::metadataKeys );
             
             PartialMolecule_exposer.def( 
@@ -158,7 +158,7 @@ void register_PartialMolecule_class(){
         }
         { //::SireMol::PartialMolecule::metadataKeys
         
-            typedef ::QStringList ( ::SireMol::PartialMolecule::*metadataKeys_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef ::QStringList ( ::SireMol::PartialMolecule::*metadataKeys_function_type)( ::SireBase::PropertyName const & ) const;
             metadataKeys_function_type metadataKeys_function_value( &::SireMol::PartialMolecule::metadataKeys );
             
             PartialMolecule_exposer.def( 
@@ -169,7 +169,7 @@ void register_PartialMolecule_class(){
         }
         { //::SireMol::PartialMolecule::move
         
-            typedef ::SireMol::Mover< SireMol::PartialMolecule > ( ::SireMol::PartialMolecule::*move_function_type )(  ) const;
+            typedef ::SireMol::Mover< SireMol::PartialMolecule > ( ::SireMol::PartialMolecule::*move_function_type)(  ) const;
             move_function_type move_function_value( &::SireMol::PartialMolecule::move );
             
             PartialMolecule_exposer.def( 
@@ -179,7 +179,7 @@ void register_PartialMolecule_class(){
         }
         { //::SireMol::PartialMolecule::nAtoms
         
-            typedef int ( ::SireMol::PartialMolecule::*nAtoms_function_type )(  ) const;
+            typedef int ( ::SireMol::PartialMolecule::*nAtoms_function_type)(  ) const;
             nAtoms_function_type nAtoms_function_value( &::SireMol::PartialMolecule::nAtoms );
             
             PartialMolecule_exposer.def( 
@@ -189,7 +189,7 @@ void register_PartialMolecule_class(){
         }
         { //::SireMol::PartialMolecule::nChains
         
-            typedef int ( ::SireMol::PartialMolecule::*nChains_function_type )(  ) const;
+            typedef int ( ::SireMol::PartialMolecule::*nChains_function_type)(  ) const;
             nChains_function_type nChains_function_value( &::SireMol::PartialMolecule::nChains );
             
             PartialMolecule_exposer.def( 
@@ -199,7 +199,7 @@ void register_PartialMolecule_class(){
         }
         { //::SireMol::PartialMolecule::nCutGroups
         
-            typedef int ( ::SireMol::PartialMolecule::*nCutGroups_function_type )(  ) const;
+            typedef int ( ::SireMol::PartialMolecule::*nCutGroups_function_type)(  ) const;
             nCutGroups_function_type nCutGroups_function_value( &::SireMol::PartialMolecule::nCutGroups );
             
             PartialMolecule_exposer.def( 
@@ -209,7 +209,7 @@ void register_PartialMolecule_class(){
         }
         { //::SireMol::PartialMolecule::nResidues
         
-            typedef int ( ::SireMol::PartialMolecule::*nResidues_function_type )(  ) const;
+            typedef int ( ::SireMol::PartialMolecule::*nResidues_function_type)(  ) const;
             nResidues_function_type nResidues_function_value( &::SireMol::PartialMolecule::nResidues );
             
             PartialMolecule_exposer.def( 
@@ -219,7 +219,7 @@ void register_PartialMolecule_class(){
         }
         { //::SireMol::PartialMolecule::nSegments
         
-            typedef int ( ::SireMol::PartialMolecule::*nSegments_function_type )(  ) const;
+            typedef int ( ::SireMol::PartialMolecule::*nSegments_function_type)(  ) const;
             nSegments_function_type nSegments_function_value( &::SireMol::PartialMolecule::nSegments );
             
             PartialMolecule_exposer.def( 
@@ -229,7 +229,7 @@ void register_PartialMolecule_class(){
         }
         { //::SireMol::PartialMolecule::name
         
-            typedef ::SireMol::MolName const & ( ::SireMol::PartialMolecule::*name_function_type )(  ) const;
+            typedef ::SireMol::MolName const & ( ::SireMol::PartialMolecule::*name_function_type)(  ) const;
             name_function_type name_function_value( &::SireMol::PartialMolecule::name );
             
             PartialMolecule_exposer.def( 
@@ -240,7 +240,7 @@ void register_PartialMolecule_class(){
         }
         { //::SireMol::PartialMolecule::number
         
-            typedef ::SireMol::MolNum ( ::SireMol::PartialMolecule::*number_function_type )(  ) const;
+            typedef ::SireMol::MolNum ( ::SireMol::PartialMolecule::*number_function_type)(  ) const;
             number_function_type number_function_value( &::SireMol::PartialMolecule::number );
             
             PartialMolecule_exposer.def( 
@@ -251,7 +251,7 @@ void register_PartialMolecule_class(){
         PartialMolecule_exposer.def( bp::self != bp::self );
         { //::SireMol::PartialMolecule::operator=
         
-            typedef ::SireMol::PartialMolecule & ( ::SireMol::PartialMolecule::*assign_function_type )( ::SireMol::MoleculeView const & ) ;
+            typedef ::SireMol::PartialMolecule & ( ::SireMol::PartialMolecule::*assign_function_type)( ::SireMol::MoleculeView const & ) ;
             assign_function_type assign_function_value( &::SireMol::PartialMolecule::operator= );
             
             PartialMolecule_exposer.def( 
@@ -263,7 +263,7 @@ void register_PartialMolecule_class(){
         }
         { //::SireMol::PartialMolecule::operator=
         
-            typedef ::SireMol::PartialMolecule & ( ::SireMol::PartialMolecule::*assign_function_type )( ::SireMol::PartialMolecule const & ) ;
+            typedef ::SireMol::PartialMolecule & ( ::SireMol::PartialMolecule::*assign_function_type)( ::SireMol::PartialMolecule const & ) ;
             assign_function_type assign_function_value( &::SireMol::PartialMolecule::operator= );
             
             PartialMolecule_exposer.def( 
@@ -276,7 +276,7 @@ void register_PartialMolecule_class(){
         PartialMolecule_exposer.def( bp::self == bp::self );
         { //::SireMol::PartialMolecule::property
         
-            typedef ::SireBase::Property const & ( ::SireMol::PartialMolecule::*property_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef ::SireBase::Property const & ( ::SireMol::PartialMolecule::*property_function_type)( ::SireBase::PropertyName const & ) const;
             property_function_type property_function_value( &::SireMol::PartialMolecule::property );
             
             PartialMolecule_exposer.def( 
@@ -288,7 +288,7 @@ void register_PartialMolecule_class(){
         }
         { //::SireMol::PartialMolecule::propertyKeys
         
-            typedef ::QStringList ( ::SireMol::PartialMolecule::*propertyKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireMol::PartialMolecule::*propertyKeys_function_type)(  ) const;
             propertyKeys_function_type propertyKeys_function_value( &::SireMol::PartialMolecule::propertyKeys );
             
             PartialMolecule_exposer.def( 
@@ -298,7 +298,7 @@ void register_PartialMolecule_class(){
         }
         { //::SireMol::PartialMolecule::selectedAll
         
-            typedef bool ( ::SireMol::PartialMolecule::*selectedAll_function_type )(  ) const;
+            typedef bool ( ::SireMol::PartialMolecule::*selectedAll_function_type)(  ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::PartialMolecule::selectedAll );
             
             PartialMolecule_exposer.def( 
@@ -308,7 +308,7 @@ void register_PartialMolecule_class(){
         }
         { //::SireMol::PartialMolecule::selection
         
-            typedef ::SireMol::AtomSelection ( ::SireMol::PartialMolecule::*selection_function_type )(  ) const;
+            typedef ::SireMol::AtomSelection ( ::SireMol::PartialMolecule::*selection_function_type)(  ) const;
             selection_function_type selection_function_value( &::SireMol::PartialMolecule::selection );
             
             PartialMolecule_exposer.def( 
@@ -318,7 +318,7 @@ void register_PartialMolecule_class(){
         }
         { //::SireMol::PartialMolecule::toString
         
-            typedef ::QString ( ::SireMol::PartialMolecule::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::PartialMolecule::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::PartialMolecule::toString );
             
             PartialMolecule_exposer.def( 
@@ -338,7 +338,7 @@ void register_PartialMolecule_class(){
         }
         { //::SireMol::PartialMolecule::version
         
-            typedef ::quint64 ( ::SireMol::PartialMolecule::*version_function_type )(  ) const;
+            typedef ::quint64 ( ::SireMol::PartialMolecule::*version_function_type)(  ) const;
             version_function_type version_function_value( &::SireMol::PartialMolecule::version );
             
             PartialMolecule_exposer.def( 
@@ -348,7 +348,7 @@ void register_PartialMolecule_class(){
         }
         { //::SireMol::PartialMolecule::version
         
-            typedef ::quint64 ( ::SireMol::PartialMolecule::*version_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef ::quint64 ( ::SireMol::PartialMolecule::*version_function_type)( ::SireBase::PropertyName const & ) const;
             version_function_type version_function_value( &::SireMol::PartialMolecule::version );
             
             PartialMolecule_exposer.def( 

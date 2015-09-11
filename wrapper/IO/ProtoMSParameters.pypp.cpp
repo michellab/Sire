@@ -101,7 +101,7 @@ void register_ProtoMSParameters_class(){
         bp::scope ProtoMSParameters_scope( ProtoMSParameters_exposer );
         { //::SireIO::ProtoMSParameters::angle
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*angle_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*angle_function_type)(  ) const;
             angle_function_type angle_function_value( &::SireIO::ProtoMSParameters::angle );
             
             ProtoMSParameters_exposer.def( 
@@ -112,7 +112,7 @@ void register_ProtoMSParameters_class(){
         }
         { //::SireIO::ProtoMSParameters::bond
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*bond_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*bond_function_type)(  ) const;
             bond_function_type bond_function_value( &::SireIO::ProtoMSParameters::bond );
             
             ProtoMSParameters_exposer.def( 
@@ -123,7 +123,7 @@ void register_ProtoMSParameters_class(){
         }
         { //::SireIO::ProtoMSParameters::charge
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*charge_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*charge_function_type)(  ) const;
             charge_function_type charge_function_value( &::SireIO::ProtoMSParameters::charge );
             
             ProtoMSParameters_exposer.def( 
@@ -134,7 +134,7 @@ void register_ProtoMSParameters_class(){
         }
         { //::SireIO::ProtoMSParameters::connectivity
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*connectivity_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*connectivity_function_type)(  ) const;
             connectivity_function_type connectivity_function_value( &::SireIO::ProtoMSParameters::connectivity );
             
             ProtoMSParameters_exposer.def( 
@@ -145,7 +145,7 @@ void register_ProtoMSParameters_class(){
         }
         { //::SireIO::ProtoMSParameters::coordinates
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*coordinates_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*coordinates_function_type)(  ) const;
             coordinates_function_type coordinates_function_value( &::SireIO::ProtoMSParameters::coordinates );
             
             ProtoMSParameters_exposer.def( 
@@ -156,7 +156,7 @@ void register_ProtoMSParameters_class(){
         }
         { //::SireIO::ProtoMSParameters::dihedral
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*dihedral_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*dihedral_function_type)(  ) const;
             dihedral_function_type dihedral_function_value( &::SireIO::ProtoMSParameters::dihedral );
             
             ProtoMSParameters_exposer.def( 
@@ -167,7 +167,7 @@ void register_ProtoMSParameters_class(){
         }
         { //::SireIO::ProtoMSParameters::finalCharge
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*finalCharge_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*finalCharge_function_type)(  ) const;
             finalCharge_function_type finalCharge_function_value( &::SireIO::ProtoMSParameters::finalCharge );
             
             ProtoMSParameters_exposer.def( 
@@ -178,7 +178,7 @@ void register_ProtoMSParameters_class(){
         }
         { //::SireIO::ProtoMSParameters::finalLJ
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*finalLJ_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*finalLJ_function_type)(  ) const;
             finalLJ_function_type finalLJ_function_value( &::SireIO::ProtoMSParameters::finalLJ );
             
             ProtoMSParameters_exposer.def( 
@@ -189,7 +189,7 @@ void register_ProtoMSParameters_class(){
         }
         { //::SireIO::ProtoMSParameters::initialCharge
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*initialCharge_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*initialCharge_function_type)(  ) const;
             initialCharge_function_type initialCharge_function_value( &::SireIO::ProtoMSParameters::initialCharge );
             
             ProtoMSParameters_exposer.def( 
@@ -200,7 +200,7 @@ void register_ProtoMSParameters_class(){
         }
         { //::SireIO::ProtoMSParameters::initialLJ
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*initialLJ_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*initialLJ_function_type)(  ) const;
             initialLJ_function_type initialLJ_function_value( &::SireIO::ProtoMSParameters::initialLJ );
             
             ProtoMSParameters_exposer.def( 
@@ -211,7 +211,7 @@ void register_ProtoMSParameters_class(){
         }
         { //::SireIO::ProtoMSParameters::lj
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*lj_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*lj_function_type)(  ) const;
             lj_function_type lj_function_value( &::SireIO::ProtoMSParameters::lj );
             
             ProtoMSParameters_exposer.def( 
@@ -222,7 +222,7 @@ void register_ProtoMSParameters_class(){
         }
         { //::SireIO::ProtoMSParameters::nonBonded
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*nonBonded_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*nonBonded_function_type)(  ) const;
             nonBonded_function_type nonBonded_function_value( &::SireIO::ProtoMSParameters::nonBonded );
             
             ProtoMSParameters_exposer.def( 
@@ -233,7 +233,7 @@ void register_ProtoMSParameters_class(){
         }
         { //::SireIO::ProtoMSParameters::perturbations
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*perturbations_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*perturbations_function_type)(  ) const;
             perturbations_function_type perturbations_function_value( &::SireIO::ProtoMSParameters::perturbations );
             
             ProtoMSParameters_exposer.def( 
@@ -244,7 +244,7 @@ void register_ProtoMSParameters_class(){
         }
         { //::SireIO::ProtoMSParameters::ureyBradley
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*ureyBradley_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*ureyBradley_function_type)(  ) const;
             ureyBradley_function_type ureyBradley_function_value( &::SireIO::ProtoMSParameters::ureyBradley );
             
             ProtoMSParameters_exposer.def( 
@@ -255,7 +255,7 @@ void register_ProtoMSParameters_class(){
         }
         { //::SireIO::ProtoMSParameters::zmatrix
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*zmatrix_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::ProtoMSParameters::*zmatrix_function_type)(  ) const;
             zmatrix_function_type zmatrix_function_value( &::SireIO::ProtoMSParameters::zmatrix );
             
             ProtoMSParameters_exposer.def( 

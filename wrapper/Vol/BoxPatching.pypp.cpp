@@ -40,7 +40,7 @@ void register_BoxPatching_class(){
         BoxPatching_exposer.def( bp::init< SireVol::BoxPatching const & >(( bp::arg("other") )) );
         { //::SireVol::BoxPatching::center
         
-            typedef ::SireMaths::Vector ( ::SireVol::BoxPatching::*center_function_type )(  ) const;
+            typedef ::SireMaths::Vector ( ::SireVol::BoxPatching::*center_function_type)(  ) const;
             center_function_type center_function_value( &::SireVol::BoxPatching::center );
             
             BoxPatching_exposer.def( 
@@ -50,7 +50,7 @@ void register_BoxPatching_class(){
         }
         { //::SireVol::BoxPatching::nPatches
         
-            typedef int ( ::SireVol::BoxPatching::*nPatches_function_type )(  ) const;
+            typedef int ( ::SireVol::BoxPatching::*nPatches_function_type)(  ) const;
             nPatches_function_type nPatches_function_value( &::SireVol::BoxPatching::nPatches );
             
             BoxPatching_exposer.def( 
@@ -61,7 +61,7 @@ void register_BoxPatching_class(){
         BoxPatching_exposer.def( bp::self != bp::self );
         { //::SireVol::BoxPatching::operator=
         
-            typedef ::SireVol::BoxPatching & ( ::SireVol::BoxPatching::*assign_function_type )( ::SireVol::BoxPatching const & ) ;
+            typedef ::SireVol::BoxPatching & ( ::SireVol::BoxPatching::*assign_function_type)( ::SireVol::BoxPatching const & ) ;
             assign_function_type assign_function_value( &::SireVol::BoxPatching::operator= );
             
             BoxPatching_exposer.def( 
@@ -74,7 +74,7 @@ void register_BoxPatching_class(){
         BoxPatching_exposer.def( bp::self == bp::self );
         { //::SireVol::BoxPatching::patchBox
         
-            typedef ::SireVol::AABox ( ::SireVol::BoxPatching::*patchBox_function_type )( int ) const;
+            typedef ::SireVol::AABox ( ::SireVol::BoxPatching::*patchBox_function_type)( int ) const;
             patchBox_function_type patchBox_function_value( &::SireVol::BoxPatching::patchBox );
             
             BoxPatching_exposer.def( 
@@ -85,7 +85,7 @@ void register_BoxPatching_class(){
         }
         { //::SireVol::BoxPatching::patchBox
         
-            typedef ::SireVol::AABox ( ::SireVol::BoxPatching::*patchBox_function_type )( ::SireMaths::Vector const & ) const;
+            typedef ::SireVol::AABox ( ::SireVol::BoxPatching::*patchBox_function_type)( ::SireMaths::Vector const & ) const;
             patchBox_function_type patchBox_function_value( &::SireVol::BoxPatching::patchBox );
             
             BoxPatching_exposer.def( 
@@ -96,7 +96,7 @@ void register_BoxPatching_class(){
         }
         { //::SireVol::BoxPatching::patchDimension
         
-            typedef ::SireMaths::Vector ( ::SireVol::BoxPatching::*patchDimension_function_type )(  ) const;
+            typedef ::SireMaths::Vector ( ::SireVol::BoxPatching::*patchDimension_function_type)(  ) const;
             patchDimension_function_type patchDimension_function_value( &::SireVol::BoxPatching::patchDimension );
             
             BoxPatching_exposer.def( 
@@ -106,7 +106,7 @@ void register_BoxPatching_class(){
         }
         { //::SireVol::BoxPatching::patchIndex
         
-            typedef int ( ::SireVol::BoxPatching::*patchIndex_function_type )( ::SireMaths::Vector const & ) const;
+            typedef int ( ::SireVol::BoxPatching::*patchIndex_function_type)( ::SireMaths::Vector const & ) const;
             patchIndex_function_type patchIndex_function_value( &::SireVol::BoxPatching::patchIndex );
             
             BoxPatching_exposer.def( 
@@ -117,7 +117,7 @@ void register_BoxPatching_class(){
         }
         { //::SireVol::BoxPatching::patchIndexAndCenter
         
-            typedef ::QPair< int, SireMaths::Vector > ( ::SireVol::BoxPatching::*patchIndexAndCenter_function_type )( ::SireMaths::Vector const & ) const;
+            typedef ::QPair< int, SireMaths::Vector > ( ::SireVol::BoxPatching::*patchIndexAndCenter_function_type)( ::SireMaths::Vector const & ) const;
             patchIndexAndCenter_function_type patchIndexAndCenter_function_value( &::SireVol::BoxPatching::patchIndexAndCenter );
             
             BoxPatching_exposer.def( 
@@ -128,7 +128,7 @@ void register_BoxPatching_class(){
         }
         { //::SireVol::BoxPatching::patchSize
         
-            typedef ::SireUnits::Dimension::Length ( ::SireVol::BoxPatching::*patchSize_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireVol::BoxPatching::*patchSize_function_type)(  ) const;
             patchSize_function_type patchSize_function_value( &::SireVol::BoxPatching::patchSize );
             
             BoxPatching_exposer.def( 
@@ -138,7 +138,7 @@ void register_BoxPatching_class(){
         }
         { //::SireVol::BoxPatching::repatch
         
-            typedef ::SireVol::PatchingPtr ( ::SireVol::BoxPatching::*repatch_function_type )( ::SireVol::Space const & ) const;
+            typedef ::SireVol::PatchingPtr ( ::SireVol::BoxPatching::*repatch_function_type)( ::SireVol::Space const & ) const;
             repatch_function_type repatch_function_value( &::SireVol::BoxPatching::repatch );
             
             BoxPatching_exposer.def( 
@@ -149,7 +149,7 @@ void register_BoxPatching_class(){
         }
         { //::SireVol::BoxPatching::toString
         
-            typedef ::QString ( ::SireVol::BoxPatching::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireVol::BoxPatching::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireVol::BoxPatching::toString );
             
             BoxPatching_exposer.def( 

@@ -49,7 +49,7 @@ void register_ChargeParameterName_class(){
         bp::scope ChargeParameterName_scope( ChargeParameterName_exposer );
         { //::SireMM::ChargeParameterName::charge
         
-            typedef ::QString const & ( ::SireMM::ChargeParameterName::*charge_function_type )(  ) const;
+            typedef ::QString const & ( ::SireMM::ChargeParameterName::*charge_function_type)(  ) const;
             charge_function_type charge_function_value( &::SireMM::ChargeParameterName::charge );
             
             ChargeParameterName_exposer.def( 

@@ -11,6 +11,8 @@ namespace bp = boost::python;
 
 #include "SireBase/property.h"
 
+#include "SireBase/stringproperty.h"
+
 #include "SireError/errors.h"
 
 #include "SireFF/detail/atomiccoords3d.h"
@@ -55,7 +57,7 @@ void register_DihedralParameterName_class(){
         bp::scope DihedralParameterName_scope( DihedralParameterName_exposer );
         { //::SireMM::DihedralParameterName::dihedral
         
-            typedef ::SireBase::PropertyName const & ( ::SireMM::DihedralParameterName::*dihedral_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireMM::DihedralParameterName::*dihedral_function_type)(  ) const;
             dihedral_function_type dihedral_function_value( &::SireMM::DihedralParameterName::dihedral );
             
             DihedralParameterName_exposer.def( 

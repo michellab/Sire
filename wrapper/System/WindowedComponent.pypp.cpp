@@ -44,7 +44,7 @@ void register_WindowedComponent_class(){
         WindowedComponent_exposer.def( bp::init< SireSystem::WindowedComponent const & >(( bp::arg("other") )) );
         { //::SireSystem::WindowedComponent::component
         
-            typedef ::SireCAS::Symbol const & ( ::SireSystem::WindowedComponent::*component_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireSystem::WindowedComponent::*component_function_type)(  ) const;
             component_function_type component_function_value( &::SireSystem::WindowedComponent::component );
             
             WindowedComponent_exposer.def( 
@@ -56,7 +56,7 @@ void register_WindowedComponent_class(){
         WindowedComponent_exposer.def( bp::self != bp::self );
         { //::SireSystem::WindowedComponent::operator=
         
-            typedef ::SireSystem::WindowedComponent & ( ::SireSystem::WindowedComponent::*assign_function_type )( ::SireSystem::WindowedComponent const & ) ;
+            typedef ::SireSystem::WindowedComponent & ( ::SireSystem::WindowedComponent::*assign_function_type)( ::SireSystem::WindowedComponent const & ) ;
             assign_function_type assign_function_value( &::SireSystem::WindowedComponent::operator= );
             
             WindowedComponent_exposer.def( 
@@ -69,7 +69,7 @@ void register_WindowedComponent_class(){
         WindowedComponent_exposer.def( bp::self == bp::self );
         { //::SireSystem::WindowedComponent::referenceComponent
         
-            typedef ::SireCAS::Symbol const & ( ::SireSystem::WindowedComponent::*referenceComponent_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireSystem::WindowedComponent::*referenceComponent_function_type)(  ) const;
             referenceComponent_function_type referenceComponent_function_value( &::SireSystem::WindowedComponent::referenceComponent );
             
             WindowedComponent_exposer.def( 
@@ -80,7 +80,7 @@ void register_WindowedComponent_class(){
         }
         { //::SireSystem::WindowedComponent::stepSize
         
-            typedef int ( ::SireSystem::WindowedComponent::*stepSize_function_type )(  ) const;
+            typedef int ( ::SireSystem::WindowedComponent::*stepSize_function_type)(  ) const;
             stepSize_function_type stepSize_function_value( &::SireSystem::WindowedComponent::stepSize );
             
             WindowedComponent_exposer.def( 
@@ -90,7 +90,7 @@ void register_WindowedComponent_class(){
         }
         { //::SireSystem::WindowedComponent::toString
         
-            typedef ::QString ( ::SireSystem::WindowedComponent::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireSystem::WindowedComponent::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireSystem::WindowedComponent::toString );
             
             WindowedComponent_exposer.def( 
@@ -110,7 +110,7 @@ void register_WindowedComponent_class(){
         }
         { //::SireSystem::WindowedComponent::windowValues
         
-            typedef ::QVector< double > const & ( ::SireSystem::WindowedComponent::*windowValues_function_type )(  ) const;
+            typedef ::QVector< double > const & ( ::SireSystem::WindowedComponent::*windowValues_function_type)(  ) const;
             windowValues_function_type windowValues_function_value( &::SireSystem::WindowedComponent::windowValues );
             
             WindowedComponent_exposer.def( 

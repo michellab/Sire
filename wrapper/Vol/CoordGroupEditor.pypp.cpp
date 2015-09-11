@@ -47,7 +47,7 @@ void register_CoordGroupEditor_class(){
         CoordGroupEditor_exposer.def( bp::init< SireVol::CoordGroupEditor const & >(( bp::arg("other") )) );
         { //::SireVol::CoordGroupEditor::changeFrame
         
-            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*changeFrame_function_type )( ::SireMaths::AxisSet const &,::SireMaths::AxisSet const & ) ;
+            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*changeFrame_function_type)( ::SireMaths::AxisSet const &,::SireMaths::AxisSet const & ) ;
             changeFrame_function_type changeFrame_function_value( &::SireVol::CoordGroupEditor::changeFrame );
             
             CoordGroupEditor_exposer.def( 
@@ -59,7 +59,7 @@ void register_CoordGroupEditor_class(){
         }
         { //::SireVol::CoordGroupEditor::changeFrame
         
-            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*changeFrame_function_type )( ::quint32,::SireMaths::AxisSet const &,::SireMaths::AxisSet const & ) ;
+            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*changeFrame_function_type)( ::quint32,::SireMaths::AxisSet const &,::SireMaths::AxisSet const & ) ;
             changeFrame_function_type changeFrame_function_value( &::SireVol::CoordGroupEditor::changeFrame );
             
             CoordGroupEditor_exposer.def( 
@@ -71,7 +71,7 @@ void register_CoordGroupEditor_class(){
         }
         { //::SireVol::CoordGroupEditor::commit
         
-            typedef ::SireVol::CoordGroup ( ::SireVol::CoordGroupEditor::*commit_function_type )(  ) ;
+            typedef ::SireVol::CoordGroup ( ::SireVol::CoordGroupEditor::*commit_function_type)(  ) ;
             commit_function_type commit_function_value( &::SireVol::CoordGroupEditor::commit );
             
             CoordGroupEditor_exposer.def( 
@@ -81,7 +81,7 @@ void register_CoordGroupEditor_class(){
         }
         { //::SireVol::CoordGroupEditor::mapInto
         
-            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*mapInto_function_type )( ::SireMaths::AxisSet const & ) ;
+            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*mapInto_function_type)( ::SireMaths::AxisSet const & ) ;
             mapInto_function_type mapInto_function_value( &::SireVol::CoordGroupEditor::mapInto );
             
             CoordGroupEditor_exposer.def( 
@@ -93,7 +93,7 @@ void register_CoordGroupEditor_class(){
         }
         { //::SireVol::CoordGroupEditor::mapInto
         
-            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*mapInto_function_type )( ::quint32,::SireMaths::AxisSet const & ) ;
+            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*mapInto_function_type)( ::quint32,::SireMaths::AxisSet const & ) ;
             mapInto_function_type mapInto_function_value( &::SireVol::CoordGroupEditor::mapInto );
             
             CoordGroupEditor_exposer.def( 
@@ -105,7 +105,7 @@ void register_CoordGroupEditor_class(){
         }
         { //::SireVol::CoordGroupEditor::operator=
         
-            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*assign_function_type )( ::SireVol::CoordGroup const & ) ;
+            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*assign_function_type)( ::SireVol::CoordGroup const & ) ;
             assign_function_type assign_function_value( &::SireVol::CoordGroupEditor::operator= );
             
             CoordGroupEditor_exposer.def( 
@@ -117,7 +117,7 @@ void register_CoordGroupEditor_class(){
         }
         { //::SireVol::CoordGroupEditor::operator=
         
-            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*assign_function_type )( ::SireVol::CoordGroupEditor const & ) ;
+            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*assign_function_type)( ::SireVol::CoordGroupEditor const & ) ;
             assign_function_type assign_function_value( &::SireVol::CoordGroupEditor::operator= );
             
             CoordGroupEditor_exposer.def( 
@@ -129,7 +129,7 @@ void register_CoordGroupEditor_class(){
         }
         { //::SireVol::CoordGroupEditor::operator[]
         
-            typedef ::SireMaths::Vector & ( ::SireVol::CoordGroupEditor::*__getitem___function_type )( ::quint32 ) ;
+            typedef ::SireMaths::Vector & ( ::SireVol::CoordGroupEditor::*__getitem___function_type)( ::quint32 ) ;
             __getitem___function_type __getitem___function_value( &::SireVol::CoordGroupEditor::operator[] );
             
             CoordGroupEditor_exposer.def( 
@@ -141,7 +141,7 @@ void register_CoordGroupEditor_class(){
         }
         { //::SireVol::CoordGroupEditor::rotate
         
-            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*rotate_function_type )( ::SireMaths::Quaternion const &,::SireMaths::Vector const & ) ;
+            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*rotate_function_type)( ::SireMaths::Quaternion const &,::SireMaths::Vector const & ) ;
             rotate_function_type rotate_function_value( &::SireVol::CoordGroupEditor::rotate );
             
             CoordGroupEditor_exposer.def( 
@@ -153,7 +153,7 @@ void register_CoordGroupEditor_class(){
         }
         { //::SireVol::CoordGroupEditor::rotate
         
-            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*rotate_function_type )( ::SireMaths::Matrix const &,::SireMaths::Vector const & ) ;
+            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*rotate_function_type)( ::SireMaths::Matrix const &,::SireMaths::Vector const & ) ;
             rotate_function_type rotate_function_value( &::SireVol::CoordGroupEditor::rotate );
             
             CoordGroupEditor_exposer.def( 
@@ -165,7 +165,7 @@ void register_CoordGroupEditor_class(){
         }
         { //::SireVol::CoordGroupEditor::rotate
         
-            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*rotate_function_type )( ::quint32,::SireMaths::Quaternion const &,::SireMaths::Vector const & ) ;
+            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*rotate_function_type)( ::quint32,::SireMaths::Quaternion const &,::SireMaths::Vector const & ) ;
             rotate_function_type rotate_function_value( &::SireVol::CoordGroupEditor::rotate );
             
             CoordGroupEditor_exposer.def( 
@@ -177,7 +177,7 @@ void register_CoordGroupEditor_class(){
         }
         { //::SireVol::CoordGroupEditor::rotate
         
-            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*rotate_function_type )( ::quint32,::SireMaths::Matrix const &,::SireMaths::Vector const & ) ;
+            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*rotate_function_type)( ::quint32,::SireMaths::Matrix const &,::SireMaths::Vector const & ) ;
             rotate_function_type rotate_function_value( &::SireVol::CoordGroupEditor::rotate );
             
             CoordGroupEditor_exposer.def( 
@@ -189,7 +189,7 @@ void register_CoordGroupEditor_class(){
         }
         { //::SireVol::CoordGroupEditor::setCoordinates
         
-            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*setCoordinates_function_type )( ::QVector< SireMaths::Vector > const & ) ;
+            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*setCoordinates_function_type)( ::QVector< SireMaths::Vector > const & ) ;
             setCoordinates_function_type setCoordinates_function_value( &::SireVol::CoordGroupEditor::setCoordinates );
             
             CoordGroupEditor_exposer.def( 
@@ -201,7 +201,7 @@ void register_CoordGroupEditor_class(){
         }
         { //::SireVol::CoordGroupEditor::setCoordinates
         
-            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*setCoordinates_function_type )( ::SireVol::CoordGroupBase const & ) ;
+            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*setCoordinates_function_type)( ::SireVol::CoordGroupBase const & ) ;
             setCoordinates_function_type setCoordinates_function_value( &::SireVol::CoordGroupEditor::setCoordinates );
             
             CoordGroupEditor_exposer.def( 
@@ -213,7 +213,7 @@ void register_CoordGroupEditor_class(){
         }
         { //::SireVol::CoordGroupEditor::setCoordinates
         
-            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*setCoordinates_function_type )( ::quint32,::SireMaths::Vector const & ) ;
+            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*setCoordinates_function_type)( ::quint32,::SireMaths::Vector const & ) ;
             setCoordinates_function_type setCoordinates_function_value( &::SireVol::CoordGroupEditor::setCoordinates );
             
             CoordGroupEditor_exposer.def( 
@@ -225,7 +225,7 @@ void register_CoordGroupEditor_class(){
         }
         { //::SireVol::CoordGroupEditor::transform
         
-            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*transform_function_type )( ::SireMaths::Transform const & ) ;
+            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*transform_function_type)( ::SireMaths::Transform const & ) ;
             transform_function_type transform_function_value( &::SireVol::CoordGroupEditor::transform );
             
             CoordGroupEditor_exposer.def( 
@@ -237,7 +237,7 @@ void register_CoordGroupEditor_class(){
         }
         { //::SireVol::CoordGroupEditor::transform
         
-            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*transform_function_type )( ::quint32,::SireMaths::Transform const & ) ;
+            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*transform_function_type)( ::quint32,::SireMaths::Transform const & ) ;
             transform_function_type transform_function_value( &::SireVol::CoordGroupEditor::transform );
             
             CoordGroupEditor_exposer.def( 
@@ -249,7 +249,7 @@ void register_CoordGroupEditor_class(){
         }
         { //::SireVol::CoordGroupEditor::translate
         
-            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*translate_function_type )( ::SireMaths::Vector const & ) ;
+            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*translate_function_type)( ::SireMaths::Vector const & ) ;
             translate_function_type translate_function_value( &::SireVol::CoordGroupEditor::translate );
             
             CoordGroupEditor_exposer.def( 
@@ -261,7 +261,7 @@ void register_CoordGroupEditor_class(){
         }
         { //::SireVol::CoordGroupEditor::translate
         
-            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*translate_function_type )( ::quint32,::SireMaths::Vector const & ) ;
+            typedef ::SireVol::CoordGroupEditor & ( ::SireVol::CoordGroupEditor::*translate_function_type)( ::quint32,::SireMaths::Vector const & ) ;
             translate_function_type translate_function_value( &::SireVol::CoordGroupEditor::translate );
             
             CoordGroupEditor_exposer.def( 
@@ -283,7 +283,7 @@ void register_CoordGroupEditor_class(){
         }
         { //::SireVol::CoordGroupEditor::what
         
-            typedef char const * ( ::SireVol::CoordGroupEditor::*what_function_type )(  ) const;
+            typedef char const * ( ::SireVol::CoordGroupEditor::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireVol::CoordGroupEditor::what );
             
             CoordGroupEditor_exposer.def( 

@@ -9,6 +9,8 @@ namespace bp = boost::python;
 
 #include "SireBase/errors.h"
 
+#include "SireError/errors.h"
+
 #include "SireMaths/accumulator.h"
 
 #include "SireMaths/axisset.h"
@@ -84,7 +86,7 @@ void register_Evaluator_class(){
         Evaluator_exposer.def( bp::init< SireMol::Evaluator const & >(( bp::arg("other") )) );
         { //::SireMol::Evaluator::aaBox
         
-            typedef ::SireVol::AABox ( ::SireMol::Evaluator::*aaBox_function_type )( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireVol::AABox ( ::SireMol::Evaluator::*aaBox_function_type)( ::SireBase::PropertyMap const & ) const;
             aaBox_function_type aaBox_function_value( &::SireMol::Evaluator::aaBox );
             
             Evaluator_exposer.def( 
@@ -95,7 +97,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::alignmentAxes
         
-            typedef ::SireMaths::AxisSet ( ::SireMol::Evaluator::*alignmentAxes_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::AxisSet ( ::SireMol::Evaluator::*alignmentAxes_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) const;
             alignmentAxes_function_type alignmentAxes_function_value( &::SireMol::Evaluator::alignmentAxes );
             
             Evaluator_exposer.def( 
@@ -106,7 +108,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::alignmentAxes
         
-            typedef ::SireMaths::AxisSet ( ::SireMol::Evaluator::*alignmentAxes_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::AxisSet ( ::SireMol::Evaluator::*alignmentAxes_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) const;
             alignmentAxes_function_type alignmentAxes_function_value( &::SireMol::Evaluator::alignmentAxes );
             
             Evaluator_exposer.def( 
@@ -117,7 +119,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::boundingSphere
         
-            typedef ::SireMaths::Sphere ( ::SireMol::Evaluator::*boundingSphere_function_type )( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::Sphere ( ::SireMol::Evaluator::*boundingSphere_function_type)( ::SireBase::PropertyMap const & ) const;
             boundingSphere_function_type boundingSphere_function_value( &::SireMol::Evaluator::boundingSphere );
             
             Evaluator_exposer.def( 
@@ -128,7 +130,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::center
         
-            typedef ::SireMaths::Vector ( ::SireMol::Evaluator::*center_function_type )( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::Vector ( ::SireMol::Evaluator::*center_function_type)( ::SireBase::PropertyMap const & ) const;
             center_function_type center_function_value( &::SireMol::Evaluator::center );
             
             Evaluator_exposer.def( 
@@ -139,7 +141,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::centerOfGeometry
         
-            typedef ::SireMaths::Vector ( ::SireMol::Evaluator::*centerOfGeometry_function_type )( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::Vector ( ::SireMol::Evaluator::*centerOfGeometry_function_type)( ::SireBase::PropertyMap const & ) const;
             centerOfGeometry_function_type centerOfGeometry_function_value( &::SireMol::Evaluator::centerOfGeometry );
             
             Evaluator_exposer.def( 
@@ -150,7 +152,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::centerOfMass
         
-            typedef ::SireMaths::Vector ( ::SireMol::Evaluator::*centerOfMass_function_type )( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::Vector ( ::SireMol::Evaluator::*centerOfMass_function_type)( ::SireBase::PropertyMap const & ) const;
             centerOfMass_function_type centerOfMass_function_value( &::SireMol::Evaluator::centerOfMass );
             
             Evaluator_exposer.def( 
@@ -161,7 +163,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::centroid
         
-            typedef ::SireMaths::Vector ( ::SireMol::Evaluator::*centroid_function_type )( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::Vector ( ::SireMol::Evaluator::*centroid_function_type)( ::SireBase::PropertyMap const & ) const;
             centroid_function_type centroid_function_value( &::SireMol::Evaluator::centroid );
             
             Evaluator_exposer.def( 
@@ -172,7 +174,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::charge
         
-            typedef ::SireUnits::Dimension::Charge ( ::SireMol::Evaluator::*charge_function_type )( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::Charge ( ::SireMol::Evaluator::*charge_function_type)( ::SireBase::PropertyMap const & ) const;
             charge_function_type charge_function_value( &::SireMol::Evaluator::charge );
             
             Evaluator_exposer.def( 
@@ -183,7 +185,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::findMCS
         
-            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             findMCS_function_type findMCS_function_value( &::SireMol::Evaluator::findMCS );
             
             Evaluator_exposer.def( 
@@ -194,7 +196,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::findMCS
         
-            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) const;
             findMCS_function_type findMCS_function_value( &::SireMol::Evaluator::findMCS );
             
             Evaluator_exposer.def( 
@@ -205,7 +207,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::findMCS
         
-            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) const;
             findMCS_function_type findMCS_function_value( &::SireMol::Evaluator::findMCS );
             
             Evaluator_exposer.def( 
@@ -216,7 +218,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::findMCS
         
-            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) const;
             findMCS_function_type findMCS_function_value( &::SireMol::Evaluator::findMCS );
             
             Evaluator_exposer.def( 
@@ -227,7 +229,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::findMCS
         
-            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type )( ::SireMol::MoleculeView const &,::SireUnits::Dimension::Time const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type)( ::SireMol::MoleculeView const &,::SireUnits::Dimension::Time const &,::SireBase::PropertyMap const & ) const;
             findMCS_function_type findMCS_function_value( &::SireMol::Evaluator::findMCS );
             
             Evaluator_exposer.def( 
@@ -238,7 +240,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::findMCS
         
-            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireUnits::Dimension::Time const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireUnits::Dimension::Time const &,::SireBase::PropertyMap const & ) const;
             findMCS_function_type findMCS_function_value( &::SireMol::Evaluator::findMCS );
             
             Evaluator_exposer.def( 
@@ -249,7 +251,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::findMCS
         
-            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type )( ::SireMol::MoleculeView const &,::SireUnits::Dimension::Time const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type)( ::SireMol::MoleculeView const &,::SireUnits::Dimension::Time const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) const;
             findMCS_function_type findMCS_function_value( &::SireMol::Evaluator::findMCS );
             
             Evaluator_exposer.def( 
@@ -260,7 +262,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::findMCS
         
-            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireUnits::Dimension::Time const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireUnits::Dimension::Time const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) const;
             findMCS_function_type findMCS_function_value( &::SireMol::Evaluator::findMCS );
             
             Evaluator_exposer.def( 
@@ -271,7 +273,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::findMCS
         
-            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type )( ::SireMol::MoleculeView const &,bool,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type)( ::SireMol::MoleculeView const &,bool,::SireBase::PropertyMap const & ) const;
             findMCS_function_type findMCS_function_value( &::SireMol::Evaluator::findMCS );
             
             Evaluator_exposer.def( 
@@ -282,7 +284,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::findMCS
         
-            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,bool,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,bool,::SireBase::PropertyMap const & ) const;
             findMCS_function_type findMCS_function_value( &::SireMol::Evaluator::findMCS );
             
             Evaluator_exposer.def( 
@@ -293,7 +295,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::findMCS
         
-            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type )( ::SireMol::MoleculeView const &,bool,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type)( ::SireMol::MoleculeView const &,bool,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) const;
             findMCS_function_type findMCS_function_value( &::SireMol::Evaluator::findMCS );
             
             Evaluator_exposer.def( 
@@ -304,7 +306,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::findMCS
         
-            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,bool,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,bool,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) const;
             findMCS_function_type findMCS_function_value( &::SireMol::Evaluator::findMCS );
             
             Evaluator_exposer.def( 
@@ -315,7 +317,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::findMCS
         
-            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type )( ::SireMol::MoleculeView const &,::SireUnits::Dimension::Time const &,bool,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type)( ::SireMol::MoleculeView const &,::SireUnits::Dimension::Time const &,bool,::SireBase::PropertyMap const & ) const;
             findMCS_function_type findMCS_function_value( &::SireMol::Evaluator::findMCS );
             
             Evaluator_exposer.def( 
@@ -326,7 +328,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::findMCS
         
-            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireUnits::Dimension::Time const &,bool,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireUnits::Dimension::Time const &,bool,::SireBase::PropertyMap const & ) const;
             findMCS_function_type findMCS_function_value( &::SireMol::Evaluator::findMCS );
             
             Evaluator_exposer.def( 
@@ -337,7 +339,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::findMCS
         
-            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type )( ::SireMol::MoleculeView const &,::SireUnits::Dimension::Time const &,bool,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type)( ::SireMol::MoleculeView const &,::SireUnits::Dimension::Time const &,bool,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) const;
             findMCS_function_type findMCS_function_value( &::SireMol::Evaluator::findMCS );
             
             Evaluator_exposer.def( 
@@ -348,7 +350,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::findMCS
         
-            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireUnits::Dimension::Time const &,bool,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::AtomIdx, SireMol::AtomIdx > ( ::SireMol::Evaluator::*findMCS_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireUnits::Dimension::Time const &,bool,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) const;
             findMCS_function_type findMCS_function_value( &::SireMol::Evaluator::findMCS );
             
             Evaluator_exposer.def( 
@@ -359,7 +361,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::hasMetadata
         
-            typedef bool ( ::SireMol::Evaluator::*hasMetadata_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Evaluator::*hasMetadata_function_type)( ::SireBase::PropertyName const & ) const;
             hasMetadata_function_type hasMetadata_function_value( &::SireMol::Evaluator::hasMetadata );
             
             Evaluator_exposer.def( 
@@ -370,7 +372,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::hasMetadata
         
-            typedef bool ( ::SireMol::Evaluator::*hasMetadata_function_type )( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Evaluator::*hasMetadata_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
             hasMetadata_function_type hasMetadata_function_value( &::SireMol::Evaluator::hasMetadata );
             
             Evaluator_exposer.def( 
@@ -381,7 +383,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::hasProperty
         
-            typedef bool ( ::SireMol::Evaluator::*hasProperty_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Evaluator::*hasProperty_function_type)( ::SireBase::PropertyName const & ) const;
             hasProperty_function_type hasProperty_function_value( &::SireMol::Evaluator::hasProperty );
             
             Evaluator_exposer.def( 
@@ -392,7 +394,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::isEmpty
         
-            typedef bool ( ::SireMol::Evaluator::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::Evaluator::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::Evaluator::isEmpty );
             
             Evaluator_exposer.def( 
@@ -402,7 +404,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::mass
         
-            typedef ::SireUnits::Dimension::MolarMass ( ::SireMol::Evaluator::*mass_function_type )( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::MolarMass ( ::SireMol::Evaluator::*mass_function_type)( ::SireBase::PropertyMap const & ) const;
             mass_function_type mass_function_value( &::SireMol::Evaluator::mass );
             
             Evaluator_exposer.def( 
@@ -413,7 +415,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::measure
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMol::Evaluator::*measure_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMol::Evaluator::*measure_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireBase::PropertyMap const & ) const;
             measure_function_type measure_function_value( &::SireMol::Evaluator::measure );
             
             Evaluator_exposer.def( 
@@ -424,7 +426,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::measure
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMol::Evaluator::*measure_function_type )( ::SireMol::BondID const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMol::Evaluator::*measure_function_type)( ::SireMol::BondID const &,::SireBase::PropertyMap const & ) const;
             measure_function_type measure_function_value( &::SireMol::Evaluator::measure );
             
             Evaluator_exposer.def( 
@@ -435,7 +437,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::measure
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMol::Evaluator::*measure_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMol::Evaluator::*measure_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireBase::PropertyMap const & ) const;
             measure_function_type measure_function_value( &::SireMol::Evaluator::measure );
             
             Evaluator_exposer.def( 
@@ -446,7 +448,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::measure
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMol::Evaluator::*measure_function_type )( ::SireMol::AngleID const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMol::Evaluator::*measure_function_type)( ::SireMol::AngleID const &,::SireBase::PropertyMap const & ) const;
             measure_function_type measure_function_value( &::SireMol::Evaluator::measure );
             
             Evaluator_exposer.def( 
@@ -457,7 +459,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::measure
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMol::Evaluator::*measure_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMol::Evaluator::*measure_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireBase::PropertyMap const & ) const;
             measure_function_type measure_function_value( &::SireMol::Evaluator::measure );
             
             Evaluator_exposer.def( 
@@ -468,7 +470,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::measure
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMol::Evaluator::*measure_function_type )( ::SireMol::DihedralID const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMol::Evaluator::*measure_function_type)( ::SireMol::DihedralID const &,::SireBase::PropertyMap const & ) const;
             measure_function_type measure_function_value( &::SireMol::Evaluator::measure );
             
             Evaluator_exposer.def( 
@@ -479,7 +481,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::metadataKeys
         
-            typedef ::QStringList ( ::SireMol::Evaluator::*metadataKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireMol::Evaluator::*metadataKeys_function_type)(  ) const;
             metadataKeys_function_type metadataKeys_function_value( &::SireMol::Evaluator::metadataKeys );
             
             Evaluator_exposer.def( 
@@ -489,7 +491,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::metadataKeys
         
-            typedef ::QStringList ( ::SireMol::Evaluator::*metadataKeys_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef ::QStringList ( ::SireMol::Evaluator::*metadataKeys_function_type)( ::SireBase::PropertyName const & ) const;
             metadataKeys_function_type metadataKeys_function_value( &::SireMol::Evaluator::metadataKeys );
             
             Evaluator_exposer.def( 
@@ -500,7 +502,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::operator=
         
-            typedef ::SireMol::Evaluator & ( ::SireMol::Evaluator::*assign_function_type )( ::SireMol::Evaluator const & ) ;
+            typedef ::SireMol::Evaluator & ( ::SireMol::Evaluator::*assign_function_type)( ::SireMol::Evaluator const & ) ;
             assign_function_type assign_function_value( &::SireMol::Evaluator::operator= );
             
             Evaluator_exposer.def( 
@@ -512,7 +514,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::operator=
         
-            typedef ::SireMol::Evaluator & ( ::SireMol::Evaluator::*assign_function_type )( ::SireMol::MoleculeView const & ) ;
+            typedef ::SireMol::Evaluator & ( ::SireMol::Evaluator::*assign_function_type)( ::SireMol::MoleculeView const & ) ;
             assign_function_type assign_function_value( &::SireMol::Evaluator::operator= );
             
             Evaluator_exposer.def( 
@@ -524,7 +526,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::principalAxes
         
-            typedef ::SireMaths::AxisSet ( ::SireMol::Evaluator::*principalAxes_function_type )( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::AxisSet ( ::SireMol::Evaluator::*principalAxes_function_type)( ::SireBase::PropertyMap const & ) const;
             principalAxes_function_type principalAxes_function_value( &::SireMol::Evaluator::principalAxes );
             
             Evaluator_exposer.def( 
@@ -535,7 +537,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::principalAxes
         
-            typedef ::SireMaths::AxisSet ( ::SireMol::Evaluator::*principalAxes_function_type )( ::SireMaths::Vector &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::AxisSet ( ::SireMol::Evaluator::*principalAxes_function_type)( ::SireMaths::Vector &,::SireBase::PropertyMap const & ) const;
             principalAxes_function_type principalAxes_function_value( &::SireMol::Evaluator::principalAxes );
             
             Evaluator_exposer.def( 
@@ -546,7 +548,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::propertyKeys
         
-            typedef ::QStringList ( ::SireMol::Evaluator::*propertyKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireMol::Evaluator::*propertyKeys_function_type)(  ) const;
             propertyKeys_function_type propertyKeys_function_value( &::SireMol::Evaluator::propertyKeys );
             
             Evaluator_exposer.def( 
@@ -556,7 +558,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::rmsd
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMol::Evaluator::*rmsd_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMol::Evaluator::*rmsd_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             rmsd_function_type rmsd_function_value( &::SireMol::Evaluator::rmsd );
             
             Evaluator_exposer.def( 
@@ -567,7 +569,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::rmsd
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMol::Evaluator::*rmsd_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMol::Evaluator::*rmsd_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) const;
             rmsd_function_type rmsd_function_value( &::SireMol::Evaluator::rmsd );
             
             Evaluator_exposer.def( 
@@ -578,7 +580,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::rmsd
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMol::Evaluator::*rmsd_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMol::Evaluator::*rmsd_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) const;
             rmsd_function_type rmsd_function_value( &::SireMol::Evaluator::rmsd );
             
             Evaluator_exposer.def( 
@@ -589,7 +591,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::rmsd
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMol::Evaluator::*rmsd_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMol::Evaluator::*rmsd_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) const;
             rmsd_function_type rmsd_function_value( &::SireMol::Evaluator::rmsd );
             
             Evaluator_exposer.def( 
@@ -600,7 +602,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::selectedAll
         
-            typedef bool ( ::SireMol::Evaluator::*selectedAll_function_type )(  ) const;
+            typedef bool ( ::SireMol::Evaluator::*selectedAll_function_type)(  ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::Evaluator::selectedAll );
             
             Evaluator_exposer.def( 
@@ -610,7 +612,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::selection
         
-            typedef ::SireMol::AtomSelection ( ::SireMol::Evaluator::*selection_function_type )(  ) const;
+            typedef ::SireMol::AtomSelection ( ::SireMol::Evaluator::*selection_function_type)(  ) const;
             selection_function_type selection_function_value( &::SireMol::Evaluator::selection );
             
             Evaluator_exposer.def( 
@@ -620,7 +622,7 @@ void register_Evaluator_class(){
         }
         { //::SireMol::Evaluator::toString
         
-            typedef ::QString ( ::SireMol::Evaluator::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::Evaluator::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::Evaluator::toString );
             
             Evaluator_exposer.def( 

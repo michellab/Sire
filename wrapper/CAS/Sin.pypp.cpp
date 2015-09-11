@@ -37,7 +37,7 @@ void register_Sin_class(){
         Sin_exposer.def( bp::init< SireCAS::Sin const & >(( bp::arg("other") )) );
         { //::SireCAS::Sin::evaluate
         
-            typedef double ( ::SireCAS::Sin::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::Sin::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Sin::evaluate );
             
             Sin_exposer.def( 
@@ -48,7 +48,7 @@ void register_Sin_class(){
         }
         { //::SireCAS::Sin::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::Sin::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::Sin::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Sin::evaluate );
             
             Sin_exposer.def( 
@@ -70,7 +70,7 @@ void register_Sin_class(){
         }
         { //::SireCAS::Sin::what
         
-            typedef char const * ( ::SireCAS::Sin::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::Sin::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::Sin::what );
             
             Sin_exposer.def( 

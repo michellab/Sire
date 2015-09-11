@@ -33,7 +33,7 @@ void register_CGVariantProperty_class(){
         { //::SireMol::CGProperty< QVariant >::array
         
             typedef SireMol::CGProperty< QVariant > exported_class_t;
-            typedef ::QVector< QVariant > const & ( ::SireMol::CGProperty< QVariant >::*array_function_type )(  ) const;
+            typedef ::QVector< QVariant > const & ( ::SireMol::CGProperty< QVariant >::*array_function_type)(  ) const;
             array_function_type array_function_value( &::SireMol::CGProperty< QVariant >::array );
             
             CGVariantProperty_exposer.def( 
@@ -45,7 +45,7 @@ void register_CGVariantProperty_class(){
         { //::SireMol::CGProperty< QVariant >::assertCanConvert
         
             typedef SireMol::CGProperty< QVariant > exported_class_t;
-            typedef void ( ::SireMol::CGProperty< QVariant >::*assertCanConvert_function_type )( ::QVariant const & ) const;
+            typedef void ( ::SireMol::CGProperty< QVariant >::*assertCanConvert_function_type)( ::QVariant const & ) const;
             assertCanConvert_function_type assertCanConvert_function_value( &::SireMol::CGProperty< QVariant >::assertCanConvert );
             
             CGVariantProperty_exposer.def( 
@@ -57,7 +57,7 @@ void register_CGVariantProperty_class(){
         { //::SireMol::CGProperty< QVariant >::assignFrom
         
             typedef SireMol::CGProperty< QVariant > exported_class_t;
-            typedef void ( ::SireMol::CGProperty< QVariant >::*assignFrom_function_type )( ::SireMol::CGProperty< QVariant > const & ) ;
+            typedef void ( ::SireMol::CGProperty< QVariant >::*assignFrom_function_type)( ::SireMol::CGProperty< QVariant > const & ) ;
             assignFrom_function_type assignFrom_function_value( &::SireMol::CGProperty< QVariant >::assignFrom );
             
             CGVariantProperty_exposer.def( 
@@ -69,7 +69,7 @@ void register_CGVariantProperty_class(){
         { //::SireMol::CGProperty< QVariant >::at
         
             typedef SireMol::CGProperty< QVariant > exported_class_t;
-            typedef ::QVariant const & ( ::SireMol::CGProperty< QVariant >::*at_function_type )( ::SireMol::CGIdx const & ) const;
+            typedef ::QVariant const & ( ::SireMol::CGProperty< QVariant >::*at_function_type)( ::SireMol::CGIdx const & ) const;
             at_function_type at_function_value( &::SireMol::CGProperty< QVariant >::at );
             
             CGVariantProperty_exposer.def( 
@@ -82,7 +82,7 @@ void register_CGVariantProperty_class(){
         { //::SireMol::CGProperty< QVariant >::canConvert
         
             typedef SireMol::CGProperty< QVariant > exported_class_t;
-            typedef bool ( ::SireMol::CGProperty< QVariant >::*canConvert_function_type )( ::QVariant const & ) const;
+            typedef bool ( ::SireMol::CGProperty< QVariant >::*canConvert_function_type)( ::QVariant const & ) const;
             canConvert_function_type canConvert_function_value( &::SireMol::CGProperty< QVariant >::canConvert );
             
             CGVariantProperty_exposer.def( 
@@ -94,7 +94,7 @@ void register_CGVariantProperty_class(){
         { //::SireMol::CGProperty< QVariant >::count
         
             typedef SireMol::CGProperty< QVariant > exported_class_t;
-            typedef int ( ::SireMol::CGProperty< QVariant >::*count_function_type )(  ) const;
+            typedef int ( ::SireMol::CGProperty< QVariant >::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMol::CGProperty< QVariant >::count );
             
             CGVariantProperty_exposer.def( 
@@ -117,7 +117,7 @@ void register_CGVariantProperty_class(){
         { //::SireMol::CGProperty< QVariant >::get
         
             typedef SireMol::CGProperty< QVariant > exported_class_t;
-            typedef ::QVariant const & ( ::SireMol::CGProperty< QVariant >::*get_function_type )( ::SireMol::CGIdx const & ) const;
+            typedef ::QVariant const & ( ::SireMol::CGProperty< QVariant >::*get_function_type)( ::SireMol::CGIdx const & ) const;
             get_function_type get_function_value( &::SireMol::CGProperty< QVariant >::get );
             
             CGVariantProperty_exposer.def( 
@@ -130,7 +130,7 @@ void register_CGVariantProperty_class(){
         { //::SireMol::CGProperty< QVariant >::isCompatibleWith
         
             typedef SireMol::CGProperty< QVariant > exported_class_t;
-            typedef bool ( ::SireMol::CGProperty< QVariant >::*isCompatibleWith_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef bool ( ::SireMol::CGProperty< QVariant >::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::CGProperty< QVariant >::isCompatibleWith );
             
             CGVariantProperty_exposer.def( 
@@ -142,7 +142,7 @@ void register_CGVariantProperty_class(){
         { //::SireMol::CGProperty< QVariant >::isEmpty
         
             typedef SireMol::CGProperty< QVariant > exported_class_t;
-            typedef bool ( ::SireMol::CGProperty< QVariant >::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::CGProperty< QVariant >::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::CGProperty< QVariant >::isEmpty );
             
             CGVariantProperty_exposer.def( 
@@ -153,7 +153,7 @@ void register_CGVariantProperty_class(){
         { //::SireMol::CGProperty< QVariant >::nCutGroups
         
             typedef SireMol::CGProperty< QVariant > exported_class_t;
-            typedef int ( ::SireMol::CGProperty< QVariant >::*nCutGroups_function_type )(  ) const;
+            typedef int ( ::SireMol::CGProperty< QVariant >::*nCutGroups_function_type)(  ) const;
             nCutGroups_function_type nCutGroups_function_value( &::SireMol::CGProperty< QVariant >::nCutGroups );
             
             CGVariantProperty_exposer.def( 
@@ -165,7 +165,7 @@ void register_CGVariantProperty_class(){
         { //::SireMol::CGProperty< QVariant >::operator=
         
             typedef SireMol::CGProperty< QVariant > exported_class_t;
-            typedef ::SireMol::CGProperty< QVariant > & ( ::SireMol::CGProperty< QVariant >::*assign_function_type )( ::SireMol::CGProperty< QVariant > const & ) ;
+            typedef ::SireMol::CGProperty< QVariant > & ( ::SireMol::CGProperty< QVariant >::*assign_function_type)( ::SireMol::CGProperty< QVariant > const & ) ;
             assign_function_type assign_function_value( &::SireMol::CGProperty< QVariant >::operator= );
             
             CGVariantProperty_exposer.def( 
@@ -179,7 +179,7 @@ void register_CGVariantProperty_class(){
         { //::SireMol::CGProperty< QVariant >::operator[]
         
             typedef SireMol::CGProperty< QVariant > exported_class_t;
-            typedef ::QVariant const & ( ::SireMol::CGProperty< QVariant >::*__getitem___function_type )( ::SireMol::CGIdx const & ) const;
+            typedef ::QVariant const & ( ::SireMol::CGProperty< QVariant >::*__getitem___function_type)( ::SireMol::CGIdx const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::CGProperty< QVariant >::operator[] );
             
             CGVariantProperty_exposer.def( 
@@ -192,7 +192,7 @@ void register_CGVariantProperty_class(){
         { //::SireMol::CGProperty< QVariant >::set
         
             typedef SireMol::CGProperty< QVariant > exported_class_t;
-            typedef ::SireMol::CGProperty< QVariant > & ( ::SireMol::CGProperty< QVariant >::*set_function_type )( ::SireMol::CGIdx,::QVariant const & ) ;
+            typedef ::SireMol::CGProperty< QVariant > & ( ::SireMol::CGProperty< QVariant >::*set_function_type)( ::SireMol::CGIdx,::QVariant const & ) ;
             set_function_type set_function_value( &::SireMol::CGProperty< QVariant >::set );
             
             CGVariantProperty_exposer.def( 
@@ -205,7 +205,7 @@ void register_CGVariantProperty_class(){
         { //::SireMol::CGProperty< QVariant >::size
         
             typedef SireMol::CGProperty< QVariant > exported_class_t;
-            typedef int ( ::SireMol::CGProperty< QVariant >::*size_function_type )(  ) const;
+            typedef int ( ::SireMol::CGProperty< QVariant >::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireMol::CGProperty< QVariant >::size );
             
             CGVariantProperty_exposer.def( 
@@ -216,7 +216,7 @@ void register_CGVariantProperty_class(){
         { //::SireMol::CGProperty< QVariant >::toString
         
             typedef SireMol::CGProperty< QVariant > exported_class_t;
-            typedef ::QString ( ::SireMol::CGProperty< QVariant >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::CGProperty< QVariant >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::CGProperty< QVariant >::toString );
             
             CGVariantProperty_exposer.def( 
@@ -227,7 +227,7 @@ void register_CGVariantProperty_class(){
         { //::SireMol::CGProperty< QVariant >::toVariant
         
             typedef SireMol::CGProperty< QVariant > exported_class_t;
-            typedef ::SireMol::CGProperty< QVariant > ( ::SireMol::CGProperty< QVariant >::*toVariant_function_type )(  ) const;
+            typedef ::SireMol::CGProperty< QVariant > ( ::SireMol::CGProperty< QVariant >::*toVariant_function_type)(  ) const;
             toVariant_function_type toVariant_function_value( &::SireMol::CGProperty< QVariant >::toVariant );
             
             CGVariantProperty_exposer.def( 

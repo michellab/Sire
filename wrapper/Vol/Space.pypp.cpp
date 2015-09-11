@@ -35,7 +35,7 @@ void register_Space_class(){
         bp::scope Space_scope( Space_exposer );
         { //::SireVol::Space::beyond
         
-            typedef bool ( ::SireVol::Space::*beyond_function_type )( double,::SireVol::CoordGroup const &,::SireVol::CoordGroup const & ) const;
+            typedef bool ( ::SireVol::Space::*beyond_function_type)( double,::SireVol::CoordGroup const &,::SireVol::CoordGroup const & ) const;
             beyond_function_type beyond_function_value( &::SireVol::Space::beyond );
             
             Space_exposer.def( 
@@ -46,7 +46,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::beyond
         
-            typedef bool ( ::SireVol::Space::*beyond_function_type )( double,::SireVol::AABox const &,::SireVol::AABox const & ) const;
+            typedef bool ( ::SireVol::Space::*beyond_function_type)( double,::SireVol::AABox const &,::SireVol::AABox const & ) const;
             beyond_function_type beyond_function_value( &::SireVol::Space::beyond );
             
             Space_exposer.def( 
@@ -57,7 +57,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::calcAngle
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireVol::Space::*calcAngle_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireVol::Space::*calcAngle_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
             calcAngle_function_type calcAngle_function_value( &::SireVol::Space::calcAngle );
             
             Space_exposer.def( 
@@ -68,7 +68,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::calcDihedral
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireVol::Space::*calcDihedral_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const &,::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireVol::Space::*calcDihedral_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const &,::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
             calcDihedral_function_type calcDihedral_function_value( &::SireVol::Space::calcDihedral );
             
             Space_exposer.def( 
@@ -79,7 +79,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::calcDist
         
-            typedef double ( ::SireVol::Space::*calcDist_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            typedef double ( ::SireVol::Space::*calcDist_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
             calcDist_function_type calcDist_function_value( &::SireVol::Space::calcDist );
             
             Space_exposer.def( 
@@ -90,7 +90,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::calcDist
         
-            typedef double ( ::SireVol::Space::*calcDist_function_type )( ::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
+            typedef double ( ::SireVol::Space::*calcDist_function_type)( ::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
             calcDist_function_type calcDist_function_value( &::SireVol::Space::calcDist );
             
             Space_exposer.def( 
@@ -101,7 +101,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::calcDist
         
-            typedef double ( ::SireVol::Space::*calcDist_function_type )( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
+            typedef double ( ::SireVol::Space::*calcDist_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
             calcDist_function_type calcDist_function_value( &::SireVol::Space::calcDist );
             
             Space_exposer.def( 
@@ -112,7 +112,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::calcDist
         
-            typedef double ( ::SireVol::Space::*calcDist_function_type )( ::SireVol::CoordGroup const &,::SireMaths::Vector const &,::SireVol::DistMatrix & ) const;
+            typedef double ( ::SireVol::Space::*calcDist_function_type)( ::SireVol::CoordGroup const &,::SireMaths::Vector const &,::SireVol::DistMatrix & ) const;
             calcDist_function_type calcDist_function_value( &::SireVol::Space::calcDist );
             
             Space_exposer.def( 
@@ -123,7 +123,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::calcDist2
         
-            typedef double ( ::SireVol::Space::*calcDist2_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            typedef double ( ::SireVol::Space::*calcDist2_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
             calcDist2_function_type calcDist2_function_value( &::SireVol::Space::calcDist2 );
             
             Space_exposer.def( 
@@ -134,7 +134,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::calcDist2
         
-            typedef double ( ::SireVol::Space::*calcDist2_function_type )( ::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
+            typedef double ( ::SireVol::Space::*calcDist2_function_type)( ::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
             calcDist2_function_type calcDist2_function_value( &::SireVol::Space::calcDist2 );
             
             Space_exposer.def( 
@@ -145,7 +145,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::calcDist2
         
-            typedef double ( ::SireVol::Space::*calcDist2_function_type )( ::SireVol::CoordGroup const &,::SireMaths::Vector const &,::SireVol::DistMatrix & ) const;
+            typedef double ( ::SireVol::Space::*calcDist2_function_type)( ::SireVol::CoordGroup const &,::SireMaths::Vector const &,::SireVol::DistMatrix & ) const;
             calcDist2_function_type calcDist2_function_value( &::SireVol::Space::calcDist2 );
             
             Space_exposer.def( 
@@ -156,7 +156,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::calcDist2
         
-            typedef double ( ::SireVol::Space::*calcDist2_function_type )( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
+            typedef double ( ::SireVol::Space::*calcDist2_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
             calcDist2_function_type calcDist2_function_value( &::SireVol::Space::calcDist2 );
             
             Space_exposer.def( 
@@ -167,7 +167,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::calcDistVector
         
-            typedef ::SireMaths::DistVector ( ::SireVol::Space::*calcDistVector_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            typedef ::SireMaths::DistVector ( ::SireVol::Space::*calcDistVector_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
             calcDistVector_function_type calcDistVector_function_value( &::SireVol::Space::calcDistVector );
             
             Space_exposer.def( 
@@ -178,7 +178,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::calcDistVectors
         
-            typedef double ( ::SireVol::Space::*calcDistVectors_function_type )( ::SireVol::CoordGroup const &,::SireVol::DistVectorMatrix & ) const;
+            typedef double ( ::SireVol::Space::*calcDistVectors_function_type)( ::SireVol::CoordGroup const &,::SireVol::DistVectorMatrix & ) const;
             calcDistVectors_function_type calcDistVectors_function_value( &::SireVol::Space::calcDistVectors );
             
             Space_exposer.def( 
@@ -189,7 +189,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::calcDistVectors
         
-            typedef double ( ::SireVol::Space::*calcDistVectors_function_type )( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistVectorMatrix & ) const;
+            typedef double ( ::SireVol::Space::*calcDistVectors_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistVectorMatrix & ) const;
             calcDistVectors_function_type calcDistVectors_function_value( &::SireVol::Space::calcDistVectors );
             
             Space_exposer.def( 
@@ -200,7 +200,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::calcDistVectors
         
-            typedef double ( ::SireVol::Space::*calcDistVectors_function_type )( ::SireVol::CoordGroup const &,::SireMaths::Vector const &,::SireVol::DistVectorMatrix & ) const;
+            typedef double ( ::SireVol::Space::*calcDistVectors_function_type)( ::SireVol::CoordGroup const &,::SireMaths::Vector const &,::SireVol::DistVectorMatrix & ) const;
             calcDistVectors_function_type calcDistVectors_function_value( &::SireVol::Space::calcDistVectors );
             
             Space_exposer.def( 
@@ -211,7 +211,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::calcInvDist
         
-            typedef double ( ::SireVol::Space::*calcInvDist_function_type )( ::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
+            typedef double ( ::SireVol::Space::*calcInvDist_function_type)( ::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
             calcInvDist_function_type calcInvDist_function_value( &::SireVol::Space::calcInvDist );
             
             Space_exposer.def( 
@@ -222,7 +222,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::calcInvDist
         
-            typedef double ( ::SireVol::Space::*calcInvDist_function_type )( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
+            typedef double ( ::SireVol::Space::*calcInvDist_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
             calcInvDist_function_type calcInvDist_function_value( &::SireVol::Space::calcInvDist );
             
             Space_exposer.def( 
@@ -233,7 +233,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::calcInvDist2
         
-            typedef double ( ::SireVol::Space::*calcInvDist2_function_type )( ::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
+            typedef double ( ::SireVol::Space::*calcInvDist2_function_type)( ::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
             calcInvDist2_function_type calcInvDist2_function_value( &::SireVol::Space::calcInvDist2 );
             
             Space_exposer.def( 
@@ -244,7 +244,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::calcInvDist2
         
-            typedef double ( ::SireVol::Space::*calcInvDist2_function_type )( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
+            typedef double ( ::SireVol::Space::*calcInvDist2_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
             calcInvDist2_function_type calcInvDist2_function_value( &::SireVol::Space::calcInvDist2 );
             
             Space_exposer.def( 
@@ -255,7 +255,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::changeVolume
         
-            typedef ::SireVol::SpacePtr ( ::SireVol::Space::*changeVolume_function_type )( ::SireUnits::Dimension::Volume ) const;
+            typedef ::SireVol::SpacePtr ( ::SireVol::Space::*changeVolume_function_type)( ::SireUnits::Dimension::Volume ) const;
             changeVolume_function_type changeVolume_function_value( &::SireVol::Space::changeVolume );
             
             Space_exposer.def( 
@@ -266,7 +266,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::getBoxCenter
         
-            typedef ::SireMaths::Vector ( ::SireVol::Space::*getBoxCenter_function_type )( ::SireMaths::Vector const & ) const;
+            typedef ::SireMaths::Vector ( ::SireVol::Space::*getBoxCenter_function_type)( ::SireMaths::Vector const & ) const;
             getBoxCenter_function_type getBoxCenter_function_value( &::SireVol::Space::getBoxCenter );
             
             Space_exposer.def( 
@@ -277,7 +277,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::getBoxCenter
         
-            typedef ::SireMaths::Vector ( ::SireVol::Space::*getBoxCenter_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            typedef ::SireMaths::Vector ( ::SireVol::Space::*getBoxCenter_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
             getBoxCenter_function_type getBoxCenter_function_value( &::SireVol::Space::getBoxCenter );
             
             Space_exposer.def( 
@@ -288,7 +288,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::getCopiesWithin
         
-            typedef ::QList< boost::tuples::tuple< double, SireVol::CoordGroup, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > > ( ::SireVol::Space::*getCopiesWithin_function_type )( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,double ) const;
+            typedef ::QList< boost::tuples::tuple< double, SireVol::CoordGroup, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > > ( ::SireVol::Space::*getCopiesWithin_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,double ) const;
             getCopiesWithin_function_type getCopiesWithin_function_value( &::SireVol::Space::getCopiesWithin );
             
             Space_exposer.def( 
@@ -299,7 +299,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::getImagesWithin
         
-            typedef ::QVector< SireMaths::Vector > ( ::SireVol::Space::*getImagesWithin_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const &,double ) const;
+            typedef ::QVector< SireMaths::Vector > ( ::SireVol::Space::*getImagesWithin_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const &,double ) const;
             getImagesWithin_function_type getImagesWithin_function_value( &::SireVol::Space::getImagesWithin );
             
             Space_exposer.def( 
@@ -310,7 +310,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::getMinimumImage
         
-            typedef ::SireVol::CoordGroup ( ::SireVol::Space::*getMinimumImage_function_type )( ::SireVol::CoordGroup const &,::SireMaths::Vector const & ) const;
+            typedef ::SireVol::CoordGroup ( ::SireVol::Space::*getMinimumImage_function_type)( ::SireVol::CoordGroup const &,::SireMaths::Vector const & ) const;
             getMinimumImage_function_type getMinimumImage_function_value( &::SireVol::Space::getMinimumImage );
             
             Space_exposer.def( 
@@ -321,7 +321,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::getMinimumImage
         
-            typedef ::SireVol::CoordGroupArray ( ::SireVol::Space::*getMinimumImage_function_type )( ::SireVol::CoordGroupArray const &,::SireMaths::Vector const &,bool ) const;
+            typedef ::SireVol::CoordGroupArray ( ::SireVol::Space::*getMinimumImage_function_type)( ::SireVol::CoordGroupArray const &,::SireMaths::Vector const &,bool ) const;
             getMinimumImage_function_type getMinimumImage_function_value( &::SireVol::Space::getMinimumImage );
             
             Space_exposer.def( 
@@ -332,7 +332,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::getMinimumImage
         
-            typedef ::SireVol::AABox ( ::SireVol::Space::*getMinimumImage_function_type )( ::SireVol::AABox const &,::SireMaths::Vector const & ) const;
+            typedef ::SireVol::AABox ( ::SireVol::Space::*getMinimumImage_function_type)( ::SireVol::AABox const &,::SireMaths::Vector const & ) const;
             getMinimumImage_function_type getMinimumImage_function_value( &::SireVol::Space::getMinimumImage );
             
             Space_exposer.def( 
@@ -343,7 +343,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::getMinimumImage
         
-            typedef ::SireMaths::Vector ( ::SireVol::Space::*getMinimumImage_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            typedef ::SireMaths::Vector ( ::SireVol::Space::*getMinimumImage_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
             getMinimumImage_function_type getMinimumImage_function_value( &::SireVol::Space::getMinimumImage );
             
             Space_exposer.def( 
@@ -354,7 +354,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::getRandomPoint
         
-            typedef ::SireMaths::Vector ( ::SireVol::Space::*getRandomPoint_function_type )( ::SireMaths::Vector const &,::SireMaths::RanGenerator const & ) const;
+            typedef ::SireMaths::Vector ( ::SireVol::Space::*getRandomPoint_function_type)( ::SireMaths::Vector const &,::SireMaths::RanGenerator const & ) const;
             getRandomPoint_function_type getRandomPoint_function_value( &::SireVol::Space::getRandomPoint );
             
             Space_exposer.def( 
@@ -365,7 +365,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::getRandomPoint
         
-            typedef ::SireMaths::Vector ( ::SireVol::Space::*getRandomPoint_function_type )( ::SireMaths::Vector const & ) const;
+            typedef ::SireMaths::Vector ( ::SireVol::Space::*getRandomPoint_function_type)( ::SireMaths::Vector const & ) const;
             getRandomPoint_function_type getRandomPoint_function_value( &::SireVol::Space::getRandomPoint );
             
             Space_exposer.def( 
@@ -376,7 +376,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::getRandomPoint
         
-            typedef ::SireMaths::Vector ( ::SireVol::Space::*getRandomPoint_function_type )( ::SireMaths::RanGenerator const & ) const;
+            typedef ::SireMaths::Vector ( ::SireVol::Space::*getRandomPoint_function_type)( ::SireMaths::RanGenerator const & ) const;
             getRandomPoint_function_type getRandomPoint_function_value( &::SireVol::Space::getRandomPoint );
             
             Space_exposer.def( 
@@ -387,7 +387,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::getRandomPoint
         
-            typedef ::SireMaths::Vector ( ::SireVol::Space::*getRandomPoint_function_type )(  ) const;
+            typedef ::SireMaths::Vector ( ::SireVol::Space::*getRandomPoint_function_type)(  ) const;
             getRandomPoint_function_type getRandomPoint_function_value( &::SireVol::Space::getRandomPoint );
             
             Space_exposer.def( 
@@ -397,7 +397,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::isCartesian
         
-            typedef bool ( ::SireVol::Space::*isCartesian_function_type )(  ) const;
+            typedef bool ( ::SireVol::Space::*isCartesian_function_type)(  ) const;
             isCartesian_function_type isCartesian_function_value( &::SireVol::Space::isCartesian );
             
             Space_exposer.def( 
@@ -407,7 +407,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::isPeriodic
         
-            typedef bool ( ::SireVol::Space::*isPeriodic_function_type )(  ) const;
+            typedef bool ( ::SireVol::Space::*isPeriodic_function_type)(  ) const;
             isPeriodic_function_type isPeriodic_function_value( &::SireVol::Space::isPeriodic );
             
             Space_exposer.def( 
@@ -417,7 +417,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::minimumDistance
         
-            typedef double ( ::SireVol::Space::*minimumDistance_function_type )( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const & ) const;
+            typedef double ( ::SireVol::Space::*minimumDistance_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const & ) const;
             minimumDistance_function_type minimumDistance_function_value( &::SireVol::Space::minimumDistance );
             
             Space_exposer.def( 
@@ -428,7 +428,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::minimumDistance
         
-            typedef double ( ::SireVol::Space::*minimumDistance_function_type )( ::SireVol::CoordGroup const & ) const;
+            typedef double ( ::SireVol::Space::*minimumDistance_function_type)( ::SireVol::CoordGroup const & ) const;
             minimumDistance_function_type minimumDistance_function_value( &::SireVol::Space::minimumDistance );
             
             Space_exposer.def( 
@@ -439,7 +439,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::minimumDistance
         
-            typedef double ( ::SireVol::Space::*minimumDistance_function_type )( ::SireVol::AABox const &,::SireVol::AABox const & ) const;
+            typedef double ( ::SireVol::Space::*minimumDistance_function_type)( ::SireVol::AABox const &,::SireVol::AABox const & ) const;
             minimumDistance_function_type minimumDistance_function_value( &::SireVol::Space::minimumDistance );
             
             Space_exposer.def( 
@@ -461,7 +461,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::setVolume
         
-            typedef ::SireVol::SpacePtr ( ::SireVol::Space::*setVolume_function_type )( ::SireUnits::Dimension::Volume ) const;
+            typedef ::SireVol::SpacePtr ( ::SireVol::Space::*setVolume_function_type)( ::SireUnits::Dimension::Volume ) const;
             setVolume_function_type setVolume_function_value( &::SireVol::Space::setVolume );
             
             Space_exposer.def( 
@@ -472,7 +472,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::toString
         
-            typedef ::QString ( ::SireVol::Space::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireVol::Space::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireVol::Space::toString );
             
             Space_exposer.def( 
@@ -492,7 +492,7 @@ void register_Space_class(){
         }
         { //::SireVol::Space::volume
         
-            typedef ::SireUnits::Dimension::Volume ( ::SireVol::Space::*volume_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Volume ( ::SireVol::Space::*volume_function_type)(  ) const;
             volume_function_type volume_function_value( &::SireVol::Space::volume );
             
             Space_exposer.def( 

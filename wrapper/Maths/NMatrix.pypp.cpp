@@ -59,7 +59,7 @@ void register_NMatrix_class(){
         NMatrix_exposer.def( bp::init< SireMaths::NMatrix const & >(( bp::arg("other") )) );
         { //::SireMaths::NMatrix::assertNColumns
         
-            typedef void ( ::SireMaths::NMatrix::*assertNColumns_function_type )( int ) const;
+            typedef void ( ::SireMaths::NMatrix::*assertNColumns_function_type)( int ) const;
             assertNColumns_function_type assertNColumns_function_value( &::SireMaths::NMatrix::assertNColumns );
             
             NMatrix_exposer.def( 
@@ -70,7 +70,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::assertNRows
         
-            typedef void ( ::SireMaths::NMatrix::*assertNRows_function_type )( int ) const;
+            typedef void ( ::SireMaths::NMatrix::*assertNRows_function_type)( int ) const;
             assertNRows_function_type assertNRows_function_value( &::SireMaths::NMatrix::assertNRows );
             
             NMatrix_exposer.def( 
@@ -81,7 +81,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::assertSquare
         
-            typedef void ( ::SireMaths::NMatrix::*assertSquare_function_type )(  ) const;
+            typedef void ( ::SireMaths::NMatrix::*assertSquare_function_type)(  ) const;
             assertSquare_function_type assertSquare_function_value( &::SireMaths::NMatrix::assertSquare );
             
             NMatrix_exposer.def( 
@@ -91,7 +91,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::assertValidColumn
         
-            typedef void ( ::SireMaths::NMatrix::*assertValidColumn_function_type )( int ) const;
+            typedef void ( ::SireMaths::NMatrix::*assertValidColumn_function_type)( int ) const;
             assertValidColumn_function_type assertValidColumn_function_value( &::SireMaths::NMatrix::assertValidColumn );
             
             NMatrix_exposer.def( 
@@ -102,7 +102,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::assertValidIndex
         
-            typedef void ( ::SireMaths::NMatrix::*assertValidIndex_function_type )( int,int ) const;
+            typedef void ( ::SireMaths::NMatrix::*assertValidIndex_function_type)( int,int ) const;
             assertValidIndex_function_type assertValidIndex_function_value( &::SireMaths::NMatrix::assertValidIndex );
             
             NMatrix_exposer.def( 
@@ -113,7 +113,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::assertValidRow
         
-            typedef void ( ::SireMaths::NMatrix::*assertValidRow_function_type )( int ) const;
+            typedef void ( ::SireMaths::NMatrix::*assertValidRow_function_type)( int ) const;
             assertValidRow_function_type assertValidRow_function_value( &::SireMaths::NMatrix::assertValidRow );
             
             NMatrix_exposer.def( 
@@ -124,7 +124,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::checkedOffset
         
-            typedef int ( ::SireMaths::NMatrix::*checkedOffset_function_type )( int,int ) const;
+            typedef int ( ::SireMaths::NMatrix::*checkedOffset_function_type)( int,int ) const;
             checkedOffset_function_type checkedOffset_function_value( &::SireMaths::NMatrix::checkedOffset );
             
             NMatrix_exposer.def( 
@@ -135,7 +135,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::column
         
-            typedef ::SireMaths::NVector ( ::SireMaths::NMatrix::*column_function_type )( int ) const;
+            typedef ::SireMaths::NVector ( ::SireMaths::NMatrix::*column_function_type)( int ) const;
             column_function_type column_function_value( &::SireMaths::NMatrix::column );
             
             NMatrix_exposer.def( 
@@ -168,7 +168,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::determinant
         
-            typedef double ( ::SireMaths::NMatrix::*determinant_function_type )(  ) const;
+            typedef double ( ::SireMaths::NMatrix::*determinant_function_type)(  ) const;
             determinant_function_type determinant_function_value( &::SireMaths::NMatrix::determinant );
             
             NMatrix_exposer.def( 
@@ -178,7 +178,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::diagonal
         
-            typedef ::SireMaths::NVector ( ::SireMaths::NMatrix::*diagonal_function_type )(  ) const;
+            typedef ::SireMaths::NVector ( ::SireMaths::NMatrix::*diagonal_function_type)(  ) const;
             diagonal_function_type diagonal_function_value( &::SireMaths::NMatrix::diagonal );
             
             NMatrix_exposer.def( 
@@ -188,7 +188,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::diagonalise
         
-            typedef ::std::pair< SireMaths::NVector, SireMaths::NMatrix > ( ::SireMaths::NMatrix::*diagonalise_function_type )(  ) const;
+            typedef ::std::pair< SireMaths::NVector, SireMaths::NMatrix > ( ::SireMaths::NMatrix::*diagonalise_function_type)(  ) const;
             diagonalise_function_type diagonalise_function_value( &::SireMaths::NMatrix::diagonalise );
             
             NMatrix_exposer.def( 
@@ -198,7 +198,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::fullTranspose
         
-            typedef ::SireMaths::NMatrix ( ::SireMaths::NMatrix::*fullTranspose_function_type )(  ) const;
+            typedef ::SireMaths::NMatrix ( ::SireMaths::NMatrix::*fullTranspose_function_type)(  ) const;
             fullTranspose_function_type fullTranspose_function_value( &::SireMaths::NMatrix::fullTranspose );
             
             NMatrix_exposer.def( 
@@ -208,7 +208,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::inverse
         
-            typedef ::SireMaths::NMatrix ( ::SireMaths::NMatrix::*inverse_function_type )(  ) const;
+            typedef ::SireMaths::NMatrix ( ::SireMaths::NMatrix::*inverse_function_type)(  ) const;
             inverse_function_type inverse_function_value( &::SireMaths::NMatrix::inverse );
             
             NMatrix_exposer.def( 
@@ -218,7 +218,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::isTransposed
         
-            typedef bool ( ::SireMaths::NMatrix::*isTransposed_function_type )(  ) const;
+            typedef bool ( ::SireMaths::NMatrix::*isTransposed_function_type)(  ) const;
             isTransposed_function_type isTransposed_function_value( &::SireMaths::NMatrix::isTransposed );
             
             NMatrix_exposer.def( 
@@ -228,7 +228,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::memory
         
-            typedef ::QVector< double > ( ::SireMaths::NMatrix::*memory_function_type )(  ) const;
+            typedef ::QVector< double > ( ::SireMaths::NMatrix::*memory_function_type)(  ) const;
             memory_function_type memory_function_value( &::SireMaths::NMatrix::memory );
             
             NMatrix_exposer.def( 
@@ -238,7 +238,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::nColumns
         
-            typedef int ( ::SireMaths::NMatrix::*nColumns_function_type )(  ) const;
+            typedef int ( ::SireMaths::NMatrix::*nColumns_function_type)(  ) const;
             nColumns_function_type nColumns_function_value( &::SireMaths::NMatrix::nColumns );
             
             NMatrix_exposer.def( 
@@ -248,7 +248,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::nRows
         
-            typedef int ( ::SireMaths::NMatrix::*nRows_function_type )(  ) const;
+            typedef int ( ::SireMaths::NMatrix::*nRows_function_type)(  ) const;
             nRows_function_type nRows_function_value( &::SireMaths::NMatrix::nRows );
             
             NMatrix_exposer.def( 
@@ -258,7 +258,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::offset
         
-            typedef int ( ::SireMaths::NMatrix::*offset_function_type )( int,int ) const;
+            typedef int ( ::SireMaths::NMatrix::*offset_function_type)( int,int ) const;
             offset_function_type offset_function_value( &::SireMaths::NMatrix::offset );
             
             NMatrix_exposer.def( 
@@ -270,7 +270,7 @@ void register_NMatrix_class(){
         NMatrix_exposer.def( bp::self != bp::self );
         { //::SireMaths::NMatrix::operator()
         
-            typedef double const & ( ::SireMaths::NMatrix::*__call___function_type )( int,int ) const;
+            typedef double const & ( ::SireMaths::NMatrix::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireMaths::NMatrix::operator() );
             
             NMatrix_exposer.def( 
@@ -291,7 +291,7 @@ void register_NMatrix_class(){
         NMatrix_exposer.def( bp::self / bp::other< double >() );
         { //::SireMaths::NMatrix::operator=
         
-            typedef ::SireMaths::NMatrix & ( ::SireMaths::NMatrix::*assign_function_type )( ::SireMaths::NMatrix const & ) ;
+            typedef ::SireMaths::NMatrix & ( ::SireMaths::NMatrix::*assign_function_type)( ::SireMaths::NMatrix const & ) ;
             assign_function_type assign_function_value( &::SireMaths::NMatrix::operator= );
             
             NMatrix_exposer.def( 
@@ -304,7 +304,7 @@ void register_NMatrix_class(){
         NMatrix_exposer.def( bp::self == bp::self );
         { //::SireMaths::NMatrix::redimension
         
-            typedef void ( ::SireMaths::NMatrix::*redimension_function_type )( int,int ) ;
+            typedef void ( ::SireMaths::NMatrix::*redimension_function_type)( int,int ) ;
             redimension_function_type redimension_function_value( &::SireMaths::NMatrix::redimension );
             
             NMatrix_exposer.def( 
@@ -315,7 +315,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::reflectBottomLeftToTopRight
         
-            typedef void ( ::SireMaths::NMatrix::*reflectBottomLeftToTopRight_function_type )(  ) ;
+            typedef void ( ::SireMaths::NMatrix::*reflectBottomLeftToTopRight_function_type)(  ) ;
             reflectBottomLeftToTopRight_function_type reflectBottomLeftToTopRight_function_value( &::SireMaths::NMatrix::reflectBottomLeftToTopRight );
             
             NMatrix_exposer.def( 
@@ -325,7 +325,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::reflectBottomRightToTopLeft
         
-            typedef void ( ::SireMaths::NMatrix::*reflectBottomRightToTopLeft_function_type )(  ) ;
+            typedef void ( ::SireMaths::NMatrix::*reflectBottomRightToTopLeft_function_type)(  ) ;
             reflectBottomRightToTopLeft_function_type reflectBottomRightToTopLeft_function_value( &::SireMaths::NMatrix::reflectBottomRightToTopLeft );
             
             NMatrix_exposer.def( 
@@ -335,7 +335,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::reflectBottomToTop
         
-            typedef void ( ::SireMaths::NMatrix::*reflectBottomToTop_function_type )(  ) ;
+            typedef void ( ::SireMaths::NMatrix::*reflectBottomToTop_function_type)(  ) ;
             reflectBottomToTop_function_type reflectBottomToTop_function_value( &::SireMaths::NMatrix::reflectBottomToTop );
             
             NMatrix_exposer.def( 
@@ -345,7 +345,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::reflectLeftToRight
         
-            typedef void ( ::SireMaths::NMatrix::*reflectLeftToRight_function_type )(  ) ;
+            typedef void ( ::SireMaths::NMatrix::*reflectLeftToRight_function_type)(  ) ;
             reflectLeftToRight_function_type reflectLeftToRight_function_value( &::SireMaths::NMatrix::reflectLeftToRight );
             
             NMatrix_exposer.def( 
@@ -355,7 +355,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::reflectRightToLeft
         
-            typedef void ( ::SireMaths::NMatrix::*reflectRightToLeft_function_type )(  ) ;
+            typedef void ( ::SireMaths::NMatrix::*reflectRightToLeft_function_type)(  ) ;
             reflectRightToLeft_function_type reflectRightToLeft_function_value( &::SireMaths::NMatrix::reflectRightToLeft );
             
             NMatrix_exposer.def( 
@@ -365,7 +365,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::reflectTopLeftToBottomRight
         
-            typedef void ( ::SireMaths::NMatrix::*reflectTopLeftToBottomRight_function_type )(  ) ;
+            typedef void ( ::SireMaths::NMatrix::*reflectTopLeftToBottomRight_function_type)(  ) ;
             reflectTopLeftToBottomRight_function_type reflectTopLeftToBottomRight_function_value( &::SireMaths::NMatrix::reflectTopLeftToBottomRight );
             
             NMatrix_exposer.def( 
@@ -375,7 +375,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::reflectTopRightToBottomLeft
         
-            typedef void ( ::SireMaths::NMatrix::*reflectTopRightToBottomLeft_function_type )(  ) ;
+            typedef void ( ::SireMaths::NMatrix::*reflectTopRightToBottomLeft_function_type)(  ) ;
             reflectTopRightToBottomLeft_function_type reflectTopRightToBottomLeft_function_value( &::SireMaths::NMatrix::reflectTopRightToBottomLeft );
             
             NMatrix_exposer.def( 
@@ -385,7 +385,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::reflectTopToBottom
         
-            typedef void ( ::SireMaths::NMatrix::*reflectTopToBottom_function_type )(  ) ;
+            typedef void ( ::SireMaths::NMatrix::*reflectTopToBottom_function_type)(  ) ;
             reflectTopToBottom_function_type reflectTopToBottom_function_value( &::SireMaths::NMatrix::reflectTopToBottom );
             
             NMatrix_exposer.def( 
@@ -395,7 +395,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::row
         
-            typedef ::SireMaths::NVector ( ::SireMaths::NMatrix::*row_function_type )( int ) const;
+            typedef ::SireMaths::NVector ( ::SireMaths::NMatrix::*row_function_type)( int ) const;
             row_function_type row_function_value( &::SireMaths::NMatrix::row );
             
             NMatrix_exposer.def( 
@@ -406,7 +406,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::set
         
-            typedef void ( ::SireMaths::NMatrix::*set_function_type )( int,int,double ) ;
+            typedef void ( ::SireMaths::NMatrix::*set_function_type)( int,int,double ) ;
             set_function_type set_function_value( &::SireMaths::NMatrix::set );
             
             NMatrix_exposer.def( 
@@ -417,7 +417,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::setAll
         
-            typedef void ( ::SireMaths::NMatrix::*setAll_function_type )( double ) ;
+            typedef void ( ::SireMaths::NMatrix::*setAll_function_type)( double ) ;
             setAll_function_type setAll_function_value( &::SireMaths::NMatrix::setAll );
             
             NMatrix_exposer.def( 
@@ -428,7 +428,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::setColumn
         
-            typedef void ( ::SireMaths::NMatrix::*setColumn_function_type )( int,double ) ;
+            typedef void ( ::SireMaths::NMatrix::*setColumn_function_type)( int,double ) ;
             setColumn_function_type setColumn_function_value( &::SireMaths::NMatrix::setColumn );
             
             NMatrix_exposer.def( 
@@ -439,7 +439,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::setColumn
         
-            typedef void ( ::SireMaths::NMatrix::*setColumn_function_type )( int,::SireMaths::NVector const & ) ;
+            typedef void ( ::SireMaths::NMatrix::*setColumn_function_type)( int,::SireMaths::NVector const & ) ;
             setColumn_function_type setColumn_function_value( &::SireMaths::NMatrix::setColumn );
             
             NMatrix_exposer.def( 
@@ -450,7 +450,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::setRow
         
-            typedef void ( ::SireMaths::NMatrix::*setRow_function_type )( int,double ) ;
+            typedef void ( ::SireMaths::NMatrix::*setRow_function_type)( int,double ) ;
             setRow_function_type setRow_function_value( &::SireMaths::NMatrix::setRow );
             
             NMatrix_exposer.def( 
@@ -461,7 +461,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::setRow
         
-            typedef void ( ::SireMaths::NMatrix::*setRow_function_type )( int,::SireMaths::NVector const & ) ;
+            typedef void ( ::SireMaths::NMatrix::*setRow_function_type)( int,::SireMaths::NVector const & ) ;
             setRow_function_type setRow_function_value( &::SireMaths::NMatrix::setRow );
             
             NMatrix_exposer.def( 
@@ -472,7 +472,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::toString
         
-            typedef ::QString ( ::SireMaths::NMatrix::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMaths::NMatrix::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMaths::NMatrix::toString );
             
             NMatrix_exposer.def( 
@@ -482,7 +482,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::trace
         
-            typedef double ( ::SireMaths::NMatrix::*trace_function_type )(  ) const;
+            typedef double ( ::SireMaths::NMatrix::*trace_function_type)(  ) const;
             trace_function_type trace_function_value( &::SireMaths::NMatrix::trace );
             
             NMatrix_exposer.def( 
@@ -492,7 +492,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::transpose
         
-            typedef ::SireMaths::NMatrix ( ::SireMaths::NMatrix::*transpose_function_type )(  ) const;
+            typedef ::SireMaths::NMatrix ( ::SireMaths::NMatrix::*transpose_function_type)(  ) const;
             transpose_function_type transpose_function_value( &::SireMaths::NMatrix::transpose );
             
             NMatrix_exposer.def( 
@@ -512,7 +512,7 @@ void register_NMatrix_class(){
         }
         { //::SireMaths::NMatrix::what
         
-            typedef char const * ( ::SireMaths::NMatrix::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMaths::NMatrix::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMaths::NMatrix::what );
             
             NMatrix_exposer.def( 

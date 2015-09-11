@@ -35,7 +35,7 @@ void register_MonitorComponent_class(){
         MonitorComponent_exposer.def( bp::init< SireSystem::MonitorComponent const & >(( bp::arg("other") )) );
         { //::SireSystem::MonitorComponent::accumulator
         
-            typedef ::SireMaths::Accumulator const & ( ::SireSystem::MonitorComponent::*accumulator_function_type )(  ) const;
+            typedef ::SireMaths::Accumulator const & ( ::SireSystem::MonitorComponent::*accumulator_function_type)(  ) const;
             accumulator_function_type accumulator_function_value( &::SireSystem::MonitorComponent::accumulator );
             
             MonitorComponent_exposer.def( 
@@ -46,7 +46,7 @@ void register_MonitorComponent_class(){
         }
         { //::SireSystem::MonitorComponent::clearStatistics
         
-            typedef void ( ::SireSystem::MonitorComponent::*clearStatistics_function_type )(  ) ;
+            typedef void ( ::SireSystem::MonitorComponent::*clearStatistics_function_type)(  ) ;
             clearStatistics_function_type clearStatistics_function_value( &::SireSystem::MonitorComponent::clearStatistics );
             
             MonitorComponent_exposer.def( 
@@ -56,7 +56,7 @@ void register_MonitorComponent_class(){
         }
         { //::SireSystem::MonitorComponent::component
         
-            typedef ::SireCAS::Symbol const & ( ::SireSystem::MonitorComponent::*component_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireSystem::MonitorComponent::*component_function_type)(  ) const;
             component_function_type component_function_value( &::SireSystem::MonitorComponent::component );
             
             MonitorComponent_exposer.def( 
@@ -67,7 +67,7 @@ void register_MonitorComponent_class(){
         }
         { //::SireSystem::MonitorComponent::monitor
         
-            typedef void ( ::SireSystem::MonitorComponent::*monitor_function_type )( ::SireSystem::System & ) ;
+            typedef void ( ::SireSystem::MonitorComponent::*monitor_function_type)( ::SireSystem::System & ) ;
             monitor_function_type monitor_function_value( &::SireSystem::MonitorComponent::monitor );
             
             MonitorComponent_exposer.def( 
@@ -79,7 +79,7 @@ void register_MonitorComponent_class(){
         MonitorComponent_exposer.def( bp::self != bp::self );
         { //::SireSystem::MonitorComponent::operator=
         
-            typedef ::SireSystem::MonitorComponent & ( ::SireSystem::MonitorComponent::*assign_function_type )( ::SireSystem::MonitorComponent const & ) ;
+            typedef ::SireSystem::MonitorComponent & ( ::SireSystem::MonitorComponent::*assign_function_type)( ::SireSystem::MonitorComponent const & ) ;
             assign_function_type assign_function_value( &::SireSystem::MonitorComponent::operator= );
             
             MonitorComponent_exposer.def( 

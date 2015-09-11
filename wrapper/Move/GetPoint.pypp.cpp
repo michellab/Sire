@@ -45,7 +45,7 @@ void register_GetPoint_class(){
         bp::scope GetPoint_scope( GetPoint_exposer );
         { //::SireMove::GetPoint::getPoint
         
-            typedef ::SireMaths::Vector ( ::SireMove::GetPoint::*getPoint_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::Vector ( ::SireMove::GetPoint::*getPoint_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             getPoint_function_type getPoint_function_value( &::SireMove::GetPoint::getPoint );
             
             GetPoint_exposer.def( 
@@ -66,7 +66,7 @@ void register_GetPoint_class(){
         }
         { //::SireMove::GetPoint::operator()
         
-            typedef ::SireMaths::Vector ( ::SireMove::GetPoint::*__call___function_type )( ::SireMol::MoleculeView const & ) const;
+            typedef ::SireMaths::Vector ( ::SireMove::GetPoint::*__call___function_type)( ::SireMol::MoleculeView const & ) const;
             __call___function_type __call___function_value( &::SireMove::GetPoint::operator() );
             
             GetPoint_exposer.def( 
@@ -77,7 +77,7 @@ void register_GetPoint_class(){
         }
         { //::SireMove::GetPoint::operator()
         
-            typedef ::SireMaths::Vector ( ::SireMove::GetPoint::*__call___function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::Vector ( ::SireMove::GetPoint::*__call___function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             __call___function_type __call___function_value( &::SireMove::GetPoint::operator() );
             
             GetPoint_exposer.def( 

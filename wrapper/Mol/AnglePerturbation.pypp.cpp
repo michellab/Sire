@@ -47,7 +47,7 @@ void register_AnglePerturbation_class(){
         AnglePerturbation_exposer.def( bp::init< SireMol::AnglePerturbation const & >(( bp::arg("other") )) );
         { //::SireMol::AnglePerturbation::angle
         
-            typedef ::SireMol::AngleID const & ( ::SireMol::AnglePerturbation::*angle_function_type )(  ) const;
+            typedef ::SireMol::AngleID const & ( ::SireMol::AnglePerturbation::*angle_function_type)(  ) const;
             angle_function_type angle_function_value( &::SireMol::AnglePerturbation::angle );
             
             AnglePerturbation_exposer.def( 
@@ -58,7 +58,7 @@ void register_AnglePerturbation_class(){
         }
         { //::SireMol::AnglePerturbation::end
         
-            typedef ::SireUnits::Dimension::Angle const & ( ::SireMol::AnglePerturbation::*end_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Angle const & ( ::SireMol::AnglePerturbation::*end_function_type)(  ) const;
             end_function_type end_function_value( &::SireMol::AnglePerturbation::end );
             
             AnglePerturbation_exposer.def( 
@@ -70,7 +70,7 @@ void register_AnglePerturbation_class(){
         AnglePerturbation_exposer.def( bp::self != bp::self );
         { //::SireMol::AnglePerturbation::operator=
         
-            typedef ::SireMol::AnglePerturbation & ( ::SireMol::AnglePerturbation::*assign_function_type )( ::SireMol::AnglePerturbation const & ) ;
+            typedef ::SireMol::AnglePerturbation & ( ::SireMol::AnglePerturbation::*assign_function_type)( ::SireMol::AnglePerturbation const & ) ;
             assign_function_type assign_function_value( &::SireMol::AnglePerturbation::operator= );
             
             AnglePerturbation_exposer.def( 
@@ -83,7 +83,7 @@ void register_AnglePerturbation_class(){
         AnglePerturbation_exposer.def( bp::self == bp::self );
         { //::SireMol::AnglePerturbation::start
         
-            typedef ::SireUnits::Dimension::Angle const & ( ::SireMol::AnglePerturbation::*start_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Angle const & ( ::SireMol::AnglePerturbation::*start_function_type)(  ) const;
             start_function_type start_function_value( &::SireMol::AnglePerturbation::start );
             
             AnglePerturbation_exposer.def( 
@@ -94,7 +94,7 @@ void register_AnglePerturbation_class(){
         }
         { //::SireMol::AnglePerturbation::toString
         
-            typedef ::QString ( ::SireMol::AnglePerturbation::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::AnglePerturbation::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::AnglePerturbation::toString );
             
             AnglePerturbation_exposer.def( 
@@ -114,7 +114,7 @@ void register_AnglePerturbation_class(){
         }
         { //::SireMol::AnglePerturbation::wouldChange
         
-            typedef bool ( ::SireMol::AnglePerturbation::*wouldChange_function_type )( ::SireMol::Molecule const &,::SireCAS::Values const & ) const;
+            typedef bool ( ::SireMol::AnglePerturbation::*wouldChange_function_type)( ::SireMol::Molecule const &,::SireCAS::Values const & ) const;
             wouldChange_function_type wouldChange_function_value( &::SireMol::AnglePerturbation::wouldChange );
             
             AnglePerturbation_exposer.def( 

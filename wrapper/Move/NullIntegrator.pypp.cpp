@@ -46,7 +46,7 @@ void register_NullIntegrator_class(){
         NullIntegrator_exposer.def( bp::init< SireMove::NullIntegrator const & >(( bp::arg("other") )) );
         { //::SireMove::NullIntegrator::createWorkspace
         
-            typedef ::SireMove::IntegratorWorkspacePtr ( ::SireMove::NullIntegrator::*createWorkspace_function_type )( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireMove::IntegratorWorkspacePtr ( ::SireMove::NullIntegrator::*createWorkspace_function_type)( ::SireBase::PropertyMap const & ) const;
             createWorkspace_function_type createWorkspace_function_value( &::SireMove::NullIntegrator::createWorkspace );
             
             NullIntegrator_exposer.def( 
@@ -57,7 +57,7 @@ void register_NullIntegrator_class(){
         }
         { //::SireMove::NullIntegrator::createWorkspace
         
-            typedef ::SireMove::IntegratorWorkspacePtr ( ::SireMove::NullIntegrator::*createWorkspace_function_type )( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMove::IntegratorWorkspacePtr ( ::SireMove::NullIntegrator::*createWorkspace_function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
             createWorkspace_function_type createWorkspace_function_value( &::SireMove::NullIntegrator::createWorkspace );
             
             NullIntegrator_exposer.def( 
@@ -68,7 +68,7 @@ void register_NullIntegrator_class(){
         }
         { //::SireMove::NullIntegrator::ensemble
         
-            typedef ::SireMove::Ensemble ( ::SireMove::NullIntegrator::*ensemble_function_type )(  ) const;
+            typedef ::SireMove::Ensemble ( ::SireMove::NullIntegrator::*ensemble_function_type)(  ) const;
             ensemble_function_type ensemble_function_value( &::SireMove::NullIntegrator::ensemble );
             
             NullIntegrator_exposer.def( 
@@ -78,7 +78,7 @@ void register_NullIntegrator_class(){
         }
         { //::SireMove::NullIntegrator::integrate
         
-            typedef void ( ::SireMove::NullIntegrator::*integrate_function_type )( ::SireMove::IntegratorWorkspace &,::SireCAS::Symbol const &,::SireUnits::Dimension::Time,int,bool ) ;
+            typedef void ( ::SireMove::NullIntegrator::*integrate_function_type)( ::SireMove::IntegratorWorkspace &,::SireCAS::Symbol const &,::SireUnits::Dimension::Time,int,bool ) ;
             integrate_function_type integrate_function_value( &::SireMove::NullIntegrator::integrate );
             
             NullIntegrator_exposer.def( 
@@ -89,7 +89,7 @@ void register_NullIntegrator_class(){
         }
         { //::SireMove::NullIntegrator::isTimeReversible
         
-            typedef bool ( ::SireMove::NullIntegrator::*isTimeReversible_function_type )(  ) const;
+            typedef bool ( ::SireMove::NullIntegrator::*isTimeReversible_function_type)(  ) const;
             isTimeReversible_function_type isTimeReversible_function_value( &::SireMove::NullIntegrator::isTimeReversible );
             
             NullIntegrator_exposer.def( 
@@ -100,7 +100,7 @@ void register_NullIntegrator_class(){
         NullIntegrator_exposer.def( bp::self != bp::self );
         { //::SireMove::NullIntegrator::operator=
         
-            typedef ::SireMove::NullIntegrator & ( ::SireMove::NullIntegrator::*assign_function_type )( ::SireMove::NullIntegrator const & ) ;
+            typedef ::SireMove::NullIntegrator & ( ::SireMove::NullIntegrator::*assign_function_type)( ::SireMove::NullIntegrator const & ) ;
             assign_function_type assign_function_value( &::SireMove::NullIntegrator::operator= );
             
             NullIntegrator_exposer.def( 
@@ -113,7 +113,7 @@ void register_NullIntegrator_class(){
         NullIntegrator_exposer.def( bp::self == bp::self );
         { //::SireMove::NullIntegrator::toString
         
-            typedef ::QString ( ::SireMove::NullIntegrator::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMove::NullIntegrator::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMove::NullIntegrator::toString );
             
             NullIntegrator_exposer.def( 

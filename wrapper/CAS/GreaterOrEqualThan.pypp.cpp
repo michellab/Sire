@@ -49,7 +49,7 @@ void register_GreaterOrEqualThan_class(){
         GreaterOrEqualThan_exposer.def( bp::init< SireCAS::GreaterOrEqualThan const & >(( bp::arg("other") )) );
         { //::SireCAS::GreaterOrEqualThan::alwaysFalse
         
-            typedef bool ( ::SireCAS::GreaterOrEqualThan::*alwaysFalse_function_type )(  ) const;
+            typedef bool ( ::SireCAS::GreaterOrEqualThan::*alwaysFalse_function_type)(  ) const;
             alwaysFalse_function_type alwaysFalse_function_value( &::SireCAS::GreaterOrEqualThan::alwaysFalse );
             
             GreaterOrEqualThan_exposer.def( 
@@ -59,7 +59,7 @@ void register_GreaterOrEqualThan_class(){
         }
         { //::SireCAS::GreaterOrEqualThan::alwaysTrue
         
-            typedef bool ( ::SireCAS::GreaterOrEqualThan::*alwaysTrue_function_type )(  ) const;
+            typedef bool ( ::SireCAS::GreaterOrEqualThan::*alwaysTrue_function_type)(  ) const;
             alwaysTrue_function_type alwaysTrue_function_value( &::SireCAS::GreaterOrEqualThan::alwaysTrue );
             
             GreaterOrEqualThan_exposer.def( 
@@ -69,7 +69,7 @@ void register_GreaterOrEqualThan_class(){
         }
         { //::SireCAS::GreaterOrEqualThan::operator=
         
-            typedef ::SireCAS::GreaterOrEqualThan & ( ::SireCAS::GreaterOrEqualThan::*assign_function_type )( ::SireCAS::GreaterOrEqualThan const & ) ;
+            typedef ::SireCAS::GreaterOrEqualThan & ( ::SireCAS::GreaterOrEqualThan::*assign_function_type)( ::SireCAS::GreaterOrEqualThan const & ) ;
             assign_function_type assign_function_value( &::SireCAS::GreaterOrEqualThan::operator= );
             
             GreaterOrEqualThan_exposer.def( 
@@ -93,7 +93,7 @@ void register_GreaterOrEqualThan_class(){
         }
         { //::SireCAS::GreaterOrEqualThan::what
         
-            typedef char const * ( ::SireCAS::GreaterOrEqualThan::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::GreaterOrEqualThan::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::GreaterOrEqualThan::what );
             
             GreaterOrEqualThan_exposer.def( 

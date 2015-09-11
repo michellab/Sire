@@ -59,7 +59,7 @@ void register_AtomIDMatcher_class(){
         AtomIDMatcher_exposer.def( bp::init< SireMol::AtomIDMatcher const & >(( bp::arg("other") )) );
         { //::SireMol::AtomIDMatcher::isNull
         
-            typedef bool ( ::SireMol::AtomIDMatcher::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::AtomIDMatcher::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::AtomIDMatcher::isNull );
             
             AtomIDMatcher_exposer.def( 
@@ -70,7 +70,7 @@ void register_AtomIDMatcher_class(){
         AtomIDMatcher_exposer.def( bp::self != bp::self );
         { //::SireMol::AtomIDMatcher::operator=
         
-            typedef ::SireMol::AtomIDMatcher & ( ::SireMol::AtomIDMatcher::*assign_function_type )( ::SireMol::AtomIDMatcher const & ) ;
+            typedef ::SireMol::AtomIDMatcher & ( ::SireMol::AtomIDMatcher::*assign_function_type)( ::SireMol::AtomIDMatcher const & ) ;
             assign_function_type assign_function_value( &::SireMol::AtomIDMatcher::operator= );
             
             AtomIDMatcher_exposer.def( 
@@ -83,7 +83,7 @@ void register_AtomIDMatcher_class(){
         AtomIDMatcher_exposer.def( bp::self == bp::self );
         { //::SireMol::AtomIDMatcher::toString
         
-            typedef ::QString ( ::SireMol::AtomIDMatcher::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::AtomIDMatcher::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::AtomIDMatcher::toString );
             
             AtomIDMatcher_exposer.def( 
@@ -103,7 +103,7 @@ void register_AtomIDMatcher_class(){
         }
         { //::SireMol::AtomIDMatcher::what
         
-            typedef char const * ( ::SireMol::AtomIDMatcher::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::AtomIDMatcher::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::AtomIDMatcher::what );
             
             AtomIDMatcher_exposer.def( 

@@ -39,7 +39,7 @@ void register_Sech_class(){
         Sech_exposer.def( bp::init< SireCAS::Sech const & >(( bp::arg("other") )) );
         { //::SireCAS::Sech::evaluate
         
-            typedef double ( ::SireCAS::Sech::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::Sech::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Sech::evaluate );
             
             Sech_exposer.def( 
@@ -50,7 +50,7 @@ void register_Sech_class(){
         }
         { //::SireCAS::Sech::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::Sech::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::Sech::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Sech::evaluate );
             
             Sech_exposer.def( 
@@ -72,7 +72,7 @@ void register_Sech_class(){
         }
         { //::SireCAS::Sech::what
         
-            typedef char const * ( ::SireCAS::Sech::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::Sech::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::Sech::what );
             
             Sech_exposer.def( 

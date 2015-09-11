@@ -37,7 +37,7 @@ void register_ErrorPacket_class(){
         ErrorPacket_exposer.def( bp::init< SireCluster::ErrorPacket const & >(( bp::arg("other") )) );
         { //::SireCluster::ErrorPacket::approximatePacketSize
         
-            typedef int ( ::SireCluster::ErrorPacket::*approximatePacketSize_function_type )(  ) const;
+            typedef int ( ::SireCluster::ErrorPacket::*approximatePacketSize_function_type)(  ) const;
             approximatePacketSize_function_type approximatePacketSize_function_value( &::SireCluster::ErrorPacket::approximatePacketSize );
             
             ErrorPacket_exposer.def( 
@@ -47,7 +47,7 @@ void register_ErrorPacket_class(){
         }
         { //::SireCluster::ErrorPacket::hasFinished
         
-            typedef bool ( ::SireCluster::ErrorPacket::*hasFinished_function_type )(  ) const;
+            typedef bool ( ::SireCluster::ErrorPacket::*hasFinished_function_type)(  ) const;
             hasFinished_function_type hasFinished_function_value( &::SireCluster::ErrorPacket::hasFinished );
             
             ErrorPacket_exposer.def( 
@@ -57,7 +57,7 @@ void register_ErrorPacket_class(){
         }
         { //::SireCluster::ErrorPacket::isError
         
-            typedef bool ( ::SireCluster::ErrorPacket::*isError_function_type )(  ) const;
+            typedef bool ( ::SireCluster::ErrorPacket::*isError_function_type)(  ) const;
             isError_function_type isError_function_value( &::SireCluster::ErrorPacket::isError );
             
             ErrorPacket_exposer.def( 
@@ -67,7 +67,7 @@ void register_ErrorPacket_class(){
         }
         { //::SireCluster::ErrorPacket::operator=
         
-            typedef ::SireCluster::ErrorPacket & ( ::SireCluster::ErrorPacket::*assign_function_type )( ::SireCluster::ErrorPacket const & ) ;
+            typedef ::SireCluster::ErrorPacket & ( ::SireCluster::ErrorPacket::*assign_function_type)( ::SireCluster::ErrorPacket const & ) ;
             assign_function_type assign_function_value( &::SireCluster::ErrorPacket::operator= );
             
             ErrorPacket_exposer.def( 
@@ -79,7 +79,7 @@ void register_ErrorPacket_class(){
         }
         { //::SireCluster::ErrorPacket::throwError
         
-            typedef void ( ::SireCluster::ErrorPacket::*throwError_function_type )(  ) const;
+            typedef void ( ::SireCluster::ErrorPacket::*throwError_function_type)(  ) const;
             throwError_function_type throwError_function_value( &::SireCluster::ErrorPacket::throwError );
             
             ErrorPacket_exposer.def( 
@@ -99,7 +99,7 @@ void register_ErrorPacket_class(){
         }
         { //::SireCluster::ErrorPacket::what
         
-            typedef char const * ( ::SireCluster::ErrorPacket::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCluster::ErrorPacket::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCluster::ErrorPacket::what );
             
             ErrorPacket_exposer.def( 

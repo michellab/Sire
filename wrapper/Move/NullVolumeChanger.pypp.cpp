@@ -47,7 +47,7 @@ void register_NullVolumeChanger_class(){
         NullVolumeChanger_exposer.def( bp::self != bp::self );
         { //::SireMove::NullVolumeChanger::operator=
         
-            typedef ::SireMove::NullVolumeChanger & ( ::SireMove::NullVolumeChanger::*assign_function_type )( ::SireMove::NullVolumeChanger const & ) ;
+            typedef ::SireMove::NullVolumeChanger & ( ::SireMove::NullVolumeChanger::*assign_function_type)( ::SireMove::NullVolumeChanger const & ) ;
             assign_function_type assign_function_value( &::SireMove::NullVolumeChanger::operator= );
             
             NullVolumeChanger_exposer.def( 
@@ -60,7 +60,7 @@ void register_NullVolumeChanger_class(){
         NullVolumeChanger_exposer.def( bp::self == bp::self );
         { //::SireMove::NullVolumeChanger::setVolume
         
-            typedef int ( ::SireMove::NullVolumeChanger::*setVolume_function_type )( ::SireSystem::System &,::SireUnits::Dimension::Volume const &,::SireBase::PropertyMap const & ) const;
+            typedef int ( ::SireMove::NullVolumeChanger::*setVolume_function_type)( ::SireSystem::System &,::SireUnits::Dimension::Volume const &,::SireBase::PropertyMap const & ) const;
             setVolume_function_type setVolume_function_value( &::SireMove::NullVolumeChanger::setVolume );
             
             NullVolumeChanger_exposer.def( 

@@ -50,7 +50,7 @@ void register_NullVelocityGenerator_class(){
         NullVelocityGenerator_exposer.def( bp::init< SireMove::NullVelocityGenerator const & >(( bp::arg("other") )) );
         { //::SireMove::NullVelocityGenerator::generate
         
-            typedef ::SireMol::AtomVelocities ( ::SireMove::NullVelocityGenerator::*generate_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::AtomVelocities ( ::SireMove::NullVelocityGenerator::*generate_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             generate_function_type generate_function_value( &::SireMove::NullVelocityGenerator::generate );
             
             NullVelocityGenerator_exposer.def( 
@@ -62,7 +62,7 @@ void register_NullVelocityGenerator_class(){
         NullVelocityGenerator_exposer.def( bp::self != bp::self );
         { //::SireMove::NullVelocityGenerator::operator=
         
-            typedef ::SireMove::NullVelocityGenerator & ( ::SireMove::NullVelocityGenerator::*assign_function_type )( ::SireMove::NullVelocityGenerator const & ) ;
+            typedef ::SireMove::NullVelocityGenerator & ( ::SireMove::NullVelocityGenerator::*assign_function_type)( ::SireMove::NullVelocityGenerator const & ) ;
             assign_function_type assign_function_value( &::SireMove::NullVelocityGenerator::operator= );
             
             NullVelocityGenerator_exposer.def( 

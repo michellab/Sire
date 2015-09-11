@@ -12,4 +12,6 @@
 #these are vital for the rest of the module
 import Sire.Qt
 import Sire.Error
-__version__ = '15.1.0'
+import Sire.Config
+
+__version__ = Sire.Config.__version__

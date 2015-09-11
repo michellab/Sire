@@ -40,7 +40,7 @@ void register_FEPDeltas_class(){
         FEPDeltas_exposer.def( bp::init< SireAnalysis::FEPDeltas const & >(( bp::arg("other") )) );
         { //::SireAnalysis::FEPDeltas::backwardsData
         
-            typedef ::QMap< double, SireMaths::FreeEnergyAverage > ( ::SireAnalysis::FEPDeltas::*backwardsData_function_type )(  ) const;
+            typedef ::QMap< double, SireMaths::FreeEnergyAverage > ( ::SireAnalysis::FEPDeltas::*backwardsData_function_type)(  ) const;
             backwardsData_function_type backwardsData_function_value( &::SireAnalysis::FEPDeltas::backwardsData );
             
             FEPDeltas_exposer.def( 
@@ -50,7 +50,7 @@ void register_FEPDeltas_class(){
         }
         { //::SireAnalysis::FEPDeltas::backwardsDeltas
         
-            typedef ::QMap< double, SireMaths::FreeEnergyAverage > ( ::SireAnalysis::FEPDeltas::*backwardsDeltas_function_type )(  ) const;
+            typedef ::QMap< double, SireMaths::FreeEnergyAverage > ( ::SireAnalysis::FEPDeltas::*backwardsDeltas_function_type)(  ) const;
             backwardsDeltas_function_type backwardsDeltas_function_value( &::SireAnalysis::FEPDeltas::backwardsDeltas );
             
             FEPDeltas_exposer.def( 
@@ -60,7 +60,7 @@ void register_FEPDeltas_class(){
         }
         { //::SireAnalysis::FEPDeltas::backwardsValues
         
-            typedef ::QVector< SireAnalysis::DataPoint > ( ::SireAnalysis::FEPDeltas::*backwardsValues_function_type )(  ) const;
+            typedef ::QVector< SireAnalysis::DataPoint > ( ::SireAnalysis::FEPDeltas::*backwardsValues_function_type)(  ) const;
             backwardsValues_function_type backwardsValues_function_value( &::SireAnalysis::FEPDeltas::backwardsValues );
             
             FEPDeltas_exposer.def( 
@@ -70,7 +70,7 @@ void register_FEPDeltas_class(){
         }
         { //::SireAnalysis::FEPDeltas::forwardsData
         
-            typedef ::QMap< double, SireMaths::FreeEnergyAverage > ( ::SireAnalysis::FEPDeltas::*forwardsData_function_type )(  ) const;
+            typedef ::QMap< double, SireMaths::FreeEnergyAverage > ( ::SireAnalysis::FEPDeltas::*forwardsData_function_type)(  ) const;
             forwardsData_function_type forwardsData_function_value( &::SireAnalysis::FEPDeltas::forwardsData );
             
             FEPDeltas_exposer.def( 
@@ -80,7 +80,7 @@ void register_FEPDeltas_class(){
         }
         { //::SireAnalysis::FEPDeltas::forwardsDeltas
         
-            typedef ::QMap< double, SireMaths::FreeEnergyAverage > ( ::SireAnalysis::FEPDeltas::*forwardsDeltas_function_type )(  ) const;
+            typedef ::QMap< double, SireMaths::FreeEnergyAverage > ( ::SireAnalysis::FEPDeltas::*forwardsDeltas_function_type)(  ) const;
             forwardsDeltas_function_type forwardsDeltas_function_value( &::SireAnalysis::FEPDeltas::forwardsDeltas );
             
             FEPDeltas_exposer.def( 
@@ -90,7 +90,7 @@ void register_FEPDeltas_class(){
         }
         { //::SireAnalysis::FEPDeltas::forwardsValues
         
-            typedef ::QVector< SireAnalysis::DataPoint > ( ::SireAnalysis::FEPDeltas::*forwardsValues_function_type )(  ) const;
+            typedef ::QVector< SireAnalysis::DataPoint > ( ::SireAnalysis::FEPDeltas::*forwardsValues_function_type)(  ) const;
             forwardsValues_function_type forwardsValues_function_value( &::SireAnalysis::FEPDeltas::forwardsValues );
             
             FEPDeltas_exposer.def( 
@@ -100,7 +100,7 @@ void register_FEPDeltas_class(){
         }
         { //::SireAnalysis::FEPDeltas::integrate
         
-            typedef ::SireAnalysis::PMF ( ::SireAnalysis::FEPDeltas::*integrate_function_type )(  ) const;
+            typedef ::SireAnalysis::PMF ( ::SireAnalysis::FEPDeltas::*integrate_function_type)(  ) const;
             integrate_function_type integrate_function_value( &::SireAnalysis::FEPDeltas::integrate );
             
             FEPDeltas_exposer.def( 
@@ -110,7 +110,7 @@ void register_FEPDeltas_class(){
         }
         { //::SireAnalysis::FEPDeltas::isEmpty
         
-            typedef bool ( ::SireAnalysis::FEPDeltas::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireAnalysis::FEPDeltas::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireAnalysis::FEPDeltas::isEmpty );
             
             FEPDeltas_exposer.def( 
@@ -120,7 +120,7 @@ void register_FEPDeltas_class(){
         }
         { //::SireAnalysis::FEPDeltas::lambdaValues
         
-            typedef ::QList< double > ( ::SireAnalysis::FEPDeltas::*lambdaValues_function_type )(  ) const;
+            typedef ::QList< double > ( ::SireAnalysis::FEPDeltas::*lambdaValues_function_type)(  ) const;
             lambdaValues_function_type lambdaValues_function_value( &::SireAnalysis::FEPDeltas::lambdaValues );
             
             FEPDeltas_exposer.def( 
@@ -141,7 +141,7 @@ void register_FEPDeltas_class(){
         }
         { //::SireAnalysis::FEPDeltas::nLambdaValues
         
-            typedef int ( ::SireAnalysis::FEPDeltas::*nLambdaValues_function_type )(  ) const;
+            typedef int ( ::SireAnalysis::FEPDeltas::*nLambdaValues_function_type)(  ) const;
             nLambdaValues_function_type nLambdaValues_function_value( &::SireAnalysis::FEPDeltas::nLambdaValues );
             
             FEPDeltas_exposer.def( 
@@ -151,7 +151,7 @@ void register_FEPDeltas_class(){
         }
         { //::SireAnalysis::FEPDeltas::nSamples
         
-            typedef ::qint64 ( ::SireAnalysis::FEPDeltas::*nSamples_function_type )(  ) const;
+            typedef ::qint64 ( ::SireAnalysis::FEPDeltas::*nSamples_function_type)(  ) const;
             nSamples_function_type nSamples_function_value( &::SireAnalysis::FEPDeltas::nSamples );
             
             FEPDeltas_exposer.def( 
@@ -161,7 +161,7 @@ void register_FEPDeltas_class(){
         }
         { //::SireAnalysis::FEPDeltas::nWindows
         
-            typedef int ( ::SireAnalysis::FEPDeltas::*nWindows_function_type )(  ) const;
+            typedef int ( ::SireAnalysis::FEPDeltas::*nWindows_function_type)(  ) const;
             nWindows_function_type nWindows_function_value( &::SireAnalysis::FEPDeltas::nWindows );
             
             FEPDeltas_exposer.def( 
@@ -173,7 +173,7 @@ void register_FEPDeltas_class(){
         FEPDeltas_exposer.def( bp::self + bp::self );
         { //::SireAnalysis::FEPDeltas::operator=
         
-            typedef ::SireAnalysis::FEPDeltas & ( ::SireAnalysis::FEPDeltas::*assign_function_type )( ::SireAnalysis::FEPDeltas const & ) ;
+            typedef ::SireAnalysis::FEPDeltas & ( ::SireAnalysis::FEPDeltas::*assign_function_type)( ::SireAnalysis::FEPDeltas const & ) ;
             assign_function_type assign_function_value( &::SireAnalysis::FEPDeltas::operator= );
             
             FEPDeltas_exposer.def( 
@@ -186,7 +186,7 @@ void register_FEPDeltas_class(){
         FEPDeltas_exposer.def( bp::self == bp::self );
         { //::SireAnalysis::FEPDeltas::sum
         
-            typedef ::SireAnalysis::PMF ( ::SireAnalysis::FEPDeltas::*sum_function_type )(  ) const;
+            typedef ::SireAnalysis::PMF ( ::SireAnalysis::FEPDeltas::*sum_function_type)(  ) const;
             sum_function_type sum_function_value( &::SireAnalysis::FEPDeltas::sum );
             
             FEPDeltas_exposer.def( 
@@ -196,7 +196,7 @@ void register_FEPDeltas_class(){
         }
         { //::SireAnalysis::FEPDeltas::sumBackwards
         
-            typedef ::SireAnalysis::PMF ( ::SireAnalysis::FEPDeltas::*sumBackwards_function_type )(  ) const;
+            typedef ::SireAnalysis::PMF ( ::SireAnalysis::FEPDeltas::*sumBackwards_function_type)(  ) const;
             sumBackwards_function_type sumBackwards_function_value( &::SireAnalysis::FEPDeltas::sumBackwards );
             
             FEPDeltas_exposer.def( 
@@ -206,7 +206,7 @@ void register_FEPDeltas_class(){
         }
         { //::SireAnalysis::FEPDeltas::sumBackwardsTaylor
         
-            typedef ::SireAnalysis::PMF ( ::SireAnalysis::FEPDeltas::*sumBackwardsTaylor_function_type )(  ) const;
+            typedef ::SireAnalysis::PMF ( ::SireAnalysis::FEPDeltas::*sumBackwardsTaylor_function_type)(  ) const;
             sumBackwardsTaylor_function_type sumBackwardsTaylor_function_value( &::SireAnalysis::FEPDeltas::sumBackwardsTaylor );
             
             FEPDeltas_exposer.def( 
@@ -216,7 +216,7 @@ void register_FEPDeltas_class(){
         }
         { //::SireAnalysis::FEPDeltas::sumForwards
         
-            typedef ::SireAnalysis::PMF ( ::SireAnalysis::FEPDeltas::*sumForwards_function_type )(  ) const;
+            typedef ::SireAnalysis::PMF ( ::SireAnalysis::FEPDeltas::*sumForwards_function_type)(  ) const;
             sumForwards_function_type sumForwards_function_value( &::SireAnalysis::FEPDeltas::sumForwards );
             
             FEPDeltas_exposer.def( 
@@ -226,7 +226,7 @@ void register_FEPDeltas_class(){
         }
         { //::SireAnalysis::FEPDeltas::sumForwardsTaylor
         
-            typedef ::SireAnalysis::PMF ( ::SireAnalysis::FEPDeltas::*sumForwardsTaylor_function_type )(  ) const;
+            typedef ::SireAnalysis::PMF ( ::SireAnalysis::FEPDeltas::*sumForwardsTaylor_function_type)(  ) const;
             sumForwardsTaylor_function_type sumForwardsTaylor_function_value( &::SireAnalysis::FEPDeltas::sumForwardsTaylor );
             
             FEPDeltas_exposer.def( 
@@ -236,7 +236,7 @@ void register_FEPDeltas_class(){
         }
         { //::SireAnalysis::FEPDeltas::temperature
         
-            typedef ::SireUnits::Dimension::Temperature ( ::SireAnalysis::FEPDeltas::*temperature_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Temperature ( ::SireAnalysis::FEPDeltas::*temperature_function_type)(  ) const;
             temperature_function_type temperature_function_value( &::SireAnalysis::FEPDeltas::temperature );
             
             FEPDeltas_exposer.def( 
@@ -246,7 +246,7 @@ void register_FEPDeltas_class(){
         }
         { //::SireAnalysis::FEPDeltas::toString
         
-            typedef ::QString ( ::SireAnalysis::FEPDeltas::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireAnalysis::FEPDeltas::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireAnalysis::FEPDeltas::toString );
             
             FEPDeltas_exposer.def( 
@@ -266,7 +266,7 @@ void register_FEPDeltas_class(){
         }
         { //::SireAnalysis::FEPDeltas::values
         
-            typedef ::QVector< SireAnalysis::DataPoint > ( ::SireAnalysis::FEPDeltas::*values_function_type )(  ) const;
+            typedef ::QVector< SireAnalysis::DataPoint > ( ::SireAnalysis::FEPDeltas::*values_function_type)(  ) const;
             values_function_type values_function_value( &::SireAnalysis::FEPDeltas::values );
             
             FEPDeltas_exposer.def( 
@@ -276,7 +276,7 @@ void register_FEPDeltas_class(){
         }
         { //::SireAnalysis::FEPDeltas::what
         
-            typedef char const * ( ::SireAnalysis::FEPDeltas::*what_function_type )(  ) const;
+            typedef char const * ( ::SireAnalysis::FEPDeltas::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireAnalysis::FEPDeltas::what );
             
             FEPDeltas_exposer.def( 
@@ -286,7 +286,7 @@ void register_FEPDeltas_class(){
         }
         { //::SireAnalysis::FEPDeltas::windows
         
-            typedef ::QList< double > ( ::SireAnalysis::FEPDeltas::*windows_function_type )(  ) const;
+            typedef ::QList< double > ( ::SireAnalysis::FEPDeltas::*windows_function_type)(  ) const;
             windows_function_type windows_function_value( &::SireAnalysis::FEPDeltas::windows );
             
             FEPDeltas_exposer.def( 

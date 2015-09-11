@@ -45,7 +45,7 @@ void register_AbsFromNumber_class(){
         AbsFromNumber_exposer.def( bp::self != bp::self );
         { //::SireMol::AbsFromNumber::operator()
         
-            typedef double ( ::SireMol::AbsFromNumber::*__call___function_type )( ::SireMol::MoleculeData const &,::SireMol::AtomSelection const &,::SireMol::AtomSelection const &,::SireBase::PropertyMap const & ) const;
+            typedef double ( ::SireMol::AbsFromNumber::*__call___function_type)( ::SireMol::MoleculeData const &,::SireMol::AtomSelection const &,::SireMol::AtomSelection const &,::SireBase::PropertyMap const & ) const;
             __call___function_type __call___function_value( &::SireMol::AbsFromNumber::operator() );
             
             AbsFromNumber_exposer.def( 
@@ -56,7 +56,7 @@ void register_AbsFromNumber_class(){
         }
         { //::SireMol::AbsFromNumber::operator()
         
-            typedef double ( ::SireMol::AbsFromNumber::*__call___function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef double ( ::SireMol::AbsFromNumber::*__call___function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             __call___function_type __call___function_value( &::SireMol::AbsFromNumber::operator() );
             
             AbsFromNumber_exposer.def( 
@@ -67,7 +67,7 @@ void register_AbsFromNumber_class(){
         }
         { //::SireMol::AbsFromNumber::operator=
         
-            typedef ::SireMol::AbsFromNumber & ( ::SireMol::AbsFromNumber::*assign_function_type )( ::SireMol::AbsFromNumber const & ) ;
+            typedef ::SireMol::AbsFromNumber & ( ::SireMol::AbsFromNumber::*assign_function_type)( ::SireMol::AbsFromNumber const & ) ;
             assign_function_type assign_function_value( &::SireMol::AbsFromNumber::operator= );
             
             AbsFromNumber_exposer.def( 

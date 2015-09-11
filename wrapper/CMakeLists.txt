@@ -8,9 +8,9 @@
 ################################
 
 # project version
-set (SIRE_VERSION_MAJOR "0")
+set (SIRE_VERSION_MAJOR "2015")
 set (SIRE_VERSION_MINOR "0")
-set (SIRE_VERSION_PATCH "1")
+set (SIRE_VERSION_PATCH "0")
 
 set (SIRE_VERSION "${SIRE_VERSION_MAJOR}.${SIRE_VERSION_MINOR}.${SIRE_VERSION_PATCH}")
 
@@ -352,7 +352,7 @@ install( FILES __init__.py
        )
 
 # Finally, write the version header file and finish off the component dependencies file
-include( GetSvnVersion )
+include( GetGitVersion )
 
 # Create the sire_python_config.h to tell Sire where the
 # python libraries will be installed

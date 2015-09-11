@@ -11,6 +11,8 @@ namespace bp = boost::python;
 
 #include "SireBase/property.h"
 
+#include "SireBase/stringproperty.h"
+
 #include "SireError/errors.h"
 
 #include "SireFF/detail/atomiccoords3d.h"
@@ -55,7 +57,7 @@ void register_BondParameterName_class(){
         bp::scope BondParameterName_scope( BondParameterName_exposer );
         { //::SireMM::BondParameterName::bond
         
-            typedef ::SireBase::PropertyName const & ( ::SireMM::BondParameterName::*bond_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireMM::BondParameterName::*bond_function_type)(  ) const;
             bond_function_type bond_function_value( &::SireMM::BondParameterName::bond );
             
             BondParameterName_exposer.def( 

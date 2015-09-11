@@ -36,7 +36,7 @@ void register_QMProgram_class(){
         bp::scope QMProgram_scope( QMProgram_exposer );
         { //::Squire::QMProgram::calculateCharges
         
-            typedef ::SireMol::AtomCharges ( ::Squire::QMProgram::*calculateCharges_function_type )( ::SireMol::Molecule const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::AtomCharges ( ::Squire::QMProgram::*calculateCharges_function_type)( ::SireMol::Molecule const &,::SireBase::PropertyMap const & ) const;
             calculateCharges_function_type calculateCharges_function_value( &::Squire::QMProgram::calculateCharges );
             
             QMProgram_exposer.def( 
@@ -47,7 +47,7 @@ void register_QMProgram_class(){
         }
         { //::Squire::QMProgram::calculateCharges
         
-            typedef ::SireMol::AtomCharges ( ::Squire::QMProgram::*calculateCharges_function_type )( ::SireMol::Molecule const & ) const;
+            typedef ::SireMol::AtomCharges ( ::Squire::QMProgram::*calculateCharges_function_type)( ::SireMol::Molecule const & ) const;
             calculateCharges_function_type calculateCharges_function_value( &::Squire::QMProgram::calculateCharges );
             
             QMProgram_exposer.def( 
@@ -58,7 +58,7 @@ void register_QMProgram_class(){
         }
         { //::Squire::QMProgram::chargeCommandFile
         
-            typedef ::QString ( ::Squire::QMProgram::*chargeCommandFile_function_type )( ::SireMol::Molecule const & ) const;
+            typedef ::QString ( ::Squire::QMProgram::*chargeCommandFile_function_type)( ::SireMol::Molecule const & ) const;
             chargeCommandFile_function_type chargeCommandFile_function_value( &::Squire::QMProgram::chargeCommandFile );
             
             QMProgram_exposer.def( 
@@ -69,7 +69,7 @@ void register_QMProgram_class(){
         }
         { //::Squire::QMProgram::chargeCommandFile
         
-            typedef ::QString ( ::Squire::QMProgram::*chargeCommandFile_function_type )( ::SireMol::Molecule const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QString ( ::Squire::QMProgram::*chargeCommandFile_function_type)( ::SireMol::Molecule const &,::SireBase::PropertyMap const & ) const;
             chargeCommandFile_function_type chargeCommandFile_function_value( &::Squire::QMProgram::chargeCommandFile );
             
             QMProgram_exposer.def( 
@@ -91,7 +91,7 @@ void register_QMProgram_class(){
         }
         { //::Squire::QMProgram::numberOfMMAtomsLimit
         
-            typedef int ( ::Squire::QMProgram::*numberOfMMAtomsLimit_function_type )(  ) const;
+            typedef int ( ::Squire::QMProgram::*numberOfMMAtomsLimit_function_type)(  ) const;
             numberOfMMAtomsLimit_function_type numberOfMMAtomsLimit_function_value( &::Squire::QMProgram::numberOfMMAtomsLimit );
             
             QMProgram_exposer.def( 
@@ -101,7 +101,7 @@ void register_QMProgram_class(){
         }
         { //::Squire::QMProgram::numberOfMMAtomsLimit
         
-            typedef int ( ::Squire::QMProgram::*numberOfMMAtomsLimit_function_type )( int ) const;
+            typedef int ( ::Squire::QMProgram::*numberOfMMAtomsLimit_function_type)( int ) const;
             numberOfMMAtomsLimit_function_type numberOfMMAtomsLimit_function_value( &::Squire::QMProgram::numberOfMMAtomsLimit );
             
             QMProgram_exposer.def( 
@@ -112,7 +112,7 @@ void register_QMProgram_class(){
         }
         { //::Squire::QMProgram::supportsGaussianCharges
         
-            typedef bool ( ::Squire::QMProgram::*supportsGaussianCharges_function_type )(  ) const;
+            typedef bool ( ::Squire::QMProgram::*supportsGaussianCharges_function_type)(  ) const;
             supportsGaussianCharges_function_type supportsGaussianCharges_function_value( &::Squire::QMProgram::supportsGaussianCharges );
             
             QMProgram_exposer.def( 
@@ -122,7 +122,7 @@ void register_QMProgram_class(){
         }
         { //::Squire::QMProgram::supportsLatticeCharges
         
-            typedef bool ( ::Squire::QMProgram::*supportsLatticeCharges_function_type )(  ) const;
+            typedef bool ( ::Squire::QMProgram::*supportsLatticeCharges_function_type)(  ) const;
             supportsLatticeCharges_function_type supportsLatticeCharges_function_value( &::Squire::QMProgram::supportsLatticeCharges );
             
             QMProgram_exposer.def( 

@@ -39,7 +39,7 @@ void register_Perturbation_class(){
         bp::scope Perturbation_scope( Perturbation_exposer );
         { //::SireMol::Perturbation::children
         
-            typedef ::QList< SireBase::PropPtr< SireMol::Perturbation > > ( ::SireMol::Perturbation::*children_function_type )(  ) const;
+            typedef ::QList< SireBase::PropPtr< SireMol::Perturbation > > ( ::SireMol::Perturbation::*children_function_type)(  ) const;
             children_function_type children_function_value( &::SireMol::Perturbation::children );
             
             Perturbation_exposer.def( 
@@ -60,7 +60,7 @@ void register_Perturbation_class(){
         }
         { //::SireMol::Perturbation::mappingFunction
         
-            typedef ::SireCAS::Expression const & ( ::SireMol::Perturbation::*mappingFunction_function_type )(  ) const;
+            typedef ::SireCAS::Expression const & ( ::SireMol::Perturbation::*mappingFunction_function_type)(  ) const;
             mappingFunction_function_type mappingFunction_function_value( &::SireMol::Perturbation::mappingFunction );
             
             Perturbation_exposer.def( 
@@ -82,7 +82,7 @@ void register_Perturbation_class(){
         }
         { //::SireMol::Perturbation::perturb
         
-            typedef ::SireMol::Molecule ( ::SireMol::Perturbation::*perturb_function_type )( ::SireMol::Molecule const &,::SireCAS::Values const & ) const;
+            typedef ::SireMol::Molecule ( ::SireMol::Perturbation::*perturb_function_type)( ::SireMol::Molecule const &,::SireCAS::Values const & ) const;
             perturb_function_type perturb_function_value( &::SireMol::Perturbation::perturb );
             
             Perturbation_exposer.def( 
@@ -93,7 +93,7 @@ void register_Perturbation_class(){
         }
         { //::SireMol::Perturbation::propertyMap
         
-            typedef ::SireBase::PropertyMap const & ( ::SireMol::Perturbation::*propertyMap_function_type )(  ) const;
+            typedef ::SireBase::PropertyMap const & ( ::SireMol::Perturbation::*propertyMap_function_type)(  ) const;
             propertyMap_function_type propertyMap_function_value( &::SireMol::Perturbation::propertyMap );
             
             Perturbation_exposer.def( 
@@ -104,7 +104,7 @@ void register_Perturbation_class(){
         }
         { //::SireMol::Perturbation::recreate
         
-            typedef ::SireMol::PerturbationPtr ( ::SireMol::Perturbation::*recreate_function_type )(  ) const;
+            typedef ::SireMol::PerturbationPtr ( ::SireMol::Perturbation::*recreate_function_type)(  ) const;
             recreate_function_type recreate_function_value( &::SireMol::Perturbation::recreate );
             
             Perturbation_exposer.def( 
@@ -114,7 +114,7 @@ void register_Perturbation_class(){
         }
         { //::SireMol::Perturbation::recreate
         
-            typedef ::SireMol::PerturbationPtr ( ::SireMol::Perturbation::*recreate_function_type )( ::SireCAS::Expression const & ) const;
+            typedef ::SireMol::PerturbationPtr ( ::SireMol::Perturbation::*recreate_function_type)( ::SireCAS::Expression const & ) const;
             recreate_function_type recreate_function_value( &::SireMol::Perturbation::recreate );
             
             Perturbation_exposer.def( 
@@ -125,7 +125,7 @@ void register_Perturbation_class(){
         }
         { //::SireMol::Perturbation::recreate
         
-            typedef ::SireMol::PerturbationPtr ( ::SireMol::Perturbation::*recreate_function_type )( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::PerturbationPtr ( ::SireMol::Perturbation::*recreate_function_type)( ::SireBase::PropertyMap const & ) const;
             recreate_function_type recreate_function_value( &::SireMol::Perturbation::recreate );
             
             Perturbation_exposer.def( 
@@ -136,7 +136,7 @@ void register_Perturbation_class(){
         }
         { //::SireMol::Perturbation::recreate
         
-            typedef ::SireMol::PerturbationPtr ( ::SireMol::Perturbation::*recreate_function_type )( ::SireCAS::Expression const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::PerturbationPtr ( ::SireMol::Perturbation::*recreate_function_type)( ::SireCAS::Expression const &,::SireBase::PropertyMap const & ) const;
             recreate_function_type recreate_function_value( &::SireMol::Perturbation::recreate );
             
             Perturbation_exposer.def( 
@@ -147,7 +147,7 @@ void register_Perturbation_class(){
         }
         { //::SireMol::Perturbation::requiredProperties
         
-            typedef ::QSet< QString > ( ::SireMol::Perturbation::*requiredProperties_function_type )(  ) const;
+            typedef ::QSet< QString > ( ::SireMol::Perturbation::*requiredProperties_function_type)(  ) const;
             requiredProperties_function_type requiredProperties_function_value( &::SireMol::Perturbation::requiredProperties );
             
             Perturbation_exposer.def( 
@@ -157,7 +157,7 @@ void register_Perturbation_class(){
         }
         { //::SireMol::Perturbation::requiredSymbols
         
-            typedef ::QSet< SireCAS::Symbol > ( ::SireMol::Perturbation::*requiredSymbols_function_type )(  ) const;
+            typedef ::QSet< SireCAS::Symbol > ( ::SireMol::Perturbation::*requiredSymbols_function_type)(  ) const;
             requiredSymbols_function_type requiredSymbols_function_value( &::SireMol::Perturbation::requiredSymbols );
             
             Perturbation_exposer.def( 
@@ -167,7 +167,7 @@ void register_Perturbation_class(){
         }
         { //::SireMol::Perturbation::substitute
         
-            typedef ::SireMol::PerturbationPtr ( ::SireMol::Perturbation::*substitute_function_type )( ::SireCAS::Symbol const &,::SireCAS::Symbol const & ) const;
+            typedef ::SireMol::PerturbationPtr ( ::SireMol::Perturbation::*substitute_function_type)( ::SireCAS::Symbol const &,::SireCAS::Symbol const & ) const;
             substitute_function_type substitute_function_value( &::SireMol::Perturbation::substitute );
             
             Perturbation_exposer.def( 
@@ -178,7 +178,7 @@ void register_Perturbation_class(){
         }
         { //::SireMol::Perturbation::substitute
         
-            typedef ::SireMol::PerturbationPtr ( ::SireMol::Perturbation::*substitute_function_type )( ::SireCAS::Identities const & ) const;
+            typedef ::SireMol::PerturbationPtr ( ::SireMol::Perturbation::*substitute_function_type)( ::SireCAS::Identities const & ) const;
             substitute_function_type substitute_function_value( &::SireMol::Perturbation::substitute );
             
             Perturbation_exposer.def( 
@@ -210,7 +210,7 @@ void register_Perturbation_class(){
         }
         { //::SireMol::Perturbation::wouldChange
         
-            typedef bool ( ::SireMol::Perturbation::*wouldChange_function_type )( ::SireMol::Molecule const &,::SireCAS::Values const & ) const;
+            typedef bool ( ::SireMol::Perturbation::*wouldChange_function_type)( ::SireMol::Molecule const &,::SireCAS::Values const & ) const;
             wouldChange_function_type wouldChange_function_value( &::SireMol::Perturbation::wouldChange );
             
             Perturbation_exposer.def( 

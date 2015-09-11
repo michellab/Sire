@@ -27,7 +27,7 @@ void register_ShellPair_class(){
         bp::scope ShellPair_scope( ShellPair_exposer );
         { //::Squire::ShellPair::angularMomentum0
         
-            typedef int ( ::Squire::ShellPair::*angularMomentum0_function_type )(  ) const;
+            typedef int ( ::Squire::ShellPair::*angularMomentum0_function_type)(  ) const;
             angularMomentum0_function_type angularMomentum0_function_value( &::Squire::ShellPair::angularMomentum0 );
             
             ShellPair_exposer.def( 
@@ -37,7 +37,7 @@ void register_ShellPair_class(){
         }
         { //::Squire::ShellPair::angularMomentum1
         
-            typedef int ( ::Squire::ShellPair::*angularMomentum1_function_type )(  ) const;
+            typedef int ( ::Squire::ShellPair::*angularMomentum1_function_type)(  ) const;
             angularMomentum1_function_type angularMomentum1_function_value( &::Squire::ShellPair::angularMomentum1 );
             
             ShellPair_exposer.def( 
@@ -47,7 +47,7 @@ void register_ShellPair_class(){
         }
         { //::Squire::ShellPair::nOrbitals0
         
-            typedef int ( ::Squire::ShellPair::*nOrbitals0_function_type )(  ) const;
+            typedef int ( ::Squire::ShellPair::*nOrbitals0_function_type)(  ) const;
             nOrbitals0_function_type nOrbitals0_function_value( &::Squire::ShellPair::nOrbitals0 );
             
             ShellPair_exposer.def( 
@@ -57,7 +57,7 @@ void register_ShellPair_class(){
         }
         { //::Squire::ShellPair::nOrbitals1
         
-            typedef int ( ::Squire::ShellPair::*nOrbitals1_function_type )(  ) const;
+            typedef int ( ::Squire::ShellPair::*nOrbitals1_function_type)(  ) const;
             nOrbitals1_function_type nOrbitals1_function_value( &::Squire::ShellPair::nOrbitals1 );
             
             ShellPair_exposer.def( 

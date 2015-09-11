@@ -54,7 +54,7 @@ void register_CoordGroup_class(){
         CoordGroup_exposer.def( bp::init< SireVol::CoordGroup const & >(( bp::arg("other") )) );
         { //::SireVol::CoordGroup::edit
         
-            typedef ::SireVol::CoordGroupEditor ( ::SireVol::CoordGroup::*edit_function_type )(  ) const;
+            typedef ::SireVol::CoordGroupEditor ( ::SireVol::CoordGroup::*edit_function_type)(  ) const;
             edit_function_type edit_function_value( &::SireVol::CoordGroup::edit );
             
             CoordGroup_exposer.def( 
@@ -64,7 +64,7 @@ void register_CoordGroup_class(){
         }
         { //::SireVol::CoordGroup::operator=
         
-            typedef ::SireVol::CoordGroup & ( ::SireVol::CoordGroup::*assign_function_type )( ::SireVol::CoordGroup const & ) ;
+            typedef ::SireVol::CoordGroup & ( ::SireVol::CoordGroup::*assign_function_type)( ::SireVol::CoordGroup const & ) ;
             assign_function_type assign_function_value( &::SireVol::CoordGroup::operator= );
             
             CoordGroup_exposer.def( 
@@ -76,7 +76,7 @@ void register_CoordGroup_class(){
         }
         { //::SireVol::CoordGroup::operator=
         
-            typedef ::SireVol::CoordGroup & ( ::SireVol::CoordGroup::*assign_function_type )( ::SireVol::CoordGroupEditor & ) ;
+            typedef ::SireVol::CoordGroup & ( ::SireVol::CoordGroup::*assign_function_type)( ::SireVol::CoordGroupEditor & ) ;
             assign_function_type assign_function_value( &::SireVol::CoordGroup::operator= );
             
             CoordGroup_exposer.def( 
@@ -98,7 +98,7 @@ void register_CoordGroup_class(){
         }
         { //::SireVol::CoordGroup::what
         
-            typedef char const * ( ::SireVol::CoordGroup::*what_function_type )(  ) const;
+            typedef char const * ( ::SireVol::CoordGroup::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireVol::CoordGroup::what );
             
             CoordGroup_exposer.def( 

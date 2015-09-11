@@ -40,7 +40,7 @@ void register_PS_GTOs_class(){
         PS_GTOs_exposer.def( bp::init< Squire::PS_GTOs const & >(( bp::arg("other") )) );
         { //::Squire::PS_GTOs::kinetic_integral
         
-            typedef ::SireMaths::NMatrix ( ::Squire::PS_GTOs::*kinetic_integral_function_type )(  ) const;
+            typedef ::SireMaths::NMatrix ( ::Squire::PS_GTOs::*kinetic_integral_function_type)(  ) const;
             kinetic_integral_function_type kinetic_integral_function_value( &::Squire::PS_GTOs::kinetic_integral );
             
             PS_GTOs_exposer.def( 
@@ -51,7 +51,7 @@ void register_PS_GTOs_class(){
         PS_GTOs_exposer.def( bp::self != bp::self );
         { //::Squire::PS_GTOs::operator=
         
-            typedef ::Squire::PS_GTOs & ( ::Squire::PS_GTOs::*assign_function_type )( ::Squire::PS_GTOs const & ) ;
+            typedef ::Squire::PS_GTOs & ( ::Squire::PS_GTOs::*assign_function_type)( ::Squire::PS_GTOs const & ) ;
             assign_function_type assign_function_value( &::Squire::PS_GTOs::operator= );
             
             PS_GTOs_exposer.def( 
@@ -64,7 +64,7 @@ void register_PS_GTOs_class(){
         PS_GTOs_exposer.def( bp::self == bp::self );
         { //::Squire::PS_GTOs::overlap_integral
         
-            typedef ::SireMaths::NMatrix ( ::Squire::PS_GTOs::*overlap_integral_function_type )(  ) const;
+            typedef ::SireMaths::NMatrix ( ::Squire::PS_GTOs::*overlap_integral_function_type)(  ) const;
             overlap_integral_function_type overlap_integral_function_value( &::Squire::PS_GTOs::overlap_integral );
             
             PS_GTOs_exposer.def( 
@@ -74,7 +74,7 @@ void register_PS_GTOs_class(){
         }
         { //::Squire::PS_GTOs::potential_integral
         
-            typedef ::SireMaths::NMatrix ( ::Squire::PS_GTOs::*potential_integral_function_type )( ::QVector< Squire::PointCharge > const & ) const;
+            typedef ::SireMaths::NMatrix ( ::Squire::PS_GTOs::*potential_integral_function_type)( ::QVector< Squire::PointCharge > const & ) const;
             potential_integral_function_type potential_integral_function_value( &::Squire::PS_GTOs::potential_integral );
             
             PS_GTOs_exposer.def( 
@@ -85,7 +85,7 @@ void register_PS_GTOs_class(){
         }
         { //::Squire::PS_GTOs::potential_integral
         
-            typedef ::SireMaths::NMatrix ( ::Squire::PS_GTOs::*potential_integral_function_type )( ::QVector< Squire::PointCharge > const &,int ) const;
+            typedef ::SireMaths::NMatrix ( ::Squire::PS_GTOs::*potential_integral_function_type)( ::QVector< Squire::PointCharge > const &,int ) const;
             potential_integral_function_type potential_integral_function_value( &::Squire::PS_GTOs::potential_integral );
             
             PS_GTOs_exposer.def( 

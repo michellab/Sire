@@ -27,7 +27,7 @@ void register_SysIdx_class(){
         SysIdx_exposer.def( bp::init< SireSystem::SysIdx const & >(( bp::arg("other") )) );
         { //::SireSystem::SysIdx::hash
         
-            typedef ::uint ( ::SireSystem::SysIdx::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireSystem::SysIdx::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireSystem::SysIdx::hash );
             
             SysIdx_exposer.def( 
@@ -37,7 +37,7 @@ void register_SysIdx_class(){
         }
         { //::SireSystem::SysIdx::isNull
         
-            typedef bool ( ::SireSystem::SysIdx::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireSystem::SysIdx::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireSystem::SysIdx::isNull );
             
             SysIdx_exposer.def( 
@@ -47,7 +47,7 @@ void register_SysIdx_class(){
         }
         { //::SireSystem::SysIdx::map
         
-            typedef ::QList< SireSystem::SysIdx > ( ::SireSystem::SysIdx::*map_function_type )( ::SireSystem::Systems const & ) const;
+            typedef ::QList< SireSystem::SysIdx > ( ::SireSystem::SysIdx::*map_function_type)( ::SireSystem::Systems const & ) const;
             map_function_type map_function_value( &::SireSystem::SysIdx::map );
             
             SysIdx_exposer.def( 
@@ -68,7 +68,7 @@ void register_SysIdx_class(){
         }
         { //::SireSystem::SysIdx::operator=
         
-            typedef ::SireSystem::SysIdx & ( ::SireSystem::SysIdx::*assign_function_type )( ::SireSystem::SysIdx const & ) ;
+            typedef ::SireSystem::SysIdx & ( ::SireSystem::SysIdx::*assign_function_type)( ::SireSystem::SysIdx const & ) ;
             assign_function_type assign_function_value( &::SireSystem::SysIdx::operator= );
             
             SysIdx_exposer.def( 
@@ -80,7 +80,7 @@ void register_SysIdx_class(){
         }
         { //::SireSystem::SysIdx::toString
         
-            typedef ::QString ( ::SireSystem::SysIdx::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireSystem::SysIdx::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireSystem::SysIdx::toString );
             
             SysIdx_exposer.def( 
@@ -100,7 +100,7 @@ void register_SysIdx_class(){
         }
         { //::SireSystem::SysIdx::what
         
-            typedef char const * ( ::SireSystem::SysIdx::*what_function_type )(  ) const;
+            typedef char const * ( ::SireSystem::SysIdx::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireSystem::SysIdx::what );
             
             SysIdx_exposer.def( 

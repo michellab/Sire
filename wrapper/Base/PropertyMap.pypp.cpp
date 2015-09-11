@@ -34,7 +34,7 @@ void register_PropertyMap_class(){
         PropertyMap_exposer.def( bp::init< SireBase::PropertyMap const & >(( bp::arg("other") )) );
         { //::SireBase::PropertyMap::isDefault
         
-            typedef bool ( ::SireBase::PropertyMap::*isDefault_function_type )(  ) const;
+            typedef bool ( ::SireBase::PropertyMap::*isDefault_function_type)(  ) const;
             isDefault_function_type isDefault_function_value( &::SireBase::PropertyMap::isDefault );
             
             PropertyMap_exposer.def( 
@@ -46,7 +46,7 @@ void register_PropertyMap_class(){
         PropertyMap_exposer.def( bp::self + bp::self );
         { //::SireBase::PropertyMap::operator=
         
-            typedef ::SireBase::PropertyMap & ( ::SireBase::PropertyMap::*assign_function_type )( ::SireBase::PropertyMap const & ) ;
+            typedef ::SireBase::PropertyMap & ( ::SireBase::PropertyMap::*assign_function_type)( ::SireBase::PropertyMap const & ) ;
             assign_function_type assign_function_value( &::SireBase::PropertyMap::operator= );
             
             PropertyMap_exposer.def( 
@@ -59,7 +59,7 @@ void register_PropertyMap_class(){
         PropertyMap_exposer.def( bp::self == bp::self );
         { //::SireBase::PropertyMap::operator[]
         
-            typedef ::SireBase::PropertyName ( ::SireBase::PropertyMap::*__getitem___function_type )( char const * ) const;
+            typedef ::SireBase::PropertyName ( ::SireBase::PropertyMap::*__getitem___function_type)( char const * ) const;
             __getitem___function_type __getitem___function_value( &::SireBase::PropertyMap::operator[] );
             
             PropertyMap_exposer.def( 
@@ -70,7 +70,7 @@ void register_PropertyMap_class(){
         }
         { //::SireBase::PropertyMap::operator[]
         
-            typedef ::SireBase::PropertyName ( ::SireBase::PropertyMap::*__getitem___function_type )( ::QString const & ) const;
+            typedef ::SireBase::PropertyName ( ::SireBase::PropertyMap::*__getitem___function_type)( ::QString const & ) const;
             __getitem___function_type __getitem___function_value( &::SireBase::PropertyMap::operator[] );
             
             PropertyMap_exposer.def( 
@@ -81,7 +81,7 @@ void register_PropertyMap_class(){
         }
         { //::SireBase::PropertyMap::operator[]
         
-            typedef ::SireBase::PropertyName ( ::SireBase::PropertyMap::*__getitem___function_type )( ::SireBase::PropertyName const & ) const;
+            typedef ::SireBase::PropertyName ( ::SireBase::PropertyMap::*__getitem___function_type)( ::SireBase::PropertyName const & ) const;
             __getitem___function_type __getitem___function_value( &::SireBase::PropertyMap::operator[] );
             
             PropertyMap_exposer.def( 
@@ -92,7 +92,7 @@ void register_PropertyMap_class(){
         }
         { //::SireBase::PropertyMap::set
         
-            typedef void ( ::SireBase::PropertyMap::*set_function_type )( ::QString const &,::SireBase::PropertyName const & ) ;
+            typedef void ( ::SireBase::PropertyMap::*set_function_type)( ::QString const &,::SireBase::PropertyName const & ) ;
             set_function_type set_function_value( &::SireBase::PropertyMap::set );
             
             PropertyMap_exposer.def( 
@@ -103,7 +103,7 @@ void register_PropertyMap_class(){
         }
         { //::SireBase::PropertyMap::specified
         
-            typedef bool ( ::SireBase::PropertyMap::*specified_function_type )( char const * ) const;
+            typedef bool ( ::SireBase::PropertyMap::*specified_function_type)( char const * ) const;
             specified_function_type specified_function_value( &::SireBase::PropertyMap::specified );
             
             PropertyMap_exposer.def( 
@@ -114,7 +114,7 @@ void register_PropertyMap_class(){
         }
         { //::SireBase::PropertyMap::specified
         
-            typedef bool ( ::SireBase::PropertyMap::*specified_function_type )( ::QString const & ) const;
+            typedef bool ( ::SireBase::PropertyMap::*specified_function_type)( ::QString const & ) const;
             specified_function_type specified_function_value( &::SireBase::PropertyMap::specified );
             
             PropertyMap_exposer.def( 
@@ -125,7 +125,7 @@ void register_PropertyMap_class(){
         }
         { //::SireBase::PropertyMap::specified
         
-            typedef bool ( ::SireBase::PropertyMap::*specified_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireBase::PropertyMap::*specified_function_type)( ::SireBase::PropertyName const & ) const;
             specified_function_type specified_function_value( &::SireBase::PropertyMap::specified );
             
             PropertyMap_exposer.def( 
@@ -136,7 +136,7 @@ void register_PropertyMap_class(){
         }
         { //::SireBase::PropertyMap::toString
         
-            typedef ::QString ( ::SireBase::PropertyMap::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireBase::PropertyMap::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireBase::PropertyMap::toString );
             
             PropertyMap_exposer.def( 
@@ -156,7 +156,7 @@ void register_PropertyMap_class(){
         }
         { //::SireBase::PropertyMap::what
         
-            typedef char const * ( ::SireBase::PropertyMap::*what_function_type )(  ) const;
+            typedef char const * ( ::SireBase::PropertyMap::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireBase::PropertyMap::what );
             
             PropertyMap_exposer.def( 

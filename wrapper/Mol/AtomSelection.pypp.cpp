@@ -45,7 +45,7 @@ void register_AtomSelection_class(){
         AtomSelection_exposer.def( bp::init< SireMol::AtomSelection const & >(( bp::arg("other") )) );
         { //::SireMol::AtomSelection::assertCompatibleWith
         
-            typedef void ( ::SireMol::AtomSelection::*assertCompatibleWith_function_type )( ::SireMol::MoleculeData const & ) const;
+            typedef void ( ::SireMol::AtomSelection::*assertCompatibleWith_function_type)( ::SireMol::MoleculeData const & ) const;
             assertCompatibleWith_function_type assertCompatibleWith_function_value( &::SireMol::AtomSelection::assertCompatibleWith );
             
             AtomSelection_exposer.def( 
@@ -56,7 +56,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::assertCompatibleWith
         
-            typedef void ( ::SireMol::AtomSelection::*assertCompatibleWith_function_type )( ::SireMol::MoleculeView const & ) const;
+            typedef void ( ::SireMol::AtomSelection::*assertCompatibleWith_function_type)( ::SireMol::MoleculeView const & ) const;
             assertCompatibleWith_function_type assertCompatibleWith_function_value( &::SireMol::AtomSelection::assertCompatibleWith );
             
             AtomSelection_exposer.def( 
@@ -67,7 +67,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::assertCompatibleWith
         
-            typedef void ( ::SireMol::AtomSelection::*assertCompatibleWith_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef void ( ::SireMol::AtomSelection::*assertCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             assertCompatibleWith_function_type assertCompatibleWith_function_value( &::SireMol::AtomSelection::assertCompatibleWith );
             
             AtomSelection_exposer.def( 
@@ -78,7 +78,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::assertCompatibleWith
         
-            typedef void ( ::SireMol::AtomSelection::*assertCompatibleWith_function_type )( ::SireMol::AtomSelection const & ) const;
+            typedef void ( ::SireMol::AtomSelection::*assertCompatibleWith_function_type)( ::SireMol::AtomSelection const & ) const;
             assertCompatibleWith_function_type assertCompatibleWith_function_value( &::SireMol::AtomSelection::assertCompatibleWith );
             
             AtomSelection_exposer.def( 
@@ -89,7 +89,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::assertSelected
         
-            typedef void ( ::SireMol::AtomSelection::*assertSelected_function_type )( ::SireMol::AtomIdx ) const;
+            typedef void ( ::SireMol::AtomSelection::*assertSelected_function_type)( ::SireMol::AtomIdx ) const;
             assertSelected_function_type assertSelected_function_value( &::SireMol::AtomSelection::assertSelected );
             
             AtomSelection_exposer.def( 
@@ -100,7 +100,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::assertSelected
         
-            typedef void ( ::SireMol::AtomSelection::*assertSelected_function_type )( ::SireMol::AtomID const & ) const;
+            typedef void ( ::SireMol::AtomSelection::*assertSelected_function_type)( ::SireMol::AtomID const & ) const;
             assertSelected_function_type assertSelected_function_value( &::SireMol::AtomSelection::assertSelected );
             
             AtomSelection_exposer.def( 
@@ -111,7 +111,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::contains
         
-            typedef bool ( ::SireMol::AtomSelection::*contains_function_type )( ::SireMol::AtomIdx ) const;
+            typedef bool ( ::SireMol::AtomSelection::*contains_function_type)( ::SireMol::AtomIdx ) const;
             contains_function_type contains_function_value( &::SireMol::AtomSelection::contains );
             
             AtomSelection_exposer.def( 
@@ -122,7 +122,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::contains
         
-            typedef bool ( ::SireMol::AtomSelection::*contains_function_type )( ::SireMol::CGIdx ) const;
+            typedef bool ( ::SireMol::AtomSelection::*contains_function_type)( ::SireMol::CGIdx ) const;
             contains_function_type contains_function_value( &::SireMol::AtomSelection::contains );
             
             AtomSelection_exposer.def( 
@@ -133,7 +133,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::contains
         
-            typedef bool ( ::SireMol::AtomSelection::*contains_function_type )( ::SireMol::ResIdx ) const;
+            typedef bool ( ::SireMol::AtomSelection::*contains_function_type)( ::SireMol::ResIdx ) const;
             contains_function_type contains_function_value( &::SireMol::AtomSelection::contains );
             
             AtomSelection_exposer.def( 
@@ -144,7 +144,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::contains
         
-            typedef bool ( ::SireMol::AtomSelection::*contains_function_type )( ::SireMol::ChainIdx ) const;
+            typedef bool ( ::SireMol::AtomSelection::*contains_function_type)( ::SireMol::ChainIdx ) const;
             contains_function_type contains_function_value( &::SireMol::AtomSelection::contains );
             
             AtomSelection_exposer.def( 
@@ -155,7 +155,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::contains
         
-            typedef bool ( ::SireMol::AtomSelection::*contains_function_type )( ::SireMol::SegIdx ) const;
+            typedef bool ( ::SireMol::AtomSelection::*contains_function_type)( ::SireMol::SegIdx ) const;
             contains_function_type contains_function_value( &::SireMol::AtomSelection::contains );
             
             AtomSelection_exposer.def( 
@@ -166,7 +166,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::contains
         
-            typedef bool ( ::SireMol::AtomSelection::*contains_function_type )( ::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*contains_function_type)( ::SireMol::AtomID const & ) const;
             contains_function_type contains_function_value( &::SireMol::AtomSelection::contains );
             
             AtomSelection_exposer.def( 
@@ -177,7 +177,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::contains
         
-            typedef bool ( ::SireMol::AtomSelection::*contains_function_type )( ::SireMol::CGID const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*contains_function_type)( ::SireMol::CGID const & ) const;
             contains_function_type contains_function_value( &::SireMol::AtomSelection::contains );
             
             AtomSelection_exposer.def( 
@@ -188,7 +188,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::contains
         
-            typedef bool ( ::SireMol::AtomSelection::*contains_function_type )( ::SireMol::ResID const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*contains_function_type)( ::SireMol::ResID const & ) const;
             contains_function_type contains_function_value( &::SireMol::AtomSelection::contains );
             
             AtomSelection_exposer.def( 
@@ -199,7 +199,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::contains
         
-            typedef bool ( ::SireMol::AtomSelection::*contains_function_type )( ::SireMol::ChainID const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*contains_function_type)( ::SireMol::ChainID const & ) const;
             contains_function_type contains_function_value( &::SireMol::AtomSelection::contains );
             
             AtomSelection_exposer.def( 
@@ -210,7 +210,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::contains
         
-            typedef bool ( ::SireMol::AtomSelection::*contains_function_type )( ::SireMol::SegID const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*contains_function_type)( ::SireMol::SegID const & ) const;
             contains_function_type contains_function_value( &::SireMol::AtomSelection::contains );
             
             AtomSelection_exposer.def( 
@@ -221,7 +221,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::contains
         
-            typedef bool ( ::SireMol::AtomSelection::*contains_function_type )( ::SireMol::AtomSelection const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*contains_function_type)( ::SireMol::AtomSelection const & ) const;
             contains_function_type contains_function_value( &::SireMol::AtomSelection::contains );
             
             AtomSelection_exposer.def( 
@@ -232,7 +232,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::deselect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type )( ::SireMol::AtomIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type)( ::SireMol::AtomIdx ) ;
             deselect_function_type deselect_function_value( &::SireMol::AtomSelection::deselect );
             
             AtomSelection_exposer.def( 
@@ -244,7 +244,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::deselect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type )( ::SireMol::CGIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type)( ::SireMol::CGIdx ) ;
             deselect_function_type deselect_function_value( &::SireMol::AtomSelection::deselect );
             
             AtomSelection_exposer.def( 
@@ -256,7 +256,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::deselect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type )( ::SireMol::ResIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type)( ::SireMol::ResIdx ) ;
             deselect_function_type deselect_function_value( &::SireMol::AtomSelection::deselect );
             
             AtomSelection_exposer.def( 
@@ -268,7 +268,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::deselect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type )( ::SireMol::ChainIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type)( ::SireMol::ChainIdx ) ;
             deselect_function_type deselect_function_value( &::SireMol::AtomSelection::deselect );
             
             AtomSelection_exposer.def( 
@@ -280,7 +280,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::deselect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type )( ::SireMol::SegIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type)( ::SireMol::SegIdx ) ;
             deselect_function_type deselect_function_value( &::SireMol::AtomSelection::deselect );
             
             AtomSelection_exposer.def( 
@@ -292,7 +292,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::deselect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type )( ::QSet< SireMol::AtomIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type)( ::QSet< SireMol::AtomIdx > const & ) ;
             deselect_function_type deselect_function_value( &::SireMol::AtomSelection::deselect );
             
             AtomSelection_exposer.def( 
@@ -304,7 +304,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::deselect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type )( ::QSet< SireMol::CGIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type)( ::QSet< SireMol::CGIdx > const & ) ;
             deselect_function_type deselect_function_value( &::SireMol::AtomSelection::deselect );
             
             AtomSelection_exposer.def( 
@@ -316,7 +316,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::deselect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type )( ::QSet< SireMol::ResIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type)( ::QSet< SireMol::ResIdx > const & ) ;
             deselect_function_type deselect_function_value( &::SireMol::AtomSelection::deselect );
             
             AtomSelection_exposer.def( 
@@ -328,7 +328,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::deselect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type )( ::QSet< SireMol::ChainIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type)( ::QSet< SireMol::ChainIdx > const & ) ;
             deselect_function_type deselect_function_value( &::SireMol::AtomSelection::deselect );
             
             AtomSelection_exposer.def( 
@@ -340,7 +340,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::deselect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type )( ::QSet< SireMol::SegIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type)( ::QSet< SireMol::SegIdx > const & ) ;
             deselect_function_type deselect_function_value( &::SireMol::AtomSelection::deselect );
             
             AtomSelection_exposer.def( 
@@ -352,7 +352,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::deselect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type )( ::QList< SireMol::AtomIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type)( ::QList< SireMol::AtomIdx > const & ) ;
             deselect_function_type deselect_function_value( &::SireMol::AtomSelection::deselect );
             
             AtomSelection_exposer.def( 
@@ -364,7 +364,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::deselect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type )( ::QList< SireMol::CGIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type)( ::QList< SireMol::CGIdx > const & ) ;
             deselect_function_type deselect_function_value( &::SireMol::AtomSelection::deselect );
             
             AtomSelection_exposer.def( 
@@ -376,7 +376,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::deselect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type )( ::QList< SireMol::ResIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type)( ::QList< SireMol::ResIdx > const & ) ;
             deselect_function_type deselect_function_value( &::SireMol::AtomSelection::deselect );
             
             AtomSelection_exposer.def( 
@@ -388,7 +388,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::deselect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type )( ::QList< SireMol::ChainIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type)( ::QList< SireMol::ChainIdx > const & ) ;
             deselect_function_type deselect_function_value( &::SireMol::AtomSelection::deselect );
             
             AtomSelection_exposer.def( 
@@ -400,7 +400,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::deselect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type )( ::QList< SireMol::SegIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type)( ::QList< SireMol::SegIdx > const & ) ;
             deselect_function_type deselect_function_value( &::SireMol::AtomSelection::deselect );
             
             AtomSelection_exposer.def( 
@@ -412,7 +412,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::deselect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type )( ::SireMol::AtomID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type)( ::SireMol::AtomID const & ) ;
             deselect_function_type deselect_function_value( &::SireMol::AtomSelection::deselect );
             
             AtomSelection_exposer.def( 
@@ -424,7 +424,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::deselect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type )( ::SireMol::CGID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type)( ::SireMol::CGID const & ) ;
             deselect_function_type deselect_function_value( &::SireMol::AtomSelection::deselect );
             
             AtomSelection_exposer.def( 
@@ -436,7 +436,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::deselect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type )( ::SireMol::ResID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type)( ::SireMol::ResID const & ) ;
             deselect_function_type deselect_function_value( &::SireMol::AtomSelection::deselect );
             
             AtomSelection_exposer.def( 
@@ -448,7 +448,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::deselect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type )( ::SireMol::ChainID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type)( ::SireMol::ChainID const & ) ;
             deselect_function_type deselect_function_value( &::SireMol::AtomSelection::deselect );
             
             AtomSelection_exposer.def( 
@@ -460,7 +460,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::deselect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type )( ::SireMol::SegID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type)( ::SireMol::SegID const & ) ;
             deselect_function_type deselect_function_value( &::SireMol::AtomSelection::deselect );
             
             AtomSelection_exposer.def( 
@@ -472,7 +472,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::deselect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type )( ::SireMol::AtomSelection const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselect_function_type)( ::SireMol::AtomSelection const & ) ;
             deselect_function_type deselect_function_value( &::SireMol::AtomSelection::deselect );
             
             AtomSelection_exposer.def( 
@@ -484,7 +484,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::deselectAll
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselectAll_function_type )(  ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*deselectAll_function_type)(  ) ;
             deselectAll_function_type deselectAll_function_value( &::SireMol::AtomSelection::deselectAll );
             
             AtomSelection_exposer.def( 
@@ -495,7 +495,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::info
         
-            typedef ::SireMol::MoleculeInfoData const & ( ::SireMol::AtomSelection::*info_function_type )(  ) const;
+            typedef ::SireMol::MoleculeInfoData const & ( ::SireMol::AtomSelection::*info_function_type)(  ) const;
             info_function_type info_function_value( &::SireMol::AtomSelection::info );
             
             AtomSelection_exposer.def( 
@@ -506,7 +506,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type )( ::SireMol::AtomIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type)( ::SireMol::AtomIdx ) ;
             intersect_function_type intersect_function_value( &::SireMol::AtomSelection::intersect );
             
             AtomSelection_exposer.def( 
@@ -518,7 +518,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type )( ::SireMol::CGIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type)( ::SireMol::CGIdx ) ;
             intersect_function_type intersect_function_value( &::SireMol::AtomSelection::intersect );
             
             AtomSelection_exposer.def( 
@@ -530,7 +530,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type )( ::SireMol::ResIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type)( ::SireMol::ResIdx ) ;
             intersect_function_type intersect_function_value( &::SireMol::AtomSelection::intersect );
             
             AtomSelection_exposer.def( 
@@ -542,7 +542,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type )( ::SireMol::ChainIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type)( ::SireMol::ChainIdx ) ;
             intersect_function_type intersect_function_value( &::SireMol::AtomSelection::intersect );
             
             AtomSelection_exposer.def( 
@@ -554,7 +554,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type )( ::SireMol::SegIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type)( ::SireMol::SegIdx ) ;
             intersect_function_type intersect_function_value( &::SireMol::AtomSelection::intersect );
             
             AtomSelection_exposer.def( 
@@ -566,7 +566,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type )( ::QSet< SireMol::AtomIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type)( ::QSet< SireMol::AtomIdx > const & ) ;
             intersect_function_type intersect_function_value( &::SireMol::AtomSelection::intersect );
             
             AtomSelection_exposer.def( 
@@ -578,7 +578,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type )( ::QSet< SireMol::CGIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type)( ::QSet< SireMol::CGIdx > const & ) ;
             intersect_function_type intersect_function_value( &::SireMol::AtomSelection::intersect );
             
             AtomSelection_exposer.def( 
@@ -590,7 +590,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type )( ::QSet< SireMol::ResIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type)( ::QSet< SireMol::ResIdx > const & ) ;
             intersect_function_type intersect_function_value( &::SireMol::AtomSelection::intersect );
             
             AtomSelection_exposer.def( 
@@ -602,7 +602,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type )( ::QSet< SireMol::ChainIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type)( ::QSet< SireMol::ChainIdx > const & ) ;
             intersect_function_type intersect_function_value( &::SireMol::AtomSelection::intersect );
             
             AtomSelection_exposer.def( 
@@ -614,7 +614,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type )( ::QSet< SireMol::SegIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type)( ::QSet< SireMol::SegIdx > const & ) ;
             intersect_function_type intersect_function_value( &::SireMol::AtomSelection::intersect );
             
             AtomSelection_exposer.def( 
@@ -626,7 +626,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type )( ::QList< SireMol::AtomIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type)( ::QList< SireMol::AtomIdx > const & ) ;
             intersect_function_type intersect_function_value( &::SireMol::AtomSelection::intersect );
             
             AtomSelection_exposer.def( 
@@ -638,7 +638,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type )( ::QList< SireMol::CGIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type)( ::QList< SireMol::CGIdx > const & ) ;
             intersect_function_type intersect_function_value( &::SireMol::AtomSelection::intersect );
             
             AtomSelection_exposer.def( 
@@ -650,7 +650,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type )( ::QList< SireMol::ResIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type)( ::QList< SireMol::ResIdx > const & ) ;
             intersect_function_type intersect_function_value( &::SireMol::AtomSelection::intersect );
             
             AtomSelection_exposer.def( 
@@ -662,7 +662,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type )( ::QList< SireMol::ChainIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type)( ::QList< SireMol::ChainIdx > const & ) ;
             intersect_function_type intersect_function_value( &::SireMol::AtomSelection::intersect );
             
             AtomSelection_exposer.def( 
@@ -674,7 +674,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type )( ::QList< SireMol::SegIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type)( ::QList< SireMol::SegIdx > const & ) ;
             intersect_function_type intersect_function_value( &::SireMol::AtomSelection::intersect );
             
             AtomSelection_exposer.def( 
@@ -686,7 +686,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type )( ::SireMol::AtomID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type)( ::SireMol::AtomID const & ) ;
             intersect_function_type intersect_function_value( &::SireMol::AtomSelection::intersect );
             
             AtomSelection_exposer.def( 
@@ -698,7 +698,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type )( ::SireMol::CGID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type)( ::SireMol::CGID const & ) ;
             intersect_function_type intersect_function_value( &::SireMol::AtomSelection::intersect );
             
             AtomSelection_exposer.def( 
@@ -710,7 +710,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type )( ::SireMol::ResID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type)( ::SireMol::ResID const & ) ;
             intersect_function_type intersect_function_value( &::SireMol::AtomSelection::intersect );
             
             AtomSelection_exposer.def( 
@@ -722,7 +722,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type )( ::SireMol::ChainID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type)( ::SireMol::ChainID const & ) ;
             intersect_function_type intersect_function_value( &::SireMol::AtomSelection::intersect );
             
             AtomSelection_exposer.def( 
@@ -734,7 +734,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type )( ::SireMol::SegID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type)( ::SireMol::SegID const & ) ;
             intersect_function_type intersect_function_value( &::SireMol::AtomSelection::intersect );
             
             AtomSelection_exposer.def( 
@@ -746,7 +746,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersect
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type )( ::SireMol::AtomSelection const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*intersect_function_type)( ::SireMol::AtomSelection const & ) ;
             intersect_function_type intersect_function_value( &::SireMol::AtomSelection::intersect );
             
             AtomSelection_exposer.def( 
@@ -758,7 +758,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersects
         
-            typedef bool ( ::SireMol::AtomSelection::*intersects_function_type )( ::SireMol::AtomIdx ) const;
+            typedef bool ( ::SireMol::AtomSelection::*intersects_function_type)( ::SireMol::AtomIdx ) const;
             intersects_function_type intersects_function_value( &::SireMol::AtomSelection::intersects );
             
             AtomSelection_exposer.def( 
@@ -769,7 +769,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersects
         
-            typedef bool ( ::SireMol::AtomSelection::*intersects_function_type )( ::SireMol::CGIdx ) const;
+            typedef bool ( ::SireMol::AtomSelection::*intersects_function_type)( ::SireMol::CGIdx ) const;
             intersects_function_type intersects_function_value( &::SireMol::AtomSelection::intersects );
             
             AtomSelection_exposer.def( 
@@ -780,7 +780,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersects
         
-            typedef bool ( ::SireMol::AtomSelection::*intersects_function_type )( ::SireMol::ResIdx ) const;
+            typedef bool ( ::SireMol::AtomSelection::*intersects_function_type)( ::SireMol::ResIdx ) const;
             intersects_function_type intersects_function_value( &::SireMol::AtomSelection::intersects );
             
             AtomSelection_exposer.def( 
@@ -791,7 +791,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersects
         
-            typedef bool ( ::SireMol::AtomSelection::*intersects_function_type )( ::SireMol::ChainIdx ) const;
+            typedef bool ( ::SireMol::AtomSelection::*intersects_function_type)( ::SireMol::ChainIdx ) const;
             intersects_function_type intersects_function_value( &::SireMol::AtomSelection::intersects );
             
             AtomSelection_exposer.def( 
@@ -802,7 +802,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersects
         
-            typedef bool ( ::SireMol::AtomSelection::*intersects_function_type )( ::SireMol::SegIdx ) const;
+            typedef bool ( ::SireMol::AtomSelection::*intersects_function_type)( ::SireMol::SegIdx ) const;
             intersects_function_type intersects_function_value( &::SireMol::AtomSelection::intersects );
             
             AtomSelection_exposer.def( 
@@ -813,7 +813,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersects
         
-            typedef bool ( ::SireMol::AtomSelection::*intersects_function_type )( ::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*intersects_function_type)( ::SireMol::AtomID const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::AtomSelection::intersects );
             
             AtomSelection_exposer.def( 
@@ -824,7 +824,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersects
         
-            typedef bool ( ::SireMol::AtomSelection::*intersects_function_type )( ::SireMol::CGID const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*intersects_function_type)( ::SireMol::CGID const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::AtomSelection::intersects );
             
             AtomSelection_exposer.def( 
@@ -835,7 +835,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersects
         
-            typedef bool ( ::SireMol::AtomSelection::*intersects_function_type )( ::SireMol::ResID const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*intersects_function_type)( ::SireMol::ResID const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::AtomSelection::intersects );
             
             AtomSelection_exposer.def( 
@@ -846,7 +846,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersects
         
-            typedef bool ( ::SireMol::AtomSelection::*intersects_function_type )( ::SireMol::ChainID const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*intersects_function_type)( ::SireMol::ChainID const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::AtomSelection::intersects );
             
             AtomSelection_exposer.def( 
@@ -857,7 +857,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersects
         
-            typedef bool ( ::SireMol::AtomSelection::*intersects_function_type )( ::SireMol::SegID const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*intersects_function_type)( ::SireMol::SegID const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::AtomSelection::intersects );
             
             AtomSelection_exposer.def( 
@@ -868,7 +868,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::intersects
         
-            typedef bool ( ::SireMol::AtomSelection::*intersects_function_type )( ::SireMol::AtomSelection const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*intersects_function_type)( ::SireMol::AtomSelection const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::AtomSelection::intersects );
             
             AtomSelection_exposer.def( 
@@ -879,7 +879,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::invert
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*invert_function_type )(  ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*invert_function_type)(  ) ;
             invert_function_type invert_function_value( &::SireMol::AtomSelection::invert );
             
             AtomSelection_exposer.def( 
@@ -890,7 +890,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::isCompatibleWith
         
-            typedef bool ( ::SireMol::AtomSelection::*isCompatibleWith_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::AtomSelection::isCompatibleWith );
             
             AtomSelection_exposer.def( 
@@ -901,7 +901,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::isEmpty
         
-            typedef bool ( ::SireMol::AtomSelection::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::AtomSelection::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::AtomSelection::isEmpty );
             
             AtomSelection_exposer.def( 
@@ -911,7 +911,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::isNull
         
-            typedef bool ( ::SireMol::AtomSelection::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::AtomSelection::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::AtomSelection::isNull );
             
             AtomSelection_exposer.def( 
@@ -921,7 +921,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::mask
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type )( ::SireMol::AtomIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type)( ::SireMol::AtomIdx ) ;
             mask_function_type mask_function_value( &::SireMol::AtomSelection::mask );
             
             AtomSelection_exposer.def( 
@@ -933,7 +933,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::mask
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type )( ::SireMol::CGIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type)( ::SireMol::CGIdx ) ;
             mask_function_type mask_function_value( &::SireMol::AtomSelection::mask );
             
             AtomSelection_exposer.def( 
@@ -945,7 +945,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::mask
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type )( ::SireMol::ResIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type)( ::SireMol::ResIdx ) ;
             mask_function_type mask_function_value( &::SireMol::AtomSelection::mask );
             
             AtomSelection_exposer.def( 
@@ -957,7 +957,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::mask
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type )( ::SireMol::ChainIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type)( ::SireMol::ChainIdx ) ;
             mask_function_type mask_function_value( &::SireMol::AtomSelection::mask );
             
             AtomSelection_exposer.def( 
@@ -969,7 +969,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::mask
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type )( ::SireMol::SegIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type)( ::SireMol::SegIdx ) ;
             mask_function_type mask_function_value( &::SireMol::AtomSelection::mask );
             
             AtomSelection_exposer.def( 
@@ -981,7 +981,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::mask
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type )( ::QSet< SireMol::AtomIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type)( ::QSet< SireMol::AtomIdx > const & ) ;
             mask_function_type mask_function_value( &::SireMol::AtomSelection::mask );
             
             AtomSelection_exposer.def( 
@@ -993,7 +993,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::mask
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type )( ::QSet< SireMol::CGIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type)( ::QSet< SireMol::CGIdx > const & ) ;
             mask_function_type mask_function_value( &::SireMol::AtomSelection::mask );
             
             AtomSelection_exposer.def( 
@@ -1005,7 +1005,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::mask
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type )( ::QSet< SireMol::ResIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type)( ::QSet< SireMol::ResIdx > const & ) ;
             mask_function_type mask_function_value( &::SireMol::AtomSelection::mask );
             
             AtomSelection_exposer.def( 
@@ -1017,7 +1017,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::mask
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type )( ::QSet< SireMol::ChainIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type)( ::QSet< SireMol::ChainIdx > const & ) ;
             mask_function_type mask_function_value( &::SireMol::AtomSelection::mask );
             
             AtomSelection_exposer.def( 
@@ -1029,7 +1029,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::mask
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type )( ::QSet< SireMol::SegIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type)( ::QSet< SireMol::SegIdx > const & ) ;
             mask_function_type mask_function_value( &::SireMol::AtomSelection::mask );
             
             AtomSelection_exposer.def( 
@@ -1041,7 +1041,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::mask
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type )( ::QList< SireMol::AtomIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type)( ::QList< SireMol::AtomIdx > const & ) ;
             mask_function_type mask_function_value( &::SireMol::AtomSelection::mask );
             
             AtomSelection_exposer.def( 
@@ -1053,7 +1053,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::mask
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type )( ::QList< SireMol::CGIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type)( ::QList< SireMol::CGIdx > const & ) ;
             mask_function_type mask_function_value( &::SireMol::AtomSelection::mask );
             
             AtomSelection_exposer.def( 
@@ -1065,7 +1065,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::mask
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type )( ::QList< SireMol::ResIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type)( ::QList< SireMol::ResIdx > const & ) ;
             mask_function_type mask_function_value( &::SireMol::AtomSelection::mask );
             
             AtomSelection_exposer.def( 
@@ -1077,7 +1077,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::mask
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type )( ::QList< SireMol::ChainIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type)( ::QList< SireMol::ChainIdx > const & ) ;
             mask_function_type mask_function_value( &::SireMol::AtomSelection::mask );
             
             AtomSelection_exposer.def( 
@@ -1089,7 +1089,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::mask
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type )( ::QList< SireMol::SegIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type)( ::QList< SireMol::SegIdx > const & ) ;
             mask_function_type mask_function_value( &::SireMol::AtomSelection::mask );
             
             AtomSelection_exposer.def( 
@@ -1101,7 +1101,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::mask
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type )( ::SireMol::AtomID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type)( ::SireMol::AtomID const & ) ;
             mask_function_type mask_function_value( &::SireMol::AtomSelection::mask );
             
             AtomSelection_exposer.def( 
@@ -1113,7 +1113,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::mask
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type )( ::SireMol::CGID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type)( ::SireMol::CGID const & ) ;
             mask_function_type mask_function_value( &::SireMol::AtomSelection::mask );
             
             AtomSelection_exposer.def( 
@@ -1125,7 +1125,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::mask
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type )( ::SireMol::ResID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type)( ::SireMol::ResID const & ) ;
             mask_function_type mask_function_value( &::SireMol::AtomSelection::mask );
             
             AtomSelection_exposer.def( 
@@ -1137,7 +1137,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::mask
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type )( ::SireMol::ChainID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type)( ::SireMol::ChainID const & ) ;
             mask_function_type mask_function_value( &::SireMol::AtomSelection::mask );
             
             AtomSelection_exposer.def( 
@@ -1149,7 +1149,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::mask
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type )( ::SireMol::SegID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type)( ::SireMol::SegID const & ) ;
             mask_function_type mask_function_value( &::SireMol::AtomSelection::mask );
             
             AtomSelection_exposer.def( 
@@ -1161,7 +1161,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::mask
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type )( ::SireMol::AtomSelection const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*mask_function_type)( ::SireMol::AtomSelection const & ) ;
             mask_function_type mask_function_value( &::SireMol::AtomSelection::mask );
             
             AtomSelection_exposer.def( 
@@ -1173,7 +1173,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::nAtoms
         
-            typedef int ( ::SireMol::AtomSelection::*nAtoms_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomSelection::*nAtoms_function_type)(  ) const;
             nAtoms_function_type nAtoms_function_value( &::SireMol::AtomSelection::nAtoms );
             
             AtomSelection_exposer.def( 
@@ -1183,7 +1183,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::nChains
         
-            typedef int ( ::SireMol::AtomSelection::*nChains_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomSelection::*nChains_function_type)(  ) const;
             nChains_function_type nChains_function_value( &::SireMol::AtomSelection::nChains );
             
             AtomSelection_exposer.def( 
@@ -1193,7 +1193,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::nCutGroups
         
-            typedef int ( ::SireMol::AtomSelection::*nCutGroups_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomSelection::*nCutGroups_function_type)(  ) const;
             nCutGroups_function_type nCutGroups_function_value( &::SireMol::AtomSelection::nCutGroups );
             
             AtomSelection_exposer.def( 
@@ -1203,7 +1203,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::nResidues
         
-            typedef int ( ::SireMol::AtomSelection::*nResidues_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomSelection::*nResidues_function_type)(  ) const;
             nResidues_function_type nResidues_function_value( &::SireMol::AtomSelection::nResidues );
             
             AtomSelection_exposer.def( 
@@ -1213,7 +1213,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::nSegments
         
-            typedef int ( ::SireMol::AtomSelection::*nSegments_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomSelection::*nSegments_function_type)(  ) const;
             nSegments_function_type nSegments_function_value( &::SireMol::AtomSelection::nSegments );
             
             AtomSelection_exposer.def( 
@@ -1223,7 +1223,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::nSelected
         
-            typedef int ( ::SireMol::AtomSelection::*nSelected_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomSelection::*nSelected_function_type)(  ) const;
             nSelected_function_type nSelected_function_value( &::SireMol::AtomSelection::nSelected );
             
             AtomSelection_exposer.def( 
@@ -1233,7 +1233,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::nSelected
         
-            typedef int ( ::SireMol::AtomSelection::*nSelected_function_type )( ::SireMol::CGIdx ) const;
+            typedef int ( ::SireMol::AtomSelection::*nSelected_function_type)( ::SireMol::CGIdx ) const;
             nSelected_function_type nSelected_function_value( &::SireMol::AtomSelection::nSelected );
             
             AtomSelection_exposer.def( 
@@ -1244,7 +1244,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::nSelected
         
-            typedef int ( ::SireMol::AtomSelection::*nSelected_function_type )( ::SireMol::AtomIdx ) const;
+            typedef int ( ::SireMol::AtomSelection::*nSelected_function_type)( ::SireMol::AtomIdx ) const;
             nSelected_function_type nSelected_function_value( &::SireMol::AtomSelection::nSelected );
             
             AtomSelection_exposer.def( 
@@ -1255,7 +1255,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::nSelected
         
-            typedef int ( ::SireMol::AtomSelection::*nSelected_function_type )( ::SireMol::ResIdx ) const;
+            typedef int ( ::SireMol::AtomSelection::*nSelected_function_type)( ::SireMol::ResIdx ) const;
             nSelected_function_type nSelected_function_value( &::SireMol::AtomSelection::nSelected );
             
             AtomSelection_exposer.def( 
@@ -1266,7 +1266,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::nSelected
         
-            typedef int ( ::SireMol::AtomSelection::*nSelected_function_type )( ::SireMol::ChainIdx ) const;
+            typedef int ( ::SireMol::AtomSelection::*nSelected_function_type)( ::SireMol::ChainIdx ) const;
             nSelected_function_type nSelected_function_value( &::SireMol::AtomSelection::nSelected );
             
             AtomSelection_exposer.def( 
@@ -1277,7 +1277,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::nSelected
         
-            typedef int ( ::SireMol::AtomSelection::*nSelected_function_type )( ::SireMol::SegIdx ) const;
+            typedef int ( ::SireMol::AtomSelection::*nSelected_function_type)( ::SireMol::SegIdx ) const;
             nSelected_function_type nSelected_function_value( &::SireMol::AtomSelection::nSelected );
             
             AtomSelection_exposer.def( 
@@ -1288,7 +1288,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::nSelected
         
-            typedef int ( ::SireMol::AtomSelection::*nSelected_function_type )( ::SireMol::CGID const & ) const;
+            typedef int ( ::SireMol::AtomSelection::*nSelected_function_type)( ::SireMol::CGID const & ) const;
             nSelected_function_type nSelected_function_value( &::SireMol::AtomSelection::nSelected );
             
             AtomSelection_exposer.def( 
@@ -1299,7 +1299,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::nSelected
         
-            typedef int ( ::SireMol::AtomSelection::*nSelected_function_type )( ::SireMol::AtomID const & ) const;
+            typedef int ( ::SireMol::AtomSelection::*nSelected_function_type)( ::SireMol::AtomID const & ) const;
             nSelected_function_type nSelected_function_value( &::SireMol::AtomSelection::nSelected );
             
             AtomSelection_exposer.def( 
@@ -1310,7 +1310,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::nSelected
         
-            typedef int ( ::SireMol::AtomSelection::*nSelected_function_type )( ::SireMol::ResID const & ) const;
+            typedef int ( ::SireMol::AtomSelection::*nSelected_function_type)( ::SireMol::ResID const & ) const;
             nSelected_function_type nSelected_function_value( &::SireMol::AtomSelection::nSelected );
             
             AtomSelection_exposer.def( 
@@ -1321,7 +1321,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::nSelected
         
-            typedef int ( ::SireMol::AtomSelection::*nSelected_function_type )( ::SireMol::ChainID const & ) const;
+            typedef int ( ::SireMol::AtomSelection::*nSelected_function_type)( ::SireMol::ChainID const & ) const;
             nSelected_function_type nSelected_function_value( &::SireMol::AtomSelection::nSelected );
             
             AtomSelection_exposer.def( 
@@ -1332,7 +1332,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::nSelected
         
-            typedef int ( ::SireMol::AtomSelection::*nSelected_function_type )( ::SireMol::SegID const & ) const;
+            typedef int ( ::SireMol::AtomSelection::*nSelected_function_type)( ::SireMol::SegID const & ) const;
             nSelected_function_type nSelected_function_value( &::SireMol::AtomSelection::nSelected );
             
             AtomSelection_exposer.def( 
@@ -1343,7 +1343,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::nSelected
         
-            typedef int ( ::SireMol::AtomSelection::*nSelected_function_type )( ::SireMol::AtomSelection const & ) const;
+            typedef int ( ::SireMol::AtomSelection::*nSelected_function_type)( ::SireMol::AtomSelection const & ) const;
             nSelected_function_type nSelected_function_value( &::SireMol::AtomSelection::nSelected );
             
             AtomSelection_exposer.def( 
@@ -1354,7 +1354,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::nSelectedAtoms
         
-            typedef int ( ::SireMol::AtomSelection::*nSelectedAtoms_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomSelection::*nSelectedAtoms_function_type)(  ) const;
             nSelectedAtoms_function_type nSelectedAtoms_function_value( &::SireMol::AtomSelection::nSelectedAtoms );
             
             AtomSelection_exposer.def( 
@@ -1364,7 +1364,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::nSelectedChains
         
-            typedef int ( ::SireMol::AtomSelection::*nSelectedChains_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomSelection::*nSelectedChains_function_type)(  ) const;
             nSelectedChains_function_type nSelectedChains_function_value( &::SireMol::AtomSelection::nSelectedChains );
             
             AtomSelection_exposer.def( 
@@ -1374,7 +1374,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::nSelectedCutGroups
         
-            typedef int ( ::SireMol::AtomSelection::*nSelectedCutGroups_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomSelection::*nSelectedCutGroups_function_type)(  ) const;
             nSelectedCutGroups_function_type nSelectedCutGroups_function_value( &::SireMol::AtomSelection::nSelectedCutGroups );
             
             AtomSelection_exposer.def( 
@@ -1384,7 +1384,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::nSelectedResidues
         
-            typedef int ( ::SireMol::AtomSelection::*nSelectedResidues_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomSelection::*nSelectedResidues_function_type)(  ) const;
             nSelectedResidues_function_type nSelectedResidues_function_value( &::SireMol::AtomSelection::nSelectedResidues );
             
             AtomSelection_exposer.def( 
@@ -1394,7 +1394,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::nSelectedSegments
         
-            typedef int ( ::SireMol::AtomSelection::*nSelectedSegments_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomSelection::*nSelectedSegments_function_type)(  ) const;
             nSelectedSegments_function_type nSelectedSegments_function_value( &::SireMol::AtomSelection::nSelectedSegments );
             
             AtomSelection_exposer.def( 
@@ -1405,7 +1405,7 @@ void register_AtomSelection_class(){
         AtomSelection_exposer.def( bp::self != bp::self );
         { //::SireMol::AtomSelection::operator=
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*assign_function_type )( ::SireMol::AtomSelection const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*assign_function_type)( ::SireMol::AtomSelection const & ) ;
             assign_function_type assign_function_value( &::SireMol::AtomSelection::operator= );
             
             AtomSelection_exposer.def( 
@@ -1418,7 +1418,7 @@ void register_AtomSelection_class(){
         AtomSelection_exposer.def( bp::self == bp::self );
         { //::SireMol::AtomSelection::select
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type )( ::SireMol::AtomIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type)( ::SireMol::AtomIdx ) ;
             select_function_type select_function_value( &::SireMol::AtomSelection::select );
             
             AtomSelection_exposer.def( 
@@ -1430,7 +1430,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::select
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type )( ::SireMol::CGIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type)( ::SireMol::CGIdx ) ;
             select_function_type select_function_value( &::SireMol::AtomSelection::select );
             
             AtomSelection_exposer.def( 
@@ -1442,7 +1442,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::select
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type )( ::SireMol::ResIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type)( ::SireMol::ResIdx ) ;
             select_function_type select_function_value( &::SireMol::AtomSelection::select );
             
             AtomSelection_exposer.def( 
@@ -1454,7 +1454,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::select
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type )( ::SireMol::ChainIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type)( ::SireMol::ChainIdx ) ;
             select_function_type select_function_value( &::SireMol::AtomSelection::select );
             
             AtomSelection_exposer.def( 
@@ -1466,7 +1466,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::select
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type )( ::SireMol::SegIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type)( ::SireMol::SegIdx ) ;
             select_function_type select_function_value( &::SireMol::AtomSelection::select );
             
             AtomSelection_exposer.def( 
@@ -1478,7 +1478,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::select
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type )( ::QSet< SireMol::AtomIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type)( ::QSet< SireMol::AtomIdx > const & ) ;
             select_function_type select_function_value( &::SireMol::AtomSelection::select );
             
             AtomSelection_exposer.def( 
@@ -1490,7 +1490,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::select
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type )( ::QSet< SireMol::CGIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type)( ::QSet< SireMol::CGIdx > const & ) ;
             select_function_type select_function_value( &::SireMol::AtomSelection::select );
             
             AtomSelection_exposer.def( 
@@ -1502,7 +1502,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::select
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type )( ::QSet< SireMol::ResIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type)( ::QSet< SireMol::ResIdx > const & ) ;
             select_function_type select_function_value( &::SireMol::AtomSelection::select );
             
             AtomSelection_exposer.def( 
@@ -1514,7 +1514,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::select
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type )( ::QSet< SireMol::ChainIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type)( ::QSet< SireMol::ChainIdx > const & ) ;
             select_function_type select_function_value( &::SireMol::AtomSelection::select );
             
             AtomSelection_exposer.def( 
@@ -1526,7 +1526,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::select
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type )( ::QSet< SireMol::SegIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type)( ::QSet< SireMol::SegIdx > const & ) ;
             select_function_type select_function_value( &::SireMol::AtomSelection::select );
             
             AtomSelection_exposer.def( 
@@ -1538,7 +1538,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::select
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type )( ::QList< SireMol::AtomIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type)( ::QList< SireMol::AtomIdx > const & ) ;
             select_function_type select_function_value( &::SireMol::AtomSelection::select );
             
             AtomSelection_exposer.def( 
@@ -1550,7 +1550,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::select
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type )( ::QList< SireMol::CGIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type)( ::QList< SireMol::CGIdx > const & ) ;
             select_function_type select_function_value( &::SireMol::AtomSelection::select );
             
             AtomSelection_exposer.def( 
@@ -1562,7 +1562,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::select
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type )( ::QList< SireMol::ResIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type)( ::QList< SireMol::ResIdx > const & ) ;
             select_function_type select_function_value( &::SireMol::AtomSelection::select );
             
             AtomSelection_exposer.def( 
@@ -1574,7 +1574,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::select
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type )( ::QList< SireMol::ChainIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type)( ::QList< SireMol::ChainIdx > const & ) ;
             select_function_type select_function_value( &::SireMol::AtomSelection::select );
             
             AtomSelection_exposer.def( 
@@ -1586,7 +1586,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::select
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type )( ::QList< SireMol::SegIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type)( ::QList< SireMol::SegIdx > const & ) ;
             select_function_type select_function_value( &::SireMol::AtomSelection::select );
             
             AtomSelection_exposer.def( 
@@ -1598,7 +1598,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::select
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type )( ::SireMol::AtomID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type)( ::SireMol::AtomID const & ) ;
             select_function_type select_function_value( &::SireMol::AtomSelection::select );
             
             AtomSelection_exposer.def( 
@@ -1610,7 +1610,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::select
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type )( ::SireMol::CGID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type)( ::SireMol::CGID const & ) ;
             select_function_type select_function_value( &::SireMol::AtomSelection::select );
             
             AtomSelection_exposer.def( 
@@ -1622,7 +1622,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::select
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type )( ::SireMol::ResID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type)( ::SireMol::ResID const & ) ;
             select_function_type select_function_value( &::SireMol::AtomSelection::select );
             
             AtomSelection_exposer.def( 
@@ -1634,7 +1634,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::select
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type )( ::SireMol::ChainID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type)( ::SireMol::ChainID const & ) ;
             select_function_type select_function_value( &::SireMol::AtomSelection::select );
             
             AtomSelection_exposer.def( 
@@ -1646,7 +1646,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::select
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type )( ::SireMol::SegID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type)( ::SireMol::SegID const & ) ;
             select_function_type select_function_value( &::SireMol::AtomSelection::select );
             
             AtomSelection_exposer.def( 
@@ -1658,7 +1658,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::select
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type )( ::SireMol::AtomSelection const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*select_function_type)( ::SireMol::AtomSelection const & ) ;
             select_function_type select_function_value( &::SireMol::AtomSelection::select );
             
             AtomSelection_exposer.def( 
@@ -1670,7 +1670,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectAll
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectAll_function_type )(  ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectAll_function_type)(  ) ;
             selectAll_function_type selectAll_function_value( &::SireMol::AtomSelection::selectAll );
             
             AtomSelection_exposer.def( 
@@ -1681,7 +1681,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectNone
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectNone_function_type )(  ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectNone_function_type)(  ) ;
             selectNone_function_type selectNone_function_value( &::SireMol::AtomSelection::selectNone );
             
             AtomSelection_exposer.def( 
@@ -1692,7 +1692,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectOnly
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type )( ::SireMol::AtomIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type)( ::SireMol::AtomIdx ) ;
             selectOnly_function_type selectOnly_function_value( &::SireMol::AtomSelection::selectOnly );
             
             AtomSelection_exposer.def( 
@@ -1704,7 +1704,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectOnly
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type )( ::SireMol::CGIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type)( ::SireMol::CGIdx ) ;
             selectOnly_function_type selectOnly_function_value( &::SireMol::AtomSelection::selectOnly );
             
             AtomSelection_exposer.def( 
@@ -1716,7 +1716,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectOnly
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type )( ::SireMol::ResIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type)( ::SireMol::ResIdx ) ;
             selectOnly_function_type selectOnly_function_value( &::SireMol::AtomSelection::selectOnly );
             
             AtomSelection_exposer.def( 
@@ -1728,7 +1728,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectOnly
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type )( ::SireMol::ChainIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type)( ::SireMol::ChainIdx ) ;
             selectOnly_function_type selectOnly_function_value( &::SireMol::AtomSelection::selectOnly );
             
             AtomSelection_exposer.def( 
@@ -1740,7 +1740,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectOnly
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type )( ::SireMol::SegIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type)( ::SireMol::SegIdx ) ;
             selectOnly_function_type selectOnly_function_value( &::SireMol::AtomSelection::selectOnly );
             
             AtomSelection_exposer.def( 
@@ -1752,7 +1752,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectOnly
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type )( ::QSet< SireMol::AtomIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type)( ::QSet< SireMol::AtomIdx > const & ) ;
             selectOnly_function_type selectOnly_function_value( &::SireMol::AtomSelection::selectOnly );
             
             AtomSelection_exposer.def( 
@@ -1764,7 +1764,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectOnly
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type )( ::QSet< SireMol::CGIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type)( ::QSet< SireMol::CGIdx > const & ) ;
             selectOnly_function_type selectOnly_function_value( &::SireMol::AtomSelection::selectOnly );
             
             AtomSelection_exposer.def( 
@@ -1776,7 +1776,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectOnly
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type )( ::QSet< SireMol::ResIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type)( ::QSet< SireMol::ResIdx > const & ) ;
             selectOnly_function_type selectOnly_function_value( &::SireMol::AtomSelection::selectOnly );
             
             AtomSelection_exposer.def( 
@@ -1788,7 +1788,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectOnly
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type )( ::QSet< SireMol::ChainIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type)( ::QSet< SireMol::ChainIdx > const & ) ;
             selectOnly_function_type selectOnly_function_value( &::SireMol::AtomSelection::selectOnly );
             
             AtomSelection_exposer.def( 
@@ -1800,7 +1800,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectOnly
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type )( ::QSet< SireMol::SegIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type)( ::QSet< SireMol::SegIdx > const & ) ;
             selectOnly_function_type selectOnly_function_value( &::SireMol::AtomSelection::selectOnly );
             
             AtomSelection_exposer.def( 
@@ -1812,7 +1812,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectOnly
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type )( ::QList< SireMol::AtomIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type)( ::QList< SireMol::AtomIdx > const & ) ;
             selectOnly_function_type selectOnly_function_value( &::SireMol::AtomSelection::selectOnly );
             
             AtomSelection_exposer.def( 
@@ -1824,7 +1824,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectOnly
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type )( ::QList< SireMol::CGIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type)( ::QList< SireMol::CGIdx > const & ) ;
             selectOnly_function_type selectOnly_function_value( &::SireMol::AtomSelection::selectOnly );
             
             AtomSelection_exposer.def( 
@@ -1836,7 +1836,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectOnly
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type )( ::QList< SireMol::ResIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type)( ::QList< SireMol::ResIdx > const & ) ;
             selectOnly_function_type selectOnly_function_value( &::SireMol::AtomSelection::selectOnly );
             
             AtomSelection_exposer.def( 
@@ -1848,7 +1848,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectOnly
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type )( ::QList< SireMol::ChainIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type)( ::QList< SireMol::ChainIdx > const & ) ;
             selectOnly_function_type selectOnly_function_value( &::SireMol::AtomSelection::selectOnly );
             
             AtomSelection_exposer.def( 
@@ -1860,7 +1860,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectOnly
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type )( ::QList< SireMol::SegIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type)( ::QList< SireMol::SegIdx > const & ) ;
             selectOnly_function_type selectOnly_function_value( &::SireMol::AtomSelection::selectOnly );
             
             AtomSelection_exposer.def( 
@@ -1872,7 +1872,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectOnly
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type )( ::SireMol::AtomID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type)( ::SireMol::AtomID const & ) ;
             selectOnly_function_type selectOnly_function_value( &::SireMol::AtomSelection::selectOnly );
             
             AtomSelection_exposer.def( 
@@ -1884,7 +1884,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectOnly
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type )( ::SireMol::CGID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type)( ::SireMol::CGID const & ) ;
             selectOnly_function_type selectOnly_function_value( &::SireMol::AtomSelection::selectOnly );
             
             AtomSelection_exposer.def( 
@@ -1896,7 +1896,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectOnly
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type )( ::SireMol::ResID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type)( ::SireMol::ResID const & ) ;
             selectOnly_function_type selectOnly_function_value( &::SireMol::AtomSelection::selectOnly );
             
             AtomSelection_exposer.def( 
@@ -1908,7 +1908,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectOnly
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type )( ::SireMol::ChainID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type)( ::SireMol::ChainID const & ) ;
             selectOnly_function_type selectOnly_function_value( &::SireMol::AtomSelection::selectOnly );
             
             AtomSelection_exposer.def( 
@@ -1920,7 +1920,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectOnly
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type )( ::SireMol::SegID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type)( ::SireMol::SegID const & ) ;
             selectOnly_function_type selectOnly_function_value( &::SireMol::AtomSelection::selectOnly );
             
             AtomSelection_exposer.def( 
@@ -1932,7 +1932,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectOnly
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type )( ::SireMol::AtomSelection const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*selectOnly_function_type)( ::SireMol::AtomSelection const & ) ;
             selectOnly_function_type selectOnly_function_value( &::SireMol::AtomSelection::selectOnly );
             
             AtomSelection_exposer.def( 
@@ -1944,7 +1944,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selected
         
-            typedef bool ( ::SireMol::AtomSelection::*selected_function_type )( ::SireMol::CGAtomIdx const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selected_function_type)( ::SireMol::CGAtomIdx const & ) const;
             selected_function_type selected_function_value( &::SireMol::AtomSelection::selected );
             
             AtomSelection_exposer.def( 
@@ -1955,7 +1955,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selected
         
-            typedef bool ( ::SireMol::AtomSelection::*selected_function_type )( ::SireMol::AtomIdx ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selected_function_type)( ::SireMol::AtomIdx ) const;
             selected_function_type selected_function_value( &::SireMol::AtomSelection::selected );
             
             AtomSelection_exposer.def( 
@@ -1966,7 +1966,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selected
         
-            typedef bool ( ::SireMol::AtomSelection::*selected_function_type )( ::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selected_function_type)( ::SireMol::AtomID const & ) const;
             selected_function_type selected_function_value( &::SireMol::AtomSelection::selected );
             
             AtomSelection_exposer.def( 
@@ -1977,7 +1977,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selected
         
-            typedef bool ( ::SireMol::AtomSelection::*selected_function_type )( ::SireMol::CGIdx ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selected_function_type)( ::SireMol::CGIdx ) const;
             selected_function_type selected_function_value( &::SireMol::AtomSelection::selected );
             
             AtomSelection_exposer.def( 
@@ -1988,7 +1988,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selected
         
-            typedef bool ( ::SireMol::AtomSelection::*selected_function_type )( ::SireMol::ResIdx ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selected_function_type)( ::SireMol::ResIdx ) const;
             selected_function_type selected_function_value( &::SireMol::AtomSelection::selected );
             
             AtomSelection_exposer.def( 
@@ -1999,7 +1999,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selected
         
-            typedef bool ( ::SireMol::AtomSelection::*selected_function_type )( ::SireMol::ChainIdx ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selected_function_type)( ::SireMol::ChainIdx ) const;
             selected_function_type selected_function_value( &::SireMol::AtomSelection::selected );
             
             AtomSelection_exposer.def( 
@@ -2010,7 +2010,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selected
         
-            typedef bool ( ::SireMol::AtomSelection::*selected_function_type )( ::SireMol::SegIdx ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selected_function_type)( ::SireMol::SegIdx ) const;
             selected_function_type selected_function_value( &::SireMol::AtomSelection::selected );
             
             AtomSelection_exposer.def( 
@@ -2021,7 +2021,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selected
         
-            typedef bool ( ::SireMol::AtomSelection::*selected_function_type )( ::SireMol::CGID const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selected_function_type)( ::SireMol::CGID const & ) const;
             selected_function_type selected_function_value( &::SireMol::AtomSelection::selected );
             
             AtomSelection_exposer.def( 
@@ -2032,7 +2032,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selected
         
-            typedef bool ( ::SireMol::AtomSelection::*selected_function_type )( ::SireMol::ResID const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selected_function_type)( ::SireMol::ResID const & ) const;
             selected_function_type selected_function_value( &::SireMol::AtomSelection::selected );
             
             AtomSelection_exposer.def( 
@@ -2043,7 +2043,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selected
         
-            typedef bool ( ::SireMol::AtomSelection::*selected_function_type )( ::SireMol::ChainID const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selected_function_type)( ::SireMol::ChainID const & ) const;
             selected_function_type selected_function_value( &::SireMol::AtomSelection::selected );
             
             AtomSelection_exposer.def( 
@@ -2054,7 +2054,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selected
         
-            typedef bool ( ::SireMol::AtomSelection::*selected_function_type )( ::SireMol::SegID const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selected_function_type)( ::SireMol::SegID const & ) const;
             selected_function_type selected_function_value( &::SireMol::AtomSelection::selected );
             
             AtomSelection_exposer.def( 
@@ -2065,7 +2065,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selected
         
-            typedef bool ( ::SireMol::AtomSelection::*selected_function_type )( ::SireMol::AtomSelection const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selected_function_type)( ::SireMol::AtomSelection const & ) const;
             selected_function_type selected_function_value( &::SireMol::AtomSelection::selected );
             
             AtomSelection_exposer.def( 
@@ -2076,7 +2076,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedAll
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedAll_function_type )(  ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedAll_function_type)(  ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::AtomSelection::selectedAll );
             
             AtomSelection_exposer.def( 
@@ -2086,7 +2086,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedAll
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedAll_function_type )( ::SireMol::AtomIdx ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedAll_function_type)( ::SireMol::AtomIdx ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::AtomSelection::selectedAll );
             
             AtomSelection_exposer.def( 
@@ -2097,7 +2097,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedAll
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedAll_function_type )( ::SireMol::CGIdx ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedAll_function_type)( ::SireMol::CGIdx ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::AtomSelection::selectedAll );
             
             AtomSelection_exposer.def( 
@@ -2108,7 +2108,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedAll
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedAll_function_type )( ::SireMol::ResIdx ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedAll_function_type)( ::SireMol::ResIdx ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::AtomSelection::selectedAll );
             
             AtomSelection_exposer.def( 
@@ -2119,7 +2119,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedAll
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedAll_function_type )( ::SireMol::ChainIdx ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedAll_function_type)( ::SireMol::ChainIdx ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::AtomSelection::selectedAll );
             
             AtomSelection_exposer.def( 
@@ -2130,7 +2130,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedAll
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedAll_function_type )( ::SireMol::SegIdx ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedAll_function_type)( ::SireMol::SegIdx ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::AtomSelection::selectedAll );
             
             AtomSelection_exposer.def( 
@@ -2141,7 +2141,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedAll
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedAll_function_type )( ::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedAll_function_type)( ::SireMol::AtomID const & ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::AtomSelection::selectedAll );
             
             AtomSelection_exposer.def( 
@@ -2152,7 +2152,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedAll
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedAll_function_type )( ::SireMol::CGID const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedAll_function_type)( ::SireMol::CGID const & ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::AtomSelection::selectedAll );
             
             AtomSelection_exposer.def( 
@@ -2163,7 +2163,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedAll
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedAll_function_type )( ::SireMol::ResID const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedAll_function_type)( ::SireMol::ResID const & ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::AtomSelection::selectedAll );
             
             AtomSelection_exposer.def( 
@@ -2174,7 +2174,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedAll
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedAll_function_type )( ::SireMol::ChainID const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedAll_function_type)( ::SireMol::ChainID const & ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::AtomSelection::selectedAll );
             
             AtomSelection_exposer.def( 
@@ -2185,7 +2185,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedAll
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedAll_function_type )( ::SireMol::SegID const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedAll_function_type)( ::SireMol::SegID const & ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::AtomSelection::selectedAll );
             
             AtomSelection_exposer.def( 
@@ -2196,7 +2196,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedAll
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedAll_function_type )( ::SireMol::AtomSelection const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedAll_function_type)( ::SireMol::AtomSelection const & ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::AtomSelection::selectedAll );
             
             AtomSelection_exposer.def( 
@@ -2207,7 +2207,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedAllAtoms
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedAllAtoms_function_type )(  ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedAllAtoms_function_type)(  ) const;
             selectedAllAtoms_function_type selectedAllAtoms_function_value( &::SireMol::AtomSelection::selectedAllAtoms );
             
             AtomSelection_exposer.def( 
@@ -2217,7 +2217,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedAllChains
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedAllChains_function_type )(  ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedAllChains_function_type)(  ) const;
             selectedAllChains_function_type selectedAllChains_function_value( &::SireMol::AtomSelection::selectedAllChains );
             
             AtomSelection_exposer.def( 
@@ -2227,7 +2227,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedAllCutGroups
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedAllCutGroups_function_type )(  ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedAllCutGroups_function_type)(  ) const;
             selectedAllCutGroups_function_type selectedAllCutGroups_function_value( &::SireMol::AtomSelection::selectedAllCutGroups );
             
             AtomSelection_exposer.def( 
@@ -2237,7 +2237,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedAllResidues
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedAllResidues_function_type )(  ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedAllResidues_function_type)(  ) const;
             selectedAllResidues_function_type selectedAllResidues_function_value( &::SireMol::AtomSelection::selectedAllResidues );
             
             AtomSelection_exposer.def( 
@@ -2247,7 +2247,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedAllSegments
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedAllSegments_function_type )(  ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedAllSegments_function_type)(  ) const;
             selectedAllSegments_function_type selectedAllSegments_function_value( &::SireMol::AtomSelection::selectedAllSegments );
             
             AtomSelection_exposer.def( 
@@ -2257,7 +2257,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedAtoms
         
-            typedef ::QVector< SireMol::AtomIdx > ( ::SireMol::AtomSelection::*selectedAtoms_function_type )(  ) const;
+            typedef ::QVector< SireMol::AtomIdx > ( ::SireMol::AtomSelection::*selectedAtoms_function_type)(  ) const;
             selectedAtoms_function_type selectedAtoms_function_value( &::SireMol::AtomSelection::selectedAtoms );
             
             AtomSelection_exposer.def( 
@@ -2267,7 +2267,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedAtoms
         
-            typedef ::QSet< SireID::Index > ( ::SireMol::AtomSelection::*selectedAtoms_function_type )( ::SireMol::CGIdx ) const;
+            typedef ::QSet< SireID::Index > ( ::SireMol::AtomSelection::*selectedAtoms_function_type)( ::SireMol::CGIdx ) const;
             selectedAtoms_function_type selectedAtoms_function_value( &::SireMol::AtomSelection::selectedAtoms );
             
             AtomSelection_exposer.def( 
@@ -2278,7 +2278,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedChains
         
-            typedef ::QList< SireMol::ChainIdx > ( ::SireMol::AtomSelection::*selectedChains_function_type )(  ) const;
+            typedef ::QList< SireMol::ChainIdx > ( ::SireMol::AtomSelection::*selectedChains_function_type)(  ) const;
             selectedChains_function_type selectedChains_function_value( &::SireMol::AtomSelection::selectedChains );
             
             AtomSelection_exposer.def( 
@@ -2288,7 +2288,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedCutGroups
         
-            typedef ::QList< SireMol::CGIdx > ( ::SireMol::AtomSelection::*selectedCutGroups_function_type )(  ) const;
+            typedef ::QList< SireMol::CGIdx > ( ::SireMol::AtomSelection::*selectedCutGroups_function_type)(  ) const;
             selectedCutGroups_function_type selectedCutGroups_function_value( &::SireMol::AtomSelection::selectedCutGroups );
             
             AtomSelection_exposer.def( 
@@ -2298,7 +2298,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedNone
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedNone_function_type )(  ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedNone_function_type)(  ) const;
             selectedNone_function_type selectedNone_function_value( &::SireMol::AtomSelection::selectedNone );
             
             AtomSelection_exposer.def( 
@@ -2308,7 +2308,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedNone
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedNone_function_type )( ::SireMol::AtomIdx ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedNone_function_type)( ::SireMol::AtomIdx ) const;
             selectedNone_function_type selectedNone_function_value( &::SireMol::AtomSelection::selectedNone );
             
             AtomSelection_exposer.def( 
@@ -2319,7 +2319,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedNone
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedNone_function_type )( ::SireMol::CGIdx ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedNone_function_type)( ::SireMol::CGIdx ) const;
             selectedNone_function_type selectedNone_function_value( &::SireMol::AtomSelection::selectedNone );
             
             AtomSelection_exposer.def( 
@@ -2330,7 +2330,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedNone
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedNone_function_type )( ::SireMol::ResIdx ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedNone_function_type)( ::SireMol::ResIdx ) const;
             selectedNone_function_type selectedNone_function_value( &::SireMol::AtomSelection::selectedNone );
             
             AtomSelection_exposer.def( 
@@ -2341,7 +2341,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedNone
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedNone_function_type )( ::SireMol::ChainIdx ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedNone_function_type)( ::SireMol::ChainIdx ) const;
             selectedNone_function_type selectedNone_function_value( &::SireMol::AtomSelection::selectedNone );
             
             AtomSelection_exposer.def( 
@@ -2352,7 +2352,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedNone
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedNone_function_type )( ::SireMol::SegIdx ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedNone_function_type)( ::SireMol::SegIdx ) const;
             selectedNone_function_type selectedNone_function_value( &::SireMol::AtomSelection::selectedNone );
             
             AtomSelection_exposer.def( 
@@ -2363,7 +2363,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedNone
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedNone_function_type )( ::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedNone_function_type)( ::SireMol::AtomID const & ) const;
             selectedNone_function_type selectedNone_function_value( &::SireMol::AtomSelection::selectedNone );
             
             AtomSelection_exposer.def( 
@@ -2374,7 +2374,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedNone
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedNone_function_type )( ::SireMol::CGID const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedNone_function_type)( ::SireMol::CGID const & ) const;
             selectedNone_function_type selectedNone_function_value( &::SireMol::AtomSelection::selectedNone );
             
             AtomSelection_exposer.def( 
@@ -2385,7 +2385,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedNone
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedNone_function_type )( ::SireMol::ResID const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedNone_function_type)( ::SireMol::ResID const & ) const;
             selectedNone_function_type selectedNone_function_value( &::SireMol::AtomSelection::selectedNone );
             
             AtomSelection_exposer.def( 
@@ -2396,7 +2396,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedNone
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedNone_function_type )( ::SireMol::ChainID const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedNone_function_type)( ::SireMol::ChainID const & ) const;
             selectedNone_function_type selectedNone_function_value( &::SireMol::AtomSelection::selectedNone );
             
             AtomSelection_exposer.def( 
@@ -2407,7 +2407,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedNone
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedNone_function_type )( ::SireMol::SegID const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedNone_function_type)( ::SireMol::SegID const & ) const;
             selectedNone_function_type selectedNone_function_value( &::SireMol::AtomSelection::selectedNone );
             
             AtomSelection_exposer.def( 
@@ -2418,7 +2418,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedNone
         
-            typedef bool ( ::SireMol::AtomSelection::*selectedNone_function_type )( ::SireMol::AtomSelection const & ) const;
+            typedef bool ( ::SireMol::AtomSelection::*selectedNone_function_type)( ::SireMol::AtomSelection const & ) const;
             selectedNone_function_type selectedNone_function_value( &::SireMol::AtomSelection::selectedNone );
             
             AtomSelection_exposer.def( 
@@ -2429,7 +2429,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedResidues
         
-            typedef ::QList< SireMol::ResIdx > ( ::SireMol::AtomSelection::*selectedResidues_function_type )(  ) const;
+            typedef ::QList< SireMol::ResIdx > ( ::SireMol::AtomSelection::*selectedResidues_function_type)(  ) const;
             selectedResidues_function_type selectedResidues_function_value( &::SireMol::AtomSelection::selectedResidues );
             
             AtomSelection_exposer.def( 
@@ -2439,7 +2439,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::selectedSegments
         
-            typedef ::QList< SireMol::SegIdx > ( ::SireMol::AtomSelection::*selectedSegments_function_type )(  ) const;
+            typedef ::QList< SireMol::SegIdx > ( ::SireMol::AtomSelection::*selectedSegments_function_type)(  ) const;
             selectedSegments_function_type selectedSegments_function_value( &::SireMol::AtomSelection::selectedSegments );
             
             AtomSelection_exposer.def( 
@@ -2449,7 +2449,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::subtract
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type )( ::SireMol::AtomIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type)( ::SireMol::AtomIdx ) ;
             subtract_function_type subtract_function_value( &::SireMol::AtomSelection::subtract );
             
             AtomSelection_exposer.def( 
@@ -2461,7 +2461,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::subtract
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type )( ::SireMol::CGIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type)( ::SireMol::CGIdx ) ;
             subtract_function_type subtract_function_value( &::SireMol::AtomSelection::subtract );
             
             AtomSelection_exposer.def( 
@@ -2473,7 +2473,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::subtract
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type )( ::SireMol::ResIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type)( ::SireMol::ResIdx ) ;
             subtract_function_type subtract_function_value( &::SireMol::AtomSelection::subtract );
             
             AtomSelection_exposer.def( 
@@ -2485,7 +2485,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::subtract
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type )( ::SireMol::ChainIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type)( ::SireMol::ChainIdx ) ;
             subtract_function_type subtract_function_value( &::SireMol::AtomSelection::subtract );
             
             AtomSelection_exposer.def( 
@@ -2497,7 +2497,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::subtract
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type )( ::SireMol::SegIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type)( ::SireMol::SegIdx ) ;
             subtract_function_type subtract_function_value( &::SireMol::AtomSelection::subtract );
             
             AtomSelection_exposer.def( 
@@ -2509,7 +2509,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::subtract
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type )( ::QSet< SireMol::AtomIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type)( ::QSet< SireMol::AtomIdx > const & ) ;
             subtract_function_type subtract_function_value( &::SireMol::AtomSelection::subtract );
             
             AtomSelection_exposer.def( 
@@ -2521,7 +2521,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::subtract
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type )( ::QSet< SireMol::CGIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type)( ::QSet< SireMol::CGIdx > const & ) ;
             subtract_function_type subtract_function_value( &::SireMol::AtomSelection::subtract );
             
             AtomSelection_exposer.def( 
@@ -2533,7 +2533,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::subtract
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type )( ::QSet< SireMol::ResIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type)( ::QSet< SireMol::ResIdx > const & ) ;
             subtract_function_type subtract_function_value( &::SireMol::AtomSelection::subtract );
             
             AtomSelection_exposer.def( 
@@ -2545,7 +2545,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::subtract
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type )( ::QSet< SireMol::ChainIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type)( ::QSet< SireMol::ChainIdx > const & ) ;
             subtract_function_type subtract_function_value( &::SireMol::AtomSelection::subtract );
             
             AtomSelection_exposer.def( 
@@ -2557,7 +2557,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::subtract
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type )( ::QSet< SireMol::SegIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type)( ::QSet< SireMol::SegIdx > const & ) ;
             subtract_function_type subtract_function_value( &::SireMol::AtomSelection::subtract );
             
             AtomSelection_exposer.def( 
@@ -2569,7 +2569,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::subtract
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type )( ::QList< SireMol::AtomIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type)( ::QList< SireMol::AtomIdx > const & ) ;
             subtract_function_type subtract_function_value( &::SireMol::AtomSelection::subtract );
             
             AtomSelection_exposer.def( 
@@ -2581,7 +2581,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::subtract
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type )( ::QList< SireMol::CGIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type)( ::QList< SireMol::CGIdx > const & ) ;
             subtract_function_type subtract_function_value( &::SireMol::AtomSelection::subtract );
             
             AtomSelection_exposer.def( 
@@ -2593,7 +2593,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::subtract
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type )( ::QList< SireMol::ResIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type)( ::QList< SireMol::ResIdx > const & ) ;
             subtract_function_type subtract_function_value( &::SireMol::AtomSelection::subtract );
             
             AtomSelection_exposer.def( 
@@ -2605,7 +2605,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::subtract
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type )( ::QList< SireMol::ChainIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type)( ::QList< SireMol::ChainIdx > const & ) ;
             subtract_function_type subtract_function_value( &::SireMol::AtomSelection::subtract );
             
             AtomSelection_exposer.def( 
@@ -2617,7 +2617,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::subtract
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type )( ::QList< SireMol::SegIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type)( ::QList< SireMol::SegIdx > const & ) ;
             subtract_function_type subtract_function_value( &::SireMol::AtomSelection::subtract );
             
             AtomSelection_exposer.def( 
@@ -2629,7 +2629,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::subtract
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type )( ::SireMol::AtomID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type)( ::SireMol::AtomID const & ) ;
             subtract_function_type subtract_function_value( &::SireMol::AtomSelection::subtract );
             
             AtomSelection_exposer.def( 
@@ -2641,7 +2641,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::subtract
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type )( ::SireMol::CGID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type)( ::SireMol::CGID const & ) ;
             subtract_function_type subtract_function_value( &::SireMol::AtomSelection::subtract );
             
             AtomSelection_exposer.def( 
@@ -2653,7 +2653,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::subtract
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type )( ::SireMol::ResID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type)( ::SireMol::ResID const & ) ;
             subtract_function_type subtract_function_value( &::SireMol::AtomSelection::subtract );
             
             AtomSelection_exposer.def( 
@@ -2665,7 +2665,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::subtract
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type )( ::SireMol::ChainID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type)( ::SireMol::ChainID const & ) ;
             subtract_function_type subtract_function_value( &::SireMol::AtomSelection::subtract );
             
             AtomSelection_exposer.def( 
@@ -2677,7 +2677,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::subtract
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type )( ::SireMol::SegID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type)( ::SireMol::SegID const & ) ;
             subtract_function_type subtract_function_value( &::SireMol::AtomSelection::subtract );
             
             AtomSelection_exposer.def( 
@@ -2689,7 +2689,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::subtract
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type )( ::SireMol::AtomSelection const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*subtract_function_type)( ::SireMol::AtomSelection const & ) ;
             subtract_function_type subtract_function_value( &::SireMol::AtomSelection::subtract );
             
             AtomSelection_exposer.def( 
@@ -2711,7 +2711,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::unite
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type )( ::SireMol::AtomIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type)( ::SireMol::AtomIdx ) ;
             unite_function_type unite_function_value( &::SireMol::AtomSelection::unite );
             
             AtomSelection_exposer.def( 
@@ -2723,7 +2723,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::unite
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type )( ::SireMol::CGIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type)( ::SireMol::CGIdx ) ;
             unite_function_type unite_function_value( &::SireMol::AtomSelection::unite );
             
             AtomSelection_exposer.def( 
@@ -2735,7 +2735,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::unite
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type )( ::SireMol::ResIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type)( ::SireMol::ResIdx ) ;
             unite_function_type unite_function_value( &::SireMol::AtomSelection::unite );
             
             AtomSelection_exposer.def( 
@@ -2747,7 +2747,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::unite
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type )( ::SireMol::ChainIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type)( ::SireMol::ChainIdx ) ;
             unite_function_type unite_function_value( &::SireMol::AtomSelection::unite );
             
             AtomSelection_exposer.def( 
@@ -2759,7 +2759,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::unite
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type )( ::SireMol::SegIdx ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type)( ::SireMol::SegIdx ) ;
             unite_function_type unite_function_value( &::SireMol::AtomSelection::unite );
             
             AtomSelection_exposer.def( 
@@ -2771,7 +2771,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::unite
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type )( ::QSet< SireMol::AtomIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type)( ::QSet< SireMol::AtomIdx > const & ) ;
             unite_function_type unite_function_value( &::SireMol::AtomSelection::unite );
             
             AtomSelection_exposer.def( 
@@ -2783,7 +2783,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::unite
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type )( ::QSet< SireMol::CGIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type)( ::QSet< SireMol::CGIdx > const & ) ;
             unite_function_type unite_function_value( &::SireMol::AtomSelection::unite );
             
             AtomSelection_exposer.def( 
@@ -2795,7 +2795,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::unite
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type )( ::QSet< SireMol::ResIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type)( ::QSet< SireMol::ResIdx > const & ) ;
             unite_function_type unite_function_value( &::SireMol::AtomSelection::unite );
             
             AtomSelection_exposer.def( 
@@ -2807,7 +2807,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::unite
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type )( ::QSet< SireMol::ChainIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type)( ::QSet< SireMol::ChainIdx > const & ) ;
             unite_function_type unite_function_value( &::SireMol::AtomSelection::unite );
             
             AtomSelection_exposer.def( 
@@ -2819,7 +2819,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::unite
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type )( ::QSet< SireMol::SegIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type)( ::QSet< SireMol::SegIdx > const & ) ;
             unite_function_type unite_function_value( &::SireMol::AtomSelection::unite );
             
             AtomSelection_exposer.def( 
@@ -2831,7 +2831,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::unite
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type )( ::QList< SireMol::AtomIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type)( ::QList< SireMol::AtomIdx > const & ) ;
             unite_function_type unite_function_value( &::SireMol::AtomSelection::unite );
             
             AtomSelection_exposer.def( 
@@ -2843,7 +2843,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::unite
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type )( ::QList< SireMol::CGIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type)( ::QList< SireMol::CGIdx > const & ) ;
             unite_function_type unite_function_value( &::SireMol::AtomSelection::unite );
             
             AtomSelection_exposer.def( 
@@ -2855,7 +2855,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::unite
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type )( ::QList< SireMol::ResIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type)( ::QList< SireMol::ResIdx > const & ) ;
             unite_function_type unite_function_value( &::SireMol::AtomSelection::unite );
             
             AtomSelection_exposer.def( 
@@ -2867,7 +2867,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::unite
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type )( ::QList< SireMol::ChainIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type)( ::QList< SireMol::ChainIdx > const & ) ;
             unite_function_type unite_function_value( &::SireMol::AtomSelection::unite );
             
             AtomSelection_exposer.def( 
@@ -2879,7 +2879,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::unite
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type )( ::QList< SireMol::SegIdx > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type)( ::QList< SireMol::SegIdx > const & ) ;
             unite_function_type unite_function_value( &::SireMol::AtomSelection::unite );
             
             AtomSelection_exposer.def( 
@@ -2891,7 +2891,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::unite
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type )( ::SireMol::AtomID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type)( ::SireMol::AtomID const & ) ;
             unite_function_type unite_function_value( &::SireMol::AtomSelection::unite );
             
             AtomSelection_exposer.def( 
@@ -2903,7 +2903,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::unite
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type )( ::SireMol::CGID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type)( ::SireMol::CGID const & ) ;
             unite_function_type unite_function_value( &::SireMol::AtomSelection::unite );
             
             AtomSelection_exposer.def( 
@@ -2915,7 +2915,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::unite
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type )( ::SireMol::ResID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type)( ::SireMol::ResID const & ) ;
             unite_function_type unite_function_value( &::SireMol::AtomSelection::unite );
             
             AtomSelection_exposer.def( 
@@ -2927,7 +2927,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::unite
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type )( ::SireMol::ChainID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type)( ::SireMol::ChainID const & ) ;
             unite_function_type unite_function_value( &::SireMol::AtomSelection::unite );
             
             AtomSelection_exposer.def( 
@@ -2939,7 +2939,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::unite
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type )( ::SireMol::SegID const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type)( ::SireMol::SegID const & ) ;
             unite_function_type unite_function_value( &::SireMol::AtomSelection::unite );
             
             AtomSelection_exposer.def( 
@@ -2951,7 +2951,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::unite
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type )( ::SireMol::AtomSelection const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type)( ::SireMol::AtomSelection const & ) ;
             unite_function_type unite_function_value( &::SireMol::AtomSelection::unite );
             
             AtomSelection_exposer.def( 
@@ -2963,7 +2963,7 @@ void register_AtomSelection_class(){
         }
         { //::SireMol::AtomSelection::unite
         
-            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type )( ::QList< SireMol::AtomSelection > const & ) ;
+            typedef ::SireMol::AtomSelection & ( ::SireMol::AtomSelection::*unite_function_type)( ::QList< SireMol::AtomSelection > const & ) ;
             unite_function_type unite_function_value( &::SireMol::AtomSelection::unite );
             
             AtomSelection_exposer.def( 

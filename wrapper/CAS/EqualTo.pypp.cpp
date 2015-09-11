@@ -49,7 +49,7 @@ void register_EqualTo_class(){
         EqualTo_exposer.def( bp::init< SireCAS::EqualTo const & >(( bp::arg("other") )) );
         { //::SireCAS::EqualTo::alwaysFalse
         
-            typedef bool ( ::SireCAS::EqualTo::*alwaysFalse_function_type )(  ) const;
+            typedef bool ( ::SireCAS::EqualTo::*alwaysFalse_function_type)(  ) const;
             alwaysFalse_function_type alwaysFalse_function_value( &::SireCAS::EqualTo::alwaysFalse );
             
             EqualTo_exposer.def( 
@@ -59,7 +59,7 @@ void register_EqualTo_class(){
         }
         { //::SireCAS::EqualTo::alwaysTrue
         
-            typedef bool ( ::SireCAS::EqualTo::*alwaysTrue_function_type )(  ) const;
+            typedef bool ( ::SireCAS::EqualTo::*alwaysTrue_function_type)(  ) const;
             alwaysTrue_function_type alwaysTrue_function_value( &::SireCAS::EqualTo::alwaysTrue );
             
             EqualTo_exposer.def( 
@@ -69,7 +69,7 @@ void register_EqualTo_class(){
         }
         { //::SireCAS::EqualTo::operator=
         
-            typedef ::SireCAS::EqualTo & ( ::SireCAS::EqualTo::*assign_function_type )( ::SireCAS::EqualTo const & ) ;
+            typedef ::SireCAS::EqualTo & ( ::SireCAS::EqualTo::*assign_function_type)( ::SireCAS::EqualTo const & ) ;
             assign_function_type assign_function_value( &::SireCAS::EqualTo::operator= );
             
             EqualTo_exposer.def( 
@@ -93,7 +93,7 @@ void register_EqualTo_class(){
         }
         { //::SireCAS::EqualTo::what
         
-            typedef char const * ( ::SireCAS::EqualTo::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::EqualTo::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::EqualTo::what );
             
             EqualTo_exposer.def( 

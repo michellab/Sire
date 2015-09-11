@@ -13,23 +13,23 @@ def findGlobals():
     
     FILE = open("_Maths_global_variables.pyman.hpp", "w")
     
-    print >>FILE, "#ifndef _Maths_global_variables_hpp"
-    print >>FILE, "#define _Maths_global_variables_hpp"
-    print >>FILE, "\nvoid register_man_global_variables();\n"
-    print >>FILE, "#endif"
+    print("#ifndef _Maths_global_variables_hpp", file=FILE)
+    print("#define _Maths_global_variables_hpp", file=FILE)
+    print("\nvoid register_man_global_variables();\n", file=FILE)
+    print("#endif", file=FILE)
      
     FILE.close()
 
     FILE = open("_Maths_global_variables.pyman.cpp", "w")
     
-    print >>FILE, "\n#include \"_Maths_global_variables.pyman.hpp\""
-    print >>FILE, "#include <boost/python.hpp>"
-    print >>FILE, "#include \"SireMaths/constants.h\""
-    print >>FILE, "\nusing namespace boost::python;"
-    print >>FILE, "using namespace SireMaths;\n"
+    print("\n#include \"_Maths_global_variables.pyman.hpp\"", file=FILE)
+    print("#include <boost/python.hpp>", file=FILE)
+    print("#include \"SireMaths/constants.h\"", file=FILE)
+    print("\nusing namespace boost::python;", file=FILE)
+    print("using namespace SireMaths;\n", file=FILE)
     
-    print >>FILE, "void register_man_global_variables()"
-    print >>FILE, "{"
+    print("void register_man_global_variables()", file=FILE)
+    print("{", file=FILE)
     
     
     for line in lines:
@@ -37,9 +37,9 @@ def findGlobals():
     
         if match:
             name = match.group(2)
-            print >>FILE, "    scope().attr(\"%s\") = %s;\n" % (name,name)
+            print("    scope().attr(\"%s\") = %s;\n" % (name,name), file=FILE)
 
-    print >>FILE, "}\n"
+    print("}\n", file=FILE)
 
 def fix_Array2D(c):
    for o in c.operators("()"):

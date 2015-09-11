@@ -47,7 +47,7 @@ void register_RealPower_class(){
         RealPower_exposer.def( bp::init< SireCAS::RealPower const & >(( bp::arg("other") )) );
         { //::SireCAS::RealPower::evaluate
         
-            typedef double ( ::SireCAS::RealPower::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::RealPower::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::RealPower::evaluate );
             
             RealPower_exposer.def( 
@@ -58,7 +58,7 @@ void register_RealPower_class(){
         }
         { //::SireCAS::RealPower::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::RealPower::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::RealPower::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::RealPower::evaluate );
             
             RealPower_exposer.def( 
@@ -69,7 +69,7 @@ void register_RealPower_class(){
         }
         { //::SireCAS::RealPower::hash
         
-            typedef ::uint ( ::SireCAS::RealPower::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireCAS::RealPower::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireCAS::RealPower::hash );
             
             RealPower_exposer.def( 
@@ -80,7 +80,7 @@ void register_RealPower_class(){
         RealPower_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
         { //::SireCAS::RealPower::power
         
-            typedef ::SireCAS::Expression ( ::SireCAS::RealPower::*power_function_type )(  ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::RealPower::*power_function_type)(  ) const;
             power_function_type power_function_value( &::SireCAS::RealPower::power );
             
             RealPower_exposer.def( 
@@ -100,7 +100,7 @@ void register_RealPower_class(){
         }
         { //::SireCAS::RealPower::what
         
-            typedef char const * ( ::SireCAS::RealPower::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::RealPower::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::RealPower::what );
             
             RealPower_exposer.def( 

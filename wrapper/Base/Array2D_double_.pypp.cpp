@@ -35,7 +35,7 @@ void register_Array2D_double__class(){
         { //::SireBase::Array2D< double >::at
         
             typedef SireBase::Array2D< double > exported_class_t;
-            typedef double const & ( ::SireBase::Array2D< double >::*at_function_type )( int,int ) const;
+            typedef double const & ( ::SireBase::Array2D< double >::*at_function_type)( int,int ) const;
             at_function_type at_function_value( &::SireBase::Array2D< double >::at );
             
             Array2D_double__exposer.def( 
@@ -48,7 +48,7 @@ void register_Array2D_double__class(){
         { //::SireBase::Array2D< double >::get
         
             typedef SireBase::Array2D< double > exported_class_t;
-            typedef double const & ( ::SireBase::Array2D< double >::*get_function_type )( int,int ) const;
+            typedef double const & ( ::SireBase::Array2D< double >::*get_function_type)( int,int ) const;
             get_function_type get_function_value( &::SireBase::Array2D< double >::get );
             
             Array2D_double__exposer.def( 
@@ -62,7 +62,7 @@ void register_Array2D_double__class(){
         { //::SireBase::Array2D< double >::operator()
         
             typedef SireBase::Array2D< double > exported_class_t;
-            typedef double const & ( ::SireBase::Array2D< double >::*__call___function_type )( int,int ) const;
+            typedef double const & ( ::SireBase::Array2D< double >::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireBase::Array2D< double >::operator() );
             
             Array2D_double__exposer.def( 
@@ -75,7 +75,7 @@ void register_Array2D_double__class(){
         { //::SireBase::Array2D< double >::operator=
         
             typedef SireBase::Array2D< double > exported_class_t;
-            typedef ::SireBase::Array2D< double > & ( ::SireBase::Array2D< double >::*assign_function_type )( ::SireBase::Array2D< double > const & ) ;
+            typedef ::SireBase::Array2D< double > & ( ::SireBase::Array2D< double >::*assign_function_type)( ::SireBase::Array2D< double > const & ) ;
             assign_function_type assign_function_value( &::SireBase::Array2D< double >::operator= );
             
             Array2D_double__exposer.def( 
@@ -89,7 +89,7 @@ void register_Array2D_double__class(){
         { //::SireBase::Array2D< double >::redimension
         
             typedef SireBase::Array2D< double > exported_class_t;
-            typedef void ( ::SireBase::Array2D< double >::*redimension_function_type )( int,int ) ;
+            typedef void ( ::SireBase::Array2D< double >::*redimension_function_type)( int,int ) ;
             redimension_function_type redimension_function_value( &::SireBase::Array2D< double >::redimension );
             
             Array2D_double__exposer.def( 
@@ -101,7 +101,7 @@ void register_Array2D_double__class(){
         { //::SireBase::Array2D< double >::set
         
             typedef SireBase::Array2D< double > exported_class_t;
-            typedef void ( ::SireBase::Array2D< double >::*set_function_type )( int,int,double const & ) ;
+            typedef void ( ::SireBase::Array2D< double >::*set_function_type)( int,int,double const & ) ;
             set_function_type set_function_value( &::SireBase::Array2D< double >::set );
             
             Array2D_double__exposer.def( 
@@ -113,7 +113,7 @@ void register_Array2D_double__class(){
         { //::SireBase::Array2D< double >::setAll
         
             typedef SireBase::Array2D< double > exported_class_t;
-            typedef void ( ::SireBase::Array2D< double >::*setAll_function_type )( double const & ) ;
+            typedef void ( ::SireBase::Array2D< double >::*setAll_function_type)( double const & ) ;
             setAll_function_type setAll_function_value( &::SireBase::Array2D< double >::setAll );
             
             Array2D_double__exposer.def( 
@@ -125,7 +125,7 @@ void register_Array2D_double__class(){
         { //::SireBase::Array2D< double >::toString
         
             typedef SireBase::Array2D< double > exported_class_t;
-            typedef ::QString ( ::SireBase::Array2D< double >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireBase::Array2D< double >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireBase::Array2D< double >::toString );
             
             Array2D_double__exposer.def( 
@@ -136,7 +136,7 @@ void register_Array2D_double__class(){
         { //::SireBase::Array2D< double >::transpose
         
             typedef SireBase::Array2D< double > exported_class_t;
-            typedef ::SireBase::Array2D< double > ( ::SireBase::Array2D< double >::*transpose_function_type )(  ) const;
+            typedef ::SireBase::Array2D< double > ( ::SireBase::Array2D< double >::*transpose_function_type)(  ) const;
             transpose_function_type transpose_function_value( &::SireBase::Array2D< double >::transpose );
             
             Array2D_double__exposer.def( 

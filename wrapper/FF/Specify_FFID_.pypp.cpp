@@ -39,7 +39,7 @@ void register_Specify_FFID__class(){
         { //::SireID::Specify< SireFF::FFID >::hash
         
             typedef SireID::Specify< SireFF::FFID > exported_class_t;
-            typedef ::uint ( ::SireID::Specify< SireFF::FFID >::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireID::Specify< SireFF::FFID >::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireID::Specify< SireFF::FFID >::hash );
             
             Specify_FFID__exposer.def( 
@@ -50,7 +50,7 @@ void register_Specify_FFID__class(){
         { //::SireID::Specify< SireFF::FFID >::isNull
         
             typedef SireID::Specify< SireFF::FFID > exported_class_t;
-            typedef bool ( ::SireID::Specify< SireFF::FFID >::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireID::Specify< SireFF::FFID >::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireID::Specify< SireFF::FFID >::isNull );
             
             Specify_FFID__exposer.def( 
@@ -61,7 +61,7 @@ void register_Specify_FFID__class(){
         { //::SireID::Specify< SireFF::FFID >::map
         
             typedef SireID::Specify< SireFF::FFID > exported_class_t;
-            typedef ::QList< SireFF::FFIdx > ( ::SireID::Specify< SireFF::FFID >::*map_function_type )( ::SireFF::ForceFields const & ) const;
+            typedef ::QList< SireFF::FFIdx > ( ::SireID::Specify< SireFF::FFID >::*map_function_type)( ::SireFF::ForceFields const & ) const;
             map_function_type map_function_value( &::SireID::Specify< SireFF::FFID >::map );
             
             Specify_FFID__exposer.def( 
@@ -75,7 +75,7 @@ void register_Specify_FFID__class(){
         { //::SireID::Specify< SireFF::FFID >::operator()
         
             typedef SireID::Specify< SireFF::FFID > exported_class_t;
-            typedef ::SireID::Specify< SireFF::FFID > ( ::SireID::Specify< SireFF::FFID >::*__call___function_type )( int ) const;
+            typedef ::SireID::Specify< SireFF::FFID > ( ::SireID::Specify< SireFF::FFID >::*__call___function_type)( int ) const;
             __call___function_type __call___function_value( &::SireID::Specify< SireFF::FFID >::operator() );
             
             Specify_FFID__exposer.def( 
@@ -87,7 +87,7 @@ void register_Specify_FFID__class(){
         { //::SireID::Specify< SireFF::FFID >::operator()
         
             typedef SireID::Specify< SireFF::FFID > exported_class_t;
-            typedef ::SireID::Specify< SireFF::FFID > ( ::SireID::Specify< SireFF::FFID >::*__call___function_type )( int,int ) const;
+            typedef ::SireID::Specify< SireFF::FFID > ( ::SireID::Specify< SireFF::FFID >::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireID::Specify< SireFF::FFID >::operator() );
             
             Specify_FFID__exposer.def( 
@@ -99,7 +99,7 @@ void register_Specify_FFID__class(){
         { //::SireID::Specify< SireFF::FFID >::operator=
         
             typedef SireID::Specify< SireFF::FFID > exported_class_t;
-            typedef ::SireID::Specify< SireFF::FFID > & ( ::SireID::Specify< SireFF::FFID >::*assign_function_type )( ::SireID::Specify< SireFF::FFID > const & ) ;
+            typedef ::SireID::Specify< SireFF::FFID > & ( ::SireID::Specify< SireFF::FFID >::*assign_function_type)( ::SireID::Specify< SireFF::FFID > const & ) ;
             assign_function_type assign_function_value( &::SireID::Specify< SireFF::FFID >::operator= );
             
             Specify_FFID__exposer.def( 
@@ -114,7 +114,7 @@ void register_Specify_FFID__class(){
         { //::SireID::Specify< SireFF::FFID >::operator[]
         
             typedef SireID::Specify< SireFF::FFID > exported_class_t;
-            typedef ::SireID::Specify< SireFF::FFID > ( ::SireID::Specify< SireFF::FFID >::*__getitem___function_type )( int ) const;
+            typedef ::SireID::Specify< SireFF::FFID > ( ::SireID::Specify< SireFF::FFID >::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireID::Specify< SireFF::FFID >::operator[] );
             
             Specify_FFID__exposer.def( 
@@ -126,7 +126,7 @@ void register_Specify_FFID__class(){
         { //::SireID::Specify< SireFF::FFID >::toString
         
             typedef SireID::Specify< SireFF::FFID > exported_class_t;
-            typedef ::QString ( ::SireID::Specify< SireFF::FFID >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireID::Specify< SireFF::FFID >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireID::Specify< SireFF::FFID >::toString );
             
             Specify_FFID__exposer.def( 
@@ -148,7 +148,7 @@ void register_Specify_FFID__class(){
         { //::SireID::Specify< SireFF::FFID >::what
         
             typedef SireID::Specify< SireFF::FFID > exported_class_t;
-            typedef char const * ( ::SireID::Specify< SireFF::FFID >::*what_function_type )(  ) const;
+            typedef char const * ( ::SireID::Specify< SireFF::FFID >::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireID::Specify< SireFF::FFID >::what );
             
             Specify_FFID__exposer.def( 

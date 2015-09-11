@@ -31,7 +31,7 @@ void register_CGIdx_class(){
         CGIdx_exposer.def( bp::init< SireMol::CGIdx const & >(( bp::arg("other") )) );
         { //::SireMol::CGIdx::hash
         
-            typedef ::uint ( ::SireMol::CGIdx::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::CGIdx::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::CGIdx::hash );
             
             CGIdx_exposer.def( 
@@ -41,7 +41,7 @@ void register_CGIdx_class(){
         }
         { //::SireMol::CGIdx::isNull
         
-            typedef bool ( ::SireMol::CGIdx::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::CGIdx::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::CGIdx::isNull );
             
             CGIdx_exposer.def( 
@@ -51,7 +51,7 @@ void register_CGIdx_class(){
         }
         { //::SireMol::CGIdx::map
         
-            typedef ::QList< SireMol::CGIdx > ( ::SireMol::CGIdx::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::CGIdx > ( ::SireMol::CGIdx::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireMol::CGIdx::map );
             
             CGIdx_exposer.def( 
@@ -73,7 +73,7 @@ void register_CGIdx_class(){
         CGIdx_exposer.def( bp::self + bp::other< SireID::Index >() );
         { //::SireMol::CGIdx::operator=
         
-            typedef ::SireMol::CGIdx & ( ::SireMol::CGIdx::*assign_function_type )( ::SireMol::CGIdx const & ) ;
+            typedef ::SireMol::CGIdx & ( ::SireMol::CGIdx::*assign_function_type)( ::SireMol::CGIdx const & ) ;
             assign_function_type assign_function_value( &::SireMol::CGIdx::operator= );
             
             CGIdx_exposer.def( 
@@ -85,7 +85,7 @@ void register_CGIdx_class(){
         }
         { //::SireMol::CGIdx::toString
         
-            typedef ::QString ( ::SireMol::CGIdx::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::CGIdx::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::CGIdx::toString );
             
             CGIdx_exposer.def( 
@@ -105,7 +105,7 @@ void register_CGIdx_class(){
         }
         { //::SireMol::CGIdx::what
         
-            typedef char const * ( ::SireMol::CGIdx::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::CGIdx::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::CGIdx::what );
             
             CGIdx_exposer.def( 
@@ -115,7 +115,6 @@ void register_CGIdx_class(){
         }
         CGIdx_exposer.staticmethod( "null" );
         CGIdx_exposer.staticmethod( "typeName" );
-        CGIdx_exposer.def( bp::other< SireID::Index >() + bp::self );
         CGIdx_exposer.def( other<SireID::Index>() + self );
         CGIdx_exposer.def( "__copy__", &__copy__);
         CGIdx_exposer.def( "__deepcopy__", &__copy__);

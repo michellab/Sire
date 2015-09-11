@@ -45,7 +45,7 @@ void register_ArcCoth_class(){
         ArcCoth_exposer.def( bp::init< SireCAS::ArcCoth const & >(( bp::arg("other") )) );
         { //::SireCAS::ArcCoth::evaluate
         
-            typedef double ( ::SireCAS::ArcCoth::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::ArcCoth::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::ArcCoth::evaluate );
             
             ArcCoth_exposer.def( 
@@ -56,7 +56,7 @@ void register_ArcCoth_class(){
         }
         { //::SireCAS::ArcCoth::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::ArcCoth::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::ArcCoth::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::ArcCoth::evaluate );
             
             ArcCoth_exposer.def( 
@@ -78,7 +78,7 @@ void register_ArcCoth_class(){
         }
         { //::SireCAS::ArcCoth::what
         
-            typedef char const * ( ::SireCAS::ArcCoth::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::ArcCoth::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::ArcCoth::what );
             
             ArcCoth_exposer.def( 

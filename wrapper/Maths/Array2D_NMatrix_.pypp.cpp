@@ -43,7 +43,7 @@ void register_Array2D_NMatrix__class(){
         { //::SireBase::Array2D< SireMaths::NMatrix >::at
         
             typedef SireBase::Array2D< SireMaths::NMatrix > exported_class_t;
-            typedef ::SireMaths::NMatrix const & ( ::SireBase::Array2D< SireMaths::NMatrix >::*at_function_type )( int,int ) const;
+            typedef ::SireMaths::NMatrix const & ( ::SireBase::Array2D< SireMaths::NMatrix >::*at_function_type)( int,int ) const;
             at_function_type at_function_value( &::SireBase::Array2D< SireMaths::NMatrix >::at );
             
             Array2D_NMatrix__exposer.def( 
@@ -56,7 +56,7 @@ void register_Array2D_NMatrix__class(){
         { //::SireBase::Array2D< SireMaths::NMatrix >::get
         
             typedef SireBase::Array2D< SireMaths::NMatrix > exported_class_t;
-            typedef ::SireMaths::NMatrix const & ( ::SireBase::Array2D< SireMaths::NMatrix >::*get_function_type )( int,int ) const;
+            typedef ::SireMaths::NMatrix const & ( ::SireBase::Array2D< SireMaths::NMatrix >::*get_function_type)( int,int ) const;
             get_function_type get_function_value( &::SireBase::Array2D< SireMaths::NMatrix >::get );
             
             Array2D_NMatrix__exposer.def( 
@@ -70,7 +70,7 @@ void register_Array2D_NMatrix__class(){
         { //::SireBase::Array2D< SireMaths::NMatrix >::operator()
         
             typedef SireBase::Array2D< SireMaths::NMatrix > exported_class_t;
-            typedef ::SireMaths::NMatrix const & ( ::SireBase::Array2D< SireMaths::NMatrix >::*__call___function_type )( int,int ) const;
+            typedef ::SireMaths::NMatrix const & ( ::SireBase::Array2D< SireMaths::NMatrix >::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireBase::Array2D< SireMaths::NMatrix >::operator() );
             
             Array2D_NMatrix__exposer.def( 
@@ -83,7 +83,7 @@ void register_Array2D_NMatrix__class(){
         { //::SireBase::Array2D< SireMaths::NMatrix >::operator=
         
             typedef SireBase::Array2D< SireMaths::NMatrix > exported_class_t;
-            typedef ::SireBase::Array2D< SireMaths::NMatrix > & ( ::SireBase::Array2D< SireMaths::NMatrix >::*assign_function_type )( ::SireBase::Array2D< SireMaths::NMatrix > const & ) ;
+            typedef ::SireBase::Array2D< SireMaths::NMatrix > & ( ::SireBase::Array2D< SireMaths::NMatrix >::*assign_function_type)( ::SireBase::Array2D< SireMaths::NMatrix > const & ) ;
             assign_function_type assign_function_value( &::SireBase::Array2D< SireMaths::NMatrix >::operator= );
             
             Array2D_NMatrix__exposer.def( 
@@ -97,7 +97,7 @@ void register_Array2D_NMatrix__class(){
         { //::SireBase::Array2D< SireMaths::NMatrix >::redimension
         
             typedef SireBase::Array2D< SireMaths::NMatrix > exported_class_t;
-            typedef void ( ::SireBase::Array2D< SireMaths::NMatrix >::*redimension_function_type )( int,int ) ;
+            typedef void ( ::SireBase::Array2D< SireMaths::NMatrix >::*redimension_function_type)( int,int ) ;
             redimension_function_type redimension_function_value( &::SireBase::Array2D< SireMaths::NMatrix >::redimension );
             
             Array2D_NMatrix__exposer.def( 
@@ -109,7 +109,7 @@ void register_Array2D_NMatrix__class(){
         { //::SireBase::Array2D< SireMaths::NMatrix >::set
         
             typedef SireBase::Array2D< SireMaths::NMatrix > exported_class_t;
-            typedef void ( ::SireBase::Array2D< SireMaths::NMatrix >::*set_function_type )( int,int,::SireMaths::NMatrix const & ) ;
+            typedef void ( ::SireBase::Array2D< SireMaths::NMatrix >::*set_function_type)( int,int,::SireMaths::NMatrix const & ) ;
             set_function_type set_function_value( &::SireBase::Array2D< SireMaths::NMatrix >::set );
             
             Array2D_NMatrix__exposer.def( 
@@ -121,7 +121,7 @@ void register_Array2D_NMatrix__class(){
         { //::SireBase::Array2D< SireMaths::NMatrix >::setAll
         
             typedef SireBase::Array2D< SireMaths::NMatrix > exported_class_t;
-            typedef void ( ::SireBase::Array2D< SireMaths::NMatrix >::*setAll_function_type )( ::SireMaths::NMatrix const & ) ;
+            typedef void ( ::SireBase::Array2D< SireMaths::NMatrix >::*setAll_function_type)( ::SireMaths::NMatrix const & ) ;
             setAll_function_type setAll_function_value( &::SireBase::Array2D< SireMaths::NMatrix >::setAll );
             
             Array2D_NMatrix__exposer.def( 
@@ -133,7 +133,7 @@ void register_Array2D_NMatrix__class(){
         { //::SireBase::Array2D< SireMaths::NMatrix >::toString
         
             typedef SireBase::Array2D< SireMaths::NMatrix > exported_class_t;
-            typedef ::QString ( ::SireBase::Array2D< SireMaths::NMatrix >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireBase::Array2D< SireMaths::NMatrix >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireBase::Array2D< SireMaths::NMatrix >::toString );
             
             Array2D_NMatrix__exposer.def( 
@@ -144,7 +144,7 @@ void register_Array2D_NMatrix__class(){
         { //::SireBase::Array2D< SireMaths::NMatrix >::transpose
         
             typedef SireBase::Array2D< SireMaths::NMatrix > exported_class_t;
-            typedef ::SireBase::Array2D< SireMaths::NMatrix > ( ::SireBase::Array2D< SireMaths::NMatrix >::*transpose_function_type )(  ) const;
+            typedef ::SireBase::Array2D< SireMaths::NMatrix > ( ::SireBase::Array2D< SireMaths::NMatrix >::*transpose_function_type)(  ) const;
             transpose_function_type transpose_function_value( &::SireBase::Array2D< SireMaths::NMatrix >::transpose );
             
             Array2D_NMatrix__exposer.def( 

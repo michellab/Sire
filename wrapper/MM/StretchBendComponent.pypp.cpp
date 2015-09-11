@@ -32,7 +32,7 @@ void register_StretchBendComponent_class(){
         StretchBendComponent_exposer.def( bp::init< SireMM::StretchBendComponent const & >(( bp::arg("other") )) );
         { //::SireMM::StretchBendComponent::changeEnergy
         
-            typedef void ( ::SireMM::StretchBendComponent::*changeEnergy_function_type )( ::SireFF::FF &,::SireMM::StretchBendEnergy const & ) const;
+            typedef void ( ::SireMM::StretchBendComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::StretchBendEnergy const & ) const;
             changeEnergy_function_type changeEnergy_function_value( &::SireMM::StretchBendComponent::changeEnergy );
             
             StretchBendComponent_exposer.def( 
@@ -43,7 +43,7 @@ void register_StretchBendComponent_class(){
         }
         { //::SireMM::StretchBendComponent::setEnergy
         
-            typedef void ( ::SireMM::StretchBendComponent::*setEnergy_function_type )( ::SireFF::FF &,::SireMM::StretchBendEnergy const & ) const;
+            typedef void ( ::SireMM::StretchBendComponent::*setEnergy_function_type)( ::SireFF::FF &,::SireMM::StretchBendEnergy const & ) const;
             setEnergy_function_type setEnergy_function_value( &::SireMM::StretchBendComponent::setEnergy );
             
             StretchBendComponent_exposer.def( 
@@ -54,7 +54,7 @@ void register_StretchBendComponent_class(){
         }
         { //::SireMM::StretchBendComponent::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireMM::StretchBendComponent::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireMM::StretchBendComponent::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireMM::StretchBendComponent::symbols );
             
             StretchBendComponent_exposer.def( 
@@ -64,7 +64,7 @@ void register_StretchBendComponent_class(){
         }
         { //::SireMM::StretchBendComponent::total
         
-            typedef ::SireMM::StretchBendComponent const & ( ::SireMM::StretchBendComponent::*total_function_type )(  ) const;
+            typedef ::SireMM::StretchBendComponent const & ( ::SireMM::StretchBendComponent::*total_function_type)(  ) const;
             total_function_type total_function_value( &::SireMM::StretchBendComponent::total );
             
             StretchBendComponent_exposer.def( 
@@ -85,7 +85,7 @@ void register_StretchBendComponent_class(){
         }
         { //::SireMM::StretchBendComponent::what
         
-            typedef char const * ( ::SireMM::StretchBendComponent::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::StretchBendComponent::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::StretchBendComponent::what );
             
             StretchBendComponent_exposer.def( 

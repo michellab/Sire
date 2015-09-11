@@ -37,6 +37,9 @@
 
 #include <cstdlib>
 
+#include <memory>
+#include <boost/config.hpp>
+
 #ifdef Q_OS_UNIX
     #include <unistd.h>
     #include <sys/utsname.h>
@@ -1189,7 +1192,11 @@ QByteArray SIRESTREAM_EXPORT streamDataSave(
         //version 1 of the format uses Qt 4.2 datastream format
         ds2.setVersion( QDataStream::Qt_4_2 );
         
-        std::auto_ptr<SharedDataStream> sds;
+        #ifdef BOOST_NO_CXX11_SMART_PTR
+          std::auto_ptr<SharedDataStream> sds;
+        #else
+          std::unique_ptr<SharedDataStream> sds;
+        #endif
         
         if (nobjects > 1)
             //create a shared data stream so that sub-objects in 
@@ -1301,8 +1308,12 @@ QByteArray SIRESTREAM_EXPORT streamDataSave(
 
         //version 1 of the format uses Qt 4.2 datastream format
         ds2.setVersion( QDataStream::Qt_4_2 );
-        
-        std::auto_ptr<SharedDataStream> sds;
+
+        #ifdef BOOST_NO_CXX11_SMART_PTR
+          std::auto_ptr<SharedDataStream> sds;
+        #else
+          std::unique_ptr<SharedDataStream> sds;
+        #endif
         
         if (nobjects > 1)
             //create a shared data stream so that sub-objects in 
@@ -1524,8 +1535,12 @@ QList< tuple<shared_ptr<void>,QString> > SIRESTREAM_EXPORT load(const QByteArray
 
         int nobjects = header.dataTypes().count();
         
-        std::auto_ptr<SharedDataStream> sds;
-        
+        #ifdef BOOST_NO_CXX11_SMART_PTR
+          std::auto_ptr<SharedDataStream> sds;
+        #else
+          std::unique_ptr<SharedDataStream> sds;
+        #endif        
+
         if (nobjects > 1)
             sds.reset( new SharedDataStream(ds2) );
         

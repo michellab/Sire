@@ -52,7 +52,7 @@ void register_Tinker_class(){
         Tinker_exposer.def( bp::init< SireIO::Tinker const & >(( bp::arg("other") )) );
         { //::SireIO::Tinker::loadParameters
         
-            typedef void ( ::SireIO::Tinker::*loadParameters_function_type )( ::QString const & ) ;
+            typedef void ( ::SireIO::Tinker::*loadParameters_function_type)( ::QString const & ) ;
             loadParameters_function_type loadParameters_function_value( &::SireIO::Tinker::loadParameters );
             
             Tinker_exposer.def( 
@@ -64,7 +64,7 @@ void register_Tinker_class(){
         Tinker_exposer.def( bp::self != bp::self );
         { //::SireIO::Tinker::operator=
         
-            typedef ::SireIO::Tinker & ( ::SireIO::Tinker::*assign_function_type )( ::SireIO::Tinker const & ) ;
+            typedef ::SireIO::Tinker & ( ::SireIO::Tinker::*assign_function_type)( ::SireIO::Tinker const & ) ;
             assign_function_type assign_function_value( &::SireIO::Tinker::operator= );
             
             Tinker_exposer.def( 

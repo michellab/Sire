@@ -34,7 +34,7 @@ void register_SupraSubMoves_class(){
         bp::scope SupraSubMoves_scope( SupraSubMoves_exposer );
         { //::SireMove::SupraSubMoves::clearStatistics
         
-            typedef void ( ::SireMove::SupraSubMoves::*clearStatistics_function_type )(  ) ;
+            typedef void ( ::SireMove::SupraSubMoves::*clearStatistics_function_type)(  ) ;
             clearStatistics_function_type clearStatistics_function_value( &::SireMove::SupraSubMoves::clearStatistics );
             
             SupraSubMoves_exposer.def( 
@@ -44,7 +44,7 @@ void register_SupraSubMoves_class(){
         }
         { //::SireMove::SupraSubMoves::count
         
-            typedef int ( ::SireMove::SupraSubMoves::*count_function_type )(  ) const;
+            typedef int ( ::SireMove::SupraSubMoves::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMove::SupraSubMoves::count );
             
             SupraSubMoves_exposer.def( 
@@ -54,7 +54,7 @@ void register_SupraSubMoves_class(){
         }
         { //::SireMove::SupraSubMoves::move
         
-            typedef void ( ::SireMove::SupraSubMoves::*move_function_type )( ::SireMove::SupraSubSystem &,int,int,bool ) ;
+            typedef void ( ::SireMove::SupraSubMoves::*move_function_type)( ::SireMove::SupraSubSystem &,int,int,bool ) ;
             move_function_type move_function_value( &::SireMove::SupraSubMoves::move );
             
             SupraSubMoves_exposer.def( 
@@ -65,7 +65,7 @@ void register_SupraSubMoves_class(){
         }
         { //::SireMove::SupraSubMoves::nSubMoveTypes
         
-            typedef int ( ::SireMove::SupraSubMoves::*nSubMoveTypes_function_type )(  ) const;
+            typedef int ( ::SireMove::SupraSubMoves::*nSubMoveTypes_function_type)(  ) const;
             nSubMoveTypes_function_type nSubMoveTypes_function_value( &::SireMove::SupraSubMoves::nSubMoveTypes );
             
             SupraSubMoves_exposer.def( 
@@ -86,7 +86,7 @@ void register_SupraSubMoves_class(){
         }
         { //::SireMove::SupraSubMoves::operator[]
         
-            typedef ::SireMove::SupraSubMove const & ( ::SireMove::SupraSubMoves::*__getitem___function_type )( int ) const;
+            typedef ::SireMove::SupraSubMove const & ( ::SireMove::SupraSubMoves::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMove::SupraSubMoves::operator[] );
             
             SupraSubMoves_exposer.def( 
@@ -98,7 +98,7 @@ void register_SupraSubMoves_class(){
         }
         { //::SireMove::SupraSubMoves::size
         
-            typedef int ( ::SireMove::SupraSubMoves::*size_function_type )(  ) const;
+            typedef int ( ::SireMove::SupraSubMoves::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireMove::SupraSubMoves::size );
             
             SupraSubMoves_exposer.def( 
@@ -108,7 +108,7 @@ void register_SupraSubMoves_class(){
         }
         { //::SireMove::SupraSubMoves::subMoves
         
-            typedef ::QList< SireBase::PropPtr< SireMove::SupraSubMove > > ( ::SireMove::SupraSubMoves::*subMoves_function_type )(  ) const;
+            typedef ::QList< SireBase::PropPtr< SireMove::SupraSubMove > > ( ::SireMove::SupraSubMoves::*subMoves_function_type)(  ) const;
             subMoves_function_type subMoves_function_value( &::SireMove::SupraSubMoves::subMoves );
             
             SupraSubMoves_exposer.def( 
@@ -118,7 +118,7 @@ void register_SupraSubMoves_class(){
         }
         { //::SireMove::SupraSubMoves::toString
         
-            typedef ::QString ( ::SireMove::SupraSubMoves::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMove::SupraSubMoves::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMove::SupraSubMoves::toString );
             
             SupraSubMoves_exposer.def( 

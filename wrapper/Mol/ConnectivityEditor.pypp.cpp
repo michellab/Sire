@@ -61,7 +61,7 @@ void register_ConnectivityEditor_class(){
         ConnectivityEditor_exposer.def( bp::init< SireMol::ConnectivityEditor const & >(( bp::arg("other") )) );
         { //::SireMol::ConnectivityEditor::commit
         
-            typedef ::SireMol::Connectivity ( ::SireMol::ConnectivityEditor::*commit_function_type )(  ) const;
+            typedef ::SireMol::Connectivity ( ::SireMol::ConnectivityEditor::*commit_function_type)(  ) const;
             commit_function_type commit_function_value( &::SireMol::ConnectivityEditor::commit );
             
             ConnectivityEditor_exposer.def( 
@@ -71,7 +71,7 @@ void register_ConnectivityEditor_class(){
         }
         { //::SireMol::ConnectivityEditor::connect
         
-            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*connect_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx ) ;
+            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*connect_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx ) ;
             connect_function_type connect_function_value( &::SireMol::ConnectivityEditor::connect );
             
             ConnectivityEditor_exposer.def( 
@@ -83,7 +83,7 @@ void register_ConnectivityEditor_class(){
         }
         { //::SireMol::ConnectivityEditor::connect
         
-            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*connect_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const & ) ;
+            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*connect_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const & ) ;
             connect_function_type connect_function_value( &::SireMol::ConnectivityEditor::connect );
             
             ConnectivityEditor_exposer.def( 
@@ -95,7 +95,7 @@ void register_ConnectivityEditor_class(){
         }
         { //::SireMol::ConnectivityEditor::disconnect
         
-            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*disconnect_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx ) ;
+            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*disconnect_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx ) ;
             disconnect_function_type disconnect_function_value( &::SireMol::ConnectivityEditor::disconnect );
             
             ConnectivityEditor_exposer.def( 
@@ -107,7 +107,7 @@ void register_ConnectivityEditor_class(){
         }
         { //::SireMol::ConnectivityEditor::disconnect
         
-            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*disconnect_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const & ) ;
+            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*disconnect_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const & ) ;
             disconnect_function_type disconnect_function_value( &::SireMol::ConnectivityEditor::disconnect );
             
             ConnectivityEditor_exposer.def( 
@@ -119,7 +119,7 @@ void register_ConnectivityEditor_class(){
         }
         { //::SireMol::ConnectivityEditor::disconnectAll
         
-            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*disconnectAll_function_type )( ::SireMol::AtomIdx ) ;
+            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*disconnectAll_function_type)( ::SireMol::AtomIdx ) ;
             disconnectAll_function_type disconnectAll_function_value( &::SireMol::ConnectivityEditor::disconnectAll );
             
             ConnectivityEditor_exposer.def( 
@@ -131,7 +131,7 @@ void register_ConnectivityEditor_class(){
         }
         { //::SireMol::ConnectivityEditor::disconnectAll
         
-            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*disconnectAll_function_type )( ::SireMol::ResIdx ) ;
+            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*disconnectAll_function_type)( ::SireMol::ResIdx ) ;
             disconnectAll_function_type disconnectAll_function_value( &::SireMol::ConnectivityEditor::disconnectAll );
             
             ConnectivityEditor_exposer.def( 
@@ -143,7 +143,7 @@ void register_ConnectivityEditor_class(){
         }
         { //::SireMol::ConnectivityEditor::disconnectAll
         
-            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*disconnectAll_function_type )( ::SireMol::AtomID const & ) ;
+            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*disconnectAll_function_type)( ::SireMol::AtomID const & ) ;
             disconnectAll_function_type disconnectAll_function_value( &::SireMol::ConnectivityEditor::disconnectAll );
             
             ConnectivityEditor_exposer.def( 
@@ -155,7 +155,7 @@ void register_ConnectivityEditor_class(){
         }
         { //::SireMol::ConnectivityEditor::disconnectAll
         
-            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*disconnectAll_function_type )( ::SireMol::ResID const & ) ;
+            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*disconnectAll_function_type)( ::SireMol::ResID const & ) ;
             disconnectAll_function_type disconnectAll_function_value( &::SireMol::ConnectivityEditor::disconnectAll );
             
             ConnectivityEditor_exposer.def( 
@@ -167,7 +167,7 @@ void register_ConnectivityEditor_class(){
         }
         { //::SireMol::ConnectivityEditor::disconnectAll
         
-            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*disconnectAll_function_type )(  ) ;
+            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*disconnectAll_function_type)(  ) ;
             disconnectAll_function_type disconnectAll_function_value( &::SireMol::ConnectivityEditor::disconnectAll );
             
             ConnectivityEditor_exposer.def( 
@@ -179,7 +179,7 @@ void register_ConnectivityEditor_class(){
         ConnectivityEditor_exposer.def( bp::self != bp::self );
         { //::SireMol::ConnectivityEditor::operator=
         
-            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*assign_function_type )( ::SireMol::ConnectivityBase const & ) ;
+            typedef ::SireMol::ConnectivityEditor & ( ::SireMol::ConnectivityEditor::*assign_function_type)( ::SireMol::ConnectivityBase const & ) ;
             assign_function_type assign_function_value( &::SireMol::ConnectivityEditor::operator= );
             
             ConnectivityEditor_exposer.def( 

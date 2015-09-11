@@ -11,6 +11,8 @@ namespace bp = boost::python;
 
 #include "SireBase/property.h"
 
+#include "SireBase/stringproperty.h"
+
 #include "SireError/errors.h"
 
 #include "SireFF/detail/atomiccoords3d.h"
@@ -55,7 +57,7 @@ void register_StretchStretchParameterName_class(){
         bp::scope StretchStretchParameterName_scope( StretchStretchParameterName_exposer );
         { //::SireMM::StretchStretchParameterName::stretchStretch
         
-            typedef ::SireBase::PropertyName const & ( ::SireMM::StretchStretchParameterName::*stretchStretch_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireMM::StretchStretchParameterName::*stretchStretch_function_type)(  ) const;
             stretchStretch_function_type stretchStretch_function_value( &::SireMM::StretchStretchParameterName::stretchStretch );
             
             StretchStretchParameterName_exposer.def( 

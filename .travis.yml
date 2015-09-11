@@ -3,18 +3,6 @@ compiler:
   - gcc
 
 sudo: false
-env:
-  global:
-    - PATH=$HOME/miniconda/bin:$PATH
-    - LD_LIBRARY_PATH=$HOME/miniconda/lib/:$LD_LIBRARY_PATH 
-    - LIBRARY_PATH=$HOME/miniconda/lib/:$LIBRARY_PATH
-    - OPENMM_PLUGIN_DIR=$HOME/miniconda/lib/plugins
-    - OPENMM_ROOT_DIR=$HOME/miniconda
-    - PYTHONPATH=$HOME/miniconda/lib/python2.7/site-packages:$PYTHONPATH
-    - OPENMM_INCLUDE_PATH=$HOME/miniconda/include 
-    - OPENMM_LIB_PATH=$HOME/miniconda/lib/
-    - CPLUS_INCLUDE_PATH=$HOME/miniconda/include 
-    - OPENMMDIR=$HOME/miniconda/include 
 
 addons:
   apt:
@@ -27,20 +15,12 @@ addons:
       - libgl1-mesa-dev
 
 before_install:
-  - wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
-  - bash miniconda.sh -b -p $HOME/miniconda
-  - export PATH="$HOME/miniconda/bin:$PATH"
-  - conda config --add channels http://conda.binstar.org/omnia
-  - conda install --yes openmm 
+  - export NCORES=2
+  - export INSTALL_SIRE_DIR=$HOME/sire.app
   - if [ "$CC" = "gcc" ]; then export CC="gcc-4.6" CXX="g++-4.6"; fi
 
 script:
-  - mkdir build
-  - cd build
-  - cmake -DSIRE_DISABLE_AVX=ON ../corelib
-  - make -j2
-  - make install
+  - bash compile_sire.sh
 
 after_success:
   - echo "Time to go home and have a cup of tea! :)"
-

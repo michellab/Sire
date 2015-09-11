@@ -50,6 +50,10 @@ class StretchBendComponent;
 class BendBendComponent;
 class StretchBendTorsionComponent;
 
+class Intra14Component;
+class Intra14CoulombComponent;
+class Intra14LJComponent;
+
 class InternalComponent;
 }
 
@@ -83,6 +87,15 @@ QDataStream& operator>>(QDataStream&, SireMM::StretchBendTorsionComponent&);
 QDataStream& operator<<(QDataStream&, const SireMM::InternalComponent&);
 QDataStream& operator>>(QDataStream&, SireMM::InternalComponent&);
 
+QDataStream& operator<<(QDataStream&, const SireMM::Intra14Component&);
+QDataStream& operator>>(QDataStream&, SireMM::Intra14Component&);
+
+QDataStream& operator<<(QDataStream&, const SireMM::Intra14CoulombComponent&);
+QDataStream& operator>>(QDataStream&, SireMM::Intra14CoulombComponent&);
+
+QDataStream& operator<<(QDataStream&, const SireMM::Intra14LJComponent&);
+QDataStream& operator>>(QDataStream&, SireMM::Intra14LJComponent&);
+
 namespace SireFF
 {
 class FF;
@@ -108,7 +121,11 @@ typedef SireFF::ComponentEnergy<StretchBendComponent> StretchBendEnergy;
 typedef SireFF::ComponentEnergy<BendBendComponent> BendBendEnergy;
 typedef SireFF::ComponentEnergy<StretchBendTorsionComponent> StretchBendTorsionEnergy;
 
+typedef SireFF::ComponentEnergy<Intra14CoulombComponent> Intra14CoulombEnergy;
+typedef SireFF::ComponentEnergy<Intra14LJComponent> Intra14LJEnergy;
+
 class InternalEnergy;
+class Intra14Energy;
 
 /** This class represents a Bond component of a forcefield */
 class SIREMM_EXPORT BondComponent : public SireFF::FFComponent
@@ -443,6 +460,136 @@ public:
     }
 };
 
+/** This class represents a intramolecular 1-4 nonbonded coulomb energy of a forcefield */
+class SIREMM_EXPORT Intra14CoulombComponent : public SireFF::FFComponent
+{
+public:
+    Intra14CoulombComponent(const FFName &ffname = FFName());
+    Intra14CoulombComponent(const SireCAS::Symbol &symbol);
+    
+    Intra14CoulombComponent(const Intra14CoulombComponent &other);
+    
+    ~Intra14CoulombComponent();
+    
+    static const char* typeName();
+    
+    const char* what() const
+    {
+        return Intra14CoulombComponent::typeName();
+    }
+    
+    Intra14CoulombComponent* clone() const
+    {
+        return new Intra14CoulombComponent(*this);
+    }
+    
+    const Intra14CoulombComponent& total() const
+    {
+        return *this;
+    }
+
+    void setEnergy(FF &ff, const Intra14CoulombEnergy &nrg) const;
+    void changeEnergy(FF &ff, const Intra14CoulombEnergy &nrg) const;
+
+    SireCAS::Symbols symbols() const
+    {
+        return *this;
+    }
+};
+
+/** This class represents a intramolecular 1-4 nonbonded LJ energy of a forcefield */
+class SIREMM_EXPORT Intra14LJComponent : public SireFF::FFComponent
+{
+public:
+    Intra14LJComponent(const FFName &ffname = FFName());
+    Intra14LJComponent(const SireCAS::Symbol &symbol);
+    
+    Intra14LJComponent(const Intra14LJComponent &other);
+    
+    ~Intra14LJComponent();
+    
+    static const char* typeName();
+    
+    const char* what() const
+    {
+        return Intra14LJComponent::typeName();
+    }
+    
+    Intra14LJComponent* clone() const
+    {
+        return new Intra14LJComponent(*this);
+    }
+    
+    const Intra14LJComponent& total() const
+    {
+        return *this;
+    }
+
+    void setEnergy(FF &ff, const Intra14LJEnergy &nrg) const;
+    void changeEnergy(FF &ff, const Intra14LJEnergy &nrg) const;
+
+    SireCAS::Symbols symbols() const
+    {
+        return *this;
+    }
+};
+
+/** This class represents the sum of the intramolecular 1-4 nonbonded
+    coulomb and LJ energies */
+class SIREMM_EXPORT Intra14Component : public SireFF::FFComponent
+{
+
+friend QDataStream& ::operator<<(QDataStream&, const Intra14Component&);
+friend QDataStream& ::operator>>(QDataStream&, Intra14Component&);
+
+public:
+    Intra14Component(const FFName &name = FFName());
+    Intra14Component(const SireCAS::Symbol &symbol);
+    
+    Intra14Component(const Intra14Component &other);
+    
+    ~Intra14Component();
+    
+    const Intra14CoulombComponent& coulomb() const
+    {
+        return coul_component;
+    }
+    
+    const Intra14LJComponent& lj() const
+    {
+        return lj_component;
+    }
+    
+    const Intra14Component& total() const
+    {
+        return *this;
+    }
+    
+    static const char* typeName();
+    
+    const char* what() const
+    {
+        return Intra14Component::typeName();
+    }
+    
+    Intra14Component* clone() const
+    {
+        return new Intra14Component(*this);
+    }
+
+    void setEnergy(FF &ff, const Intra14Energy &nrg) const;
+    void changeEnergy(FF &ff, const Intra14Energy &nrg) const;
+
+    SireCAS::Symbols symbols() const;
+
+protected:
+    /** The coulomb component */
+    Intra14CoulombComponent coul_component;
+    
+    /** The LJ component */
+    Intra14LJComponent lj_component;
+};
+
 /** This class represents the sum of the internal MM energy
     components (bond, angle, dihedral, Urey-Bradley) */
 class SIREMM_EXPORT InternalComponent : public SireFF::FFComponent
@@ -504,6 +651,21 @@ public:
         return sbt_component;
     }
     
+    const Intra14Component& intra14() const
+    {
+        return nb_component;
+    }
+    
+    const Intra14CoulombComponent& intra14Coulomb() const
+    {
+        return nb_component.coulomb();
+    }
+    
+    const Intra14LJComponent& intra14LJ() const
+    {
+        return nb_component.lj();
+    }
+    
     const InternalComponent& total() const
     {
         return *this;
@@ -547,6 +709,147 @@ protected:
     BendBendComponent bb_component;
     /** The stretch-bend-torsion component */
     StretchBendTorsionComponent sbt_component;
+    
+    /** The intramolecular 1-4 nonbonded component */
+    Intra14Component nb_component;
+};
+
+/** This class holds the complete intramolecular 1-4 energy (coulomb plus LJ) */
+class SIREMM_EXPORT Intra14Energy
+{
+public:
+    typedef Intra14Component Components;
+
+    Intra14Energy(double cnrg=0, double ljnrg=0);
+    
+    Intra14Energy(const Intra14Energy &other);
+    
+    ~Intra14Energy();
+    
+    static const char* typeName();
+    
+    const char* what() const
+    {
+        return Intra14Energy::typeName();
+    }
+
+    Intra14Energy& operator=(const Intra14Energy &other)
+    {
+        cnrg = other.cnrg;
+        ljnrg = other.ljnrg;
+        
+        return *this;
+    }
+    
+    Intra14Energy& operator+=(const Intra14Energy &other)
+    {
+        cnrg += other.cnrg;
+        ljnrg += other.ljnrg;
+    
+        return *this;
+    }
+    
+    Intra14Energy& operator-=(const Intra14Energy &other)
+    {
+        cnrg -= other.cnrg;
+        ljnrg -= other.ljnrg;
+    
+        return *this;
+    }
+    
+    Intra14Energy operator+(const Intra14Energy &other) const
+    {
+        return Intra14Energy( cnrg + other.cnrg, ljnrg + other.ljnrg );
+    }
+    
+    Intra14Energy operator-(const Intra14Energy &other) const
+    {
+        return Intra14Energy( cnrg - other.cnrg, ljnrg - other.ljnrg );
+    }
+    
+    Intra14Energy& operator+=(const Intra14CoulombEnergy &icnrg)
+    {
+        cnrg += icnrg.total();
+        return *this;
+    }
+    
+    Intra14Energy& operator+=(const Intra14LJEnergy &iljnrg)
+    {
+        ljnrg += iljnrg.total();
+        return *this;
+    }
+    
+    Intra14Energy& operator-=(const Intra14CoulombEnergy &icnrg)
+    {
+        cnrg -= icnrg.total();
+        return *this;
+    }
+    
+    Intra14Energy& operator-=(const Intra14LJEnergy &iljnrg)
+    {
+        ljnrg -= iljnrg.total();
+        return *this;
+    }
+    
+    Components components() const
+    {
+        return Components();
+    }
+    
+    double component(const Intra14CoulombComponent&) const
+    {
+        return cnrg;
+    }
+    
+    double component(const Intra14LJComponent&) const
+    {
+        return ljnrg;
+    }
+    
+    double component(const Intra14Component&) const
+    {
+        return cnrg + ljnrg;
+    }
+    
+    double coulomb() const
+    {
+        return cnrg;
+    }
+    
+    double lj() const
+    {
+        return ljnrg;
+    }
+    
+    double total() const
+    {
+        return cnrg + ljnrg;
+    }
+    
+    operator double() const
+    {
+        //return the total energy
+        return Intra14Energy::total();
+    }
+    
+    operator SireUnits::Dimension::MolarEnergy() const
+    {
+        return SireUnits::Dimension::MolarEnergy( Intra14Energy::total() );
+    }
+    
+    operator Intra14CoulombEnergy() const
+    {
+        return Intra14CoulombEnergy(cnrg);
+    }
+    
+    operator Intra14LJEnergy() const
+    {
+        return Intra14LJEnergy(ljnrg);
+    }
+
+private:
+    /** All of the component energies */
+    double cnrg, ljnrg;
 };
 
 /** This class holds the complete molecule mechanics internal
@@ -559,7 +862,8 @@ public:
 
     InternalEnergy(double bondnrg=0, double anglenrg=0, double dihedralnrg=0, 
                    double impropernrg=0, double ubnrg=0,
-                   double ssnrg=0, double sbnrg=0, double bbnrg=0, double sbtnrg=0);
+                   double ssnrg=0, double sbnrg=0, double bbnrg=0, double sbtnrg=0,
+                   double cnrg14=0, double ljnrg14=0);
     
     InternalEnergy(const InternalEnergy &other);
     
@@ -586,6 +890,8 @@ public:
         ibbnrg = other.ibbnrg;
         isbtnrg = other.isbtnrg;
         
+        i14nrg = other.i14nrg;
+        
         return *this;
     }
     
@@ -602,6 +908,8 @@ public:
         isbnrg += other.isbnrg;
         ibbnrg += other.ibbnrg;
         isbtnrg += other.isbtnrg;
+    
+        i14nrg += other.i14nrg;
     
         return *this;
     }
@@ -620,6 +928,8 @@ public:
         ibbnrg -= other.ibbnrg;
         isbtnrg -= other.isbtnrg;
     
+        i14nrg -= other.i14nrg;
+    
         return *this;
     }
     
@@ -633,7 +943,8 @@ public:
                                issnrg + other.issnrg,
                                isbnrg + other.isbnrg,
                                ibbnrg + other.ibbnrg,
-                               isbtnrg + other.isbtnrg );
+                               isbtnrg + other.isbtnrg,
+                               i14nrg + other.i14nrg );
     }
     
     InternalEnergy operator-(const InternalEnergy &other) const
@@ -646,7 +957,8 @@ public:
                                issnrg - other.issnrg,
                                isbnrg - other.isbnrg,
                                ibbnrg - other.ibbnrg,
-                               isbtnrg - other.isbtnrg );
+                               isbtnrg - other.isbtnrg,
+                               i14nrg - other.i14nrg );
     }
     
     InternalEnergy& operator+=(const BondEnergy &bndnrg)
@@ -700,6 +1012,24 @@ public:
     InternalEnergy& operator+=(const StretchBendTorsionEnergy sbtnrg)
     {
         isbtnrg += sbtnrg.total();
+        return *this;
+    }
+    
+    InternalEnergy& operator+=(const Intra14Energy &nrg)
+    {
+        i14nrg += nrg;
+        return *this;
+    }
+    
+    InternalEnergy& operator+=(const Intra14CoulombEnergy &nrg)
+    {
+        i14nrg += nrg;
+        return *this;
+    }
+    
+    InternalEnergy& operator+=(const Intra14LJEnergy &nrg)
+    {
+        i14nrg += nrg;
         return *this;
     }
     
@@ -757,6 +1087,24 @@ public:
         return *this;
     }
     
+    InternalEnergy& operator-=(const Intra14Energy &nrg)
+    {
+        i14nrg -= nrg;
+        return *this;
+    }
+    
+    InternalEnergy& operator-=(const Intra14CoulombEnergy &nrg)
+    {
+        i14nrg -= nrg;
+        return *this;
+    }
+    
+    InternalEnergy& operator-=(const Intra14LJEnergy &nrg)
+    {
+        i14nrg -= nrg;
+        return *this;
+    }
+    
     Components components() const
     {
         return Components();
@@ -807,11 +1155,27 @@ public:
         return isbtnrg;
     }
     
+    double component(const Intra14Component&) const
+    {
+        return i14nrg.total();
+    }
+    
+    double component(const Intra14CoulombComponent&) const
+    {
+        return i14nrg.coulomb();
+    }
+    
+    double component(const Intra14LJComponent&) const
+    {
+        return i14nrg.lj();
+    }
+    
     double component(const InternalComponent&) const
     {
         return ibndnrg + iangnrg + idihnrg + 
                iimpnrg + iubnrg +
-               issnrg + isbnrg + ibbnrg + isbtnrg;
+               issnrg + isbnrg + ibbnrg + isbtnrg +
+               i14nrg.total();
     }
     
     double bond() const
@@ -859,11 +1223,27 @@ public:
         return isbtnrg;
     }
     
+    double intra14() const
+    {
+        return i14nrg.total();
+    }
+    
+    double intra14Coulomb() const
+    {
+        return i14nrg.coulomb();
+    }
+    
+    double intra14LJ() const
+    {
+        return i14nrg.lj();
+    }
+    
     double total() const
     {
         return ibndnrg + iangnrg + idihnrg + 
                iimpnrg + iubnrg +
-               issnrg + isbnrg + ibbnrg + isbtnrg;
+               issnrg + isbnrg + ibbnrg + isbtnrg +
+               i14nrg.total();
     }
     
     operator double() const
@@ -922,7 +1302,25 @@ public:
         return StretchBendTorsionEnergy(isbtnrg);
     }
 
+    operator Intra14Energy() const
+    {
+        return Intra14Energy(i14nrg.total());
+    }
+    
+    operator Intra14CoulombEnergy() const
+    {
+        return Intra14CoulombEnergy(i14nrg.coulomb());
+    }
+    
+    operator Intra14LJEnergy() const
+    {
+        return Intra14LJEnergy(i14nrg.lj());
+    }
+
 private:
+    /** The intramolecular 1-4 nonbonded energies */
+    Intra14Energy i14nrg;
+
     /** All of the component energies */
     double ibndnrg, iangnrg, idihnrg, 
            iimpnrg, iubnrg,
@@ -941,6 +1339,10 @@ SIRE_EXPOSE_CLASS( SireMM::StretchBendComponent )
 SIRE_EXPOSE_CLASS( SireMM::BendBendComponent )
 SIRE_EXPOSE_CLASS( SireMM::StretchBendTorsionComponent )
 
+SIRE_EXPOSE_CLASS( SireMM::Intra14CoulombComponent )
+SIRE_EXPOSE_CLASS( SireMM::Intra14LJComponent )
+SIRE_EXPOSE_CLASS( SireMM::Intra14Component )
+
 SIRE_EXPOSE_CLASS( SireMM::InternalComponent )
 
 Q_DECLARE_METATYPE( SireMM::BondComponent )
@@ -952,6 +1354,9 @@ Q_DECLARE_METATYPE( SireMM::StretchStretchComponent )
 Q_DECLARE_METATYPE( SireMM::StretchBendComponent )
 Q_DECLARE_METATYPE( SireMM::BendBendComponent )
 Q_DECLARE_METATYPE( SireMM::StretchBendTorsionComponent )
+Q_DECLARE_METATYPE( SireMM::Intra14CoulombComponent )
+Q_DECLARE_METATYPE( SireMM::Intra14LJComponent )
+Q_DECLARE_METATYPE( SireMM::Intra14Component )
 Q_DECLARE_METATYPE( SireMM::InternalComponent )
 
 SIRE_END_HEADER

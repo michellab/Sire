@@ -45,7 +45,7 @@ void register_Condition_class(){
         bp::scope Condition_scope( Condition_exposer );
         { //::SireCAS::Condition::alwaysFalse
         
-            typedef bool ( ::SireCAS::Condition::*alwaysFalse_function_type )(  ) const;
+            typedef bool ( ::SireCAS::Condition::*alwaysFalse_function_type)(  ) const;
             alwaysFalse_function_type alwaysFalse_function_value( &::SireCAS::Condition::alwaysFalse );
             
             Condition_exposer.def( 
@@ -55,7 +55,7 @@ void register_Condition_class(){
         }
         { //::SireCAS::Condition::alwaysTrue
         
-            typedef bool ( ::SireCAS::Condition::*alwaysTrue_function_type )(  ) const;
+            typedef bool ( ::SireCAS::Condition::*alwaysTrue_function_type)(  ) const;
             alwaysTrue_function_type alwaysTrue_function_value( &::SireCAS::Condition::alwaysTrue );
             
             Condition_exposer.def( 
@@ -65,7 +65,7 @@ void register_Condition_class(){
         }
         { //::SireCAS::Condition::children
         
-            typedef ::SireCAS::Expressions ( ::SireCAS::Condition::*children_function_type )(  ) const;
+            typedef ::SireCAS::Expressions ( ::SireCAS::Condition::*children_function_type)(  ) const;
             children_function_type children_function_value( &::SireCAS::Condition::children );
             
             Condition_exposer.def( 
@@ -75,7 +75,7 @@ void register_Condition_class(){
         }
         { //::SireCAS::Condition::conjugate
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Condition::*conjugate_function_type )(  ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Condition::*conjugate_function_type)(  ) const;
             conjugate_function_type conjugate_function_value( &::SireCAS::Condition::conjugate );
             
             Condition_exposer.def( 
@@ -85,7 +85,7 @@ void register_Condition_class(){
         }
         { //::SireCAS::Condition::differentiate
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Condition::*differentiate_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Condition::*differentiate_function_type)( ::SireCAS::Symbol const & ) const;
             differentiate_function_type differentiate_function_value( &::SireCAS::Condition::differentiate );
             
             Condition_exposer.def( 
@@ -96,7 +96,7 @@ void register_Condition_class(){
         }
         { //::SireCAS::Condition::evaluate
         
-            typedef double ( ::SireCAS::Condition::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::Condition::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Condition::evaluate );
             
             Condition_exposer.def( 
@@ -107,7 +107,7 @@ void register_Condition_class(){
         }
         { //::SireCAS::Condition::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::Condition::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::Condition::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Condition::evaluate );
             
             Condition_exposer.def( 
@@ -118,7 +118,7 @@ void register_Condition_class(){
         }
         { //::SireCAS::Condition::evaluateCondition
         
-            typedef bool ( ::SireCAS::Condition::*evaluateCondition_function_type )( ::SireCAS::Values const & ) const;
+            typedef bool ( ::SireCAS::Condition::*evaluateCondition_function_type)( ::SireCAS::Values const & ) const;
             evaluateCondition_function_type evaluateCondition_function_value( &::SireCAS::Condition::evaluateCondition );
             
             Condition_exposer.def( 
@@ -129,7 +129,7 @@ void register_Condition_class(){
         }
         { //::SireCAS::Condition::evaluateCondition
         
-            typedef bool ( ::SireCAS::Condition::*evaluateCondition_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef bool ( ::SireCAS::Condition::*evaluateCondition_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluateCondition_function_type evaluateCondition_function_value( &::SireCAS::Condition::evaluateCondition );
             
             Condition_exposer.def( 
@@ -140,7 +140,7 @@ void register_Condition_class(){
         }
         { //::SireCAS::Condition::expand
         
-            typedef ::QList< SireCAS::Factor > ( ::SireCAS::Condition::*expand_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::QList< SireCAS::Factor > ( ::SireCAS::Condition::*expand_function_type)( ::SireCAS::Symbol const & ) const;
             expand_function_type expand_function_value( &::SireCAS::Condition::expand );
             
             Condition_exposer.def( 
@@ -151,7 +151,7 @@ void register_Condition_class(){
         }
         { //::SireCAS::Condition::functions
         
-            typedef ::SireCAS::Functions ( ::SireCAS::Condition::*functions_function_type )(  ) const;
+            typedef ::SireCAS::Functions ( ::SireCAS::Condition::*functions_function_type)(  ) const;
             functions_function_type functions_function_value( &::SireCAS::Condition::functions );
             
             Condition_exposer.def( 
@@ -161,7 +161,7 @@ void register_Condition_class(){
         }
         { //::SireCAS::Condition::hash
         
-            typedef ::uint ( ::SireCAS::Condition::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireCAS::Condition::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireCAS::Condition::hash );
             
             Condition_exposer.def( 
@@ -171,7 +171,7 @@ void register_Condition_class(){
         }
         { //::SireCAS::Condition::integrate
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Condition::*integrate_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Condition::*integrate_function_type)( ::SireCAS::Symbol const & ) const;
             integrate_function_type integrate_function_value( &::SireCAS::Condition::integrate );
             
             Condition_exposer.def( 
@@ -182,7 +182,7 @@ void register_Condition_class(){
         }
         { //::SireCAS::Condition::isComplex
         
-            typedef bool ( ::SireCAS::Condition::*isComplex_function_type )(  ) const;
+            typedef bool ( ::SireCAS::Condition::*isComplex_function_type)(  ) const;
             isComplex_function_type isComplex_function_value( &::SireCAS::Condition::isComplex );
             
             Condition_exposer.def( 
@@ -192,7 +192,7 @@ void register_Condition_class(){
         }
         { //::SireCAS::Condition::isCompound
         
-            typedef bool ( ::SireCAS::Condition::*isCompound_function_type )(  ) const;
+            typedef bool ( ::SireCAS::Condition::*isCompound_function_type)(  ) const;
             isCompound_function_type isCompound_function_value( &::SireCAS::Condition::isCompound );
             
             Condition_exposer.def( 
@@ -202,7 +202,7 @@ void register_Condition_class(){
         }
         { //::SireCAS::Condition::isConstant
         
-            typedef bool ( ::SireCAS::Condition::*isConstant_function_type )(  ) const;
+            typedef bool ( ::SireCAS::Condition::*isConstant_function_type)(  ) const;
             isConstant_function_type isConstant_function_value( &::SireCAS::Condition::isConstant );
             
             Condition_exposer.def( 
@@ -212,7 +212,7 @@ void register_Condition_class(){
         }
         { //::SireCAS::Condition::isFunction
         
-            typedef bool ( ::SireCAS::Condition::*isFunction_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef bool ( ::SireCAS::Condition::*isFunction_function_type)( ::SireCAS::Symbol const & ) const;
             isFunction_function_type isFunction_function_value( &::SireCAS::Condition::isFunction );
             
             Condition_exposer.def( 
@@ -223,7 +223,7 @@ void register_Condition_class(){
         }
         { //::SireCAS::Condition::isNull
         
-            typedef bool ( ::SireCAS::Condition::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireCAS::Condition::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireCAS::Condition::isNull );
             
             Condition_exposer.def( 
@@ -233,7 +233,7 @@ void register_Condition_class(){
         }
         { //::SireCAS::Condition::leftHandSide
         
-            typedef ::SireCAS::Expression const & ( ::SireCAS::Condition::*leftHandSide_function_type )(  ) const;
+            typedef ::SireCAS::Expression const & ( ::SireCAS::Condition::*leftHandSide_function_type)(  ) const;
             leftHandSide_function_type leftHandSide_function_value( &::SireCAS::Condition::leftHandSide );
             
             Condition_exposer.def( 
@@ -244,7 +244,7 @@ void register_Condition_class(){
         }
         { //::SireCAS::Condition::rightHandSide
         
-            typedef ::SireCAS::Expression const & ( ::SireCAS::Condition::*rightHandSide_function_type )(  ) const;
+            typedef ::SireCAS::Expression const & ( ::SireCAS::Condition::*rightHandSide_function_type)(  ) const;
             rightHandSide_function_type rightHandSide_function_value( &::SireCAS::Condition::rightHandSide );
             
             Condition_exposer.def( 
@@ -255,7 +255,7 @@ void register_Condition_class(){
         }
         { //::SireCAS::Condition::simplify
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Condition::*simplify_function_type )( int ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Condition::*simplify_function_type)( int ) const;
             simplify_function_type simplify_function_value( &::SireCAS::Condition::simplify );
             
             Condition_exposer.def( 
@@ -266,7 +266,7 @@ void register_Condition_class(){
         }
         { //::SireCAS::Condition::substitute
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Condition::*substitute_function_type )( ::SireCAS::Identities const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Condition::*substitute_function_type)( ::SireCAS::Identities const & ) const;
             substitute_function_type substitute_function_value( &::SireCAS::Condition::substitute );
             
             Condition_exposer.def( 
@@ -277,7 +277,7 @@ void register_Condition_class(){
         }
         { //::SireCAS::Condition::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireCAS::Condition::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireCAS::Condition::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireCAS::Condition::symbols );
             
             Condition_exposer.def( 
@@ -287,7 +287,7 @@ void register_Condition_class(){
         }
         { //::SireCAS::Condition::toString
         
-            typedef ::QString ( ::SireCAS::Condition::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireCAS::Condition::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireCAS::Condition::toString );
             
             Condition_exposer.def( 

@@ -41,7 +41,7 @@ void register_DataPoint_class(){
         DataPoint_exposer.def( bp::init< SireAnalysis::DataPoint const & >(( bp::arg("other") )) );
         { //::SireAnalysis::DataPoint::equalWithinError
         
-            typedef bool ( ::SireAnalysis::DataPoint::*equalWithinError_function_type )( ::SireAnalysis::DataPoint const & ) const;
+            typedef bool ( ::SireAnalysis::DataPoint::*equalWithinError_function_type)( ::SireAnalysis::DataPoint const & ) const;
             equalWithinError_function_type equalWithinError_function_value( &::SireAnalysis::DataPoint::equalWithinError );
             
             DataPoint_exposer.def( 
@@ -52,7 +52,7 @@ void register_DataPoint_class(){
         }
         { //::SireAnalysis::DataPoint::equalWithinMaxError
         
-            typedef bool ( ::SireAnalysis::DataPoint::*equalWithinMaxError_function_type )( ::SireAnalysis::DataPoint const & ) const;
+            typedef bool ( ::SireAnalysis::DataPoint::*equalWithinMaxError_function_type)( ::SireAnalysis::DataPoint const & ) const;
             equalWithinMaxError_function_type equalWithinMaxError_function_value( &::SireAnalysis::DataPoint::equalWithinMaxError );
             
             DataPoint_exposer.def( 
@@ -63,7 +63,7 @@ void register_DataPoint_class(){
         }
         { //::SireAnalysis::DataPoint::equalWithinMinError
         
-            typedef bool ( ::SireAnalysis::DataPoint::*equalWithinMinError_function_type )( ::SireAnalysis::DataPoint const & ) const;
+            typedef bool ( ::SireAnalysis::DataPoint::*equalWithinMinError_function_type)( ::SireAnalysis::DataPoint const & ) const;
             equalWithinMinError_function_type equalWithinMinError_function_value( &::SireAnalysis::DataPoint::equalWithinMinError );
             
             DataPoint_exposer.def( 
@@ -74,7 +74,7 @@ void register_DataPoint_class(){
         }
         { //::SireAnalysis::DataPoint::hasError
         
-            typedef bool ( ::SireAnalysis::DataPoint::*hasError_function_type )(  ) const;
+            typedef bool ( ::SireAnalysis::DataPoint::*hasError_function_type)(  ) const;
             hasError_function_type hasError_function_value( &::SireAnalysis::DataPoint::hasError );
             
             DataPoint_exposer.def( 
@@ -84,7 +84,7 @@ void register_DataPoint_class(){
         }
         { //::SireAnalysis::DataPoint::hasErrorRange
         
-            typedef bool ( ::SireAnalysis::DataPoint::*hasErrorRange_function_type )(  ) const;
+            typedef bool ( ::SireAnalysis::DataPoint::*hasErrorRange_function_type)(  ) const;
             hasErrorRange_function_type hasErrorRange_function_value( &::SireAnalysis::DataPoint::hasErrorRange );
             
             DataPoint_exposer.def( 
@@ -94,7 +94,7 @@ void register_DataPoint_class(){
         }
         { //::SireAnalysis::DataPoint::hasXError
         
-            typedef bool ( ::SireAnalysis::DataPoint::*hasXError_function_type )(  ) const;
+            typedef bool ( ::SireAnalysis::DataPoint::*hasXError_function_type)(  ) const;
             hasXError_function_type hasXError_function_value( &::SireAnalysis::DataPoint::hasXError );
             
             DataPoint_exposer.def( 
@@ -104,7 +104,7 @@ void register_DataPoint_class(){
         }
         { //::SireAnalysis::DataPoint::hasXErrorRange
         
-            typedef bool ( ::SireAnalysis::DataPoint::*hasXErrorRange_function_type )(  ) const;
+            typedef bool ( ::SireAnalysis::DataPoint::*hasXErrorRange_function_type)(  ) const;
             hasXErrorRange_function_type hasXErrorRange_function_value( &::SireAnalysis::DataPoint::hasXErrorRange );
             
             DataPoint_exposer.def( 
@@ -114,7 +114,7 @@ void register_DataPoint_class(){
         }
         { //::SireAnalysis::DataPoint::hasYError
         
-            typedef bool ( ::SireAnalysis::DataPoint::*hasYError_function_type )(  ) const;
+            typedef bool ( ::SireAnalysis::DataPoint::*hasYError_function_type)(  ) const;
             hasYError_function_type hasYError_function_value( &::SireAnalysis::DataPoint::hasYError );
             
             DataPoint_exposer.def( 
@@ -124,7 +124,7 @@ void register_DataPoint_class(){
         }
         { //::SireAnalysis::DataPoint::hasYErrorRange
         
-            typedef bool ( ::SireAnalysis::DataPoint::*hasYErrorRange_function_type )(  ) const;
+            typedef bool ( ::SireAnalysis::DataPoint::*hasYErrorRange_function_type)(  ) const;
             hasYErrorRange_function_type hasYErrorRange_function_value( &::SireAnalysis::DataPoint::hasYErrorRange );
             
             DataPoint_exposer.def( 
@@ -135,7 +135,7 @@ void register_DataPoint_class(){
         DataPoint_exposer.def( bp::self != bp::self );
         { //::SireAnalysis::DataPoint::operator=
         
-            typedef ::SireAnalysis::DataPoint & ( ::SireAnalysis::DataPoint::*assign_function_type )( ::SireAnalysis::DataPoint const & ) ;
+            typedef ::SireAnalysis::DataPoint & ( ::SireAnalysis::DataPoint::*assign_function_type)( ::SireAnalysis::DataPoint const & ) ;
             assign_function_type assign_function_value( &::SireAnalysis::DataPoint::operator= );
             
             DataPoint_exposer.def( 
@@ -148,7 +148,7 @@ void register_DataPoint_class(){
         DataPoint_exposer.def( bp::self == bp::self );
         { //::SireAnalysis::DataPoint::toString
         
-            typedef ::QString ( ::SireAnalysis::DataPoint::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireAnalysis::DataPoint::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireAnalysis::DataPoint::toString );
             
             DataPoint_exposer.def( 
@@ -168,7 +168,7 @@ void register_DataPoint_class(){
         }
         { //::SireAnalysis::DataPoint::what
         
-            typedef char const * ( ::SireAnalysis::DataPoint::*what_function_type )(  ) const;
+            typedef char const * ( ::SireAnalysis::DataPoint::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireAnalysis::DataPoint::what );
             
             DataPoint_exposer.def( 
@@ -178,7 +178,7 @@ void register_DataPoint_class(){
         }
         { //::SireAnalysis::DataPoint::x
         
-            typedef double ( ::SireAnalysis::DataPoint::*x_function_type )(  ) const;
+            typedef double ( ::SireAnalysis::DataPoint::*x_function_type)(  ) const;
             x_function_type x_function_value( &::SireAnalysis::DataPoint::x );
             
             DataPoint_exposer.def( 
@@ -188,7 +188,7 @@ void register_DataPoint_class(){
         }
         { //::SireAnalysis::DataPoint::xError
         
-            typedef double ( ::SireAnalysis::DataPoint::*xError_function_type )(  ) const;
+            typedef double ( ::SireAnalysis::DataPoint::*xError_function_type)(  ) const;
             xError_function_type xError_function_value( &::SireAnalysis::DataPoint::xError );
             
             DataPoint_exposer.def( 
@@ -198,7 +198,7 @@ void register_DataPoint_class(){
         }
         { //::SireAnalysis::DataPoint::xMaxError
         
-            typedef double ( ::SireAnalysis::DataPoint::*xMaxError_function_type )(  ) const;
+            typedef double ( ::SireAnalysis::DataPoint::*xMaxError_function_type)(  ) const;
             xMaxError_function_type xMaxError_function_value( &::SireAnalysis::DataPoint::xMaxError );
             
             DataPoint_exposer.def( 
@@ -208,7 +208,7 @@ void register_DataPoint_class(){
         }
         { //::SireAnalysis::DataPoint::xMinError
         
-            typedef double ( ::SireAnalysis::DataPoint::*xMinError_function_type )(  ) const;
+            typedef double ( ::SireAnalysis::DataPoint::*xMinError_function_type)(  ) const;
             xMinError_function_type xMinError_function_value( &::SireAnalysis::DataPoint::xMinError );
             
             DataPoint_exposer.def( 
@@ -218,7 +218,7 @@ void register_DataPoint_class(){
         }
         { //::SireAnalysis::DataPoint::y
         
-            typedef double ( ::SireAnalysis::DataPoint::*y_function_type )(  ) const;
+            typedef double ( ::SireAnalysis::DataPoint::*y_function_type)(  ) const;
             y_function_type y_function_value( &::SireAnalysis::DataPoint::y );
             
             DataPoint_exposer.def( 
@@ -228,7 +228,7 @@ void register_DataPoint_class(){
         }
         { //::SireAnalysis::DataPoint::yError
         
-            typedef double ( ::SireAnalysis::DataPoint::*yError_function_type )(  ) const;
+            typedef double ( ::SireAnalysis::DataPoint::*yError_function_type)(  ) const;
             yError_function_type yError_function_value( &::SireAnalysis::DataPoint::yError );
             
             DataPoint_exposer.def( 
@@ -238,7 +238,7 @@ void register_DataPoint_class(){
         }
         { //::SireAnalysis::DataPoint::yMaxError
         
-            typedef double ( ::SireAnalysis::DataPoint::*yMaxError_function_type )(  ) const;
+            typedef double ( ::SireAnalysis::DataPoint::*yMaxError_function_type)(  ) const;
             yMaxError_function_type yMaxError_function_value( &::SireAnalysis::DataPoint::yMaxError );
             
             DataPoint_exposer.def( 
@@ -248,7 +248,7 @@ void register_DataPoint_class(){
         }
         { //::SireAnalysis::DataPoint::yMinError
         
-            typedef double ( ::SireAnalysis::DataPoint::*yMinError_function_type )(  ) const;
+            typedef double ( ::SireAnalysis::DataPoint::*yMinError_function_type)(  ) const;
             yMinError_function_type yMinError_function_value( &::SireAnalysis::DataPoint::yMinError );
             
             DataPoint_exposer.def( 

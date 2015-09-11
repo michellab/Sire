@@ -45,7 +45,7 @@ void register_Beading_class(){
         bp::scope Beading_scope( Beading_exposer );
         { //::SireMol::Beading::isCompatibleWith
         
-            typedef bool ( ::SireMol::Beading::*isCompatibleWith_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef bool ( ::SireMol::Beading::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::Beading::isCompatibleWith );
             
             Beading_exposer.def( 

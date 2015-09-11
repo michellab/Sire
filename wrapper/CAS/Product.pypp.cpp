@@ -58,7 +58,7 @@ void register_Product_class(){
         Product_exposer.def( bp::init< SireCAS::Product const & >(( bp::arg("other") )) );
         { //::SireCAS::Product::children
         
-            typedef ::SireCAS::Expressions ( ::SireCAS::Product::*children_function_type )(  ) const;
+            typedef ::SireCAS::Expressions ( ::SireCAS::Product::*children_function_type)(  ) const;
             children_function_type children_function_value( &::SireCAS::Product::children );
             
             Product_exposer.def( 
@@ -68,7 +68,7 @@ void register_Product_class(){
         }
         { //::SireCAS::Product::conjugate
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Product::*conjugate_function_type )(  ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Product::*conjugate_function_type)(  ) const;
             conjugate_function_type conjugate_function_value( &::SireCAS::Product::conjugate );
             
             Product_exposer.def( 
@@ -78,7 +78,7 @@ void register_Product_class(){
         }
         { //::SireCAS::Product::denominator
         
-            typedef ::SireCAS::Product ( ::SireCAS::Product::*denominator_function_type )(  ) const;
+            typedef ::SireCAS::Product ( ::SireCAS::Product::*denominator_function_type)(  ) const;
             denominator_function_type denominator_function_value( &::SireCAS::Product::denominator );
             
             Product_exposer.def( 
@@ -88,7 +88,7 @@ void register_Product_class(){
         }
         { //::SireCAS::Product::differentiate
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Product::*differentiate_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Product::*differentiate_function_type)( ::SireCAS::Symbol const & ) const;
             differentiate_function_type differentiate_function_value( &::SireCAS::Product::differentiate );
             
             Product_exposer.def( 
@@ -99,7 +99,7 @@ void register_Product_class(){
         }
         { //::SireCAS::Product::evaluate
         
-            typedef double ( ::SireCAS::Product::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::Product::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Product::evaluate );
             
             Product_exposer.def( 
@@ -110,7 +110,7 @@ void register_Product_class(){
         }
         { //::SireCAS::Product::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::Product::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::Product::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Product::evaluate );
             
             Product_exposer.def( 
@@ -121,7 +121,7 @@ void register_Product_class(){
         }
         { //::SireCAS::Product::expand
         
-            typedef ::QList< SireCAS::Factor > ( ::SireCAS::Product::*expand_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::QList< SireCAS::Factor > ( ::SireCAS::Product::*expand_function_type)( ::SireCAS::Symbol const & ) const;
             expand_function_type expand_function_value( &::SireCAS::Product::expand );
             
             Product_exposer.def( 
@@ -132,7 +132,7 @@ void register_Product_class(){
         }
         { //::SireCAS::Product::functions
         
-            typedef ::SireCAS::Functions ( ::SireCAS::Product::*functions_function_type )(  ) const;
+            typedef ::SireCAS::Functions ( ::SireCAS::Product::*functions_function_type)(  ) const;
             functions_function_type functions_function_value( &::SireCAS::Product::functions );
             
             Product_exposer.def( 
@@ -142,7 +142,7 @@ void register_Product_class(){
         }
         { //::SireCAS::Product::hash
         
-            typedef ::uint ( ::SireCAS::Product::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireCAS::Product::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireCAS::Product::hash );
             
             Product_exposer.def( 
@@ -152,7 +152,7 @@ void register_Product_class(){
         }
         { //::SireCAS::Product::integrate
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Product::*integrate_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Product::*integrate_function_type)( ::SireCAS::Symbol const & ) const;
             integrate_function_type integrate_function_value( &::SireCAS::Product::integrate );
             
             Product_exposer.def( 
@@ -163,7 +163,7 @@ void register_Product_class(){
         }
         { //::SireCAS::Product::isComplex
         
-            typedef bool ( ::SireCAS::Product::*isComplex_function_type )(  ) const;
+            typedef bool ( ::SireCAS::Product::*isComplex_function_type)(  ) const;
             isComplex_function_type isComplex_function_value( &::SireCAS::Product::isComplex );
             
             Product_exposer.def( 
@@ -173,7 +173,7 @@ void register_Product_class(){
         }
         { //::SireCAS::Product::isCompound
         
-            typedef bool ( ::SireCAS::Product::*isCompound_function_type )(  ) const;
+            typedef bool ( ::SireCAS::Product::*isCompound_function_type)(  ) const;
             isCompound_function_type isCompound_function_value( &::SireCAS::Product::isCompound );
             
             Product_exposer.def( 
@@ -183,7 +183,7 @@ void register_Product_class(){
         }
         { //::SireCAS::Product::isConstant
         
-            typedef bool ( ::SireCAS::Product::*isConstant_function_type )(  ) const;
+            typedef bool ( ::SireCAS::Product::*isConstant_function_type)(  ) const;
             isConstant_function_type isConstant_function_value( &::SireCAS::Product::isConstant );
             
             Product_exposer.def( 
@@ -193,7 +193,7 @@ void register_Product_class(){
         }
         { //::SireCAS::Product::isFunction
         
-            typedef bool ( ::SireCAS::Product::*isFunction_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef bool ( ::SireCAS::Product::*isFunction_function_type)( ::SireCAS::Symbol const & ) const;
             isFunction_function_type isFunction_function_value( &::SireCAS::Product::isFunction );
             
             Product_exposer.def( 
@@ -204,7 +204,7 @@ void register_Product_class(){
         }
         { //::SireCAS::Product::numerator
         
-            typedef ::SireCAS::Product ( ::SireCAS::Product::*numerator_function_type )(  ) const;
+            typedef ::SireCAS::Product ( ::SireCAS::Product::*numerator_function_type)(  ) const;
             numerator_function_type numerator_function_value( &::SireCAS::Product::numerator );
             
             Product_exposer.def( 
@@ -215,7 +215,7 @@ void register_Product_class(){
         Product_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
         { //::SireCAS::Product::reduce
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Product::*reduce_function_type )(  ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Product::*reduce_function_type)(  ) const;
             reduce_function_type reduce_function_value( &::SireCAS::Product::reduce );
             
             Product_exposer.def( 
@@ -225,7 +225,7 @@ void register_Product_class(){
         }
         { //::SireCAS::Product::series
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Product::*series_function_type )( ::SireCAS::Symbol const &,int ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Product::*series_function_type)( ::SireCAS::Symbol const &,int ) const;
             series_function_type series_function_value( &::SireCAS::Product::series );
             
             Product_exposer.def( 
@@ -236,7 +236,7 @@ void register_Product_class(){
         }
         { //::SireCAS::Product::simplify
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Product::*simplify_function_type )( int ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Product::*simplify_function_type)( int ) const;
             simplify_function_type simplify_function_value( &::SireCAS::Product::simplify );
             
             Product_exposer.def( 
@@ -247,7 +247,7 @@ void register_Product_class(){
         }
         { //::SireCAS::Product::substitute
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Product::*substitute_function_type )( ::SireCAS::Identities const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Product::*substitute_function_type)( ::SireCAS::Identities const & ) const;
             substitute_function_type substitute_function_value( &::SireCAS::Product::substitute );
             
             Product_exposer.def( 
@@ -258,7 +258,7 @@ void register_Product_class(){
         }
         { //::SireCAS::Product::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireCAS::Product::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireCAS::Product::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireCAS::Product::symbols );
             
             Product_exposer.def( 
@@ -268,7 +268,7 @@ void register_Product_class(){
         }
         { //::SireCAS::Product::toOpenMMString
         
-            typedef ::QString ( ::SireCAS::Product::*toOpenMMString_function_type )(  ) const;
+            typedef ::QString ( ::SireCAS::Product::*toOpenMMString_function_type)(  ) const;
             toOpenMMString_function_type toOpenMMString_function_value( &::SireCAS::Product::toOpenMMString );
             
             Product_exposer.def( 
@@ -278,7 +278,7 @@ void register_Product_class(){
         }
         { //::SireCAS::Product::toString
         
-            typedef ::QString ( ::SireCAS::Product::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireCAS::Product::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireCAS::Product::toString );
             
             Product_exposer.def( 
@@ -298,7 +298,7 @@ void register_Product_class(){
         }
         { //::SireCAS::Product::what
         
-            typedef char const * ( ::SireCAS::Product::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::Product::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::Product::what );
             
             Product_exposer.def( 

@@ -31,7 +31,7 @@ void register_CLJComponent_class(){
         CLJComponent_exposer.def( bp::init< SireMM::CLJComponent const & >(( bp::arg("other") )) );
         { //::SireMM::CLJComponent::changeEnergy
         
-            typedef void ( ::SireMM::CLJComponent::*changeEnergy_function_type )( ::SireFF::FF &,::SireMM::CLJEnergy const & ) const;
+            typedef void ( ::SireMM::CLJComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::CLJEnergy const & ) const;
             changeEnergy_function_type changeEnergy_function_value( &::SireMM::CLJComponent::changeEnergy );
             
             CLJComponent_exposer.def( 
@@ -42,7 +42,7 @@ void register_CLJComponent_class(){
         }
         { //::SireMM::CLJComponent::coulomb
         
-            typedef ::SireMM::CoulombComponent const & ( ::SireMM::CLJComponent::*coulomb_function_type )(  ) const;
+            typedef ::SireMM::CoulombComponent const & ( ::SireMM::CLJComponent::*coulomb_function_type)(  ) const;
             coulomb_function_type coulomb_function_value( &::SireMM::CLJComponent::coulomb );
             
             CLJComponent_exposer.def( 
@@ -53,7 +53,7 @@ void register_CLJComponent_class(){
         }
         { //::SireMM::CLJComponent::lj
         
-            typedef ::SireMM::LJComponent const & ( ::SireMM::CLJComponent::*lj_function_type )(  ) const;
+            typedef ::SireMM::LJComponent const & ( ::SireMM::CLJComponent::*lj_function_type)(  ) const;
             lj_function_type lj_function_value( &::SireMM::CLJComponent::lj );
             
             CLJComponent_exposer.def( 
@@ -64,7 +64,7 @@ void register_CLJComponent_class(){
         }
         { //::SireMM::CLJComponent::setEnergy
         
-            typedef void ( ::SireMM::CLJComponent::*setEnergy_function_type )( ::SireFF::FF &,::SireMM::CLJEnergy const & ) const;
+            typedef void ( ::SireMM::CLJComponent::*setEnergy_function_type)( ::SireFF::FF &,::SireMM::CLJEnergy const & ) const;
             setEnergy_function_type setEnergy_function_value( &::SireMM::CLJComponent::setEnergy );
             
             CLJComponent_exposer.def( 
@@ -75,7 +75,7 @@ void register_CLJComponent_class(){
         }
         { //::SireMM::CLJComponent::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireMM::CLJComponent::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireMM::CLJComponent::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireMM::CLJComponent::symbols );
             
             CLJComponent_exposer.def( 
@@ -85,7 +85,7 @@ void register_CLJComponent_class(){
         }
         { //::SireMM::CLJComponent::total
         
-            typedef ::SireMM::CLJComponent const & ( ::SireMM::CLJComponent::*total_function_type )(  ) const;
+            typedef ::SireMM::CLJComponent const & ( ::SireMM::CLJComponent::*total_function_type)(  ) const;
             total_function_type total_function_value( &::SireMM::CLJComponent::total );
             
             CLJComponent_exposer.def( 
@@ -106,7 +106,7 @@ void register_CLJComponent_class(){
         }
         { //::SireMM::CLJComponent::what
         
-            typedef char const * ( ::SireMM::CLJComponent::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::CLJComponent::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::CLJComponent::what );
             
             CLJComponent_exposer.def( 

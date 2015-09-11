@@ -51,7 +51,7 @@ void register_VelocitiesFromProperty_class(){
         VelocitiesFromProperty_exposer.def( bp::init< SireMove::VelocitiesFromProperty const & >(( bp::arg("other") )) );
         { //::SireMove::VelocitiesFromProperty::generate
         
-            typedef ::SireMol::AtomVelocities ( ::SireMove::VelocitiesFromProperty::*generate_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::AtomVelocities ( ::SireMove::VelocitiesFromProperty::*generate_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             generate_function_type generate_function_value( &::SireMove::VelocitiesFromProperty::generate );
             
             VelocitiesFromProperty_exposer.def( 
@@ -63,7 +63,7 @@ void register_VelocitiesFromProperty_class(){
         VelocitiesFromProperty_exposer.def( bp::self != bp::self );
         { //::SireMove::VelocitiesFromProperty::operator=
         
-            typedef ::SireMove::VelocitiesFromProperty & ( ::SireMove::VelocitiesFromProperty::*assign_function_type )( ::SireMove::VelocitiesFromProperty const & ) ;
+            typedef ::SireMove::VelocitiesFromProperty & ( ::SireMove::VelocitiesFromProperty::*assign_function_type)( ::SireMove::VelocitiesFromProperty const & ) ;
             assign_function_type assign_function_value( &::SireMove::VelocitiesFromProperty::operator= );
             
             VelocitiesFromProperty_exposer.def( 

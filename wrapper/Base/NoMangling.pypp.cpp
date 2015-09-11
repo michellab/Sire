@@ -32,7 +32,7 @@ void register_NoMangling_class(){
         NoMangling_exposer.def( bp::init< SireBase::NoMangling const & >(( bp::arg("other") )) );
         { //::SireBase::NoMangling::mangle
         
-            typedef ::QString ( ::SireBase::NoMangling::*mangle_function_type )( ::QString const & ) const;
+            typedef ::QString ( ::SireBase::NoMangling::*mangle_function_type)( ::QString const & ) const;
             mangle_function_type mangle_function_value( &::SireBase::NoMangling::mangle );
             
             NoMangling_exposer.def( 
@@ -44,7 +44,7 @@ void register_NoMangling_class(){
         NoMangling_exposer.def( bp::self != bp::self );
         { //::SireBase::NoMangling::operator=
         
-            typedef ::SireBase::NoMangling & ( ::SireBase::NoMangling::*assign_function_type )( ::SireBase::NoMangling const & ) ;
+            typedef ::SireBase::NoMangling & ( ::SireBase::NoMangling::*assign_function_type)( ::SireBase::NoMangling const & ) ;
             assign_function_type assign_function_value( &::SireBase::NoMangling::operator= );
             
             NoMangling_exposer.def( 

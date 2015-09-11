@@ -38,7 +38,7 @@ void register_MonitorMonitor_class(){
         MonitorMonitor_exposer.def( bp::init< SireSystem::MonitorMonitor const & >(( bp::arg("other") )) );
         { //::SireSystem::MonitorMonitor::at
         
-            typedef ::SireSystem::SystemMonitor const & ( ::SireSystem::MonitorMonitor::*at_function_type )( int ) const;
+            typedef ::SireSystem::SystemMonitor const & ( ::SireSystem::MonitorMonitor::*at_function_type)( int ) const;
             at_function_type at_function_value( &::SireSystem::MonitorMonitor::at );
             
             MonitorMonitor_exposer.def( 
@@ -50,7 +50,7 @@ void register_MonitorMonitor_class(){
         }
         { //::SireSystem::MonitorMonitor::clearOriginal
         
-            typedef bool ( ::SireSystem::MonitorMonitor::*clearOriginal_function_type )(  ) const;
+            typedef bool ( ::SireSystem::MonitorMonitor::*clearOriginal_function_type)(  ) const;
             clearOriginal_function_type clearOriginal_function_value( &::SireSystem::MonitorMonitor::clearOriginal );
             
             MonitorMonitor_exposer.def( 
@@ -60,7 +60,7 @@ void register_MonitorMonitor_class(){
         }
         { //::SireSystem::MonitorMonitor::clearStatistics
         
-            typedef void ( ::SireSystem::MonitorMonitor::*clearStatistics_function_type )(  ) ;
+            typedef void ( ::SireSystem::MonitorMonitor::*clearStatistics_function_type)(  ) ;
             clearStatistics_function_type clearStatistics_function_value( &::SireSystem::MonitorMonitor::clearStatistics );
             
             MonitorMonitor_exposer.def( 
@@ -70,7 +70,7 @@ void register_MonitorMonitor_class(){
         }
         { //::SireSystem::MonitorMonitor::count
         
-            typedef int ( ::SireSystem::MonitorMonitor::*count_function_type )(  ) const;
+            typedef int ( ::SireSystem::MonitorMonitor::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireSystem::MonitorMonitor::count );
             
             MonitorMonitor_exposer.def( 
@@ -80,7 +80,7 @@ void register_MonitorMonitor_class(){
         }
         { //::SireSystem::MonitorMonitor::monitor
         
-            typedef void ( ::SireSystem::MonitorMonitor::*monitor_function_type )( ::SireSystem::System & ) ;
+            typedef void ( ::SireSystem::MonitorMonitor::*monitor_function_type)( ::SireSystem::System & ) ;
             monitor_function_type monitor_function_value( &::SireSystem::MonitorMonitor::monitor );
             
             MonitorMonitor_exposer.def( 
@@ -91,7 +91,7 @@ void register_MonitorMonitor_class(){
         }
         { //::SireSystem::MonitorMonitor::nStates
         
-            typedef int ( ::SireSystem::MonitorMonitor::*nStates_function_type )(  ) const;
+            typedef int ( ::SireSystem::MonitorMonitor::*nStates_function_type)(  ) const;
             nStates_function_type nStates_function_value( &::SireSystem::MonitorMonitor::nStates );
             
             MonitorMonitor_exposer.def( 
@@ -102,7 +102,7 @@ void register_MonitorMonitor_class(){
         MonitorMonitor_exposer.def( bp::self != bp::self );
         { //::SireSystem::MonitorMonitor::operator=
         
-            typedef ::SireSystem::MonitorMonitor & ( ::SireSystem::MonitorMonitor::*assign_function_type )( ::SireSystem::MonitorMonitor const & ) ;
+            typedef ::SireSystem::MonitorMonitor & ( ::SireSystem::MonitorMonitor::*assign_function_type)( ::SireSystem::MonitorMonitor const & ) ;
             assign_function_type assign_function_value( &::SireSystem::MonitorMonitor::operator= );
             
             MonitorMonitor_exposer.def( 
@@ -115,7 +115,7 @@ void register_MonitorMonitor_class(){
         MonitorMonitor_exposer.def( bp::self == bp::self );
         { //::SireSystem::MonitorMonitor::operator[]
         
-            typedef ::SireSystem::SystemMonitor const & ( ::SireSystem::MonitorMonitor::*__getitem___function_type )( int ) const;
+            typedef ::SireSystem::SystemMonitor const & ( ::SireSystem::MonitorMonitor::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireSystem::MonitorMonitor::operator[] );
             
             MonitorMonitor_exposer.def( 
@@ -127,7 +127,7 @@ void register_MonitorMonitor_class(){
         }
         { //::SireSystem::MonitorMonitor::removeOriginal
         
-            typedef bool ( ::SireSystem::MonitorMonitor::*removeOriginal_function_type )(  ) const;
+            typedef bool ( ::SireSystem::MonitorMonitor::*removeOriginal_function_type)(  ) const;
             removeOriginal_function_type removeOriginal_function_value( &::SireSystem::MonitorMonitor::removeOriginal );
             
             MonitorMonitor_exposer.def( 
@@ -137,7 +137,7 @@ void register_MonitorMonitor_class(){
         }
         { //::SireSystem::MonitorMonitor::setClearOriginal
         
-            typedef void ( ::SireSystem::MonitorMonitor::*setClearOriginal_function_type )( bool ) ;
+            typedef void ( ::SireSystem::MonitorMonitor::*setClearOriginal_function_type)( bool ) ;
             setClearOriginal_function_type setClearOriginal_function_value( &::SireSystem::MonitorMonitor::setClearOriginal );
             
             MonitorMonitor_exposer.def( 
@@ -148,7 +148,7 @@ void register_MonitorMonitor_class(){
         }
         { //::SireSystem::MonitorMonitor::setRemoveOriginal
         
-            typedef void ( ::SireSystem::MonitorMonitor::*setRemoveOriginal_function_type )( bool ) ;
+            typedef void ( ::SireSystem::MonitorMonitor::*setRemoveOriginal_function_type)( bool ) ;
             setRemoveOriginal_function_type setRemoveOriginal_function_value( &::SireSystem::MonitorMonitor::setRemoveOriginal );
             
             MonitorMonitor_exposer.def( 
@@ -159,7 +159,7 @@ void register_MonitorMonitor_class(){
         }
         { //::SireSystem::MonitorMonitor::size
         
-            typedef int ( ::SireSystem::MonitorMonitor::*size_function_type )(  ) const;
+            typedef int ( ::SireSystem::MonitorMonitor::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireSystem::MonitorMonitor::size );
             
             MonitorMonitor_exposer.def( 
@@ -169,7 +169,7 @@ void register_MonitorMonitor_class(){
         }
         { //::SireSystem::MonitorMonitor::states
         
-            typedef ::QList< SireBase::PropPtr< SireSystem::SystemMonitor > > const & ( ::SireSystem::MonitorMonitor::*states_function_type )(  ) const;
+            typedef ::QList< SireBase::PropPtr< SireSystem::SystemMonitor > > const & ( ::SireSystem::MonitorMonitor::*states_function_type)(  ) const;
             states_function_type states_function_value( &::SireSystem::MonitorMonitor::states );
             
             MonitorMonitor_exposer.def( 

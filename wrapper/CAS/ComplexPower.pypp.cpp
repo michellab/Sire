@@ -47,7 +47,7 @@ void register_ComplexPower_class(){
         ComplexPower_exposer.def( bp::init< SireCAS::ComplexPower const & >(( bp::arg("other") )) );
         { //::SireCAS::ComplexPower::evaluate
         
-            typedef double ( ::SireCAS::ComplexPower::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::ComplexPower::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::ComplexPower::evaluate );
             
             ComplexPower_exposer.def( 
@@ -58,7 +58,7 @@ void register_ComplexPower_class(){
         }
         { //::SireCAS::ComplexPower::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::ComplexPower::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::ComplexPower::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::ComplexPower::evaluate );
             
             ComplexPower_exposer.def( 
@@ -69,7 +69,7 @@ void register_ComplexPower_class(){
         }
         { //::SireCAS::ComplexPower::hash
         
-            typedef ::uint ( ::SireCAS::ComplexPower::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireCAS::ComplexPower::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireCAS::ComplexPower::hash );
             
             ComplexPower_exposer.def( 
@@ -79,7 +79,7 @@ void register_ComplexPower_class(){
         }
         { //::SireCAS::ComplexPower::isComplex
         
-            typedef bool ( ::SireCAS::ComplexPower::*isComplex_function_type )(  ) const;
+            typedef bool ( ::SireCAS::ComplexPower::*isComplex_function_type)(  ) const;
             isComplex_function_type isComplex_function_value( &::SireCAS::ComplexPower::isComplex );
             
             ComplexPower_exposer.def( 
@@ -90,7 +90,7 @@ void register_ComplexPower_class(){
         ComplexPower_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
         { //::SireCAS::ComplexPower::power
         
-            typedef ::SireCAS::Expression ( ::SireCAS::ComplexPower::*power_function_type )(  ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::ComplexPower::*power_function_type)(  ) const;
             power_function_type power_function_value( &::SireCAS::ComplexPower::power );
             
             ComplexPower_exposer.def( 
@@ -110,7 +110,7 @@ void register_ComplexPower_class(){
         }
         { //::SireCAS::ComplexPower::what
         
-            typedef char const * ( ::SireCAS::ComplexPower::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::ComplexPower::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::ComplexPower::what );
             
             ComplexPower_exposer.def( 

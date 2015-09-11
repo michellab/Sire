@@ -45,7 +45,7 @@ void register_UniformInserter_class(){
         UniformInserter_exposer.def( bp::init< SireMove::UniformInserter const & >(( bp::arg("other") )) );
         { //::SireMove::UniformInserter::insert
         
-            typedef double ( ::SireMove::UniformInserter::*insert_function_type )( ::SireMol::Molecule const &,::SireSystem::System &,::SireVol::Space const & ) ;
+            typedef double ( ::SireMove::UniformInserter::*insert_function_type)( ::SireMol::Molecule const &,::SireSystem::System &,::SireVol::Space const & ) ;
             insert_function_type insert_function_value( &::SireMove::UniformInserter::insert );
             
             UniformInserter_exposer.def( 
@@ -56,7 +56,7 @@ void register_UniformInserter_class(){
         }
         { //::SireMove::UniformInserter::insert
         
-            typedef double ( ::SireMove::UniformInserter::*insert_function_type )( ::SireMol::PartialMolecule const &,::SireSystem::System &,::SireVol::Space const & ) ;
+            typedef double ( ::SireMove::UniformInserter::*insert_function_type)( ::SireMol::PartialMolecule const &,::SireSystem::System &,::SireVol::Space const & ) ;
             insert_function_type insert_function_value( &::SireMove::UniformInserter::insert );
             
             UniformInserter_exposer.def( 
@@ -68,7 +68,7 @@ void register_UniformInserter_class(){
         UniformInserter_exposer.def( bp::self != bp::self );
         { //::SireMove::UniformInserter::operator=
         
-            typedef ::SireMove::UniformInserter & ( ::SireMove::UniformInserter::*assign_function_type )( ::SireMove::UniformInserter const & ) ;
+            typedef ::SireMove::UniformInserter & ( ::SireMove::UniformInserter::*assign_function_type)( ::SireMove::UniformInserter const & ) ;
             assign_function_type assign_function_value( &::SireMove::UniformInserter::operator= );
             
             UniformInserter_exposer.def( 

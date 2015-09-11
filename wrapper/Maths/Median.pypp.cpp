@@ -42,7 +42,7 @@ void register_Median_class(){
         Median_exposer.def( bp::init< SireMaths::Median const & >(( bp::arg("other") )) );
         { //::SireMaths::Median::accumulate
         
-            typedef void ( ::SireMaths::Median::*accumulate_function_type )( double ) ;
+            typedef void ( ::SireMaths::Median::*accumulate_function_type)( double ) ;
             accumulate_function_type accumulate_function_value( &::SireMaths::Median::accumulate );
             
             Median_exposer.def( 
@@ -53,7 +53,7 @@ void register_Median_class(){
         }
         { //::SireMaths::Median::clear
         
-            typedef void ( ::SireMaths::Median::*clear_function_type )(  ) ;
+            typedef void ( ::SireMaths::Median::*clear_function_type)(  ) ;
             clear_function_type clear_function_value( &::SireMaths::Median::clear );
             
             Median_exposer.def( 
@@ -63,7 +63,7 @@ void register_Median_class(){
         }
         { //::SireMaths::Median::max
         
-            typedef double ( ::SireMaths::Median::*max_function_type )(  ) const;
+            typedef double ( ::SireMaths::Median::*max_function_type)(  ) const;
             max_function_type max_function_value( &::SireMaths::Median::max );
             
             Median_exposer.def( 
@@ -73,7 +73,7 @@ void register_Median_class(){
         }
         { //::SireMaths::Median::maximum
         
-            typedef double ( ::SireMaths::Median::*maximum_function_type )(  ) const;
+            typedef double ( ::SireMaths::Median::*maximum_function_type)(  ) const;
             maximum_function_type maximum_function_value( &::SireMaths::Median::maximum );
             
             Median_exposer.def( 
@@ -83,7 +83,7 @@ void register_Median_class(){
         }
         { //::SireMaths::Median::median
         
-            typedef double ( ::SireMaths::Median::*median_function_type )(  ) const;
+            typedef double ( ::SireMaths::Median::*median_function_type)(  ) const;
             median_function_type median_function_value( &::SireMaths::Median::median );
             
             Median_exposer.def( 
@@ -93,7 +93,7 @@ void register_Median_class(){
         }
         { //::SireMaths::Median::min
         
-            typedef double ( ::SireMaths::Median::*min_function_type )(  ) const;
+            typedef double ( ::SireMaths::Median::*min_function_type)(  ) const;
             min_function_type min_function_value( &::SireMaths::Median::min );
             
             Median_exposer.def( 
@@ -103,7 +103,7 @@ void register_Median_class(){
         }
         { //::SireMaths::Median::minimum
         
-            typedef double ( ::SireMaths::Median::*minimum_function_type )(  ) const;
+            typedef double ( ::SireMaths::Median::*minimum_function_type)(  ) const;
             minimum_function_type minimum_function_value( &::SireMaths::Median::minimum );
             
             Median_exposer.def( 
@@ -114,7 +114,7 @@ void register_Median_class(){
         Median_exposer.def( bp::self != bp::self );
         { //::SireMaths::Median::operator=
         
-            typedef ::SireMaths::Median & ( ::SireMaths::Median::*assign_function_type )( ::SireMaths::Median const & ) ;
+            typedef ::SireMaths::Median & ( ::SireMaths::Median::*assign_function_type)( ::SireMaths::Median const & ) ;
             assign_function_type assign_function_value( &::SireMaths::Median::operator= );
             
             Median_exposer.def( 

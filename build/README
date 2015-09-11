@@ -1,0 +1,8 @@
+This directory is used by the automatic Sire build
+script to build both the corelib and python wrappers.
+
+These directories are used by the build_sire.py script
+that is contained in this directory, and which must
+be called using the python interpreter that is contained
+in a working anaconda or miniconda distribution.
+

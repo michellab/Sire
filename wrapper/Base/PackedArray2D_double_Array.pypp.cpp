@@ -32,7 +32,7 @@ void register_PackedArray2D_double_Array_class(){
         { //::SireBase::detail::PackedArray2D_Array< double >::assertValidIndex
         
             typedef SireBase::detail::PackedArray2D_Array< double > exported_class_t;
-            typedef void ( ::SireBase::detail::PackedArray2D_Array< double >::*assertValidIndex_function_type )( ::quint32 ) const;
+            typedef void ( ::SireBase::detail::PackedArray2D_Array< double >::*assertValidIndex_function_type)( ::quint32 ) const;
             assertValidIndex_function_type assertValidIndex_function_value( &::SireBase::detail::PackedArray2D_Array< double >::assertValidIndex );
             
             PackedArray2D_double_Array_exposer.def( 
@@ -44,7 +44,7 @@ void register_PackedArray2D_double_Array_class(){
         { //::SireBase::detail::PackedArray2D_Array< double >::at
         
             typedef SireBase::detail::PackedArray2D_Array< double > exported_class_t;
-            typedef double const & ( ::SireBase::detail::PackedArray2D_Array< double >::*at_function_type )( ::quint32 ) const;
+            typedef double const & ( ::SireBase::detail::PackedArray2D_Array< double >::*at_function_type)( ::quint32 ) const;
             at_function_type at_function_value( &::SireBase::detail::PackedArray2D_Array< double >::at );
             
             PackedArray2D_double_Array_exposer.def( 
@@ -57,7 +57,7 @@ void register_PackedArray2D_double_Array_class(){
         { //::SireBase::detail::PackedArray2D_Array< double >::count
         
             typedef SireBase::detail::PackedArray2D_Array< double > exported_class_t;
-            typedef int ( ::SireBase::detail::PackedArray2D_Array< double >::*count_function_type )(  ) const;
+            typedef int ( ::SireBase::detail::PackedArray2D_Array< double >::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireBase::detail::PackedArray2D_Array< double >::count );
             
             PackedArray2D_double_Array_exposer.def( 
@@ -68,7 +68,7 @@ void register_PackedArray2D_double_Array_class(){
         { //::SireBase::detail::PackedArray2D_Array< double >::isEmpty
         
             typedef SireBase::detail::PackedArray2D_Array< double > exported_class_t;
-            typedef bool ( ::SireBase::detail::PackedArray2D_Array< double >::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireBase::detail::PackedArray2D_Array< double >::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireBase::detail::PackedArray2D_Array< double >::isEmpty );
             
             PackedArray2D_double_Array_exposer.def( 
@@ -79,7 +79,7 @@ void register_PackedArray2D_double_Array_class(){
         { //::SireBase::detail::PackedArray2D_Array< double >::nValues
         
             typedef SireBase::detail::PackedArray2D_Array< double > exported_class_t;
-            typedef int ( ::SireBase::detail::PackedArray2D_Array< double >::*nValues_function_type )(  ) const;
+            typedef int ( ::SireBase::detail::PackedArray2D_Array< double >::*nValues_function_type)(  ) const;
             nValues_function_type nValues_function_value( &::SireBase::detail::PackedArray2D_Array< double >::nValues );
             
             PackedArray2D_double_Array_exposer.def( 
@@ -91,7 +91,7 @@ void register_PackedArray2D_double_Array_class(){
         { //::SireBase::detail::PackedArray2D_Array< double >::operator=
         
             typedef SireBase::detail::PackedArray2D_Array< double > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< double > & ( ::SireBase::detail::PackedArray2D_Array< double >::*assign_function_type )( ::SireBase::detail::PackedArray2D_Array< double > const & ) ;
+            typedef ::SireBase::detail::PackedArray2D_Array< double > & ( ::SireBase::detail::PackedArray2D_Array< double >::*assign_function_type)( ::SireBase::detail::PackedArray2D_Array< double > const & ) ;
             assign_function_type assign_function_value( &::SireBase::detail::PackedArray2D_Array< double >::operator= );
             
             PackedArray2D_double_Array_exposer.def( 
@@ -105,7 +105,7 @@ void register_PackedArray2D_double_Array_class(){
         { //::SireBase::detail::PackedArray2D_Array< double >::operator[]
         
             typedef SireBase::detail::PackedArray2D_Array< double > exported_class_t;
-            typedef double const & ( ::SireBase::detail::PackedArray2D_Array< double >::*__getitem___function_type )( ::quint32 ) const;
+            typedef double const & ( ::SireBase::detail::PackedArray2D_Array< double >::*__getitem___function_type)( ::quint32 ) const;
             __getitem___function_type __getitem___function_value( &::SireBase::detail::PackedArray2D_Array< double >::operator[] );
             
             PackedArray2D_double_Array_exposer.def( 
@@ -118,7 +118,7 @@ void register_PackedArray2D_double_Array_class(){
         { //::SireBase::detail::PackedArray2D_Array< double >::operator[]
         
             typedef SireBase::detail::PackedArray2D_Array< double > exported_class_t;
-            typedef double & ( ::SireBase::detail::PackedArray2D_Array< double >::*__getitem___function_type )( ::quint32 ) ;
+            typedef double & ( ::SireBase::detail::PackedArray2D_Array< double >::*__getitem___function_type)( ::quint32 ) ;
             __getitem___function_type __getitem___function_value( &::SireBase::detail::PackedArray2D_Array< double >::operator[] );
             
             PackedArray2D_double_Array_exposer.def( 
@@ -131,7 +131,7 @@ void register_PackedArray2D_double_Array_class(){
         { //::SireBase::detail::PackedArray2D_Array< double >::size
         
             typedef SireBase::detail::PackedArray2D_Array< double > exported_class_t;
-            typedef int ( ::SireBase::detail::PackedArray2D_Array< double >::*size_function_type )(  ) const;
+            typedef int ( ::SireBase::detail::PackedArray2D_Array< double >::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireBase::detail::PackedArray2D_Array< double >::size );
             
             PackedArray2D_double_Array_exposer.def( 
@@ -142,7 +142,7 @@ void register_PackedArray2D_double_Array_class(){
         { //::SireBase::detail::PackedArray2D_Array< double >::toQVector
         
             typedef SireBase::detail::PackedArray2D_Array< double > exported_class_t;
-            typedef ::QVector< double > ( ::SireBase::detail::PackedArray2D_Array< double >::*toQVector_function_type )(  ) const;
+            typedef ::QVector< double > ( ::SireBase::detail::PackedArray2D_Array< double >::*toQVector_function_type)(  ) const;
             toQVector_function_type toQVector_function_value( &::SireBase::detail::PackedArray2D_Array< double >::toQVector );
             
             PackedArray2D_double_Array_exposer.def( 
@@ -153,7 +153,7 @@ void register_PackedArray2D_double_Array_class(){
         { //::SireBase::detail::PackedArray2D_Array< double >::toString
         
             typedef SireBase::detail::PackedArray2D_Array< double > exported_class_t;
-            typedef ::QString ( ::SireBase::detail::PackedArray2D_Array< double >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireBase::detail::PackedArray2D_Array< double >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireBase::detail::PackedArray2D_Array< double >::toString );
             
             PackedArray2D_double_Array_exposer.def( 
@@ -164,7 +164,7 @@ void register_PackedArray2D_double_Array_class(){
         { //::SireBase::detail::PackedArray2D_Array< double >::update
         
             typedef SireBase::detail::PackedArray2D_Array< double > exported_class_t;
-            typedef void ( ::SireBase::detail::PackedArray2D_Array< double >::*update_function_type )( ::SireBase::detail::PackedArray2D_Array< double > const & ) ;
+            typedef void ( ::SireBase::detail::PackedArray2D_Array< double >::*update_function_type)( ::SireBase::detail::PackedArray2D_Array< double > const & ) ;
             update_function_type update_function_value( &::SireBase::detail::PackedArray2D_Array< double >::update );
             
             PackedArray2D_double_Array_exposer.def( 

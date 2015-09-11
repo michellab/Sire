@@ -37,7 +37,7 @@ void register_Sec_class(){
         Sec_exposer.def( bp::init< SireCAS::Sec const & >(( bp::arg("other") )) );
         { //::SireCAS::Sec::evaluate
         
-            typedef double ( ::SireCAS::Sec::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::Sec::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Sec::evaluate );
             
             Sec_exposer.def( 
@@ -48,7 +48,7 @@ void register_Sec_class(){
         }
         { //::SireCAS::Sec::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::Sec::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::Sec::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Sec::evaluate );
             
             Sec_exposer.def( 
@@ -70,7 +70,7 @@ void register_Sec_class(){
         }
         { //::SireCAS::Sec::what
         
-            typedef char const * ( ::SireCAS::Sec::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::Sec::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::Sec::what );
             
             Sec_exposer.def( 

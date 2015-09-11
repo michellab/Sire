@@ -39,7 +39,7 @@ void register_Accumulator_class(){
         bp::scope Accumulator_scope( Accumulator_exposer );
         { //::SireMaths::Accumulator::accumulate
         
-            typedef void ( ::SireMaths::Accumulator::*accumulate_function_type )( double ) ;
+            typedef void ( ::SireMaths::Accumulator::*accumulate_function_type)( double ) ;
             accumulate_function_type accumulate_function_value( &::SireMaths::Accumulator::accumulate );
             
             Accumulator_exposer.def( 
@@ -50,7 +50,7 @@ void register_Accumulator_class(){
         }
         { //::SireMaths::Accumulator::accumulate
         
-            typedef void ( ::SireMaths::Accumulator::*accumulate_function_type )( ::QVector< double > const & ) ;
+            typedef void ( ::SireMaths::Accumulator::*accumulate_function_type)( ::QVector< double > const & ) ;
             accumulate_function_type accumulate_function_value( &::SireMaths::Accumulator::accumulate );
             
             Accumulator_exposer.def( 
@@ -61,7 +61,7 @@ void register_Accumulator_class(){
         }
         { //::SireMaths::Accumulator::accumulate
         
-            typedef void ( ::SireMaths::Accumulator::*accumulate_function_type )( ::QList< double > const & ) ;
+            typedef void ( ::SireMaths::Accumulator::*accumulate_function_type)( ::QList< double > const & ) ;
             accumulate_function_type accumulate_function_value( &::SireMaths::Accumulator::accumulate );
             
             Accumulator_exposer.def( 
@@ -72,7 +72,7 @@ void register_Accumulator_class(){
         }
         { //::SireMaths::Accumulator::clear
         
-            typedef void ( ::SireMaths::Accumulator::*clear_function_type )(  ) ;
+            typedef void ( ::SireMaths::Accumulator::*clear_function_type)(  ) ;
             clear_function_type clear_function_value( &::SireMaths::Accumulator::clear );
             
             Accumulator_exposer.def( 
@@ -82,7 +82,7 @@ void register_Accumulator_class(){
         }
         { //::SireMaths::Accumulator::nSamples
         
-            typedef int ( ::SireMaths::Accumulator::*nSamples_function_type )(  ) const;
+            typedef int ( ::SireMaths::Accumulator::*nSamples_function_type)(  ) const;
             nSamples_function_type nSamples_function_value( &::SireMaths::Accumulator::nSamples );
             
             Accumulator_exposer.def( 

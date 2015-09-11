@@ -258,7 +258,7 @@ if (NOT SIRE_DISABLE_FORTRAN)
 
   set_target_properties (SireBLASPACK PROPERTIES
                          VERSION ${SIRE_VERSION}
-                         SOVERSION ${SIRE_VERSION_MAJOR}
+                         SOVERSION ${S_VERSION_MAJOR}
                         )
 
   if ( SIREBLASPACK_HAS_LIBRARIES )
@@ -272,7 +272,7 @@ add_library (SireMaths ${SIREMATHS_SOURCES})
 
 set_target_properties (SireMaths PROPERTIES
                        VERSION ${SIRE_VERSION}
-                       SOVERSION ${SIRE_VERSION_MAJOR}
+                       SOVERSION ${S_VERSION_MAJOR}
                       )
 
 # Link to other Sire libraries, and GSL

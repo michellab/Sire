@@ -68,7 +68,8 @@ namespace SireMM
             {}
             
             InterFFData(const InterFFData &other)
-                 : cljfuncs(other.cljfuncs),
+                 : QSharedData(),
+                   cljfuncs(other.cljfuncs),
                    fixed_atoms(other.fixed_atoms),
                    cljcomps(other.cljcomps),
                    props(other.props),
@@ -279,6 +280,9 @@ void InterFF::removeAllCLJFunctions()
     {
         d->fixed_atoms.removeLast();
     }
+    
+    rebuildProps();
+    this->mustNowRecalculateFromScratch();
 }
 
 /** Return the keys of all CLJFunctions added to this forcefield */

@@ -45,7 +45,7 @@ void register_ForceTable_class(){
         ForceTable_exposer.def( bp::init< SireFF::ForceTable const & >(( bp::arg("other") )) );
         { //::SireFF::ForceTable::add
         
-            typedef void ( ::SireFF::ForceTable::*add_function_type )( ::SireFF::ForceTable const & ) ;
+            typedef void ( ::SireFF::ForceTable::*add_function_type)( ::SireFF::ForceTable const & ) ;
             add_function_type add_function_value( &::SireFF::ForceTable::add );
             
             ForceTable_exposer.def( 
@@ -56,7 +56,7 @@ void register_ForceTable_class(){
         }
         { //::SireFF::ForceTable::add
         
-            typedef void ( ::SireFF::ForceTable::*add_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireFF::ForceTable::*add_function_type)( ::SireMaths::Vector const & ) ;
             add_function_type add_function_value( &::SireFF::ForceTable::add );
             
             ForceTable_exposer.def( 
@@ -67,7 +67,7 @@ void register_ForceTable_class(){
         }
         { //::SireFF::ForceTable::assertContainsTableFor
         
-            typedef void ( ::SireFF::ForceTable::*assertContainsTableFor_function_type )( ::SireMol::MolNum ) const;
+            typedef void ( ::SireFF::ForceTable::*assertContainsTableFor_function_type)( ::SireMol::MolNum ) const;
             assertContainsTableFor_function_type assertContainsTableFor_function_value( &::SireFF::ForceTable::assertContainsTableFor );
             
             ForceTable_exposer.def( 
@@ -78,7 +78,7 @@ void register_ForceTable_class(){
         }
         { //::SireFF::ForceTable::constGetTable
         
-            typedef ::SireFF::MolForceTable const & ( ::SireFF::ForceTable::*constGetTable_function_type )( ::SireMol::MolNum ) const;
+            typedef ::SireFF::MolForceTable const & ( ::SireFF::ForceTable::*constGetTable_function_type)( ::SireMol::MolNum ) const;
             constGetTable_function_type constGetTable_function_value( &::SireFF::ForceTable::constGetTable );
             
             ForceTable_exposer.def( 
@@ -90,7 +90,7 @@ void register_ForceTable_class(){
         }
         { //::SireFF::ForceTable::containsTable
         
-            typedef bool ( ::SireFF::ForceTable::*containsTable_function_type )( ::SireMol::MolNum ) const;
+            typedef bool ( ::SireFF::ForceTable::*containsTable_function_type)( ::SireMol::MolNum ) const;
             containsTable_function_type containsTable_function_value( &::SireFF::ForceTable::containsTable );
             
             ForceTable_exposer.def( 
@@ -101,7 +101,7 @@ void register_ForceTable_class(){
         }
         { //::SireFF::ForceTable::count
         
-            typedef int ( ::SireFF::ForceTable::*count_function_type )(  ) const;
+            typedef int ( ::SireFF::ForceTable::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireFF::ForceTable::count );
             
             ForceTable_exposer.def( 
@@ -111,7 +111,7 @@ void register_ForceTable_class(){
         }
         { //::SireFF::ForceTable::divide
         
-            typedef void ( ::SireFF::ForceTable::*divide_function_type )( double ) ;
+            typedef void ( ::SireFF::ForceTable::*divide_function_type)( double ) ;
             divide_function_type divide_function_value( &::SireFF::ForceTable::divide );
             
             ForceTable_exposer.def( 
@@ -122,7 +122,7 @@ void register_ForceTable_class(){
         }
         { //::SireFF::ForceTable::getTable
         
-            typedef ::SireFF::MolForceTable const & ( ::SireFF::ForceTable::*getTable_function_type )( ::SireMol::MolNum ) const;
+            typedef ::SireFF::MolForceTable const & ( ::SireFF::ForceTable::*getTable_function_type)( ::SireMol::MolNum ) const;
             getTable_function_type getTable_function_value( &::SireFF::ForceTable::getTable );
             
             ForceTable_exposer.def( 
@@ -134,7 +134,7 @@ void register_ForceTable_class(){
         }
         { //::SireFF::ForceTable::index
         
-            typedef ::QHash< SireMol::MolNum, int > const & ( ::SireFF::ForceTable::*index_function_type )(  ) const;
+            typedef ::QHash< SireMol::MolNum, int > const & ( ::SireFF::ForceTable::*index_function_type)(  ) const;
             index_function_type index_function_value( &::SireFF::ForceTable::index );
             
             ForceTable_exposer.def( 
@@ -145,7 +145,7 @@ void register_ForceTable_class(){
         }
         { //::SireFF::ForceTable::indexOf
         
-            typedef int ( ::SireFF::ForceTable::*indexOf_function_type )( ::SireMol::MolNum ) const;
+            typedef int ( ::SireFF::ForceTable::*indexOf_function_type)( ::SireMol::MolNum ) const;
             indexOf_function_type indexOf_function_value( &::SireFF::ForceTable::indexOf );
             
             ForceTable_exposer.def( 
@@ -156,7 +156,7 @@ void register_ForceTable_class(){
         }
         { //::SireFF::ForceTable::initialiseTable
         
-            typedef void ( ::SireFF::ForceTable::*initialiseTable_function_type )( ::SireMol::MolNum ) ;
+            typedef void ( ::SireFF::ForceTable::*initialiseTable_function_type)( ::SireMol::MolNum ) ;
             initialiseTable_function_type initialiseTable_function_value( &::SireFF::ForceTable::initialiseTable );
             
             ForceTable_exposer.def( 
@@ -167,7 +167,7 @@ void register_ForceTable_class(){
         }
         { //::SireFF::ForceTable::initialiseTables
         
-            typedef void ( ::SireFF::ForceTable::*initialiseTables_function_type )(  ) ;
+            typedef void ( ::SireFF::ForceTable::*initialiseTables_function_type)(  ) ;
             initialiseTables_function_type initialiseTables_function_value( &::SireFF::ForceTable::initialiseTables );
             
             ForceTable_exposer.def( 
@@ -177,7 +177,7 @@ void register_ForceTable_class(){
         }
         { //::SireFF::ForceTable::molNums
         
-            typedef ::QList< SireMol::MolNum > ( ::SireFF::ForceTable::*molNums_function_type )(  ) const;
+            typedef ::QList< SireMol::MolNum > ( ::SireFF::ForceTable::*molNums_function_type)(  ) const;
             molNums_function_type molNums_function_value( &::SireFF::ForceTable::molNums );
             
             ForceTable_exposer.def( 
@@ -187,7 +187,7 @@ void register_ForceTable_class(){
         }
         { //::SireFF::ForceTable::multiply
         
-            typedef void ( ::SireFF::ForceTable::*multiply_function_type )( double ) ;
+            typedef void ( ::SireFF::ForceTable::*multiply_function_type)( double ) ;
             multiply_function_type multiply_function_value( &::SireFF::ForceTable::multiply );
             
             ForceTable_exposer.def( 
@@ -206,7 +206,7 @@ void register_ForceTable_class(){
         ForceTable_exposer.def( bp::self / bp::other< double >() );
         { //::SireFF::ForceTable::operator=
         
-            typedef ::SireFF::ForceTable & ( ::SireFF::ForceTable::*assign_function_type )( ::SireFF::ForceTable const & ) ;
+            typedef ::SireFF::ForceTable & ( ::SireFF::ForceTable::*assign_function_type)( ::SireFF::ForceTable const & ) ;
             assign_function_type assign_function_value( &::SireFF::ForceTable::operator= );
             
             ForceTable_exposer.def( 
@@ -218,7 +218,7 @@ void register_ForceTable_class(){
         }
         { //::SireFF::ForceTable::operator=
         
-            typedef ::SireFF::ForceTable & ( ::SireFF::ForceTable::*assign_function_type )( ::SireMaths::Vector const & ) ;
+            typedef ::SireFF::ForceTable & ( ::SireFF::ForceTable::*assign_function_type)( ::SireMaths::Vector const & ) ;
             assign_function_type assign_function_value( &::SireFF::ForceTable::operator= );
             
             ForceTable_exposer.def( 
@@ -231,7 +231,7 @@ void register_ForceTable_class(){
         ForceTable_exposer.def( bp::self == bp::self );
         { //::SireFF::ForceTable::setAll
         
-            typedef void ( ::SireFF::ForceTable::*setAll_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireFF::ForceTable::*setAll_function_type)( ::SireMaths::Vector const & ) ;
             setAll_function_type setAll_function_value( &::SireFF::ForceTable::setAll );
             
             ForceTable_exposer.def( 
@@ -242,7 +242,7 @@ void register_ForceTable_class(){
         }
         { //::SireFF::ForceTable::setTable
         
-            typedef void ( ::SireFF::ForceTable::*setTable_function_type )( ::SireMol::MolNum,::SireFF::MolForceTable & ) ;
+            typedef void ( ::SireFF::ForceTable::*setTable_function_type)( ::SireMol::MolNum,::SireFF::MolForceTable & ) ;
             setTable_function_type setTable_function_value( &::SireFF::ForceTable::setTable );
             
             ForceTable_exposer.def( 
@@ -253,7 +253,7 @@ void register_ForceTable_class(){
         }
         { //::SireFF::ForceTable::subtract
         
-            typedef void ( ::SireFF::ForceTable::*subtract_function_type )( ::SireFF::ForceTable const & ) ;
+            typedef void ( ::SireFF::ForceTable::*subtract_function_type)( ::SireFF::ForceTable const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::ForceTable::subtract );
             
             ForceTable_exposer.def( 
@@ -264,7 +264,7 @@ void register_ForceTable_class(){
         }
         { //::SireFF::ForceTable::subtract
         
-            typedef void ( ::SireFF::ForceTable::*subtract_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireFF::ForceTable::*subtract_function_type)( ::SireMaths::Vector const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::ForceTable::subtract );
             
             ForceTable_exposer.def( 
@@ -285,7 +285,7 @@ void register_ForceTable_class(){
         }
         { //::SireFF::ForceTable::what
         
-            typedef char const * ( ::SireFF::ForceTable::*what_function_type )(  ) const;
+            typedef char const * ( ::SireFF::ForceTable::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireFF::ForceTable::what );
             
             ForceTable_exposer.def( 

@@ -31,7 +31,7 @@ void register_TempDir_class(){
         bp::scope TempDir_scope( TempDir_exposer );
         { //::SireBase::TempDir::doNotDelete
         
-            typedef void ( ::SireBase::TempDir::*doNotDelete_function_type )(  ) ;
+            typedef void ( ::SireBase::TempDir::*doNotDelete_function_type)(  ) ;
             doNotDelete_function_type doNotDelete_function_value( &::SireBase::TempDir::doNotDelete );
             
             TempDir_exposer.def( 
@@ -41,7 +41,7 @@ void register_TempDir_class(){
         }
         { //::SireBase::TempDir::path
         
-            typedef ::QString ( ::SireBase::TempDir::*path_function_type )(  ) const;
+            typedef ::QString ( ::SireBase::TempDir::*path_function_type)(  ) const;
             path_function_type path_function_value( &::SireBase::TempDir::path );
             
             TempDir_exposer.def( 
@@ -51,7 +51,7 @@ void register_TempDir_class(){
         }
         { //::SireBase::TempDir::toString
         
-            typedef ::QString ( ::SireBase::TempDir::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireBase::TempDir::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireBase::TempDir::toString );
             
             TempDir_exposer.def( 
@@ -71,7 +71,7 @@ void register_TempDir_class(){
         }
         { //::SireBase::TempDir::what
         
-            typedef char const * ( ::SireBase::TempDir::*what_function_type )(  ) const;
+            typedef char const * ( ::SireBase::TempDir::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireBase::TempDir::what );
             
             TempDir_exposer.def( 

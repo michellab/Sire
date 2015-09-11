@@ -21,14 +21,6 @@ endif()
 
 file(TO_CMAKE_PATH "$ENV{OPENMM_ROOT_DIR}" _env_OPENMM_ROOT_DIR)
 
-if(IS_DIRECTORY ${_env_OPENMM_ROOT_DIR})
-    set(OpenMM_ROOT_DIR "${_env_OPENMM_ROOT_DIR}" CACHE PATH "OpenMM installation directory" FORCE)
-else()
-    if(IS_DIRECTORY "/usr/local/openmm")
-        set(OpenMM_ROOT_DIR "/usr/local/openmm" CACHE PATH "OpenMM installation directory" FORCE)
-    endif()
-endif()
-
 find_library(OpenMM_LIBRARIES
     NAMES OpenMM
     PATHS "${OpenMM_ROOT_DIR}/lib"

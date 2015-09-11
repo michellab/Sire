@@ -31,7 +31,7 @@ void register_RestraintComponent_class(){
         RestraintComponent_exposer.def( bp::init< SireMM::RestraintComponent const & >(( bp::arg("other") )) );
         { //::SireMM::RestraintComponent::changeEnergy
         
-            typedef void ( ::SireMM::RestraintComponent::*changeEnergy_function_type )( ::SireFF::FF &,::SireMM::RestraintEnergy const & ) const;
+            typedef void ( ::SireMM::RestraintComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::RestraintEnergy const & ) const;
             changeEnergy_function_type changeEnergy_function_value( &::SireMM::RestraintComponent::changeEnergy );
             
             RestraintComponent_exposer.def( 
@@ -42,7 +42,7 @@ void register_RestraintComponent_class(){
         }
         { //::SireMM::RestraintComponent::setEnergy
         
-            typedef void ( ::SireMM::RestraintComponent::*setEnergy_function_type )( ::SireFF::FF &,::SireMM::RestraintEnergy const & ) const;
+            typedef void ( ::SireMM::RestraintComponent::*setEnergy_function_type)( ::SireFF::FF &,::SireMM::RestraintEnergy const & ) const;
             setEnergy_function_type setEnergy_function_value( &::SireMM::RestraintComponent::setEnergy );
             
             RestraintComponent_exposer.def( 
@@ -53,7 +53,7 @@ void register_RestraintComponent_class(){
         }
         { //::SireMM::RestraintComponent::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireMM::RestraintComponent::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireMM::RestraintComponent::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireMM::RestraintComponent::symbols );
             
             RestraintComponent_exposer.def( 
@@ -63,7 +63,7 @@ void register_RestraintComponent_class(){
         }
         { //::SireMM::RestraintComponent::total
         
-            typedef ::SireMM::RestraintComponent const & ( ::SireMM::RestraintComponent::*total_function_type )(  ) const;
+            typedef ::SireMM::RestraintComponent const & ( ::SireMM::RestraintComponent::*total_function_type)(  ) const;
             total_function_type total_function_value( &::SireMM::RestraintComponent::total );
             
             RestraintComponent_exposer.def( 
@@ -84,7 +84,7 @@ void register_RestraintComponent_class(){
         }
         { //::SireMM::RestraintComponent::what
         
-            typedef char const * ( ::SireMM::RestraintComponent::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::RestraintComponent::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::RestraintComponent::what );
             
             RestraintComponent_exposer.def( 

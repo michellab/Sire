@@ -47,7 +47,7 @@ void register_MolPotentialTable_class(){
         MolPotentialTable_exposer.def( bp::init< SireFF::MolPotentialTable const & >(( bp::arg("other") )) );
         { //::SireFF::MolPotentialTable::add
         
-            typedef bool ( ::SireFF::MolPotentialTable::*add_function_type )( ::SireMol::CGAtomIdx const &,::SireUnits::Dimension::MolarEnergy const & ) ;
+            typedef bool ( ::SireFF::MolPotentialTable::*add_function_type)( ::SireMol::CGAtomIdx const &,::SireUnits::Dimension::MolarEnergy const & ) ;
             add_function_type add_function_value( &::SireFF::MolPotentialTable::add );
             
             MolPotentialTable_exposer.def( 
@@ -58,7 +58,7 @@ void register_MolPotentialTable_class(){
         }
         { //::SireFF::MolPotentialTable::add
         
-            typedef bool ( ::SireFF::MolPotentialTable::*add_function_type )( ::SireMol::AtomSelection const &,::SireUnits::Dimension::MolarEnergy const & ) ;
+            typedef bool ( ::SireFF::MolPotentialTable::*add_function_type)( ::SireMol::AtomSelection const &,::SireUnits::Dimension::MolarEnergy const & ) ;
             add_function_type add_function_value( &::SireFF::MolPotentialTable::add );
             
             MolPotentialTable_exposer.def( 
@@ -69,7 +69,7 @@ void register_MolPotentialTable_class(){
         }
         { //::SireFF::MolPotentialTable::add
         
-            typedef void ( ::SireFF::MolPotentialTable::*add_function_type )( ::SireFF::MolPotentialTable const & ) ;
+            typedef void ( ::SireFF::MolPotentialTable::*add_function_type)( ::SireFF::MolPotentialTable const & ) ;
             add_function_type add_function_value( &::SireFF::MolPotentialTable::add );
             
             MolPotentialTable_exposer.def( 
@@ -80,7 +80,7 @@ void register_MolPotentialTable_class(){
         }
         { //::SireFF::MolPotentialTable::add
         
-            typedef void ( ::SireFF::MolPotentialTable::*add_function_type )( ::SireUnits::Dimension::MolarEnergy const & ) ;
+            typedef void ( ::SireFF::MolPotentialTable::*add_function_type)( ::SireUnits::Dimension::MolarEnergy const & ) ;
             add_function_type add_function_value( &::SireFF::MolPotentialTable::add );
             
             MolPotentialTable_exposer.def( 
@@ -91,7 +91,7 @@ void register_MolPotentialTable_class(){
         }
         { //::SireFF::MolPotentialTable::divide
         
-            typedef void ( ::SireFF::MolPotentialTable::*divide_function_type )( double ) ;
+            typedef void ( ::SireFF::MolPotentialTable::*divide_function_type)( double ) ;
             divide_function_type divide_function_value( &::SireFF::MolPotentialTable::divide );
             
             MolPotentialTable_exposer.def( 
@@ -102,7 +102,7 @@ void register_MolPotentialTable_class(){
         }
         { //::SireFF::MolPotentialTable::initialise
         
-            typedef void ( ::SireFF::MolPotentialTable::*initialise_function_type )(  ) ;
+            typedef void ( ::SireFF::MolPotentialTable::*initialise_function_type)(  ) ;
             initialise_function_type initialise_function_value( &::SireFF::MolPotentialTable::initialise );
             
             MolPotentialTable_exposer.def( 
@@ -112,7 +112,7 @@ void register_MolPotentialTable_class(){
         }
         { //::SireFF::MolPotentialTable::map
         
-            typedef int ( ::SireFF::MolPotentialTable::*map_function_type )( ::SireMol::CGIdx ) const;
+            typedef int ( ::SireFF::MolPotentialTable::*map_function_type)( ::SireMol::CGIdx ) const;
             map_function_type map_function_value( &::SireFF::MolPotentialTable::map );
             
             MolPotentialTable_exposer.def( 
@@ -123,7 +123,7 @@ void register_MolPotentialTable_class(){
         }
         { //::SireFF::MolPotentialTable::molNum
         
-            typedef ::SireMol::MolNum ( ::SireFF::MolPotentialTable::*molNum_function_type )(  ) const;
+            typedef ::SireMol::MolNum ( ::SireFF::MolPotentialTable::*molNum_function_type)(  ) const;
             molNum_function_type molNum_function_value( &::SireFF::MolPotentialTable::molNum );
             
             MolPotentialTable_exposer.def( 
@@ -133,7 +133,7 @@ void register_MolPotentialTable_class(){
         }
         { //::SireFF::MolPotentialTable::molUID
         
-            typedef ::QUuid const & ( ::SireFF::MolPotentialTable::*molUID_function_type )(  ) const;
+            typedef ::QUuid const & ( ::SireFF::MolPotentialTable::*molUID_function_type)(  ) const;
             molUID_function_type molUID_function_value( &::SireFF::MolPotentialTable::molUID );
             
             MolPotentialTable_exposer.def( 
@@ -144,7 +144,7 @@ void register_MolPotentialTable_class(){
         }
         { //::SireFF::MolPotentialTable::multiply
         
-            typedef void ( ::SireFF::MolPotentialTable::*multiply_function_type )( double ) ;
+            typedef void ( ::SireFF::MolPotentialTable::*multiply_function_type)( double ) ;
             multiply_function_type multiply_function_value( &::SireFF::MolPotentialTable::multiply );
             
             MolPotentialTable_exposer.def( 
@@ -155,7 +155,7 @@ void register_MolPotentialTable_class(){
         }
         { //::SireFF::MolPotentialTable::nCutGroups
         
-            typedef int ( ::SireFF::MolPotentialTable::*nCutGroups_function_type )(  ) const;
+            typedef int ( ::SireFF::MolPotentialTable::*nCutGroups_function_type)(  ) const;
             nCutGroups_function_type nCutGroups_function_value( &::SireFF::MolPotentialTable::nCutGroups );
             
             MolPotentialTable_exposer.def( 
@@ -165,7 +165,7 @@ void register_MolPotentialTable_class(){
         }
         { //::SireFF::MolPotentialTable::nSelectedCutGroups
         
-            typedef int ( ::SireFF::MolPotentialTable::*nSelectedCutGroups_function_type )(  ) const;
+            typedef int ( ::SireFF::MolPotentialTable::*nSelectedCutGroups_function_type)(  ) const;
             nSelectedCutGroups_function_type nSelectedCutGroups_function_value( &::SireFF::MolPotentialTable::nSelectedCutGroups );
             
             MolPotentialTable_exposer.def( 
@@ -183,7 +183,7 @@ void register_MolPotentialTable_class(){
         MolPotentialTable_exposer.def( bp::self / bp::other< double >() );
         { //::SireFF::MolPotentialTable::operator=
         
-            typedef ::SireFF::MolPotentialTable & ( ::SireFF::MolPotentialTable::*assign_function_type )( ::SireFF::MolPotentialTable const & ) ;
+            typedef ::SireFF::MolPotentialTable & ( ::SireFF::MolPotentialTable::*assign_function_type)( ::SireFF::MolPotentialTable const & ) ;
             assign_function_type assign_function_value( &::SireFF::MolPotentialTable::operator= );
             
             MolPotentialTable_exposer.def( 
@@ -195,7 +195,7 @@ void register_MolPotentialTable_class(){
         }
         { //::SireFF::MolPotentialTable::operator=
         
-            typedef ::SireFF::MolPotentialTable & ( ::SireFF::MolPotentialTable::*assign_function_type )( ::SireUnits::Dimension::MolarEnergy const & ) ;
+            typedef ::SireFF::MolPotentialTable & ( ::SireFF::MolPotentialTable::*assign_function_type)( ::SireUnits::Dimension::MolarEnergy const & ) ;
             assign_function_type assign_function_value( &::SireFF::MolPotentialTable::operator= );
             
             MolPotentialTable_exposer.def( 
@@ -208,7 +208,7 @@ void register_MolPotentialTable_class(){
         MolPotentialTable_exposer.def( bp::self == bp::self );
         { //::SireFF::MolPotentialTable::selected
         
-            typedef bool ( ::SireFF::MolPotentialTable::*selected_function_type )( ::SireMol::CGIdx ) const;
+            typedef bool ( ::SireFF::MolPotentialTable::*selected_function_type)( ::SireMol::CGIdx ) const;
             selected_function_type selected_function_value( &::SireFF::MolPotentialTable::selected );
             
             MolPotentialTable_exposer.def( 
@@ -219,7 +219,7 @@ void register_MolPotentialTable_class(){
         }
         { //::SireFF::MolPotentialTable::selectedAll
         
-            typedef bool ( ::SireFF::MolPotentialTable::*selectedAll_function_type )(  ) const;
+            typedef bool ( ::SireFF::MolPotentialTable::*selectedAll_function_type)(  ) const;
             selectedAll_function_type selectedAll_function_value( &::SireFF::MolPotentialTable::selectedAll );
             
             MolPotentialTable_exposer.def( 
@@ -229,7 +229,7 @@ void register_MolPotentialTable_class(){
         }
         { //::SireFF::MolPotentialTable::setAll
         
-            typedef void ( ::SireFF::MolPotentialTable::*setAll_function_type )( ::SireUnits::Dimension::MolarEnergy const & ) ;
+            typedef void ( ::SireFF::MolPotentialTable::*setAll_function_type)( ::SireUnits::Dimension::MolarEnergy const & ) ;
             setAll_function_type setAll_function_value( &::SireFF::MolPotentialTable::setAll );
             
             MolPotentialTable_exposer.def( 
@@ -240,7 +240,7 @@ void register_MolPotentialTable_class(){
         }
         { //::SireFF::MolPotentialTable::subtract
         
-            typedef bool ( ::SireFF::MolPotentialTable::*subtract_function_type )( ::SireMol::CGAtomIdx const &,::SireUnits::Dimension::MolarEnergy const & ) ;
+            typedef bool ( ::SireFF::MolPotentialTable::*subtract_function_type)( ::SireMol::CGAtomIdx const &,::SireUnits::Dimension::MolarEnergy const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::MolPotentialTable::subtract );
             
             MolPotentialTable_exposer.def( 
@@ -251,7 +251,7 @@ void register_MolPotentialTable_class(){
         }
         { //::SireFF::MolPotentialTable::subtract
         
-            typedef bool ( ::SireFF::MolPotentialTable::*subtract_function_type )( ::SireMol::AtomSelection const &,::SireUnits::Dimension::MolarEnergy const & ) ;
+            typedef bool ( ::SireFF::MolPotentialTable::*subtract_function_type)( ::SireMol::AtomSelection const &,::SireUnits::Dimension::MolarEnergy const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::MolPotentialTable::subtract );
             
             MolPotentialTable_exposer.def( 
@@ -262,7 +262,7 @@ void register_MolPotentialTable_class(){
         }
         { //::SireFF::MolPotentialTable::subtract
         
-            typedef void ( ::SireFF::MolPotentialTable::*subtract_function_type )( ::SireFF::MolPotentialTable const & ) ;
+            typedef void ( ::SireFF::MolPotentialTable::*subtract_function_type)( ::SireFF::MolPotentialTable const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::MolPotentialTable::subtract );
             
             MolPotentialTable_exposer.def( 
@@ -273,7 +273,7 @@ void register_MolPotentialTable_class(){
         }
         { //::SireFF::MolPotentialTable::subtract
         
-            typedef void ( ::SireFF::MolPotentialTable::*subtract_function_type )( ::SireUnits::Dimension::MolarEnergy const & ) ;
+            typedef void ( ::SireFF::MolPotentialTable::*subtract_function_type)( ::SireUnits::Dimension::MolarEnergy const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::MolPotentialTable::subtract );
             
             MolPotentialTable_exposer.def( 
@@ -284,7 +284,7 @@ void register_MolPotentialTable_class(){
         }
         { //::SireFF::MolPotentialTable::toVector
         
-            typedef ::QVector< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > ( ::SireFF::MolPotentialTable::*toVector_function_type )(  ) const;
+            typedef ::QVector< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > ( ::SireFF::MolPotentialTable::*toVector_function_type)(  ) const;
             toVector_function_type toVector_function_value( &::SireFF::MolPotentialTable::toVector );
             
             MolPotentialTable_exposer.def( 
@@ -294,7 +294,7 @@ void register_MolPotentialTable_class(){
         }
         { //::SireFF::MolPotentialTable::toVector
         
-            typedef ::QVector< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > ( ::SireFF::MolPotentialTable::*toVector_function_type )( ::SireMol::AtomSelection const & ) const;
+            typedef ::QVector< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > ( ::SireFF::MolPotentialTable::*toVector_function_type)( ::SireMol::AtomSelection const & ) const;
             toVector_function_type toVector_function_value( &::SireFF::MolPotentialTable::toVector );
             
             MolPotentialTable_exposer.def( 
@@ -315,7 +315,7 @@ void register_MolPotentialTable_class(){
         }
         { //::SireFF::MolPotentialTable::what
         
-            typedef char const * ( ::SireFF::MolPotentialTable::*what_function_type )(  ) const;
+            typedef char const * ( ::SireFF::MolPotentialTable::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireFF::MolPotentialTable::what );
             
             MolPotentialTable_exposer.def( 

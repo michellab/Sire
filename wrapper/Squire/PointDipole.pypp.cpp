@@ -29,7 +29,7 @@ void register_PointDipole_class(){
         PointDipole_exposer.def( bp::init< Squire::PointDipole const & >(( bp::arg("other") )) );
         { //::Squire::PointDipole::center
         
-            typedef ::SireMaths::Vector const & ( ::Squire::PointDipole::*center_function_type )(  ) const;
+            typedef ::SireMaths::Vector const & ( ::Squire::PointDipole::*center_function_type)(  ) const;
             center_function_type center_function_value( &::Squire::PointDipole::center );
             
             PointDipole_exposer.def( 
@@ -40,7 +40,7 @@ void register_PointDipole_class(){
         }
         { //::Squire::PointDipole::dipole
         
-            typedef ::SireMaths::Vector const & ( ::Squire::PointDipole::*dipole_function_type )(  ) const;
+            typedef ::SireMaths::Vector const & ( ::Squire::PointDipole::*dipole_function_type)(  ) const;
             dipole_function_type dipole_function_value( &::Squire::PointDipole::dipole );
             
             PointDipole_exposer.def( 
@@ -52,7 +52,7 @@ void register_PointDipole_class(){
         PointDipole_exposer.def( bp::self != bp::self );
         { //::Squire::PointDipole::operator=
         
-            typedef ::Squire::PointDipole & ( ::Squire::PointDipole::*assign_function_type )( ::Squire::PointDipole const & ) ;
+            typedef ::Squire::PointDipole & ( ::Squire::PointDipole::*assign_function_type)( ::Squire::PointDipole const & ) ;
             assign_function_type assign_function_value( &::Squire::PointDipole::operator= );
             
             PointDipole_exposer.def( 

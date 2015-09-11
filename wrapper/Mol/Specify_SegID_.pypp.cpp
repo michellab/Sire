@@ -67,7 +67,7 @@ void register_Specify_SegID__class(){
         { //::SireID::Specify< SireMol::SegID >::hash
         
             typedef SireID::Specify< SireMol::SegID > exported_class_t;
-            typedef ::uint ( ::SireID::Specify< SireMol::SegID >::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireID::Specify< SireMol::SegID >::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireID::Specify< SireMol::SegID >::hash );
             
             Specify_SegID__exposer.def( 
@@ -78,7 +78,7 @@ void register_Specify_SegID__class(){
         { //::SireID::Specify< SireMol::SegID >::isNull
         
             typedef SireID::Specify< SireMol::SegID > exported_class_t;
-            typedef bool ( ::SireID::Specify< SireMol::SegID >::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireID::Specify< SireMol::SegID >::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireID::Specify< SireMol::SegID >::isNull );
             
             Specify_SegID__exposer.def( 
@@ -89,7 +89,7 @@ void register_Specify_SegID__class(){
         { //::SireID::Specify< SireMol::SegID >::map
         
             typedef SireID::Specify< SireMol::SegID > exported_class_t;
-            typedef ::QList< SireMol::SegIdx > ( ::SireID::Specify< SireMol::SegID >::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::SegIdx > ( ::SireID::Specify< SireMol::SegID >::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireID::Specify< SireMol::SegID >::map );
             
             Specify_SegID__exposer.def( 
@@ -103,7 +103,7 @@ void register_Specify_SegID__class(){
         { //::SireID::Specify< SireMol::SegID >::operator()
         
             typedef SireID::Specify< SireMol::SegID > exported_class_t;
-            typedef ::SireID::Specify< SireMol::SegID > ( ::SireID::Specify< SireMol::SegID >::*__call___function_type )( int ) const;
+            typedef ::SireID::Specify< SireMol::SegID > ( ::SireID::Specify< SireMol::SegID >::*__call___function_type)( int ) const;
             __call___function_type __call___function_value( &::SireID::Specify< SireMol::SegID >::operator() );
             
             Specify_SegID__exposer.def( 
@@ -115,7 +115,7 @@ void register_Specify_SegID__class(){
         { //::SireID::Specify< SireMol::SegID >::operator()
         
             typedef SireID::Specify< SireMol::SegID > exported_class_t;
-            typedef ::SireID::Specify< SireMol::SegID > ( ::SireID::Specify< SireMol::SegID >::*__call___function_type )( int,int ) const;
+            typedef ::SireID::Specify< SireMol::SegID > ( ::SireID::Specify< SireMol::SegID >::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireID::Specify< SireMol::SegID >::operator() );
             
             Specify_SegID__exposer.def( 
@@ -127,7 +127,7 @@ void register_Specify_SegID__class(){
         { //::SireID::Specify< SireMol::SegID >::operator=
         
             typedef SireID::Specify< SireMol::SegID > exported_class_t;
-            typedef ::SireID::Specify< SireMol::SegID > & ( ::SireID::Specify< SireMol::SegID >::*assign_function_type )( ::SireID::Specify< SireMol::SegID > const & ) ;
+            typedef ::SireID::Specify< SireMol::SegID > & ( ::SireID::Specify< SireMol::SegID >::*assign_function_type)( ::SireID::Specify< SireMol::SegID > const & ) ;
             assign_function_type assign_function_value( &::SireID::Specify< SireMol::SegID >::operator= );
             
             Specify_SegID__exposer.def( 
@@ -142,7 +142,7 @@ void register_Specify_SegID__class(){
         { //::SireID::Specify< SireMol::SegID >::operator[]
         
             typedef SireID::Specify< SireMol::SegID > exported_class_t;
-            typedef ::SireID::Specify< SireMol::SegID > ( ::SireID::Specify< SireMol::SegID >::*__getitem___function_type )( int ) const;
+            typedef ::SireID::Specify< SireMol::SegID > ( ::SireID::Specify< SireMol::SegID >::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireID::Specify< SireMol::SegID >::operator[] );
             
             Specify_SegID__exposer.def( 
@@ -154,7 +154,7 @@ void register_Specify_SegID__class(){
         { //::SireID::Specify< SireMol::SegID >::toString
         
             typedef SireID::Specify< SireMol::SegID > exported_class_t;
-            typedef ::QString ( ::SireID::Specify< SireMol::SegID >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireID::Specify< SireMol::SegID >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireID::Specify< SireMol::SegID >::toString );
             
             Specify_SegID__exposer.def( 
@@ -176,7 +176,7 @@ void register_Specify_SegID__class(){
         { //::SireID::Specify< SireMol::SegID >::what
         
             typedef SireID::Specify< SireMol::SegID > exported_class_t;
-            typedef char const * ( ::SireID::Specify< SireMol::SegID >::*what_function_type )(  ) const;
+            typedef char const * ( ::SireID::Specify< SireMol::SegID >::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireID::Specify< SireMol::SegID >::what );
             
             Specify_SegID__exposer.def( 

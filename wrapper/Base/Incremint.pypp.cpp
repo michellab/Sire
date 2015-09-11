@@ -24,7 +24,7 @@ void register_Incremint_class(){
         Incremint_exposer.def( bp::init< SireBase::Incremint const & >(( bp::arg("other") )) );
         { //::SireBase::Incremint::increment
         
-            typedef int ( ::SireBase::Incremint::*increment_function_type )(  ) ;
+            typedef int ( ::SireBase::Incremint::*increment_function_type)(  ) ;
             increment_function_type increment_function_value( &::SireBase::Incremint::increment );
             
             Incremint_exposer.def( 

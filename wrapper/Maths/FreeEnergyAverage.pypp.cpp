@@ -43,7 +43,7 @@ void register_FreeEnergyAverage_class(){
         FreeEnergyAverage_exposer.def( bp::init< SireMaths::FreeEnergyAverage const & >(( bp::arg("other") )) );
         { //::SireMaths::FreeEnergyAverage::accumulate
         
-            typedef void ( ::SireMaths::FreeEnergyAverage::*accumulate_function_type )( double ) ;
+            typedef void ( ::SireMaths::FreeEnergyAverage::*accumulate_function_type)( double ) ;
             accumulate_function_type accumulate_function_value( &::SireMaths::FreeEnergyAverage::accumulate );
             
             FreeEnergyAverage_exposer.def( 
@@ -54,7 +54,7 @@ void register_FreeEnergyAverage_class(){
         }
         { //::SireMaths::FreeEnergyAverage::average
         
-            typedef double ( ::SireMaths::FreeEnergyAverage::*average_function_type )(  ) const;
+            typedef double ( ::SireMaths::FreeEnergyAverage::*average_function_type)(  ) const;
             average_function_type average_function_value( &::SireMaths::FreeEnergyAverage::average );
             
             FreeEnergyAverage_exposer.def( 
@@ -64,7 +64,7 @@ void register_FreeEnergyAverage_class(){
         }
         { //::SireMaths::FreeEnergyAverage::average2
         
-            typedef double ( ::SireMaths::FreeEnergyAverage::*average2_function_type )(  ) const;
+            typedef double ( ::SireMaths::FreeEnergyAverage::*average2_function_type)(  ) const;
             average2_function_type average2_function_value( &::SireMaths::FreeEnergyAverage::average2 );
             
             FreeEnergyAverage_exposer.def( 
@@ -74,7 +74,7 @@ void register_FreeEnergyAverage_class(){
         }
         { //::SireMaths::FreeEnergyAverage::clear
         
-            typedef void ( ::SireMaths::FreeEnergyAverage::*clear_function_type )(  ) ;
+            typedef void ( ::SireMaths::FreeEnergyAverage::*clear_function_type)(  ) ;
             clear_function_type clear_function_value( &::SireMaths::FreeEnergyAverage::clear );
             
             FreeEnergyAverage_exposer.def( 
@@ -84,7 +84,7 @@ void register_FreeEnergyAverage_class(){
         }
         { //::SireMaths::FreeEnergyAverage::fepFreeEnergy
         
-            typedef double ( ::SireMaths::FreeEnergyAverage::*fepFreeEnergy_function_type )(  ) const;
+            typedef double ( ::SireMaths::FreeEnergyAverage::*fepFreeEnergy_function_type)(  ) const;
             fepFreeEnergy_function_type fepFreeEnergy_function_value( &::SireMaths::FreeEnergyAverage::fepFreeEnergy );
             
             FreeEnergyAverage_exposer.def( 
@@ -94,7 +94,7 @@ void register_FreeEnergyAverage_class(){
         }
         { //::SireMaths::FreeEnergyAverage::histogram
         
-            typedef ::SireMaths::Histogram const & ( ::SireMaths::FreeEnergyAverage::*histogram_function_type )(  ) const;
+            typedef ::SireMaths::Histogram const & ( ::SireMaths::FreeEnergyAverage::*histogram_function_type)(  ) const;
             histogram_function_type histogram_function_value( &::SireMaths::FreeEnergyAverage::histogram );
             
             FreeEnergyAverage_exposer.def( 
@@ -105,7 +105,7 @@ void register_FreeEnergyAverage_class(){
         }
         { //::SireMaths::FreeEnergyAverage::isBackwardsFreeEnergy
         
-            typedef bool ( ::SireMaths::FreeEnergyAverage::*isBackwardsFreeEnergy_function_type )(  ) const;
+            typedef bool ( ::SireMaths::FreeEnergyAverage::*isBackwardsFreeEnergy_function_type)(  ) const;
             isBackwardsFreeEnergy_function_type isBackwardsFreeEnergy_function_value( &::SireMaths::FreeEnergyAverage::isBackwardsFreeEnergy );
             
             FreeEnergyAverage_exposer.def( 
@@ -115,7 +115,7 @@ void register_FreeEnergyAverage_class(){
         }
         { //::SireMaths::FreeEnergyAverage::isForwardsFreeEnergy
         
-            typedef bool ( ::SireMaths::FreeEnergyAverage::*isForwardsFreeEnergy_function_type )(  ) const;
+            typedef bool ( ::SireMaths::FreeEnergyAverage::*isForwardsFreeEnergy_function_type)(  ) const;
             isForwardsFreeEnergy_function_type isForwardsFreeEnergy_function_value( &::SireMaths::FreeEnergyAverage::isForwardsFreeEnergy );
             
             FreeEnergyAverage_exposer.def( 
@@ -127,7 +127,7 @@ void register_FreeEnergyAverage_class(){
         FreeEnergyAverage_exposer.def( bp::self + bp::self );
         { //::SireMaths::FreeEnergyAverage::operator=
         
-            typedef ::SireMaths::FreeEnergyAverage & ( ::SireMaths::FreeEnergyAverage::*assign_function_type )( ::SireMaths::FreeEnergyAverage const & ) ;
+            typedef ::SireMaths::FreeEnergyAverage & ( ::SireMaths::FreeEnergyAverage::*assign_function_type)( ::SireMaths::FreeEnergyAverage const & ) ;
             assign_function_type assign_function_value( &::SireMaths::FreeEnergyAverage::operator= );
             
             FreeEnergyAverage_exposer.def( 
@@ -140,7 +140,7 @@ void register_FreeEnergyAverage_class(){
         FreeEnergyAverage_exposer.def( bp::self == bp::self );
         { //::SireMaths::FreeEnergyAverage::taylorExpansion
         
-            typedef double ( ::SireMaths::FreeEnergyAverage::*taylorExpansion_function_type )(  ) const;
+            typedef double ( ::SireMaths::FreeEnergyAverage::*taylorExpansion_function_type)(  ) const;
             taylorExpansion_function_type taylorExpansion_function_value( &::SireMaths::FreeEnergyAverage::taylorExpansion );
             
             FreeEnergyAverage_exposer.def( 
@@ -150,7 +150,7 @@ void register_FreeEnergyAverage_class(){
         }
         { //::SireMaths::FreeEnergyAverage::temperature
         
-            typedef ::SireUnits::Dimension::Temperature ( ::SireMaths::FreeEnergyAverage::*temperature_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Temperature ( ::SireMaths::FreeEnergyAverage::*temperature_function_type)(  ) const;
             temperature_function_type temperature_function_value( &::SireMaths::FreeEnergyAverage::temperature );
             
             FreeEnergyAverage_exposer.def( 
@@ -160,7 +160,7 @@ void register_FreeEnergyAverage_class(){
         }
         { //::SireMaths::FreeEnergyAverage::toString
         
-            typedef ::QString ( ::SireMaths::FreeEnergyAverage::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMaths::FreeEnergyAverage::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMaths::FreeEnergyAverage::toString );
             
             FreeEnergyAverage_exposer.def( 

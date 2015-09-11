@@ -1,0 +1,83 @@
+
+cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
+cmake_policy(VERSION 2.8)
+
+# Add these directories to the RPATH variable for the libraries / executables,
+# so that they can find each other when loading
+set( CMAKE_SKIP_RPATH FALSE )
+set (CMAKE_SKIP_BUILD_RPATH FALSE)
+
+if (APPLE)
+  # make sure that all libraries are named "@rpath/library.dylib". This will allow
+  # the library to be found as long as the executable can substitute @rpath with the 
+  # path to the library
+  set (CMAKE_INSTALL_NAME_DIR "@rpath")
+endif()
+
+set (CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+
+# use loose loop syntax in CMakeLists files
+set( CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE )
+
+# must build as a shared library
+set (BUILD_SHARED_LIBS ON)
+
+# name the project
+project (BOOST_PYTHON CXX)
+
+# set the location of the boost headers
+set ( BOOST_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include" )
+
+# The PYTHON_LIBRARIES and PYTHON_INCLUDE_DIR should both be 
+# passed in as command line options
+message( STATUS "Python paths ${PYTHON_LIBRARIES} | ${PYTHON_INCLUDE_DIR}" )
+include_directories( ${PYTHON_INCLUDE_DIR} )
+
+# The CMAKE_CXX_FLAGS should have been passed as a command line option
+message( STATUS "C++ compiler flags: ${CMAKE_CXX_FLAGS}" )
+
+set ( SOURCES
+        numeric.cpp
+        list.cpp
+        long.cpp
+        dict.cpp
+        tuple.cpp
+        str.cpp
+        slice.cpp
+
+        converter/from_python.cpp
+        converter/registry.cpp
+        converter/type_id.cpp
+        object/enum.cpp
+        object/class.cpp
+        object/function.cpp
+        object/inheritance.cpp
+        object/life_support.cpp
+        object/pickle_support.cpp
+        errors.cpp
+        module.cpp
+        converter/builtin_converters.cpp
+        converter/arg_to_python_base.cpp
+        object/iterator.cpp
+        object/stl_iterator.cpp
+        object_protocol.cpp
+        object_operators.cpp
+        wrapper.cpp
+        import.cpp
+        exec.cpp
+        object/function_doc_signature.cpp
+    )
+
+include_directories( ${BOOST_INCLUDE_DIR} )
+
+add_library( boost_python ${SOURCES} )
+
+target_link_libraries( boost_python ${PYTHON_LIBRARIES} )
+
+message( STATUS "Will install boost::python to ${CMAKE_INSTALL_PREFIX}/lib" )
+
+install( DIRECTORY ${CMAKE_SOURCE_DIR}/include
+         DESTINATION ${CMAKE_INSTALL_PREFIX}/
+         USE_SOURCE_PERMISSIONS )
+
+install( TARGETS boost_python DESTINATION ${CMAKE_INSTALL_PREFIX}/lib )

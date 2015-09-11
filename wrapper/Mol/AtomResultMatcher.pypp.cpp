@@ -51,7 +51,7 @@ void register_AtomResultMatcher_class(){
         AtomResultMatcher_exposer.def( bp::init< SireMol::AtomResultMatcher const & >(( bp::arg("other") )) );
         { //::SireMol::AtomResultMatcher::isNull
         
-            typedef bool ( ::SireMol::AtomResultMatcher::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::AtomResultMatcher::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::AtomResultMatcher::isNull );
             
             AtomResultMatcher_exposer.def( 
@@ -62,7 +62,7 @@ void register_AtomResultMatcher_class(){
         AtomResultMatcher_exposer.def( bp::self != bp::self );
         { //::SireMol::AtomResultMatcher::operator=
         
-            typedef ::SireMol::AtomResultMatcher & ( ::SireMol::AtomResultMatcher::*assign_function_type )( ::SireMol::AtomResultMatcher const & ) ;
+            typedef ::SireMol::AtomResultMatcher & ( ::SireMol::AtomResultMatcher::*assign_function_type)( ::SireMol::AtomResultMatcher const & ) ;
             assign_function_type assign_function_value( &::SireMol::AtomResultMatcher::operator= );
             
             AtomResultMatcher_exposer.def( 
@@ -75,7 +75,7 @@ void register_AtomResultMatcher_class(){
         AtomResultMatcher_exposer.def( bp::self == bp::self );
         { //::SireMol::AtomResultMatcher::toString
         
-            typedef ::QString ( ::SireMol::AtomResultMatcher::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::AtomResultMatcher::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::AtomResultMatcher::toString );
             
             AtomResultMatcher_exposer.def( 
@@ -95,7 +95,7 @@ void register_AtomResultMatcher_class(){
         }
         { //::SireMol::AtomResultMatcher::what
         
-            typedef char const * ( ::SireMol::AtomResultMatcher::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::AtomResultMatcher::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::AtomResultMatcher::what );
             
             AtomResultMatcher_exposer.def( 

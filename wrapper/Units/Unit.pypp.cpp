@@ -23,7 +23,7 @@ void register_Unit_class(){
         bp::scope Unit_scope( Unit_exposer );
         { //::SireUnits::Dimension::Unit::convertFromInternal
         
-            typedef double ( ::SireUnits::Dimension::Unit::*convertFromInternal_function_type )( double ) const;
+            typedef double ( ::SireUnits::Dimension::Unit::*convertFromInternal_function_type)( double ) const;
             convertFromInternal_function_type convertFromInternal_function_value( &::SireUnits::Dimension::Unit::convertFromInternal );
             
             Unit_exposer.def( 
@@ -34,7 +34,7 @@ void register_Unit_class(){
         }
         { //::SireUnits::Dimension::Unit::convertToInternal
         
-            typedef double ( ::SireUnits::Dimension::Unit::*convertToInternal_function_type )( double ) const;
+            typedef double ( ::SireUnits::Dimension::Unit::*convertToInternal_function_type)( double ) const;
             convertToInternal_function_type convertToInternal_function_value( &::SireUnits::Dimension::Unit::convertToInternal );
             
             Unit_exposer.def( 
@@ -45,7 +45,7 @@ void register_Unit_class(){
         }
         { //::SireUnits::Dimension::Unit::scaleFactor
         
-            typedef double ( ::SireUnits::Dimension::Unit::*scaleFactor_function_type )(  ) const;
+            typedef double ( ::SireUnits::Dimension::Unit::*scaleFactor_function_type)(  ) const;
             scaleFactor_function_type scaleFactor_function_value( &::SireUnits::Dimension::Unit::scaleFactor );
             
             Unit_exposer.def( 
@@ -55,7 +55,7 @@ void register_Unit_class(){
         }
         { //::SireUnits::Dimension::Unit::value
         
-            typedef double ( ::SireUnits::Dimension::Unit::*value_function_type )(  ) const;
+            typedef double ( ::SireUnits::Dimension::Unit::*value_function_type)(  ) const;
             value_function_type value_function_value( &::SireUnits::Dimension::Unit::value );
             
             Unit_exposer.def( 

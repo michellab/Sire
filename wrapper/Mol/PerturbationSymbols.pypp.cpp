@@ -40,7 +40,7 @@ void register_PerturbationSymbols_class(){
         bp::scope PerturbationSymbols_scope( PerturbationSymbols_exposer );
         { //::SireMol::PerturbationSymbols::final
         
-            typedef ::SireCAS::Symbol const & ( ::SireMol::PerturbationSymbols::*final_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMol::PerturbationSymbols::*final_function_type)(  ) const;
             final_function_type final_function_value( &::SireMol::PerturbationSymbols::final );
             
             PerturbationSymbols_exposer.def( 
@@ -51,7 +51,7 @@ void register_PerturbationSymbols_class(){
         }
         { //::SireMol::PerturbationSymbols::initial
         
-            typedef ::SireCAS::Symbol const & ( ::SireMol::PerturbationSymbols::*initial_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMol::PerturbationSymbols::*initial_function_type)(  ) const;
             initial_function_type initial_function_value( &::SireMol::PerturbationSymbols::initial );
             
             PerturbationSymbols_exposer.def( 
@@ -62,7 +62,7 @@ void register_PerturbationSymbols_class(){
         }
         { //::SireMol::PerturbationSymbols::lambda
         
-            typedef ::SireCAS::Symbol const & ( ::SireMol::PerturbationSymbols::*Lambda_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMol::PerturbationSymbols::*Lambda_function_type)(  ) const;
             Lambda_function_type Lambda_function_value( &::SireMol::PerturbationSymbols::lambda );
             
             PerturbationSymbols_exposer.def( 

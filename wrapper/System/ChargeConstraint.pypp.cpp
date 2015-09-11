@@ -38,7 +38,7 @@ void register_ChargeConstraint_class(){
         bp::scope ChargeConstraint_scope( ChargeConstraint_exposer );
         { //::SireSystem::ChargeConstraint::moleculeGroup
         
-            typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::ChargeConstraint::*moleculeGroup_function_type )(  ) const;
+            typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::ChargeConstraint::*moleculeGroup_function_type)(  ) const;
             moleculeGroup_function_type moleculeGroup_function_value( &::SireSystem::ChargeConstraint::moleculeGroup );
             
             ChargeConstraint_exposer.def( 
@@ -49,7 +49,7 @@ void register_ChargeConstraint_class(){
         }
         { //::SireSystem::ChargeConstraint::propertyMap
         
-            typedef ::SireBase::PropertyMap const & ( ::SireSystem::ChargeConstraint::*propertyMap_function_type )(  ) const;
+            typedef ::SireBase::PropertyMap const & ( ::SireSystem::ChargeConstraint::*propertyMap_function_type)(  ) const;
             propertyMap_function_type propertyMap_function_value( &::SireSystem::ChargeConstraint::propertyMap );
             
             ChargeConstraint_exposer.def( 

@@ -37,7 +37,7 @@ void register_HistogramBin_class(){
         HistogramBin_exposer.def( bp::init< SireMaths::HistogramBin const & >(( bp::arg("other") )) );
         { //::SireMaths::HistogramBin::maximum
         
-            typedef double ( ::SireMaths::HistogramBin::*maximum_function_type )(  ) const;
+            typedef double ( ::SireMaths::HistogramBin::*maximum_function_type)(  ) const;
             maximum_function_type maximum_function_value( &::SireMaths::HistogramBin::maximum );
             
             HistogramBin_exposer.def( 
@@ -47,7 +47,7 @@ void register_HistogramBin_class(){
         }
         { //::SireMaths::HistogramBin::middle
         
-            typedef double ( ::SireMaths::HistogramBin::*middle_function_type )(  ) const;
+            typedef double ( ::SireMaths::HistogramBin::*middle_function_type)(  ) const;
             middle_function_type middle_function_value( &::SireMaths::HistogramBin::middle );
             
             HistogramBin_exposer.def( 
@@ -57,7 +57,7 @@ void register_HistogramBin_class(){
         }
         { //::SireMaths::HistogramBin::minimum
         
-            typedef double ( ::SireMaths::HistogramBin::*minimum_function_type )(  ) const;
+            typedef double ( ::SireMaths::HistogramBin::*minimum_function_type)(  ) const;
             minimum_function_type minimum_function_value( &::SireMaths::HistogramBin::minimum );
             
             HistogramBin_exposer.def( 
@@ -68,7 +68,7 @@ void register_HistogramBin_class(){
         HistogramBin_exposer.def( bp::self != bp::self );
         { //::SireMaths::HistogramBin::operator=
         
-            typedef ::SireMaths::HistogramBin & ( ::SireMaths::HistogramBin::*assign_function_type )( ::SireMaths::HistogramBin const & ) ;
+            typedef ::SireMaths::HistogramBin & ( ::SireMaths::HistogramBin::*assign_function_type)( ::SireMaths::HistogramBin const & ) ;
             assign_function_type assign_function_value( &::SireMaths::HistogramBin::operator= );
             
             HistogramBin_exposer.def( 
@@ -81,7 +81,7 @@ void register_HistogramBin_class(){
         HistogramBin_exposer.def( bp::self == bp::self );
         { //::SireMaths::HistogramBin::toString
         
-            typedef ::QString ( ::SireMaths::HistogramBin::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMaths::HistogramBin::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMaths::HistogramBin::toString );
             
             HistogramBin_exposer.def( 

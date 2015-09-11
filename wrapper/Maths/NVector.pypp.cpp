@@ -44,7 +44,7 @@ void register_NVector_class(){
         NVector_exposer.def( bp::init< SireMaths::NVector const & >(( bp::arg("vector") )) );
         { //::SireMaths::NVector::assertNColumns
         
-            typedef void ( ::SireMaths::NVector::*assertNColumns_function_type )( int ) const;
+            typedef void ( ::SireMaths::NVector::*assertNColumns_function_type)( int ) const;
             assertNColumns_function_type assertNColumns_function_value( &::SireMaths::NVector::assertNColumns );
             
             NVector_exposer.def( 
@@ -55,7 +55,7 @@ void register_NVector_class(){
         }
         { //::SireMaths::NVector::assertNRows
         
-            typedef void ( ::SireMaths::NVector::*assertNRows_function_type )( int ) const;
+            typedef void ( ::SireMaths::NVector::*assertNRows_function_type)( int ) const;
             assertNRows_function_type assertNRows_function_value( &::SireMaths::NVector::assertNRows );
             
             NVector_exposer.def( 
@@ -66,7 +66,7 @@ void register_NVector_class(){
         }
         { //::SireMaths::NVector::assertValidIndex
         
-            typedef void ( ::SireMaths::NVector::*assertValidIndex_function_type )( int ) const;
+            typedef void ( ::SireMaths::NVector::*assertValidIndex_function_type)( int ) const;
             assertValidIndex_function_type assertValidIndex_function_value( &::SireMaths::NVector::assertValidIndex );
             
             NVector_exposer.def( 
@@ -77,7 +77,7 @@ void register_NVector_class(){
         }
         { //::SireMaths::NVector::assertValidIndex
         
-            typedef void ( ::SireMaths::NVector::*assertValidIndex_function_type )( int,int ) const;
+            typedef void ( ::SireMaths::NVector::*assertValidIndex_function_type)( int,int ) const;
             assertValidIndex_function_type assertValidIndex_function_value( &::SireMaths::NVector::assertValidIndex );
             
             NVector_exposer.def( 
@@ -88,7 +88,7 @@ void register_NVector_class(){
         }
         { //::SireMaths::NVector::count
         
-            typedef int ( ::SireMaths::NVector::*count_function_type )(  ) const;
+            typedef int ( ::SireMaths::NVector::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMaths::NVector::count );
             
             NVector_exposer.def( 
@@ -98,7 +98,7 @@ void register_NVector_class(){
         }
         { //::SireMaths::NVector::cross
         
-            typedef ::SireMaths::NVector ( ::SireMaths::NVector::*cross_function_type )( ::SireMaths::NVector const & ) const;
+            typedef ::SireMaths::NVector ( ::SireMaths::NVector::*cross_function_type)( ::SireMaths::NVector const & ) const;
             cross_function_type cross_function_value( &::SireMaths::NVector::cross );
             
             NVector_exposer.def( 
@@ -109,7 +109,7 @@ void register_NVector_class(){
         }
         { //::SireMaths::NVector::dot
         
-            typedef double ( ::SireMaths::NVector::*dot_function_type )( ::SireMaths::NVector const & ) const;
+            typedef double ( ::SireMaths::NVector::*dot_function_type)( ::SireMaths::NVector const & ) const;
             dot_function_type dot_function_value( &::SireMaths::NVector::dot );
             
             NVector_exposer.def( 
@@ -120,7 +120,7 @@ void register_NVector_class(){
         }
         { //::SireMaths::NVector::isZero
         
-            typedef bool ( ::SireMaths::NVector::*isZero_function_type )(  ) const;
+            typedef bool ( ::SireMaths::NVector::*isZero_function_type)(  ) const;
             isZero_function_type isZero_function_value( &::SireMaths::NVector::isZero );
             
             NVector_exposer.def( 
@@ -130,7 +130,7 @@ void register_NVector_class(){
         }
         { //::SireMaths::NVector::length
         
-            typedef double ( ::SireMaths::NVector::*length_function_type )(  ) const;
+            typedef double ( ::SireMaths::NVector::*length_function_type)(  ) const;
             length_function_type length_function_value( &::SireMaths::NVector::length );
             
             NVector_exposer.def( 
@@ -140,7 +140,7 @@ void register_NVector_class(){
         }
         { //::SireMaths::NVector::length2
         
-            typedef double ( ::SireMaths::NVector::*length2_function_type )(  ) const;
+            typedef double ( ::SireMaths::NVector::*length2_function_type)(  ) const;
             length2_function_type length2_function_value( &::SireMaths::NVector::length2 );
             
             NVector_exposer.def( 
@@ -150,7 +150,7 @@ void register_NVector_class(){
         }
         { //::SireMaths::NVector::nColumns
         
-            typedef int ( ::SireMaths::NVector::*nColumns_function_type )(  ) const;
+            typedef int ( ::SireMaths::NVector::*nColumns_function_type)(  ) const;
             nColumns_function_type nColumns_function_value( &::SireMaths::NVector::nColumns );
             
             NVector_exposer.def( 
@@ -160,7 +160,7 @@ void register_NVector_class(){
         }
         { //::SireMaths::NVector::nRows
         
-            typedef int ( ::SireMaths::NVector::*nRows_function_type )(  ) const;
+            typedef int ( ::SireMaths::NVector::*nRows_function_type)(  ) const;
             nRows_function_type nRows_function_value( &::SireMaths::NVector::nRows );
             
             NVector_exposer.def( 
@@ -170,7 +170,7 @@ void register_NVector_class(){
         }
         { //::SireMaths::NVector::normalise
         
-            typedef ::SireMaths::NVector ( ::SireMaths::NVector::*normalise_function_type )(  ) const;
+            typedef ::SireMaths::NVector ( ::SireMaths::NVector::*normalise_function_type)(  ) const;
             normalise_function_type normalise_function_value( &::SireMaths::NVector::normalise );
             
             NVector_exposer.def( 
@@ -181,7 +181,7 @@ void register_NVector_class(){
         NVector_exposer.def( bp::self != bp::self );
         { //::SireMaths::NVector::operator()
         
-            typedef double const & ( ::SireMaths::NVector::*__call___function_type )( int ) const;
+            typedef double const & ( ::SireMaths::NVector::*__call___function_type)( int ) const;
             __call___function_type __call___function_value( &::SireMaths::NVector::operator() );
             
             NVector_exposer.def( 
@@ -193,7 +193,7 @@ void register_NVector_class(){
         }
         { //::SireMaths::NVector::operator()
         
-            typedef double const & ( ::SireMaths::NVector::*__call___function_type )( int,int ) const;
+            typedef double const & ( ::SireMaths::NVector::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireMaths::NVector::operator() );
             
             NVector_exposer.def( 
@@ -210,7 +210,7 @@ void register_NVector_class(){
         NVector_exposer.def( bp::self / bp::other< double >() );
         { //::SireMaths::NVector::operator=
         
-            typedef ::SireMaths::NVector & ( ::SireMaths::NVector::*assign_function_type )( ::SireMaths::NVector const & ) ;
+            typedef ::SireMaths::NVector & ( ::SireMaths::NVector::*assign_function_type)( ::SireMaths::NVector const & ) ;
             assign_function_type assign_function_value( &::SireMaths::NVector::operator= );
             
             NVector_exposer.def( 
@@ -223,7 +223,7 @@ void register_NVector_class(){
         NVector_exposer.def( bp::self == bp::self );
         { //::SireMaths::NVector::operator[]
         
-            typedef double & ( ::SireMaths::NVector::*__getitem___function_type )( int ) ;
+            typedef double & ( ::SireMaths::NVector::*__getitem___function_type)( int ) ;
             __getitem___function_type __getitem___function_value( &::SireMaths::NVector::operator[] );
             
             NVector_exposer.def( 
@@ -235,7 +235,7 @@ void register_NVector_class(){
         }
         { //::SireMaths::NVector::operator[]
         
-            typedef double const & ( ::SireMaths::NVector::*__getitem___function_type )( int ) const;
+            typedef double const & ( ::SireMaths::NVector::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMaths::NVector::operator[] );
             
             NVector_exposer.def( 
@@ -247,7 +247,7 @@ void register_NVector_class(){
         }
         { //::SireMaths::NVector::set
         
-            typedef void ( ::SireMaths::NVector::*set_function_type )( int,double ) ;
+            typedef void ( ::SireMaths::NVector::*set_function_type)( int,double ) ;
             set_function_type set_function_value( &::SireMaths::NVector::set );
             
             NVector_exposer.def( 
@@ -258,7 +258,7 @@ void register_NVector_class(){
         }
         { //::SireMaths::NVector::set
         
-            typedef void ( ::SireMaths::NVector::*set_function_type )( int,int,double ) ;
+            typedef void ( ::SireMaths::NVector::*set_function_type)( int,int,double ) ;
             set_function_type set_function_value( &::SireMaths::NVector::set );
             
             NVector_exposer.def( 
@@ -269,7 +269,7 @@ void register_NVector_class(){
         }
         { //::SireMaths::NVector::setAll
         
-            typedef void ( ::SireMaths::NVector::*setAll_function_type )( double ) ;
+            typedef void ( ::SireMaths::NVector::*setAll_function_type)( double ) ;
             setAll_function_type setAll_function_value( &::SireMaths::NVector::setAll );
             
             NVector_exposer.def( 
@@ -280,7 +280,7 @@ void register_NVector_class(){
         }
         { //::SireMaths::NVector::size
         
-            typedef int ( ::SireMaths::NVector::*size_function_type )(  ) const;
+            typedef int ( ::SireMaths::NVector::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireMaths::NVector::size );
             
             NVector_exposer.def( 
@@ -290,7 +290,7 @@ void register_NVector_class(){
         }
         { //::SireMaths::NVector::sum
         
-            typedef double ( ::SireMaths::NVector::*sum_function_type )(  ) const;
+            typedef double ( ::SireMaths::NVector::*sum_function_type)(  ) const;
             sum_function_type sum_function_value( &::SireMaths::NVector::sum );
             
             NVector_exposer.def( 
@@ -300,7 +300,7 @@ void register_NVector_class(){
         }
         { //::SireMaths::NVector::toString
         
-            typedef ::QString ( ::SireMaths::NVector::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMaths::NVector::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMaths::NVector::toString );
             
             NVector_exposer.def( 
@@ -310,7 +310,7 @@ void register_NVector_class(){
         }
         { //::SireMaths::NVector::transpose
         
-            typedef ::SireMaths::NMatrix ( ::SireMaths::NVector::*transpose_function_type )(  ) const;
+            typedef ::SireMaths::NMatrix ( ::SireMaths::NVector::*transpose_function_type)(  ) const;
             transpose_function_type transpose_function_value( &::SireMaths::NVector::transpose );
             
             NVector_exposer.def( 
@@ -330,7 +330,7 @@ void register_NVector_class(){
         }
         { //::SireMaths::NVector::what
         
-            typedef char const * ( ::SireMaths::NVector::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMaths::NVector::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMaths::NVector::what );
             
             NVector_exposer.def( 
