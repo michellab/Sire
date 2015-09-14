@@ -41,7 +41,7 @@ void register_ChargePerturbation_class(){
         ChargePerturbation_exposer.def( bp::self != bp::self );
         { //::SireMol::ChargePerturbation::operator=
         
-            typedef ::SireMol::ChargePerturbation & ( ::SireMol::ChargePerturbation::*assign_function_type )( ::SireMol::ChargePerturbation const & ) ;
+            typedef ::SireMol::ChargePerturbation & ( ::SireMol::ChargePerturbation::*assign_function_type)( ::SireMol::ChargePerturbation const & ) ;
             assign_function_type assign_function_value( &::SireMol::ChargePerturbation::operator= );
             
             ChargePerturbation_exposer.def( 
@@ -54,7 +54,7 @@ void register_ChargePerturbation_class(){
         ChargePerturbation_exposer.def( bp::self == bp::self );
         { //::SireMol::ChargePerturbation::requiredProperties
         
-            typedef ::QSet< QString > ( ::SireMol::ChargePerturbation::*requiredProperties_function_type )(  ) const;
+            typedef ::QSet< QString > ( ::SireMol::ChargePerturbation::*requiredProperties_function_type)(  ) const;
             requiredProperties_function_type requiredProperties_function_value( &::SireMol::ChargePerturbation::requiredProperties );
             
             ChargePerturbation_exposer.def( 
@@ -64,7 +64,7 @@ void register_ChargePerturbation_class(){
         }
         { //::SireMol::ChargePerturbation::toString
         
-            typedef ::QString ( ::SireMol::ChargePerturbation::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::ChargePerturbation::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::ChargePerturbation::toString );
             
             ChargePerturbation_exposer.def( 
@@ -84,7 +84,7 @@ void register_ChargePerturbation_class(){
         }
         { //::SireMol::ChargePerturbation::wouldChange
         
-            typedef bool ( ::SireMol::ChargePerturbation::*wouldChange_function_type )( ::SireMol::Molecule const &,::SireCAS::Values const & ) const;
+            typedef bool ( ::SireMol::ChargePerturbation::*wouldChange_function_type)( ::SireMol::Molecule const &,::SireCAS::Values const & ) const;
             wouldChange_function_type wouldChange_function_value( &::SireMol::ChargePerturbation::wouldChange );
             
             ChargePerturbation_exposer.def( 

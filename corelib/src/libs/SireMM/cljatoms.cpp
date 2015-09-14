@@ -385,11 +385,48 @@ MultiInt CLJAtoms::idOfDummy()
 CLJAtoms::CLJAtoms()
 {}
 
+/** Constructor allowing implicit conversion from a single CLJAtom */
+CLJAtoms::CLJAtoms(const CLJAtom &cljatom)
+{
+    if (cljatom.isNull())
+        return;
+
+    QElapsedTimer t;
+    t.start();
+    
+/*
+            xa[idx] = atm.x;
+            ya[idx] = atm.y;
+            za[idx] = atm.z;
+            ca[idx] = atm.chg;
+            sa[idx] = atm.sig;
+            ea[idx] = atm.eps;
+            ida[idx] = atm.idnum;
+*/
+    _x = MultiFloat::fromArray( &(cljatom.x), 1 );
+    _y = MultiFloat::fromArray( &(cljatom.y), 1 );
+    _z = MultiFloat::fromArray( &(cljatom.z), 1 );
+    _q = MultiFloat::fromArray( &(cljatom.chg), 1 );
+    _sig = MultiFloat::fromArray( &(cljatom.sig), 1 );
+    _eps = MultiFloat::fromArray( &(cljatom.eps), 1 );
+    _id = MultiInt::fromArray( &(cljatom.idnum), 1 );
+
+    quint64 ns = t.nsecsElapsed();
+
+    qDebug() << "Converting a single atom took " << (0.000001*ns) << "ms";
+}
+
 /** Construct from the passed array of CLJAtom atoms */
 CLJAtoms::CLJAtoms(const QVector<CLJAtom> &atoms)
 {
     if (atoms.isEmpty())
         return;
+    
+    else if (atoms.count() == 1)
+    {
+        this->operator=( CLJAtoms(atoms.at(0)) );
+        return;
+    }
     
     /*QElapsedTimer t;
     t.start();*/
@@ -461,6 +498,12 @@ CLJAtoms::CLJAtoms(const CLJAtom *atoms, int natoms)
 {
     if (atoms == 0 or natoms <= 0)
         return;
+    
+    else if (natoms == 1)
+    {
+        this->operator=( CLJAtoms(atoms[0]) );
+        return;
+    }
     
     /*QElapsedTimer t;
     t.start();*/
@@ -800,6 +843,9 @@ CLJAtoms::CLJAtoms(const QVector<Vector> &coordinates,
 void CLJAtoms::constructFrom(const MoleculeView &molecule,
                              const ID_SOURCE id_source, const PropertyMap &map)
 {
+    if (molecule.isEmpty())
+        return;
+
     //QElapsedTimer t;
     //t.start();
     

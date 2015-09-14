@@ -32,7 +32,7 @@ void register_BondComponent_class(){
         BondComponent_exposer.def( bp::init< SireMM::BondComponent const & >(( bp::arg("other") )) );
         { //::SireMM::BondComponent::changeEnergy
         
-            typedef void ( ::SireMM::BondComponent::*changeEnergy_function_type )( ::SireFF::FF &,::SireMM::BondEnergy const & ) const;
+            typedef void ( ::SireMM::BondComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::BondEnergy const & ) const;
             changeEnergy_function_type changeEnergy_function_value( &::SireMM::BondComponent::changeEnergy );
             
             BondComponent_exposer.def( 
@@ -43,7 +43,7 @@ void register_BondComponent_class(){
         }
         { //::SireMM::BondComponent::setEnergy
         
-            typedef void ( ::SireMM::BondComponent::*setEnergy_function_type )( ::SireFF::FF &,::SireMM::BondEnergy const & ) const;
+            typedef void ( ::SireMM::BondComponent::*setEnergy_function_type)( ::SireFF::FF &,::SireMM::BondEnergy const & ) const;
             setEnergy_function_type setEnergy_function_value( &::SireMM::BondComponent::setEnergy );
             
             BondComponent_exposer.def( 
@@ -54,7 +54,7 @@ void register_BondComponent_class(){
         }
         { //::SireMM::BondComponent::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireMM::BondComponent::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireMM::BondComponent::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireMM::BondComponent::symbols );
             
             BondComponent_exposer.def( 
@@ -64,7 +64,7 @@ void register_BondComponent_class(){
         }
         { //::SireMM::BondComponent::total
         
-            typedef ::SireMM::BondComponent const & ( ::SireMM::BondComponent::*total_function_type )(  ) const;
+            typedef ::SireMM::BondComponent const & ( ::SireMM::BondComponent::*total_function_type)(  ) const;
             total_function_type total_function_value( &::SireMM::BondComponent::total );
             
             BondComponent_exposer.def( 
@@ -85,7 +85,7 @@ void register_BondComponent_class(){
         }
         { //::SireMM::BondComponent::what
         
-            typedef char const * ( ::SireMM::BondComponent::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::BondComponent::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::BondComponent::what );
             
             BondComponent_exposer.def( 

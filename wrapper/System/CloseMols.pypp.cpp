@@ -43,7 +43,7 @@ void register_CloseMols_class(){
         CloseMols_exposer.def( bp::init< SireSystem::CloseMols const & >(( bp::arg("other") )) );
         { //::SireSystem::CloseMols::closeMolecules
         
-            typedef ::QHash< SireMol::MolNum, double > const & ( ::SireSystem::CloseMols::*closeMolecules_function_type )(  ) const;
+            typedef ::QHash< SireMol::MolNum, double > const & ( ::SireSystem::CloseMols::*closeMolecules_function_type)(  ) const;
             closeMolecules_function_type closeMolecules_function_value( &::SireSystem::CloseMols::closeMolecules );
             
             CloseMols_exposer.def( 
@@ -54,7 +54,7 @@ void register_CloseMols_class(){
         }
         { //::SireSystem::CloseMols::isClose
         
-            typedef bool ( ::SireSystem::CloseMols::*isClose_function_type )( ::SireMol::MolNum ) const;
+            typedef bool ( ::SireSystem::CloseMols::*isClose_function_type)( ::SireMol::MolNum ) const;
             isClose_function_type isClose_function_value( &::SireSystem::CloseMols::isClose );
             
             CloseMols_exposer.def( 
@@ -65,7 +65,7 @@ void register_CloseMols_class(){
         }
         { //::SireSystem::CloseMols::moleculeGroup
         
-            typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::CloseMols::*moleculeGroup_function_type )(  ) const;
+            typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::CloseMols::*moleculeGroup_function_type)(  ) const;
             moleculeGroup_function_type moleculeGroup_function_value( &::SireSystem::CloseMols::moleculeGroup );
             
             CloseMols_exposer.def( 
@@ -76,7 +76,7 @@ void register_CloseMols_class(){
         }
         { //::SireSystem::CloseMols::nClosest
         
-            typedef int ( ::SireSystem::CloseMols::*nClosest_function_type )(  ) const;
+            typedef int ( ::SireSystem::CloseMols::*nClosest_function_type)(  ) const;
             nClosest_function_type nClosest_function_value( &::SireSystem::CloseMols::nClosest );
             
             CloseMols_exposer.def( 
@@ -87,7 +87,7 @@ void register_CloseMols_class(){
         CloseMols_exposer.def( bp::self != bp::self );
         { //::SireSystem::CloseMols::operator=
         
-            typedef ::SireSystem::CloseMols & ( ::SireSystem::CloseMols::*assign_function_type )( ::SireSystem::CloseMols const & ) ;
+            typedef ::SireSystem::CloseMols & ( ::SireSystem::CloseMols::*assign_function_type)( ::SireSystem::CloseMols const & ) ;
             assign_function_type assign_function_value( &::SireSystem::CloseMols::operator= );
             
             CloseMols_exposer.def( 
@@ -100,7 +100,7 @@ void register_CloseMols_class(){
         CloseMols_exposer.def( bp::self == bp::self );
         { //::SireSystem::CloseMols::point
         
-            typedef ::SireFF::Point const & ( ::SireSystem::CloseMols::*point_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::CloseMols::*point_function_type)(  ) const;
             point_function_type point_function_value( &::SireSystem::CloseMols::point );
             
             CloseMols_exposer.def( 
@@ -111,7 +111,7 @@ void register_CloseMols_class(){
         }
         { //::SireSystem::CloseMols::propertyMap
         
-            typedef ::SireBase::PropertyMap const & ( ::SireSystem::CloseMols::*propertyMap_function_type )(  ) const;
+            typedef ::SireBase::PropertyMap const & ( ::SireSystem::CloseMols::*propertyMap_function_type)(  ) const;
             propertyMap_function_type propertyMap_function_value( &::SireSystem::CloseMols::propertyMap );
             
             CloseMols_exposer.def( 
@@ -122,7 +122,7 @@ void register_CloseMols_class(){
         }
         { //::SireSystem::CloseMols::space
         
-            typedef ::SireVol::Space const & ( ::SireSystem::CloseMols::*space_function_type )(  ) const;
+            typedef ::SireVol::Space const & ( ::SireSystem::CloseMols::*space_function_type)(  ) const;
             space_function_type space_function_value( &::SireSystem::CloseMols::space );
             
             CloseMols_exposer.def( 
@@ -143,7 +143,7 @@ void register_CloseMols_class(){
         }
         { //::SireSystem::CloseMols::update
         
-            typedef bool ( ::SireSystem::CloseMols::*update_function_type )( ::SireSystem::System const & ) ;
+            typedef bool ( ::SireSystem::CloseMols::*update_function_type)( ::SireSystem::System const & ) ;
             update_function_type update_function_value( &::SireSystem::CloseMols::update );
             
             CloseMols_exposer.def( 
@@ -154,7 +154,7 @@ void register_CloseMols_class(){
         }
         { //::SireSystem::CloseMols::update
         
-            typedef bool ( ::SireSystem::CloseMols::*update_function_type )( ::SireSystem::System const &,::SireMol::MolNum ) ;
+            typedef bool ( ::SireSystem::CloseMols::*update_function_type)( ::SireSystem::System const &,::SireMol::MolNum ) ;
             update_function_type update_function_value( &::SireSystem::CloseMols::update );
             
             CloseMols_exposer.def( 
@@ -165,7 +165,7 @@ void register_CloseMols_class(){
         }
         { //::SireSystem::CloseMols::update
         
-            typedef bool ( ::SireSystem::CloseMols::*update_function_type )( ::SireSystem::System const &,::SireMol::Molecules const & ) ;
+            typedef bool ( ::SireSystem::CloseMols::*update_function_type)( ::SireSystem::System const &,::SireMol::Molecules const & ) ;
             update_function_type update_function_value( &::SireSystem::CloseMols::update );
             
             CloseMols_exposer.def( 
@@ -176,7 +176,7 @@ void register_CloseMols_class(){
         }
         { //::SireSystem::CloseMols::what
         
-            typedef char const * ( ::SireSystem::CloseMols::*what_function_type )(  ) const;
+            typedef char const * ( ::SireSystem::CloseMols::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireSystem::CloseMols::what );
             
             CloseMols_exposer.def( 

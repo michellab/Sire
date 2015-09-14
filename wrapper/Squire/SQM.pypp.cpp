@@ -61,7 +61,7 @@ void register_SQM_class(){
         SQM_exposer.def( bp::init< Squire::SQM const & >(( bp::arg("other") )) );
         { //::Squire::SQM::energyTemplate
         
-            typedef ::QString const & ( ::Squire::SQM::*energyTemplate_function_type )(  ) const;
+            typedef ::QString const & ( ::Squire::SQM::*energyTemplate_function_type)(  ) const;
             energyTemplate_function_type energyTemplate_function_value( &::Squire::SQM::energyTemplate );
             
             SQM_exposer.def( 
@@ -72,7 +72,7 @@ void register_SQM_class(){
         }
         { //::Squire::SQM::environment
         
-            typedef ::QHash< QString, QString > const & ( ::Squire::SQM::*environment_function_type )(  ) const;
+            typedef ::QHash< QString, QString > const & ( ::Squire::SQM::*environment_function_type)(  ) const;
             environment_function_type environment_function_value( &::Squire::SQM::environment );
             
             SQM_exposer.def( 
@@ -83,7 +83,7 @@ void register_SQM_class(){
         }
         { //::Squire::SQM::environment
         
-            typedef ::QString ( ::Squire::SQM::*environment_function_type )( ::QString const & ) const;
+            typedef ::QString ( ::Squire::SQM::*environment_function_type)( ::QString const & ) const;
             environment_function_type environment_function_value( &::Squire::SQM::environment );
             
             SQM_exposer.def( 
@@ -94,7 +94,7 @@ void register_SQM_class(){
         }
         { //::Squire::SQM::executable
         
-            typedef ::QString ( ::Squire::SQM::*executable_function_type )(  ) const;
+            typedef ::QString ( ::Squire::SQM::*executable_function_type)(  ) const;
             executable_function_type executable_function_value( &::Squire::SQM::executable );
             
             SQM_exposer.def( 
@@ -104,7 +104,7 @@ void register_SQM_class(){
         }
         { //::Squire::SQM::expectedNumberOfQMAtoms
         
-            typedef int ( ::Squire::SQM::*expectedNumberOfQMAtoms_function_type )(  ) const;
+            typedef int ( ::Squire::SQM::*expectedNumberOfQMAtoms_function_type)(  ) const;
             expectedNumberOfQMAtoms_function_type expectedNumberOfQMAtoms_function_value( &::Squire::SQM::expectedNumberOfQMAtoms );
             
             SQM_exposer.def( 
@@ -114,7 +114,7 @@ void register_SQM_class(){
         }
         { //::Squire::SQM::forceTemplate
         
-            typedef ::QString const & ( ::Squire::SQM::*forceTemplate_function_type )(  ) const;
+            typedef ::QString const & ( ::Squire::SQM::*forceTemplate_function_type)(  ) const;
             forceTemplate_function_type forceTemplate_function_value( &::Squire::SQM::forceTemplate );
             
             SQM_exposer.def( 
@@ -125,7 +125,7 @@ void register_SQM_class(){
         }
         { //::Squire::SQM::maximumNumberOfSQMInputLines
         
-            typedef int ( ::Squire::SQM::*maximumNumberOfSQMInputLines_function_type )(  ) const;
+            typedef int ( ::Squire::SQM::*maximumNumberOfSQMInputLines_function_type)(  ) const;
             maximumNumberOfSQMInputLines_function_type maximumNumberOfSQMInputLines_function_value( &::Squire::SQM::maximumNumberOfSQMInputLines );
             
             SQM_exposer.def( 
@@ -135,7 +135,7 @@ void register_SQM_class(){
         }
         { //::Squire::SQM::maximumRunTime
         
-            typedef int ( ::Squire::SQM::*maximumRunTime_function_type )(  ) const;
+            typedef int ( ::Squire::SQM::*maximumRunTime_function_type)(  ) const;
             maximumRunTime_function_type maximumRunTime_function_value( &::Squire::SQM::maximumRunTime );
             
             SQM_exposer.def( 
@@ -145,7 +145,7 @@ void register_SQM_class(){
         }
         { //::Squire::SQM::method
         
-            typedef ::QString const & ( ::Squire::SQM::*method_function_type )(  ) const;
+            typedef ::QString const & ( ::Squire::SQM::*method_function_type)(  ) const;
             method_function_type method_function_value( &::Squire::SQM::method );
             
             SQM_exposer.def( 
@@ -156,7 +156,7 @@ void register_SQM_class(){
         }
         { //::Squire::SQM::numberOfMMAtomsLimit
         
-            typedef int ( ::Squire::SQM::*numberOfMMAtomsLimit_function_type )(  ) const;
+            typedef int ( ::Squire::SQM::*numberOfMMAtomsLimit_function_type)(  ) const;
             numberOfMMAtomsLimit_function_type numberOfMMAtomsLimit_function_value( &::Squire::SQM::numberOfMMAtomsLimit );
             
             SQM_exposer.def( 
@@ -166,7 +166,7 @@ void register_SQM_class(){
         }
         { //::Squire::SQM::numberOfMMAtomsLimit
         
-            typedef int ( ::Squire::SQM::*numberOfMMAtomsLimit_function_type )( int ) const;
+            typedef int ( ::Squire::SQM::*numberOfMMAtomsLimit_function_type)( int ) const;
             numberOfMMAtomsLimit_function_type numberOfMMAtomsLimit_function_value( &::Squire::SQM::numberOfMMAtomsLimit );
             
             SQM_exposer.def( 
@@ -178,7 +178,7 @@ void register_SQM_class(){
         SQM_exposer.def( bp::self != bp::self );
         { //::Squire::SQM::operator=
         
-            typedef ::Squire::SQM & ( ::Squire::SQM::*assign_function_type )( ::Squire::SQM const & ) ;
+            typedef ::Squire::SQM & ( ::Squire::SQM::*assign_function_type)( ::Squire::SQM const & ) ;
             assign_function_type assign_function_value( &::Squire::SQM::operator= );
             
             SQM_exposer.def( 
@@ -191,7 +191,7 @@ void register_SQM_class(){
         SQM_exposer.def( bp::self == bp::self );
         { //::Squire::SQM::setEnergyTemplate
         
-            typedef void ( ::Squire::SQM::*setEnergyTemplate_function_type )( ::QString const & ) ;
+            typedef void ( ::Squire::SQM::*setEnergyTemplate_function_type)( ::QString const & ) ;
             setEnergyTemplate_function_type setEnergyTemplate_function_value( &::Squire::SQM::setEnergyTemplate );
             
             SQM_exposer.def( 
@@ -202,7 +202,7 @@ void register_SQM_class(){
         }
         { //::Squire::SQM::setEnvironment
         
-            typedef void ( ::Squire::SQM::*setEnvironment_function_type )( ::QString const &,::QString const & ) ;
+            typedef void ( ::Squire::SQM::*setEnvironment_function_type)( ::QString const &,::QString const & ) ;
             setEnvironment_function_type setEnvironment_function_value( &::Squire::SQM::setEnvironment );
             
             SQM_exposer.def( 
@@ -213,7 +213,7 @@ void register_SQM_class(){
         }
         { //::Squire::SQM::setExecutable
         
-            typedef void ( ::Squire::SQM::*setExecutable_function_type )( ::QString const & ) ;
+            typedef void ( ::Squire::SQM::*setExecutable_function_type)( ::QString const & ) ;
             setExecutable_function_type setExecutable_function_value( &::Squire::SQM::setExecutable );
             
             SQM_exposer.def( 
@@ -224,7 +224,7 @@ void register_SQM_class(){
         }
         { //::Squire::SQM::setExpectedNumberOfQMAtoms
         
-            typedef void ( ::Squire::SQM::*setExpectedNumberOfQMAtoms_function_type )( int ) ;
+            typedef void ( ::Squire::SQM::*setExpectedNumberOfQMAtoms_function_type)( int ) ;
             setExpectedNumberOfQMAtoms_function_type setExpectedNumberOfQMAtoms_function_value( &::Squire::SQM::setExpectedNumberOfQMAtoms );
             
             SQM_exposer.def( 
@@ -235,7 +235,7 @@ void register_SQM_class(){
         }
         { //::Squire::SQM::setForceTemplate
         
-            typedef void ( ::Squire::SQM::*setForceTemplate_function_type )( ::QString const & ) ;
+            typedef void ( ::Squire::SQM::*setForceTemplate_function_type)( ::QString const & ) ;
             setForceTemplate_function_type setForceTemplate_function_value( &::Squire::SQM::setForceTemplate );
             
             SQM_exposer.def( 
@@ -246,7 +246,7 @@ void register_SQM_class(){
         }
         { //::Squire::SQM::setMaximumNumberOfSQMInputLines
         
-            typedef void ( ::Squire::SQM::*setMaximumNumberOfSQMInputLines_function_type )( int ) ;
+            typedef void ( ::Squire::SQM::*setMaximumNumberOfSQMInputLines_function_type)( int ) ;
             setMaximumNumberOfSQMInputLines_function_type setMaximumNumberOfSQMInputLines_function_value( &::Squire::SQM::setMaximumNumberOfSQMInputLines );
             
             SQM_exposer.def( 
@@ -257,7 +257,7 @@ void register_SQM_class(){
         }
         { //::Squire::SQM::setMaximumRunTime
         
-            typedef void ( ::Squire::SQM::*setMaximumRunTime_function_type )( int ) ;
+            typedef void ( ::Squire::SQM::*setMaximumRunTime_function_type)( int ) ;
             setMaximumRunTime_function_type setMaximumRunTime_function_value( &::Squire::SQM::setMaximumRunTime );
             
             SQM_exposer.def( 
@@ -268,7 +268,7 @@ void register_SQM_class(){
         }
         { //::Squire::SQM::setMethod
         
-            typedef void ( ::Squire::SQM::*setMethod_function_type )( ::QString const & ) ;
+            typedef void ( ::Squire::SQM::*setMethod_function_type)( ::QString const & ) ;
             setMethod_function_type setMethod_function_value( &::Squire::SQM::setMethod );
             
             SQM_exposer.def( 
@@ -279,7 +279,7 @@ void register_SQM_class(){
         }
         { //::Squire::SQM::setTotalCharge
         
-            typedef void ( ::Squire::SQM::*setTotalCharge_function_type )( int ) ;
+            typedef void ( ::Squire::SQM::*setTotalCharge_function_type)( int ) ;
             setTotalCharge_function_type setTotalCharge_function_value( &::Squire::SQM::setTotalCharge );
             
             SQM_exposer.def( 
@@ -290,7 +290,7 @@ void register_SQM_class(){
         }
         { //::Squire::SQM::supportsLatticeCharges
         
-            typedef bool ( ::Squire::SQM::*supportsLatticeCharges_function_type )(  ) const;
+            typedef bool ( ::Squire::SQM::*supportsLatticeCharges_function_type)(  ) const;
             supportsLatticeCharges_function_type supportsLatticeCharges_function_value( &::Squire::SQM::supportsLatticeCharges );
             
             SQM_exposer.def( 
@@ -300,7 +300,7 @@ void register_SQM_class(){
         }
         { //::Squire::SQM::toString
         
-            typedef ::QString ( ::Squire::SQM::*toString_function_type )(  ) const;
+            typedef ::QString ( ::Squire::SQM::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::Squire::SQM::toString );
             
             SQM_exposer.def( 
@@ -310,7 +310,7 @@ void register_SQM_class(){
         }
         { //::Squire::SQM::totalCharge
         
-            typedef int ( ::Squire::SQM::*totalCharge_function_type )(  ) const;
+            typedef int ( ::Squire::SQM::*totalCharge_function_type)(  ) const;
             totalCharge_function_type totalCharge_function_value( &::Squire::SQM::totalCharge );
             
             SQM_exposer.def( 

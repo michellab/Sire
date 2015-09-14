@@ -27,7 +27,7 @@ void register_OrbitalShell_class(){
         bp::scope OrbitalShell_scope( OrbitalShell_exposer );
         { //::Squire::OrbitalShell::angularMomentum
         
-            typedef int ( ::Squire::OrbitalShell::*angularMomentum_function_type )(  ) const;
+            typedef int ( ::Squire::OrbitalShell::*angularMomentum_function_type)(  ) const;
             angularMomentum_function_type angularMomentum_function_value( &::Squire::OrbitalShell::angularMomentum );
             
             OrbitalShell_exposer.def( 
@@ -37,7 +37,7 @@ void register_OrbitalShell_class(){
         }
         { //::Squire::OrbitalShell::nOrbitals
         
-            typedef int ( ::Squire::OrbitalShell::*nOrbitals_function_type )(  ) const;
+            typedef int ( ::Squire::OrbitalShell::*nOrbitals_function_type)(  ) const;
             nOrbitals_function_type nOrbitals_function_value( &::Squire::OrbitalShell::nOrbitals );
             
             OrbitalShell_exposer.def( 

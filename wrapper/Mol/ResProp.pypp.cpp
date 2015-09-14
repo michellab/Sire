@@ -23,7 +23,7 @@ void register_ResProp_class(){
         bp::scope ResProp_scope( ResProp_exposer );
         { //::SireMol::ResProp::assertCanConvert
         
-            typedef void ( ::SireMol::ResProp::*assertCanConvert_function_type )( ::QVariant const & ) const;
+            typedef void ( ::SireMol::ResProp::*assertCanConvert_function_type)( ::QVariant const & ) const;
             assertCanConvert_function_type assertCanConvert_function_value( &::SireMol::ResProp::assertCanConvert );
             
             ResProp_exposer.def( 
@@ -34,7 +34,7 @@ void register_ResProp_class(){
         }
         { //::SireMol::ResProp::assignFrom
         
-            typedef void ( ::SireMol::ResProp::*assignFrom_function_type )( ::SireMol::ResProperty< QVariant > const & ) ;
+            typedef void ( ::SireMol::ResProp::*assignFrom_function_type)( ::SireMol::ResProperty< QVariant > const & ) ;
             assignFrom_function_type assignFrom_function_value( &::SireMol::ResProp::assignFrom );
             
             ResProp_exposer.def( 
@@ -45,7 +45,7 @@ void register_ResProp_class(){
         }
         { //::SireMol::ResProp::canConvert
         
-            typedef bool ( ::SireMol::ResProp::*canConvert_function_type )( ::QVariant const & ) const;
+            typedef bool ( ::SireMol::ResProp::*canConvert_function_type)( ::QVariant const & ) const;
             canConvert_function_type canConvert_function_value( &::SireMol::ResProp::canConvert );
             
             ResProp_exposer.def( 
@@ -56,7 +56,7 @@ void register_ResProp_class(){
         }
         { //::SireMol::ResProp::toVariant
         
-            typedef ::SireMol::ResProperty< QVariant > ( ::SireMol::ResProp::*toVariant_function_type )(  ) const;
+            typedef ::SireMol::ResProperty< QVariant > ( ::SireMol::ResProp::*toVariant_function_type)(  ) const;
             toVariant_function_type toVariant_function_value( &::SireMol::ResProp::toVariant );
             
             ResProp_exposer.def( 

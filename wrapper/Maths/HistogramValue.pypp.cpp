@@ -38,7 +38,7 @@ void register_HistogramValue_class(){
         HistogramValue_exposer.def( bp::self != bp::self );
         { //::SireMaths::HistogramValue::operator=
         
-            typedef ::SireMaths::HistogramValue & ( ::SireMaths::HistogramValue::*assign_function_type )( ::SireMaths::HistogramValue const & ) ;
+            typedef ::SireMaths::HistogramValue & ( ::SireMaths::HistogramValue::*assign_function_type)( ::SireMaths::HistogramValue const & ) ;
             assign_function_type assign_function_value( &::SireMaths::HistogramValue::operator= );
             
             HistogramValue_exposer.def( 
@@ -51,7 +51,7 @@ void register_HistogramValue_class(){
         HistogramValue_exposer.def( bp::self == bp::self );
         { //::SireMaths::HistogramValue::toString
         
-            typedef ::QString ( ::SireMaths::HistogramValue::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMaths::HistogramValue::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMaths::HistogramValue::toString );
             
             HistogramValue_exposer.def( 
@@ -61,7 +61,7 @@ void register_HistogramValue_class(){
         }
         { //::SireMaths::HistogramValue::value
         
-            typedef double ( ::SireMaths::HistogramValue::*value_function_type )(  ) const;
+            typedef double ( ::SireMaths::HistogramValue::*value_function_type)(  ) const;
             value_function_type value_function_value( &::SireMaths::HistogramValue::value );
             
             HistogramValue_exposer.def( 

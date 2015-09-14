@@ -37,7 +37,7 @@ void register_MGIdx_class(){
         MGIdx_exposer.def( bp::init< SireMol::MGIdx const & >(( bp::arg("other") )) );
         { //::SireMol::MGIdx::hash
         
-            typedef ::uint ( ::SireMol::MGIdx::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::MGIdx::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::MGIdx::hash );
             
             MGIdx_exposer.def( 
@@ -47,7 +47,7 @@ void register_MGIdx_class(){
         }
         { //::SireMol::MGIdx::isNull
         
-            typedef bool ( ::SireMol::MGIdx::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::MGIdx::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::MGIdx::isNull );
             
             MGIdx_exposer.def( 
@@ -57,7 +57,7 @@ void register_MGIdx_class(){
         }
         { //::SireMol::MGIdx::map
         
-            typedef ::QList< SireMol::MGNum > ( ::SireMol::MGIdx::*map_function_type )( ::SireMol::MolGroupsBase const & ) const;
+            typedef ::QList< SireMol::MGNum > ( ::SireMol::MGIdx::*map_function_type)( ::SireMol::MolGroupsBase const & ) const;
             map_function_type map_function_value( &::SireMol::MGIdx::map );
             
             MGIdx_exposer.def( 
@@ -78,7 +78,7 @@ void register_MGIdx_class(){
         }
         { //::SireMol::MGIdx::operator=
         
-            typedef ::SireMol::MGIdx & ( ::SireMol::MGIdx::*assign_function_type )( ::SireMol::MGIdx const & ) ;
+            typedef ::SireMol::MGIdx & ( ::SireMol::MGIdx::*assign_function_type)( ::SireMol::MGIdx const & ) ;
             assign_function_type assign_function_value( &::SireMol::MGIdx::operator= );
             
             MGIdx_exposer.def( 
@@ -90,7 +90,7 @@ void register_MGIdx_class(){
         }
         { //::SireMol::MGIdx::toString
         
-            typedef ::QString ( ::SireMol::MGIdx::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::MGIdx::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::MGIdx::toString );
             
             MGIdx_exposer.def( 
@@ -110,7 +110,7 @@ void register_MGIdx_class(){
         }
         { //::SireMol::MGIdx::what
         
-            typedef char const * ( ::SireMol::MGIdx::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::MGIdx::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::MGIdx::what );
             
             MGIdx_exposer.def( 

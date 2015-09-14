@@ -40,7 +40,7 @@ void register_MD5Sum_class(){
         MD5Sum_exposer.def( bp::self != bp::self );
         { //::SireStream::MD5Sum::operator=
         
-            typedef ::SireStream::MD5Sum const & ( ::SireStream::MD5Sum::*assign_function_type )( ::SireStream::MD5Sum const & ) ;
+            typedef ::SireStream::MD5Sum const & ( ::SireStream::MD5Sum::*assign_function_type)( ::SireStream::MD5Sum const & ) ;
             assign_function_type assign_function_value( &::SireStream::MD5Sum::operator= );
             
             MD5Sum_exposer.def( 
@@ -53,7 +53,7 @@ void register_MD5Sum_class(){
         MD5Sum_exposer.def( bp::self == bp::self );
         { //::SireStream::MD5Sum::toString
         
-            typedef ::QString ( ::SireStream::MD5Sum::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireStream::MD5Sum::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireStream::MD5Sum::toString );
             
             MD5Sum_exposer.def( 

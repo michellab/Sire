@@ -42,7 +42,7 @@ void register_NullAccumulator_class(){
         NullAccumulator_exposer.def( bp::init< SireMaths::NullAccumulator const & >(( bp::arg("other") )) );
         { //::SireMaths::NullAccumulator::accumulate
         
-            typedef void ( ::SireMaths::NullAccumulator::*accumulate_function_type )( double ) ;
+            typedef void ( ::SireMaths::NullAccumulator::*accumulate_function_type)( double ) ;
             accumulate_function_type accumulate_function_value( &::SireMaths::NullAccumulator::accumulate );
             
             NullAccumulator_exposer.def( 
@@ -54,7 +54,7 @@ void register_NullAccumulator_class(){
         NullAccumulator_exposer.def( bp::self != bp::self );
         { //::SireMaths::NullAccumulator::operator=
         
-            typedef ::SireMaths::NullAccumulator & ( ::SireMaths::NullAccumulator::*assign_function_type )( ::SireMaths::NullAccumulator const & ) ;
+            typedef ::SireMaths::NullAccumulator & ( ::SireMaths::NullAccumulator::*assign_function_type)( ::SireMaths::NullAccumulator const & ) ;
             assign_function_type assign_function_value( &::SireMaths::NullAccumulator::operator= );
             
             NullAccumulator_exposer.def( 

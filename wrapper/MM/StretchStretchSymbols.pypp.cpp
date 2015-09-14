@@ -44,7 +44,7 @@ void register_StretchStretchSymbols_class(){
         bp::scope StretchStretchSymbols_scope( StretchStretchSymbols_exposer );
         { //::SireMM::StretchStretchSymbols::r01
         
-            typedef ::SireCAS::Symbol const & ( ::SireMM::StretchStretchSymbols::*r01_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMM::StretchStretchSymbols::*r01_function_type)(  ) const;
             r01_function_type r01_function_value( &::SireMM::StretchStretchSymbols::r01 );
             
             StretchStretchSymbols_exposer.def( 
@@ -55,7 +55,7 @@ void register_StretchStretchSymbols_class(){
         }
         { //::SireMM::StretchStretchSymbols::r12
         
-            typedef ::SireCAS::Symbol const & ( ::SireMM::StretchStretchSymbols::*r12_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMM::StretchStretchSymbols::*r12_function_type)(  ) const;
             r12_function_type r12_function_value( &::SireMM::StretchStretchSymbols::r12 );
             
             StretchStretchSymbols_exposer.def( 
@@ -66,7 +66,7 @@ void register_StretchStretchSymbols_class(){
         }
         { //::SireMM::StretchStretchSymbols::r21
         
-            typedef ::SireCAS::Symbol const & ( ::SireMM::StretchStretchSymbols::*r21_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMM::StretchStretchSymbols::*r21_function_type)(  ) const;
             r21_function_type r21_function_value( &::SireMM::StretchStretchSymbols::r21 );
             
             StretchStretchSymbols_exposer.def( 

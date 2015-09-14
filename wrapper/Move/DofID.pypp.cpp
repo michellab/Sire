@@ -59,7 +59,7 @@ void register_DofID_class(){
         DofID_exposer.def( bp::init< SireMove::DofID const & >(( bp::arg("other") )) );
         { //::SireMove::DofID::atom0
         
-            typedef ::SireMol::AtomIdx ( ::SireMove::DofID::*atom0_function_type )(  ) const;
+            typedef ::SireMol::AtomIdx ( ::SireMove::DofID::*atom0_function_type)(  ) const;
             atom0_function_type atom0_function_value( &::SireMove::DofID::atom0 );
             
             DofID_exposer.def( 
@@ -69,7 +69,7 @@ void register_DofID_class(){
         }
         { //::SireMove::DofID::atom1
         
-            typedef ::SireMol::AtomIdx ( ::SireMove::DofID::*atom1_function_type )(  ) const;
+            typedef ::SireMol::AtomIdx ( ::SireMove::DofID::*atom1_function_type)(  ) const;
             atom1_function_type atom1_function_value( &::SireMove::DofID::atom1 );
             
             DofID_exposer.def( 
@@ -79,7 +79,7 @@ void register_DofID_class(){
         }
         { //::SireMove::DofID::atom2
         
-            typedef ::SireMol::AtomIdx ( ::SireMove::DofID::*atom2_function_type )(  ) const;
+            typedef ::SireMol::AtomIdx ( ::SireMove::DofID::*atom2_function_type)(  ) const;
             atom2_function_type atom2_function_value( &::SireMove::DofID::atom2 );
             
             DofID_exposer.def( 
@@ -89,7 +89,7 @@ void register_DofID_class(){
         }
         { //::SireMove::DofID::atom3
         
-            typedef ::SireMol::AtomIdx ( ::SireMove::DofID::*atom3_function_type )(  ) const;
+            typedef ::SireMol::AtomIdx ( ::SireMove::DofID::*atom3_function_type)(  ) const;
             atom3_function_type atom3_function_value( &::SireMove::DofID::atom3 );
             
             DofID_exposer.def( 
@@ -99,7 +99,7 @@ void register_DofID_class(){
         }
         { //::SireMove::DofID::isAngle
         
-            typedef bool ( ::SireMove::DofID::*isAngle_function_type )(  ) const;
+            typedef bool ( ::SireMove::DofID::*isAngle_function_type)(  ) const;
             isAngle_function_type isAngle_function_value( &::SireMove::DofID::isAngle );
             
             DofID_exposer.def( 
@@ -109,7 +109,7 @@ void register_DofID_class(){
         }
         { //::SireMove::DofID::isBond
         
-            typedef bool ( ::SireMove::DofID::*isBond_function_type )(  ) const;
+            typedef bool ( ::SireMove::DofID::*isBond_function_type)(  ) const;
             isBond_function_type isBond_function_value( &::SireMove::DofID::isBond );
             
             DofID_exposer.def( 
@@ -119,7 +119,7 @@ void register_DofID_class(){
         }
         { //::SireMove::DofID::isDihedral
         
-            typedef bool ( ::SireMove::DofID::*isDihedral_function_type )(  ) const;
+            typedef bool ( ::SireMove::DofID::*isDihedral_function_type)(  ) const;
             isDihedral_function_type isDihedral_function_value( &::SireMove::DofID::isDihedral );
             
             DofID_exposer.def( 
@@ -129,7 +129,7 @@ void register_DofID_class(){
         }
         { //::SireMove::DofID::isNull
         
-            typedef bool ( ::SireMove::DofID::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMove::DofID::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMove::DofID::isNull );
             
             DofID_exposer.def( 
@@ -140,7 +140,7 @@ void register_DofID_class(){
         DofID_exposer.def( bp::self != bp::self );
         { //::SireMove::DofID::operator=
         
-            typedef ::SireMove::DofID & ( ::SireMove::DofID::*assign_function_type )( ::SireMove::DofID const & ) ;
+            typedef ::SireMove::DofID & ( ::SireMove::DofID::*assign_function_type)( ::SireMove::DofID const & ) ;
             assign_function_type assign_function_value( &::SireMove::DofID::operator= );
             
             DofID_exposer.def( 

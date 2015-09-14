@@ -38,7 +38,7 @@ void register_DLMRigidBody_class(){
         DLMRigidBody_exposer.def( bp::init< SireMove::DLMRigidBody const & >(( bp::arg("other") )) );
         { //::SireMove::DLMRigidBody::createWorkspace
         
-            typedef ::SireMove::IntegratorWorkspacePtr ( ::SireMove::DLMRigidBody::*createWorkspace_function_type )( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireMove::IntegratorWorkspacePtr ( ::SireMove::DLMRigidBody::*createWorkspace_function_type)( ::SireBase::PropertyMap const & ) const;
             createWorkspace_function_type createWorkspace_function_value( &::SireMove::DLMRigidBody::createWorkspace );
             
             DLMRigidBody_exposer.def( 
@@ -49,7 +49,7 @@ void register_DLMRigidBody_class(){
         }
         { //::SireMove::DLMRigidBody::createWorkspace
         
-            typedef ::SireMove::IntegratorWorkspacePtr ( ::SireMove::DLMRigidBody::*createWorkspace_function_type )( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMove::IntegratorWorkspacePtr ( ::SireMove::DLMRigidBody::*createWorkspace_function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
             createWorkspace_function_type createWorkspace_function_value( &::SireMove::DLMRigidBody::createWorkspace );
             
             DLMRigidBody_exposer.def( 
@@ -60,7 +60,7 @@ void register_DLMRigidBody_class(){
         }
         { //::SireMove::DLMRigidBody::ensemble
         
-            typedef ::SireMove::Ensemble ( ::SireMove::DLMRigidBody::*ensemble_function_type )(  ) const;
+            typedef ::SireMove::Ensemble ( ::SireMove::DLMRigidBody::*ensemble_function_type)(  ) const;
             ensemble_function_type ensemble_function_value( &::SireMove::DLMRigidBody::ensemble );
             
             DLMRigidBody_exposer.def( 
@@ -70,7 +70,7 @@ void register_DLMRigidBody_class(){
         }
         { //::SireMove::DLMRigidBody::integrate
         
-            typedef void ( ::SireMove::DLMRigidBody::*integrate_function_type )( ::SireMove::IntegratorWorkspace &,::SireCAS::Symbol const &,::SireUnits::Dimension::Time,int,bool ) ;
+            typedef void ( ::SireMove::DLMRigidBody::*integrate_function_type)( ::SireMove::IntegratorWorkspace &,::SireCAS::Symbol const &,::SireUnits::Dimension::Time,int,bool ) ;
             integrate_function_type integrate_function_value( &::SireMove::DLMRigidBody::integrate );
             
             DLMRigidBody_exposer.def( 
@@ -81,7 +81,7 @@ void register_DLMRigidBody_class(){
         }
         { //::SireMove::DLMRigidBody::isTimeReversible
         
-            typedef bool ( ::SireMove::DLMRigidBody::*isTimeReversible_function_type )(  ) const;
+            typedef bool ( ::SireMove::DLMRigidBody::*isTimeReversible_function_type)(  ) const;
             isTimeReversible_function_type isTimeReversible_function_value( &::SireMove::DLMRigidBody::isTimeReversible );
             
             DLMRigidBody_exposer.def( 
@@ -92,7 +92,7 @@ void register_DLMRigidBody_class(){
         DLMRigidBody_exposer.def( bp::self != bp::self );
         { //::SireMove::DLMRigidBody::operator=
         
-            typedef ::SireMove::DLMRigidBody & ( ::SireMove::DLMRigidBody::*assign_function_type )( ::SireMove::DLMRigidBody const & ) ;
+            typedef ::SireMove::DLMRigidBody & ( ::SireMove::DLMRigidBody::*assign_function_type)( ::SireMove::DLMRigidBody const & ) ;
             assign_function_type assign_function_value( &::SireMove::DLMRigidBody::operator= );
             
             DLMRigidBody_exposer.def( 
@@ -105,7 +105,7 @@ void register_DLMRigidBody_class(){
         DLMRigidBody_exposer.def( bp::self == bp::self );
         { //::SireMove::DLMRigidBody::toString
         
-            typedef ::QString ( ::SireMove::DLMRigidBody::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMove::DLMRigidBody::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMove::DLMRigidBody::toString );
             
             DLMRigidBody_exposer.def( 

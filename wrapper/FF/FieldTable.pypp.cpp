@@ -49,7 +49,7 @@ void register_FieldTable_class(){
         FieldTable_exposer.def( bp::init< SireFF::FieldTable const & >(( bp::arg("other") )) );
         { //::SireFF::FieldTable::add
         
-            typedef void ( ::SireFF::FieldTable::*add_function_type )( ::SireFF::FieldTable const & ) ;
+            typedef void ( ::SireFF::FieldTable::*add_function_type)( ::SireFF::FieldTable const & ) ;
             add_function_type add_function_value( &::SireFF::FieldTable::add );
             
             FieldTable_exposer.def( 
@@ -60,7 +60,7 @@ void register_FieldTable_class(){
         }
         { //::SireFF::FieldTable::add
         
-            typedef void ( ::SireFF::FieldTable::*add_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireFF::FieldTable::*add_function_type)( ::SireMaths::Vector const & ) ;
             add_function_type add_function_value( &::SireFF::FieldTable::add );
             
             FieldTable_exposer.def( 
@@ -71,7 +71,7 @@ void register_FieldTable_class(){
         }
         { //::SireFF::FieldTable::assertContainsTableFor
         
-            typedef void ( ::SireFF::FieldTable::*assertContainsTableFor_function_type )( ::SireMol::MolNum ) const;
+            typedef void ( ::SireFF::FieldTable::*assertContainsTableFor_function_type)( ::SireMol::MolNum ) const;
             assertContainsTableFor_function_type assertContainsTableFor_function_value( &::SireFF::FieldTable::assertContainsTableFor );
             
             FieldTable_exposer.def( 
@@ -82,7 +82,7 @@ void register_FieldTable_class(){
         }
         { //::SireFF::FieldTable::assertContainsTableFor
         
-            typedef void ( ::SireFF::FieldTable::*assertContainsTableFor_function_type )( ::SireVol::Grid const & ) const;
+            typedef void ( ::SireFF::FieldTable::*assertContainsTableFor_function_type)( ::SireVol::Grid const & ) const;
             assertContainsTableFor_function_type assertContainsTableFor_function_value( &::SireFF::FieldTable::assertContainsTableFor );
             
             FieldTable_exposer.def( 
@@ -93,7 +93,7 @@ void register_FieldTable_class(){
         }
         { //::SireFF::FieldTable::constGetTable
         
-            typedef ::SireFF::MolFieldTable const & ( ::SireFF::FieldTable::*constGetTable_function_type )( ::SireMol::MolNum ) const;
+            typedef ::SireFF::MolFieldTable const & ( ::SireFF::FieldTable::*constGetTable_function_type)( ::SireMol::MolNum ) const;
             constGetTable_function_type constGetTable_function_value( &::SireFF::FieldTable::constGetTable );
             
             FieldTable_exposer.def( 
@@ -105,7 +105,7 @@ void register_FieldTable_class(){
         }
         { //::SireFF::FieldTable::constGetTable
         
-            typedef ::SireFF::GridFieldTable const & ( ::SireFF::FieldTable::*constGetTable_function_type )( ::SireVol::Grid const & ) const;
+            typedef ::SireFF::GridFieldTable const & ( ::SireFF::FieldTable::*constGetTable_function_type)( ::SireVol::Grid const & ) const;
             constGetTable_function_type constGetTable_function_value( &::SireFF::FieldTable::constGetTable );
             
             FieldTable_exposer.def( 
@@ -117,7 +117,7 @@ void register_FieldTable_class(){
         }
         { //::SireFF::FieldTable::contains
         
-            typedef bool ( ::SireFF::FieldTable::*contains_function_type )( ::SireMol::MolNum ) const;
+            typedef bool ( ::SireFF::FieldTable::*contains_function_type)( ::SireMol::MolNum ) const;
             contains_function_type contains_function_value( &::SireFF::FieldTable::contains );
             
             FieldTable_exposer.def( 
@@ -128,7 +128,7 @@ void register_FieldTable_class(){
         }
         { //::SireFF::FieldTable::contains
         
-            typedef bool ( ::SireFF::FieldTable::*contains_function_type )( ::SireVol::Grid const & ) const;
+            typedef bool ( ::SireFF::FieldTable::*contains_function_type)( ::SireVol::Grid const & ) const;
             contains_function_type contains_function_value( &::SireFF::FieldTable::contains );
             
             FieldTable_exposer.def( 
@@ -139,7 +139,7 @@ void register_FieldTable_class(){
         }
         { //::SireFF::FieldTable::divide
         
-            typedef void ( ::SireFF::FieldTable::*divide_function_type )( double ) ;
+            typedef void ( ::SireFF::FieldTable::*divide_function_type)( double ) ;
             divide_function_type divide_function_value( &::SireFF::FieldTable::divide );
             
             FieldTable_exposer.def( 
@@ -150,7 +150,7 @@ void register_FieldTable_class(){
         }
         { //::SireFF::FieldTable::getTable
         
-            typedef ::SireFF::MolFieldTable const & ( ::SireFF::FieldTable::*getTable_function_type )( ::SireMol::MolNum ) const;
+            typedef ::SireFF::MolFieldTable const & ( ::SireFF::FieldTable::*getTable_function_type)( ::SireMol::MolNum ) const;
             getTable_function_type getTable_function_value( &::SireFF::FieldTable::getTable );
             
             FieldTable_exposer.def( 
@@ -162,7 +162,7 @@ void register_FieldTable_class(){
         }
         { //::SireFF::FieldTable::getTable
         
-            typedef ::SireFF::GridFieldTable const & ( ::SireFF::FieldTable::*getTable_function_type )( ::SireVol::Grid const & ) const;
+            typedef ::SireFF::GridFieldTable const & ( ::SireFF::FieldTable::*getTable_function_type)( ::SireVol::Grid const & ) const;
             getTable_function_type getTable_function_value( &::SireFF::FieldTable::getTable );
             
             FieldTable_exposer.def( 
@@ -174,7 +174,7 @@ void register_FieldTable_class(){
         }
         { //::SireFF::FieldTable::index
         
-            typedef ::QHash< SireMol::MolNum, int > const & ( ::SireFF::FieldTable::*index_function_type )(  ) const;
+            typedef ::QHash< SireMol::MolNum, int > const & ( ::SireFF::FieldTable::*index_function_type)(  ) const;
             index_function_type index_function_value( &::SireFF::FieldTable::index );
             
             FieldTable_exposer.def( 
@@ -185,7 +185,7 @@ void register_FieldTable_class(){
         }
         { //::SireFF::FieldTable::indexOf
         
-            typedef int ( ::SireFF::FieldTable::*indexOf_function_type )( ::SireMol::MolNum ) const;
+            typedef int ( ::SireFF::FieldTable::*indexOf_function_type)( ::SireMol::MolNum ) const;
             indexOf_function_type indexOf_function_value( &::SireFF::FieldTable::indexOf );
             
             FieldTable_exposer.def( 
@@ -196,7 +196,7 @@ void register_FieldTable_class(){
         }
         { //::SireFF::FieldTable::initialiseTable
         
-            typedef void ( ::SireFF::FieldTable::*initialiseTable_function_type )( ::SireMol::MolNum ) ;
+            typedef void ( ::SireFF::FieldTable::*initialiseTable_function_type)( ::SireMol::MolNum ) ;
             initialiseTable_function_type initialiseTable_function_value( &::SireFF::FieldTable::initialiseTable );
             
             FieldTable_exposer.def( 
@@ -207,7 +207,7 @@ void register_FieldTable_class(){
         }
         { //::SireFF::FieldTable::initialiseTable
         
-            typedef void ( ::SireFF::FieldTable::*initialiseTable_function_type )( ::SireVol::Grid const & ) ;
+            typedef void ( ::SireFF::FieldTable::*initialiseTable_function_type)( ::SireVol::Grid const & ) ;
             initialiseTable_function_type initialiseTable_function_value( &::SireFF::FieldTable::initialiseTable );
             
             FieldTable_exposer.def( 
@@ -218,7 +218,7 @@ void register_FieldTable_class(){
         }
         { //::SireFF::FieldTable::initialiseTables
         
-            typedef void ( ::SireFF::FieldTable::*initialiseTables_function_type )(  ) ;
+            typedef void ( ::SireFF::FieldTable::*initialiseTables_function_type)(  ) ;
             initialiseTables_function_type initialiseTables_function_value( &::SireFF::FieldTable::initialiseTables );
             
             FieldTable_exposer.def( 
@@ -228,7 +228,7 @@ void register_FieldTable_class(){
         }
         { //::SireFF::FieldTable::isEmpty
         
-            typedef bool ( ::SireFF::FieldTable::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireFF::FieldTable::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireFF::FieldTable::isEmpty );
             
             FieldTable_exposer.def( 
@@ -238,7 +238,7 @@ void register_FieldTable_class(){
         }
         { //::SireFF::FieldTable::molNums
         
-            typedef ::QList< SireMol::MolNum > ( ::SireFF::FieldTable::*molNums_function_type )(  ) const;
+            typedef ::QList< SireMol::MolNum > ( ::SireFF::FieldTable::*molNums_function_type)(  ) const;
             molNums_function_type molNums_function_value( &::SireFF::FieldTable::molNums );
             
             FieldTable_exposer.def( 
@@ -248,7 +248,7 @@ void register_FieldTable_class(){
         }
         { //::SireFF::FieldTable::multiply
         
-            typedef void ( ::SireFF::FieldTable::*multiply_function_type )( double ) ;
+            typedef void ( ::SireFF::FieldTable::*multiply_function_type)( double ) ;
             multiply_function_type multiply_function_value( &::SireFF::FieldTable::multiply );
             
             FieldTable_exposer.def( 
@@ -259,7 +259,7 @@ void register_FieldTable_class(){
         }
         { //::SireFF::FieldTable::nGrids
         
-            typedef int ( ::SireFF::FieldTable::*nGrids_function_type )(  ) const;
+            typedef int ( ::SireFF::FieldTable::*nGrids_function_type)(  ) const;
             nGrids_function_type nGrids_function_value( &::SireFF::FieldTable::nGrids );
             
             FieldTable_exposer.def( 
@@ -269,7 +269,7 @@ void register_FieldTable_class(){
         }
         { //::SireFF::FieldTable::nMolecules
         
-            typedef int ( ::SireFF::FieldTable::*nMolecules_function_type )(  ) const;
+            typedef int ( ::SireFF::FieldTable::*nMolecules_function_type)(  ) const;
             nMolecules_function_type nMolecules_function_value( &::SireFF::FieldTable::nMolecules );
             
             FieldTable_exposer.def( 
@@ -287,7 +287,7 @@ void register_FieldTable_class(){
         FieldTable_exposer.def( bp::self / bp::other< double >() );
         { //::SireFF::FieldTable::operator=
         
-            typedef ::SireFF::FieldTable & ( ::SireFF::FieldTable::*assign_function_type )( ::SireFF::FieldTable const & ) ;
+            typedef ::SireFF::FieldTable & ( ::SireFF::FieldTable::*assign_function_type)( ::SireFF::FieldTable const & ) ;
             assign_function_type assign_function_value( &::SireFF::FieldTable::operator= );
             
             FieldTable_exposer.def( 
@@ -299,7 +299,7 @@ void register_FieldTable_class(){
         }
         { //::SireFF::FieldTable::operator=
         
-            typedef ::SireFF::FieldTable & ( ::SireFF::FieldTable::*assign_function_type )( ::SireMaths::Vector const & ) ;
+            typedef ::SireFF::FieldTable & ( ::SireFF::FieldTable::*assign_function_type)( ::SireMaths::Vector const & ) ;
             assign_function_type assign_function_value( &::SireFF::FieldTable::operator= );
             
             FieldTable_exposer.def( 
@@ -312,7 +312,7 @@ void register_FieldTable_class(){
         FieldTable_exposer.def( bp::self == bp::self );
         { //::SireFF::FieldTable::setAll
         
-            typedef void ( ::SireFF::FieldTable::*setAll_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireFF::FieldTable::*setAll_function_type)( ::SireMaths::Vector const & ) ;
             setAll_function_type setAll_function_value( &::SireFF::FieldTable::setAll );
             
             FieldTable_exposer.def( 
@@ -323,7 +323,7 @@ void register_FieldTable_class(){
         }
         { //::SireFF::FieldTable::subtract
         
-            typedef void ( ::SireFF::FieldTable::*subtract_function_type )( ::SireFF::FieldTable const & ) ;
+            typedef void ( ::SireFF::FieldTable::*subtract_function_type)( ::SireFF::FieldTable const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::FieldTable::subtract );
             
             FieldTable_exposer.def( 
@@ -334,7 +334,7 @@ void register_FieldTable_class(){
         }
         { //::SireFF::FieldTable::subtract
         
-            typedef void ( ::SireFF::FieldTable::*subtract_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireFF::FieldTable::*subtract_function_type)( ::SireMaths::Vector const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::FieldTable::subtract );
             
             FieldTable_exposer.def( 
@@ -355,7 +355,7 @@ void register_FieldTable_class(){
         }
         { //::SireFF::FieldTable::what
         
-            typedef char const * ( ::SireFF::FieldTable::*what_function_type )(  ) const;
+            typedef char const * ( ::SireFF::FieldTable::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireFF::FieldTable::what );
             
             FieldTable_exposer.def( 

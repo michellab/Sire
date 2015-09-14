@@ -36,7 +36,7 @@ void register_Sampler_class(){
         bp::scope Sampler_scope( Sampler_exposer );
         { //::SireMove::Sampler::generator
         
-            typedef ::SireMaths::RanGenerator const & ( ::SireMove::Sampler::*generator_function_type )(  ) const;
+            typedef ::SireMaths::RanGenerator const & ( ::SireMove::Sampler::*generator_function_type)(  ) const;
             generator_function_type generator_function_value( &::SireMove::Sampler::generator );
             
             Sampler_exposer.def( 
@@ -47,13 +47,23 @@ void register_Sampler_class(){
         }
         { //::SireMove::Sampler::group
         
-            typedef ::SireMol::MoleculeGroup const & ( ::SireMove::Sampler::*group_function_type )(  ) const;
+            typedef ::SireMol::MoleculeGroup const & ( ::SireMove::Sampler::*group_function_type)(  ) const;
             group_function_type group_function_value( &::SireMove::Sampler::group );
             
             Sampler_exposer.def( 
                 "group"
                 , group_function_value
                 , bp::return_value_policy<bp::clone_const_reference>() );
+        
+        }
+        { //::SireMove::Sampler::isBiased
+        
+            typedef bool ( ::SireMove::Sampler::*isBiased_function_type)(  ) const;
+            isBiased_function_type isBiased_function_value( &::SireMove::Sampler::isBiased );
+            
+            Sampler_exposer.def( 
+                "isBiased"
+                , isBiased_function_value );
         
         }
         { //::SireMove::Sampler::null
@@ -69,7 +79,7 @@ void register_Sampler_class(){
         }
         { //::SireMove::Sampler::probabilityOf
         
-            typedef double ( ::SireMove::Sampler::*probabilityOf_function_type )( ::SireMol::PartialMolecule const & ) const;
+            typedef double ( ::SireMove::Sampler::*probabilityOf_function_type)( ::SireMol::PartialMolecule const & ) const;
             probabilityOf_function_type probabilityOf_function_value( &::SireMove::Sampler::probabilityOf );
             
             Sampler_exposer.def( 
@@ -80,7 +90,7 @@ void register_Sampler_class(){
         }
         { //::SireMove::Sampler::probabilityOfMolecule
         
-            typedef double ( ::SireMove::Sampler::*probabilityOfMolecule_function_type )( ::SireMol::Molecule const & ) const;
+            typedef double ( ::SireMove::Sampler::*probabilityOfMolecule_function_type)( ::SireMol::Molecule const & ) const;
             probabilityOfMolecule_function_type probabilityOfMolecule_function_value( &::SireMove::Sampler::probabilityOfMolecule );
             
             Sampler_exposer.def( 
@@ -91,7 +101,7 @@ void register_Sampler_class(){
         }
         { //::SireMove::Sampler::sample
         
-            typedef ::boost::tuples::tuple< SireMol::PartialMolecule, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMove::Sampler::*sample_function_type )(  ) const;
+            typedef ::boost::tuples::tuple< SireMol::PartialMolecule, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMove::Sampler::*sample_function_type)(  ) const;
             sample_function_type sample_function_value( &::SireMove::Sampler::sample );
             
             Sampler_exposer.def( 
@@ -101,7 +111,7 @@ void register_Sampler_class(){
         }
         { //::SireMove::Sampler::sampleMolecule
         
-            typedef ::boost::tuples::tuple< SireMol::Molecule, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMove::Sampler::*sampleMolecule_function_type )(  ) const;
+            typedef ::boost::tuples::tuple< SireMol::Molecule, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMove::Sampler::*sampleMolecule_function_type)(  ) const;
             sampleMolecule_function_type sampleMolecule_function_value( &::SireMove::Sampler::sampleMolecule );
             
             Sampler_exposer.def( 
@@ -111,7 +121,7 @@ void register_Sampler_class(){
         }
         { //::SireMove::Sampler::setGenerator
         
-            typedef void ( ::SireMove::Sampler::*setGenerator_function_type )( ::SireMaths::RanGenerator const & ) ;
+            typedef void ( ::SireMove::Sampler::*setGenerator_function_type)( ::SireMaths::RanGenerator const & ) ;
             setGenerator_function_type setGenerator_function_value( &::SireMove::Sampler::setGenerator );
             
             Sampler_exposer.def( 
@@ -122,7 +132,7 @@ void register_Sampler_class(){
         }
         { //::SireMove::Sampler::setGroup
         
-            typedef void ( ::SireMove::Sampler::*setGroup_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireMove::Sampler::*setGroup_function_type)( ::SireMol::MoleculeGroup const & ) ;
             setGroup_function_type setGroup_function_value( &::SireMove::Sampler::setGroup );
             
             Sampler_exposer.def( 
@@ -143,7 +153,7 @@ void register_Sampler_class(){
         }
         { //::SireMove::Sampler::updateFrom
         
-            typedef void ( ::SireMove::Sampler::*updateFrom_function_type )( ::SireSystem::System const & ) ;
+            typedef void ( ::SireMove::Sampler::*updateFrom_function_type)( ::SireSystem::System const & ) ;
             updateFrom_function_type updateFrom_function_value( &::SireMove::Sampler::updateFrom );
             
             Sampler_exposer.def( 

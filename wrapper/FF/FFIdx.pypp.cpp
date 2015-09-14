@@ -31,7 +31,7 @@ void register_FFIdx_class(){
         FFIdx_exposer.def( bp::init< SireFF::FFIdx const & >(( bp::arg("other") )) );
         { //::SireFF::FFIdx::hash
         
-            typedef ::uint ( ::SireFF::FFIdx::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireFF::FFIdx::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireFF::FFIdx::hash );
             
             FFIdx_exposer.def( 
@@ -41,7 +41,7 @@ void register_FFIdx_class(){
         }
         { //::SireFF::FFIdx::isNull
         
-            typedef bool ( ::SireFF::FFIdx::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireFF::FFIdx::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireFF::FFIdx::isNull );
             
             FFIdx_exposer.def( 
@@ -51,7 +51,7 @@ void register_FFIdx_class(){
         }
         { //::SireFF::FFIdx::map
         
-            typedef ::QList< SireFF::FFIdx > ( ::SireFF::FFIdx::*map_function_type )( ::SireFF::ForceFields const & ) const;
+            typedef ::QList< SireFF::FFIdx > ( ::SireFF::FFIdx::*map_function_type)( ::SireFF::ForceFields const & ) const;
             map_function_type map_function_value( &::SireFF::FFIdx::map );
             
             FFIdx_exposer.def( 
@@ -72,7 +72,7 @@ void register_FFIdx_class(){
         }
         { //::SireFF::FFIdx::operator=
         
-            typedef ::SireFF::FFIdx & ( ::SireFF::FFIdx::*assign_function_type )( ::SireFF::FFIdx const & ) ;
+            typedef ::SireFF::FFIdx & ( ::SireFF::FFIdx::*assign_function_type)( ::SireFF::FFIdx const & ) ;
             assign_function_type assign_function_value( &::SireFF::FFIdx::operator= );
             
             FFIdx_exposer.def( 
@@ -84,7 +84,7 @@ void register_FFIdx_class(){
         }
         { //::SireFF::FFIdx::toString
         
-            typedef ::QString ( ::SireFF::FFIdx::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireFF::FFIdx::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireFF::FFIdx::toString );
             
             FFIdx_exposer.def( 
@@ -104,7 +104,7 @@ void register_FFIdx_class(){
         }
         { //::SireFF::FFIdx::what
         
-            typedef char const * ( ::SireFF::FFIdx::*what_function_type )(  ) const;
+            typedef char const * ( ::SireFF::FFIdx::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireFF::FFIdx::what );
             
             FFIdx_exposer.def( 

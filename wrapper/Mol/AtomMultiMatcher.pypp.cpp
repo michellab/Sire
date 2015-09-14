@@ -52,7 +52,7 @@ void register_AtomMultiMatcher_class(){
         AtomMultiMatcher_exposer.def( bp::init< SireMol::AtomMultiMatcher const & >(( bp::arg("other") )) );
         { //::SireMol::AtomMultiMatcher::isNull
         
-            typedef bool ( ::SireMol::AtomMultiMatcher::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::AtomMultiMatcher::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::AtomMultiMatcher::isNull );
             
             AtomMultiMatcher_exposer.def( 
@@ -63,7 +63,7 @@ void register_AtomMultiMatcher_class(){
         AtomMultiMatcher_exposer.def( bp::self != bp::self );
         { //::SireMol::AtomMultiMatcher::operator=
         
-            typedef ::SireMol::AtomMultiMatcher & ( ::SireMol::AtomMultiMatcher::*assign_function_type )( ::SireMol::AtomMultiMatcher const & ) ;
+            typedef ::SireMol::AtomMultiMatcher & ( ::SireMol::AtomMultiMatcher::*assign_function_type)( ::SireMol::AtomMultiMatcher const & ) ;
             assign_function_type assign_function_value( &::SireMol::AtomMultiMatcher::operator= );
             
             AtomMultiMatcher_exposer.def( 
@@ -76,7 +76,7 @@ void register_AtomMultiMatcher_class(){
         AtomMultiMatcher_exposer.def( bp::self == bp::self );
         { //::SireMol::AtomMultiMatcher::toString
         
-            typedef ::QString ( ::SireMol::AtomMultiMatcher::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::AtomMultiMatcher::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::AtomMultiMatcher::toString );
             
             AtomMultiMatcher_exposer.def( 
@@ -96,7 +96,7 @@ void register_AtomMultiMatcher_class(){
         }
         { //::SireMol::AtomMultiMatcher::what
         
-            typedef char const * ( ::SireMol::AtomMultiMatcher::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::AtomMultiMatcher::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::AtomMultiMatcher::what );
             
             AtomMultiMatcher_exposer.def( 

@@ -46,7 +46,7 @@ void register_Identities_class(){
         Identities_exposer.def( bp::init< SireCAS::Identities const & >(( bp::arg("other") )) );
         { //::SireCAS::Identities::add
         
-            typedef void ( ::SireCAS::Identities::*add_function_type )( ::SireCAS::SymbolExpression const & ) ;
+            typedef void ( ::SireCAS::Identities::*add_function_type)( ::SireCAS::SymbolExpression const & ) ;
             add_function_type add_function_value( &::SireCAS::Identities::add );
             
             Identities_exposer.def( 
@@ -57,7 +57,7 @@ void register_Identities_class(){
         }
         { //::SireCAS::Identities::add
         
-            typedef void ( ::SireCAS::Identities::*add_function_type )( ::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const & ) ;
+            typedef void ( ::SireCAS::Identities::*add_function_type)( ::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const & ) ;
             add_function_type add_function_value( &::SireCAS::Identities::add );
             
             Identities_exposer.def( 
@@ -68,7 +68,7 @@ void register_Identities_class(){
         }
         { //::SireCAS::Identities::add
         
-            typedef void ( ::SireCAS::Identities::*add_function_type )( ::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const & ) ;
+            typedef void ( ::SireCAS::Identities::*add_function_type)( ::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const & ) ;
             add_function_type add_function_value( &::SireCAS::Identities::add );
             
             Identities_exposer.def( 
@@ -79,7 +79,7 @@ void register_Identities_class(){
         }
         { //::SireCAS::Identities::add
         
-            typedef void ( ::SireCAS::Identities::*add_function_type )( ::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const & ) ;
+            typedef void ( ::SireCAS::Identities::*add_function_type)( ::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const & ) ;
             add_function_type add_function_value( &::SireCAS::Identities::add );
             
             Identities_exposer.def( 
@@ -90,7 +90,7 @@ void register_Identities_class(){
         }
         { //::SireCAS::Identities::add
         
-            typedef void ( ::SireCAS::Identities::*add_function_type )( ::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const & ) ;
+            typedef void ( ::SireCAS::Identities::*add_function_type)( ::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const & ) ;
             add_function_type add_function_value( &::SireCAS::Identities::add );
             
             Identities_exposer.def( 
@@ -101,7 +101,7 @@ void register_Identities_class(){
         }
         { //::SireCAS::Identities::add
         
-            typedef void ( ::SireCAS::Identities::*add_function_type )( ::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const & ) ;
+            typedef void ( ::SireCAS::Identities::*add_function_type)( ::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const & ) ;
             add_function_type add_function_value( &::SireCAS::Identities::add );
             
             Identities_exposer.def( 
@@ -112,7 +112,7 @@ void register_Identities_class(){
         }
         { //::SireCAS::Identities::add
         
-            typedef void ( ::SireCAS::Identities::*add_function_type )( ::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const & ) ;
+            typedef void ( ::SireCAS::Identities::*add_function_type)( ::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const & ) ;
             add_function_type add_function_value( &::SireCAS::Identities::add );
             
             Identities_exposer.def( 
@@ -123,7 +123,7 @@ void register_Identities_class(){
         }
         { //::SireCAS::Identities::add
         
-            typedef void ( ::SireCAS::Identities::*add_function_type )( ::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const & ) ;
+            typedef void ( ::SireCAS::Identities::*add_function_type)( ::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const & ) ;
             add_function_type add_function_value( &::SireCAS::Identities::add );
             
             Identities_exposer.def( 
@@ -134,7 +134,7 @@ void register_Identities_class(){
         }
         { //::SireCAS::Identities::add
         
-            typedef void ( ::SireCAS::Identities::*add_function_type )( ::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const & ) ;
+            typedef void ( ::SireCAS::Identities::*add_function_type)( ::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const & ) ;
             add_function_type add_function_value( &::SireCAS::Identities::add );
             
             Identities_exposer.def( 
@@ -145,7 +145,7 @@ void register_Identities_class(){
         }
         { //::SireCAS::Identities::add
         
-            typedef void ( ::SireCAS::Identities::*add_function_type )( ::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const & ) ;
+            typedef void ( ::SireCAS::Identities::*add_function_type)( ::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const &,::SireCAS::SymbolExpression const & ) ;
             add_function_type add_function_value( &::SireCAS::Identities::add );
             
             Identities_exposer.def( 
@@ -156,7 +156,7 @@ void register_Identities_class(){
         }
         { //::SireCAS::Identities::contains
         
-            typedef bool ( ::SireCAS::Identities::*contains_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef bool ( ::SireCAS::Identities::*contains_function_type)( ::SireCAS::Symbol const & ) const;
             contains_function_type contains_function_value( &::SireCAS::Identities::contains );
             
             Identities_exposer.def( 
@@ -167,7 +167,7 @@ void register_Identities_class(){
         }
         { //::SireCAS::Identities::contains
         
-            typedef bool ( ::SireCAS::Identities::*contains_function_type )( ::SireCAS::Function const & ) const;
+            typedef bool ( ::SireCAS::Identities::*contains_function_type)( ::SireCAS::Function const & ) const;
             contains_function_type contains_function_value( &::SireCAS::Identities::contains );
             
             Identities_exposer.def( 
@@ -178,7 +178,7 @@ void register_Identities_class(){
         }
         { //::SireCAS::Identities::expression
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Identities::*expression_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Identities::*expression_function_type)( ::SireCAS::Symbol const & ) const;
             expression_function_type expression_function_value( &::SireCAS::Identities::expression );
             
             Identities_exposer.def( 
@@ -189,7 +189,7 @@ void register_Identities_class(){
         }
         { //::SireCAS::Identities::function
         
-            typedef ::SireCAS::Function ( ::SireCAS::Identities::*function_function_type )( ::SireCAS::Function const & ) const;
+            typedef ::SireCAS::Function ( ::SireCAS::Identities::*function_function_type)( ::SireCAS::Function const & ) const;
             function_function_type function_function_value( &::SireCAS::Identities::function );
             
             Identities_exposer.def( 
@@ -202,7 +202,7 @@ void register_Identities_class(){
         Identities_exposer.def( bp::self == bp::self );
         { //::SireCAS::Identities::operator[]
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Identities::*__getitem___function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Identities::*__getitem___function_type)( ::SireCAS::Symbol const & ) const;
             __getitem___function_type __getitem___function_value( &::SireCAS::Identities::operator[] );
             
             Identities_exposer.def( 
@@ -213,7 +213,7 @@ void register_Identities_class(){
         }
         { //::SireCAS::Identities::set
         
-            typedef void ( ::SireCAS::Identities::*set_function_type )( ::SireCAS::Symbol const &,::SireCAS::Expression const & ) ;
+            typedef void ( ::SireCAS::Identities::*set_function_type)( ::SireCAS::Symbol const &,::SireCAS::Expression const & ) ;
             set_function_type set_function_value( &::SireCAS::Identities::set );
             
             Identities_exposer.def( 
@@ -224,7 +224,7 @@ void register_Identities_class(){
         }
         { //::SireCAS::Identities::symbols
         
-            typedef ::QList< SireCAS::Symbol > ( ::SireCAS::Identities::*symbols_function_type )(  ) const;
+            typedef ::QList< SireCAS::Symbol > ( ::SireCAS::Identities::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireCAS::Identities::symbols );
             
             Identities_exposer.def( 
@@ -234,7 +234,7 @@ void register_Identities_class(){
         }
         { //::SireCAS::Identities::toString
         
-            typedef ::QString ( ::SireCAS::Identities::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireCAS::Identities::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireCAS::Identities::toString );
             
             Identities_exposer.def( 
@@ -254,7 +254,7 @@ void register_Identities_class(){
         }
         { //::SireCAS::Identities::what
         
-            typedef char const * ( ::SireCAS::Identities::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::Identities::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::Identities::what );
             
             Identities_exposer.def( 

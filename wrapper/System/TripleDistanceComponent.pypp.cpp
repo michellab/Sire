@@ -41,7 +41,7 @@ void register_TripleDistanceComponent_class(){
         TripleDistanceComponent_exposer.def( bp::init< SireSystem::TripleDistanceComponent const & >(( bp::arg("other") )) );
         { //::SireSystem::TripleDistanceComponent::nPoints
         
-            typedef int ( ::SireSystem::TripleDistanceComponent::*nPoints_function_type )(  ) const;
+            typedef int ( ::SireSystem::TripleDistanceComponent::*nPoints_function_type)(  ) const;
             nPoints_function_type nPoints_function_value( &::SireSystem::TripleDistanceComponent::nPoints );
             
             TripleDistanceComponent_exposer.def( 
@@ -52,7 +52,7 @@ void register_TripleDistanceComponent_class(){
         TripleDistanceComponent_exposer.def( bp::self != bp::self );
         { //::SireSystem::TripleDistanceComponent::operator=
         
-            typedef ::SireSystem::TripleDistanceComponent & ( ::SireSystem::TripleDistanceComponent::*assign_function_type )( ::SireSystem::TripleDistanceComponent const & ) ;
+            typedef ::SireSystem::TripleDistanceComponent & ( ::SireSystem::TripleDistanceComponent::*assign_function_type)( ::SireSystem::TripleDistanceComponent const & ) ;
             assign_function_type assign_function_value( &::SireSystem::TripleDistanceComponent::operator= );
             
             TripleDistanceComponent_exposer.def( 
@@ -65,7 +65,7 @@ void register_TripleDistanceComponent_class(){
         TripleDistanceComponent_exposer.def( bp::self == bp::self );
         { //::SireSystem::TripleDistanceComponent::point
         
-            typedef ::SireFF::Point const & ( ::SireSystem::TripleDistanceComponent::*point_function_type )( int ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::TripleDistanceComponent::*point_function_type)( int ) const;
             point_function_type point_function_value( &::SireSystem::TripleDistanceComponent::point );
             
             TripleDistanceComponent_exposer.def( 
@@ -77,7 +77,7 @@ void register_TripleDistanceComponent_class(){
         }
         { //::SireSystem::TripleDistanceComponent::point0
         
-            typedef ::SireFF::Point const & ( ::SireSystem::TripleDistanceComponent::*point0_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::TripleDistanceComponent::*point0_function_type)(  ) const;
             point0_function_type point0_function_value( &::SireSystem::TripleDistanceComponent::point0 );
             
             TripleDistanceComponent_exposer.def( 
@@ -88,7 +88,7 @@ void register_TripleDistanceComponent_class(){
         }
         { //::SireSystem::TripleDistanceComponent::point1
         
-            typedef ::SireFF::Point const & ( ::SireSystem::TripleDistanceComponent::*point1_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::TripleDistanceComponent::*point1_function_type)(  ) const;
             point1_function_type point1_function_value( &::SireSystem::TripleDistanceComponent::point1 );
             
             TripleDistanceComponent_exposer.def( 
@@ -99,7 +99,7 @@ void register_TripleDistanceComponent_class(){
         }
         { //::SireSystem::TripleDistanceComponent::point2
         
-            typedef ::SireFF::Point const & ( ::SireSystem::TripleDistanceComponent::*point2_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::TripleDistanceComponent::*point2_function_type)(  ) const;
             point2_function_type point2_function_value( &::SireSystem::TripleDistanceComponent::point2 );
             
             TripleDistanceComponent_exposer.def( 
@@ -110,7 +110,7 @@ void register_TripleDistanceComponent_class(){
         }
         { //::SireSystem::TripleDistanceComponent::point3
         
-            typedef ::SireFF::Point const & ( ::SireSystem::TripleDistanceComponent::*point3_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::TripleDistanceComponent::*point3_function_type)(  ) const;
             point3_function_type point3_function_value( &::SireSystem::TripleDistanceComponent::point3 );
             
             TripleDistanceComponent_exposer.def( 
@@ -121,7 +121,7 @@ void register_TripleDistanceComponent_class(){
         }
         { //::SireSystem::TripleDistanceComponent::point4
         
-            typedef ::SireFF::Point const & ( ::SireSystem::TripleDistanceComponent::*point4_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::TripleDistanceComponent::*point4_function_type)(  ) const;
             point4_function_type point4_function_value( &::SireSystem::TripleDistanceComponent::point4 );
             
             TripleDistanceComponent_exposer.def( 
@@ -132,7 +132,7 @@ void register_TripleDistanceComponent_class(){
         }
         { //::SireSystem::TripleDistanceComponent::point5
         
-            typedef ::SireFF::Point const & ( ::SireSystem::TripleDistanceComponent::*point5_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::TripleDistanceComponent::*point5_function_type)(  ) const;
             point5_function_type point5_function_value( &::SireSystem::TripleDistanceComponent::point5 );
             
             TripleDistanceComponent_exposer.def( 
@@ -176,7 +176,7 @@ void register_TripleDistanceComponent_class(){
         }
         { //::SireSystem::TripleDistanceComponent::toString
         
-            typedef ::QString ( ::SireSystem::TripleDistanceComponent::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireSystem::TripleDistanceComponent::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireSystem::TripleDistanceComponent::toString );
             
             TripleDistanceComponent_exposer.def( 

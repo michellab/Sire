@@ -46,7 +46,7 @@ void register_Values_class(){
         Values_exposer.def( bp::init< SireCAS::Values const & >(( bp::arg("other") )) );
         { //::SireCAS::Values::add
         
-            typedef void ( ::SireCAS::Values::*add_function_type )( ::SireCAS::SymbolValue const & ) ;
+            typedef void ( ::SireCAS::Values::*add_function_type)( ::SireCAS::SymbolValue const & ) ;
             add_function_type add_function_value( &::SireCAS::Values::add );
             
             Values_exposer.def( 
@@ -57,7 +57,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::add
         
-            typedef void ( ::SireCAS::Values::*add_function_type )( ::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const & ) ;
+            typedef void ( ::SireCAS::Values::*add_function_type)( ::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const & ) ;
             add_function_type add_function_value( &::SireCAS::Values::add );
             
             Values_exposer.def( 
@@ -68,7 +68,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::add
         
-            typedef void ( ::SireCAS::Values::*add_function_type )( ::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const & ) ;
+            typedef void ( ::SireCAS::Values::*add_function_type)( ::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const & ) ;
             add_function_type add_function_value( &::SireCAS::Values::add );
             
             Values_exposer.def( 
@@ -79,7 +79,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::add
         
-            typedef void ( ::SireCAS::Values::*add_function_type )( ::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const & ) ;
+            typedef void ( ::SireCAS::Values::*add_function_type)( ::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const & ) ;
             add_function_type add_function_value( &::SireCAS::Values::add );
             
             Values_exposer.def( 
@@ -90,7 +90,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::add
         
-            typedef void ( ::SireCAS::Values::*add_function_type )( ::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const & ) ;
+            typedef void ( ::SireCAS::Values::*add_function_type)( ::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const & ) ;
             add_function_type add_function_value( &::SireCAS::Values::add );
             
             Values_exposer.def( 
@@ -101,7 +101,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::add
         
-            typedef void ( ::SireCAS::Values::*add_function_type )( ::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const & ) ;
+            typedef void ( ::SireCAS::Values::*add_function_type)( ::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const & ) ;
             add_function_type add_function_value( &::SireCAS::Values::add );
             
             Values_exposer.def( 
@@ -112,7 +112,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::add
         
-            typedef void ( ::SireCAS::Values::*add_function_type )( ::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const & ) ;
+            typedef void ( ::SireCAS::Values::*add_function_type)( ::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const & ) ;
             add_function_type add_function_value( &::SireCAS::Values::add );
             
             Values_exposer.def( 
@@ -123,7 +123,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::add
         
-            typedef void ( ::SireCAS::Values::*add_function_type )( ::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const & ) ;
+            typedef void ( ::SireCAS::Values::*add_function_type)( ::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const & ) ;
             add_function_type add_function_value( &::SireCAS::Values::add );
             
             Values_exposer.def( 
@@ -134,7 +134,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::add
         
-            typedef void ( ::SireCAS::Values::*add_function_type )( ::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const & ) ;
+            typedef void ( ::SireCAS::Values::*add_function_type)( ::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const & ) ;
             add_function_type add_function_value( &::SireCAS::Values::add );
             
             Values_exposer.def( 
@@ -145,7 +145,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::add
         
-            typedef void ( ::SireCAS::Values::*add_function_type )( ::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const & ) ;
+            typedef void ( ::SireCAS::Values::*add_function_type)( ::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const &,::SireCAS::SymbolValue const & ) ;
             add_function_type add_function_value( &::SireCAS::Values::add );
             
             Values_exposer.def( 
@@ -156,7 +156,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::begin
         
-            typedef ::QHash< unsigned int, double >::const_iterator ( ::SireCAS::Values::*begin_function_type )(  ) const;
+            typedef ::QHash< unsigned int, double >::const_iterator ( ::SireCAS::Values::*begin_function_type)(  ) const;
             begin_function_type begin_function_value( &::SireCAS::Values::begin );
             
             Values_exposer.def( 
@@ -166,7 +166,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::constBegin
         
-            typedef ::QHash< unsigned int, double >::const_iterator ( ::SireCAS::Values::*constBegin_function_type )(  ) const;
+            typedef ::QHash< unsigned int, double >::const_iterator ( ::SireCAS::Values::*constBegin_function_type)(  ) const;
             constBegin_function_type constBegin_function_value( &::SireCAS::Values::constBegin );
             
             Values_exposer.def( 
@@ -176,7 +176,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::constEnd
         
-            typedef ::QHash< unsigned int, double >::const_iterator ( ::SireCAS::Values::*constEnd_function_type )(  ) const;
+            typedef ::QHash< unsigned int, double >::const_iterator ( ::SireCAS::Values::*constEnd_function_type)(  ) const;
             constEnd_function_type constEnd_function_value( &::SireCAS::Values::constEnd );
             
             Values_exposer.def( 
@@ -186,7 +186,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::constFind
         
-            typedef ::QHash< unsigned int, double >::const_iterator ( ::SireCAS::Values::*constFind_function_type )( ::SireCAS::SymbolID ) const;
+            typedef ::QHash< unsigned int, double >::const_iterator ( ::SireCAS::Values::*constFind_function_type)( ::SireCAS::SymbolID ) const;
             constFind_function_type constFind_function_value( &::SireCAS::Values::constFind );
             
             Values_exposer.def( 
@@ -197,7 +197,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::constFind
         
-            typedef ::QHash< unsigned int, double >::const_iterator ( ::SireCAS::Values::*constFind_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::QHash< unsigned int, double >::const_iterator ( ::SireCAS::Values::*constFind_function_type)( ::SireCAS::Symbol const & ) const;
             constFind_function_type constFind_function_value( &::SireCAS::Values::constFind );
             
             Values_exposer.def( 
@@ -208,7 +208,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::contains
         
-            typedef bool ( ::SireCAS::Values::*contains_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef bool ( ::SireCAS::Values::*contains_function_type)( ::SireCAS::Symbol const & ) const;
             contains_function_type contains_function_value( &::SireCAS::Values::contains );
             
             Values_exposer.def( 
@@ -219,7 +219,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::count
         
-            typedef int ( ::SireCAS::Values::*count_function_type )(  ) const;
+            typedef int ( ::SireCAS::Values::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireCAS::Values::count );
             
             Values_exposer.def( 
@@ -229,7 +229,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::end
         
-            typedef ::QHash< unsigned int, double >::const_iterator ( ::SireCAS::Values::*end_function_type )(  ) const;
+            typedef ::QHash< unsigned int, double >::const_iterator ( ::SireCAS::Values::*end_function_type)(  ) const;
             end_function_type end_function_value( &::SireCAS::Values::end );
             
             Values_exposer.def( 
@@ -239,7 +239,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::isEmpty
         
-            typedef bool ( ::SireCAS::Values::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireCAS::Values::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireCAS::Values::isEmpty );
             
             Values_exposer.def( 
@@ -249,7 +249,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::keys
         
-            typedef ::QList< SireCAS::Symbol > ( ::SireCAS::Values::*keys_function_type )(  ) const;
+            typedef ::QList< SireCAS::Symbol > ( ::SireCAS::Values::*keys_function_type)(  ) const;
             keys_function_type keys_function_value( &::SireCAS::Values::keys );
             
             Values_exposer.def( 
@@ -260,7 +260,7 @@ void register_Values_class(){
         Values_exposer.def( bp::self != bp::self );
         { //::SireCAS::Values::operator()
         
-            typedef double ( ::SireCAS::Values::*__call___function_type )( ::SireCAS::Symbol const & ) const;
+            typedef double ( ::SireCAS::Values::*__call___function_type)( ::SireCAS::Symbol const & ) const;
             __call___function_type __call___function_value( &::SireCAS::Values::operator() );
             
             Values_exposer.def( 
@@ -272,7 +272,7 @@ void register_Values_class(){
         Values_exposer.def( bp::self == bp::self );
         { //::SireCAS::Values::operator[]
         
-            typedef double ( ::SireCAS::Values::*__getitem___function_type )( ::SireCAS::Symbol const & ) const;
+            typedef double ( ::SireCAS::Values::*__getitem___function_type)( ::SireCAS::Symbol const & ) const;
             __getitem___function_type __getitem___function_value( &::SireCAS::Values::operator[] );
             
             Values_exposer.def( 
@@ -283,7 +283,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::remove
         
-            typedef void ( ::SireCAS::Values::*remove_function_type )( ::SireCAS::Symbol const & ) ;
+            typedef void ( ::SireCAS::Values::*remove_function_type)( ::SireCAS::Symbol const & ) ;
             remove_function_type remove_function_value( &::SireCAS::Values::remove );
             
             Values_exposer.def( 
@@ -294,7 +294,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::remove
         
-            typedef void ( ::SireCAS::Values::*remove_function_type )( ::SireCAS::SymbolID const & ) ;
+            typedef void ( ::SireCAS::Values::*remove_function_type)( ::SireCAS::SymbolID const & ) ;
             remove_function_type remove_function_value( &::SireCAS::Values::remove );
             
             Values_exposer.def( 
@@ -305,7 +305,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::reserve
         
-            typedef void ( ::SireCAS::Values::*reserve_function_type )( int ) ;
+            typedef void ( ::SireCAS::Values::*reserve_function_type)( int ) ;
             reserve_function_type reserve_function_value( &::SireCAS::Values::reserve );
             
             Values_exposer.def( 
@@ -316,7 +316,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::set
         
-            typedef void ( ::SireCAS::Values::*set_function_type )( ::SireCAS::Symbol const &,double ) ;
+            typedef void ( ::SireCAS::Values::*set_function_type)( ::SireCAS::Symbol const &,double ) ;
             set_function_type set_function_value( &::SireCAS::Values::set );
             
             Values_exposer.def( 
@@ -327,7 +327,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::set
         
-            typedef void ( ::SireCAS::Values::*set_function_type )( ::QHash< unsigned int, double >::const_iterator const & ) ;
+            typedef void ( ::SireCAS::Values::*set_function_type)( ::QHash< unsigned int, double >::const_iterator const & ) ;
             set_function_type set_function_value( &::SireCAS::Values::set );
             
             Values_exposer.def( 
@@ -338,7 +338,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::symbols
         
-            typedef ::QList< SireCAS::Symbol > ( ::SireCAS::Values::*symbols_function_type )(  ) const;
+            typedef ::QList< SireCAS::Symbol > ( ::SireCAS::Values::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireCAS::Values::symbols );
             
             Values_exposer.def( 
@@ -348,7 +348,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::toString
         
-            typedef ::QString ( ::SireCAS::Values::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireCAS::Values::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireCAS::Values::toString );
             
             Values_exposer.def( 
@@ -368,7 +368,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::value
         
-            typedef double ( ::SireCAS::Values::*value_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef double ( ::SireCAS::Values::*value_function_type)( ::SireCAS::Symbol const & ) const;
             value_function_type value_function_value( &::SireCAS::Values::value );
             
             Values_exposer.def( 
@@ -379,7 +379,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::values
         
-            typedef ::QHash< unsigned int, double > const & ( ::SireCAS::Values::*values_function_type )(  ) const;
+            typedef ::QHash< unsigned int, double > const & ( ::SireCAS::Values::*values_function_type)(  ) const;
             values_function_type values_function_value( &::SireCAS::Values::values );
             
             Values_exposer.def( 
@@ -390,7 +390,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::what
         
-            typedef char const * ( ::SireCAS::Values::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::Values::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::Values::what );
             
             Values_exposer.def( 

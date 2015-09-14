@@ -37,7 +37,7 @@ void register_CLJGroup_class(){
         CLJGroup_exposer.def( bp::init< SireMM::CLJGroup const & >(( bp::arg("other") )) );
         { //::SireMM::CLJGroup::accept
         
-            typedef void ( ::SireMM::CLJGroup::*accept_function_type )(  ) ;
+            typedef void ( ::SireMM::CLJGroup::*accept_function_type)(  ) ;
             accept_function_type accept_function_value( &::SireMM::CLJGroup::accept );
             
             CLJGroup_exposer.def( 
@@ -47,7 +47,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::add
         
-            typedef void ( ::SireMM::CLJGroup::*add_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMM::CLJGroup::*add_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireMM::CLJGroup::add );
             
             CLJGroup_exposer.def( 
@@ -58,7 +58,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::add
         
-            typedef void ( ::SireMM::CLJGroup::*add_function_type )( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMM::CLJGroup::*add_function_type)( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireMM::CLJGroup::add );
             
             CLJGroup_exposer.def( 
@@ -69,7 +69,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::add
         
-            typedef void ( ::SireMM::CLJGroup::*add_function_type )( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMM::CLJGroup::*add_function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireMM::CLJGroup::add );
             
             CLJGroup_exposer.def( 
@@ -80,7 +80,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::boxLength
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMM::CLJGroup::*boxLength_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::CLJGroup::*boxLength_function_type)(  ) const;
             boxLength_function_type boxLength_function_value( &::SireMM::CLJGroup::boxLength );
             
             CLJGroup_exposer.def( 
@@ -90,7 +90,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::changedAtoms
         
-            typedef ::SireMM::CLJAtoms ( ::SireMM::CLJGroup::*changedAtoms_function_type )(  ) const;
+            typedef ::SireMM::CLJAtoms ( ::SireMM::CLJGroup::*changedAtoms_function_type)(  ) const;
             changedAtoms_function_type changedAtoms_function_value( &::SireMM::CLJGroup::changedAtoms );
             
             CLJGroup_exposer.def( 
@@ -100,7 +100,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::changedMolecules
         
-            typedef ::SireMol::Molecules ( ::SireMM::CLJGroup::*changedMolecules_function_type )(  ) const;
+            typedef ::SireMol::Molecules ( ::SireMM::CLJGroup::*changedMolecules_function_type)(  ) const;
             changedMolecules_function_type changedMolecules_function_value( &::SireMM::CLJGroup::changedMolecules );
             
             CLJGroup_exposer.def( 
@@ -110,7 +110,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::cljBoxes
         
-            typedef ::SireMM::CLJBoxes const & ( ::SireMM::CLJGroup::*cljBoxes_function_type )(  ) const;
+            typedef ::SireMM::CLJBoxes const & ( ::SireMM::CLJGroup::*cljBoxes_function_type)(  ) const;
             cljBoxes_function_type cljBoxes_function_value( &::SireMM::CLJGroup::cljBoxes );
             
             CLJGroup_exposer.def( 
@@ -121,7 +121,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::isEmpty
         
-            typedef bool ( ::SireMM::CLJGroup::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJGroup::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMM::CLJGroup::isEmpty );
             
             CLJGroup_exposer.def( 
@@ -131,7 +131,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::isSingleIDChange
         
-            typedef bool ( ::SireMM::CLJGroup::*isSingleIDChange_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJGroup::*isSingleIDChange_function_type)(  ) const;
             isSingleIDChange_function_type isSingleIDChange_function_value( &::SireMM::CLJGroup::isSingleIDChange );
             
             CLJGroup_exposer.def( 
@@ -141,7 +141,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::mapForMolecule
         
-            typedef ::SireBase::PropertyMap ( ::SireMM::CLJGroup::*mapForMolecule_function_type )( ::SireMol::MolNum ) const;
+            typedef ::SireBase::PropertyMap ( ::SireMM::CLJGroup::*mapForMolecule_function_type)( ::SireMol::MolNum ) const;
             mapForMolecule_function_type mapForMolecule_function_value( &::SireMM::CLJGroup::mapForMolecule );
             
             CLJGroup_exposer.def( 
@@ -152,7 +152,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::mergeChanges
         
-            typedef ::boost::tuples::tuple< SireMM::CLJAtoms, SireMM::CLJAtoms, SireMM::CLJAtoms, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJGroup::*mergeChanges_function_type )(  ) const;
+            typedef ::boost::tuples::tuple< SireMM::CLJAtoms, SireMM::CLJAtoms, SireMM::CLJAtoms, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMM::CLJGroup::*mergeChanges_function_type)(  ) const;
             mergeChanges_function_type mergeChanges_function_value( &::SireMM::CLJGroup::mergeChanges );
             
             CLJGroup_exposer.def( 
@@ -162,7 +162,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::molecules
         
-            typedef ::SireMol::Molecules ( ::SireMM::CLJGroup::*molecules_function_type )(  ) const;
+            typedef ::SireMol::Molecules ( ::SireMM::CLJGroup::*molecules_function_type)(  ) const;
             molecules_function_type molecules_function_value( &::SireMM::CLJGroup::molecules );
             
             CLJGroup_exposer.def( 
@@ -172,7 +172,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::mustReallyRecalculateFromScratch
         
-            typedef void ( ::SireMM::CLJGroup::*mustReallyRecalculateFromScratch_function_type )(  ) ;
+            typedef void ( ::SireMM::CLJGroup::*mustReallyRecalculateFromScratch_function_type)(  ) ;
             mustReallyRecalculateFromScratch_function_type mustReallyRecalculateFromScratch_function_value( &::SireMM::CLJGroup::mustReallyRecalculateFromScratch );
             
             CLJGroup_exposer.def( 
@@ -182,7 +182,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::mustRecalculateFromScratch
         
-            typedef void ( ::SireMM::CLJGroup::*mustRecalculateFromScratch_function_type )(  ) ;
+            typedef void ( ::SireMM::CLJGroup::*mustRecalculateFromScratch_function_type)(  ) ;
             mustRecalculateFromScratch_function_type mustRecalculateFromScratch_function_value( &::SireMM::CLJGroup::mustRecalculateFromScratch );
             
             CLJGroup_exposer.def( 
@@ -192,7 +192,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::nChangedMolecules
         
-            typedef int ( ::SireMM::CLJGroup::*nChangedMolecules_function_type )(  ) const;
+            typedef int ( ::SireMM::CLJGroup::*nChangedMolecules_function_type)(  ) const;
             nChangedMolecules_function_type nChangedMolecules_function_value( &::SireMM::CLJGroup::nChangedMolecules );
             
             CLJGroup_exposer.def( 
@@ -202,7 +202,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::needsAccepting
         
-            typedef bool ( ::SireMM::CLJGroup::*needsAccepting_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJGroup::*needsAccepting_function_type)(  ) const;
             needsAccepting_function_type needsAccepting_function_value( &::SireMM::CLJGroup::needsAccepting );
             
             CLJGroup_exposer.def( 
@@ -212,7 +212,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::newAtoms
         
-            typedef ::SireMM::CLJAtoms ( ::SireMM::CLJGroup::*newAtoms_function_type )(  ) const;
+            typedef ::SireMM::CLJAtoms ( ::SireMM::CLJGroup::*newAtoms_function_type)(  ) const;
             newAtoms_function_type newAtoms_function_value( &::SireMM::CLJGroup::newAtoms );
             
             CLJGroup_exposer.def( 
@@ -222,7 +222,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::oldAtoms
         
-            typedef ::SireMM::CLJAtoms ( ::SireMM::CLJGroup::*oldAtoms_function_type )(  ) const;
+            typedef ::SireMM::CLJAtoms ( ::SireMM::CLJGroup::*oldAtoms_function_type)(  ) const;
             oldAtoms_function_type oldAtoms_function_value( &::SireMM::CLJGroup::oldAtoms );
             
             CLJGroup_exposer.def( 
@@ -233,7 +233,7 @@ void register_CLJGroup_class(){
         CLJGroup_exposer.def( bp::self != bp::self );
         { //::SireMM::CLJGroup::operator=
         
-            typedef ::SireMM::CLJGroup & ( ::SireMM::CLJGroup::*assign_function_type )( ::SireMM::CLJGroup const & ) ;
+            typedef ::SireMM::CLJGroup & ( ::SireMM::CLJGroup::*assign_function_type)( ::SireMM::CLJGroup const & ) ;
             assign_function_type assign_function_value( &::SireMM::CLJGroup::operator= );
             
             CLJGroup_exposer.def( 
@@ -246,7 +246,7 @@ void register_CLJGroup_class(){
         CLJGroup_exposer.def( bp::self == bp::self );
         { //::SireMM::CLJGroup::recalculatingFromScratch
         
-            typedef bool ( ::SireMM::CLJGroup::*recalculatingFromScratch_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJGroup::*recalculatingFromScratch_function_type)(  ) const;
             recalculatingFromScratch_function_type recalculatingFromScratch_function_value( &::SireMM::CLJGroup::recalculatingFromScratch );
             
             CLJGroup_exposer.def( 
@@ -256,7 +256,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::remove
         
-            typedef void ( ::SireMM::CLJGroup::*remove_function_type )( ::SireMol::MoleculeView const & ) ;
+            typedef void ( ::SireMM::CLJGroup::*remove_function_type)( ::SireMol::MoleculeView const & ) ;
             remove_function_type remove_function_value( &::SireMM::CLJGroup::remove );
             
             CLJGroup_exposer.def( 
@@ -267,7 +267,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::remove
         
-            typedef void ( ::SireMM::CLJGroup::*remove_function_type )( ::SireMol::Molecules const & ) ;
+            typedef void ( ::SireMM::CLJGroup::*remove_function_type)( ::SireMol::Molecules const & ) ;
             remove_function_type remove_function_value( &::SireMM::CLJGroup::remove );
             
             CLJGroup_exposer.def( 
@@ -278,7 +278,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::remove
         
-            typedef void ( ::SireMM::CLJGroup::*remove_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireMM::CLJGroup::*remove_function_type)( ::SireMol::MoleculeGroup const & ) ;
             remove_function_type remove_function_value( &::SireMM::CLJGroup::remove );
             
             CLJGroup_exposer.def( 
@@ -289,7 +289,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::remove
         
-            typedef void ( ::SireMM::CLJGroup::*remove_function_type )( ::SireMol::MolNum ) ;
+            typedef void ( ::SireMM::CLJGroup::*remove_function_type)( ::SireMol::MolNum ) ;
             remove_function_type remove_function_value( &::SireMM::CLJGroup::remove );
             
             CLJGroup_exposer.def( 
@@ -300,7 +300,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::removeAll
         
-            typedef void ( ::SireMM::CLJGroup::*removeAll_function_type )(  ) ;
+            typedef void ( ::SireMM::CLJGroup::*removeAll_function_type)(  ) ;
             removeAll_function_type removeAll_function_value( &::SireMM::CLJGroup::removeAll );
             
             CLJGroup_exposer.def( 
@@ -310,7 +310,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::setBoxLength
         
-            typedef void ( ::SireMM::CLJGroup::*setBoxLength_function_type )( ::SireUnits::Dimension::Length ) ;
+            typedef void ( ::SireMM::CLJGroup::*setBoxLength_function_type)( ::SireUnits::Dimension::Length ) ;
             setBoxLength_function_type setBoxLength_function_value( &::SireMM::CLJGroup::setBoxLength );
             
             CLJGroup_exposer.def( 
@@ -321,7 +321,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::toString
         
-            typedef ::QString ( ::SireMM::CLJGroup::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMM::CLJGroup::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMM::CLJGroup::toString );
             
             CLJGroup_exposer.def( 
@@ -341,7 +341,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::update
         
-            typedef void ( ::SireMM::CLJGroup::*update_function_type )( ::SireMol::MoleculeView const & ) ;
+            typedef void ( ::SireMM::CLJGroup::*update_function_type)( ::SireMol::MoleculeView const & ) ;
             update_function_type update_function_value( &::SireMM::CLJGroup::update );
             
             CLJGroup_exposer.def( 
@@ -352,7 +352,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::update
         
-            typedef void ( ::SireMM::CLJGroup::*update_function_type )( ::SireMol::Molecules const & ) ;
+            typedef void ( ::SireMM::CLJGroup::*update_function_type)( ::SireMol::Molecules const & ) ;
             update_function_type update_function_value( &::SireMM::CLJGroup::update );
             
             CLJGroup_exposer.def( 
@@ -363,7 +363,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::update
         
-            typedef void ( ::SireMM::CLJGroup::*update_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireMM::CLJGroup::*update_function_type)( ::SireMol::MoleculeGroup const & ) ;
             update_function_type update_function_value( &::SireMM::CLJGroup::update );
             
             CLJGroup_exposer.def( 
@@ -374,7 +374,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::updatedConnectedGroup
         
-            typedef void ( ::SireMM::CLJGroup::*updatedConnectedGroup_function_type )(  ) ;
+            typedef void ( ::SireMM::CLJGroup::*updatedConnectedGroup_function_type)(  ) ;
             updatedConnectedGroup_function_type updatedConnectedGroup_function_value( &::SireMM::CLJGroup::updatedConnectedGroup );
             
             CLJGroup_exposer.def( 
@@ -384,7 +384,7 @@ void register_CLJGroup_class(){
         }
         { //::SireMM::CLJGroup::what
         
-            typedef char const * ( ::SireMM::CLJGroup::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::CLJGroup::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::CLJGroup::what );
             
             CLJGroup_exposer.def( 

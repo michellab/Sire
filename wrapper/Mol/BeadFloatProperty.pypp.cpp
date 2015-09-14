@@ -33,7 +33,7 @@ void register_BeadFloatProperty_class(){
         { //::SireMol::BeadProperty< double >::array
         
             typedef SireMol::BeadProperty< double > exported_class_t;
-            typedef ::QVector< double > const & ( ::SireMol::BeadProperty< double >::*array_function_type )(  ) const;
+            typedef ::QVector< double > const & ( ::SireMol::BeadProperty< double >::*array_function_type)(  ) const;
             array_function_type array_function_value( &::SireMol::BeadProperty< double >::array );
             
             BeadFloatProperty_exposer.def( 
@@ -45,7 +45,7 @@ void register_BeadFloatProperty_class(){
         { //::SireMol::BeadProperty< double >::assertCanConvert
         
             typedef SireMol::BeadProperty< double > exported_class_t;
-            typedef void ( ::SireMol::BeadProperty< double >::*assertCanConvert_function_type )( ::QVariant const & ) const;
+            typedef void ( ::SireMol::BeadProperty< double >::*assertCanConvert_function_type)( ::QVariant const & ) const;
             assertCanConvert_function_type assertCanConvert_function_value( &::SireMol::BeadProperty< double >::assertCanConvert );
             
             BeadFloatProperty_exposer.def( 
@@ -57,7 +57,7 @@ void register_BeadFloatProperty_class(){
         { //::SireMol::BeadProperty< double >::assignFrom
         
             typedef SireMol::BeadProperty< double > exported_class_t;
-            typedef void ( ::SireMol::BeadProperty< double >::*assignFrom_function_type )( ::SireMol::BeadProperty< QVariant > const & ) ;
+            typedef void ( ::SireMol::BeadProperty< double >::*assignFrom_function_type)( ::SireMol::BeadProperty< QVariant > const & ) ;
             assignFrom_function_type assignFrom_function_value( &::SireMol::BeadProperty< double >::assignFrom );
             
             BeadFloatProperty_exposer.def( 
@@ -69,7 +69,7 @@ void register_BeadFloatProperty_class(){
         { //::SireMol::BeadProperty< double >::at
         
             typedef SireMol::BeadProperty< double > exported_class_t;
-            typedef double const & ( ::SireMol::BeadProperty< double >::*at_function_type )( ::SireMol::BeadIdx const & ) const;
+            typedef double const & ( ::SireMol::BeadProperty< double >::*at_function_type)( ::SireMol::BeadIdx const & ) const;
             at_function_type at_function_value( &::SireMol::BeadProperty< double >::at );
             
             BeadFloatProperty_exposer.def( 
@@ -82,7 +82,7 @@ void register_BeadFloatProperty_class(){
         { //::SireMol::BeadProperty< double >::canConvert
         
             typedef SireMol::BeadProperty< double > exported_class_t;
-            typedef bool ( ::SireMol::BeadProperty< double >::*canConvert_function_type )( ::QVariant const & ) const;
+            typedef bool ( ::SireMol::BeadProperty< double >::*canConvert_function_type)( ::QVariant const & ) const;
             canConvert_function_type canConvert_function_value( &::SireMol::BeadProperty< double >::canConvert );
             
             BeadFloatProperty_exposer.def( 
@@ -94,7 +94,7 @@ void register_BeadFloatProperty_class(){
         { //::SireMol::BeadProperty< double >::count
         
             typedef SireMol::BeadProperty< double > exported_class_t;
-            typedef int ( ::SireMol::BeadProperty< double >::*count_function_type )(  ) const;
+            typedef int ( ::SireMol::BeadProperty< double >::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMol::BeadProperty< double >::count );
             
             BeadFloatProperty_exposer.def( 
@@ -117,7 +117,7 @@ void register_BeadFloatProperty_class(){
         { //::SireMol::BeadProperty< double >::get
         
             typedef SireMol::BeadProperty< double > exported_class_t;
-            typedef double const & ( ::SireMol::BeadProperty< double >::*get_function_type )( ::SireMol::BeadIdx const & ) const;
+            typedef double const & ( ::SireMol::BeadProperty< double >::*get_function_type)( ::SireMol::BeadIdx const & ) const;
             get_function_type get_function_value( &::SireMol::BeadProperty< double >::get );
             
             BeadFloatProperty_exposer.def( 
@@ -130,7 +130,7 @@ void register_BeadFloatProperty_class(){
         { //::SireMol::BeadProperty< double >::isCompatibleWith
         
             typedef SireMol::BeadProperty< double > exported_class_t;
-            typedef bool ( ::SireMol::BeadProperty< double >::*isCompatibleWith_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef bool ( ::SireMol::BeadProperty< double >::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::BeadProperty< double >::isCompatibleWith );
             
             BeadFloatProperty_exposer.def( 
@@ -142,7 +142,7 @@ void register_BeadFloatProperty_class(){
         { //::SireMol::BeadProperty< double >::isEmpty
         
             typedef SireMol::BeadProperty< double > exported_class_t;
-            typedef bool ( ::SireMol::BeadProperty< double >::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::BeadProperty< double >::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::BeadProperty< double >::isEmpty );
             
             BeadFloatProperty_exposer.def( 
@@ -153,7 +153,7 @@ void register_BeadFloatProperty_class(){
         { //::SireMol::BeadProperty< double >::nBeads
         
             typedef SireMol::BeadProperty< double > exported_class_t;
-            typedef int ( ::SireMol::BeadProperty< double >::*nBeads_function_type )(  ) const;
+            typedef int ( ::SireMol::BeadProperty< double >::*nBeads_function_type)(  ) const;
             nBeads_function_type nBeads_function_value( &::SireMol::BeadProperty< double >::nBeads );
             
             BeadFloatProperty_exposer.def( 
@@ -165,7 +165,7 @@ void register_BeadFloatProperty_class(){
         { //::SireMol::BeadProperty< double >::operator=
         
             typedef SireMol::BeadProperty< double > exported_class_t;
-            typedef ::SireMol::BeadProperty< double > & ( ::SireMol::BeadProperty< double >::*assign_function_type )( ::SireMol::BeadProperty< double > const & ) ;
+            typedef ::SireMol::BeadProperty< double > & ( ::SireMol::BeadProperty< double >::*assign_function_type)( ::SireMol::BeadProperty< double > const & ) ;
             assign_function_type assign_function_value( &::SireMol::BeadProperty< double >::operator= );
             
             BeadFloatProperty_exposer.def( 
@@ -179,7 +179,7 @@ void register_BeadFloatProperty_class(){
         { //::SireMol::BeadProperty< double >::operator[]
         
             typedef SireMol::BeadProperty< double > exported_class_t;
-            typedef double const & ( ::SireMol::BeadProperty< double >::*__getitem___function_type )( ::SireMol::BeadIdx const & ) const;
+            typedef double const & ( ::SireMol::BeadProperty< double >::*__getitem___function_type)( ::SireMol::BeadIdx const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::BeadProperty< double >::operator[] );
             
             BeadFloatProperty_exposer.def( 
@@ -192,7 +192,7 @@ void register_BeadFloatProperty_class(){
         { //::SireMol::BeadProperty< double >::set
         
             typedef SireMol::BeadProperty< double > exported_class_t;
-            typedef ::SireMol::BeadProperty< double > & ( ::SireMol::BeadProperty< double >::*set_function_type )( ::SireMol::BeadIdx,double const & ) ;
+            typedef ::SireMol::BeadProperty< double > & ( ::SireMol::BeadProperty< double >::*set_function_type)( ::SireMol::BeadIdx,double const & ) ;
             set_function_type set_function_value( &::SireMol::BeadProperty< double >::set );
             
             BeadFloatProperty_exposer.def( 
@@ -205,7 +205,7 @@ void register_BeadFloatProperty_class(){
         { //::SireMol::BeadProperty< double >::size
         
             typedef SireMol::BeadProperty< double > exported_class_t;
-            typedef int ( ::SireMol::BeadProperty< double >::*size_function_type )(  ) const;
+            typedef int ( ::SireMol::BeadProperty< double >::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireMol::BeadProperty< double >::size );
             
             BeadFloatProperty_exposer.def( 
@@ -216,7 +216,7 @@ void register_BeadFloatProperty_class(){
         { //::SireMol::BeadProperty< double >::toString
         
             typedef SireMol::BeadProperty< double > exported_class_t;
-            typedef ::QString ( ::SireMol::BeadProperty< double >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::BeadProperty< double >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::BeadProperty< double >::toString );
             
             BeadFloatProperty_exposer.def( 
@@ -227,7 +227,7 @@ void register_BeadFloatProperty_class(){
         { //::SireMol::BeadProperty< double >::toVariant
         
             typedef SireMol::BeadProperty< double > exported_class_t;
-            typedef ::SireMol::BeadProperty< QVariant > ( ::SireMol::BeadProperty< double >::*toVariant_function_type )(  ) const;
+            typedef ::SireMol::BeadProperty< QVariant > ( ::SireMol::BeadProperty< double >::*toVariant_function_type)(  ) const;
             toVariant_function_type toVariant_function_value( &::SireMol::BeadProperty< double >::toVariant );
             
             BeadFloatProperty_exposer.def( 

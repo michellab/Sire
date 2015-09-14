@@ -34,7 +34,7 @@ void register_GeometryComponent_class(){
         bp::scope GeometryComponent_scope( GeometryComponent_exposer );
         { //::SireSystem::GeometryComponent::component
         
-            typedef ::SireCAS::Symbol const & ( ::SireSystem::GeometryComponent::*component_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireSystem::GeometryComponent::*component_function_type)(  ) const;
             component_function_type component_function_value( &::SireSystem::GeometryComponent::component );
             
             GeometryComponent_exposer.def( 
@@ -45,7 +45,7 @@ void register_GeometryComponent_class(){
         }
         { //::SireSystem::GeometryComponent::expression
         
-            typedef ::SireCAS::Expression const & ( ::SireSystem::GeometryComponent::*expression_function_type )(  ) const;
+            typedef ::SireCAS::Expression const & ( ::SireSystem::GeometryComponent::*expression_function_type)(  ) const;
             expression_function_type expression_function_value( &::SireSystem::GeometryComponent::expression );
             
             GeometryComponent_exposer.def( 

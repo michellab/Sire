@@ -48,7 +48,7 @@ void register_PointRef_class(){
         PointRef_exposer.def( bp::init< SireFF::PointPtr const & >(( bp::arg("point") )) );
         { //::SireFF::PointRef::addForce
         
-            typedef bool ( ::SireFF::PointRef::*addForce_function_type )( ::SireFF::MolForceTable &,::SireMaths::Vector const & ) const;
+            typedef bool ( ::SireFF::PointRef::*addForce_function_type)( ::SireFF::MolForceTable &,::SireMaths::Vector const & ) const;
             addForce_function_type addForce_function_value( &::SireFF::PointRef::addForce );
             
             PointRef_exposer.def( 
@@ -59,7 +59,7 @@ void register_PointRef_class(){
         }
         { //::SireFF::PointRef::addForce
         
-            typedef bool ( ::SireFF::PointRef::*addForce_function_type )( ::SireFF::ForceTable &,::SireMaths::Vector const & ) const;
+            typedef bool ( ::SireFF::PointRef::*addForce_function_type)( ::SireFF::ForceTable &,::SireMaths::Vector const & ) const;
             addForce_function_type addForce_function_value( &::SireFF::PointRef::addForce );
             
             PointRef_exposer.def( 
@@ -70,7 +70,7 @@ void register_PointRef_class(){
         }
         { //::SireFF::PointRef::operator()
         
-            typedef ::SireMaths::Vector const & ( ::SireFF::PointRef::*__call___function_type )(  ) const;
+            typedef ::SireMaths::Vector const & ( ::SireFF::PointRef::*__call___function_type)(  ) const;
             __call___function_type __call___function_value( &::SireFF::PointRef::operator() );
             
             PointRef_exposer.def( 
@@ -81,7 +81,7 @@ void register_PointRef_class(){
         }
         { //::SireFF::PointRef::point
         
-            typedef ::SireMaths::Vector const & ( ::SireFF::PointRef::*point_function_type )(  ) const;
+            typedef ::SireMaths::Vector const & ( ::SireFF::PointRef::*point_function_type)(  ) const;
             point_function_type point_function_value( &::SireFF::PointRef::point );
             
             PointRef_exposer.def( 

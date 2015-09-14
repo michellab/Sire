@@ -32,7 +32,7 @@ void register_CheckPoint_class(){
         CheckPoint_exposer.def( bp::self != bp::self );
         { //::SireSystem::CheckPoint::operator=
         
-            typedef ::SireSystem::CheckPoint & ( ::SireSystem::CheckPoint::*assign_function_type )( ::SireSystem::System const & ) ;
+            typedef ::SireSystem::CheckPoint & ( ::SireSystem::CheckPoint::*assign_function_type)( ::SireSystem::System const & ) ;
             assign_function_type assign_function_value( &::SireSystem::CheckPoint::operator= );
             
             CheckPoint_exposer.def( 
@@ -44,7 +44,7 @@ void register_CheckPoint_class(){
         }
         { //::SireSystem::CheckPoint::operator=
         
-            typedef ::SireSystem::CheckPoint & ( ::SireSystem::CheckPoint::*assign_function_type )( ::SireSystem::CheckPoint const & ) ;
+            typedef ::SireSystem::CheckPoint & ( ::SireSystem::CheckPoint::*assign_function_type)( ::SireSystem::CheckPoint const & ) ;
             assign_function_type assign_function_value( &::SireSystem::CheckPoint::operator= );
             
             CheckPoint_exposer.def( 

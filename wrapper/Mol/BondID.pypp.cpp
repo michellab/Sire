@@ -42,7 +42,7 @@ void register_BondID_class(){
         BondID_exposer.def( bp::init< SireMol::BondID const & >(( bp::arg("other") )) );
         { //::SireMol::BondID::atom0
         
-            typedef ::SireMol::AtomID const & ( ::SireMol::BondID::*atom0_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMol::BondID::*atom0_function_type)(  ) const;
             atom0_function_type atom0_function_value( &::SireMol::BondID::atom0 );
             
             BondID_exposer.def( 
@@ -53,7 +53,7 @@ void register_BondID_class(){
         }
         { //::SireMol::BondID::atom1
         
-            typedef ::SireMol::AtomID const & ( ::SireMol::BondID::*atom1_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMol::BondID::*atom1_function_type)(  ) const;
             atom1_function_type atom1_function_value( &::SireMol::BondID::atom1 );
             
             BondID_exposer.def( 
@@ -64,7 +64,7 @@ void register_BondID_class(){
         }
         { //::SireMol::BondID::hash
         
-            typedef ::uint ( ::SireMol::BondID::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::BondID::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::BondID::hash );
             
             BondID_exposer.def( 
@@ -74,7 +74,7 @@ void register_BondID_class(){
         }
         { //::SireMol::BondID::isNull
         
-            typedef bool ( ::SireMol::BondID::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::BondID::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::BondID::isNull );
             
             BondID_exposer.def( 
@@ -84,7 +84,7 @@ void register_BondID_class(){
         }
         { //::SireMol::BondID::length
         
-            typedef double ( ::SireMol::BondID::*length_function_type )( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef double ( ::SireMol::BondID::*length_function_type)( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             length_function_type length_function_value( &::SireMol::BondID::length );
             
             BondID_exposer.def( 
@@ -95,7 +95,7 @@ void register_BondID_class(){
         }
         { //::SireMol::BondID::length
         
-            typedef double ( ::SireMol::BondID::*length_function_type )( ::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef double ( ::SireMol::BondID::*length_function_type)( ::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             length_function_type length_function_value( &::SireMol::BondID::length );
             
             BondID_exposer.def( 
@@ -106,7 +106,7 @@ void register_BondID_class(){
         }
         { //::SireMol::BondID::length
         
-            typedef double ( ::SireMol::BondID::*length_function_type )( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef double ( ::SireMol::BondID::*length_function_type)( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             length_function_type length_function_value( &::SireMol::BondID::length );
             
             BondID_exposer.def( 
@@ -117,7 +117,7 @@ void register_BondID_class(){
         }
         { //::SireMol::BondID::map
         
-            typedef ::boost::tuples::tuple< SireMol::AtomIdx, SireMol::AtomIdx, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::BondID::*map_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomIdx, SireMol::AtomIdx, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::BondID::*map_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             map_function_type map_function_value( &::SireMol::BondID::map );
             
             BondID_exposer.def( 
@@ -128,7 +128,7 @@ void register_BondID_class(){
         }
         { //::SireMol::BondID::map
         
-            typedef ::boost::tuples::tuple< SireMol::AtomIdx, SireMol::AtomIdx, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::BondID::*map_function_type )( ::SireMol::MoleculeInfoData const &,::SireMol::MoleculeInfoData const & ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomIdx, SireMol::AtomIdx, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::BondID::*map_function_type)( ::SireMol::MoleculeInfoData const &,::SireMol::MoleculeInfoData const & ) const;
             map_function_type map_function_value( &::SireMol::BondID::map );
             
             BondID_exposer.def( 
@@ -139,7 +139,7 @@ void register_BondID_class(){
         }
         { //::SireMol::BondID::mirror
         
-            typedef ::SireMol::BondID ( ::SireMol::BondID::*mirror_function_type )(  ) const;
+            typedef ::SireMol::BondID ( ::SireMol::BondID::*mirror_function_type)(  ) const;
             mirror_function_type mirror_function_value( &::SireMol::BondID::mirror );
             
             BondID_exposer.def( 
@@ -150,7 +150,7 @@ void register_BondID_class(){
         BondID_exposer.def( bp::self != bp::self );
         { //::SireMol::BondID::operator=
         
-            typedef ::SireMol::BondID & ( ::SireMol::BondID::*assign_function_type )( ::SireMol::BondID const & ) ;
+            typedef ::SireMol::BondID & ( ::SireMol::BondID::*assign_function_type)( ::SireMol::BondID const & ) ;
             assign_function_type assign_function_value( &::SireMol::BondID::operator= );
             
             BondID_exposer.def( 
@@ -164,7 +164,7 @@ void register_BondID_class(){
         BondID_exposer.def( bp::self == bp::self );
         { //::SireMol::BondID::size
         
-            typedef double ( ::SireMol::BondID::*size_function_type )( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef double ( ::SireMol::BondID::*size_function_type)( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             size_function_type size_function_value( &::SireMol::BondID::size );
             
             BondID_exposer.def( 
@@ -175,7 +175,7 @@ void register_BondID_class(){
         }
         { //::SireMol::BondID::size
         
-            typedef double ( ::SireMol::BondID::*size_function_type )( ::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef double ( ::SireMol::BondID::*size_function_type)( ::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             size_function_type size_function_value( &::SireMol::BondID::size );
             
             BondID_exposer.def( 
@@ -186,7 +186,7 @@ void register_BondID_class(){
         }
         { //::SireMol::BondID::size
         
-            typedef double ( ::SireMol::BondID::*size_function_type )( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef double ( ::SireMol::BondID::*size_function_type)( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             size_function_type size_function_value( &::SireMol::BondID::size );
             
             BondID_exposer.def( 
@@ -197,7 +197,7 @@ void register_BondID_class(){
         }
         { //::SireMol::BondID::toString
         
-            typedef ::QString ( ::SireMol::BondID::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::BondID::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::BondID::toString );
             
             BondID_exposer.def( 
@@ -217,7 +217,7 @@ void register_BondID_class(){
         }
         { //::SireMol::BondID::vector
         
-            typedef ::SireMaths::Vector ( ::SireMol::BondID::*vector_function_type )( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::Vector ( ::SireMol::BondID::*vector_function_type)( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             vector_function_type vector_function_value( &::SireMol::BondID::vector );
             
             BondID_exposer.def( 
@@ -228,7 +228,7 @@ void register_BondID_class(){
         }
         { //::SireMol::BondID::vector
         
-            typedef ::SireMaths::Vector ( ::SireMol::BondID::*vector_function_type )( ::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::Vector ( ::SireMol::BondID::*vector_function_type)( ::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             vector_function_type vector_function_value( &::SireMol::BondID::vector );
             
             BondID_exposer.def( 
@@ -239,7 +239,7 @@ void register_BondID_class(){
         }
         { //::SireMol::BondID::vector
         
-            typedef ::SireMaths::Vector ( ::SireMol::BondID::*vector_function_type )( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::Vector ( ::SireMol::BondID::*vector_function_type)( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             vector_function_type vector_function_value( &::SireMol::BondID::vector );
             
             BondID_exposer.def( 
@@ -250,7 +250,7 @@ void register_BondID_class(){
         }
         { //::SireMol::BondID::what
         
-            typedef char const * ( ::SireMol::BondID::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::BondID::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::BondID::what );
             
             BondID_exposer.def( 

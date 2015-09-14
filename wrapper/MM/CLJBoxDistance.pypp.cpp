@@ -49,7 +49,7 @@ void register_CLJBoxDistance_class(){
         CLJBoxDistance_exposer.def( bp::init< SireMM::CLJBoxDistance const & >(( bp::arg("other") )) );
         { //::SireMM::CLJBoxDistance::box0
         
-            typedef ::quint32 ( ::SireMM::CLJBoxDistance::*box0_function_type )(  ) const;
+            typedef ::quint32 ( ::SireMM::CLJBoxDistance::*box0_function_type)(  ) const;
             box0_function_type box0_function_value( &::SireMM::CLJBoxDistance::box0 );
             
             CLJBoxDistance_exposer.def( 
@@ -59,7 +59,7 @@ void register_CLJBoxDistance_class(){
         }
         { //::SireMM::CLJBoxDistance::box1
         
-            typedef ::quint32 ( ::SireMM::CLJBoxDistance::*box1_function_type )(  ) const;
+            typedef ::quint32 ( ::SireMM::CLJBoxDistance::*box1_function_type)(  ) const;
             box1_function_type box1_function_value( &::SireMM::CLJBoxDistance::box1 );
             
             CLJBoxDistance_exposer.def( 
@@ -69,7 +69,7 @@ void register_CLJBoxDistance_class(){
         }
         { //::SireMM::CLJBoxDistance::distance
         
-            typedef float ( ::SireMM::CLJBoxDistance::*distance_function_type )(  ) const;
+            typedef float ( ::SireMM::CLJBoxDistance::*distance_function_type)(  ) const;
             distance_function_type distance_function_value( &::SireMM::CLJBoxDistance::distance );
             
             CLJBoxDistance_exposer.def( 
@@ -81,7 +81,7 @@ void register_CLJBoxDistance_class(){
         CLJBoxDistance_exposer.def( bp::self < bp::self );
         { //::SireMM::CLJBoxDistance::operator=
         
-            typedef ::SireMM::CLJBoxDistance & ( ::SireMM::CLJBoxDistance::*assign_function_type )( ::SireMM::CLJBoxDistance const & ) ;
+            typedef ::SireMM::CLJBoxDistance & ( ::SireMM::CLJBoxDistance::*assign_function_type)( ::SireMM::CLJBoxDistance const & ) ;
             assign_function_type assign_function_value( &::SireMM::CLJBoxDistance::operator= );
             
             CLJBoxDistance_exposer.def( 
@@ -95,7 +95,7 @@ void register_CLJBoxDistance_class(){
         CLJBoxDistance_exposer.def( bp::self > bp::self );
         { //::SireMM::CLJBoxDistance::toString
         
-            typedef ::QString ( ::SireMM::CLJBoxDistance::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMM::CLJBoxDistance::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMM::CLJBoxDistance::toString );
             
             CLJBoxDistance_exposer.def( 
@@ -115,7 +115,7 @@ void register_CLJBoxDistance_class(){
         }
         { //::SireMM::CLJBoxDistance::what
         
-            typedef char const * ( ::SireMM::CLJBoxDistance::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::CLJBoxDistance::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::CLJBoxDistance::what );
             
             CLJBoxDistance_exposer.def( 

@@ -33,7 +33,7 @@ void register_ChainIntProperty_class(){
         { //::SireMol::ChainProperty< long long >::array
         
             typedef SireMol::ChainProperty< long long > exported_class_t;
-            typedef ::QVector< long long > const & ( ::SireMol::ChainProperty< long long >::*array_function_type )(  ) const;
+            typedef ::QVector< long long > const & ( ::SireMol::ChainProperty< long long >::*array_function_type)(  ) const;
             array_function_type array_function_value( &::SireMol::ChainProperty< long long >::array );
             
             ChainIntProperty_exposer.def( 
@@ -45,7 +45,7 @@ void register_ChainIntProperty_class(){
         { //::SireMol::ChainProperty< long long >::assertCanConvert
         
             typedef SireMol::ChainProperty< long long > exported_class_t;
-            typedef void ( ::SireMol::ChainProperty< long long >::*assertCanConvert_function_type )( ::QVariant const & ) const;
+            typedef void ( ::SireMol::ChainProperty< long long >::*assertCanConvert_function_type)( ::QVariant const & ) const;
             assertCanConvert_function_type assertCanConvert_function_value( &::SireMol::ChainProperty< long long >::assertCanConvert );
             
             ChainIntProperty_exposer.def( 
@@ -57,7 +57,7 @@ void register_ChainIntProperty_class(){
         { //::SireMol::ChainProperty< long long >::assignFrom
         
             typedef SireMol::ChainProperty< long long > exported_class_t;
-            typedef void ( ::SireMol::ChainProperty< long long >::*assignFrom_function_type )( ::SireMol::ChainProperty< QVariant > const & ) ;
+            typedef void ( ::SireMol::ChainProperty< long long >::*assignFrom_function_type)( ::SireMol::ChainProperty< QVariant > const & ) ;
             assignFrom_function_type assignFrom_function_value( &::SireMol::ChainProperty< long long >::assignFrom );
             
             ChainIntProperty_exposer.def( 
@@ -69,7 +69,7 @@ void register_ChainIntProperty_class(){
         { //::SireMol::ChainProperty< long long >::at
         
             typedef SireMol::ChainProperty< long long > exported_class_t;
-            typedef long long int const & ( ::SireMol::ChainProperty< long long >::*at_function_type )( ::SireMol::ChainIdx const & ) const;
+            typedef long long int const & ( ::SireMol::ChainProperty< long long >::*at_function_type)( ::SireMol::ChainIdx const & ) const;
             at_function_type at_function_value( &::SireMol::ChainProperty< long long >::at );
             
             ChainIntProperty_exposer.def( 
@@ -82,7 +82,7 @@ void register_ChainIntProperty_class(){
         { //::SireMol::ChainProperty< long long >::canConvert
         
             typedef SireMol::ChainProperty< long long > exported_class_t;
-            typedef bool ( ::SireMol::ChainProperty< long long >::*canConvert_function_type )( ::QVariant const & ) const;
+            typedef bool ( ::SireMol::ChainProperty< long long >::*canConvert_function_type)( ::QVariant const & ) const;
             canConvert_function_type canConvert_function_value( &::SireMol::ChainProperty< long long >::canConvert );
             
             ChainIntProperty_exposer.def( 
@@ -94,7 +94,7 @@ void register_ChainIntProperty_class(){
         { //::SireMol::ChainProperty< long long >::count
         
             typedef SireMol::ChainProperty< long long > exported_class_t;
-            typedef int ( ::SireMol::ChainProperty< long long >::*count_function_type )(  ) const;
+            typedef int ( ::SireMol::ChainProperty< long long >::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMol::ChainProperty< long long >::count );
             
             ChainIntProperty_exposer.def( 
@@ -117,7 +117,7 @@ void register_ChainIntProperty_class(){
         { //::SireMol::ChainProperty< long long >::get
         
             typedef SireMol::ChainProperty< long long > exported_class_t;
-            typedef long long int const & ( ::SireMol::ChainProperty< long long >::*get_function_type )( ::SireMol::ChainIdx const & ) const;
+            typedef long long int const & ( ::SireMol::ChainProperty< long long >::*get_function_type)( ::SireMol::ChainIdx const & ) const;
             get_function_type get_function_value( &::SireMol::ChainProperty< long long >::get );
             
             ChainIntProperty_exposer.def( 
@@ -130,7 +130,7 @@ void register_ChainIntProperty_class(){
         { //::SireMol::ChainProperty< long long >::isCompatibleWith
         
             typedef SireMol::ChainProperty< long long > exported_class_t;
-            typedef bool ( ::SireMol::ChainProperty< long long >::*isCompatibleWith_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef bool ( ::SireMol::ChainProperty< long long >::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::ChainProperty< long long >::isCompatibleWith );
             
             ChainIntProperty_exposer.def( 
@@ -142,7 +142,7 @@ void register_ChainIntProperty_class(){
         { //::SireMol::ChainProperty< long long >::isEmpty
         
             typedef SireMol::ChainProperty< long long > exported_class_t;
-            typedef bool ( ::SireMol::ChainProperty< long long >::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::ChainProperty< long long >::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::ChainProperty< long long >::isEmpty );
             
             ChainIntProperty_exposer.def( 
@@ -153,7 +153,7 @@ void register_ChainIntProperty_class(){
         { //::SireMol::ChainProperty< long long >::nChains
         
             typedef SireMol::ChainProperty< long long > exported_class_t;
-            typedef int ( ::SireMol::ChainProperty< long long >::*nChains_function_type )(  ) const;
+            typedef int ( ::SireMol::ChainProperty< long long >::*nChains_function_type)(  ) const;
             nChains_function_type nChains_function_value( &::SireMol::ChainProperty< long long >::nChains );
             
             ChainIntProperty_exposer.def( 
@@ -165,7 +165,7 @@ void register_ChainIntProperty_class(){
         { //::SireMol::ChainProperty< long long >::operator=
         
             typedef SireMol::ChainProperty< long long > exported_class_t;
-            typedef ::SireMol::ChainProperty< long long > & ( ::SireMol::ChainProperty< long long >::*assign_function_type )( ::SireMol::ChainProperty< long long > const & ) ;
+            typedef ::SireMol::ChainProperty< long long > & ( ::SireMol::ChainProperty< long long >::*assign_function_type)( ::SireMol::ChainProperty< long long > const & ) ;
             assign_function_type assign_function_value( &::SireMol::ChainProperty< long long >::operator= );
             
             ChainIntProperty_exposer.def( 
@@ -179,7 +179,7 @@ void register_ChainIntProperty_class(){
         { //::SireMol::ChainProperty< long long >::operator[]
         
             typedef SireMol::ChainProperty< long long > exported_class_t;
-            typedef long long int const & ( ::SireMol::ChainProperty< long long >::*__getitem___function_type )( ::SireMol::ChainIdx const & ) const;
+            typedef long long int const & ( ::SireMol::ChainProperty< long long >::*__getitem___function_type)( ::SireMol::ChainIdx const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::ChainProperty< long long >::operator[] );
             
             ChainIntProperty_exposer.def( 
@@ -192,7 +192,7 @@ void register_ChainIntProperty_class(){
         { //::SireMol::ChainProperty< long long >::set
         
             typedef SireMol::ChainProperty< long long > exported_class_t;
-            typedef ::SireMol::ChainProperty< long long > & ( ::SireMol::ChainProperty< long long >::*set_function_type )( ::SireMol::ChainIdx,long long int const & ) ;
+            typedef ::SireMol::ChainProperty< long long > & ( ::SireMol::ChainProperty< long long >::*set_function_type)( ::SireMol::ChainIdx,long long int const & ) ;
             set_function_type set_function_value( &::SireMol::ChainProperty< long long >::set );
             
             ChainIntProperty_exposer.def( 
@@ -205,7 +205,7 @@ void register_ChainIntProperty_class(){
         { //::SireMol::ChainProperty< long long >::size
         
             typedef SireMol::ChainProperty< long long > exported_class_t;
-            typedef int ( ::SireMol::ChainProperty< long long >::*size_function_type )(  ) const;
+            typedef int ( ::SireMol::ChainProperty< long long >::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireMol::ChainProperty< long long >::size );
             
             ChainIntProperty_exposer.def( 
@@ -216,7 +216,7 @@ void register_ChainIntProperty_class(){
         { //::SireMol::ChainProperty< long long >::toString
         
             typedef SireMol::ChainProperty< long long > exported_class_t;
-            typedef ::QString ( ::SireMol::ChainProperty< long long >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::ChainProperty< long long >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::ChainProperty< long long >::toString );
             
             ChainIntProperty_exposer.def( 
@@ -227,7 +227,7 @@ void register_ChainIntProperty_class(){
         { //::SireMol::ChainProperty< long long >::toVariant
         
             typedef SireMol::ChainProperty< long long > exported_class_t;
-            typedef ::SireMol::ChainProperty< QVariant > ( ::SireMol::ChainProperty< long long >::*toVariant_function_type )(  ) const;
+            typedef ::SireMol::ChainProperty< QVariant > ( ::SireMol::ChainProperty< long long >::*toVariant_function_type)(  ) const;
             toVariant_function_type toVariant_function_value( &::SireMol::ChainProperty< long long >::toVariant );
             
             ChainIntProperty_exposer.def( 

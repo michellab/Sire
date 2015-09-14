@@ -41,7 +41,7 @@ void register_ArcSec_class(){
         ArcSec_exposer.def( bp::init< SireCAS::ArcSec const & >(( bp::arg("other") )) );
         { //::SireCAS::ArcSec::evaluate
         
-            typedef double ( ::SireCAS::ArcSec::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::ArcSec::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::ArcSec::evaluate );
             
             ArcSec_exposer.def( 
@@ -52,7 +52,7 @@ void register_ArcSec_class(){
         }
         { //::SireCAS::ArcSec::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::ArcSec::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::ArcSec::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::ArcSec::evaluate );
             
             ArcSec_exposer.def( 
@@ -74,7 +74,7 @@ void register_ArcSec_class(){
         }
         { //::SireCAS::ArcSec::what
         
-            typedef char const * ( ::SireCAS::ArcSec::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::ArcSec::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::ArcSec::what );
             
             ArcSec_exposer.def( 

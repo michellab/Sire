@@ -33,7 +33,7 @@ void register_ResFloatProperty_class(){
         { //::SireMol::ResProperty< double >::array
         
             typedef SireMol::ResProperty< double > exported_class_t;
-            typedef ::QVector< double > const & ( ::SireMol::ResProperty< double >::*array_function_type )(  ) const;
+            typedef ::QVector< double > const & ( ::SireMol::ResProperty< double >::*array_function_type)(  ) const;
             array_function_type array_function_value( &::SireMol::ResProperty< double >::array );
             
             ResFloatProperty_exposer.def( 
@@ -45,7 +45,7 @@ void register_ResFloatProperty_class(){
         { //::SireMol::ResProperty< double >::assertCanConvert
         
             typedef SireMol::ResProperty< double > exported_class_t;
-            typedef void ( ::SireMol::ResProperty< double >::*assertCanConvert_function_type )( ::QVariant const & ) const;
+            typedef void ( ::SireMol::ResProperty< double >::*assertCanConvert_function_type)( ::QVariant const & ) const;
             assertCanConvert_function_type assertCanConvert_function_value( &::SireMol::ResProperty< double >::assertCanConvert );
             
             ResFloatProperty_exposer.def( 
@@ -57,7 +57,7 @@ void register_ResFloatProperty_class(){
         { //::SireMol::ResProperty< double >::assignFrom
         
             typedef SireMol::ResProperty< double > exported_class_t;
-            typedef void ( ::SireMol::ResProperty< double >::*assignFrom_function_type )( ::SireMol::ResProperty< QVariant > const & ) ;
+            typedef void ( ::SireMol::ResProperty< double >::*assignFrom_function_type)( ::SireMol::ResProperty< QVariant > const & ) ;
             assignFrom_function_type assignFrom_function_value( &::SireMol::ResProperty< double >::assignFrom );
             
             ResFloatProperty_exposer.def( 
@@ -69,7 +69,7 @@ void register_ResFloatProperty_class(){
         { //::SireMol::ResProperty< double >::at
         
             typedef SireMol::ResProperty< double > exported_class_t;
-            typedef double const & ( ::SireMol::ResProperty< double >::*at_function_type )( ::SireMol::ResIdx const & ) const;
+            typedef double const & ( ::SireMol::ResProperty< double >::*at_function_type)( ::SireMol::ResIdx const & ) const;
             at_function_type at_function_value( &::SireMol::ResProperty< double >::at );
             
             ResFloatProperty_exposer.def( 
@@ -82,7 +82,7 @@ void register_ResFloatProperty_class(){
         { //::SireMol::ResProperty< double >::canConvert
         
             typedef SireMol::ResProperty< double > exported_class_t;
-            typedef bool ( ::SireMol::ResProperty< double >::*canConvert_function_type )( ::QVariant const & ) const;
+            typedef bool ( ::SireMol::ResProperty< double >::*canConvert_function_type)( ::QVariant const & ) const;
             canConvert_function_type canConvert_function_value( &::SireMol::ResProperty< double >::canConvert );
             
             ResFloatProperty_exposer.def( 
@@ -94,7 +94,7 @@ void register_ResFloatProperty_class(){
         { //::SireMol::ResProperty< double >::count
         
             typedef SireMol::ResProperty< double > exported_class_t;
-            typedef int ( ::SireMol::ResProperty< double >::*count_function_type )(  ) const;
+            typedef int ( ::SireMol::ResProperty< double >::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMol::ResProperty< double >::count );
             
             ResFloatProperty_exposer.def( 
@@ -117,7 +117,7 @@ void register_ResFloatProperty_class(){
         { //::SireMol::ResProperty< double >::get
         
             typedef SireMol::ResProperty< double > exported_class_t;
-            typedef double const & ( ::SireMol::ResProperty< double >::*get_function_type )( ::SireMol::ResIdx const & ) const;
+            typedef double const & ( ::SireMol::ResProperty< double >::*get_function_type)( ::SireMol::ResIdx const & ) const;
             get_function_type get_function_value( &::SireMol::ResProperty< double >::get );
             
             ResFloatProperty_exposer.def( 
@@ -130,7 +130,7 @@ void register_ResFloatProperty_class(){
         { //::SireMol::ResProperty< double >::isCompatibleWith
         
             typedef SireMol::ResProperty< double > exported_class_t;
-            typedef bool ( ::SireMol::ResProperty< double >::*isCompatibleWith_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef bool ( ::SireMol::ResProperty< double >::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::ResProperty< double >::isCompatibleWith );
             
             ResFloatProperty_exposer.def( 
@@ -142,7 +142,7 @@ void register_ResFloatProperty_class(){
         { //::SireMol::ResProperty< double >::isEmpty
         
             typedef SireMol::ResProperty< double > exported_class_t;
-            typedef bool ( ::SireMol::ResProperty< double >::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::ResProperty< double >::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::ResProperty< double >::isEmpty );
             
             ResFloatProperty_exposer.def( 
@@ -153,7 +153,7 @@ void register_ResFloatProperty_class(){
         { //::SireMol::ResProperty< double >::nResidues
         
             typedef SireMol::ResProperty< double > exported_class_t;
-            typedef int ( ::SireMol::ResProperty< double >::*nResidues_function_type )(  ) const;
+            typedef int ( ::SireMol::ResProperty< double >::*nResidues_function_type)(  ) const;
             nResidues_function_type nResidues_function_value( &::SireMol::ResProperty< double >::nResidues );
             
             ResFloatProperty_exposer.def( 
@@ -165,7 +165,7 @@ void register_ResFloatProperty_class(){
         { //::SireMol::ResProperty< double >::operator=
         
             typedef SireMol::ResProperty< double > exported_class_t;
-            typedef ::SireMol::ResProperty< double > & ( ::SireMol::ResProperty< double >::*assign_function_type )( ::SireMol::ResProperty< double > const & ) ;
+            typedef ::SireMol::ResProperty< double > & ( ::SireMol::ResProperty< double >::*assign_function_type)( ::SireMol::ResProperty< double > const & ) ;
             assign_function_type assign_function_value( &::SireMol::ResProperty< double >::operator= );
             
             ResFloatProperty_exposer.def( 
@@ -179,7 +179,7 @@ void register_ResFloatProperty_class(){
         { //::SireMol::ResProperty< double >::operator[]
         
             typedef SireMol::ResProperty< double > exported_class_t;
-            typedef double const & ( ::SireMol::ResProperty< double >::*__getitem___function_type )( ::SireMol::ResIdx const & ) const;
+            typedef double const & ( ::SireMol::ResProperty< double >::*__getitem___function_type)( ::SireMol::ResIdx const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::ResProperty< double >::operator[] );
             
             ResFloatProperty_exposer.def( 
@@ -192,7 +192,7 @@ void register_ResFloatProperty_class(){
         { //::SireMol::ResProperty< double >::set
         
             typedef SireMol::ResProperty< double > exported_class_t;
-            typedef ::SireMol::ResProperty< double > & ( ::SireMol::ResProperty< double >::*set_function_type )( ::SireMol::ResIdx,double const & ) ;
+            typedef ::SireMol::ResProperty< double > & ( ::SireMol::ResProperty< double >::*set_function_type)( ::SireMol::ResIdx,double const & ) ;
             set_function_type set_function_value( &::SireMol::ResProperty< double >::set );
             
             ResFloatProperty_exposer.def( 
@@ -205,7 +205,7 @@ void register_ResFloatProperty_class(){
         { //::SireMol::ResProperty< double >::size
         
             typedef SireMol::ResProperty< double > exported_class_t;
-            typedef int ( ::SireMol::ResProperty< double >::*size_function_type )(  ) const;
+            typedef int ( ::SireMol::ResProperty< double >::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireMol::ResProperty< double >::size );
             
             ResFloatProperty_exposer.def( 
@@ -216,7 +216,7 @@ void register_ResFloatProperty_class(){
         { //::SireMol::ResProperty< double >::toString
         
             typedef SireMol::ResProperty< double > exported_class_t;
-            typedef ::QString ( ::SireMol::ResProperty< double >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::ResProperty< double >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::ResProperty< double >::toString );
             
             ResFloatProperty_exposer.def( 
@@ -227,7 +227,7 @@ void register_ResFloatProperty_class(){
         { //::SireMol::ResProperty< double >::toVariant
         
             typedef SireMol::ResProperty< double > exported_class_t;
-            typedef ::SireMol::ResProperty< QVariant > ( ::SireMol::ResProperty< double >::*toVariant_function_type )(  ) const;
+            typedef ::SireMol::ResProperty< QVariant > ( ::SireMol::ResProperty< double >::*toVariant_function_type)(  ) const;
             toVariant_function_type toVariant_function_value( &::SireMol::ResProperty< double >::toVariant );
             
             ResFloatProperty_exposer.def( 

@@ -30,7 +30,7 @@ void register_CGChainID_class(){
         { //::SireMol::GroupGroupID< SireMol::CGID, SireMol::ChainID >::hash
         
             typedef SireMol::GroupGroupID< SireMol::CGID, SireMol::ChainID > exported_class_t;
-            typedef ::uint ( ::SireMol::GroupGroupID< SireMol::CGID, SireMol::ChainID >::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::GroupGroupID< SireMol::CGID, SireMol::ChainID >::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::GroupGroupID< SireMol::CGID, SireMol::ChainID >::hash );
             
             CGChainID_exposer.def( 
@@ -41,7 +41,7 @@ void register_CGChainID_class(){
         { //::SireMol::GroupGroupID< SireMol::CGID, SireMol::ChainID >::isNull
         
             typedef SireMol::GroupGroupID< SireMol::CGID, SireMol::ChainID > exported_class_t;
-            typedef bool ( ::SireMol::GroupGroupID< SireMol::CGID, SireMol::ChainID >::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::GroupGroupID< SireMol::CGID, SireMol::ChainID >::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::GroupGroupID< SireMol::CGID, SireMol::ChainID >::isNull );
             
             CGChainID_exposer.def( 
@@ -52,7 +52,7 @@ void register_CGChainID_class(){
         { //::SireMol::GroupGroupID< SireMol::CGID, SireMol::ChainID >::map
         
             typedef SireMol::GroupGroupID< SireMol::CGID, SireMol::ChainID > exported_class_t;
-            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::GroupGroupID< SireMol::CGID, SireMol::ChainID >::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::GroupGroupID< SireMol::CGID, SireMol::ChainID >::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireMol::GroupGroupID< SireMol::CGID, SireMol::ChainID >::map );
             
             CGChainID_exposer.def( 
@@ -67,7 +67,7 @@ void register_CGChainID_class(){
         { //::SireMol::GroupGroupID< SireMol::CGID, SireMol::ChainID >::toString
         
             typedef SireMol::GroupGroupID< SireMol::CGID, SireMol::ChainID > exported_class_t;
-            typedef ::QString ( ::SireMol::GroupGroupID< SireMol::CGID, SireMol::ChainID >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::GroupGroupID< SireMol::CGID, SireMol::ChainID >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::GroupGroupID< SireMol::CGID, SireMol::ChainID >::toString );
             
             CGChainID_exposer.def( 
@@ -89,7 +89,7 @@ void register_CGChainID_class(){
         { //::SireMol::GroupGroupID< SireMol::CGID, SireMol::ChainID >::what
         
             typedef SireMol::GroupGroupID< SireMol::CGID, SireMol::ChainID > exported_class_t;
-            typedef char const * ( ::SireMol::GroupGroupID< SireMol::CGID, SireMol::ChainID >::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::GroupGroupID< SireMol::CGID, SireMol::ChainID >::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::GroupGroupID< SireMol::CGID, SireMol::ChainID >::what );
             
             CGChainID_exposer.def( 

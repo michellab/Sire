@@ -47,7 +47,7 @@ void register_MTSMC_class(){
         MTSMC_exposer.def( bp::init< SireMove::MTSMC const & >(( bp::arg("other") )) );
         { //::SireMove::MTSMC::addSlowConstraint
         
-            typedef void ( ::SireMove::MTSMC::*addSlowConstraint_function_type )( ::SireSystem::Constraint const & ) ;
+            typedef void ( ::SireMove::MTSMC::*addSlowConstraint_function_type)( ::SireSystem::Constraint const & ) ;
             addSlowConstraint_function_type addSlowConstraint_function_value( &::SireMove::MTSMC::addSlowConstraint );
             
             MTSMC_exposer.def( 
@@ -58,7 +58,7 @@ void register_MTSMC_class(){
         }
         { //::SireMove::MTSMC::clearStatistics
         
-            typedef void ( ::SireMove::MTSMC::*clearStatistics_function_type )(  ) ;
+            typedef void ( ::SireMove::MTSMC::*clearStatistics_function_type)(  ) ;
             clearStatistics_function_type clearStatistics_function_value( &::SireMove::MTSMC::clearStatistics );
             
             MTSMC_exposer.def( 
@@ -68,7 +68,7 @@ void register_MTSMC_class(){
         }
         { //::SireMove::MTSMC::fastEnergyComponent
         
-            typedef ::SireCAS::Symbol const & ( ::SireMove::MTSMC::*fastEnergyComponent_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMove::MTSMC::*fastEnergyComponent_function_type)(  ) const;
             fastEnergyComponent_function_type fastEnergyComponent_function_value( &::SireMove::MTSMC::fastEnergyComponent );
             
             MTSMC_exposer.def( 
@@ -79,7 +79,7 @@ void register_MTSMC_class(){
         }
         { //::SireMove::MTSMC::fastMoves
         
-            typedef ::SireMove::Moves const & ( ::SireMove::MTSMC::*fastMoves_function_type )(  ) const;
+            typedef ::SireMove::Moves const & ( ::SireMove::MTSMC::*fastMoves_function_type)(  ) const;
             fastMoves_function_type fastMoves_function_value( &::SireMove::MTSMC::fastMoves );
             
             MTSMC_exposer.def( 
@@ -90,7 +90,7 @@ void register_MTSMC_class(){
         }
         { //::SireMove::MTSMC::move
         
-            typedef void ( ::SireMove::MTSMC::*move_function_type )( ::SireSystem::System &,int,bool ) ;
+            typedef void ( ::SireMove::MTSMC::*move_function_type)( ::SireSystem::System &,int,bool ) ;
             move_function_type move_function_value( &::SireMove::MTSMC::move );
             
             MTSMC_exposer.def( 
@@ -101,7 +101,7 @@ void register_MTSMC_class(){
         }
         { //::SireMove::MTSMC::nFastMoves
         
-            typedef int ( ::SireMove::MTSMC::*nFastMoves_function_type )(  ) const;
+            typedef int ( ::SireMove::MTSMC::*nFastMoves_function_type)(  ) const;
             nFastMoves_function_type nFastMoves_function_value( &::SireMove::MTSMC::nFastMoves );
             
             MTSMC_exposer.def( 
@@ -112,7 +112,7 @@ void register_MTSMC_class(){
         MTSMC_exposer.def( bp::self != bp::self );
         { //::SireMove::MTSMC::operator=
         
-            typedef ::SireMove::MTSMC & ( ::SireMove::MTSMC::*assign_function_type )( ::SireMove::MTSMC const & ) ;
+            typedef ::SireMove::MTSMC & ( ::SireMove::MTSMC::*assign_function_type)( ::SireMove::MTSMC const & ) ;
             assign_function_type assign_function_value( &::SireMove::MTSMC::operator= );
             
             MTSMC_exposer.def( 
@@ -125,7 +125,7 @@ void register_MTSMC_class(){
         MTSMC_exposer.def( bp::self == bp::self );
         { //::SireMove::MTSMC::removeSlowConstraints
         
-            typedef void ( ::SireMove::MTSMC::*removeSlowConstraints_function_type )(  ) ;
+            typedef void ( ::SireMove::MTSMC::*removeSlowConstraints_function_type)(  ) ;
             removeSlowConstraints_function_type removeSlowConstraints_function_value( &::SireMove::MTSMC::removeSlowConstraints );
             
             MTSMC_exposer.def( 
@@ -135,7 +135,7 @@ void register_MTSMC_class(){
         }
         { //::SireMove::MTSMC::setFastEnergyComponent
         
-            typedef void ( ::SireMove::MTSMC::*setFastEnergyComponent_function_type )( ::SireCAS::Symbol const & ) ;
+            typedef void ( ::SireMove::MTSMC::*setFastEnergyComponent_function_type)( ::SireCAS::Symbol const & ) ;
             setFastEnergyComponent_function_type setFastEnergyComponent_function_value( &::SireMove::MTSMC::setFastEnergyComponent );
             
             MTSMC_exposer.def( 
@@ -146,7 +146,7 @@ void register_MTSMC_class(){
         }
         { //::SireMove::MTSMC::setFastMoves
         
-            typedef void ( ::SireMove::MTSMC::*setFastMoves_function_type )( ::SireMove::Moves const & ) ;
+            typedef void ( ::SireMove::MTSMC::*setFastMoves_function_type)( ::SireMove::Moves const & ) ;
             setFastMoves_function_type setFastMoves_function_value( &::SireMove::MTSMC::setFastMoves );
             
             MTSMC_exposer.def( 
@@ -157,7 +157,7 @@ void register_MTSMC_class(){
         }
         { //::SireMove::MTSMC::setGenerator
         
-            typedef void ( ::SireMove::MTSMC::*setGenerator_function_type )( ::SireMaths::RanGenerator const & ) ;
+            typedef void ( ::SireMove::MTSMC::*setGenerator_function_type)( ::SireMaths::RanGenerator const & ) ;
             setGenerator_function_type setGenerator_function_value( &::SireMove::MTSMC::setGenerator );
             
             MTSMC_exposer.def( 
@@ -168,7 +168,7 @@ void register_MTSMC_class(){
         }
         { //::SireMove::MTSMC::setNFastMoves
         
-            typedef void ( ::SireMove::MTSMC::*setNFastMoves_function_type )( int ) ;
+            typedef void ( ::SireMove::MTSMC::*setNFastMoves_function_type)( int ) ;
             setNFastMoves_function_type setNFastMoves_function_value( &::SireMove::MTSMC::setNFastMoves );
             
             MTSMC_exposer.def( 
@@ -179,7 +179,7 @@ void register_MTSMC_class(){
         }
         { //::SireMove::MTSMC::setSlowConstraints
         
-            typedef void ( ::SireMove::MTSMC::*setSlowConstraints_function_type )( ::SireSystem::Constraints const & ) ;
+            typedef void ( ::SireMove::MTSMC::*setSlowConstraints_function_type)( ::SireSystem::Constraints const & ) ;
             setSlowConstraints_function_type setSlowConstraints_function_value( &::SireMove::MTSMC::setSlowConstraints );
             
             MTSMC_exposer.def( 
@@ -190,7 +190,7 @@ void register_MTSMC_class(){
         }
         { //::SireMove::MTSMC::setSlowEnergyComponent
         
-            typedef void ( ::SireMove::MTSMC::*setSlowEnergyComponent_function_type )( ::SireCAS::Symbol const & ) ;
+            typedef void ( ::SireMove::MTSMC::*setSlowEnergyComponent_function_type)( ::SireCAS::Symbol const & ) ;
             setSlowEnergyComponent_function_type setSlowEnergyComponent_function_value( &::SireMove::MTSMC::setSlowEnergyComponent );
             
             MTSMC_exposer.def( 
@@ -201,7 +201,7 @@ void register_MTSMC_class(){
         }
         { //::SireMove::MTSMC::slowConstraints
         
-            typedef ::SireSystem::Constraints const & ( ::SireMove::MTSMC::*slowConstraints_function_type )(  ) const;
+            typedef ::SireSystem::Constraints const & ( ::SireMove::MTSMC::*slowConstraints_function_type)(  ) const;
             slowConstraints_function_type slowConstraints_function_value( &::SireMove::MTSMC::slowConstraints );
             
             MTSMC_exposer.def( 
@@ -212,7 +212,7 @@ void register_MTSMC_class(){
         }
         { //::SireMove::MTSMC::slowEnergyComponent
         
-            typedef ::SireCAS::Symbol const & ( ::SireMove::MTSMC::*slowEnergyComponent_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMove::MTSMC::*slowEnergyComponent_function_type)(  ) const;
             slowEnergyComponent_function_type slowEnergyComponent_function_value( &::SireMove::MTSMC::slowEnergyComponent );
             
             MTSMC_exposer.def( 
@@ -223,7 +223,7 @@ void register_MTSMC_class(){
         }
         { //::SireMove::MTSMC::toString
         
-            typedef ::QString ( ::SireMove::MTSMC::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMove::MTSMC::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMove::MTSMC::toString );
             
             MTSMC_exposer.def( 

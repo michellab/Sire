@@ -49,7 +49,7 @@ void register_MoleculeBeading_class(){
         MoleculeBeading_exposer.def( bp::self != bp::self );
         { //::SireMol::MoleculeBeading::operator=
         
-            typedef ::SireMol::MoleculeBeading & ( ::SireMol::MoleculeBeading::*assign_function_type )( ::SireMol::MoleculeBeading const & ) ;
+            typedef ::SireMol::MoleculeBeading & ( ::SireMol::MoleculeBeading::*assign_function_type)( ::SireMol::MoleculeBeading const & ) ;
             assign_function_type assign_function_value( &::SireMol::MoleculeBeading::operator= );
             
             MoleculeBeading_exposer.def( 

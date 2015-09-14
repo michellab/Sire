@@ -91,7 +91,7 @@ void register_MoleculeGroups_class(){
         MoleculeGroups_exposer.def( bp::init< SireMol::MoleculeGroups const & >(( bp::arg("other") )) );
         { //::SireMol::MoleculeGroups::accept
         
-            typedef void ( ::SireMol::MoleculeGroups::*accept_function_type )(  ) ;
+            typedef void ( ::SireMol::MoleculeGroups::*accept_function_type)(  ) ;
             accept_function_type accept_function_value( &::SireMol::MoleculeGroups::accept );
             
             MoleculeGroups_exposer.def( 
@@ -101,7 +101,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::add
         
-            typedef void ( ::SireMol::MoleculeGroups::*add_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireMol::MoleculeGroups::*add_function_type)( ::SireMol::MoleculeGroup const & ) ;
             add_function_type add_function_value( &::SireMol::MoleculeGroups::add );
             
             MoleculeGroups_exposer.def( 
@@ -112,7 +112,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::add
         
-            typedef void ( ::SireMol::MoleculeGroups::*add_function_type )( ::SireMol::MoleculeView const &,::SireMol::MGID const & ) ;
+            typedef void ( ::SireMol::MoleculeGroups::*add_function_type)( ::SireMol::MoleculeView const &,::SireMol::MGID const & ) ;
             add_function_type add_function_value( &::SireMol::MoleculeGroups::add );
             
             MoleculeGroups_exposer.def( 
@@ -123,7 +123,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::add
         
-            typedef void ( ::SireMol::MoleculeGroups::*add_function_type )( ::SireMol::ViewsOfMol const &,::SireMol::MGID const & ) ;
+            typedef void ( ::SireMol::MoleculeGroups::*add_function_type)( ::SireMol::ViewsOfMol const &,::SireMol::MGID const & ) ;
             add_function_type add_function_value( &::SireMol::MoleculeGroups::add );
             
             MoleculeGroups_exposer.def( 
@@ -134,7 +134,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::add
         
-            typedef void ( ::SireMol::MoleculeGroups::*add_function_type )( ::SireMol::Molecules const &,::SireMol::MGID const & ) ;
+            typedef void ( ::SireMol::MoleculeGroups::*add_function_type)( ::SireMol::Molecules const &,::SireMol::MGID const & ) ;
             add_function_type add_function_value( &::SireMol::MoleculeGroups::add );
             
             MoleculeGroups_exposer.def( 
@@ -145,7 +145,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::add
         
-            typedef void ( ::SireMol::MoleculeGroups::*add_function_type )( ::SireMol::MoleculeGroup const &,::SireMol::MGID const & ) ;
+            typedef void ( ::SireMol::MoleculeGroups::*add_function_type)( ::SireMol::MoleculeGroup const &,::SireMol::MGID const & ) ;
             add_function_type add_function_value( &::SireMol::MoleculeGroups::add );
             
             MoleculeGroups_exposer.def( 
@@ -156,7 +156,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::addIfUnique
         
-            typedef void ( ::SireMol::MoleculeGroups::*addIfUnique_function_type )( ::SireMol::MoleculeView const &,::SireMol::MGID const & ) ;
+            typedef void ( ::SireMol::MoleculeGroups::*addIfUnique_function_type)( ::SireMol::MoleculeView const &,::SireMol::MGID const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireMol::MoleculeGroups::addIfUnique );
             
             MoleculeGroups_exposer.def( 
@@ -167,7 +167,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::addIfUnique
         
-            typedef void ( ::SireMol::MoleculeGroups::*addIfUnique_function_type )( ::SireMol::ViewsOfMol const &,::SireMol::MGID const & ) ;
+            typedef void ( ::SireMol::MoleculeGroups::*addIfUnique_function_type)( ::SireMol::ViewsOfMol const &,::SireMol::MGID const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireMol::MoleculeGroups::addIfUnique );
             
             MoleculeGroups_exposer.def( 
@@ -178,7 +178,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::addIfUnique
         
-            typedef void ( ::SireMol::MoleculeGroups::*addIfUnique_function_type )( ::SireMol::Molecules const &,::SireMol::MGID const & ) ;
+            typedef void ( ::SireMol::MoleculeGroups::*addIfUnique_function_type)( ::SireMol::Molecules const &,::SireMol::MGID const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireMol::MoleculeGroups::addIfUnique );
             
             MoleculeGroups_exposer.def( 
@@ -189,7 +189,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::addIfUnique
         
-            typedef void ( ::SireMol::MoleculeGroups::*addIfUnique_function_type )( ::SireMol::MoleculeGroup const &,::SireMol::MGID const & ) ;
+            typedef void ( ::SireMol::MoleculeGroups::*addIfUnique_function_type)( ::SireMol::MoleculeGroup const &,::SireMol::MGID const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireMol::MoleculeGroups::addIfUnique );
             
             MoleculeGroups_exposer.def( 
@@ -200,7 +200,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::at
         
-            typedef ::SireMol::MoleculeGroup const & ( ::SireMol::MoleculeGroups::*at_function_type )( ::SireMol::MGNum ) const;
+            typedef ::SireMol::MoleculeGroup const & ( ::SireMol::MoleculeGroups::*at_function_type)( ::SireMol::MGNum ) const;
             at_function_type at_function_value( &::SireMol::MoleculeGroups::at );
             
             MoleculeGroups_exposer.def( 
@@ -212,7 +212,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::needsAccepting
         
-            typedef bool ( ::SireMol::MoleculeGroups::*needsAccepting_function_type )(  ) const;
+            typedef bool ( ::SireMol::MoleculeGroups::*needsAccepting_function_type)(  ) const;
             needsAccepting_function_type needsAccepting_function_value( &::SireMol::MoleculeGroups::needsAccepting );
             
             MoleculeGroups_exposer.def( 
@@ -223,7 +223,7 @@ void register_MoleculeGroups_class(){
         MoleculeGroups_exposer.def( bp::self != bp::self );
         { //::SireMol::MoleculeGroups::operator=
         
-            typedef ::SireMol::MoleculeGroups & ( ::SireMol::MoleculeGroups::*assign_function_type )( ::SireMol::MoleculeGroups const & ) ;
+            typedef ::SireMol::MoleculeGroups & ( ::SireMol::MoleculeGroups::*assign_function_type)( ::SireMol::MoleculeGroups const & ) ;
             assign_function_type assign_function_value( &::SireMol::MoleculeGroups::operator= );
             
             MoleculeGroups_exposer.def( 
@@ -236,7 +236,7 @@ void register_MoleculeGroups_class(){
         MoleculeGroups_exposer.def( bp::self == bp::self );
         { //::SireMol::MoleculeGroups::remove
         
-            typedef bool ( ::SireMol::MoleculeGroups::*remove_function_type )( ::SireMol::MGID const & ) ;
+            typedef bool ( ::SireMol::MoleculeGroups::*remove_function_type)( ::SireMol::MGID const & ) ;
             remove_function_type remove_function_value( &::SireMol::MoleculeGroups::remove );
             
             MoleculeGroups_exposer.def( 
@@ -247,7 +247,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::remove
         
-            typedef bool ( ::SireMol::MoleculeGroups::*remove_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef bool ( ::SireMol::MoleculeGroups::*remove_function_type)( ::SireMol::MoleculeGroup const & ) ;
             remove_function_type remove_function_value( &::SireMol::MoleculeGroups::remove );
             
             MoleculeGroups_exposer.def( 
@@ -258,7 +258,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::remove
         
-            typedef bool ( ::SireMol::MoleculeGroups::*remove_function_type )( ::SireMol::MolID const & ) ;
+            typedef bool ( ::SireMol::MoleculeGroups::*remove_function_type)( ::SireMol::MolID const & ) ;
             remove_function_type remove_function_value( &::SireMol::MoleculeGroups::remove );
             
             MoleculeGroups_exposer.def( 
@@ -269,7 +269,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::remove
         
-            typedef bool ( ::SireMol::MoleculeGroups::*remove_function_type )( ::SireMol::MoleculeView const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireMol::MoleculeGroups::*remove_function_type)( ::SireMol::MoleculeView const &,::SireMol::MGID const & ) ;
             remove_function_type remove_function_value( &::SireMol::MoleculeGroups::remove );
             
             MoleculeGroups_exposer.def( 
@@ -280,7 +280,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::remove
         
-            typedef bool ( ::SireMol::MoleculeGroups::*remove_function_type )( ::SireMol::ViewsOfMol const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireMol::MoleculeGroups::*remove_function_type)( ::SireMol::ViewsOfMol const &,::SireMol::MGID const & ) ;
             remove_function_type remove_function_value( &::SireMol::MoleculeGroups::remove );
             
             MoleculeGroups_exposer.def( 
@@ -291,7 +291,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::remove
         
-            typedef bool ( ::SireMol::MoleculeGroups::*remove_function_type )( ::SireMol::Molecules const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireMol::MoleculeGroups::*remove_function_type)( ::SireMol::Molecules const &,::SireMol::MGID const & ) ;
             remove_function_type remove_function_value( &::SireMol::MoleculeGroups::remove );
             
             MoleculeGroups_exposer.def( 
@@ -302,7 +302,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::remove
         
-            typedef bool ( ::SireMol::MoleculeGroups::*remove_function_type )( ::SireMol::MoleculeGroup const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireMol::MoleculeGroups::*remove_function_type)( ::SireMol::MoleculeGroup const &,::SireMol::MGID const & ) ;
             remove_function_type remove_function_value( &::SireMol::MoleculeGroups::remove );
             
             MoleculeGroups_exposer.def( 
@@ -313,7 +313,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::remove
         
-            typedef bool ( ::SireMol::MoleculeGroups::*remove_function_type )( ::SireMol::MolNum,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireMol::MoleculeGroups::*remove_function_type)( ::SireMol::MolNum,::SireMol::MGID const & ) ;
             remove_function_type remove_function_value( &::SireMol::MoleculeGroups::remove );
             
             MoleculeGroups_exposer.def( 
@@ -324,7 +324,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::remove
         
-            typedef bool ( ::SireMol::MoleculeGroups::*remove_function_type )( ::QSet< SireMol::MolNum > const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireMol::MoleculeGroups::*remove_function_type)( ::QSet< SireMol::MolNum > const &,::SireMol::MGID const & ) ;
             remove_function_type remove_function_value( &::SireMol::MoleculeGroups::remove );
             
             MoleculeGroups_exposer.def( 
@@ -335,7 +335,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::removeAll
         
-            typedef bool ( ::SireMol::MoleculeGroups::*removeAll_function_type )( ::SireMol::MoleculeView const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireMol::MoleculeGroups::*removeAll_function_type)( ::SireMol::MoleculeView const &,::SireMol::MGID const & ) ;
             removeAll_function_type removeAll_function_value( &::SireMol::MoleculeGroups::removeAll );
             
             MoleculeGroups_exposer.def( 
@@ -346,7 +346,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::removeAll
         
-            typedef bool ( ::SireMol::MoleculeGroups::*removeAll_function_type )( ::SireMol::ViewsOfMol const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireMol::MoleculeGroups::*removeAll_function_type)( ::SireMol::ViewsOfMol const &,::SireMol::MGID const & ) ;
             removeAll_function_type removeAll_function_value( &::SireMol::MoleculeGroups::removeAll );
             
             MoleculeGroups_exposer.def( 
@@ -357,7 +357,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::removeAll
         
-            typedef bool ( ::SireMol::MoleculeGroups::*removeAll_function_type )( ::SireMol::Molecules const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireMol::MoleculeGroups::*removeAll_function_type)( ::SireMol::Molecules const &,::SireMol::MGID const & ) ;
             removeAll_function_type removeAll_function_value( &::SireMol::MoleculeGroups::removeAll );
             
             MoleculeGroups_exposer.def( 
@@ -368,7 +368,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::removeAll
         
-            typedef bool ( ::SireMol::MoleculeGroups::*removeAll_function_type )( ::SireMol::MoleculeGroup const &,::SireMol::MGID const & ) ;
+            typedef bool ( ::SireMol::MoleculeGroups::*removeAll_function_type)( ::SireMol::MoleculeGroup const &,::SireMol::MGID const & ) ;
             removeAll_function_type removeAll_function_value( &::SireMol::MoleculeGroups::removeAll );
             
             MoleculeGroups_exposer.def( 
@@ -379,7 +379,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::removeAll
         
-            typedef bool ( ::SireMol::MoleculeGroups::*removeAll_function_type )( ::SireMol::MGID const & ) ;
+            typedef bool ( ::SireMol::MoleculeGroups::*removeAll_function_type)( ::SireMol::MGID const & ) ;
             removeAll_function_type removeAll_function_value( &::SireMol::MoleculeGroups::removeAll );
             
             MoleculeGroups_exposer.def( 
@@ -390,7 +390,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::setContents
         
-            typedef void ( ::SireMol::MoleculeGroups::*setContents_function_type )( ::SireMol::MGID const &,::SireMol::MoleculeView const & ) ;
+            typedef void ( ::SireMol::MoleculeGroups::*setContents_function_type)( ::SireMol::MGID const &,::SireMol::MoleculeView const & ) ;
             setContents_function_type setContents_function_value( &::SireMol::MoleculeGroups::setContents );
             
             MoleculeGroups_exposer.def( 
@@ -401,7 +401,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::setContents
         
-            typedef void ( ::SireMol::MoleculeGroups::*setContents_function_type )( ::SireMol::MGID const &,::SireMol::ViewsOfMol const & ) ;
+            typedef void ( ::SireMol::MoleculeGroups::*setContents_function_type)( ::SireMol::MGID const &,::SireMol::ViewsOfMol const & ) ;
             setContents_function_type setContents_function_value( &::SireMol::MoleculeGroups::setContents );
             
             MoleculeGroups_exposer.def( 
@@ -412,7 +412,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::setContents
         
-            typedef void ( ::SireMol::MoleculeGroups::*setContents_function_type )( ::SireMol::MGID const &,::SireMol::Molecules const & ) ;
+            typedef void ( ::SireMol::MoleculeGroups::*setContents_function_type)( ::SireMol::MGID const &,::SireMol::Molecules const & ) ;
             setContents_function_type setContents_function_value( &::SireMol::MoleculeGroups::setContents );
             
             MoleculeGroups_exposer.def( 
@@ -423,7 +423,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::setContents
         
-            typedef void ( ::SireMol::MoleculeGroups::*setContents_function_type )( ::SireMol::MGID const &,::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireMol::MoleculeGroups::*setContents_function_type)( ::SireMol::MGID const &,::SireMol::MoleculeGroup const & ) ;
             setContents_function_type setContents_function_value( &::SireMol::MoleculeGroups::setContents );
             
             MoleculeGroups_exposer.def( 
@@ -444,7 +444,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::update
         
-            typedef void ( ::SireMol::MoleculeGroups::*update_function_type )( ::SireMol::MoleculeData const &,bool ) ;
+            typedef void ( ::SireMol::MoleculeGroups::*update_function_type)( ::SireMol::MoleculeData const &,bool ) ;
             update_function_type update_function_value( &::SireMol::MoleculeGroups::update );
             
             MoleculeGroups_exposer.def( 
@@ -455,7 +455,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::update
         
-            typedef void ( ::SireMol::MoleculeGroups::*update_function_type )( ::SireMol::Molecules const &,bool ) ;
+            typedef void ( ::SireMol::MoleculeGroups::*update_function_type)( ::SireMol::Molecules const &,bool ) ;
             update_function_type update_function_value( &::SireMol::MoleculeGroups::update );
             
             MoleculeGroups_exposer.def( 
@@ -466,7 +466,7 @@ void register_MoleculeGroups_class(){
         }
         { //::SireMol::MoleculeGroups::update
         
-            typedef void ( ::SireMol::MoleculeGroups::*update_function_type )( ::SireMol::MoleculeGroup const &,bool ) ;
+            typedef void ( ::SireMol::MoleculeGroups::*update_function_type)( ::SireMol::MoleculeGroup const &,bool ) ;
             update_function_type update_function_value( &::SireMol::MoleculeGroups::update );
             
             MoleculeGroups_exposer.def( 

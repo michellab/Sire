@@ -57,7 +57,7 @@ void register_ThisThread_class(){
         ThisThread_exposer.def( bp::init< SireCluster::Nodes const & >(( bp::arg("nodes") )) );
         { //::SireCluster::ThisThread::operator=
         
-            typedef ::SireCluster::ThisThread & ( ::SireCluster::ThisThread::*assign_function_type )( ::SireCluster::ThisThread const & ) ;
+            typedef ::SireCluster::ThisThread & ( ::SireCluster::ThisThread::*assign_function_type)( ::SireCluster::ThisThread const & ) ;
             assign_function_type assign_function_value( &::SireCluster::ThisThread::operator= );
             
             ThisThread_exposer.def( 
@@ -69,7 +69,7 @@ void register_ThisThread_class(){
         }
         { //::SireCluster::ThisThread::reclaim
         
-            typedef void ( ::SireCluster::ThisThread::*reclaim_function_type )(  ) ;
+            typedef void ( ::SireCluster::ThisThread::*reclaim_function_type)(  ) ;
             reclaim_function_type reclaim_function_value( &::SireCluster::ThisThread::reclaim );
             
             ThisThread_exposer.def( 

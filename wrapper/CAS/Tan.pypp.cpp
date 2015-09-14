@@ -37,7 +37,7 @@ void register_Tan_class(){
         Tan_exposer.def( bp::init< SireCAS::Tan const & >(( bp::arg("other") )) );
         { //::SireCAS::Tan::evaluate
         
-            typedef double ( ::SireCAS::Tan::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::Tan::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Tan::evaluate );
             
             Tan_exposer.def( 
@@ -48,7 +48,7 @@ void register_Tan_class(){
         }
         { //::SireCAS::Tan::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::Tan::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::Tan::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Tan::evaluate );
             
             Tan_exposer.def( 
@@ -70,7 +70,7 @@ void register_Tan_class(){
         }
         { //::SireCAS::Tan::what
         
-            typedef char const * ( ::SireCAS::Tan::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::Tan::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::Tan::what );
             
             Tan_exposer.def( 

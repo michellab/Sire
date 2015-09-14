@@ -27,7 +27,7 @@ void register_IndexBase_class(){
         bp::scope IndexBase_scope( IndexBase_exposer );
         { //::SireID::IndexBase::hash
         
-            typedef ::uint ( ::SireID::IndexBase::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireID::IndexBase::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireID::IndexBase::hash );
             
             IndexBase_exposer.def( 
@@ -37,7 +37,7 @@ void register_IndexBase_class(){
         }
         { //::SireID::IndexBase::isNull
         
-            typedef bool ( ::SireID::IndexBase::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireID::IndexBase::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireID::IndexBase::isNull );
             
             IndexBase_exposer.def( 
@@ -47,7 +47,7 @@ void register_IndexBase_class(){
         }
         { //::SireID::IndexBase::map
         
-            typedef ::qint32 ( ::SireID::IndexBase::*map_function_type )( ::qint32 ) const;
+            typedef ::qint32 ( ::SireID::IndexBase::*map_function_type)( ::qint32 ) const;
             map_function_type map_function_value( &::SireID::IndexBase::map );
             
             IndexBase_exposer.def( 
@@ -68,7 +68,7 @@ void register_IndexBase_class(){
         }
         { //::SireID::IndexBase::value
         
-            typedef ::qint32 ( ::SireID::IndexBase::*value_function_type )(  ) const;
+            typedef ::qint32 ( ::SireID::IndexBase::*value_function_type)(  ) const;
             value_function_type value_function_value( &::SireID::IndexBase::value );
             
             IndexBase_exposer.def( 

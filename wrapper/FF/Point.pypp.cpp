@@ -46,7 +46,7 @@ void register_Point_class(){
         bp::scope Point_scope( Point_exposer );
         { //::SireFF::Point::addForce
         
-            typedef bool ( ::SireFF::Point::*addForce_function_type )( ::SireFF::MolForceTable &,::SireMaths::Vector const & ) const;
+            typedef bool ( ::SireFF::Point::*addForce_function_type)( ::SireFF::MolForceTable &,::SireMaths::Vector const & ) const;
             addForce_function_type addForce_function_value( &::SireFF::Point::addForce );
             
             Point_exposer.def( 
@@ -57,7 +57,7 @@ void register_Point_class(){
         }
         { //::SireFF::Point::addForce
         
-            typedef bool ( ::SireFF::Point::*addForce_function_type )( ::SireFF::ForceTable &,::SireMaths::Vector const & ) const;
+            typedef bool ( ::SireFF::Point::*addForce_function_type)( ::SireFF::ForceTable &,::SireMaths::Vector const & ) const;
             addForce_function_type addForce_function_value( &::SireFF::Point::addForce );
             
             Point_exposer.def( 
@@ -112,7 +112,7 @@ void register_Point_class(){
         }
         { //::SireFF::Point::contains
         
-            typedef bool ( ::SireFF::Point::*contains_function_type )( ::SireMol::MolNum ) const;
+            typedef bool ( ::SireFF::Point::*contains_function_type)( ::SireMol::MolNum ) const;
             contains_function_type contains_function_value( &::SireFF::Point::contains );
             
             Point_exposer.def( 
@@ -123,7 +123,7 @@ void register_Point_class(){
         }
         { //::SireFF::Point::contains
         
-            typedef bool ( ::SireFF::Point::*contains_function_type )( ::SireMol::MolID const & ) const;
+            typedef bool ( ::SireFF::Point::*contains_function_type)( ::SireMol::MolID const & ) const;
             contains_function_type contains_function_value( &::SireFF::Point::contains );
             
             Point_exposer.def( 
@@ -134,7 +134,7 @@ void register_Point_class(){
         }
         { //::SireFF::Point::isExtraMoleculePoint
         
-            typedef bool ( ::SireFF::Point::*isExtraMoleculePoint_function_type )(  ) const;
+            typedef bool ( ::SireFF::Point::*isExtraMoleculePoint_function_type)(  ) const;
             isExtraMoleculePoint_function_type isExtraMoleculePoint_function_value( &::SireFF::Point::isExtraMoleculePoint );
             
             Point_exposer.def( 
@@ -144,7 +144,7 @@ void register_Point_class(){
         }
         { //::SireFF::Point::isInterMoleculePoint
         
-            typedef bool ( ::SireFF::Point::*isInterMoleculePoint_function_type )(  ) const;
+            typedef bool ( ::SireFF::Point::*isInterMoleculePoint_function_type)(  ) const;
             isInterMoleculePoint_function_type isInterMoleculePoint_function_value( &::SireFF::Point::isInterMoleculePoint );
             
             Point_exposer.def( 
@@ -154,7 +154,7 @@ void register_Point_class(){
         }
         { //::SireFF::Point::isIntraMoleculePoint
         
-            typedef bool ( ::SireFF::Point::*isIntraMoleculePoint_function_type )(  ) const;
+            typedef bool ( ::SireFF::Point::*isIntraMoleculePoint_function_type)(  ) const;
             isIntraMoleculePoint_function_type isIntraMoleculePoint_function_value( &::SireFF::Point::isIntraMoleculePoint );
             
             Point_exposer.def( 
@@ -164,7 +164,7 @@ void register_Point_class(){
         }
         { //::SireFF::Point::molecules
         
-            typedef ::SireMol::Molecules ( ::SireFF::Point::*molecules_function_type )(  ) const;
+            typedef ::SireMol::Molecules ( ::SireFF::Point::*molecules_function_type)(  ) const;
             molecules_function_type molecules_function_value( &::SireFF::Point::molecules );
             
             Point_exposer.def( 
@@ -174,7 +174,7 @@ void register_Point_class(){
         }
         { //::SireFF::Point::nMolecules
         
-            typedef int ( ::SireFF::Point::*nMolecules_function_type )(  ) const;
+            typedef int ( ::SireFF::Point::*nMolecules_function_type)(  ) const;
             nMolecules_function_type nMolecules_function_value( &::SireFF::Point::nMolecules );
             
             Point_exposer.def( 
@@ -195,7 +195,7 @@ void register_Point_class(){
         }
         { //::SireFF::Point::operator()
         
-            typedef ::SireMaths::Vector const & ( ::SireFF::Point::*__call___function_type )(  ) const;
+            typedef ::SireMaths::Vector const & ( ::SireFF::Point::*__call___function_type)(  ) const;
             __call___function_type __call___function_value( &::SireFF::Point::operator() );
             
             Point_exposer.def( 
@@ -206,7 +206,7 @@ void register_Point_class(){
         }
         { //::SireFF::Point::point
         
-            typedef ::SireMaths::Vector const & ( ::SireFF::Point::*point_function_type )(  ) const;
+            typedef ::SireMaths::Vector const & ( ::SireFF::Point::*point_function_type)(  ) const;
             point_function_type point_function_value( &::SireFF::Point::point );
             
             Point_exposer.def( 
@@ -217,7 +217,7 @@ void register_Point_class(){
         }
         { //::SireFF::Point::setSpace
         
-            typedef void ( ::SireFF::Point::*setSpace_function_type )( ::SireVol::Space const & ) ;
+            typedef void ( ::SireFF::Point::*setSpace_function_type)( ::SireVol::Space const & ) ;
             setSpace_function_type setSpace_function_value( &::SireFF::Point::setSpace );
             
             Point_exposer.def( 
@@ -228,7 +228,7 @@ void register_Point_class(){
         }
         { //::SireFF::Point::space
         
-            typedef ::SireVol::Space const & ( ::SireFF::Point::*space_function_type )(  ) const;
+            typedef ::SireVol::Space const & ( ::SireFF::Point::*space_function_type)(  ) const;
             space_function_type space_function_value( &::SireFF::Point::space );
             
             Point_exposer.def( 
@@ -249,7 +249,7 @@ void register_Point_class(){
         }
         { //::SireFF::Point::update
         
-            typedef bool ( ::SireFF::Point::*update_function_type )( ::SireMol::MoleculeData const & ) ;
+            typedef bool ( ::SireFF::Point::*update_function_type)( ::SireMol::MoleculeData const & ) ;
             update_function_type update_function_value( &::SireFF::Point::update );
             
             Point_exposer.def( 
@@ -260,7 +260,7 @@ void register_Point_class(){
         }
         { //::SireFF::Point::update
         
-            typedef bool ( ::SireFF::Point::*update_function_type )( ::SireMol::Molecules const & ) ;
+            typedef bool ( ::SireFF::Point::*update_function_type)( ::SireMol::Molecules const & ) ;
             update_function_type update_function_value( &::SireFF::Point::update );
             
             Point_exposer.def( 
@@ -271,7 +271,7 @@ void register_Point_class(){
         }
         { //::SireFF::Point::update
         
-            typedef bool ( ::SireFF::Point::*update_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef bool ( ::SireFF::Point::*update_function_type)( ::SireMol::MoleculeGroup const & ) ;
             update_function_type update_function_value( &::SireFF::Point::update );
             
             Point_exposer.def( 
@@ -282,7 +282,7 @@ void register_Point_class(){
         }
         { //::SireFF::Point::update
         
-            typedef bool ( ::SireFF::Point::*update_function_type )( ::SireMol::MolGroupsBase const & ) ;
+            typedef bool ( ::SireFF::Point::*update_function_type)( ::SireMol::MolGroupsBase const & ) ;
             update_function_type update_function_value( &::SireFF::Point::update );
             
             Point_exposer.def( 
@@ -293,7 +293,7 @@ void register_Point_class(){
         }
         { //::SireFF::Point::usesMoleculesIn
         
-            typedef bool ( ::SireFF::Point::*usesMoleculesIn_function_type )( ::SireFF::ForceTable const & ) const;
+            typedef bool ( ::SireFF::Point::*usesMoleculesIn_function_type)( ::SireFF::ForceTable const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireFF::Point::usesMoleculesIn );
             
             Point_exposer.def( 
@@ -304,7 +304,7 @@ void register_Point_class(){
         }
         { //::SireFF::Point::usesMoleculesIn
         
-            typedef bool ( ::SireFF::Point::*usesMoleculesIn_function_type )( ::SireMol::Molecules const & ) const;
+            typedef bool ( ::SireFF::Point::*usesMoleculesIn_function_type)( ::SireMol::Molecules const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireFF::Point::usesMoleculesIn );
             
             Point_exposer.def( 
@@ -315,7 +315,7 @@ void register_Point_class(){
         }
         { //::SireFF::Point::usesMoleculesIn
         
-            typedef bool ( ::SireFF::Point::*usesMoleculesIn_function_type )( ::SireMol::MoleculeGroup const & ) const;
+            typedef bool ( ::SireFF::Point::*usesMoleculesIn_function_type)( ::SireMol::MoleculeGroup const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireFF::Point::usesMoleculesIn );
             
             Point_exposer.def( 
@@ -326,7 +326,7 @@ void register_Point_class(){
         }
         { //::SireFF::Point::usesMoleculesIn
         
-            typedef bool ( ::SireFF::Point::*usesMoleculesIn_function_type )( ::SireMol::MolGroupsBase const & ) const;
+            typedef bool ( ::SireFF::Point::*usesMoleculesIn_function_type)( ::SireMol::MolGroupsBase const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireFF::Point::usesMoleculesIn );
             
             Point_exposer.def( 
@@ -337,7 +337,7 @@ void register_Point_class(){
         }
         { //::SireFF::Point::wouldUpdate
         
-            typedef bool ( ::SireFF::Point::*wouldUpdate_function_type )( ::SireMol::MoleculeData const & ) const;
+            typedef bool ( ::SireFF::Point::*wouldUpdate_function_type)( ::SireMol::MoleculeData const & ) const;
             wouldUpdate_function_type wouldUpdate_function_value( &::SireFF::Point::wouldUpdate );
             
             Point_exposer.def( 
@@ -348,7 +348,7 @@ void register_Point_class(){
         }
         { //::SireFF::Point::wouldUpdate
         
-            typedef bool ( ::SireFF::Point::*wouldUpdate_function_type )( ::SireMol::Molecules const & ) const;
+            typedef bool ( ::SireFF::Point::*wouldUpdate_function_type)( ::SireMol::Molecules const & ) const;
             wouldUpdate_function_type wouldUpdate_function_value( &::SireFF::Point::wouldUpdate );
             
             Point_exposer.def( 
@@ -359,7 +359,7 @@ void register_Point_class(){
         }
         { //::SireFF::Point::wouldUpdate
         
-            typedef bool ( ::SireFF::Point::*wouldUpdate_function_type )( ::SireMol::MoleculeGroup const & ) const;
+            typedef bool ( ::SireFF::Point::*wouldUpdate_function_type)( ::SireMol::MoleculeGroup const & ) const;
             wouldUpdate_function_type wouldUpdate_function_value( &::SireFF::Point::wouldUpdate );
             
             Point_exposer.def( 
@@ -370,7 +370,7 @@ void register_Point_class(){
         }
         { //::SireFF::Point::wouldUpdate
         
-            typedef bool ( ::SireFF::Point::*wouldUpdate_function_type )( ::SireMol::MolGroupsBase const & ) const;
+            typedef bool ( ::SireFF::Point::*wouldUpdate_function_type)( ::SireMol::MolGroupsBase const & ) const;
             wouldUpdate_function_type wouldUpdate_function_value( &::SireFF::Point::wouldUpdate );
             
             Point_exposer.def( 

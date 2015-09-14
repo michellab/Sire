@@ -55,7 +55,7 @@ void register_MolID_class(){
         bp::scope MolID_scope( MolID_exposer );
         { //::SireMol::MolID::map
         
-            typedef ::QList< SireMol::MolNum > ( ::SireMol::MolID::*map_function_type )( ::SireMol::Molecules const & ) const;
+            typedef ::QList< SireMol::MolNum > ( ::SireMol::MolID::*map_function_type)( ::SireMol::Molecules const & ) const;
             map_function_type map_function_value( &::SireMol::MolID::map );
             
             MolID_exposer.def( 
@@ -66,7 +66,7 @@ void register_MolID_class(){
         }
         { //::SireMol::MolID::map
         
-            typedef ::QList< SireMol::MolNum > ( ::SireMol::MolID::*map_function_type )( ::SireMol::MoleculeGroup const & ) const;
+            typedef ::QList< SireMol::MolNum > ( ::SireMol::MolID::*map_function_type)( ::SireMol::MoleculeGroup const & ) const;
             map_function_type map_function_value( &::SireMol::MolID::map );
             
             MolID_exposer.def( 
@@ -77,7 +77,7 @@ void register_MolID_class(){
         }
         { //::SireMol::MolID::map
         
-            typedef ::QList< SireMol::MolNum > ( ::SireMol::MolID::*map_function_type )( ::SireMol::MolGroupsBase const & ) const;
+            typedef ::QList< SireMol::MolNum > ( ::SireMol::MolID::*map_function_type)( ::SireMol::MolGroupsBase const & ) const;
             map_function_type map_function_value( &::SireMol::MolID::map );
             
             MolID_exposer.def( 
@@ -90,7 +90,7 @@ void register_MolID_class(){
         MolID_exposer.def( bp::self & bp::other< SireMol::AtomID >() );
         { //::SireMol::MolID::operator()
         
-            typedef ::SireMol::SpecifyMol ( ::SireMol::MolID::*__call___function_type )( int ) const;
+            typedef ::SireMol::SpecifyMol ( ::SireMol::MolID::*__call___function_type)( int ) const;
             __call___function_type __call___function_value( &::SireMol::MolID::operator() );
             
             MolID_exposer.def( 
@@ -101,7 +101,7 @@ void register_MolID_class(){
         }
         { //::SireMol::MolID::operator()
         
-            typedef ::SireMol::SpecifyMol ( ::SireMol::MolID::*__call___function_type )( int,int ) const;
+            typedef ::SireMol::SpecifyMol ( ::SireMol::MolID::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireMol::MolID::operator() );
             
             MolID_exposer.def( 
@@ -115,7 +115,7 @@ void register_MolID_class(){
         MolID_exposer.def( bp::self + bp::other< SireMol::AtomID >() );
         { //::SireMol::MolID::operator[]
         
-            typedef ::SireMol::SpecifyMol ( ::SireMol::MolID::*__getitem___function_type )( int ) const;
+            typedef ::SireMol::SpecifyMol ( ::SireMol::MolID::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::MolID::operator[] );
             
             MolID_exposer.def( 

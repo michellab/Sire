@@ -11,6 +11,8 @@ namespace bp = boost::python;
 
 #include "SireBase/property.h"
 
+#include "SireBase/stringproperty.h"
+
 #include "SireError/errors.h"
 
 #include "SireFF/detail/atomiccoords3d.h"

@@ -117,6 +117,8 @@ public:
     virtual double probabilityOf(const PartialMolecule &molecule) const=0;
     virtual double probabilityOfMolecule(const Molecule &molecule) const=0;
 
+    virtual bool isBiased() const;
+
     static const UniformSampler& null();
 
 protected:

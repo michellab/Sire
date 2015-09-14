@@ -57,7 +57,7 @@ void register_SegStructureEditor_class(){
         SegStructureEditor_exposer.def( bp::init< SireMol::SegStructureEditor const & >(( bp::arg("other") )) );
         { //::SireMol::SegStructureEditor::add
         
-            typedef ::SireMol::AtomStructureEditor ( ::SireMol::SegStructureEditor::*add_function_type )( ::SireMol::AtomName const & ) ;
+            typedef ::SireMol::AtomStructureEditor ( ::SireMol::SegStructureEditor::*add_function_type)( ::SireMol::AtomName const & ) ;
             add_function_type add_function_value( &::SireMol::SegStructureEditor::add );
             
             SegStructureEditor_exposer.def( 
@@ -68,7 +68,7 @@ void register_SegStructureEditor_class(){
         }
         { //::SireMol::SegStructureEditor::add
         
-            typedef ::SireMol::AtomStructureEditor ( ::SireMol::SegStructureEditor::*add_function_type )( ::SireMol::AtomNum ) ;
+            typedef ::SireMol::AtomStructureEditor ( ::SireMol::SegStructureEditor::*add_function_type)( ::SireMol::AtomNum ) ;
             add_function_type add_function_value( &::SireMol::SegStructureEditor::add );
             
             SegStructureEditor_exposer.def( 
@@ -79,7 +79,7 @@ void register_SegStructureEditor_class(){
         }
         { //::SireMol::SegStructureEditor::atom
         
-            typedef ::SireMol::AtomStructureEditor ( ::SireMol::SegStructureEditor::*atom_function_type )( int ) ;
+            typedef ::SireMol::AtomStructureEditor ( ::SireMol::SegStructureEditor::*atom_function_type)( int ) ;
             atom_function_type atom_function_value( &::SireMol::SegStructureEditor::atom );
             
             SegStructureEditor_exposer.def( 
@@ -90,7 +90,7 @@ void register_SegStructureEditor_class(){
         }
         { //::SireMol::SegStructureEditor::atom
         
-            typedef ::SireMol::AtomStructureEditor ( ::SireMol::SegStructureEditor::*atom_function_type )( ::SireMol::AtomID const & ) ;
+            typedef ::SireMol::AtomStructureEditor ( ::SireMol::SegStructureEditor::*atom_function_type)( ::SireMol::AtomID const & ) ;
             atom_function_type atom_function_value( &::SireMol::SegStructureEditor::atom );
             
             SegStructureEditor_exposer.def( 
@@ -101,7 +101,7 @@ void register_SegStructureEditor_class(){
         }
         { //::SireMol::SegStructureEditor::commit
         
-            typedef ::SireMol::Segment ( ::SireMol::SegStructureEditor::*commit_function_type )(  ) const;
+            typedef ::SireMol::Segment ( ::SireMol::SegStructureEditor::*commit_function_type)(  ) const;
             commit_function_type commit_function_value( &::SireMol::SegStructureEditor::commit );
             
             SegStructureEditor_exposer.def( 
@@ -111,7 +111,7 @@ void register_SegStructureEditor_class(){
         }
         { //::SireMol::SegStructureEditor::index
         
-            typedef ::SireMol::SegIdx ( ::SireMol::SegStructureEditor::*index_function_type )(  ) const;
+            typedef ::SireMol::SegIdx ( ::SireMol::SegStructureEditor::*index_function_type)(  ) const;
             index_function_type index_function_value( &::SireMol::SegStructureEditor::index );
             
             SegStructureEditor_exposer.def( 
@@ -121,7 +121,7 @@ void register_SegStructureEditor_class(){
         }
         { //::SireMol::SegStructureEditor::molecule
         
-            typedef ::SireMol::MolStructureEditor ( ::SireMol::SegStructureEditor::*molecule_function_type )(  ) ;
+            typedef ::SireMol::MolStructureEditor ( ::SireMol::SegStructureEditor::*molecule_function_type)(  ) ;
             molecule_function_type molecule_function_value( &::SireMol::SegStructureEditor::molecule );
             
             SegStructureEditor_exposer.def( 
@@ -131,7 +131,7 @@ void register_SegStructureEditor_class(){
         }
         { //::SireMol::SegStructureEditor::nAtoms
         
-            typedef int ( ::SireMol::SegStructureEditor::*nAtoms_function_type )(  ) const;
+            typedef int ( ::SireMol::SegStructureEditor::*nAtoms_function_type)(  ) const;
             nAtoms_function_type nAtoms_function_value( &::SireMol::SegStructureEditor::nAtoms );
             
             SegStructureEditor_exposer.def( 
@@ -141,7 +141,7 @@ void register_SegStructureEditor_class(){
         }
         { //::SireMol::SegStructureEditor::name
         
-            typedef ::SireMol::SegName const & ( ::SireMol::SegStructureEditor::*name_function_type )(  ) const;
+            typedef ::SireMol::SegName const & ( ::SireMol::SegStructureEditor::*name_function_type)(  ) const;
             name_function_type name_function_value( &::SireMol::SegStructureEditor::name );
             
             SegStructureEditor_exposer.def( 
@@ -152,7 +152,7 @@ void register_SegStructureEditor_class(){
         }
         { //::SireMol::SegStructureEditor::operator=
         
-            typedef ::SireMol::SegStructureEditor & ( ::SireMol::SegStructureEditor::*assign_function_type )( ::SireMol::Segment const & ) ;
+            typedef ::SireMol::SegStructureEditor & ( ::SireMol::SegStructureEditor::*assign_function_type)( ::SireMol::Segment const & ) ;
             assign_function_type assign_function_value( &::SireMol::SegStructureEditor::operator= );
             
             SegStructureEditor_exposer.def( 
@@ -164,7 +164,7 @@ void register_SegStructureEditor_class(){
         }
         { //::SireMol::SegStructureEditor::operator=
         
-            typedef ::SireMol::SegStructureEditor & ( ::SireMol::SegStructureEditor::*assign_function_type )( ::SireMol::SegStructureEditor const & ) ;
+            typedef ::SireMol::SegStructureEditor & ( ::SireMol::SegStructureEditor::*assign_function_type)( ::SireMol::SegStructureEditor const & ) ;
             assign_function_type assign_function_value( &::SireMol::SegStructureEditor::operator= );
             
             SegStructureEditor_exposer.def( 
@@ -176,7 +176,7 @@ void register_SegStructureEditor_class(){
         }
         { //::SireMol::SegStructureEditor::reindex
         
-            typedef ::SireMol::SegStructureEditor & ( ::SireMol::SegStructureEditor::*reindex_function_type )( ::SireMol::SegIdx ) ;
+            typedef ::SireMol::SegStructureEditor & ( ::SireMol::SegStructureEditor::*reindex_function_type)( ::SireMol::SegIdx ) ;
             reindex_function_type reindex_function_value( &::SireMol::SegStructureEditor::reindex );
             
             SegStructureEditor_exposer.def( 
@@ -188,7 +188,7 @@ void register_SegStructureEditor_class(){
         }
         { //::SireMol::SegStructureEditor::remove
         
-            typedef ::SireMol::MolStructureEditor ( ::SireMol::SegStructureEditor::*remove_function_type )(  ) ;
+            typedef ::SireMol::MolStructureEditor ( ::SireMol::SegStructureEditor::*remove_function_type)(  ) ;
             remove_function_type remove_function_value( &::SireMol::SegStructureEditor::remove );
             
             SegStructureEditor_exposer.def( 
@@ -199,7 +199,7 @@ void register_SegStructureEditor_class(){
         }
         { //::SireMol::SegStructureEditor::remove
         
-            typedef ::SireMol::SegStructureEditor & ( ::SireMol::SegStructureEditor::*remove_function_type )( ::SireMol::AtomID const & ) ;
+            typedef ::SireMol::SegStructureEditor & ( ::SireMol::SegStructureEditor::*remove_function_type)( ::SireMol::AtomID const & ) ;
             remove_function_type remove_function_value( &::SireMol::SegStructureEditor::remove );
             
             SegStructureEditor_exposer.def( 
@@ -211,7 +211,7 @@ void register_SegStructureEditor_class(){
         }
         { //::SireMol::SegStructureEditor::remove
         
-            typedef ::SireMol::SegStructureEditor & ( ::SireMol::SegStructureEditor::*remove_function_type )( int ) ;
+            typedef ::SireMol::SegStructureEditor & ( ::SireMol::SegStructureEditor::*remove_function_type)( int ) ;
             remove_function_type remove_function_value( &::SireMol::SegStructureEditor::remove );
             
             SegStructureEditor_exposer.def( 
@@ -223,7 +223,7 @@ void register_SegStructureEditor_class(){
         }
         { //::SireMol::SegStructureEditor::rename
         
-            typedef ::SireMol::SegStructureEditor & ( ::SireMol::SegStructureEditor::*rename_function_type )( ::SireMol::SegName const & ) ;
+            typedef ::SireMol::SegStructureEditor & ( ::SireMol::SegStructureEditor::*rename_function_type)( ::SireMol::SegName const & ) ;
             rename_function_type rename_function_value( &::SireMol::SegStructureEditor::rename );
             
             SegStructureEditor_exposer.def( 
@@ -235,7 +235,7 @@ void register_SegStructureEditor_class(){
         }
         { //::SireMol::SegStructureEditor::select
         
-            typedef ::SireMol::AtomStructureEditor ( ::SireMol::SegStructureEditor::*select_function_type )( int ) ;
+            typedef ::SireMol::AtomStructureEditor ( ::SireMol::SegStructureEditor::*select_function_type)( int ) ;
             select_function_type select_function_value( &::SireMol::SegStructureEditor::select );
             
             SegStructureEditor_exposer.def( 
@@ -246,7 +246,7 @@ void register_SegStructureEditor_class(){
         }
         { //::SireMol::SegStructureEditor::select
         
-            typedef ::SireMol::AtomStructureEditor ( ::SireMol::SegStructureEditor::*select_function_type )( ::SireMol::AtomID const & ) ;
+            typedef ::SireMol::AtomStructureEditor ( ::SireMol::SegStructureEditor::*select_function_type)( ::SireMol::AtomID const & ) ;
             select_function_type select_function_value( &::SireMol::SegStructureEditor::select );
             
             SegStructureEditor_exposer.def( 
@@ -257,7 +257,7 @@ void register_SegStructureEditor_class(){
         }
         { //::SireMol::SegStructureEditor::selectedAll
         
-            typedef bool ( ::SireMol::SegStructureEditor::*selectedAll_function_type )(  ) const;
+            typedef bool ( ::SireMol::SegStructureEditor::*selectedAll_function_type)(  ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::SegStructureEditor::selectedAll );
             
             SegStructureEditor_exposer.def( 
@@ -267,7 +267,7 @@ void register_SegStructureEditor_class(){
         }
         { //::SireMol::SegStructureEditor::toString
         
-            typedef ::QString ( ::SireMol::SegStructureEditor::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::SegStructureEditor::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::SegStructureEditor::toString );
             
             SegStructureEditor_exposer.def( 
@@ -277,7 +277,7 @@ void register_SegStructureEditor_class(){
         }
         { //::SireMol::SegStructureEditor::transfer
         
-            typedef ::SireMol::SegStructureEditor & ( ::SireMol::SegStructureEditor::*transfer_function_type )( ::SireMol::AtomID const &,::SireMol::SegID const & ) ;
+            typedef ::SireMol::SegStructureEditor & ( ::SireMol::SegStructureEditor::*transfer_function_type)( ::SireMol::AtomID const &,::SireMol::SegID const & ) ;
             transfer_function_type transfer_function_value( &::SireMol::SegStructureEditor::transfer );
             
             SegStructureEditor_exposer.def( 
@@ -289,7 +289,7 @@ void register_SegStructureEditor_class(){
         }
         { //::SireMol::SegStructureEditor::transfer
         
-            typedef ::SireMol::SegStructureEditor & ( ::SireMol::SegStructureEditor::*transfer_function_type )( int,::SireMol::SegID const & ) ;
+            typedef ::SireMol::SegStructureEditor & ( ::SireMol::SegStructureEditor::*transfer_function_type)( int,::SireMol::SegID const & ) ;
             transfer_function_type transfer_function_value( &::SireMol::SegStructureEditor::transfer );
             
             SegStructureEditor_exposer.def( 
@@ -301,7 +301,7 @@ void register_SegStructureEditor_class(){
         }
         { //::SireMol::SegStructureEditor::transferAll
         
-            typedef ::SireMol::SegStructureEditor & ( ::SireMol::SegStructureEditor::*transferAll_function_type )( ::SireMol::SegID const & ) ;
+            typedef ::SireMol::SegStructureEditor & ( ::SireMol::SegStructureEditor::*transferAll_function_type)( ::SireMol::SegID const & ) ;
             transferAll_function_type transferAll_function_value( &::SireMol::SegStructureEditor::transferAll );
             
             SegStructureEditor_exposer.def( 
@@ -323,7 +323,7 @@ void register_SegStructureEditor_class(){
         }
         { //::SireMol::SegStructureEditor::what
         
-            typedef char const * ( ::SireMol::SegStructureEditor::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::SegStructureEditor::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::SegStructureEditor::what );
             
             SegStructureEditor_exposer.def( 

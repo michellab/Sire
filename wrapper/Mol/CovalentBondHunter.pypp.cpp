@@ -59,7 +59,7 @@ void register_CovalentBondHunter_class(){
         CovalentBondHunter_exposer.def( bp::self != bp::self );
         { //::SireMol::CovalentBondHunter::operator()
         
-            typedef ::SireMol::Connectivity ( ::SireMol::CovalentBondHunter::*__call___function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::Connectivity ( ::SireMol::CovalentBondHunter::*__call___function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             __call___function_type __call___function_value( &::SireMol::CovalentBondHunter::operator() );
             
             CovalentBondHunter_exposer.def( 
@@ -70,7 +70,7 @@ void register_CovalentBondHunter_class(){
         }
         { //::SireMol::CovalentBondHunter::operator=
         
-            typedef ::SireMol::CovalentBondHunter & ( ::SireMol::CovalentBondHunter::*assign_function_type )( ::SireMol::CovalentBondHunter const & ) ;
+            typedef ::SireMol::CovalentBondHunter & ( ::SireMol::CovalentBondHunter::*assign_function_type)( ::SireMol::CovalentBondHunter const & ) ;
             assign_function_type assign_function_value( &::SireMol::CovalentBondHunter::operator= );
             
             CovalentBondHunter_exposer.def( 

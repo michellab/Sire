@@ -45,11 +45,11 @@ void register_CLJBoxIndex_class(){
         typedef bp::class_< SireMM::CLJBoxIndex > CLJBoxIndex_exposer_t;
         CLJBoxIndex_exposer_t CLJBoxIndex_exposer = CLJBoxIndex_exposer_t( "CLJBoxIndex", bp::init< >() );
         bp::scope CLJBoxIndex_scope( CLJBoxIndex_exposer );
-        CLJBoxIndex_exposer.def( bp::init< qint16, qint16, qint16, bp::optional< qint16 > >(( bp::arg("i"), bp::arg("j"), bp::arg("k"), bp::arg("atom_idx")=(short int)(-0x00000000000000001) )) );
+        CLJBoxIndex_exposer.def( bp::init< qint16, qint16, qint16, bp::optional< qint16 > >(( bp::arg("i"), bp::arg("j"), bp::arg("k"), bp::arg("atom_idx")=(::qint16)(-0x00000000000000001) )) );
         CLJBoxIndex_exposer.def( bp::init< SireMM::CLJBoxIndex const & >(( bp::arg("other") )) );
         { //::SireMM::CLJBoxIndex::box
         
-            typedef ::SireVol::AABox ( ::SireMM::CLJBoxIndex::*box_function_type )( ::SireUnits::Dimension::Length ) const;
+            typedef ::SireVol::AABox ( ::SireMM::CLJBoxIndex::*box_function_type)( ::SireUnits::Dimension::Length ) const;
             box_function_type box_function_value( &::SireMM::CLJBoxIndex::box );
             
             CLJBoxIndex_exposer.def( 
@@ -60,7 +60,7 @@ void register_CLJBoxIndex_class(){
         }
         { //::SireMM::CLJBoxIndex::boxOnly
         
-            typedef ::SireMM::CLJBoxIndex ( ::SireMM::CLJBoxIndex::*boxOnly_function_type )(  ) const;
+            typedef ::SireMM::CLJBoxIndex ( ::SireMM::CLJBoxIndex::*boxOnly_function_type)(  ) const;
             boxOnly_function_type boxOnly_function_value( &::SireMM::CLJBoxIndex::boxOnly );
             
             CLJBoxIndex_exposer.def( 
@@ -125,7 +125,7 @@ void register_CLJBoxIndex_class(){
         }
         { //::SireMM::CLJBoxIndex::hasAtomIndex
         
-            typedef bool ( ::SireMM::CLJBoxIndex::*hasAtomIndex_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJBoxIndex::*hasAtomIndex_function_type)(  ) const;
             hasAtomIndex_function_type hasAtomIndex_function_value( &::SireMM::CLJBoxIndex::hasAtomIndex );
             
             CLJBoxIndex_exposer.def( 
@@ -135,7 +135,7 @@ void register_CLJBoxIndex_class(){
         }
         { //::SireMM::CLJBoxIndex::hash
         
-            typedef ::uint ( ::SireMM::CLJBoxIndex::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMM::CLJBoxIndex::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMM::CLJBoxIndex::hash );
             
             CLJBoxIndex_exposer.def( 
@@ -145,7 +145,7 @@ void register_CLJBoxIndex_class(){
         }
         { //::SireMM::CLJBoxIndex::i
         
-            typedef ::qint16 ( ::SireMM::CLJBoxIndex::*i_function_type )(  ) const;
+            typedef ::qint16 ( ::SireMM::CLJBoxIndex::*i_function_type)(  ) const;
             i_function_type i_function_value( &::SireMM::CLJBoxIndex::i );
             
             CLJBoxIndex_exposer.def( 
@@ -155,7 +155,7 @@ void register_CLJBoxIndex_class(){
         }
         { //::SireMM::CLJBoxIndex::index
         
-            typedef ::qint16 ( ::SireMM::CLJBoxIndex::*index_function_type )(  ) const;
+            typedef ::qint16 ( ::SireMM::CLJBoxIndex::*index_function_type)(  ) const;
             index_function_type index_function_value( &::SireMM::CLJBoxIndex::index );
             
             CLJBoxIndex_exposer.def( 
@@ -165,7 +165,7 @@ void register_CLJBoxIndex_class(){
         }
         { //::SireMM::CLJBoxIndex::isNull
         
-            typedef bool ( ::SireMM::CLJBoxIndex::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJBoxIndex::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMM::CLJBoxIndex::isNull );
             
             CLJBoxIndex_exposer.def( 
@@ -175,7 +175,7 @@ void register_CLJBoxIndex_class(){
         }
         { //::SireMM::CLJBoxIndex::j
         
-            typedef ::qint16 ( ::SireMM::CLJBoxIndex::*j_function_type )(  ) const;
+            typedef ::qint16 ( ::SireMM::CLJBoxIndex::*j_function_type)(  ) const;
             j_function_type j_function_value( &::SireMM::CLJBoxIndex::j );
             
             CLJBoxIndex_exposer.def( 
@@ -185,7 +185,7 @@ void register_CLJBoxIndex_class(){
         }
         { //::SireMM::CLJBoxIndex::k
         
-            typedef ::qint16 ( ::SireMM::CLJBoxIndex::*k_function_type )(  ) const;
+            typedef ::qint16 ( ::SireMM::CLJBoxIndex::*k_function_type)(  ) const;
             k_function_type k_function_value( &::SireMM::CLJBoxIndex::k );
             
             CLJBoxIndex_exposer.def( 
@@ -195,7 +195,7 @@ void register_CLJBoxIndex_class(){
         }
         { //::SireMM::CLJBoxIndex::max
         
-            typedef ::SireMM::CLJBoxIndex ( ::SireMM::CLJBoxIndex::*max_function_type )( ::SireMM::CLJBoxIndex const & ) const;
+            typedef ::SireMM::CLJBoxIndex ( ::SireMM::CLJBoxIndex::*max_function_type)( ::SireMM::CLJBoxIndex const & ) const;
             max_function_type max_function_value( &::SireMM::CLJBoxIndex::max );
             
             CLJBoxIndex_exposer.def( 
@@ -206,7 +206,7 @@ void register_CLJBoxIndex_class(){
         }
         { //::SireMM::CLJBoxIndex::min
         
-            typedef ::SireMM::CLJBoxIndex ( ::SireMM::CLJBoxIndex::*min_function_type )( ::SireMM::CLJBoxIndex const & ) const;
+            typedef ::SireMM::CLJBoxIndex ( ::SireMM::CLJBoxIndex::*min_function_type)( ::SireMM::CLJBoxIndex const & ) const;
             min_function_type min_function_value( &::SireMM::CLJBoxIndex::min );
             
             CLJBoxIndex_exposer.def( 
@@ -230,7 +230,7 @@ void register_CLJBoxIndex_class(){
         CLJBoxIndex_exposer.def( bp::self <= bp::self );
         { //::SireMM::CLJBoxIndex::operator=
         
-            typedef ::SireMM::CLJBoxIndex & ( ::SireMM::CLJBoxIndex::*assign_function_type )( ::SireMM::CLJBoxIndex const & ) ;
+            typedef ::SireMM::CLJBoxIndex & ( ::SireMM::CLJBoxIndex::*assign_function_type)( ::SireMM::CLJBoxIndex const & ) ;
             assign_function_type assign_function_value( &::SireMM::CLJBoxIndex::operator= );
             
             CLJBoxIndex_exposer.def( 
@@ -245,7 +245,7 @@ void register_CLJBoxIndex_class(){
         CLJBoxIndex_exposer.def( bp::self >= bp::self );
         { //::SireMM::CLJBoxIndex::sameBox
         
-            typedef bool ( ::SireMM::CLJBoxIndex::*sameBox_function_type )( ::SireMM::CLJBoxIndex const & ) const;
+            typedef bool ( ::SireMM::CLJBoxIndex::*sameBox_function_type)( ::SireMM::CLJBoxIndex const & ) const;
             sameBox_function_type sameBox_function_value( &::SireMM::CLJBoxIndex::sameBox );
             
             CLJBoxIndex_exposer.def( 
@@ -256,7 +256,7 @@ void register_CLJBoxIndex_class(){
         }
         { //::SireMM::CLJBoxIndex::toString
         
-            typedef ::QString ( ::SireMM::CLJBoxIndex::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMM::CLJBoxIndex::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMM::CLJBoxIndex::toString );
             
             CLJBoxIndex_exposer.def( 
@@ -276,7 +276,7 @@ void register_CLJBoxIndex_class(){
         }
         { //::SireMM::CLJBoxIndex::what
         
-            typedef char const * ( ::SireMM::CLJBoxIndex::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::CLJBoxIndex::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::CLJBoxIndex::what );
             
             CLJBoxIndex_exposer.def( 

@@ -62,7 +62,7 @@ void register_Matrix_class(){
         Matrix_exposer.def( bp::init< SireMaths::Matrix const & >(( bp::arg("m") )) );
         { //::SireMaths::Matrix::at
         
-            typedef double ( ::SireMaths::Matrix::*at_function_type )( int,int ) const;
+            typedef double ( ::SireMaths::Matrix::*at_function_type)( int,int ) const;
             at_function_type at_function_value( &::SireMaths::Matrix::at );
             
             Matrix_exposer.def( 
@@ -73,7 +73,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::checkedOffset
         
-            typedef int ( ::SireMaths::Matrix::*checkedOffset_function_type )( int,int ) const;
+            typedef int ( ::SireMaths::Matrix::*checkedOffset_function_type)( int,int ) const;
             checkedOffset_function_type checkedOffset_function_value( &::SireMaths::Matrix::checkedOffset );
             
             Matrix_exposer.def( 
@@ -84,7 +84,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::column0
         
-            typedef ::SireMaths::Vector ( ::SireMaths::Matrix::*column0_function_type )(  ) const;
+            typedef ::SireMaths::Vector ( ::SireMaths::Matrix::*column0_function_type)(  ) const;
             column0_function_type column0_function_value( &::SireMaths::Matrix::column0 );
             
             Matrix_exposer.def( 
@@ -94,7 +94,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::column1
         
-            typedef ::SireMaths::Vector ( ::SireMaths::Matrix::*column1_function_type )(  ) const;
+            typedef ::SireMaths::Vector ( ::SireMaths::Matrix::*column1_function_type)(  ) const;
             column1_function_type column1_function_value( &::SireMaths::Matrix::column1 );
             
             Matrix_exposer.def( 
@@ -104,7 +104,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::column2
         
-            typedef ::SireMaths::Vector ( ::SireMaths::Matrix::*column2_function_type )(  ) const;
+            typedef ::SireMaths::Vector ( ::SireMaths::Matrix::*column2_function_type)(  ) const;
             column2_function_type column2_function_value( &::SireMaths::Matrix::column2 );
             
             Matrix_exposer.def( 
@@ -125,7 +125,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::determinant
         
-            typedef double ( ::SireMaths::Matrix::*determinant_function_type )(  ) const;
+            typedef double ( ::SireMaths::Matrix::*determinant_function_type)(  ) const;
             determinant_function_type determinant_function_value( &::SireMaths::Matrix::determinant );
             
             Matrix_exposer.def( 
@@ -135,7 +135,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::diagonalise
         
-            typedef ::boost::tuples::tuple< SireMaths::Vector, SireMaths::Matrix, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMaths::Matrix::*diagonalise_function_type )(  ) const;
+            typedef ::boost::tuples::tuple< SireMaths::Vector, SireMaths::Matrix, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMaths::Matrix::*diagonalise_function_type)(  ) const;
             diagonalise_function_type diagonalise_function_value( &::SireMaths::Matrix::diagonalise );
             
             Matrix_exposer.def( 
@@ -145,7 +145,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::enforceSymmetric
         
-            typedef void ( ::SireMaths::Matrix::*enforceSymmetric_function_type )(  ) ;
+            typedef void ( ::SireMaths::Matrix::*enforceSymmetric_function_type)(  ) ;
             enforceSymmetric_function_type enforceSymmetric_function_value( &::SireMaths::Matrix::enforceSymmetric );
             
             Matrix_exposer.def( 
@@ -155,7 +155,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::getPrincipalAxes
         
-            typedef ::SireMaths::Matrix ( ::SireMaths::Matrix::*getPrincipalAxes_function_type )(  ) const;
+            typedef ::SireMaths::Matrix ( ::SireMaths::Matrix::*getPrincipalAxes_function_type)(  ) const;
             getPrincipalAxes_function_type getPrincipalAxes_function_value( &::SireMaths::Matrix::getPrincipalAxes );
             
             Matrix_exposer.def( 
@@ -175,7 +175,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::inverse
         
-            typedef ::SireMaths::Matrix ( ::SireMaths::Matrix::*inverse_function_type )(  ) const;
+            typedef ::SireMaths::Matrix ( ::SireMaths::Matrix::*inverse_function_type)(  ) const;
             inverse_function_type inverse_function_value( &::SireMaths::Matrix::inverse );
             
             Matrix_exposer.def( 
@@ -185,7 +185,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::isIdentity
         
-            typedef bool ( ::SireMaths::Matrix::*isIdentity_function_type )(  ) const;
+            typedef bool ( ::SireMaths::Matrix::*isIdentity_function_type)(  ) const;
             isIdentity_function_type isIdentity_function_value( &::SireMaths::Matrix::isIdentity );
             
             Matrix_exposer.def( 
@@ -195,7 +195,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::isSymmetric
         
-            typedef bool ( ::SireMaths::Matrix::*isSymmetric_function_type )(  ) const;
+            typedef bool ( ::SireMaths::Matrix::*isSymmetric_function_type)(  ) const;
             isSymmetric_function_type isSymmetric_function_value( &::SireMaths::Matrix::isSymmetric );
             
             Matrix_exposer.def( 
@@ -205,7 +205,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::offset
         
-            typedef int ( ::SireMaths::Matrix::*offset_function_type )( int,int ) const;
+            typedef int ( ::SireMaths::Matrix::*offset_function_type)( int,int ) const;
             offset_function_type offset_function_value( &::SireMaths::Matrix::offset );
             
             Matrix_exposer.def( 
@@ -217,7 +217,7 @@ void register_Matrix_class(){
         Matrix_exposer.def( bp::self != bp::self );
         { //::SireMaths::Matrix::operator()
         
-            typedef double const & ( ::SireMaths::Matrix::*__call___function_type )( int,int ) const;
+            typedef double const & ( ::SireMaths::Matrix::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireMaths::Matrix::operator() );
             
             Matrix_exposer.def( 
@@ -229,7 +229,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::operator=
         
-            typedef ::SireMaths::Matrix & ( ::SireMaths::Matrix::*assign_function_type )( ::SireMaths::Matrix const & ) ;
+            typedef ::SireMaths::Matrix & ( ::SireMaths::Matrix::*assign_function_type)( ::SireMaths::Matrix const & ) ;
             assign_function_type assign_function_value( &::SireMaths::Matrix::operator= );
             
             Matrix_exposer.def( 
@@ -242,7 +242,7 @@ void register_Matrix_class(){
         Matrix_exposer.def( bp::self == bp::self );
         { //::SireMaths::Matrix::row0
         
-            typedef ::SireMaths::Vector ( ::SireMaths::Matrix::*row0_function_type )(  ) const;
+            typedef ::SireMaths::Vector ( ::SireMaths::Matrix::*row0_function_type)(  ) const;
             row0_function_type row0_function_value( &::SireMaths::Matrix::row0 );
             
             Matrix_exposer.def( 
@@ -252,7 +252,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::row1
         
-            typedef ::SireMaths::Vector ( ::SireMaths::Matrix::*row1_function_type )(  ) const;
+            typedef ::SireMaths::Vector ( ::SireMaths::Matrix::*row1_function_type)(  ) const;
             row1_function_type row1_function_value( &::SireMaths::Matrix::row1 );
             
             Matrix_exposer.def( 
@@ -262,7 +262,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::row2
         
-            typedef ::SireMaths::Vector ( ::SireMaths::Matrix::*row2_function_type )(  ) const;
+            typedef ::SireMaths::Vector ( ::SireMaths::Matrix::*row2_function_type)(  ) const;
             row2_function_type row2_function_value( &::SireMaths::Matrix::row2 );
             
             Matrix_exposer.def( 
@@ -272,7 +272,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::setToIdentity
         
-            typedef void ( ::SireMaths::Matrix::*setToIdentity_function_type )(  ) ;
+            typedef void ( ::SireMaths::Matrix::*setToIdentity_function_type)(  ) ;
             setToIdentity_function_type setToIdentity_function_value( &::SireMaths::Matrix::setToIdentity );
             
             Matrix_exposer.def( 
@@ -282,7 +282,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::singleValueDecomposition
         
-            typedef ::boost::tuples::tuple< SireMaths::Matrix, SireMaths::Matrix, SireMaths::Matrix, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMaths::Matrix::*singleValueDecomposition_function_type )(  ) const;
+            typedef ::boost::tuples::tuple< SireMaths::Matrix, SireMaths::Matrix, SireMaths::Matrix, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMaths::Matrix::*singleValueDecomposition_function_type)(  ) const;
             singleValueDecomposition_function_type singleValueDecomposition_function_value( &::SireMaths::Matrix::singleValueDecomposition );
             
             Matrix_exposer.def( 
@@ -292,7 +292,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::svd
         
-            typedef ::boost::tuples::tuple< SireMaths::Matrix, SireMaths::Matrix, SireMaths::Matrix, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMaths::Matrix::*svd_function_type )(  ) const;
+            typedef ::boost::tuples::tuple< SireMaths::Matrix, SireMaths::Matrix, SireMaths::Matrix, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMaths::Matrix::*svd_function_type)(  ) const;
             svd_function_type svd_function_value( &::SireMaths::Matrix::svd );
             
             Matrix_exposer.def( 
@@ -302,7 +302,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::toString
         
-            typedef ::QString ( ::SireMaths::Matrix::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMaths::Matrix::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMaths::Matrix::toString );
             
             Matrix_exposer.def( 
@@ -312,7 +312,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::trace
         
-            typedef ::SireMaths::Vector ( ::SireMaths::Matrix::*trace_function_type )(  ) const;
+            typedef ::SireMaths::Vector ( ::SireMaths::Matrix::*trace_function_type)(  ) const;
             trace_function_type trace_function_value( &::SireMaths::Matrix::trace );
             
             Matrix_exposer.def( 
@@ -322,7 +322,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::transpose
         
-            typedef ::SireMaths::Matrix ( ::SireMaths::Matrix::*transpose_function_type )(  ) const;
+            typedef ::SireMaths::Matrix ( ::SireMaths::Matrix::*transpose_function_type)(  ) const;
             transpose_function_type transpose_function_value( &::SireMaths::Matrix::transpose );
             
             Matrix_exposer.def( 
@@ -342,7 +342,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::what
         
-            typedef char const * ( ::SireMaths::Matrix::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMaths::Matrix::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMaths::Matrix::what );
             
             Matrix_exposer.def( 
@@ -352,7 +352,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::xx
         
-            typedef double ( ::SireMaths::Matrix::*xx_function_type )(  ) const;
+            typedef double ( ::SireMaths::Matrix::*xx_function_type)(  ) const;
             xx_function_type xx_function_value( &::SireMaths::Matrix::xx );
             
             Matrix_exposer.def( 
@@ -362,7 +362,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::xy
         
-            typedef double ( ::SireMaths::Matrix::*xy_function_type )(  ) const;
+            typedef double ( ::SireMaths::Matrix::*xy_function_type)(  ) const;
             xy_function_type xy_function_value( &::SireMaths::Matrix::xy );
             
             Matrix_exposer.def( 
@@ -372,7 +372,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::xz
         
-            typedef double ( ::SireMaths::Matrix::*xz_function_type )(  ) const;
+            typedef double ( ::SireMaths::Matrix::*xz_function_type)(  ) const;
             xz_function_type xz_function_value( &::SireMaths::Matrix::xz );
             
             Matrix_exposer.def( 
@@ -382,7 +382,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::yx
         
-            typedef double ( ::SireMaths::Matrix::*yx_function_type )(  ) const;
+            typedef double ( ::SireMaths::Matrix::*yx_function_type)(  ) const;
             yx_function_type yx_function_value( &::SireMaths::Matrix::yx );
             
             Matrix_exposer.def( 
@@ -392,7 +392,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::yy
         
-            typedef double ( ::SireMaths::Matrix::*yy_function_type )(  ) const;
+            typedef double ( ::SireMaths::Matrix::*yy_function_type)(  ) const;
             yy_function_type yy_function_value( &::SireMaths::Matrix::yy );
             
             Matrix_exposer.def( 
@@ -402,7 +402,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::yz
         
-            typedef double ( ::SireMaths::Matrix::*yz_function_type )(  ) const;
+            typedef double ( ::SireMaths::Matrix::*yz_function_type)(  ) const;
             yz_function_type yz_function_value( &::SireMaths::Matrix::yz );
             
             Matrix_exposer.def( 
@@ -422,7 +422,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::zx
         
-            typedef double ( ::SireMaths::Matrix::*zx_function_type )(  ) const;
+            typedef double ( ::SireMaths::Matrix::*zx_function_type)(  ) const;
             zx_function_type zx_function_value( &::SireMaths::Matrix::zx );
             
             Matrix_exposer.def( 
@@ -432,7 +432,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::zy
         
-            typedef double ( ::SireMaths::Matrix::*zy_function_type )(  ) const;
+            typedef double ( ::SireMaths::Matrix::*zy_function_type)(  ) const;
             zy_function_type zy_function_value( &::SireMaths::Matrix::zy );
             
             Matrix_exposer.def( 
@@ -442,7 +442,7 @@ void register_Matrix_class(){
         }
         { //::SireMaths::Matrix::zz
         
-            typedef double ( ::SireMaths::Matrix::*zz_function_type )(  ) const;
+            typedef double ( ::SireMaths::Matrix::*zz_function_type)(  ) const;
             zz_function_type zz_function_value( &::SireMaths::Matrix::zz );
             
             Matrix_exposer.def( 

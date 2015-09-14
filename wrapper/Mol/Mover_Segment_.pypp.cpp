@@ -93,7 +93,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::align
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*align_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*align_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
             align_function_type align_function_value( &::SireMol::Mover< SireMol::Segment >::align );
             
             Mover_Segment__exposer.def( 
@@ -106,7 +106,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::align
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*align_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*align_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
             align_function_type align_function_value( &::SireMol::Mover< SireMol::Segment >::align );
             
             Mover_Segment__exposer.def( 
@@ -119,7 +119,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::align
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*align_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*align_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
             align_function_type align_function_value( &::SireMol::Mover< SireMol::Segment >::align );
             
             Mover_Segment__exposer.def( 
@@ -132,7 +132,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::align
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*align_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*align_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
             align_function_type align_function_value( &::SireMol::Mover< SireMol::Segment >::align );
             
             Mover_Segment__exposer.def( 
@@ -145,7 +145,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::alignTo
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*alignTo_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*alignTo_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
             alignTo_function_type alignTo_function_value( &::SireMol::Mover< SireMol::Segment >::alignTo );
             
             Mover_Segment__exposer.def( 
@@ -158,7 +158,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::alignTo
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*alignTo_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*alignTo_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
             alignTo_function_type alignTo_function_value( &::SireMol::Mover< SireMol::Segment >::alignTo );
             
             Mover_Segment__exposer.def( 
@@ -171,7 +171,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::alignTo
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*alignTo_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomSelection const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*alignTo_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomSelection const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
             alignTo_function_type alignTo_function_value( &::SireMol::Mover< SireMol::Segment >::alignTo );
             
             Mover_Segment__exposer.def( 
@@ -184,7 +184,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::alignTo
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*alignTo_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomSelection const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*alignTo_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomSelection const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
             alignTo_function_type alignTo_function_value( &::SireMol::Mover< SireMol::Segment >::alignTo );
             
             Mover_Segment__exposer.def( 
@@ -197,7 +197,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::change
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*change_function_type )( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*change_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 >,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::Segment >::change );
             
             Mover_Segment__exposer.def( 
@@ -210,7 +210,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::change
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*change_function_type )( ::SireMol::AngleID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*change_function_type)( ::SireMol::AngleID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::Segment >::change );
             
             Mover_Segment__exposer.def( 
@@ -223,7 +223,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::change
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*change_function_type )( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*change_function_type)( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::Segment >::change );
             
             Mover_Segment__exposer.def( 
@@ -236,7 +236,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::change
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*change_function_type )( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*change_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::Segment >::change );
             
             Mover_Segment__exposer.def( 
@@ -249,7 +249,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::change
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*change_function_type )( ::SireMol::ImproperID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*change_function_type)( ::SireMol::ImproperID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::Segment >::change );
             
             Mover_Segment__exposer.def( 
@@ -262,7 +262,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::changeFrame
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*changeFrame_function_type )( ::SireMaths::AxisSet const &,::SireMaths::AxisSet const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*changeFrame_function_type)( ::SireMaths::AxisSet const &,::SireMaths::AxisSet const &,::SireBase::PropertyMap const & ) ;
             changeFrame_function_type changeFrame_function_value( &::SireMol::Mover< SireMol::Segment >::changeFrame );
             
             Mover_Segment__exposer.def( 
@@ -275,7 +275,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::commit
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Segment ( ::SireMol::Mover< SireMol::Segment >::*commit_function_type )(  ) const;
+            typedef ::SireMol::Segment ( ::SireMol::Mover< SireMol::Segment >::*commit_function_type)(  ) const;
             commit_function_type commit_function_value( &::SireMol::Mover< SireMol::Segment >::commit );
             
             Mover_Segment__exposer.def( 
@@ -286,7 +286,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::mapInto
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*mapInto_function_type )( ::SireMaths::AxisSet const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*mapInto_function_type)( ::SireMaths::AxisSet const &,::SireBase::PropertyMap const & ) ;
             mapInto_function_type mapInto_function_value( &::SireMol::Mover< SireMol::Segment >::mapInto );
             
             Mover_Segment__exposer.def( 
@@ -299,7 +299,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::operator=
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*assign_function_type )( ::SireMol::Mover< SireMol::Segment > const & ) ;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*assign_function_type)( ::SireMol::Mover< SireMol::Segment > const & ) ;
             assign_function_type assign_function_value( &::SireMol::Mover< SireMol::Segment >::operator= );
             
             Mover_Segment__exposer.def( 
@@ -312,7 +312,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::operator=
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*assign_function_type )( ::SireMol::Segment const & ) ;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*assign_function_type)( ::SireMol::Segment const & ) ;
             assign_function_type assign_function_value( &::SireMol::Mover< SireMol::Segment >::operator= );
             
             Mover_Segment__exposer.def( 
@@ -325,7 +325,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::rotate
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*rotate_function_type )( ::SireMaths::Quaternion const &,::SireMaths::Vector const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*rotate_function_type)( ::SireMaths::Quaternion const &,::SireMaths::Vector const &,::SireBase::PropertyMap const & ) ;
             rotate_function_type rotate_function_value( &::SireMol::Mover< SireMol::Segment >::rotate );
             
             Mover_Segment__exposer.def( 
@@ -338,7 +338,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::rotate
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*rotate_function_type )( ::SireMaths::Matrix const &,::SireMaths::Vector const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*rotate_function_type)( ::SireMaths::Matrix const &,::SireMaths::Vector const &,::SireBase::PropertyMap const & ) ;
             rotate_function_type rotate_function_value( &::SireMol::Mover< SireMol::Segment >::rotate );
             
             Mover_Segment__exposer.def( 
@@ -351,7 +351,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::set
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*set_function_type )( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*set_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 >,::SireBase::PropertyMap const & ) ;
             set_function_type set_function_value( &::SireMol::Mover< SireMol::Segment >::set );
             
             Mover_Segment__exposer.def( 
@@ -364,7 +364,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::set
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*set_function_type )( ::SireMol::AngleID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*set_function_type)( ::SireMol::AngleID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             set_function_type set_function_value( &::SireMol::Mover< SireMol::Segment >::set );
             
             Mover_Segment__exposer.def( 
@@ -377,7 +377,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::set
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*set_function_type )( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*set_function_type)( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             set_function_type set_function_value( &::SireMol::Mover< SireMol::Segment >::set );
             
             Mover_Segment__exposer.def( 
@@ -390,7 +390,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::set
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*set_function_type )( ::SireMol::ImproperID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*set_function_type)( ::SireMol::ImproperID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             set_function_type set_function_value( &::SireMol::Mover< SireMol::Segment >::set );
             
             Mover_Segment__exposer.def( 
@@ -403,7 +403,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::setAll
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*setAll_function_type )( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*setAll_function_type)( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             setAll_function_type setAll_function_value( &::SireMol::Mover< SireMol::Segment >::setAll );
             
             Mover_Segment__exposer.def( 
@@ -416,7 +416,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::toString
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::QString ( ::SireMol::Mover< SireMol::Segment >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::Mover< SireMol::Segment >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::Mover< SireMol::Segment >::toString );
             
             Mover_Segment__exposer.def( 
@@ -427,7 +427,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::transform
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*transform_function_type )( ::SireMaths::Transform const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*transform_function_type)( ::SireMaths::Transform const &,::SireBase::PropertyMap const & ) ;
             transform_function_type transform_function_value( &::SireMol::Mover< SireMol::Segment >::transform );
             
             Mover_Segment__exposer.def( 
@@ -440,7 +440,7 @@ void register_Mover_Segment__class(){
         { //::SireMol::Mover< SireMol::Segment >::translate
         
             typedef SireMol::Mover< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*translate_function_type )( ::SireMaths::Vector const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Segment > & ( ::SireMol::Mover< SireMol::Segment >::*translate_function_type)( ::SireMaths::Vector const &,::SireBase::PropertyMap const & ) ;
             translate_function_type translate_function_value( &::SireMol::Mover< SireMol::Segment >::translate );
             
             Mover_Segment__exposer.def( 

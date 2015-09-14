@@ -46,7 +46,7 @@ void register_DoubleArrayProperty_class(){
         DoubleArrayProperty_exposer.def( bp::self + bp::self );
         { //::SireBase::DoubleArrayProperty::operator=
         
-            typedef ::SireBase::DoubleArrayProperty & ( ::SireBase::DoubleArrayProperty::*assign_function_type )( ::SireBase::DoubleArrayProperty const & ) ;
+            typedef ::SireBase::DoubleArrayProperty & ( ::SireBase::DoubleArrayProperty::*assign_function_type)( ::SireBase::DoubleArrayProperty const & ) ;
             assign_function_type assign_function_value( &::SireBase::DoubleArrayProperty::operator= );
             
             DoubleArrayProperty_exposer.def( 

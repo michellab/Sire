@@ -25,7 +25,7 @@ void register_SymbolComplex_class(){
         SymbolComplex_exposer.def( bp::init< SireCAS::SymbolValue const & >(( bp::arg("val") )) );
         { //::SireCAS::SymbolComplex::ID
         
-            typedef ::SireCAS::SymbolID ( ::SireCAS::SymbolComplex::*ID_function_type )(  ) const;
+            typedef ::SireCAS::SymbolID ( ::SireCAS::SymbolComplex::*ID_function_type)(  ) const;
             ID_function_type ID_function_value( &::SireCAS::SymbolComplex::ID );
             
             SymbolComplex_exposer.def( 
@@ -35,7 +35,7 @@ void register_SymbolComplex_class(){
         }
         { //::SireCAS::SymbolComplex::value
         
-            typedef ::SireMaths::Complex const & ( ::SireCAS::SymbolComplex::*value_function_type )(  ) const;
+            typedef ::SireMaths::Complex const & ( ::SireCAS::SymbolComplex::*value_function_type)(  ) const;
             value_function_type value_function_value( &::SireCAS::SymbolComplex::value );
             
             SymbolComplex_exposer.def( 

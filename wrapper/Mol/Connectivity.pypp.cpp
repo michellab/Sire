@@ -63,7 +63,7 @@ void register_Connectivity_class(){
         Connectivity_exposer.def( bp::init< SireMol::Connectivity const & >(( bp::arg("other") )) );
         { //::SireMol::Connectivity::edit
         
-            typedef ::SireMol::ConnectivityEditor ( ::SireMol::Connectivity::*edit_function_type )(  ) const;
+            typedef ::SireMol::ConnectivityEditor ( ::SireMol::Connectivity::*edit_function_type)(  ) const;
             edit_function_type edit_function_value( &::SireMol::Connectivity::edit );
             
             Connectivity_exposer.def( 
@@ -74,7 +74,7 @@ void register_Connectivity_class(){
         Connectivity_exposer.def( bp::self != bp::self );
         { //::SireMol::Connectivity::operator=
         
-            typedef ::SireMol::Connectivity & ( ::SireMol::Connectivity::*assign_function_type )( ::SireMol::Connectivity const & ) ;
+            typedef ::SireMol::Connectivity & ( ::SireMol::Connectivity::*assign_function_type)( ::SireMol::Connectivity const & ) ;
             assign_function_type assign_function_value( &::SireMol::Connectivity::operator= );
             
             Connectivity_exposer.def( 
@@ -86,7 +86,7 @@ void register_Connectivity_class(){
         }
         { //::SireMol::Connectivity::operator=
         
-            typedef ::SireMol::Connectivity & ( ::SireMol::Connectivity::*assign_function_type )( ::SireMol::ConnectivityEditor const & ) ;
+            typedef ::SireMol::Connectivity & ( ::SireMol::Connectivity::*assign_function_type)( ::SireMol::ConnectivityEditor const & ) ;
             assign_function_type assign_function_value( &::SireMol::Connectivity::operator= );
             
             Connectivity_exposer.def( 

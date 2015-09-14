@@ -637,6 +637,229 @@ void StretchBendTorsionComponent::changeEnergy(FF &ff,
 }
 
 //////
+////// Implementation of Intra14CoulombComponent
+//////
+
+static const RegisterMetaType<Intra14CoulombComponent> r_14coul;
+
+/** Serialise to a binary datastream */
+QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const Intra14CoulombComponent &comp)
+{
+    writeHeader(ds, r_14coul, 1);
+    ds << static_cast<const FFComponent&>(comp);
+    
+    return ds;
+}
+
+/** Extract from a binary datastream */
+QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, Intra14CoulombComponent &comp)
+{
+    VersionID v = readHeader(ds, r_14coul);
+    
+    if (v == 1)
+    {
+        ds >> static_cast<FFComponent&>(comp);
+    }
+    else
+        throw version_error(v, "1", r_14coul, CODELOC);
+        
+    return ds;
+}
+
+/** Constructor */
+Intra14CoulombComponent::Intra14CoulombComponent(const FFName &ffname)
+                        : FFComponent(ffname, QLatin1String("1-4[coulomb]"))
+{}
+
+/** Construct from a symbol
+
+    \throw SireError::incompatible_error
+*/
+Intra14CoulombComponent::Intra14CoulombComponent(const SireCAS::Symbol &symbol)
+                        : FFComponent(symbol, QLatin1String("1-4[coulomb]"))
+{}
+
+/** Copy constructor */  
+Intra14CoulombComponent::Intra14CoulombComponent(const Intra14CoulombComponent &other)
+                        : FFComponent(other)
+{}
+  
+/** Destructor */  
+Intra14CoulombComponent::~Intra14CoulombComponent()
+{}
+
+/** Set the component of the energy in the forcefield 'ff'
+    to be equal to the passed energy */
+void Intra14CoulombComponent::setEnergy(FF &ff, const Intra14CoulombEnergy &nrg) const
+{
+    FFComponent::setEnergy(ff, this->total(), nrg);
+}
+
+/** Change the component of the energy in the forcefield 'ff'
+    by 'delta' */
+void Intra14CoulombComponent::changeEnergy(FF &ff, const Intra14CoulombEnergy &delta) const
+{
+    FFComponent::changeEnergy(ff, this->total(), delta);
+}
+
+//////
+////// Implementation of Intra14LJComponent
+//////
+
+static const RegisterMetaType<Intra14LJComponent> r_14lj;
+
+/** Serialise to a binary datastream */
+QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const Intra14LJComponent &comp)
+{
+    writeHeader(ds, r_14lj, 1);
+    ds << static_cast<const FFComponent&>(comp);
+    
+    return ds;
+}
+
+/** Extract from a binary datastream */
+QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, Intra14LJComponent &comp)
+{
+    VersionID v = readHeader(ds, r_14lj);
+    
+    if (v == 1)
+    {
+        ds >> static_cast<FFComponent&>(comp);
+    }
+    else
+        throw version_error(v, "1", r_14lj, CODELOC);
+        
+    return ds;
+}
+
+/** Constructor */
+Intra14LJComponent::Intra14LJComponent(const FFName &ffname)
+                   : FFComponent(ffname, QLatin1String("1-4[LJ]"))
+{}
+
+/** Construct from a symbol
+
+    \throw SireError::incompatible_error
+*/
+Intra14LJComponent::Intra14LJComponent(const SireCAS::Symbol &symbol)
+                   : FFComponent(symbol, QLatin1String("1-4[LJ]"))
+{}
+
+/** Copy constructor */  
+Intra14LJComponent::Intra14LJComponent(const Intra14LJComponent &other)
+                   : FFComponent(other)
+{}
+  
+/** Destructor */  
+Intra14LJComponent::~Intra14LJComponent()
+{}
+
+/** Set the component of the energy in the forcefield 'ff'
+    to be equal to the passed energy */
+void Intra14LJComponent::setEnergy(FF &ff, const Intra14LJEnergy &nrg) const
+{
+    FFComponent::setEnergy(ff, this->total(), nrg);
+}
+
+/** Change the component of the energy in the forcefield 'ff'
+    by 'delta' */
+void Intra14LJComponent::changeEnergy(FF &ff, const Intra14LJEnergy &delta) const
+{
+    FFComponent::changeEnergy(ff, this->total(), delta);
+}
+
+//////
+////// Implementation of Intra14Component
+//////
+
+static const RegisterMetaType<Intra14Component> r_14;
+
+/** Serialise to a binary datastream */
+QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const Intra14Component &comp)
+{
+    writeHeader(ds, r_14, 1);
+    
+    ds << static_cast<const FFComponent&>(comp)
+       << comp.coul_component << comp.lj_component;
+    
+    return ds;
+}
+
+/** Extract from a binary datastream */
+QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, Intra14Component &comp)
+{
+    VersionID v = readHeader(ds, r_14);
+    
+    if (v == 1)
+    {
+        ds >> static_cast<FFComponent&>(comp)
+           >> comp.coul_component >> comp.lj_component;
+    }
+    else
+        throw version_error(v, "1", r_14, CODELOC);
+        
+    return ds;
+}
+
+/** Constructor */
+Intra14Component::Intra14Component(const FFName &ffname)
+                  : FFComponent(ffname, QLatin1String("1-4")),
+                    coul_component(ffname), lj_component(ffname)
+{}
+
+/** Construct from a symbol
+
+    \throw SireError::incompatible_error
+*/
+Intra14Component::Intra14Component(const SireCAS::Symbol &symbol)
+                 : FFComponent(symbol, QLatin1String("1-4"))
+{
+    coul_component = Intra14CoulombComponent(this->forceFieldName());
+    lj_component = Intra14LJComponent(this->forceFieldName());
+}
+
+/** Copy constructor */  
+Intra14Component::Intra14Component(const Intra14Component &other)
+                 : FFComponent(other),
+                   coul_component(other.coul_component),
+                   lj_component(other.lj_component)
+{}
+
+/** Destructor */  
+Intra14Component::~Intra14Component()
+{}
+
+/** Return all of the components in this set */
+Symbols Intra14Component::symbols() const
+{
+    Symbols symbls;
+    
+    symbls.reserve(3);
+    
+    symbls.insert(*this);
+    symbls.insert(coul_component);
+    symbls.insert(lj_component);
+    
+    return symbls;
+}
+
+/** Set the internal components of the forcefield 'ff' to the passed values */
+void Intra14Component::setEnergy(FF &ff, const Intra14Energy &value) const
+{
+    FFComponent::setEnergy(ff, this->total(), value.total());
+    FFComponent::setEnergy(ff, this->coulomb(), value.coulomb());
+    FFComponent::setEnergy(ff, this->lj(), value.lj());
+}
+
+/** Change the internal components of the forcefield 'ff' by 'delta' */
+void Intra14Component::changeEnergy(FF &ff, const Intra14Energy &delta) const
+{
+    FFComponent::changeEnergy(ff, this->total(), delta.total());
+    FFComponent::changeEnergy(ff, this->coulomb(), delta.coulomb());
+    FFComponent::changeEnergy(ff, this->lj(), delta.lj());
+}
+
+//////
 ////// Implementation of InternalComponent
 //////
 
@@ -645,7 +868,7 @@ static const RegisterMetaType<InternalComponent> r_internal;
 /** Serialise to a binary datastream */
 QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const InternalComponent &internal)
 {
-    writeHeader(ds, r_internal, 1);
+    writeHeader(ds, r_internal, 2);
     
     ds << static_cast<const FFComponent&>(internal)
        << internal.bond_component
@@ -656,7 +879,8 @@ QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const InternalComponent &
        << internal.ss_component
        << internal.sb_component
        << internal.bb_component
-       << internal.sbt_component;
+       << internal.sbt_component
+       << internal.nb_component;
     
     return ds;
 }
@@ -666,7 +890,21 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, InternalComponent &intern
 {
     VersionID v = readHeader(ds, r_internal);
     
-    if (v == 1)
+    if (v == 2)
+    {
+        ds >> static_cast<FFComponent&>(internal)
+           >> internal.bond_component
+           >> internal.angle_component
+           >> internal.dihedral_component
+           >> internal.improper_component
+           >> internal.ub_component
+           >> internal.ss_component
+           >> internal.sb_component
+           >> internal.bb_component
+           >> internal.sbt_component
+           >> internal.nb_component;
+    }
+    else if (v == 1)
     {
         ds >> static_cast<FFComponent&>(internal)
            >> internal.bond_component
@@ -678,9 +916,11 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, InternalComponent &intern
            >> internal.sb_component
            >> internal.bb_component
            >> internal.sbt_component;
+        
+        internal.nb_component = Intra14Component( internal.forceFieldName() );
     }
     else
-        throw version_error(v, "1", r_internal, CODELOC);
+        throw version_error(v, "1,2", r_internal, CODELOC);
         
     return ds;
 }
@@ -692,7 +932,8 @@ InternalComponent::InternalComponent(const FFName &ffname)
                     dihedral_component(ffname), 
                     improper_component(ffname), ub_component(ffname),
                     ss_component(ffname), sb_component(ffname),
-                    bb_component(ffname), sbt_component(ffname)
+                    bb_component(ffname), sbt_component(ffname),
+                    nb_component(ffname)
 {}
 
 /** Construct from a symbol
@@ -713,6 +954,8 @@ InternalComponent::InternalComponent(const SireCAS::Symbol &symbol)
     sb_component = StretchBendComponent( this->forceFieldName() );
     bb_component = BendBendComponent( this->forceFieldName() );
     sbt_component = StretchBendTorsionComponent( this->forceFieldName() );
+    
+    nb_component = Intra14Component( this->forceFieldName() );
 }
 
 /** Copy constructor */  
@@ -726,7 +969,8 @@ InternalComponent::InternalComponent(const InternalComponent &other)
                     ss_component(other.ss_component),
                     sb_component(other.sb_component),
                     bb_component(other.bb_component),
-                    sbt_component(other.sbt_component)
+                    sbt_component(other.sbt_component),
+                    nb_component(other.nb_component)
 {}
   
 /** Destructor */  
@@ -738,7 +982,7 @@ Symbols InternalComponent::symbols() const
 {
     Symbols symbls;
     
-    symbls.reserve(11);
+    symbls.reserve(13);
     
     symbls.insert(*this);
     
@@ -753,6 +997,10 @@ Symbols InternalComponent::symbols() const
     symbls.insert(sb_component);
     symbls.insert(bb_component);
     symbls.insert(sbt_component);
+    
+    symbls.insert(nb_component);
+    symbls.insert(nb_component.coulomb());
+    symbls.insert(nb_component.lj());
     
     return symbls;
 }
@@ -772,6 +1020,10 @@ void InternalComponent::setEnergy(FF &ff, const InternalEnergy &value) const
     FFComponent::setEnergy(ff, this->stretchBend(), value.stretchBend());
     FFComponent::setEnergy(ff, this->bendBend(), value.bendBend());
     FFComponent::setEnergy(ff, this->stretchBendTorsion(), value.stretchBendTorsion());
+    
+    FFComponent::setEnergy(ff, this->intra14(), value.intra14());
+    FFComponent::setEnergy(ff, this->intra14Coulomb(), value.intra14Coulomb());
+    FFComponent::setEnergy(ff, this->intra14LJ(), value.intra14LJ());
 }
 
 /** Change the internal components of the forcefield 'ff' by 'delta' */
@@ -790,6 +1042,10 @@ void InternalComponent::changeEnergy(FF &ff, const InternalEnergy &delta) const
     FFComponent::changeEnergy(ff, this->bendBend(), delta.bendBend());
     FFComponent::changeEnergy(ff, this->stretchBendTorsion(), 
                               delta.stretchBendTorsion());
+
+    FFComponent::changeEnergy(ff, this->intra14(), delta.intra14());
+    FFComponent::changeEnergy(ff, this->intra14Coulomb(), delta.intra14Coulomb());
+    FFComponent::changeEnergy(ff, this->intra14LJ(), delta.intra14LJ());
 }
 
 /////////
@@ -801,8 +1057,10 @@ InternalEnergy::InternalEnergy(double bondnrg, double anglenrg,
                                double dihedralnrg, 
                                double impropernrg, double ubnrg,
                                double ssnrg, double sbnrg,
-                               double bbnrg, double sbtnrg)
-               : ibndnrg(bondnrg), iangnrg(anglenrg),
+                               double bbnrg, double sbtnrg,
+                               double cnrg, double ljnrg)
+               : i14nrg(cnrg,ljnrg),
+                 ibndnrg(bondnrg), iangnrg(anglenrg),
                  idihnrg(dihedralnrg), 
                  iimpnrg(impropernrg), iubnrg(ubnrg),
                  issnrg(ssnrg), isbnrg(sbnrg),
@@ -811,7 +1069,8 @@ InternalEnergy::InternalEnergy(double bondnrg, double anglenrg,
   
 /** Copy constructor */  
 InternalEnergy::InternalEnergy(const InternalEnergy &other)
-               : ibndnrg(other.ibndnrg), iangnrg(other.iangnrg),
+               : i14nrg(other.i14nrg),
+                 ibndnrg(other.ibndnrg), iangnrg(other.iangnrg),
                  idihnrg(other.idihnrg), 
                  iimpnrg(other.iimpnrg), iubnrg(other.iubnrg),
                  issnrg(other.issnrg), isbnrg(other.isbnrg),
@@ -821,6 +1080,26 @@ InternalEnergy::InternalEnergy(const InternalEnergy &other)
 /** Destructor */  
 InternalEnergy::~InternalEnergy()
 {}
+
+/////////
+///////// Implementation of Intra14Energy
+/////////
+
+/** Constructor */
+Intra14Energy::Intra14Energy(double coul_nrg, double lj_nrg)
+               : cnrg(coul_nrg), ljnrg(lj_nrg)
+{}
+  
+/** Copy constructor */  
+Intra14Energy::Intra14Energy(const Intra14Energy &other)
+              : cnrg(other.cnrg), ljnrg(other.ljnrg)
+{}
+  
+/** Destructor */  
+Intra14Energy::~Intra14Energy()
+{}
+
+/// typename functions
 
 const char* BondComponent::typeName()
 {
@@ -865,6 +1144,21 @@ const char* BendBendComponent::typeName()
 const char* StretchBendTorsionComponent::typeName()
 {
     return QMetaType::typeName( qMetaTypeId<StretchBendTorsionComponent>() );
+}
+
+const char* Intra14CoulombComponent::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<Intra14CoulombComponent>() );
+}
+
+const char* Intra14LJComponent::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<Intra14LJComponent>() );
+}
+
+const char* Intra14Component::typeName()
+{
+    return QMetaType::typeName( qMetaTypeId<Intra14Component>() );
 }
 
 const char* InternalComponent::typeName()

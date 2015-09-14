@@ -59,7 +59,7 @@ void register_CLJSoftFunction_class(){
         bp::scope CLJSoftFunction_scope( CLJSoftFunction_exposer );
         { //::SireMM::CLJSoftFunction::alpha
         
-            typedef float ( ::SireMM::CLJSoftFunction::*alpha_function_type )(  ) const;
+            typedef float ( ::SireMM::CLJSoftFunction::*alpha_function_type)(  ) const;
             alpha_function_type alpha_function_value( &::SireMM::CLJSoftFunction::alpha );
             
             CLJSoftFunction_exposer.def( 
@@ -69,7 +69,7 @@ void register_CLJSoftFunction_class(){
         }
         { //::SireMM::CLJSoftFunction::containsProperty
         
-            typedef bool ( ::SireMM::CLJSoftFunction::*containsProperty_function_type )( ::QString const & ) const;
+            typedef bool ( ::SireMM::CLJSoftFunction::*containsProperty_function_type)( ::QString const & ) const;
             containsProperty_function_type containsProperty_function_value( &::SireMM::CLJSoftFunction::containsProperty );
             
             CLJSoftFunction_exposer.def( 
@@ -80,7 +80,7 @@ void register_CLJSoftFunction_class(){
         }
         { //::SireMM::CLJSoftFunction::coulombPower
         
-            typedef float ( ::SireMM::CLJSoftFunction::*coulombPower_function_type )(  ) const;
+            typedef float ( ::SireMM::CLJSoftFunction::*coulombPower_function_type)(  ) const;
             coulombPower_function_type coulombPower_function_value( &::SireMM::CLJSoftFunction::coulombPower );
             
             CLJSoftFunction_exposer.def( 
@@ -90,7 +90,7 @@ void register_CLJSoftFunction_class(){
         }
         { //::SireMM::CLJSoftFunction::isSoftened
         
-            typedef bool ( ::SireMM::CLJSoftFunction::*isSoftened_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJSoftFunction::*isSoftened_function_type)(  ) const;
             isSoftened_function_type isSoftened_function_value( &::SireMM::CLJSoftFunction::isSoftened );
             
             CLJSoftFunction_exposer.def( 
@@ -100,7 +100,7 @@ void register_CLJSoftFunction_class(){
         }
         { //::SireMM::CLJSoftFunction::properties
         
-            typedef ::SireBase::Properties ( ::SireMM::CLJSoftFunction::*properties_function_type )(  ) const;
+            typedef ::SireBase::Properties ( ::SireMM::CLJSoftFunction::*properties_function_type)(  ) const;
             properties_function_type properties_function_value( &::SireMM::CLJSoftFunction::properties );
             
             CLJSoftFunction_exposer.def( 
@@ -110,7 +110,7 @@ void register_CLJSoftFunction_class(){
         }
         { //::SireMM::CLJSoftFunction::property
         
-            typedef ::SireBase::PropertyPtr ( ::SireMM::CLJSoftFunction::*property_function_type )( ::QString const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMM::CLJSoftFunction::*property_function_type)( ::QString const & ) const;
             property_function_type property_function_value( &::SireMM::CLJSoftFunction::property );
             
             CLJSoftFunction_exposer.def( 
@@ -121,7 +121,7 @@ void register_CLJSoftFunction_class(){
         }
         { //::SireMM::CLJSoftFunction::setAlpha
         
-            typedef void ( ::SireMM::CLJSoftFunction::*setAlpha_function_type )( float ) ;
+            typedef void ( ::SireMM::CLJSoftFunction::*setAlpha_function_type)( float ) ;
             setAlpha_function_type setAlpha_function_value( &::SireMM::CLJSoftFunction::setAlpha );
             
             CLJSoftFunction_exposer.def( 
@@ -132,7 +132,7 @@ void register_CLJSoftFunction_class(){
         }
         { //::SireMM::CLJSoftFunction::setCoulombPower
         
-            typedef void ( ::SireMM::CLJSoftFunction::*setCoulombPower_function_type )( float ) ;
+            typedef void ( ::SireMM::CLJSoftFunction::*setCoulombPower_function_type)( float ) ;
             setCoulombPower_function_type setCoulombPower_function_value( &::SireMM::CLJSoftFunction::setCoulombPower );
             
             CLJSoftFunction_exposer.def( 
@@ -143,7 +143,7 @@ void register_CLJSoftFunction_class(){
         }
         { //::SireMM::CLJSoftFunction::setProperty
         
-            typedef ::SireMM::CLJFunctionPtr ( ::SireMM::CLJSoftFunction::*setProperty_function_type )( ::QString const &,::SireBase::Property const & ) const;
+            typedef ::SireMM::CLJFunctionPtr ( ::SireMM::CLJSoftFunction::*setProperty_function_type)( ::QString const &,::SireBase::Property const & ) const;
             setProperty_function_type setProperty_function_value( &::SireMM::CLJSoftFunction::setProperty );
             
             CLJSoftFunction_exposer.def( 
@@ -154,7 +154,7 @@ void register_CLJSoftFunction_class(){
         }
         { //::SireMM::CLJSoftFunction::setShiftDelta
         
-            typedef void ( ::SireMM::CLJSoftFunction::*setShiftDelta_function_type )( float ) ;
+            typedef void ( ::SireMM::CLJSoftFunction::*setShiftDelta_function_type)( float ) ;
             setShiftDelta_function_type setShiftDelta_function_value( &::SireMM::CLJSoftFunction::setShiftDelta );
             
             CLJSoftFunction_exposer.def( 
@@ -165,7 +165,7 @@ void register_CLJSoftFunction_class(){
         }
         { //::SireMM::CLJSoftFunction::shiftDelta
         
-            typedef float ( ::SireMM::CLJSoftFunction::*shiftDelta_function_type )(  ) const;
+            typedef float ( ::SireMM::CLJSoftFunction::*shiftDelta_function_type)(  ) const;
             shiftDelta_function_type shiftDelta_function_value( &::SireMM::CLJSoftFunction::shiftDelta );
             
             CLJSoftFunction_exposer.def( 

@@ -42,7 +42,7 @@ void register_AverageAndStddev_class(){
         AverageAndStddev_exposer.def( bp::init< SireMaths::AverageAndStddev const & >(( bp::arg("other") )) );
         { //::SireMaths::AverageAndStddev::accumulate
         
-            typedef void ( ::SireMaths::AverageAndStddev::*accumulate_function_type )( double ) ;
+            typedef void ( ::SireMaths::AverageAndStddev::*accumulate_function_type)( double ) ;
             accumulate_function_type accumulate_function_value( &::SireMaths::AverageAndStddev::accumulate );
             
             AverageAndStddev_exposer.def( 
@@ -53,7 +53,7 @@ void register_AverageAndStddev_class(){
         }
         { //::SireMaths::AverageAndStddev::clear
         
-            typedef void ( ::SireMaths::AverageAndStddev::*clear_function_type )(  ) ;
+            typedef void ( ::SireMaths::AverageAndStddev::*clear_function_type)(  ) ;
             clear_function_type clear_function_value( &::SireMaths::AverageAndStddev::clear );
             
             AverageAndStddev_exposer.def( 
@@ -63,7 +63,7 @@ void register_AverageAndStddev_class(){
         }
         { //::SireMaths::AverageAndStddev::meanOfSquares
         
-            typedef double ( ::SireMaths::AverageAndStddev::*meanOfSquares_function_type )(  ) const;
+            typedef double ( ::SireMaths::AverageAndStddev::*meanOfSquares_function_type)(  ) const;
             meanOfSquares_function_type meanOfSquares_function_value( &::SireMaths::AverageAndStddev::meanOfSquares );
             
             AverageAndStddev_exposer.def( 
@@ -75,7 +75,7 @@ void register_AverageAndStddev_class(){
         AverageAndStddev_exposer.def( bp::self + bp::self );
         { //::SireMaths::AverageAndStddev::operator=
         
-            typedef ::SireMaths::AverageAndStddev & ( ::SireMaths::AverageAndStddev::*assign_function_type )( ::SireMaths::AverageAndStddev const & ) ;
+            typedef ::SireMaths::AverageAndStddev & ( ::SireMaths::AverageAndStddev::*assign_function_type)( ::SireMaths::AverageAndStddev const & ) ;
             assign_function_type assign_function_value( &::SireMaths::AverageAndStddev::operator= );
             
             AverageAndStddev_exposer.def( 
@@ -88,7 +88,7 @@ void register_AverageAndStddev_class(){
         AverageAndStddev_exposer.def( bp::self == bp::self );
         { //::SireMaths::AverageAndStddev::standardDeviation
         
-            typedef double ( ::SireMaths::AverageAndStddev::*standardDeviation_function_type )(  ) const;
+            typedef double ( ::SireMaths::AverageAndStddev::*standardDeviation_function_type)(  ) const;
             standardDeviation_function_type standardDeviation_function_value( &::SireMaths::AverageAndStddev::standardDeviation );
             
             AverageAndStddev_exposer.def( 
@@ -98,7 +98,7 @@ void register_AverageAndStddev_class(){
         }
         { //::SireMaths::AverageAndStddev::standardError
         
-            typedef double ( ::SireMaths::AverageAndStddev::*standardError_function_type )(  ) const;
+            typedef double ( ::SireMaths::AverageAndStddev::*standardError_function_type)(  ) const;
             standardError_function_type standardError_function_value( &::SireMaths::AverageAndStddev::standardError );
             
             AverageAndStddev_exposer.def( 
@@ -108,7 +108,7 @@ void register_AverageAndStddev_class(){
         }
         { //::SireMaths::AverageAndStddev::standardError
         
-            typedef double ( ::SireMaths::AverageAndStddev::*standardError_function_type )( int ) const;
+            typedef double ( ::SireMaths::AverageAndStddev::*standardError_function_type)( int ) const;
             standardError_function_type standardError_function_value( &::SireMaths::AverageAndStddev::standardError );
             
             AverageAndStddev_exposer.def( 
@@ -119,7 +119,7 @@ void register_AverageAndStddev_class(){
         }
         { //::SireMaths::AverageAndStddev::stddev
         
-            typedef double ( ::SireMaths::AverageAndStddev::*stddev_function_type )(  ) const;
+            typedef double ( ::SireMaths::AverageAndStddev::*stddev_function_type)(  ) const;
             stddev_function_type stddev_function_value( &::SireMaths::AverageAndStddev::stddev );
             
             AverageAndStddev_exposer.def( 

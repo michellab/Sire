@@ -61,7 +61,7 @@ void register_ZmatrixMaker_class(){
         bp::scope ZmatrixMaker_scope( ZmatrixMaker_exposer );
         { //::SireIO::ZmatrixMaker::applyTemplates
         
-            typedef ::SireMol::Molecule ( ::SireIO::ZmatrixMaker::*applyTemplates_function_type )( ::SireMol::Molecule & ) ;
+            typedef ::SireMol::Molecule ( ::SireIO::ZmatrixMaker::*applyTemplates_function_type)( ::SireMol::Molecule & ) ;
             applyTemplates_function_type applyTemplates_function_value( &::SireIO::ZmatrixMaker::applyTemplates );
             
             ZmatrixMaker_exposer.def( 
@@ -72,7 +72,7 @@ void register_ZmatrixMaker_class(){
         }
         { //::SireIO::ZmatrixMaker::loadTemplates
         
-            typedef void ( ::SireIO::ZmatrixMaker::*loadTemplates_function_type )( ::QString const & ) ;
+            typedef void ( ::SireIO::ZmatrixMaker::*loadTemplates_function_type)( ::QString const & ) ;
             loadTemplates_function_type loadTemplates_function_value( &::SireIO::ZmatrixMaker::loadTemplates );
             
             ZmatrixMaker_exposer.def( 
@@ -93,7 +93,7 @@ void register_ZmatrixMaker_class(){
         }
         { //::SireIO::ZmatrixMaker::what
         
-            typedef char const * ( ::SireIO::ZmatrixMaker::*what_function_type )(  ) const;
+            typedef char const * ( ::SireIO::ZmatrixMaker::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireIO::ZmatrixMaker::what );
             
             ZmatrixMaker_exposer.def( 

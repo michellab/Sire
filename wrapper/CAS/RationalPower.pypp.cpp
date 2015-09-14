@@ -47,7 +47,7 @@ void register_RationalPower_class(){
         RationalPower_exposer.def( bp::init< SireCAS::RationalPower const & >(( bp::arg("other") )) );
         { //::SireCAS::RationalPower::evaluate
         
-            typedef double ( ::SireCAS::RationalPower::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::RationalPower::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::RationalPower::evaluate );
             
             RationalPower_exposer.def( 
@@ -58,7 +58,7 @@ void register_RationalPower_class(){
         }
         { //::SireCAS::RationalPower::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::RationalPower::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::RationalPower::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::RationalPower::evaluate );
             
             RationalPower_exposer.def( 
@@ -69,7 +69,7 @@ void register_RationalPower_class(){
         }
         { //::SireCAS::RationalPower::hash
         
-            typedef ::uint ( ::SireCAS::RationalPower::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireCAS::RationalPower::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireCAS::RationalPower::hash );
             
             RationalPower_exposer.def( 
@@ -80,7 +80,7 @@ void register_RationalPower_class(){
         RationalPower_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
         { //::SireCAS::RationalPower::power
         
-            typedef ::SireCAS::Expression ( ::SireCAS::RationalPower::*power_function_type )(  ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::RationalPower::*power_function_type)(  ) const;
             power_function_type power_function_value( &::SireCAS::RationalPower::power );
             
             RationalPower_exposer.def( 
@@ -100,7 +100,7 @@ void register_RationalPower_class(){
         }
         { //::SireCAS::RationalPower::what
         
-            typedef char const * ( ::SireCAS::RationalPower::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::RationalPower::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::RationalPower::what );
             
             RationalPower_exposer.def( 

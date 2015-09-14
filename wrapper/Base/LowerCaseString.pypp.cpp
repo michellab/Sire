@@ -32,7 +32,7 @@ void register_LowerCaseString_class(){
         LowerCaseString_exposer.def( bp::init< SireBase::LowerCaseString const & >(( bp::arg("other") )) );
         { //::SireBase::LowerCaseString::mangle
         
-            typedef ::QString ( ::SireBase::LowerCaseString::*mangle_function_type )( ::QString const & ) const;
+            typedef ::QString ( ::SireBase::LowerCaseString::*mangle_function_type)( ::QString const & ) const;
             mangle_function_type mangle_function_value( &::SireBase::LowerCaseString::mangle );
             
             LowerCaseString_exposer.def( 
@@ -44,7 +44,7 @@ void register_LowerCaseString_class(){
         LowerCaseString_exposer.def( bp::self != bp::self );
         { //::SireBase::LowerCaseString::operator=
         
-            typedef ::SireBase::LowerCaseString & ( ::SireBase::LowerCaseString::*assign_function_type )( ::SireBase::LowerCaseString const & ) ;
+            typedef ::SireBase::LowerCaseString & ( ::SireBase::LowerCaseString::*assign_function_type)( ::SireBase::LowerCaseString const & ) ;
             assign_function_type assign_function_value( &::SireBase::LowerCaseString::operator= );
             
             LowerCaseString_exposer.def( 

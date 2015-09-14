@@ -43,7 +43,7 @@ void register_SpecifyMol_class(){
         SpecifyMol_exposer.def( bp::init< SireMol::SpecifyMol const & >(( bp::arg("other") )) );
         { //::SireMol::SpecifyMol::hash
         
-            typedef ::uint ( ::SireMol::SpecifyMol::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::SpecifyMol::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::SpecifyMol::hash );
             
             SpecifyMol_exposer.def( 
@@ -53,7 +53,7 @@ void register_SpecifyMol_class(){
         }
         { //::SireMol::SpecifyMol::isNull
         
-            typedef bool ( ::SireMol::SpecifyMol::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::SpecifyMol::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::SpecifyMol::isNull );
             
             SpecifyMol_exposer.def( 
@@ -63,7 +63,7 @@ void register_SpecifyMol_class(){
         }
         { //::SireMol::SpecifyMol::map
         
-            typedef ::QList< SireMol::MolNum > ( ::SireMol::SpecifyMol::*map_function_type )( ::SireMol::Molecules const & ) const;
+            typedef ::QList< SireMol::MolNum > ( ::SireMol::SpecifyMol::*map_function_type)( ::SireMol::Molecules const & ) const;
             map_function_type map_function_value( &::SireMol::SpecifyMol::map );
             
             SpecifyMol_exposer.def( 
@@ -74,7 +74,7 @@ void register_SpecifyMol_class(){
         }
         { //::SireMol::SpecifyMol::map
         
-            typedef ::QList< SireMol::MolNum > ( ::SireMol::SpecifyMol::*map_function_type )( ::SireMol::MoleculeGroup const & ) const;
+            typedef ::QList< SireMol::MolNum > ( ::SireMol::SpecifyMol::*map_function_type)( ::SireMol::MoleculeGroup const & ) const;
             map_function_type map_function_value( &::SireMol::SpecifyMol::map );
             
             SpecifyMol_exposer.def( 
@@ -85,7 +85,7 @@ void register_SpecifyMol_class(){
         }
         { //::SireMol::SpecifyMol::map
         
-            typedef ::QList< SireMol::MolNum > ( ::SireMol::SpecifyMol::*map_function_type )( ::SireMol::MolGroupsBase const & ) const;
+            typedef ::QList< SireMol::MolNum > ( ::SireMol::SpecifyMol::*map_function_type)( ::SireMol::MolGroupsBase const & ) const;
             map_function_type map_function_value( &::SireMol::SpecifyMol::map );
             
             SpecifyMol_exposer.def( 
@@ -98,7 +98,7 @@ void register_SpecifyMol_class(){
         SpecifyMol_exposer.def( bp::self != bp::other< SireID::ID >() );
         { //::SireMol::SpecifyMol::operator=
         
-            typedef ::SireMol::SpecifyMol & ( ::SireMol::SpecifyMol::*assign_function_type )( ::SireMol::SpecifyMol const & ) ;
+            typedef ::SireMol::SpecifyMol & ( ::SireMol::SpecifyMol::*assign_function_type)( ::SireMol::SpecifyMol const & ) ;
             assign_function_type assign_function_value( &::SireMol::SpecifyMol::operator= );
             
             SpecifyMol_exposer.def( 
@@ -112,7 +112,7 @@ void register_SpecifyMol_class(){
         SpecifyMol_exposer.def( bp::self == bp::other< SireID::ID >() );
         { //::SireMol::SpecifyMol::toString
         
-            typedef ::QString ( ::SireMol::SpecifyMol::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::SpecifyMol::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::SpecifyMol::toString );
             
             SpecifyMol_exposer.def( 
@@ -132,7 +132,7 @@ void register_SpecifyMol_class(){
         }
         { //::SireMol::SpecifyMol::what
         
-            typedef char const * ( ::SireMol::SpecifyMol::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::SpecifyMol::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::SpecifyMol::what );
             
             SpecifyMol_exposer.def( 

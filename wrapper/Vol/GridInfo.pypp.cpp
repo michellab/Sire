@@ -41,7 +41,7 @@ void register_GridInfo_class(){
         GridInfo_exposer.def( bp::init< SireVol::GridInfo const & >(( bp::arg("other") )) );
         { //::SireVol::GridInfo::arrayToGridIndex
         
-            typedef ::SireVol::GridIndex ( ::SireVol::GridInfo::*arrayToGridIndex_function_type )( int ) const;
+            typedef ::SireVol::GridIndex ( ::SireVol::GridInfo::*arrayToGridIndex_function_type)( int ) const;
             arrayToGridIndex_function_type arrayToGridIndex_function_value( &::SireVol::GridInfo::arrayToGridIndex );
             
             GridInfo_exposer.def( 
@@ -52,7 +52,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::at
         
-            typedef ::SireVol::GridIndex ( ::SireVol::GridInfo::*at_function_type )( int ) const;
+            typedef ::SireVol::GridIndex ( ::SireVol::GridInfo::*at_function_type)( int ) const;
             at_function_type at_function_value( &::SireVol::GridInfo::at );
             
             GridInfo_exposer.def( 
@@ -63,7 +63,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::at
         
-            typedef int ( ::SireVol::GridInfo::*at_function_type )( ::SireVol::GridIndex const & ) const;
+            typedef int ( ::SireVol::GridInfo::*at_function_type)( ::SireVol::GridIndex const & ) const;
             at_function_type at_function_value( &::SireVol::GridInfo::at );
             
             GridInfo_exposer.def( 
@@ -74,7 +74,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::at
         
-            typedef int ( ::SireVol::GridInfo::*at_function_type )( int,int,int ) const;
+            typedef int ( ::SireVol::GridInfo::*at_function_type)( int,int,int ) const;
             at_function_type at_function_value( &::SireVol::GridInfo::at );
             
             GridInfo_exposer.def( 
@@ -85,7 +85,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::at
         
-            typedef int ( ::SireVol::GridInfo::*at_function_type )( ::SireMaths::Vector const & ) const;
+            typedef int ( ::SireVol::GridInfo::*at_function_type)( ::SireMaths::Vector const & ) const;
             at_function_type at_function_value( &::SireVol::GridInfo::at );
             
             GridInfo_exposer.def( 
@@ -96,7 +96,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::box
         
-            typedef ::SireVol::AABox ( ::SireVol::GridInfo::*box_function_type )( int ) const;
+            typedef ::SireVol::AABox ( ::SireVol::GridInfo::*box_function_type)( int ) const;
             box_function_type box_function_value( &::SireVol::GridInfo::box );
             
             GridInfo_exposer.def( 
@@ -107,7 +107,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::box
         
-            typedef ::SireVol::AABox ( ::SireVol::GridInfo::*box_function_type )( ::SireVol::GridIndex const & ) const;
+            typedef ::SireVol::AABox ( ::SireVol::GridInfo::*box_function_type)( ::SireVol::GridIndex const & ) const;
             box_function_type box_function_value( &::SireVol::GridInfo::box );
             
             GridInfo_exposer.def( 
@@ -118,7 +118,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::box
         
-            typedef ::SireVol::AABox ( ::SireVol::GridInfo::*box_function_type )( ::SireMaths::Vector const & ) const;
+            typedef ::SireVol::AABox ( ::SireVol::GridInfo::*box_function_type)( ::SireMaths::Vector const & ) const;
             box_function_type box_function_value( &::SireVol::GridInfo::box );
             
             GridInfo_exposer.def( 
@@ -129,7 +129,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::closestIndexTo
         
-            typedef ::SireVol::GridIndex ( ::SireVol::GridInfo::*closestIndexTo_function_type )( ::SireMaths::Vector const & ) const;
+            typedef ::SireVol::GridIndex ( ::SireVol::GridInfo::*closestIndexTo_function_type)( ::SireMaths::Vector const & ) const;
             closestIndexTo_function_type closestIndexTo_function_value( &::SireVol::GridInfo::closestIndexTo );
             
             GridInfo_exposer.def( 
@@ -140,7 +140,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::contains
         
-            typedef bool ( ::SireVol::GridInfo::*contains_function_type )( ::SireMaths::Vector const & ) const;
+            typedef bool ( ::SireVol::GridInfo::*contains_function_type)( ::SireMaths::Vector const & ) const;
             contains_function_type contains_function_value( &::SireVol::GridInfo::contains );
             
             GridInfo_exposer.def( 
@@ -151,7 +151,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::count
         
-            typedef int ( ::SireVol::GridInfo::*count_function_type )(  ) const;
+            typedef int ( ::SireVol::GridInfo::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireVol::GridInfo::count );
             
             GridInfo_exposer.def( 
@@ -161,7 +161,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::dimX
         
-            typedef ::qint32 ( ::SireVol::GridInfo::*dimX_function_type )(  ) const;
+            typedef ::qint32 ( ::SireVol::GridInfo::*dimX_function_type)(  ) const;
             dimX_function_type dimX_function_value( &::SireVol::GridInfo::dimX );
             
             GridInfo_exposer.def( 
@@ -171,7 +171,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::dimY
         
-            typedef ::qint32 ( ::SireVol::GridInfo::*dimY_function_type )(  ) const;
+            typedef ::qint32 ( ::SireVol::GridInfo::*dimY_function_type)(  ) const;
             dimY_function_type dimY_function_value( &::SireVol::GridInfo::dimY );
             
             GridInfo_exposer.def( 
@@ -181,7 +181,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::dimZ
         
-            typedef ::qint32 ( ::SireVol::GridInfo::*dimZ_function_type )(  ) const;
+            typedef ::qint32 ( ::SireVol::GridInfo::*dimZ_function_type)(  ) const;
             dimZ_function_type dimZ_function_value( &::SireVol::GridInfo::dimZ );
             
             GridInfo_exposer.def( 
@@ -191,7 +191,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::dimensions
         
-            typedef ::SireVol::AABox ( ::SireVol::GridInfo::*dimensions_function_type )(  ) const;
+            typedef ::SireVol::AABox ( ::SireVol::GridInfo::*dimensions_function_type)(  ) const;
             dimensions_function_type dimensions_function_value( &::SireVol::GridInfo::dimensions );
             
             GridInfo_exposer.def( 
@@ -201,7 +201,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::getitem
         
-            typedef ::SireVol::GridIndex ( ::SireVol::GridInfo::*getitem_function_type )( int ) const;
+            typedef ::SireVol::GridIndex ( ::SireVol::GridInfo::*getitem_function_type)( int ) const;
             getitem_function_type getitem_function_value( &::SireVol::GridInfo::getitem );
             
             GridInfo_exposer.def( 
@@ -212,7 +212,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::gridToArrayIndex
         
-            typedef int ( ::SireVol::GridInfo::*gridToArrayIndex_function_type )( int,int,int ) const;
+            typedef int ( ::SireVol::GridInfo::*gridToArrayIndex_function_type)( int,int,int ) const;
             gridToArrayIndex_function_type gridToArrayIndex_function_value( &::SireVol::GridInfo::gridToArrayIndex );
             
             GridInfo_exposer.def( 
@@ -223,7 +223,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::gridToArrayIndex
         
-            typedef int ( ::SireVol::GridInfo::*gridToArrayIndex_function_type )( ::SireVol::GridIndex const & ) const;
+            typedef int ( ::SireVol::GridInfo::*gridToArrayIndex_function_type)( ::SireVol::GridIndex const & ) const;
             gridToArrayIndex_function_type gridToArrayIndex_function_value( &::SireVol::GridInfo::gridToArrayIndex );
             
             GridInfo_exposer.def( 
@@ -234,7 +234,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::indexOf
         
-            typedef ::SireVol::GridIndex ( ::SireVol::GridInfo::*indexOf_function_type )( int,::SireVol::GridInfo const & ) const;
+            typedef ::SireVol::GridIndex ( ::SireVol::GridInfo::*indexOf_function_type)( int,::SireVol::GridInfo const & ) const;
             indexOf_function_type indexOf_function_value( &::SireVol::GridInfo::indexOf );
             
             GridInfo_exposer.def( 
@@ -245,7 +245,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::indexOf
         
-            typedef ::SireVol::GridIndex ( ::SireVol::GridInfo::*indexOf_function_type )( ::SireVol::GridIndex const &,::SireVol::GridInfo const & ) const;
+            typedef ::SireVol::GridIndex ( ::SireVol::GridInfo::*indexOf_function_type)( ::SireVol::GridIndex const &,::SireVol::GridInfo const & ) const;
             indexOf_function_type indexOf_function_value( &::SireVol::GridInfo::indexOf );
             
             GridInfo_exposer.def( 
@@ -256,7 +256,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::isEmpty
         
-            typedef bool ( ::SireVol::GridInfo::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireVol::GridInfo::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireVol::GridInfo::isEmpty );
             
             GridInfo_exposer.def( 
@@ -266,7 +266,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::nPoints
         
-            typedef int ( ::SireVol::GridInfo::*nPoints_function_type )(  ) const;
+            typedef int ( ::SireVol::GridInfo::*nPoints_function_type)(  ) const;
             nPoints_function_type nPoints_function_value( &::SireVol::GridInfo::nPoints );
             
             GridInfo_exposer.def( 
@@ -277,7 +277,7 @@ void register_GridInfo_class(){
         GridInfo_exposer.def( bp::self != bp::self );
         { //::SireVol::GridInfo::operator=
         
-            typedef ::SireVol::GridInfo & ( ::SireVol::GridInfo::*assign_function_type )( ::SireVol::GridInfo const & ) ;
+            typedef ::SireVol::GridInfo & ( ::SireVol::GridInfo::*assign_function_type)( ::SireVol::GridInfo const & ) ;
             assign_function_type assign_function_value( &::SireVol::GridInfo::operator= );
             
             GridInfo_exposer.def( 
@@ -290,7 +290,7 @@ void register_GridInfo_class(){
         GridInfo_exposer.def( bp::self == bp::self );
         { //::SireVol::GridInfo::operator[]
         
-            typedef ::SireVol::GridIndex ( ::SireVol::GridInfo::*__getitem___function_type )( int ) const;
+            typedef ::SireVol::GridIndex ( ::SireVol::GridInfo::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireVol::GridInfo::operator[] );
             
             GridInfo_exposer.def( 
@@ -301,7 +301,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::operator[]
         
-            typedef int ( ::SireVol::GridInfo::*__getitem___function_type )( ::SireVol::GridIndex const & ) const;
+            typedef int ( ::SireVol::GridInfo::*__getitem___function_type)( ::SireVol::GridIndex const & ) const;
             __getitem___function_type __getitem___function_value( &::SireVol::GridInfo::operator[] );
             
             GridInfo_exposer.def( 
@@ -312,7 +312,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::operator[]
         
-            typedef int ( ::SireVol::GridInfo::*__getitem___function_type )( ::SireMaths::Vector const & ) const;
+            typedef int ( ::SireVol::GridInfo::*__getitem___function_type)( ::SireMaths::Vector const & ) const;
             __getitem___function_type __getitem___function_value( &::SireVol::GridInfo::operator[] );
             
             GridInfo_exposer.def( 
@@ -323,7 +323,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::point
         
-            typedef ::SireMaths::Vector ( ::SireVol::GridInfo::*point_function_type )( int ) const;
+            typedef ::SireMaths::Vector ( ::SireVol::GridInfo::*point_function_type)( int ) const;
             point_function_type point_function_value( &::SireVol::GridInfo::point );
             
             GridInfo_exposer.def( 
@@ -334,7 +334,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::point
         
-            typedef ::SireMaths::Vector ( ::SireVol::GridInfo::*point_function_type )( ::SireVol::GridIndex const & ) const;
+            typedef ::SireMaths::Vector ( ::SireVol::GridInfo::*point_function_type)( ::SireVol::GridIndex const & ) const;
             point_function_type point_function_value( &::SireVol::GridInfo::point );
             
             GridInfo_exposer.def( 
@@ -345,7 +345,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::point
         
-            typedef ::SireMaths::Vector ( ::SireVol::GridInfo::*point_function_type )( ::SireMaths::Vector const & ) const;
+            typedef ::SireMaths::Vector ( ::SireVol::GridInfo::*point_function_type)( ::SireMaths::Vector const & ) const;
             point_function_type point_function_value( &::SireVol::GridInfo::point );
             
             GridInfo_exposer.def( 
@@ -356,7 +356,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::pointToArrayIndex
         
-            typedef int ( ::SireVol::GridInfo::*pointToArrayIndex_function_type )( ::SireMaths::Vector const & ) const;
+            typedef int ( ::SireVol::GridInfo::*pointToArrayIndex_function_type)( ::SireMaths::Vector const & ) const;
             pointToArrayIndex_function_type pointToArrayIndex_function_value( &::SireVol::GridInfo::pointToArrayIndex );
             
             GridInfo_exposer.def( 
@@ -367,7 +367,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::pointToGridCorners
         
-            typedef void ( ::SireVol::GridInfo::*pointToGridCorners_function_type )( ::SireMaths::Vector const &,::QVector< int > & ) const;
+            typedef void ( ::SireVol::GridInfo::*pointToGridCorners_function_type)( ::SireMaths::Vector const &,::QVector< int > & ) const;
             pointToGridCorners_function_type pointToGridCorners_function_value( &::SireVol::GridInfo::pointToGridCorners );
             
             GridInfo_exposer.def( 
@@ -378,7 +378,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::pointToGridCorners
         
-            typedef void ( ::SireVol::GridInfo::*pointToGridCorners_function_type )( ::SireMaths::Vector const &,::QVector< int > &,::QVector< float > & ) const;
+            typedef void ( ::SireVol::GridInfo::*pointToGridCorners_function_type)( ::SireMaths::Vector const &,::QVector< int > &,::QVector< float > & ) const;
             pointToGridCorners_function_type pointToGridCorners_function_value( &::SireVol::GridInfo::pointToGridCorners );
             
             GridInfo_exposer.def( 
@@ -389,7 +389,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::pointToGridCorners
         
-            typedef int ( ::SireVol::GridInfo::*pointToGridCorners_function_type )( ::SireMaths::MultiFloat const &,::SireMaths::MultiFloat const &,::SireMaths::MultiFloat const &,::QVector< SireMaths::MultiInt > & ) const;
+            typedef int ( ::SireVol::GridInfo::*pointToGridCorners_function_type)( ::SireMaths::MultiFloat const &,::SireMaths::MultiFloat const &,::SireMaths::MultiFloat const &,::QVector< SireMaths::MultiInt > & ) const;
             pointToGridCorners_function_type pointToGridCorners_function_value( &::SireVol::GridInfo::pointToGridCorners );
             
             GridInfo_exposer.def( 
@@ -400,7 +400,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::pointToGridCorners
         
-            typedef int ( ::SireVol::GridInfo::*pointToGridCorners_function_type )( ::SireMaths::MultiFloat const &,::SireMaths::MultiFloat const &,::SireMaths::MultiFloat const &,::QVector< SireMaths::MultiInt > &,::QVector< SireMaths::MultiFloat > & ) const;
+            typedef int ( ::SireVol::GridInfo::*pointToGridCorners_function_type)( ::SireMaths::MultiFloat const &,::SireMaths::MultiFloat const &,::SireMaths::MultiFloat const &,::QVector< SireMaths::MultiInt > &,::QVector< SireMaths::MultiFloat > & ) const;
             pointToGridCorners_function_type pointToGridCorners_function_value( &::SireVol::GridInfo::pointToGridCorners );
             
             GridInfo_exposer.def( 
@@ -411,7 +411,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::pointToGridIndex
         
-            typedef ::SireVol::GridIndex ( ::SireVol::GridInfo::*pointToGridIndex_function_type )( ::SireMaths::Vector const & ) const;
+            typedef ::SireVol::GridIndex ( ::SireVol::GridInfo::*pointToGridIndex_function_type)( ::SireMaths::Vector const & ) const;
             pointToGridIndex_function_type pointToGridIndex_function_value( &::SireVol::GridInfo::pointToGridIndex );
             
             GridInfo_exposer.def( 
@@ -422,7 +422,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::redimension
         
-            typedef ::QVector< float > ( ::SireVol::GridInfo::*redimension_function_type )( ::QVector< float > const &,::SireVol::GridInfo const & ) const;
+            typedef ::QVector< float > ( ::SireVol::GridInfo::*redimension_function_type)( ::QVector< float > const &,::SireVol::GridInfo const & ) const;
             redimension_function_type redimension_function_value( &::SireVol::GridInfo::redimension );
             
             GridInfo_exposer.def( 
@@ -433,7 +433,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::size
         
-            typedef int ( ::SireVol::GridInfo::*size_function_type )(  ) const;
+            typedef int ( ::SireVol::GridInfo::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireVol::GridInfo::size );
             
             GridInfo_exposer.def( 
@@ -443,7 +443,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::spacing
         
-            typedef ::SireUnits::Dimension::Length ( ::SireVol::GridInfo::*spacing_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireVol::GridInfo::*spacing_function_type)(  ) const;
             spacing_function_type spacing_function_value( &::SireVol::GridInfo::spacing );
             
             GridInfo_exposer.def( 
@@ -453,7 +453,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::toString
         
-            typedef ::QString ( ::SireVol::GridInfo::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireVol::GridInfo::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireVol::GridInfo::toString );
             
             GridInfo_exposer.def( 
@@ -473,7 +473,7 @@ void register_GridInfo_class(){
         }
         { //::SireVol::GridInfo::what
         
-            typedef char const * ( ::SireVol::GridInfo::*what_function_type )(  ) const;
+            typedef char const * ( ::SireVol::GridInfo::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireVol::GridInfo::what );
             
             GridInfo_exposer.def( 

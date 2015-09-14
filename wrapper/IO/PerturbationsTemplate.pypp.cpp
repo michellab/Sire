@@ -91,7 +91,7 @@ void register_PerturbationsTemplate_class(){
         PerturbationsTemplate_exposer.def( bp::init< SireIO::PerturbationsTemplate const & >(( bp::arg("other") )) );
         { //::SireIO::PerturbationsTemplate::getAngles
         
-            typedef ::QList< SireMol::AngleID > ( ::SireIO::PerturbationsTemplate::*getAngles_function_type )(  ) const;
+            typedef ::QList< SireMol::AngleID > ( ::SireIO::PerturbationsTemplate::*getAngles_function_type)(  ) const;
             getAngles_function_type getAngles_function_value( &::SireIO::PerturbationsTemplate::getAngles );
             
             PerturbationsTemplate_exposer.def( 
@@ -101,7 +101,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::getBonds
         
-            typedef ::QList< SireMol::BondID > ( ::SireIO::PerturbationsTemplate::*getBonds_function_type )(  ) const;
+            typedef ::QList< SireMol::BondID > ( ::SireIO::PerturbationsTemplate::*getBonds_function_type)(  ) const;
             getBonds_function_type getBonds_function_value( &::SireIO::PerturbationsTemplate::getBonds );
             
             PerturbationsTemplate_exposer.def( 
@@ -111,7 +111,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::getDihedrals
         
-            typedef ::QList< SireMol::DihedralID > ( ::SireIO::PerturbationsTemplate::*getDihedrals_function_type )(  ) const;
+            typedef ::QList< SireMol::DihedralID > ( ::SireIO::PerturbationsTemplate::*getDihedrals_function_type)(  ) const;
             getDihedrals_function_type getDihedrals_function_value( &::SireIO::PerturbationsTemplate::getDihedrals );
             
             PerturbationsTemplate_exposer.def( 
@@ -121,7 +121,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::getFinalAngleK
         
-            typedef double ( ::SireIO::PerturbationsTemplate::*getFinalAngleK_function_type )( ::SireMol::AngleID const & ) const;
+            typedef double ( ::SireIO::PerturbationsTemplate::*getFinalAngleK_function_type)( ::SireMol::AngleID const & ) const;
             getFinalAngleK_function_type getFinalAngleK_function_value( &::SireIO::PerturbationsTemplate::getFinalAngleK );
             
             PerturbationsTemplate_exposer.def( 
@@ -132,7 +132,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::getFinalAngleT
         
-            typedef double ( ::SireIO::PerturbationsTemplate::*getFinalAngleT_function_type )( ::SireMol::AngleID const & ) const;
+            typedef double ( ::SireIO::PerturbationsTemplate::*getFinalAngleT_function_type)( ::SireMol::AngleID const & ) const;
             getFinalAngleT_function_type getFinalAngleT_function_value( &::SireIO::PerturbationsTemplate::getFinalAngleT );
             
             PerturbationsTemplate_exposer.def( 
@@ -143,7 +143,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::getFinalBondK
         
-            typedef double ( ::SireIO::PerturbationsTemplate::*getFinalBondK_function_type )( ::SireMol::BondID const & ) const;
+            typedef double ( ::SireIO::PerturbationsTemplate::*getFinalBondK_function_type)( ::SireMol::BondID const & ) const;
             getFinalBondK_function_type getFinalBondK_function_value( &::SireIO::PerturbationsTemplate::getFinalBondK );
             
             PerturbationsTemplate_exposer.def( 
@@ -154,7 +154,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::getFinalBondR
         
-            typedef double ( ::SireIO::PerturbationsTemplate::*getFinalBondR_function_type )( ::SireMol::BondID const & ) const;
+            typedef double ( ::SireIO::PerturbationsTemplate::*getFinalBondR_function_type)( ::SireMol::BondID const & ) const;
             getFinalBondR_function_type getFinalBondR_function_value( &::SireIO::PerturbationsTemplate::getFinalBondR );
             
             PerturbationsTemplate_exposer.def( 
@@ -165,7 +165,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::getFinalCharge
         
-            typedef ::SireUnits::Dimension::Charge ( ::SireIO::PerturbationsTemplate::*getFinalCharge_function_type )( ::QString const & ) const;
+            typedef ::SireUnits::Dimension::Charge ( ::SireIO::PerturbationsTemplate::*getFinalCharge_function_type)( ::QString const & ) const;
             getFinalCharge_function_type getFinalCharge_function_value( &::SireIO::PerturbationsTemplate::getFinalCharge );
             
             PerturbationsTemplate_exposer.def( 
@@ -176,7 +176,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::getFinalDihParams
         
-            typedef ::QList< double > ( ::SireIO::PerturbationsTemplate::*getFinalDihParams_function_type )( ::SireMol::DihedralID const & ) const;
+            typedef ::QList< double > ( ::SireIO::PerturbationsTemplate::*getFinalDihParams_function_type)( ::SireMol::DihedralID const & ) const;
             getFinalDihParams_function_type getFinalDihParams_function_value( &::SireIO::PerturbationsTemplate::getFinalDihParams );
             
             PerturbationsTemplate_exposer.def( 
@@ -187,7 +187,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::getFinalImpParams
         
-            typedef ::QList< double > ( ::SireIO::PerturbationsTemplate::*getFinalImpParams_function_type )( ::SireMol::ImproperID const & ) const;
+            typedef ::QList< double > ( ::SireIO::PerturbationsTemplate::*getFinalImpParams_function_type)( ::SireMol::ImproperID const & ) const;
             getFinalImpParams_function_type getFinalImpParams_function_value( &::SireIO::PerturbationsTemplate::getFinalImpParams );
             
             PerturbationsTemplate_exposer.def( 
@@ -198,7 +198,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::getFinalLJ
         
-            typedef ::SireMM::LJParameter ( ::SireIO::PerturbationsTemplate::*getFinalLJ_function_type )( ::QString const & ) const;
+            typedef ::SireMM::LJParameter ( ::SireIO::PerturbationsTemplate::*getFinalLJ_function_type)( ::QString const & ) const;
             getFinalLJ_function_type getFinalLJ_function_value( &::SireIO::PerturbationsTemplate::getFinalLJ );
             
             PerturbationsTemplate_exposer.def( 
@@ -209,7 +209,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::getFinalType
         
-            typedef ::QString ( ::SireIO::PerturbationsTemplate::*getFinalType_function_type )( ::QString const & ) const;
+            typedef ::QString ( ::SireIO::PerturbationsTemplate::*getFinalType_function_type)( ::QString const & ) const;
             getFinalType_function_type getFinalType_function_value( &::SireIO::PerturbationsTemplate::getFinalType );
             
             PerturbationsTemplate_exposer.def( 
@@ -220,7 +220,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::getImpropers
         
-            typedef ::QList< SireMol::ImproperID > ( ::SireIO::PerturbationsTemplate::*getImpropers_function_type )(  ) const;
+            typedef ::QList< SireMol::ImproperID > ( ::SireIO::PerturbationsTemplate::*getImpropers_function_type)(  ) const;
             getImpropers_function_type getImpropers_function_value( &::SireIO::PerturbationsTemplate::getImpropers );
             
             PerturbationsTemplate_exposer.def( 
@@ -230,7 +230,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::getInitAngleK
         
-            typedef double ( ::SireIO::PerturbationsTemplate::*getInitAngleK_function_type )( ::SireMol::AngleID const & ) const;
+            typedef double ( ::SireIO::PerturbationsTemplate::*getInitAngleK_function_type)( ::SireMol::AngleID const & ) const;
             getInitAngleK_function_type getInitAngleK_function_value( &::SireIO::PerturbationsTemplate::getInitAngleK );
             
             PerturbationsTemplate_exposer.def( 
@@ -241,7 +241,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::getInitAngleT
         
-            typedef double ( ::SireIO::PerturbationsTemplate::*getInitAngleT_function_type )( ::SireMol::AngleID const & ) const;
+            typedef double ( ::SireIO::PerturbationsTemplate::*getInitAngleT_function_type)( ::SireMol::AngleID const & ) const;
             getInitAngleT_function_type getInitAngleT_function_value( &::SireIO::PerturbationsTemplate::getInitAngleT );
             
             PerturbationsTemplate_exposer.def( 
@@ -252,7 +252,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::getInitBondK
         
-            typedef double ( ::SireIO::PerturbationsTemplate::*getInitBondK_function_type )( ::SireMol::BondID const & ) const;
+            typedef double ( ::SireIO::PerturbationsTemplate::*getInitBondK_function_type)( ::SireMol::BondID const & ) const;
             getInitBondK_function_type getInitBondK_function_value( &::SireIO::PerturbationsTemplate::getInitBondK );
             
             PerturbationsTemplate_exposer.def( 
@@ -263,7 +263,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::getInitBondR
         
-            typedef double ( ::SireIO::PerturbationsTemplate::*getInitBondR_function_type )( ::SireMol::BondID const & ) const;
+            typedef double ( ::SireIO::PerturbationsTemplate::*getInitBondR_function_type)( ::SireMol::BondID const & ) const;
             getInitBondR_function_type getInitBondR_function_value( &::SireIO::PerturbationsTemplate::getInitBondR );
             
             PerturbationsTemplate_exposer.def( 
@@ -274,7 +274,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::getInitCharge
         
-            typedef ::SireUnits::Dimension::Charge ( ::SireIO::PerturbationsTemplate::*getInitCharge_function_type )( ::QString const & ) const;
+            typedef ::SireUnits::Dimension::Charge ( ::SireIO::PerturbationsTemplate::*getInitCharge_function_type)( ::QString const & ) const;
             getInitCharge_function_type getInitCharge_function_value( &::SireIO::PerturbationsTemplate::getInitCharge );
             
             PerturbationsTemplate_exposer.def( 
@@ -285,7 +285,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::getInitDihParams
         
-            typedef ::QList< double > ( ::SireIO::PerturbationsTemplate::*getInitDihParams_function_type )( ::SireMol::DihedralID const & ) const;
+            typedef ::QList< double > ( ::SireIO::PerturbationsTemplate::*getInitDihParams_function_type)( ::SireMol::DihedralID const & ) const;
             getInitDihParams_function_type getInitDihParams_function_value( &::SireIO::PerturbationsTemplate::getInitDihParams );
             
             PerturbationsTemplate_exposer.def( 
@@ -296,7 +296,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::getInitImpParams
         
-            typedef ::QList< double > ( ::SireIO::PerturbationsTemplate::*getInitImpParams_function_type )( ::SireMol::ImproperID const & ) const;
+            typedef ::QList< double > ( ::SireIO::PerturbationsTemplate::*getInitImpParams_function_type)( ::SireMol::ImproperID const & ) const;
             getInitImpParams_function_type getInitImpParams_function_value( &::SireIO::PerturbationsTemplate::getInitImpParams );
             
             PerturbationsTemplate_exposer.def( 
@@ -307,7 +307,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::getInitLJ
         
-            typedef ::SireMM::LJParameter ( ::SireIO::PerturbationsTemplate::*getInitLJ_function_type )( ::QString const & ) const;
+            typedef ::SireMM::LJParameter ( ::SireIO::PerturbationsTemplate::*getInitLJ_function_type)( ::QString const & ) const;
             getInitLJ_function_type getInitLJ_function_value( &::SireIO::PerturbationsTemplate::getInitLJ );
             
             PerturbationsTemplate_exposer.def( 
@@ -318,7 +318,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::getInitType
         
-            typedef ::QString ( ::SireIO::PerturbationsTemplate::*getInitType_function_type )( ::QString const & ) const;
+            typedef ::QString ( ::SireIO::PerturbationsTemplate::*getInitType_function_type)( ::QString const & ) const;
             getInitType_function_type getInitType_function_value( &::SireIO::PerturbationsTemplate::getInitType );
             
             PerturbationsTemplate_exposer.def( 
@@ -329,7 +329,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::getName
         
-            typedef ::QString const ( ::SireIO::PerturbationsTemplate::*getName_function_type )(  ) ;
+            typedef ::QString const ( ::SireIO::PerturbationsTemplate::*getName_function_type)(  ) ;
             getName_function_type getName_function_value( &::SireIO::PerturbationsTemplate::getName );
             
             PerturbationsTemplate_exposer.def( 
@@ -340,7 +340,7 @@ void register_PerturbationsTemplate_class(){
         PerturbationsTemplate_exposer.def( bp::self != bp::self );
         { //::SireIO::PerturbationsTemplate::operator=
         
-            typedef ::SireIO::PerturbationsTemplate & ( ::SireIO::PerturbationsTemplate::*assign_function_type )( ::SireIO::PerturbationsTemplate const & ) ;
+            typedef ::SireIO::PerturbationsTemplate & ( ::SireIO::PerturbationsTemplate::*assign_function_type)( ::SireIO::PerturbationsTemplate const & ) ;
             assign_function_type assign_function_value( &::SireIO::PerturbationsTemplate::operator= );
             
             PerturbationsTemplate_exposer.def( 
@@ -353,7 +353,7 @@ void register_PerturbationsTemplate_class(){
         PerturbationsTemplate_exposer.def( bp::self == bp::self );
         { //::SireIO::PerturbationsTemplate::setFinalAngleK
         
-            typedef void ( ::SireIO::PerturbationsTemplate::*setFinalAngleK_function_type )( ::SireMol::AngleID const &,double const & ) ;
+            typedef void ( ::SireIO::PerturbationsTemplate::*setFinalAngleK_function_type)( ::SireMol::AngleID const &,double const & ) ;
             setFinalAngleK_function_type setFinalAngleK_function_value( &::SireIO::PerturbationsTemplate::setFinalAngleK );
             
             PerturbationsTemplate_exposer.def( 
@@ -364,7 +364,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::setFinalAngleT
         
-            typedef void ( ::SireIO::PerturbationsTemplate::*setFinalAngleT_function_type )( ::SireMol::AngleID const &,double const & ) ;
+            typedef void ( ::SireIO::PerturbationsTemplate::*setFinalAngleT_function_type)( ::SireMol::AngleID const &,double const & ) ;
             setFinalAngleT_function_type setFinalAngleT_function_value( &::SireIO::PerturbationsTemplate::setFinalAngleT );
             
             PerturbationsTemplate_exposer.def( 
@@ -375,7 +375,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::setFinalBondK
         
-            typedef void ( ::SireIO::PerturbationsTemplate::*setFinalBondK_function_type )( ::SireMol::BondID const &,double const & ) ;
+            typedef void ( ::SireIO::PerturbationsTemplate::*setFinalBondK_function_type)( ::SireMol::BondID const &,double const & ) ;
             setFinalBondK_function_type setFinalBondK_function_value( &::SireIO::PerturbationsTemplate::setFinalBondK );
             
             PerturbationsTemplate_exposer.def( 
@@ -386,7 +386,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::setFinalBondR
         
-            typedef void ( ::SireIO::PerturbationsTemplate::*setFinalBondR_function_type )( ::SireMol::BondID const &,double const & ) ;
+            typedef void ( ::SireIO::PerturbationsTemplate::*setFinalBondR_function_type)( ::SireMol::BondID const &,double const & ) ;
             setFinalBondR_function_type setFinalBondR_function_value( &::SireIO::PerturbationsTemplate::setFinalBondR );
             
             PerturbationsTemplate_exposer.def( 
@@ -397,7 +397,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::setFinalCharge
         
-            typedef void ( ::SireIO::PerturbationsTemplate::*setFinalCharge_function_type )( ::QString const &,::SireUnits::Dimension::Charge const & ) ;
+            typedef void ( ::SireIO::PerturbationsTemplate::*setFinalCharge_function_type)( ::QString const &,::SireUnits::Dimension::Charge const & ) ;
             setFinalCharge_function_type setFinalCharge_function_value( &::SireIO::PerturbationsTemplate::setFinalCharge );
             
             PerturbationsTemplate_exposer.def( 
@@ -408,7 +408,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::setFinalDihParams
         
-            typedef void ( ::SireIO::PerturbationsTemplate::*setFinalDihParams_function_type )( ::SireMol::DihedralID const &,::QList< double > const & ) ;
+            typedef void ( ::SireIO::PerturbationsTemplate::*setFinalDihParams_function_type)( ::SireMol::DihedralID const &,::QList< double > const & ) ;
             setFinalDihParams_function_type setFinalDihParams_function_value( &::SireIO::PerturbationsTemplate::setFinalDihParams );
             
             PerturbationsTemplate_exposer.def( 
@@ -419,7 +419,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::setFinalImpParams
         
-            typedef void ( ::SireIO::PerturbationsTemplate::*setFinalImpParams_function_type )( ::SireMol::ImproperID const &,::QList< double > const & ) ;
+            typedef void ( ::SireIO::PerturbationsTemplate::*setFinalImpParams_function_type)( ::SireMol::ImproperID const &,::QList< double > const & ) ;
             setFinalImpParams_function_type setFinalImpParams_function_value( &::SireIO::PerturbationsTemplate::setFinalImpParams );
             
             PerturbationsTemplate_exposer.def( 
@@ -430,7 +430,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::setFinalLJ
         
-            typedef void ( ::SireIO::PerturbationsTemplate::*setFinalLJ_function_type )( ::QString const &,::SireMM::LJParameter const & ) ;
+            typedef void ( ::SireIO::PerturbationsTemplate::*setFinalLJ_function_type)( ::QString const &,::SireMM::LJParameter const & ) ;
             setFinalLJ_function_type setFinalLJ_function_value( &::SireIO::PerturbationsTemplate::setFinalLJ );
             
             PerturbationsTemplate_exposer.def( 
@@ -441,7 +441,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::setFinalType
         
-            typedef void ( ::SireIO::PerturbationsTemplate::*setFinalType_function_type )( ::QString const &,::QString const & ) ;
+            typedef void ( ::SireIO::PerturbationsTemplate::*setFinalType_function_type)( ::QString const &,::QString const & ) ;
             setFinalType_function_type setFinalType_function_value( &::SireIO::PerturbationsTemplate::setFinalType );
             
             PerturbationsTemplate_exposer.def( 
@@ -452,7 +452,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::setInitAngleK
         
-            typedef void ( ::SireIO::PerturbationsTemplate::*setInitAngleK_function_type )( ::SireMol::AngleID const &,double const & ) ;
+            typedef void ( ::SireIO::PerturbationsTemplate::*setInitAngleK_function_type)( ::SireMol::AngleID const &,double const & ) ;
             setInitAngleK_function_type setInitAngleK_function_value( &::SireIO::PerturbationsTemplate::setInitAngleK );
             
             PerturbationsTemplate_exposer.def( 
@@ -463,7 +463,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::setInitAngleT
         
-            typedef void ( ::SireIO::PerturbationsTemplate::*setInitAngleT_function_type )( ::SireMol::AngleID const &,double const & ) ;
+            typedef void ( ::SireIO::PerturbationsTemplate::*setInitAngleT_function_type)( ::SireMol::AngleID const &,double const & ) ;
             setInitAngleT_function_type setInitAngleT_function_value( &::SireIO::PerturbationsTemplate::setInitAngleT );
             
             PerturbationsTemplate_exposer.def( 
@@ -474,7 +474,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::setInitBondK
         
-            typedef void ( ::SireIO::PerturbationsTemplate::*setInitBondK_function_type )( ::SireMol::BondID const &,double const & ) ;
+            typedef void ( ::SireIO::PerturbationsTemplate::*setInitBondK_function_type)( ::SireMol::BondID const &,double const & ) ;
             setInitBondK_function_type setInitBondK_function_value( &::SireIO::PerturbationsTemplate::setInitBondK );
             
             PerturbationsTemplate_exposer.def( 
@@ -485,7 +485,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::setInitBondR
         
-            typedef void ( ::SireIO::PerturbationsTemplate::*setInitBondR_function_type )( ::SireMol::BondID const &,double const & ) ;
+            typedef void ( ::SireIO::PerturbationsTemplate::*setInitBondR_function_type)( ::SireMol::BondID const &,double const & ) ;
             setInitBondR_function_type setInitBondR_function_value( &::SireIO::PerturbationsTemplate::setInitBondR );
             
             PerturbationsTemplate_exposer.def( 
@@ -496,7 +496,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::setInitCharge
         
-            typedef void ( ::SireIO::PerturbationsTemplate::*setInitCharge_function_type )( ::QString const &,::SireUnits::Dimension::Charge const & ) ;
+            typedef void ( ::SireIO::PerturbationsTemplate::*setInitCharge_function_type)( ::QString const &,::SireUnits::Dimension::Charge const & ) ;
             setInitCharge_function_type setInitCharge_function_value( &::SireIO::PerturbationsTemplate::setInitCharge );
             
             PerturbationsTemplate_exposer.def( 
@@ -507,7 +507,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::setInitDihParams
         
-            typedef void ( ::SireIO::PerturbationsTemplate::*setInitDihParams_function_type )( ::SireMol::DihedralID const &,::QList< double > const & ) ;
+            typedef void ( ::SireIO::PerturbationsTemplate::*setInitDihParams_function_type)( ::SireMol::DihedralID const &,::QList< double > const & ) ;
             setInitDihParams_function_type setInitDihParams_function_value( &::SireIO::PerturbationsTemplate::setInitDihParams );
             
             PerturbationsTemplate_exposer.def( 
@@ -518,7 +518,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::setInitImpParams
         
-            typedef void ( ::SireIO::PerturbationsTemplate::*setInitImpParams_function_type )( ::SireMol::ImproperID const &,::QList< double > const & ) ;
+            typedef void ( ::SireIO::PerturbationsTemplate::*setInitImpParams_function_type)( ::SireMol::ImproperID const &,::QList< double > const & ) ;
             setInitImpParams_function_type setInitImpParams_function_value( &::SireIO::PerturbationsTemplate::setInitImpParams );
             
             PerturbationsTemplate_exposer.def( 
@@ -529,7 +529,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::setInitLJ
         
-            typedef void ( ::SireIO::PerturbationsTemplate::*setInitLJ_function_type )( ::QString const &,::SireMM::LJParameter const & ) ;
+            typedef void ( ::SireIO::PerturbationsTemplate::*setInitLJ_function_type)( ::QString const &,::SireMM::LJParameter const & ) ;
             setInitLJ_function_type setInitLJ_function_value( &::SireIO::PerturbationsTemplate::setInitLJ );
             
             PerturbationsTemplate_exposer.def( 
@@ -540,7 +540,7 @@ void register_PerturbationsTemplate_class(){
         }
         { //::SireIO::PerturbationsTemplate::setInitType
         
-            typedef void ( ::SireIO::PerturbationsTemplate::*setInitType_function_type )( ::QString const &,::QString const & ) ;
+            typedef void ( ::SireIO::PerturbationsTemplate::*setInitType_function_type)( ::QString const &,::QString const & ) ;
             setInitType_function_type setInitType_function_value( &::SireIO::PerturbationsTemplate::setInitType );
             
             PerturbationsTemplate_exposer.def( 

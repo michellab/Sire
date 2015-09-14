@@ -74,7 +74,7 @@ void register_ResName_class(){
         ResName_exposer.def( bp::init< SireMol::ResName const & >(( bp::arg("other") )) );
         { //::SireMol::ResName::hash
         
-            typedef ::uint ( ::SireMol::ResName::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::ResName::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::ResName::hash );
             
             ResName_exposer.def( 
@@ -84,7 +84,7 @@ void register_ResName_class(){
         }
         { //::SireMol::ResName::isNull
         
-            typedef bool ( ::SireMol::ResName::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::ResName::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::ResName::isNull );
             
             ResName_exposer.def( 
@@ -94,7 +94,7 @@ void register_ResName_class(){
         }
         { //::SireMol::ResName::map
         
-            typedef ::QList< SireMol::ResIdx > ( ::SireMol::ResName::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::ResIdx > ( ::SireMol::ResName::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireMol::ResName::map );
             
             ResName_exposer.def( 
@@ -106,7 +106,7 @@ void register_ResName_class(){
         ResName_exposer.def( bp::self != bp::self );
         { //::SireMol::ResName::operator=
         
-            typedef ::SireMol::ResName & ( ::SireMol::ResName::*assign_function_type )( ::SireMol::ResName const & ) ;
+            typedef ::SireMol::ResName & ( ::SireMol::ResName::*assign_function_type)( ::SireMol::ResName const & ) ;
             assign_function_type assign_function_value( &::SireMol::ResName::operator= );
             
             ResName_exposer.def( 
@@ -120,7 +120,7 @@ void register_ResName_class(){
         ResName_exposer.def( bp::self == bp::self );
         { //::SireMol::ResName::toString
         
-            typedef ::QString ( ::SireMol::ResName::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::ResName::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::ResName::toString );
             
             ResName_exposer.def( 
@@ -140,7 +140,7 @@ void register_ResName_class(){
         }
         { //::SireMol::ResName::what
         
-            typedef char const * ( ::SireMol::ResName::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::ResName::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::ResName::what );
             
             ResName_exposer.def( 

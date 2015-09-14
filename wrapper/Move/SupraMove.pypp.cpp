@@ -29,7 +29,7 @@ void register_SupraMove_class(){
         bp::scope SupraMove_scope( SupraMove_exposer );
         { //::SireMove::SupraMove::clearStatistics
         
-            typedef void ( ::SireMove::SupraMove::*clearStatistics_function_type )(  ) ;
+            typedef void ( ::SireMove::SupraMove::*clearStatistics_function_type)(  ) ;
             clearStatistics_function_type clearStatistics_function_value( &::SireMove::SupraMove::clearStatistics );
             
             SupraMove_exposer.def( 
@@ -39,7 +39,7 @@ void register_SupraMove_class(){
         }
         { //::SireMove::SupraMove::move
         
-            typedef void ( ::SireMove::SupraMove::*move_function_type )( ::SireMove::SupraSystem &,int,bool ) ;
+            typedef void ( ::SireMove::SupraMove::*move_function_type)( ::SireMove::SupraSystem &,int,bool ) ;
             move_function_type move_function_value( &::SireMove::SupraMove::move );
             
             SupraMove_exposer.def( 
@@ -50,7 +50,7 @@ void register_SupraMove_class(){
         }
         { //::SireMove::SupraMove::nMoves
         
-            typedef int ( ::SireMove::SupraMove::*nMoves_function_type )(  ) const;
+            typedef int ( ::SireMove::SupraMove::*nMoves_function_type)(  ) const;
             nMoves_function_type nMoves_function_value( &::SireMove::SupraMove::nMoves );
             
             SupraMove_exposer.def( 
@@ -71,7 +71,7 @@ void register_SupraMove_class(){
         }
         { //::SireMove::SupraMove::toString
         
-            typedef ::QString ( ::SireMove::SupraMove::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMove::SupraMove::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMove::SupraMove::toString );
             
             SupraMove_exposer.def( 

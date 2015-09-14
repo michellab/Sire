@@ -49,7 +49,7 @@ void register_LessOrEqualThan_class(){
         LessOrEqualThan_exposer.def( bp::init< SireCAS::LessOrEqualThan const & >(( bp::arg("other") )) );
         { //::SireCAS::LessOrEqualThan::alwaysFalse
         
-            typedef bool ( ::SireCAS::LessOrEqualThan::*alwaysFalse_function_type )(  ) const;
+            typedef bool ( ::SireCAS::LessOrEqualThan::*alwaysFalse_function_type)(  ) const;
             alwaysFalse_function_type alwaysFalse_function_value( &::SireCAS::LessOrEqualThan::alwaysFalse );
             
             LessOrEqualThan_exposer.def( 
@@ -59,7 +59,7 @@ void register_LessOrEqualThan_class(){
         }
         { //::SireCAS::LessOrEqualThan::alwaysTrue
         
-            typedef bool ( ::SireCAS::LessOrEqualThan::*alwaysTrue_function_type )(  ) const;
+            typedef bool ( ::SireCAS::LessOrEqualThan::*alwaysTrue_function_type)(  ) const;
             alwaysTrue_function_type alwaysTrue_function_value( &::SireCAS::LessOrEqualThan::alwaysTrue );
             
             LessOrEqualThan_exposer.def( 
@@ -69,7 +69,7 @@ void register_LessOrEqualThan_class(){
         }
         { //::SireCAS::LessOrEqualThan::operator=
         
-            typedef ::SireCAS::LessOrEqualThan & ( ::SireCAS::LessOrEqualThan::*assign_function_type )( ::SireCAS::LessOrEqualThan const & ) ;
+            typedef ::SireCAS::LessOrEqualThan & ( ::SireCAS::LessOrEqualThan::*assign_function_type)( ::SireCAS::LessOrEqualThan const & ) ;
             assign_function_type assign_function_value( &::SireCAS::LessOrEqualThan::operator= );
             
             LessOrEqualThan_exposer.def( 
@@ -93,7 +93,7 @@ void register_LessOrEqualThan_class(){
         }
         { //::SireCAS::LessOrEqualThan::what
         
-            typedef char const * ( ::SireCAS::LessOrEqualThan::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::LessOrEqualThan::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::LessOrEqualThan::what );
             
             LessOrEqualThan_exposer.def( 

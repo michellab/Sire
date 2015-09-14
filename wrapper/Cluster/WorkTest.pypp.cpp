@@ -37,7 +37,7 @@ void register_WorkTest_class(){
         WorkTest_exposer.def( bp::init< SireCluster::WorkTest const & >(( bp::arg("other") )) );
         { //::SireCluster::WorkTest::approximatePacketSize
         
-            typedef int ( ::SireCluster::WorkTest::*approximatePacketSize_function_type )(  ) const;
+            typedef int ( ::SireCluster::WorkTest::*approximatePacketSize_function_type)(  ) const;
             approximatePacketSize_function_type approximatePacketSize_function_value( &::SireCluster::WorkTest::approximatePacketSize );
             
             WorkTest_exposer.def( 
@@ -47,7 +47,7 @@ void register_WorkTest_class(){
         }
         { //::SireCluster::WorkTest::hasFinished
         
-            typedef bool ( ::SireCluster::WorkTest::*hasFinished_function_type )(  ) const;
+            typedef bool ( ::SireCluster::WorkTest::*hasFinished_function_type)(  ) const;
             hasFinished_function_type hasFinished_function_value( &::SireCluster::WorkTest::hasFinished );
             
             WorkTest_exposer.def( 
@@ -57,7 +57,7 @@ void register_WorkTest_class(){
         }
         { //::SireCluster::WorkTest::operator=
         
-            typedef ::SireCluster::WorkTest & ( ::SireCluster::WorkTest::*assign_function_type )( ::SireCluster::WorkTest const & ) ;
+            typedef ::SireCluster::WorkTest & ( ::SireCluster::WorkTest::*assign_function_type)( ::SireCluster::WorkTest const & ) ;
             assign_function_type assign_function_value( &::SireCluster::WorkTest::operator= );
             
             WorkTest_exposer.def( 
@@ -79,7 +79,7 @@ void register_WorkTest_class(){
         }
         { //::SireCluster::WorkTest::what
         
-            typedef char const * ( ::SireCluster::WorkTest::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCluster::WorkTest::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCluster::WorkTest::what );
             
             WorkTest_exposer.def( 

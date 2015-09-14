@@ -47,7 +47,7 @@ void register_PowerConstant_class(){
         PowerConstant_exposer.def( bp::init< SireCAS::PowerConstant const & >(( bp::arg("other") )) );
         { //::SireCAS::PowerConstant::core
         
-            typedef ::SireCAS::Expression ( ::SireCAS::PowerConstant::*core_function_type )(  ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::PowerConstant::*core_function_type)(  ) const;
             core_function_type core_function_value( &::SireCAS::PowerConstant::core );
             
             PowerConstant_exposer.def( 
@@ -57,7 +57,7 @@ void register_PowerConstant_class(){
         }
         { //::SireCAS::PowerConstant::evaluate
         
-            typedef double ( ::SireCAS::PowerConstant::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::PowerConstant::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::PowerConstant::evaluate );
             
             PowerConstant_exposer.def( 
@@ -68,7 +68,7 @@ void register_PowerConstant_class(){
         }
         { //::SireCAS::PowerConstant::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::PowerConstant::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::PowerConstant::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::PowerConstant::evaluate );
             
             PowerConstant_exposer.def( 
@@ -79,7 +79,7 @@ void register_PowerConstant_class(){
         }
         { //::SireCAS::PowerConstant::hash
         
-            typedef ::uint ( ::SireCAS::PowerConstant::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireCAS::PowerConstant::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireCAS::PowerConstant::hash );
             
             PowerConstant_exposer.def( 
@@ -90,7 +90,7 @@ void register_PowerConstant_class(){
         PowerConstant_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
         { //::SireCAS::PowerConstant::power
         
-            typedef ::SireCAS::Expression ( ::SireCAS::PowerConstant::*power_function_type )(  ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::PowerConstant::*power_function_type)(  ) const;
             power_function_type power_function_value( &::SireCAS::PowerConstant::power );
             
             PowerConstant_exposer.def( 
@@ -110,7 +110,7 @@ void register_PowerConstant_class(){
         }
         { //::SireCAS::PowerConstant::what
         
-            typedef char const * ( ::SireCAS::PowerConstant::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::PowerConstant::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::PowerConstant::what );
             
             PowerConstant_exposer.def( 

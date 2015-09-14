@@ -58,7 +58,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::add
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*add_function_type )( ::SireMol::Selector< SireMol::Chain > const & ) const;
+            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*add_function_type)( ::SireMol::Selector< SireMol::Chain > const & ) const;
             add_function_type add_function_value( &::SireMol::Selector< SireMol::Chain >::add );
             
             Selector_Chain__exposer.def( 
@@ -70,7 +70,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::add
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*add_function_type )( ::SireMol::Chain const & ) const;
+            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*add_function_type)( ::SireMol::Chain const & ) const;
             add_function_type add_function_value( &::SireMol::Selector< SireMol::Chain >::add );
             
             Selector_Chain__exposer.def( 
@@ -82,7 +82,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::add
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*add_function_type )( ::SireMol::ChainID const & ) const;
+            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*add_function_type)( ::SireMol::ChainID const & ) const;
             add_function_type add_function_value( &::SireMol::Selector< SireMol::Chain >::add );
             
             Selector_Chain__exposer.def( 
@@ -94,7 +94,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::at
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Chain ( ::SireMol::Selector< SireMol::Chain >::*at_function_type )( int ) const;
+            typedef ::SireMol::Chain ( ::SireMol::Selector< SireMol::Chain >::*at_function_type)( int ) const;
             at_function_type at_function_value( &::SireMol::Selector< SireMol::Chain >::at );
             
             Selector_Chain__exposer.def( 
@@ -106,7 +106,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::at
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*at_function_type )( int,int ) const;
+            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*at_function_type)( int,int ) const;
             at_function_type at_function_value( &::SireMol::Selector< SireMol::Chain >::at );
             
             Selector_Chain__exposer.def( 
@@ -118,7 +118,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::contains
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Chain >::*contains_function_type )( ::SireMol::Selector< SireMol::Chain > const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Chain >::*contains_function_type)( ::SireMol::Selector< SireMol::Chain > const & ) const;
             contains_function_type contains_function_value( &::SireMol::Selector< SireMol::Chain >::contains );
             
             Selector_Chain__exposer.def( 
@@ -130,7 +130,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::contains
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Chain >::*contains_function_type )( ::SireMol::Chain const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Chain >::*contains_function_type)( ::SireMol::Chain const & ) const;
             contains_function_type contains_function_value( &::SireMol::Selector< SireMol::Chain >::contains );
             
             Selector_Chain__exposer.def( 
@@ -142,7 +142,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::contains
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Chain >::*contains_function_type )( ::SireMol::ChainID const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Chain >::*contains_function_type)( ::SireMol::ChainID const & ) const;
             contains_function_type contains_function_value( &::SireMol::Selector< SireMol::Chain >::contains );
             
             Selector_Chain__exposer.def( 
@@ -154,7 +154,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::count
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef int ( ::SireMol::Selector< SireMol::Chain >::*count_function_type )(  ) const;
+            typedef int ( ::SireMol::Selector< SireMol::Chain >::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMol::Selector< SireMol::Chain >::count );
             
             Selector_Chain__exposer.def( 
@@ -165,7 +165,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::evaluate
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Evaluator ( ::SireMol::Selector< SireMol::Chain >::*evaluate_function_type )(  ) const;
+            typedef ::SireMol::Evaluator ( ::SireMol::Selector< SireMol::Chain >::*evaluate_function_type)(  ) const;
             evaluate_function_type evaluate_function_value( &::SireMol::Selector< SireMol::Chain >::evaluate );
             
             Selector_Chain__exposer.def( 
@@ -176,7 +176,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::evaluate
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Evaluator ( ::SireMol::Selector< SireMol::Chain >::*evaluate_function_type )( int ) const;
+            typedef ::SireMol::Evaluator ( ::SireMol::Selector< SireMol::Chain >::*evaluate_function_type)( int ) const;
             evaluate_function_type evaluate_function_value( &::SireMol::Selector< SireMol::Chain >::evaluate );
             
             Selector_Chain__exposer.def( 
@@ -188,7 +188,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::evaluate
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Evaluator ( ::SireMol::Selector< SireMol::Chain >::*evaluate_function_type )( int,int ) const;
+            typedef ::SireMol::Evaluator ( ::SireMol::Selector< SireMol::Chain >::*evaluate_function_type)( int,int ) const;
             evaluate_function_type evaluate_function_value( &::SireMol::Selector< SireMol::Chain >::evaluate );
             
             Selector_Chain__exposer.def( 
@@ -200,7 +200,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::hasMetadata
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Chain >::*hasMetadata_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Chain >::*hasMetadata_function_type)( ::SireBase::PropertyName const & ) const;
             hasMetadata_function_type hasMetadata_function_value( &::SireMol::Selector< SireMol::Chain >::hasMetadata );
             
             Selector_Chain__exposer.def( 
@@ -212,7 +212,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::hasMetadata
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Chain >::*hasMetadata_function_type )( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Chain >::*hasMetadata_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
             hasMetadata_function_type hasMetadata_function_value( &::SireMol::Selector< SireMol::Chain >::hasMetadata );
             
             Selector_Chain__exposer.def( 
@@ -224,7 +224,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::hasProperty
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Chain >::*hasProperty_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Chain >::*hasProperty_function_type)( ::SireBase::PropertyName const & ) const;
             hasProperty_function_type hasProperty_function_value( &::SireMol::Selector< SireMol::Chain >::hasProperty );
             
             Selector_Chain__exposer.def( 
@@ -236,7 +236,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::index
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::ChainIdx ( ::SireMol::Selector< SireMol::Chain >::*index_function_type )( int ) const;
+            typedef ::SireMol::ChainIdx ( ::SireMol::Selector< SireMol::Chain >::*index_function_type)( int ) const;
             index_function_type index_function_value( &::SireMol::Selector< SireMol::Chain >::index );
             
             Selector_Chain__exposer.def( 
@@ -248,7 +248,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::intersection
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*intersection_function_type )( ::SireMol::Selector< SireMol::Chain > const & ) const;
+            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*intersection_function_type)( ::SireMol::Selector< SireMol::Chain > const & ) const;
             intersection_function_type intersection_function_value( &::SireMol::Selector< SireMol::Chain >::intersection );
             
             Selector_Chain__exposer.def( 
@@ -260,7 +260,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::intersection
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*intersection_function_type )( ::SireMol::Chain const & ) const;
+            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*intersection_function_type)( ::SireMol::Chain const & ) const;
             intersection_function_type intersection_function_value( &::SireMol::Selector< SireMol::Chain >::intersection );
             
             Selector_Chain__exposer.def( 
@@ -272,7 +272,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::intersection
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*intersection_function_type )( ::SireMol::ChainID const & ) const;
+            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*intersection_function_type)( ::SireMol::ChainID const & ) const;
             intersection_function_type intersection_function_value( &::SireMol::Selector< SireMol::Chain >::intersection );
             
             Selector_Chain__exposer.def( 
@@ -284,7 +284,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::intersects
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Chain >::*intersects_function_type )( ::SireMol::Selector< SireMol::Chain > const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Chain >::*intersects_function_type)( ::SireMol::Selector< SireMol::Chain > const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::Selector< SireMol::Chain >::intersects );
             
             Selector_Chain__exposer.def( 
@@ -296,7 +296,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::intersects
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Chain >::*intersects_function_type )( ::SireMol::Chain const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Chain >::*intersects_function_type)( ::SireMol::Chain const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::Selector< SireMol::Chain >::intersects );
             
             Selector_Chain__exposer.def( 
@@ -308,7 +308,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::intersects
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Chain >::*intersects_function_type )( ::SireMol::ChainID const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Chain >::*intersects_function_type)( ::SireMol::ChainID const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::Selector< SireMol::Chain >::intersects );
             
             Selector_Chain__exposer.def( 
@@ -320,7 +320,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::invert
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*invert_function_type )(  ) const;
+            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*invert_function_type)(  ) const;
             invert_function_type invert_function_value( &::SireMol::Selector< SireMol::Chain >::invert );
             
             Selector_Chain__exposer.def( 
@@ -331,7 +331,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::isEmpty
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Chain >::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Chain >::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::Selector< SireMol::Chain >::isEmpty );
             
             Selector_Chain__exposer.def( 
@@ -342,7 +342,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::metadataKeys
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::QStringList ( ::SireMol::Selector< SireMol::Chain >::*metadataKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireMol::Selector< SireMol::Chain >::*metadataKeys_function_type)(  ) const;
             metadataKeys_function_type metadataKeys_function_value( &::SireMol::Selector< SireMol::Chain >::metadataKeys );
             
             Selector_Chain__exposer.def( 
@@ -353,7 +353,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::metadataKeys
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::QStringList ( ::SireMol::Selector< SireMol::Chain >::*metadataKeys_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef ::QStringList ( ::SireMol::Selector< SireMol::Chain >::*metadataKeys_function_type)( ::SireBase::PropertyName const & ) const;
             metadataKeys_function_type metadataKeys_function_value( &::SireMol::Selector< SireMol::Chain >::metadataKeys );
             
             Selector_Chain__exposer.def( 
@@ -365,7 +365,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::move
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Selector< SireMol::Chain > > ( ::SireMol::Selector< SireMol::Chain >::*move_function_type )(  ) const;
+            typedef ::SireMol::Mover< SireMol::Selector< SireMol::Chain > > ( ::SireMol::Selector< SireMol::Chain >::*move_function_type)(  ) const;
             move_function_type move_function_value( &::SireMol::Selector< SireMol::Chain >::move );
             
             Selector_Chain__exposer.def( 
@@ -376,7 +376,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::move
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Selector< SireMol::Chain > > ( ::SireMol::Selector< SireMol::Chain >::*move_function_type )( int ) const;
+            typedef ::SireMol::Mover< SireMol::Selector< SireMol::Chain > > ( ::SireMol::Selector< SireMol::Chain >::*move_function_type)( int ) const;
             move_function_type move_function_value( &::SireMol::Selector< SireMol::Chain >::move );
             
             Selector_Chain__exposer.def( 
@@ -388,7 +388,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::move
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Selector< SireMol::Chain > > ( ::SireMol::Selector< SireMol::Chain >::*move_function_type )( int,int ) const;
+            typedef ::SireMol::Mover< SireMol::Selector< SireMol::Chain > > ( ::SireMol::Selector< SireMol::Chain >::*move_function_type)( int,int ) const;
             move_function_type move_function_value( &::SireMol::Selector< SireMol::Chain >::move );
             
             Selector_Chain__exposer.def( 
@@ -401,7 +401,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::operator()
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Chain ( ::SireMol::Selector< SireMol::Chain >::*__call___function_type )( int ) const;
+            typedef ::SireMol::Chain ( ::SireMol::Selector< SireMol::Chain >::*__call___function_type)( int ) const;
             __call___function_type __call___function_value( &::SireMol::Selector< SireMol::Chain >::operator() );
             
             Selector_Chain__exposer.def( 
@@ -413,7 +413,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::operator()
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*__call___function_type )( int,int ) const;
+            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireMol::Selector< SireMol::Chain >::operator() );
             
             Selector_Chain__exposer.def( 
@@ -431,7 +431,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::operator=
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Chain > & ( ::SireMol::Selector< SireMol::Chain >::*assign_function_type )( ::SireMol::Selector< SireMol::Chain > const & ) ;
+            typedef ::SireMol::Selector< SireMol::Chain > & ( ::SireMol::Selector< SireMol::Chain >::*assign_function_type)( ::SireMol::Selector< SireMol::Chain > const & ) ;
             assign_function_type assign_function_value( &::SireMol::Selector< SireMol::Chain >::operator= );
             
             Selector_Chain__exposer.def( 
@@ -444,7 +444,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::operator=
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Chain > & ( ::SireMol::Selector< SireMol::Chain >::*assign_function_type )( ::SireMol::Chain const & ) ;
+            typedef ::SireMol::Selector< SireMol::Chain > & ( ::SireMol::Selector< SireMol::Chain >::*assign_function_type)( ::SireMol::Chain const & ) ;
             assign_function_type assign_function_value( &::SireMol::Selector< SireMol::Chain >::operator= );
             
             Selector_Chain__exposer.def( 
@@ -458,7 +458,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::operator[]
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Chain ( ::SireMol::Selector< SireMol::Chain >::*__getitem___function_type )( int ) const;
+            typedef ::SireMol::Chain ( ::SireMol::Selector< SireMol::Chain >::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::Selector< SireMol::Chain >::operator[] );
             
             Selector_Chain__exposer.def( 
@@ -470,7 +470,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::propertyKeys
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::QStringList ( ::SireMol::Selector< SireMol::Chain >::*propertyKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireMol::Selector< SireMol::Chain >::*propertyKeys_function_type)(  ) const;
             propertyKeys_function_type propertyKeys_function_value( &::SireMol::Selector< SireMol::Chain >::propertyKeys );
             
             Selector_Chain__exposer.def( 
@@ -481,7 +481,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::selectedAll
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Chain >::*selectedAll_function_type )(  ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Chain >::*selectedAll_function_type)(  ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::Selector< SireMol::Chain >::selectedAll );
             
             Selector_Chain__exposer.def( 
@@ -492,7 +492,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::selection
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::AtomSelection ( ::SireMol::Selector< SireMol::Chain >::*selection_function_type )(  ) const;
+            typedef ::SireMol::AtomSelection ( ::SireMol::Selector< SireMol::Chain >::*selection_function_type)(  ) const;
             selection_function_type selection_function_value( &::SireMol::Selector< SireMol::Chain >::selection );
             
             Selector_Chain__exposer.def( 
@@ -503,7 +503,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::selection
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::AtomSelection ( ::SireMol::Selector< SireMol::Chain >::*selection_function_type )( int ) const;
+            typedef ::SireMol::AtomSelection ( ::SireMol::Selector< SireMol::Chain >::*selection_function_type)( int ) const;
             selection_function_type selection_function_value( &::SireMol::Selector< SireMol::Chain >::selection );
             
             Selector_Chain__exposer.def( 
@@ -515,7 +515,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::selection
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::AtomSelection ( ::SireMol::Selector< SireMol::Chain >::*selection_function_type )( int,int ) const;
+            typedef ::SireMol::AtomSelection ( ::SireMol::Selector< SireMol::Chain >::*selection_function_type)( int,int ) const;
             selection_function_type selection_function_value( &::SireMol::Selector< SireMol::Chain >::selection );
             
             Selector_Chain__exposer.def( 
@@ -527,7 +527,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::selector
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*selector_function_type )(  ) const;
+            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*selector_function_type)(  ) const;
             selector_function_type selector_function_value( &::SireMol::Selector< SireMol::Chain >::selector );
             
             Selector_Chain__exposer.def( 
@@ -538,7 +538,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::selector
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*selector_function_type )( int ) const;
+            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*selector_function_type)( int ) const;
             selector_function_type selector_function_value( &::SireMol::Selector< SireMol::Chain >::selector );
             
             Selector_Chain__exposer.def( 
@@ -550,7 +550,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::selector
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*selector_function_type )( int,int ) const;
+            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*selector_function_type)( int,int ) const;
             selector_function_type selector_function_value( &::SireMol::Selector< SireMol::Chain >::selector );
             
             Selector_Chain__exposer.def( 
@@ -562,7 +562,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::subtract
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*subtract_function_type )( ::SireMol::Selector< SireMol::Chain > const & ) const;
+            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*subtract_function_type)( ::SireMol::Selector< SireMol::Chain > const & ) const;
             subtract_function_type subtract_function_value( &::SireMol::Selector< SireMol::Chain >::subtract );
             
             Selector_Chain__exposer.def( 
@@ -574,7 +574,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::subtract
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*subtract_function_type )( ::SireMol::Chain const & ) const;
+            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*subtract_function_type)( ::SireMol::Chain const & ) const;
             subtract_function_type subtract_function_value( &::SireMol::Selector< SireMol::Chain >::subtract );
             
             Selector_Chain__exposer.def( 
@@ -586,7 +586,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::subtract
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*subtract_function_type )( ::SireMol::ChainID const & ) const;
+            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Selector< SireMol::Chain >::*subtract_function_type)( ::SireMol::ChainID const & ) const;
             subtract_function_type subtract_function_value( &::SireMol::Selector< SireMol::Chain >::subtract );
             
             Selector_Chain__exposer.def( 
@@ -598,7 +598,7 @@ void register_Selector_Chain__class(){
         { //::SireMol::Selector< SireMol::Chain >::toString
         
             typedef SireMol::Selector< SireMol::Chain > exported_class_t;
-            typedef ::QString ( ::SireMol::Selector< SireMol::Chain >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::Selector< SireMol::Chain >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::Selector< SireMol::Chain >::toString );
             
             Selector_Chain__exposer.def( 

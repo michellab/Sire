@@ -44,7 +44,7 @@ void register_RegularGrid_class(){
         RegularGrid_exposer.def( bp::init< SireVol::RegularGrid const & >(( bp::arg("other") )) );
         { //::SireVol::RegularGrid::basis
         
-            typedef ::SireMaths::Matrix const & ( ::SireVol::RegularGrid::*basis_function_type )(  ) const;
+            typedef ::SireMaths::Matrix const & ( ::SireVol::RegularGrid::*basis_function_type)(  ) const;
             basis_function_type basis_function_value( &::SireVol::RegularGrid::basis );
             
             RegularGrid_exposer.def( 
@@ -55,7 +55,7 @@ void register_RegularGrid_class(){
         }
         { //::SireVol::RegularGrid::dimX
         
-            typedef int ( ::SireVol::RegularGrid::*dimX_function_type )(  ) const;
+            typedef int ( ::SireVol::RegularGrid::*dimX_function_type)(  ) const;
             dimX_function_type dimX_function_value( &::SireVol::RegularGrid::dimX );
             
             RegularGrid_exposer.def( 
@@ -65,7 +65,7 @@ void register_RegularGrid_class(){
         }
         { //::SireVol::RegularGrid::dimY
         
-            typedef int ( ::SireVol::RegularGrid::*dimY_function_type )(  ) const;
+            typedef int ( ::SireVol::RegularGrid::*dimY_function_type)(  ) const;
             dimY_function_type dimY_function_value( &::SireVol::RegularGrid::dimY );
             
             RegularGrid_exposer.def( 
@@ -75,7 +75,7 @@ void register_RegularGrid_class(){
         }
         { //::SireVol::RegularGrid::dimZ
         
-            typedef int ( ::SireVol::RegularGrid::*dimZ_function_type )(  ) const;
+            typedef int ( ::SireVol::RegularGrid::*dimZ_function_type)(  ) const;
             dimZ_function_type dimZ_function_value( &::SireVol::RegularGrid::dimZ );
             
             RegularGrid_exposer.def( 
@@ -85,7 +85,7 @@ void register_RegularGrid_class(){
         }
         { //::SireVol::RegularGrid::gridSpacing
         
-            typedef ::SireUnits::Dimension::Length ( ::SireVol::RegularGrid::*gridSpacing_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireVol::RegularGrid::*gridSpacing_function_type)(  ) const;
             gridSpacing_function_type gridSpacing_function_value( &::SireVol::RegularGrid::gridSpacing );
             
             RegularGrid_exposer.def( 
@@ -96,7 +96,7 @@ void register_RegularGrid_class(){
         RegularGrid_exposer.def( bp::self != bp::self );
         { //::SireVol::RegularGrid::operator=
         
-            typedef ::SireVol::RegularGrid & ( ::SireVol::RegularGrid::*assign_function_type )( ::SireVol::RegularGrid const & ) ;
+            typedef ::SireVol::RegularGrid & ( ::SireVol::RegularGrid::*assign_function_type)( ::SireVol::RegularGrid const & ) ;
             assign_function_type assign_function_value( &::SireVol::RegularGrid::operator= );
             
             RegularGrid_exposer.def( 
@@ -109,7 +109,7 @@ void register_RegularGrid_class(){
         RegularGrid_exposer.def( bp::self == bp::self );
         { //::SireVol::RegularGrid::recenter
         
-            typedef ::SireVol::GridPtr ( ::SireVol::RegularGrid::*recenter_function_type )( ::SireMaths::Vector const & ) const;
+            typedef ::SireVol::GridPtr ( ::SireVol::RegularGrid::*recenter_function_type)( ::SireMaths::Vector const & ) const;
             recenter_function_type recenter_function_value( &::SireVol::RegularGrid::recenter );
             
             RegularGrid_exposer.def( 
@@ -120,7 +120,7 @@ void register_RegularGrid_class(){
         }
         { //::SireVol::RegularGrid::rotate
         
-            typedef ::SireVol::GridPtr ( ::SireVol::RegularGrid::*rotate_function_type )( ::SireMaths::Matrix const &,::SireMaths::Vector const & ) const;
+            typedef ::SireVol::GridPtr ( ::SireVol::RegularGrid::*rotate_function_type)( ::SireMaths::Matrix const &,::SireMaths::Vector const & ) const;
             rotate_function_type rotate_function_value( &::SireVol::RegularGrid::rotate );
             
             RegularGrid_exposer.def( 
@@ -131,7 +131,7 @@ void register_RegularGrid_class(){
         }
         { //::SireVol::RegularGrid::rotate
         
-            typedef ::SireVol::GridPtr ( ::SireVol::RegularGrid::*rotate_function_type )( ::SireMaths::Quaternion const &,::SireMaths::Vector const & ) const;
+            typedef ::SireVol::GridPtr ( ::SireVol::RegularGrid::*rotate_function_type)( ::SireMaths::Quaternion const &,::SireMaths::Vector const & ) const;
             rotate_function_type rotate_function_value( &::SireVol::RegularGrid::rotate );
             
             RegularGrid_exposer.def( 
@@ -142,7 +142,7 @@ void register_RegularGrid_class(){
         }
         { //::SireVol::RegularGrid::scale
         
-            typedef ::SireVol::GridPtr ( ::SireVol::RegularGrid::*scale_function_type )( double ) const;
+            typedef ::SireVol::GridPtr ( ::SireVol::RegularGrid::*scale_function_type)( double ) const;
             scale_function_type scale_function_value( &::SireVol::RegularGrid::scale );
             
             RegularGrid_exposer.def( 
@@ -153,7 +153,7 @@ void register_RegularGrid_class(){
         }
         { //::SireVol::RegularGrid::toString
         
-            typedef ::QString ( ::SireVol::RegularGrid::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireVol::RegularGrid::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireVol::RegularGrid::toString );
             
             RegularGrid_exposer.def( 
@@ -163,7 +163,7 @@ void register_RegularGrid_class(){
         }
         { //::SireVol::RegularGrid::translate
         
-            typedef ::SireVol::GridPtr ( ::SireVol::RegularGrid::*translate_function_type )( ::SireMaths::Vector const & ) const;
+            typedef ::SireVol::GridPtr ( ::SireVol::RegularGrid::*translate_function_type)( ::SireMaths::Vector const & ) const;
             translate_function_type translate_function_value( &::SireVol::RegularGrid::translate );
             
             RegularGrid_exposer.def( 

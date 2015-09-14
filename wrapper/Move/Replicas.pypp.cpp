@@ -45,7 +45,7 @@ void register_Replicas_class(){
         Replicas_exposer.def( bp::init< SireMove::Replicas const & >(( bp::arg("other") )) );
         { //::SireMove::Replicas::at
         
-            typedef ::SireMove::Replica const & ( ::SireMove::Replicas::*at_function_type )( int ) const;
+            typedef ::SireMove::Replica const & ( ::SireMove::Replicas::*at_function_type)( int ) const;
             at_function_type at_function_value( &::SireMove::Replicas::at );
             
             Replicas_exposer.def( 
@@ -57,7 +57,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::collectSupraStats
         
-            typedef void ( ::SireMove::Replicas::*collectSupraStats_function_type )(  ) ;
+            typedef void ( ::SireMove::Replicas::*collectSupraStats_function_type)(  ) ;
             collectSupraStats_function_type collectSupraStats_function_value( &::SireMove::Replicas::collectSupraStats );
             
             Replicas_exposer.def( 
@@ -67,7 +67,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::lambdaTrajectory
         
-            typedef ::QVector< double > ( ::SireMove::Replicas::*lambdaTrajectory_function_type )(  ) const;
+            typedef ::QVector< double > ( ::SireMove::Replicas::*lambdaTrajectory_function_type)(  ) const;
             lambdaTrajectory_function_type lambdaTrajectory_function_value( &::SireMove::Replicas::lambdaTrajectory );
             
             Replicas_exposer.def( 
@@ -77,7 +77,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::lambdaTrajectoryHistory
         
-            typedef ::QList< QVector< double > > ( ::SireMove::Replicas::*lambdaTrajectoryHistory_function_type )(  ) const;
+            typedef ::QList< QVector< double > > ( ::SireMove::Replicas::*lambdaTrajectoryHistory_function_type)(  ) const;
             lambdaTrajectoryHistory_function_type lambdaTrajectoryHistory_function_value( &::SireMove::Replicas::lambdaTrajectoryHistory );
             
             Replicas_exposer.def( 
@@ -87,7 +87,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::nReplicas
         
-            typedef int ( ::SireMove::Replicas::*nReplicas_function_type )(  ) const;
+            typedef int ( ::SireMove::Replicas::*nReplicas_function_type)(  ) const;
             nReplicas_function_type nReplicas_function_value( &::SireMove::Replicas::nReplicas );
             
             Replicas_exposer.def( 
@@ -98,7 +98,7 @@ void register_Replicas_class(){
         Replicas_exposer.def( bp::self != bp::self );
         { //::SireMove::Replicas::operator=
         
-            typedef ::SireMove::Replicas & ( ::SireMove::Replicas::*assign_function_type )( ::SireMove::Replicas const & ) ;
+            typedef ::SireMove::Replicas & ( ::SireMove::Replicas::*assign_function_type)( ::SireMove::Replicas const & ) ;
             assign_function_type assign_function_value( &::SireMove::Replicas::operator= );
             
             Replicas_exposer.def( 
@@ -111,7 +111,7 @@ void register_Replicas_class(){
         Replicas_exposer.def( bp::self == bp::self );
         { //::SireMove::Replicas::operator[]
         
-            typedef ::SireMove::Replica const & ( ::SireMove::Replicas::*__getitem___function_type )( int ) const;
+            typedef ::SireMove::Replica const & ( ::SireMove::Replicas::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMove::Replicas::operator[] );
             
             Replicas_exposer.def( 
@@ -123,7 +123,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::replicaIDs
         
-            typedef ::QVector< unsigned int > const & ( ::SireMove::Replicas::*replicaIDs_function_type )(  ) const;
+            typedef ::QVector< unsigned int > const & ( ::SireMove::Replicas::*replicaIDs_function_type)(  ) const;
             replicaIDs_function_type replicaIDs_function_value( &::SireMove::Replicas::replicaIDs );
             
             Replicas_exposer.def( 
@@ -134,7 +134,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::resetReplicaIDs
         
-            typedef void ( ::SireMove::Replicas::*resetReplicaIDs_function_type )(  ) ;
+            typedef void ( ::SireMove::Replicas::*resetReplicaIDs_function_type)(  ) ;
             resetReplicaIDs_function_type resetReplicaIDs_function_value( &::SireMove::Replicas::resetReplicaIDs );
             
             Replicas_exposer.def( 
@@ -144,7 +144,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::setChemicalPotential
         
-            typedef void ( ::SireMove::Replicas::*setChemicalPotential_function_type )( ::SireUnits::Dimension::MolarEnergy const & ) ;
+            typedef void ( ::SireMove::Replicas::*setChemicalPotential_function_type)( ::SireUnits::Dimension::MolarEnergy const & ) ;
             setChemicalPotential_function_type setChemicalPotential_function_value( &::SireMove::Replicas::setChemicalPotential );
             
             Replicas_exposer.def( 
@@ -155,7 +155,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::setChemicalPotential
         
-            typedef void ( ::SireMove::Replicas::*setChemicalPotential_function_type )( int,::SireUnits::Dimension::MolarEnergy const & ) ;
+            typedef void ( ::SireMove::Replicas::*setChemicalPotential_function_type)( int,::SireUnits::Dimension::MolarEnergy const & ) ;
             setChemicalPotential_function_type setChemicalPotential_function_value( &::SireMove::Replicas::setChemicalPotential );
             
             Replicas_exposer.def( 
@@ -166,7 +166,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::setEnergyComponent
         
-            typedef void ( ::SireMove::Replicas::*setEnergyComponent_function_type )( ::SireCAS::Symbol const & ) ;
+            typedef void ( ::SireMove::Replicas::*setEnergyComponent_function_type)( ::SireCAS::Symbol const & ) ;
             setEnergyComponent_function_type setEnergyComponent_function_value( &::SireMove::Replicas::setEnergyComponent );
             
             Replicas_exposer.def( 
@@ -177,7 +177,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::setEnergyComponent
         
-            typedef void ( ::SireMove::Replicas::*setEnergyComponent_function_type )( int,::SireCAS::Symbol const & ) ;
+            typedef void ( ::SireMove::Replicas::*setEnergyComponent_function_type)( int,::SireCAS::Symbol const & ) ;
             setEnergyComponent_function_type setEnergyComponent_function_value( &::SireMove::Replicas::setEnergyComponent );
             
             Replicas_exposer.def( 
@@ -188,7 +188,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::setFugacity
         
-            typedef void ( ::SireMove::Replicas::*setFugacity_function_type )( ::SireUnits::Dimension::Pressure const & ) ;
+            typedef void ( ::SireMove::Replicas::*setFugacity_function_type)( ::SireUnits::Dimension::Pressure const & ) ;
             setFugacity_function_type setFugacity_function_value( &::SireMove::Replicas::setFugacity );
             
             Replicas_exposer.def( 
@@ -199,7 +199,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::setFugacity
         
-            typedef void ( ::SireMove::Replicas::*setFugacity_function_type )( int,::SireUnits::Dimension::Pressure const & ) ;
+            typedef void ( ::SireMove::Replicas::*setFugacity_function_type)( int,::SireUnits::Dimension::Pressure const & ) ;
             setFugacity_function_type setFugacity_function_value( &::SireMove::Replicas::setFugacity );
             
             Replicas_exposer.def( 
@@ -210,7 +210,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::setGenerator
         
-            typedef void ( ::SireMove::Replicas::*setGenerator_function_type )( ::SireMaths::RanGenerator const & ) ;
+            typedef void ( ::SireMove::Replicas::*setGenerator_function_type)( ::SireMaths::RanGenerator const & ) ;
             setGenerator_function_type setGenerator_function_value( &::SireMove::Replicas::setGenerator );
             
             Replicas_exposer.def( 
@@ -221,7 +221,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::setGenerator
         
-            typedef void ( ::SireMove::Replicas::*setGenerator_function_type )( int,::SireMaths::RanGenerator const & ) ;
+            typedef void ( ::SireMove::Replicas::*setGenerator_function_type)( int,::SireMaths::RanGenerator const & ) ;
             setGenerator_function_type setGenerator_function_value( &::SireMove::Replicas::setGenerator );
             
             Replicas_exposer.def( 
@@ -232,7 +232,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::setLambdaComponent
         
-            typedef void ( ::SireMove::Replicas::*setLambdaComponent_function_type )( ::SireCAS::Symbol const & ) ;
+            typedef void ( ::SireMove::Replicas::*setLambdaComponent_function_type)( ::SireCAS::Symbol const & ) ;
             setLambdaComponent_function_type setLambdaComponent_function_value( &::SireMove::Replicas::setLambdaComponent );
             
             Replicas_exposer.def( 
@@ -243,7 +243,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::setLambdaComponent
         
-            typedef void ( ::SireMove::Replicas::*setLambdaComponent_function_type )( int,::SireCAS::Symbol const & ) ;
+            typedef void ( ::SireMove::Replicas::*setLambdaComponent_function_type)( int,::SireCAS::Symbol const & ) ;
             setLambdaComponent_function_type setLambdaComponent_function_value( &::SireMove::Replicas::setLambdaComponent );
             
             Replicas_exposer.def( 
@@ -254,7 +254,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::setLambdaValue
         
-            typedef void ( ::SireMove::Replicas::*setLambdaValue_function_type )( double ) ;
+            typedef void ( ::SireMove::Replicas::*setLambdaValue_function_type)( double ) ;
             setLambdaValue_function_type setLambdaValue_function_value( &::SireMove::Replicas::setLambdaValue );
             
             Replicas_exposer.def( 
@@ -265,7 +265,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::setLambdaValue
         
-            typedef void ( ::SireMove::Replicas::*setLambdaValue_function_type )( int,double ) ;
+            typedef void ( ::SireMove::Replicas::*setLambdaValue_function_type)( int,double ) ;
             setLambdaValue_function_type setLambdaValue_function_value( &::SireMove::Replicas::setLambdaValue );
             
             Replicas_exposer.def( 
@@ -276,7 +276,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::setPressure
         
-            typedef void ( ::SireMove::Replicas::*setPressure_function_type )( ::SireUnits::Dimension::Pressure const & ) ;
+            typedef void ( ::SireMove::Replicas::*setPressure_function_type)( ::SireUnits::Dimension::Pressure const & ) ;
             setPressure_function_type setPressure_function_value( &::SireMove::Replicas::setPressure );
             
             Replicas_exposer.def( 
@@ -287,7 +287,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::setPressure
         
-            typedef void ( ::SireMove::Replicas::*setPressure_function_type )( int,::SireUnits::Dimension::Pressure const & ) ;
+            typedef void ( ::SireMove::Replicas::*setPressure_function_type)( int,::SireUnits::Dimension::Pressure const & ) ;
             setPressure_function_type setPressure_function_value( &::SireMove::Replicas::setPressure );
             
             Replicas_exposer.def( 
@@ -298,7 +298,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::setReplica
         
-            typedef void ( ::SireMove::Replicas::*setReplica_function_type )( ::SireMove::Replica const & ) ;
+            typedef void ( ::SireMove::Replicas::*setReplica_function_type)( ::SireMove::Replica const & ) ;
             setReplica_function_type setReplica_function_value( &::SireMove::Replicas::setReplica );
             
             Replicas_exposer.def( 
@@ -309,7 +309,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::setReplica
         
-            typedef void ( ::SireMove::Replicas::*setReplica_function_type )( int,::SireMove::Replica const & ) ;
+            typedef void ( ::SireMove::Replicas::*setReplica_function_type)( int,::SireMove::Replica const & ) ;
             setReplica_function_type setReplica_function_value( &::SireMove::Replicas::setReplica );
             
             Replicas_exposer.def( 
@@ -320,7 +320,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::setReplicas
         
-            typedef void ( ::SireMove::Replicas::*setReplicas_function_type )( ::SireMove::Replicas const & ) ;
+            typedef void ( ::SireMove::Replicas::*setReplicas_function_type)( ::SireMove::Replicas const & ) ;
             setReplicas_function_type setReplicas_function_value( &::SireMove::Replicas::setReplicas );
             
             Replicas_exposer.def( 
@@ -331,7 +331,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::setSpaceProperty
         
-            typedef void ( ::SireMove::Replicas::*setSpaceProperty_function_type )( ::SireBase::PropertyName const & ) ;
+            typedef void ( ::SireMove::Replicas::*setSpaceProperty_function_type)( ::SireBase::PropertyName const & ) ;
             setSpaceProperty_function_type setSpaceProperty_function_value( &::SireMove::Replicas::setSpaceProperty );
             
             Replicas_exposer.def( 
@@ -342,7 +342,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::setSpaceProperty
         
-            typedef void ( ::SireMove::Replicas::*setSpaceProperty_function_type )( int,::SireBase::PropertyName const & ) ;
+            typedef void ( ::SireMove::Replicas::*setSpaceProperty_function_type)( int,::SireBase::PropertyName const & ) ;
             setSpaceProperty_function_type setSpaceProperty_function_value( &::SireMove::Replicas::setSpaceProperty );
             
             Replicas_exposer.def( 
@@ -353,7 +353,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::setSubSystem
         
-            typedef void ( ::SireMove::Replicas::*setSubSystem_function_type )( ::SireSystem::System const & ) ;
+            typedef void ( ::SireMove::Replicas::*setSubSystem_function_type)( ::SireSystem::System const & ) ;
             setSubSystem_function_type setSubSystem_function_value( &::SireMove::Replicas::setSubSystem );
             
             Replicas_exposer.def( 
@@ -364,7 +364,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::setSubSystem
         
-            typedef void ( ::SireMove::Replicas::*setSubSystem_function_type )( ::SireMove::SupraSubSystem const & ) ;
+            typedef void ( ::SireMove::Replicas::*setSubSystem_function_type)( ::SireMove::SupraSubSystem const & ) ;
             setSubSystem_function_type setSubSystem_function_value( &::SireMove::Replicas::setSubSystem );
             
             Replicas_exposer.def( 
@@ -375,7 +375,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::setSubSystem
         
-            typedef void ( ::SireMove::Replicas::*setSubSystem_function_type )( int,::SireSystem::System const & ) ;
+            typedef void ( ::SireMove::Replicas::*setSubSystem_function_type)( int,::SireSystem::System const & ) ;
             setSubSystem_function_type setSubSystem_function_value( &::SireMove::Replicas::setSubSystem );
             
             Replicas_exposer.def( 
@@ -386,7 +386,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::setSubSystem
         
-            typedef void ( ::SireMove::Replicas::*setSubSystem_function_type )( int,::SireMove::SupraSubSystem const & ) ;
+            typedef void ( ::SireMove::Replicas::*setSubSystem_function_type)( int,::SireMove::SupraSubSystem const & ) ;
             setSubSystem_function_type setSubSystem_function_value( &::SireMove::Replicas::setSubSystem );
             
             Replicas_exposer.def( 
@@ -397,7 +397,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::setTemperature
         
-            typedef void ( ::SireMove::Replicas::*setTemperature_function_type )( ::SireUnits::Dimension::Temperature const & ) ;
+            typedef void ( ::SireMove::Replicas::*setTemperature_function_type)( ::SireUnits::Dimension::Temperature const & ) ;
             setTemperature_function_type setTemperature_function_value( &::SireMove::Replicas::setTemperature );
             
             Replicas_exposer.def( 
@@ -408,7 +408,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::setTemperature
         
-            typedef void ( ::SireMove::Replicas::*setTemperature_function_type )( int,::SireUnits::Dimension::Temperature const & ) ;
+            typedef void ( ::SireMove::Replicas::*setTemperature_function_type)( int,::SireUnits::Dimension::Temperature const & ) ;
             setTemperature_function_type setTemperature_function_value( &::SireMove::Replicas::setTemperature );
             
             Replicas_exposer.def( 
@@ -419,7 +419,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::swapMolecules
         
-            typedef void ( ::SireMove::Replicas::*swapMolecules_function_type )( int,int ) ;
+            typedef void ( ::SireMove::Replicas::*swapMolecules_function_type)( int,int ) ;
             swapMolecules_function_type swapMolecules_function_value( &::SireMove::Replicas::swapMolecules );
             
             Replicas_exposer.def( 
@@ -430,7 +430,7 @@ void register_Replicas_class(){
         }
         { //::SireMove::Replicas::swapSystems
         
-            typedef void ( ::SireMove::Replicas::*swapSystems_function_type )( int,int,bool ) ;
+            typedef void ( ::SireMove::Replicas::*swapSystems_function_type)( int,int,bool ) ;
             swapSystems_function_type swapSystems_function_value( &::SireMove::Replicas::swapSystems );
             
             Replicas_exposer.def( 

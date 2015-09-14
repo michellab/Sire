@@ -49,7 +49,7 @@ void register_Factor_class(){
         Factor_exposer.def( bp::init< SireCAS::Factor const & >(( bp::arg("other") )) );
         { //::SireCAS::Factor::factor
         
-            typedef ::SireCAS::Expression const & ( ::SireCAS::Factor::*factor_function_type )(  ) const;
+            typedef ::SireCAS::Expression const & ( ::SireCAS::Factor::*factor_function_type)(  ) const;
             factor_function_type factor_function_value( &::SireCAS::Factor::factor );
             
             Factor_exposer.def( 
@@ -61,7 +61,7 @@ void register_Factor_class(){
         Factor_exposer.def( bp::self != bp::self );
         { //::SireCAS::Factor::operator=
         
-            typedef ::SireCAS::Factor & ( ::SireCAS::Factor::*assign_function_type )( ::SireCAS::Factor const & ) ;
+            typedef ::SireCAS::Factor & ( ::SireCAS::Factor::*assign_function_type)( ::SireCAS::Factor const & ) ;
             assign_function_type assign_function_value( &::SireCAS::Factor::operator= );
             
             Factor_exposer.def( 
@@ -74,7 +74,7 @@ void register_Factor_class(){
         Factor_exposer.def( bp::self == bp::self );
         { //::SireCAS::Factor::power
         
-            typedef ::SireCAS::Expression const & ( ::SireCAS::Factor::*power_function_type )(  ) const;
+            typedef ::SireCAS::Expression const & ( ::SireCAS::Factor::*power_function_type)(  ) const;
             power_function_type power_function_value( &::SireCAS::Factor::power );
             
             Factor_exposer.def( 
@@ -85,7 +85,7 @@ void register_Factor_class(){
         }
         { //::SireCAS::Factor::symbol
         
-            typedef ::SireCAS::Symbol const & ( ::SireCAS::Factor::*symbol_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireCAS::Factor::*symbol_function_type)(  ) const;
             symbol_function_type symbol_function_value( &::SireCAS::Factor::symbol );
             
             Factor_exposer.def( 
@@ -96,7 +96,7 @@ void register_Factor_class(){
         }
         { //::SireCAS::Factor::toString
         
-            typedef ::QString ( ::SireCAS::Factor::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireCAS::Factor::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireCAS::Factor::toString );
             
             Factor_exposer.def( 

@@ -1,0 +1,111 @@
+
+A. INSTALL THE DEPENDENCIES
+
+First, make sure that you have downloaded and installed all
+of the dependencies of Sire. These are;
+
+(1) Functioning C++ and C compilers (recommend gcc >= 4.2 or clang >= 4.2)
+(2) cmake >= 2.8.12.1
+
+B. COMPILE THE CORELIB
+
+Change into the build/corelib directory
+
+:-> cd build/corelib
+
+Next, run cmake on the corelib source directory. This will take a long
+time as it will compile all of the Sire dependencies and will install them
+into the Sire install directory (by default, $HOME/sire.app)
+
+:-> cmake ../../corelib
+
+Note that if you want to install Sire into another directory, use
+
+:-> cmake ../../corelib -DSIRE_INSTALL_PREFIX=/path/to/sire.app
+
+Once cmake has completed, you can compile using
+
+:-> make -j X
+
+where X is the number of cores in your computer, e.g. if you want to 
+run 4 compile jobs in parallel on a 4-core node, type
+
+:-> make -j 4
+
+Once make has completed (it will take a LONG time), install using
+
+:-> make -j X install/strip
+
+To test that the corelib has installed correctly, check that the sire 
+executable runs, e.g.
+
+:-> ~/sire.app/bin/sire
+
+(the application should run, print out some help, and then exit)
+
+C. COMPILE THE PYTHON WRAPPERS
+
+Once the corelib has been compiled, you can then compile the
+python wrappers. Change into the python wrapper build directory, e.g.
+
+:-> cd ../python
+
+Next, run cmake pointing to the python wrapper source directory
+
+:-> cmake ../../python
+
+Note that cmake will look for sire.app in your home directory. If you
+installed sire.app somewhere different, you will need to use
+
+:-> cmake ../../python -DSIRE_APP=/path/to/sire.app
+
+Again, this cmake run will take a long time as it will compile and install
+all of the python wrapper dependencies (e.g. including python 3!)
+
+Once it has completed successfully, make the python wrappers using
+
+:-> make -j X
+
+where X has the same meaning as for the compilation of the corelib. Note
+that this compilation will take even longer than that for the corelib!
+
+Once it has finished, install using
+
+:-> make -j X install/strip
+
+To test that the Sire python wrappers have installed correctly, you can
+run the Sire python executable using
+
+:-> ~/sire.app/bin/python
+
+This should drop you into the python 3 prompt. Use "CTRL+D" to exit.
+
+D. RUNNING SIRE EXECUTABLES AND SCRIPTS
+
+To run a Sire script, e.g. script.py, simply using the Sire python 
+executable, e.g.
+
+:-> ~/sire.app/bin/python script.py
+
+Sire will automatically use all of the cores in a node to parallelise the job.
+
+Sire also comes with a set of installed scripts, that are linked to in the
+sire.app/bin directory. These include the "waterswap" script. To get help
+with these scripts, use "--help", e.g.
+
+:-> ~/sire.app/bin/waterswap --help
+
+E. DISTRIBUTING YOUR BINARY
+
+To package your installation of Sire up into a self-extracting
+executable, type
+
+:-> ~/sire.app/bin/package_sire
+
+This will build a "sire.run" package that can be used to install Sire
+on any machine that uses the same operating system, C and C++ library
+as that on which you compiled the binary.
+
+To get further help, please get in touch with the authors
+via the Sire mailing lists, or via the email links on the
+Sire website, http://siremol.org

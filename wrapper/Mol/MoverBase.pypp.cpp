@@ -64,7 +64,7 @@ void register_MoverBase_class(){
         MoverBase_exposer.def( bp::init< SireMol::MoverBase const & >(( bp::arg("other") )) );
         { //::SireMol::MoverBase::operator=
         
-            typedef ::SireMol::MoverBase & ( ::SireMol::MoverBase::*assign_function_type )( ::SireMol::MoverBase const & ) ;
+            typedef ::SireMol::MoverBase & ( ::SireMol::MoverBase::*assign_function_type)( ::SireMol::MoverBase const & ) ;
             assign_function_type assign_function_value( &::SireMol::MoverBase::operator= );
             
             MoverBase_exposer.def( 

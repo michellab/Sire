@@ -43,7 +43,7 @@ void register_MGID_class(){
         bp::scope MGID_scope( MGID_exposer );
         { //::SireMol::MGID::map
         
-            typedef ::QList< SireMol::MGNum > ( ::SireMol::MGID::*map_function_type )( ::SireMol::MolGroupsBase const & ) const;
+            typedef ::QList< SireMol::MGNum > ( ::SireMol::MGID::*map_function_type)( ::SireMol::MolGroupsBase const & ) const;
             map_function_type map_function_value( &::SireMol::MGID::map );
             
             MGID_exposer.def( 
@@ -55,7 +55,7 @@ void register_MGID_class(){
         MGID_exposer.def( bp::self & bp::self );
         { //::SireMol::MGID::operator()
         
-            typedef ::SireID::Specify< SireMol::MGID > ( ::SireMol::MGID::*__call___function_type )( int ) const;
+            typedef ::SireID::Specify< SireMol::MGID > ( ::SireMol::MGID::*__call___function_type)( int ) const;
             __call___function_type __call___function_value( &::SireMol::MGID::operator() );
             
             MGID_exposer.def( 
@@ -66,7 +66,7 @@ void register_MGID_class(){
         }
         { //::SireMol::MGID::operator()
         
-            typedef ::SireID::Specify< SireMol::MGID > ( ::SireMol::MGID::*__call___function_type )( int,int ) const;
+            typedef ::SireID::Specify< SireMol::MGID > ( ::SireMol::MGID::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireMol::MGID::operator() );
             
             MGID_exposer.def( 
@@ -79,7 +79,7 @@ void register_MGID_class(){
         MGID_exposer.def( bp::self + bp::self );
         { //::SireMol::MGID::operator[]
         
-            typedef ::SireID::Specify< SireMol::MGID > ( ::SireMol::MGID::*__getitem___function_type )( int ) const;
+            typedef ::SireID::Specify< SireMol::MGID > ( ::SireMol::MGID::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::MGID::operator[] );
             
             MGID_exposer.def( 

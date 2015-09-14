@@ -32,7 +32,7 @@ void register_FFName_class(){
         FFName_exposer.def( bp::init< SireFF::FFName const & >(( bp::arg("other") )) );
         { //::SireFF::FFName::hash
         
-            typedef ::uint ( ::SireFF::FFName::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireFF::FFName::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireFF::FFName::hash );
             
             FFName_exposer.def( 
@@ -42,7 +42,7 @@ void register_FFName_class(){
         }
         { //::SireFF::FFName::isNull
         
-            typedef bool ( ::SireFF::FFName::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireFF::FFName::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireFF::FFName::isNull );
             
             FFName_exposer.def( 
@@ -52,7 +52,7 @@ void register_FFName_class(){
         }
         { //::SireFF::FFName::map
         
-            typedef ::QList< SireFF::FFIdx > ( ::SireFF::FFName::*map_function_type )( ::SireFF::ForceFields const & ) const;
+            typedef ::QList< SireFF::FFIdx > ( ::SireFF::FFName::*map_function_type)( ::SireFF::ForceFields const & ) const;
             map_function_type map_function_value( &::SireFF::FFName::map );
             
             FFName_exposer.def( 
@@ -64,7 +64,7 @@ void register_FFName_class(){
         FFName_exposer.def( bp::self != bp::self );
         { //::SireFF::FFName::operator=
         
-            typedef ::SireFF::FFName & ( ::SireFF::FFName::*assign_function_type )( ::SireFF::FFName const & ) ;
+            typedef ::SireFF::FFName & ( ::SireFF::FFName::*assign_function_type)( ::SireFF::FFName const & ) ;
             assign_function_type assign_function_value( &::SireFF::FFName::operator= );
             
             FFName_exposer.def( 
@@ -78,7 +78,7 @@ void register_FFName_class(){
         FFName_exposer.def( bp::self == bp::self );
         { //::SireFF::FFName::toString
         
-            typedef ::QString ( ::SireFF::FFName::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireFF::FFName::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireFF::FFName::toString );
             
             FFName_exposer.def( 
@@ -98,7 +98,7 @@ void register_FFName_class(){
         }
         { //::SireFF::FFName::what
         
-            typedef char const * ( ::SireFF::FFName::*what_function_type )(  ) const;
+            typedef char const * ( ::SireFF::FFName::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireFF::FFName::what );
             
             FFName_exposer.def( 

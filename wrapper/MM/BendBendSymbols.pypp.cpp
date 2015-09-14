@@ -44,7 +44,7 @@ void register_BendBendSymbols_class(){
         bp::scope BendBendSymbols_scope( BendBendSymbols_exposer );
         { //::SireMM::BendBendSymbols::theta012
         
-            typedef ::SireCAS::Symbol const & ( ::SireMM::BendBendSymbols::*theta012_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMM::BendBendSymbols::*theta012_function_type)(  ) const;
             theta012_function_type theta012_function_value( &::SireMM::BendBendSymbols::theta012 );
             
             BendBendSymbols_exposer.def( 
@@ -55,7 +55,7 @@ void register_BendBendSymbols_class(){
         }
         { //::SireMM::BendBendSymbols::theta213
         
-            typedef ::SireCAS::Symbol const & ( ::SireMM::BendBendSymbols::*theta213_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMM::BendBendSymbols::*theta213_function_type)(  ) const;
             theta213_function_type theta213_function_value( &::SireMM::BendBendSymbols::theta213 );
             
             BendBendSymbols_exposer.def( 
@@ -66,7 +66,7 @@ void register_BendBendSymbols_class(){
         }
         { //::SireMM::BendBendSymbols::theta310
         
-            typedef ::SireCAS::Symbol const & ( ::SireMM::BendBendSymbols::*theta310_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMM::BendBendSymbols::*theta310_function_type)(  ) const;
             theta310_function_type theta310_function_value( &::SireMM::BendBendSymbols::theta310 );
             
             BendBendSymbols_exposer.def( 

@@ -94,7 +94,7 @@ void register_ResEditorBase_class(){
         { //::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::atom
         
             typedef SireMol::Editor< SireMol::ResEditor, SireMol::Residue > exported_class_t;
-            typedef ::SireMol::AtomEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*atom_function_type )(  ) ;
+            typedef ::SireMol::AtomEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*atom_function_type)(  ) ;
             atom_function_type atom_function_value( &::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::atom );
             
             ResEditorBase_exposer.def( 
@@ -105,7 +105,7 @@ void register_ResEditorBase_class(){
         { //::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::atom
         
             typedef SireMol::Editor< SireMol::ResEditor, SireMol::Residue > exported_class_t;
-            typedef ::SireMol::AtomEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*atom_function_type )( ::SireMol::AtomID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::AtomEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*atom_function_type)( ::SireMol::AtomID const &,::SireBase::PropertyMap const & ) ;
             atom_function_type atom_function_value( &::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::atom );
             
             ResEditorBase_exposer.def( 
@@ -117,7 +117,7 @@ void register_ResEditorBase_class(){
         { //::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::chain
         
             typedef SireMol::Editor< SireMol::ResEditor, SireMol::Residue > exported_class_t;
-            typedef ::SireMol::ChainEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*chain_function_type )(  ) ;
+            typedef ::SireMol::ChainEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*chain_function_type)(  ) ;
             chain_function_type chain_function_value( &::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::chain );
             
             ResEditorBase_exposer.def( 
@@ -128,7 +128,7 @@ void register_ResEditorBase_class(){
         { //::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::chain
         
             typedef SireMol::Editor< SireMol::ResEditor, SireMol::Residue > exported_class_t;
-            typedef ::SireMol::ChainEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*chain_function_type )( ::SireMol::ChainID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::ChainEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*chain_function_type)( ::SireMol::ChainID const &,::SireBase::PropertyMap const & ) ;
             chain_function_type chain_function_value( &::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::chain );
             
             ResEditorBase_exposer.def( 
@@ -140,7 +140,7 @@ void register_ResEditorBase_class(){
         { //::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::cutGroup
         
             typedef SireMol::Editor< SireMol::ResEditor, SireMol::Residue > exported_class_t;
-            typedef ::SireMol::CGEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*cutGroup_function_type )(  ) ;
+            typedef ::SireMol::CGEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*cutGroup_function_type)(  ) ;
             cutGroup_function_type cutGroup_function_value( &::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::cutGroup );
             
             ResEditorBase_exposer.def( 
@@ -151,7 +151,7 @@ void register_ResEditorBase_class(){
         { //::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::cutGroup
         
             typedef SireMol::Editor< SireMol::ResEditor, SireMol::Residue > exported_class_t;
-            typedef ::SireMol::CGEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*cutGroup_function_type )( ::SireMol::CGID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::CGEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*cutGroup_function_type)( ::SireMol::CGID const &,::SireBase::PropertyMap const & ) ;
             cutGroup_function_type cutGroup_function_value( &::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::cutGroup );
             
             ResEditorBase_exposer.def( 
@@ -163,7 +163,7 @@ void register_ResEditorBase_class(){
         { //::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::molecule
         
             typedef SireMol::Editor< SireMol::ResEditor, SireMol::Residue > exported_class_t;
-            typedef ::SireMol::MolEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*molecule_function_type )(  ) ;
+            typedef ::SireMol::MolEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*molecule_function_type)(  ) ;
             molecule_function_type molecule_function_value( &::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::molecule );
             
             ResEditorBase_exposer.def( 
@@ -174,7 +174,7 @@ void register_ResEditorBase_class(){
         { //::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::operator=
         
             typedef SireMol::Editor< SireMol::ResEditor, SireMol::Residue > exported_class_t;
-            typedef ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue > & ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*assign_function_type )( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue > const & ) ;
+            typedef ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue > & ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*assign_function_type)( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue > const & ) ;
             assign_function_type assign_function_value( &::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::operator= );
             
             ResEditorBase_exposer.def( 
@@ -187,7 +187,7 @@ void register_ResEditorBase_class(){
         { //::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::operator=
         
             typedef SireMol::Editor< SireMol::ResEditor, SireMol::Residue > exported_class_t;
-            typedef ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue > & ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*assign_function_type )( ::SireMol::Residue const & ) ;
+            typedef ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue > & ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*assign_function_type)( ::SireMol::Residue const & ) ;
             assign_function_type assign_function_value( &::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::operator= );
             
             ResEditorBase_exposer.def( 
@@ -200,7 +200,7 @@ void register_ResEditorBase_class(){
         { //::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::removeMetadata
         
             typedef SireMol::Editor< SireMol::ResEditor, SireMol::Residue > exported_class_t;
-            typedef ::SireMol::ResEditor & ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*removeMetadata_function_type )( ::SireBase::PropertyName const & ) ;
+            typedef ::SireMol::ResEditor & ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*removeMetadata_function_type)( ::SireBase::PropertyName const & ) ;
             removeMetadata_function_type removeMetadata_function_value( &::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::removeMetadata );
             
             ResEditorBase_exposer.def( 
@@ -213,7 +213,7 @@ void register_ResEditorBase_class(){
         { //::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::removeMetadata
         
             typedef SireMol::Editor< SireMol::ResEditor, SireMol::Residue > exported_class_t;
-            typedef ::SireMol::ResEditor & ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*removeMetadata_function_type )( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) ;
+            typedef ::SireMol::ResEditor & ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*removeMetadata_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) ;
             removeMetadata_function_type removeMetadata_function_value( &::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::removeMetadata );
             
             ResEditorBase_exposer.def( 
@@ -226,7 +226,7 @@ void register_ResEditorBase_class(){
         { //::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::removeProperty
         
             typedef SireMol::Editor< SireMol::ResEditor, SireMol::Residue > exported_class_t;
-            typedef ::SireMol::ResEditor & ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*removeProperty_function_type )( ::SireBase::PropertyName const & ) ;
+            typedef ::SireMol::ResEditor & ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*removeProperty_function_type)( ::SireBase::PropertyName const & ) ;
             removeProperty_function_type removeProperty_function_value( &::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::removeProperty );
             
             ResEditorBase_exposer.def( 
@@ -239,7 +239,7 @@ void register_ResEditorBase_class(){
         { //::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::residue
         
             typedef SireMol::Editor< SireMol::ResEditor, SireMol::Residue > exported_class_t;
-            typedef ::SireMol::ResEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*residue_function_type )(  ) ;
+            typedef ::SireMol::ResEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*residue_function_type)(  ) ;
             residue_function_type residue_function_value( &::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::residue );
             
             ResEditorBase_exposer.def( 
@@ -250,7 +250,7 @@ void register_ResEditorBase_class(){
         { //::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::residue
         
             typedef SireMol::Editor< SireMol::ResEditor, SireMol::Residue > exported_class_t;
-            typedef ::SireMol::ResEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*residue_function_type )( ::SireMol::ResID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::ResEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*residue_function_type)( ::SireMol::ResID const &,::SireBase::PropertyMap const & ) ;
             residue_function_type residue_function_value( &::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::residue );
             
             ResEditorBase_exposer.def( 
@@ -262,7 +262,7 @@ void register_ResEditorBase_class(){
         { //::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::segment
         
             typedef SireMol::Editor< SireMol::ResEditor, SireMol::Residue > exported_class_t;
-            typedef ::SireMol::SegEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*segment_function_type )(  ) ;
+            typedef ::SireMol::SegEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*segment_function_type)(  ) ;
             segment_function_type segment_function_value( &::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::segment );
             
             ResEditorBase_exposer.def( 
@@ -273,7 +273,7 @@ void register_ResEditorBase_class(){
         { //::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::segment
         
             typedef SireMol::Editor< SireMol::ResEditor, SireMol::Residue > exported_class_t;
-            typedef ::SireMol::SegEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*segment_function_type )( ::SireMol::SegID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::SegEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*segment_function_type)( ::SireMol::SegID const &,::SireBase::PropertyMap const & ) ;
             segment_function_type segment_function_value( &::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::segment );
             
             ResEditorBase_exposer.def( 
@@ -285,7 +285,7 @@ void register_ResEditorBase_class(){
         { //::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::select
         
             typedef SireMol::Editor< SireMol::ResEditor, SireMol::Residue > exported_class_t;
-            typedef ::SireMol::AtomEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*select_function_type )( ::SireMol::AtomID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::AtomEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*select_function_type)( ::SireMol::AtomID const &,::SireBase::PropertyMap const & ) ;
             select_function_type select_function_value( &::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::select );
             
             ResEditorBase_exposer.def( 
@@ -297,7 +297,7 @@ void register_ResEditorBase_class(){
         { //::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::select
         
             typedef SireMol::Editor< SireMol::ResEditor, SireMol::Residue > exported_class_t;
-            typedef ::SireMol::CGEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*select_function_type )( ::SireMol::CGID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::CGEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*select_function_type)( ::SireMol::CGID const &,::SireBase::PropertyMap const & ) ;
             select_function_type select_function_value( &::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::select );
             
             ResEditorBase_exposer.def( 
@@ -309,7 +309,7 @@ void register_ResEditorBase_class(){
         { //::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::select
         
             typedef SireMol::Editor< SireMol::ResEditor, SireMol::Residue > exported_class_t;
-            typedef ::SireMol::ResEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*select_function_type )( ::SireMol::ResID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::ResEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*select_function_type)( ::SireMol::ResID const &,::SireBase::PropertyMap const & ) ;
             select_function_type select_function_value( &::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::select );
             
             ResEditorBase_exposer.def( 
@@ -321,7 +321,7 @@ void register_ResEditorBase_class(){
         { //::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::select
         
             typedef SireMol::Editor< SireMol::ResEditor, SireMol::Residue > exported_class_t;
-            typedef ::SireMol::ChainEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*select_function_type )( ::SireMol::ChainID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::ChainEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*select_function_type)( ::SireMol::ChainID const &,::SireBase::PropertyMap const & ) ;
             select_function_type select_function_value( &::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::select );
             
             ResEditorBase_exposer.def( 
@@ -333,7 +333,7 @@ void register_ResEditorBase_class(){
         { //::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::select
         
             typedef SireMol::Editor< SireMol::ResEditor, SireMol::Residue > exported_class_t;
-            typedef ::SireMol::SegEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*select_function_type )( ::SireMol::SegID const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::SegEditor ( ::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::*select_function_type)( ::SireMol::SegID const &,::SireBase::PropertyMap const & ) ;
             select_function_type select_function_value( &::SireMol::Editor< SireMol::ResEditor, SireMol::Residue >::select );
             
             ResEditorBase_exposer.def( 

@@ -39,7 +39,7 @@ void register_IOParametersBase_class(){
         bp::scope IOParametersBase_scope( IOParametersBase_exposer );
         { //::SireIO::IOParametersBase::coordinates
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::IOParametersBase::*coordinates_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::IOParametersBase::*coordinates_function_type)(  ) const;
             coordinates_function_type coordinates_function_value( &::SireIO::IOParametersBase::coordinates );
             
             IOParametersBase_exposer.def( 
@@ -50,7 +50,7 @@ void register_IOParametersBase_class(){
         }
         { //::SireIO::IOParametersBase::cuttingFunction
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::IOParametersBase::*cuttingFunction_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::IOParametersBase::*cuttingFunction_function_type)(  ) const;
             cuttingFunction_function_type cuttingFunction_function_value( &::SireIO::IOParametersBase::cuttingFunction );
             
             IOParametersBase_exposer.def( 
@@ -61,7 +61,7 @@ void register_IOParametersBase_class(){
         }
         { //::SireIO::IOParametersBase::element
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::IOParametersBase::*element_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::IOParametersBase::*element_function_type)(  ) const;
             element_function_type element_function_value( &::SireIO::IOParametersBase::element );
             
             IOParametersBase_exposer.def( 

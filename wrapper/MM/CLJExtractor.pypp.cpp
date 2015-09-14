@@ -58,7 +58,7 @@ void register_CLJExtractor_class(){
         CLJExtractor_exposer.def( bp::init< SireMM::CLJExtractor const & >(( bp::arg("other") )) );
         { //::SireMM::CLJExtractor::add
         
-            typedef void ( ::SireMM::CLJExtractor::*add_function_type )( ::SireMol::MoleculeView const &,::SireMM::CLJBoxes &,::SireMM::CLJWorkspace & ) ;
+            typedef void ( ::SireMM::CLJExtractor::*add_function_type)( ::SireMol::MoleculeView const &,::SireMM::CLJBoxes &,::SireMM::CLJWorkspace & ) ;
             add_function_type add_function_value( &::SireMM::CLJExtractor::add );
             
             CLJExtractor_exposer.def( 
@@ -69,7 +69,7 @@ void register_CLJExtractor_class(){
         }
         { //::SireMM::CLJExtractor::add
         
-            typedef void ( ::SireMM::CLJExtractor::*add_function_type )( ::SireMol::AtomSelection const &,::SireMM::CLJBoxes &,::SireMM::CLJWorkspace & ) ;
+            typedef void ( ::SireMM::CLJExtractor::*add_function_type)( ::SireMol::AtomSelection const &,::SireMM::CLJBoxes &,::SireMM::CLJWorkspace & ) ;
             add_function_type add_function_value( &::SireMM::CLJExtractor::add );
             
             CLJExtractor_exposer.def( 
@@ -80,7 +80,7 @@ void register_CLJExtractor_class(){
         }
         { //::SireMM::CLJExtractor::changed
         
-            typedef bool ( ::SireMM::CLJExtractor::*changed_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJExtractor::*changed_function_type)(  ) const;
             changed_function_type changed_function_value( &::SireMM::CLJExtractor::changed );
             
             CLJExtractor_exposer.def( 
@@ -90,7 +90,7 @@ void register_CLJExtractor_class(){
         }
         { //::SireMM::CLJExtractor::chargeProperty
         
-            typedef ::SireBase::PropertyName ( ::SireMM::CLJExtractor::*chargeProperty_function_type )(  ) const;
+            typedef ::SireBase::PropertyName ( ::SireMM::CLJExtractor::*chargeProperty_function_type)(  ) const;
             chargeProperty_function_type chargeProperty_function_value( &::SireMM::CLJExtractor::chargeProperty );
             
             CLJExtractor_exposer.def( 
@@ -100,7 +100,7 @@ void register_CLJExtractor_class(){
         }
         { //::SireMM::CLJExtractor::commit
         
-            typedef void ( ::SireMM::CLJExtractor::*commit_function_type )( ::SireMM::CLJBoxes &,::SireMM::CLJWorkspace & ) ;
+            typedef void ( ::SireMM::CLJExtractor::*commit_function_type)( ::SireMM::CLJBoxes &,::SireMM::CLJWorkspace & ) ;
             commit_function_type commit_function_value( &::SireMM::CLJExtractor::commit );
             
             CLJExtractor_exposer.def( 
@@ -111,7 +111,7 @@ void register_CLJExtractor_class(){
         }
         { //::SireMM::CLJExtractor::coordinatesProperty
         
-            typedef ::SireBase::PropertyName ( ::SireMM::CLJExtractor::*coordinatesProperty_function_type )(  ) const;
+            typedef ::SireBase::PropertyName ( ::SireMM::CLJExtractor::*coordinatesProperty_function_type)(  ) const;
             coordinatesProperty_function_type coordinatesProperty_function_value( &::SireMM::CLJExtractor::coordinatesProperty );
             
             CLJExtractor_exposer.def( 
@@ -121,7 +121,7 @@ void register_CLJExtractor_class(){
         }
         { //::SireMM::CLJExtractor::extractingByCutGroup
         
-            typedef bool ( ::SireMM::CLJExtractor::*extractingByCutGroup_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJExtractor::*extractingByCutGroup_function_type)(  ) const;
             extractingByCutGroup_function_type extractingByCutGroup_function_value( &::SireMM::CLJExtractor::extractingByCutGroup );
             
             CLJExtractor_exposer.def( 
@@ -131,7 +131,7 @@ void register_CLJExtractor_class(){
         }
         { //::SireMM::CLJExtractor::extractingByMolecule
         
-            typedef bool ( ::SireMM::CLJExtractor::*extractingByMolecule_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJExtractor::*extractingByMolecule_function_type)(  ) const;
             extractingByMolecule_function_type extractingByMolecule_function_value( &::SireMM::CLJExtractor::extractingByMolecule );
             
             CLJExtractor_exposer.def( 
@@ -141,7 +141,7 @@ void register_CLJExtractor_class(){
         }
         { //::SireMM::CLJExtractor::extractingByResidue
         
-            typedef bool ( ::SireMM::CLJExtractor::*extractingByResidue_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJExtractor::*extractingByResidue_function_type)(  ) const;
             extractingByResidue_function_type extractingByResidue_function_value( &::SireMM::CLJExtractor::extractingByResidue );
             
             CLJExtractor_exposer.def( 
@@ -149,9 +149,19 @@ void register_CLJExtractor_class(){
                 , extractingByResidue_function_value );
         
         }
+        { //::SireMM::CLJExtractor::hasChangedAtoms
+        
+            typedef bool ( ::SireMM::CLJExtractor::*hasChangedAtoms_function_type)(  ) const;
+            hasChangedAtoms_function_type hasChangedAtoms_function_value( &::SireMM::CLJExtractor::hasChangedAtoms );
+            
+            CLJExtractor_exposer.def( 
+                "hasChangedAtoms"
+                , hasChangedAtoms_function_value );
+        
+        }
         { //::SireMM::CLJExtractor::idSource
         
-            typedef ::SireMM::CLJAtoms::ID_SOURCE ( ::SireMM::CLJExtractor::*idSource_function_type )(  ) const;
+            typedef ::SireMM::CLJAtoms::ID_SOURCE ( ::SireMM::CLJExtractor::*idSource_function_type)(  ) const;
             idSource_function_type idSource_function_value( &::SireMM::CLJExtractor::idSource );
             
             CLJExtractor_exposer.def( 
@@ -161,7 +171,7 @@ void register_CLJExtractor_class(){
         }
         { //::SireMM::CLJExtractor::isEmpty
         
-            typedef bool ( ::SireMM::CLJExtractor::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJExtractor::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMM::CLJExtractor::isEmpty );
             
             CLJExtractor_exposer.def( 
@@ -171,7 +181,7 @@ void register_CLJExtractor_class(){
         }
         { //::SireMM::CLJExtractor::isNull
         
-            typedef bool ( ::SireMM::CLJExtractor::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJExtractor::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMM::CLJExtractor::isNull );
             
             CLJExtractor_exposer.def( 
@@ -181,7 +191,7 @@ void register_CLJExtractor_class(){
         }
         { //::SireMM::CLJExtractor::ljProperty
         
-            typedef ::SireBase::PropertyName ( ::SireMM::CLJExtractor::*ljProperty_function_type )(  ) const;
+            typedef ::SireBase::PropertyName ( ::SireMM::CLJExtractor::*ljProperty_function_type)(  ) const;
             ljProperty_function_type ljProperty_function_value( &::SireMM::CLJExtractor::ljProperty );
             
             CLJExtractor_exposer.def( 
@@ -191,7 +201,7 @@ void register_CLJExtractor_class(){
         }
         { //::SireMM::CLJExtractor::needsCommitting
         
-            typedef bool ( ::SireMM::CLJExtractor::*needsCommitting_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJExtractor::*needsCommitting_function_type)(  ) const;
             needsCommitting_function_type needsCommitting_function_value( &::SireMM::CLJExtractor::needsCommitting );
             
             CLJExtractor_exposer.def( 
@@ -201,7 +211,7 @@ void register_CLJExtractor_class(){
         }
         { //::SireMM::CLJExtractor::newMolecule
         
-            typedef ::SireMol::PartialMolecule ( ::SireMM::CLJExtractor::*newMolecule_function_type )(  ) const;
+            typedef ::SireMol::PartialMolecule ( ::SireMM::CLJExtractor::*newMolecule_function_type)(  ) const;
             newMolecule_function_type newMolecule_function_value( &::SireMM::CLJExtractor::newMolecule );
             
             CLJExtractor_exposer.def( 
@@ -211,7 +221,7 @@ void register_CLJExtractor_class(){
         }
         { //::SireMM::CLJExtractor::oldMolecule
         
-            typedef ::SireMol::PartialMolecule ( ::SireMM::CLJExtractor::*oldMolecule_function_type )(  ) const;
+            typedef ::SireMol::PartialMolecule ( ::SireMM::CLJExtractor::*oldMolecule_function_type)(  ) const;
             oldMolecule_function_type oldMolecule_function_value( &::SireMM::CLJExtractor::oldMolecule );
             
             CLJExtractor_exposer.def( 
@@ -222,7 +232,7 @@ void register_CLJExtractor_class(){
         CLJExtractor_exposer.def( bp::self != bp::self );
         { //::SireMM::CLJExtractor::operator=
         
-            typedef ::SireMM::CLJExtractor & ( ::SireMM::CLJExtractor::*assign_function_type )( ::SireMM::CLJExtractor const & ) ;
+            typedef ::SireMM::CLJExtractor & ( ::SireMM::CLJExtractor::*assign_function_type)( ::SireMM::CLJExtractor const & ) ;
             assign_function_type assign_function_value( &::SireMM::CLJExtractor::operator= );
             
             CLJExtractor_exposer.def( 
@@ -235,7 +245,7 @@ void register_CLJExtractor_class(){
         CLJExtractor_exposer.def( bp::self == bp::self );
         { //::SireMM::CLJExtractor::propertyMap
         
-            typedef ::SireBase::PropertyMap ( ::SireMM::CLJExtractor::*propertyMap_function_type )(  ) const;
+            typedef ::SireBase::PropertyMap ( ::SireMM::CLJExtractor::*propertyMap_function_type)(  ) const;
             propertyMap_function_type propertyMap_function_value( &::SireMM::CLJExtractor::propertyMap );
             
             CLJExtractor_exposer.def( 
@@ -245,7 +255,7 @@ void register_CLJExtractor_class(){
         }
         { //::SireMM::CLJExtractor::remove
         
-            typedef void ( ::SireMM::CLJExtractor::*remove_function_type )( ::SireMol::AtomSelection const &,::SireMM::CLJBoxes &,::SireMM::CLJWorkspace & ) ;
+            typedef void ( ::SireMM::CLJExtractor::*remove_function_type)( ::SireMol::AtomSelection const &,::SireMM::CLJBoxes &,::SireMM::CLJWorkspace & ) ;
             remove_function_type remove_function_value( &::SireMM::CLJExtractor::remove );
             
             CLJExtractor_exposer.def( 
@@ -256,7 +266,7 @@ void register_CLJExtractor_class(){
         }
         { //::SireMM::CLJExtractor::remove
         
-            typedef void ( ::SireMM::CLJExtractor::*remove_function_type )( ::SireMol::MoleculeView const &,::SireMM::CLJBoxes &,::SireMM::CLJWorkspace & ) ;
+            typedef void ( ::SireMM::CLJExtractor::*remove_function_type)( ::SireMol::MoleculeView const &,::SireMM::CLJBoxes &,::SireMM::CLJWorkspace & ) ;
             remove_function_type remove_function_value( &::SireMM::CLJExtractor::remove );
             
             CLJExtractor_exposer.def( 
@@ -267,7 +277,7 @@ void register_CLJExtractor_class(){
         }
         { //::SireMM::CLJExtractor::removeAll
         
-            typedef void ( ::SireMM::CLJExtractor::*removeAll_function_type )( ::SireMM::CLJBoxes &,::SireMM::CLJWorkspace & ) ;
+            typedef void ( ::SireMM::CLJExtractor::*removeAll_function_type)( ::SireMM::CLJBoxes &,::SireMM::CLJWorkspace & ) ;
             removeAll_function_type removeAll_function_value( &::SireMM::CLJExtractor::removeAll );
             
             CLJExtractor_exposer.def( 
@@ -278,7 +288,7 @@ void register_CLJExtractor_class(){
         }
         { //::SireMM::CLJExtractor::revert
         
-            typedef void ( ::SireMM::CLJExtractor::*revert_function_type )( ::SireMM::CLJBoxes &,::SireMM::CLJWorkspace & ) ;
+            typedef void ( ::SireMM::CLJExtractor::*revert_function_type)( ::SireMM::CLJBoxes &,::SireMM::CLJWorkspace & ) ;
             revert_function_type revert_function_value( &::SireMM::CLJExtractor::revert );
             
             CLJExtractor_exposer.def( 
@@ -289,7 +299,7 @@ void register_CLJExtractor_class(){
         }
         { //::SireMM::CLJExtractor::toString
         
-            typedef ::QString ( ::SireMM::CLJExtractor::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMM::CLJExtractor::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMM::CLJExtractor::toString );
             
             CLJExtractor_exposer.def( 
@@ -309,7 +319,7 @@ void register_CLJExtractor_class(){
         }
         { //::SireMM::CLJExtractor::update
         
-            typedef void ( ::SireMM::CLJExtractor::*update_function_type )( ::SireMol::MoleculeView const &,::SireMM::CLJBoxes &,::SireMM::CLJWorkspace & ) ;
+            typedef void ( ::SireMM::CLJExtractor::*update_function_type)( ::SireMol::MoleculeView const &,::SireMM::CLJBoxes &,::SireMM::CLJWorkspace & ) ;
             update_function_type update_function_value( &::SireMM::CLJExtractor::update );
             
             CLJExtractor_exposer.def( 
@@ -320,7 +330,7 @@ void register_CLJExtractor_class(){
         }
         { //::SireMM::CLJExtractor::updateSelection
         
-            typedef void ( ::SireMM::CLJExtractor::*updateSelection_function_type )( ::SireMol::AtomSelection const &,::SireMM::CLJBoxes &,::SireMM::CLJWorkspace & ) ;
+            typedef void ( ::SireMM::CLJExtractor::*updateSelection_function_type)( ::SireMol::AtomSelection const &,::SireMM::CLJBoxes &,::SireMM::CLJWorkspace & ) ;
             updateSelection_function_type updateSelection_function_value( &::SireMM::CLJExtractor::updateSelection );
             
             CLJExtractor_exposer.def( 
@@ -331,7 +341,7 @@ void register_CLJExtractor_class(){
         }
         { //::SireMM::CLJExtractor::what
         
-            typedef char const * ( ::SireMM::CLJExtractor::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::CLJExtractor::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::CLJExtractor::what );
             
             CLJExtractor_exposer.def( 

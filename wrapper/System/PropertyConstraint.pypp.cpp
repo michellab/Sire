@@ -45,7 +45,7 @@ void register_PropertyConstraint_class(){
         PropertyConstraint_exposer.def( bp::self != bp::self );
         { //::SireSystem::PropertyConstraint::operator=
         
-            typedef ::SireSystem::PropertyConstraint & ( ::SireSystem::PropertyConstraint::*assign_function_type )( ::SireSystem::PropertyConstraint const & ) ;
+            typedef ::SireSystem::PropertyConstraint & ( ::SireSystem::PropertyConstraint::*assign_function_type)( ::SireSystem::PropertyConstraint const & ) ;
             assign_function_type assign_function_value( &::SireSystem::PropertyConstraint::operator= );
             
             PropertyConstraint_exposer.def( 
@@ -58,7 +58,7 @@ void register_PropertyConstraint_class(){
         PropertyConstraint_exposer.def( bp::self == bp::self );
         { //::SireSystem::PropertyConstraint::toString
         
-            typedef ::QString ( ::SireSystem::PropertyConstraint::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireSystem::PropertyConstraint::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireSystem::PropertyConstraint::toString );
             
             PropertyConstraint_exposer.def( 

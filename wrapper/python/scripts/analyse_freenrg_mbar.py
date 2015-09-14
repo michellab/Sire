@@ -186,8 +186,8 @@ FILE.close()
 
 pmf_ti = free_energy_obj.pmf_ti
 if T != None:
-    #pmf_ti[:,1] = pmf_ti[:,1]*T*k_boltz_J
-    print ('blub')
+    pmf_ti[:,1] = pmf_ti[:,1]*T*k_boltz_J
+
 
 ti_out = os.path.join(os.path.dirname(output_file),'TI_'+os.path.basename(output_file))
 np.savetxt(ti_out, pmf_ti, fmt=['%f.2', '%f'])

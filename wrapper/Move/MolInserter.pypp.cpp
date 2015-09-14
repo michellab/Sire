@@ -41,7 +41,7 @@ void register_MolInserter_class(){
         bp::scope MolInserter_scope( MolInserter_exposer );
         { //::SireMove::MolInserter::generator
         
-            typedef ::SireMaths::RanGenerator const & ( ::SireMove::MolInserter::*generator_function_type )(  ) const;
+            typedef ::SireMaths::RanGenerator const & ( ::SireMove::MolInserter::*generator_function_type)(  ) const;
             generator_function_type generator_function_value( &::SireMove::MolInserter::generator );
             
             MolInserter_exposer.def( 
@@ -52,7 +52,7 @@ void register_MolInserter_class(){
         }
         { //::SireMove::MolInserter::groups
         
-            typedef ::SireMol::MGIDsAndMaps const & ( ::SireMove::MolInserter::*groups_function_type )(  ) const;
+            typedef ::SireMol::MGIDsAndMaps const & ( ::SireMove::MolInserter::*groups_function_type)(  ) const;
             groups_function_type groups_function_value( &::SireMove::MolInserter::groups );
             
             MolInserter_exposer.def( 
@@ -63,7 +63,7 @@ void register_MolInserter_class(){
         }
         { //::SireMove::MolInserter::insert
         
-            typedef double ( ::SireMove::MolInserter::*insert_function_type )( ::SireMol::Molecule const &,::SireSystem::System &,::SireVol::Space const & ) ;
+            typedef double ( ::SireMove::MolInserter::*insert_function_type)( ::SireMol::Molecule const &,::SireSystem::System &,::SireVol::Space const & ) ;
             insert_function_type insert_function_value( &::SireMove::MolInserter::insert );
             
             MolInserter_exposer.def( 
@@ -74,7 +74,7 @@ void register_MolInserter_class(){
         }
         { //::SireMove::MolInserter::insert
         
-            typedef double ( ::SireMove::MolInserter::*insert_function_type )( ::SireMol::PartialMolecule const &,::SireSystem::System &,::SireVol::Space const & ) ;
+            typedef double ( ::SireMove::MolInserter::*insert_function_type)( ::SireMol::PartialMolecule const &,::SireSystem::System &,::SireVol::Space const & ) ;
             insert_function_type insert_function_value( &::SireMove::MolInserter::insert );
             
             MolInserter_exposer.def( 
@@ -96,7 +96,7 @@ void register_MolInserter_class(){
         }
         { //::SireMove::MolInserter::setGenerator
         
-            typedef void ( ::SireMove::MolInserter::*setGenerator_function_type )( ::SireMaths::RanGenerator const & ) ;
+            typedef void ( ::SireMove::MolInserter::*setGenerator_function_type)( ::SireMaths::RanGenerator const & ) ;
             setGenerator_function_type setGenerator_function_value( &::SireMove::MolInserter::setGenerator );
             
             MolInserter_exposer.def( 
@@ -107,7 +107,7 @@ void register_MolInserter_class(){
         }
         { //::SireMove::MolInserter::setGroups
         
-            typedef void ( ::SireMove::MolInserter::*setGroups_function_type )( ::SireMol::MGIDsAndMaps const & ) ;
+            typedef void ( ::SireMove::MolInserter::*setGroups_function_type)( ::SireMol::MGIDsAndMaps const & ) ;
             setGroups_function_type setGroups_function_value( &::SireMove::MolInserter::setGroups );
             
             MolInserter_exposer.def( 

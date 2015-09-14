@@ -43,7 +43,7 @@ void register_AtomProp_class(){
         bp::scope AtomProp_scope( AtomProp_exposer );
         { //::SireMol::AtomProp::assertCanConvert
         
-            typedef void ( ::SireMol::AtomProp::*assertCanConvert_function_type )( ::QVariant const & ) const;
+            typedef void ( ::SireMol::AtomProp::*assertCanConvert_function_type)( ::QVariant const & ) const;
             assertCanConvert_function_type assertCanConvert_function_value( &::SireMol::AtomProp::assertCanConvert );
             
             AtomProp_exposer.def( 
@@ -54,7 +54,7 @@ void register_AtomProp_class(){
         }
         { //::SireMol::AtomProp::assignFrom
         
-            typedef void ( ::SireMol::AtomProp::*assignFrom_function_type )( ::SireMol::AtomVariantProperty const & ) ;
+            typedef void ( ::SireMol::AtomProp::*assignFrom_function_type)( ::SireMol::AtomVariantProperty const & ) ;
             assignFrom_function_type assignFrom_function_value( &::SireMol::AtomProp::assignFrom );
             
             AtomProp_exposer.def( 
@@ -65,7 +65,7 @@ void register_AtomProp_class(){
         }
         { //::SireMol::AtomProp::canConvert
         
-            typedef bool ( ::SireMol::AtomProp::*canConvert_function_type )( ::QVariant const & ) const;
+            typedef bool ( ::SireMol::AtomProp::*canConvert_function_type)( ::QVariant const & ) const;
             canConvert_function_type canConvert_function_value( &::SireMol::AtomProp::canConvert );
             
             AtomProp_exposer.def( 
@@ -76,7 +76,7 @@ void register_AtomProp_class(){
         }
         { //::SireMol::AtomProp::divide
         
-            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProp::*divide_function_type )( ::QVector< SireMol::AtomSelection > const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProp::*divide_function_type)( ::QVector< SireMol::AtomSelection > const & ) const;
             divide_function_type divide_function_value( &::SireMol::AtomProp::divide );
             
             AtomProp_exposer.def( 
@@ -87,7 +87,7 @@ void register_AtomProp_class(){
         }
         { //::SireMol::AtomProp::divideByResidue
         
-            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProp::*divideByResidue_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProp::*divideByResidue_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             divideByResidue_function_type divideByResidue_function_value( &::SireMol::AtomProp::divideByResidue );
             
             AtomProp_exposer.def( 
@@ -98,7 +98,7 @@ void register_AtomProp_class(){
         }
         { //::SireMol::AtomProp::merge
         
-            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProp::*merge_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProp::*merge_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             merge_function_type merge_function_value( &::SireMol::AtomProp::merge );
             
             AtomProp_exposer.def( 
@@ -109,7 +109,7 @@ void register_AtomProp_class(){
         }
         { //::SireMol::AtomProp::operator=
         
-            typedef ::SireMol::AtomProp & ( ::SireMol::AtomProp::*assign_function_type )( ::SireMol::AtomVariantProperty const & ) ;
+            typedef ::SireMol::AtomProp & ( ::SireMol::AtomProp::*assign_function_type)( ::SireMol::AtomVariantProperty const & ) ;
             assign_function_type assign_function_value( &::SireMol::AtomProp::operator= );
             
             AtomProp_exposer.def( 
@@ -121,7 +121,7 @@ void register_AtomProp_class(){
         }
         { //::SireMol::AtomProp::toVariant
         
-            typedef ::SireMol::AtomVariantProperty ( ::SireMol::AtomProp::*toVariant_function_type )(  ) const;
+            typedef ::SireMol::AtomVariantProperty ( ::SireMol::AtomProp::*toVariant_function_type)(  ) const;
             toVariant_function_type toVariant_function_value( &::SireMol::AtomProp::toVariant );
             
             AtomProp_exposer.def( 

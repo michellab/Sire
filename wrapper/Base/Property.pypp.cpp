@@ -35,7 +35,7 @@ void register_Property_class(){
         bp::scope Property_scope( Property_exposer );
         { //::SireBase::Property::copy
         
-            typedef void ( ::SireBase::Property::*copy_function_type )( ::SireBase::Property const & ) ;
+            typedef void ( ::SireBase::Property::*copy_function_type)( ::SireBase::Property const & ) ;
             copy_function_type copy_function_value( &::SireBase::Property::copy );
             
             Property_exposer.def( 
@@ -46,7 +46,7 @@ void register_Property_class(){
         }
         { //::SireBase::Property::equals
         
-            typedef bool ( ::SireBase::Property::*equals_function_type )( ::SireBase::Property const & ) const;
+            typedef bool ( ::SireBase::Property::*equals_function_type)( ::SireBase::Property const & ) const;
             equals_function_type equals_function_value( &::SireBase::Property::equals );
             
             Property_exposer.def( 
@@ -57,7 +57,7 @@ void register_Property_class(){
         }
         { //::SireBase::Property::load
         
-            typedef void ( ::SireBase::Property::*load_function_type )( ::QDataStream & ) ;
+            typedef void ( ::SireBase::Property::*load_function_type)( ::QDataStream & ) ;
             load_function_type load_function_value( &::SireBase::Property::load );
             
             Property_exposer.def( 
@@ -79,7 +79,7 @@ void register_Property_class(){
         }
         { //::SireBase::Property::save
         
-            typedef void ( ::SireBase::Property::*save_function_type )( ::QDataStream & ) const;
+            typedef void ( ::SireBase::Property::*save_function_type)( ::QDataStream & ) const;
             save_function_type save_function_value( &::SireBase::Property::save );
             
             Property_exposer.def( 
@@ -90,7 +90,7 @@ void register_Property_class(){
         }
         { //::SireBase::Property::toString
         
-            typedef ::QString ( ::SireBase::Property::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireBase::Property::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireBase::Property::toString );
             
             Property_exposer.def( 
@@ -110,7 +110,7 @@ void register_Property_class(){
         }
         { //::SireBase::Property::what
         
-            typedef char const * ( ::SireBase::Property::*what_function_type )(  ) const;
+            typedef char const * ( ::SireBase::Property::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireBase::Property::what );
             
             Property_exposer.def( 

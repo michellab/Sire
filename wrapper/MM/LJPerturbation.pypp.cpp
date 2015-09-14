@@ -53,7 +53,7 @@ void register_LJPerturbation_class(){
         LJPerturbation_exposer.def( bp::init< SireMM::LJPerturbation const & >(( bp::arg("other") )) );
         { //::SireMM::LJPerturbation::A_MappingFunction
         
-            typedef ::SireCAS::Expression const & ( ::SireMM::LJPerturbation::*A_MappingFunction_function_type )(  ) const;
+            typedef ::SireCAS::Expression const & ( ::SireMM::LJPerturbation::*A_MappingFunction_function_type)(  ) const;
             A_MappingFunction_function_type A_MappingFunction_function_value( &::SireMM::LJPerturbation::A_MappingFunction );
             
             LJPerturbation_exposer.def( 
@@ -64,7 +64,7 @@ void register_LJPerturbation_class(){
         }
         { //::SireMM::LJPerturbation::B_MappingFunction
         
-            typedef ::SireCAS::Expression const & ( ::SireMM::LJPerturbation::*B_MappingFunction_function_type )(  ) const;
+            typedef ::SireCAS::Expression const & ( ::SireMM::LJPerturbation::*B_MappingFunction_function_type)(  ) const;
             B_MappingFunction_function_type B_MappingFunction_function_value( &::SireMM::LJPerturbation::B_MappingFunction );
             
             LJPerturbation_exposer.def( 
@@ -75,7 +75,7 @@ void register_LJPerturbation_class(){
         }
         { //::SireMM::LJPerturbation::epsilonMappingFunction
         
-            typedef ::SireCAS::Expression const & ( ::SireMM::LJPerturbation::*epsilonMappingFunction_function_type )(  ) const;
+            typedef ::SireCAS::Expression const & ( ::SireMM::LJPerturbation::*epsilonMappingFunction_function_type)(  ) const;
             epsilonMappingFunction_function_type epsilonMappingFunction_function_value( &::SireMM::LJPerturbation::epsilonMappingFunction );
             
             LJPerturbation_exposer.def( 
@@ -86,7 +86,7 @@ void register_LJPerturbation_class(){
         }
         { //::SireMM::LJPerturbation::mapAB
         
-            typedef bool ( ::SireMM::LJPerturbation::*mapAB_function_type )(  ) const;
+            typedef bool ( ::SireMM::LJPerturbation::*mapAB_function_type)(  ) const;
             mapAB_function_type mapAB_function_value( &::SireMM::LJPerturbation::mapAB );
             
             LJPerturbation_exposer.def( 
@@ -96,7 +96,7 @@ void register_LJPerturbation_class(){
         }
         { //::SireMM::LJPerturbation::mapRMinEpsilon
         
-            typedef bool ( ::SireMM::LJPerturbation::*mapRMinEpsilon_function_type )(  ) const;
+            typedef bool ( ::SireMM::LJPerturbation::*mapRMinEpsilon_function_type)(  ) const;
             mapRMinEpsilon_function_type mapRMinEpsilon_function_value( &::SireMM::LJPerturbation::mapRMinEpsilon );
             
             LJPerturbation_exposer.def( 
@@ -106,7 +106,7 @@ void register_LJPerturbation_class(){
         }
         { //::SireMM::LJPerturbation::mapSigmaEpsilon
         
-            typedef bool ( ::SireMM::LJPerturbation::*mapSigmaEpsilon_function_type )(  ) const;
+            typedef bool ( ::SireMM::LJPerturbation::*mapSigmaEpsilon_function_type)(  ) const;
             mapSigmaEpsilon_function_type mapSigmaEpsilon_function_value( &::SireMM::LJPerturbation::mapSigmaEpsilon );
             
             LJPerturbation_exposer.def( 
@@ -116,7 +116,7 @@ void register_LJPerturbation_class(){
         }
         { //::SireMM::LJPerturbation::mappingFunction
         
-            typedef ::SireCAS::Expression const & ( ::SireMM::LJPerturbation::*mappingFunction_function_type )(  ) const;
+            typedef ::SireCAS::Expression const & ( ::SireMM::LJPerturbation::*mappingFunction_function_type)(  ) const;
             mappingFunction_function_type mappingFunction_function_value( &::SireMM::LJPerturbation::mappingFunction );
             
             LJPerturbation_exposer.def( 
@@ -128,7 +128,7 @@ void register_LJPerturbation_class(){
         LJPerturbation_exposer.def( bp::self != bp::self );
         { //::SireMM::LJPerturbation::operator=
         
-            typedef ::SireMM::LJPerturbation & ( ::SireMM::LJPerturbation::*assign_function_type )( ::SireMM::LJPerturbation const & ) ;
+            typedef ::SireMM::LJPerturbation & ( ::SireMM::LJPerturbation::*assign_function_type)( ::SireMM::LJPerturbation const & ) ;
             assign_function_type assign_function_value( &::SireMM::LJPerturbation::operator= );
             
             LJPerturbation_exposer.def( 
@@ -141,7 +141,7 @@ void register_LJPerturbation_class(){
         LJPerturbation_exposer.def( bp::self == bp::self );
         { //::SireMM::LJPerturbation::rMinMappingFunction
         
-            typedef ::SireCAS::Expression const & ( ::SireMM::LJPerturbation::*rMinMappingFunction_function_type )(  ) const;
+            typedef ::SireCAS::Expression const & ( ::SireMM::LJPerturbation::*rMinMappingFunction_function_type)(  ) const;
             rMinMappingFunction_function_type rMinMappingFunction_function_value( &::SireMM::LJPerturbation::rMinMappingFunction );
             
             LJPerturbation_exposer.def( 
@@ -152,7 +152,7 @@ void register_LJPerturbation_class(){
         }
         { //::SireMM::LJPerturbation::recreate
         
-            typedef ::SireMol::PerturbationPtr ( ::SireMM::LJPerturbation::*recreate_function_type )( ::SireCAS::Expression const & ) const;
+            typedef ::SireMol::PerturbationPtr ( ::SireMM::LJPerturbation::*recreate_function_type)( ::SireCAS::Expression const & ) const;
             recreate_function_type recreate_function_value( &::SireMM::LJPerturbation::recreate );
             
             LJPerturbation_exposer.def( 
@@ -163,7 +163,7 @@ void register_LJPerturbation_class(){
         }
         { //::SireMM::LJPerturbation::recreate
         
-            typedef ::SireMol::PerturbationPtr ( ::SireMM::LJPerturbation::*recreate_function_type )( ::SireCAS::Expression const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::PerturbationPtr ( ::SireMM::LJPerturbation::*recreate_function_type)( ::SireCAS::Expression const &,::SireBase::PropertyMap const & ) const;
             recreate_function_type recreate_function_value( &::SireMM::LJPerturbation::recreate );
             
             LJPerturbation_exposer.def( 
@@ -174,7 +174,7 @@ void register_LJPerturbation_class(){
         }
         { //::SireMM::LJPerturbation::requiredProperties
         
-            typedef ::QSet< QString > ( ::SireMM::LJPerturbation::*requiredProperties_function_type )(  ) const;
+            typedef ::QSet< QString > ( ::SireMM::LJPerturbation::*requiredProperties_function_type)(  ) const;
             requiredProperties_function_type requiredProperties_function_value( &::SireMM::LJPerturbation::requiredProperties );
             
             LJPerturbation_exposer.def( 
@@ -184,7 +184,7 @@ void register_LJPerturbation_class(){
         }
         { //::SireMM::LJPerturbation::sigmaMappingFunction
         
-            typedef ::SireCAS::Expression const & ( ::SireMM::LJPerturbation::*sigmaMappingFunction_function_type )(  ) const;
+            typedef ::SireCAS::Expression const & ( ::SireMM::LJPerturbation::*sigmaMappingFunction_function_type)(  ) const;
             sigmaMappingFunction_function_type sigmaMappingFunction_function_value( &::SireMM::LJPerturbation::sigmaMappingFunction );
             
             LJPerturbation_exposer.def( 
@@ -195,7 +195,7 @@ void register_LJPerturbation_class(){
         }
         { //::SireMM::LJPerturbation::substitute
         
-            typedef ::SireMol::PerturbationPtr ( ::SireMM::LJPerturbation::*substitute_function_type )( ::SireCAS::Identities const & ) const;
+            typedef ::SireMol::PerturbationPtr ( ::SireMM::LJPerturbation::*substitute_function_type)( ::SireCAS::Identities const & ) const;
             substitute_function_type substitute_function_value( &::SireMM::LJPerturbation::substitute );
             
             LJPerturbation_exposer.def( 
@@ -206,7 +206,7 @@ void register_LJPerturbation_class(){
         }
         { //::SireMM::LJPerturbation::toString
         
-            typedef ::QString ( ::SireMM::LJPerturbation::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMM::LJPerturbation::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMM::LJPerturbation::toString );
             
             LJPerturbation_exposer.def( 
@@ -226,7 +226,7 @@ void register_LJPerturbation_class(){
         }
         { //::SireMM::LJPerturbation::wouldChange
         
-            typedef bool ( ::SireMM::LJPerturbation::*wouldChange_function_type )( ::SireMol::Molecule const &,::SireCAS::Values const & ) const;
+            typedef bool ( ::SireMM::LJPerturbation::*wouldChange_function_type)( ::SireMol::Molecule const &,::SireCAS::Values const & ) const;
             wouldChange_function_type wouldChange_function_value( &::SireMM::LJPerturbation::wouldChange );
             
             LJPerturbation_exposer.def( 

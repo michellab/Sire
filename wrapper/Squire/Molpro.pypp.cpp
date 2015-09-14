@@ -61,7 +61,7 @@ void register_Molpro_class(){
         Molpro_exposer.def( bp::init< Squire::Molpro const & >(( bp::arg("other") )) );
         { //::Squire::Molpro::basisSet
         
-            typedef ::QString const & ( ::Squire::Molpro::*basisSet_function_type )(  ) const;
+            typedef ::QString const & ( ::Squire::Molpro::*basisSet_function_type)(  ) const;
             basisSet_function_type basisSet_function_value( &::Squire::Molpro::basisSet );
             
             Molpro_exposer.def( 
@@ -72,7 +72,7 @@ void register_Molpro_class(){
         }
         { //::Squire::Molpro::energyTemplate
         
-            typedef ::QString const & ( ::Squire::Molpro::*energyTemplate_function_type )(  ) const;
+            typedef ::QString const & ( ::Squire::Molpro::*energyTemplate_function_type)(  ) const;
             energyTemplate_function_type energyTemplate_function_value( &::Squire::Molpro::energyTemplate );
             
             Molpro_exposer.def( 
@@ -83,7 +83,7 @@ void register_Molpro_class(){
         }
         { //::Squire::Molpro::environment
         
-            typedef ::QHash< QString, QString > const & ( ::Squire::Molpro::*environment_function_type )(  ) const;
+            typedef ::QHash< QString, QString > const & ( ::Squire::Molpro::*environment_function_type)(  ) const;
             environment_function_type environment_function_value( &::Squire::Molpro::environment );
             
             Molpro_exposer.def( 
@@ -94,7 +94,7 @@ void register_Molpro_class(){
         }
         { //::Squire::Molpro::environment
         
-            typedef ::QString ( ::Squire::Molpro::*environment_function_type )( ::QString const & ) const;
+            typedef ::QString ( ::Squire::Molpro::*environment_function_type)( ::QString const & ) const;
             environment_function_type environment_function_value( &::Squire::Molpro::environment );
             
             Molpro_exposer.def( 
@@ -105,7 +105,7 @@ void register_Molpro_class(){
         }
         { //::Squire::Molpro::executable
         
-            typedef ::QString ( ::Squire::Molpro::*executable_function_type )(  ) const;
+            typedef ::QString ( ::Squire::Molpro::*executable_function_type)(  ) const;
             executable_function_type executable_function_value( &::Squire::Molpro::executable );
             
             Molpro_exposer.def( 
@@ -115,7 +115,7 @@ void register_Molpro_class(){
         }
         { //::Squire::Molpro::forceTemplate
         
-            typedef ::QString const & ( ::Squire::Molpro::*forceTemplate_function_type )(  ) const;
+            typedef ::QString const & ( ::Squire::Molpro::*forceTemplate_function_type)(  ) const;
             forceTemplate_function_type forceTemplate_function_value( &::Squire::Molpro::forceTemplate );
             
             Molpro_exposer.def( 
@@ -126,7 +126,7 @@ void register_Molpro_class(){
         }
         { //::Squire::Molpro::latticeInBohrRadii
         
-            typedef bool ( ::Squire::Molpro::*latticeInBohrRadii_function_type )(  ) const;
+            typedef bool ( ::Squire::Molpro::*latticeInBohrRadii_function_type)(  ) const;
             latticeInBohrRadii_function_type latticeInBohrRadii_function_value( &::Squire::Molpro::latticeInBohrRadii );
             
             Molpro_exposer.def( 
@@ -136,7 +136,7 @@ void register_Molpro_class(){
         }
         { //::Squire::Molpro::maximumRunTime
         
-            typedef int ( ::Squire::Molpro::*maximumRunTime_function_type )(  ) const;
+            typedef int ( ::Squire::Molpro::*maximumRunTime_function_type)(  ) const;
             maximumRunTime_function_type maximumRunTime_function_value( &::Squire::Molpro::maximumRunTime );
             
             Molpro_exposer.def( 
@@ -146,7 +146,7 @@ void register_Molpro_class(){
         }
         { //::Squire::Molpro::memoryRequirement
         
-            typedef int ( ::Squire::Molpro::*memoryRequirement_function_type )(  ) const;
+            typedef int ( ::Squire::Molpro::*memoryRequirement_function_type)(  ) const;
             memoryRequirement_function_type memoryRequirement_function_value( &::Squire::Molpro::memoryRequirement );
             
             Molpro_exposer.def( 
@@ -156,7 +156,7 @@ void register_Molpro_class(){
         }
         { //::Squire::Molpro::method
         
-            typedef ::QString const & ( ::Squire::Molpro::*method_function_type )(  ) const;
+            typedef ::QString const & ( ::Squire::Molpro::*method_function_type)(  ) const;
             method_function_type method_function_value( &::Squire::Molpro::method );
             
             Molpro_exposer.def( 
@@ -168,7 +168,7 @@ void register_Molpro_class(){
         Molpro_exposer.def( bp::self != bp::self );
         { //::Squire::Molpro::operator=
         
-            typedef ::Squire::Molpro & ( ::Squire::Molpro::*assign_function_type )( ::Squire::Molpro const & ) ;
+            typedef ::Squire::Molpro & ( ::Squire::Molpro::*assign_function_type)( ::Squire::Molpro const & ) ;
             assign_function_type assign_function_value( &::Squire::Molpro::operator= );
             
             Molpro_exposer.def( 
@@ -181,7 +181,7 @@ void register_Molpro_class(){
         Molpro_exposer.def( bp::self == bp::self );
         { //::Squire::Molpro::setBasisSet
         
-            typedef void ( ::Squire::Molpro::*setBasisSet_function_type )( ::QString const & ) ;
+            typedef void ( ::Squire::Molpro::*setBasisSet_function_type)( ::QString const & ) ;
             setBasisSet_function_type setBasisSet_function_value( &::Squire::Molpro::setBasisSet );
             
             Molpro_exposer.def( 
@@ -192,7 +192,7 @@ void register_Molpro_class(){
         }
         { //::Squire::Molpro::setEnergyTemplate
         
-            typedef void ( ::Squire::Molpro::*setEnergyTemplate_function_type )( ::QString const & ) ;
+            typedef void ( ::Squire::Molpro::*setEnergyTemplate_function_type)( ::QString const & ) ;
             setEnergyTemplate_function_type setEnergyTemplate_function_value( &::Squire::Molpro::setEnergyTemplate );
             
             Molpro_exposer.def( 
@@ -203,7 +203,7 @@ void register_Molpro_class(){
         }
         { //::Squire::Molpro::setEnvironment
         
-            typedef void ( ::Squire::Molpro::*setEnvironment_function_type )( ::QString const &,::QString const & ) ;
+            typedef void ( ::Squire::Molpro::*setEnvironment_function_type)( ::QString const &,::QString const & ) ;
             setEnvironment_function_type setEnvironment_function_value( &::Squire::Molpro::setEnvironment );
             
             Molpro_exposer.def( 
@@ -214,7 +214,7 @@ void register_Molpro_class(){
         }
         { //::Squire::Molpro::setExecutable
         
-            typedef void ( ::Squire::Molpro::*setExecutable_function_type )( ::QString const & ) ;
+            typedef void ( ::Squire::Molpro::*setExecutable_function_type)( ::QString const & ) ;
             setExecutable_function_type setExecutable_function_value( &::Squire::Molpro::setExecutable );
             
             Molpro_exposer.def( 
@@ -225,7 +225,7 @@ void register_Molpro_class(){
         }
         { //::Squire::Molpro::setForceTemplate
         
-            typedef void ( ::Squire::Molpro::*setForceTemplate_function_type )( ::QString const & ) ;
+            typedef void ( ::Squire::Molpro::*setForceTemplate_function_type)( ::QString const & ) ;
             setForceTemplate_function_type setForceTemplate_function_value( &::Squire::Molpro::setForceTemplate );
             
             Molpro_exposer.def( 
@@ -236,7 +236,7 @@ void register_Molpro_class(){
         }
         { //::Squire::Molpro::setLatticeInBohrRadii
         
-            typedef void ( ::Squire::Molpro::*setLatticeInBohrRadii_function_type )( bool ) ;
+            typedef void ( ::Squire::Molpro::*setLatticeInBohrRadii_function_type)( bool ) ;
             setLatticeInBohrRadii_function_type setLatticeInBohrRadii_function_value( &::Squire::Molpro::setLatticeInBohrRadii );
             
             Molpro_exposer.def( 
@@ -247,7 +247,7 @@ void register_Molpro_class(){
         }
         { //::Squire::Molpro::setMaximumRunTime
         
-            typedef void ( ::Squire::Molpro::*setMaximumRunTime_function_type )( int ) ;
+            typedef void ( ::Squire::Molpro::*setMaximumRunTime_function_type)( int ) ;
             setMaximumRunTime_function_type setMaximumRunTime_function_value( &::Squire::Molpro::setMaximumRunTime );
             
             Molpro_exposer.def( 
@@ -258,7 +258,7 @@ void register_Molpro_class(){
         }
         { //::Squire::Molpro::setMemoryRequirement
         
-            typedef void ( ::Squire::Molpro::*setMemoryRequirement_function_type )( int ) ;
+            typedef void ( ::Squire::Molpro::*setMemoryRequirement_function_type)( int ) ;
             setMemoryRequirement_function_type setMemoryRequirement_function_value( &::Squire::Molpro::setMemoryRequirement );
             
             Molpro_exposer.def( 
@@ -269,7 +269,7 @@ void register_Molpro_class(){
         }
         { //::Squire::Molpro::setMethod
         
-            typedef void ( ::Squire::Molpro::*setMethod_function_type )( ::QString const & ) ;
+            typedef void ( ::Squire::Molpro::*setMethod_function_type)( ::QString const & ) ;
             setMethod_function_type setMethod_function_value( &::Squire::Molpro::setMethod );
             
             Molpro_exposer.def( 
@@ -280,7 +280,7 @@ void register_Molpro_class(){
         }
         { //::Squire::Molpro::setTotalCharge
         
-            typedef void ( ::Squire::Molpro::*setTotalCharge_function_type )( int ) ;
+            typedef void ( ::Squire::Molpro::*setTotalCharge_function_type)( int ) ;
             setTotalCharge_function_type setTotalCharge_function_value( &::Squire::Molpro::setTotalCharge );
             
             Molpro_exposer.def( 
@@ -291,7 +291,7 @@ void register_Molpro_class(){
         }
         { //::Squire::Molpro::supportsLatticeCharges
         
-            typedef bool ( ::Squire::Molpro::*supportsLatticeCharges_function_type )(  ) const;
+            typedef bool ( ::Squire::Molpro::*supportsLatticeCharges_function_type)(  ) const;
             supportsLatticeCharges_function_type supportsLatticeCharges_function_value( &::Squire::Molpro::supportsLatticeCharges );
             
             Molpro_exposer.def( 
@@ -301,7 +301,7 @@ void register_Molpro_class(){
         }
         { //::Squire::Molpro::toString
         
-            typedef ::QString ( ::Squire::Molpro::*toString_function_type )(  ) const;
+            typedef ::QString ( ::Squire::Molpro::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::Squire::Molpro::toString );
             
             Molpro_exposer.def( 
@@ -311,7 +311,7 @@ void register_Molpro_class(){
         }
         { //::Squire::Molpro::totalCharge
         
-            typedef int ( ::Squire::Molpro::*totalCharge_function_type )(  ) const;
+            typedef int ( ::Squire::Molpro::*totalCharge_function_type)(  ) const;
             totalCharge_function_type totalCharge_function_value( &::Squire::Molpro::totalCharge );
             
             Molpro_exposer.def( 

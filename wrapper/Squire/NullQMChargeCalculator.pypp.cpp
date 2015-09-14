@@ -38,7 +38,7 @@ void register_NullQMChargeCalculator_class(){
         NullQMChargeCalculator_exposer.def( bp::init< Squire::NullQMChargeCalculator const & >(( bp::arg("other") )) );
         { //::Squire::NullQMChargeCalculator::mayChangeCharges
         
-            typedef bool ( ::Squire::NullQMChargeCalculator::*mayChangeCharges_function_type )( ::SireMol::PartialMolecule const &,::SireMol::PartialMolecule const &,::SireBase::PropertyMap const & ) const;
+            typedef bool ( ::Squire::NullQMChargeCalculator::*mayChangeCharges_function_type)( ::SireMol::PartialMolecule const &,::SireMol::PartialMolecule const &,::SireBase::PropertyMap const & ) const;
             mayChangeCharges_function_type mayChangeCharges_function_value( &::Squire::NullQMChargeCalculator::mayChangeCharges );
             
             NullQMChargeCalculator_exposer.def( 
@@ -50,7 +50,7 @@ void register_NullQMChargeCalculator_class(){
         NullQMChargeCalculator_exposer.def( bp::self != bp::self );
         { //::Squire::NullQMChargeCalculator::operator()
         
-            typedef ::SireMol::AtomCharges ( ::Squire::NullQMChargeCalculator::*__call___function_type )( ::SireMol::PartialMolecule const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::AtomCharges ( ::Squire::NullQMChargeCalculator::*__call___function_type)( ::SireMol::PartialMolecule const &,::SireBase::PropertyMap const & ) const;
             __call___function_type __call___function_value( &::Squire::NullQMChargeCalculator::operator() );
             
             NullQMChargeCalculator_exposer.def( 
@@ -61,7 +61,7 @@ void register_NullQMChargeCalculator_class(){
         }
         { //::Squire::NullQMChargeCalculator::operator=
         
-            typedef ::Squire::NullQMChargeCalculator & ( ::Squire::NullQMChargeCalculator::*assign_function_type )( ::Squire::NullQMChargeCalculator const & ) ;
+            typedef ::Squire::NullQMChargeCalculator & ( ::Squire::NullQMChargeCalculator::*assign_function_type)( ::Squire::NullQMChargeCalculator const & ) ;
             assign_function_type assign_function_value( &::Squire::NullQMChargeCalculator::operator= );
             
             NullQMChargeCalculator_exposer.def( 

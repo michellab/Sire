@@ -33,7 +33,7 @@ void register_SegIntProperty_class(){
         { //::SireMol::SegProperty< long long >::array
         
             typedef SireMol::SegProperty< long long > exported_class_t;
-            typedef ::QVector< long long > const & ( ::SireMol::SegProperty< long long >::*array_function_type )(  ) const;
+            typedef ::QVector< long long > const & ( ::SireMol::SegProperty< long long >::*array_function_type)(  ) const;
             array_function_type array_function_value( &::SireMol::SegProperty< long long >::array );
             
             SegIntProperty_exposer.def( 
@@ -45,7 +45,7 @@ void register_SegIntProperty_class(){
         { //::SireMol::SegProperty< long long >::assertCanConvert
         
             typedef SireMol::SegProperty< long long > exported_class_t;
-            typedef void ( ::SireMol::SegProperty< long long >::*assertCanConvert_function_type )( ::QVariant const & ) const;
+            typedef void ( ::SireMol::SegProperty< long long >::*assertCanConvert_function_type)( ::QVariant const & ) const;
             assertCanConvert_function_type assertCanConvert_function_value( &::SireMol::SegProperty< long long >::assertCanConvert );
             
             SegIntProperty_exposer.def( 
@@ -57,7 +57,7 @@ void register_SegIntProperty_class(){
         { //::SireMol::SegProperty< long long >::assignFrom
         
             typedef SireMol::SegProperty< long long > exported_class_t;
-            typedef void ( ::SireMol::SegProperty< long long >::*assignFrom_function_type )( ::SireMol::SegProperty< QVariant > const & ) ;
+            typedef void ( ::SireMol::SegProperty< long long >::*assignFrom_function_type)( ::SireMol::SegProperty< QVariant > const & ) ;
             assignFrom_function_type assignFrom_function_value( &::SireMol::SegProperty< long long >::assignFrom );
             
             SegIntProperty_exposer.def( 
@@ -69,7 +69,7 @@ void register_SegIntProperty_class(){
         { //::SireMol::SegProperty< long long >::at
         
             typedef SireMol::SegProperty< long long > exported_class_t;
-            typedef long long int const & ( ::SireMol::SegProperty< long long >::*at_function_type )( ::SireMol::SegIdx const & ) const;
+            typedef long long int const & ( ::SireMol::SegProperty< long long >::*at_function_type)( ::SireMol::SegIdx const & ) const;
             at_function_type at_function_value( &::SireMol::SegProperty< long long >::at );
             
             SegIntProperty_exposer.def( 
@@ -82,7 +82,7 @@ void register_SegIntProperty_class(){
         { //::SireMol::SegProperty< long long >::canConvert
         
             typedef SireMol::SegProperty< long long > exported_class_t;
-            typedef bool ( ::SireMol::SegProperty< long long >::*canConvert_function_type )( ::QVariant const & ) const;
+            typedef bool ( ::SireMol::SegProperty< long long >::*canConvert_function_type)( ::QVariant const & ) const;
             canConvert_function_type canConvert_function_value( &::SireMol::SegProperty< long long >::canConvert );
             
             SegIntProperty_exposer.def( 
@@ -94,7 +94,7 @@ void register_SegIntProperty_class(){
         { //::SireMol::SegProperty< long long >::count
         
             typedef SireMol::SegProperty< long long > exported_class_t;
-            typedef int ( ::SireMol::SegProperty< long long >::*count_function_type )(  ) const;
+            typedef int ( ::SireMol::SegProperty< long long >::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMol::SegProperty< long long >::count );
             
             SegIntProperty_exposer.def( 
@@ -117,7 +117,7 @@ void register_SegIntProperty_class(){
         { //::SireMol::SegProperty< long long >::get
         
             typedef SireMol::SegProperty< long long > exported_class_t;
-            typedef long long int const & ( ::SireMol::SegProperty< long long >::*get_function_type )( ::SireMol::SegIdx const & ) const;
+            typedef long long int const & ( ::SireMol::SegProperty< long long >::*get_function_type)( ::SireMol::SegIdx const & ) const;
             get_function_type get_function_value( &::SireMol::SegProperty< long long >::get );
             
             SegIntProperty_exposer.def( 
@@ -130,7 +130,7 @@ void register_SegIntProperty_class(){
         { //::SireMol::SegProperty< long long >::isCompatibleWith
         
             typedef SireMol::SegProperty< long long > exported_class_t;
-            typedef bool ( ::SireMol::SegProperty< long long >::*isCompatibleWith_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef bool ( ::SireMol::SegProperty< long long >::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::SegProperty< long long >::isCompatibleWith );
             
             SegIntProperty_exposer.def( 
@@ -142,7 +142,7 @@ void register_SegIntProperty_class(){
         { //::SireMol::SegProperty< long long >::isEmpty
         
             typedef SireMol::SegProperty< long long > exported_class_t;
-            typedef bool ( ::SireMol::SegProperty< long long >::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::SegProperty< long long >::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::SegProperty< long long >::isEmpty );
             
             SegIntProperty_exposer.def( 
@@ -153,7 +153,7 @@ void register_SegIntProperty_class(){
         { //::SireMol::SegProperty< long long >::nSegments
         
             typedef SireMol::SegProperty< long long > exported_class_t;
-            typedef int ( ::SireMol::SegProperty< long long >::*nSegments_function_type )(  ) const;
+            typedef int ( ::SireMol::SegProperty< long long >::*nSegments_function_type)(  ) const;
             nSegments_function_type nSegments_function_value( &::SireMol::SegProperty< long long >::nSegments );
             
             SegIntProperty_exposer.def( 
@@ -165,7 +165,7 @@ void register_SegIntProperty_class(){
         { //::SireMol::SegProperty< long long >::operator=
         
             typedef SireMol::SegProperty< long long > exported_class_t;
-            typedef ::SireMol::SegProperty< long long > & ( ::SireMol::SegProperty< long long >::*assign_function_type )( ::SireMol::SegProperty< long long > const & ) ;
+            typedef ::SireMol::SegProperty< long long > & ( ::SireMol::SegProperty< long long >::*assign_function_type)( ::SireMol::SegProperty< long long > const & ) ;
             assign_function_type assign_function_value( &::SireMol::SegProperty< long long >::operator= );
             
             SegIntProperty_exposer.def( 
@@ -179,7 +179,7 @@ void register_SegIntProperty_class(){
         { //::SireMol::SegProperty< long long >::operator[]
         
             typedef SireMol::SegProperty< long long > exported_class_t;
-            typedef long long int const & ( ::SireMol::SegProperty< long long >::*__getitem___function_type )( ::SireMol::SegIdx const & ) const;
+            typedef long long int const & ( ::SireMol::SegProperty< long long >::*__getitem___function_type)( ::SireMol::SegIdx const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::SegProperty< long long >::operator[] );
             
             SegIntProperty_exposer.def( 
@@ -192,7 +192,7 @@ void register_SegIntProperty_class(){
         { //::SireMol::SegProperty< long long >::set
         
             typedef SireMol::SegProperty< long long > exported_class_t;
-            typedef ::SireMol::SegProperty< long long > & ( ::SireMol::SegProperty< long long >::*set_function_type )( ::SireMol::SegIdx,long long int const & ) ;
+            typedef ::SireMol::SegProperty< long long > & ( ::SireMol::SegProperty< long long >::*set_function_type)( ::SireMol::SegIdx,long long int const & ) ;
             set_function_type set_function_value( &::SireMol::SegProperty< long long >::set );
             
             SegIntProperty_exposer.def( 
@@ -205,7 +205,7 @@ void register_SegIntProperty_class(){
         { //::SireMol::SegProperty< long long >::size
         
             typedef SireMol::SegProperty< long long > exported_class_t;
-            typedef int ( ::SireMol::SegProperty< long long >::*size_function_type )(  ) const;
+            typedef int ( ::SireMol::SegProperty< long long >::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireMol::SegProperty< long long >::size );
             
             SegIntProperty_exposer.def( 
@@ -216,7 +216,7 @@ void register_SegIntProperty_class(){
         { //::SireMol::SegProperty< long long >::toString
         
             typedef SireMol::SegProperty< long long > exported_class_t;
-            typedef ::QString ( ::SireMol::SegProperty< long long >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::SegProperty< long long >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::SegProperty< long long >::toString );
             
             SegIntProperty_exposer.def( 
@@ -227,7 +227,7 @@ void register_SegIntProperty_class(){
         { //::SireMol::SegProperty< long long >::toVariant
         
             typedef SireMol::SegProperty< long long > exported_class_t;
-            typedef ::SireMol::SegProperty< QVariant > ( ::SireMol::SegProperty< long long >::*toVariant_function_type )(  ) const;
+            typedef ::SireMol::SegProperty< QVariant > ( ::SireMol::SegProperty< long long >::*toVariant_function_type)(  ) const;
             toVariant_function_type toVariant_function_value( &::SireMol::SegProperty< long long >::toVariant );
             
             SegIntProperty_exposer.def( 

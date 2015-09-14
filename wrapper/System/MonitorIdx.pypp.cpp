@@ -31,7 +31,7 @@ void register_MonitorIdx_class(){
         MonitorIdx_exposer.def( bp::init< SireSystem::MonitorIdx const & >(( bp::arg("other") )) );
         { //::SireSystem::MonitorIdx::hash
         
-            typedef ::uint ( ::SireSystem::MonitorIdx::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireSystem::MonitorIdx::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireSystem::MonitorIdx::hash );
             
             MonitorIdx_exposer.def( 
@@ -41,7 +41,7 @@ void register_MonitorIdx_class(){
         }
         { //::SireSystem::MonitorIdx::isNull
         
-            typedef bool ( ::SireSystem::MonitorIdx::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireSystem::MonitorIdx::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireSystem::MonitorIdx::isNull );
             
             MonitorIdx_exposer.def( 
@@ -51,7 +51,7 @@ void register_MonitorIdx_class(){
         }
         { //::SireSystem::MonitorIdx::map
         
-            typedef ::QList< SireSystem::MonitorName > ( ::SireSystem::MonitorIdx::*map_function_type )( ::SireSystem::SystemMonitors const & ) const;
+            typedef ::QList< SireSystem::MonitorName > ( ::SireSystem::MonitorIdx::*map_function_type)( ::SireSystem::SystemMonitors const & ) const;
             map_function_type map_function_value( &::SireSystem::MonitorIdx::map );
             
             MonitorIdx_exposer.def( 
@@ -72,7 +72,7 @@ void register_MonitorIdx_class(){
         }
         { //::SireSystem::MonitorIdx::operator=
         
-            typedef ::SireSystem::MonitorIdx & ( ::SireSystem::MonitorIdx::*assign_function_type )( ::SireSystem::MonitorIdx const & ) ;
+            typedef ::SireSystem::MonitorIdx & ( ::SireSystem::MonitorIdx::*assign_function_type)( ::SireSystem::MonitorIdx const & ) ;
             assign_function_type assign_function_value( &::SireSystem::MonitorIdx::operator= );
             
             MonitorIdx_exposer.def( 
@@ -84,7 +84,7 @@ void register_MonitorIdx_class(){
         }
         { //::SireSystem::MonitorIdx::toString
         
-            typedef ::QString ( ::SireSystem::MonitorIdx::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireSystem::MonitorIdx::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireSystem::MonitorIdx::toString );
             
             MonitorIdx_exposer.def( 
@@ -104,7 +104,7 @@ void register_MonitorIdx_class(){
         }
         { //::SireSystem::MonitorIdx::what
         
-            typedef char const * ( ::SireSystem::MonitorIdx::*what_function_type )(  ) const;
+            typedef char const * ( ::SireSystem::MonitorIdx::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireSystem::MonitorIdx::what );
             
             MonitorIdx_exposer.def( 

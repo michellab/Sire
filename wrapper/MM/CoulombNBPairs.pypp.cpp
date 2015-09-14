@@ -32,7 +32,7 @@ void register_CoulombNBPairs_class(){
         CoulombNBPairs_exposer.def( bp::self != bp::self );
         { //::SireMM::CoulombNBPairs::operator=
         
-            typedef ::SireMM::CoulombNBPairs & ( ::SireMM::CoulombNBPairs::*assign_function_type )( ::SireMM::CoulombNBPairs const & ) ;
+            typedef ::SireMM::CoulombNBPairs & ( ::SireMM::CoulombNBPairs::*assign_function_type)( ::SireMM::CoulombNBPairs const & ) ;
             assign_function_type assign_function_value( &::SireMM::CoulombNBPairs::operator= );
             
             CoulombNBPairs_exposer.def( 
@@ -44,7 +44,7 @@ void register_CoulombNBPairs_class(){
         }
         { //::SireMM::CoulombNBPairs::operator=
         
-            typedef ::SireMM::CoulombNBPairs & ( ::SireMM::CoulombNBPairs::*assign_function_type )( ::SireMM::CLJNBPairs const & ) ;
+            typedef ::SireMM::CoulombNBPairs & ( ::SireMM::CoulombNBPairs::*assign_function_type)( ::SireMM::CLJNBPairs const & ) ;
             assign_function_type assign_function_value( &::SireMM::CoulombNBPairs::operator= );
             
             CoulombNBPairs_exposer.def( 

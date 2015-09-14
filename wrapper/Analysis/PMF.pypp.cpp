@@ -39,7 +39,7 @@ void register_PMF_class(){
         PMF_exposer.def( bp::init< SireAnalysis::PMF const & >(( bp::arg("other") )) );
         { //::SireAnalysis::PMF::deltaG
         
-            typedef double ( ::SireAnalysis::PMF::*deltaG_function_type )(  ) const;
+            typedef double ( ::SireAnalysis::PMF::*deltaG_function_type)(  ) const;
             deltaG_function_type deltaG_function_value( &::SireAnalysis::PMF::deltaG );
             
             PMF_exposer.def( 
@@ -49,7 +49,7 @@ void register_PMF_class(){
         }
         { //::SireAnalysis::PMF::error
         
-            typedef double ( ::SireAnalysis::PMF::*error_function_type )(  ) const;
+            typedef double ( ::SireAnalysis::PMF::*error_function_type)(  ) const;
             error_function_type error_function_value( &::SireAnalysis::PMF::error );
             
             PMF_exposer.def( 
@@ -59,7 +59,7 @@ void register_PMF_class(){
         }
         { //::SireAnalysis::PMF::isEmpty
         
-            typedef bool ( ::SireAnalysis::PMF::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireAnalysis::PMF::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireAnalysis::PMF::isEmpty );
             
             PMF_exposer.def( 
@@ -70,7 +70,7 @@ void register_PMF_class(){
         PMF_exposer.def( bp::self != bp::self );
         { //::SireAnalysis::PMF::operator=
         
-            typedef ::SireAnalysis::PMF & ( ::SireAnalysis::PMF::*assign_function_type )( ::SireAnalysis::PMF const & ) ;
+            typedef ::SireAnalysis::PMF & ( ::SireAnalysis::PMF::*assign_function_type)( ::SireAnalysis::PMF const & ) ;
             assign_function_type assign_function_value( &::SireAnalysis::PMF::operator= );
             
             PMF_exposer.def( 
@@ -83,7 +83,7 @@ void register_PMF_class(){
         PMF_exposer.def( bp::self == bp::self );
         { //::SireAnalysis::PMF::rangeMax
         
-            typedef double ( ::SireAnalysis::PMF::*rangeMax_function_type )(  ) const;
+            typedef double ( ::SireAnalysis::PMF::*rangeMax_function_type)(  ) const;
             rangeMax_function_type rangeMax_function_value( &::SireAnalysis::PMF::rangeMax );
             
             PMF_exposer.def( 
@@ -93,7 +93,7 @@ void register_PMF_class(){
         }
         { //::SireAnalysis::PMF::rangeMin
         
-            typedef double ( ::SireAnalysis::PMF::*rangeMin_function_type )(  ) const;
+            typedef double ( ::SireAnalysis::PMF::*rangeMin_function_type)(  ) const;
             rangeMin_function_type rangeMin_function_value( &::SireAnalysis::PMF::rangeMin );
             
             PMF_exposer.def( 
@@ -103,7 +103,7 @@ void register_PMF_class(){
         }
         { //::SireAnalysis::PMF::toString
         
-            typedef ::QString ( ::SireAnalysis::PMF::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireAnalysis::PMF::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireAnalysis::PMF::toString );
             
             PMF_exposer.def( 
@@ -123,7 +123,7 @@ void register_PMF_class(){
         }
         { //::SireAnalysis::PMF::values
         
-            typedef ::QVector< SireAnalysis::DataPoint > ( ::SireAnalysis::PMF::*values_function_type )(  ) const;
+            typedef ::QVector< SireAnalysis::DataPoint > ( ::SireAnalysis::PMF::*values_function_type)(  ) const;
             values_function_type values_function_value( &::SireAnalysis::PMF::values );
             
             PMF_exposer.def( 
@@ -133,7 +133,7 @@ void register_PMF_class(){
         }
         { //::SireAnalysis::PMF::what
         
-            typedef char const * ( ::SireAnalysis::PMF::*what_function_type )(  ) const;
+            typedef char const * ( ::SireAnalysis::PMF::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireAnalysis::PMF::what );
             
             PMF_exposer.def( 

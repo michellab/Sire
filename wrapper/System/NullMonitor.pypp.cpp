@@ -34,7 +34,7 @@ void register_NullMonitor_class(){
         NullMonitor_exposer.def( bp::init< SireSystem::NullMonitor const & >(( bp::arg("other") )) );
         { //::SireSystem::NullMonitor::clearStatistics
         
-            typedef void ( ::SireSystem::NullMonitor::*clearStatistics_function_type )(  ) ;
+            typedef void ( ::SireSystem::NullMonitor::*clearStatistics_function_type)(  ) ;
             clearStatistics_function_type clearStatistics_function_value( &::SireSystem::NullMonitor::clearStatistics );
             
             NullMonitor_exposer.def( 
@@ -44,7 +44,7 @@ void register_NullMonitor_class(){
         }
         { //::SireSystem::NullMonitor::monitor
         
-            typedef void ( ::SireSystem::NullMonitor::*monitor_function_type )( ::SireSystem::System & ) ;
+            typedef void ( ::SireSystem::NullMonitor::*monitor_function_type)( ::SireSystem::System & ) ;
             monitor_function_type monitor_function_value( &::SireSystem::NullMonitor::monitor );
             
             NullMonitor_exposer.def( 
@@ -56,7 +56,7 @@ void register_NullMonitor_class(){
         NullMonitor_exposer.def( bp::self != bp::self );
         { //::SireSystem::NullMonitor::operator=
         
-            typedef ::SireSystem::NullMonitor & ( ::SireSystem::NullMonitor::*assign_function_type )( ::SireSystem::NullMonitor const & ) ;
+            typedef ::SireSystem::NullMonitor & ( ::SireSystem::NullMonitor::*assign_function_type)( ::SireSystem::NullMonitor const & ) ;
             assign_function_type assign_function_value( &::SireSystem::NullMonitor::operator= );
             
             NullMonitor_exposer.def( 

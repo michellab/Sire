@@ -39,7 +39,7 @@ void register_SwitchingFunction_class(){
         bp::scope SwitchingFunction_scope( SwitchingFunction_exposer );
         { //::SireMM::SwitchingFunction::cutoffDistance
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMM::SwitchingFunction::*cutoffDistance_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::SwitchingFunction::*cutoffDistance_function_type)(  ) const;
             cutoffDistance_function_type cutoffDistance_function_value( &::SireMM::SwitchingFunction::cutoffDistance );
             
             SwitchingFunction_exposer.def( 
@@ -49,7 +49,7 @@ void register_SwitchingFunction_class(){
         }
         { //::SireMM::SwitchingFunction::dElectrostaticScaleFactor
         
-            typedef double ( ::SireMM::SwitchingFunction::*dElectrostaticScaleFactor_function_type )( ::SireUnits::Dimension::Length ) const;
+            typedef double ( ::SireMM::SwitchingFunction::*dElectrostaticScaleFactor_function_type)( ::SireUnits::Dimension::Length ) const;
             dElectrostaticScaleFactor_function_type dElectrostaticScaleFactor_function_value( &::SireMM::SwitchingFunction::dElectrostaticScaleFactor );
             
             SwitchingFunction_exposer.def( 
@@ -60,7 +60,7 @@ void register_SwitchingFunction_class(){
         }
         { //::SireMM::SwitchingFunction::dVDWScaleFactor
         
-            typedef double ( ::SireMM::SwitchingFunction::*dVDWScaleFactor_function_type )( ::SireUnits::Dimension::Length ) const;
+            typedef double ( ::SireMM::SwitchingFunction::*dVDWScaleFactor_function_type)( ::SireUnits::Dimension::Length ) const;
             dVDWScaleFactor_function_type dVDWScaleFactor_function_value( &::SireMM::SwitchingFunction::dVDWScaleFactor );
             
             SwitchingFunction_exposer.def( 
@@ -71,7 +71,7 @@ void register_SwitchingFunction_class(){
         }
         { //::SireMM::SwitchingFunction::electrostaticCutoffDistance
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMM::SwitchingFunction::*electrostaticCutoffDistance_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::SwitchingFunction::*electrostaticCutoffDistance_function_type)(  ) const;
             electrostaticCutoffDistance_function_type electrostaticCutoffDistance_function_value( &::SireMM::SwitchingFunction::electrostaticCutoffDistance );
             
             SwitchingFunction_exposer.def( 
@@ -81,7 +81,7 @@ void register_SwitchingFunction_class(){
         }
         { //::SireMM::SwitchingFunction::electrostaticFeatherDistance
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMM::SwitchingFunction::*electrostaticFeatherDistance_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::SwitchingFunction::*electrostaticFeatherDistance_function_type)(  ) const;
             electrostaticFeatherDistance_function_type electrostaticFeatherDistance_function_value( &::SireMM::SwitchingFunction::electrostaticFeatherDistance );
             
             SwitchingFunction_exposer.def( 
@@ -91,7 +91,7 @@ void register_SwitchingFunction_class(){
         }
         { //::SireMM::SwitchingFunction::electrostaticScaleFactor
         
-            typedef double ( ::SireMM::SwitchingFunction::*electrostaticScaleFactor_function_type )( ::SireUnits::Dimension::Length ) const;
+            typedef double ( ::SireMM::SwitchingFunction::*electrostaticScaleFactor_function_type)( ::SireUnits::Dimension::Length ) const;
             electrostaticScaleFactor_function_type electrostaticScaleFactor_function_value( &::SireMM::SwitchingFunction::electrostaticScaleFactor );
             
             SwitchingFunction_exposer.def( 
@@ -102,7 +102,7 @@ void register_SwitchingFunction_class(){
         }
         { //::SireMM::SwitchingFunction::featherDistance
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMM::SwitchingFunction::*featherDistance_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::SwitchingFunction::*featherDistance_function_type)(  ) const;
             featherDistance_function_type featherDistance_function_value( &::SireMM::SwitchingFunction::featherDistance );
             
             SwitchingFunction_exposer.def( 
@@ -123,7 +123,7 @@ void register_SwitchingFunction_class(){
         }
         { //::SireMM::SwitchingFunction::toString
         
-            typedef ::QString ( ::SireMM::SwitchingFunction::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMM::SwitchingFunction::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMM::SwitchingFunction::toString );
             
             SwitchingFunction_exposer.def( 
@@ -143,7 +143,7 @@ void register_SwitchingFunction_class(){
         }
         { //::SireMM::SwitchingFunction::vdwCutoffDistance
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMM::SwitchingFunction::*vdwCutoffDistance_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::SwitchingFunction::*vdwCutoffDistance_function_type)(  ) const;
             vdwCutoffDistance_function_type vdwCutoffDistance_function_value( &::SireMM::SwitchingFunction::vdwCutoffDistance );
             
             SwitchingFunction_exposer.def( 
@@ -153,7 +153,7 @@ void register_SwitchingFunction_class(){
         }
         { //::SireMM::SwitchingFunction::vdwFeatherDistance
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMM::SwitchingFunction::*vdwFeatherDistance_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::SwitchingFunction::*vdwFeatherDistance_function_type)(  ) const;
             vdwFeatherDistance_function_type vdwFeatherDistance_function_value( &::SireMM::SwitchingFunction::vdwFeatherDistance );
             
             SwitchingFunction_exposer.def( 
@@ -163,7 +163,7 @@ void register_SwitchingFunction_class(){
         }
         { //::SireMM::SwitchingFunction::vdwScaleFactor
         
-            typedef double ( ::SireMM::SwitchingFunction::*vdwScaleFactor_function_type )( ::SireUnits::Dimension::Length ) const;
+            typedef double ( ::SireMM::SwitchingFunction::*vdwScaleFactor_function_type)( ::SireUnits::Dimension::Length ) const;
             vdwScaleFactor_function_type vdwScaleFactor_function_value( &::SireMM::SwitchingFunction::vdwScaleFactor );
             
             SwitchingFunction_exposer.def( 

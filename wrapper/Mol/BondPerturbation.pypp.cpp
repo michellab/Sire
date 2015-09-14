@@ -47,7 +47,7 @@ void register_BondPerturbation_class(){
         BondPerturbation_exposer.def( bp::init< SireMol::BondPerturbation const & >(( bp::arg("other") )) );
         { //::SireMol::BondPerturbation::bond
         
-            typedef ::SireMol::BondID const & ( ::SireMol::BondPerturbation::*bond_function_type )(  ) const;
+            typedef ::SireMol::BondID const & ( ::SireMol::BondPerturbation::*bond_function_type)(  ) const;
             bond_function_type bond_function_value( &::SireMol::BondPerturbation::bond );
             
             BondPerturbation_exposer.def( 
@@ -58,7 +58,7 @@ void register_BondPerturbation_class(){
         }
         { //::SireMol::BondPerturbation::end
         
-            typedef ::SireUnits::Dimension::Length const & ( ::SireMol::BondPerturbation::*end_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length const & ( ::SireMol::BondPerturbation::*end_function_type)(  ) const;
             end_function_type end_function_value( &::SireMol::BondPerturbation::end );
             
             BondPerturbation_exposer.def( 
@@ -70,7 +70,7 @@ void register_BondPerturbation_class(){
         BondPerturbation_exposer.def( bp::self != bp::self );
         { //::SireMol::BondPerturbation::operator=
         
-            typedef ::SireMol::BondPerturbation & ( ::SireMol::BondPerturbation::*assign_function_type )( ::SireMol::BondPerturbation const & ) ;
+            typedef ::SireMol::BondPerturbation & ( ::SireMol::BondPerturbation::*assign_function_type)( ::SireMol::BondPerturbation const & ) ;
             assign_function_type assign_function_value( &::SireMol::BondPerturbation::operator= );
             
             BondPerturbation_exposer.def( 
@@ -83,7 +83,7 @@ void register_BondPerturbation_class(){
         BondPerturbation_exposer.def( bp::self == bp::self );
         { //::SireMol::BondPerturbation::start
         
-            typedef ::SireUnits::Dimension::Length const & ( ::SireMol::BondPerturbation::*start_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length const & ( ::SireMol::BondPerturbation::*start_function_type)(  ) const;
             start_function_type start_function_value( &::SireMol::BondPerturbation::start );
             
             BondPerturbation_exposer.def( 
@@ -94,7 +94,7 @@ void register_BondPerturbation_class(){
         }
         { //::SireMol::BondPerturbation::toString
         
-            typedef ::QString ( ::SireMol::BondPerturbation::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::BondPerturbation::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::BondPerturbation::toString );
             
             BondPerturbation_exposer.def( 
@@ -114,7 +114,7 @@ void register_BondPerturbation_class(){
         }
         { //::SireMol::BondPerturbation::wouldChange
         
-            typedef bool ( ::SireMol::BondPerturbation::*wouldChange_function_type )( ::SireMol::Molecule const &,::SireCAS::Values const & ) const;
+            typedef bool ( ::SireMol::BondPerturbation::*wouldChange_function_type)( ::SireMol::Molecule const &,::SireCAS::Values const & ) const;
             wouldChange_function_type wouldChange_function_value( &::SireMol::BondPerturbation::wouldChange );
             
             BondPerturbation_exposer.def( 

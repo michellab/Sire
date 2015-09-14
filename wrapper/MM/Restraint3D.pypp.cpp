@@ -48,7 +48,7 @@ void register_Restraint3D_class(){
         bp::scope Restraint3D_scope( Restraint3D_exposer );
         { //::SireMM::Restraint3D::force
         
-            typedef void ( ::SireMM::Restraint3D::*force_function_type )( ::SireFF::MolForceTable &,double ) const;
+            typedef void ( ::SireMM::Restraint3D::*force_function_type)( ::SireFF::MolForceTable &,double ) const;
             force_function_type force_function_value( &::SireMM::Restraint3D::force );
             
             Restraint3D_exposer.def( 
@@ -59,7 +59,7 @@ void register_Restraint3D_class(){
         }
         { //::SireMM::Restraint3D::force
         
-            typedef void ( ::SireMM::Restraint3D::*force_function_type )( ::SireFF::ForceTable &,double ) const;
+            typedef void ( ::SireMM::Restraint3D::*force_function_type)( ::SireFF::ForceTable &,double ) const;
             force_function_type force_function_value( &::SireMM::Restraint3D::force );
             
             Restraint3D_exposer.def( 
@@ -70,7 +70,7 @@ void register_Restraint3D_class(){
         }
         { //::SireMM::Restraint3D::setSpace
         
-            typedef void ( ::SireMM::Restraint3D::*setSpace_function_type )( ::SireVol::Space const & ) ;
+            typedef void ( ::SireMM::Restraint3D::*setSpace_function_type)( ::SireVol::Space const & ) ;
             setSpace_function_type setSpace_function_value( &::SireMM::Restraint3D::setSpace );
             
             Restraint3D_exposer.def( 
@@ -81,7 +81,7 @@ void register_Restraint3D_class(){
         }
         { //::SireMM::Restraint3D::space
         
-            typedef ::SireVol::Space const & ( ::SireMM::Restraint3D::*space_function_type )(  ) const;
+            typedef ::SireVol::Space const & ( ::SireMM::Restraint3D::*space_function_type)(  ) const;
             space_function_type space_function_value( &::SireMM::Restraint3D::space );
             
             Restraint3D_exposer.def( 
@@ -102,7 +102,7 @@ void register_Restraint3D_class(){
         }
         { //::SireMM::Restraint3D::usesMoleculesIn
         
-            typedef bool ( ::SireMM::Restraint3D::*usesMoleculesIn_function_type )( ::SireFF::ForceTable const & ) const;
+            typedef bool ( ::SireMM::Restraint3D::*usesMoleculesIn_function_type)( ::SireFF::ForceTable const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireMM::Restraint3D::usesMoleculesIn );
             
             Restraint3D_exposer.def( 
@@ -113,7 +113,7 @@ void register_Restraint3D_class(){
         }
         { //::SireMM::Restraint3D::usesMoleculesIn
         
-            typedef bool ( ::SireMM::Restraint3D::*usesMoleculesIn_function_type )( ::SireMol::Molecules const & ) const;
+            typedef bool ( ::SireMM::Restraint3D::*usesMoleculesIn_function_type)( ::SireMol::Molecules const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireMM::Restraint3D::usesMoleculesIn );
             
             Restraint3D_exposer.def( 

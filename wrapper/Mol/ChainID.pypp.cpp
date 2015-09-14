@@ -59,7 +59,7 @@ void register_ChainID_class(){
         bp::scope ChainID_scope( ChainID_exposer );
         { //::SireMol::ChainID::atom
         
-            typedef ::SireMol::AtomsIn< SireMol::ChainID > ( ::SireMol::ChainID::*atom_function_type )( int ) const;
+            typedef ::SireMol::AtomsIn< SireMol::ChainID > ( ::SireMol::ChainID::*atom_function_type)( int ) const;
             atom_function_type atom_function_value( &::SireMol::ChainID::atom );
             
             ChainID_exposer.def( 
@@ -70,7 +70,7 @@ void register_ChainID_class(){
         }
         { //::SireMol::ChainID::atoms
         
-            typedef ::SireMol::AtomsIn< SireMol::ChainID > ( ::SireMol::ChainID::*atoms_function_type )(  ) const;
+            typedef ::SireMol::AtomsIn< SireMol::ChainID > ( ::SireMol::ChainID::*atoms_function_type)(  ) const;
             atoms_function_type atoms_function_value( &::SireMol::ChainID::atoms );
             
             ChainID_exposer.def( 
@@ -80,7 +80,7 @@ void register_ChainID_class(){
         }
         { //::SireMol::ChainID::atoms
         
-            typedef ::SireMol::AtomsIn< SireMol::ChainID > ( ::SireMol::ChainID::*atoms_function_type )( int,int ) const;
+            typedef ::SireMol::AtomsIn< SireMol::ChainID > ( ::SireMol::ChainID::*atoms_function_type)( int,int ) const;
             atoms_function_type atoms_function_value( &::SireMol::ChainID::atoms );
             
             ChainID_exposer.def( 
@@ -91,7 +91,7 @@ void register_ChainID_class(){
         }
         { //::SireMol::ChainID::map
         
-            typedef ::QList< SireMol::ChainIdx > ( ::SireMol::ChainID::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::ChainIdx > ( ::SireMol::ChainID::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireMol::ChainID::map );
             
             ChainID_exposer.def( 
@@ -102,7 +102,7 @@ void register_ChainID_class(){
         }
         { //::SireMol::ChainID::map
         
-            typedef ::QList< SireMol::ChainIdx > ( ::SireMol::ChainID::*map_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QList< SireMol::ChainIdx > ( ::SireMol::ChainID::*map_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             map_function_type map_function_value( &::SireMol::ChainID::map );
             
             ChainID_exposer.def( 
@@ -118,7 +118,7 @@ void register_ChainID_class(){
         ChainID_exposer.def( bp::self & bp::other< SireMol::CGID >() );
         { //::SireMol::ChainID::operator()
         
-            typedef ::SireID::Specify< SireMol::ChainID > ( ::SireMol::ChainID::*__call___function_type )( int ) const;
+            typedef ::SireID::Specify< SireMol::ChainID > ( ::SireMol::ChainID::*__call___function_type)( int ) const;
             __call___function_type __call___function_value( &::SireMol::ChainID::operator() );
             
             ChainID_exposer.def( 
@@ -129,7 +129,7 @@ void register_ChainID_class(){
         }
         { //::SireMol::ChainID::operator()
         
-            typedef ::SireID::Specify< SireMol::ChainID > ( ::SireMol::ChainID::*__call___function_type )( int,int ) const;
+            typedef ::SireID::Specify< SireMol::ChainID > ( ::SireMol::ChainID::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireMol::ChainID::operator() );
             
             ChainID_exposer.def( 
@@ -146,7 +146,7 @@ void register_ChainID_class(){
         ChainID_exposer.def( bp::self + bp::other< SireMol::CGID >() );
         { //::SireMol::ChainID::operator[]
         
-            typedef ::SireID::Specify< SireMol::ChainID > ( ::SireMol::ChainID::*__getitem___function_type )( int ) const;
+            typedef ::SireID::Specify< SireMol::ChainID > ( ::SireMol::ChainID::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::ChainID::operator[] );
             
             ChainID_exposer.def( 
@@ -158,7 +158,7 @@ void register_ChainID_class(){
         ChainID_exposer.def( bp::self | bp::self );
         { //::SireMol::ChainID::residue
         
-            typedef ::SireMol::ResIn< SireMol::ChainID > ( ::SireMol::ChainID::*residue_function_type )( int ) const;
+            typedef ::SireMol::ResIn< SireMol::ChainID > ( ::SireMol::ChainID::*residue_function_type)( int ) const;
             residue_function_type residue_function_value( &::SireMol::ChainID::residue );
             
             ChainID_exposer.def( 
@@ -169,7 +169,7 @@ void register_ChainID_class(){
         }
         { //::SireMol::ChainID::residues
         
-            typedef ::SireMol::ResIn< SireMol::ChainID > ( ::SireMol::ChainID::*residues_function_type )(  ) const;
+            typedef ::SireMol::ResIn< SireMol::ChainID > ( ::SireMol::ChainID::*residues_function_type)(  ) const;
             residues_function_type residues_function_value( &::SireMol::ChainID::residues );
             
             ChainID_exposer.def( 
@@ -179,7 +179,7 @@ void register_ChainID_class(){
         }
         { //::SireMol::ChainID::residues
         
-            typedef ::SireMol::ResIn< SireMol::ChainID > ( ::SireMol::ChainID::*residues_function_type )( int,int ) const;
+            typedef ::SireMol::ResIn< SireMol::ChainID > ( ::SireMol::ChainID::*residues_function_type)( int,int ) const;
             residues_function_type residues_function_value( &::SireMol::ChainID::residues );
             
             ChainID_exposer.def( 
@@ -190,7 +190,7 @@ void register_ChainID_class(){
         }
         { //::SireMol::ChainID::selectAllFrom
         
-            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::ChainID::*selectAllFrom_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::ChainID::*selectAllFrom_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             selectAllFrom_function_type selectAllFrom_function_value( &::SireMol::ChainID::selectAllFrom );
             
             ChainID_exposer.def( 
@@ -201,7 +201,7 @@ void register_ChainID_class(){
         }
         { //::SireMol::ChainID::selectAllFrom
         
-            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Chain > > ( ::SireMol::ChainID::*selectAllFrom_function_type )( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Chain > > ( ::SireMol::ChainID::*selectAllFrom_function_type)( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) const;
             selectAllFrom_function_type selectAllFrom_function_value( &::SireMol::ChainID::selectAllFrom );
             
             ChainID_exposer.def( 
@@ -212,7 +212,7 @@ void register_ChainID_class(){
         }
         { //::SireMol::ChainID::selectAllFrom
         
-            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Chain > > ( ::SireMol::ChainID::*selectAllFrom_function_type )( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Chain > > ( ::SireMol::ChainID::*selectAllFrom_function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
             selectAllFrom_function_type selectAllFrom_function_value( &::SireMol::ChainID::selectAllFrom );
             
             ChainID_exposer.def( 
@@ -223,7 +223,7 @@ void register_ChainID_class(){
         }
         { //::SireMol::ChainID::selectAllFrom
         
-            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Chain > > ( ::SireMol::ChainID::*selectAllFrom_function_type )( ::SireMol::MolGroupsBase const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Chain > > ( ::SireMol::ChainID::*selectAllFrom_function_type)( ::SireMol::MolGroupsBase const &,::SireBase::PropertyMap const & ) const;
             selectAllFrom_function_type selectAllFrom_function_value( &::SireMol::ChainID::selectAllFrom );
             
             ChainID_exposer.def( 
@@ -234,7 +234,7 @@ void register_ChainID_class(){
         }
         { //::SireMol::ChainID::selectFrom
         
-            typedef ::SireMol::Chain ( ::SireMol::ChainID::*selectFrom_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::Chain ( ::SireMol::ChainID::*selectFrom_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             selectFrom_function_type selectFrom_function_value( &::SireMol::ChainID::selectFrom );
             
             ChainID_exposer.def( 
@@ -245,7 +245,7 @@ void register_ChainID_class(){
         }
         { //::SireMol::ChainID::selectFrom
         
-            typedef ::SireMol::Chain ( ::SireMol::ChainID::*selectFrom_function_type )( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::Chain ( ::SireMol::ChainID::*selectFrom_function_type)( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) const;
             selectFrom_function_type selectFrom_function_value( &::SireMol::ChainID::selectFrom );
             
             ChainID_exposer.def( 
@@ -256,7 +256,7 @@ void register_ChainID_class(){
         }
         { //::SireMol::ChainID::selectFrom
         
-            typedef ::SireMol::Chain ( ::SireMol::ChainID::*selectFrom_function_type )( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::Chain ( ::SireMol::ChainID::*selectFrom_function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
             selectFrom_function_type selectFrom_function_value( &::SireMol::ChainID::selectFrom );
             
             ChainID_exposer.def( 
@@ -267,7 +267,7 @@ void register_ChainID_class(){
         }
         { //::SireMol::ChainID::selectFrom
         
-            typedef ::SireMol::Chain ( ::SireMol::ChainID::*selectFrom_function_type )( ::SireMol::MolGroupsBase const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::Chain ( ::SireMol::ChainID::*selectFrom_function_type)( ::SireMol::MolGroupsBase const &,::SireBase::PropertyMap const & ) const;
             selectFrom_function_type selectFrom_function_value( &::SireMol::ChainID::selectFrom );
             
             ChainID_exposer.def( 

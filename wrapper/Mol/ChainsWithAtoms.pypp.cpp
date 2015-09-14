@@ -32,7 +32,7 @@ void register_ChainsWithAtoms_class(){
         ChainsWithAtoms_exposer.def( bp::init< SireMol::ChainsWithAtoms const & >(( bp::arg("other") )) );
         { //::SireMol::ChainsWithAtoms::atomID
         
-            typedef ::SireMol::AtomID const & ( ::SireMol::ChainsWithAtoms::*atomID_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMol::ChainsWithAtoms::*atomID_function_type)(  ) const;
             atomID_function_type atomID_function_value( &::SireMol::ChainsWithAtoms::atomID );
             
             ChainsWithAtoms_exposer.def( 
@@ -43,7 +43,7 @@ void register_ChainsWithAtoms_class(){
         }
         { //::SireMol::ChainsWithAtoms::hash
         
-            typedef ::uint ( ::SireMol::ChainsWithAtoms::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::ChainsWithAtoms::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::ChainsWithAtoms::hash );
             
             ChainsWithAtoms_exposer.def( 
@@ -53,7 +53,7 @@ void register_ChainsWithAtoms_class(){
         }
         { //::SireMol::ChainsWithAtoms::isNull
         
-            typedef bool ( ::SireMol::ChainsWithAtoms::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::ChainsWithAtoms::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::ChainsWithAtoms::isNull );
             
             ChainsWithAtoms_exposer.def( 
@@ -63,7 +63,7 @@ void register_ChainsWithAtoms_class(){
         }
         { //::SireMol::ChainsWithAtoms::map
         
-            typedef ::QList< SireMol::ChainIdx > ( ::SireMol::ChainsWithAtoms::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::ChainIdx > ( ::SireMol::ChainsWithAtoms::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireMol::ChainsWithAtoms::map );
             
             ChainsWithAtoms_exposer.def( 
@@ -75,7 +75,7 @@ void register_ChainsWithAtoms_class(){
         ChainsWithAtoms_exposer.def( bp::self != bp::self );
         { //::SireMol::ChainsWithAtoms::operator=
         
-            typedef ::SireMol::ChainsWithAtoms & ( ::SireMol::ChainsWithAtoms::*assign_function_type )( ::SireMol::ChainsWithAtoms const & ) ;
+            typedef ::SireMol::ChainsWithAtoms & ( ::SireMol::ChainsWithAtoms::*assign_function_type)( ::SireMol::ChainsWithAtoms const & ) ;
             assign_function_type assign_function_value( &::SireMol::ChainsWithAtoms::operator= );
             
             ChainsWithAtoms_exposer.def( 
@@ -89,7 +89,7 @@ void register_ChainsWithAtoms_class(){
         ChainsWithAtoms_exposer.def( bp::self == bp::self );
         { //::SireMol::ChainsWithAtoms::toString
         
-            typedef ::QString ( ::SireMol::ChainsWithAtoms::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::ChainsWithAtoms::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::ChainsWithAtoms::toString );
             
             ChainsWithAtoms_exposer.def( 
@@ -109,7 +109,7 @@ void register_ChainsWithAtoms_class(){
         }
         { //::SireMol::ChainsWithAtoms::what
         
-            typedef char const * ( ::SireMol::ChainsWithAtoms::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::ChainsWithAtoms::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::ChainsWithAtoms::what );
             
             ChainsWithAtoms_exposer.def( 

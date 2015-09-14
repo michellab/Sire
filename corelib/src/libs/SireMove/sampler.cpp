@@ -128,6 +128,16 @@ void Sampler::setGenerator(const RanGenerator &generator)
     rangen = generator;
 }
 
+/** Return whether or not this sampler is biased, i.e. picks some 
+    molecules / views with a higher probability than others. If this
+    is a biased sampler, then this will need to be accounted for in the
+    MC acceptance test. If this is not a biased sampler, then every
+    molecule or view is chosen with equal probability */
+bool Sampler::isBiased() const
+{
+    return false;
+}
+
 /** Set the molecule group from which random molecules will be sampled */    
 void Sampler::setGroup(const MoleculeGroup &moleculegroup)
 {

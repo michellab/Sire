@@ -47,7 +47,7 @@ void register_MolResNum_class(){
         MolResNum_exposer.def( bp::init< SireMol::MolResNum const & >(( bp::arg("other") )) );
         { //::SireMol::MolResNum::hash
         
-            typedef ::uint ( ::SireMol::MolResNum::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::MolResNum::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::MolResNum::hash );
             
             MolResNum_exposer.def( 
@@ -57,7 +57,7 @@ void register_MolResNum_class(){
         }
         { //::SireMol::MolResNum::isNull
         
-            typedef bool ( ::SireMol::MolResNum::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::MolResNum::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::MolResNum::isNull );
             
             MolResNum_exposer.def( 
@@ -67,7 +67,7 @@ void register_MolResNum_class(){
         }
         { //::SireMol::MolResNum::map
         
-            typedef ::QList< SireMol::ResIdx > ( ::SireMol::MolResNum::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::ResIdx > ( ::SireMol::MolResNum::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireMol::MolResNum::map );
             
             MolResNum_exposer.def( 
@@ -78,7 +78,7 @@ void register_MolResNum_class(){
         }
         { //::SireMol::MolResNum::molNum
         
-            typedef ::SireMol::MolNum const & ( ::SireMol::MolResNum::*molNum_function_type )(  ) const;
+            typedef ::SireMol::MolNum const & ( ::SireMol::MolResNum::*molNum_function_type)(  ) const;
             molNum_function_type molNum_function_value( &::SireMol::MolResNum::molNum );
             
             MolResNum_exposer.def( 
@@ -90,7 +90,7 @@ void register_MolResNum_class(){
         MolResNum_exposer.def( bp::self != bp::self );
         { //::SireMol::MolResNum::operator=
         
-            typedef ::SireMol::MolResNum & ( ::SireMol::MolResNum::*assign_function_type )( ::SireMol::MolResNum const & ) ;
+            typedef ::SireMol::MolResNum & ( ::SireMol::MolResNum::*assign_function_type)( ::SireMol::MolResNum const & ) ;
             assign_function_type assign_function_value( &::SireMol::MolResNum::operator= );
             
             MolResNum_exposer.def( 
@@ -104,7 +104,7 @@ void register_MolResNum_class(){
         MolResNum_exposer.def( bp::self == bp::self );
         { //::SireMol::MolResNum::resNum
         
-            typedef ::SireMol::ResNum const & ( ::SireMol::MolResNum::*resNum_function_type )(  ) const;
+            typedef ::SireMol::ResNum const & ( ::SireMol::MolResNum::*resNum_function_type)(  ) const;
             resNum_function_type resNum_function_value( &::SireMol::MolResNum::resNum );
             
             MolResNum_exposer.def( 
@@ -115,7 +115,7 @@ void register_MolResNum_class(){
         }
         { //::SireMol::MolResNum::selectAllFrom
         
-            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Residue > > ( ::SireMol::MolResNum::*selectAllFrom_function_type )( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Residue > > ( ::SireMol::MolResNum::*selectAllFrom_function_type)( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) const;
             selectAllFrom_function_type selectAllFrom_function_value( &::SireMol::MolResNum::selectAllFrom );
             
             MolResNum_exposer.def( 
@@ -126,7 +126,7 @@ void register_MolResNum_class(){
         }
         { //::SireMol::MolResNum::selectAllFrom
         
-            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Residue > > ( ::SireMol::MolResNum::*selectAllFrom_function_type )( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Residue > > ( ::SireMol::MolResNum::*selectAllFrom_function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
             selectAllFrom_function_type selectAllFrom_function_value( &::SireMol::MolResNum::selectAllFrom );
             
             MolResNum_exposer.def( 
@@ -137,7 +137,7 @@ void register_MolResNum_class(){
         }
         { //::SireMol::MolResNum::selectAllFrom
         
-            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Residue > > ( ::SireMol::MolResNum::*selectAllFrom_function_type )( ::SireMol::MolGroupsBase const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Residue > > ( ::SireMol::MolResNum::*selectAllFrom_function_type)( ::SireMol::MolGroupsBase const &,::SireBase::PropertyMap const & ) const;
             selectAllFrom_function_type selectAllFrom_function_value( &::SireMol::MolResNum::selectAllFrom );
             
             MolResNum_exposer.def( 
@@ -148,7 +148,7 @@ void register_MolResNum_class(){
         }
         { //::SireMol::MolResNum::toString
         
-            typedef ::QString ( ::SireMol::MolResNum::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::MolResNum::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::MolResNum::toString );
             
             MolResNum_exposer.def( 
@@ -168,7 +168,7 @@ void register_MolResNum_class(){
         }
         { //::SireMol::MolResNum::what
         
-            typedef char const * ( ::SireMol::MolResNum::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::MolResNum::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::MolResNum::what );
             
             MolResNum_exposer.def( 

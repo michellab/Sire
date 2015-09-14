@@ -55,7 +55,7 @@ void register_AssignerGroup_class(){
         AssignerGroup_exposer.def( bp::init< SireSystem::AssignerGroup const & >(( bp::arg("other") )) );
         { //::SireSystem::AssignerGroup::assigner
         
-            typedef ::SireSystem::IDAssigner const & ( ::SireSystem::AssignerGroup::*assigner_function_type )(  ) const;
+            typedef ::SireSystem::IDAssigner const & ( ::SireSystem::AssignerGroup::*assigner_function_type)(  ) const;
             assigner_function_type assigner_function_value( &::SireSystem::AssignerGroup::assigner );
             
             AssignerGroup_exposer.def( 
@@ -66,7 +66,7 @@ void register_AssignerGroup_class(){
         }
         { //::SireSystem::AssignerGroup::group
         
-            typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::AssignerGroup::*group_function_type )(  ) const;
+            typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::AssignerGroup::*group_function_type)(  ) const;
             group_function_type group_function_value( &::SireSystem::AssignerGroup::group );
             
             AssignerGroup_exposer.def( 
@@ -77,7 +77,7 @@ void register_AssignerGroup_class(){
         }
         { //::SireSystem::AssignerGroup::isAssigner
         
-            typedef bool ( ::SireSystem::AssignerGroup::*isAssigner_function_type )(  ) const;
+            typedef bool ( ::SireSystem::AssignerGroup::*isAssigner_function_type)(  ) const;
             isAssigner_function_type isAssigner_function_value( &::SireSystem::AssignerGroup::isAssigner );
             
             AssignerGroup_exposer.def( 
@@ -87,7 +87,7 @@ void register_AssignerGroup_class(){
         }
         { //::SireSystem::AssignerGroup::isCompatible
         
-            typedef bool ( ::SireSystem::AssignerGroup::*isCompatible_function_type )( ::SireSystem::AssignerGroup const & ) const;
+            typedef bool ( ::SireSystem::AssignerGroup::*isCompatible_function_type)( ::SireSystem::AssignerGroup const & ) const;
             isCompatible_function_type isCompatible_function_value( &::SireSystem::AssignerGroup::isCompatible );
             
             AssignerGroup_exposer.def( 
@@ -98,7 +98,7 @@ void register_AssignerGroup_class(){
         }
         { //::SireSystem::AssignerGroup::isEmpty
         
-            typedef bool ( ::SireSystem::AssignerGroup::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireSystem::AssignerGroup::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireSystem::AssignerGroup::isEmpty );
             
             AssignerGroup_exposer.def( 
@@ -108,7 +108,7 @@ void register_AssignerGroup_class(){
         }
         { //::SireSystem::AssignerGroup::isMoleculeGroup
         
-            typedef bool ( ::SireSystem::AssignerGroup::*isMoleculeGroup_function_type )(  ) const;
+            typedef bool ( ::SireSystem::AssignerGroup::*isMoleculeGroup_function_type)(  ) const;
             isMoleculeGroup_function_type isMoleculeGroup_function_value( &::SireSystem::AssignerGroup::isMoleculeGroup );
             
             AssignerGroup_exposer.def( 
@@ -119,7 +119,7 @@ void register_AssignerGroup_class(){
         AssignerGroup_exposer.def( bp::self != bp::self );
         { //::SireSystem::AssignerGroup::operator=
         
-            typedef ::SireSystem::AssignerGroup & ( ::SireSystem::AssignerGroup::*assign_function_type )( ::SireSystem::AssignerGroup const & ) ;
+            typedef ::SireSystem::AssignerGroup & ( ::SireSystem::AssignerGroup::*assign_function_type)( ::SireSystem::AssignerGroup const & ) ;
             assign_function_type assign_function_value( &::SireSystem::AssignerGroup::operator= );
             
             AssignerGroup_exposer.def( 
@@ -142,7 +142,7 @@ void register_AssignerGroup_class(){
         }
         { //::SireSystem::AssignerGroup::update
         
-            typedef void ( ::SireSystem::AssignerGroup::*update_function_type )( ::SireSystem::System const & ) ;
+            typedef void ( ::SireSystem::AssignerGroup::*update_function_type)( ::SireSystem::System const & ) ;
             update_function_type update_function_value( &::SireSystem::AssignerGroup::update );
             
             AssignerGroup_exposer.def( 
@@ -153,7 +153,7 @@ void register_AssignerGroup_class(){
         }
         { //::SireSystem::AssignerGroup::views
         
-            typedef ::QVector< SireMol::PartialMolecule > ( ::SireSystem::AssignerGroup::*views_function_type )(  ) const;
+            typedef ::QVector< SireMol::PartialMolecule > ( ::SireSystem::AssignerGroup::*views_function_type)(  ) const;
             views_function_type views_function_value( &::SireSystem::AssignerGroup::views );
             
             AssignerGroup_exposer.def( 
@@ -163,7 +163,7 @@ void register_AssignerGroup_class(){
         }
         { //::SireSystem::AssignerGroup::what
         
-            typedef char const * ( ::SireSystem::AssignerGroup::*what_function_type )(  ) const;
+            typedef char const * ( ::SireSystem::AssignerGroup::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireSystem::AssignerGroup::what );
             
             AssignerGroup_exposer.def( 

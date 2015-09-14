@@ -47,7 +47,7 @@ void register_IntegerPower_class(){
         IntegerPower_exposer.def( bp::init< SireCAS::IntegerPower const & >(( bp::arg("other") )) );
         { //::SireCAS::IntegerPower::evaluate
         
-            typedef double ( ::SireCAS::IntegerPower::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::IntegerPower::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::IntegerPower::evaluate );
             
             IntegerPower_exposer.def( 
@@ -58,7 +58,7 @@ void register_IntegerPower_class(){
         }
         { //::SireCAS::IntegerPower::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::IntegerPower::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::IntegerPower::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::IntegerPower::evaluate );
             
             IntegerPower_exposer.def( 
@@ -69,7 +69,7 @@ void register_IntegerPower_class(){
         }
         { //::SireCAS::IntegerPower::hash
         
-            typedef ::uint ( ::SireCAS::IntegerPower::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireCAS::IntegerPower::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireCAS::IntegerPower::hash );
             
             IntegerPower_exposer.def( 
@@ -80,7 +80,7 @@ void register_IntegerPower_class(){
         IntegerPower_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
         { //::SireCAS::IntegerPower::power
         
-            typedef ::SireCAS::Expression ( ::SireCAS::IntegerPower::*power_function_type )(  ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::IntegerPower::*power_function_type)(  ) const;
             power_function_type power_function_value( &::SireCAS::IntegerPower::power );
             
             IntegerPower_exposer.def( 
@@ -100,7 +100,7 @@ void register_IntegerPower_class(){
         }
         { //::SireCAS::IntegerPower::what
         
-            typedef char const * ( ::SireCAS::IntegerPower::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::IntegerPower::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::IntegerPower::what );
             
             IntegerPower_exposer.def( 

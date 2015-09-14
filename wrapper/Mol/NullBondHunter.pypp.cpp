@@ -58,7 +58,7 @@ void register_NullBondHunter_class(){
         NullBondHunter_exposer.def( bp::init< SireMol::NullBondHunter const & >(( bp::arg("other") )) );
         { //::SireMol::NullBondHunter::operator()
         
-            typedef ::SireMol::Connectivity ( ::SireMol::NullBondHunter::*__call___function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::Connectivity ( ::SireMol::NullBondHunter::*__call___function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             __call___function_type __call___function_value( &::SireMol::NullBondHunter::operator() );
             
             NullBondHunter_exposer.def( 
@@ -79,7 +79,7 @@ void register_NullBondHunter_class(){
         }
         { //::SireMol::NullBondHunter::what
         
-            typedef char const * ( ::SireMol::NullBondHunter::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::NullBondHunter::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::NullBondHunter::what );
             
             NullBondHunter_exposer.def( 

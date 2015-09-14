@@ -30,7 +30,7 @@ void register_CLJScaleFactor_class(){
         CLJScaleFactor_exposer.def( bp::self != bp::self );
         { //::SireMM::CLJScaleFactor::operator=
         
-            typedef ::SireMM::CLJScaleFactor & ( ::SireMM::CLJScaleFactor::*assign_function_type )( ::SireMM::CLJScaleFactor const & ) ;
+            typedef ::SireMM::CLJScaleFactor & ( ::SireMM::CLJScaleFactor::*assign_function_type)( ::SireMM::CLJScaleFactor const & ) ;
             assign_function_type assign_function_value( &::SireMM::CLJScaleFactor::operator= );
             
             CLJScaleFactor_exposer.def( 
@@ -53,7 +53,7 @@ void register_CLJScaleFactor_class(){
         }
         { //::SireMM::CLJScaleFactor::what
         
-            typedef char const * ( ::SireMM::CLJScaleFactor::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::CLJScaleFactor::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::CLJScaleFactor::what );
             
             CLJScaleFactor_exposer.def( 

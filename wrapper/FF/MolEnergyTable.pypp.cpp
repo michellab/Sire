@@ -45,7 +45,7 @@ void register_MolEnergyTable_class(){
         MolEnergyTable_exposer.def( bp::init< SireFF::MolEnergyTable const & >(( bp::arg("other") )) );
         { //::SireFF::MolEnergyTable::add
         
-            typedef bool ( ::SireFF::MolEnergyTable::*add_function_type )( ::SireMol::CGAtomIdx const &,::SireMaths::Vector const & ) ;
+            typedef bool ( ::SireFF::MolEnergyTable::*add_function_type)( ::SireMol::CGAtomIdx const &,::SireMaths::Vector const & ) ;
             add_function_type add_function_value( &::SireFF::MolEnergyTable::add );
             
             MolEnergyTable_exposer.def( 
@@ -56,7 +56,7 @@ void register_MolEnergyTable_class(){
         }
         { //::SireFF::MolEnergyTable::add
         
-            typedef bool ( ::SireFF::MolEnergyTable::*add_function_type )( ::SireMol::AtomSelection const &,::SireMaths::Vector const & ) ;
+            typedef bool ( ::SireFF::MolEnergyTable::*add_function_type)( ::SireMol::AtomSelection const &,::SireMaths::Vector const & ) ;
             add_function_type add_function_value( &::SireFF::MolEnergyTable::add );
             
             MolEnergyTable_exposer.def( 
@@ -67,7 +67,7 @@ void register_MolEnergyTable_class(){
         }
         { //::SireFF::MolEnergyTable::add
         
-            typedef void ( ::SireFF::MolEnergyTable::*add_function_type )( ::SireFF::MolEnergyTable const & ) ;
+            typedef void ( ::SireFF::MolEnergyTable::*add_function_type)( ::SireFF::MolEnergyTable const & ) ;
             add_function_type add_function_value( &::SireFF::MolEnergyTable::add );
             
             MolEnergyTable_exposer.def( 
@@ -78,7 +78,7 @@ void register_MolEnergyTable_class(){
         }
         { //::SireFF::MolEnergyTable::add
         
-            typedef void ( ::SireFF::MolEnergyTable::*add_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireFF::MolEnergyTable::*add_function_type)( ::SireMaths::Vector const & ) ;
             add_function_type add_function_value( &::SireFF::MolEnergyTable::add );
             
             MolEnergyTable_exposer.def( 
@@ -89,7 +89,7 @@ void register_MolEnergyTable_class(){
         }
         { //::SireFF::MolEnergyTable::divide
         
-            typedef void ( ::SireFF::MolEnergyTable::*divide_function_type )( double ) ;
+            typedef void ( ::SireFF::MolEnergyTable::*divide_function_type)( double ) ;
             divide_function_type divide_function_value( &::SireFF::MolEnergyTable::divide );
             
             MolEnergyTable_exposer.def( 
@@ -100,7 +100,7 @@ void register_MolEnergyTable_class(){
         }
         { //::SireFF::MolEnergyTable::initialise
         
-            typedef void ( ::SireFF::MolEnergyTable::*initialise_function_type )(  ) ;
+            typedef void ( ::SireFF::MolEnergyTable::*initialise_function_type)(  ) ;
             initialise_function_type initialise_function_value( &::SireFF::MolEnergyTable::initialise );
             
             MolEnergyTable_exposer.def( 
@@ -110,7 +110,7 @@ void register_MolEnergyTable_class(){
         }
         { //::SireFF::MolEnergyTable::map
         
-            typedef int ( ::SireFF::MolEnergyTable::*map_function_type )( ::SireMol::CGIdx ) const;
+            typedef int ( ::SireFF::MolEnergyTable::*map_function_type)( ::SireMol::CGIdx ) const;
             map_function_type map_function_value( &::SireFF::MolEnergyTable::map );
             
             MolEnergyTable_exposer.def( 
@@ -121,7 +121,7 @@ void register_MolEnergyTable_class(){
         }
         { //::SireFF::MolEnergyTable::molNum
         
-            typedef ::SireMol::MolNum ( ::SireFF::MolEnergyTable::*molNum_function_type )(  ) const;
+            typedef ::SireMol::MolNum ( ::SireFF::MolEnergyTable::*molNum_function_type)(  ) const;
             molNum_function_type molNum_function_value( &::SireFF::MolEnergyTable::molNum );
             
             MolEnergyTable_exposer.def( 
@@ -131,7 +131,7 @@ void register_MolEnergyTable_class(){
         }
         { //::SireFF::MolEnergyTable::molUID
         
-            typedef ::QUuid const & ( ::SireFF::MolEnergyTable::*molUID_function_type )(  ) const;
+            typedef ::QUuid const & ( ::SireFF::MolEnergyTable::*molUID_function_type)(  ) const;
             molUID_function_type molUID_function_value( &::SireFF::MolEnergyTable::molUID );
             
             MolEnergyTable_exposer.def( 
@@ -142,7 +142,7 @@ void register_MolEnergyTable_class(){
         }
         { //::SireFF::MolEnergyTable::multiply
         
-            typedef void ( ::SireFF::MolEnergyTable::*multiply_function_type )( double ) ;
+            typedef void ( ::SireFF::MolEnergyTable::*multiply_function_type)( double ) ;
             multiply_function_type multiply_function_value( &::SireFF::MolEnergyTable::multiply );
             
             MolEnergyTable_exposer.def( 
@@ -153,7 +153,7 @@ void register_MolEnergyTable_class(){
         }
         { //::SireFF::MolEnergyTable::nCutGroups
         
-            typedef int ( ::SireFF::MolEnergyTable::*nCutGroups_function_type )(  ) const;
+            typedef int ( ::SireFF::MolEnergyTable::*nCutGroups_function_type)(  ) const;
             nCutGroups_function_type nCutGroups_function_value( &::SireFF::MolEnergyTable::nCutGroups );
             
             MolEnergyTable_exposer.def( 
@@ -163,7 +163,7 @@ void register_MolEnergyTable_class(){
         }
         { //::SireFF::MolEnergyTable::nSelectedCutGroups
         
-            typedef int ( ::SireFF::MolEnergyTable::*nSelectedCutGroups_function_type )(  ) const;
+            typedef int ( ::SireFF::MolEnergyTable::*nSelectedCutGroups_function_type)(  ) const;
             nSelectedCutGroups_function_type nSelectedCutGroups_function_value( &::SireFF::MolEnergyTable::nSelectedCutGroups );
             
             MolEnergyTable_exposer.def( 
@@ -181,7 +181,7 @@ void register_MolEnergyTable_class(){
         MolEnergyTable_exposer.def( bp::self / bp::other< double >() );
         { //::SireFF::MolEnergyTable::operator=
         
-            typedef ::SireFF::MolEnergyTable & ( ::SireFF::MolEnergyTable::*assign_function_type )( ::SireFF::MolEnergyTable const & ) ;
+            typedef ::SireFF::MolEnergyTable & ( ::SireFF::MolEnergyTable::*assign_function_type)( ::SireFF::MolEnergyTable const & ) ;
             assign_function_type assign_function_value( &::SireFF::MolEnergyTable::operator= );
             
             MolEnergyTable_exposer.def( 
@@ -193,7 +193,7 @@ void register_MolEnergyTable_class(){
         }
         { //::SireFF::MolEnergyTable::operator=
         
-            typedef ::SireFF::MolEnergyTable & ( ::SireFF::MolEnergyTable::*assign_function_type )( ::SireMaths::Vector const & ) ;
+            typedef ::SireFF::MolEnergyTable & ( ::SireFF::MolEnergyTable::*assign_function_type)( ::SireMaths::Vector const & ) ;
             assign_function_type assign_function_value( &::SireFF::MolEnergyTable::operator= );
             
             MolEnergyTable_exposer.def( 
@@ -206,7 +206,7 @@ void register_MolEnergyTable_class(){
         MolEnergyTable_exposer.def( bp::self == bp::self );
         { //::SireFF::MolEnergyTable::selected
         
-            typedef bool ( ::SireFF::MolEnergyTable::*selected_function_type )( ::SireMol::CGIdx ) const;
+            typedef bool ( ::SireFF::MolEnergyTable::*selected_function_type)( ::SireMol::CGIdx ) const;
             selected_function_type selected_function_value( &::SireFF::MolEnergyTable::selected );
             
             MolEnergyTable_exposer.def( 
@@ -217,7 +217,7 @@ void register_MolEnergyTable_class(){
         }
         { //::SireFF::MolEnergyTable::selectedAll
         
-            typedef bool ( ::SireFF::MolEnergyTable::*selectedAll_function_type )(  ) const;
+            typedef bool ( ::SireFF::MolEnergyTable::*selectedAll_function_type)(  ) const;
             selectedAll_function_type selectedAll_function_value( &::SireFF::MolEnergyTable::selectedAll );
             
             MolEnergyTable_exposer.def( 
@@ -227,7 +227,7 @@ void register_MolEnergyTable_class(){
         }
         { //::SireFF::MolEnergyTable::setAll
         
-            typedef void ( ::SireFF::MolEnergyTable::*setAll_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireFF::MolEnergyTable::*setAll_function_type)( ::SireMaths::Vector const & ) ;
             setAll_function_type setAll_function_value( &::SireFF::MolEnergyTable::setAll );
             
             MolEnergyTable_exposer.def( 
@@ -238,7 +238,7 @@ void register_MolEnergyTable_class(){
         }
         { //::SireFF::MolEnergyTable::subtract
         
-            typedef bool ( ::SireFF::MolEnergyTable::*subtract_function_type )( ::SireMol::CGAtomIdx const &,::SireMaths::Vector const & ) ;
+            typedef bool ( ::SireFF::MolEnergyTable::*subtract_function_type)( ::SireMol::CGAtomIdx const &,::SireMaths::Vector const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::MolEnergyTable::subtract );
             
             MolEnergyTable_exposer.def( 
@@ -249,7 +249,7 @@ void register_MolEnergyTable_class(){
         }
         { //::SireFF::MolEnergyTable::subtract
         
-            typedef bool ( ::SireFF::MolEnergyTable::*subtract_function_type )( ::SireMol::AtomSelection const &,::SireMaths::Vector const & ) ;
+            typedef bool ( ::SireFF::MolEnergyTable::*subtract_function_type)( ::SireMol::AtomSelection const &,::SireMaths::Vector const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::MolEnergyTable::subtract );
             
             MolEnergyTable_exposer.def( 
@@ -260,7 +260,7 @@ void register_MolEnergyTable_class(){
         }
         { //::SireFF::MolEnergyTable::subtract
         
-            typedef void ( ::SireFF::MolEnergyTable::*subtract_function_type )( ::SireFF::MolEnergyTable const & ) ;
+            typedef void ( ::SireFF::MolEnergyTable::*subtract_function_type)( ::SireFF::MolEnergyTable const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::MolEnergyTable::subtract );
             
             MolEnergyTable_exposer.def( 
@@ -271,7 +271,7 @@ void register_MolEnergyTable_class(){
         }
         { //::SireFF::MolEnergyTable::subtract
         
-            typedef void ( ::SireFF::MolEnergyTable::*subtract_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireFF::MolEnergyTable::*subtract_function_type)( ::SireMaths::Vector const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::MolEnergyTable::subtract );
             
             MolEnergyTable_exposer.def( 
@@ -282,7 +282,7 @@ void register_MolEnergyTable_class(){
         }
         { //::SireFF::MolEnergyTable::toVector
         
-            typedef ::QVector< SireMaths::Vector > ( ::SireFF::MolEnergyTable::*toVector_function_type )(  ) const;
+            typedef ::QVector< SireMaths::Vector > ( ::SireFF::MolEnergyTable::*toVector_function_type)(  ) const;
             toVector_function_type toVector_function_value( &::SireFF::MolEnergyTable::toVector );
             
             MolEnergyTable_exposer.def( 
@@ -292,7 +292,7 @@ void register_MolEnergyTable_class(){
         }
         { //::SireFF::MolEnergyTable::toVector
         
-            typedef ::QVector< SireMaths::Vector > ( ::SireFF::MolEnergyTable::*toVector_function_type )( ::SireMol::AtomSelection const & ) const;
+            typedef ::QVector< SireMaths::Vector > ( ::SireFF::MolEnergyTable::*toVector_function_type)( ::SireMol::AtomSelection const & ) const;
             toVector_function_type toVector_function_value( &::SireFF::MolEnergyTable::toVector );
             
             MolEnergyTable_exposer.def( 
@@ -313,7 +313,7 @@ void register_MolEnergyTable_class(){
         }
         { //::SireFF::MolEnergyTable::what
         
-            typedef char const * ( ::SireFF::MolEnergyTable::*what_function_type )(  ) const;
+            typedef char const * ( ::SireFF::MolEnergyTable::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireFF::MolEnergyTable::what );
             
             MolEnergyTable_exposer.def( 

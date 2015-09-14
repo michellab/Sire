@@ -37,7 +37,7 @@ void register_Max_class(){
         Max_exposer.def( bp::init< SireCAS::Max const & >(( bp::arg("other") )) );
         { //::SireCAS::Max::evaluate
         
-            typedef double ( ::SireCAS::Max::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::Max::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Max::evaluate );
             
             Max_exposer.def( 
@@ -48,7 +48,7 @@ void register_Max_class(){
         }
         { //::SireCAS::Max::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::Max::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::Max::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Max::evaluate );
             
             Max_exposer.def( 
@@ -70,7 +70,7 @@ void register_Max_class(){
         }
         { //::SireCAS::Max::what
         
-            typedef char const * ( ::SireCAS::Max::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::Max::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::Max::what );
             
             Max_exposer.def( 

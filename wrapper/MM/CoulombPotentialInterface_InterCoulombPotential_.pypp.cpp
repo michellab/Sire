@@ -29,7 +29,7 @@ void register_CoulombPotentialInterface_InterCoulombPotential__class(){
         { //::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::containsProperty
         
             typedef SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential > exported_class_t;
-            typedef bool ( ::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::*containsProperty_function_type )( ::QString const & ) const;
+            typedef bool ( ::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::*containsProperty_function_type)( ::QString const & ) const;
             containsProperty_function_type containsProperty_function_value( &::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::containsProperty );
             
             CoulombPotentialInterface_InterCoulombPotential__exposer.def( 
@@ -52,7 +52,7 @@ void register_CoulombPotentialInterface_InterCoulombPotential__class(){
         { //::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::properties
         
             typedef SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential > exported_class_t;
-            typedef ::SireBase::Properties const & ( ::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::*properties_function_type )(  ) const;
+            typedef ::SireBase::Properties const & ( ::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::*properties_function_type)(  ) const;
             properties_function_type properties_function_value( &::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::properties );
             
             CoulombPotentialInterface_InterCoulombPotential__exposer.def( 
@@ -64,7 +64,7 @@ void register_CoulombPotentialInterface_InterCoulombPotential__class(){
         { //::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::property
         
             typedef SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential > exported_class_t;
-            typedef ::SireBase::Property const & ( ::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::*property_function_type )( ::QString const & ) const;
+            typedef ::SireBase::Property const & ( ::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::*property_function_type)( ::QString const & ) const;
             property_function_type property_function_value( &::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::property );
             
             CoulombPotentialInterface_InterCoulombPotential__exposer.def( 
@@ -77,7 +77,7 @@ void register_CoulombPotentialInterface_InterCoulombPotential__class(){
         { //::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::setProperty
         
             typedef SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential > exported_class_t;
-            typedef bool ( ::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::*setProperty_function_type )( ::QString const &,::SireBase::Property const & ) ;
+            typedef bool ( ::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::*setProperty_function_type)( ::QString const &,::SireBase::Property const & ) ;
             setProperty_function_type setProperty_function_value( &::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::setProperty );
             
             CoulombPotentialInterface_InterCoulombPotential__exposer.def( 
@@ -89,7 +89,7 @@ void register_CoulombPotentialInterface_InterCoulombPotential__class(){
         { //::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::setShiftElectrostatics
         
             typedef SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential > exported_class_t;
-            typedef bool ( ::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::*setShiftElectrostatics_function_type )( bool ) ;
+            typedef bool ( ::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::*setShiftElectrostatics_function_type)( bool ) ;
             setShiftElectrostatics_function_type setShiftElectrostatics_function_value( &::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::setShiftElectrostatics );
             
             CoulombPotentialInterface_InterCoulombPotential__exposer.def( 
@@ -101,7 +101,7 @@ void register_CoulombPotentialInterface_InterCoulombPotential__class(){
         { //::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::setSpace
         
             typedef SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential > exported_class_t;
-            typedef bool ( ::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::*setSpace_function_type )( ::SireVol::Space const & ) ;
+            typedef bool ( ::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::*setSpace_function_type)( ::SireVol::Space const & ) ;
             setSpace_function_type setSpace_function_value( &::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::setSpace );
             
             CoulombPotentialInterface_InterCoulombPotential__exposer.def( 
@@ -113,7 +113,7 @@ void register_CoulombPotentialInterface_InterCoulombPotential__class(){
         { //::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::setSwitchingFunction
         
             typedef SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential > exported_class_t;
-            typedef bool ( ::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::*setSwitchingFunction_function_type )( ::SireMM::SwitchingFunction const & ) ;
+            typedef bool ( ::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::*setSwitchingFunction_function_type)( ::SireMM::SwitchingFunction const & ) ;
             setSwitchingFunction_function_type setSwitchingFunction_function_value( &::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::setSwitchingFunction );
             
             CoulombPotentialInterface_InterCoulombPotential__exposer.def( 
@@ -125,7 +125,7 @@ void register_CoulombPotentialInterface_InterCoulombPotential__class(){
         { //::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::shiftElectrostatics
         
             typedef SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential > exported_class_t;
-            typedef bool ( ::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::*shiftElectrostatics_function_type )(  ) const;
+            typedef bool ( ::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::*shiftElectrostatics_function_type)(  ) const;
             shiftElectrostatics_function_type shiftElectrostatics_function_value( &::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::shiftElectrostatics );
             
             CoulombPotentialInterface_InterCoulombPotential__exposer.def( 
@@ -136,7 +136,7 @@ void register_CoulombPotentialInterface_InterCoulombPotential__class(){
         { //::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::space
         
             typedef SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential > exported_class_t;
-            typedef ::SireVol::Space const & ( ::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::*space_function_type )(  ) const;
+            typedef ::SireVol::Space const & ( ::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::*space_function_type)(  ) const;
             space_function_type space_function_value( &::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::space );
             
             CoulombPotentialInterface_InterCoulombPotential__exposer.def( 
@@ -148,7 +148,7 @@ void register_CoulombPotentialInterface_InterCoulombPotential__class(){
         { //::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::switchingFunction
         
             typedef SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential > exported_class_t;
-            typedef ::SireMM::SwitchingFunction const & ( ::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::*switchingFunction_function_type )(  ) const;
+            typedef ::SireMM::SwitchingFunction const & ( ::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::*switchingFunction_function_type)(  ) const;
             switchingFunction_function_type switchingFunction_function_value( &::SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential >::switchingFunction );
             
             CoulombPotentialInterface_InterCoulombPotential__exposer.def( 

@@ -21,7 +21,6 @@
 #include "move.h"
 #include "moves.h"
 #include "mtsmc.h"
-#include "openmmacceleratedmdintegrator.h"
 #include "openmmfrenergydt.h"
 #include "openmmfrenergyst.h"
 #include "openmmmdintegrator.h"

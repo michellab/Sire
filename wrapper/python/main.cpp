@@ -126,11 +126,13 @@ int main(int argc, char **argv)
 
         QDir site_packages( QString("%1/%2").arg( getInstallDir(), SIRE_PYTHON2_DIR ) );
 
-        if (not site_packages.exists())
-            throw SireError::file_error( QObject::tr(
-                "Cannot find the directory containing the Sire python modules (%1). "
-                "Please check your installation of Sire in directory %2.")
-                    .arg(site_packages.absolutePath()).arg(getInstallDir()), CODELOC );
+        /*
+        //if (not site_packages.exists())
+        //    throw SireError::file_error( QObject::tr(
+        //        "Cannot find the directory containing the Sire python modules (%1). "
+        //        "Please check your installation of Sire in directory %2.")
+        //            .arg(site_packages.absolutePath()).arg(getInstallDir()), CODELOC );
+        */
 
         QString pythonpath;
 
@@ -144,6 +146,7 @@ int main(int argc, char **argv)
 
         QDir python_home( QString("%1/%2/..").arg( getInstallDir(), SIRE_BUNDLED_LIBS_DIR ) ); 
 
+        /**
         if (not python_home.exists())
         throw SireError::file_error( QObject::tr(
             "Cannot find the directory containing the bundled files (%1). "
@@ -152,6 +155,7 @@ int main(int argc, char **argv)
 
         qputenv("PYTHONPATH", pythonpath.toUtf8());
         qputenv("PYTHONHOME", python_home.canonicalPath().toUtf8());
+        */
 
         //now look at the name of the executable. If there is a script with this
         //name in share/scripts then run that script

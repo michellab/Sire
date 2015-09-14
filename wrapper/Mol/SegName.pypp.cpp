@@ -70,7 +70,7 @@ void register_SegName_class(){
         SegName_exposer.def( bp::init< SireMol::SegName const & >(( bp::arg("other") )) );
         { //::SireMol::SegName::hash
         
-            typedef ::uint ( ::SireMol::SegName::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::SegName::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::SegName::hash );
             
             SegName_exposer.def( 
@@ -80,7 +80,7 @@ void register_SegName_class(){
         }
         { //::SireMol::SegName::isNull
         
-            typedef bool ( ::SireMol::SegName::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::SegName::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::SegName::isNull );
             
             SegName_exposer.def( 
@@ -90,7 +90,7 @@ void register_SegName_class(){
         }
         { //::SireMol::SegName::map
         
-            typedef ::QList< SireMol::SegIdx > ( ::SireMol::SegName::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::SegIdx > ( ::SireMol::SegName::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireMol::SegName::map );
             
             SegName_exposer.def( 
@@ -102,7 +102,7 @@ void register_SegName_class(){
         SegName_exposer.def( bp::self != bp::self );
         { //::SireMol::SegName::operator=
         
-            typedef ::SireMol::SegName & ( ::SireMol::SegName::*assign_function_type )( ::SireMol::SegName const & ) ;
+            typedef ::SireMol::SegName & ( ::SireMol::SegName::*assign_function_type)( ::SireMol::SegName const & ) ;
             assign_function_type assign_function_value( &::SireMol::SegName::operator= );
             
             SegName_exposer.def( 
@@ -116,7 +116,7 @@ void register_SegName_class(){
         SegName_exposer.def( bp::self == bp::self );
         { //::SireMol::SegName::toString
         
-            typedef ::QString ( ::SireMol::SegName::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::SegName::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::SegName::toString );
             
             SegName_exposer.def( 
@@ -136,7 +136,7 @@ void register_SegName_class(){
         }
         { //::SireMol::SegName::what
         
-            typedef char const * ( ::SireMol::SegName::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::SegName::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::SegName::what );
             
             SegName_exposer.def( 

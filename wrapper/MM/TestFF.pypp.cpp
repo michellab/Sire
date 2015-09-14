@@ -44,7 +44,7 @@ void register_TestFF_class(){
         TestFF_exposer.def( bp::init< SireMM::TestFF const & >(( bp::arg("other") )) );
         { //::SireMM::TestFF::add
         
-            typedef void ( ::SireMM::TestFF::*add_function_type )( ::SireMol::Molecules const & ) ;
+            typedef void ( ::SireMM::TestFF::*add_function_type)( ::SireMol::Molecules const & ) ;
             add_function_type add_function_value( &::SireMM::TestFF::add );
             
             TestFF_exposer.def( 
@@ -55,7 +55,7 @@ void register_TestFF_class(){
         }
         { //::SireMM::TestFF::addFixedAtoms
         
-            typedef void ( ::SireMM::TestFF::*addFixedAtoms_function_type )( ::SireMol::Molecules const & ) ;
+            typedef void ( ::SireMM::TestFF::*addFixedAtoms_function_type)( ::SireMol::Molecules const & ) ;
             addFixedAtoms_function_type addFixedAtoms_function_value( &::SireMM::TestFF::addFixedAtoms );
             
             TestFF_exposer.def( 
@@ -66,7 +66,7 @@ void register_TestFF_class(){
         }
         { //::SireMM::TestFF::calculateEnergy
         
-            typedef void ( ::SireMM::TestFF::*calculateEnergy_function_type )(  ) ;
+            typedef void ( ::SireMM::TestFF::*calculateEnergy_function_type)(  ) ;
             calculateEnergy_function_type calculateEnergy_function_value( &::SireMM::TestFF::calculateEnergy );
             
             TestFF_exposer.def( 
@@ -76,7 +76,7 @@ void register_TestFF_class(){
         }
         { //::SireMM::TestFF::operator=
         
-            typedef ::SireMM::TestFF & ( ::SireMM::TestFF::*assign_function_type )( ::SireMM::TestFF const & ) ;
+            typedef ::SireMM::TestFF & ( ::SireMM::TestFF::*assign_function_type)( ::SireMM::TestFF const & ) ;
             assign_function_type assign_function_value( &::SireMM::TestFF::operator= );
             
             TestFF_exposer.def( 
@@ -88,7 +88,7 @@ void register_TestFF_class(){
         }
         { //::SireMM::TestFF::setCutoff
         
-            typedef void ( ::SireMM::TestFF::*setCutoff_function_type )( ::SireUnits::Dimension::Length,::SireUnits::Dimension::Length ) ;
+            typedef void ( ::SireMM::TestFF::*setCutoff_function_type)( ::SireUnits::Dimension::Length,::SireUnits::Dimension::Length ) ;
             setCutoff_function_type setCutoff_function_value( &::SireMM::TestFF::setCutoff );
             
             TestFF_exposer.def( 

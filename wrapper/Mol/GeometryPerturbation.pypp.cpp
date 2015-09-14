@@ -50,7 +50,7 @@ void register_GeometryPerturbation_class(){
         }
         { //::SireMol::GeometryPerturbation::requiredProperties
         
-            typedef ::QSet< QString > ( ::SireMol::GeometryPerturbation::*requiredProperties_function_type )(  ) const;
+            typedef ::QSet< QString > ( ::SireMol::GeometryPerturbation::*requiredProperties_function_type)(  ) const;
             requiredProperties_function_type requiredProperties_function_value( &::SireMol::GeometryPerturbation::requiredProperties );
             
             GeometryPerturbation_exposer.def( 

@@ -47,7 +47,7 @@ void register_VelocityGenerator_class(){
         bp::scope VelocityGenerator_scope( VelocityGenerator_exposer );
         { //::SireMove::VelocityGenerator::generate
         
-            typedef ::SireMol::AtomVelocities ( ::SireMove::VelocityGenerator::*generate_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::AtomVelocities ( ::SireMove::VelocityGenerator::*generate_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             generate_function_type generate_function_value( &::SireMove::VelocityGenerator::generate );
             
             VelocityGenerator_exposer.def( 
@@ -69,7 +69,7 @@ void register_VelocityGenerator_class(){
         }
         { //::SireMove::VelocityGenerator::setGenerator
         
-            typedef void ( ::SireMove::VelocityGenerator::*setGenerator_function_type )( ::SireMaths::RanGenerator const & ) ;
+            typedef void ( ::SireMove::VelocityGenerator::*setGenerator_function_type)( ::SireMaths::RanGenerator const & ) ;
             setGenerator_function_type setGenerator_function_value( &::SireMove::VelocityGenerator::setGenerator );
             
             VelocityGenerator_exposer.def( 

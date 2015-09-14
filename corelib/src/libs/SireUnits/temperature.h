@@ -107,6 +107,16 @@ public:
         return val != double(temp);
     }
 
+    double value() const
+    {
+        return val;
+    }
+
+    QString toString() const
+    {
+        return QString("%1 %2").arg(this->convertFromInternal()).arg(this->unitString());
+    }
+
     /** Convert this into a temperature object */
     operator Temperature() const
     {
@@ -142,6 +152,11 @@ public:
     }
 
 protected:
+    virtual QString unitString() const
+    {
+        return "K";
+    }
+
     /** This holds the temperature in internal units (K) */
     double val;
 };
@@ -270,6 +285,12 @@ public:
     Celsius operator/(int value) const
     {
         return Celsius(value / convertFromInternal());
+    }
+
+protected:
+    QString unitString() const
+    {
+        return "C";
     }
 };
 
@@ -412,6 +433,12 @@ public:
     Fahrenheit operator/(int value) const
     {
         return Fahrenheit(value / convertFromInternal());
+    }
+
+protected:
+    QString unitString() const
+    {
+        return "F";
     }
 };
 

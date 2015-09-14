@@ -59,7 +59,7 @@ void register_ChemicalBondHunter_class(){
         ChemicalBondHunter_exposer.def( bp::init< SireMol::ChemicalBondHunter const & >(( bp::arg("other") )) );
         { //::SireMol::ChemicalBondHunter::operator()
         
-            typedef ::SireMol::Connectivity ( ::SireMol::ChemicalBondHunter::*__call___function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::Connectivity ( ::SireMol::ChemicalBondHunter::*__call___function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             __call___function_type __call___function_value( &::SireMol::ChemicalBondHunter::operator() );
             
             ChemicalBondHunter_exposer.def( 

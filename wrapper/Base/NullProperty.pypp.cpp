@@ -38,7 +38,7 @@ void register_NullProperty_class(){
         NullProperty_exposer.def( bp::init< SireBase::NullProperty const & >(( bp::arg("other") )) );
         { //::SireBase::NullProperty::toString
         
-            typedef ::QString ( ::SireBase::NullProperty::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireBase::NullProperty::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireBase::NullProperty::toString );
             
             NullProperty_exposer.def( 

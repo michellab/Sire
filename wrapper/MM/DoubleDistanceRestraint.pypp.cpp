@@ -47,7 +47,7 @@ void register_DoubleDistanceRestraint_class(){
         DoubleDistanceRestraint_exposer.def( bp::init< SireMM::DoubleDistanceRestraint const & >(( bp::arg("other") )) );
         { //::SireMM::DoubleDistanceRestraint::builtinSymbols
         
-            typedef ::SireCAS::Symbols ( ::SireMM::DoubleDistanceRestraint::*builtinSymbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireMM::DoubleDistanceRestraint::*builtinSymbols_function_type)(  ) const;
             builtinSymbols_function_type builtinSymbols_function_value( &::SireMM::DoubleDistanceRestraint::builtinSymbols );
             
             DoubleDistanceRestraint_exposer.def( 
@@ -57,7 +57,7 @@ void register_DoubleDistanceRestraint_class(){
         }
         { //::SireMM::DoubleDistanceRestraint::builtinValues
         
-            typedef ::SireCAS::Values ( ::SireMM::DoubleDistanceRestraint::*builtinValues_function_type )(  ) const;
+            typedef ::SireCAS::Values ( ::SireMM::DoubleDistanceRestraint::*builtinValues_function_type)(  ) const;
             builtinValues_function_type builtinValues_function_value( &::SireMM::DoubleDistanceRestraint::builtinValues );
             
             DoubleDistanceRestraint_exposer.def( 
@@ -67,7 +67,7 @@ void register_DoubleDistanceRestraint_class(){
         }
         { //::SireMM::DoubleDistanceRestraint::contains
         
-            typedef bool ( ::SireMM::DoubleDistanceRestraint::*contains_function_type )( ::SireMol::MolNum ) const;
+            typedef bool ( ::SireMM::DoubleDistanceRestraint::*contains_function_type)( ::SireMol::MolNum ) const;
             contains_function_type contains_function_value( &::SireMM::DoubleDistanceRestraint::contains );
             
             DoubleDistanceRestraint_exposer.def( 
@@ -78,7 +78,7 @@ void register_DoubleDistanceRestraint_class(){
         }
         { //::SireMM::DoubleDistanceRestraint::contains
         
-            typedef bool ( ::SireMM::DoubleDistanceRestraint::*contains_function_type )( ::SireMol::MolID const & ) const;
+            typedef bool ( ::SireMM::DoubleDistanceRestraint::*contains_function_type)( ::SireMol::MolID const & ) const;
             contains_function_type contains_function_value( &::SireMM::DoubleDistanceRestraint::contains );
             
             DoubleDistanceRestraint_exposer.def( 
@@ -89,7 +89,7 @@ void register_DoubleDistanceRestraint_class(){
         }
         { //::SireMM::DoubleDistanceRestraint::differentialRestraintFunction01
         
-            typedef ::SireCAS::Expression const & ( ::SireMM::DoubleDistanceRestraint::*differentialRestraintFunction01_function_type )(  ) const;
+            typedef ::SireCAS::Expression const & ( ::SireMM::DoubleDistanceRestraint::*differentialRestraintFunction01_function_type)(  ) const;
             differentialRestraintFunction01_function_type differentialRestraintFunction01_function_value( &::SireMM::DoubleDistanceRestraint::differentialRestraintFunction01 );
             
             DoubleDistanceRestraint_exposer.def( 
@@ -100,7 +100,7 @@ void register_DoubleDistanceRestraint_class(){
         }
         { //::SireMM::DoubleDistanceRestraint::differentialRestraintFunction23
         
-            typedef ::SireCAS::Expression const & ( ::SireMM::DoubleDistanceRestraint::*differentialRestraintFunction23_function_type )(  ) const;
+            typedef ::SireCAS::Expression const & ( ::SireMM::DoubleDistanceRestraint::*differentialRestraintFunction23_function_type)(  ) const;
             differentialRestraintFunction23_function_type differentialRestraintFunction23_function_value( &::SireMM::DoubleDistanceRestraint::differentialRestraintFunction23 );
             
             DoubleDistanceRestraint_exposer.def( 
@@ -111,7 +111,7 @@ void register_DoubleDistanceRestraint_class(){
         }
         { //::SireMM::DoubleDistanceRestraint::differentiate
         
-            typedef ::SireMM::RestraintPtr ( ::SireMM::DoubleDistanceRestraint::*differentiate_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireMM::RestraintPtr ( ::SireMM::DoubleDistanceRestraint::*differentiate_function_type)( ::SireCAS::Symbol const & ) const;
             differentiate_function_type differentiate_function_value( &::SireMM::DoubleDistanceRestraint::differentiate );
             
             DoubleDistanceRestraint_exposer.def( 
@@ -122,7 +122,7 @@ void register_DoubleDistanceRestraint_class(){
         }
         { //::SireMM::DoubleDistanceRestraint::force
         
-            typedef void ( ::SireMM::DoubleDistanceRestraint::*force_function_type )( ::SireFF::MolForceTable &,double ) const;
+            typedef void ( ::SireMM::DoubleDistanceRestraint::*force_function_type)( ::SireFF::MolForceTable &,double ) const;
             force_function_type force_function_value( &::SireMM::DoubleDistanceRestraint::force );
             
             DoubleDistanceRestraint_exposer.def( 
@@ -133,7 +133,7 @@ void register_DoubleDistanceRestraint_class(){
         }
         { //::SireMM::DoubleDistanceRestraint::force
         
-            typedef void ( ::SireMM::DoubleDistanceRestraint::*force_function_type )( ::SireFF::ForceTable &,double ) const;
+            typedef void ( ::SireMM::DoubleDistanceRestraint::*force_function_type)( ::SireFF::ForceTable &,double ) const;
             force_function_type force_function_value( &::SireMM::DoubleDistanceRestraint::force );
             
             DoubleDistanceRestraint_exposer.def( 
@@ -144,7 +144,7 @@ void register_DoubleDistanceRestraint_class(){
         }
         { //::SireMM::DoubleDistanceRestraint::molecules
         
-            typedef ::SireMol::Molecules ( ::SireMM::DoubleDistanceRestraint::*molecules_function_type )(  ) const;
+            typedef ::SireMol::Molecules ( ::SireMM::DoubleDistanceRestraint::*molecules_function_type)(  ) const;
             molecules_function_type molecules_function_value( &::SireMM::DoubleDistanceRestraint::molecules );
             
             DoubleDistanceRestraint_exposer.def( 
@@ -154,7 +154,7 @@ void register_DoubleDistanceRestraint_class(){
         }
         { //::SireMM::DoubleDistanceRestraint::nPoints
         
-            typedef int ( ::SireMM::DoubleDistanceRestraint::*nPoints_function_type )(  ) const;
+            typedef int ( ::SireMM::DoubleDistanceRestraint::*nPoints_function_type)(  ) const;
             nPoints_function_type nPoints_function_value( &::SireMM::DoubleDistanceRestraint::nPoints );
             
             DoubleDistanceRestraint_exposer.def( 
@@ -165,7 +165,7 @@ void register_DoubleDistanceRestraint_class(){
         DoubleDistanceRestraint_exposer.def( bp::self != bp::self );
         { //::SireMM::DoubleDistanceRestraint::operator=
         
-            typedef ::SireMM::DoubleDistanceRestraint & ( ::SireMM::DoubleDistanceRestraint::*assign_function_type )( ::SireMM::DoubleDistanceRestraint const & ) ;
+            typedef ::SireMM::DoubleDistanceRestraint & ( ::SireMM::DoubleDistanceRestraint::*assign_function_type)( ::SireMM::DoubleDistanceRestraint const & ) ;
             assign_function_type assign_function_value( &::SireMM::DoubleDistanceRestraint::operator= );
             
             DoubleDistanceRestraint_exposer.def( 
@@ -178,7 +178,7 @@ void register_DoubleDistanceRestraint_class(){
         DoubleDistanceRestraint_exposer.def( bp::self == bp::self );
         { //::SireMM::DoubleDistanceRestraint::point
         
-            typedef ::SireFF::Point const & ( ::SireMM::DoubleDistanceRestraint::*point_function_type )( int ) const;
+            typedef ::SireFF::Point const & ( ::SireMM::DoubleDistanceRestraint::*point_function_type)( int ) const;
             point_function_type point_function_value( &::SireMM::DoubleDistanceRestraint::point );
             
             DoubleDistanceRestraint_exposer.def( 
@@ -190,7 +190,7 @@ void register_DoubleDistanceRestraint_class(){
         }
         { //::SireMM::DoubleDistanceRestraint::point0
         
-            typedef ::SireFF::Point const & ( ::SireMM::DoubleDistanceRestraint::*point0_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireMM::DoubleDistanceRestraint::*point0_function_type)(  ) const;
             point0_function_type point0_function_value( &::SireMM::DoubleDistanceRestraint::point0 );
             
             DoubleDistanceRestraint_exposer.def( 
@@ -201,7 +201,7 @@ void register_DoubleDistanceRestraint_class(){
         }
         { //::SireMM::DoubleDistanceRestraint::point1
         
-            typedef ::SireFF::Point const & ( ::SireMM::DoubleDistanceRestraint::*point1_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireMM::DoubleDistanceRestraint::*point1_function_type)(  ) const;
             point1_function_type point1_function_value( &::SireMM::DoubleDistanceRestraint::point1 );
             
             DoubleDistanceRestraint_exposer.def( 
@@ -212,7 +212,7 @@ void register_DoubleDistanceRestraint_class(){
         }
         { //::SireMM::DoubleDistanceRestraint::point2
         
-            typedef ::SireFF::Point const & ( ::SireMM::DoubleDistanceRestraint::*point2_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireMM::DoubleDistanceRestraint::*point2_function_type)(  ) const;
             point2_function_type point2_function_value( &::SireMM::DoubleDistanceRestraint::point2 );
             
             DoubleDistanceRestraint_exposer.def( 
@@ -223,7 +223,7 @@ void register_DoubleDistanceRestraint_class(){
         }
         { //::SireMM::DoubleDistanceRestraint::point3
         
-            typedef ::SireFF::Point const & ( ::SireMM::DoubleDistanceRestraint::*point3_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireMM::DoubleDistanceRestraint::*point3_function_type)(  ) const;
             point3_function_type point3_function_value( &::SireMM::DoubleDistanceRestraint::point3 );
             
             DoubleDistanceRestraint_exposer.def( 
@@ -256,7 +256,7 @@ void register_DoubleDistanceRestraint_class(){
         }
         { //::SireMM::DoubleDistanceRestraint::setSpace
         
-            typedef void ( ::SireMM::DoubleDistanceRestraint::*setSpace_function_type )( ::SireVol::Space const & ) ;
+            typedef void ( ::SireMM::DoubleDistanceRestraint::*setSpace_function_type)( ::SireVol::Space const & ) ;
             setSpace_function_type setSpace_function_value( &::SireMM::DoubleDistanceRestraint::setSpace );
             
             DoubleDistanceRestraint_exposer.def( 
@@ -277,7 +277,7 @@ void register_DoubleDistanceRestraint_class(){
         }
         { //::SireMM::DoubleDistanceRestraint::update
         
-            typedef void ( ::SireMM::DoubleDistanceRestraint::*update_function_type )( ::SireMol::MoleculeData const & ) ;
+            typedef void ( ::SireMM::DoubleDistanceRestraint::*update_function_type)( ::SireMol::MoleculeData const & ) ;
             update_function_type update_function_value( &::SireMM::DoubleDistanceRestraint::update );
             
             DoubleDistanceRestraint_exposer.def( 
@@ -288,7 +288,7 @@ void register_DoubleDistanceRestraint_class(){
         }
         { //::SireMM::DoubleDistanceRestraint::update
         
-            typedef void ( ::SireMM::DoubleDistanceRestraint::*update_function_type )( ::SireMol::Molecules const & ) ;
+            typedef void ( ::SireMM::DoubleDistanceRestraint::*update_function_type)( ::SireMol::Molecules const & ) ;
             update_function_type update_function_value( &::SireMM::DoubleDistanceRestraint::update );
             
             DoubleDistanceRestraint_exposer.def( 
@@ -299,7 +299,7 @@ void register_DoubleDistanceRestraint_class(){
         }
         { //::SireMM::DoubleDistanceRestraint::usesMoleculesIn
         
-            typedef bool ( ::SireMM::DoubleDistanceRestraint::*usesMoleculesIn_function_type )( ::SireFF::ForceTable const & ) const;
+            typedef bool ( ::SireMM::DoubleDistanceRestraint::*usesMoleculesIn_function_type)( ::SireFF::ForceTable const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireMM::DoubleDistanceRestraint::usesMoleculesIn );
             
             DoubleDistanceRestraint_exposer.def( 
@@ -310,7 +310,7 @@ void register_DoubleDistanceRestraint_class(){
         }
         { //::SireMM::DoubleDistanceRestraint::usesMoleculesIn
         
-            typedef bool ( ::SireMM::DoubleDistanceRestraint::*usesMoleculesIn_function_type )( ::SireMol::Molecules const & ) const;
+            typedef bool ( ::SireMM::DoubleDistanceRestraint::*usesMoleculesIn_function_type)( ::SireMol::Molecules const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireMM::DoubleDistanceRestraint::usesMoleculesIn );
             
             DoubleDistanceRestraint_exposer.def( 

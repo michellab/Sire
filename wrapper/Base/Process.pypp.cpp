@@ -50,7 +50,7 @@ void register_Process_class(){
         Process_exposer.def( bp::init< SireBase::Process const & >(( bp::arg("other") )) );
         { //::SireBase::Process::hasFinished
         
-            typedef bool ( ::SireBase::Process::*hasFinished_function_type )(  ) ;
+            typedef bool ( ::SireBase::Process::*hasFinished_function_type)(  ) ;
             hasFinished_function_type hasFinished_function_value( &::SireBase::Process::hasFinished );
             
             Process_exposer.def( 
@@ -60,7 +60,7 @@ void register_Process_class(){
         }
         { //::SireBase::Process::isError
         
-            typedef bool ( ::SireBase::Process::*isError_function_type )(  ) ;
+            typedef bool ( ::SireBase::Process::*isError_function_type)(  ) ;
             isError_function_type isError_function_value( &::SireBase::Process::isError );
             
             Process_exposer.def( 
@@ -70,7 +70,7 @@ void register_Process_class(){
         }
         { //::SireBase::Process::isRunning
         
-            typedef bool ( ::SireBase::Process::*isRunning_function_type )(  ) ;
+            typedef bool ( ::SireBase::Process::*isRunning_function_type)(  ) ;
             isRunning_function_type isRunning_function_value( &::SireBase::Process::isRunning );
             
             Process_exposer.def( 
@@ -80,7 +80,7 @@ void register_Process_class(){
         }
         { //::SireBase::Process::kill
         
-            typedef void ( ::SireBase::Process::*kill_function_type )(  ) ;
+            typedef void ( ::SireBase::Process::*kill_function_type)(  ) ;
             kill_function_type kill_function_value( &::SireBase::Process::kill );
             
             Process_exposer.def( 
@@ -101,7 +101,7 @@ void register_Process_class(){
         Process_exposer.def( bp::self != bp::self );
         { //::SireBase::Process::operator=
         
-            typedef ::SireBase::Process & ( ::SireBase::Process::*assign_function_type )( ::SireBase::Process const & ) ;
+            typedef ::SireBase::Process & ( ::SireBase::Process::*assign_function_type)( ::SireBase::Process const & ) ;
             assign_function_type assign_function_value( &::SireBase::Process::operator= );
             
             Process_exposer.def( 
@@ -157,7 +157,7 @@ void register_Process_class(){
         }
         { //::SireBase::Process::wait
         
-            typedef void ( ::SireBase::Process::*wait_function_type )(  ) ;
+            typedef void ( ::SireBase::Process::*wait_function_type)(  ) ;
             wait_function_type wait_function_value( &::SireBase::Process::wait );
             
             Process_exposer.def( 
@@ -167,7 +167,7 @@ void register_Process_class(){
         }
         { //::SireBase::Process::wait
         
-            typedef bool ( ::SireBase::Process::*wait_function_type )( int ) ;
+            typedef bool ( ::SireBase::Process::*wait_function_type)( int ) ;
             wait_function_type wait_function_value( &::SireBase::Process::wait );
             
             Process_exposer.def( 
@@ -178,7 +178,7 @@ void register_Process_class(){
         }
         { //::SireBase::Process::wasKilled
         
-            typedef bool ( ::SireBase::Process::*wasKilled_function_type )(  ) ;
+            typedef bool ( ::SireBase::Process::*wasKilled_function_type)(  ) ;
             wasKilled_function_type wasKilled_function_value( &::SireBase::Process::wasKilled );
             
             Process_exposer.def( 
@@ -188,7 +188,7 @@ void register_Process_class(){
         }
         { //::SireBase::Process::what
         
-            typedef char const * ( ::SireBase::Process::*what_function_type )(  ) const;
+            typedef char const * ( ::SireBase::Process::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireBase::Process::what );
             
             Process_exposer.def( 

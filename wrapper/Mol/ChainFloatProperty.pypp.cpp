@@ -33,7 +33,7 @@ void register_ChainFloatProperty_class(){
         { //::SireMol::ChainProperty< double >::array
         
             typedef SireMol::ChainProperty< double > exported_class_t;
-            typedef ::QVector< double > const & ( ::SireMol::ChainProperty< double >::*array_function_type )(  ) const;
+            typedef ::QVector< double > const & ( ::SireMol::ChainProperty< double >::*array_function_type)(  ) const;
             array_function_type array_function_value( &::SireMol::ChainProperty< double >::array );
             
             ChainFloatProperty_exposer.def( 
@@ -45,7 +45,7 @@ void register_ChainFloatProperty_class(){
         { //::SireMol::ChainProperty< double >::assertCanConvert
         
             typedef SireMol::ChainProperty< double > exported_class_t;
-            typedef void ( ::SireMol::ChainProperty< double >::*assertCanConvert_function_type )( ::QVariant const & ) const;
+            typedef void ( ::SireMol::ChainProperty< double >::*assertCanConvert_function_type)( ::QVariant const & ) const;
             assertCanConvert_function_type assertCanConvert_function_value( &::SireMol::ChainProperty< double >::assertCanConvert );
             
             ChainFloatProperty_exposer.def( 
@@ -57,7 +57,7 @@ void register_ChainFloatProperty_class(){
         { //::SireMol::ChainProperty< double >::assignFrom
         
             typedef SireMol::ChainProperty< double > exported_class_t;
-            typedef void ( ::SireMol::ChainProperty< double >::*assignFrom_function_type )( ::SireMol::ChainProperty< QVariant > const & ) ;
+            typedef void ( ::SireMol::ChainProperty< double >::*assignFrom_function_type)( ::SireMol::ChainProperty< QVariant > const & ) ;
             assignFrom_function_type assignFrom_function_value( &::SireMol::ChainProperty< double >::assignFrom );
             
             ChainFloatProperty_exposer.def( 
@@ -69,7 +69,7 @@ void register_ChainFloatProperty_class(){
         { //::SireMol::ChainProperty< double >::at
         
             typedef SireMol::ChainProperty< double > exported_class_t;
-            typedef double const & ( ::SireMol::ChainProperty< double >::*at_function_type )( ::SireMol::ChainIdx const & ) const;
+            typedef double const & ( ::SireMol::ChainProperty< double >::*at_function_type)( ::SireMol::ChainIdx const & ) const;
             at_function_type at_function_value( &::SireMol::ChainProperty< double >::at );
             
             ChainFloatProperty_exposer.def( 
@@ -82,7 +82,7 @@ void register_ChainFloatProperty_class(){
         { //::SireMol::ChainProperty< double >::canConvert
         
             typedef SireMol::ChainProperty< double > exported_class_t;
-            typedef bool ( ::SireMol::ChainProperty< double >::*canConvert_function_type )( ::QVariant const & ) const;
+            typedef bool ( ::SireMol::ChainProperty< double >::*canConvert_function_type)( ::QVariant const & ) const;
             canConvert_function_type canConvert_function_value( &::SireMol::ChainProperty< double >::canConvert );
             
             ChainFloatProperty_exposer.def( 
@@ -94,7 +94,7 @@ void register_ChainFloatProperty_class(){
         { //::SireMol::ChainProperty< double >::count
         
             typedef SireMol::ChainProperty< double > exported_class_t;
-            typedef int ( ::SireMol::ChainProperty< double >::*count_function_type )(  ) const;
+            typedef int ( ::SireMol::ChainProperty< double >::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMol::ChainProperty< double >::count );
             
             ChainFloatProperty_exposer.def( 
@@ -117,7 +117,7 @@ void register_ChainFloatProperty_class(){
         { //::SireMol::ChainProperty< double >::get
         
             typedef SireMol::ChainProperty< double > exported_class_t;
-            typedef double const & ( ::SireMol::ChainProperty< double >::*get_function_type )( ::SireMol::ChainIdx const & ) const;
+            typedef double const & ( ::SireMol::ChainProperty< double >::*get_function_type)( ::SireMol::ChainIdx const & ) const;
             get_function_type get_function_value( &::SireMol::ChainProperty< double >::get );
             
             ChainFloatProperty_exposer.def( 
@@ -130,7 +130,7 @@ void register_ChainFloatProperty_class(){
         { //::SireMol::ChainProperty< double >::isCompatibleWith
         
             typedef SireMol::ChainProperty< double > exported_class_t;
-            typedef bool ( ::SireMol::ChainProperty< double >::*isCompatibleWith_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef bool ( ::SireMol::ChainProperty< double >::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::ChainProperty< double >::isCompatibleWith );
             
             ChainFloatProperty_exposer.def( 
@@ -142,7 +142,7 @@ void register_ChainFloatProperty_class(){
         { //::SireMol::ChainProperty< double >::isEmpty
         
             typedef SireMol::ChainProperty< double > exported_class_t;
-            typedef bool ( ::SireMol::ChainProperty< double >::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::ChainProperty< double >::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::ChainProperty< double >::isEmpty );
             
             ChainFloatProperty_exposer.def( 
@@ -153,7 +153,7 @@ void register_ChainFloatProperty_class(){
         { //::SireMol::ChainProperty< double >::nChains
         
             typedef SireMol::ChainProperty< double > exported_class_t;
-            typedef int ( ::SireMol::ChainProperty< double >::*nChains_function_type )(  ) const;
+            typedef int ( ::SireMol::ChainProperty< double >::*nChains_function_type)(  ) const;
             nChains_function_type nChains_function_value( &::SireMol::ChainProperty< double >::nChains );
             
             ChainFloatProperty_exposer.def( 
@@ -165,7 +165,7 @@ void register_ChainFloatProperty_class(){
         { //::SireMol::ChainProperty< double >::operator=
         
             typedef SireMol::ChainProperty< double > exported_class_t;
-            typedef ::SireMol::ChainProperty< double > & ( ::SireMol::ChainProperty< double >::*assign_function_type )( ::SireMol::ChainProperty< double > const & ) ;
+            typedef ::SireMol::ChainProperty< double > & ( ::SireMol::ChainProperty< double >::*assign_function_type)( ::SireMol::ChainProperty< double > const & ) ;
             assign_function_type assign_function_value( &::SireMol::ChainProperty< double >::operator= );
             
             ChainFloatProperty_exposer.def( 
@@ -179,7 +179,7 @@ void register_ChainFloatProperty_class(){
         { //::SireMol::ChainProperty< double >::operator[]
         
             typedef SireMol::ChainProperty< double > exported_class_t;
-            typedef double const & ( ::SireMol::ChainProperty< double >::*__getitem___function_type )( ::SireMol::ChainIdx const & ) const;
+            typedef double const & ( ::SireMol::ChainProperty< double >::*__getitem___function_type)( ::SireMol::ChainIdx const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::ChainProperty< double >::operator[] );
             
             ChainFloatProperty_exposer.def( 
@@ -192,7 +192,7 @@ void register_ChainFloatProperty_class(){
         { //::SireMol::ChainProperty< double >::set
         
             typedef SireMol::ChainProperty< double > exported_class_t;
-            typedef ::SireMol::ChainProperty< double > & ( ::SireMol::ChainProperty< double >::*set_function_type )( ::SireMol::ChainIdx,double const & ) ;
+            typedef ::SireMol::ChainProperty< double > & ( ::SireMol::ChainProperty< double >::*set_function_type)( ::SireMol::ChainIdx,double const & ) ;
             set_function_type set_function_value( &::SireMol::ChainProperty< double >::set );
             
             ChainFloatProperty_exposer.def( 
@@ -205,7 +205,7 @@ void register_ChainFloatProperty_class(){
         { //::SireMol::ChainProperty< double >::size
         
             typedef SireMol::ChainProperty< double > exported_class_t;
-            typedef int ( ::SireMol::ChainProperty< double >::*size_function_type )(  ) const;
+            typedef int ( ::SireMol::ChainProperty< double >::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireMol::ChainProperty< double >::size );
             
             ChainFloatProperty_exposer.def( 
@@ -216,7 +216,7 @@ void register_ChainFloatProperty_class(){
         { //::SireMol::ChainProperty< double >::toString
         
             typedef SireMol::ChainProperty< double > exported_class_t;
-            typedef ::QString ( ::SireMol::ChainProperty< double >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::ChainProperty< double >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::ChainProperty< double >::toString );
             
             ChainFloatProperty_exposer.def( 
@@ -227,7 +227,7 @@ void register_ChainFloatProperty_class(){
         { //::SireMol::ChainProperty< double >::toVariant
         
             typedef SireMol::ChainProperty< double > exported_class_t;
-            typedef ::SireMol::ChainProperty< QVariant > ( ::SireMol::ChainProperty< double >::*toVariant_function_type )(  ) const;
+            typedef ::SireMol::ChainProperty< QVariant > ( ::SireMol::ChainProperty< double >::*toVariant_function_type)(  ) const;
             toVariant_function_type toVariant_function_value( &::SireMol::ChainProperty< double >::toVariant );
             
             ChainFloatProperty_exposer.def( 

@@ -74,7 +74,7 @@ void register_AtomName_class(){
         AtomName_exposer.def( bp::init< SireMol::AtomName const & >(( bp::arg("other") )) );
         { //::SireMol::AtomName::hash
         
-            typedef ::uint ( ::SireMol::AtomName::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::AtomName::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::AtomName::hash );
             
             AtomName_exposer.def( 
@@ -84,7 +84,7 @@ void register_AtomName_class(){
         }
         { //::SireMol::AtomName::isNull
         
-            typedef bool ( ::SireMol::AtomName::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::AtomName::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::AtomName::isNull );
             
             AtomName_exposer.def( 
@@ -94,7 +94,7 @@ void register_AtomName_class(){
         }
         { //::SireMol::AtomName::map
         
-            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::AtomName::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::AtomName::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireMol::AtomName::map );
             
             AtomName_exposer.def( 
@@ -106,7 +106,7 @@ void register_AtomName_class(){
         AtomName_exposer.def( bp::self != bp::self );
         { //::SireMol::AtomName::operator=
         
-            typedef ::SireMol::AtomName & ( ::SireMol::AtomName::*assign_function_type )( ::SireMol::AtomName const & ) ;
+            typedef ::SireMol::AtomName & ( ::SireMol::AtomName::*assign_function_type)( ::SireMol::AtomName const & ) ;
             assign_function_type assign_function_value( &::SireMol::AtomName::operator= );
             
             AtomName_exposer.def( 
@@ -120,7 +120,7 @@ void register_AtomName_class(){
         AtomName_exposer.def( bp::self == bp::self );
         { //::SireMol::AtomName::toString
         
-            typedef ::QString ( ::SireMol::AtomName::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::AtomName::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::AtomName::toString );
             
             AtomName_exposer.def( 
@@ -140,7 +140,7 @@ void register_AtomName_class(){
         }
         { //::SireMol::AtomName::what
         
-            typedef char const * ( ::SireMol::AtomName::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::AtomName::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::AtomName::what );
             
             AtomName_exposer.def( 

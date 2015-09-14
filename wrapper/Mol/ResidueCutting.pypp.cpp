@@ -51,7 +51,7 @@ void register_ResidueCutting_class(){
         ResidueCutting_exposer.def( bp::self != bp::self );
         { //::SireMol::ResidueCutting::operator()
         
-            typedef ::SireMol::MolStructureEditor ( ::SireMol::ResidueCutting::*__call___function_type )( ::SireMol::MolStructureEditor & ) const;
+            typedef ::SireMol::MolStructureEditor ( ::SireMol::ResidueCutting::*__call___function_type)( ::SireMol::MolStructureEditor & ) const;
             __call___function_type __call___function_value( &::SireMol::ResidueCutting::operator() );
             
             ResidueCutting_exposer.def( 
@@ -62,7 +62,7 @@ void register_ResidueCutting_class(){
         }
         { //::SireMol::ResidueCutting::operator=
         
-            typedef ::SireMol::ResidueCutting & ( ::SireMol::ResidueCutting::*assign_function_type )( ::SireMol::ResidueCutting const & ) ;
+            typedef ::SireMol::ResidueCutting & ( ::SireMol::ResidueCutting::*assign_function_type)( ::SireMol::ResidueCutting const & ) ;
             assign_function_type assign_function_value( &::SireMol::ResidueCutting::operator= );
             
             ResidueCutting_exposer.def( 

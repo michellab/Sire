@@ -33,7 +33,7 @@ void register_LJProbe_class(){
         LJProbe_exposer.def( bp::init< SireMM::LJProbe const & >(( bp::arg("other") )) );
         { //::SireMM::LJProbe::lj
         
-            typedef ::SireMM::LJParameter const & ( ::SireMM::LJProbe::*lj_function_type )(  ) const;
+            typedef ::SireMM::LJParameter const & ( ::SireMM::LJProbe::*lj_function_type)(  ) const;
             lj_function_type lj_function_value( &::SireMM::LJProbe::lj );
             
             LJProbe_exposer.def( 
@@ -45,7 +45,7 @@ void register_LJProbe_class(){
         LJProbe_exposer.def( bp::self != bp::self );
         { //::SireMM::LJProbe::operator=
         
-            typedef ::SireMM::LJProbe & ( ::SireMM::LJProbe::*assign_function_type )( ::SireMM::LJProbe const & ) ;
+            typedef ::SireMM::LJProbe & ( ::SireMM::LJProbe::*assign_function_type)( ::SireMM::LJProbe const & ) ;
             assign_function_type assign_function_value( &::SireMM::LJProbe::operator= );
             
             LJProbe_exposer.def( 
