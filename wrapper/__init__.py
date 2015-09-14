@@ -18,6 +18,25 @@ __version__ = Sire.Config.__version__
 
 sent_usage_data = None
 
+def _getOSInfo():
+    import platform as _pf
+
+    data = {}
+    data["platform"] = _pf.system()
+
+    if _pf.system().startswith("Darwin"):
+        data["OS"] = _pf.mac_ver()[0]
+    elif _pf.system().startswith("Linux"):
+        ld = _pf.linux_distribution()
+        data["OS"] = "%s (%s %s)" % (ld[0],ld[1],ld[2])
+    else:
+        data["OS"] = "unknown"
+
+    u = _pf.uname()
+    data["uname"] = "%s | %s | %s | %s" % (u.system,u.release,u.machine,u.processor)
+
+    data["OS"] = "%s : %s"
+
 # Now try to upload usage data to siremol.org
 def _uploadUsageData():
     try:
@@ -39,15 +58,34 @@ def _uploadUsageData():
 
         data = {}
 
+        # get information about the processor
         data["processor"] = id.brand()
         data["vendor"] = id.vendor()
         data["clockspeed"] = id.clockSpeed()
         data["numcores"] = id.numCores()
 
+        # get information about the operating system
+        import platform as _pf
+
+        data["platform"] = _pf.system()
+
+        if _pf.system().startswith("Darwin"):
+            data["OS"] = _pf.mac_ver()[0]
+        elif _pf.system().startswith("Linux"):
+            ld = _pf.linux_distribution()
+            data["OS"] = "%s (%s %s)" % (ld[0],ld[1],ld[2])
+        else:
+            data["OS"] = "unknown"
+
+        u = _pf.uname()
+        data["uname"] = "%s | %s | %s | %s" % (u.system,u.release,u.machine,u.processor)
+
+        # get information about the version of Sire
         data["version"] = Sire.__version__
         data["repository"] = Sire.Config.sire_repository_url
         data["repository_version"] = Sire.Config.sire_repository_version
 
+        # now get information about which Sire app is running
         import sys as _sys
         # get the executable name, but make sure we don't get the path
         # (as it may contain sensitive user information)
