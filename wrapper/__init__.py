@@ -106,9 +106,11 @@ def _uploadUsageData():
         sent_usage_data = data
 
         conn = _htc.HTTPConnection("siremol.org")
-        conn.request("POST", "/cgi-bin/postusagestats.php", params, headers)
-        r1 = conn.getresponse()
+        conn.request("POST", "/phonehome/postusagestats.php", params, headers)
+        #r1 = conn.getresponse()
         #print(r1.status, r1.reason)
+        #print(r1.read())
+        
     except:
         # something went wrong - just ignore the error
         # and cancel the phone home
