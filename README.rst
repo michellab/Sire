@@ -1,6 +1,6 @@
-***********************************************
-Sire is a versatile Molecular Mechanics library
-***********************************************
+****
+Sire
+****
 
 .. image:: https://travis-ci.org/michellab/Sire.svg?branch=autobuild_feature
    :target: https://travis-ci.org/michellab/Sire
@@ -13,12 +13,13 @@ Sire is a free, open source, multiscale molecular simulation framework, written 
 Installation 
 ============
 
-The easy install option is:
-```
-$: git clone git@github.com:michellab/Sire.git
-$: cd Sire
-$: ./compile_sire.sh
-```
+The easy install option is::
+
+    git clone git@github.com:michellab/Sire.git
+    cd Sire
+    ./compile_sire.sh
+
+
 A small word of warning, the installation can easily take up to an hour!
 
 Alternatively Sire can be installed into an existin Conda installation/Python installation
