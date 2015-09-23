@@ -17,8 +17,8 @@ Can you run a simple python script?
 
 If you want OpenMM support, install OpenMM into miniconda using the commands
 
-$HOME/sire.app/conda config --add channels http://conda.binstar.org/omnia
-$HOME/sire.app/conda install openmm
+$HOME/sire.app/bin/conda config --add channels http://conda.binstar.org/omnia
+$HOME/sire.app/bin/conda install openmm
 
 (this assumes that you installed miniconda into $HOME/sire.app)
 
