@@ -402,7 +402,7 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
     CHECK_CXX_COMPILER_FLAG( "-msse2" HAVE_SSE_FLAG )
     CHECK_CXX_COMPILER_FLAG( "-mavx" HAVE_AVX_FLAG )
 
-    set( SIRE_SKIP_AVX 0 )
+    set( SIRE_SKIP_AVX 1 )
 
     if ( NOT SIRE_DISABLE_AVX)
 
@@ -423,7 +423,7 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
         if (CAN_RUN_AVX_PROGRAM)
           message( STATUS "Compiling with AVX enabled. Resulting binary will only work on newer Intel CPUs" )
         
-          set( SIRE_SKIP_AVX 1 )
+          set( SIRE_SKIP_AVX 0 )
 
           CHECK_CXX_COMPILER_FLAG( "-mavx2" HAVE_AVX2_FLAG )
 
@@ -449,8 +449,7 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
           else()
             set ( SIRE_VECTOR_FLAGS "-msse2 -DSIRE_USE_SSE" )
           endif()
-        endif()
-      elseif (NOT SIRE_DISABLE_SSE)   
+        elseif (NOT SIRE_DISABLE_SSE)   
           # we have emmintrin.h so we have SSE
           message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
 
@@ -462,6 +461,7 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
           else()
             set ( SIRE_VECTOR_FLAGS "-msse2 -DSIRE_USE_SSE" )
           endif()  
+        endif()
       endif()
     endif()
 
