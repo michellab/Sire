@@ -68,6 +68,12 @@ LengthProperty::LengthProperty(Length value)
                : ConcreteProperty<LengthProperty,Property>(), val(value)
 {}
 
+/** Construct from a VariantProperty */
+LengthProperty::LengthProperty(const VariantProperty &other)
+               : ConcreteProperty<LengthProperty,Property>(other),
+                 val(other.convertTo<Length>())
+{}
+
 /** Copy constructor */
 LengthProperty::LengthProperty(const LengthProperty &other)
                : ConcreteProperty<LengthProperty,Property>(other), val(other.val)
