@@ -11,8 +11,14 @@ def test_cast(verbose=False):
     c = NumberProperty( VariantProperty(1.0) )
     assert_equal( c, NumberProperty(1.0) )
 
+    c = NumberProperty( VariantProperty(5) )
+    assert_equal( c, NumberProperty(5) )
+
     c = BooleanProperty( VariantProperty(False) )
     assert_equal( c, BooleanProperty(False) )
+
+    c = BooleanProperty( VariantProperty(True) )
+    assert_equal( c, BooleanProperty(True) )
 
 def test_ff_cast(verbose=False):
     ff = InternalFF()

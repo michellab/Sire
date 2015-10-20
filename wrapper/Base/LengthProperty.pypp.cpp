@@ -30,6 +30,7 @@ void register_LengthProperty_class(){
         LengthProperty_exposer_t LengthProperty_exposer = LengthProperty_exposer_t( "LengthProperty", bp::init< >() );
         bp::scope LengthProperty_scope( LengthProperty_exposer );
         LengthProperty_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("value") )) );
+        LengthProperty_exposer.def( bp::init< SireBase::VariantProperty const & >(( bp::arg("other") )) );
         LengthProperty_exposer.def( bp::init< SireBase::LengthProperty const & >(( bp::arg("other") )) );
         LengthProperty_exposer.def( bp::self != bp::self );
         { //::SireBase::LengthProperty::operator=

@@ -32,6 +32,7 @@ void register_NumberProperty_class(){
         NumberProperty_exposer.def( bp::init< double >(( bp::arg("value") )) );
         NumberProperty_exposer.def( bp::init< int >(( bp::arg("value") )) );
         NumberProperty_exposer.def( bp::init< qint64 >(( bp::arg("value") )) );
+        NumberProperty_exposer.def( bp::init< SireBase::VariantProperty const & >(( bp::arg("other") )) );
         NumberProperty_exposer.def( bp::init< SireBase::NumberProperty const & >(( bp::arg("other") )) );
         NumberProperty_exposer.def( bp::self != bp::self );
         { //::SireBase::NumberProperty::operator=

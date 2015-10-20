@@ -30,6 +30,7 @@ void register_BooleanProperty_class(){
         BooleanProperty_exposer_t BooleanProperty_exposer = BooleanProperty_exposer_t( "BooleanProperty", bp::init< >() );
         bp::scope BooleanProperty_scope( BooleanProperty_exposer );
         BooleanProperty_exposer.def( bp::init< bool >(( bp::arg("value") )) );
+        BooleanProperty_exposer.def( bp::init< SireBase::VariantProperty const & >(( bp::arg("other") )) );
         BooleanProperty_exposer.def( bp::init< SireBase::BooleanProperty const & >(( bp::arg("other") )) );
         BooleanProperty_exposer.def( bp::self != bp::self );
         { //::SireBase::BooleanProperty::operator=
