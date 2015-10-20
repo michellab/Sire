@@ -22,7 +22,7 @@ def test_cast(verbose=False):
 
 def test_ff_cast(verbose=False):
     ff = InternalFF()
-    ff.setProperty("combiningRules", VariantProperty("arithmetic"))
+    ff.setProperty("combiningRules", VariantProperty("geometric"))
 
 
 if __name__ == "__main__":

@@ -426,7 +426,7 @@ void InternalPotential::calculatePhysicalEnergy(
                                           getCoords(dihedral.atom3(), cgroup_array) );
                            
             vals.set(phi, ang.to(radians));
-            
+
             dihnrg += dihedral.function().evaluate(vals);
         }
         
@@ -2158,7 +2158,7 @@ InternalFF::InternalFF()
 {
     props.setProperty("strict", VariantProperty(true));
     props.setProperty("calculate14", VariantProperty(calc_14_nrgs));
-    props.setProperty("combiningRules", StringProperty("arithmetic"));
+    props.setProperty("combiningRules", VariantProperty("arithmetic"));
 }
 
 /** Construct a named internal forcefield */
@@ -2169,7 +2169,7 @@ InternalFF::InternalFF(const QString &name)
     G1FF::setName(name);
     props.setProperty("strict", VariantProperty(true));
     props.setProperty("calculate14", VariantProperty(calc_14_nrgs));
-    props.setProperty("combiningRules", StringProperty("arithmetic"));
+    props.setProperty("combiningRules", VariantProperty("arithmetic"));
 }
 
 /** Copy constructor */
@@ -2378,7 +2378,7 @@ void InternalFF::setGeometricCombiningRules(bool on)
     nonbonded energy */
 CLJFunction::COMBINING_RULES InternalFF::combiningRules() const
 {
-    QString rules = props.property("combiningRules").asA<StringProperty>();
+    QString rules = props.property("combiningRules").asA<VariantProperty>().convertTo<QString>();
     
     if (rules == QLatin1String("arithmetic"))
         return CLJFunction::ARITHMETIC;
@@ -2410,10 +2410,10 @@ bool InternalFF::setCombiningRules(CLJFunction::COMBINING_RULES rules)
         switch(rules)
         {
         case CLJFunction::ARITHMETIC:
-            props.setProperty("combiningRules", StringProperty("arithmetic"));
+            props.setProperty("combiningRules", VariantProperty("arithmetic"));
             break;
         case CLJFunction::GEOMETRIC:
-            props.setProperty("combiningRules", StringProperty("geometric"));
+            props.setProperty("combiningRules", VariantProperty("geometric"));
             break;
         }
         
@@ -2475,7 +2475,7 @@ bool InternalFF::setProperty(const QString &name, const Property &value)
     }
     else if (name == QLatin1String("combiningRules"))
     {
-        QString rules = value.asA<StringProperty>();
+        QString rules = value.asA<VariantProperty>().convertTo<QString>();
 
         CLJFunction::COMBINING_RULES new_rules;
         
