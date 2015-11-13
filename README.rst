@@ -1,5 +1,5 @@
 ****
-`Sire <http://siremol.org>`
+`Sire <http://siremol.org>`__
 ****
 
 .. image:: https://travis-ci.org/michellab/Sire.svg?branch=autobuild_feature
@@ -8,7 +8,7 @@
 
 About
 =====
-`Sire <http://siremol.org` is a free, open source, multiscale 
+`Sire <http://siremol.org>`__ is a free, open source, multiscale 
 molecular simulation framework, written to allow computational 
 modellers to quickly prototype and develop new algorithms for 
 molecular simulation and molecular design. Sire is written 
@@ -25,7 +25,7 @@ built with Sire, please `visit the Sire website <http://siremol.org`.
 Installation 
 ============
 
-There are many `pre-built binary packages <http://siremol.org/Sire/Binaries.html>`,
+There are many `pre-built binary packages <http://siremol.org/Sire/Binaries.html>`__,
 which are available for Linux and OS X, which are quick and easy to install.
 
 However, as you are here, it is likely you want to download the latest,
