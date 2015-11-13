@@ -545,6 +545,7 @@ if __name__ == "__main__":
     qtdir = "%s/bundled/include" % os.path.abspath(dir[0])
     boostdir = qtdir
     gsldir = qtdir
+    openmm_include_dir = "%s/../include" % os.path.dirname(sys.executable)
 
     need_input = False 
 
@@ -573,13 +574,12 @@ if __name__ == "__main__":
     boost_include_dirs = [ boostdir ]
     gsl_include_dirs = [ gsldir ]
 
-    openmm_include_dirs = os.getenv("OPENMMDIR")
-
-    if openmm_include_dirs is not None:
-        if os.path.exists(openmm_include_dirs):
-            print(("Generating wrappers including OpenMM from %s" % openmm_include_dirs))
-            openmm_include_dirs = [ "%s/include" % openmm_include_dirs ]
+    if openmm_include_dir is not None:
+        if os.path.exists("%s/OpenMM.h" % openmm_include_dir):
+            print("Generating wrappers including OpenMM from %s" % openmm_include_dir)
+            openmm_include_dirs = [openmm_include_dir]
         else:
+            print("Cannot find %s/OpenMM.h - disabling generation of OpenMM wrappers." % openmm_include_dir)
             openmm_include_dirs = None
 
     if openmm_include_dirs is None:
