@@ -13,8 +13,8 @@ molecular simulation framework, written to allow computational
 modellers to quickly prototype and develop new algorithms for 
 molecular simulation and molecular design. Sire is written 
 as a collection of libraries, each of which contains self-contained 
-and robust C++/Python building blocks. These building blocks are v
-ectorised and thread-aware and can be streamed (saved/loaded) 
+and robust C++/Python building blocks. These building blocks are 
+vectorised and thread-aware and can be streamed (saved/loaded) 
 to and from a version-controlled and tagged binary format, 
 thereby allowing them to be combined together easily to build 
 custom multi-processor molecular simulation applications.
