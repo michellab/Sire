@@ -168,10 +168,10 @@ try:
     x = Sire.CAS.Symbol("x")
     f = x**2 + 5*x - 10
     g = f.differentiate(x)
-except:
+except Exception as e:
     print("Something went wrong when trying to test the Sire installation.")
+    print(e)
     print("Please check things manually yourself...")
-    sys.exit(-1)
 
-print("=================================")
+print("\n\n=================================")
 print("Congratulations. Everything has installed :-)")
