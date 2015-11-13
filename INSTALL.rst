@@ -47,7 +47,7 @@ INSTALLATION INSTRUCTIONS
 
    ``$SIRE/bin/waterswap --help``
 
-12. Distributing your binaries
+6. Distributing your binaries
 
    To package your installation of Sire up into a self-extracting
    executable, type
