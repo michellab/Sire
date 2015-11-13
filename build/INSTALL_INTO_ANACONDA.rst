@@ -2,7 +2,7 @@
 
 (1) Download and install a miniconda or anaconda distribution, e.g.
 
-wget....
+wget http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
 
 chmod a+x Miniconda3-latest-Linux-x86_64.sh
 ./Miniconda3-latest-Linux-x86_64.sh
@@ -13,9 +13,9 @@ naming convention of Sire, you can choose $HOME/sire.app
 Now, you should have a python in $HOME/sire.app/bin/python. Test it.
 Can you run a simple python script?
 
-(1a) (OPTIONAL) Download and install OpenMM
+(1a) Download and install OpenMM
 
-If you want OpenMM support, install OpenMM into miniconda using the commands
+Sire now depends on OpenMM support, so install OpenMM into miniconda using the commands
 
 $HOME/sire.app/bin/conda config --add channels http://conda.binstar.org/omnia
 $HOME/sire.app/bin/conda install openmm
