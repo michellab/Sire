@@ -20,7 +20,7 @@ thereby allowing them to be combined together easily to build
 custom multi-processor molecular simulation applications.
 
 For more information about how to use Sire, and about application
-built with Sire, please `visit the Sire website <http://siremol.org`.
+built with Sire, please `visit the Sire website <http://siremol.org>`__.
 
 Installation 
 ============
@@ -30,9 +30,9 @@ which are available for Linux and OS X, which are quick and easy to install.
 
 However, as you are here, it is likely you want to download the latest,
 greatest version of the code, which you will need to compile. To compile Sire,
-you need a working C++ compiler (gcc or clang), `cmake <http://cmake.org>` 
+you need a working C++ compiler (gcc or clang), `cmake <http://cmake.org>`__ 
 (version 2.8.11.2 or above), a Git client to download the source,
- and a working internet connection (needed by
+and a working internet connection (needed by
 the Sire compilation scripts to download additional dependencies).
 
 The easy install option is::
@@ -50,7 +50,7 @@ and is the route we strongly recommend. If you have any problems with
 compiling and installing Sire, then please get in touch using the links below.
 
 If you want to install Sire into an existing miniconda or Anaconda 
-Python installation, please follow the instructions in build/INSTALL_INTO_ANACONDA.rst.
+Python installation, please follow the instructions in `build/INSTALL_INTO_ANACONDA.rst`.
 
 Support and Development
 =======================
@@ -63,7 +63,7 @@ or contact the developers via the google user group: `https://groups.google.com/
 
 Developers guide
 -----------------
-Please `visit the website <http://siremol.org>` for information on how to 
+Please `visit the website <http://siremol.org>`__ for information on how to 
 develop applications using Sire. 
 
 Travis -- Autobuild feature
@@ -71,5 +71,3 @@ Travis -- Autobuild feature
 Since Sire is quite large, a build can take quite long and might not be neccessary 
 if a commit is only fixing a couple of typos. Simply add the line `[ci skip]` 
 to your commit message and Travis will not invoke an autobuild. 
-
-
