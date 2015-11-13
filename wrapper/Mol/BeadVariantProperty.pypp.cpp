@@ -33,7 +33,7 @@ void register_BeadVariantProperty_class(){
         { //::SireMol::BeadProperty< QVariant >::array
         
             typedef SireMol::BeadProperty< QVariant > exported_class_t;
-            typedef ::QVector< QVariant > const & ( ::SireMol::BeadProperty< QVariant >::*array_function_type )(  ) const;
+            typedef ::QVector< QVariant > const & ( ::SireMol::BeadProperty< QVariant >::*array_function_type)(  ) const;
             array_function_type array_function_value( &::SireMol::BeadProperty< QVariant >::array );
             
             BeadVariantProperty_exposer.def( 
@@ -45,7 +45,7 @@ void register_BeadVariantProperty_class(){
         { //::SireMol::BeadProperty< QVariant >::assertCanConvert
         
             typedef SireMol::BeadProperty< QVariant > exported_class_t;
-            typedef void ( ::SireMol::BeadProperty< QVariant >::*assertCanConvert_function_type )( ::QVariant const & ) const;
+            typedef void ( ::SireMol::BeadProperty< QVariant >::*assertCanConvert_function_type)( ::QVariant const & ) const;
             assertCanConvert_function_type assertCanConvert_function_value( &::SireMol::BeadProperty< QVariant >::assertCanConvert );
             
             BeadVariantProperty_exposer.def( 
@@ -57,7 +57,7 @@ void register_BeadVariantProperty_class(){
         { //::SireMol::BeadProperty< QVariant >::assignFrom
         
             typedef SireMol::BeadProperty< QVariant > exported_class_t;
-            typedef void ( ::SireMol::BeadProperty< QVariant >::*assignFrom_function_type )( ::SireMol::BeadProperty< QVariant > const & ) ;
+            typedef void ( ::SireMol::BeadProperty< QVariant >::*assignFrom_function_type)( ::SireMol::BeadProperty< QVariant > const & ) ;
             assignFrom_function_type assignFrom_function_value( &::SireMol::BeadProperty< QVariant >::assignFrom );
             
             BeadVariantProperty_exposer.def( 
@@ -69,7 +69,7 @@ void register_BeadVariantProperty_class(){
         { //::SireMol::BeadProperty< QVariant >::at
         
             typedef SireMol::BeadProperty< QVariant > exported_class_t;
-            typedef ::QVariant const & ( ::SireMol::BeadProperty< QVariant >::*at_function_type )( ::SireMol::BeadIdx const & ) const;
+            typedef ::QVariant const & ( ::SireMol::BeadProperty< QVariant >::*at_function_type)( ::SireMol::BeadIdx const & ) const;
             at_function_type at_function_value( &::SireMol::BeadProperty< QVariant >::at );
             
             BeadVariantProperty_exposer.def( 
@@ -82,7 +82,7 @@ void register_BeadVariantProperty_class(){
         { //::SireMol::BeadProperty< QVariant >::canConvert
         
             typedef SireMol::BeadProperty< QVariant > exported_class_t;
-            typedef bool ( ::SireMol::BeadProperty< QVariant >::*canConvert_function_type )( ::QVariant const & ) const;
+            typedef bool ( ::SireMol::BeadProperty< QVariant >::*canConvert_function_type)( ::QVariant const & ) const;
             canConvert_function_type canConvert_function_value( &::SireMol::BeadProperty< QVariant >::canConvert );
             
             BeadVariantProperty_exposer.def( 
@@ -94,7 +94,7 @@ void register_BeadVariantProperty_class(){
         { //::SireMol::BeadProperty< QVariant >::count
         
             typedef SireMol::BeadProperty< QVariant > exported_class_t;
-            typedef int ( ::SireMol::BeadProperty< QVariant >::*count_function_type )(  ) const;
+            typedef int ( ::SireMol::BeadProperty< QVariant >::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMol::BeadProperty< QVariant >::count );
             
             BeadVariantProperty_exposer.def( 
@@ -117,7 +117,7 @@ void register_BeadVariantProperty_class(){
         { //::SireMol::BeadProperty< QVariant >::get
         
             typedef SireMol::BeadProperty< QVariant > exported_class_t;
-            typedef ::QVariant const & ( ::SireMol::BeadProperty< QVariant >::*get_function_type )( ::SireMol::BeadIdx const & ) const;
+            typedef ::QVariant const & ( ::SireMol::BeadProperty< QVariant >::*get_function_type)( ::SireMol::BeadIdx const & ) const;
             get_function_type get_function_value( &::SireMol::BeadProperty< QVariant >::get );
             
             BeadVariantProperty_exposer.def( 
@@ -130,7 +130,7 @@ void register_BeadVariantProperty_class(){
         { //::SireMol::BeadProperty< QVariant >::isCompatibleWith
         
             typedef SireMol::BeadProperty< QVariant > exported_class_t;
-            typedef bool ( ::SireMol::BeadProperty< QVariant >::*isCompatibleWith_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef bool ( ::SireMol::BeadProperty< QVariant >::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::BeadProperty< QVariant >::isCompatibleWith );
             
             BeadVariantProperty_exposer.def( 
@@ -142,7 +142,7 @@ void register_BeadVariantProperty_class(){
         { //::SireMol::BeadProperty< QVariant >::isEmpty
         
             typedef SireMol::BeadProperty< QVariant > exported_class_t;
-            typedef bool ( ::SireMol::BeadProperty< QVariant >::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::BeadProperty< QVariant >::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::BeadProperty< QVariant >::isEmpty );
             
             BeadVariantProperty_exposer.def( 
@@ -153,7 +153,7 @@ void register_BeadVariantProperty_class(){
         { //::SireMol::BeadProperty< QVariant >::nBeads
         
             typedef SireMol::BeadProperty< QVariant > exported_class_t;
-            typedef int ( ::SireMol::BeadProperty< QVariant >::*nBeads_function_type )(  ) const;
+            typedef int ( ::SireMol::BeadProperty< QVariant >::*nBeads_function_type)(  ) const;
             nBeads_function_type nBeads_function_value( &::SireMol::BeadProperty< QVariant >::nBeads );
             
             BeadVariantProperty_exposer.def( 
@@ -165,7 +165,7 @@ void register_BeadVariantProperty_class(){
         { //::SireMol::BeadProperty< QVariant >::operator=
         
             typedef SireMol::BeadProperty< QVariant > exported_class_t;
-            typedef ::SireMol::BeadProperty< QVariant > & ( ::SireMol::BeadProperty< QVariant >::*assign_function_type )( ::SireMol::BeadProperty< QVariant > const & ) ;
+            typedef ::SireMol::BeadProperty< QVariant > & ( ::SireMol::BeadProperty< QVariant >::*assign_function_type)( ::SireMol::BeadProperty< QVariant > const & ) ;
             assign_function_type assign_function_value( &::SireMol::BeadProperty< QVariant >::operator= );
             
             BeadVariantProperty_exposer.def( 
@@ -179,7 +179,7 @@ void register_BeadVariantProperty_class(){
         { //::SireMol::BeadProperty< QVariant >::operator[]
         
             typedef SireMol::BeadProperty< QVariant > exported_class_t;
-            typedef ::QVariant const & ( ::SireMol::BeadProperty< QVariant >::*__getitem___function_type )( ::SireMol::BeadIdx const & ) const;
+            typedef ::QVariant const & ( ::SireMol::BeadProperty< QVariant >::*__getitem___function_type)( ::SireMol::BeadIdx const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::BeadProperty< QVariant >::operator[] );
             
             BeadVariantProperty_exposer.def( 
@@ -192,7 +192,7 @@ void register_BeadVariantProperty_class(){
         { //::SireMol::BeadProperty< QVariant >::set
         
             typedef SireMol::BeadProperty< QVariant > exported_class_t;
-            typedef ::SireMol::BeadProperty< QVariant > & ( ::SireMol::BeadProperty< QVariant >::*set_function_type )( ::SireMol::BeadIdx,::QVariant const & ) ;
+            typedef ::SireMol::BeadProperty< QVariant > & ( ::SireMol::BeadProperty< QVariant >::*set_function_type)( ::SireMol::BeadIdx,::QVariant const & ) ;
             set_function_type set_function_value( &::SireMol::BeadProperty< QVariant >::set );
             
             BeadVariantProperty_exposer.def( 
@@ -205,7 +205,7 @@ void register_BeadVariantProperty_class(){
         { //::SireMol::BeadProperty< QVariant >::size
         
             typedef SireMol::BeadProperty< QVariant > exported_class_t;
-            typedef int ( ::SireMol::BeadProperty< QVariant >::*size_function_type )(  ) const;
+            typedef int ( ::SireMol::BeadProperty< QVariant >::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireMol::BeadProperty< QVariant >::size );
             
             BeadVariantProperty_exposer.def( 
@@ -216,7 +216,7 @@ void register_BeadVariantProperty_class(){
         { //::SireMol::BeadProperty< QVariant >::toString
         
             typedef SireMol::BeadProperty< QVariant > exported_class_t;
-            typedef ::QString ( ::SireMol::BeadProperty< QVariant >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::BeadProperty< QVariant >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::BeadProperty< QVariant >::toString );
             
             BeadVariantProperty_exposer.def( 
@@ -227,7 +227,7 @@ void register_BeadVariantProperty_class(){
         { //::SireMol::BeadProperty< QVariant >::toVariant
         
             typedef SireMol::BeadProperty< QVariant > exported_class_t;
-            typedef ::SireMol::BeadProperty< QVariant > ( ::SireMol::BeadProperty< QVariant >::*toVariant_function_type )(  ) const;
+            typedef ::SireMol::BeadProperty< QVariant > ( ::SireMol::BeadProperty< QVariant >::*toVariant_function_type)(  ) const;
             toVariant_function_type toVariant_function_value( &::SireMol::BeadProperty< QVariant >::toVariant );
             
             BeadVariantProperty_exposer.def( 

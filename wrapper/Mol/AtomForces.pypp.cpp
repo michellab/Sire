@@ -36,7 +36,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::array
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef ::SireBase::PackedArray2D< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > const & ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*array_function_type )(  ) const;
+            typedef ::SireBase::PackedArray2D< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > const & ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*array_function_type)(  ) const;
             array_function_type array_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::array );
             
             AtomForces_exposer.def( 
@@ -48,7 +48,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::assertCanConvert
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*assertCanConvert_function_type )( ::QVariant const & ) const;
+            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*assertCanConvert_function_type)( ::QVariant const & ) const;
             assertCanConvert_function_type assertCanConvert_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::assertCanConvert );
             
             AtomForces_exposer.def( 
@@ -60,7 +60,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::assignFrom
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*assignFrom_function_type )( ::SireMol::AtomProperty< QVariant > const & ) ;
+            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*assignFrom_function_type)( ::SireMol::AtomProperty< QVariant > const & ) ;
             assignFrom_function_type assignFrom_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::assignFrom );
             
             AtomForces_exposer.def( 
@@ -72,7 +72,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::at
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -0x00000000000000002, 0, 0, 0, 0 > > > const & ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*at_function_type )( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::detail::PackedArray2D_Array< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -0x00000000000000002, 0, 0, 0, 0 > > > const & ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*at_function_type)( ::SireMol::CGIdx ) const;
             at_function_type at_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::at );
             
             AtomForces_exposer.def( 
@@ -85,7 +85,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::at
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > const & ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*at_function_type )( ::SireMol::CGAtomIdx const & ) const;
+            typedef ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > const & ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*at_function_type)( ::SireMol::CGAtomIdx const & ) const;
             at_function_type at_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::at );
             
             AtomForces_exposer.def( 
@@ -98,7 +98,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::canConvert
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef bool ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*canConvert_function_type )( ::QVariant const & ) const;
+            typedef bool ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*canConvert_function_type)( ::QVariant const & ) const;
             canConvert_function_type canConvert_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::canConvert );
             
             AtomForces_exposer.def( 
@@ -110,7 +110,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::copyFrom
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*copyFrom_function_type )( ::QVector< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -0x00000000000000002, 0, 0, 0, 0 > > > const & ) ;
+            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*copyFrom_function_type)( ::QVector< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -0x00000000000000002, 0, 0, 0, 0 > > > const & ) ;
             copyFrom_function_type copyFrom_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::copyFrom );
             
             AtomForces_exposer.def( 
@@ -122,7 +122,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::copyFrom
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*copyFrom_function_type )( ::QVector< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -0x00000000000000002, 0, 0, 0, 0 > > > const &,::SireMol::AtomSelection const & ) ;
+            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*copyFrom_function_type)( ::QVector< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -0x00000000000000002, 0, 0, 0, 0 > > > const &,::SireMol::AtomSelection const & ) ;
             copyFrom_function_type copyFrom_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::copyFrom );
             
             AtomForces_exposer.def( 
@@ -134,7 +134,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::count
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*count_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::count );
             
             AtomForces_exposer.def( 
@@ -145,7 +145,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::divide
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*divide_function_type )( ::QVector< SireMol::AtomSelection > const & ) const;
+            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*divide_function_type)( ::QVector< SireMol::AtomSelection > const & ) const;
             divide_function_type divide_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::divide );
             
             AtomForces_exposer.def( 
@@ -157,7 +157,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::divideByResidue
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*divideByResidue_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*divideByResidue_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             divideByResidue_function_type divideByResidue_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::divideByResidue );
             
             AtomForces_exposer.def( 
@@ -181,7 +181,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::get
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -0x00000000000000002, 0, 0, 0, 0 > > > const & ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*get_function_type )( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::detail::PackedArray2D_Array< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -0x00000000000000002, 0, 0, 0, 0 > > > const & ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*get_function_type)( ::SireMol::CGIdx ) const;
             get_function_type get_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::get );
             
             AtomForces_exposer.def( 
@@ -194,7 +194,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::get
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > const & ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*get_function_type )( ::SireMol::CGAtomIdx const & ) const;
+            typedef ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > const & ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*get_function_type)( ::SireMol::CGAtomIdx const & ) const;
             get_function_type get_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::get );
             
             AtomForces_exposer.def( 
@@ -207,7 +207,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::isCompatibleWith
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef bool ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*isCompatibleWith_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef bool ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::isCompatibleWith );
             
             AtomForces_exposer.def( 
@@ -219,7 +219,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::isEmpty
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef bool ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::isEmpty );
             
             AtomForces_exposer.def( 
@@ -230,7 +230,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::matchToSelection
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*matchToSelection_function_type )( ::SireMol::AtomSelection const & ) const;
+            typedef ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*matchToSelection_function_type)( ::SireMol::AtomSelection const & ) const;
             matchToSelection_function_type matchToSelection_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::matchToSelection );
             
             AtomForces_exposer.def( 
@@ -242,7 +242,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::merge
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*merge_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*merge_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             merge_function_type merge_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::merge );
             
             AtomForces_exposer.def( 
@@ -254,7 +254,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::nAtoms
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*nAtoms_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*nAtoms_function_type)(  ) const;
             nAtoms_function_type nAtoms_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::nAtoms );
             
             AtomForces_exposer.def( 
@@ -265,7 +265,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::nAtoms
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*nAtoms_function_type )( ::SireMol::CGIdx ) const;
+            typedef int ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*nAtoms_function_type)( ::SireMol::CGIdx ) const;
             nAtoms_function_type nAtoms_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::nAtoms );
             
             AtomForces_exposer.def( 
@@ -277,7 +277,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::nCutGroups
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*nCutGroups_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*nCutGroups_function_type)(  ) const;
             nCutGroups_function_type nCutGroups_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::nCutGroups );
             
             AtomForces_exposer.def( 
@@ -289,7 +289,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::operator=
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > & ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*assign_function_type )( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > const & ) ;
+            typedef ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > & ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*assign_function_type)( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > const & ) ;
             assign_function_type assign_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::operator= );
             
             AtomForces_exposer.def( 
@@ -303,7 +303,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::operator[]
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -0x00000000000000002, 0, 0, 0, 0 > > > const & ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*__getitem___function_type )( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::detail::PackedArray2D_Array< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -0x00000000000000002, 0, 0, 0, 0 > > > const & ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*__getitem___function_type)( ::SireMol::CGIdx ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::operator[] );
             
             AtomForces_exposer.def( 
@@ -316,7 +316,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::operator[]
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > const & ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*__getitem___function_type )( ::SireMol::CGAtomIdx const & ) const;
+            typedef ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > const & ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*__getitem___function_type)( ::SireMol::CGAtomIdx const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::operator[] );
             
             AtomForces_exposer.def( 
@@ -329,7 +329,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::set
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > & ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*set_function_type )( ::SireMol::CGAtomIdx const &,::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > const & ) ;
+            typedef ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > & ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*set_function_type)( ::SireMol::CGAtomIdx const &,::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > const & ) ;
             set_function_type set_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::set );
             
             AtomForces_exposer.def( 
@@ -342,7 +342,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::set
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > & ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*set_function_type )( ::SireMol::CGIdx,::QVector< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -0x00000000000000002, 0, 0, 0, 0 > > > const & ) ;
+            typedef ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > & ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*set_function_type)( ::SireMol::CGIdx,::QVector< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -0x00000000000000002, 0, 0, 0, 0 > > > const & ) ;
             set_function_type set_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::set );
             
             AtomForces_exposer.def( 
@@ -355,7 +355,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::size
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*size_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::size );
             
             AtomForces_exposer.def( 
@@ -366,7 +366,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::toString
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef ::QString ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::toString );
             
             AtomForces_exposer.def( 
@@ -377,7 +377,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::toVariant
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef ::SireMol::AtomProperty< QVariant > ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*toVariant_function_type )(  ) const;
+            typedef ::SireMol::AtomProperty< QVariant > ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*toVariant_function_type)(  ) const;
             toVariant_function_type toVariant_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::toVariant );
             
             AtomForces_exposer.def( 
@@ -388,7 +388,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::toVector
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef ::QVector< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -0x00000000000000002, 0, 0, 0, 0 > > > ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*toVector_function_type )(  ) const;
+            typedef ::QVector< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -0x00000000000000002, 0, 0, 0, 0 > > > ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*toVector_function_type)(  ) const;
             toVector_function_type toVector_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::toVector );
             
             AtomForces_exposer.def( 
@@ -399,7 +399,7 @@ void register_AtomForces_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::toVector
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > > exported_class_t;
-            typedef ::QVector< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -0x00000000000000002, 0, 0, 0, 0 > > > ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*toVector_function_type )( ::SireMol::AtomSelection const & ) const;
+            typedef ::QVector< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -0x00000000000000002, 0, 0, 0, 0 > > > ( ::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::*toVector_function_type)( ::SireMol::AtomSelection const & ) const;
             toVector_function_type toVector_function_value( &::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > >::toVector );
             
             AtomForces_exposer.def( 

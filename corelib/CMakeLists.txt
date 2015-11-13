@@ -6,31 +6,42 @@
 #
 ################################
 
-# project version
-set (SIRE_VERSION_MAJOR "0")
-set (SIRE_VERSION_MINOR "0")
-set (SIRE_VERSION_PATCH "1")             
+# project version - cannot use SIRE_VERSION_X as
+# these no longer work with cmake 3
+set (S_VERSION_MAJOR "2015")
+set (S_VERSION_MINOR "0")
+set (S_VERSION_PATCH "0")             
 
-set (SIRE_VERSION "${SIRE_VERSION_MAJOR}.${SIRE_VERSION_MINOR}.${SIRE_VERSION_PATCH}")
+set (SIRE_VERSION "${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}")
 
 ############
 ############ SETTING INITIAL SIRE VARIABLES
 ############
 
-# require cmake >= 2.8.12
-cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
+# require cmake >= 2.8.11.2
+cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
 cmake_policy(VERSION 2.8)
 
 # use loose loop syntax in CMakeLists files
 set( CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE )
 
+# Option used to control the number of cores for the compile
+set ( BUILD_NCORES "0" 
+      CACHE STRING 
+      "The number of cores used to compile Sire. Leave this at 0 to automatically work this out." )
+
+string(REGEX MATCH "[0-9]+" NCORES ${BUILD_NCORES})
+
 # get the number of cores on this machine - useful for
 # compiling dependencies
-include(ProcessorCount)
-ProcessorCount(NCORES)
-if (NCORES EQUAL 0)
+if ( NCORES EQUAL 0 )
+  include(ProcessorCount)
+  ProcessorCount(NCORES)
+  if (NCORES EQUAL 0)
     set( NCORES 1 )
+  endif()
 endif()
+
 message(STATUS "Configuring on a machine with number of cores = ${NCORES}")
 
 # Option to compile and install into an anaconda or miniconda directory
@@ -89,18 +100,19 @@ macro( SAVE_SIRE_VARIABLE _var _value )
 endmacro (SAVE_SIRE_VARIABLE)
 
 math (EXPR SIRE_VERSION_NUMBER 
-      "${SIRE_VERSION_MAJOR}*100000 + ${SIRE_VERSION_MINOR}*100 + ${SIRE_VERSION_PATCH}")
+      "${S_VERSION_MAJOR}*100000 + ${S_VERSION_MINOR}*100 + ${S_VERSION_PATCH}")
 
-set (SIRE_VERSION_STRING "${SIRE_VERSION_MAJOR}_${SIRE_VERSION_MINOR}_${SIRE_VERSION_PATCH}")
+set (SIRE_VERSION_STRING "${S_VERSION_MAJOR}_${S_VERSION_MINOR}_${S_VERSION_PATCH}")
 
-save_sire_variable( "SIRE_VERSION_MAJOR" "${SIRE_VERSION_MAJOR}" )
-save_sire_variable( "SIRE_VERSION_MINOR" "${SIRE_VERSION_MINOR}" )
-save_sire_variable( "SIRE_VERSION_PATCH" "${SIRE_VERSION_PATCH}" )
-save_sire_variable( "SIRE_VERSION" "${SIRE_VERSION}" )
+save_sire_variable( "S_VERSION_MAJOR" "${S_VERSION_MAJOR}" )
+save_sire_variable( "S_VERSION_MINOR" "${S_VERSION_MINOR}" )
+save_sire_variable( "S_VERSION_PATCH" "${S_VERSION_PATCH}" )
+save_sire_variable( "SIREE_VERSION" "${SIRE_VERSION}" )
 save_sire_variable( "SIRE_VERSION_STRING" "${SIRE_VERSION_STRING}" )
 save_sire_variable( "SIRE_APP_DIR" "${CMAKE_INSTALL_PREFIX}" )
 
 save_sire_variable( "SIRE_ANACONDA_BUILD" "${ANACONDA_BUILD}" )
+save_sire_variable( "BUILD_NCORES" "${NCORES}" )
 
 if (ANACONDA_BUILD)
   save_sire_variable( "SIRE_ANACONDA_BASE" "${ANACONDA_BASE}" )
@@ -129,13 +141,15 @@ set (SIRE_LIBS "lib")
 # Where to install all bundled components
 set (SIRE_BUNDLED_DIR "bundled" )
 
-if (ANACONDA_BUILD)
-  # For an anaconda build, we copy all of the bundled
-  # libraries into the anaconda lib directory
-  set (SIRE_BUNDLED_LIBS "${ANACONDA_BASE}/lib")
-else()
-  set (SIRE_BUNDLED_LIBS "${SIRE_BUNDLED_DIR}/lib")
-endif()
+#if (ANACONDA_BUILD)
+#  # For an anaconda build, we copy all of the bundled
+#  # libraries into the anaconda lib directory
+#  set (SIRE_BUNDLED_LIBS "${ANACONDA_BASE}/lib")
+#else()
+#  set (SIRE_BUNDLED_LIBS "${SIRE_BUNDLED_DIR}/lib")
+#endif()
+
+set (SIRE_BUNDLED_LIBS "${SIRE_BUNDLED_DIR}/lib")
 
 # Static library install dir
 set (SIRE_ARCHIVES "lib/static")
@@ -146,9 +160,9 @@ set (SIRE_CMAKEFILES "include/Sire/cmake")
 # Sire share directory (for parameters etc.)
 set (SIRE_SHARE "share/Sire")
 
-if (ANACONDA_BUILD)
-  set( SIRE_SHARE "${ANACONDA_BASE}/share/Sire" )
-endif()
+#if (ANACONDA_BUILD)
+#  set( SIRE_SHARE "${ANACONDA_BASE}/share/Sire" )
+#endif()
 
 # Where will the test files be saved?
 set (SIRE_TEST "test")
@@ -249,7 +263,7 @@ endif()
 option( SIRE_DISABLE_MPI "Turn off MPI compilation and linking" ON )
 
 # Add an option to say whether or not to use OpenMM
-option( SIRE_USE_OPENMM "Set whether or not to compile in support for OpenMM", ON )
+option( SIRE_USE_OPENMM "Set whether or not to compile in support for OpenMM" ON )
 save_sire_variable( "SIRE_USE_OPENMM" "${SIRE_USE_OPENMM}" )
 
 #############
@@ -388,46 +402,67 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
     CHECK_CXX_COMPILER_FLAG( "-msse2" HAVE_SSE_FLAG )
     CHECK_CXX_COMPILER_FLAG( "-mavx" HAVE_AVX_FLAG )
 
+    set( SIRE_SKIP_AVX 1 )
+
     if ( NOT SIRE_DISABLE_AVX)
 
       if ( HAVE_IMMINTRIN_H AND HAVE_AVX_FLAG )
 
-        # we have immintrin.h so we have AVX
-        message( STATUS "Compiling with AVX enabled. Resulting binary will only work on newer Intel CPUs" )
+        # we have immintrin.h so we can compile AVX - check if we can run it
+        INCLUDE(CheckCSourceRuns)
+        set(CMAKE_REQUIRED_FLAGS "-mavx")
+        check_c_source_runs("
+           #include <immintrin.h>
+           int main()
+           {
+              __m256i a = _mm256_setzero_si256();
+              return 0;
+           }"
+           CAN_RUN_AVX_PROGRAM)
+
+        if (CAN_RUN_AVX_PROGRAM)
+          message( STATUS "Compiling with AVX enabled. Resulting binary will only work on newer Intel CPUs" )
         
-        CHECK_CXX_COMPILER_FLAG( "-mavx2" HAVE_AVX2_FLAG )
+          set( SIRE_SKIP_AVX 0 )
 
-        if ( SIRE_ENABLE_AVX2 AND HAVE_AVX2_FLAG )
-          message( STATUS "Compiling with AVX2 enabled. Resulting binary will only work on really new Intel CPUs" )
-          set( SIRE_VECTOR_FLAGS "-mavx2 -DSIRE_USE_AVX -DSIRE_USE_AVX2" )
-        else()
-          set ( SIRE_VECTOR_FLAGS "-mavx -DSIRE_USE_AVX" )
-        endif()
-      elseif ( HAVE_EMMINTRIN_H AND HAVE_SSE_FLAG )
-        # we have emmintrin.h so we have SSE
-        message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
+          CHECK_CXX_COMPILER_FLAG( "-mavx2" HAVE_AVX2_FLAG )
 
-        CHECK_CXX_COMPILER_FLAG( "-msse4.1" HAVE_SSE4_FLAG )
-
-        if ( SIRE_ENABLE_SSE4 AND HAVE_SMMINTRIN_H AND HAVE_SSE4_FLAG )
-          message( STATUS "Compiling with SSE4 enabled. Resulting binary will only work on newer Intel CPUs" )
-          set( SIRE_VECTOR_FLAGS "-msse4.1 -DSIRE_USE_SSE -DSIRE_USE_SSE4" )
-        else()
-          set ( SIRE_VECTOR_FLAGS "-msse2 -DSIRE_USE_SSE" )
+          if ( SIRE_ENABLE_AVX2 AND HAVE_AVX2_FLAG )
+            message( STATUS "Compiling with AVX2 enabled. Resulting binary will only work on really new Intel CPUs" )
+            set( SIRE_VECTOR_FLAGS "-mavx2 -DSIRE_USE_AVX -DSIRE_USE_AVX2" )
+          else()
+            set ( SIRE_VECTOR_FLAGS "-mavx -DSIRE_USE_AVX" )
+          endif()
         endif()
       endif()
-    elseif (NOT SIRE_DISABLE_SSE)   
-        # we have emmintrin.h so we have SSE
-        message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
 
-        CHECK_CXX_COMPILER_FLAG( "-msse4.1" HAVE_SSE4_FLAG )
+      if ( SIRE_SKIP_AVX )
+        if ( HAVE_EMMINTRIN_H AND HAVE_SSE_FLAG )
+          # we have emmintrin.h so we have SSE
+          message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
 
-        if ( SIRE_ENABLE_SSE4 AND HAVE_SMMINTRIN_H AND HAVE_SSE4_FLAG )
-          message( STATUS "Compiling with SSE4 enabled. Resulting binary will only work on newer Intel CPUs" )
-          set( SIRE_VECTOR_FLAGS "-msse4.1 -DSIRE_USE_SSE -DSIRE_USE_SSE4" )
-        else()
-          set ( SIRE_VECTOR_FLAGS "-msse2 -DSIRE_USE_SSE" )
-        endif()  
+          CHECK_CXX_COMPILER_FLAG( "-msse4.1" HAVE_SSE4_FLAG )
+
+          if ( SIRE_ENABLE_SSE4 AND HAVE_SMMINTRIN_H AND HAVE_SSE4_FLAG )
+            message( STATUS "Compiling with SSE4 enabled. Resulting binary will only work on newer Intel CPUs" )
+            set( SIRE_VECTOR_FLAGS "-msse4.1 -DSIRE_USE_SSE -DSIRE_USE_SSE4" )
+          else()
+            set ( SIRE_VECTOR_FLAGS "-msse2 -DSIRE_USE_SSE" )
+          endif()
+        elseif (NOT SIRE_DISABLE_SSE)   
+          # we have emmintrin.h so we have SSE
+          message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
+
+          CHECK_CXX_COMPILER_FLAG( "-msse4.1" HAVE_SSE4_FLAG )
+
+          if ( SIRE_ENABLE_SSE4 AND HAVE_SMMINTRIN_H AND HAVE_SSE4_FLAG )
+            message( STATUS "Compiling with SSE4 enabled. Resulting binary will only work on newer Intel CPUs" )
+            set( SIRE_VECTOR_FLAGS "-msse4.1 -DSIRE_USE_SSE -DSIRE_USE_SSE4" )
+          else()
+            set ( SIRE_VECTOR_FLAGS "-msse2 -DSIRE_USE_SSE" )
+          endif()  
+        endif()
+      endif()
     endif()
 
     # Now gcc 4 specific options
@@ -480,20 +515,39 @@ elseif ( ${SIRE_CXX_COMPILER_ID} MATCHES "CLANG" )
     CHECK_CXX_COMPILER_FLAG( "-msse2" HAVE_SSE_FLAG )
     CHECK_CXX_COMPILER_FLAG( "-mavx" HAVE_AVX_FLAG )
 
+    set( SIRE_SKIP_AVX 1 )
+
     if ( NOT SIRE_DISABLE_AVX )
       if ( HAVE_IMMINTRIN_H AND HAVE_AVX_FLAG )
-        # we have immintrin.h so we have AVX
-        message( STATUS "Compiling with AVX enabled. Resulting binary will only work on newer Intel CPUs" )
+        # we have immintrin.h so we can compile AVX - check if we can run it
+        INCLUDE(CheckCSourceRuns)
+        set(CMAKE_REQUIRED_FLAGS "-mavx")
+        CHECK_C_SOURCE_RUNS("
+           #include <immintrin.h>
+           int main()
+           {
+              __m256i a = _mm256_setzero_si256();
+              return 0;
+           }"
+           CAN_RUN_AVX_PROGRAM)
 
-        CHECK_CXX_COMPILER_FLAG( "-mavx2" HAVE_AVX2_FLAG )
+        if (CAN_RUN_AVX_PROGRAM)        
+          message( STATUS "Compiling with AVX enabled. Resulting binary will only work on newer Intel CPUs" )
+          set( SIRE_SKIP_AVX 0 )
+          CHECK_CXX_COMPILER_FLAG( "-mavx2" HAVE_AVX2_FLAG )
 
-        if ( SIRE_ENABLE_AVX2 AND HAVE_AVX2_FLAG )
-          message( STATUS "Compiling with AVX2 enabled. Resulting binary will only work on really new Intel CPUs")
-          set( SIRE_VECTOR_FLAGS "-mavx2 -DSIRE_USE_AVX -DSIRE_USE_AVX2" )
-        else()
-          set ( SIRE_VECTOR_FLAGS "-mavx -DSIRE_USE_AVX" )
-        endif() 
-     elseif ( HAVE_EMMINTRIN_H AND HAVE_SSE_FLAG )
+          if ( SIRE_ENABLE_AVX2 AND HAVE_AVX2_FLAG )
+            message( STATUS "Compiling with AVX2 enabled. Resulting binary will only work on really new Intel CPUs")
+            set( SIRE_VECTOR_FLAGS "-mavx2 -DSIRE_USE_AVX -DSIRE_USE_AVX2" )
+          else()
+            set ( SIRE_VECTOR_FLAGS "-mavx -DSIRE_USE_AVX" )
+          endif()
+        endif()
+      endif()
+    endif()
+
+    if ( SIRE_SKIP_AVX )
+      if ( HAVE_EMMINTRIN_H AND HAVE_SSE_FLAG )
         # we have emmintrin.h so we have SSE
         message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
 
@@ -505,8 +559,7 @@ elseif ( ${SIRE_CXX_COMPILER_ID} MATCHES "CLANG" )
         else()
           set ( SIRE_VECTOR_FLAGS "-msse2 -DSIRE_USE_SSE" )
         endif() 
-     endif()
-    elseif( NOT SIRE_DISABLE_SSE )
+      elseif( NOT SIRE_DISABLE_SSE )
         # we have emmintrin.h so we have SSE
         message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
 
@@ -518,6 +571,7 @@ elseif ( ${SIRE_CXX_COMPILER_ID} MATCHES "CLANG" )
         else()
           set ( SIRE_VECTOR_FLAGS "-msse2 -DSIRE_USE_SSE" )
         endif()    
+      endif()
     endif()
        
     set ( SIRE_VISIBILITY_FLAGS "-DSIRE_VISIBILITY_AVAILABLE -fvisibility=hidden -fvisibility-inlines-hidden" )
@@ -689,6 +743,7 @@ if ( SIRE_USE_OPENMM )
       # Now look for OpenMM
       if (ANACONDA_BUILD)
         set(OpenMM_ROOT_DIR "${ANACONDA_BASE}")
+        set(OPENMM_ROOT_DIR "${ANACONDA_BASE}")
         FIND_PACKAGE( OpenMM )
       else()
         option (OPENMM_HOME "The location of the OpenMM installation" "/usr/local/openmm")
@@ -909,7 +964,7 @@ add_subdirectory (src/apps)
 ################
 
 # Finally, write the version header file and finish off the component dependencies file
-include( GetSvnVersion )
+include( GetGitVersion )
 
 # install the extra includes file in the Sire/cmake directory
 install (FILES ${SIRE_VARIABLES_FILE} 

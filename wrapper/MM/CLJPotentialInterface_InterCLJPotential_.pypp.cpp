@@ -29,7 +29,7 @@ void register_CLJPotentialInterface_InterCLJPotential__class(){
         { //::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::combiningRules
         
             typedef SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > exported_class_t;
-            typedef ::QString const & ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*combiningRules_function_type )(  ) const;
+            typedef ::QString const & ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*combiningRules_function_type)(  ) const;
             combiningRules_function_type combiningRules_function_value( &::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::combiningRules );
             
             CLJPotentialInterface_InterCLJPotential__exposer.def( 
@@ -41,7 +41,7 @@ void register_CLJPotentialInterface_InterCLJPotential__class(){
         { //::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::containsProperty
         
             typedef SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > exported_class_t;
-            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*containsProperty_function_type )( ::QString const & ) const;
+            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*containsProperty_function_type)( ::QString const & ) const;
             containsProperty_function_type containsProperty_function_value( &::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::containsProperty );
             
             CLJPotentialInterface_InterCLJPotential__exposer.def( 
@@ -64,7 +64,7 @@ void register_CLJPotentialInterface_InterCLJPotential__class(){
         { //::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::properties
         
             typedef SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > exported_class_t;
-            typedef ::SireBase::Properties const & ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*properties_function_type )(  ) const;
+            typedef ::SireBase::Properties const & ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*properties_function_type)(  ) const;
             properties_function_type properties_function_value( &::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::properties );
             
             CLJPotentialInterface_InterCLJPotential__exposer.def( 
@@ -76,7 +76,7 @@ void register_CLJPotentialInterface_InterCLJPotential__class(){
         { //::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::property
         
             typedef SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > exported_class_t;
-            typedef ::SireBase::Property const & ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*property_function_type )( ::QString const & ) const;
+            typedef ::SireBase::Property const & ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*property_function_type)( ::QString const & ) const;
             property_function_type property_function_value( &::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::property );
             
             CLJPotentialInterface_InterCLJPotential__exposer.def( 
@@ -89,7 +89,7 @@ void register_CLJPotentialInterface_InterCLJPotential__class(){
         { //::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::reactionFieldDielectric
         
             typedef SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > exported_class_t;
-            typedef double ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*reactionFieldDielectric_function_type )(  ) const;
+            typedef double ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*reactionFieldDielectric_function_type)(  ) const;
             reactionFieldDielectric_function_type reactionFieldDielectric_function_value( &::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::reactionFieldDielectric );
             
             CLJPotentialInterface_InterCLJPotential__exposer.def( 
@@ -100,7 +100,7 @@ void register_CLJPotentialInterface_InterCLJPotential__class(){
         { //::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::setCombiningRules
         
             typedef SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > exported_class_t;
-            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*setCombiningRules_function_type )( ::QString const & ) ;
+            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*setCombiningRules_function_type)( ::QString const & ) ;
             setCombiningRules_function_type setCombiningRules_function_value( &::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::setCombiningRules );
             
             CLJPotentialInterface_InterCLJPotential__exposer.def( 
@@ -112,7 +112,7 @@ void register_CLJPotentialInterface_InterCLJPotential__class(){
         { //::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::setProperty
         
             typedef SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > exported_class_t;
-            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*setProperty_function_type )( ::QString const &,::SireBase::Property const & ) ;
+            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*setProperty_function_type)( ::QString const &,::SireBase::Property const & ) ;
             setProperty_function_type setProperty_function_value( &::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::setProperty );
             
             CLJPotentialInterface_InterCLJPotential__exposer.def( 
@@ -124,7 +124,7 @@ void register_CLJPotentialInterface_InterCLJPotential__class(){
         { //::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::setReactionFieldDielectric
         
             typedef SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > exported_class_t;
-            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*setReactionFieldDielectric_function_type )( double ) ;
+            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*setReactionFieldDielectric_function_type)( double ) ;
             setReactionFieldDielectric_function_type setReactionFieldDielectric_function_value( &::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::setReactionFieldDielectric );
             
             CLJPotentialInterface_InterCLJPotential__exposer.def( 
@@ -136,7 +136,7 @@ void register_CLJPotentialInterface_InterCLJPotential__class(){
         { //::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::setShiftElectrostatics
         
             typedef SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > exported_class_t;
-            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*setShiftElectrostatics_function_type )( bool ) ;
+            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*setShiftElectrostatics_function_type)( bool ) ;
             setShiftElectrostatics_function_type setShiftElectrostatics_function_value( &::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::setShiftElectrostatics );
             
             CLJPotentialInterface_InterCLJPotential__exposer.def( 
@@ -148,7 +148,7 @@ void register_CLJPotentialInterface_InterCLJPotential__class(){
         { //::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::setSpace
         
             typedef SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > exported_class_t;
-            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*setSpace_function_type )( ::SireVol::Space const & ) ;
+            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*setSpace_function_type)( ::SireVol::Space const & ) ;
             setSpace_function_type setSpace_function_value( &::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::setSpace );
             
             CLJPotentialInterface_InterCLJPotential__exposer.def( 
@@ -160,7 +160,7 @@ void register_CLJPotentialInterface_InterCLJPotential__class(){
         { //::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::setSwitchingFunction
         
             typedef SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > exported_class_t;
-            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*setSwitchingFunction_function_type )( ::SireMM::SwitchingFunction const & ) ;
+            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*setSwitchingFunction_function_type)( ::SireMM::SwitchingFunction const & ) ;
             setSwitchingFunction_function_type setSwitchingFunction_function_value( &::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::setSwitchingFunction );
             
             CLJPotentialInterface_InterCLJPotential__exposer.def( 
@@ -172,7 +172,7 @@ void register_CLJPotentialInterface_InterCLJPotential__class(){
         { //::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::setUseAtomisticCutoff
         
             typedef SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > exported_class_t;
-            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*setUseAtomisticCutoff_function_type )( bool ) ;
+            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*setUseAtomisticCutoff_function_type)( bool ) ;
             setUseAtomisticCutoff_function_type setUseAtomisticCutoff_function_value( &::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::setUseAtomisticCutoff );
             
             CLJPotentialInterface_InterCLJPotential__exposer.def( 
@@ -184,7 +184,7 @@ void register_CLJPotentialInterface_InterCLJPotential__class(){
         { //::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::setUseGroupCutoff
         
             typedef SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > exported_class_t;
-            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*setUseGroupCutoff_function_type )( bool ) ;
+            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*setUseGroupCutoff_function_type)( bool ) ;
             setUseGroupCutoff_function_type setUseGroupCutoff_function_value( &::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::setUseGroupCutoff );
             
             CLJPotentialInterface_InterCLJPotential__exposer.def( 
@@ -196,7 +196,7 @@ void register_CLJPotentialInterface_InterCLJPotential__class(){
         { //::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::setUseReactionField
         
             typedef SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > exported_class_t;
-            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*setUseReactionField_function_type )( bool ) ;
+            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*setUseReactionField_function_type)( bool ) ;
             setUseReactionField_function_type setUseReactionField_function_value( &::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::setUseReactionField );
             
             CLJPotentialInterface_InterCLJPotential__exposer.def( 
@@ -208,7 +208,7 @@ void register_CLJPotentialInterface_InterCLJPotential__class(){
         { //::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::shiftElectrostatics
         
             typedef SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > exported_class_t;
-            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*shiftElectrostatics_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*shiftElectrostatics_function_type)(  ) const;
             shiftElectrostatics_function_type shiftElectrostatics_function_value( &::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::shiftElectrostatics );
             
             CLJPotentialInterface_InterCLJPotential__exposer.def( 
@@ -219,7 +219,7 @@ void register_CLJPotentialInterface_InterCLJPotential__class(){
         { //::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::space
         
             typedef SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > exported_class_t;
-            typedef ::SireVol::Space const & ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*space_function_type )(  ) const;
+            typedef ::SireVol::Space const & ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*space_function_type)(  ) const;
             space_function_type space_function_value( &::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::space );
             
             CLJPotentialInterface_InterCLJPotential__exposer.def( 
@@ -231,7 +231,7 @@ void register_CLJPotentialInterface_InterCLJPotential__class(){
         { //::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::switchingFunction
         
             typedef SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > exported_class_t;
-            typedef ::SireMM::SwitchingFunction const & ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*switchingFunction_function_type )(  ) const;
+            typedef ::SireMM::SwitchingFunction const & ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*switchingFunction_function_type)(  ) const;
             switchingFunction_function_type switchingFunction_function_value( &::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::switchingFunction );
             
             CLJPotentialInterface_InterCLJPotential__exposer.def( 
@@ -243,7 +243,7 @@ void register_CLJPotentialInterface_InterCLJPotential__class(){
         { //::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::useAtomisticCutoff
         
             typedef SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > exported_class_t;
-            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*useAtomisticCutoff_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*useAtomisticCutoff_function_type)(  ) const;
             useAtomisticCutoff_function_type useAtomisticCutoff_function_value( &::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::useAtomisticCutoff );
             
             CLJPotentialInterface_InterCLJPotential__exposer.def( 
@@ -254,7 +254,7 @@ void register_CLJPotentialInterface_InterCLJPotential__class(){
         { //::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::useGroupCutoff
         
             typedef SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > exported_class_t;
-            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*useGroupCutoff_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*useGroupCutoff_function_type)(  ) const;
             useGroupCutoff_function_type useGroupCutoff_function_value( &::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::useGroupCutoff );
             
             CLJPotentialInterface_InterCLJPotential__exposer.def( 
@@ -265,7 +265,7 @@ void register_CLJPotentialInterface_InterCLJPotential__class(){
         { //::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::useReactionField
         
             typedef SireMM::CLJPotentialInterface< SireMM::InterCLJPotential > exported_class_t;
-            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*useReactionField_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::*useReactionField_function_type)(  ) const;
             useReactionField_function_type useReactionField_function_value( &::SireMM::CLJPotentialInterface< SireMM::InterCLJPotential >::useReactionField );
             
             CLJPotentialInterface_InterCLJPotential__exposer.def( 

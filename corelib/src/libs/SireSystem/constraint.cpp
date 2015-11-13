@@ -230,8 +230,12 @@ bool Constraint::isSatisfied(const System &system) const
 
     else
     {
-        std::auto_ptr<Constraint> copy( this->clone() );
-        
+        #ifdef BOOST_NO_CXX11_SMART_PTR
+          std::auto_ptr<Constraint> copy( this->clone() );
+        #else
+          std::unique_ptr<Constraint> copy( this->clone() );
+        #endif 
+       
         copy->setSystem(system);
         
         if (not (copy->wasLastSystem(system) and copy->wasLastSubVersion(system)))

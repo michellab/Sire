@@ -51,7 +51,7 @@ void register_QMChargeConstraint_class(){
         QMChargeConstraint_exposer.def( bp::init< Squire::QMChargeConstraint const & >(( bp::arg("other") )) );
         { //::Squire::QMChargeConstraint::chargeCalculator
         
-            typedef ::Squire::QMChargeCalculator const & ( ::Squire::QMChargeConstraint::*chargeCalculator_function_type )(  ) const;
+            typedef ::Squire::QMChargeCalculator const & ( ::Squire::QMChargeConstraint::*chargeCalculator_function_type)(  ) const;
             chargeCalculator_function_type chargeCalculator_function_value( &::Squire::QMChargeConstraint::chargeCalculator );
             
             QMChargeConstraint_exposer.def( 
@@ -63,7 +63,7 @@ void register_QMChargeConstraint_class(){
         QMChargeConstraint_exposer.def( bp::self != bp::self );
         { //::Squire::QMChargeConstraint::operator=
         
-            typedef ::Squire::QMChargeConstraint & ( ::Squire::QMChargeConstraint::*assign_function_type )( ::Squire::QMChargeConstraint const & ) ;
+            typedef ::Squire::QMChargeConstraint & ( ::Squire::QMChargeConstraint::*assign_function_type)( ::Squire::QMChargeConstraint const & ) ;
             assign_function_type assign_function_value( &::Squire::QMChargeConstraint::operator= );
             
             QMChargeConstraint_exposer.def( 
@@ -76,7 +76,7 @@ void register_QMChargeConstraint_class(){
         QMChargeConstraint_exposer.def( bp::self == bp::self );
         { //::Squire::QMChargeConstraint::setChargeCalculator
         
-            typedef void ( ::Squire::QMChargeConstraint::*setChargeCalculator_function_type )( ::Squire::QMChargeCalculator const & ) ;
+            typedef void ( ::Squire::QMChargeConstraint::*setChargeCalculator_function_type)( ::Squire::QMChargeCalculator const & ) ;
             setChargeCalculator_function_type setChargeCalculator_function_value( &::Squire::QMChargeConstraint::setChargeCalculator );
             
             QMChargeConstraint_exposer.def( 
@@ -87,7 +87,7 @@ void register_QMChargeConstraint_class(){
         }
         { //::Squire::QMChargeConstraint::toString
         
-            typedef ::QString ( ::Squire::QMChargeConstraint::*toString_function_type )(  ) const;
+            typedef ::QString ( ::Squire::QMChargeConstraint::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::Squire::QMChargeConstraint::toString );
             
             QMChargeConstraint_exposer.def( 

@@ -53,7 +53,7 @@ void register_RepExSubMove_class(){
         RepExSubMove_exposer.def( bp::init< SireMove::RepExSubMove const & >(( bp::arg("other") )) );
         { //::SireMove::RepExSubMove::energy_i
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::RepExSubMove::*energy_i_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::RepExSubMove::*energy_i_function_type)(  ) const;
             energy_i_function_type energy_i_function_value( &::SireMove::RepExSubMove::energy_i );
             
             RepExSubMove_exposer.def( 
@@ -63,7 +63,7 @@ void register_RepExSubMove_class(){
         }
         { //::SireMove::RepExSubMove::energy_j
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::RepExSubMove::*energy_j_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::RepExSubMove::*energy_j_function_type)(  ) const;
             energy_j_function_type energy_j_function_value( &::SireMove::RepExSubMove::energy_j );
             
             RepExSubMove_exposer.def( 
@@ -73,7 +73,7 @@ void register_RepExSubMove_class(){
         }
         { //::SireMove::RepExSubMove::move
         
-            typedef void ( ::SireMove::RepExSubMove::*move_function_type )( ::SireMove::SupraSubSystem &,int,int,bool ) ;
+            typedef void ( ::SireMove::RepExSubMove::*move_function_type)( ::SireMove::SupraSubSystem &,int,int,bool ) ;
             move_function_type move_function_value( &::SireMove::RepExSubMove::move );
             
             RepExSubMove_exposer.def( 
@@ -85,7 +85,7 @@ void register_RepExSubMove_class(){
         RepExSubMove_exposer.def( bp::self != bp::self );
         { //::SireMove::RepExSubMove::operator=
         
-            typedef ::SireMove::RepExSubMove & ( ::SireMove::RepExSubMove::*assign_function_type )( ::SireMove::RepExSubMove const & ) ;
+            typedef ::SireMove::RepExSubMove & ( ::SireMove::RepExSubMove::*assign_function_type)( ::SireMove::RepExSubMove const & ) ;
             assign_function_type assign_function_value( &::SireMove::RepExSubMove::operator= );
             
             RepExSubMove_exposer.def( 
@@ -98,7 +98,7 @@ void register_RepExSubMove_class(){
         RepExSubMove_exposer.def( bp::self == bp::self );
         { //::SireMove::RepExSubMove::toString
         
-            typedef ::QString ( ::SireMove::RepExSubMove::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMove::RepExSubMove::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMove::RepExSubMove::toString );
             
             RepExSubMove_exposer.def( 
@@ -118,7 +118,7 @@ void register_RepExSubMove_class(){
         }
         { //::SireMove::RepExSubMove::volume_i
         
-            typedef ::SireUnits::Dimension::Volume ( ::SireMove::RepExSubMove::*volume_i_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Volume ( ::SireMove::RepExSubMove::*volume_i_function_type)(  ) const;
             volume_i_function_type volume_i_function_value( &::SireMove::RepExSubMove::volume_i );
             
             RepExSubMove_exposer.def( 
@@ -128,7 +128,7 @@ void register_RepExSubMove_class(){
         }
         { //::SireMove::RepExSubMove::volume_j
         
-            typedef ::SireUnits::Dimension::Volume ( ::SireMove::RepExSubMove::*volume_j_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Volume ( ::SireMove::RepExSubMove::*volume_j_function_type)(  ) const;
             volume_j_function_type volume_j_function_value( &::SireMove::RepExSubMove::volume_j );
             
             RepExSubMove_exposer.def( 

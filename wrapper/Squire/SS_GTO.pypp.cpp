@@ -41,7 +41,7 @@ void register_SS_GTO_class(){
         SS_GTO_exposer.def( bp::init< Squire::SS_GTO const & >(( bp::arg("other") )) );
         { //::Squire::SS_GTO::angularMomentum0
         
-            typedef int ( ::Squire::SS_GTO::*angularMomentum0_function_type )(  ) const;
+            typedef int ( ::Squire::SS_GTO::*angularMomentum0_function_type)(  ) const;
             angularMomentum0_function_type angularMomentum0_function_value( &::Squire::SS_GTO::angularMomentum0 );
             
             SS_GTO_exposer.def( 
@@ -51,7 +51,7 @@ void register_SS_GTO_class(){
         }
         { //::Squire::SS_GTO::angularMomentum1
         
-            typedef int ( ::Squire::SS_GTO::*angularMomentum1_function_type )(  ) const;
+            typedef int ( ::Squire::SS_GTO::*angularMomentum1_function_type)(  ) const;
             angularMomentum1_function_type angularMomentum1_function_value( &::Squire::SS_GTO::angularMomentum1 );
             
             SS_GTO_exposer.def( 
@@ -61,7 +61,7 @@ void register_SS_GTO_class(){
         }
         { //::Squire::SS_GTO::nOrbitals0
         
-            typedef int ( ::Squire::SS_GTO::*nOrbitals0_function_type )(  ) const;
+            typedef int ( ::Squire::SS_GTO::*nOrbitals0_function_type)(  ) const;
             nOrbitals0_function_type nOrbitals0_function_value( &::Squire::SS_GTO::nOrbitals0 );
             
             SS_GTO_exposer.def( 
@@ -71,7 +71,7 @@ void register_SS_GTO_class(){
         }
         { //::Squire::SS_GTO::nOrbitals1
         
-            typedef int ( ::Squire::SS_GTO::*nOrbitals1_function_type )(  ) const;
+            typedef int ( ::Squire::SS_GTO::*nOrbitals1_function_type)(  ) const;
             nOrbitals1_function_type nOrbitals1_function_value( &::Squire::SS_GTO::nOrbitals1 );
             
             SS_GTO_exposer.def( 
@@ -82,7 +82,7 @@ void register_SS_GTO_class(){
         SS_GTO_exposer.def( bp::self != bp::self );
         { //::Squire::SS_GTO::operator=
         
-            typedef ::Squire::SS_GTO & ( ::Squire::SS_GTO::*assign_function_type )( ::Squire::SS_GTO const & ) ;
+            typedef ::Squire::SS_GTO & ( ::Squire::SS_GTO::*assign_function_type)( ::Squire::SS_GTO const & ) ;
             assign_function_type assign_function_value( &::Squire::SS_GTO::operator= );
             
             SS_GTO_exposer.def( 

@@ -37,7 +37,7 @@ void register_MonteCarlo_class(){
         bp::scope MonteCarlo_scope( MonteCarlo_exposer );
         { //::SireMove::MonteCarlo::acceptanceRatio
         
-            typedef double ( ::SireMove::MonteCarlo::*acceptanceRatio_function_type )(  ) const;
+            typedef double ( ::SireMove::MonteCarlo::*acceptanceRatio_function_type)(  ) const;
             acceptanceRatio_function_type acceptanceRatio_function_value( &::SireMove::MonteCarlo::acceptanceRatio );
             
             MonteCarlo_exposer.def( 
@@ -47,7 +47,7 @@ void register_MonteCarlo_class(){
         }
         { //::SireMove::MonteCarlo::clearStatistics
         
-            typedef void ( ::SireMove::MonteCarlo::*clearStatistics_function_type )(  ) ;
+            typedef void ( ::SireMove::MonteCarlo::*clearStatistics_function_type)(  ) ;
             clearStatistics_function_type clearStatistics_function_value( &::SireMove::MonteCarlo::clearStatistics );
             
             MonteCarlo_exposer.def( 
@@ -57,7 +57,7 @@ void register_MonteCarlo_class(){
         }
         { //::SireMove::MonteCarlo::disableOptimisedMoves
         
-            typedef void ( ::SireMove::MonteCarlo::*disableOptimisedMoves_function_type )(  ) ;
+            typedef void ( ::SireMove::MonteCarlo::*disableOptimisedMoves_function_type)(  ) ;
             disableOptimisedMoves_function_type disableOptimisedMoves_function_value( &::SireMove::MonteCarlo::disableOptimisedMoves );
             
             MonteCarlo_exposer.def( 
@@ -67,7 +67,7 @@ void register_MonteCarlo_class(){
         }
         { //::SireMove::MonteCarlo::enableOptimisedMoves
         
-            typedef void ( ::SireMove::MonteCarlo::*enableOptimisedMoves_function_type )(  ) ;
+            typedef void ( ::SireMove::MonteCarlo::*enableOptimisedMoves_function_type)(  ) ;
             enableOptimisedMoves_function_type enableOptimisedMoves_function_value( &::SireMove::MonteCarlo::enableOptimisedMoves );
             
             MonteCarlo_exposer.def( 
@@ -77,7 +77,7 @@ void register_MonteCarlo_class(){
         }
         { //::SireMove::MonteCarlo::ensemble
         
-            typedef ::SireMove::Ensemble ( ::SireMove::MonteCarlo::*ensemble_function_type )(  ) const;
+            typedef ::SireMove::Ensemble ( ::SireMove::MonteCarlo::*ensemble_function_type)(  ) const;
             ensemble_function_type ensemble_function_value( &::SireMove::MonteCarlo::ensemble );
             
             MonteCarlo_exposer.def( 
@@ -87,7 +87,7 @@ void register_MonteCarlo_class(){
         }
         { //::SireMove::MonteCarlo::generator
         
-            typedef ::SireMaths::RanGenerator const & ( ::SireMove::MonteCarlo::*generator_function_type )(  ) const;
+            typedef ::SireMaths::RanGenerator const & ( ::SireMove::MonteCarlo::*generator_function_type)(  ) const;
             generator_function_type generator_function_value( &::SireMove::MonteCarlo::generator );
             
             MonteCarlo_exposer.def( 
@@ -98,7 +98,7 @@ void register_MonteCarlo_class(){
         }
         { //::SireMove::MonteCarlo::nAccepted
         
-            typedef ::quint32 ( ::SireMove::MonteCarlo::*nAccepted_function_type )(  ) const;
+            typedef ::quint32 ( ::SireMove::MonteCarlo::*nAccepted_function_type)(  ) const;
             nAccepted_function_type nAccepted_function_value( &::SireMove::MonteCarlo::nAccepted );
             
             MonteCarlo_exposer.def( 
@@ -108,7 +108,7 @@ void register_MonteCarlo_class(){
         }
         { //::SireMove::MonteCarlo::nAttempted
         
-            typedef ::quint32 ( ::SireMove::MonteCarlo::*nAttempted_function_type )(  ) const;
+            typedef ::quint32 ( ::SireMove::MonteCarlo::*nAttempted_function_type)(  ) const;
             nAttempted_function_type nAttempted_function_value( &::SireMove::MonteCarlo::nAttempted );
             
             MonteCarlo_exposer.def( 
@@ -118,7 +118,7 @@ void register_MonteCarlo_class(){
         }
         { //::SireMove::MonteCarlo::nMoves
         
-            typedef int ( ::SireMove::MonteCarlo::*nMoves_function_type )(  ) const;
+            typedef int ( ::SireMove::MonteCarlo::*nMoves_function_type)(  ) const;
             nMoves_function_type nMoves_function_value( &::SireMove::MonteCarlo::nMoves );
             
             MonteCarlo_exposer.def( 
@@ -128,7 +128,7 @@ void register_MonteCarlo_class(){
         }
         { //::SireMove::MonteCarlo::nRejected
         
-            typedef ::quint32 ( ::SireMove::MonteCarlo::*nRejected_function_type )(  ) const;
+            typedef ::quint32 ( ::SireMove::MonteCarlo::*nRejected_function_type)(  ) const;
             nRejected_function_type nRejected_function_value( &::SireMove::MonteCarlo::nRejected );
             
             MonteCarlo_exposer.def( 
@@ -138,7 +138,7 @@ void register_MonteCarlo_class(){
         }
         { //::SireMove::MonteCarlo::setGenerator
         
-            typedef void ( ::SireMove::MonteCarlo::*setGenerator_function_type )( ::SireMaths::RanGenerator const & ) ;
+            typedef void ( ::SireMove::MonteCarlo::*setGenerator_function_type)( ::SireMaths::RanGenerator const & ) ;
             setGenerator_function_type setGenerator_function_value( &::SireMove::MonteCarlo::setGenerator );
             
             MonteCarlo_exposer.def( 
@@ -149,7 +149,7 @@ void register_MonteCarlo_class(){
         }
         { //::SireMove::MonteCarlo::setUseOptimisedMoves
         
-            typedef void ( ::SireMove::MonteCarlo::*setUseOptimisedMoves_function_type )( bool ) ;
+            typedef void ( ::SireMove::MonteCarlo::*setUseOptimisedMoves_function_type)( bool ) ;
             setUseOptimisedMoves_function_type setUseOptimisedMoves_function_value( &::SireMove::MonteCarlo::setUseOptimisedMoves );
             
             MonteCarlo_exposer.def( 
@@ -170,7 +170,7 @@ void register_MonteCarlo_class(){
         }
         { //::SireMove::MonteCarlo::usingOptimisedMoves
         
-            typedef bool ( ::SireMove::MonteCarlo::*usingOptimisedMoves_function_type )(  ) const;
+            typedef bool ( ::SireMove::MonteCarlo::*usingOptimisedMoves_function_type)(  ) const;
             usingOptimisedMoves_function_type usingOptimisedMoves_function_value( &::SireMove::MonteCarlo::usingOptimisedMoves );
             
             MonteCarlo_exposer.def( 

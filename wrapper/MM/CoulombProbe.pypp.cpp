@@ -33,7 +33,7 @@ void register_CoulombProbe_class(){
         CoulombProbe_exposer.def( bp::init< SireMM::CoulombProbe const & >(( bp::arg("other") )) );
         { //::SireMM::CoulombProbe::charge
         
-            typedef ::SireUnits::Dimension::Charge ( ::SireMM::CoulombProbe::*charge_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Charge ( ::SireMM::CoulombProbe::*charge_function_type)(  ) const;
             charge_function_type charge_function_value( &::SireMM::CoulombProbe::charge );
             
             CoulombProbe_exposer.def( 
@@ -44,7 +44,7 @@ void register_CoulombProbe_class(){
         CoulombProbe_exposer.def( bp::self != bp::self );
         { //::SireMM::CoulombProbe::operator=
         
-            typedef ::SireMM::CoulombProbe & ( ::SireMM::CoulombProbe::*assign_function_type )( ::SireMM::CoulombProbe const & ) ;
+            typedef ::SireMM::CoulombProbe & ( ::SireMM::CoulombProbe::*assign_function_type)( ::SireMM::CoulombProbe const & ) ;
             assign_function_type assign_function_value( &::SireMM::CoulombProbe::operator= );
             
             CoulombProbe_exposer.def( 
@@ -57,7 +57,7 @@ void register_CoulombProbe_class(){
         CoulombProbe_exposer.def( bp::self == bp::self );
         { //::SireMM::CoulombProbe::reducedCharge
         
-            typedef double ( ::SireMM::CoulombProbe::*reducedCharge_function_type )(  ) const;
+            typedef double ( ::SireMM::CoulombProbe::*reducedCharge_function_type)(  ) const;
             reducedCharge_function_type reducedCharge_function_value( &::SireMM::CoulombProbe::reducedCharge );
             
             CoulombProbe_exposer.def( 

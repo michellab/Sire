@@ -41,6 +41,51 @@ using namespace SireStream;
 ////////// Implementation of MultiCLJEnergy
 //////////
 
+QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds, const MultiCLJEnergy &nrg)
+{
+    quint32 version = 1;
+    
+    ds << version;
+    
+    SharedDataStream sds(ds);
+    
+    sds << nrg.cnrgs << nrg.ljnrgs << nrg.coulomb() << nrg.lj();
+    
+    return ds;
+}
+
+QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds, MultiCLJEnergy &nrg)
+{
+    quint32 version;
+    
+    ds >> version;
+    
+    if (version == 1)
+    {
+        SharedDataStream sds(ds);
+        
+        double cnrg, ljnrg;
+        QVector<double> cnrgs, ljnrgs;
+        
+        sds >> cnrgs >> ljnrgs >> cnrg >> ljnrg;
+        
+        if (cnrgs.isEmpty())
+        {
+            nrg = MultiCLJEnergy(cnrg, ljnrg);
+        }
+        else
+        {
+            nrg = MultiCLJEnergy(cnrgs, ljnrgs);
+        }
+    }
+    else
+        throw version_error( QObject::tr(
+                "Unsupported version of MultiCLJEnergy being loaded (%1). "
+                "Only version 1 is supported.").arg(version), CODELOC );
+    
+    return ds;
+}
+
 void MultiCLJEnergy::assertValidCoulombIndex(quint32 i) const
 {
     if (i >= cnrgs.count())

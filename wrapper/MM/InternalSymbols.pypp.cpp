@@ -43,7 +43,7 @@ void register_InternalSymbols_class(){
         bp::scope InternalSymbols_scope( InternalSymbols_exposer );
         { //::SireMM::InternalSymbols::angle
         
-            typedef ::SireMM::AngleSymbols const & ( ::SireMM::InternalSymbols::*angle_function_type )(  ) const;
+            typedef ::SireMM::AngleSymbols const & ( ::SireMM::InternalSymbols::*angle_function_type)(  ) const;
             angle_function_type angle_function_value( &::SireMM::InternalSymbols::angle );
             
             InternalSymbols_exposer.def( 
@@ -54,7 +54,7 @@ void register_InternalSymbols_class(){
         }
         { //::SireMM::InternalSymbols::bendBend
         
-            typedef ::SireMM::BendBendSymbols const & ( ::SireMM::InternalSymbols::*bendBend_function_type )(  ) const;
+            typedef ::SireMM::BendBendSymbols const & ( ::SireMM::InternalSymbols::*bendBend_function_type)(  ) const;
             bendBend_function_type bendBend_function_value( &::SireMM::InternalSymbols::bendBend );
             
             InternalSymbols_exposer.def( 
@@ -65,7 +65,7 @@ void register_InternalSymbols_class(){
         }
         { //::SireMM::InternalSymbols::bond
         
-            typedef ::SireMM::BondSymbols const & ( ::SireMM::InternalSymbols::*bond_function_type )(  ) const;
+            typedef ::SireMM::BondSymbols const & ( ::SireMM::InternalSymbols::*bond_function_type)(  ) const;
             bond_function_type bond_function_value( &::SireMM::InternalSymbols::bond );
             
             InternalSymbols_exposer.def( 
@@ -76,7 +76,7 @@ void register_InternalSymbols_class(){
         }
         { //::SireMM::InternalSymbols::dihedral
         
-            typedef ::SireMM::DihedralSymbols const & ( ::SireMM::InternalSymbols::*dihedral_function_type )(  ) const;
+            typedef ::SireMM::DihedralSymbols const & ( ::SireMM::InternalSymbols::*dihedral_function_type)(  ) const;
             dihedral_function_type dihedral_function_value( &::SireMM::InternalSymbols::dihedral );
             
             InternalSymbols_exposer.def( 
@@ -87,7 +87,7 @@ void register_InternalSymbols_class(){
         }
         { //::SireMM::InternalSymbols::improper
         
-            typedef ::SireMM::ImproperSymbols const & ( ::SireMM::InternalSymbols::*improper_function_type )(  ) const;
+            typedef ::SireMM::ImproperSymbols const & ( ::SireMM::InternalSymbols::*improper_function_type)(  ) const;
             improper_function_type improper_function_value( &::SireMM::InternalSymbols::improper );
             
             InternalSymbols_exposer.def( 
@@ -98,7 +98,7 @@ void register_InternalSymbols_class(){
         }
         { //::SireMM::InternalSymbols::stretchBend
         
-            typedef ::SireMM::StretchBendSymbols const & ( ::SireMM::InternalSymbols::*stretchBend_function_type )(  ) const;
+            typedef ::SireMM::StretchBendSymbols const & ( ::SireMM::InternalSymbols::*stretchBend_function_type)(  ) const;
             stretchBend_function_type stretchBend_function_value( &::SireMM::InternalSymbols::stretchBend );
             
             InternalSymbols_exposer.def( 
@@ -109,7 +109,7 @@ void register_InternalSymbols_class(){
         }
         { //::SireMM::InternalSymbols::stretchBendTorsion
         
-            typedef ::SireMM::StretchBendTorsionSymbols const & ( ::SireMM::InternalSymbols::*stretchBendTorsion_function_type )(  ) const;
+            typedef ::SireMM::StretchBendTorsionSymbols const & ( ::SireMM::InternalSymbols::*stretchBendTorsion_function_type)(  ) const;
             stretchBendTorsion_function_type stretchBendTorsion_function_value( &::SireMM::InternalSymbols::stretchBendTorsion );
             
             InternalSymbols_exposer.def( 
@@ -120,7 +120,7 @@ void register_InternalSymbols_class(){
         }
         { //::SireMM::InternalSymbols::stretchStretch
         
-            typedef ::SireMM::StretchStretchSymbols const & ( ::SireMM::InternalSymbols::*stretchStretch_function_type )(  ) const;
+            typedef ::SireMM::StretchStretchSymbols const & ( ::SireMM::InternalSymbols::*stretchStretch_function_type)(  ) const;
             stretchStretch_function_type stretchStretch_function_value( &::SireMM::InternalSymbols::stretchStretch );
             
             InternalSymbols_exposer.def( 
@@ -131,7 +131,7 @@ void register_InternalSymbols_class(){
         }
         { //::SireMM::InternalSymbols::ureyBradley
         
-            typedef ::SireMM::BondSymbols const & ( ::SireMM::InternalSymbols::*ureyBradley_function_type )(  ) const;
+            typedef ::SireMM::BondSymbols const & ( ::SireMM::InternalSymbols::*ureyBradley_function_type)(  ) const;
             ureyBradley_function_type ureyBradley_function_value( &::SireMM::InternalSymbols::ureyBradley );
             
             InternalSymbols_exposer.def( 

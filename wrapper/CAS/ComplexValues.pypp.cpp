@@ -43,7 +43,7 @@ void register_ComplexValues_class(){
         ComplexValues_exposer.def( bp::init< SireCAS::ComplexValues const & >(( bp::arg("other") )) );
         { //::SireCAS::ComplexValues::add
         
-            typedef void ( ::SireCAS::ComplexValues::*add_function_type )( ::SireCAS::SymbolComplex const & ) ;
+            typedef void ( ::SireCAS::ComplexValues::*add_function_type)( ::SireCAS::SymbolComplex const & ) ;
             add_function_type add_function_value( &::SireCAS::ComplexValues::add );
             
             ComplexValues_exposer.def( 
@@ -54,7 +54,7 @@ void register_ComplexValues_class(){
         }
         { //::SireCAS::ComplexValues::add
         
-            typedef void ( ::SireCAS::ComplexValues::*add_function_type )( ::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const & ) ;
+            typedef void ( ::SireCAS::ComplexValues::*add_function_type)( ::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const & ) ;
             add_function_type add_function_value( &::SireCAS::ComplexValues::add );
             
             ComplexValues_exposer.def( 
@@ -65,7 +65,7 @@ void register_ComplexValues_class(){
         }
         { //::SireCAS::ComplexValues::add
         
-            typedef void ( ::SireCAS::ComplexValues::*add_function_type )( ::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const & ) ;
+            typedef void ( ::SireCAS::ComplexValues::*add_function_type)( ::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const & ) ;
             add_function_type add_function_value( &::SireCAS::ComplexValues::add );
             
             ComplexValues_exposer.def( 
@@ -76,7 +76,7 @@ void register_ComplexValues_class(){
         }
         { //::SireCAS::ComplexValues::add
         
-            typedef void ( ::SireCAS::ComplexValues::*add_function_type )( ::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const & ) ;
+            typedef void ( ::SireCAS::ComplexValues::*add_function_type)( ::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const & ) ;
             add_function_type add_function_value( &::SireCAS::ComplexValues::add );
             
             ComplexValues_exposer.def( 
@@ -87,7 +87,7 @@ void register_ComplexValues_class(){
         }
         { //::SireCAS::ComplexValues::add
         
-            typedef void ( ::SireCAS::ComplexValues::*add_function_type )( ::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const & ) ;
+            typedef void ( ::SireCAS::ComplexValues::*add_function_type)( ::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const & ) ;
             add_function_type add_function_value( &::SireCAS::ComplexValues::add );
             
             ComplexValues_exposer.def( 
@@ -98,7 +98,7 @@ void register_ComplexValues_class(){
         }
         { //::SireCAS::ComplexValues::add
         
-            typedef void ( ::SireCAS::ComplexValues::*add_function_type )( ::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const & ) ;
+            typedef void ( ::SireCAS::ComplexValues::*add_function_type)( ::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const & ) ;
             add_function_type add_function_value( &::SireCAS::ComplexValues::add );
             
             ComplexValues_exposer.def( 
@@ -109,7 +109,7 @@ void register_ComplexValues_class(){
         }
         { //::SireCAS::ComplexValues::add
         
-            typedef void ( ::SireCAS::ComplexValues::*add_function_type )( ::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const & ) ;
+            typedef void ( ::SireCAS::ComplexValues::*add_function_type)( ::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const & ) ;
             add_function_type add_function_value( &::SireCAS::ComplexValues::add );
             
             ComplexValues_exposer.def( 
@@ -120,7 +120,7 @@ void register_ComplexValues_class(){
         }
         { //::SireCAS::ComplexValues::add
         
-            typedef void ( ::SireCAS::ComplexValues::*add_function_type )( ::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const & ) ;
+            typedef void ( ::SireCAS::ComplexValues::*add_function_type)( ::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const & ) ;
             add_function_type add_function_value( &::SireCAS::ComplexValues::add );
             
             ComplexValues_exposer.def( 
@@ -131,7 +131,7 @@ void register_ComplexValues_class(){
         }
         { //::SireCAS::ComplexValues::add
         
-            typedef void ( ::SireCAS::ComplexValues::*add_function_type )( ::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const & ) ;
+            typedef void ( ::SireCAS::ComplexValues::*add_function_type)( ::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const & ) ;
             add_function_type add_function_value( &::SireCAS::ComplexValues::add );
             
             ComplexValues_exposer.def( 
@@ -142,7 +142,7 @@ void register_ComplexValues_class(){
         }
         { //::SireCAS::ComplexValues::add
         
-            typedef void ( ::SireCAS::ComplexValues::*add_function_type )( ::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const & ) ;
+            typedef void ( ::SireCAS::ComplexValues::*add_function_type)( ::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const &,::SireCAS::SymbolComplex const & ) ;
             add_function_type add_function_value( &::SireCAS::ComplexValues::add );
             
             ComplexValues_exposer.def( 
@@ -153,7 +153,7 @@ void register_ComplexValues_class(){
         }
         { //::SireCAS::ComplexValues::set
         
-            typedef void ( ::SireCAS::ComplexValues::*set_function_type )( ::SireCAS::Symbol const &,::SireMaths::Complex const & ) ;
+            typedef void ( ::SireCAS::ComplexValues::*set_function_type)( ::SireCAS::Symbol const &,::SireMaths::Complex const & ) ;
             set_function_type set_function_value( &::SireCAS::ComplexValues::set );
             
             ComplexValues_exposer.def( 
@@ -174,7 +174,7 @@ void register_ComplexValues_class(){
         }
         { //::SireCAS::ComplexValues::value
         
-            typedef ::SireMaths::Complex ( ::SireCAS::ComplexValues::*value_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::ComplexValues::*value_function_type)( ::SireCAS::Symbol const & ) const;
             value_function_type value_function_value( &::SireCAS::ComplexValues::value );
             
             ComplexValues_exposer.def( 
@@ -185,7 +185,7 @@ void register_ComplexValues_class(){
         }
         { //::SireCAS::ComplexValues::values
         
-            typedef ::QHash< unsigned int, SireMaths::Complex > const & ( ::SireCAS::ComplexValues::*values_function_type )(  ) const;
+            typedef ::QHash< unsigned int, SireMaths::Complex > const & ( ::SireCAS::ComplexValues::*values_function_type)(  ) const;
             values_function_type values_function_value( &::SireCAS::ComplexValues::values );
             
             ComplexValues_exposer.def( 
@@ -196,7 +196,7 @@ void register_ComplexValues_class(){
         }
         { //::SireCAS::ComplexValues::what
         
-            typedef char const * ( ::SireCAS::ComplexValues::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::ComplexValues::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::ComplexValues::what );
             
             ComplexValues_exposer.def( 

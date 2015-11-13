@@ -48,7 +48,7 @@ void register_GridPotentialTable_class(){
         GridPotentialTable_exposer.def( bp::init< SireFF::GridPotentialTable const & >(( bp::arg("other") )) );
         { //::SireFF::GridPotentialTable::add
         
-            typedef void ( ::SireFF::GridPotentialTable::*add_function_type )( int,::SireUnits::Dimension::MolarEnergy const & ) ;
+            typedef void ( ::SireFF::GridPotentialTable::*add_function_type)( int,::SireUnits::Dimension::MolarEnergy const & ) ;
             add_function_type add_function_value( &::SireFF::GridPotentialTable::add );
             
             GridPotentialTable_exposer.def( 
@@ -59,7 +59,7 @@ void register_GridPotentialTable_class(){
         }
         { //::SireFF::GridPotentialTable::add
         
-            typedef void ( ::SireFF::GridPotentialTable::*add_function_type )( ::SireFF::GridPotentialTable const & ) ;
+            typedef void ( ::SireFF::GridPotentialTable::*add_function_type)( ::SireFF::GridPotentialTable const & ) ;
             add_function_type add_function_value( &::SireFF::GridPotentialTable::add );
             
             GridPotentialTable_exposer.def( 
@@ -70,7 +70,7 @@ void register_GridPotentialTable_class(){
         }
         { //::SireFF::GridPotentialTable::add
         
-            typedef void ( ::SireFF::GridPotentialTable::*add_function_type )( ::SireUnits::Dimension::MolarEnergy const & ) ;
+            typedef void ( ::SireFF::GridPotentialTable::*add_function_type)( ::SireUnits::Dimension::MolarEnergy const & ) ;
             add_function_type add_function_value( &::SireFF::GridPotentialTable::add );
             
             GridPotentialTable_exposer.def( 
@@ -81,7 +81,7 @@ void register_GridPotentialTable_class(){
         }
         { //::SireFF::GridPotentialTable::at
         
-            typedef ::SireUnits::Dimension::MolarEnergy const & ( ::SireFF::GridPotentialTable::*at_function_type )( int ) const;
+            typedef ::SireUnits::Dimension::MolarEnergy const & ( ::SireFF::GridPotentialTable::*at_function_type)( int ) const;
             at_function_type at_function_value( &::SireFF::GridPotentialTable::at );
             
             GridPotentialTable_exposer.def( 
@@ -93,7 +93,7 @@ void register_GridPotentialTable_class(){
         }
         { //::SireFF::GridPotentialTable::count
         
-            typedef int ( ::SireFF::GridPotentialTable::*count_function_type )(  ) const;
+            typedef int ( ::SireFF::GridPotentialTable::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireFF::GridPotentialTable::count );
             
             GridPotentialTable_exposer.def( 
@@ -103,7 +103,7 @@ void register_GridPotentialTable_class(){
         }
         { //::SireFF::GridPotentialTable::divide
         
-            typedef void ( ::SireFF::GridPotentialTable::*divide_function_type )( double ) ;
+            typedef void ( ::SireFF::GridPotentialTable::*divide_function_type)( double ) ;
             divide_function_type divide_function_value( &::SireFF::GridPotentialTable::divide );
             
             GridPotentialTable_exposer.def( 
@@ -114,7 +114,7 @@ void register_GridPotentialTable_class(){
         }
         { //::SireFF::GridPotentialTable::grid
         
-            typedef ::SireVol::Grid const & ( ::SireFF::GridPotentialTable::*grid_function_type )(  ) const;
+            typedef ::SireVol::Grid const & ( ::SireFF::GridPotentialTable::*grid_function_type)(  ) const;
             grid_function_type grid_function_value( &::SireFF::GridPotentialTable::grid );
             
             GridPotentialTable_exposer.def( 
@@ -125,7 +125,7 @@ void register_GridPotentialTable_class(){
         }
         { //::SireFF::GridPotentialTable::initialise
         
-            typedef void ( ::SireFF::GridPotentialTable::*initialise_function_type )(  ) ;
+            typedef void ( ::SireFF::GridPotentialTable::*initialise_function_type)(  ) ;
             initialise_function_type initialise_function_value( &::SireFF::GridPotentialTable::initialise );
             
             GridPotentialTable_exposer.def( 
@@ -135,7 +135,7 @@ void register_GridPotentialTable_class(){
         }
         { //::SireFF::GridPotentialTable::multiply
         
-            typedef void ( ::SireFF::GridPotentialTable::*multiply_function_type )( double ) ;
+            typedef void ( ::SireFF::GridPotentialTable::*multiply_function_type)( double ) ;
             multiply_function_type multiply_function_value( &::SireFF::GridPotentialTable::multiply );
             
             GridPotentialTable_exposer.def( 
@@ -146,7 +146,7 @@ void register_GridPotentialTable_class(){
         }
         { //::SireFF::GridPotentialTable::nPoints
         
-            typedef int ( ::SireFF::GridPotentialTable::*nPoints_function_type )(  ) const;
+            typedef int ( ::SireFF::GridPotentialTable::*nPoints_function_type)(  ) const;
             nPoints_function_type nPoints_function_value( &::SireFF::GridPotentialTable::nPoints );
             
             GridPotentialTable_exposer.def( 
@@ -164,7 +164,7 @@ void register_GridPotentialTable_class(){
         GridPotentialTable_exposer.def( bp::self / bp::other< double >() );
         { //::SireFF::GridPotentialTable::operator=
         
-            typedef ::SireFF::GridPotentialTable & ( ::SireFF::GridPotentialTable::*assign_function_type )( ::SireFF::GridPotentialTable const & ) ;
+            typedef ::SireFF::GridPotentialTable & ( ::SireFF::GridPotentialTable::*assign_function_type)( ::SireFF::GridPotentialTable const & ) ;
             assign_function_type assign_function_value( &::SireFF::GridPotentialTable::operator= );
             
             GridPotentialTable_exposer.def( 
@@ -176,7 +176,7 @@ void register_GridPotentialTable_class(){
         }
         { //::SireFF::GridPotentialTable::operator=
         
-            typedef ::SireFF::GridPotentialTable & ( ::SireFF::GridPotentialTable::*assign_function_type )( ::SireUnits::Dimension::MolarEnergy const & ) ;
+            typedef ::SireFF::GridPotentialTable & ( ::SireFF::GridPotentialTable::*assign_function_type)( ::SireUnits::Dimension::MolarEnergy const & ) ;
             assign_function_type assign_function_value( &::SireFF::GridPotentialTable::operator= );
             
             GridPotentialTable_exposer.def( 
@@ -189,7 +189,7 @@ void register_GridPotentialTable_class(){
         GridPotentialTable_exposer.def( bp::self == bp::self );
         { //::SireFF::GridPotentialTable::operator[]
         
-            typedef ::SireUnits::Dimension::MolarEnergy & ( ::SireFF::GridPotentialTable::*__getitem___function_type )( int ) ;
+            typedef ::SireUnits::Dimension::MolarEnergy & ( ::SireFF::GridPotentialTable::*__getitem___function_type)( int ) ;
             __getitem___function_type __getitem___function_value( &::SireFF::GridPotentialTable::operator[] );
             
             GridPotentialTable_exposer.def( 
@@ -201,7 +201,7 @@ void register_GridPotentialTable_class(){
         }
         { //::SireFF::GridPotentialTable::operator[]
         
-            typedef ::SireUnits::Dimension::MolarEnergy const & ( ::SireFF::GridPotentialTable::*__getitem___function_type )( int ) const;
+            typedef ::SireUnits::Dimension::MolarEnergy const & ( ::SireFF::GridPotentialTable::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireFF::GridPotentialTable::operator[] );
             
             GridPotentialTable_exposer.def( 
@@ -213,7 +213,7 @@ void register_GridPotentialTable_class(){
         }
         { //::SireFF::GridPotentialTable::setAll
         
-            typedef void ( ::SireFF::GridPotentialTable::*setAll_function_type )( ::SireUnits::Dimension::MolarEnergy const & ) ;
+            typedef void ( ::SireFF::GridPotentialTable::*setAll_function_type)( ::SireUnits::Dimension::MolarEnergy const & ) ;
             setAll_function_type setAll_function_value( &::SireFF::GridPotentialTable::setAll );
             
             GridPotentialTable_exposer.def( 
@@ -224,7 +224,7 @@ void register_GridPotentialTable_class(){
         }
         { //::SireFF::GridPotentialTable::subtract
         
-            typedef void ( ::SireFF::GridPotentialTable::*subtract_function_type )( int,::SireUnits::Dimension::MolarEnergy const & ) ;
+            typedef void ( ::SireFF::GridPotentialTable::*subtract_function_type)( int,::SireUnits::Dimension::MolarEnergy const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::GridPotentialTable::subtract );
             
             GridPotentialTable_exposer.def( 
@@ -235,7 +235,7 @@ void register_GridPotentialTable_class(){
         }
         { //::SireFF::GridPotentialTable::subtract
         
-            typedef void ( ::SireFF::GridPotentialTable::*subtract_function_type )( ::SireFF::GridPotentialTable const & ) ;
+            typedef void ( ::SireFF::GridPotentialTable::*subtract_function_type)( ::SireFF::GridPotentialTable const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::GridPotentialTable::subtract );
             
             GridPotentialTable_exposer.def( 
@@ -246,7 +246,7 @@ void register_GridPotentialTable_class(){
         }
         { //::SireFF::GridPotentialTable::subtract
         
-            typedef void ( ::SireFF::GridPotentialTable::*subtract_function_type )( ::SireUnits::Dimension::MolarEnergy const & ) ;
+            typedef void ( ::SireFF::GridPotentialTable::*subtract_function_type)( ::SireUnits::Dimension::MolarEnergy const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::GridPotentialTable::subtract );
             
             GridPotentialTable_exposer.def( 
@@ -257,7 +257,7 @@ void register_GridPotentialTable_class(){
         }
         { //::SireFF::GridPotentialTable::toVector
         
-            typedef ::QVector< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > ( ::SireFF::GridPotentialTable::*toVector_function_type )(  ) const;
+            typedef ::QVector< SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > > ( ::SireFF::GridPotentialTable::*toVector_function_type)(  ) const;
             toVector_function_type toVector_function_value( &::SireFF::GridPotentialTable::toVector );
             
             GridPotentialTable_exposer.def( 

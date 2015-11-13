@@ -87,7 +87,7 @@ void register_OpenMMFrEnergyDT_class(){
         OpenMMFrEnergyDT_exposer.def( bp::init< SireMove::OpenMMFrEnergyDT const & >(( bp::arg("other") )) );
         { //::SireMove::OpenMMFrEnergyDT::createWorkspace
         
-            typedef ::SireMove::IntegratorWorkspacePtr ( ::SireMove::OpenMMFrEnergyDT::*createWorkspace_function_type )( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireMove::IntegratorWorkspacePtr ( ::SireMove::OpenMMFrEnergyDT::*createWorkspace_function_type)( ::SireBase::PropertyMap const & ) const;
             createWorkspace_function_type createWorkspace_function_value( &::SireMove::OpenMMFrEnergyDT::createWorkspace );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -98,7 +98,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::createWorkspace
         
-            typedef ::SireMove::IntegratorWorkspacePtr ( ::SireMove::OpenMMFrEnergyDT::*createWorkspace_function_type )( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMove::IntegratorWorkspacePtr ( ::SireMove::OpenMMFrEnergyDT::*createWorkspace_function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
             createWorkspace_function_type createWorkspace_function_value( &::SireMove::OpenMMFrEnergyDT::createWorkspace );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -109,7 +109,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::ensemble
         
-            typedef ::SireMove::Ensemble ( ::SireMove::OpenMMFrEnergyDT::*ensemble_function_type )(  ) const;
+            typedef ::SireMove::Ensemble ( ::SireMove::OpenMMFrEnergyDT::*ensemble_function_type)(  ) const;
             ensemble_function_type ensemble_function_value( &::SireMove::OpenMMFrEnergyDT::ensemble );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -119,7 +119,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::getAlchemical_value
         
-            typedef double ( ::SireMove::OpenMMFrEnergyDT::*getAlchemical_value_function_type )(  ) ;
+            typedef double ( ::SireMove::OpenMMFrEnergyDT::*getAlchemical_value_function_type)(  ) ;
             getAlchemical_value_function_type getAlchemical_value_function_value( &::SireMove::OpenMMFrEnergyDT::getAlchemical_value );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -129,7 +129,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::getAndersen
         
-            typedef bool ( ::SireMove::OpenMMFrEnergyDT::*getAndersen_function_type )(  ) ;
+            typedef bool ( ::SireMove::OpenMMFrEnergyDT::*getAndersen_function_type)(  ) ;
             getAndersen_function_type getAndersen_function_value( &::SireMove::OpenMMFrEnergyDT::getAndersen );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -139,7 +139,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::getAndersen_frequency
         
-            typedef double ( ::SireMove::OpenMMFrEnergyDT::*getAndersen_frequency_function_type )(  ) ;
+            typedef double ( ::SireMove::OpenMMFrEnergyDT::*getAndersen_frequency_function_type)(  ) ;
             getAndersen_frequency_function_type getAndersen_frequency_function_value( &::SireMove::OpenMMFrEnergyDT::getAndersen_frequency );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -149,7 +149,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::getBufferCoords
         
-            typedef bool ( ::SireMove::OpenMMFrEnergyDT::*getBufferCoords_function_type )(  ) ;
+            typedef bool ( ::SireMove::OpenMMFrEnergyDT::*getBufferCoords_function_type)(  ) ;
             getBufferCoords_function_type getBufferCoords_function_value( &::SireMove::OpenMMFrEnergyDT::getBufferCoords );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -159,7 +159,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::getCMMremoval_frequency
         
-            typedef int ( ::SireMove::OpenMMFrEnergyDT::*getCMMremoval_frequency_function_type )(  ) ;
+            typedef int ( ::SireMove::OpenMMFrEnergyDT::*getCMMremoval_frequency_function_type)(  ) ;
             getCMMremoval_frequency_function_type getCMMremoval_frequency_function_value( &::SireMove::OpenMMFrEnergyDT::getCMMremoval_frequency );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -169,7 +169,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::getConstraintType
         
-            typedef ::QString ( ::SireMove::OpenMMFrEnergyDT::*getConstraintType_function_type )(  ) ;
+            typedef ::QString ( ::SireMove::OpenMMFrEnergyDT::*getConstraintType_function_type)(  ) ;
             getConstraintType_function_type getConstraintType_function_value( &::SireMove::OpenMMFrEnergyDT::getConstraintType );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -179,7 +179,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::getCoulomb_power
         
-            typedef int ( ::SireMove::OpenMMFrEnergyDT::*getCoulomb_power_function_type )(  ) ;
+            typedef int ( ::SireMove::OpenMMFrEnergyDT::*getCoulomb_power_function_type)(  ) ;
             getCoulomb_power_function_type getCoulomb_power_function_value( &::SireMove::OpenMMFrEnergyDT::getCoulomb_power );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -189,7 +189,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::getCutoffType
         
-            typedef ::QString ( ::SireMove::OpenMMFrEnergyDT::*getCutoffType_function_type )(  ) ;
+            typedef ::QString ( ::SireMove::OpenMMFrEnergyDT::*getCutoffType_function_type)(  ) ;
             getCutoffType_function_type getCutoffType_function_value( &::SireMove::OpenMMFrEnergyDT::getCutoffType );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -199,7 +199,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::getCutoff_distance
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMove::OpenMMFrEnergyDT::*getCutoff_distance_function_type )(  ) ;
+            typedef ::SireUnits::Dimension::Length ( ::SireMove::OpenMMFrEnergyDT::*getCutoff_distance_function_type)(  ) ;
             getCutoff_distance_function_type getCutoff_distance_function_value( &::SireMove::OpenMMFrEnergyDT::getCutoff_distance );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -209,7 +209,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::getDeltaAlchemical
         
-            typedef double ( ::SireMove::OpenMMFrEnergyDT::*getDeltaAlchemical_function_type )(  ) ;
+            typedef double ( ::SireMove::OpenMMFrEnergyDT::*getDeltaAlchemical_function_type)(  ) ;
             getDeltaAlchemical_function_type getDeltaAlchemical_function_value( &::SireMove::OpenMMFrEnergyDT::getDeltaAlchemical );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -219,7 +219,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::getDeviceIndex
         
-            typedef ::QString ( ::SireMove::OpenMMFrEnergyDT::*getDeviceIndex_function_type )(  ) ;
+            typedef ::QString ( ::SireMove::OpenMMFrEnergyDT::*getDeviceIndex_function_type)(  ) ;
             getDeviceIndex_function_type getDeviceIndex_function_value( &::SireMove::OpenMMFrEnergyDT::getDeviceIndex );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -229,7 +229,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::getEnergyFrequency
         
-            typedef int ( ::SireMove::OpenMMFrEnergyDT::*getEnergyFrequency_function_type )(  ) ;
+            typedef int ( ::SireMove::OpenMMFrEnergyDT::*getEnergyFrequency_function_type)(  ) ;
             getEnergyFrequency_function_type getEnergyFrequency_function_value( &::SireMove::OpenMMFrEnergyDT::getEnergyFrequency );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -239,7 +239,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::getField_dielectric
         
-            typedef double ( ::SireMove::OpenMMFrEnergyDT::*getField_dielectric_function_type )(  ) ;
+            typedef double ( ::SireMove::OpenMMFrEnergyDT::*getField_dielectric_function_type)(  ) ;
             getField_dielectric_function_type getField_dielectric_function_value( &::SireMove::OpenMMFrEnergyDT::getField_dielectric );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -249,7 +249,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::getGradients
         
-            typedef ::QVector< double > ( ::SireMove::OpenMMFrEnergyDT::*getGradients_function_type )(  ) ;
+            typedef ::QVector< double > ( ::SireMove::OpenMMFrEnergyDT::*getGradients_function_type)(  ) ;
             getGradients_function_type getGradients_function_value( &::SireMove::OpenMMFrEnergyDT::getGradients );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -259,7 +259,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::getMCBarostat
         
-            typedef bool ( ::SireMove::OpenMMFrEnergyDT::*getMCBarostat_function_type )(  ) ;
+            typedef bool ( ::SireMove::OpenMMFrEnergyDT::*getMCBarostat_function_type)(  ) ;
             getMCBarostat_function_type getMCBarostat_function_value( &::SireMove::OpenMMFrEnergyDT::getMCBarostat );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -269,7 +269,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::getMCBarostat_frequency
         
-            typedef int ( ::SireMove::OpenMMFrEnergyDT::*getMCBarostat_frequency_function_type )(  ) ;
+            typedef int ( ::SireMove::OpenMMFrEnergyDT::*getMCBarostat_frequency_function_type)(  ) ;
             getMCBarostat_frequency_function_type getMCBarostat_frequency_function_value( &::SireMove::OpenMMFrEnergyDT::getMCBarostat_frequency );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -279,7 +279,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::getPlatform
         
-            typedef ::QString ( ::SireMove::OpenMMFrEnergyDT::*getPlatform_function_type )(  ) ;
+            typedef ::QString ( ::SireMove::OpenMMFrEnergyDT::*getPlatform_function_type)(  ) ;
             getPlatform_function_type getPlatform_function_value( &::SireMove::OpenMMFrEnergyDT::getPlatform );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -289,7 +289,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::getPressure
         
-            typedef ::SireUnits::Dimension::Pressure ( ::SireMove::OpenMMFrEnergyDT::*getPressure_function_type )(  ) ;
+            typedef ::SireUnits::Dimension::Pressure ( ::SireMove::OpenMMFrEnergyDT::*getPressure_function_type)(  ) ;
             getPressure_function_type getPressure_function_value( &::SireMove::OpenMMFrEnergyDT::getPressure );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -299,7 +299,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::getRestraint
         
-            typedef bool ( ::SireMove::OpenMMFrEnergyDT::*getRestraint_function_type )(  ) ;
+            typedef bool ( ::SireMove::OpenMMFrEnergyDT::*getRestraint_function_type)(  ) ;
             getRestraint_function_type getRestraint_function_value( &::SireMove::OpenMMFrEnergyDT::getRestraint );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -309,7 +309,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::getShift_delta
         
-            typedef double ( ::SireMove::OpenMMFrEnergyDT::*getShift_delta_function_type )(  ) ;
+            typedef double ( ::SireMove::OpenMMFrEnergyDT::*getShift_delta_function_type)(  ) ;
             getShift_delta_function_type getShift_delta_function_value( &::SireMove::OpenMMFrEnergyDT::getShift_delta );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -319,7 +319,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::getTemperature
         
-            typedef ::SireUnits::Dimension::Temperature ( ::SireMove::OpenMMFrEnergyDT::*getTemperature_function_type )(  ) ;
+            typedef ::SireUnits::Dimension::Temperature ( ::SireMove::OpenMMFrEnergyDT::*getTemperature_function_type)(  ) ;
             getTemperature_function_type getTemperature_function_value( &::SireMove::OpenMMFrEnergyDT::getTemperature );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -329,7 +329,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::initialise
         
-            typedef void ( ::SireMove::OpenMMFrEnergyDT::*initialise_function_type )(  ) ;
+            typedef void ( ::SireMove::OpenMMFrEnergyDT::*initialise_function_type)(  ) ;
             initialise_function_type initialise_function_value( &::SireMove::OpenMMFrEnergyDT::initialise );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -339,7 +339,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::integrate
         
-            typedef void ( ::SireMove::OpenMMFrEnergyDT::*integrate_function_type )( ::SireMove::IntegratorWorkspace &,::SireCAS::Symbol const &,::SireUnits::Dimension::Time,int,bool ) ;
+            typedef void ( ::SireMove::OpenMMFrEnergyDT::*integrate_function_type)( ::SireMove::IntegratorWorkspace &,::SireCAS::Symbol const &,::SireUnits::Dimension::Time,int,bool ) ;
             integrate_function_type integrate_function_value( &::SireMove::OpenMMFrEnergyDT::integrate );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -350,7 +350,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::isTimeReversible
         
-            typedef bool ( ::SireMove::OpenMMFrEnergyDT::*isTimeReversible_function_type )(  ) const;
+            typedef bool ( ::SireMove::OpenMMFrEnergyDT::*isTimeReversible_function_type)(  ) const;
             isTimeReversible_function_type isTimeReversible_function_value( &::SireMove::OpenMMFrEnergyDT::isTimeReversible );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -361,7 +361,7 @@ void register_OpenMMFrEnergyDT_class(){
         OpenMMFrEnergyDT_exposer.def( bp::self != bp::self );
         { //::SireMove::OpenMMFrEnergyDT::operator=
         
-            typedef ::SireMove::OpenMMFrEnergyDT & ( ::SireMove::OpenMMFrEnergyDT::*assign_function_type )( ::SireMove::OpenMMFrEnergyDT const & ) ;
+            typedef ::SireMove::OpenMMFrEnergyDT & ( ::SireMove::OpenMMFrEnergyDT::*assign_function_type)( ::SireMove::OpenMMFrEnergyDT const & ) ;
             assign_function_type assign_function_value( &::SireMove::OpenMMFrEnergyDT::operator= );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -374,7 +374,7 @@ void register_OpenMMFrEnergyDT_class(){
         OpenMMFrEnergyDT_exposer.def( bp::self == bp::self );
         { //::SireMove::OpenMMFrEnergyDT::setAlchemical_value
         
-            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setAlchemical_value_function_type )( double ) ;
+            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setAlchemical_value_function_type)( double ) ;
             setAlchemical_value_function_type setAlchemical_value_function_value( &::SireMove::OpenMMFrEnergyDT::setAlchemical_value );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -385,7 +385,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::setAndersen
         
-            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setAndersen_function_type )( bool ) ;
+            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setAndersen_function_type)( bool ) ;
             setAndersen_function_type setAndersen_function_value( &::SireMove::OpenMMFrEnergyDT::setAndersen );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -396,7 +396,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::setAndersen_frequency
         
-            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setAndersen_frequency_function_type )( double ) ;
+            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setAndersen_frequency_function_type)( double ) ;
             setAndersen_frequency_function_type setAndersen_frequency_function_value( &::SireMove::OpenMMFrEnergyDT::setAndersen_frequency );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -407,7 +407,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::setBufferCoords
         
-            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setBufferCoords_function_type )( bool ) ;
+            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setBufferCoords_function_type)( bool ) ;
             setBufferCoords_function_type setBufferCoords_function_value( &::SireMove::OpenMMFrEnergyDT::setBufferCoords );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -418,7 +418,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::setCMMremoval_frequency
         
-            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setCMMremoval_frequency_function_type )( int ) ;
+            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setCMMremoval_frequency_function_type)( int ) ;
             setCMMremoval_frequency_function_type setCMMremoval_frequency_function_value( &::SireMove::OpenMMFrEnergyDT::setCMMremoval_frequency );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -429,7 +429,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::setConstraintType
         
-            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setConstraintType_function_type )( ::QString ) ;
+            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setConstraintType_function_type)( ::QString ) ;
             setConstraintType_function_type setConstraintType_function_value( &::SireMove::OpenMMFrEnergyDT::setConstraintType );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -440,7 +440,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::setCoulomb_power
         
-            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setCoulomb_power_function_type )( int ) ;
+            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setCoulomb_power_function_type)( int ) ;
             setCoulomb_power_function_type setCoulomb_power_function_value( &::SireMove::OpenMMFrEnergyDT::setCoulomb_power );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -451,7 +451,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::setCutoffType
         
-            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setCutoffType_function_type )( ::QString ) ;
+            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setCutoffType_function_type)( ::QString ) ;
             setCutoffType_function_type setCutoffType_function_value( &::SireMove::OpenMMFrEnergyDT::setCutoffType );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -462,7 +462,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::setCutoff_distance
         
-            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setCutoff_distance_function_type )( ::SireUnits::Dimension::Length ) ;
+            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setCutoff_distance_function_type)( ::SireUnits::Dimension::Length ) ;
             setCutoff_distance_function_type setCutoff_distance_function_value( &::SireMove::OpenMMFrEnergyDT::setCutoff_distance );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -473,7 +473,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::setDeltatAlchemical
         
-            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setDeltatAlchemical_function_type )( double ) ;
+            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setDeltatAlchemical_function_type)( double ) ;
             setDeltatAlchemical_function_type setDeltatAlchemical_function_value( &::SireMove::OpenMMFrEnergyDT::setDeltatAlchemical );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -484,7 +484,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::setDeviceIndex
         
-            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setDeviceIndex_function_type )( ::QString ) ;
+            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setDeviceIndex_function_type)( ::QString ) ;
             setDeviceIndex_function_type setDeviceIndex_function_value( &::SireMove::OpenMMFrEnergyDT::setDeviceIndex );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -495,7 +495,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::setEnergyFrequency
         
-            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setEnergyFrequency_function_type )( int ) ;
+            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setEnergyFrequency_function_type)( int ) ;
             setEnergyFrequency_function_type setEnergyFrequency_function_value( &::SireMove::OpenMMFrEnergyDT::setEnergyFrequency );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -506,7 +506,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::setField_dielectric
         
-            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setField_dielectric_function_type )( double ) ;
+            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setField_dielectric_function_type)( double ) ;
             setField_dielectric_function_type setField_dielectric_function_value( &::SireMove::OpenMMFrEnergyDT::setField_dielectric );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -517,7 +517,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::setMCBarostat
         
-            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setMCBarostat_function_type )( bool ) ;
+            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setMCBarostat_function_type)( bool ) ;
             setMCBarostat_function_type setMCBarostat_function_value( &::SireMove::OpenMMFrEnergyDT::setMCBarostat );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -528,7 +528,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::setMCBarostat_frequency
         
-            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setMCBarostat_frequency_function_type )( int ) ;
+            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setMCBarostat_frequency_function_type)( int ) ;
             setMCBarostat_frequency_function_type setMCBarostat_frequency_function_value( &::SireMove::OpenMMFrEnergyDT::setMCBarostat_frequency );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -539,7 +539,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::setPlatform
         
-            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setPlatform_function_type )( ::QString ) ;
+            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setPlatform_function_type)( ::QString ) ;
             setPlatform_function_type setPlatform_function_value( &::SireMove::OpenMMFrEnergyDT::setPlatform );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -550,7 +550,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::setPressure
         
-            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setPressure_function_type )( ::SireUnits::Dimension::Pressure ) ;
+            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setPressure_function_type)( ::SireUnits::Dimension::Pressure ) ;
             setPressure_function_type setPressure_function_value( &::SireMove::OpenMMFrEnergyDT::setPressure );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -561,7 +561,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::setRestraint
         
-            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setRestraint_function_type )( bool ) ;
+            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setRestraint_function_type)( bool ) ;
             setRestraint_function_type setRestraint_function_value( &::SireMove::OpenMMFrEnergyDT::setRestraint );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -572,7 +572,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::setShift_delta
         
-            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setShift_delta_function_type )( double ) ;
+            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setShift_delta_function_type)( double ) ;
             setShift_delta_function_type setShift_delta_function_value( &::SireMove::OpenMMFrEnergyDT::setShift_delta );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -583,7 +583,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::setTemperature
         
-            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setTemperature_function_type )( ::SireUnits::Dimension::Temperature ) ;
+            typedef void ( ::SireMove::OpenMMFrEnergyDT::*setTemperature_function_type)( ::SireUnits::Dimension::Temperature ) ;
             setTemperature_function_type setTemperature_function_value( &::SireMove::OpenMMFrEnergyDT::setTemperature );
             
             OpenMMFrEnergyDT_exposer.def( 
@@ -594,7 +594,7 @@ void register_OpenMMFrEnergyDT_class(){
         }
         { //::SireMove::OpenMMFrEnergyDT::toString
         
-            typedef ::QString ( ::SireMove::OpenMMFrEnergyDT::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMove::OpenMMFrEnergyDT::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMove::OpenMMFrEnergyDT::toString );
             
             OpenMMFrEnergyDT_exposer.def( 

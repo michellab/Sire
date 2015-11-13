@@ -35,7 +35,7 @@ void register_ChainResID_class(){
         ChainResID_exposer.def( bp::init< SireMol::ChainResID const & >(( bp::arg("other") )) );
         { //::SireMol::ChainResID::hash
         
-            typedef ::uint ( ::SireMol::ChainResID::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::ChainResID::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::ChainResID::hash );
             
             ChainResID_exposer.def( 
@@ -45,7 +45,7 @@ void register_ChainResID_class(){
         }
         { //::SireMol::ChainResID::isNull
         
-            typedef bool ( ::SireMol::ChainResID::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::ChainResID::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::ChainResID::isNull );
             
             ChainResID_exposer.def( 
@@ -55,7 +55,7 @@ void register_ChainResID_class(){
         }
         { //::SireMol::ChainResID::map
         
-            typedef ::QList< SireMol::ResIdx > ( ::SireMol::ChainResID::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::ResIdx > ( ::SireMol::ChainResID::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireMol::ChainResID::map );
             
             ChainResID_exposer.def( 
@@ -69,7 +69,7 @@ void register_ChainResID_class(){
         ChainResID_exposer.def( bp::self == bp::other< SireID::ID >() );
         { //::SireMol::ChainResID::toString
         
-            typedef ::QString ( ::SireMol::ChainResID::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::ChainResID::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::ChainResID::toString );
             
             ChainResID_exposer.def( 
@@ -89,7 +89,7 @@ void register_ChainResID_class(){
         }
         { //::SireMol::ChainResID::what
         
-            typedef char const * ( ::SireMol::ChainResID::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::ChainResID::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::ChainResID::what );
             
             ChainResID_exposer.def( 

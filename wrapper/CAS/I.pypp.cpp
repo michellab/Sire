@@ -34,7 +34,7 @@ void register_I_class(){
         I_exposer.def( bp::init< SireCAS::I const & >(( bp::arg("other") )) );
         { //::SireCAS::I::conjugate
         
-            typedef ::SireCAS::Expression ( ::SireCAS::I::*conjugate_function_type )(  ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::I::*conjugate_function_type)(  ) const;
             conjugate_function_type conjugate_function_value( &::SireCAS::I::conjugate );
             
             I_exposer.def( 
@@ -44,7 +44,7 @@ void register_I_class(){
         }
         { //::SireCAS::I::evaluate
         
-            typedef double ( ::SireCAS::I::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::I::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::I::evaluate );
             
             I_exposer.def( 
@@ -55,7 +55,7 @@ void register_I_class(){
         }
         { //::SireCAS::I::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::I::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::I::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::I::evaluate );
             
             I_exposer.def( 
@@ -66,7 +66,7 @@ void register_I_class(){
         }
         { //::SireCAS::I::hash
         
-            typedef ::uint ( ::SireCAS::I::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireCAS::I::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireCAS::I::hash );
             
             I_exposer.def( 
@@ -76,7 +76,7 @@ void register_I_class(){
         }
         { //::SireCAS::I::isComplex
         
-            typedef bool ( ::SireCAS::I::*isComplex_function_type )(  ) const;
+            typedef bool ( ::SireCAS::I::*isComplex_function_type)(  ) const;
             isComplex_function_type isComplex_function_value( &::SireCAS::I::isComplex );
             
             I_exposer.def( 
@@ -87,7 +87,7 @@ void register_I_class(){
         I_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
         { //::SireCAS::I::toString
         
-            typedef ::QString ( ::SireCAS::I::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireCAS::I::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireCAS::I::toString );
             
             I_exposer.def( 
@@ -107,7 +107,7 @@ void register_I_class(){
         }
         { //::SireCAS::I::what
         
-            typedef char const * ( ::SireCAS::I::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::I::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::I::what );
             
             I_exposer.def( 

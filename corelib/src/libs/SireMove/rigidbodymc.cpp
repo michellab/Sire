@@ -1119,6 +1119,9 @@ void RigidBodyMC::performMove(System &system,
     Quaternion rotdelta( rdel * generator().rand(),
                          generator().vectorOnSphere() );
 
+    old_bias = 1;
+    new_bias = 1;
+
     if (reflect_moves and (sync_trans or sync_rot))
         throw SireError::incomplete_code( QObject::tr(
                 "Sire does not yet support using the reflection sphere together with "
@@ -1130,7 +1133,17 @@ void RigidBodyMC::performMove(System &system,
         tuple<PartialMolecule,double> mol_and_bias = smplr.read().sample();
 
         const PartialMolecule &oldmol = mol_and_bias.get<0>();
-        old_bias = mol_and_bias.get<1>();
+        
+        if (smplr.read().isBiased())
+            old_bias = mol_and_bias.get<1>();
+        
+        if (oldmol.isEmpty())
+        {
+            qDebug() << "Sampler returned an empty molecule in RigidBodyMC" << this->toString()
+                     << this->moleculeGroup().toString()
+                     << this->moleculeGroup().nMolecules() << smplr.read().toString();
+            return;
+        }
         
         const bool has_center_property = (oldmol.selectedAll() and
                                           oldmol.hasProperty(center_property));
@@ -1145,8 +1158,6 @@ void RigidBodyMC::performMove(System &system,
         {
             if (reflect_radius == 0)
             {
-                old_bias = 1;
-                new_bias = 1;
                 qDebug() << "CANNOT MOVE MOLECULE AS RESTRICT VOLUME RADIUS IS ZERO"
                          << oldmol.number().toString();
                 return;
@@ -1169,8 +1180,6 @@ void RigidBodyMC::performMove(System &system,
             if (not ::inVolume(old_center,reflect_points,reflect_rad))
             {
                 //the molecule is already outside the volume, so cannot be moved
-                old_bias = 1;
-                new_bias = 1;
                 qDebug() << "HOW IS THE MOLECULE OUTSIDE THE VOLUME?"
                          << oldmol.number().toString();
                 return;
@@ -1350,8 +1359,6 @@ void RigidBodyMC::performMove(System &system,
                         qDebug() << "Cannot move molecule as the number of volume reflection "
                                     "attempts has exceeded 50." << oldmol.number().toString();
                         
-                        old_bias = 1;
-                        new_bias = 1;
                         return;
                     }
                 }
@@ -1420,8 +1427,6 @@ void RigidBodyMC::performMove(System &system,
                 if ( (old_center-reflect_cent).length() > reflect_rad )
                 {
                     //the molecule is already outside the sphere, so cannot be moved
-                    old_bias = 1;
-                    new_bias = 1;
                     qDebug() << "HOW IS THE MOLECULE OUTSIDE THE SPHERE?";
                     qDebug() << (old_center-reflect_cent).length() << reflect_rad;
                     return;
@@ -1447,8 +1452,6 @@ void RigidBodyMC::performMove(System &system,
                 if (not ok)
                 {
                     qDebug() << "Something went wrong with the reflection move...";
-                    old_bias = 1;
-                    new_bias = 1;
                     return;
                 }
             }
@@ -1461,16 +1464,14 @@ void RigidBodyMC::performMove(System &system,
             system.update(newmol, true);
 
         //get the new bias on this molecule
-        new_bias = smplr.read().probabilityOf(newmol);
+        if (smplr.read().isBiased())
+            new_bias = smplr.read().probabilityOf(newmol);
     }
     else if (sync_trans)
     {
         if (sync_rot)
         {
             //translate and rotate all molecules
-            old_bias = 1;
-            new_bias = 1;
-
             const Molecules &molecules = smplr.read().group().molecules();
 
             Molecules new_molecules = molecules;
@@ -1552,7 +1553,9 @@ void RigidBodyMC::performMove(System &system,
             tuple<PartialMolecule,double> mol_and_bias = smplr.read().sample();
 
             const PartialMolecule &oldmol = mol_and_bias.get<0>();
-            old_bias = mol_and_bias.get<1>();
+            
+            if (smplr.read().isBiased())
+                old_bias = mol_and_bias.get<1>();
 
             PartialMolecule newmol;
             
@@ -1577,7 +1580,8 @@ void RigidBodyMC::performMove(System &system,
             system.update(newmol);
 
             //get the new bias on this molecule
-            new_bias = smplr.read().probabilityOf(newmol);
+            if (smplr.read().isBiased())
+                new_bias = smplr.read().probabilityOf(newmol);
         }
     }
     else if (sync_rot)
@@ -1668,7 +1672,9 @@ void RigidBodyMC::performMove(System &system,
             tuple<PartialMolecule,double> mol_and_bias = smplr.read().sample();
 
             const PartialMolecule &oldmol = mol_and_bias.get<0>();
-            old_bias = mol_and_bias.get<1>();
+            
+            if (smplr.read().isBiased())
+                old_bias = mol_and_bias.get<1>();
 
             PartialMolecule newmol = oldmol.move()
                                            .translate(delta, map)
@@ -1678,14 +1684,9 @@ void RigidBodyMC::performMove(System &system,
             system.update(newmol);
 
             //get the new bias on this molecule
-            new_bias = smplr.read().probabilityOf(newmol);
+            if (smplr.read().isBiased())
+                new_bias = smplr.read().probabilityOf(newmol);
         }
-        else
-        {
-            old_bias = 1;
-            new_bias = 1;
-        }
-
     }
 }
 
@@ -1945,14 +1946,14 @@ void RigidBodyMC::move(System &system, int nmoves, bool record_stats)
     
     qint64 ns = t2.nsecsElapsed();
     
-    if (nmoves > 1)
+    /*if (nmoves > 1)
     {
         qDebug() << "Timing for" << nmoves << "(" << (0.000001*ns) << ")";
         qDebug() << "OLD:" << (0.000001*old_ns) << "COPY:" << (0.000001*copy_ns)
                  << "MOVE:" << (0.000001*move_ns) << "ENERGY:" << (0.000001*nrg_ns)
                  << "TEST:" << (0.000001*test_ns) << "ACCEPT:" << (0.000001*accept_ns)
                  << "REJECT:" << (0.000001*reject_ns);
-    }
+    }*/
 }
 
 const char* RigidBodyMC::typeName()

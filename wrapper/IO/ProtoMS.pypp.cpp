@@ -107,7 +107,7 @@ void register_ProtoMS_class(){
         ProtoMS_exposer.def( bp::init< QString const & >(( bp::arg("protoms") )) );
         { //::SireIO::ProtoMS::addParameterFile
         
-            typedef void ( ::SireIO::ProtoMS::*addParameterFile_function_type )( ::QString const & ) ;
+            typedef void ( ::SireIO::ProtoMS::*addParameterFile_function_type)( ::QString const & ) ;
             addParameterFile_function_type addParameterFile_function_value( &::SireIO::ProtoMS::addParameterFile );
             
             ProtoMS_exposer.def( 
@@ -118,7 +118,7 @@ void register_ProtoMS_class(){
         }
         { //::SireIO::ProtoMS::parameterFiles
         
-            typedef ::QStringList ( ::SireIO::ProtoMS::*parameterFiles_function_type )(  ) const;
+            typedef ::QStringList ( ::SireIO::ProtoMS::*parameterFiles_function_type)(  ) const;
             parameterFiles_function_type parameterFiles_function_value( &::SireIO::ProtoMS::parameterFiles );
             
             ProtoMS_exposer.def( 
@@ -128,7 +128,7 @@ void register_ProtoMS_class(){
         }
         { //::SireIO::ProtoMS::parameterisationCommandFile
         
-            typedef ::QString ( ::SireIO::ProtoMS::*parameterisationCommandFile_function_type )( ::SireMol::Molecule const &,int ) const;
+            typedef ::QString ( ::SireIO::ProtoMS::*parameterisationCommandFile_function_type)( ::SireMol::Molecule const &,int ) const;
             parameterisationCommandFile_function_type parameterisationCommandFile_function_value( &::SireIO::ProtoMS::parameterisationCommandFile );
             
             ProtoMS_exposer.def( 
@@ -139,7 +139,7 @@ void register_ProtoMS_class(){
         }
         { //::SireIO::ProtoMS::parameterise
         
-            typedef ::SireMol::Molecule ( ::SireIO::ProtoMS::*parameterise_function_type )( ::SireMol::Molecule const &,int,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Molecule ( ::SireIO::ProtoMS::*parameterise_function_type)( ::SireMol::Molecule const &,int,::SireBase::PropertyMap const & ) ;
             parameterise_function_type parameterise_function_value( &::SireIO::ProtoMS::parameterise );
             
             ProtoMS_exposer.def( 
@@ -150,7 +150,7 @@ void register_ProtoMS_class(){
         }
         { //::SireIO::ProtoMS::parameterise
         
-            typedef ::SireMol::Molecules ( ::SireIO::ProtoMS::*parameterise_function_type )( ::SireMol::Molecules const &,int,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Molecules ( ::SireIO::ProtoMS::*parameterise_function_type)( ::SireMol::Molecules const &,int,::SireBase::PropertyMap const & ) ;
             parameterise_function_type parameterise_function_value( &::SireIO::ProtoMS::parameterise );
             
             ProtoMS_exposer.def( 
@@ -172,7 +172,7 @@ void register_ProtoMS_class(){
         }
         { //::SireIO::ProtoMS::setExecutable
         
-            typedef void ( ::SireIO::ProtoMS::*setExecutable_function_type )( ::QString const & ) ;
+            typedef void ( ::SireIO::ProtoMS::*setExecutable_function_type)( ::QString const & ) ;
             setExecutable_function_type setExecutable_function_value( &::SireIO::ProtoMS::setExecutable );
             
             ProtoMS_exposer.def( 
@@ -193,7 +193,7 @@ void register_ProtoMS_class(){
         }
         { //::SireIO::ProtoMS::what
         
-            typedef char const * ( ::SireIO::ProtoMS::*what_function_type )(  ) const;
+            typedef char const * ( ::SireIO::ProtoMS::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireIO::ProtoMS::what );
             
             ProtoMS_exposer.def( 

@@ -32,7 +32,7 @@ void register_SegsWithAtoms_class(){
         SegsWithAtoms_exposer.def( bp::init< SireMol::SegsWithAtoms const & >(( bp::arg("other") )) );
         { //::SireMol::SegsWithAtoms::atomID
         
-            typedef ::SireMol::AtomID const & ( ::SireMol::SegsWithAtoms::*atomID_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMol::SegsWithAtoms::*atomID_function_type)(  ) const;
             atomID_function_type atomID_function_value( &::SireMol::SegsWithAtoms::atomID );
             
             SegsWithAtoms_exposer.def( 
@@ -43,7 +43,7 @@ void register_SegsWithAtoms_class(){
         }
         { //::SireMol::SegsWithAtoms::hash
         
-            typedef ::uint ( ::SireMol::SegsWithAtoms::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::SegsWithAtoms::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::SegsWithAtoms::hash );
             
             SegsWithAtoms_exposer.def( 
@@ -53,7 +53,7 @@ void register_SegsWithAtoms_class(){
         }
         { //::SireMol::SegsWithAtoms::isNull
         
-            typedef bool ( ::SireMol::SegsWithAtoms::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::SegsWithAtoms::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::SegsWithAtoms::isNull );
             
             SegsWithAtoms_exposer.def( 
@@ -63,7 +63,7 @@ void register_SegsWithAtoms_class(){
         }
         { //::SireMol::SegsWithAtoms::map
         
-            typedef ::QList< SireMol::SegIdx > ( ::SireMol::SegsWithAtoms::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::SegIdx > ( ::SireMol::SegsWithAtoms::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireMol::SegsWithAtoms::map );
             
             SegsWithAtoms_exposer.def( 
@@ -75,7 +75,7 @@ void register_SegsWithAtoms_class(){
         SegsWithAtoms_exposer.def( bp::self != bp::self );
         { //::SireMol::SegsWithAtoms::operator=
         
-            typedef ::SireMol::SegsWithAtoms & ( ::SireMol::SegsWithAtoms::*assign_function_type )( ::SireMol::SegsWithAtoms const & ) ;
+            typedef ::SireMol::SegsWithAtoms & ( ::SireMol::SegsWithAtoms::*assign_function_type)( ::SireMol::SegsWithAtoms const & ) ;
             assign_function_type assign_function_value( &::SireMol::SegsWithAtoms::operator= );
             
             SegsWithAtoms_exposer.def( 
@@ -89,7 +89,7 @@ void register_SegsWithAtoms_class(){
         SegsWithAtoms_exposer.def( bp::self == bp::self );
         { //::SireMol::SegsWithAtoms::toString
         
-            typedef ::QString ( ::SireMol::SegsWithAtoms::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::SegsWithAtoms::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::SegsWithAtoms::toString );
             
             SegsWithAtoms_exposer.def( 
@@ -109,7 +109,7 @@ void register_SegsWithAtoms_class(){
         }
         { //::SireMol::SegsWithAtoms::what
         
-            typedef char const * ( ::SireMol::SegsWithAtoms::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::SegsWithAtoms::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::SegsWithAtoms::what );
             
             SegsWithAtoms_exposer.def( 

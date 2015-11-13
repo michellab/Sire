@@ -46,7 +46,7 @@ void register_CHARMMSwitchingFunction_class(){
         CHARMMSwitchingFunction_exposer.def( bp::init< SireMM::CHARMMSwitchingFunction const & >(( bp::arg("other") )) );
         { //::SireMM::CHARMMSwitchingFunction::dElectrostaticScaleFactor
         
-            typedef double ( ::SireMM::CHARMMSwitchingFunction::*dElectrostaticScaleFactor_function_type )( ::SireUnits::Dimension::Length ) const;
+            typedef double ( ::SireMM::CHARMMSwitchingFunction::*dElectrostaticScaleFactor_function_type)( ::SireUnits::Dimension::Length ) const;
             dElectrostaticScaleFactor_function_type dElectrostaticScaleFactor_function_value( &::SireMM::CHARMMSwitchingFunction::dElectrostaticScaleFactor );
             
             CHARMMSwitchingFunction_exposer.def( 
@@ -57,7 +57,7 @@ void register_CHARMMSwitchingFunction_class(){
         }
         { //::SireMM::CHARMMSwitchingFunction::dVDWScaleFactor
         
-            typedef double ( ::SireMM::CHARMMSwitchingFunction::*dVDWScaleFactor_function_type )( ::SireUnits::Dimension::Length ) const;
+            typedef double ( ::SireMM::CHARMMSwitchingFunction::*dVDWScaleFactor_function_type)( ::SireUnits::Dimension::Length ) const;
             dVDWScaleFactor_function_type dVDWScaleFactor_function_value( &::SireMM::CHARMMSwitchingFunction::dVDWScaleFactor );
             
             CHARMMSwitchingFunction_exposer.def( 
@@ -68,7 +68,7 @@ void register_CHARMMSwitchingFunction_class(){
         }
         { //::SireMM::CHARMMSwitchingFunction::electrostaticScaleFactor
         
-            typedef double ( ::SireMM::CHARMMSwitchingFunction::*electrostaticScaleFactor_function_type )( ::SireUnits::Dimension::Length ) const;
+            typedef double ( ::SireMM::CHARMMSwitchingFunction::*electrostaticScaleFactor_function_type)( ::SireUnits::Dimension::Length ) const;
             electrostaticScaleFactor_function_type electrostaticScaleFactor_function_value( &::SireMM::CHARMMSwitchingFunction::electrostaticScaleFactor );
             
             CHARMMSwitchingFunction_exposer.def( 
@@ -80,7 +80,7 @@ void register_CHARMMSwitchingFunction_class(){
         CHARMMSwitchingFunction_exposer.def( bp::self != bp::self );
         { //::SireMM::CHARMMSwitchingFunction::operator=
         
-            typedef ::SireMM::CHARMMSwitchingFunction & ( ::SireMM::CHARMMSwitchingFunction::*assign_function_type )( ::SireMM::CHARMMSwitchingFunction const & ) ;
+            typedef ::SireMM::CHARMMSwitchingFunction & ( ::SireMM::CHARMMSwitchingFunction::*assign_function_type)( ::SireMM::CHARMMSwitchingFunction const & ) ;
             assign_function_type assign_function_value( &::SireMM::CHARMMSwitchingFunction::operator= );
             
             CHARMMSwitchingFunction_exposer.def( 
@@ -93,7 +93,7 @@ void register_CHARMMSwitchingFunction_class(){
         CHARMMSwitchingFunction_exposer.def( bp::self == bp::self );
         { //::SireMM::CHARMMSwitchingFunction::toString
         
-            typedef ::QString ( ::SireMM::CHARMMSwitchingFunction::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMM::CHARMMSwitchingFunction::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMM::CHARMMSwitchingFunction::toString );
             
             CHARMMSwitchingFunction_exposer.def( 
@@ -113,7 +113,7 @@ void register_CHARMMSwitchingFunction_class(){
         }
         { //::SireMM::CHARMMSwitchingFunction::vdwScaleFactor
         
-            typedef double ( ::SireMM::CHARMMSwitchingFunction::*vdwScaleFactor_function_type )( ::SireUnits::Dimension::Length ) const;
+            typedef double ( ::SireMM::CHARMMSwitchingFunction::*vdwScaleFactor_function_type)( ::SireUnits::Dimension::Length ) const;
             vdwScaleFactor_function_type vdwScaleFactor_function_value( &::SireMM::CHARMMSwitchingFunction::vdwScaleFactor );
             
             CHARMMSwitchingFunction_exposer.def( 

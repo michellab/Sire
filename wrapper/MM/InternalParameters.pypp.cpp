@@ -47,7 +47,7 @@ void register_InternalParameters_class(){
         InternalParameters_exposer.def( bp::init< SireMM::InternalParameters const & >(( bp::arg("other") )) );
         { //::SireMM::InternalParameters::addChangedGroups
         
-            typedef void ( ::SireMM::InternalParameters::*addChangedGroups_function_type )( ::SireMM::InternalParameters const &,::QSet< unsigned int > & ) const;
+            typedef void ( ::SireMM::InternalParameters::*addChangedGroups_function_type)( ::SireMM::InternalParameters const &,::QSet< unsigned int > & ) const;
             addChangedGroups_function_type addChangedGroups_function_value( &::SireMM::InternalParameters::addChangedGroups );
             
             InternalParameters_exposer.def( 
@@ -58,7 +58,7 @@ void register_InternalParameters_class(){
         }
         { //::SireMM::InternalParameters::applyMask
         
-            typedef ::SireMM::InternalParameters ( ::SireMM::InternalParameters::*applyMask_function_type )( ::QSet< unsigned int > const & ) const;
+            typedef ::SireMM::InternalParameters ( ::SireMM::InternalParameters::*applyMask_function_type)( ::QSet< unsigned int > const & ) const;
             applyMask_function_type applyMask_function_value( &::SireMM::InternalParameters::applyMask );
             
             InternalParameters_exposer.def( 
@@ -69,7 +69,7 @@ void register_InternalParameters_class(){
         }
         { //::SireMM::InternalParameters::changedAllGroups
         
-            typedef bool ( ::SireMM::InternalParameters::*changedAllGroups_function_type )( ::SireMM::InternalParameters const & ) const;
+            typedef bool ( ::SireMM::InternalParameters::*changedAllGroups_function_type)( ::SireMM::InternalParameters const & ) const;
             changedAllGroups_function_type changedAllGroups_function_value( &::SireMM::InternalParameters::changedAllGroups );
             
             InternalParameters_exposer.def( 
@@ -80,7 +80,7 @@ void register_InternalParameters_class(){
         }
         { //::SireMM::InternalParameters::getChangedGroups
         
-            typedef ::QSet< unsigned int > ( ::SireMM::InternalParameters::*getChangedGroups_function_type )( ::SireMM::InternalParameters const & ) const;
+            typedef ::QSet< unsigned int > ( ::SireMM::InternalParameters::*getChangedGroups_function_type)( ::SireMM::InternalParameters const & ) const;
             getChangedGroups_function_type getChangedGroups_function_value( &::SireMM::InternalParameters::getChangedGroups );
             
             InternalParameters_exposer.def( 
@@ -91,7 +91,7 @@ void register_InternalParameters_class(){
         }
         { //::SireMM::InternalParameters::groupParameters
         
-            typedef ::QVector< SireMM::GroupInternalParameters > const & ( ::SireMM::InternalParameters::*groupParameters_function_type )(  ) const;
+            typedef ::QVector< SireMM::GroupInternalParameters > const & ( ::SireMM::InternalParameters::*groupParameters_function_type)(  ) const;
             groupParameters_function_type groupParameters_function_value( &::SireMM::InternalParameters::groupParameters );
             
             InternalParameters_exposer.def( 
@@ -102,7 +102,7 @@ void register_InternalParameters_class(){
         }
         { //::SireMM::InternalParameters::groupParameters
         
-            typedef ::QVector< SireMM::GroupInternalParameters > ( ::SireMM::InternalParameters::*groupParameters_function_type )( ::quint32 ) const;
+            typedef ::QVector< SireMM::GroupInternalParameters > ( ::SireMM::InternalParameters::*groupParameters_function_type)( ::quint32 ) const;
             groupParameters_function_type groupParameters_function_value( &::SireMM::InternalParameters::groupParameters );
             
             InternalParameters_exposer.def( 
@@ -113,7 +113,7 @@ void register_InternalParameters_class(){
         }
         { //::SireMM::InternalParameters::groupParameters
         
-            typedef ::QVector< SireMM::GroupInternalParameters > ( ::SireMM::InternalParameters::*groupParameters_function_type )( ::QSet< unsigned int > const & ) const;
+            typedef ::QVector< SireMM::GroupInternalParameters > ( ::SireMM::InternalParameters::*groupParameters_function_type)( ::QSet< unsigned int > const & ) const;
             groupParameters_function_type groupParameters_function_value( &::SireMM::InternalParameters::groupParameters );
             
             InternalParameters_exposer.def( 
@@ -124,7 +124,7 @@ void register_InternalParameters_class(){
         }
         { //::SireMM::InternalParameters::hasAngleParameters
         
-            typedef bool ( ::SireMM::InternalParameters::*hasAngleParameters_function_type )(  ) const;
+            typedef bool ( ::SireMM::InternalParameters::*hasAngleParameters_function_type)(  ) const;
             hasAngleParameters_function_type hasAngleParameters_function_value( &::SireMM::InternalParameters::hasAngleParameters );
             
             InternalParameters_exposer.def( 
@@ -134,7 +134,7 @@ void register_InternalParameters_class(){
         }
         { //::SireMM::InternalParameters::hasBendBendParameters
         
-            typedef bool ( ::SireMM::InternalParameters::*hasBendBendParameters_function_type )(  ) const;
+            typedef bool ( ::SireMM::InternalParameters::*hasBendBendParameters_function_type)(  ) const;
             hasBendBendParameters_function_type hasBendBendParameters_function_value( &::SireMM::InternalParameters::hasBendBendParameters );
             
             InternalParameters_exposer.def( 
@@ -144,7 +144,7 @@ void register_InternalParameters_class(){
         }
         { //::SireMM::InternalParameters::hasBondParameters
         
-            typedef bool ( ::SireMM::InternalParameters::*hasBondParameters_function_type )(  ) const;
+            typedef bool ( ::SireMM::InternalParameters::*hasBondParameters_function_type)(  ) const;
             hasBondParameters_function_type hasBondParameters_function_value( &::SireMM::InternalParameters::hasBondParameters );
             
             InternalParameters_exposer.def( 
@@ -154,7 +154,7 @@ void register_InternalParameters_class(){
         }
         { //::SireMM::InternalParameters::hasCrossTerms
         
-            typedef bool ( ::SireMM::InternalParameters::*hasCrossTerms_function_type )(  ) const;
+            typedef bool ( ::SireMM::InternalParameters::*hasCrossTerms_function_type)(  ) const;
             hasCrossTerms_function_type hasCrossTerms_function_value( &::SireMM::InternalParameters::hasCrossTerms );
             
             InternalParameters_exposer.def( 
@@ -164,7 +164,7 @@ void register_InternalParameters_class(){
         }
         { //::SireMM::InternalParameters::hasDihedralParameters
         
-            typedef bool ( ::SireMM::InternalParameters::*hasDihedralParameters_function_type )(  ) const;
+            typedef bool ( ::SireMM::InternalParameters::*hasDihedralParameters_function_type)(  ) const;
             hasDihedralParameters_function_type hasDihedralParameters_function_value( &::SireMM::InternalParameters::hasDihedralParameters );
             
             InternalParameters_exposer.def( 
@@ -174,7 +174,7 @@ void register_InternalParameters_class(){
         }
         { //::SireMM::InternalParameters::hasImproperParameters
         
-            typedef bool ( ::SireMM::InternalParameters::*hasImproperParameters_function_type )(  ) const;
+            typedef bool ( ::SireMM::InternalParameters::*hasImproperParameters_function_type)(  ) const;
             hasImproperParameters_function_type hasImproperParameters_function_value( &::SireMM::InternalParameters::hasImproperParameters );
             
             InternalParameters_exposer.def( 
@@ -184,7 +184,7 @@ void register_InternalParameters_class(){
         }
         { //::SireMM::InternalParameters::hasNonPhysicalParameters
         
-            typedef bool ( ::SireMM::InternalParameters::*hasNonPhysicalParameters_function_type )(  ) const;
+            typedef bool ( ::SireMM::InternalParameters::*hasNonPhysicalParameters_function_type)(  ) const;
             hasNonPhysicalParameters_function_type hasNonPhysicalParameters_function_value( &::SireMM::InternalParameters::hasNonPhysicalParameters );
             
             InternalParameters_exposer.def( 
@@ -194,7 +194,7 @@ void register_InternalParameters_class(){
         }
         { //::SireMM::InternalParameters::hasPhysicalParameters
         
-            typedef bool ( ::SireMM::InternalParameters::*hasPhysicalParameters_function_type )(  ) const;
+            typedef bool ( ::SireMM::InternalParameters::*hasPhysicalParameters_function_type)(  ) const;
             hasPhysicalParameters_function_type hasPhysicalParameters_function_value( &::SireMM::InternalParameters::hasPhysicalParameters );
             
             InternalParameters_exposer.def( 
@@ -204,7 +204,7 @@ void register_InternalParameters_class(){
         }
         { //::SireMM::InternalParameters::hasStretchBendParameters
         
-            typedef bool ( ::SireMM::InternalParameters::*hasStretchBendParameters_function_type )(  ) const;
+            typedef bool ( ::SireMM::InternalParameters::*hasStretchBendParameters_function_type)(  ) const;
             hasStretchBendParameters_function_type hasStretchBendParameters_function_value( &::SireMM::InternalParameters::hasStretchBendParameters );
             
             InternalParameters_exposer.def( 
@@ -214,7 +214,7 @@ void register_InternalParameters_class(){
         }
         { //::SireMM::InternalParameters::hasStretchBendTorsionParameters
         
-            typedef bool ( ::SireMM::InternalParameters::*hasStretchBendTorsionParameters_function_type )(  ) const;
+            typedef bool ( ::SireMM::InternalParameters::*hasStretchBendTorsionParameters_function_type)(  ) const;
             hasStretchBendTorsionParameters_function_type hasStretchBendTorsionParameters_function_value( &::SireMM::InternalParameters::hasStretchBendTorsionParameters );
             
             InternalParameters_exposer.def( 
@@ -224,7 +224,7 @@ void register_InternalParameters_class(){
         }
         { //::SireMM::InternalParameters::hasStretchStretchParameters
         
-            typedef bool ( ::SireMM::InternalParameters::*hasStretchStretchParameters_function_type )(  ) const;
+            typedef bool ( ::SireMM::InternalParameters::*hasStretchStretchParameters_function_type)(  ) const;
             hasStretchStretchParameters_function_type hasStretchStretchParameters_function_value( &::SireMM::InternalParameters::hasStretchStretchParameters );
             
             InternalParameters_exposer.def( 
@@ -234,7 +234,7 @@ void register_InternalParameters_class(){
         }
         { //::SireMM::InternalParameters::hasUreyBradleyParameters
         
-            typedef bool ( ::SireMM::InternalParameters::*hasUreyBradleyParameters_function_type )(  ) const;
+            typedef bool ( ::SireMM::InternalParameters::*hasUreyBradleyParameters_function_type)(  ) const;
             hasUreyBradleyParameters_function_type hasUreyBradleyParameters_function_value( &::SireMM::InternalParameters::hasUreyBradleyParameters );
             
             InternalParameters_exposer.def( 
@@ -244,7 +244,7 @@ void register_InternalParameters_class(){
         }
         { //::SireMM::InternalParameters::isEmpty
         
-            typedef bool ( ::SireMM::InternalParameters::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMM::InternalParameters::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMM::InternalParameters::isEmpty );
             
             InternalParameters_exposer.def( 
@@ -255,7 +255,7 @@ void register_InternalParameters_class(){
         InternalParameters_exposer.def( bp::self != bp::self );
         { //::SireMM::InternalParameters::operator=
         
-            typedef ::SireMM::InternalParameters & ( ::SireMM::InternalParameters::*assign_function_type )( ::SireMM::InternalParameters const & ) ;
+            typedef ::SireMM::InternalParameters & ( ::SireMM::InternalParameters::*assign_function_type)( ::SireMM::InternalParameters const & ) ;
             assign_function_type assign_function_value( &::SireMM::InternalParameters::operator= );
             
             InternalParameters_exposer.def( 
@@ -268,7 +268,7 @@ void register_InternalParameters_class(){
         InternalParameters_exposer.def( bp::self == bp::self );
         { //::SireMM::InternalParameters::symbols
         
-            typedef ::SireMM::InternalSymbols const & ( ::SireMM::InternalParameters::*symbols_function_type )(  ) const;
+            typedef ::SireMM::InternalSymbols const & ( ::SireMM::InternalParameters::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireMM::InternalParameters::symbols );
             
             InternalParameters_exposer.def( 
@@ -289,7 +289,7 @@ void register_InternalParameters_class(){
         }
         { //::SireMM::InternalParameters::what
         
-            typedef char const * ( ::SireMM::InternalParameters::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::InternalParameters::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::InternalParameters::what );
             
             InternalParameters_exposer.def( 

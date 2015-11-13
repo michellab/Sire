@@ -44,7 +44,7 @@ void register_VolumeChanger_class(){
         bp::scope VolumeChanger_scope( VolumeChanger_exposer );
         { //::SireMove::VolumeChanger::changeVolume
         
-            typedef int ( ::SireMove::VolumeChanger::*changeVolume_function_type )( ::SireSystem::System &,::SireUnits::Dimension::Volume const &,::SireBase::PropertyMap const & ) const;
+            typedef int ( ::SireMove::VolumeChanger::*changeVolume_function_type)( ::SireSystem::System &,::SireUnits::Dimension::Volume const &,::SireBase::PropertyMap const & ) const;
             changeVolume_function_type changeVolume_function_value( &::SireMove::VolumeChanger::changeVolume );
             
             VolumeChanger_exposer.def( 
@@ -55,7 +55,7 @@ void register_VolumeChanger_class(){
         }
         { //::SireMove::VolumeChanger::generator
         
-            typedef ::SireMaths::RanGenerator const & ( ::SireMove::VolumeChanger::*generator_function_type )(  ) const;
+            typedef ::SireMaths::RanGenerator const & ( ::SireMove::VolumeChanger::*generator_function_type)(  ) const;
             generator_function_type generator_function_value( &::SireMove::VolumeChanger::generator );
             
             VolumeChanger_exposer.def( 
@@ -66,7 +66,7 @@ void register_VolumeChanger_class(){
         }
         { //::SireMove::VolumeChanger::groupID
         
-            typedef ::SireMol::MGID const & ( ::SireMove::VolumeChanger::*groupID_function_type )(  ) const;
+            typedef ::SireMol::MGID const & ( ::SireMove::VolumeChanger::*groupID_function_type)(  ) const;
             groupID_function_type groupID_function_value( &::SireMove::VolumeChanger::groupID );
             
             VolumeChanger_exposer.def( 
@@ -88,7 +88,7 @@ void register_VolumeChanger_class(){
         }
         { //::SireMove::VolumeChanger::randomChangeVolume
         
-            typedef int ( ::SireMove::VolumeChanger::*randomChangeVolume_function_type )( ::SireSystem::System &,::SireUnits::Dimension::Volume const &,double &,double &,::SireBase::PropertyMap const & ) const;
+            typedef int ( ::SireMove::VolumeChanger::*randomChangeVolume_function_type)( ::SireSystem::System &,::SireUnits::Dimension::Volume const &,double &,double &,::SireBase::PropertyMap const & ) const;
             randomChangeVolume_function_type randomChangeVolume_function_value( &::SireMove::VolumeChanger::randomChangeVolume );
             
             VolumeChanger_exposer.def( 
@@ -99,7 +99,7 @@ void register_VolumeChanger_class(){
         }
         { //::SireMove::VolumeChanger::setGenerator
         
-            typedef void ( ::SireMove::VolumeChanger::*setGenerator_function_type )( ::SireMaths::RanGenerator const & ) ;
+            typedef void ( ::SireMove::VolumeChanger::*setGenerator_function_type)( ::SireMaths::RanGenerator const & ) ;
             setGenerator_function_type setGenerator_function_value( &::SireMove::VolumeChanger::setGenerator );
             
             VolumeChanger_exposer.def( 
@@ -110,7 +110,7 @@ void register_VolumeChanger_class(){
         }
         { //::SireMove::VolumeChanger::setGroup
         
-            typedef void ( ::SireMove::VolumeChanger::*setGroup_function_type )( ::SireMol::MGID const & ) ;
+            typedef void ( ::SireMove::VolumeChanger::*setGroup_function_type)( ::SireMol::MGID const & ) ;
             setGroup_function_type setGroup_function_value( &::SireMove::VolumeChanger::setGroup );
             
             VolumeChanger_exposer.def( 
@@ -121,7 +121,7 @@ void register_VolumeChanger_class(){
         }
         { //::SireMove::VolumeChanger::setGroup
         
-            typedef void ( ::SireMove::VolumeChanger::*setGroup_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireMove::VolumeChanger::*setGroup_function_type)( ::SireMol::MoleculeGroup const & ) ;
             setGroup_function_type setGroup_function_value( &::SireMove::VolumeChanger::setGroup );
             
             VolumeChanger_exposer.def( 
@@ -132,7 +132,7 @@ void register_VolumeChanger_class(){
         }
         { //::SireMove::VolumeChanger::setVolume
         
-            typedef int ( ::SireMove::VolumeChanger::*setVolume_function_type )( ::SireSystem::System &,::SireUnits::Dimension::Volume const &,::SireBase::PropertyMap const & ) const;
+            typedef int ( ::SireMove::VolumeChanger::*setVolume_function_type)( ::SireSystem::System &,::SireUnits::Dimension::Volume const &,::SireBase::PropertyMap const & ) const;
             setVolume_function_type setVolume_function_value( &::SireMove::VolumeChanger::setVolume );
             
             VolumeChanger_exposer.def( 

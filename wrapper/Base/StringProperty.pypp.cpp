@@ -30,11 +30,12 @@ void register_StringProperty_class(){
         StringProperty_exposer_t StringProperty_exposer = StringProperty_exposer_t( "StringProperty", bp::init< >() );
         bp::scope StringProperty_scope( StringProperty_exposer );
         StringProperty_exposer.def( bp::init< QString const & >(( bp::arg("s") )) );
+        StringProperty_exposer.def( bp::init< SireBase::VariantProperty const & >(( bp::arg("other") )) );
         StringProperty_exposer.def( bp::init< SireBase::StringProperty const & >(( bp::arg("other") )) );
         StringProperty_exposer.def( bp::self != bp::self );
         { //::SireBase::StringProperty::operator=
         
-            typedef ::SireBase::StringProperty & ( ::SireBase::StringProperty::*assign_function_type )( ::SireBase::StringProperty const & ) ;
+            typedef ::SireBase::StringProperty & ( ::SireBase::StringProperty::*assign_function_type)( ::SireBase::StringProperty const & ) ;
             assign_function_type assign_function_value( &::SireBase::StringProperty::operator= );
             
             StringProperty_exposer.def( 
@@ -47,7 +48,7 @@ void register_StringProperty_class(){
         StringProperty_exposer.def( bp::self == bp::self );
         { //::SireBase::StringProperty::toString
         
-            typedef ::QString ( ::SireBase::StringProperty::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireBase::StringProperty::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireBase::StringProperty::toString );
             
             StringProperty_exposer.def( 

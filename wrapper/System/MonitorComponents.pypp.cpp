@@ -43,7 +43,7 @@ void register_MonitorComponents_class(){
         MonitorComponents_exposer.def( bp::init< SireSystem::MonitorComponents const & >(( bp::arg("other") )) );
         { //::SireSystem::MonitorComponents::accumulator
         
-            typedef ::SireMaths::Accumulator const & ( ::SireSystem::MonitorComponents::*accumulator_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireMaths::Accumulator const & ( ::SireSystem::MonitorComponents::*accumulator_function_type)( ::SireCAS::Symbol const & ) const;
             accumulator_function_type accumulator_function_value( &::SireSystem::MonitorComponents::accumulator );
             
             MonitorComponents_exposer.def( 
@@ -55,7 +55,7 @@ void register_MonitorComponents_class(){
         }
         { //::SireSystem::MonitorComponents::accumulatorTemplate
         
-            typedef ::SireMaths::Accumulator const & ( ::SireSystem::MonitorComponents::*accumulatorTemplate_function_type )(  ) const;
+            typedef ::SireMaths::Accumulator const & ( ::SireSystem::MonitorComponents::*accumulatorTemplate_function_type)(  ) const;
             accumulatorTemplate_function_type accumulatorTemplate_function_value( &::SireSystem::MonitorComponents::accumulatorTemplate );
             
             MonitorComponents_exposer.def( 
@@ -66,7 +66,7 @@ void register_MonitorComponents_class(){
         }
         { //::SireSystem::MonitorComponents::clearStatistics
         
-            typedef void ( ::SireSystem::MonitorComponents::*clearStatistics_function_type )(  ) ;
+            typedef void ( ::SireSystem::MonitorComponents::*clearStatistics_function_type)(  ) ;
             clearStatistics_function_type clearStatistics_function_value( &::SireSystem::MonitorComponents::clearStatistics );
             
             MonitorComponents_exposer.def( 
@@ -76,7 +76,7 @@ void register_MonitorComponents_class(){
         }
         { //::SireSystem::MonitorComponents::excludeComponent
         
-            typedef void ( ::SireSystem::MonitorComponents::*excludeComponent_function_type )( ::SireCAS::Symbol const & ) ;
+            typedef void ( ::SireSystem::MonitorComponents::*excludeComponent_function_type)( ::SireCAS::Symbol const & ) ;
             excludeComponent_function_type excludeComponent_function_value( &::SireSystem::MonitorComponents::excludeComponent );
             
             MonitorComponents_exposer.def( 
@@ -87,7 +87,7 @@ void register_MonitorComponents_class(){
         }
         { //::SireSystem::MonitorComponents::excludeComponent
         
-            typedef void ( ::SireSystem::MonitorComponents::*excludeComponent_function_type )( ::SireCAS::Symbols const & ) ;
+            typedef void ( ::SireSystem::MonitorComponents::*excludeComponent_function_type)( ::SireCAS::Symbols const & ) ;
             excludeComponent_function_type excludeComponent_function_value( &::SireSystem::MonitorComponents::excludeComponent );
             
             MonitorComponents_exposer.def( 
@@ -98,7 +98,7 @@ void register_MonitorComponents_class(){
         }
         { //::SireSystem::MonitorComponents::excludeComponents
         
-            typedef ::SireCAS::Symbols const & ( ::SireSystem::MonitorComponents::*excludeComponents_function_type )(  ) const;
+            typedef ::SireCAS::Symbols const & ( ::SireSystem::MonitorComponents::*excludeComponents_function_type)(  ) const;
             excludeComponents_function_type excludeComponents_function_value( &::SireSystem::MonitorComponents::excludeComponents );
             
             MonitorComponents_exposer.def( 
@@ -109,7 +109,7 @@ void register_MonitorComponents_class(){
         }
         { //::SireSystem::MonitorComponents::includeComponents
         
-            typedef ::SireCAS::Symbols const & ( ::SireSystem::MonitorComponents::*includeComponents_function_type )(  ) const;
+            typedef ::SireCAS::Symbols const & ( ::SireSystem::MonitorComponents::*includeComponents_function_type)(  ) const;
             includeComponents_function_type includeComponents_function_value( &::SireSystem::MonitorComponents::includeComponents );
             
             MonitorComponents_exposer.def( 
@@ -120,7 +120,7 @@ void register_MonitorComponents_class(){
         }
         { //::SireSystem::MonitorComponents::monitor
         
-            typedef void ( ::SireSystem::MonitorComponents::*monitor_function_type )( ::SireSystem::System & ) ;
+            typedef void ( ::SireSystem::MonitorComponents::*monitor_function_type)( ::SireSystem::System & ) ;
             monitor_function_type monitor_function_value( &::SireSystem::MonitorComponents::monitor );
             
             MonitorComponents_exposer.def( 
@@ -131,7 +131,7 @@ void register_MonitorComponents_class(){
         }
         { //::SireSystem::MonitorComponents::monitoredComponents
         
-            typedef ::SireCAS::Symbols ( ::SireSystem::MonitorComponents::*monitoredComponents_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireSystem::MonitorComponents::*monitoredComponents_function_type)(  ) const;
             monitoredComponents_function_type monitoredComponents_function_value( &::SireSystem::MonitorComponents::monitoredComponents );
             
             MonitorComponents_exposer.def( 
@@ -142,7 +142,7 @@ void register_MonitorComponents_class(){
         MonitorComponents_exposer.def( bp::self != bp::self );
         { //::SireSystem::MonitorComponents::operator=
         
-            typedef ::SireSystem::MonitorComponents & ( ::SireSystem::MonitorComponents::*assign_function_type )( ::SireSystem::MonitorComponents const & ) ;
+            typedef ::SireSystem::MonitorComponents & ( ::SireSystem::MonitorComponents::*assign_function_type)( ::SireSystem::MonitorComponents const & ) ;
             assign_function_type assign_function_value( &::SireSystem::MonitorComponents::operator= );
             
             MonitorComponents_exposer.def( 

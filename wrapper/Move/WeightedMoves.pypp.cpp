@@ -43,7 +43,7 @@ void register_WeightedMoves_class(){
         WeightedMoves_exposer.def( bp::init< SireMove::WeightedMoves const & >(( bp::arg("other") )) );
         { //::SireMove::WeightedMoves::add
         
-            typedef void ( ::SireMove::WeightedMoves::*add_function_type )( ::SireMove::Move const &,double ) ;
+            typedef void ( ::SireMove::WeightedMoves::*add_function_type)( ::SireMove::Move const &,double ) ;
             add_function_type add_function_value( &::SireMove::WeightedMoves::add );
             
             WeightedMoves_exposer.def( 
@@ -54,7 +54,7 @@ void register_WeightedMoves_class(){
         }
         { //::SireMove::WeightedMoves::clearStatistics
         
-            typedef void ( ::SireMove::WeightedMoves::*clearStatistics_function_type )(  ) ;
+            typedef void ( ::SireMove::WeightedMoves::*clearStatistics_function_type)(  ) ;
             clearStatistics_function_type clearStatistics_function_value( &::SireMove::WeightedMoves::clearStatistics );
             
             WeightedMoves_exposer.def( 
@@ -64,7 +64,7 @@ void register_WeightedMoves_class(){
         }
         { //::SireMove::WeightedMoves::energyComponent
         
-            typedef ::SireCAS::Symbol const & ( ::SireMove::WeightedMoves::*energyComponent_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMove::WeightedMoves::*energyComponent_function_type)(  ) const;
             energyComponent_function_type energyComponent_function_value( &::SireMove::WeightedMoves::energyComponent );
             
             WeightedMoves_exposer.def( 
@@ -75,7 +75,7 @@ void register_WeightedMoves_class(){
         }
         { //::SireMove::WeightedMoves::generator
         
-            typedef ::SireMaths::RanGenerator const & ( ::SireMove::WeightedMoves::*generator_function_type )(  ) const;
+            typedef ::SireMaths::RanGenerator const & ( ::SireMove::WeightedMoves::*generator_function_type)(  ) const;
             generator_function_type generator_function_value( &::SireMove::WeightedMoves::generator );
             
             WeightedMoves_exposer.def( 
@@ -86,7 +86,7 @@ void register_WeightedMoves_class(){
         }
         { //::SireMove::WeightedMoves::hasCombinedSpaceProperty
         
-            typedef bool ( ::SireMove::WeightedMoves::*hasCombinedSpaceProperty_function_type )(  ) const;
+            typedef bool ( ::SireMove::WeightedMoves::*hasCombinedSpaceProperty_function_type)(  ) const;
             hasCombinedSpaceProperty_function_type hasCombinedSpaceProperty_function_value( &::SireMove::WeightedMoves::hasCombinedSpaceProperty );
             
             WeightedMoves_exposer.def( 
@@ -96,7 +96,7 @@ void register_WeightedMoves_class(){
         }
         { //::SireMove::WeightedMoves::move
         
-            typedef ::SireSystem::System ( ::SireMove::WeightedMoves::*move_function_type )( ::SireSystem::System const &,int,bool ) ;
+            typedef ::SireSystem::System ( ::SireMove::WeightedMoves::*move_function_type)( ::SireSystem::System const &,int,bool ) ;
             move_function_type move_function_value( &::SireMove::WeightedMoves::move );
             
             WeightedMoves_exposer.def( 
@@ -107,7 +107,7 @@ void register_WeightedMoves_class(){
         }
         { //::SireMove::WeightedMoves::moves
         
-            typedef ::QList< SireBase::PropPtr< SireMove::Move > > ( ::SireMove::WeightedMoves::*moves_function_type )(  ) const;
+            typedef ::QList< SireBase::PropPtr< SireMove::Move > > ( ::SireMove::WeightedMoves::*moves_function_type)(  ) const;
             moves_function_type moves_function_value( &::SireMove::WeightedMoves::moves );
             
             WeightedMoves_exposer.def( 
@@ -118,7 +118,7 @@ void register_WeightedMoves_class(){
         WeightedMoves_exposer.def( bp::self != bp::self );
         { //::SireMove::WeightedMoves::operator=
         
-            typedef ::SireMove::WeightedMoves & ( ::SireMove::WeightedMoves::*assign_function_type )( ::SireMove::WeightedMoves const & ) ;
+            typedef ::SireMove::WeightedMoves & ( ::SireMove::WeightedMoves::*assign_function_type)( ::SireMove::WeightedMoves const & ) ;
             assign_function_type assign_function_value( &::SireMove::WeightedMoves::operator= );
             
             WeightedMoves_exposer.def( 
@@ -131,7 +131,7 @@ void register_WeightedMoves_class(){
         WeightedMoves_exposer.def( bp::self == bp::self );
         { //::SireMove::WeightedMoves::setCombinedSpaceProperty
         
-            typedef void ( ::SireMove::WeightedMoves::*setCombinedSpaceProperty_function_type )( ::SireBase::PropertyName const & ) ;
+            typedef void ( ::SireMove::WeightedMoves::*setCombinedSpaceProperty_function_type)( ::SireBase::PropertyName const & ) ;
             setCombinedSpaceProperty_function_type setCombinedSpaceProperty_function_value( &::SireMove::WeightedMoves::setCombinedSpaceProperty );
             
             WeightedMoves_exposer.def( 
@@ -142,7 +142,7 @@ void register_WeightedMoves_class(){
         }
         { //::SireMove::WeightedMoves::setEnergyComponent
         
-            typedef void ( ::SireMove::WeightedMoves::*setEnergyComponent_function_type )( ::SireCAS::Symbol const & ) ;
+            typedef void ( ::SireMove::WeightedMoves::*setEnergyComponent_function_type)( ::SireCAS::Symbol const & ) ;
             setEnergyComponent_function_type setEnergyComponent_function_value( &::SireMove::WeightedMoves::setEnergyComponent );
             
             WeightedMoves_exposer.def( 
@@ -153,7 +153,7 @@ void register_WeightedMoves_class(){
         }
         { //::SireMove::WeightedMoves::setGenerator
         
-            typedef void ( ::SireMove::WeightedMoves::*setGenerator_function_type )( ::SireMaths::RanGenerator const & ) ;
+            typedef void ( ::SireMove::WeightedMoves::*setGenerator_function_type)( ::SireMaths::RanGenerator const & ) ;
             setGenerator_function_type setGenerator_function_value( &::SireMove::WeightedMoves::setGenerator );
             
             WeightedMoves_exposer.def( 
@@ -164,7 +164,7 @@ void register_WeightedMoves_class(){
         }
         { //::SireMove::WeightedMoves::setSpaceProperty
         
-            typedef void ( ::SireMove::WeightedMoves::*setSpaceProperty_function_type )( ::SireBase::PropertyName const & ) ;
+            typedef void ( ::SireMove::WeightedMoves::*setSpaceProperty_function_type)( ::SireBase::PropertyName const & ) ;
             setSpaceProperty_function_type setSpaceProperty_function_value( &::SireMove::WeightedMoves::setSpaceProperty );
             
             WeightedMoves_exposer.def( 
@@ -175,7 +175,7 @@ void register_WeightedMoves_class(){
         }
         { //::SireMove::WeightedMoves::spaceProperty
         
-            typedef ::SireBase::PropertyName const & ( ::SireMove::WeightedMoves::*spaceProperty_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireMove::WeightedMoves::*spaceProperty_function_type)(  ) const;
             spaceProperty_function_type spaceProperty_function_value( &::SireMove::WeightedMoves::spaceProperty );
             
             WeightedMoves_exposer.def( 
@@ -186,7 +186,7 @@ void register_WeightedMoves_class(){
         }
         { //::SireMove::WeightedMoves::toString
         
-            typedef ::QString ( ::SireMove::WeightedMoves::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMove::WeightedMoves::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMove::WeightedMoves::toString );
             
             WeightedMoves_exposer.def( 

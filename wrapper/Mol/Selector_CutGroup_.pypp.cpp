@@ -58,7 +58,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::add
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*add_function_type )( ::SireMol::Selector< SireMol::CutGroup > const & ) const;
+            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*add_function_type)( ::SireMol::Selector< SireMol::CutGroup > const & ) const;
             add_function_type add_function_value( &::SireMol::Selector< SireMol::CutGroup >::add );
             
             Selector_CutGroup__exposer.def( 
@@ -70,7 +70,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::add
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*add_function_type )( ::SireMol::CutGroup const & ) const;
+            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*add_function_type)( ::SireMol::CutGroup const & ) const;
             add_function_type add_function_value( &::SireMol::Selector< SireMol::CutGroup >::add );
             
             Selector_CutGroup__exposer.def( 
@@ -82,7 +82,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::add
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*add_function_type )( ::SireMol::CGID const & ) const;
+            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*add_function_type)( ::SireMol::CGID const & ) const;
             add_function_type add_function_value( &::SireMol::Selector< SireMol::CutGroup >::add );
             
             Selector_CutGroup__exposer.def( 
@@ -94,7 +94,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::at
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::CutGroup ( ::SireMol::Selector< SireMol::CutGroup >::*at_function_type )( int ) const;
+            typedef ::SireMol::CutGroup ( ::SireMol::Selector< SireMol::CutGroup >::*at_function_type)( int ) const;
             at_function_type at_function_value( &::SireMol::Selector< SireMol::CutGroup >::at );
             
             Selector_CutGroup__exposer.def( 
@@ -106,7 +106,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::at
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*at_function_type )( int,int ) const;
+            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*at_function_type)( int,int ) const;
             at_function_type at_function_value( &::SireMol::Selector< SireMol::CutGroup >::at );
             
             Selector_CutGroup__exposer.def( 
@@ -118,7 +118,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::contains
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::CutGroup >::*contains_function_type )( ::SireMol::Selector< SireMol::CutGroup > const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::CutGroup >::*contains_function_type)( ::SireMol::Selector< SireMol::CutGroup > const & ) const;
             contains_function_type contains_function_value( &::SireMol::Selector< SireMol::CutGroup >::contains );
             
             Selector_CutGroup__exposer.def( 
@@ -130,7 +130,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::contains
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::CutGroup >::*contains_function_type )( ::SireMol::CutGroup const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::CutGroup >::*contains_function_type)( ::SireMol::CutGroup const & ) const;
             contains_function_type contains_function_value( &::SireMol::Selector< SireMol::CutGroup >::contains );
             
             Selector_CutGroup__exposer.def( 
@@ -142,7 +142,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::contains
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::CutGroup >::*contains_function_type )( ::SireMol::CGID const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::CutGroup >::*contains_function_type)( ::SireMol::CGID const & ) const;
             contains_function_type contains_function_value( &::SireMol::Selector< SireMol::CutGroup >::contains );
             
             Selector_CutGroup__exposer.def( 
@@ -154,7 +154,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::count
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef int ( ::SireMol::Selector< SireMol::CutGroup >::*count_function_type )(  ) const;
+            typedef int ( ::SireMol::Selector< SireMol::CutGroup >::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMol::Selector< SireMol::CutGroup >::count );
             
             Selector_CutGroup__exposer.def( 
@@ -165,7 +165,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::evaluate
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::Evaluator ( ::SireMol::Selector< SireMol::CutGroup >::*evaluate_function_type )(  ) const;
+            typedef ::SireMol::Evaluator ( ::SireMol::Selector< SireMol::CutGroup >::*evaluate_function_type)(  ) const;
             evaluate_function_type evaluate_function_value( &::SireMol::Selector< SireMol::CutGroup >::evaluate );
             
             Selector_CutGroup__exposer.def( 
@@ -176,7 +176,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::evaluate
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::Evaluator ( ::SireMol::Selector< SireMol::CutGroup >::*evaluate_function_type )( int ) const;
+            typedef ::SireMol::Evaluator ( ::SireMol::Selector< SireMol::CutGroup >::*evaluate_function_type)( int ) const;
             evaluate_function_type evaluate_function_value( &::SireMol::Selector< SireMol::CutGroup >::evaluate );
             
             Selector_CutGroup__exposer.def( 
@@ -188,7 +188,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::evaluate
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::Evaluator ( ::SireMol::Selector< SireMol::CutGroup >::*evaluate_function_type )( int,int ) const;
+            typedef ::SireMol::Evaluator ( ::SireMol::Selector< SireMol::CutGroup >::*evaluate_function_type)( int,int ) const;
             evaluate_function_type evaluate_function_value( &::SireMol::Selector< SireMol::CutGroup >::evaluate );
             
             Selector_CutGroup__exposer.def( 
@@ -200,7 +200,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::hasMetadata
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::CutGroup >::*hasMetadata_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::CutGroup >::*hasMetadata_function_type)( ::SireBase::PropertyName const & ) const;
             hasMetadata_function_type hasMetadata_function_value( &::SireMol::Selector< SireMol::CutGroup >::hasMetadata );
             
             Selector_CutGroup__exposer.def( 
@@ -212,7 +212,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::hasMetadata
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::CutGroup >::*hasMetadata_function_type )( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::CutGroup >::*hasMetadata_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
             hasMetadata_function_type hasMetadata_function_value( &::SireMol::Selector< SireMol::CutGroup >::hasMetadata );
             
             Selector_CutGroup__exposer.def( 
@@ -224,7 +224,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::hasProperty
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::CutGroup >::*hasProperty_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::CutGroup >::*hasProperty_function_type)( ::SireBase::PropertyName const & ) const;
             hasProperty_function_type hasProperty_function_value( &::SireMol::Selector< SireMol::CutGroup >::hasProperty );
             
             Selector_CutGroup__exposer.def( 
@@ -236,7 +236,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::index
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::CGIdx ( ::SireMol::Selector< SireMol::CutGroup >::*index_function_type )( int ) const;
+            typedef ::SireMol::CGIdx ( ::SireMol::Selector< SireMol::CutGroup >::*index_function_type)( int ) const;
             index_function_type index_function_value( &::SireMol::Selector< SireMol::CutGroup >::index );
             
             Selector_CutGroup__exposer.def( 
@@ -248,7 +248,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::intersection
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*intersection_function_type )( ::SireMol::Selector< SireMol::CutGroup > const & ) const;
+            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*intersection_function_type)( ::SireMol::Selector< SireMol::CutGroup > const & ) const;
             intersection_function_type intersection_function_value( &::SireMol::Selector< SireMol::CutGroup >::intersection );
             
             Selector_CutGroup__exposer.def( 
@@ -260,7 +260,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::intersection
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*intersection_function_type )( ::SireMol::CutGroup const & ) const;
+            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*intersection_function_type)( ::SireMol::CutGroup const & ) const;
             intersection_function_type intersection_function_value( &::SireMol::Selector< SireMol::CutGroup >::intersection );
             
             Selector_CutGroup__exposer.def( 
@@ -272,7 +272,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::intersection
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*intersection_function_type )( ::SireMol::CGID const & ) const;
+            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*intersection_function_type)( ::SireMol::CGID const & ) const;
             intersection_function_type intersection_function_value( &::SireMol::Selector< SireMol::CutGroup >::intersection );
             
             Selector_CutGroup__exposer.def( 
@@ -284,7 +284,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::intersects
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::CutGroup >::*intersects_function_type )( ::SireMol::Selector< SireMol::CutGroup > const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::CutGroup >::*intersects_function_type)( ::SireMol::Selector< SireMol::CutGroup > const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::Selector< SireMol::CutGroup >::intersects );
             
             Selector_CutGroup__exposer.def( 
@@ -296,7 +296,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::intersects
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::CutGroup >::*intersects_function_type )( ::SireMol::CutGroup const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::CutGroup >::*intersects_function_type)( ::SireMol::CutGroup const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::Selector< SireMol::CutGroup >::intersects );
             
             Selector_CutGroup__exposer.def( 
@@ -308,7 +308,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::intersects
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::CutGroup >::*intersects_function_type )( ::SireMol::CGID const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::CutGroup >::*intersects_function_type)( ::SireMol::CGID const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::Selector< SireMol::CutGroup >::intersects );
             
             Selector_CutGroup__exposer.def( 
@@ -320,7 +320,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::invert
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*invert_function_type )(  ) const;
+            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*invert_function_type)(  ) const;
             invert_function_type invert_function_value( &::SireMol::Selector< SireMol::CutGroup >::invert );
             
             Selector_CutGroup__exposer.def( 
@@ -331,7 +331,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::isEmpty
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::CutGroup >::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::CutGroup >::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::Selector< SireMol::CutGroup >::isEmpty );
             
             Selector_CutGroup__exposer.def( 
@@ -342,7 +342,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::metadataKeys
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::QStringList ( ::SireMol::Selector< SireMol::CutGroup >::*metadataKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireMol::Selector< SireMol::CutGroup >::*metadataKeys_function_type)(  ) const;
             metadataKeys_function_type metadataKeys_function_value( &::SireMol::Selector< SireMol::CutGroup >::metadataKeys );
             
             Selector_CutGroup__exposer.def( 
@@ -353,7 +353,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::metadataKeys
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::QStringList ( ::SireMol::Selector< SireMol::CutGroup >::*metadataKeys_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef ::QStringList ( ::SireMol::Selector< SireMol::CutGroup >::*metadataKeys_function_type)( ::SireBase::PropertyName const & ) const;
             metadataKeys_function_type metadataKeys_function_value( &::SireMol::Selector< SireMol::CutGroup >::metadataKeys );
             
             Selector_CutGroup__exposer.def( 
@@ -365,7 +365,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::move
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > ( ::SireMol::Selector< SireMol::CutGroup >::*move_function_type )(  ) const;
+            typedef ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > ( ::SireMol::Selector< SireMol::CutGroup >::*move_function_type)(  ) const;
             move_function_type move_function_value( &::SireMol::Selector< SireMol::CutGroup >::move );
             
             Selector_CutGroup__exposer.def( 
@@ -376,7 +376,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::move
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > ( ::SireMol::Selector< SireMol::CutGroup >::*move_function_type )( int ) const;
+            typedef ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > ( ::SireMol::Selector< SireMol::CutGroup >::*move_function_type)( int ) const;
             move_function_type move_function_value( &::SireMol::Selector< SireMol::CutGroup >::move );
             
             Selector_CutGroup__exposer.def( 
@@ -388,7 +388,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::move
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > ( ::SireMol::Selector< SireMol::CutGroup >::*move_function_type )( int,int ) const;
+            typedef ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > ( ::SireMol::Selector< SireMol::CutGroup >::*move_function_type)( int,int ) const;
             move_function_type move_function_value( &::SireMol::Selector< SireMol::CutGroup >::move );
             
             Selector_CutGroup__exposer.def( 
@@ -401,7 +401,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::operator()
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::CutGroup ( ::SireMol::Selector< SireMol::CutGroup >::*__call___function_type )( int ) const;
+            typedef ::SireMol::CutGroup ( ::SireMol::Selector< SireMol::CutGroup >::*__call___function_type)( int ) const;
             __call___function_type __call___function_value( &::SireMol::Selector< SireMol::CutGroup >::operator() );
             
             Selector_CutGroup__exposer.def( 
@@ -413,7 +413,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::operator()
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*__call___function_type )( int,int ) const;
+            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireMol::Selector< SireMol::CutGroup >::operator() );
             
             Selector_CutGroup__exposer.def( 
@@ -431,7 +431,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::operator=
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::CutGroup > & ( ::SireMol::Selector< SireMol::CutGroup >::*assign_function_type )( ::SireMol::Selector< SireMol::CutGroup > const & ) ;
+            typedef ::SireMol::Selector< SireMol::CutGroup > & ( ::SireMol::Selector< SireMol::CutGroup >::*assign_function_type)( ::SireMol::Selector< SireMol::CutGroup > const & ) ;
             assign_function_type assign_function_value( &::SireMol::Selector< SireMol::CutGroup >::operator= );
             
             Selector_CutGroup__exposer.def( 
@@ -444,7 +444,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::operator=
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::CutGroup > & ( ::SireMol::Selector< SireMol::CutGroup >::*assign_function_type )( ::SireMol::CutGroup const & ) ;
+            typedef ::SireMol::Selector< SireMol::CutGroup > & ( ::SireMol::Selector< SireMol::CutGroup >::*assign_function_type)( ::SireMol::CutGroup const & ) ;
             assign_function_type assign_function_value( &::SireMol::Selector< SireMol::CutGroup >::operator= );
             
             Selector_CutGroup__exposer.def( 
@@ -458,7 +458,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::operator[]
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::CutGroup ( ::SireMol::Selector< SireMol::CutGroup >::*__getitem___function_type )( int ) const;
+            typedef ::SireMol::CutGroup ( ::SireMol::Selector< SireMol::CutGroup >::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::Selector< SireMol::CutGroup >::operator[] );
             
             Selector_CutGroup__exposer.def( 
@@ -470,7 +470,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::propertyKeys
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::QStringList ( ::SireMol::Selector< SireMol::CutGroup >::*propertyKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireMol::Selector< SireMol::CutGroup >::*propertyKeys_function_type)(  ) const;
             propertyKeys_function_type propertyKeys_function_value( &::SireMol::Selector< SireMol::CutGroup >::propertyKeys );
             
             Selector_CutGroup__exposer.def( 
@@ -481,7 +481,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::selectedAll
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::CutGroup >::*selectedAll_function_type )(  ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::CutGroup >::*selectedAll_function_type)(  ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::Selector< SireMol::CutGroup >::selectedAll );
             
             Selector_CutGroup__exposer.def( 
@@ -492,7 +492,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::selection
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::AtomSelection ( ::SireMol::Selector< SireMol::CutGroup >::*selection_function_type )(  ) const;
+            typedef ::SireMol::AtomSelection ( ::SireMol::Selector< SireMol::CutGroup >::*selection_function_type)(  ) const;
             selection_function_type selection_function_value( &::SireMol::Selector< SireMol::CutGroup >::selection );
             
             Selector_CutGroup__exposer.def( 
@@ -503,7 +503,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::selection
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::AtomSelection ( ::SireMol::Selector< SireMol::CutGroup >::*selection_function_type )( int ) const;
+            typedef ::SireMol::AtomSelection ( ::SireMol::Selector< SireMol::CutGroup >::*selection_function_type)( int ) const;
             selection_function_type selection_function_value( &::SireMol::Selector< SireMol::CutGroup >::selection );
             
             Selector_CutGroup__exposer.def( 
@@ -515,7 +515,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::selection
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::AtomSelection ( ::SireMol::Selector< SireMol::CutGroup >::*selection_function_type )( int,int ) const;
+            typedef ::SireMol::AtomSelection ( ::SireMol::Selector< SireMol::CutGroup >::*selection_function_type)( int,int ) const;
             selection_function_type selection_function_value( &::SireMol::Selector< SireMol::CutGroup >::selection );
             
             Selector_CutGroup__exposer.def( 
@@ -527,7 +527,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::selector
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*selector_function_type )(  ) const;
+            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*selector_function_type)(  ) const;
             selector_function_type selector_function_value( &::SireMol::Selector< SireMol::CutGroup >::selector );
             
             Selector_CutGroup__exposer.def( 
@@ -538,7 +538,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::selector
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*selector_function_type )( int ) const;
+            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*selector_function_type)( int ) const;
             selector_function_type selector_function_value( &::SireMol::Selector< SireMol::CutGroup >::selector );
             
             Selector_CutGroup__exposer.def( 
@@ -550,7 +550,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::selector
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*selector_function_type )( int,int ) const;
+            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*selector_function_type)( int,int ) const;
             selector_function_type selector_function_value( &::SireMol::Selector< SireMol::CutGroup >::selector );
             
             Selector_CutGroup__exposer.def( 
@@ -562,7 +562,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::subtract
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*subtract_function_type )( ::SireMol::Selector< SireMol::CutGroup > const & ) const;
+            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*subtract_function_type)( ::SireMol::Selector< SireMol::CutGroup > const & ) const;
             subtract_function_type subtract_function_value( &::SireMol::Selector< SireMol::CutGroup >::subtract );
             
             Selector_CutGroup__exposer.def( 
@@ -574,7 +574,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::subtract
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*subtract_function_type )( ::SireMol::CutGroup const & ) const;
+            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*subtract_function_type)( ::SireMol::CutGroup const & ) const;
             subtract_function_type subtract_function_value( &::SireMol::Selector< SireMol::CutGroup >::subtract );
             
             Selector_CutGroup__exposer.def( 
@@ -586,7 +586,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::subtract
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*subtract_function_type )( ::SireMol::CGID const & ) const;
+            typedef ::SireMol::Selector< SireMol::CutGroup > ( ::SireMol::Selector< SireMol::CutGroup >::*subtract_function_type)( ::SireMol::CGID const & ) const;
             subtract_function_type subtract_function_value( &::SireMol::Selector< SireMol::CutGroup >::subtract );
             
             Selector_CutGroup__exposer.def( 
@@ -598,7 +598,7 @@ void register_Selector_CutGroup__class(){
         { //::SireMol::Selector< SireMol::CutGroup >::toString
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
-            typedef ::QString ( ::SireMol::Selector< SireMol::CutGroup >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::Selector< SireMol::CutGroup >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::Selector< SireMol::CutGroup >::toString );
             
             Selector_CutGroup__exposer.def( 

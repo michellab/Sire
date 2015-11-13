@@ -43,7 +43,7 @@ void register_Quaternion_class(){
         Quaternion_exposer.def( bp::init< double, double, double, double >(( bp::arg("x"), bp::arg("y"), bp::arg("z"), bp::arg("w") )) );
         { //::SireMaths::Quaternion::conjugate
         
-            typedef ::SireMaths::Quaternion ( ::SireMaths::Quaternion::*conjugate_function_type )(  ) const;
+            typedef ::SireMaths::Quaternion ( ::SireMaths::Quaternion::*conjugate_function_type)(  ) const;
             conjugate_function_type conjugate_function_value( &::SireMaths::Quaternion::conjugate );
             
             Quaternion_exposer.def( 
@@ -53,7 +53,7 @@ void register_Quaternion_class(){
         }
         { //::SireMaths::Quaternion::dot
         
-            typedef double ( ::SireMaths::Quaternion::*dot_function_type )( ::SireMaths::Quaternion const & ) const;
+            typedef double ( ::SireMaths::Quaternion::*dot_function_type)( ::SireMaths::Quaternion const & ) const;
             dot_function_type dot_function_value( &::SireMaths::Quaternion::dot );
             
             Quaternion_exposer.def( 
@@ -64,7 +64,7 @@ void register_Quaternion_class(){
         }
         { //::SireMaths::Quaternion::fromMatrix
         
-            typedef void ( ::SireMaths::Quaternion::*fromMatrix_function_type )( ::SireMaths::Matrix const & ) ;
+            typedef void ( ::SireMaths::Quaternion::*fromMatrix_function_type)( ::SireMaths::Matrix const & ) ;
             fromMatrix_function_type fromMatrix_function_value( &::SireMaths::Quaternion::fromMatrix );
             
             Quaternion_exposer.def( 
@@ -96,7 +96,7 @@ void register_Quaternion_class(){
         }
         { //::SireMaths::Quaternion::inverse
         
-            typedef ::SireMaths::Quaternion ( ::SireMaths::Quaternion::*inverse_function_type )(  ) const;
+            typedef ::SireMaths::Quaternion ( ::SireMaths::Quaternion::*inverse_function_type)(  ) const;
             inverse_function_type inverse_function_value( &::SireMaths::Quaternion::inverse );
             
             Quaternion_exposer.def( 
@@ -106,7 +106,7 @@ void register_Quaternion_class(){
         }
         { //::SireMaths::Quaternion::isIdentity
         
-            typedef bool ( ::SireMaths::Quaternion::*isIdentity_function_type )(  ) const;
+            typedef bool ( ::SireMaths::Quaternion::*isIdentity_function_type)(  ) const;
             isIdentity_function_type isIdentity_function_value( &::SireMaths::Quaternion::isIdentity );
             
             Quaternion_exposer.def( 
@@ -117,7 +117,7 @@ void register_Quaternion_class(){
         Quaternion_exposer.def( bp::self != bp::self );
         { //::SireMaths::Quaternion::operator=
         
-            typedef ::SireMaths::Quaternion & ( ::SireMaths::Quaternion::*assign_function_type )( ::SireMaths::Quaternion const & ) ;
+            typedef ::SireMaths::Quaternion & ( ::SireMaths::Quaternion::*assign_function_type)( ::SireMaths::Quaternion const & ) ;
             assign_function_type assign_function_value( &::SireMaths::Quaternion::operator= );
             
             Quaternion_exposer.def( 
@@ -130,7 +130,7 @@ void register_Quaternion_class(){
         Quaternion_exposer.def( bp::self == bp::self );
         { //::SireMaths::Quaternion::pow
         
-            typedef ::SireMaths::Quaternion ( ::SireMaths::Quaternion::*pow_function_type )( double ) const;
+            typedef ::SireMaths::Quaternion ( ::SireMaths::Quaternion::*pow_function_type)( double ) const;
             pow_function_type pow_function_value( &::SireMaths::Quaternion::pow );
             
             Quaternion_exposer.def( 
@@ -141,7 +141,7 @@ void register_Quaternion_class(){
         }
         { //::SireMaths::Quaternion::renormalise
         
-            typedef void ( ::SireMaths::Quaternion::*renormalise_function_type )(  ) ;
+            typedef void ( ::SireMaths::Quaternion::*renormalise_function_type)(  ) ;
             renormalise_function_type renormalise_function_value( &::SireMaths::Quaternion::renormalise );
             
             Quaternion_exposer.def( 
@@ -151,7 +151,7 @@ void register_Quaternion_class(){
         }
         { //::SireMaths::Quaternion::rotate
         
-            typedef ::SireMaths::Vector ( ::SireMaths::Quaternion::*rotate_function_type )( ::SireMaths::Vector const & ) const;
+            typedef ::SireMaths::Vector ( ::SireMaths::Quaternion::*rotate_function_type)( ::SireMaths::Vector const & ) const;
             rotate_function_type rotate_function_value( &::SireMaths::Quaternion::rotate );
             
             Quaternion_exposer.def( 
@@ -162,7 +162,7 @@ void register_Quaternion_class(){
         }
         { //::SireMaths::Quaternion::rotate
         
-            typedef ::QVector< SireMaths::Vector > ( ::SireMaths::Quaternion::*rotate_function_type )( ::QVector< SireMaths::Vector > const & ) const;
+            typedef ::QVector< SireMaths::Vector > ( ::SireMaths::Quaternion::*rotate_function_type)( ::QVector< SireMaths::Vector > const & ) const;
             rotate_function_type rotate_function_value( &::SireMaths::Quaternion::rotate );
             
             Quaternion_exposer.def( 
@@ -173,7 +173,7 @@ void register_Quaternion_class(){
         }
         { //::SireMaths::Quaternion::slerp
         
-            typedef ::SireMaths::Quaternion ( ::SireMaths::Quaternion::*slerp_function_type )( ::SireMaths::Quaternion const &,double ) const;
+            typedef ::SireMaths::Quaternion ( ::SireMaths::Quaternion::*slerp_function_type)( ::SireMaths::Quaternion const &,double ) const;
             slerp_function_type slerp_function_value( &::SireMaths::Quaternion::slerp );
             
             Quaternion_exposer.def( 
@@ -184,7 +184,7 @@ void register_Quaternion_class(){
         }
         { //::SireMaths::Quaternion::toMatrix
         
-            typedef ::SireMaths::Matrix ( ::SireMaths::Quaternion::*toMatrix_function_type )(  ) const;
+            typedef ::SireMaths::Matrix ( ::SireMaths::Quaternion::*toMatrix_function_type)(  ) const;
             toMatrix_function_type toMatrix_function_value( &::SireMaths::Quaternion::toMatrix );
             
             Quaternion_exposer.def( 
@@ -194,7 +194,7 @@ void register_Quaternion_class(){
         }
         { //::SireMaths::Quaternion::toString
         
-            typedef ::QString ( ::SireMaths::Quaternion::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMaths::Quaternion::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMaths::Quaternion::toString );
             
             Quaternion_exposer.def( 
@@ -214,7 +214,7 @@ void register_Quaternion_class(){
         }
         { //::SireMaths::Quaternion::w
         
-            typedef double ( ::SireMaths::Quaternion::*w_function_type )(  ) const;
+            typedef double ( ::SireMaths::Quaternion::*w_function_type)(  ) const;
             w_function_type w_function_value( &::SireMaths::Quaternion::w );
             
             Quaternion_exposer.def( 
@@ -224,7 +224,7 @@ void register_Quaternion_class(){
         }
         { //::SireMaths::Quaternion::what
         
-            typedef char const * ( ::SireMaths::Quaternion::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMaths::Quaternion::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMaths::Quaternion::what );
             
             Quaternion_exposer.def( 
@@ -234,7 +234,7 @@ void register_Quaternion_class(){
         }
         { //::SireMaths::Quaternion::x
         
-            typedef double ( ::SireMaths::Quaternion::*x_function_type )(  ) const;
+            typedef double ( ::SireMaths::Quaternion::*x_function_type)(  ) const;
             x_function_type x_function_value( &::SireMaths::Quaternion::x );
             
             Quaternion_exposer.def( 
@@ -244,7 +244,7 @@ void register_Quaternion_class(){
         }
         { //::SireMaths::Quaternion::y
         
-            typedef double ( ::SireMaths::Quaternion::*y_function_type )(  ) const;
+            typedef double ( ::SireMaths::Quaternion::*y_function_type)(  ) const;
             y_function_type y_function_value( &::SireMaths::Quaternion::y );
             
             Quaternion_exposer.def( 
@@ -254,7 +254,7 @@ void register_Quaternion_class(){
         }
         { //::SireMaths::Quaternion::z
         
-            typedef double ( ::SireMaths::Quaternion::*z_function_type )(  ) const;
+            typedef double ( ::SireMaths::Quaternion::*z_function_type)(  ) const;
             z_function_type z_function_value( &::SireMaths::Quaternion::z );
             
             Quaternion_exposer.def( 

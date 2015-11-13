@@ -45,7 +45,7 @@ void register_AngleComponent_class(){
         AngleComponent_exposer.def( bp::init< SireSystem::AngleComponent const & >(( bp::arg("other") )) );
         { //::SireSystem::AngleComponent::nPoints
         
-            typedef int ( ::SireSystem::AngleComponent::*nPoints_function_type )(  ) const;
+            typedef int ( ::SireSystem::AngleComponent::*nPoints_function_type)(  ) const;
             nPoints_function_type nPoints_function_value( &::SireSystem::AngleComponent::nPoints );
             
             AngleComponent_exposer.def( 
@@ -56,7 +56,7 @@ void register_AngleComponent_class(){
         AngleComponent_exposer.def( bp::self != bp::self );
         { //::SireSystem::AngleComponent::operator=
         
-            typedef ::SireSystem::AngleComponent & ( ::SireSystem::AngleComponent::*assign_function_type )( ::SireSystem::AngleComponent const & ) ;
+            typedef ::SireSystem::AngleComponent & ( ::SireSystem::AngleComponent::*assign_function_type)( ::SireSystem::AngleComponent const & ) ;
             assign_function_type assign_function_value( &::SireSystem::AngleComponent::operator= );
             
             AngleComponent_exposer.def( 
@@ -69,7 +69,7 @@ void register_AngleComponent_class(){
         AngleComponent_exposer.def( bp::self == bp::self );
         { //::SireSystem::AngleComponent::point
         
-            typedef ::SireFF::Point const & ( ::SireSystem::AngleComponent::*point_function_type )( int ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::AngleComponent::*point_function_type)( int ) const;
             point_function_type point_function_value( &::SireSystem::AngleComponent::point );
             
             AngleComponent_exposer.def( 
@@ -81,7 +81,7 @@ void register_AngleComponent_class(){
         }
         { //::SireSystem::AngleComponent::point0
         
-            typedef ::SireFF::Point const & ( ::SireSystem::AngleComponent::*point0_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::AngleComponent::*point0_function_type)(  ) const;
             point0_function_type point0_function_value( &::SireSystem::AngleComponent::point0 );
             
             AngleComponent_exposer.def( 
@@ -92,7 +92,7 @@ void register_AngleComponent_class(){
         }
         { //::SireSystem::AngleComponent::point1
         
-            typedef ::SireFF::Point const & ( ::SireSystem::AngleComponent::*point1_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::AngleComponent::*point1_function_type)(  ) const;
             point1_function_type point1_function_value( &::SireSystem::AngleComponent::point1 );
             
             AngleComponent_exposer.def( 
@@ -103,7 +103,7 @@ void register_AngleComponent_class(){
         }
         { //::SireSystem::AngleComponent::point2
         
-            typedef ::SireFF::Point const & ( ::SireSystem::AngleComponent::*point2_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::AngleComponent::*point2_function_type)(  ) const;
             point2_function_type point2_function_value( &::SireSystem::AngleComponent::point2 );
             
             AngleComponent_exposer.def( 
@@ -191,7 +191,7 @@ void register_AngleComponent_class(){
         }
         { //::SireSystem::AngleComponent::toString
         
-            typedef ::QString ( ::SireSystem::AngleComponent::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireSystem::AngleComponent::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireSystem::AngleComponent::toString );
             
             AngleComponent_exposer.def( 

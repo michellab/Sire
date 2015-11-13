@@ -31,7 +31,7 @@ void register_Plane_class(){
         Plane_exposer.def( bp::init< SireMaths::Plane const & >(( bp::arg("other") )) );
         { //::SireMaths::Plane::a
         
-            typedef double ( ::SireMaths::Plane::*a_function_type )(  ) const;
+            typedef double ( ::SireMaths::Plane::*a_function_type)(  ) const;
             a_function_type a_function_value( &::SireMaths::Plane::a );
             
             Plane_exposer.def( 
@@ -41,7 +41,7 @@ void register_Plane_class(){
         }
         { //::SireMaths::Plane::b
         
-            typedef double ( ::SireMaths::Plane::*b_function_type )(  ) const;
+            typedef double ( ::SireMaths::Plane::*b_function_type)(  ) const;
             b_function_type b_function_value( &::SireMaths::Plane::b );
             
             Plane_exposer.def( 
@@ -51,7 +51,7 @@ void register_Plane_class(){
         }
         { //::SireMaths::Plane::c
         
-            typedef double ( ::SireMaths::Plane::*c_function_type )(  ) const;
+            typedef double ( ::SireMaths::Plane::*c_function_type)(  ) const;
             c_function_type c_function_value( &::SireMaths::Plane::c );
             
             Plane_exposer.def( 
@@ -61,7 +61,7 @@ void register_Plane_class(){
         }
         { //::SireMaths::Plane::d
         
-            typedef double ( ::SireMaths::Plane::*d_function_type )(  ) const;
+            typedef double ( ::SireMaths::Plane::*d_function_type)(  ) const;
             d_function_type d_function_value( &::SireMaths::Plane::d );
             
             Plane_exposer.def( 
@@ -71,7 +71,7 @@ void register_Plane_class(){
         }
         { //::SireMaths::Plane::distance
         
-            typedef double ( ::SireMaths::Plane::*distance_function_type )( ::SireMaths::Vector const & ) const;
+            typedef double ( ::SireMaths::Plane::*distance_function_type)( ::SireMaths::Vector const & ) const;
             distance_function_type distance_function_value( &::SireMaths::Plane::distance );
             
             Plane_exposer.def( 
@@ -82,7 +82,7 @@ void register_Plane_class(){
         }
         { //::SireMaths::Plane::distanceFromOrigin
         
-            typedef double const & ( ::SireMaths::Plane::*distanceFromOrigin_function_type )(  ) const;
+            typedef double const & ( ::SireMaths::Plane::*distanceFromOrigin_function_type)(  ) const;
             distanceFromOrigin_function_type distanceFromOrigin_function_value( &::SireMaths::Plane::distanceFromOrigin );
             
             Plane_exposer.def( 
@@ -93,7 +93,7 @@ void register_Plane_class(){
         }
         { //::SireMaths::Plane::normal
         
-            typedef ::SireMaths::Vector const & ( ::SireMaths::Plane::*normal_function_type )(  ) const;
+            typedef ::SireMaths::Vector const & ( ::SireMaths::Plane::*normal_function_type)(  ) const;
             normal_function_type normal_function_value( &::SireMaths::Plane::normal );
             
             Plane_exposer.def( 
@@ -114,7 +114,7 @@ void register_Plane_class(){
         }
         { //::SireMaths::Plane::what
         
-            typedef char const * ( ::SireMaths::Plane::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMaths::Plane::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMaths::Plane::what );
             
             Plane_exposer.def( 

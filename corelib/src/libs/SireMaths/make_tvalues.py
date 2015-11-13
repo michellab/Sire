@@ -15,11 +15,11 @@ def join(vals, typ):
         for val in vals:
             numbers.append( str( int(val.replace('%','')) ) )
 
-    return string.join(numbers, ", ")
+    return ", ".join(numbers)
 
 nlevels = len(words[1:])
-print "    int nlevels = %d;" % nlevels
-print "    double levels[%d] = { %s };" % (nlevels, join(words[1:], "float"))
+print("    int nlevels = %d;" % nlevels)
+print("    double levels[%d] = { %s };" % (nlevels, join(words[1:], "float")))
 
 counts = []
 
@@ -27,20 +27,20 @@ for line in lines[1:]:
     words = line.split()
     counts.append(words[0])
 
-print "    int ncounts = %d;" % len(counts)
-print "    int counts[%d] = { %s };" % (len(counts), join(counts, "int"))
+print("    int ncounts = %d;" % len(counts))
+print("    int counts[%d] = { %s };" % (len(counts), join(counts, "int")))
 
 vals = []
 
 for line in lines[1:]:
     vals.append( line.split()[1:] )
 
-print "    double values[%d][%d] = {" % (len(counts), nlevels)
+print("    double values[%d][%d] = {" % (len(counts), nlevels))
 
 a = []
 
 for val in vals:
     a.append("        { %s }" % join(val, "float"))
 
-print "%s\n    };" % string.join(a, ",\n")
+print("%s\n    };" % ",\n".join(a))
 

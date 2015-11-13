@@ -44,7 +44,7 @@ void register_DihedralSymbols_class(){
         bp::scope DihedralSymbols_scope( DihedralSymbols_exposer );
         { //::SireMM::DihedralSymbols::phi
         
-            typedef ::SireCAS::Symbol const & ( ::SireMM::DihedralSymbols::*phi_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMM::DihedralSymbols::*phi_function_type)(  ) const;
             phi_function_type phi_function_value( &::SireMM::DihedralSymbols::phi );
             
             DihedralSymbols_exposer.def( 

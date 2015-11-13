@@ -73,6 +73,12 @@ StringProperty::StringProperty(const QString &str)
                  s(shareString(str))
 {}
 
+/** Cast from the passed VariantProperty */
+StringProperty::StringProperty(const VariantProperty &other)
+               : ConcreteProperty<StringProperty,Property>(other),
+                 s(other.convertTo<QString>())
+{}
+
 /** Copy constructor */
 StringProperty::StringProperty(const StringProperty &other)
                : ConcreteProperty<StringProperty,Property>(other), s(other.s)

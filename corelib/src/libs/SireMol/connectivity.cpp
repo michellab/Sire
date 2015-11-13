@@ -2226,9 +2226,6 @@ QList<DihedralID> ConnectivityBase::getDihedrals(const AtomID &atom0) const
     that are bonded, angled or dihedraled) */
 QVector< QVector<bool> > ConnectivityBase::getBondMatrix(int start, int end) const
 {
-    QElapsedTimer t;
-    t.start();
-    
     if (start < 0)
         start = 0;
     
@@ -2362,10 +2359,6 @@ QVector< QVector<bool> > ConnectivityBase::getBondMatrix(int start, int end) con
             break;
         }
     }
-    
-    quint64 ns = t.nsecsElapsed();
-    
-    qDebug() << "getBondMatrix(" << start << "," << end << ") took" << (0.000001*ns) << "ms";
     
     return ret;
 }

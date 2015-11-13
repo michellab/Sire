@@ -66,7 +66,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::add
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*add_function_type )( ::SireMol::Selector< SireMol::Atom > const & ) const;
+            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*add_function_type)( ::SireMol::Selector< SireMol::Atom > const & ) const;
             add_function_type add_function_value( &::SireMol::Selector< SireMol::Atom >::add );
             
             Selector_Atom__exposer.def( 
@@ -78,7 +78,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::add
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*add_function_type )( ::SireMol::Atom const & ) const;
+            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*add_function_type)( ::SireMol::Atom const & ) const;
             add_function_type add_function_value( &::SireMol::Selector< SireMol::Atom >::add );
             
             Selector_Atom__exposer.def( 
@@ -90,7 +90,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::add
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*add_function_type )( ::SireMol::AtomID const & ) const;
+            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*add_function_type)( ::SireMol::AtomID const & ) const;
             add_function_type add_function_value( &::SireMol::Selector< SireMol::Atom >::add );
             
             Selector_Atom__exposer.def( 
@@ -102,7 +102,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::at
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Atom ( ::SireMol::Selector< SireMol::Atom >::*at_function_type )( int ) const;
+            typedef ::SireMol::Atom ( ::SireMol::Selector< SireMol::Atom >::*at_function_type)( int ) const;
             at_function_type at_function_value( &::SireMol::Selector< SireMol::Atom >::at );
             
             Selector_Atom__exposer.def( 
@@ -114,7 +114,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::at
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*at_function_type )( int,int ) const;
+            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*at_function_type)( int,int ) const;
             at_function_type at_function_value( &::SireMol::Selector< SireMol::Atom >::at );
             
             Selector_Atom__exposer.def( 
@@ -126,7 +126,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::contains
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Atom >::*contains_function_type )( ::SireMol::Selector< SireMol::Atom > const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Atom >::*contains_function_type)( ::SireMol::Selector< SireMol::Atom > const & ) const;
             contains_function_type contains_function_value( &::SireMol::Selector< SireMol::Atom >::contains );
             
             Selector_Atom__exposer.def( 
@@ -138,7 +138,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::contains
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Atom >::*contains_function_type )( ::SireMol::Atom const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Atom >::*contains_function_type)( ::SireMol::Atom const & ) const;
             contains_function_type contains_function_value( &::SireMol::Selector< SireMol::Atom >::contains );
             
             Selector_Atom__exposer.def( 
@@ -150,7 +150,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::contains
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Atom >::*contains_function_type )( ::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Atom >::*contains_function_type)( ::SireMol::AtomID const & ) const;
             contains_function_type contains_function_value( &::SireMol::Selector< SireMol::Atom >::contains );
             
             Selector_Atom__exposer.def( 
@@ -162,7 +162,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::count
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef int ( ::SireMol::Selector< SireMol::Atom >::*count_function_type )(  ) const;
+            typedef int ( ::SireMol::Selector< SireMol::Atom >::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMol::Selector< SireMol::Atom >::count );
             
             Selector_Atom__exposer.def( 
@@ -173,7 +173,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::evaluate
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Evaluator ( ::SireMol::Selector< SireMol::Atom >::*evaluate_function_type )(  ) const;
+            typedef ::SireMol::Evaluator ( ::SireMol::Selector< SireMol::Atom >::*evaluate_function_type)(  ) const;
             evaluate_function_type evaluate_function_value( &::SireMol::Selector< SireMol::Atom >::evaluate );
             
             Selector_Atom__exposer.def( 
@@ -184,7 +184,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::evaluate
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Evaluator ( ::SireMol::Selector< SireMol::Atom >::*evaluate_function_type )( int ) const;
+            typedef ::SireMol::Evaluator ( ::SireMol::Selector< SireMol::Atom >::*evaluate_function_type)( int ) const;
             evaluate_function_type evaluate_function_value( &::SireMol::Selector< SireMol::Atom >::evaluate );
             
             Selector_Atom__exposer.def( 
@@ -196,7 +196,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::evaluate
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Evaluator ( ::SireMol::Selector< SireMol::Atom >::*evaluate_function_type )( int,int ) const;
+            typedef ::SireMol::Evaluator ( ::SireMol::Selector< SireMol::Atom >::*evaluate_function_type)( int,int ) const;
             evaluate_function_type evaluate_function_value( &::SireMol::Selector< SireMol::Atom >::evaluate );
             
             Selector_Atom__exposer.def( 
@@ -208,7 +208,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::hasMetadata
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Atom >::*hasMetadata_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Atom >::*hasMetadata_function_type)( ::SireBase::PropertyName const & ) const;
             hasMetadata_function_type hasMetadata_function_value( &::SireMol::Selector< SireMol::Atom >::hasMetadata );
             
             Selector_Atom__exposer.def( 
@@ -220,7 +220,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::hasMetadata
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Atom >::*hasMetadata_function_type )( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Atom >::*hasMetadata_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
             hasMetadata_function_type hasMetadata_function_value( &::SireMol::Selector< SireMol::Atom >::hasMetadata );
             
             Selector_Atom__exposer.def( 
@@ -232,7 +232,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::hasProperty
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Atom >::*hasProperty_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Atom >::*hasProperty_function_type)( ::SireBase::PropertyName const & ) const;
             hasProperty_function_type hasProperty_function_value( &::SireMol::Selector< SireMol::Atom >::hasProperty );
             
             Selector_Atom__exposer.def( 
@@ -244,7 +244,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::index
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::AtomIdx ( ::SireMol::Selector< SireMol::Atom >::*index_function_type )( int ) const;
+            typedef ::SireMol::AtomIdx ( ::SireMol::Selector< SireMol::Atom >::*index_function_type)( int ) const;
             index_function_type index_function_value( &::SireMol::Selector< SireMol::Atom >::index );
             
             Selector_Atom__exposer.def( 
@@ -256,7 +256,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::intersection
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*intersection_function_type )( ::SireMol::Selector< SireMol::Atom > const & ) const;
+            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*intersection_function_type)( ::SireMol::Selector< SireMol::Atom > const & ) const;
             intersection_function_type intersection_function_value( &::SireMol::Selector< SireMol::Atom >::intersection );
             
             Selector_Atom__exposer.def( 
@@ -268,7 +268,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::intersection
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*intersection_function_type )( ::SireMol::Atom const & ) const;
+            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*intersection_function_type)( ::SireMol::Atom const & ) const;
             intersection_function_type intersection_function_value( &::SireMol::Selector< SireMol::Atom >::intersection );
             
             Selector_Atom__exposer.def( 
@@ -280,7 +280,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::intersection
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*intersection_function_type )( ::SireMol::AtomID const & ) const;
+            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*intersection_function_type)( ::SireMol::AtomID const & ) const;
             intersection_function_type intersection_function_value( &::SireMol::Selector< SireMol::Atom >::intersection );
             
             Selector_Atom__exposer.def( 
@@ -292,7 +292,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::intersects
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Atom >::*intersects_function_type )( ::SireMol::Selector< SireMol::Atom > const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Atom >::*intersects_function_type)( ::SireMol::Selector< SireMol::Atom > const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::Selector< SireMol::Atom >::intersects );
             
             Selector_Atom__exposer.def( 
@@ -304,7 +304,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::intersects
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Atom >::*intersects_function_type )( ::SireMol::Atom const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Atom >::*intersects_function_type)( ::SireMol::Atom const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::Selector< SireMol::Atom >::intersects );
             
             Selector_Atom__exposer.def( 
@@ -316,7 +316,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::intersects
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Atom >::*intersects_function_type )( ::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Atom >::*intersects_function_type)( ::SireMol::AtomID const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::Selector< SireMol::Atom >::intersects );
             
             Selector_Atom__exposer.def( 
@@ -328,7 +328,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::invert
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*invert_function_type )(  ) const;
+            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*invert_function_type)(  ) const;
             invert_function_type invert_function_value( &::SireMol::Selector< SireMol::Atom >::invert );
             
             Selector_Atom__exposer.def( 
@@ -339,7 +339,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::isEmpty
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Atom >::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Atom >::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::Selector< SireMol::Atom >::isEmpty );
             
             Selector_Atom__exposer.def( 
@@ -350,7 +350,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::metadataKeys
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::QStringList ( ::SireMol::Selector< SireMol::Atom >::*metadataKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireMol::Selector< SireMol::Atom >::*metadataKeys_function_type)(  ) const;
             metadataKeys_function_type metadataKeys_function_value( &::SireMol::Selector< SireMol::Atom >::metadataKeys );
             
             Selector_Atom__exposer.def( 
@@ -361,7 +361,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::metadataKeys
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::QStringList ( ::SireMol::Selector< SireMol::Atom >::*metadataKeys_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef ::QStringList ( ::SireMol::Selector< SireMol::Atom >::*metadataKeys_function_type)( ::SireBase::PropertyName const & ) const;
             metadataKeys_function_type metadataKeys_function_value( &::SireMol::Selector< SireMol::Atom >::metadataKeys );
             
             Selector_Atom__exposer.def( 
@@ -373,7 +373,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::move
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Selector< SireMol::Atom > > ( ::SireMol::Selector< SireMol::Atom >::*move_function_type )(  ) const;
+            typedef ::SireMol::Mover< SireMol::Selector< SireMol::Atom > > ( ::SireMol::Selector< SireMol::Atom >::*move_function_type)(  ) const;
             move_function_type move_function_value( &::SireMol::Selector< SireMol::Atom >::move );
             
             Selector_Atom__exposer.def( 
@@ -384,7 +384,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::move
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Selector< SireMol::Atom > > ( ::SireMol::Selector< SireMol::Atom >::*move_function_type )( int ) const;
+            typedef ::SireMol::Mover< SireMol::Selector< SireMol::Atom > > ( ::SireMol::Selector< SireMol::Atom >::*move_function_type)( int ) const;
             move_function_type move_function_value( &::SireMol::Selector< SireMol::Atom >::move );
             
             Selector_Atom__exposer.def( 
@@ -396,7 +396,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::move
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Selector< SireMol::Atom > > ( ::SireMol::Selector< SireMol::Atom >::*move_function_type )( int,int ) const;
+            typedef ::SireMol::Mover< SireMol::Selector< SireMol::Atom > > ( ::SireMol::Selector< SireMol::Atom >::*move_function_type)( int,int ) const;
             move_function_type move_function_value( &::SireMol::Selector< SireMol::Atom >::move );
             
             Selector_Atom__exposer.def( 
@@ -409,7 +409,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::operator()
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Atom ( ::SireMol::Selector< SireMol::Atom >::*__call___function_type )( int ) const;
+            typedef ::SireMol::Atom ( ::SireMol::Selector< SireMol::Atom >::*__call___function_type)( int ) const;
             __call___function_type __call___function_value( &::SireMol::Selector< SireMol::Atom >::operator() );
             
             Selector_Atom__exposer.def( 
@@ -421,7 +421,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::operator()
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*__call___function_type )( int,int ) const;
+            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireMol::Selector< SireMol::Atom >::operator() );
             
             Selector_Atom__exposer.def( 
@@ -439,7 +439,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::operator=
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Atom > & ( ::SireMol::Selector< SireMol::Atom >::*assign_function_type )( ::SireMol::Selector< SireMol::Atom > const & ) ;
+            typedef ::SireMol::Selector< SireMol::Atom > & ( ::SireMol::Selector< SireMol::Atom >::*assign_function_type)( ::SireMol::Selector< SireMol::Atom > const & ) ;
             assign_function_type assign_function_value( &::SireMol::Selector< SireMol::Atom >::operator= );
             
             Selector_Atom__exposer.def( 
@@ -452,7 +452,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::operator=
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Atom > & ( ::SireMol::Selector< SireMol::Atom >::*assign_function_type )( ::SireMol::Atom const & ) ;
+            typedef ::SireMol::Selector< SireMol::Atom > & ( ::SireMol::Selector< SireMol::Atom >::*assign_function_type)( ::SireMol::Atom const & ) ;
             assign_function_type assign_function_value( &::SireMol::Selector< SireMol::Atom >::operator= );
             
             Selector_Atom__exposer.def( 
@@ -466,7 +466,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::operator[]
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Atom ( ::SireMol::Selector< SireMol::Atom >::*__getitem___function_type )( int ) const;
+            typedef ::SireMol::Atom ( ::SireMol::Selector< SireMol::Atom >::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::Selector< SireMol::Atom >::operator[] );
             
             Selector_Atom__exposer.def( 
@@ -478,7 +478,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::propertyKeys
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::QStringList ( ::SireMol::Selector< SireMol::Atom >::*propertyKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireMol::Selector< SireMol::Atom >::*propertyKeys_function_type)(  ) const;
             propertyKeys_function_type propertyKeys_function_value( &::SireMol::Selector< SireMol::Atom >::propertyKeys );
             
             Selector_Atom__exposer.def( 
@@ -489,7 +489,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::selectedAll
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Atom >::*selectedAll_function_type )(  ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Atom >::*selectedAll_function_type)(  ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::Selector< SireMol::Atom >::selectedAll );
             
             Selector_Atom__exposer.def( 
@@ -500,7 +500,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::selection
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::AtomSelection ( ::SireMol::Selector< SireMol::Atom >::*selection_function_type )(  ) const;
+            typedef ::SireMol::AtomSelection ( ::SireMol::Selector< SireMol::Atom >::*selection_function_type)(  ) const;
             selection_function_type selection_function_value( &::SireMol::Selector< SireMol::Atom >::selection );
             
             Selector_Atom__exposer.def( 
@@ -511,7 +511,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::selection
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::AtomSelection ( ::SireMol::Selector< SireMol::Atom >::*selection_function_type )( int ) const;
+            typedef ::SireMol::AtomSelection ( ::SireMol::Selector< SireMol::Atom >::*selection_function_type)( int ) const;
             selection_function_type selection_function_value( &::SireMol::Selector< SireMol::Atom >::selection );
             
             Selector_Atom__exposer.def( 
@@ -523,7 +523,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::selection
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::AtomSelection ( ::SireMol::Selector< SireMol::Atom >::*selection_function_type )( int,int ) const;
+            typedef ::SireMol::AtomSelection ( ::SireMol::Selector< SireMol::Atom >::*selection_function_type)( int,int ) const;
             selection_function_type selection_function_value( &::SireMol::Selector< SireMol::Atom >::selection );
             
             Selector_Atom__exposer.def( 
@@ -535,7 +535,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::selector
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*selector_function_type )(  ) const;
+            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*selector_function_type)(  ) const;
             selector_function_type selector_function_value( &::SireMol::Selector< SireMol::Atom >::selector );
             
             Selector_Atom__exposer.def( 
@@ -546,7 +546,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::selector
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*selector_function_type )( int ) const;
+            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*selector_function_type)( int ) const;
             selector_function_type selector_function_value( &::SireMol::Selector< SireMol::Atom >::selector );
             
             Selector_Atom__exposer.def( 
@@ -558,7 +558,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::selector
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*selector_function_type )( int,int ) const;
+            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*selector_function_type)( int,int ) const;
             selector_function_type selector_function_value( &::SireMol::Selector< SireMol::Atom >::selector );
             
             Selector_Atom__exposer.def( 
@@ -570,7 +570,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::subtract
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*subtract_function_type )( ::SireMol::Selector< SireMol::Atom > const & ) const;
+            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*subtract_function_type)( ::SireMol::Selector< SireMol::Atom > const & ) const;
             subtract_function_type subtract_function_value( &::SireMol::Selector< SireMol::Atom >::subtract );
             
             Selector_Atom__exposer.def( 
@@ -582,7 +582,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::subtract
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*subtract_function_type )( ::SireMol::Atom const & ) const;
+            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*subtract_function_type)( ::SireMol::Atom const & ) const;
             subtract_function_type subtract_function_value( &::SireMol::Selector< SireMol::Atom >::subtract );
             
             Selector_Atom__exposer.def( 
@@ -594,7 +594,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::subtract
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*subtract_function_type )( ::SireMol::AtomID const & ) const;
+            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::Selector< SireMol::Atom >::*subtract_function_type)( ::SireMol::AtomID const & ) const;
             subtract_function_type subtract_function_value( &::SireMol::Selector< SireMol::Atom >::subtract );
             
             Selector_Atom__exposer.def( 
@@ -606,7 +606,7 @@ void register_Selector_Atom__class(){
         { //::SireMol::Selector< SireMol::Atom >::toString
         
             typedef SireMol::Selector< SireMol::Atom > exported_class_t;
-            typedef ::QString ( ::SireMol::Selector< SireMol::Atom >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::Selector< SireMol::Atom >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::Selector< SireMol::Atom >::toString );
             
             Selector_Atom__exposer.def( 

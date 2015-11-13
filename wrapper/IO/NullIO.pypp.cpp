@@ -43,7 +43,7 @@ void register_NullIO_class(){
         NullIO_exposer.def( bp::self != bp::self );
         { //::SireIO::NullIO::operator=
         
-            typedef ::SireIO::NullIO & ( ::SireIO::NullIO::*assign_function_type )( ::SireIO::NullIO const & ) ;
+            typedef ::SireIO::NullIO & ( ::SireIO::NullIO::*assign_function_type)( ::SireIO::NullIO const & ) ;
             assign_function_type assign_function_value( &::SireIO::NullIO::operator= );
             
             NullIO_exposer.def( 

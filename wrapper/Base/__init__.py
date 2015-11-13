@@ -21,3 +21,11 @@ def wrap(value):
         return Sire.Base._Base.wrap(value)
     except:
         return Sire.Maths.wrap(value)
+
+# cludgy quick fix for an anaconda install
+_getBundledLibDir = getBundledLibDir
+def getBundledLibDir():
+    try:
+        return _getBundledLibDir()
+    except:
+        return "%s/lib" % getInstallDir()

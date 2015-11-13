@@ -34,7 +34,7 @@ void register_LJParameter_class(){
         LJParameter_exposer.def( bp::init< SireMM::LJParameter const & >(( bp::arg("param") )) );
         { //::SireMM::LJParameter::A
         
-            typedef double ( ::SireMM::LJParameter::*A_function_type )(  ) const;
+            typedef double ( ::SireMM::LJParameter::*A_function_type)(  ) const;
             A_function_type A_function_value( &::SireMM::LJParameter::A );
             
             LJParameter_exposer.def( 
@@ -44,7 +44,7 @@ void register_LJParameter_class(){
         }
         { //::SireMM::LJParameter::B
         
-            typedef double ( ::SireMM::LJParameter::*B_function_type )(  ) const;
+            typedef double ( ::SireMM::LJParameter::*B_function_type)(  ) const;
             B_function_type B_function_value( &::SireMM::LJParameter::B );
             
             LJParameter_exposer.def( 
@@ -64,7 +64,7 @@ void register_LJParameter_class(){
         }
         { //::SireMM::LJParameter::epsilon
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::LJParameter::*epsilon_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::LJParameter::*epsilon_function_type)(  ) const;
             epsilon_function_type epsilon_function_value( &::SireMM::LJParameter::epsilon );
             
             LJParameter_exposer.def( 
@@ -107,7 +107,7 @@ void register_LJParameter_class(){
         }
         { //::SireMM::LJParameter::isDummy
         
-            typedef bool ( ::SireMM::LJParameter::*isDummy_function_type )(  ) const;
+            typedef bool ( ::SireMM::LJParameter::*isDummy_function_type)(  ) const;
             isDummy_function_type isDummy_function_value( &::SireMM::LJParameter::isDummy );
             
             LJParameter_exposer.def( 
@@ -119,7 +119,7 @@ void register_LJParameter_class(){
         LJParameter_exposer.def( bp::self == bp::self );
         { //::SireMM::LJParameter::rmin
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMM::LJParameter::*rmin_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::LJParameter::*rmin_function_type)(  ) const;
             rmin_function_type rmin_function_value( &::SireMM::LJParameter::rmin );
             
             LJParameter_exposer.def( 
@@ -129,7 +129,7 @@ void register_LJParameter_class(){
         }
         { //::SireMM::LJParameter::sigma
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMM::LJParameter::*sigma_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::LJParameter::*sigma_function_type)(  ) const;
             sigma_function_type sigma_function_value( &::SireMM::LJParameter::sigma );
             
             LJParameter_exposer.def( 
@@ -139,7 +139,7 @@ void register_LJParameter_class(){
         }
         { //::SireMM::LJParameter::sqrtEpsilon
         
-            typedef double ( ::SireMM::LJParameter::*sqrtEpsilon_function_type )(  ) const;
+            typedef double ( ::SireMM::LJParameter::*sqrtEpsilon_function_type)(  ) const;
             sqrtEpsilon_function_type sqrtEpsilon_function_value( &::SireMM::LJParameter::sqrtEpsilon );
             
             LJParameter_exposer.def( 
@@ -149,7 +149,7 @@ void register_LJParameter_class(){
         }
         { //::SireMM::LJParameter::sqrtSigma
         
-            typedef double ( ::SireMM::LJParameter::*sqrtSigma_function_type )(  ) const;
+            typedef double ( ::SireMM::LJParameter::*sqrtSigma_function_type)(  ) const;
             sqrtSigma_function_type sqrtSigma_function_value( &::SireMM::LJParameter::sqrtSigma );
             
             LJParameter_exposer.def( 
@@ -159,7 +159,7 @@ void register_LJParameter_class(){
         }
         { //::SireMM::LJParameter::toString
         
-            typedef ::QString ( ::SireMM::LJParameter::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMM::LJParameter::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMM::LJParameter::toString );
             
             LJParameter_exposer.def( 
@@ -179,7 +179,7 @@ void register_LJParameter_class(){
         }
         { //::SireMM::LJParameter::what
         
-            typedef char const * ( ::SireMM::LJParameter::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::LJParameter::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::LJParameter::what );
             
             LJParameter_exposer.def( 
@@ -189,7 +189,7 @@ void register_LJParameter_class(){
         }
         { //::SireMM::LJParameter::zeroLJ
         
-            typedef bool ( ::SireMM::LJParameter::*zeroLJ_function_type )(  ) const;
+            typedef bool ( ::SireMM::LJParameter::*zeroLJ_function_type)(  ) const;
             zeroLJ_function_type zeroLJ_function_value( &::SireMM::LJParameter::zeroLJ );
             
             LJParameter_exposer.def( 

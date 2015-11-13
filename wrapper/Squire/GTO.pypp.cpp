@@ -36,7 +36,7 @@ void register_GTO_class(){
         bp::scope GTO_scope( GTO_exposer );
         { //::Squire::GTO::alpha
         
-            typedef double ( ::Squire::GTO::*alpha_function_type )(  ) const;
+            typedef double ( ::Squire::GTO::*alpha_function_type)(  ) const;
             alpha_function_type alpha_function_value( &::Squire::GTO::alpha );
             
             GTO_exposer.def( 
@@ -46,7 +46,7 @@ void register_GTO_class(){
         }
         { //::Squire::GTO::beta
         
-            typedef double ( ::Squire::GTO::*beta_function_type )(  ) const;
+            typedef double ( ::Squire::GTO::*beta_function_type)(  ) const;
             beta_function_type beta_function_value( &::Squire::GTO::beta );
             
             GTO_exposer.def( 
@@ -56,7 +56,7 @@ void register_GTO_class(){
         }
         { //::Squire::GTO::isNull
         
-            typedef bool ( ::Squire::GTO::*isNull_function_type )(  ) const;
+            typedef bool ( ::Squire::GTO::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::Squire::GTO::isNull );
             
             GTO_exposer.def( 
@@ -66,7 +66,7 @@ void register_GTO_class(){
         }
         { //::Squire::GTO::multiply
         
-            typedef ::Squire::GTOPtr ( ::Squire::GTO::*multiply_function_type )( double ) const;
+            typedef ::Squire::GTOPtr ( ::Squire::GTO::*multiply_function_type)( double ) const;
             multiply_function_type multiply_function_value( &::Squire::GTO::multiply );
             
             GTO_exposer.def( 
@@ -88,7 +88,7 @@ void register_GTO_class(){
         }
         { //::Squire::GTO::scale
         
-            typedef double ( ::Squire::GTO::*scale_function_type )(  ) const;
+            typedef double ( ::Squire::GTO::*scale_function_type)(  ) const;
             scale_function_type scale_function_value( &::Squire::GTO::scale );
             
             GTO_exposer.def( 

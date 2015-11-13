@@ -48,7 +48,7 @@ void register_CuttingFunction_class(){
         }
         { //::SireMol::CuttingFunction::operator()
         
-            typedef ::SireMol::Molecule ( ::SireMol::CuttingFunction::*__call___function_type )( ::SireMol::Molecule const & ) const;
+            typedef ::SireMol::Molecule ( ::SireMol::CuttingFunction::*__call___function_type)( ::SireMol::Molecule const & ) const;
             __call___function_type __call___function_value( &::SireMol::CuttingFunction::operator() );
             
             CuttingFunction_exposer.def( 
@@ -59,7 +59,7 @@ void register_CuttingFunction_class(){
         }
         { //::SireMol::CuttingFunction::operator()
         
-            typedef ::SireMol::MolStructureEditor ( ::SireMol::CuttingFunction::*__call___function_type )( ::SireMol::MolStructureEditor & ) const;
+            typedef ::SireMol::MolStructureEditor ( ::SireMol::CuttingFunction::*__call___function_type)( ::SireMol::MolStructureEditor & ) const;
             __call___function_type __call___function_value( &::SireMol::CuttingFunction::operator() );
             
             CuttingFunction_exposer.def( 

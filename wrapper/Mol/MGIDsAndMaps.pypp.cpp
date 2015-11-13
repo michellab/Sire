@@ -49,7 +49,7 @@ void register_MGIDsAndMaps_class(){
         MGIDsAndMaps_exposer.def( bp::init< SireMol::MGIDsAndMaps const & >(( bp::arg("other") )) );
         { //::SireMol::MGIDsAndMaps::count
         
-            typedef int ( ::SireMol::MGIDsAndMaps::*count_function_type )(  ) const;
+            typedef int ( ::SireMol::MGIDsAndMaps::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMol::MGIDsAndMaps::count );
             
             MGIDsAndMaps_exposer.def( 
@@ -59,7 +59,7 @@ void register_MGIDsAndMaps_class(){
         }
         { //::SireMol::MGIDsAndMaps::isEmpty
         
-            typedef bool ( ::SireMol::MGIDsAndMaps::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::MGIDsAndMaps::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::MGIDsAndMaps::isEmpty );
             
             MGIDsAndMaps_exposer.def( 
@@ -69,7 +69,7 @@ void register_MGIDsAndMaps_class(){
         }
         { //::SireMol::MGIDsAndMaps::mgIDs
         
-            typedef ::QVector< SireMol::MGIdentifier > const & ( ::SireMol::MGIDsAndMaps::*mgIDs_function_type )(  ) const;
+            typedef ::QVector< SireMol::MGIdentifier > const & ( ::SireMol::MGIDsAndMaps::*mgIDs_function_type)(  ) const;
             mgIDs_function_type mgIDs_function_value( &::SireMol::MGIDsAndMaps::mgIDs );
             
             MGIDsAndMaps_exposer.def( 
@@ -81,7 +81,7 @@ void register_MGIDsAndMaps_class(){
         MGIDsAndMaps_exposer.def( bp::self != bp::self );
         { //::SireMol::MGIDsAndMaps::operator=
         
-            typedef ::SireMol::MGIDsAndMaps & ( ::SireMol::MGIDsAndMaps::*assign_function_type )( ::SireMol::MGIDsAndMaps const & ) ;
+            typedef ::SireMol::MGIDsAndMaps & ( ::SireMol::MGIDsAndMaps::*assign_function_type)( ::SireMol::MGIDsAndMaps const & ) ;
             assign_function_type assign_function_value( &::SireMol::MGIDsAndMaps::operator= );
             
             MGIDsAndMaps_exposer.def( 
@@ -94,7 +94,7 @@ void register_MGIDsAndMaps_class(){
         MGIDsAndMaps_exposer.def( bp::self == bp::self );
         { //::SireMol::MGIDsAndMaps::propertyMaps
         
-            typedef ::QVector< SireBase::PropertyMap > const & ( ::SireMol::MGIDsAndMaps::*propertyMaps_function_type )(  ) const;
+            typedef ::QVector< SireBase::PropertyMap > const & ( ::SireMol::MGIDsAndMaps::*propertyMaps_function_type)(  ) const;
             propertyMaps_function_type propertyMaps_function_value( &::SireMol::MGIDsAndMaps::propertyMaps );
             
             MGIDsAndMaps_exposer.def( 
@@ -105,7 +105,7 @@ void register_MGIDsAndMaps_class(){
         }
         { //::SireMol::MGIDsAndMaps::toString
         
-            typedef ::QString ( ::SireMol::MGIDsAndMaps::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::MGIDsAndMaps::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::MGIDsAndMaps::toString );
             
             MGIDsAndMaps_exposer.def( 

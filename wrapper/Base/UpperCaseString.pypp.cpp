@@ -32,7 +32,7 @@ void register_UpperCaseString_class(){
         UpperCaseString_exposer.def( bp::init< SireBase::UpperCaseString const & >(( bp::arg("other") )) );
         { //::SireBase::UpperCaseString::mangle
         
-            typedef ::QString ( ::SireBase::UpperCaseString::*mangle_function_type )( ::QString const & ) const;
+            typedef ::QString ( ::SireBase::UpperCaseString::*mangle_function_type)( ::QString const & ) const;
             mangle_function_type mangle_function_value( &::SireBase::UpperCaseString::mangle );
             
             UpperCaseString_exposer.def( 
@@ -44,7 +44,7 @@ void register_UpperCaseString_class(){
         UpperCaseString_exposer.def( bp::self != bp::self );
         { //::SireBase::UpperCaseString::operator=
         
-            typedef ::SireBase::UpperCaseString & ( ::SireBase::UpperCaseString::*assign_function_type )( ::SireBase::UpperCaseString const & ) ;
+            typedef ::SireBase::UpperCaseString & ( ::SireBase::UpperCaseString::*assign_function_type)( ::SireBase::UpperCaseString const & ) ;
             assign_function_type assign_function_value( &::SireBase::UpperCaseString::operator= );
             
             UpperCaseString_exposer.def( 

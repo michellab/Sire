@@ -54,7 +54,7 @@ void register_AM1BCC_class(){
         AM1BCC_exposer.def( bp::init< Squire::AM1BCC const & >(( bp::arg("other") )) );
         { //::Squire::AM1BCC::environment
         
-            typedef ::QHash< QString, QString > const & ( ::Squire::AM1BCC::*environment_function_type )(  ) const;
+            typedef ::QHash< QString, QString > const & ( ::Squire::AM1BCC::*environment_function_type)(  ) const;
             environment_function_type environment_function_value( &::Squire::AM1BCC::environment );
             
             AM1BCC_exposer.def( 
@@ -65,7 +65,7 @@ void register_AM1BCC_class(){
         }
         { //::Squire::AM1BCC::environment
         
-            typedef ::QString ( ::Squire::AM1BCC::*environment_function_type )( ::QString const & ) const;
+            typedef ::QString ( ::Squire::AM1BCC::*environment_function_type)( ::QString const & ) const;
             environment_function_type environment_function_value( &::Squire::AM1BCC::environment );
             
             AM1BCC_exposer.def( 
@@ -76,7 +76,7 @@ void register_AM1BCC_class(){
         }
         { //::Squire::AM1BCC::mayChangeCharges
         
-            typedef bool ( ::Squire::AM1BCC::*mayChangeCharges_function_type )( ::SireMol::PartialMolecule const &,::SireMol::PartialMolecule const &,::SireBase::PropertyMap const & ) const;
+            typedef bool ( ::Squire::AM1BCC::*mayChangeCharges_function_type)( ::SireMol::PartialMolecule const &,::SireMol::PartialMolecule const &,::SireBase::PropertyMap const & ) const;
             mayChangeCharges_function_type mayChangeCharges_function_value( &::Squire::AM1BCC::mayChangeCharges );
             
             AM1BCC_exposer.def( 
@@ -88,7 +88,7 @@ void register_AM1BCC_class(){
         AM1BCC_exposer.def( bp::self != bp::self );
         { //::Squire::AM1BCC::operator()
         
-            typedef ::SireMol::AtomCharges ( ::Squire::AM1BCC::*__call___function_type )( ::SireMol::PartialMolecule const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::AtomCharges ( ::Squire::AM1BCC::*__call___function_type)( ::SireMol::PartialMolecule const &,::SireBase::PropertyMap const & ) const;
             __call___function_type __call___function_value( &::Squire::AM1BCC::operator() );
             
             AM1BCC_exposer.def( 
@@ -99,7 +99,7 @@ void register_AM1BCC_class(){
         }
         { //::Squire::AM1BCC::operator=
         
-            typedef ::Squire::AM1BCC & ( ::Squire::AM1BCC::*assign_function_type )( ::Squire::AM1BCC const & ) ;
+            typedef ::Squire::AM1BCC & ( ::Squire::AM1BCC::*assign_function_type)( ::Squire::AM1BCC const & ) ;
             assign_function_type assign_function_value( &::Squire::AM1BCC::operator= );
             
             AM1BCC_exposer.def( 
@@ -112,7 +112,7 @@ void register_AM1BCC_class(){
         AM1BCC_exposer.def( bp::self == bp::self );
         { //::Squire::AM1BCC::setEnvironment
         
-            typedef void ( ::Squire::AM1BCC::*setEnvironment_function_type )( ::QString const &,::QString const & ) ;
+            typedef void ( ::Squire::AM1BCC::*setEnvironment_function_type)( ::QString const &,::QString const & ) ;
             setEnvironment_function_type setEnvironment_function_value( &::Squire::AM1BCC::setEnvironment );
             
             AM1BCC_exposer.def( 
@@ -123,7 +123,7 @@ void register_AM1BCC_class(){
         }
         { //::Squire::AM1BCC::setScaleFactor
         
-            typedef void ( ::Squire::AM1BCC::*setScaleFactor_function_type )( double ) ;
+            typedef void ( ::Squire::AM1BCC::*setScaleFactor_function_type)( double ) ;
             setScaleFactor_function_type setScaleFactor_function_value( &::Squire::AM1BCC::setScaleFactor );
             
             AM1BCC_exposer.def( 
@@ -134,7 +134,7 @@ void register_AM1BCC_class(){
         }
         { //::Squire::AM1BCC::setTotalCharge
         
-            typedef void ( ::Squire::AM1BCC::*setTotalCharge_function_type )( int ) ;
+            typedef void ( ::Squire::AM1BCC::*setTotalCharge_function_type)( int ) ;
             setTotalCharge_function_type setTotalCharge_function_value( &::Squire::AM1BCC::setTotalCharge );
             
             AM1BCC_exposer.def( 
@@ -145,7 +145,7 @@ void register_AM1BCC_class(){
         }
         { //::Squire::AM1BCC::totalCharge
         
-            typedef int ( ::Squire::AM1BCC::*totalCharge_function_type )(  ) const;
+            typedef int ( ::Squire::AM1BCC::*totalCharge_function_type)(  ) const;
             totalCharge_function_type totalCharge_function_value( &::Squire::AM1BCC::totalCharge );
             
             AM1BCC_exposer.def( 

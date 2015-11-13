@@ -35,7 +35,7 @@ void register_Exp_class(){
         Exp_exposer.def( bp::init< SireCAS::Exp const & >(( bp::arg("other") )) );
         { //::SireCAS::Exp::core
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Exp::*core_function_type )(  ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Exp::*core_function_type)(  ) const;
             core_function_type core_function_value( &::SireCAS::Exp::core );
             
             Exp_exposer.def( 
@@ -45,7 +45,7 @@ void register_Exp_class(){
         }
         { //::SireCAS::Exp::differentiate
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Exp::*differentiate_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Exp::*differentiate_function_type)( ::SireCAS::Symbol const & ) const;
             differentiate_function_type differentiate_function_value( &::SireCAS::Exp::differentiate );
             
             Exp_exposer.def( 
@@ -56,7 +56,7 @@ void register_Exp_class(){
         }
         { //::SireCAS::Exp::evaluate
         
-            typedef double ( ::SireCAS::Exp::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::Exp::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Exp::evaluate );
             
             Exp_exposer.def( 
@@ -67,7 +67,7 @@ void register_Exp_class(){
         }
         { //::SireCAS::Exp::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::Exp::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::Exp::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Exp::evaluate );
             
             Exp_exposer.def( 
@@ -78,7 +78,7 @@ void register_Exp_class(){
         }
         { //::SireCAS::Exp::hash
         
-            typedef ::uint ( ::SireCAS::Exp::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireCAS::Exp::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireCAS::Exp::hash );
             
             Exp_exposer.def( 
@@ -88,7 +88,7 @@ void register_Exp_class(){
         }
         { //::SireCAS::Exp::integrate
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Exp::*integrate_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Exp::*integrate_function_type)( ::SireCAS::Symbol const & ) const;
             integrate_function_type integrate_function_value( &::SireCAS::Exp::integrate );
             
             Exp_exposer.def( 
@@ -100,7 +100,7 @@ void register_Exp_class(){
         Exp_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
         { //::SireCAS::Exp::power
         
-            typedef ::SireCAS::Expression ( ::SireCAS::Exp::*power_function_type )(  ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::Exp::*power_function_type)(  ) const;
             power_function_type power_function_value( &::SireCAS::Exp::power );
             
             Exp_exposer.def( 
@@ -110,7 +110,7 @@ void register_Exp_class(){
         }
         { //::SireCAS::Exp::toString
         
-            typedef ::QString ( ::SireCAS::Exp::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireCAS::Exp::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireCAS::Exp::toString );
             
             Exp_exposer.def( 
@@ -130,7 +130,7 @@ void register_Exp_class(){
         }
         { //::SireCAS::Exp::what
         
-            typedef char const * ( ::SireCAS::Exp::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::Exp::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::Exp::what );
             
             Exp_exposer.def( 

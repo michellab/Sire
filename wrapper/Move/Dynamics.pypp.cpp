@@ -25,7 +25,7 @@ void register_Dynamics_class(){
         bp::scope Dynamics_scope( Dynamics_exposer );
         { //::SireMove::Dynamics::ensemble
         
-            typedef ::SireMove::Ensemble ( ::SireMove::Dynamics::*ensemble_function_type )(  ) const;
+            typedef ::SireMove::Ensemble ( ::SireMove::Dynamics::*ensemble_function_type)(  ) const;
             ensemble_function_type ensemble_function_value( &::SireMove::Dynamics::ensemble );
             
             Dynamics_exposer.def( 

@@ -48,7 +48,7 @@ void register_AlwaysTrue_class(){
         AlwaysTrue_exposer.def( bp::init< SireCAS::AlwaysTrue const & >(( bp::arg("other") )) );
         { //::SireCAS::AlwaysTrue::alwaysFalse
         
-            typedef bool ( ::SireCAS::AlwaysTrue::*alwaysFalse_function_type )(  ) const;
+            typedef bool ( ::SireCAS::AlwaysTrue::*alwaysFalse_function_type)(  ) const;
             alwaysFalse_function_type alwaysFalse_function_value( &::SireCAS::AlwaysTrue::alwaysFalse );
             
             AlwaysTrue_exposer.def( 
@@ -58,7 +58,7 @@ void register_AlwaysTrue_class(){
         }
         { //::SireCAS::AlwaysTrue::alwaysTrue
         
-            typedef bool ( ::SireCAS::AlwaysTrue::*alwaysTrue_function_type )(  ) const;
+            typedef bool ( ::SireCAS::AlwaysTrue::*alwaysTrue_function_type)(  ) const;
             alwaysTrue_function_type alwaysTrue_function_value( &::SireCAS::AlwaysTrue::alwaysTrue );
             
             AlwaysTrue_exposer.def( 
@@ -68,7 +68,7 @@ void register_AlwaysTrue_class(){
         }
         { //::SireCAS::AlwaysTrue::children
         
-            typedef ::SireCAS::Expressions ( ::SireCAS::AlwaysTrue::*children_function_type )(  ) const;
+            typedef ::SireCAS::Expressions ( ::SireCAS::AlwaysTrue::*children_function_type)(  ) const;
             children_function_type children_function_value( &::SireCAS::AlwaysTrue::children );
             
             AlwaysTrue_exposer.def( 
@@ -78,7 +78,7 @@ void register_AlwaysTrue_class(){
         }
         { //::SireCAS::AlwaysTrue::evaluate
         
-            typedef double ( ::SireCAS::AlwaysTrue::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::AlwaysTrue::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::AlwaysTrue::evaluate );
             
             AlwaysTrue_exposer.def( 
@@ -89,7 +89,7 @@ void register_AlwaysTrue_class(){
         }
         { //::SireCAS::AlwaysTrue::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::AlwaysTrue::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::AlwaysTrue::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::AlwaysTrue::evaluate );
             
             AlwaysTrue_exposer.def( 
@@ -100,7 +100,7 @@ void register_AlwaysTrue_class(){
         }
         { //::SireCAS::AlwaysTrue::evaluateCondition
         
-            typedef bool ( ::SireCAS::AlwaysTrue::*evaluateCondition_function_type )( ::SireCAS::Values const & ) const;
+            typedef bool ( ::SireCAS::AlwaysTrue::*evaluateCondition_function_type)( ::SireCAS::Values const & ) const;
             evaluateCondition_function_type evaluateCondition_function_value( &::SireCAS::AlwaysTrue::evaluateCondition );
             
             AlwaysTrue_exposer.def( 
@@ -111,7 +111,7 @@ void register_AlwaysTrue_class(){
         }
         { //::SireCAS::AlwaysTrue::evaluateCondition
         
-            typedef bool ( ::SireCAS::AlwaysTrue::*evaluateCondition_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef bool ( ::SireCAS::AlwaysTrue::*evaluateCondition_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluateCondition_function_type evaluateCondition_function_value( &::SireCAS::AlwaysTrue::evaluateCondition );
             
             AlwaysTrue_exposer.def( 
@@ -122,7 +122,7 @@ void register_AlwaysTrue_class(){
         }
         { //::SireCAS::AlwaysTrue::expand
         
-            typedef ::QList< SireCAS::Factor > ( ::SireCAS::AlwaysTrue::*expand_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::QList< SireCAS::Factor > ( ::SireCAS::AlwaysTrue::*expand_function_type)( ::SireCAS::Symbol const & ) const;
             expand_function_type expand_function_value( &::SireCAS::AlwaysTrue::expand );
             
             AlwaysTrue_exposer.def( 
@@ -133,7 +133,7 @@ void register_AlwaysTrue_class(){
         }
         { //::SireCAS::AlwaysTrue::functions
         
-            typedef ::SireCAS::Functions ( ::SireCAS::AlwaysTrue::*functions_function_type )(  ) const;
+            typedef ::SireCAS::Functions ( ::SireCAS::AlwaysTrue::*functions_function_type)(  ) const;
             functions_function_type functions_function_value( &::SireCAS::AlwaysTrue::functions );
             
             AlwaysTrue_exposer.def( 
@@ -143,7 +143,7 @@ void register_AlwaysTrue_class(){
         }
         { //::SireCAS::AlwaysTrue::hash
         
-            typedef ::uint ( ::SireCAS::AlwaysTrue::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireCAS::AlwaysTrue::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireCAS::AlwaysTrue::hash );
             
             AlwaysTrue_exposer.def( 
@@ -153,7 +153,7 @@ void register_AlwaysTrue_class(){
         }
         { //::SireCAS::AlwaysTrue::isComplex
         
-            typedef bool ( ::SireCAS::AlwaysTrue::*isComplex_function_type )(  ) const;
+            typedef bool ( ::SireCAS::AlwaysTrue::*isComplex_function_type)(  ) const;
             isComplex_function_type isComplex_function_value( &::SireCAS::AlwaysTrue::isComplex );
             
             AlwaysTrue_exposer.def( 
@@ -163,7 +163,7 @@ void register_AlwaysTrue_class(){
         }
         { //::SireCAS::AlwaysTrue::isCompound
         
-            typedef bool ( ::SireCAS::AlwaysTrue::*isCompound_function_type )(  ) const;
+            typedef bool ( ::SireCAS::AlwaysTrue::*isCompound_function_type)(  ) const;
             isCompound_function_type isCompound_function_value( &::SireCAS::AlwaysTrue::isCompound );
             
             AlwaysTrue_exposer.def( 
@@ -173,7 +173,7 @@ void register_AlwaysTrue_class(){
         }
         { //::SireCAS::AlwaysTrue::isConstant
         
-            typedef bool ( ::SireCAS::AlwaysTrue::*isConstant_function_type )(  ) const;
+            typedef bool ( ::SireCAS::AlwaysTrue::*isConstant_function_type)(  ) const;
             isConstant_function_type isConstant_function_value( &::SireCAS::AlwaysTrue::isConstant );
             
             AlwaysTrue_exposer.def( 
@@ -183,7 +183,7 @@ void register_AlwaysTrue_class(){
         }
         { //::SireCAS::AlwaysTrue::isFunction
         
-            typedef bool ( ::SireCAS::AlwaysTrue::*isFunction_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef bool ( ::SireCAS::AlwaysTrue::*isFunction_function_type)( ::SireCAS::Symbol const & ) const;
             isFunction_function_type isFunction_function_value( &::SireCAS::AlwaysTrue::isFunction );
             
             AlwaysTrue_exposer.def( 
@@ -194,7 +194,7 @@ void register_AlwaysTrue_class(){
         }
         { //::SireCAS::AlwaysTrue::isNull
         
-            typedef bool ( ::SireCAS::AlwaysTrue::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireCAS::AlwaysTrue::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireCAS::AlwaysTrue::isNull );
             
             AlwaysTrue_exposer.def( 
@@ -204,7 +204,7 @@ void register_AlwaysTrue_class(){
         }
         { //::SireCAS::AlwaysTrue::operator=
         
-            typedef ::SireCAS::AlwaysTrue & ( ::SireCAS::AlwaysTrue::*assign_function_type )( ::SireCAS::AlwaysTrue const & ) ;
+            typedef ::SireCAS::AlwaysTrue & ( ::SireCAS::AlwaysTrue::*assign_function_type)( ::SireCAS::AlwaysTrue const & ) ;
             assign_function_type assign_function_value( &::SireCAS::AlwaysTrue::operator= );
             
             AlwaysTrue_exposer.def( 
@@ -218,7 +218,7 @@ void register_AlwaysTrue_class(){
         AlwaysTrue_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
         { //::SireCAS::AlwaysTrue::simplify
         
-            typedef ::SireCAS::Expression ( ::SireCAS::AlwaysTrue::*simplify_function_type )( int ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::AlwaysTrue::*simplify_function_type)( int ) const;
             simplify_function_type simplify_function_value( &::SireCAS::AlwaysTrue::simplify );
             
             AlwaysTrue_exposer.def( 
@@ -229,7 +229,7 @@ void register_AlwaysTrue_class(){
         }
         { //::SireCAS::AlwaysTrue::substitute
         
-            typedef ::SireCAS::Expression ( ::SireCAS::AlwaysTrue::*substitute_function_type )( ::SireCAS::Identities const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::AlwaysTrue::*substitute_function_type)( ::SireCAS::Identities const & ) const;
             substitute_function_type substitute_function_value( &::SireCAS::AlwaysTrue::substitute );
             
             AlwaysTrue_exposer.def( 
@@ -240,7 +240,7 @@ void register_AlwaysTrue_class(){
         }
         { //::SireCAS::AlwaysTrue::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireCAS::AlwaysTrue::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireCAS::AlwaysTrue::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireCAS::AlwaysTrue::symbols );
             
             AlwaysTrue_exposer.def( 
@@ -250,7 +250,7 @@ void register_AlwaysTrue_class(){
         }
         { //::SireCAS::AlwaysTrue::toString
         
-            typedef ::QString ( ::SireCAS::AlwaysTrue::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireCAS::AlwaysTrue::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireCAS::AlwaysTrue::toString );
             
             AlwaysTrue_exposer.def( 
@@ -270,7 +270,7 @@ void register_AlwaysTrue_class(){
         }
         { //::SireCAS::AlwaysTrue::what
         
-            typedef char const * ( ::SireCAS::AlwaysTrue::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::AlwaysTrue::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::AlwaysTrue::what );
             
             AlwaysTrue_exposer.def( 

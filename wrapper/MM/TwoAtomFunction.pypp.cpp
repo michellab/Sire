@@ -46,7 +46,7 @@ void register_TwoAtomFunction_class(){
         TwoAtomFunction_exposer.def( bp::init< SireMM::TwoAtomFunction const & >(( bp::arg("other") )) );
         { //::SireMM::TwoAtomFunction::atom0
         
-            typedef ::SireMol::CGAtomIdx const & ( ::SireMM::TwoAtomFunction::*atom0_function_type )(  ) const;
+            typedef ::SireMol::CGAtomIdx const & ( ::SireMM::TwoAtomFunction::*atom0_function_type)(  ) const;
             atom0_function_type atom0_function_value( &::SireMM::TwoAtomFunction::atom0 );
             
             TwoAtomFunction_exposer.def( 
@@ -57,7 +57,7 @@ void register_TwoAtomFunction_class(){
         }
         { //::SireMM::TwoAtomFunction::atom1
         
-            typedef ::SireMol::CGAtomIdx const & ( ::SireMM::TwoAtomFunction::*atom1_function_type )(  ) const;
+            typedef ::SireMol::CGAtomIdx const & ( ::SireMM::TwoAtomFunction::*atom1_function_type)(  ) const;
             atom1_function_type atom1_function_value( &::SireMM::TwoAtomFunction::atom1 );
             
             TwoAtomFunction_exposer.def( 
@@ -69,7 +69,7 @@ void register_TwoAtomFunction_class(){
         TwoAtomFunction_exposer.def( bp::self != bp::self );
         { //::SireMM::TwoAtomFunction::operator=
         
-            typedef ::SireMM::TwoAtomFunction & ( ::SireMM::TwoAtomFunction::*assign_function_type )( ::SireMM::TwoAtomFunction const & ) ;
+            typedef ::SireMM::TwoAtomFunction & ( ::SireMM::TwoAtomFunction::*assign_function_type)( ::SireMM::TwoAtomFunction const & ) ;
             assign_function_type assign_function_value( &::SireMM::TwoAtomFunction::operator= );
             
             TwoAtomFunction_exposer.def( 
@@ -82,7 +82,7 @@ void register_TwoAtomFunction_class(){
         TwoAtomFunction_exposer.def( bp::self == bp::self );
         { //::SireMM::TwoAtomFunction::toString
         
-            typedef ::QString ( ::SireMM::TwoAtomFunction::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMM::TwoAtomFunction::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMM::TwoAtomFunction::toString );
             
             TwoAtomFunction_exposer.def( 

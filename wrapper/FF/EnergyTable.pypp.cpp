@@ -45,7 +45,7 @@ void register_EnergyTable_class(){
         EnergyTable_exposer.def( bp::init< SireFF::EnergyTable const & >(( bp::arg("other") )) );
         { //::SireFF::EnergyTable::add
         
-            typedef void ( ::SireFF::EnergyTable::*add_function_type )( ::SireFF::EnergyTable const & ) ;
+            typedef void ( ::SireFF::EnergyTable::*add_function_type)( ::SireFF::EnergyTable const & ) ;
             add_function_type add_function_value( &::SireFF::EnergyTable::add );
             
             EnergyTable_exposer.def( 
@@ -56,7 +56,7 @@ void register_EnergyTable_class(){
         }
         { //::SireFF::EnergyTable::add
         
-            typedef void ( ::SireFF::EnergyTable::*add_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireFF::EnergyTable::*add_function_type)( ::SireMaths::Vector const & ) ;
             add_function_type add_function_value( &::SireFF::EnergyTable::add );
             
             EnergyTable_exposer.def( 
@@ -67,7 +67,7 @@ void register_EnergyTable_class(){
         }
         { //::SireFF::EnergyTable::assertContainsTableFor
         
-            typedef void ( ::SireFF::EnergyTable::*assertContainsTableFor_function_type )( ::SireMol::MolNum ) const;
+            typedef void ( ::SireFF::EnergyTable::*assertContainsTableFor_function_type)( ::SireMol::MolNum ) const;
             assertContainsTableFor_function_type assertContainsTableFor_function_value( &::SireFF::EnergyTable::assertContainsTableFor );
             
             EnergyTable_exposer.def( 
@@ -78,7 +78,7 @@ void register_EnergyTable_class(){
         }
         { //::SireFF::EnergyTable::constGetTable
         
-            typedef ::SireFF::MolEnergyTable const & ( ::SireFF::EnergyTable::*constGetTable_function_type )( ::SireMol::MolNum ) const;
+            typedef ::SireFF::MolEnergyTable const & ( ::SireFF::EnergyTable::*constGetTable_function_type)( ::SireMol::MolNum ) const;
             constGetTable_function_type constGetTable_function_value( &::SireFF::EnergyTable::constGetTable );
             
             EnergyTable_exposer.def( 
@@ -90,7 +90,7 @@ void register_EnergyTable_class(){
         }
         { //::SireFF::EnergyTable::containsTable
         
-            typedef bool ( ::SireFF::EnergyTable::*containsTable_function_type )( ::SireMol::MolNum ) const;
+            typedef bool ( ::SireFF::EnergyTable::*containsTable_function_type)( ::SireMol::MolNum ) const;
             containsTable_function_type containsTable_function_value( &::SireFF::EnergyTable::containsTable );
             
             EnergyTable_exposer.def( 
@@ -101,7 +101,7 @@ void register_EnergyTable_class(){
         }
         { //::SireFF::EnergyTable::count
         
-            typedef int ( ::SireFF::EnergyTable::*count_function_type )(  ) const;
+            typedef int ( ::SireFF::EnergyTable::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireFF::EnergyTable::count );
             
             EnergyTable_exposer.def( 
@@ -111,7 +111,7 @@ void register_EnergyTable_class(){
         }
         { //::SireFF::EnergyTable::divide
         
-            typedef void ( ::SireFF::EnergyTable::*divide_function_type )( double ) ;
+            typedef void ( ::SireFF::EnergyTable::*divide_function_type)( double ) ;
             divide_function_type divide_function_value( &::SireFF::EnergyTable::divide );
             
             EnergyTable_exposer.def( 
@@ -122,7 +122,7 @@ void register_EnergyTable_class(){
         }
         { //::SireFF::EnergyTable::getTable
         
-            typedef ::SireFF::MolEnergyTable const & ( ::SireFF::EnergyTable::*getTable_function_type )( ::SireMol::MolNum ) const;
+            typedef ::SireFF::MolEnergyTable const & ( ::SireFF::EnergyTable::*getTable_function_type)( ::SireMol::MolNum ) const;
             getTable_function_type getTable_function_value( &::SireFF::EnergyTable::getTable );
             
             EnergyTable_exposer.def( 
@@ -134,7 +134,7 @@ void register_EnergyTable_class(){
         }
         { //::SireFF::EnergyTable::index
         
-            typedef ::QHash< SireMol::MolNum, int > const & ( ::SireFF::EnergyTable::*index_function_type )(  ) const;
+            typedef ::QHash< SireMol::MolNum, int > const & ( ::SireFF::EnergyTable::*index_function_type)(  ) const;
             index_function_type index_function_value( &::SireFF::EnergyTable::index );
             
             EnergyTable_exposer.def( 
@@ -145,7 +145,7 @@ void register_EnergyTable_class(){
         }
         { //::SireFF::EnergyTable::indexOf
         
-            typedef int ( ::SireFF::EnergyTable::*indexOf_function_type )( ::SireMol::MolNum ) const;
+            typedef int ( ::SireFF::EnergyTable::*indexOf_function_type)( ::SireMol::MolNum ) const;
             indexOf_function_type indexOf_function_value( &::SireFF::EnergyTable::indexOf );
             
             EnergyTable_exposer.def( 
@@ -156,7 +156,7 @@ void register_EnergyTable_class(){
         }
         { //::SireFF::EnergyTable::initialiseTable
         
-            typedef void ( ::SireFF::EnergyTable::*initialiseTable_function_type )( ::SireMol::MolNum ) ;
+            typedef void ( ::SireFF::EnergyTable::*initialiseTable_function_type)( ::SireMol::MolNum ) ;
             initialiseTable_function_type initialiseTable_function_value( &::SireFF::EnergyTable::initialiseTable );
             
             EnergyTable_exposer.def( 
@@ -167,7 +167,7 @@ void register_EnergyTable_class(){
         }
         { //::SireFF::EnergyTable::initialiseTables
         
-            typedef void ( ::SireFF::EnergyTable::*initialiseTables_function_type )(  ) ;
+            typedef void ( ::SireFF::EnergyTable::*initialiseTables_function_type)(  ) ;
             initialiseTables_function_type initialiseTables_function_value( &::SireFF::EnergyTable::initialiseTables );
             
             EnergyTable_exposer.def( 
@@ -177,7 +177,7 @@ void register_EnergyTable_class(){
         }
         { //::SireFF::EnergyTable::molNums
         
-            typedef ::QList< SireMol::MolNum > ( ::SireFF::EnergyTable::*molNums_function_type )(  ) const;
+            typedef ::QList< SireMol::MolNum > ( ::SireFF::EnergyTable::*molNums_function_type)(  ) const;
             molNums_function_type molNums_function_value( &::SireFF::EnergyTable::molNums );
             
             EnergyTable_exposer.def( 
@@ -187,7 +187,7 @@ void register_EnergyTable_class(){
         }
         { //::SireFF::EnergyTable::multiply
         
-            typedef void ( ::SireFF::EnergyTable::*multiply_function_type )( double ) ;
+            typedef void ( ::SireFF::EnergyTable::*multiply_function_type)( double ) ;
             multiply_function_type multiply_function_value( &::SireFF::EnergyTable::multiply );
             
             EnergyTable_exposer.def( 
@@ -206,7 +206,7 @@ void register_EnergyTable_class(){
         EnergyTable_exposer.def( bp::self / bp::other< double >() );
         { //::SireFF::EnergyTable::operator=
         
-            typedef ::SireFF::EnergyTable & ( ::SireFF::EnergyTable::*assign_function_type )( ::SireFF::EnergyTable const & ) ;
+            typedef ::SireFF::EnergyTable & ( ::SireFF::EnergyTable::*assign_function_type)( ::SireFF::EnergyTable const & ) ;
             assign_function_type assign_function_value( &::SireFF::EnergyTable::operator= );
             
             EnergyTable_exposer.def( 
@@ -218,7 +218,7 @@ void register_EnergyTable_class(){
         }
         { //::SireFF::EnergyTable::operator=
         
-            typedef ::SireFF::EnergyTable & ( ::SireFF::EnergyTable::*assign_function_type )( ::SireMaths::Vector const & ) ;
+            typedef ::SireFF::EnergyTable & ( ::SireFF::EnergyTable::*assign_function_type)( ::SireMaths::Vector const & ) ;
             assign_function_type assign_function_value( &::SireFF::EnergyTable::operator= );
             
             EnergyTable_exposer.def( 
@@ -231,7 +231,7 @@ void register_EnergyTable_class(){
         EnergyTable_exposer.def( bp::self == bp::self );
         { //::SireFF::EnergyTable::setAll
         
-            typedef void ( ::SireFF::EnergyTable::*setAll_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireFF::EnergyTable::*setAll_function_type)( ::SireMaths::Vector const & ) ;
             setAll_function_type setAll_function_value( &::SireFF::EnergyTable::setAll );
             
             EnergyTable_exposer.def( 
@@ -242,7 +242,7 @@ void register_EnergyTable_class(){
         }
         { //::SireFF::EnergyTable::subtract
         
-            typedef void ( ::SireFF::EnergyTable::*subtract_function_type )( ::SireFF::EnergyTable const & ) ;
+            typedef void ( ::SireFF::EnergyTable::*subtract_function_type)( ::SireFF::EnergyTable const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::EnergyTable::subtract );
             
             EnergyTable_exposer.def( 
@@ -253,7 +253,7 @@ void register_EnergyTable_class(){
         }
         { //::SireFF::EnergyTable::subtract
         
-            typedef void ( ::SireFF::EnergyTable::*subtract_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireFF::EnergyTable::*subtract_function_type)( ::SireMaths::Vector const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::EnergyTable::subtract );
             
             EnergyTable_exposer.def( 
@@ -274,7 +274,7 @@ void register_EnergyTable_class(){
         }
         { //::SireFF::EnergyTable::what
         
-            typedef char const * ( ::SireFF::EnergyTable::*what_function_type )(  ) const;
+            typedef char const * ( ::SireFF::EnergyTable::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireFF::EnergyTable::what );
             
             EnergyTable_exposer.def( 

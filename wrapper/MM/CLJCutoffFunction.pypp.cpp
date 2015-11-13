@@ -59,7 +59,7 @@ void register_CLJCutoffFunction_class(){
         bp::scope CLJCutoffFunction_scope( CLJCutoffFunction_exposer );
         { //::SireMM::CLJCutoffFunction::containsProperty
         
-            typedef bool ( ::SireMM::CLJCutoffFunction::*containsProperty_function_type )( ::QString const & ) const;
+            typedef bool ( ::SireMM::CLJCutoffFunction::*containsProperty_function_type)( ::QString const & ) const;
             containsProperty_function_type containsProperty_function_value( &::SireMM::CLJCutoffFunction::containsProperty );
             
             CLJCutoffFunction_exposer.def( 
@@ -70,7 +70,7 @@ void register_CLJCutoffFunction_class(){
         }
         { //::SireMM::CLJCutoffFunction::coulombCutoff
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMM::CLJCutoffFunction::*coulombCutoff_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::CLJCutoffFunction::*coulombCutoff_function_type)(  ) const;
             coulombCutoff_function_type coulombCutoff_function_value( &::SireMM::CLJCutoffFunction::coulombCutoff );
             
             CLJCutoffFunction_exposer.def( 
@@ -80,7 +80,7 @@ void register_CLJCutoffFunction_class(){
         }
         { //::SireMM::CLJCutoffFunction::hasCutoff
         
-            typedef bool ( ::SireMM::CLJCutoffFunction::*hasCutoff_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJCutoffFunction::*hasCutoff_function_type)(  ) const;
             hasCutoff_function_type hasCutoff_function_value( &::SireMM::CLJCutoffFunction::hasCutoff );
             
             CLJCutoffFunction_exposer.def( 
@@ -90,7 +90,7 @@ void register_CLJCutoffFunction_class(){
         }
         { //::SireMM::CLJCutoffFunction::ljCutoff
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMM::CLJCutoffFunction::*ljCutoff_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::CLJCutoffFunction::*ljCutoff_function_type)(  ) const;
             ljCutoff_function_type ljCutoff_function_value( &::SireMM::CLJCutoffFunction::ljCutoff );
             
             CLJCutoffFunction_exposer.def( 
@@ -100,7 +100,7 @@ void register_CLJCutoffFunction_class(){
         }
         { //::SireMM::CLJCutoffFunction::properties
         
-            typedef ::SireBase::Properties ( ::SireMM::CLJCutoffFunction::*properties_function_type )(  ) const;
+            typedef ::SireBase::Properties ( ::SireMM::CLJCutoffFunction::*properties_function_type)(  ) const;
             properties_function_type properties_function_value( &::SireMM::CLJCutoffFunction::properties );
             
             CLJCutoffFunction_exposer.def( 
@@ -110,7 +110,7 @@ void register_CLJCutoffFunction_class(){
         }
         { //::SireMM::CLJCutoffFunction::property
         
-            typedef ::SireBase::PropertyPtr ( ::SireMM::CLJCutoffFunction::*property_function_type )( ::QString const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMM::CLJCutoffFunction::*property_function_type)( ::QString const & ) const;
             property_function_type property_function_value( &::SireMM::CLJCutoffFunction::property );
             
             CLJCutoffFunction_exposer.def( 
@@ -121,7 +121,7 @@ void register_CLJCutoffFunction_class(){
         }
         { //::SireMM::CLJCutoffFunction::setCoulombCutoff
         
-            typedef void ( ::SireMM::CLJCutoffFunction::*setCoulombCutoff_function_type )( ::SireUnits::Dimension::Length ) ;
+            typedef void ( ::SireMM::CLJCutoffFunction::*setCoulombCutoff_function_type)( ::SireUnits::Dimension::Length ) ;
             setCoulombCutoff_function_type setCoulombCutoff_function_value( &::SireMM::CLJCutoffFunction::setCoulombCutoff );
             
             CLJCutoffFunction_exposer.def( 
@@ -132,7 +132,7 @@ void register_CLJCutoffFunction_class(){
         }
         { //::SireMM::CLJCutoffFunction::setCutoff
         
-            typedef void ( ::SireMM::CLJCutoffFunction::*setCutoff_function_type )( ::SireUnits::Dimension::Length ) ;
+            typedef void ( ::SireMM::CLJCutoffFunction::*setCutoff_function_type)( ::SireUnits::Dimension::Length ) ;
             setCutoff_function_type setCutoff_function_value( &::SireMM::CLJCutoffFunction::setCutoff );
             
             CLJCutoffFunction_exposer.def( 
@@ -143,7 +143,7 @@ void register_CLJCutoffFunction_class(){
         }
         { //::SireMM::CLJCutoffFunction::setCutoff
         
-            typedef void ( ::SireMM::CLJCutoffFunction::*setCutoff_function_type )( ::SireUnits::Dimension::Length,::SireUnits::Dimension::Length ) ;
+            typedef void ( ::SireMM::CLJCutoffFunction::*setCutoff_function_type)( ::SireUnits::Dimension::Length,::SireUnits::Dimension::Length ) ;
             setCutoff_function_type setCutoff_function_value( &::SireMM::CLJCutoffFunction::setCutoff );
             
             CLJCutoffFunction_exposer.def( 
@@ -154,7 +154,7 @@ void register_CLJCutoffFunction_class(){
         }
         { //::SireMM::CLJCutoffFunction::setLJCutoff
         
-            typedef void ( ::SireMM::CLJCutoffFunction::*setLJCutoff_function_type )( ::SireUnits::Dimension::Length ) ;
+            typedef void ( ::SireMM::CLJCutoffFunction::*setLJCutoff_function_type)( ::SireUnits::Dimension::Length ) ;
             setLJCutoff_function_type setLJCutoff_function_value( &::SireMM::CLJCutoffFunction::setLJCutoff );
             
             CLJCutoffFunction_exposer.def( 
@@ -165,7 +165,7 @@ void register_CLJCutoffFunction_class(){
         }
         { //::SireMM::CLJCutoffFunction::setProperty
         
-            typedef ::SireMM::CLJFunctionPtr ( ::SireMM::CLJCutoffFunction::*setProperty_function_type )( ::QString const &,::SireBase::Property const & ) const;
+            typedef ::SireMM::CLJFunctionPtr ( ::SireMM::CLJCutoffFunction::*setProperty_function_type)( ::QString const &,::SireBase::Property const & ) const;
             setProperty_function_type setProperty_function_value( &::SireMM::CLJCutoffFunction::setProperty );
             
             CLJCutoffFunction_exposer.def( 
@@ -176,7 +176,7 @@ void register_CLJCutoffFunction_class(){
         }
         { //::SireMM::CLJCutoffFunction::toString
         
-            typedef ::QString ( ::SireMM::CLJCutoffFunction::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMM::CLJCutoffFunction::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMM::CLJCutoffFunction::toString );
             
             CLJCutoffFunction_exposer.def( 

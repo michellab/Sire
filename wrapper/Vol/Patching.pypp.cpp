@@ -34,7 +34,7 @@ void register_Patching_class(){
         bp::scope Patching_scope( Patching_exposer );
         { //::SireVol::Patching::nPatches
         
-            typedef int ( ::SireVol::Patching::*nPatches_function_type )(  ) const;
+            typedef int ( ::SireVol::Patching::*nPatches_function_type)(  ) const;
             nPatches_function_type nPatches_function_value( &::SireVol::Patching::nPatches );
             
             Patching_exposer.def( 
@@ -54,7 +54,7 @@ void register_Patching_class(){
         }
         { //::SireVol::Patching::patchIndex
         
-            typedef int ( ::SireVol::Patching::*patchIndex_function_type )( ::SireMaths::Vector const & ) const;
+            typedef int ( ::SireVol::Patching::*patchIndex_function_type)( ::SireMaths::Vector const & ) const;
             patchIndex_function_type patchIndex_function_value( &::SireVol::Patching::patchIndex );
             
             Patching_exposer.def( 
@@ -65,7 +65,7 @@ void register_Patching_class(){
         }
         { //::SireVol::Patching::patchIndexAndCenter
         
-            typedef ::QPair< int, SireMaths::Vector > ( ::SireVol::Patching::*patchIndexAndCenter_function_type )( ::SireMaths::Vector const & ) const;
+            typedef ::QPair< int, SireMaths::Vector > ( ::SireVol::Patching::*patchIndexAndCenter_function_type)( ::SireMaths::Vector const & ) const;
             patchIndexAndCenter_function_type patchIndexAndCenter_function_value( &::SireVol::Patching::patchIndexAndCenter );
             
             Patching_exposer.def( 
@@ -76,7 +76,7 @@ void register_Patching_class(){
         }
         { //::SireVol::Patching::rebalance
         
-            typedef ::SireVol::PatchingPtr ( ::SireVol::Patching::*rebalance_function_type )( ::SireVol::Space const &,::QVector< SireVol::CoordGroupArray > const & ) const;
+            typedef ::SireVol::PatchingPtr ( ::SireVol::Patching::*rebalance_function_type)( ::SireVol::Space const &,::QVector< SireVol::CoordGroupArray > const & ) const;
             rebalance_function_type rebalance_function_value( &::SireVol::Patching::rebalance );
             
             Patching_exposer.def( 
@@ -87,7 +87,7 @@ void register_Patching_class(){
         }
         { //::SireVol::Patching::repatch
         
-            typedef ::SireVol::PatchingPtr ( ::SireVol::Patching::*repatch_function_type )( ::SireVol::Space const & ) const;
+            typedef ::SireVol::PatchingPtr ( ::SireVol::Patching::*repatch_function_type)( ::SireVol::Space const & ) const;
             repatch_function_type repatch_function_value( &::SireVol::Patching::repatch );
             
             Patching_exposer.def( 
@@ -98,7 +98,7 @@ void register_Patching_class(){
         }
         { //::SireVol::Patching::space
         
-            typedef ::SireVol::Space const & ( ::SireVol::Patching::*space_function_type )(  ) const;
+            typedef ::SireVol::Space const & ( ::SireVol::Patching::*space_function_type)(  ) const;
             space_function_type space_function_value( &::SireVol::Patching::space );
             
             Patching_exposer.def( 

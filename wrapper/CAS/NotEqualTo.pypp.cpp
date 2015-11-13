@@ -49,7 +49,7 @@ void register_NotEqualTo_class(){
         NotEqualTo_exposer.def( bp::init< SireCAS::NotEqualTo const & >(( bp::arg("other") )) );
         { //::SireCAS::NotEqualTo::alwaysFalse
         
-            typedef bool ( ::SireCAS::NotEqualTo::*alwaysFalse_function_type )(  ) const;
+            typedef bool ( ::SireCAS::NotEqualTo::*alwaysFalse_function_type)(  ) const;
             alwaysFalse_function_type alwaysFalse_function_value( &::SireCAS::NotEqualTo::alwaysFalse );
             
             NotEqualTo_exposer.def( 
@@ -59,7 +59,7 @@ void register_NotEqualTo_class(){
         }
         { //::SireCAS::NotEqualTo::alwaysTrue
         
-            typedef bool ( ::SireCAS::NotEqualTo::*alwaysTrue_function_type )(  ) const;
+            typedef bool ( ::SireCAS::NotEqualTo::*alwaysTrue_function_type)(  ) const;
             alwaysTrue_function_type alwaysTrue_function_value( &::SireCAS::NotEqualTo::alwaysTrue );
             
             NotEqualTo_exposer.def( 
@@ -69,7 +69,7 @@ void register_NotEqualTo_class(){
         }
         { //::SireCAS::NotEqualTo::operator=
         
-            typedef ::SireCAS::NotEqualTo & ( ::SireCAS::NotEqualTo::*assign_function_type )( ::SireCAS::NotEqualTo const & ) ;
+            typedef ::SireCAS::NotEqualTo & ( ::SireCAS::NotEqualTo::*assign_function_type)( ::SireCAS::NotEqualTo const & ) ;
             assign_function_type assign_function_value( &::SireCAS::NotEqualTo::operator= );
             
             NotEqualTo_exposer.def( 
@@ -93,7 +93,7 @@ void register_NotEqualTo_class(){
         }
         { //::SireCAS::NotEqualTo::what
         
-            typedef char const * ( ::SireCAS::NotEqualTo::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::NotEqualTo::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::NotEqualTo::what );
             
             NotEqualTo_exposer.def( 

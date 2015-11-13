@@ -11,7 +11,7 @@ namespace bp = boost::python;
 
 #include "temperature.h"
 
-const char* pvt_get_name(const SireUnits::Dimension::TempBase&){ return "SireUnits::Dimension::TempBase";}
+#include "Helpers/str.hpp"
 
 void register_TempBase_class(){
 
@@ -21,7 +21,7 @@ void register_TempBase_class(){
         bp::scope TempBase_scope( TempBase_exposer );
         { //::SireUnits::Dimension::TempBase::convertFromInternal
         
-            typedef double ( ::SireUnits::Dimension::TempBase::*convertFromInternal_function_type )( double ) const;
+            typedef double ( ::SireUnits::Dimension::TempBase::*convertFromInternal_function_type)( double ) const;
             convertFromInternal_function_type convertFromInternal_function_value( &::SireUnits::Dimension::TempBase::convertFromInternal );
             
             TempBase_exposer.def( 
@@ -32,7 +32,7 @@ void register_TempBase_class(){
         }
         { //::SireUnits::Dimension::TempBase::convertFromInternal
         
-            typedef double ( ::SireUnits::Dimension::TempBase::*convertFromInternal_function_type )(  ) const;
+            typedef double ( ::SireUnits::Dimension::TempBase::*convertFromInternal_function_type)(  ) const;
             convertFromInternal_function_type convertFromInternal_function_value( &::SireUnits::Dimension::TempBase::convertFromInternal );
             
             TempBase_exposer.def( 
@@ -42,7 +42,7 @@ void register_TempBase_class(){
         }
         { //::SireUnits::Dimension::TempBase::convertToInternal
         
-            typedef double ( ::SireUnits::Dimension::TempBase::*convertToInternal_function_type )( double ) const;
+            typedef double ( ::SireUnits::Dimension::TempBase::*convertToInternal_function_type)( double ) const;
             convertToInternal_function_type convertToInternal_function_value( &::SireUnits::Dimension::TempBase::convertToInternal );
             
             TempBase_exposer.def( 
@@ -53,7 +53,7 @@ void register_TempBase_class(){
         }
         { //::SireUnits::Dimension::TempBase::in
         
-            typedef double ( ::SireUnits::Dimension::TempBase::*in_function_type )( ::SireUnits::Dimension::TempBase const & ) const;
+            typedef double ( ::SireUnits::Dimension::TempBase::*in_function_type)( ::SireUnits::Dimension::TempBase const & ) const;
             in_function_type in_function_value( &::SireUnits::Dimension::TempBase::in );
             
             TempBase_exposer.def( 
@@ -64,7 +64,7 @@ void register_TempBase_class(){
         }
         { //::SireUnits::Dimension::TempBase::in
         
-            typedef double ( ::SireUnits::Dimension::TempBase::*in_function_type )( ::SireUnits::Dimension::Temperature const & ) const;
+            typedef double ( ::SireUnits::Dimension::TempBase::*in_function_type)( ::SireUnits::Dimension::Temperature const & ) const;
             in_function_type in_function_value( &::SireUnits::Dimension::TempBase::in );
             
             TempBase_exposer.def( 
@@ -77,7 +77,7 @@ void register_TempBase_class(){
         TempBase_exposer.def( bp::self != bp::other< SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 1, 0, 0 > >() );
         { //::SireUnits::Dimension::TempBase::operator=
         
-            typedef ::SireUnits::Dimension::TempBase & ( ::SireUnits::Dimension::TempBase::*assign_function_type )( ::SireUnits::Dimension::TempBase const & ) ;
+            typedef ::SireUnits::Dimension::TempBase & ( ::SireUnits::Dimension::TempBase::*assign_function_type)( ::SireUnits::Dimension::TempBase const & ) ;
             assign_function_type assign_function_value( &::SireUnits::Dimension::TempBase::operator= );
             
             TempBase_exposer.def( 
@@ -89,7 +89,7 @@ void register_TempBase_class(){
         }
         { //::SireUnits::Dimension::TempBase::operator=
         
-            typedef ::SireUnits::Dimension::TempBase & ( ::SireUnits::Dimension::TempBase::*assign_function_type )( ::SireUnits::Dimension::Temperature const & ) ;
+            typedef ::SireUnits::Dimension::TempBase & ( ::SireUnits::Dimension::TempBase::*assign_function_type)( ::SireUnits::Dimension::Temperature const & ) ;
             assign_function_type assign_function_value( &::SireUnits::Dimension::TempBase::operator= );
             
             TempBase_exposer.def( 
@@ -103,7 +103,7 @@ void register_TempBase_class(){
         TempBase_exposer.def( bp::self == bp::other< SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 1, 0, 0 > >() );
         { //::SireUnits::Dimension::TempBase::to
         
-            typedef double ( ::SireUnits::Dimension::TempBase::*to_function_type )( ::SireUnits::Dimension::TempBase const & ) const;
+            typedef double ( ::SireUnits::Dimension::TempBase::*to_function_type)( ::SireUnits::Dimension::TempBase const & ) const;
             to_function_type to_function_value( &::SireUnits::Dimension::TempBase::to );
             
             TempBase_exposer.def( 
@@ -112,8 +112,28 @@ void register_TempBase_class(){
                 , ( bp::arg("other") ) );
         
         }
-        TempBase_exposer.def( "__str__", &pvt_get_name);
-        TempBase_exposer.def( "__repr__", &pvt_get_name);
+        { //::SireUnits::Dimension::TempBase::toString
+        
+            typedef ::QString ( ::SireUnits::Dimension::TempBase::*toString_function_type)(  ) const;
+            toString_function_type toString_function_value( &::SireUnits::Dimension::TempBase::toString );
+            
+            TempBase_exposer.def( 
+                "toString"
+                , toString_function_value );
+        
+        }
+        { //::SireUnits::Dimension::TempBase::value
+        
+            typedef double ( ::SireUnits::Dimension::TempBase::*value_function_type)(  ) const;
+            value_function_type value_function_value( &::SireUnits::Dimension::TempBase::value );
+            
+            TempBase_exposer.def( 
+                "value"
+                , value_function_value );
+        
+        }
+        TempBase_exposer.def( "__str__", &__str__< ::SireUnits::Dimension::TempBase > );
+        TempBase_exposer.def( "__repr__", &__str__< ::SireUnits::Dimension::TempBase > );
     }
 
 }

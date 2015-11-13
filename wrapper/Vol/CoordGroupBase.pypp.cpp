@@ -43,7 +43,7 @@ void register_CoordGroupBase_class(){
         bp::scope CoordGroupBase_scope( CoordGroupBase_exposer );
         { //::SireVol::CoordGroupBase::aaBox
         
-            typedef ::SireVol::AABox const & ( ::SireVol::CoordGroupBase::*aaBox_function_type )(  ) const;
+            typedef ::SireVol::AABox const & ( ::SireVol::CoordGroupBase::*aaBox_function_type)(  ) const;
             aaBox_function_type aaBox_function_value( &::SireVol::CoordGroupBase::aaBox );
             
             CoordGroupBase_exposer.def( 
@@ -54,7 +54,7 @@ void register_CoordGroupBase_class(){
         }
         { //::SireVol::CoordGroupBase::assertSameSize
         
-            typedef void ( ::SireVol::CoordGroupBase::*assertSameSize_function_type )( ::QVector< SireMaths::Vector > const & ) const;
+            typedef void ( ::SireVol::CoordGroupBase::*assertSameSize_function_type)( ::QVector< SireMaths::Vector > const & ) const;
             assertSameSize_function_type assertSameSize_function_value( &::SireVol::CoordGroupBase::assertSameSize );
             
             CoordGroupBase_exposer.def( 
@@ -65,7 +65,7 @@ void register_CoordGroupBase_class(){
         }
         { //::SireVol::CoordGroupBase::assertSameSize
         
-            typedef void ( ::SireVol::CoordGroupBase::*assertSameSize_function_type )( ::SireVol::CoordGroupBase const & ) const;
+            typedef void ( ::SireVol::CoordGroupBase::*assertSameSize_function_type)( ::SireVol::CoordGroupBase const & ) const;
             assertSameSize_function_type assertSameSize_function_value( &::SireVol::CoordGroupBase::assertSameSize );
             
             CoordGroupBase_exposer.def( 
@@ -76,7 +76,7 @@ void register_CoordGroupBase_class(){
         }
         { //::SireVol::CoordGroupBase::assertValidIndex
         
-            typedef void ( ::SireVol::CoordGroupBase::*assertValidIndex_function_type )( ::quint32 ) const;
+            typedef void ( ::SireVol::CoordGroupBase::*assertValidIndex_function_type)( ::quint32 ) const;
             assertValidIndex_function_type assertValidIndex_function_value( &::SireVol::CoordGroupBase::assertValidIndex );
             
             CoordGroupBase_exposer.def( 
@@ -87,7 +87,7 @@ void register_CoordGroupBase_class(){
         }
         { //::SireVol::CoordGroupBase::at
         
-            typedef ::SireMaths::Vector const & ( ::SireVol::CoordGroupBase::*at_function_type )( ::quint32 ) const;
+            typedef ::SireMaths::Vector const & ( ::SireVol::CoordGroupBase::*at_function_type)( ::quint32 ) const;
             at_function_type at_function_value( &::SireVol::CoordGroupBase::at );
             
             CoordGroupBase_exposer.def( 
@@ -99,7 +99,7 @@ void register_CoordGroupBase_class(){
         }
         { //::SireVol::CoordGroupBase::count
         
-            typedef int ( ::SireVol::CoordGroupBase::*count_function_type )(  ) const;
+            typedef int ( ::SireVol::CoordGroupBase::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireVol::CoordGroupBase::count );
             
             CoordGroupBase_exposer.def( 
@@ -109,7 +109,7 @@ void register_CoordGroupBase_class(){
         }
         { //::SireVol::CoordGroupBase::isEmpty
         
-            typedef bool ( ::SireVol::CoordGroupBase::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireVol::CoordGroupBase::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireVol::CoordGroupBase::isEmpty );
             
             CoordGroupBase_exposer.def( 
@@ -119,7 +119,7 @@ void register_CoordGroupBase_class(){
         }
         { //::SireVol::CoordGroupBase::maybeDifferent
         
-            typedef bool ( ::SireVol::CoordGroupBase::*maybeDifferent_function_type )( ::SireVol::CoordGroupBase const & ) const;
+            typedef bool ( ::SireVol::CoordGroupBase::*maybeDifferent_function_type)( ::SireVol::CoordGroupBase const & ) const;
             maybeDifferent_function_type maybeDifferent_function_value( &::SireVol::CoordGroupBase::maybeDifferent );
             
             CoordGroupBase_exposer.def( 
@@ -132,7 +132,7 @@ void register_CoordGroupBase_class(){
         CoordGroupBase_exposer.def( bp::self == bp::self );
         { //::SireVol::CoordGroupBase::operator[]
         
-            typedef ::SireMaths::Vector const & ( ::SireVol::CoordGroupBase::*__getitem___function_type )( ::quint32 ) const;
+            typedef ::SireMaths::Vector const & ( ::SireVol::CoordGroupBase::*__getitem___function_type)( ::quint32 ) const;
             __getitem___function_type __getitem___function_value( &::SireVol::CoordGroupBase::operator[] );
             
             CoordGroupBase_exposer.def( 
@@ -144,7 +144,7 @@ void register_CoordGroupBase_class(){
         }
         { //::SireVol::CoordGroupBase::size
         
-            typedef int ( ::SireVol::CoordGroupBase::*size_function_type )(  ) const;
+            typedef int ( ::SireVol::CoordGroupBase::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireVol::CoordGroupBase::size );
             
             CoordGroupBase_exposer.def( 
@@ -154,7 +154,7 @@ void register_CoordGroupBase_class(){
         }
         { //::SireVol::CoordGroupBase::toString
         
-            typedef ::QString ( ::SireVol::CoordGroupBase::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireVol::CoordGroupBase::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireVol::CoordGroupBase::toString );
             
             CoordGroupBase_exposer.def( 
@@ -164,7 +164,7 @@ void register_CoordGroupBase_class(){
         }
         { //::SireVol::CoordGroupBase::toVector
         
-            typedef ::QVector< SireMaths::Vector > ( ::SireVol::CoordGroupBase::*toVector_function_type )(  ) const;
+            typedef ::QVector< SireMaths::Vector > ( ::SireVol::CoordGroupBase::*toVector_function_type)(  ) const;
             toVector_function_type toVector_function_value( &::SireVol::CoordGroupBase::toVector );
             
             CoordGroupBase_exposer.def( 
@@ -184,7 +184,7 @@ void register_CoordGroupBase_class(){
         }
         { //::SireVol::CoordGroupBase::what
         
-            typedef char const * ( ::SireVol::CoordGroupBase::*what_function_type )(  ) const;
+            typedef char const * ( ::SireVol::CoordGroupBase::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireVol::CoordGroupBase::what );
             
             CoordGroupBase_exposer.def( 

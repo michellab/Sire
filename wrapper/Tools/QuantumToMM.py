@@ -109,18 +109,27 @@ nfast = Parameter("nfast", 1000,
 scale_charges = Parameter("scale charges", 1.0,
                           """The amount by which to scale MM charges in the QM/MM calculation.""")
 
-qm_program = Parameter("qm program", "molpro",
+intermolecular_only = Parameter("intermolecular only", False,
+                                """Only calculate QM/MM intermolecular energies. This intramolecular energy of the QM atoms 
+                                   is calculated using the MM forcefield.""")
+
+amberhome = Parameter("amberhome", None,
+                      """Use this to specify the installation directory of Amber / AmberTools, if you are using
+                         the 'sqm' program. If this is not set, then you must have set this location using
+                         the AMBERHOME environmental variable.""")
+
+qm_program = Parameter("qm program", "sqm",
                        """The name of the program to use to calculate QM energies.""")
 
 qm_executable = Parameter("qm executable", None,
                           """Exact path to the QM executable used to calculate the QM energies. If 
                              this is not set, then the QM executable will be searched from the path.""")
 
-qm_method = Parameter("qm method", "ks,b,lyp",
-                      """The string passed to Molpro to specify the QM method to use to model the ligand.""")
+qm_method = Parameter("qm method", "AM1/d",
+                      """The string passed to the QM program to specify the QM method to use to model the ligand.""")
 
 basis_set = Parameter("basis set", "VDZ",
-                      """The string passed to Molpro to specify the basis set used to model the ligand.""")
+                      """The string passed to the QM program (molpro, as ab-initio only) to specify the basis set used to model the ligand.""")
 
 qm_zero_energy = Parameter("qm zero energy", None,
                            """The value of 'zero' for the QM energy. This is used to shift the QM energy so that it
@@ -160,6 +169,8 @@ def createQMMMMoves(system):
     except:
         pass
 
+    use_reflection_sphere = False
+
     try:
         mobile_ligand = system[MGName("ligand")]
 
@@ -169,7 +180,8 @@ def createQMMMMoves(system):
             # get the amount to translate and rotate from the ligand's flexibility object
             flex = mobile_ligand.moleculeAt(0).molecule().property("flexibility")
 
-            if (flex.translation().value() != 0 or flex.rotation().value() != 0):
+            # only move the solute if it is not the only molecule in the system
+            if system.nMolecules() > 1 and (flex.translation().value() != 0 or flex.rotation().value() != 0):
                 rb_moves = RigidBodyMC(mobile_ligand)
                 rb_moves.setMaximumTranslation(flex.translation())
                 rb_moves.setMaximumRotation(flex.rotation())
@@ -178,6 +190,8 @@ def createQMMMMoves(system):
                     reflection_radius = float(str(system.property("reflection sphere radius"))) * angstroms
                     reflection_center = system.property("reflection center").toVector()[0]
                     rb_moves.setReflectionSphere(reflection_center, reflection_radius)
+                    use_reflection_sphere = True
+                    print("Using the reflection sphere to constrain solvent moves...")
 
                 scale_moves = scale_moves / 2
                 moves.add( rb_moves, scale_moves * mobile_ligand.nViews() )
@@ -239,17 +253,20 @@ def createQMMMMoves(system):
     except:
         pass
 
-    print("SETTING TEMPERATURE")
     moves.setTemperature(temperature.val)
 
-    if pressure.val:
-        if not system.containsProperty("reflection sphere radius"):
-            all = system[MGName("all")]
-            volume_move = VolumeMove(all)
-            volume_move.setTemperature(temperature.val)
-            volume_move.setPressure(pressure.val)
-            volume_move.setMaximumVolumeChange( 0.1 * all.nMolecules() * angstrom3 )
-            moves.add(volume_move, 1)
+    try:
+        if pressure.val and system.nMolecules() > 1 and system.property("space").isPeriodic():
+            if not use_reflection_sphere:
+                print("Running a constant pressure calculation")
+                all = system[MGName("all")]
+                volume_move = VolumeMove(all)
+                volume_move.setTemperature(temperature.val)
+                volume_move.setPressure(pressure.val)
+                volume_move.setMaximumVolumeChange( 0.1 * all.nMolecules() * angstrom3 )
+                moves.add(volume_move, 1)
+    except:
+        pass
 
     # Now create a multiple-timestep Monte Carlo move that
     # uses the above weighted moves for the fast energy
@@ -286,7 +303,7 @@ def getMinimumDistance(mol0, mol1):
                                  CoordGroup(mol1.molecule().property("coordinates").array()))
 
 
-def setCLJProperties(forcefield, space = Cartesian()):
+def setCLJProperties(forcefield, space):
     if cutoff_method.val.find("shift electrostatics") != -1:
         forcefield.setShiftElectrostatics(True)
 
@@ -304,7 +321,7 @@ def setCLJProperties(forcefield, space = Cartesian()):
     return forcefield
 
 
-def setFakeGridProperties(forcefield, space = Cartesian()):
+def setFakeGridProperties(forcefield, space):
     forcefield.setSwitchingFunction( HarmonicSwitchingFunction(coul_cutoff.val,coul_cutoff.val,
                                                                lj_cutoff.val,lj_cutoff.val) )
     forcefield.setSpace(space)
@@ -321,7 +338,7 @@ def setGridProperties(forcefield, extra_buffer=0*angstrom):
     return forcefield
 
 
-def setQMProperties(forcefield, space = Cartesian()):
+def setQMProperties(forcefield, space):
     forcefield.setSpace(space)
     forcefield.setSwitchingFunction( HarmonicSwitchingFunction(coul_cutoff.val,coul_cutoff.val,
                                                                lj_cutoff.val,lj_cutoff.val) )
@@ -329,7 +346,7 @@ def setQMProperties(forcefield, space = Cartesian()):
     # calculate the total charge on the QM atoms
     total_charge = 0.0
     for molnum in forcefield.molecules().molNums():
-        total_charge = forcefield[molnum].evaluate().charge().value()
+        total_charge += forcefield[molnum].evaluate().charge().value()
 
     # round the charge to the nearest integer
     print("Charge on QM atoms is %s" % total_charge)
@@ -338,7 +355,31 @@ def setQMProperties(forcefield, space = Cartesian()):
     print("Integer charge on QM atoms is %s" % total_charge)
 
     # Define the QM program used to calculate the QM part of the QM/MM energy
-    if qm_program.val == "molpro":
+    if qm_program.val == "sqm":
+        qm_prog = SQM()
+        qm_prog.setMethod(qm_method.val)
+        qm_prog.setTotalCharge(total_charge)
+
+        if amberhome.val is None:
+            ahome = os.getenv("AMBERHOME")
+
+            if ahome is None:
+                print("ERROR: YOU MUST SET THE AMBERHOME ENVIRONMENTAL VARIABLE!!!")
+                print("This must point to the installation directory of Amber / AmberTools")
+                sys.exit(0)
+        else:
+            ahome = amberhome.val
+
+        if qm_executable.val is None:
+            qm_prog.setExecutable( findExe("%s/bin/sqm" % ahome).absoluteFilePath() )
+        else:
+            qm_prog.setExecutable( findExe(qm_executable.val).absoluteFilePath() )
+
+        qm_prog.setEnvironment("AMBERHOME", ahome)
+
+        forcefield.setQuantumProgram(qm_prog)
+
+    elif qm_program.val == "molpro":
         qm_prog = Molpro()
         qm_prog.setBasisSet(basis_set.val)
         qm_prog.setMethod(qm_method.val)
@@ -361,6 +402,12 @@ def setQMProperties(forcefield, space = Cartesian()):
                          % qm_program.val)
 
         forcefield.setQuantumProgram(NullQM())
+
+    forcefield.setIntermolecularOnly( intermolecular_only.val )
+
+    forcefield.setChargeScalingFactor( scale_charges.val )
+
+    print("Using QM program %s, MM charges scaled by %s" % (qm_prog, scale_charges.val))
 
     return forcefield
 
@@ -426,6 +473,9 @@ def loadQMMMSystem():
 
         system.setProperty("reflection center", AtomCoords(CoordGroup(1,reflect_center)))
         system.setProperty("reflection sphere radius", VariantProperty(reflect_radius))
+        space = Cartesian()
+    else:
+        space = loadsys.property("space")
 
     if loadsys.containsProperty("average solute translation delta"):
         system.setProperty("average solute translation delta", \
@@ -639,7 +689,7 @@ def loadQMMMSystem():
     
     # intramolecular energy of the ligand
     ligand_intraclj = IntraCLJFF("ligand:intraclj")
-    ligand_intraclj = setCLJProperties(ligand_intraclj)
+    ligand_intraclj = setCLJProperties(ligand_intraclj, space)
     ligand_intraclj.add(ligand_mols)
 
     ligand_intraff = InternalFF("ligand:intra")
@@ -657,38 +707,46 @@ def loadQMMMSystem():
     # forcefield holding the energy between the ligand and the mobile atoms in the
     # bound leg
     ligand_mobile = InterGroupCLJFF("system:ligand-mobile")
-    ligand_mobile = setCLJProperties(ligand_mobile)
+    ligand_mobile = setCLJProperties(ligand_mobile, space)
 
     ligand_mobile.add(ligand_mols, MGIdx(0))
     ligand_mobile.add(mobile_mols, MGIdx(1))
 
     qm_ligand = QMMMFF("system:ligand-QM")    
-    qm_ligand = setQMProperties(qm_ligand)
-
     qm_ligand.add(ligand_mols, MGIdx(0))
+    qm_ligand = setQMProperties(qm_ligand, space)
 
-    if qm_zero_energy.val is None:
-        # calculate the delta value for the system - this is the difference between
-        # the MM and QM intramolecular energy of the ligand
-        t.start()
-        print("\nComparing the MM and QM energies of the ligand...")
-        mm_intra = ligand_intraclj.energy().value() + ligand_intraff.energy().value()
-        print("MM energy = %s kcal mol-1 (took %s ms)" % (mm_intra, t.elapsed()))
+    zero_energy = 0
 
-        t.start()
-        qm_intra = qm_ligand.energy().value()
-        print("QM energy = %s kcal mol-1 (took %s ms)" % (qm_intra, t.elapsed()))
+    if not intermolecular_only.val:
+        if qm_zero_energy.val is None:
+            # calculate the delta value for the system - this is the difference between
+            # the MM and QM intramolecular energy of the ligand
+            t.start()
+            print("\nComparing the MM and QM energies of the ligand...")
+            mm_intra = ligand_intraclj.energy().value() + ligand_intraff.energy().value()
+            print("MM energy = %s kcal mol-1 (took %s ms)" % (mm_intra, t.elapsed()))
 
-        print("\nSetting the QM zero energy to %s kcal mol-1" % (qm_intra - mm_intra))
-        qm_ligand.setZeroEnergy( (qm_intra-mm_intra) * kcal_per_mol )
-    else:
-        print("\nManually setting the QM zero energy to %s" % qm_zero_energy.val)
-        qm_ligand.setZeroEnergy( qm_zero_energy.val )
+            t.start()
+            qm_intra = qm_ligand.energy().value()
+            print("QM energy = %s kcal mol-1 (took %s ms)" % (qm_intra, t.elapsed()))
+
+            print("\nSetting the QM zero energy to %s kcal mol-1" % (qm_intra - mm_intra))
+            qm_ligand.setZeroEnergy( (qm_intra-mm_intra) * kcal_per_mol )
+            zero_energy = qm_intra - mm_intra
+        else:
+            print("\nManually setting the QM zero energy to %s" % qm_zero_energy.val)
+            qm_ligand.setZeroEnergy( qm_zero_energy.val )
+            zero_energy = qm_zero_energy.val
 
     qm_ligand.add(mobile_mols, MGIdx(1))
 
     ligand_mm_nrg += ligand_mobile.components().total()
     ligand_qm_nrg = qm_ligand.components().total() + ligand_mobile.components().lj()
+
+    if intermolecular_only.val:
+        # the QM model still uses the MM intramolecular energy of the ligand
+        ligand_qm_nrg += ligand_intraclj.components().total() + ligand_intraff.components().total()
 
     forcefields.append(ligand_mobile)
     forcefields.append(qm_ligand)
@@ -706,8 +764,8 @@ def loadQMMMSystem():
         # forcefield holding the energy between the ligand and the fixed atoms in the bound leg
         if disable_grid:
             ligand_fixed = InterGroupCLJFF("system:ligand-fixed")
-            ligand_fixed = setCLJProperties(ligand_fixed)
-            ligand_fixed = setFakeGridProperties(ligand_fixed)
+            ligand_fixed = setCLJProperties(ligand_fixed, space)
+            ligand_fixed = setFakeGridProperties(ligand_fixed, space)
 
             ligand_fixed.add(ligand_mols, MGIdx(0))
             ligand_fixed.add(fixed_group, MGIdx(1))
@@ -721,7 +779,7 @@ def loadQMMMSystem():
 
         else:
             ligand_fixed = GridFF("system:ligand-fixed")
-            ligand_fixed = setCLJProperties(ligand_fixed)
+            ligand_fixed = setCLJProperties(ligand_fixed, space)
             ligand_fixed = setGridProperties(ligand_fixed)
 
             ligand_fixed.add(ligand_mols, MGIdx(0))
@@ -740,7 +798,7 @@ def loadQMMMSystem():
 
     # forcefield holding the intermolecular energy between all molecules
     mobile_mobile = InterCLJFF("mobile-mobile")
-    mobile_mobile = setCLJProperties(mobile_mobile)
+    mobile_mobile = setCLJProperties(mobile_mobile, space)
 
     mobile_mobile.add(mobile_mols)
 
@@ -752,14 +810,14 @@ def loadQMMMSystem():
     if disable_grid.val:
         mobile_fixed = InterGroupCLJFF("mobile-fixed")
         mobile_fixed = setCLJProperties(mobile_fixed)
-        mobile_fixed = setFakeGridProperties(mobile_fixed)
+        mobile_fixed = setFakeGridProperties(mobile_fixed, space)
         mobile_fixed.add(mobile_buffered_mols, MGIdx(0))
         mobile_fixed.add(fixed_group, MGIdx(1))
         other_nrg += mobile_fixed.components().total()
         forcefields.append(mobile_fixed)
     else:
         mobile_fixed = GridFF("mobile-fixed")
-        mobile_fixed = setCLJProperties(mobile_fixed)
+        mobile_fixed = setCLJProperties(mobile_fixed, space)
         mobile_fixed = setGridProperties(mobile_fixed)
 
         # we use mobile_buffered_group as this group misses out atoms that are bonded
@@ -772,7 +830,7 @@ def loadQMMMSystem():
     # intramolecular energy of the protein
     if protein_intra_mols.nMolecules() > 0:
         protein_intraclj = IntraCLJFF("protein_intraclj")
-        protein_intraclj = setCLJProperties(protein_intraclj)
+        protein_intraclj = setCLJProperties(protein_intraclj, space)
 
         protein_intraff = InternalFF("protein_intra")
 
@@ -789,7 +847,7 @@ def loadQMMMSystem():
     # intramolecular energy of any other solutes
     if solute_intra_mols.nMolecules() > 0:
         solute_intraclj = IntraCLJFF("solute_intraclj")
-        solute_intraclj = setCLJProperties(solute_intraclj)
+        solute_intraclj = setCLJProperties(solute_intraclj, space)
 
         solute_intraff = InternalFF("solute_intra")
 
@@ -827,7 +885,13 @@ def loadQMMMSystem():
     system.setComponent(Symbol("dE/dlam"), de_by_dlam)
     system.setComponent( system.totalComponent(), e_slow )
  
-    system.setProperty("space", loadsys.property("space"))
+    system.setProperty("space", space)
+    
+    if space.isPeriodic():
+        # ensure that all molecules are wrapped into the space with the ligand at the center
+        print("Adding in a space wrapper constraint %s, %s" % (space, ligand_mol.evaluate().center()))
+        system.add( SpaceWrapper( ligand_mol.evaluate().center(), all_group ) )
+        system.applyConstraints()
 
     print("\nHere are the values of all of the initial energy components...")
     t.start()
@@ -836,6 +900,16 @@ def loadQMMMSystem():
 
     # Create a monitor to monitor the free energy average
     system.add( "dG/dlam", MonitorComponent(Symbol("dE/dlam"), AverageAndStddev()) )
+
+    if intermolecular_only.val:
+        print("\n\n## This simulation uses QM to model *only* the intermolecular energy between")
+        print("## the QM and MM atoms. The intramolecular energy of the QM atoms is still")
+        print("## modelled using MM.\n")
+    else:
+        print("\n\n## This simulation uses QM to model both the intermolecular and intramolecular")
+        print("## energies of the QM atoms. Because the this, we have to adjust the 'zero' point")
+        print("## of the QM potential. You need to add the value %s kcal mol-1 back onto the" % zero_energy)
+        print("## QM->MM free energy calculated using this program.\n")
 
     return system
 

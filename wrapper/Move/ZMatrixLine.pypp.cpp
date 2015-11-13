@@ -61,7 +61,7 @@ void register_ZMatrixLine_class(){
         ZMatrixLine_exposer.def( bp::init< SireMove::ZMatrixLine const & >(( bp::arg("other") )) );
         { //::SireMove::ZMatrixLine::angle
         
-            typedef ::SireMol::AtomIdx ( ::SireMove::ZMatrixLine::*angle_function_type )(  ) const;
+            typedef ::SireMol::AtomIdx ( ::SireMove::ZMatrixLine::*angle_function_type)(  ) const;
             angle_function_type angle_function_value( &::SireMove::ZMatrixLine::angle );
             
             ZMatrixLine_exposer.def( 
@@ -71,7 +71,7 @@ void register_ZMatrixLine_class(){
         }
         { //::SireMove::ZMatrixLine::angleDelta
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMove::ZMatrixLine::*angleDelta_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMove::ZMatrixLine::*angleDelta_function_type)(  ) const;
             angleDelta_function_type angleDelta_function_value( &::SireMove::ZMatrixLine::angleDelta );
             
             ZMatrixLine_exposer.def( 
@@ -81,7 +81,7 @@ void register_ZMatrixLine_class(){
         }
         { //::SireMove::ZMatrixLine::atom
         
-            typedef ::SireMol::AtomIdx ( ::SireMove::ZMatrixLine::*atom_function_type )(  ) const;
+            typedef ::SireMol::AtomIdx ( ::SireMove::ZMatrixLine::*atom_function_type)(  ) const;
             atom_function_type atom_function_value( &::SireMove::ZMatrixLine::atom );
             
             ZMatrixLine_exposer.def( 
@@ -91,7 +91,7 @@ void register_ZMatrixLine_class(){
         }
         { //::SireMove::ZMatrixLine::bond
         
-            typedef ::SireMol::AtomIdx ( ::SireMove::ZMatrixLine::*bond_function_type )(  ) const;
+            typedef ::SireMol::AtomIdx ( ::SireMove::ZMatrixLine::*bond_function_type)(  ) const;
             bond_function_type bond_function_value( &::SireMove::ZMatrixLine::bond );
             
             ZMatrixLine_exposer.def( 
@@ -101,7 +101,7 @@ void register_ZMatrixLine_class(){
         }
         { //::SireMove::ZMatrixLine::bondDelta
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMove::ZMatrixLine::*bondDelta_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMove::ZMatrixLine::*bondDelta_function_type)(  ) const;
             bondDelta_function_type bondDelta_function_value( &::SireMove::ZMatrixLine::bondDelta );
             
             ZMatrixLine_exposer.def( 
@@ -111,7 +111,7 @@ void register_ZMatrixLine_class(){
         }
         { //::SireMove::ZMatrixLine::dihedral
         
-            typedef ::SireMol::AtomIdx ( ::SireMove::ZMatrixLine::*dihedral_function_type )(  ) const;
+            typedef ::SireMol::AtomIdx ( ::SireMove::ZMatrixLine::*dihedral_function_type)(  ) const;
             dihedral_function_type dihedral_function_value( &::SireMove::ZMatrixLine::dihedral );
             
             ZMatrixLine_exposer.def( 
@@ -121,7 +121,7 @@ void register_ZMatrixLine_class(){
         }
         { //::SireMove::ZMatrixLine::dihedralDelta
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMove::ZMatrixLine::*dihedralDelta_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMove::ZMatrixLine::*dihedralDelta_function_type)(  ) const;
             dihedralDelta_function_type dihedralDelta_function_value( &::SireMove::ZMatrixLine::dihedralDelta );
             
             ZMatrixLine_exposer.def( 
@@ -132,7 +132,7 @@ void register_ZMatrixLine_class(){
         ZMatrixLine_exposer.def( bp::self != bp::self );
         { //::SireMove::ZMatrixLine::operator=
         
-            typedef ::SireMove::ZMatrixLine & ( ::SireMove::ZMatrixLine::*assign_function_type )( ::SireMove::ZMatrixLine const & ) ;
+            typedef ::SireMove::ZMatrixLine & ( ::SireMove::ZMatrixLine::*assign_function_type)( ::SireMove::ZMatrixLine const & ) ;
             assign_function_type assign_function_value( &::SireMove::ZMatrixLine::operator= );
             
             ZMatrixLine_exposer.def( 
@@ -145,7 +145,7 @@ void register_ZMatrixLine_class(){
         ZMatrixLine_exposer.def( bp::self == bp::self );
         { //::SireMove::ZMatrixLine::operator[]
         
-            typedef ::SireMol::AtomIdx ( ::SireMove::ZMatrixLine::*__getitem___function_type )( int ) const;
+            typedef ::SireMol::AtomIdx ( ::SireMove::ZMatrixLine::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMove::ZMatrixLine::operator[] );
             
             ZMatrixLine_exposer.def( 
@@ -156,7 +156,7 @@ void register_ZMatrixLine_class(){
         }
         { //::SireMove::ZMatrixLine::setAngleDelta
         
-            typedef void ( ::SireMove::ZMatrixLine::*setAngleDelta_function_type )( ::SireUnits::Dimension::Angle const & ) ;
+            typedef void ( ::SireMove::ZMatrixLine::*setAngleDelta_function_type)( ::SireUnits::Dimension::Angle const & ) ;
             setAngleDelta_function_type setAngleDelta_function_value( &::SireMove::ZMatrixLine::setAngleDelta );
             
             ZMatrixLine_exposer.def( 
@@ -167,7 +167,7 @@ void register_ZMatrixLine_class(){
         }
         { //::SireMove::ZMatrixLine::setBondDelta
         
-            typedef void ( ::SireMove::ZMatrixLine::*setBondDelta_function_type )( ::SireUnits::Dimension::Length const & ) ;
+            typedef void ( ::SireMove::ZMatrixLine::*setBondDelta_function_type)( ::SireUnits::Dimension::Length const & ) ;
             setBondDelta_function_type setBondDelta_function_value( &::SireMove::ZMatrixLine::setBondDelta );
             
             ZMatrixLine_exposer.def( 
@@ -178,7 +178,7 @@ void register_ZMatrixLine_class(){
         }
         { //::SireMove::ZMatrixLine::setDihedralDelta
         
-            typedef void ( ::SireMove::ZMatrixLine::*setDihedralDelta_function_type )( ::SireUnits::Dimension::Angle const & ) ;
+            typedef void ( ::SireMove::ZMatrixLine::*setDihedralDelta_function_type)( ::SireUnits::Dimension::Angle const & ) ;
             setDihedralDelta_function_type setDihedralDelta_function_value( &::SireMove::ZMatrixLine::setDihedralDelta );
             
             ZMatrixLine_exposer.def( 
@@ -189,7 +189,7 @@ void register_ZMatrixLine_class(){
         }
         { //::SireMove::ZMatrixLine::toString
         
-            typedef ::QString ( ::SireMove::ZMatrixLine::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMove::ZMatrixLine::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMove::ZMatrixLine::toString );
             
             ZMatrixLine_exposer.def( 
@@ -209,7 +209,7 @@ void register_ZMatrixLine_class(){
         }
         { //::SireMove::ZMatrixLine::what
         
-            typedef char const * ( ::SireMove::ZMatrixLine::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMove::ZMatrixLine::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMove::ZMatrixLine::what );
             
             ZMatrixLine_exposer.def( 

@@ -52,7 +52,7 @@ void register_RepExMove_class(){
         RepExMove_exposer.def( bp::init< SireMove::RepExMove const & >(( bp::arg("other") )) );
         { //::SireMove::RepExMove::acceptanceRatio
         
-            typedef double ( ::SireMove::RepExMove::*acceptanceRatio_function_type )(  ) const;
+            typedef double ( ::SireMove::RepExMove::*acceptanceRatio_function_type)(  ) const;
             acceptanceRatio_function_type acceptanceRatio_function_value( &::SireMove::RepExMove::acceptanceRatio );
             
             RepExMove_exposer.def( 
@@ -62,7 +62,7 @@ void register_RepExMove_class(){
         }
         { //::SireMove::RepExMove::clearStatistics
         
-            typedef void ( ::SireMove::RepExMove::*clearStatistics_function_type )(  ) ;
+            typedef void ( ::SireMove::RepExMove::*clearStatistics_function_type)(  ) ;
             clearStatistics_function_type clearStatistics_function_value( &::SireMove::RepExMove::clearStatistics );
             
             RepExMove_exposer.def( 
@@ -72,7 +72,7 @@ void register_RepExMove_class(){
         }
         { //::SireMove::RepExMove::generator
         
-            typedef ::SireMaths::RanGenerator const & ( ::SireMove::RepExMove::*generator_function_type )(  ) const;
+            typedef ::SireMaths::RanGenerator const & ( ::SireMove::RepExMove::*generator_function_type)(  ) const;
             generator_function_type generator_function_value( &::SireMove::RepExMove::generator );
             
             RepExMove_exposer.def( 
@@ -83,7 +83,7 @@ void register_RepExMove_class(){
         }
         { //::SireMove::RepExMove::move
         
-            typedef void ( ::SireMove::RepExMove::*move_function_type )( ::SireMove::SupraSystem &,int,bool ) ;
+            typedef void ( ::SireMove::RepExMove::*move_function_type)( ::SireMove::SupraSystem &,int,bool ) ;
             move_function_type move_function_value( &::SireMove::RepExMove::move );
             
             RepExMove_exposer.def( 
@@ -94,7 +94,7 @@ void register_RepExMove_class(){
         }
         { //::SireMove::RepExMove::nAccepted
         
-            typedef int ( ::SireMove::RepExMove::*nAccepted_function_type )(  ) const;
+            typedef int ( ::SireMove::RepExMove::*nAccepted_function_type)(  ) const;
             nAccepted_function_type nAccepted_function_value( &::SireMove::RepExMove::nAccepted );
             
             RepExMove_exposer.def( 
@@ -104,7 +104,7 @@ void register_RepExMove_class(){
         }
         { //::SireMove::RepExMove::nAttempted
         
-            typedef int ( ::SireMove::RepExMove::*nAttempted_function_type )(  ) const;
+            typedef int ( ::SireMove::RepExMove::*nAttempted_function_type)(  ) const;
             nAttempted_function_type nAttempted_function_value( &::SireMove::RepExMove::nAttempted );
             
             RepExMove_exposer.def( 
@@ -114,7 +114,7 @@ void register_RepExMove_class(){
         }
         { //::SireMove::RepExMove::nRejected
         
-            typedef int ( ::SireMove::RepExMove::*nRejected_function_type )(  ) const;
+            typedef int ( ::SireMove::RepExMove::*nRejected_function_type)(  ) const;
             nRejected_function_type nRejected_function_value( &::SireMove::RepExMove::nRejected );
             
             RepExMove_exposer.def( 
@@ -125,7 +125,7 @@ void register_RepExMove_class(){
         RepExMove_exposer.def( bp::self != bp::self );
         { //::SireMove::RepExMove::operator=
         
-            typedef ::SireMove::RepExMove & ( ::SireMove::RepExMove::*assign_function_type )( ::SireMove::RepExMove const & ) ;
+            typedef ::SireMove::RepExMove & ( ::SireMove::RepExMove::*assign_function_type)( ::SireMove::RepExMove const & ) ;
             assign_function_type assign_function_value( &::SireMove::RepExMove::operator= );
             
             RepExMove_exposer.def( 
@@ -138,7 +138,7 @@ void register_RepExMove_class(){
         RepExMove_exposer.def( bp::self == bp::self );
         { //::SireMove::RepExMove::setDisableSwaps
         
-            typedef void ( ::SireMove::RepExMove::*setDisableSwaps_function_type )( bool ) ;
+            typedef void ( ::SireMove::RepExMove::*setDisableSwaps_function_type)( bool ) ;
             setDisableSwaps_function_type setDisableSwaps_function_value( &::SireMove::RepExMove::setDisableSwaps );
             
             RepExMove_exposer.def( 
@@ -149,7 +149,7 @@ void register_RepExMove_class(){
         }
         { //::SireMove::RepExMove::setGenerator
         
-            typedef void ( ::SireMove::RepExMove::*setGenerator_function_type )( ::SireMaths::RanGenerator const & ) ;
+            typedef void ( ::SireMove::RepExMove::*setGenerator_function_type)( ::SireMaths::RanGenerator const & ) ;
             setGenerator_function_type setGenerator_function_value( &::SireMove::RepExMove::setGenerator );
             
             RepExMove_exposer.def( 
@@ -160,7 +160,7 @@ void register_RepExMove_class(){
         }
         { //::SireMove::RepExMove::setSwapMonitors
         
-            typedef void ( ::SireMove::RepExMove::*setSwapMonitors_function_type )( bool ) ;
+            typedef void ( ::SireMove::RepExMove::*setSwapMonitors_function_type)( bool ) ;
             setSwapMonitors_function_type setSwapMonitors_function_value( &::SireMove::RepExMove::setSwapMonitors );
             
             RepExMove_exposer.def( 
@@ -171,7 +171,7 @@ void register_RepExMove_class(){
         }
         { //::SireMove::RepExMove::swapMovesDisabled
         
-            typedef bool ( ::SireMove::RepExMove::*swapMovesDisabled_function_type )(  ) const;
+            typedef bool ( ::SireMove::RepExMove::*swapMovesDisabled_function_type)(  ) const;
             swapMovesDisabled_function_type swapMovesDisabled_function_value( &::SireMove::RepExMove::swapMovesDisabled );
             
             RepExMove_exposer.def( 
@@ -181,7 +181,7 @@ void register_RepExMove_class(){
         }
         { //::SireMove::RepExMove::toString
         
-            typedef ::QString ( ::SireMove::RepExMove::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMove::RepExMove::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMove::RepExMove::toString );
             
             RepExMove_exposer.def( 

@@ -38,7 +38,7 @@ void register_IDOrSet_SysID__class(){
         { //::SireID::IDOrSet< SireSystem::SysID >::IDs
         
             typedef SireID::IDOrSet< SireSystem::SysID > exported_class_t;
-            typedef ::QSet< SireSystem::SysIdentifier > const & ( ::SireID::IDOrSet< SireSystem::SysID >::*IDs_function_type )(  ) const;
+            typedef ::QSet< SireSystem::SysIdentifier > const & ( ::SireID::IDOrSet< SireSystem::SysID >::*IDs_function_type)(  ) const;
             IDs_function_type IDs_function_value( &::SireID::IDOrSet< SireSystem::SysID >::IDs );
             
             IDOrSet_SysID__exposer.def( 
@@ -50,7 +50,7 @@ void register_IDOrSet_SysID__class(){
         { //::SireID::IDOrSet< SireSystem::SysID >::hash
         
             typedef SireID::IDOrSet< SireSystem::SysID > exported_class_t;
-            typedef ::uint ( ::SireID::IDOrSet< SireSystem::SysID >::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireID::IDOrSet< SireSystem::SysID >::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireID::IDOrSet< SireSystem::SysID >::hash );
             
             IDOrSet_SysID__exposer.def( 
@@ -61,7 +61,7 @@ void register_IDOrSet_SysID__class(){
         { //::SireID::IDOrSet< SireSystem::SysID >::isNull
         
             typedef SireID::IDOrSet< SireSystem::SysID > exported_class_t;
-            typedef bool ( ::SireID::IDOrSet< SireSystem::SysID >::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireID::IDOrSet< SireSystem::SysID >::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireID::IDOrSet< SireSystem::SysID >::isNull );
             
             IDOrSet_SysID__exposer.def( 
@@ -72,7 +72,7 @@ void register_IDOrSet_SysID__class(){
         { //::SireID::IDOrSet< SireSystem::SysID >::map
         
             typedef SireID::IDOrSet< SireSystem::SysID > exported_class_t;
-            typedef ::QList< SireSystem::SysIdx > ( ::SireID::IDOrSet< SireSystem::SysID >::*map_function_type )( ::SireSystem::Systems const & ) const;
+            typedef ::QList< SireSystem::SysIdx > ( ::SireID::IDOrSet< SireSystem::SysID >::*map_function_type)( ::SireSystem::Systems const & ) const;
             map_function_type map_function_value( &::SireID::IDOrSet< SireSystem::SysID >::map );
             
             IDOrSet_SysID__exposer.def( 
@@ -87,7 +87,7 @@ void register_IDOrSet_SysID__class(){
         { //::SireID::IDOrSet< SireSystem::SysID >::operator=
         
             typedef SireID::IDOrSet< SireSystem::SysID > exported_class_t;
-            typedef ::SireID::IDOrSet< SireSystem::SysID > & ( ::SireID::IDOrSet< SireSystem::SysID >::*assign_function_type )( ::SireID::IDOrSet< SireSystem::SysID > const & ) ;
+            typedef ::SireID::IDOrSet< SireSystem::SysID > & ( ::SireID::IDOrSet< SireSystem::SysID >::*assign_function_type)( ::SireID::IDOrSet< SireSystem::SysID > const & ) ;
             assign_function_type assign_function_value( &::SireID::IDOrSet< SireSystem::SysID >::operator= );
             
             IDOrSet_SysID__exposer.def( 
@@ -100,7 +100,7 @@ void register_IDOrSet_SysID__class(){
         { //::SireID::IDOrSet< SireSystem::SysID >::operator=
         
             typedef SireID::IDOrSet< SireSystem::SysID > exported_class_t;
-            typedef ::SireID::IDOrSet< SireSystem::SysID > & ( ::SireID::IDOrSet< SireSystem::SysID >::*assign_function_type )( ::SireSystem::SysID const & ) ;
+            typedef ::SireID::IDOrSet< SireSystem::SysID > & ( ::SireID::IDOrSet< SireSystem::SysID >::*assign_function_type)( ::SireSystem::SysID const & ) ;
             assign_function_type assign_function_value( &::SireID::IDOrSet< SireSystem::SysID >::operator= );
             
             IDOrSet_SysID__exposer.def( 
@@ -116,7 +116,7 @@ void register_IDOrSet_SysID__class(){
         { //::SireID::IDOrSet< SireSystem::SysID >::toString
         
             typedef SireID::IDOrSet< SireSystem::SysID > exported_class_t;
-            typedef ::QString ( ::SireID::IDOrSet< SireSystem::SysID >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireID::IDOrSet< SireSystem::SysID >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireID::IDOrSet< SireSystem::SysID >::toString );
             
             IDOrSet_SysID__exposer.def( 
@@ -138,7 +138,7 @@ void register_IDOrSet_SysID__class(){
         { //::SireID::IDOrSet< SireSystem::SysID >::what
         
             typedef SireID::IDOrSet< SireSystem::SysID > exported_class_t;
-            typedef char const * ( ::SireID::IDOrSet< SireSystem::SysID >::*what_function_type )(  ) const;
+            typedef char const * ( ::SireID::IDOrSet< SireSystem::SysID >::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireID::IDOrSet< SireSystem::SysID >::what );
             
             IDOrSet_SysID__exposer.def( 

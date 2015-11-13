@@ -63,7 +63,7 @@ void register_NullCLJFunction_class(){
         NullCLJFunction_exposer.def( bp::self != bp::self );
         { //::SireMM::NullCLJFunction::operator=
         
-            typedef ::SireMM::NullCLJFunction & ( ::SireMM::NullCLJFunction::*assign_function_type )( ::SireMM::NullCLJFunction const & ) ;
+            typedef ::SireMM::NullCLJFunction & ( ::SireMM::NullCLJFunction::*assign_function_type)( ::SireMM::NullCLJFunction const & ) ;
             assign_function_type assign_function_value( &::SireMM::NullCLJFunction::operator= );
             
             NullCLJFunction_exposer.def( 
@@ -86,7 +86,7 @@ void register_NullCLJFunction_class(){
         }
         { //::SireMM::NullCLJFunction::what
         
-            typedef char const * ( ::SireMM::NullCLJFunction::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::NullCLJFunction::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::NullCLJFunction::what );
             
             NullCLJFunction_exposer.def( 

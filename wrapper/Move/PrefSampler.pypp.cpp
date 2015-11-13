@@ -68,7 +68,7 @@ void register_PrefSampler_class(){
         PrefSampler_exposer.def( bp::init< SireMove::PrefSampler const & >(( bp::arg("other") )) );
         { //::SireMove::PrefSampler::biasingFunction
         
-            typedef ::SireCAS::Expression ( ::SireMove::PrefSampler::*biasingFunction_function_type )(  ) const;
+            typedef ::SireCAS::Expression ( ::SireMove::PrefSampler::*biasingFunction_function_type)(  ) const;
             biasingFunction_function_type biasingFunction_function_value( &::SireMove::PrefSampler::biasingFunction );
             
             PrefSampler_exposer.def( 
@@ -78,7 +78,7 @@ void register_PrefSampler_class(){
         }
         { //::SireMove::PrefSampler::coordinatesProperty
         
-            typedef ::SireBase::PropertyName const & ( ::SireMove::PrefSampler::*coordinatesProperty_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireMove::PrefSampler::*coordinatesProperty_function_type)(  ) const;
             coordinatesProperty_function_type coordinatesProperty_function_value( &::SireMove::PrefSampler::coordinatesProperty );
             
             PrefSampler_exposer.def( 
@@ -89,7 +89,7 @@ void register_PrefSampler_class(){
         }
         { //::SireMove::PrefSampler::focalMolecule
         
-            typedef ::SireMol::PartialMolecule const & ( ::SireMove::PrefSampler::*focalMolecule_function_type )(  ) const;
+            typedef ::SireMol::PartialMolecule const & ( ::SireMove::PrefSampler::*focalMolecule_function_type)(  ) const;
             focalMolecule_function_type focalMolecule_function_value( &::SireMove::PrefSampler::focalMolecule );
             
             PrefSampler_exposer.def( 
@@ -100,13 +100,23 @@ void register_PrefSampler_class(){
         }
         { //::SireMove::PrefSampler::focalPoint
         
-            typedef ::SireMaths::Vector const & ( ::SireMove::PrefSampler::*focalPoint_function_type )(  ) const;
+            typedef ::SireMaths::Vector const & ( ::SireMove::PrefSampler::*focalPoint_function_type)(  ) const;
             focalPoint_function_type focalPoint_function_value( &::SireMove::PrefSampler::focalPoint );
             
             PrefSampler_exposer.def( 
                 "focalPoint"
                 , focalPoint_function_value
                 , bp::return_value_policy< bp::copy_const_reference >() );
+        
+        }
+        { //::SireMove::PrefSampler::isBiased
+        
+            typedef bool ( ::SireMove::PrefSampler::*isBiased_function_type)(  ) const;
+            isBiased_function_type isBiased_function_value( &::SireMove::PrefSampler::isBiased );
+            
+            PrefSampler_exposer.def( 
+                "isBiased"
+                , isBiased_function_value );
         
         }
         { //::SireMove::PrefSampler::k
@@ -122,7 +132,7 @@ void register_PrefSampler_class(){
         PrefSampler_exposer.def( bp::self != bp::self );
         { //::SireMove::PrefSampler::operator=
         
-            typedef ::SireMove::PrefSampler & ( ::SireMove::PrefSampler::*assign_function_type )( ::SireMove::PrefSampler const & ) ;
+            typedef ::SireMove::PrefSampler & ( ::SireMove::PrefSampler::*assign_function_type)( ::SireMove::PrefSampler const & ) ;
             assign_function_type assign_function_value( &::SireMove::PrefSampler::operator= );
             
             PrefSampler_exposer.def( 
@@ -135,7 +145,7 @@ void register_PrefSampler_class(){
         PrefSampler_exposer.def( bp::self == bp::self );
         { //::SireMove::PrefSampler::probabilityOf
         
-            typedef double ( ::SireMove::PrefSampler::*probabilityOf_function_type )( ::SireMol::PartialMolecule const & ) const;
+            typedef double ( ::SireMove::PrefSampler::*probabilityOf_function_type)( ::SireMol::PartialMolecule const & ) const;
             probabilityOf_function_type probabilityOf_function_value( &::SireMove::PrefSampler::probabilityOf );
             
             PrefSampler_exposer.def( 
@@ -146,7 +156,7 @@ void register_PrefSampler_class(){
         }
         { //::SireMove::PrefSampler::probabilityOfMolecule
         
-            typedef double ( ::SireMove::PrefSampler::*probabilityOfMolecule_function_type )( ::SireMol::Molecule const & ) const;
+            typedef double ( ::SireMove::PrefSampler::*probabilityOfMolecule_function_type)( ::SireMol::Molecule const & ) const;
             probabilityOfMolecule_function_type probabilityOfMolecule_function_value( &::SireMove::PrefSampler::probabilityOfMolecule );
             
             PrefSampler_exposer.def( 
@@ -167,7 +177,7 @@ void register_PrefSampler_class(){
         }
         { //::SireMove::PrefSampler::sample
         
-            typedef ::boost::tuples::tuple< SireMol::PartialMolecule, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMove::PrefSampler::*sample_function_type )(  ) const;
+            typedef ::boost::tuples::tuple< SireMol::PartialMolecule, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMove::PrefSampler::*sample_function_type)(  ) const;
             sample_function_type sample_function_value( &::SireMove::PrefSampler::sample );
             
             PrefSampler_exposer.def( 
@@ -177,7 +187,7 @@ void register_PrefSampler_class(){
         }
         { //::SireMove::PrefSampler::sampleMolecule
         
-            typedef ::boost::tuples::tuple< SireMol::Molecule, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMove::PrefSampler::*sampleMolecule_function_type )(  ) const;
+            typedef ::boost::tuples::tuple< SireMol::Molecule, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMove::PrefSampler::*sampleMolecule_function_type)(  ) const;
             sampleMolecule_function_type sampleMolecule_function_value( &::SireMove::PrefSampler::sampleMolecule );
             
             PrefSampler_exposer.def( 
@@ -187,7 +197,7 @@ void register_PrefSampler_class(){
         }
         { //::SireMove::PrefSampler::samplingConstant
         
-            typedef ::SireUnits::Dimension::Area ( ::SireMove::PrefSampler::*samplingConstant_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Area ( ::SireMove::PrefSampler::*samplingConstant_function_type)(  ) const;
             samplingConstant_function_type samplingConstant_function_value( &::SireMove::PrefSampler::samplingConstant );
             
             PrefSampler_exposer.def( 
@@ -197,7 +207,7 @@ void register_PrefSampler_class(){
         }
         { //::SireMove::PrefSampler::setBiasingFunction
         
-            typedef void ( ::SireMove::PrefSampler::*setBiasingFunction_function_type )( ::SireCAS::Expression const & ) ;
+            typedef void ( ::SireMove::PrefSampler::*setBiasingFunction_function_type)( ::SireCAS::Expression const & ) ;
             setBiasingFunction_function_type setBiasingFunction_function_value( &::SireMove::PrefSampler::setBiasingFunction );
             
             PrefSampler_exposer.def( 
@@ -208,7 +218,7 @@ void register_PrefSampler_class(){
         }
         { //::SireMove::PrefSampler::setCoordinatesProperty
         
-            typedef void ( ::SireMove::PrefSampler::*setCoordinatesProperty_function_type )( ::SireBase::PropertyName const & ) ;
+            typedef void ( ::SireMove::PrefSampler::*setCoordinatesProperty_function_type)( ::SireBase::PropertyName const & ) ;
             setCoordinatesProperty_function_type setCoordinatesProperty_function_value( &::SireMove::PrefSampler::setCoordinatesProperty );
             
             PrefSampler_exposer.def( 
@@ -219,7 +229,7 @@ void register_PrefSampler_class(){
         }
         { //::SireMove::PrefSampler::setFocalMolecule
         
-            typedef void ( ::SireMove::PrefSampler::*setFocalMolecule_function_type )( ::SireMol::MoleculeView const & ) ;
+            typedef void ( ::SireMove::PrefSampler::*setFocalMolecule_function_type)( ::SireMol::MoleculeView const & ) ;
             setFocalMolecule_function_type setFocalMolecule_function_value( &::SireMove::PrefSampler::setFocalMolecule );
             
             PrefSampler_exposer.def( 
@@ -230,7 +240,7 @@ void register_PrefSampler_class(){
         }
         { //::SireMove::PrefSampler::setFocalPoint
         
-            typedef void ( ::SireMove::PrefSampler::*setFocalPoint_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireMove::PrefSampler::*setFocalPoint_function_type)( ::SireMaths::Vector const & ) ;
             setFocalPoint_function_type setFocalPoint_function_value( &::SireMove::PrefSampler::setFocalPoint );
             
             PrefSampler_exposer.def( 
@@ -241,7 +251,7 @@ void register_PrefSampler_class(){
         }
         { //::SireMove::PrefSampler::setGroup
         
-            typedef void ( ::SireMove::PrefSampler::*setGroup_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireMove::PrefSampler::*setGroup_function_type)( ::SireMol::MoleculeGroup const & ) ;
             setGroup_function_type setGroup_function_value( &::SireMove::PrefSampler::setGroup );
             
             PrefSampler_exposer.def( 
@@ -252,7 +262,7 @@ void register_PrefSampler_class(){
         }
         { //::SireMove::PrefSampler::setSamplingConstant
         
-            typedef void ( ::SireMove::PrefSampler::*setSamplingConstant_function_type )( ::SireUnits::Dimension::Area ) ;
+            typedef void ( ::SireMove::PrefSampler::*setSamplingConstant_function_type)( ::SireUnits::Dimension::Area ) ;
             setSamplingConstant_function_type setSamplingConstant_function_value( &::SireMove::PrefSampler::setSamplingConstant );
             
             PrefSampler_exposer.def( 
@@ -263,7 +273,7 @@ void register_PrefSampler_class(){
         }
         { //::SireMove::PrefSampler::setSpaceProperty
         
-            typedef void ( ::SireMove::PrefSampler::*setSpaceProperty_function_type )( ::SireBase::PropertyName const & ) ;
+            typedef void ( ::SireMove::PrefSampler::*setSpaceProperty_function_type)( ::SireBase::PropertyName const & ) ;
             setSpaceProperty_function_type setSpaceProperty_function_value( &::SireMove::PrefSampler::setSpaceProperty );
             
             PrefSampler_exposer.def( 
@@ -274,7 +284,7 @@ void register_PrefSampler_class(){
         }
         { //::SireMove::PrefSampler::spaceProperty
         
-            typedef ::SireBase::PropertyName const & ( ::SireMove::PrefSampler::*spaceProperty_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireMove::PrefSampler::*spaceProperty_function_type)(  ) const;
             spaceProperty_function_type spaceProperty_function_value( &::SireMove::PrefSampler::spaceProperty );
             
             PrefSampler_exposer.def( 
@@ -295,7 +305,7 @@ void register_PrefSampler_class(){
         }
         { //::SireMove::PrefSampler::updateFrom
         
-            typedef void ( ::SireMove::PrefSampler::*updateFrom_function_type )( ::SireSystem::System const & ) ;
+            typedef void ( ::SireMove::PrefSampler::*updateFrom_function_type)( ::SireSystem::System const & ) ;
             updateFrom_function_type updateFrom_function_value( &::SireMove::PrefSampler::updateFrom );
             
             PrefSampler_exposer.def( 
@@ -306,7 +316,7 @@ void register_PrefSampler_class(){
         }
         { //::SireMove::PrefSampler::usingFocalMolecule
         
-            typedef bool ( ::SireMove::PrefSampler::*usingFocalMolecule_function_type )(  ) const;
+            typedef bool ( ::SireMove::PrefSampler::*usingFocalMolecule_function_type)(  ) const;
             usingFocalMolecule_function_type usingFocalMolecule_function_value( &::SireMove::PrefSampler::usingFocalMolecule );
             
             PrefSampler_exposer.def( 
@@ -316,7 +326,7 @@ void register_PrefSampler_class(){
         }
         { //::SireMove::PrefSampler::usingFocalPoint
         
-            typedef bool ( ::SireMove::PrefSampler::*usingFocalPoint_function_type )(  ) const;
+            typedef bool ( ::SireMove::PrefSampler::*usingFocalPoint_function_type)(  ) const;
             usingFocalPoint_function_type usingFocalPoint_function_value( &::SireMove::PrefSampler::usingFocalPoint );
             
             PrefSampler_exposer.def( 

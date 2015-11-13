@@ -23,7 +23,7 @@ void register_ChainProp_class(){
         bp::scope ChainProp_scope( ChainProp_exposer );
         { //::SireMol::ChainProp::assertCanConvert
         
-            typedef void ( ::SireMol::ChainProp::*assertCanConvert_function_type )( ::QVariant const & ) const;
+            typedef void ( ::SireMol::ChainProp::*assertCanConvert_function_type)( ::QVariant const & ) const;
             assertCanConvert_function_type assertCanConvert_function_value( &::SireMol::ChainProp::assertCanConvert );
             
             ChainProp_exposer.def( 
@@ -34,7 +34,7 @@ void register_ChainProp_class(){
         }
         { //::SireMol::ChainProp::assignFrom
         
-            typedef void ( ::SireMol::ChainProp::*assignFrom_function_type )( ::SireMol::ChainProperty< QVariant > const & ) ;
+            typedef void ( ::SireMol::ChainProp::*assignFrom_function_type)( ::SireMol::ChainProperty< QVariant > const & ) ;
             assignFrom_function_type assignFrom_function_value( &::SireMol::ChainProp::assignFrom );
             
             ChainProp_exposer.def( 
@@ -45,7 +45,7 @@ void register_ChainProp_class(){
         }
         { //::SireMol::ChainProp::canConvert
         
-            typedef bool ( ::SireMol::ChainProp::*canConvert_function_type )( ::QVariant const & ) const;
+            typedef bool ( ::SireMol::ChainProp::*canConvert_function_type)( ::QVariant const & ) const;
             canConvert_function_type canConvert_function_value( &::SireMol::ChainProp::canConvert );
             
             ChainProp_exposer.def( 
@@ -56,7 +56,7 @@ void register_ChainProp_class(){
         }
         { //::SireMol::ChainProp::toVariant
         
-            typedef ::SireMol::ChainProperty< QVariant > ( ::SireMol::ChainProp::*toVariant_function_type )(  ) const;
+            typedef ::SireMol::ChainProperty< QVariant > ( ::SireMol::ChainProp::*toVariant_function_type)(  ) const;
             toVariant_function_type toVariant_function_value( &::SireMol::ChainProp::toVariant );
             
             ChainProp_exposer.def( 

@@ -55,7 +55,7 @@ void register_Titrator_class(){
         Titrator_exposer.def( bp::init< SireMove::Titrator const & >(( bp::arg("other") )) );
         { //::SireMove::Titrator::applyTo
         
-            typedef double ( ::SireMove::Titrator::*applyTo_function_type )( ::SireSystem::System & ) ;
+            typedef double ( ::SireMove::Titrator::*applyTo_function_type)( ::SireSystem::System & ) ;
             applyTo_function_type applyTo_function_value( &::SireMove::Titrator::applyTo );
             
             Titrator_exposer.def( 
@@ -66,7 +66,7 @@ void register_Titrator_class(){
         }
         { //::SireMove::Titrator::getCharge
         
-            typedef int ( ::SireMove::Titrator::*getCharge_function_type )( int ) const;
+            typedef int ( ::SireMove::Titrator::*getCharge_function_type)( int ) const;
             getCharge_function_type getCharge_function_value( &::SireMove::Titrator::getCharge );
             
             Titrator_exposer.def( 
@@ -77,7 +77,7 @@ void register_Titrator_class(){
         }
         { //::SireMove::Titrator::getIonIndex
         
-            typedef int ( ::SireMove::Titrator::*getIonIndex_function_type )( int ) const;
+            typedef int ( ::SireMove::Titrator::*getIonIndex_function_type)( int ) const;
             getIonIndex_function_type getIonIndex_function_value( &::SireMove::Titrator::getIonIndex );
             
             Titrator_exposer.def( 
@@ -88,7 +88,7 @@ void register_Titrator_class(){
         }
         { //::SireMove::Titrator::getNegativeIonIndex
         
-            typedef int ( ::SireMove::Titrator::*getNegativeIonIndex_function_type )( int ) const;
+            typedef int ( ::SireMove::Titrator::*getNegativeIonIndex_function_type)( int ) const;
             getNegativeIonIndex_function_type getNegativeIonIndex_function_value( &::SireMove::Titrator::getNegativeIonIndex );
             
             Titrator_exposer.def( 
@@ -99,7 +99,7 @@ void register_Titrator_class(){
         }
         { //::SireMove::Titrator::getNeutralIndex
         
-            typedef int ( ::SireMove::Titrator::*getNeutralIndex_function_type )( int ) const;
+            typedef int ( ::SireMove::Titrator::*getNeutralIndex_function_type)( int ) const;
             getNeutralIndex_function_type getNeutralIndex_function_value( &::SireMove::Titrator::getNeutralIndex );
             
             Titrator_exposer.def( 
@@ -110,7 +110,7 @@ void register_Titrator_class(){
         }
         { //::SireMove::Titrator::getPositiveIonIndex
         
-            typedef int ( ::SireMove::Titrator::*getPositiveIonIndex_function_type )( int ) const;
+            typedef int ( ::SireMove::Titrator::*getPositiveIonIndex_function_type)( int ) const;
             getPositiveIonIndex_function_type getPositiveIonIndex_function_value( &::SireMove::Titrator::getPositiveIonIndex );
             
             Titrator_exposer.def( 
@@ -121,7 +121,7 @@ void register_Titrator_class(){
         }
         { //::SireMove::Titrator::nIons
         
-            typedef int ( ::SireMove::Titrator::*nIons_function_type )(  ) const;
+            typedef int ( ::SireMove::Titrator::*nIons_function_type)(  ) const;
             nIons_function_type nIons_function_value( &::SireMove::Titrator::nIons );
             
             Titrator_exposer.def( 
@@ -131,7 +131,7 @@ void register_Titrator_class(){
         }
         { //::SireMove::Titrator::nNegativeIons
         
-            typedef int ( ::SireMove::Titrator::*nNegativeIons_function_type )(  ) const;
+            typedef int ( ::SireMove::Titrator::*nNegativeIons_function_type)(  ) const;
             nNegativeIons_function_type nNegativeIons_function_value( &::SireMove::Titrator::nNegativeIons );
             
             Titrator_exposer.def( 
@@ -141,7 +141,7 @@ void register_Titrator_class(){
         }
         { //::SireMove::Titrator::nNeutrals
         
-            typedef int ( ::SireMove::Titrator::*nNeutrals_function_type )(  ) const;
+            typedef int ( ::SireMove::Titrator::*nNeutrals_function_type)(  ) const;
             nNeutrals_function_type nNeutrals_function_value( &::SireMove::Titrator::nNeutrals );
             
             Titrator_exposer.def( 
@@ -151,7 +151,7 @@ void register_Titrator_class(){
         }
         { //::SireMove::Titrator::nPositiveIons
         
-            typedef int ( ::SireMove::Titrator::*nPositiveIons_function_type )(  ) const;
+            typedef int ( ::SireMove::Titrator::*nPositiveIons_function_type)(  ) const;
             nPositiveIons_function_type nPositiveIons_function_value( &::SireMove::Titrator::nPositiveIons );
             
             Titrator_exposer.def( 
@@ -162,7 +162,7 @@ void register_Titrator_class(){
         Titrator_exposer.def( bp::self != bp::self );
         { //::SireMove::Titrator::operator=
         
-            typedef ::SireMove::Titrator & ( ::SireMove::Titrator::*assign_function_type )( ::SireMove::Titrator const & ) ;
+            typedef ::SireMove::Titrator & ( ::SireMove::Titrator::*assign_function_type)( ::SireMove::Titrator const & ) ;
             assign_function_type assign_function_value( &::SireMove::Titrator::operator= );
             
             Titrator_exposer.def( 
@@ -175,7 +175,7 @@ void register_Titrator_class(){
         Titrator_exposer.def( bp::self == bp::self );
         { //::SireMove::Titrator::randomiseCharge
         
-            typedef void ( ::SireMove::Titrator::*randomiseCharge_function_type )( int ) ;
+            typedef void ( ::SireMove::Titrator::*randomiseCharge_function_type)( int ) ;
             randomiseCharge_function_type randomiseCharge_function_value( &::SireMove::Titrator::randomiseCharge );
             
             Titrator_exposer.def( 
@@ -186,7 +186,7 @@ void register_Titrator_class(){
         }
         { //::SireMove::Titrator::randomiseCharge
         
-            typedef void ( ::SireMove::Titrator::*randomiseCharge_function_type )( int,int ) ;
+            typedef void ( ::SireMove::Titrator::*randomiseCharge_function_type)( int,int ) ;
             randomiseCharge_function_type randomiseCharge_function_value( &::SireMove::Titrator::randomiseCharge );
             
             Titrator_exposer.def( 
@@ -197,7 +197,7 @@ void register_Titrator_class(){
         }
         { //::SireMove::Titrator::setMoleculeGroup
         
-            typedef void ( ::SireMove::Titrator::*setMoleculeGroup_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireMove::Titrator::*setMoleculeGroup_function_type)( ::SireMol::MoleculeGroup const & ) ;
             setMoleculeGroup_function_type setMoleculeGroup_function_value( &::SireMove::Titrator::setMoleculeGroup );
             
             Titrator_exposer.def( 
@@ -208,7 +208,7 @@ void register_Titrator_class(){
         }
         { //::SireMove::Titrator::setNegativeTemplate
         
-            typedef void ( ::SireMove::Titrator::*setNegativeTemplate_function_type )( ::SireMol::Molecule const &,::QStringList const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMove::Titrator::*setNegativeTemplate_function_type)( ::SireMol::Molecule const &,::QStringList const &,::SireBase::PropertyMap const & ) ;
             setNegativeTemplate_function_type setNegativeTemplate_function_value( &::SireMove::Titrator::setNegativeTemplate );
             
             Titrator_exposer.def( 
@@ -219,7 +219,7 @@ void register_Titrator_class(){
         }
         { //::SireMove::Titrator::setNegativeTemplate
         
-            typedef void ( ::SireMove::Titrator::*setNegativeTemplate_function_type )( ::SireMol::Molecule const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMove::Titrator::*setNegativeTemplate_function_type)( ::SireMol::Molecule const &,::SireBase::PropertyMap const & ) ;
             setNegativeTemplate_function_type setNegativeTemplate_function_value( &::SireMove::Titrator::setNegativeTemplate );
             
             Titrator_exposer.def( 
@@ -230,7 +230,7 @@ void register_Titrator_class(){
         }
         { //::SireMove::Titrator::setNeutralTemplate
         
-            typedef void ( ::SireMove::Titrator::*setNeutralTemplate_function_type )( ::SireMol::Molecule const &,::QStringList const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMove::Titrator::*setNeutralTemplate_function_type)( ::SireMol::Molecule const &,::QStringList const &,::SireBase::PropertyMap const & ) ;
             setNeutralTemplate_function_type setNeutralTemplate_function_value( &::SireMove::Titrator::setNeutralTemplate );
             
             Titrator_exposer.def( 
@@ -241,7 +241,7 @@ void register_Titrator_class(){
         }
         { //::SireMove::Titrator::setNeutralTemplate
         
-            typedef void ( ::SireMove::Titrator::*setNeutralTemplate_function_type )( ::SireMol::Molecule const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMove::Titrator::*setNeutralTemplate_function_type)( ::SireMol::Molecule const &,::SireBase::PropertyMap const & ) ;
             setNeutralTemplate_function_type setNeutralTemplate_function_value( &::SireMove::Titrator::setNeutralTemplate );
             
             Titrator_exposer.def( 
@@ -252,7 +252,7 @@ void register_Titrator_class(){
         }
         { //::SireMove::Titrator::setPositiveTemplate
         
-            typedef void ( ::SireMove::Titrator::*setPositiveTemplate_function_type )( ::SireMol::Molecule const &,::QStringList const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMove::Titrator::*setPositiveTemplate_function_type)( ::SireMol::Molecule const &,::QStringList const &,::SireBase::PropertyMap const & ) ;
             setPositiveTemplate_function_type setPositiveTemplate_function_value( &::SireMove::Titrator::setPositiveTemplate );
             
             Titrator_exposer.def( 
@@ -263,7 +263,7 @@ void register_Titrator_class(){
         }
         { //::SireMove::Titrator::setPositiveTemplate
         
-            typedef void ( ::SireMove::Titrator::*setPositiveTemplate_function_type )( ::SireMol::Molecule const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMove::Titrator::*setPositiveTemplate_function_type)( ::SireMol::Molecule const &,::SireBase::PropertyMap const & ) ;
             setPositiveTemplate_function_type setPositiveTemplate_function_value( &::SireMove::Titrator::setPositiveTemplate );
             
             Titrator_exposer.def( 
@@ -274,7 +274,7 @@ void register_Titrator_class(){
         }
         { //::SireMove::Titrator::swapCharge
         
-            typedef void ( ::SireMove::Titrator::*swapCharge_function_type )( int,int ) ;
+            typedef void ( ::SireMove::Titrator::*swapCharge_function_type)( int,int ) ;
             swapCharge_function_type swapCharge_function_value( &::SireMove::Titrator::swapCharge );
             
             Titrator_exposer.def( 
@@ -295,7 +295,7 @@ void register_Titrator_class(){
         }
         { //::SireMove::Titrator::what
         
-            typedef char const * ( ::SireMove::Titrator::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMove::Titrator::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMove::Titrator::what );
             
             Titrator_exposer.def( 

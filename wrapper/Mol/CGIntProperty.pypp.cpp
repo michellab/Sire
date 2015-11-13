@@ -33,7 +33,7 @@ void register_CGIntProperty_class(){
         { //::SireMol::CGProperty< long long >::array
         
             typedef SireMol::CGProperty< long long > exported_class_t;
-            typedef ::QVector< long long > const & ( ::SireMol::CGProperty< long long >::*array_function_type )(  ) const;
+            typedef ::QVector< long long > const & ( ::SireMol::CGProperty< long long >::*array_function_type)(  ) const;
             array_function_type array_function_value( &::SireMol::CGProperty< long long >::array );
             
             CGIntProperty_exposer.def( 
@@ -45,7 +45,7 @@ void register_CGIntProperty_class(){
         { //::SireMol::CGProperty< long long >::assertCanConvert
         
             typedef SireMol::CGProperty< long long > exported_class_t;
-            typedef void ( ::SireMol::CGProperty< long long >::*assertCanConvert_function_type )( ::QVariant const & ) const;
+            typedef void ( ::SireMol::CGProperty< long long >::*assertCanConvert_function_type)( ::QVariant const & ) const;
             assertCanConvert_function_type assertCanConvert_function_value( &::SireMol::CGProperty< long long >::assertCanConvert );
             
             CGIntProperty_exposer.def( 
@@ -57,7 +57,7 @@ void register_CGIntProperty_class(){
         { //::SireMol::CGProperty< long long >::assignFrom
         
             typedef SireMol::CGProperty< long long > exported_class_t;
-            typedef void ( ::SireMol::CGProperty< long long >::*assignFrom_function_type )( ::SireMol::CGProperty< QVariant > const & ) ;
+            typedef void ( ::SireMol::CGProperty< long long >::*assignFrom_function_type)( ::SireMol::CGProperty< QVariant > const & ) ;
             assignFrom_function_type assignFrom_function_value( &::SireMol::CGProperty< long long >::assignFrom );
             
             CGIntProperty_exposer.def( 
@@ -69,7 +69,7 @@ void register_CGIntProperty_class(){
         { //::SireMol::CGProperty< long long >::at
         
             typedef SireMol::CGProperty< long long > exported_class_t;
-            typedef long long int const & ( ::SireMol::CGProperty< long long >::*at_function_type )( ::SireMol::CGIdx const & ) const;
+            typedef long long int const & ( ::SireMol::CGProperty< long long >::*at_function_type)( ::SireMol::CGIdx const & ) const;
             at_function_type at_function_value( &::SireMol::CGProperty< long long >::at );
             
             CGIntProperty_exposer.def( 
@@ -82,7 +82,7 @@ void register_CGIntProperty_class(){
         { //::SireMol::CGProperty< long long >::canConvert
         
             typedef SireMol::CGProperty< long long > exported_class_t;
-            typedef bool ( ::SireMol::CGProperty< long long >::*canConvert_function_type )( ::QVariant const & ) const;
+            typedef bool ( ::SireMol::CGProperty< long long >::*canConvert_function_type)( ::QVariant const & ) const;
             canConvert_function_type canConvert_function_value( &::SireMol::CGProperty< long long >::canConvert );
             
             CGIntProperty_exposer.def( 
@@ -94,7 +94,7 @@ void register_CGIntProperty_class(){
         { //::SireMol::CGProperty< long long >::count
         
             typedef SireMol::CGProperty< long long > exported_class_t;
-            typedef int ( ::SireMol::CGProperty< long long >::*count_function_type )(  ) const;
+            typedef int ( ::SireMol::CGProperty< long long >::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMol::CGProperty< long long >::count );
             
             CGIntProperty_exposer.def( 
@@ -117,7 +117,7 @@ void register_CGIntProperty_class(){
         { //::SireMol::CGProperty< long long >::get
         
             typedef SireMol::CGProperty< long long > exported_class_t;
-            typedef long long int const & ( ::SireMol::CGProperty< long long >::*get_function_type )( ::SireMol::CGIdx const & ) const;
+            typedef long long int const & ( ::SireMol::CGProperty< long long >::*get_function_type)( ::SireMol::CGIdx const & ) const;
             get_function_type get_function_value( &::SireMol::CGProperty< long long >::get );
             
             CGIntProperty_exposer.def( 
@@ -130,7 +130,7 @@ void register_CGIntProperty_class(){
         { //::SireMol::CGProperty< long long >::isCompatibleWith
         
             typedef SireMol::CGProperty< long long > exported_class_t;
-            typedef bool ( ::SireMol::CGProperty< long long >::*isCompatibleWith_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef bool ( ::SireMol::CGProperty< long long >::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::CGProperty< long long >::isCompatibleWith );
             
             CGIntProperty_exposer.def( 
@@ -142,7 +142,7 @@ void register_CGIntProperty_class(){
         { //::SireMol::CGProperty< long long >::isEmpty
         
             typedef SireMol::CGProperty< long long > exported_class_t;
-            typedef bool ( ::SireMol::CGProperty< long long >::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::CGProperty< long long >::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::CGProperty< long long >::isEmpty );
             
             CGIntProperty_exposer.def( 
@@ -153,7 +153,7 @@ void register_CGIntProperty_class(){
         { //::SireMol::CGProperty< long long >::nCutGroups
         
             typedef SireMol::CGProperty< long long > exported_class_t;
-            typedef int ( ::SireMol::CGProperty< long long >::*nCutGroups_function_type )(  ) const;
+            typedef int ( ::SireMol::CGProperty< long long >::*nCutGroups_function_type)(  ) const;
             nCutGroups_function_type nCutGroups_function_value( &::SireMol::CGProperty< long long >::nCutGroups );
             
             CGIntProperty_exposer.def( 
@@ -165,7 +165,7 @@ void register_CGIntProperty_class(){
         { //::SireMol::CGProperty< long long >::operator=
         
             typedef SireMol::CGProperty< long long > exported_class_t;
-            typedef ::SireMol::CGProperty< long long > & ( ::SireMol::CGProperty< long long >::*assign_function_type )( ::SireMol::CGProperty< long long > const & ) ;
+            typedef ::SireMol::CGProperty< long long > & ( ::SireMol::CGProperty< long long >::*assign_function_type)( ::SireMol::CGProperty< long long > const & ) ;
             assign_function_type assign_function_value( &::SireMol::CGProperty< long long >::operator= );
             
             CGIntProperty_exposer.def( 
@@ -179,7 +179,7 @@ void register_CGIntProperty_class(){
         { //::SireMol::CGProperty< long long >::operator[]
         
             typedef SireMol::CGProperty< long long > exported_class_t;
-            typedef long long int const & ( ::SireMol::CGProperty< long long >::*__getitem___function_type )( ::SireMol::CGIdx const & ) const;
+            typedef long long int const & ( ::SireMol::CGProperty< long long >::*__getitem___function_type)( ::SireMol::CGIdx const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::CGProperty< long long >::operator[] );
             
             CGIntProperty_exposer.def( 
@@ -192,7 +192,7 @@ void register_CGIntProperty_class(){
         { //::SireMol::CGProperty< long long >::set
         
             typedef SireMol::CGProperty< long long > exported_class_t;
-            typedef ::SireMol::CGProperty< long long > & ( ::SireMol::CGProperty< long long >::*set_function_type )( ::SireMol::CGIdx,long long int const & ) ;
+            typedef ::SireMol::CGProperty< long long > & ( ::SireMol::CGProperty< long long >::*set_function_type)( ::SireMol::CGIdx,long long int const & ) ;
             set_function_type set_function_value( &::SireMol::CGProperty< long long >::set );
             
             CGIntProperty_exposer.def( 
@@ -205,7 +205,7 @@ void register_CGIntProperty_class(){
         { //::SireMol::CGProperty< long long >::size
         
             typedef SireMol::CGProperty< long long > exported_class_t;
-            typedef int ( ::SireMol::CGProperty< long long >::*size_function_type )(  ) const;
+            typedef int ( ::SireMol::CGProperty< long long >::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireMol::CGProperty< long long >::size );
             
             CGIntProperty_exposer.def( 
@@ -216,7 +216,7 @@ void register_CGIntProperty_class(){
         { //::SireMol::CGProperty< long long >::toString
         
             typedef SireMol::CGProperty< long long > exported_class_t;
-            typedef ::QString ( ::SireMol::CGProperty< long long >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::CGProperty< long long >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::CGProperty< long long >::toString );
             
             CGIntProperty_exposer.def( 
@@ -227,7 +227,7 @@ void register_CGIntProperty_class(){
         { //::SireMol::CGProperty< long long >::toVariant
         
             typedef SireMol::CGProperty< long long > exported_class_t;
-            typedef ::SireMol::CGProperty< QVariant > ( ::SireMol::CGProperty< long long >::*toVariant_function_type )(  ) const;
+            typedef ::SireMol::CGProperty< QVariant > ( ::SireMol::CGProperty< long long >::*toVariant_function_type)(  ) const;
             toVariant_function_type toVariant_function_value( &::SireMol::CGProperty< long long >::toVariant );
             
             CGIntProperty_exposer.def( 

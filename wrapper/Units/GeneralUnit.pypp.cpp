@@ -38,7 +38,7 @@ void register_GeneralUnit_class(){
         GeneralUnit_exposer.def( bp::init< SireUnits::Dimension::GeneralUnit const & >(( bp::arg("other") )) );
         { //::SireUnits::Dimension::GeneralUnit::ANGLE
         
-            typedef int ( ::SireUnits::Dimension::GeneralUnit::*ANGLE_function_type )(  ) const;
+            typedef int ( ::SireUnits::Dimension::GeneralUnit::*ANGLE_function_type)(  ) const;
             ANGLE_function_type ANGLE_function_value( &::SireUnits::Dimension::GeneralUnit::ANGLE );
             
             GeneralUnit_exposer.def( 
@@ -48,7 +48,7 @@ void register_GeneralUnit_class(){
         }
         { //::SireUnits::Dimension::GeneralUnit::CHARGE
         
-            typedef int ( ::SireUnits::Dimension::GeneralUnit::*CHARGE_function_type )(  ) const;
+            typedef int ( ::SireUnits::Dimension::GeneralUnit::*CHARGE_function_type)(  ) const;
             CHARGE_function_type CHARGE_function_value( &::SireUnits::Dimension::GeneralUnit::CHARGE );
             
             GeneralUnit_exposer.def( 
@@ -58,7 +58,7 @@ void register_GeneralUnit_class(){
         }
         { //::SireUnits::Dimension::GeneralUnit::LENGTH
         
-            typedef int ( ::SireUnits::Dimension::GeneralUnit::*LENGTH_function_type )(  ) const;
+            typedef int ( ::SireUnits::Dimension::GeneralUnit::*LENGTH_function_type)(  ) const;
             LENGTH_function_type LENGTH_function_value( &::SireUnits::Dimension::GeneralUnit::LENGTH );
             
             GeneralUnit_exposer.def( 
@@ -68,7 +68,7 @@ void register_GeneralUnit_class(){
         }
         { //::SireUnits::Dimension::GeneralUnit::MASS
         
-            typedef int ( ::SireUnits::Dimension::GeneralUnit::*MASS_function_type )(  ) const;
+            typedef int ( ::SireUnits::Dimension::GeneralUnit::*MASS_function_type)(  ) const;
             MASS_function_type MASS_function_value( &::SireUnits::Dimension::GeneralUnit::MASS );
             
             GeneralUnit_exposer.def( 
@@ -78,7 +78,7 @@ void register_GeneralUnit_class(){
         }
         { //::SireUnits::Dimension::GeneralUnit::QUANTITY
         
-            typedef int ( ::SireUnits::Dimension::GeneralUnit::*QUANTITY_function_type )(  ) const;
+            typedef int ( ::SireUnits::Dimension::GeneralUnit::*QUANTITY_function_type)(  ) const;
             QUANTITY_function_type QUANTITY_function_value( &::SireUnits::Dimension::GeneralUnit::QUANTITY );
             
             GeneralUnit_exposer.def( 
@@ -88,7 +88,7 @@ void register_GeneralUnit_class(){
         }
         { //::SireUnits::Dimension::GeneralUnit::TEMPERATURE
         
-            typedef int ( ::SireUnits::Dimension::GeneralUnit::*TEMPERATURE_function_type )(  ) const;
+            typedef int ( ::SireUnits::Dimension::GeneralUnit::*TEMPERATURE_function_type)(  ) const;
             TEMPERATURE_function_type TEMPERATURE_function_value( &::SireUnits::Dimension::GeneralUnit::TEMPERATURE );
             
             GeneralUnit_exposer.def( 
@@ -98,7 +98,7 @@ void register_GeneralUnit_class(){
         }
         { //::SireUnits::Dimension::GeneralUnit::TIME
         
-            typedef int ( ::SireUnits::Dimension::GeneralUnit::*TIME_function_type )(  ) const;
+            typedef int ( ::SireUnits::Dimension::GeneralUnit::*TIME_function_type)(  ) const;
             TIME_function_type TIME_function_value( &::SireUnits::Dimension::GeneralUnit::TIME );
             
             GeneralUnit_exposer.def( 
@@ -108,7 +108,7 @@ void register_GeneralUnit_class(){
         }
         { //::SireUnits::Dimension::GeneralUnit::invert
         
-            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireUnits::Dimension::GeneralUnit::*invert_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::GeneralUnit ( ::SireUnits::Dimension::GeneralUnit::*invert_function_type)(  ) const;
             invert_function_type invert_function_value( &::SireUnits::Dimension::GeneralUnit::invert );
             
             GeneralUnit_exposer.def( 
@@ -130,7 +130,7 @@ void register_GeneralUnit_class(){
         GeneralUnit_exposer.def( bp::self /= bp::self );
         { //::SireUnits::Dimension::GeneralUnit::operator=
         
-            typedef ::SireUnits::Dimension::GeneralUnit & ( ::SireUnits::Dimension::GeneralUnit::*assign_function_type )( ::SireUnits::Dimension::GeneralUnit const & ) ;
+            typedef ::SireUnits::Dimension::GeneralUnit & ( ::SireUnits::Dimension::GeneralUnit::*assign_function_type)( ::SireUnits::Dimension::GeneralUnit const & ) ;
             assign_function_type assign_function_value( &::SireUnits::Dimension::GeneralUnit::operator= );
             
             GeneralUnit_exposer.def( 
@@ -143,7 +143,7 @@ void register_GeneralUnit_class(){
         GeneralUnit_exposer.def( bp::self == bp::self );
         { //::SireUnits::Dimension::GeneralUnit::to
         
-            typedef double ( ::SireUnits::Dimension::GeneralUnit::*to_function_type )( ::SireUnits::Dimension::TempBase const & ) const;
+            typedef double ( ::SireUnits::Dimension::GeneralUnit::*to_function_type)( ::SireUnits::Dimension::TempBase const & ) const;
             to_function_type to_function_value( &::SireUnits::Dimension::GeneralUnit::to );
             
             GeneralUnit_exposer.def( 
@@ -154,7 +154,7 @@ void register_GeneralUnit_class(){
         }
         { //::SireUnits::Dimension::GeneralUnit::to
         
-            typedef double ( ::SireUnits::Dimension::GeneralUnit::*to_function_type )( ::SireUnits::Dimension::GeneralUnit const & ) const;
+            typedef double ( ::SireUnits::Dimension::GeneralUnit::*to_function_type)( ::SireUnits::Dimension::GeneralUnit const & ) const;
             to_function_type to_function_value( &::SireUnits::Dimension::GeneralUnit::to );
             
             GeneralUnit_exposer.def( 
@@ -165,7 +165,7 @@ void register_GeneralUnit_class(){
         }
         { //::SireUnits::Dimension::GeneralUnit::toString
         
-            typedef ::QString ( ::SireUnits::Dimension::GeneralUnit::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireUnits::Dimension::GeneralUnit::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireUnits::Dimension::GeneralUnit::toString );
             
             GeneralUnit_exposer.def( 
@@ -175,7 +175,7 @@ void register_GeneralUnit_class(){
         }
         { //::SireUnits::Dimension::GeneralUnit::typeName
         
-            typedef ::QString ( ::SireUnits::Dimension::GeneralUnit::*typeName_function_type )(  ) const;
+            typedef ::QString ( ::SireUnits::Dimension::GeneralUnit::*typeName_function_type)(  ) const;
             typeName_function_type typeName_function_value( &::SireUnits::Dimension::GeneralUnit::typeName );
             
             GeneralUnit_exposer.def( 
@@ -185,7 +185,7 @@ void register_GeneralUnit_class(){
         }
         { //::SireUnits::Dimension::GeneralUnit::what
         
-            typedef ::QString ( ::SireUnits::Dimension::GeneralUnit::*what_function_type )(  ) const;
+            typedef ::QString ( ::SireUnits::Dimension::GeneralUnit::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireUnits::Dimension::GeneralUnit::what );
             
             GeneralUnit_exposer.def( 

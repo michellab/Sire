@@ -33,7 +33,7 @@ void register_ChainStringProperty_class(){
         { //::SireMol::ChainProperty< QString >::array
         
             typedef SireMol::ChainProperty< QString > exported_class_t;
-            typedef ::QVector< QString > const & ( ::SireMol::ChainProperty< QString >::*array_function_type )(  ) const;
+            typedef ::QVector< QString > const & ( ::SireMol::ChainProperty< QString >::*array_function_type)(  ) const;
             array_function_type array_function_value( &::SireMol::ChainProperty< QString >::array );
             
             ChainStringProperty_exposer.def( 
@@ -45,7 +45,7 @@ void register_ChainStringProperty_class(){
         { //::SireMol::ChainProperty< QString >::assertCanConvert
         
             typedef SireMol::ChainProperty< QString > exported_class_t;
-            typedef void ( ::SireMol::ChainProperty< QString >::*assertCanConvert_function_type )( ::QVariant const & ) const;
+            typedef void ( ::SireMol::ChainProperty< QString >::*assertCanConvert_function_type)( ::QVariant const & ) const;
             assertCanConvert_function_type assertCanConvert_function_value( &::SireMol::ChainProperty< QString >::assertCanConvert );
             
             ChainStringProperty_exposer.def( 
@@ -57,7 +57,7 @@ void register_ChainStringProperty_class(){
         { //::SireMol::ChainProperty< QString >::assignFrom
         
             typedef SireMol::ChainProperty< QString > exported_class_t;
-            typedef void ( ::SireMol::ChainProperty< QString >::*assignFrom_function_type )( ::SireMol::ChainProperty< QVariant > const & ) ;
+            typedef void ( ::SireMol::ChainProperty< QString >::*assignFrom_function_type)( ::SireMol::ChainProperty< QVariant > const & ) ;
             assignFrom_function_type assignFrom_function_value( &::SireMol::ChainProperty< QString >::assignFrom );
             
             ChainStringProperty_exposer.def( 
@@ -69,7 +69,7 @@ void register_ChainStringProperty_class(){
         { //::SireMol::ChainProperty< QString >::at
         
             typedef SireMol::ChainProperty< QString > exported_class_t;
-            typedef ::QString const & ( ::SireMol::ChainProperty< QString >::*at_function_type )( ::SireMol::ChainIdx const & ) const;
+            typedef ::QString const & ( ::SireMol::ChainProperty< QString >::*at_function_type)( ::SireMol::ChainIdx const & ) const;
             at_function_type at_function_value( &::SireMol::ChainProperty< QString >::at );
             
             ChainStringProperty_exposer.def( 
@@ -82,7 +82,7 @@ void register_ChainStringProperty_class(){
         { //::SireMol::ChainProperty< QString >::canConvert
         
             typedef SireMol::ChainProperty< QString > exported_class_t;
-            typedef bool ( ::SireMol::ChainProperty< QString >::*canConvert_function_type )( ::QVariant const & ) const;
+            typedef bool ( ::SireMol::ChainProperty< QString >::*canConvert_function_type)( ::QVariant const & ) const;
             canConvert_function_type canConvert_function_value( &::SireMol::ChainProperty< QString >::canConvert );
             
             ChainStringProperty_exposer.def( 
@@ -94,7 +94,7 @@ void register_ChainStringProperty_class(){
         { //::SireMol::ChainProperty< QString >::count
         
             typedef SireMol::ChainProperty< QString > exported_class_t;
-            typedef int ( ::SireMol::ChainProperty< QString >::*count_function_type )(  ) const;
+            typedef int ( ::SireMol::ChainProperty< QString >::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMol::ChainProperty< QString >::count );
             
             ChainStringProperty_exposer.def( 
@@ -117,7 +117,7 @@ void register_ChainStringProperty_class(){
         { //::SireMol::ChainProperty< QString >::get
         
             typedef SireMol::ChainProperty< QString > exported_class_t;
-            typedef ::QString const & ( ::SireMol::ChainProperty< QString >::*get_function_type )( ::SireMol::ChainIdx const & ) const;
+            typedef ::QString const & ( ::SireMol::ChainProperty< QString >::*get_function_type)( ::SireMol::ChainIdx const & ) const;
             get_function_type get_function_value( &::SireMol::ChainProperty< QString >::get );
             
             ChainStringProperty_exposer.def( 
@@ -130,7 +130,7 @@ void register_ChainStringProperty_class(){
         { //::SireMol::ChainProperty< QString >::isCompatibleWith
         
             typedef SireMol::ChainProperty< QString > exported_class_t;
-            typedef bool ( ::SireMol::ChainProperty< QString >::*isCompatibleWith_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef bool ( ::SireMol::ChainProperty< QString >::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::ChainProperty< QString >::isCompatibleWith );
             
             ChainStringProperty_exposer.def( 
@@ -142,7 +142,7 @@ void register_ChainStringProperty_class(){
         { //::SireMol::ChainProperty< QString >::isEmpty
         
             typedef SireMol::ChainProperty< QString > exported_class_t;
-            typedef bool ( ::SireMol::ChainProperty< QString >::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::ChainProperty< QString >::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::ChainProperty< QString >::isEmpty );
             
             ChainStringProperty_exposer.def( 
@@ -153,7 +153,7 @@ void register_ChainStringProperty_class(){
         { //::SireMol::ChainProperty< QString >::nChains
         
             typedef SireMol::ChainProperty< QString > exported_class_t;
-            typedef int ( ::SireMol::ChainProperty< QString >::*nChains_function_type )(  ) const;
+            typedef int ( ::SireMol::ChainProperty< QString >::*nChains_function_type)(  ) const;
             nChains_function_type nChains_function_value( &::SireMol::ChainProperty< QString >::nChains );
             
             ChainStringProperty_exposer.def( 
@@ -165,7 +165,7 @@ void register_ChainStringProperty_class(){
         { //::SireMol::ChainProperty< QString >::operator=
         
             typedef SireMol::ChainProperty< QString > exported_class_t;
-            typedef ::SireMol::ChainProperty< QString > & ( ::SireMol::ChainProperty< QString >::*assign_function_type )( ::SireMol::ChainProperty< QString > const & ) ;
+            typedef ::SireMol::ChainProperty< QString > & ( ::SireMol::ChainProperty< QString >::*assign_function_type)( ::SireMol::ChainProperty< QString > const & ) ;
             assign_function_type assign_function_value( &::SireMol::ChainProperty< QString >::operator= );
             
             ChainStringProperty_exposer.def( 
@@ -179,7 +179,7 @@ void register_ChainStringProperty_class(){
         { //::SireMol::ChainProperty< QString >::operator[]
         
             typedef SireMol::ChainProperty< QString > exported_class_t;
-            typedef ::QString const & ( ::SireMol::ChainProperty< QString >::*__getitem___function_type )( ::SireMol::ChainIdx const & ) const;
+            typedef ::QString const & ( ::SireMol::ChainProperty< QString >::*__getitem___function_type)( ::SireMol::ChainIdx const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::ChainProperty< QString >::operator[] );
             
             ChainStringProperty_exposer.def( 
@@ -192,7 +192,7 @@ void register_ChainStringProperty_class(){
         { //::SireMol::ChainProperty< QString >::set
         
             typedef SireMol::ChainProperty< QString > exported_class_t;
-            typedef ::SireMol::ChainProperty< QString > & ( ::SireMol::ChainProperty< QString >::*set_function_type )( ::SireMol::ChainIdx,::QString const & ) ;
+            typedef ::SireMol::ChainProperty< QString > & ( ::SireMol::ChainProperty< QString >::*set_function_type)( ::SireMol::ChainIdx,::QString const & ) ;
             set_function_type set_function_value( &::SireMol::ChainProperty< QString >::set );
             
             ChainStringProperty_exposer.def( 
@@ -205,7 +205,7 @@ void register_ChainStringProperty_class(){
         { //::SireMol::ChainProperty< QString >::size
         
             typedef SireMol::ChainProperty< QString > exported_class_t;
-            typedef int ( ::SireMol::ChainProperty< QString >::*size_function_type )(  ) const;
+            typedef int ( ::SireMol::ChainProperty< QString >::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireMol::ChainProperty< QString >::size );
             
             ChainStringProperty_exposer.def( 
@@ -216,7 +216,7 @@ void register_ChainStringProperty_class(){
         { //::SireMol::ChainProperty< QString >::toString
         
             typedef SireMol::ChainProperty< QString > exported_class_t;
-            typedef ::QString ( ::SireMol::ChainProperty< QString >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::ChainProperty< QString >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::ChainProperty< QString >::toString );
             
             ChainStringProperty_exposer.def( 
@@ -227,7 +227,7 @@ void register_ChainStringProperty_class(){
         { //::SireMol::ChainProperty< QString >::toVariant
         
             typedef SireMol::ChainProperty< QString > exported_class_t;
-            typedef ::SireMol::ChainProperty< QVariant > ( ::SireMol::ChainProperty< QString >::*toVariant_function_type )(  ) const;
+            typedef ::SireMol::ChainProperty< QVariant > ( ::SireMol::ChainProperty< QString >::*toVariant_function_type)(  ) const;
             toVariant_function_type toVariant_function_value( &::SireMol::ChainProperty< QString >::toVariant );
             
             ChainStringProperty_exposer.def( 

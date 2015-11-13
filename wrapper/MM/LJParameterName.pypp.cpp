@@ -53,7 +53,7 @@ void register_LJParameterName_class(){
         bp::scope LJParameterName_scope( LJParameterName_exposer );
         { //::SireMM::LJParameterName::lj
         
-            typedef ::QString const & ( ::SireMM::LJParameterName::*lj_function_type )(  ) const;
+            typedef ::QString const & ( ::SireMM::LJParameterName::*lj_function_type)(  ) const;
             lj_function_type lj_function_value( &::SireMM::LJParameterName::lj );
             
             LJParameterName_exposer.def( 

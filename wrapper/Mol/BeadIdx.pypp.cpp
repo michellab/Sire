@@ -37,7 +37,7 @@ void register_BeadIdx_class(){
         BeadIdx_exposer.def( bp::init< SireMol::BeadIdx const & >(( bp::arg("other") )) );
         { //::SireMol::BeadIdx::hash
         
-            typedef ::uint ( ::SireMol::BeadIdx::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::BeadIdx::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::BeadIdx::hash );
             
             BeadIdx_exposer.def( 
@@ -47,7 +47,7 @@ void register_BeadIdx_class(){
         }
         { //::SireMol::BeadIdx::isNull
         
-            typedef bool ( ::SireMol::BeadIdx::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::BeadIdx::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::BeadIdx::isNull );
             
             BeadIdx_exposer.def( 
@@ -67,7 +67,7 @@ void register_BeadIdx_class(){
         }
         { //::SireMol::BeadIdx::operator=
         
-            typedef ::SireMol::BeadIdx & ( ::SireMol::BeadIdx::*assign_function_type )( ::SireMol::BeadIdx const & ) ;
+            typedef ::SireMol::BeadIdx & ( ::SireMol::BeadIdx::*assign_function_type)( ::SireMol::BeadIdx const & ) ;
             assign_function_type assign_function_value( &::SireMol::BeadIdx::operator= );
             
             BeadIdx_exposer.def( 
@@ -79,7 +79,7 @@ void register_BeadIdx_class(){
         }
         { //::SireMol::BeadIdx::toString
         
-            typedef ::QString ( ::SireMol::BeadIdx::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::BeadIdx::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::BeadIdx::toString );
             
             BeadIdx_exposer.def( 
@@ -99,7 +99,7 @@ void register_BeadIdx_class(){
         }
         { //::SireMol::BeadIdx::what
         
-            typedef char const * ( ::SireMol::BeadIdx::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::BeadIdx::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::BeadIdx::what );
             
             BeadIdx_exposer.def( 

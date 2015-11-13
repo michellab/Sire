@@ -51,7 +51,7 @@ void register_GridFF_class(){
         GridFF_exposer.def( bp::init< SireMM::GridFF const & >(( bp::arg("other") )) );
         { //::SireMM::GridFF::addFixedAtoms
         
-            typedef void ( ::SireMM::GridFF::*addFixedAtoms_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMM::GridFF::*addFixedAtoms_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
             addFixedAtoms_function_type addFixedAtoms_function_value( &::SireMM::GridFF::addFixedAtoms );
             
             GridFF_exposer.def( 
@@ -62,7 +62,7 @@ void register_GridFF_class(){
         }
         { //::SireMM::GridFF::addFixedAtoms
         
-            typedef void ( ::SireMM::GridFF::*addFixedAtoms_function_type )( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMM::GridFF::*addFixedAtoms_function_type)( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
             addFixedAtoms_function_type addFixedAtoms_function_value( &::SireMM::GridFF::addFixedAtoms );
             
             GridFF_exposer.def( 
@@ -73,7 +73,7 @@ void register_GridFF_class(){
         }
         { //::SireMM::GridFF::addFixedAtoms
         
-            typedef void ( ::SireMM::GridFF::*addFixedAtoms_function_type )( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMM::GridFF::*addFixedAtoms_function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
             addFixedAtoms_function_type addFixedAtoms_function_value( &::SireMM::GridFF::addFixedAtoms );
             
             GridFF_exposer.def( 
@@ -84,7 +84,7 @@ void register_GridFF_class(){
         }
         { //::SireMM::GridFF::addFixedAtoms
         
-            typedef void ( ::SireMM::GridFF::*addFixedAtoms_function_type )( ::SireMM::GridFF const & ) ;
+            typedef void ( ::SireMM::GridFF::*addFixedAtoms_function_type)( ::SireMM::GridFF const & ) ;
             addFixedAtoms_function_type addFixedAtoms_function_value( &::SireMM::GridFF::addFixedAtoms );
             
             GridFF_exposer.def( 
@@ -95,7 +95,7 @@ void register_GridFF_class(){
         }
         { //::SireMM::GridFF::buffer
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMM::GridFF::*buffer_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::GridFF::*buffer_function_type)(  ) const;
             buffer_function_type buffer_function_value( &::SireMM::GridFF::buffer );
             
             GridFF_exposer.def( 
@@ -105,7 +105,7 @@ void register_GridFF_class(){
         }
         { //::SireMM::GridFF::coulombCutoff
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMM::GridFF::*coulombCutoff_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::GridFF::*coulombCutoff_function_type)(  ) const;
             coulombCutoff_function_type coulombCutoff_function_value( &::SireMM::GridFF::coulombCutoff );
             
             GridFF_exposer.def( 
@@ -115,7 +115,7 @@ void register_GridFF_class(){
         }
         { //::SireMM::GridFF::ljCutoff
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMM::GridFF::*ljCutoff_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::GridFF::*ljCutoff_function_type)(  ) const;
             ljCutoff_function_type ljCutoff_function_value( &::SireMM::GridFF::ljCutoff );
             
             GridFF_exposer.def( 
@@ -125,7 +125,7 @@ void register_GridFF_class(){
         }
         { //::SireMM::GridFF::mustNowRecalculateFromScratch
         
-            typedef void ( ::SireMM::GridFF::*mustNowRecalculateFromScratch_function_type )(  ) ;
+            typedef void ( ::SireMM::GridFF::*mustNowRecalculateFromScratch_function_type)(  ) ;
             mustNowRecalculateFromScratch_function_type mustNowRecalculateFromScratch_function_value( &::SireMM::GridFF::mustNowRecalculateFromScratch );
             
             GridFF_exposer.def( 
@@ -136,7 +136,7 @@ void register_GridFF_class(){
         GridFF_exposer.def( bp::self != bp::self );
         { //::SireMM::GridFF::operator=
         
-            typedef ::SireMM::GridFF & ( ::SireMM::GridFF::*assign_function_type )( ::SireMM::GridFF const & ) ;
+            typedef ::SireMM::GridFF & ( ::SireMM::GridFF::*assign_function_type)( ::SireMM::GridFF const & ) ;
             assign_function_type assign_function_value( &::SireMM::GridFF::operator= );
             
             GridFF_exposer.def( 
@@ -149,7 +149,7 @@ void register_GridFF_class(){
         GridFF_exposer.def( bp::self == bp::self );
         { //::SireMM::GridFF::setBuffer
         
-            typedef void ( ::SireMM::GridFF::*setBuffer_function_type )( ::SireUnits::Dimension::Length ) ;
+            typedef void ( ::SireMM::GridFF::*setBuffer_function_type)( ::SireUnits::Dimension::Length ) ;
             setBuffer_function_type setBuffer_function_value( &::SireMM::GridFF::setBuffer );
             
             GridFF_exposer.def( 
@@ -160,7 +160,7 @@ void register_GridFF_class(){
         }
         { //::SireMM::GridFF::setCoulombCutoff
         
-            typedef void ( ::SireMM::GridFF::*setCoulombCutoff_function_type )( ::SireUnits::Dimension::Length ) ;
+            typedef void ( ::SireMM::GridFF::*setCoulombCutoff_function_type)( ::SireUnits::Dimension::Length ) ;
             setCoulombCutoff_function_type setCoulombCutoff_function_value( &::SireMM::GridFF::setCoulombCutoff );
             
             GridFF_exposer.def( 
@@ -171,7 +171,7 @@ void register_GridFF_class(){
         }
         { //::SireMM::GridFF::setGridSpacing
         
-            typedef void ( ::SireMM::GridFF::*setGridSpacing_function_type )( ::SireUnits::Dimension::Length ) ;
+            typedef void ( ::SireMM::GridFF::*setGridSpacing_function_type)( ::SireUnits::Dimension::Length ) ;
             setGridSpacing_function_type setGridSpacing_function_value( &::SireMM::GridFF::setGridSpacing );
             
             GridFF_exposer.def( 
@@ -182,7 +182,7 @@ void register_GridFF_class(){
         }
         { //::SireMM::GridFF::setLJCutoff
         
-            typedef void ( ::SireMM::GridFF::*setLJCutoff_function_type )( ::SireUnits::Dimension::Length ) ;
+            typedef void ( ::SireMM::GridFF::*setLJCutoff_function_type)( ::SireUnits::Dimension::Length ) ;
             setLJCutoff_function_type setLJCutoff_function_value( &::SireMM::GridFF::setLJCutoff );
             
             GridFF_exposer.def( 
@@ -193,7 +193,7 @@ void register_GridFF_class(){
         }
         { //::SireMM::GridFF::setReactionFieldDielectric
         
-            typedef bool ( ::SireMM::GridFF::*setReactionFieldDielectric_function_type )( double ) ;
+            typedef bool ( ::SireMM::GridFF::*setReactionFieldDielectric_function_type)( double ) ;
             setReactionFieldDielectric_function_type setReactionFieldDielectric_function_value( &::SireMM::GridFF::setReactionFieldDielectric );
             
             GridFF_exposer.def( 
@@ -204,7 +204,7 @@ void register_GridFF_class(){
         }
         { //::SireMM::GridFF::setShiftElectrostatics
         
-            typedef bool ( ::SireMM::GridFF::*setShiftElectrostatics_function_type )( bool ) ;
+            typedef bool ( ::SireMM::GridFF::*setShiftElectrostatics_function_type)( bool ) ;
             setShiftElectrostatics_function_type setShiftElectrostatics_function_value( &::SireMM::GridFF::setShiftElectrostatics );
             
             GridFF_exposer.def( 
@@ -215,7 +215,7 @@ void register_GridFF_class(){
         }
         { //::SireMM::GridFF::setUseReactionField
         
-            typedef bool ( ::SireMM::GridFF::*setUseReactionField_function_type )( bool ) ;
+            typedef bool ( ::SireMM::GridFF::*setUseReactionField_function_type)( bool ) ;
             setUseReactionField_function_type setUseReactionField_function_value( &::SireMM::GridFF::setUseReactionField );
             
             GridFF_exposer.def( 
@@ -226,7 +226,7 @@ void register_GridFF_class(){
         }
         { //::SireMM::GridFF::spacing
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMM::GridFF::*spacing_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMM::GridFF::*spacing_function_type)(  ) const;
             spacing_function_type spacing_function_value( &::SireMM::GridFF::spacing );
             
             GridFF_exposer.def( 
@@ -246,7 +246,7 @@ void register_GridFF_class(){
         }
         { //::SireMM::GridFF::what
         
-            typedef char const * ( ::SireMM::GridFF::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::GridFF::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::GridFF::what );
             
             GridFF_exposer.def( 

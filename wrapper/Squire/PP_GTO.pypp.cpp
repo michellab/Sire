@@ -41,7 +41,7 @@ void register_PP_GTO_class(){
         PP_GTO_exposer.def( bp::init< Squire::PP_GTO const & >(( bp::arg("other") )) );
         { //::Squire::PP_GTO::P_minus_A
         
-            typedef ::SireMaths::Vector const & ( ::Squire::PP_GTO::*P_minus_A_function_type )(  ) const;
+            typedef ::SireMaths::Vector const & ( ::Squire::PP_GTO::*P_minus_A_function_type)(  ) const;
             P_minus_A_function_type P_minus_A_function_value( &::Squire::PP_GTO::P_minus_A );
             
             PP_GTO_exposer.def( 
@@ -52,7 +52,7 @@ void register_PP_GTO_class(){
         }
         { //::Squire::PP_GTO::P_minus_B
         
-            typedef ::SireMaths::Vector const & ( ::Squire::PP_GTO::*P_minus_B_function_type )(  ) const;
+            typedef ::SireMaths::Vector const & ( ::Squire::PP_GTO::*P_minus_B_function_type)(  ) const;
             P_minus_B_function_type P_minus_B_function_value( &::Squire::PP_GTO::P_minus_B );
             
             PP_GTO_exposer.def( 
@@ -63,7 +63,7 @@ void register_PP_GTO_class(){
         }
         { //::Squire::PP_GTO::Q_minus_C
         
-            typedef ::SireMaths::Vector const & ( ::Squire::PP_GTO::*Q_minus_C_function_type )(  ) const;
+            typedef ::SireMaths::Vector const & ( ::Squire::PP_GTO::*Q_minus_C_function_type)(  ) const;
             Q_minus_C_function_type Q_minus_C_function_value( &::Squire::PP_GTO::Q_minus_C );
             
             PP_GTO_exposer.def( 
@@ -74,7 +74,7 @@ void register_PP_GTO_class(){
         }
         { //::Squire::PP_GTO::Q_minus_D
         
-            typedef ::SireMaths::Vector const & ( ::Squire::PP_GTO::*Q_minus_D_function_type )(  ) const;
+            typedef ::SireMaths::Vector const & ( ::Squire::PP_GTO::*Q_minus_D_function_type)(  ) const;
             Q_minus_D_function_type Q_minus_D_function_value( &::Squire::PP_GTO::Q_minus_D );
             
             PP_GTO_exposer.def( 
@@ -85,7 +85,7 @@ void register_PP_GTO_class(){
         }
         { //::Squire::PP_GTO::angularMomentum0
         
-            typedef int ( ::Squire::PP_GTO::*angularMomentum0_function_type )(  ) const;
+            typedef int ( ::Squire::PP_GTO::*angularMomentum0_function_type)(  ) const;
             angularMomentum0_function_type angularMomentum0_function_value( &::Squire::PP_GTO::angularMomentum0 );
             
             PP_GTO_exposer.def( 
@@ -95,7 +95,7 @@ void register_PP_GTO_class(){
         }
         { //::Squire::PP_GTO::angularMomentum1
         
-            typedef int ( ::Squire::PP_GTO::*angularMomentum1_function_type )(  ) const;
+            typedef int ( ::Squire::PP_GTO::*angularMomentum1_function_type)(  ) const;
             angularMomentum1_function_type angularMomentum1_function_value( &::Squire::PP_GTO::angularMomentum1 );
             
             PP_GTO_exposer.def( 
@@ -105,7 +105,7 @@ void register_PP_GTO_class(){
         }
         { //::Squire::PP_GTO::nOrbitals0
         
-            typedef int ( ::Squire::PP_GTO::*nOrbitals0_function_type )(  ) const;
+            typedef int ( ::Squire::PP_GTO::*nOrbitals0_function_type)(  ) const;
             nOrbitals0_function_type nOrbitals0_function_value( &::Squire::PP_GTO::nOrbitals0 );
             
             PP_GTO_exposer.def( 
@@ -115,7 +115,7 @@ void register_PP_GTO_class(){
         }
         { //::Squire::PP_GTO::nOrbitals1
         
-            typedef int ( ::Squire::PP_GTO::*nOrbitals1_function_type )(  ) const;
+            typedef int ( ::Squire::PP_GTO::*nOrbitals1_function_type)(  ) const;
             nOrbitals1_function_type nOrbitals1_function_value( &::Squire::PP_GTO::nOrbitals1 );
             
             PP_GTO_exposer.def( 
@@ -126,7 +126,7 @@ void register_PP_GTO_class(){
         PP_GTO_exposer.def( bp::self != bp::self );
         { //::Squire::PP_GTO::operator=
         
-            typedef ::Squire::PP_GTO & ( ::Squire::PP_GTO::*assign_function_type )( ::Squire::PP_GTO const & ) ;
+            typedef ::Squire::PP_GTO & ( ::Squire::PP_GTO::*assign_function_type)( ::Squire::PP_GTO const & ) ;
             assign_function_type assign_function_value( &::Squire::PP_GTO::operator= );
             
             PP_GTO_exposer.def( 
@@ -139,7 +139,7 @@ void register_PP_GTO_class(){
         PP_GTO_exposer.def( bp::self == bp::self );
         { //::Squire::PP_GTO::scale
         
-            typedef double ( ::Squire::PP_GTO::*scale_function_type )(  ) const;
+            typedef double ( ::Squire::PP_GTO::*scale_function_type)(  ) const;
             scale_function_type scale_function_value( &::Squire::PP_GTO::scale );
             
             PP_GTO_exposer.def( 

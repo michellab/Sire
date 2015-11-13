@@ -45,7 +45,7 @@ void register_AbsFromMass_class(){
         AbsFromMass_exposer.def( bp::self != bp::self );
         { //::SireMol::AbsFromMass::operator()
         
-            typedef double ( ::SireMol::AbsFromMass::*__call___function_type )( ::SireMol::MoleculeData const &,::SireMol::AtomSelection const &,::SireMol::AtomSelection const &,::SireBase::PropertyMap const & ) const;
+            typedef double ( ::SireMol::AbsFromMass::*__call___function_type)( ::SireMol::MoleculeData const &,::SireMol::AtomSelection const &,::SireMol::AtomSelection const &,::SireBase::PropertyMap const & ) const;
             __call___function_type __call___function_value( &::SireMol::AbsFromMass::operator() );
             
             AbsFromMass_exposer.def( 
@@ -56,7 +56,7 @@ void register_AbsFromMass_class(){
         }
         { //::SireMol::AbsFromMass::operator()
         
-            typedef double ( ::SireMol::AbsFromMass::*__call___function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef double ( ::SireMol::AbsFromMass::*__call___function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             __call___function_type __call___function_value( &::SireMol::AbsFromMass::operator() );
             
             AbsFromMass_exposer.def( 
@@ -67,7 +67,7 @@ void register_AbsFromMass_class(){
         }
         { //::SireMol::AbsFromMass::operator=
         
-            typedef ::SireMol::AbsFromMass & ( ::SireMol::AbsFromMass::*assign_function_type )( ::SireMol::AbsFromMass const & ) ;
+            typedef ::SireMol::AbsFromMass & ( ::SireMol::AbsFromMass::*assign_function_type)( ::SireMol::AbsFromMass const & ) ;
             assign_function_type assign_function_value( &::SireMol::AbsFromMass::operator= );
             
             AbsFromMass_exposer.def( 

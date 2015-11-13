@@ -58,7 +58,7 @@ void register_Nodes_class(){
         Nodes_exposer.def( bp::init< SireCluster::Nodes const & >(( bp::arg("other") )) );
         { //::SireCluster::Nodes::add
         
-            typedef void ( ::SireCluster::Nodes::*add_function_type )( ::SireCluster::Node ) ;
+            typedef void ( ::SireCluster::Nodes::*add_function_type)( ::SireCluster::Node ) ;
             add_function_type add_function_value( &::SireCluster::Nodes::add );
             
             Nodes_exposer.def( 
@@ -69,7 +69,7 @@ void register_Nodes_class(){
         }
         { //::SireCluster::Nodes::add
         
-            typedef void ( ::SireCluster::Nodes::*add_function_type )( ::SireCluster::Nodes & ) ;
+            typedef void ( ::SireCluster::Nodes::*add_function_type)( ::SireCluster::Nodes & ) ;
             add_function_type add_function_value( &::SireCluster::Nodes::add );
             
             Nodes_exposer.def( 
@@ -80,7 +80,7 @@ void register_Nodes_class(){
         }
         { //::SireCluster::Nodes::addNode
         
-            typedef void ( ::SireCluster::Nodes::*addNode_function_type )(  ) ;
+            typedef void ( ::SireCluster::Nodes::*addNode_function_type)(  ) ;
             addNode_function_type addNode_function_value( &::SireCluster::Nodes::addNode );
             
             Nodes_exposer.def( 
@@ -90,7 +90,7 @@ void register_Nodes_class(){
         }
         { //::SireCluster::Nodes::addNode
         
-            typedef void ( ::SireCluster::Nodes::*addNode_function_type )( int ) ;
+            typedef void ( ::SireCluster::Nodes::*addNode_function_type)( int ) ;
             addNode_function_type addNode_function_value( &::SireCluster::Nodes::addNode );
             
             Nodes_exposer.def( 
@@ -101,7 +101,7 @@ void register_Nodes_class(){
         }
         { //::SireCluster::Nodes::addNodes
         
-            typedef void ( ::SireCluster::Nodes::*addNodes_function_type )( int ) ;
+            typedef void ( ::SireCluster::Nodes::*addNodes_function_type)( int ) ;
             addNodes_function_type addNodes_function_value( &::SireCluster::Nodes::addNodes );
             
             Nodes_exposer.def( 
@@ -112,7 +112,7 @@ void register_Nodes_class(){
         }
         { //::SireCluster::Nodes::addNodes
         
-            typedef void ( ::SireCluster::Nodes::*addNodes_function_type )( int,int ) ;
+            typedef void ( ::SireCluster::Nodes::*addNodes_function_type)( int,int ) ;
             addNodes_function_type addNodes_function_value( &::SireCluster::Nodes::addNodes );
             
             Nodes_exposer.def( 
@@ -123,7 +123,7 @@ void register_Nodes_class(){
         }
         { //::SireCluster::Nodes::borrowThisThread
         
-            typedef ::SireCluster::ThisThread ( ::SireCluster::Nodes::*borrowThisThread_function_type )(  ) ;
+            typedef ::SireCluster::ThisThread ( ::SireCluster::Nodes::*borrowThisThread_function_type)(  ) ;
             borrowThisThread_function_type borrowThisThread_function_value( &::SireCluster::Nodes::borrowThisThread );
             
             Nodes_exposer.def( 
@@ -133,7 +133,7 @@ void register_Nodes_class(){
         }
         { //::SireCluster::Nodes::count
         
-            typedef int ( ::SireCluster::Nodes::*count_function_type )(  ) ;
+            typedef int ( ::SireCluster::Nodes::*count_function_type)(  ) ;
             count_function_type count_function_value( &::SireCluster::Nodes::count );
             
             Nodes_exposer.def( 
@@ -143,7 +143,7 @@ void register_Nodes_class(){
         }
         { //::SireCluster::Nodes::getAllNodes
         
-            typedef ::QList< SireCluster::Node > ( ::SireCluster::Nodes::*getAllNodes_function_type )(  ) ;
+            typedef ::QList< SireCluster::Node > ( ::SireCluster::Nodes::*getAllNodes_function_type)(  ) ;
             getAllNodes_function_type getAllNodes_function_value( &::SireCluster::Nodes::getAllNodes );
             
             Nodes_exposer.def( 
@@ -153,7 +153,7 @@ void register_Nodes_class(){
         }
         { //::SireCluster::Nodes::getAllNodes
         
-            typedef ::QList< SireCluster::Node > ( ::SireCluster::Nodes::*getAllNodes_function_type )( int ) ;
+            typedef ::QList< SireCluster::Node > ( ::SireCluster::Nodes::*getAllNodes_function_type)( int ) ;
             getAllNodes_function_type getAllNodes_function_value( &::SireCluster::Nodes::getAllNodes );
             
             Nodes_exposer.def( 
@@ -164,7 +164,7 @@ void register_Nodes_class(){
         }
         { //::SireCluster::Nodes::getNode
         
-            typedef ::SireCluster::Node ( ::SireCluster::Nodes::*getNode_function_type )(  ) ;
+            typedef ::SireCluster::Node ( ::SireCluster::Nodes::*getNode_function_type)(  ) ;
             getNode_function_type getNode_function_value( &::SireCluster::Nodes::getNode );
             
             Nodes_exposer.def( 
@@ -174,7 +174,7 @@ void register_Nodes_class(){
         }
         { //::SireCluster::Nodes::getNode
         
-            typedef ::SireCluster::Node ( ::SireCluster::Nodes::*getNode_function_type )( int ) ;
+            typedef ::SireCluster::Node ( ::SireCluster::Nodes::*getNode_function_type)( int ) ;
             getNode_function_type getNode_function_value( &::SireCluster::Nodes::getNode );
             
             Nodes_exposer.def( 
@@ -185,7 +185,7 @@ void register_Nodes_class(){
         }
         { //::SireCluster::Nodes::getNodes
         
-            typedef ::QList< SireCluster::Node > ( ::SireCluster::Nodes::*getNodes_function_type )( int ) ;
+            typedef ::QList< SireCluster::Node > ( ::SireCluster::Nodes::*getNodes_function_type)( int ) ;
             getNodes_function_type getNodes_function_value( &::SireCluster::Nodes::getNodes );
             
             Nodes_exposer.def( 
@@ -196,7 +196,7 @@ void register_Nodes_class(){
         }
         { //::SireCluster::Nodes::getNodes
         
-            typedef ::QList< SireCluster::Node > ( ::SireCluster::Nodes::*getNodes_function_type )( int,int ) ;
+            typedef ::QList< SireCluster::Node > ( ::SireCluster::Nodes::*getNodes_function_type)( int,int ) ;
             getNodes_function_type getNodes_function_value( &::SireCluster::Nodes::getNodes );
             
             Nodes_exposer.def( 
@@ -207,7 +207,7 @@ void register_Nodes_class(){
         }
         { //::SireCluster::Nodes::isEmpty
         
-            typedef bool ( ::SireCluster::Nodes::*isEmpty_function_type )(  ) ;
+            typedef bool ( ::SireCluster::Nodes::*isEmpty_function_type)(  ) ;
             isEmpty_function_type isEmpty_function_value( &::SireCluster::Nodes::isEmpty );
             
             Nodes_exposer.def( 
@@ -217,7 +217,7 @@ void register_Nodes_class(){
         }
         { //::SireCluster::Nodes::nBusy
         
-            typedef int ( ::SireCluster::Nodes::*nBusy_function_type )(  ) ;
+            typedef int ( ::SireCluster::Nodes::*nBusy_function_type)(  ) ;
             nBusy_function_type nBusy_function_value( &::SireCluster::Nodes::nBusy );
             
             Nodes_exposer.def( 
@@ -227,7 +227,7 @@ void register_Nodes_class(){
         }
         { //::SireCluster::Nodes::nFree
         
-            typedef int ( ::SireCluster::Nodes::*nFree_function_type )(  ) ;
+            typedef int ( ::SireCluster::Nodes::*nFree_function_type)(  ) ;
             nFree_function_type nFree_function_value( &::SireCluster::Nodes::nFree );
             
             Nodes_exposer.def( 
@@ -237,7 +237,7 @@ void register_Nodes_class(){
         }
         { //::SireCluster::Nodes::nNodes
         
-            typedef int ( ::SireCluster::Nodes::*nNodes_function_type )(  ) ;
+            typedef int ( ::SireCluster::Nodes::*nNodes_function_type)(  ) ;
             nNodes_function_type nNodes_function_value( &::SireCluster::Nodes::nNodes );
             
             Nodes_exposer.def( 
@@ -248,7 +248,7 @@ void register_Nodes_class(){
         Nodes_exposer.def( bp::self != bp::self );
         { //::SireCluster::Nodes::operator=
         
-            typedef ::SireCluster::Nodes & ( ::SireCluster::Nodes::*assign_function_type )( ::SireCluster::Nodes const & ) ;
+            typedef ::SireCluster::Nodes & ( ::SireCluster::Nodes::*assign_function_type)( ::SireCluster::Nodes const & ) ;
             assign_function_type assign_function_value( &::SireCluster::Nodes::operator= );
             
             Nodes_exposer.def( 
@@ -261,7 +261,7 @@ void register_Nodes_class(){
         Nodes_exposer.def( bp::self == bp::self );
         { //::SireCluster::Nodes::remove
         
-            typedef void ( ::SireCluster::Nodes::*remove_function_type )( ::SireCluster::Node ) ;
+            typedef void ( ::SireCluster::Nodes::*remove_function_type)( ::SireCluster::Node ) ;
             remove_function_type remove_function_value( &::SireCluster::Nodes::remove );
             
             Nodes_exposer.def( 
@@ -272,7 +272,7 @@ void register_Nodes_class(){
         }
         { //::SireCluster::Nodes::removeAll
         
-            typedef void ( ::SireCluster::Nodes::*removeAll_function_type )(  ) ;
+            typedef void ( ::SireCluster::Nodes::*removeAll_function_type)(  ) ;
             removeAll_function_type removeAll_function_value( &::SireCluster::Nodes::removeAll );
             
             Nodes_exposer.def( 
@@ -282,7 +282,7 @@ void register_Nodes_class(){
         }
         { //::SireCluster::Nodes::toString
         
-            typedef ::QString ( ::SireCluster::Nodes::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireCluster::Nodes::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireCluster::Nodes::toString );
             
             Nodes_exposer.def( 
@@ -292,7 +292,7 @@ void register_Nodes_class(){
         }
         { //::SireCluster::Nodes::waitUntilAllFree
         
-            typedef void ( ::SireCluster::Nodes::*waitUntilAllFree_function_type )(  ) ;
+            typedef void ( ::SireCluster::Nodes::*waitUntilAllFree_function_type)(  ) ;
             waitUntilAllFree_function_type waitUntilAllFree_function_value( &::SireCluster::Nodes::waitUntilAllFree );
             
             Nodes_exposer.def( 
@@ -302,7 +302,7 @@ void register_Nodes_class(){
         }
         { //::SireCluster::Nodes::waitUntilAllFree
         
-            typedef bool ( ::SireCluster::Nodes::*waitUntilAllFree_function_type )( int ) ;
+            typedef bool ( ::SireCluster::Nodes::*waitUntilAllFree_function_type)( int ) ;
             waitUntilAllFree_function_type waitUntilAllFree_function_value( &::SireCluster::Nodes::waitUntilAllFree );
             
             Nodes_exposer.def( 

@@ -30,7 +30,7 @@ void register_IntegrationConstant_class(){
         IntegrationConstant_exposer.def( bp::init< SireCAS::IntegrationConstant const & >(( bp::arg("other") )) );
         { //::SireCAS::IntegrationConstant::hash
         
-            typedef ::uint ( ::SireCAS::IntegrationConstant::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireCAS::IntegrationConstant::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireCAS::IntegrationConstant::hash );
             
             IntegrationConstant_exposer.def( 
@@ -40,7 +40,7 @@ void register_IntegrationConstant_class(){
         }
         { //::SireCAS::IntegrationConstant::integrate
         
-            typedef ::SireCAS::Expression ( ::SireCAS::IntegrationConstant::*integrate_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::IntegrationConstant::*integrate_function_type)( ::SireCAS::Symbol const & ) const;
             integrate_function_type integrate_function_value( &::SireCAS::IntegrationConstant::integrate );
             
             IntegrationConstant_exposer.def( 
@@ -62,7 +62,7 @@ void register_IntegrationConstant_class(){
         }
         { //::SireCAS::IntegrationConstant::what
         
-            typedef char const * ( ::SireCAS::IntegrationConstant::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::IntegrationConstant::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::IntegrationConstant::what );
             
             IntegrationConstant_exposer.def( 

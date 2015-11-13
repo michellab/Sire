@@ -54,7 +54,7 @@ void register_TrajectoryMonitor_class(){
         TrajectoryMonitor_exposer.def( bp::init< SireIO::TrajectoryMonitor const & >(( bp::arg("other") )) );
         { //::SireIO::TrajectoryMonitor::clearStatistics
         
-            typedef void ( ::SireIO::TrajectoryMonitor::*clearStatistics_function_type )(  ) ;
+            typedef void ( ::SireIO::TrajectoryMonitor::*clearStatistics_function_type)(  ) ;
             clearStatistics_function_type clearStatistics_function_value( &::SireIO::TrajectoryMonitor::clearStatistics );
             
             TrajectoryMonitor_exposer.def( 
@@ -64,7 +64,7 @@ void register_TrajectoryMonitor_class(){
         }
         { //::SireIO::TrajectoryMonitor::monitor
         
-            typedef void ( ::SireIO::TrajectoryMonitor::*monitor_function_type )( ::SireSystem::System & ) ;
+            typedef void ( ::SireIO::TrajectoryMonitor::*monitor_function_type)( ::SireSystem::System & ) ;
             monitor_function_type monitor_function_value( &::SireIO::TrajectoryMonitor::monitor );
             
             TrajectoryMonitor_exposer.def( 
@@ -76,7 +76,7 @@ void register_TrajectoryMonitor_class(){
         TrajectoryMonitor_exposer.def( bp::self != bp::self );
         { //::SireIO::TrajectoryMonitor::operator=
         
-            typedef ::SireIO::TrajectoryMonitor & ( ::SireIO::TrajectoryMonitor::*assign_function_type )( ::SireIO::TrajectoryMonitor const & ) ;
+            typedef ::SireIO::TrajectoryMonitor & ( ::SireIO::TrajectoryMonitor::*assign_function_type)( ::SireIO::TrajectoryMonitor const & ) ;
             assign_function_type assign_function_value( &::SireIO::TrajectoryMonitor::operator= );
             
             TrajectoryMonitor_exposer.def( 
@@ -89,7 +89,7 @@ void register_TrajectoryMonitor_class(){
         TrajectoryMonitor_exposer.def( bp::self == bp::self );
         { //::SireIO::TrajectoryMonitor::setTempDir
         
-            typedef void ( ::SireIO::TrajectoryMonitor::*setTempDir_function_type )( ::QString const & ) ;
+            typedef void ( ::SireIO::TrajectoryMonitor::*setTempDir_function_type)( ::QString const & ) ;
             setTempDir_function_type setTempDir_function_value( &::SireIO::TrajectoryMonitor::setTempDir );
             
             TrajectoryMonitor_exposer.def( 
@@ -110,7 +110,7 @@ void register_TrajectoryMonitor_class(){
         }
         { //::SireIO::TrajectoryMonitor::writeToDisk
         
-            typedef void ( ::SireIO::TrajectoryMonitor::*writeToDisk_function_type )( ::QString const & ) const;
+            typedef void ( ::SireIO::TrajectoryMonitor::*writeToDisk_function_type)( ::QString const & ) const;
             writeToDisk_function_type writeToDisk_function_value( &::SireIO::TrajectoryMonitor::writeToDisk );
             
             TrajectoryMonitor_exposer.def( 

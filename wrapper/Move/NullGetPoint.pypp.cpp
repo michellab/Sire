@@ -48,7 +48,7 @@ void register_NullGetPoint_class(){
         NullGetPoint_exposer.def( bp::init< SireMove::NullGetPoint const & >(( bp::arg("other") )) );
         { //::SireMove::NullGetPoint::getPoint
         
-            typedef ::SireMaths::Vector ( ::SireMove::NullGetPoint::*getPoint_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::Vector ( ::SireMove::NullGetPoint::*getPoint_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             getPoint_function_type getPoint_function_value( &::SireMove::NullGetPoint::getPoint );
             
             NullGetPoint_exposer.def( 
@@ -60,7 +60,7 @@ void register_NullGetPoint_class(){
         NullGetPoint_exposer.def( bp::self != bp::self );
         { //::SireMove::NullGetPoint::operator=
         
-            typedef ::SireMove::NullGetPoint & ( ::SireMove::NullGetPoint::*assign_function_type )( ::SireMove::NullGetPoint const & ) ;
+            typedef ::SireMove::NullGetPoint & ( ::SireMove::NullGetPoint::*assign_function_type)( ::SireMove::NullGetPoint const & ) ;
             assign_function_type assign_function_value( &::SireMove::NullGetPoint::operator= );
             
             NullGetPoint_exposer.def( 

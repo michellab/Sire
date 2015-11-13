@@ -44,7 +44,7 @@ void register_GeometryPerturbations_class(){
         GeometryPerturbations_exposer.def( bp::init< SireMol::GeometryPerturbations const & >(( bp::arg("other") )) );
         { //::SireMol::GeometryPerturbations::children
         
-            typedef ::QList< SireBase::PropPtr< SireMol::Perturbation > > ( ::SireMol::GeometryPerturbations::*children_function_type )(  ) const;
+            typedef ::QList< SireBase::PropPtr< SireMol::Perturbation > > ( ::SireMol::GeometryPerturbations::*children_function_type)(  ) const;
             children_function_type children_function_value( &::SireMol::GeometryPerturbations::children );
             
             GeometryPerturbations_exposer.def( 
@@ -55,7 +55,7 @@ void register_GeometryPerturbations_class(){
         GeometryPerturbations_exposer.def( bp::self != bp::self );
         { //::SireMol::GeometryPerturbations::operator=
         
-            typedef ::SireMol::GeometryPerturbations & ( ::SireMol::GeometryPerturbations::*assign_function_type )( ::SireMol::GeometryPerturbations const & ) ;
+            typedef ::SireMol::GeometryPerturbations & ( ::SireMol::GeometryPerturbations::*assign_function_type)( ::SireMol::GeometryPerturbations const & ) ;
             assign_function_type assign_function_value( &::SireMol::GeometryPerturbations::operator= );
             
             GeometryPerturbations_exposer.def( 
@@ -68,7 +68,7 @@ void register_GeometryPerturbations_class(){
         GeometryPerturbations_exposer.def( bp::self == bp::self );
         { //::SireMol::GeometryPerturbations::perturbations
         
-            typedef ::QList< SireBase::PropPtr< SireMol::GeometryPerturbation > > ( ::SireMol::GeometryPerturbations::*perturbations_function_type )(  ) const;
+            typedef ::QList< SireBase::PropPtr< SireMol::GeometryPerturbation > > ( ::SireMol::GeometryPerturbations::*perturbations_function_type)(  ) const;
             perturbations_function_type perturbations_function_value( &::SireMol::GeometryPerturbations::perturbations );
             
             GeometryPerturbations_exposer.def( 
@@ -78,7 +78,7 @@ void register_GeometryPerturbations_class(){
         }
         { //::SireMol::GeometryPerturbations::recreate
         
-            typedef ::SireMol::PerturbationPtr ( ::SireMol::GeometryPerturbations::*recreate_function_type )( ::SireCAS::Expression const & ) const;
+            typedef ::SireMol::PerturbationPtr ( ::SireMol::GeometryPerturbations::*recreate_function_type)( ::SireCAS::Expression const & ) const;
             recreate_function_type recreate_function_value( &::SireMol::GeometryPerturbations::recreate );
             
             GeometryPerturbations_exposer.def( 
@@ -89,7 +89,7 @@ void register_GeometryPerturbations_class(){
         }
         { //::SireMol::GeometryPerturbations::recreate
         
-            typedef ::SireMol::PerturbationPtr ( ::SireMol::GeometryPerturbations::*recreate_function_type )( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::PerturbationPtr ( ::SireMol::GeometryPerturbations::*recreate_function_type)( ::SireBase::PropertyMap const & ) const;
             recreate_function_type recreate_function_value( &::SireMol::GeometryPerturbations::recreate );
             
             GeometryPerturbations_exposer.def( 
@@ -100,7 +100,7 @@ void register_GeometryPerturbations_class(){
         }
         { //::SireMol::GeometryPerturbations::recreate
         
-            typedef ::SireMol::PerturbationPtr ( ::SireMol::GeometryPerturbations::*recreate_function_type )( ::SireCAS::Expression const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::PerturbationPtr ( ::SireMol::GeometryPerturbations::*recreate_function_type)( ::SireCAS::Expression const &,::SireBase::PropertyMap const & ) const;
             recreate_function_type recreate_function_value( &::SireMol::GeometryPerturbations::recreate );
             
             GeometryPerturbations_exposer.def( 
@@ -111,7 +111,7 @@ void register_GeometryPerturbations_class(){
         }
         { //::SireMol::GeometryPerturbations::requiredProperties
         
-            typedef ::QSet< QString > ( ::SireMol::GeometryPerturbations::*requiredProperties_function_type )(  ) const;
+            typedef ::QSet< QString > ( ::SireMol::GeometryPerturbations::*requiredProperties_function_type)(  ) const;
             requiredProperties_function_type requiredProperties_function_value( &::SireMol::GeometryPerturbations::requiredProperties );
             
             GeometryPerturbations_exposer.def( 
@@ -121,7 +121,7 @@ void register_GeometryPerturbations_class(){
         }
         { //::SireMol::GeometryPerturbations::requiredSymbols
         
-            typedef ::QSet< SireCAS::Symbol > ( ::SireMol::GeometryPerturbations::*requiredSymbols_function_type )(  ) const;
+            typedef ::QSet< SireCAS::Symbol > ( ::SireMol::GeometryPerturbations::*requiredSymbols_function_type)(  ) const;
             requiredSymbols_function_type requiredSymbols_function_value( &::SireMol::GeometryPerturbations::requiredSymbols );
             
             GeometryPerturbations_exposer.def( 
@@ -131,7 +131,7 @@ void register_GeometryPerturbations_class(){
         }
         { //::SireMol::GeometryPerturbations::substitute
         
-            typedef ::SireMol::PerturbationPtr ( ::SireMol::GeometryPerturbations::*substitute_function_type )( ::SireCAS::Identities const & ) const;
+            typedef ::SireMol::PerturbationPtr ( ::SireMol::GeometryPerturbations::*substitute_function_type)( ::SireCAS::Identities const & ) const;
             substitute_function_type substitute_function_value( &::SireMol::GeometryPerturbations::substitute );
             
             GeometryPerturbations_exposer.def( 
@@ -142,7 +142,7 @@ void register_GeometryPerturbations_class(){
         }
         { //::SireMol::GeometryPerturbations::substitute
         
-            typedef ::SireMol::PerturbationPtr ( ::SireMol::GeometryPerturbations::*substitute_function_type )( ::SireCAS::Symbol const &,::SireCAS::Symbol const & ) const;
+            typedef ::SireMol::PerturbationPtr ( ::SireMol::GeometryPerturbations::*substitute_function_type)( ::SireCAS::Symbol const &,::SireCAS::Symbol const & ) const;
             substitute_function_type substitute_function_value( &::SireMol::GeometryPerturbations::substitute );
             
             GeometryPerturbations_exposer.def( 
@@ -153,7 +153,7 @@ void register_GeometryPerturbations_class(){
         }
         { //::SireMol::GeometryPerturbations::toString
         
-            typedef ::QString ( ::SireMol::GeometryPerturbations::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::GeometryPerturbations::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::GeometryPerturbations::toString );
             
             GeometryPerturbations_exposer.def( 
@@ -173,7 +173,7 @@ void register_GeometryPerturbations_class(){
         }
         { //::SireMol::GeometryPerturbations::wouldChange
         
-            typedef bool ( ::SireMol::GeometryPerturbations::*wouldChange_function_type )( ::SireMol::Molecule const &,::SireCAS::Values const & ) const;
+            typedef bool ( ::SireMol::GeometryPerturbations::*wouldChange_function_type)( ::SireMol::Molecule const &,::SireCAS::Values const & ) const;
             wouldChange_function_type wouldChange_function_value( &::SireMol::GeometryPerturbations::wouldChange );
             
             GeometryPerturbations_exposer.def( 

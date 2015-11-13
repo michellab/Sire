@@ -44,7 +44,7 @@ void register_AngleSymbols_class(){
         bp::scope AngleSymbols_scope( AngleSymbols_exposer );
         { //::SireMM::AngleSymbols::theta
         
-            typedef ::SireCAS::Symbol const & ( ::SireMM::AngleSymbols::*theta_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMM::AngleSymbols::*theta_function_type)(  ) const;
             theta_function_type theta_function_value( &::SireMM::AngleSymbols::theta );
             
             AngleSymbols_exposer.def( 

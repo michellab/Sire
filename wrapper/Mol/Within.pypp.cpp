@@ -48,7 +48,7 @@ void register_Within_class(){
         Within_exposer.def( bp::init< SireMol::Within const & >(( bp::arg("other") )) );
         { //::SireMol::Within::hash
         
-            typedef ::uint ( ::SireMol::Within::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::Within::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::Within::hash );
             
             Within_exposer.def( 
@@ -58,7 +58,7 @@ void register_Within_class(){
         }
         { //::SireMol::Within::isNull
         
-            typedef bool ( ::SireMol::Within::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::Within::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::Within::isNull );
             
             Within_exposer.def( 
@@ -68,7 +68,7 @@ void register_Within_class(){
         }
         { //::SireMol::Within::map
         
-            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::Within::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::Within::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireMol::Within::map );
             
             Within_exposer.def( 
@@ -79,7 +79,7 @@ void register_Within_class(){
         }
         { //::SireMol::Within::map
         
-            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::Within::*map_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::Within::*map_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             map_function_type map_function_value( &::SireMol::Within::map );
             
             Within_exposer.def( 
@@ -91,7 +91,7 @@ void register_Within_class(){
         Within_exposer.def( bp::self != bp::self );
         { //::SireMol::Within::operator=
         
-            typedef ::SireMol::Within & ( ::SireMol::Within::*assign_function_type )( ::SireMol::Within const & ) ;
+            typedef ::SireMol::Within & ( ::SireMol::Within::*assign_function_type)( ::SireMol::Within const & ) ;
             assign_function_type assign_function_value( &::SireMol::Within::operator= );
             
             Within_exposer.def( 
@@ -105,7 +105,7 @@ void register_Within_class(){
         Within_exposer.def( bp::self == bp::self );
         { //::SireMol::Within::toString
         
-            typedef ::QString ( ::SireMol::Within::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::Within::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::Within::toString );
             
             Within_exposer.def( 
@@ -125,7 +125,7 @@ void register_Within_class(){
         }
         { //::SireMol::Within::what
         
-            typedef char const * ( ::SireMol::Within::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::Within::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::Within::what );
             
             Within_exposer.def( 

@@ -44,7 +44,7 @@ void register_ComponentConstraint_class(){
         ComponentConstraint_exposer.def( bp::init< SireSystem::ComponentConstraint const & >(( bp::arg("other") )) );
         { //::SireSystem::ComponentConstraint::component
         
-            typedef ::SireCAS::Symbol const & ( ::SireSystem::ComponentConstraint::*component_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireSystem::ComponentConstraint::*component_function_type)(  ) const;
             component_function_type component_function_value( &::SireSystem::ComponentConstraint::component );
             
             ComponentConstraint_exposer.def( 
@@ -55,7 +55,7 @@ void register_ComponentConstraint_class(){
         }
         { //::SireSystem::ComponentConstraint::expression
         
-            typedef ::SireCAS::Expression const & ( ::SireSystem::ComponentConstraint::*expression_function_type )(  ) const;
+            typedef ::SireCAS::Expression const & ( ::SireSystem::ComponentConstraint::*expression_function_type)(  ) const;
             expression_function_type expression_function_value( &::SireSystem::ComponentConstraint::expression );
             
             ComponentConstraint_exposer.def( 
@@ -67,7 +67,7 @@ void register_ComponentConstraint_class(){
         ComponentConstraint_exposer.def( bp::self != bp::self );
         { //::SireSystem::ComponentConstraint::operator=
         
-            typedef ::SireSystem::ComponentConstraint & ( ::SireSystem::ComponentConstraint::*assign_function_type )( ::SireSystem::ComponentConstraint const & ) ;
+            typedef ::SireSystem::ComponentConstraint & ( ::SireSystem::ComponentConstraint::*assign_function_type)( ::SireSystem::ComponentConstraint const & ) ;
             assign_function_type assign_function_value( &::SireSystem::ComponentConstraint::operator= );
             
             ComponentConstraint_exposer.def( 
@@ -80,7 +80,7 @@ void register_ComponentConstraint_class(){
         ComponentConstraint_exposer.def( bp::self == bp::self );
         { //::SireSystem::ComponentConstraint::toString
         
-            typedef ::QString ( ::SireSystem::ComponentConstraint::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireSystem::ComponentConstraint::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireSystem::ComponentConstraint::toString );
             
             ComponentConstraint_exposer.def( 

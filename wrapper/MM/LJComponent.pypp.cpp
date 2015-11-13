@@ -31,7 +31,7 @@ void register_LJComponent_class(){
         LJComponent_exposer.def( bp::init< SireMM::LJComponent const & >(( bp::arg("other") )) );
         { //::SireMM::LJComponent::changeEnergy
         
-            typedef void ( ::SireMM::LJComponent::*changeEnergy_function_type )( ::SireFF::FF &,::SireMM::LJEnergy const & ) const;
+            typedef void ( ::SireMM::LJComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::LJEnergy const & ) const;
             changeEnergy_function_type changeEnergy_function_value( &::SireMM::LJComponent::changeEnergy );
             
             LJComponent_exposer.def( 
@@ -42,7 +42,7 @@ void register_LJComponent_class(){
         }
         { //::SireMM::LJComponent::setEnergy
         
-            typedef void ( ::SireMM::LJComponent::*setEnergy_function_type )( ::SireFF::FF &,::SireMM::LJEnergy const & ) const;
+            typedef void ( ::SireMM::LJComponent::*setEnergy_function_type)( ::SireFF::FF &,::SireMM::LJEnergy const & ) const;
             setEnergy_function_type setEnergy_function_value( &::SireMM::LJComponent::setEnergy );
             
             LJComponent_exposer.def( 
@@ -53,7 +53,7 @@ void register_LJComponent_class(){
         }
         { //::SireMM::LJComponent::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireMM::LJComponent::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireMM::LJComponent::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireMM::LJComponent::symbols );
             
             LJComponent_exposer.def( 
@@ -63,7 +63,7 @@ void register_LJComponent_class(){
         }
         { //::SireMM::LJComponent::total
         
-            typedef ::SireMM::LJComponent const & ( ::SireMM::LJComponent::*total_function_type )(  ) const;
+            typedef ::SireMM::LJComponent const & ( ::SireMM::LJComponent::*total_function_type)(  ) const;
             total_function_type total_function_value( &::SireMM::LJComponent::total );
             
             LJComponent_exposer.def( 
@@ -84,7 +84,7 @@ void register_LJComponent_class(){
         }
         { //::SireMM::LJComponent::what
         
-            typedef char const * ( ::SireMM::LJComponent::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::LJComponent::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::LJComponent::what );
             
             LJComponent_exposer.def( 

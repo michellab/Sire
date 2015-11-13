@@ -38,6 +38,7 @@ SIRE_BEGIN_HEADER
 namespace SireBase
 {
 class LengthProperty;
+class VariantProperty;
 }
 
 QDataStream& operator<<(QDataStream&, const SireBase::LengthProperty&);
@@ -61,7 +62,8 @@ friend QDataStream& ::operator>>(QDataStream&, LengthProperty&);
 public:
     LengthProperty();
     LengthProperty(Length value);
-    
+
+    LengthProperty(const VariantProperty &other);    
     LengthProperty(const LengthProperty &other);
     
     ~LengthProperty();

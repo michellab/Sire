@@ -51,7 +51,7 @@ void register_HybridMC_class(){
         HybridMC_exposer.def( bp::init< SireMove::HybridMC const & >(( bp::arg("other") )) );
         { //::SireMove::HybridMC::moleculeGroup
         
-            typedef ::SireMol::MoleculeGroup const & ( ::SireMove::HybridMC::*moleculeGroup_function_type )(  ) const;
+            typedef ::SireMol::MoleculeGroup const & ( ::SireMove::HybridMC::*moleculeGroup_function_type)(  ) const;
             moleculeGroup_function_type moleculeGroup_function_value( &::SireMove::HybridMC::moleculeGroup );
             
             HybridMC_exposer.def( 
@@ -62,7 +62,7 @@ void register_HybridMC_class(){
         }
         { //::SireMove::HybridMC::move
         
-            typedef void ( ::SireMove::HybridMC::*move_function_type )( ::SireSystem::System &,int,bool ) ;
+            typedef void ( ::SireMove::HybridMC::*move_function_type)( ::SireSystem::System &,int,bool ) ;
             move_function_type move_function_value( &::SireMove::HybridMC::move );
             
             HybridMC_exposer.def( 
@@ -73,7 +73,7 @@ void register_HybridMC_class(){
         }
         { //::SireMove::HybridMC::nDynamicsSteps
         
-            typedef int ( ::SireMove::HybridMC::*nDynamicsSteps_function_type )(  ) ;
+            typedef int ( ::SireMove::HybridMC::*nDynamicsSteps_function_type)(  ) ;
             nDynamicsSteps_function_type nDynamicsSteps_function_value( &::SireMove::HybridMC::nDynamicsSteps );
             
             HybridMC_exposer.def( 
@@ -84,7 +84,7 @@ void register_HybridMC_class(){
         HybridMC_exposer.def( bp::self != bp::self );
         { //::SireMove::HybridMC::operator=
         
-            typedef ::SireMove::HybridMC & ( ::SireMove::HybridMC::*assign_function_type )( ::SireMove::HybridMC const & ) ;
+            typedef ::SireMove::HybridMC & ( ::SireMove::HybridMC::*assign_function_type)( ::SireMove::HybridMC const & ) ;
             assign_function_type assign_function_value( &::SireMove::HybridMC::operator= );
             
             HybridMC_exposer.def( 
@@ -97,7 +97,7 @@ void register_HybridMC_class(){
         HybridMC_exposer.def( bp::self == bp::self );
         { //::SireMove::HybridMC::setCoordinatesProperty
         
-            typedef void ( ::SireMove::HybridMC::*setCoordinatesProperty_function_type )( ::SireBase::PropertyName const & ) ;
+            typedef void ( ::SireMove::HybridMC::*setCoordinatesProperty_function_type)( ::SireBase::PropertyName const & ) ;
             setCoordinatesProperty_function_type setCoordinatesProperty_function_value( &::SireMove::HybridMC::setCoordinatesProperty );
             
             HybridMC_exposer.def( 
@@ -108,7 +108,7 @@ void register_HybridMC_class(){
         }
         { //::SireMove::HybridMC::setGenerator
         
-            typedef void ( ::SireMove::HybridMC::*setGenerator_function_type )( ::SireMaths::RanGenerator const & ) ;
+            typedef void ( ::SireMove::HybridMC::*setGenerator_function_type)( ::SireMaths::RanGenerator const & ) ;
             setGenerator_function_type setGenerator_function_value( &::SireMove::HybridMC::setGenerator );
             
             HybridMC_exposer.def( 
@@ -119,7 +119,7 @@ void register_HybridMC_class(){
         }
         { //::SireMove::HybridMC::setNDynamicsSteps
         
-            typedef void ( ::SireMove::HybridMC::*setNDynamicsSteps_function_type )( int ) ;
+            typedef void ( ::SireMove::HybridMC::*setNDynamicsSteps_function_type)( int ) ;
             setNDynamicsSteps_function_type setNDynamicsSteps_function_value( &::SireMove::HybridMC::setNDynamicsSteps );
             
             HybridMC_exposer.def( 
@@ -130,7 +130,7 @@ void register_HybridMC_class(){
         }
         { //::SireMove::HybridMC::setSpaceProperty
         
-            typedef void ( ::SireMove::HybridMC::*setSpaceProperty_function_type )( ::SireBase::PropertyName const & ) ;
+            typedef void ( ::SireMove::HybridMC::*setSpaceProperty_function_type)( ::SireBase::PropertyName const & ) ;
             setSpaceProperty_function_type setSpaceProperty_function_value( &::SireMove::HybridMC::setSpaceProperty );
             
             HybridMC_exposer.def( 
@@ -141,7 +141,7 @@ void register_HybridMC_class(){
         }
         { //::SireMove::HybridMC::setTimeStep
         
-            typedef void ( ::SireMove::HybridMC::*setTimeStep_function_type )( ::SireUnits::Dimension::Time ) ;
+            typedef void ( ::SireMove::HybridMC::*setTimeStep_function_type)( ::SireUnits::Dimension::Time ) ;
             setTimeStep_function_type setTimeStep_function_value( &::SireMove::HybridMC::setTimeStep );
             
             HybridMC_exposer.def( 
@@ -152,7 +152,7 @@ void register_HybridMC_class(){
         }
         { //::SireMove::HybridMC::setVelocityGenerator
         
-            typedef void ( ::SireMove::HybridMC::*setVelocityGenerator_function_type )( ::SireMove::HMCVelGen const & ) ;
+            typedef void ( ::SireMove::HybridMC::*setVelocityGenerator_function_type)( ::SireMove::HMCVelGen const & ) ;
             setVelocityGenerator_function_type setVelocityGenerator_function_value( &::SireMove::HybridMC::setVelocityGenerator );
             
             HybridMC_exposer.def( 
@@ -163,7 +163,7 @@ void register_HybridMC_class(){
         }
         { //::SireMove::HybridMC::timeStep
         
-            typedef ::SireUnits::Dimension::Time ( ::SireMove::HybridMC::*timeStep_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Time ( ::SireMove::HybridMC::*timeStep_function_type)(  ) const;
             timeStep_function_type timeStep_function_value( &::SireMove::HybridMC::timeStep );
             
             HybridMC_exposer.def( 
@@ -173,7 +173,7 @@ void register_HybridMC_class(){
         }
         { //::SireMove::HybridMC::toString
         
-            typedef ::QString ( ::SireMove::HybridMC::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMove::HybridMC::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMove::HybridMC::toString );
             
             HybridMC_exposer.def( 
@@ -193,7 +193,7 @@ void register_HybridMC_class(){
         }
         { //::SireMove::HybridMC::velocityGenerator
         
-            typedef ::SireMove::HMCVelGen const & ( ::SireMove::HybridMC::*velocityGenerator_function_type )(  ) const;
+            typedef ::SireMove::HMCVelGen const & ( ::SireMove::HybridMC::*velocityGenerator_function_type)(  ) const;
             velocityGenerator_function_type velocityGenerator_function_value( &::SireMove::HybridMC::velocityGenerator );
             
             HybridMC_exposer.def( 

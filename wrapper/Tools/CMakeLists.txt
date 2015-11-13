@@ -12,16 +12,19 @@ set ( SCRIPTS
         DCDFile.py
         FDTISingleBound.py
         FDTISingleFree.py
+        LSRC.py
         Nautilus.py 
         QuantumToMM.py
         OpenMMMD.py
         Plot.py
         WaterChanger.py
+        WaterView.py
         WSRC.py
+        FreeEnergyAnalysis.py
     )
 
 # If your script needs any default files (e.g. parameter or config files)
-# then put those files in a named directory in the Config directory and 
+# then put those files in a named directory in the Config directory and
 # add the name of that directory here. This directory will be copied
 # to the share/Sire/Tools
 set ( CONFIGDIRS
@@ -40,7 +43,7 @@ install( DIRECTORY ${CONFIGDIRS} DESTINATION ${SIRE_SHARE}/Tools
 # (do this here to make sure that it happens after installing
 #  everything else)
 if (ANACONDA_BUILD)
-  # copy the files from the pkg directory to the anaconda lib and bin 
+  # copy the files from the pkg directory to the anaconda lib and bin
   # directories
   install( CODE "execute_process(COMMAND \"${ANACONDA_BASE}/bin/python\"
                       ${CMAKE_SOURCE_DIR}/build/copy_into_conda.py
@@ -57,4 +60,8 @@ if (ANACONDA_BUILD)
        	              ${CMAKE_INSTALL_PREFIX}/bin ${ANACONDA_BASE}/bin force
        	                    WORKING_DIRECTORY \"${ANACONDA_BASE}\")" )
 
+  install( CODE "execute_process(COMMAND \"${ANACONDA_BASE}/bin/python\"
+                      ${CMAKE_SOURCE_DIR}/build/copy_into_conda.py
+                      ${CMAKE_INSTALL_PREFIX}/share/Sire ${ANACONDA_BASE}/share/Sire force
+                            WORKING_DIRECTORY \"${ANACONDA_BASE}\")" )
 endif()

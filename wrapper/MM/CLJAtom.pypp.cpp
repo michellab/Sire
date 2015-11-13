@@ -55,11 +55,11 @@ void register_CLJAtom_class(){
         typedef bp::class_< SireMM::CLJAtom > CLJAtom_exposer_t;
         CLJAtom_exposer_t CLJAtom_exposer = CLJAtom_exposer_t( "CLJAtom", bp::init< >() );
         bp::scope CLJAtom_scope( CLJAtom_exposer );
-        CLJAtom_exposer.def( bp::init< SireMaths::Vector, SireUnits::Dimension::Charge, SireMM::LJParameter, bp::optional< qint32 > >(( bp::arg("coords"), bp::arg("charge"), bp::arg("ljparam"), bp::arg("idnum")=(int)(1) )) );
+        CLJAtom_exposer.def( bp::init< SireMaths::Vector, SireUnits::Dimension::Charge, SireMM::LJParameter, bp::optional< qint32 > >(( bp::arg("coords"), bp::arg("charge"), bp::arg("ljparam"), bp::arg("idnum")=(::qint32)(1) )) );
         CLJAtom_exposer.def( bp::init< SireMM::CLJAtom const & >(( bp::arg("other") )) );
         { //::SireMM::CLJAtom::ID
         
-            typedef ::qint32 ( ::SireMM::CLJAtom::*ID_function_type )(  ) const;
+            typedef ::qint32 ( ::SireMM::CLJAtom::*ID_function_type)(  ) const;
             ID_function_type ID_function_value( &::SireMM::CLJAtom::ID );
             
             CLJAtom_exposer.def( 
@@ -80,7 +80,7 @@ void register_CLJAtom_class(){
         }
         { //::SireMM::CLJAtom::charge
         
-            typedef ::SireUnits::Dimension::Charge ( ::SireMM::CLJAtom::*charge_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Charge ( ::SireMM::CLJAtom::*charge_function_type)(  ) const;
             charge_function_type charge_function_value( &::SireMM::CLJAtom::charge );
             
             CLJAtom_exposer.def( 
@@ -90,7 +90,7 @@ void register_CLJAtom_class(){
         }
         { //::SireMM::CLJAtom::coordinates
         
-            typedef ::SireMaths::Vector ( ::SireMM::CLJAtom::*coordinates_function_type )(  ) const;
+            typedef ::SireMaths::Vector ( ::SireMM::CLJAtom::*coordinates_function_type)(  ) const;
             coordinates_function_type coordinates_function_value( &::SireMM::CLJAtom::coordinates );
             
             CLJAtom_exposer.def( 
@@ -100,7 +100,7 @@ void register_CLJAtom_class(){
         }
         { //::SireMM::CLJAtom::isDummy
         
-            typedef bool ( ::SireMM::CLJAtom::*isDummy_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJAtom::*isDummy_function_type)(  ) const;
             isDummy_function_type isDummy_function_value( &::SireMM::CLJAtom::isDummy );
             
             CLJAtom_exposer.def( 
@@ -110,7 +110,7 @@ void register_CLJAtom_class(){
         }
         { //::SireMM::CLJAtom::isNull
         
-            typedef bool ( ::SireMM::CLJAtom::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJAtom::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMM::CLJAtom::isNull );
             
             CLJAtom_exposer.def( 
@@ -120,7 +120,7 @@ void register_CLJAtom_class(){
         }
         { //::SireMM::CLJAtom::ljParameter
         
-            typedef ::SireMM::LJParameter ( ::SireMM::CLJAtom::*ljParameter_function_type )(  ) const;
+            typedef ::SireMM::LJParameter ( ::SireMM::CLJAtom::*ljParameter_function_type)(  ) const;
             ljParameter_function_type ljParameter_function_value( &::SireMM::CLJAtom::ljParameter );
             
             CLJAtom_exposer.def( 
@@ -130,7 +130,7 @@ void register_CLJAtom_class(){
         }
         { //::SireMM::CLJAtom::negate
         
-            typedef ::SireMM::CLJAtom ( ::SireMM::CLJAtom::*negate_function_type )(  ) const;
+            typedef ::SireMM::CLJAtom ( ::SireMM::CLJAtom::*negate_function_type)(  ) const;
             negate_function_type negate_function_value( &::SireMM::CLJAtom::negate );
             
             CLJAtom_exposer.def( 
@@ -141,7 +141,7 @@ void register_CLJAtom_class(){
         CLJAtom_exposer.def( bp::self != bp::self );
         { //::SireMM::CLJAtom::operator=
         
-            typedef ::SireMM::CLJAtom & ( ::SireMM::CLJAtom::*assign_function_type )( ::SireMM::CLJAtom const & ) ;
+            typedef ::SireMM::CLJAtom & ( ::SireMM::CLJAtom::*assign_function_type)( ::SireMM::CLJAtom const & ) ;
             assign_function_type assign_function_value( &::SireMM::CLJAtom::operator= );
             
             CLJAtom_exposer.def( 
@@ -154,7 +154,7 @@ void register_CLJAtom_class(){
         CLJAtom_exposer.def( bp::self == bp::self );
         { //::SireMM::CLJAtom::toString
         
-            typedef ::QString ( ::SireMM::CLJAtom::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMM::CLJAtom::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMM::CLJAtom::toString );
             
             CLJAtom_exposer.def( 
@@ -174,7 +174,7 @@ void register_CLJAtom_class(){
         }
         { //::SireMM::CLJAtom::what
         
-            typedef char const * ( ::SireMM::CLJAtom::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::CLJAtom::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::CLJAtom::what );
             
             CLJAtom_exposer.def( 

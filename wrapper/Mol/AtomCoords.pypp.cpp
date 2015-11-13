@@ -52,7 +52,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::array
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef ::SireVol::CoordGroupArray const & ( ::SireMol::AtomProperty< SireMaths::Vector >::*array_function_type )(  ) const;
+            typedef ::SireVol::CoordGroupArray const & ( ::SireMol::AtomProperty< SireMaths::Vector >::*array_function_type)(  ) const;
             array_function_type array_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::array );
             
             AtomCoords_exposer.def( 
@@ -64,7 +64,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::assertCanConvert
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*assertCanConvert_function_type )( ::QVariant const & ) const;
+            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*assertCanConvert_function_type)( ::QVariant const & ) const;
             assertCanConvert_function_type assertCanConvert_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::assertCanConvert );
             
             AtomCoords_exposer.def( 
@@ -76,7 +76,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::assignFrom
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*assignFrom_function_type )( ::SireMol::AtomProperty< QVariant > const & ) ;
+            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*assignFrom_function_type)( ::SireMol::AtomProperty< QVariant > const & ) ;
             assignFrom_function_type assignFrom_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::assignFrom );
             
             AtomCoords_exposer.def( 
@@ -88,7 +88,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::at
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef ::SireVol::CoordGroup const & ( ::SireMol::AtomProperty< SireMaths::Vector >::*at_function_type )( ::SireMol::CGIdx ) const;
+            typedef ::SireVol::CoordGroup const & ( ::SireMol::AtomProperty< SireMaths::Vector >::*at_function_type)( ::SireMol::CGIdx ) const;
             at_function_type at_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::at );
             
             AtomCoords_exposer.def( 
@@ -101,7 +101,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::at
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef ::SireMaths::Vector const & ( ::SireMol::AtomProperty< SireMaths::Vector >::*at_function_type )( ::SireMol::CGAtomIdx const & ) const;
+            typedef ::SireMaths::Vector const & ( ::SireMol::AtomProperty< SireMaths::Vector >::*at_function_type)( ::SireMol::CGAtomIdx const & ) const;
             at_function_type at_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::at );
             
             AtomCoords_exposer.def( 
@@ -114,7 +114,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::canConvert
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef bool ( ::SireMol::AtomProperty< SireMaths::Vector >::*canConvert_function_type )( ::QVariant const & ) const;
+            typedef bool ( ::SireMol::AtomProperty< SireMaths::Vector >::*canConvert_function_type)( ::QVariant const & ) const;
             canConvert_function_type canConvert_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::canConvert );
             
             AtomCoords_exposer.def( 
@@ -126,7 +126,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::changeFrame
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*changeFrame_function_type )( ::SireMaths::AxisSet const &,::SireMaths::AxisSet const & ) ;
+            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*changeFrame_function_type)( ::SireMaths::AxisSet const &,::SireMaths::AxisSet const & ) ;
             changeFrame_function_type changeFrame_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::changeFrame );
             
             AtomCoords_exposer.def( 
@@ -138,7 +138,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::changeFrame
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*changeFrame_function_type )( ::SireMol::CGIdx,::SireMaths::AxisSet const &,::SireMaths::AxisSet const & ) ;
+            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*changeFrame_function_type)( ::SireMol::CGIdx,::SireMaths::AxisSet const &,::SireMaths::AxisSet const & ) ;
             changeFrame_function_type changeFrame_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::changeFrame );
             
             AtomCoords_exposer.def( 
@@ -150,7 +150,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::copyFrom
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*copyFrom_function_type )( ::QVector< SireMaths::Vector > const & ) ;
+            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*copyFrom_function_type)( ::QVector< SireMaths::Vector > const & ) ;
             copyFrom_function_type copyFrom_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::copyFrom );
             
             AtomCoords_exposer.def( 
@@ -162,7 +162,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::copyFrom
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*copyFrom_function_type )( ::QVector< SireMaths::Vector > const &,::SireMol::AtomSelection const & ) ;
+            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*copyFrom_function_type)( ::QVector< SireMaths::Vector > const &,::SireMol::AtomSelection const & ) ;
             copyFrom_function_type copyFrom_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::copyFrom );
             
             AtomCoords_exposer.def( 
@@ -174,7 +174,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::count
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< SireMaths::Vector >::*count_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomProperty< SireMaths::Vector >::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::count );
             
             AtomCoords_exposer.def( 
@@ -185,7 +185,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::divide
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireMaths::Vector >::*divide_function_type )( ::QVector< SireMol::AtomSelection > const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireMaths::Vector >::*divide_function_type)( ::QVector< SireMol::AtomSelection > const & ) const;
             divide_function_type divide_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::divide );
             
             AtomCoords_exposer.def( 
@@ -197,7 +197,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::divideByResidue
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireMaths::Vector >::*divideByResidue_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireMaths::Vector >::*divideByResidue_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             divideByResidue_function_type divideByResidue_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::divideByResidue );
             
             AtomCoords_exposer.def( 
@@ -221,7 +221,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::get
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef ::SireVol::CoordGroup const & ( ::SireMol::AtomProperty< SireMaths::Vector >::*get_function_type )( ::SireMol::CGIdx ) const;
+            typedef ::SireVol::CoordGroup const & ( ::SireMol::AtomProperty< SireMaths::Vector >::*get_function_type)( ::SireMol::CGIdx ) const;
             get_function_type get_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::get );
             
             AtomCoords_exposer.def( 
@@ -234,7 +234,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::get
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef ::SireMaths::Vector const & ( ::SireMol::AtomProperty< SireMaths::Vector >::*get_function_type )( ::SireMol::CGAtomIdx const & ) const;
+            typedef ::SireMaths::Vector const & ( ::SireMol::AtomProperty< SireMaths::Vector >::*get_function_type)( ::SireMol::CGAtomIdx const & ) const;
             get_function_type get_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::get );
             
             AtomCoords_exposer.def( 
@@ -247,7 +247,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::isCompatibleWith
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef bool ( ::SireMol::AtomProperty< SireMaths::Vector >::*isCompatibleWith_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef bool ( ::SireMol::AtomProperty< SireMaths::Vector >::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::isCompatibleWith );
             
             AtomCoords_exposer.def( 
@@ -259,7 +259,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::mapInto
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*mapInto_function_type )( ::SireMaths::AxisSet const & ) ;
+            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*mapInto_function_type)( ::SireMaths::AxisSet const & ) ;
             mapInto_function_type mapInto_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::mapInto );
             
             AtomCoords_exposer.def( 
@@ -271,7 +271,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::mapInto
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*mapInto_function_type )( ::SireMol::CGIdx,::SireMaths::AxisSet const & ) ;
+            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*mapInto_function_type)( ::SireMol::CGIdx,::SireMaths::AxisSet const & ) ;
             mapInto_function_type mapInto_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::mapInto );
             
             AtomCoords_exposer.def( 
@@ -283,7 +283,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::merge
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireMaths::Vector >::*merge_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireMaths::Vector >::*merge_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             merge_function_type merge_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::merge );
             
             AtomCoords_exposer.def( 
@@ -295,7 +295,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::nAtoms
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< SireMaths::Vector >::*nAtoms_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomProperty< SireMaths::Vector >::*nAtoms_function_type)(  ) const;
             nAtoms_function_type nAtoms_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::nAtoms );
             
             AtomCoords_exposer.def( 
@@ -306,7 +306,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::nAtoms
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< SireMaths::Vector >::*nAtoms_function_type )( ::SireMol::CGIdx ) const;
+            typedef int ( ::SireMol::AtomProperty< SireMaths::Vector >::*nAtoms_function_type)( ::SireMol::CGIdx ) const;
             nAtoms_function_type nAtoms_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::nAtoms );
             
             AtomCoords_exposer.def( 
@@ -318,7 +318,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::nCutGroups
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< SireMaths::Vector >::*nCutGroups_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomProperty< SireMaths::Vector >::*nCutGroups_function_type)(  ) const;
             nCutGroups_function_type nCutGroups_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::nCutGroups );
             
             AtomCoords_exposer.def( 
@@ -330,7 +330,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::operator=
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef ::SireMol::AtomProperty< SireMaths::Vector > & ( ::SireMol::AtomProperty< SireMaths::Vector >::*assign_function_type )( ::SireMol::AtomProperty< SireMaths::Vector > const & ) ;
+            typedef ::SireMol::AtomProperty< SireMaths::Vector > & ( ::SireMol::AtomProperty< SireMaths::Vector >::*assign_function_type)( ::SireMol::AtomProperty< SireMaths::Vector > const & ) ;
             assign_function_type assign_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::operator= );
             
             AtomCoords_exposer.def( 
@@ -344,7 +344,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::operator[]
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef ::SireVol::CoordGroup const & ( ::SireMol::AtomProperty< SireMaths::Vector >::*__getitem___function_type )( ::SireMol::CGIdx ) const;
+            typedef ::SireVol::CoordGroup const & ( ::SireMol::AtomProperty< SireMaths::Vector >::*__getitem___function_type)( ::SireMol::CGIdx ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireMaths::Vector >::operator[] );
             
             AtomCoords_exposer.def( 
@@ -357,7 +357,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::operator[]
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef ::SireMaths::Vector const & ( ::SireMol::AtomProperty< SireMaths::Vector >::*__getitem___function_type )( ::SireMol::CGAtomIdx const & ) const;
+            typedef ::SireMaths::Vector const & ( ::SireMol::AtomProperty< SireMaths::Vector >::*__getitem___function_type)( ::SireMol::CGAtomIdx const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireMaths::Vector >::operator[] );
             
             AtomCoords_exposer.def( 
@@ -370,7 +370,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::rotate
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*rotate_function_type )( ::SireMaths::Quaternion const &,::SireMaths::Vector const & ) ;
+            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*rotate_function_type)( ::SireMaths::Quaternion const &,::SireMaths::Vector const & ) ;
             rotate_function_type rotate_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::rotate );
             
             AtomCoords_exposer.def( 
@@ -382,7 +382,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::rotate
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*rotate_function_type )( ::SireMaths::Matrix const &,::SireMaths::Vector const & ) ;
+            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*rotate_function_type)( ::SireMaths::Matrix const &,::SireMaths::Vector const & ) ;
             rotate_function_type rotate_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::rotate );
             
             AtomCoords_exposer.def( 
@@ -394,7 +394,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::rotate
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*rotate_function_type )( ::SireMol::CGIdx,::SireMaths::Quaternion const &,::SireMaths::Vector const & ) ;
+            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*rotate_function_type)( ::SireMol::CGIdx,::SireMaths::Quaternion const &,::SireMaths::Vector const & ) ;
             rotate_function_type rotate_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::rotate );
             
             AtomCoords_exposer.def( 
@@ -406,7 +406,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::rotate
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*rotate_function_type )( ::SireMol::CGIdx,::SireMaths::Matrix const &,::SireMaths::Vector const & ) ;
+            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*rotate_function_type)( ::SireMol::CGIdx,::SireMaths::Matrix const &,::SireMaths::Vector const & ) ;
             rotate_function_type rotate_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::rotate );
             
             AtomCoords_exposer.def( 
@@ -418,7 +418,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::set
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef ::SireMol::AtomProperty< SireMaths::Vector > & ( ::SireMol::AtomProperty< SireMaths::Vector >::*set_function_type )( ::SireMol::CGAtomIdx const &,::SireMaths::Vector const & ) ;
+            typedef ::SireMol::AtomProperty< SireMaths::Vector > & ( ::SireMol::AtomProperty< SireMaths::Vector >::*set_function_type)( ::SireMol::CGAtomIdx const &,::SireMaths::Vector const & ) ;
             set_function_type set_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::set );
             
             AtomCoords_exposer.def( 
@@ -431,7 +431,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::set
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef ::SireMol::AtomProperty< SireMaths::Vector > & ( ::SireMol::AtomProperty< SireMaths::Vector >::*set_function_type )( ::SireMol::CGIdx,::QVector< SireMaths::Vector > const & ) ;
+            typedef ::SireMol::AtomProperty< SireMaths::Vector > & ( ::SireMol::AtomProperty< SireMaths::Vector >::*set_function_type)( ::SireMol::CGIdx,::QVector< SireMaths::Vector > const & ) ;
             set_function_type set_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::set );
             
             AtomCoords_exposer.def( 
@@ -444,7 +444,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::set
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef ::SireMol::AtomProperty< SireMaths::Vector > & ( ::SireMol::AtomProperty< SireMaths::Vector >::*set_function_type )( ::SireMol::CGIdx,::SireVol::CoordGroup const & ) ;
+            typedef ::SireMol::AtomProperty< SireMaths::Vector > & ( ::SireMol::AtomProperty< SireMaths::Vector >::*set_function_type)( ::SireMol::CGIdx,::SireVol::CoordGroup const & ) ;
             set_function_type set_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::set );
             
             AtomCoords_exposer.def( 
@@ -457,7 +457,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::size
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< SireMaths::Vector >::*size_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomProperty< SireMaths::Vector >::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::size );
             
             AtomCoords_exposer.def( 
@@ -468,7 +468,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::toVariant
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef ::SireMol::AtomProperty< QVariant > ( ::SireMol::AtomProperty< SireMaths::Vector >::*toVariant_function_type )(  ) const;
+            typedef ::SireMol::AtomProperty< QVariant > ( ::SireMol::AtomProperty< SireMaths::Vector >::*toVariant_function_type)(  ) const;
             toVariant_function_type toVariant_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::toVariant );
             
             AtomCoords_exposer.def( 
@@ -479,7 +479,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::toVector
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef ::QVector< SireMaths::Vector > ( ::SireMol::AtomProperty< SireMaths::Vector >::*toVector_function_type )(  ) const;
+            typedef ::QVector< SireMaths::Vector > ( ::SireMol::AtomProperty< SireMaths::Vector >::*toVector_function_type)(  ) const;
             toVector_function_type toVector_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::toVector );
             
             AtomCoords_exposer.def( 
@@ -490,7 +490,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::toVector
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef ::QVector< SireMaths::Vector > ( ::SireMol::AtomProperty< SireMaths::Vector >::*toVector_function_type )( ::SireMol::AtomSelection const & ) const;
+            typedef ::QVector< SireMaths::Vector > ( ::SireMol::AtomProperty< SireMaths::Vector >::*toVector_function_type)( ::SireMol::AtomSelection const & ) const;
             toVector_function_type toVector_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::toVector );
             
             AtomCoords_exposer.def( 
@@ -502,7 +502,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::transform
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*transform_function_type )( ::SireMaths::Transform const & ) ;
+            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*transform_function_type)( ::SireMaths::Transform const & ) ;
             transform_function_type transform_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::transform );
             
             AtomCoords_exposer.def( 
@@ -514,7 +514,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::transform
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*transform_function_type )( ::SireMol::CGIdx,::SireMaths::Transform const & ) ;
+            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*transform_function_type)( ::SireMol::CGIdx,::SireMaths::Transform const & ) ;
             transform_function_type transform_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::transform );
             
             AtomCoords_exposer.def( 
@@ -526,7 +526,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::translate
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*translate_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*translate_function_type)( ::SireMaths::Vector const & ) ;
             translate_function_type translate_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::translate );
             
             AtomCoords_exposer.def( 
@@ -538,7 +538,7 @@ void register_AtomCoords_class(){
         { //::SireMol::AtomProperty< SireMaths::Vector >::translate
         
             typedef SireMol::AtomProperty< SireMaths::Vector > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*translate_function_type )( ::SireMol::CGIdx,::SireMaths::Vector const & ) ;
+            typedef void ( ::SireMol::AtomProperty< SireMaths::Vector >::*translate_function_type)( ::SireMol::CGIdx,::SireMaths::Vector const & ) ;
             translate_function_type translate_function_value( &::SireMol::AtomProperty< SireMaths::Vector >::translate );
             
             AtomCoords_exposer.def( 

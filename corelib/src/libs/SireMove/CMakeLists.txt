@@ -142,6 +142,7 @@ set ( SIREMOVE_OPENMM_SOURCES
 if ( ${SIRE_USE_OPENMM} )
   if ( ${OpenMM_FOUND} )
     message ( STATUS "Adding in OpenMM support to SireMove using OpenMM ${OpenMM_ROOT_DIR}" )
+    message ( STATUS "${OpenMM_LIBRARIES} | ${OpenMM_INCLUDE_DIR}" )
     set ( SIREMOVE_SOURCES  ${SIREMOVE_SOURCES} ${SIREMOVE_OPENMM_SOURCES} ${SIREMOVE_OPENMM_HEADERS} )
     set ( SIREMOVE_HEADERS  ${SIREMOVE_HEADERS} ${SIREMOVE_OPENMM_HEADERS} )
     set ( SIRE_OPENMM_LIBRARIES ${OpenMM_LIBRARIES} )
@@ -161,7 +162,7 @@ add_library (SireMove ${SIREMOVE_SOURCES})
 
 set_target_properties (SireMove PROPERTIES
                        VERSION ${SIRE_VERSION}
-                       SOVERSION ${SIRE_VERSION_MAJOR}
+                       SOVERSION ${S_VERSION_MAJOR}
                       )
 
 # Link to other Sire libraries

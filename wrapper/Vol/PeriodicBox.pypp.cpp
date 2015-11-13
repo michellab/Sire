@@ -46,7 +46,7 @@ void register_PeriodicBox_class(){
         PeriodicBox_exposer.def( bp::init< SireVol::PeriodicBox const & >(( bp::arg("other") )) );
         { //::SireVol::PeriodicBox::beyond
         
-            typedef bool ( ::SireVol::PeriodicBox::*beyond_function_type )( double,::SireVol::AABox const &,::SireVol::AABox const & ) const;
+            typedef bool ( ::SireVol::PeriodicBox::*beyond_function_type)( double,::SireVol::AABox const &,::SireVol::AABox const & ) const;
             beyond_function_type beyond_function_value( &::SireVol::PeriodicBox::beyond );
             
             PeriodicBox_exposer.def( 
@@ -57,7 +57,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::beyond
         
-            typedef bool ( ::SireVol::PeriodicBox::*beyond_function_type )( double,::SireVol::CoordGroup const &,::SireVol::CoordGroup const & ) const;
+            typedef bool ( ::SireVol::PeriodicBox::*beyond_function_type)( double,::SireVol::CoordGroup const &,::SireVol::CoordGroup const & ) const;
             beyond_function_type beyond_function_value( &::SireVol::PeriodicBox::beyond );
             
             PeriodicBox_exposer.def( 
@@ -68,7 +68,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::calcAngle
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireVol::PeriodicBox::*calcAngle_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireVol::PeriodicBox::*calcAngle_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
             calcAngle_function_type calcAngle_function_value( &::SireVol::PeriodicBox::calcAngle );
             
             PeriodicBox_exposer.def( 
@@ -79,7 +79,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::calcDihedral
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireVol::PeriodicBox::*calcDihedral_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const &,::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireVol::PeriodicBox::*calcDihedral_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const &,::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
             calcDihedral_function_type calcDihedral_function_value( &::SireVol::PeriodicBox::calcDihedral );
             
             PeriodicBox_exposer.def( 
@@ -90,7 +90,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::calcDist
         
-            typedef double ( ::SireVol::PeriodicBox::*calcDist_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            typedef double ( ::SireVol::PeriodicBox::*calcDist_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
             calcDist_function_type calcDist_function_value( &::SireVol::PeriodicBox::calcDist );
             
             PeriodicBox_exposer.def( 
@@ -101,7 +101,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::calcDist
         
-            typedef double ( ::SireVol::PeriodicBox::*calcDist_function_type )( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
+            typedef double ( ::SireVol::PeriodicBox::*calcDist_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
             calcDist_function_type calcDist_function_value( &::SireVol::PeriodicBox::calcDist );
             
             PeriodicBox_exposer.def( 
@@ -112,7 +112,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::calcDist
         
-            typedef double ( ::SireVol::PeriodicBox::*calcDist_function_type )( ::SireVol::CoordGroup const &,::SireMaths::Vector const &,::SireVol::DistMatrix & ) const;
+            typedef double ( ::SireVol::PeriodicBox::*calcDist_function_type)( ::SireVol::CoordGroup const &,::SireMaths::Vector const &,::SireVol::DistMatrix & ) const;
             calcDist_function_type calcDist_function_value( &::SireVol::PeriodicBox::calcDist );
             
             PeriodicBox_exposer.def( 
@@ -123,7 +123,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::calcDist2
         
-            typedef double ( ::SireVol::PeriodicBox::*calcDist2_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            typedef double ( ::SireVol::PeriodicBox::*calcDist2_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
             calcDist2_function_type calcDist2_function_value( &::SireVol::PeriodicBox::calcDist2 );
             
             PeriodicBox_exposer.def( 
@@ -134,7 +134,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::calcDist2
         
-            typedef double ( ::SireVol::PeriodicBox::*calcDist2_function_type )( ::SireVol::CoordGroup const &,::SireMaths::Vector const &,::SireVol::DistMatrix & ) const;
+            typedef double ( ::SireVol::PeriodicBox::*calcDist2_function_type)( ::SireVol::CoordGroup const &,::SireMaths::Vector const &,::SireVol::DistMatrix & ) const;
             calcDist2_function_type calcDist2_function_value( &::SireVol::PeriodicBox::calcDist2 );
             
             PeriodicBox_exposer.def( 
@@ -145,7 +145,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::calcDist2
         
-            typedef double ( ::SireVol::PeriodicBox::*calcDist2_function_type )( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
+            typedef double ( ::SireVol::PeriodicBox::*calcDist2_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
             calcDist2_function_type calcDist2_function_value( &::SireVol::PeriodicBox::calcDist2 );
             
             PeriodicBox_exposer.def( 
@@ -156,7 +156,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::calcDistVector
         
-            typedef ::SireMaths::DistVector ( ::SireVol::PeriodicBox::*calcDistVector_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            typedef ::SireMaths::DistVector ( ::SireVol::PeriodicBox::*calcDistVector_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
             calcDistVector_function_type calcDistVector_function_value( &::SireVol::PeriodicBox::calcDistVector );
             
             PeriodicBox_exposer.def( 
@@ -167,7 +167,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::calcDistVectors
         
-            typedef double ( ::SireVol::PeriodicBox::*calcDistVectors_function_type )( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistVectorMatrix & ) const;
+            typedef double ( ::SireVol::PeriodicBox::*calcDistVectors_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistVectorMatrix & ) const;
             calcDistVectors_function_type calcDistVectors_function_value( &::SireVol::PeriodicBox::calcDistVectors );
             
             PeriodicBox_exposer.def( 
@@ -178,7 +178,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::calcDistVectors
         
-            typedef double ( ::SireVol::PeriodicBox::*calcDistVectors_function_type )( ::SireVol::CoordGroup const &,::SireMaths::Vector const &,::SireVol::DistVectorMatrix & ) const;
+            typedef double ( ::SireVol::PeriodicBox::*calcDistVectors_function_type)( ::SireVol::CoordGroup const &,::SireMaths::Vector const &,::SireVol::DistVectorMatrix & ) const;
             calcDistVectors_function_type calcDistVectors_function_value( &::SireVol::PeriodicBox::calcDistVectors );
             
             PeriodicBox_exposer.def( 
@@ -189,7 +189,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::calcInvDist
         
-            typedef double ( ::SireVol::PeriodicBox::*calcInvDist_function_type )( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
+            typedef double ( ::SireVol::PeriodicBox::*calcInvDist_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
             calcInvDist_function_type calcInvDist_function_value( &::SireVol::PeriodicBox::calcInvDist );
             
             PeriodicBox_exposer.def( 
@@ -200,7 +200,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::calcInvDist2
         
-            typedef double ( ::SireVol::PeriodicBox::*calcInvDist2_function_type )( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
+            typedef double ( ::SireVol::PeriodicBox::*calcInvDist2_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
             calcInvDist2_function_type calcInvDist2_function_value( &::SireVol::PeriodicBox::calcInvDist2 );
             
             PeriodicBox_exposer.def( 
@@ -211,7 +211,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::dimensions
         
-            typedef ::SireMaths::Vector const & ( ::SireVol::PeriodicBox::*dimensions_function_type )(  ) const;
+            typedef ::SireMaths::Vector const & ( ::SireVol::PeriodicBox::*dimensions_function_type)(  ) const;
             dimensions_function_type dimensions_function_value( &::SireVol::PeriodicBox::dimensions );
             
             PeriodicBox_exposer.def( 
@@ -222,7 +222,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::getBoxCenter
         
-            typedef ::SireMaths::Vector ( ::SireVol::PeriodicBox::*getBoxCenter_function_type )( ::SireMaths::Vector const & ) const;
+            typedef ::SireMaths::Vector ( ::SireVol::PeriodicBox::*getBoxCenter_function_type)( ::SireMaths::Vector const & ) const;
             getBoxCenter_function_type getBoxCenter_function_value( &::SireVol::PeriodicBox::getBoxCenter );
             
             PeriodicBox_exposer.def( 
@@ -233,7 +233,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::getBoxCenter
         
-            typedef ::SireMaths::Vector ( ::SireVol::PeriodicBox::*getBoxCenter_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            typedef ::SireMaths::Vector ( ::SireVol::PeriodicBox::*getBoxCenter_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
             getBoxCenter_function_type getBoxCenter_function_value( &::SireVol::PeriodicBox::getBoxCenter );
             
             PeriodicBox_exposer.def( 
@@ -244,7 +244,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::getCopiesWithin
         
-            typedef ::QList< boost::tuples::tuple< double, SireVol::CoordGroup, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > > ( ::SireVol::PeriodicBox::*getCopiesWithin_function_type )( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,double ) const;
+            typedef ::QList< boost::tuples::tuple< double, SireVol::CoordGroup, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > > ( ::SireVol::PeriodicBox::*getCopiesWithin_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,double ) const;
             getCopiesWithin_function_type getCopiesWithin_function_value( &::SireVol::PeriodicBox::getCopiesWithin );
             
             PeriodicBox_exposer.def( 
@@ -255,7 +255,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::getImagesWithin
         
-            typedef ::QVector< SireMaths::Vector > ( ::SireVol::PeriodicBox::*getImagesWithin_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const &,double ) const;
+            typedef ::QVector< SireMaths::Vector > ( ::SireVol::PeriodicBox::*getImagesWithin_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const &,double ) const;
             getImagesWithin_function_type getImagesWithin_function_value( &::SireVol::PeriodicBox::getImagesWithin );
             
             PeriodicBox_exposer.def( 
@@ -266,7 +266,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::getMinimumImage
         
-            typedef ::SireVol::CoordGroup ( ::SireVol::PeriodicBox::*getMinimumImage_function_type )( ::SireVol::CoordGroup const &,::SireMaths::Vector const & ) const;
+            typedef ::SireVol::CoordGroup ( ::SireVol::PeriodicBox::*getMinimumImage_function_type)( ::SireVol::CoordGroup const &,::SireMaths::Vector const & ) const;
             getMinimumImage_function_type getMinimumImage_function_value( &::SireVol::PeriodicBox::getMinimumImage );
             
             PeriodicBox_exposer.def( 
@@ -277,7 +277,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::getMinimumImage
         
-            typedef ::SireVol::CoordGroupArray ( ::SireVol::PeriodicBox::*getMinimumImage_function_type )( ::SireVol::CoordGroupArray const &,::SireMaths::Vector const &,bool ) const;
+            typedef ::SireVol::CoordGroupArray ( ::SireVol::PeriodicBox::*getMinimumImage_function_type)( ::SireVol::CoordGroupArray const &,::SireMaths::Vector const &,bool ) const;
             getMinimumImage_function_type getMinimumImage_function_value( &::SireVol::PeriodicBox::getMinimumImage );
             
             PeriodicBox_exposer.def( 
@@ -288,7 +288,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::getMinimumImage
         
-            typedef ::SireVol::AABox ( ::SireVol::PeriodicBox::*getMinimumImage_function_type )( ::SireVol::AABox const &,::SireMaths::Vector const & ) const;
+            typedef ::SireVol::AABox ( ::SireVol::PeriodicBox::*getMinimumImage_function_type)( ::SireVol::AABox const &,::SireMaths::Vector const & ) const;
             getMinimumImage_function_type getMinimumImage_function_value( &::SireVol::PeriodicBox::getMinimumImage );
             
             PeriodicBox_exposer.def( 
@@ -299,7 +299,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::getMinimumImage
         
-            typedef ::SireMaths::Vector ( ::SireVol::PeriodicBox::*getMinimumImage_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            typedef ::SireMaths::Vector ( ::SireVol::PeriodicBox::*getMinimumImage_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
             getMinimumImage_function_type getMinimumImage_function_value( &::SireVol::PeriodicBox::getMinimumImage );
             
             PeriodicBox_exposer.def( 
@@ -310,7 +310,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::getRandomPoint
         
-            typedef ::SireMaths::Vector ( ::SireVol::PeriodicBox::*getRandomPoint_function_type )( ::SireMaths::Vector const &,::SireMaths::RanGenerator const & ) const;
+            typedef ::SireMaths::Vector ( ::SireVol::PeriodicBox::*getRandomPoint_function_type)( ::SireMaths::Vector const &,::SireMaths::RanGenerator const & ) const;
             getRandomPoint_function_type getRandomPoint_function_value( &::SireVol::PeriodicBox::getRandomPoint );
             
             PeriodicBox_exposer.def( 
@@ -321,7 +321,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::isCartesian
         
-            typedef bool ( ::SireVol::PeriodicBox::*isCartesian_function_type )(  ) const;
+            typedef bool ( ::SireVol::PeriodicBox::*isCartesian_function_type)(  ) const;
             isCartesian_function_type isCartesian_function_value( &::SireVol::PeriodicBox::isCartesian );
             
             PeriodicBox_exposer.def( 
@@ -331,7 +331,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::isPeriodic
         
-            typedef bool ( ::SireVol::PeriodicBox::*isPeriodic_function_type )(  ) const;
+            typedef bool ( ::SireVol::PeriodicBox::*isPeriodic_function_type)(  ) const;
             isPeriodic_function_type isPeriodic_function_value( &::SireVol::PeriodicBox::isPeriodic );
             
             PeriodicBox_exposer.def( 
@@ -341,7 +341,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::maxCoords
         
-            typedef ::SireMaths::Vector ( ::SireVol::PeriodicBox::*maxCoords_function_type )( ::SireMaths::Vector const & ) const;
+            typedef ::SireMaths::Vector ( ::SireVol::PeriodicBox::*maxCoords_function_type)( ::SireMaths::Vector const & ) const;
             maxCoords_function_type maxCoords_function_value( &::SireVol::PeriodicBox::maxCoords );
             
             PeriodicBox_exposer.def( 
@@ -352,7 +352,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::minCoords
         
-            typedef ::SireMaths::Vector ( ::SireVol::PeriodicBox::*minCoords_function_type )( ::SireMaths::Vector const & ) const;
+            typedef ::SireMaths::Vector ( ::SireVol::PeriodicBox::*minCoords_function_type)( ::SireMaths::Vector const & ) const;
             minCoords_function_type minCoords_function_value( &::SireVol::PeriodicBox::minCoords );
             
             PeriodicBox_exposer.def( 
@@ -363,7 +363,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::minimumDistance
         
-            typedef double ( ::SireVol::PeriodicBox::*minimumDistance_function_type )( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const & ) const;
+            typedef double ( ::SireVol::PeriodicBox::*minimumDistance_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const & ) const;
             minimumDistance_function_type minimumDistance_function_value( &::SireVol::PeriodicBox::minimumDistance );
             
             PeriodicBox_exposer.def( 
@@ -374,7 +374,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::minimumDistance
         
-            typedef double ( ::SireVol::PeriodicBox::*minimumDistance_function_type )( ::SireVol::AABox const &,::SireVol::AABox const & ) const;
+            typedef double ( ::SireVol::PeriodicBox::*minimumDistance_function_type)( ::SireVol::AABox const &,::SireVol::AABox const & ) const;
             minimumDistance_function_type minimumDistance_function_value( &::SireVol::PeriodicBox::minimumDistance );
             
             PeriodicBox_exposer.def( 
@@ -386,7 +386,7 @@ void register_PeriodicBox_class(){
         PeriodicBox_exposer.def( bp::self != bp::self );
         { //::SireVol::PeriodicBox::operator=
         
-            typedef ::SireVol::PeriodicBox & ( ::SireVol::PeriodicBox::*assign_function_type )( ::SireVol::PeriodicBox const & ) ;
+            typedef ::SireVol::PeriodicBox & ( ::SireVol::PeriodicBox::*assign_function_type)( ::SireVol::PeriodicBox const & ) ;
             assign_function_type assign_function_value( &::SireVol::PeriodicBox::operator= );
             
             PeriodicBox_exposer.def( 
@@ -399,7 +399,7 @@ void register_PeriodicBox_class(){
         PeriodicBox_exposer.def( bp::self == bp::self );
         { //::SireVol::PeriodicBox::setDimensions
         
-            typedef void ( ::SireVol::PeriodicBox::*setDimensions_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireVol::PeriodicBox::*setDimensions_function_type)( ::SireMaths::Vector const & ) ;
             setDimensions_function_type setDimensions_function_value( &::SireVol::PeriodicBox::setDimensions );
             
             PeriodicBox_exposer.def( 
@@ -410,7 +410,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::setDimensions
         
-            typedef void ( ::SireVol::PeriodicBox::*setDimensions_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const & ) ;
+            typedef void ( ::SireVol::PeriodicBox::*setDimensions_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const & ) ;
             setDimensions_function_type setDimensions_function_value( &::SireVol::PeriodicBox::setDimensions );
             
             PeriodicBox_exposer.def( 
@@ -421,7 +421,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::setVolume
         
-            typedef ::SireVol::SpacePtr ( ::SireVol::PeriodicBox::*setVolume_function_type )( ::SireUnits::Dimension::Volume ) const;
+            typedef ::SireVol::SpacePtr ( ::SireVol::PeriodicBox::*setVolume_function_type)( ::SireUnits::Dimension::Volume ) const;
             setVolume_function_type setVolume_function_value( &::SireVol::PeriodicBox::setVolume );
             
             PeriodicBox_exposer.def( 
@@ -432,7 +432,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::toString
         
-            typedef ::QString ( ::SireVol::PeriodicBox::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireVol::PeriodicBox::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireVol::PeriodicBox::toString );
             
             PeriodicBox_exposer.def( 
@@ -452,7 +452,7 @@ void register_PeriodicBox_class(){
         }
         { //::SireVol::PeriodicBox::volume
         
-            typedef ::SireUnits::Dimension::Volume ( ::SireVol::PeriodicBox::*volume_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Volume ( ::SireVol::PeriodicBox::*volume_function_type)(  ) const;
             volume_function_type volume_function_value( &::SireVol::PeriodicBox::volume );
             
             PeriodicBox_exposer.def( 

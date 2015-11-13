@@ -50,7 +50,7 @@ void register_MonitorProperty_class(){
         MonitorProperty_exposer.def( bp::init< SireSystem::MonitorProperty const & >(( bp::arg("other") )) );
         { //::SireSystem::MonitorProperty::clearStatistics
         
-            typedef void ( ::SireSystem::MonitorProperty::*clearStatistics_function_type )(  ) ;
+            typedef void ( ::SireSystem::MonitorProperty::*clearStatistics_function_type)(  ) ;
             clearStatistics_function_type clearStatistics_function_value( &::SireSystem::MonitorProperty::clearStatistics );
             
             MonitorProperty_exposer.def( 
@@ -60,7 +60,7 @@ void register_MonitorProperty_class(){
         }
         { //::SireSystem::MonitorProperty::ffID
         
-            typedef ::SireFF::FFID const & ( ::SireSystem::MonitorProperty::*ffID_function_type )(  ) const;
+            typedef ::SireFF::FFID const & ( ::SireSystem::MonitorProperty::*ffID_function_type)(  ) const;
             ffID_function_type ffID_function_value( &::SireSystem::MonitorProperty::ffID );
             
             MonitorProperty_exposer.def( 
@@ -71,7 +71,7 @@ void register_MonitorProperty_class(){
         }
         { //::SireSystem::MonitorProperty::mgID
         
-            typedef ::SireMol::MGID const & ( ::SireSystem::MonitorProperty::*mgID_function_type )(  ) const;
+            typedef ::SireMol::MGID const & ( ::SireSystem::MonitorProperty::*mgID_function_type)(  ) const;
             mgID_function_type mgID_function_value( &::SireSystem::MonitorProperty::mgID );
             
             MonitorProperty_exposer.def( 
@@ -82,7 +82,7 @@ void register_MonitorProperty_class(){
         }
         { //::SireSystem::MonitorProperty::monitor
         
-            typedef void ( ::SireSystem::MonitorProperty::*monitor_function_type )( ::SireSystem::System & ) ;
+            typedef void ( ::SireSystem::MonitorProperty::*monitor_function_type)( ::SireSystem::System & ) ;
             monitor_function_type monitor_function_value( &::SireSystem::MonitorProperty::monitor );
             
             MonitorProperty_exposer.def( 
@@ -93,7 +93,7 @@ void register_MonitorProperty_class(){
         }
         { //::SireSystem::MonitorProperty::monitoredMolecules
         
-            typedef ::QList< SireMol::MolNum > ( ::SireSystem::MonitorProperty::*monitoredMolecules_function_type )(  ) const;
+            typedef ::QList< SireMol::MolNum > ( ::SireSystem::MonitorProperty::*monitoredMolecules_function_type)(  ) const;
             monitoredMolecules_function_type monitoredMolecules_function_value( &::SireSystem::MonitorProperty::monitoredMolecules );
             
             MonitorProperty_exposer.def( 
@@ -103,7 +103,7 @@ void register_MonitorProperty_class(){
         }
         { //::SireSystem::MonitorProperty::monitoringForceFieldProperty
         
-            typedef bool ( ::SireSystem::MonitorProperty::*monitoringForceFieldProperty_function_type )(  ) const;
+            typedef bool ( ::SireSystem::MonitorProperty::*monitoringForceFieldProperty_function_type)(  ) const;
             monitoringForceFieldProperty_function_type monitoringForceFieldProperty_function_value( &::SireSystem::MonitorProperty::monitoringForceFieldProperty );
             
             MonitorProperty_exposer.def( 
@@ -113,7 +113,7 @@ void register_MonitorProperty_class(){
         }
         { //::SireSystem::MonitorProperty::monitoringMoleculeProperty
         
-            typedef bool ( ::SireSystem::MonitorProperty::*monitoringMoleculeProperty_function_type )(  ) const;
+            typedef bool ( ::SireSystem::MonitorProperty::*monitoringMoleculeProperty_function_type)(  ) const;
             monitoringMoleculeProperty_function_type monitoringMoleculeProperty_function_value( &::SireSystem::MonitorProperty::monitoringMoleculeProperty );
             
             MonitorProperty_exposer.def( 
@@ -123,7 +123,7 @@ void register_MonitorProperty_class(){
         }
         { //::SireSystem::MonitorProperty::monitoringSystemProperty
         
-            typedef bool ( ::SireSystem::MonitorProperty::*monitoringSystemProperty_function_type )(  ) const;
+            typedef bool ( ::SireSystem::MonitorProperty::*monitoringSystemProperty_function_type)(  ) const;
             monitoringSystemProperty_function_type monitoringSystemProperty_function_value( &::SireSystem::MonitorProperty::monitoringSystemProperty );
             
             MonitorProperty_exposer.def( 
@@ -134,7 +134,7 @@ void register_MonitorProperty_class(){
         MonitorProperty_exposer.def( bp::self != bp::self );
         { //::SireSystem::MonitorProperty::operator=
         
-            typedef ::SireSystem::MonitorProperty & ( ::SireSystem::MonitorProperty::*assign_function_type )( ::SireSystem::MonitorProperty const & ) ;
+            typedef ::SireSystem::MonitorProperty & ( ::SireSystem::MonitorProperty::*assign_function_type)( ::SireSystem::MonitorProperty const & ) ;
             assign_function_type assign_function_value( &::SireSystem::MonitorProperty::operator= );
             
             MonitorProperty_exposer.def( 
@@ -147,7 +147,7 @@ void register_MonitorProperty_class(){
         MonitorProperty_exposer.def( bp::self == bp::self );
         { //::SireSystem::MonitorProperty::properties
         
-            typedef ::QVector< SireBase::PropPtr< SireBase::Property > > ( ::SireSystem::MonitorProperty::*properties_function_type )(  ) const;
+            typedef ::QVector< SireBase::PropPtr< SireBase::Property > > ( ::SireSystem::MonitorProperty::*properties_function_type)(  ) const;
             properties_function_type properties_function_value( &::SireSystem::MonitorProperty::properties );
             
             MonitorProperty_exposer.def( 
@@ -157,7 +157,7 @@ void register_MonitorProperty_class(){
         }
         { //::SireSystem::MonitorProperty::properties
         
-            typedef ::QVector< SireBase::PropPtr< SireBase::Property > > ( ::SireSystem::MonitorProperty::*properties_function_type )( ::SireMol::MolNum ) const;
+            typedef ::QVector< SireBase::PropPtr< SireBase::Property > > ( ::SireSystem::MonitorProperty::*properties_function_type)( ::SireMol::MolNum ) const;
             properties_function_type properties_function_value( &::SireSystem::MonitorProperty::properties );
             
             MonitorProperty_exposer.def( 
@@ -168,7 +168,7 @@ void register_MonitorProperty_class(){
         }
         { //::SireSystem::MonitorProperty::property
         
-            typedef ::QString const & ( ::SireSystem::MonitorProperty::*property_function_type )(  ) const;
+            typedef ::QString const & ( ::SireSystem::MonitorProperty::*property_function_type)(  ) const;
             property_function_type property_function_value( &::SireSystem::MonitorProperty::property );
             
             MonitorProperty_exposer.def( 
@@ -179,7 +179,7 @@ void register_MonitorProperty_class(){
         }
         { //::SireSystem::MonitorProperty::toString
         
-            typedef ::QString ( ::SireSystem::MonitorProperty::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireSystem::MonitorProperty::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireSystem::MonitorProperty::toString );
             
             MonitorProperty_exposer.def( 
@@ -199,7 +199,7 @@ void register_MonitorProperty_class(){
         }
         { //::SireSystem::MonitorProperty::writeToDisk
         
-            typedef void ( ::SireSystem::MonitorProperty::*writeToDisk_function_type )( ::QString const & ) ;
+            typedef void ( ::SireSystem::MonitorProperty::*writeToDisk_function_type)( ::QString const & ) ;
             writeToDisk_function_type writeToDisk_function_value( &::SireSystem::MonitorProperty::writeToDisk );
             
             MonitorProperty_exposer.def( 

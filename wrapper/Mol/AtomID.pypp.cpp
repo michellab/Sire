@@ -63,7 +63,7 @@ void register_AtomID_class(){
         bp::scope AtomID_scope( AtomID_exposer );
         { //::SireMol::AtomID::chains
         
-            typedef ::SireMol::ChainsWithAtoms ( ::SireMol::AtomID::*chains_function_type )(  ) const;
+            typedef ::SireMol::ChainsWithAtoms ( ::SireMol::AtomID::*chains_function_type)(  ) const;
             chains_function_type chains_function_value( &::SireMol::AtomID::chains );
             
             AtomID_exposer.def( 
@@ -73,7 +73,7 @@ void register_AtomID_class(){
         }
         { //::SireMol::AtomID::cutGroups
         
-            typedef ::SireMol::CGsWithAtoms ( ::SireMol::AtomID::*cutGroups_function_type )(  ) const;
+            typedef ::SireMol::CGsWithAtoms ( ::SireMol::AtomID::*cutGroups_function_type)(  ) const;
             cutGroups_function_type cutGroups_function_value( &::SireMol::AtomID::cutGroups );
             
             AtomID_exposer.def( 
@@ -83,7 +83,7 @@ void register_AtomID_class(){
         }
         { //::SireMol::AtomID::map
         
-            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::AtomID::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::AtomID::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireMol::AtomID::map );
             
             AtomID_exposer.def( 
@@ -94,7 +94,7 @@ void register_AtomID_class(){
         }
         { //::SireMol::AtomID::map
         
-            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::AtomID::*map_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::AtomID::*map_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             map_function_type map_function_value( &::SireMol::AtomID::map );
             
             AtomID_exposer.def( 
@@ -111,7 +111,7 @@ void register_AtomID_class(){
         AtomID_exposer.def( bp::self & bp::other< SireMol::MolID >() );
         { //::SireMol::AtomID::operator()
         
-            typedef ::SireID::Specify< SireMol::AtomID > ( ::SireMol::AtomID::*__call___function_type )( int ) const;
+            typedef ::SireID::Specify< SireMol::AtomID > ( ::SireMol::AtomID::*__call___function_type)( int ) const;
             __call___function_type __call___function_value( &::SireMol::AtomID::operator() );
             
             AtomID_exposer.def( 
@@ -122,7 +122,7 @@ void register_AtomID_class(){
         }
         { //::SireMol::AtomID::operator()
         
-            typedef ::SireID::Specify< SireMol::AtomID > ( ::SireMol::AtomID::*__call___function_type )( int,int ) const;
+            typedef ::SireID::Specify< SireMol::AtomID > ( ::SireMol::AtomID::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireMol::AtomID::operator() );
             
             AtomID_exposer.def( 
@@ -140,7 +140,7 @@ void register_AtomID_class(){
         AtomID_exposer.def( bp::self + bp::other< SireMol::MolID >() );
         { //::SireMol::AtomID::operator[]
         
-            typedef ::SireID::Specify< SireMol::AtomID > ( ::SireMol::AtomID::*__getitem___function_type )( int ) const;
+            typedef ::SireID::Specify< SireMol::AtomID > ( ::SireMol::AtomID::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomID::operator[] );
             
             AtomID_exposer.def( 
@@ -152,7 +152,7 @@ void register_AtomID_class(){
         AtomID_exposer.def( bp::self | bp::self );
         { //::SireMol::AtomID::residues
         
-            typedef ::SireMol::ResWithAtoms ( ::SireMol::AtomID::*residues_function_type )(  ) const;
+            typedef ::SireMol::ResWithAtoms ( ::SireMol::AtomID::*residues_function_type)(  ) const;
             residues_function_type residues_function_value( &::SireMol::AtomID::residues );
             
             AtomID_exposer.def( 
@@ -162,7 +162,7 @@ void register_AtomID_class(){
         }
         { //::SireMol::AtomID::segments
         
-            typedef ::SireMol::SegsWithAtoms ( ::SireMol::AtomID::*segments_function_type )(  ) const;
+            typedef ::SireMol::SegsWithAtoms ( ::SireMol::AtomID::*segments_function_type)(  ) const;
             segments_function_type segments_function_value( &::SireMol::AtomID::segments );
             
             AtomID_exposer.def( 
@@ -172,7 +172,7 @@ void register_AtomID_class(){
         }
         { //::SireMol::AtomID::selectAllFrom
         
-            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::AtomID::*selectAllFrom_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::Selector< SireMol::Atom > ( ::SireMol::AtomID::*selectAllFrom_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             selectAllFrom_function_type selectAllFrom_function_value( &::SireMol::AtomID::selectAllFrom );
             
             AtomID_exposer.def( 
@@ -183,7 +183,7 @@ void register_AtomID_class(){
         }
         { //::SireMol::AtomID::selectAllFrom
         
-            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Atom > > ( ::SireMol::AtomID::*selectAllFrom_function_type )( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Atom > > ( ::SireMol::AtomID::*selectAllFrom_function_type)( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) const;
             selectAllFrom_function_type selectAllFrom_function_value( &::SireMol::AtomID::selectAllFrom );
             
             AtomID_exposer.def( 
@@ -194,7 +194,7 @@ void register_AtomID_class(){
         }
         { //::SireMol::AtomID::selectAllFrom
         
-            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Atom > > ( ::SireMol::AtomID::*selectAllFrom_function_type )( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Atom > > ( ::SireMol::AtomID::*selectAllFrom_function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
             selectAllFrom_function_type selectAllFrom_function_value( &::SireMol::AtomID::selectAllFrom );
             
             AtomID_exposer.def( 
@@ -205,7 +205,7 @@ void register_AtomID_class(){
         }
         { //::SireMol::AtomID::selectAllFrom
         
-            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Atom > > ( ::SireMol::AtomID::*selectAllFrom_function_type )( ::SireMol::MolGroupsBase const &,::SireBase::PropertyMap const & ) const;
+            typedef ::QHash< SireMol::MolNum, SireMol::Selector< SireMol::Atom > > ( ::SireMol::AtomID::*selectAllFrom_function_type)( ::SireMol::MolGroupsBase const &,::SireBase::PropertyMap const & ) const;
             selectAllFrom_function_type selectAllFrom_function_value( &::SireMol::AtomID::selectAllFrom );
             
             AtomID_exposer.def( 
@@ -216,7 +216,7 @@ void register_AtomID_class(){
         }
         { //::SireMol::AtomID::selectFrom
         
-            typedef ::SireMol::Atom ( ::SireMol::AtomID::*selectFrom_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::Atom ( ::SireMol::AtomID::*selectFrom_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             selectFrom_function_type selectFrom_function_value( &::SireMol::AtomID::selectFrom );
             
             AtomID_exposer.def( 
@@ -227,7 +227,7 @@ void register_AtomID_class(){
         }
         { //::SireMol::AtomID::selectFrom
         
-            typedef ::SireMol::Atom ( ::SireMol::AtomID::*selectFrom_function_type )( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::Atom ( ::SireMol::AtomID::*selectFrom_function_type)( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) const;
             selectFrom_function_type selectFrom_function_value( &::SireMol::AtomID::selectFrom );
             
             AtomID_exposer.def( 
@@ -238,7 +238,7 @@ void register_AtomID_class(){
         }
         { //::SireMol::AtomID::selectFrom
         
-            typedef ::SireMol::Atom ( ::SireMol::AtomID::*selectFrom_function_type )( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::Atom ( ::SireMol::AtomID::*selectFrom_function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
             selectFrom_function_type selectFrom_function_value( &::SireMol::AtomID::selectFrom );
             
             AtomID_exposer.def( 
@@ -249,7 +249,7 @@ void register_AtomID_class(){
         }
         { //::SireMol::AtomID::selectFrom
         
-            typedef ::SireMol::Atom ( ::SireMol::AtomID::*selectFrom_function_type )( ::SireMol::MolGroupsBase const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::Atom ( ::SireMol::AtomID::*selectFrom_function_type)( ::SireMol::MolGroupsBase const &,::SireBase::PropertyMap const & ) const;
             selectFrom_function_type selectFrom_function_value( &::SireMol::AtomID::selectFrom );
             
             AtomID_exposer.def( 

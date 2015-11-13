@@ -49,7 +49,7 @@ void register_RBWorkspaceJM_class(){
         RBWorkspaceJM_exposer.def( bp::init< SireMove::RBWorkspaceJM const & >(( bp::arg("other") )) );
         { //::SireMove::RBWorkspaceJM::beadAtomIntCoords
         
-            typedef ::QVector< QVector< SireMaths::Vector > > ( ::SireMove::RBWorkspaceJM::*beadAtomIntCoords_function_type )(  ) const;
+            typedef ::QVector< QVector< SireMaths::Vector > > ( ::SireMove::RBWorkspaceJM::*beadAtomIntCoords_function_type)(  ) const;
             beadAtomIntCoords_function_type beadAtomIntCoords_function_value( &::SireMove::RBWorkspaceJM::beadAtomIntCoords );
             
             RBWorkspaceJM_exposer.def( 
@@ -59,7 +59,7 @@ void register_RBWorkspaceJM_class(){
         }
         { //::SireMove::RBWorkspaceJM::beadCoordinatesArray
         
-            typedef ::QVector< SireMaths::Vector > ( ::SireMove::RBWorkspaceJM::*beadCoordinatesArray_function_type )(  ) const;
+            typedef ::QVector< SireMaths::Vector > ( ::SireMove::RBWorkspaceJM::*beadCoordinatesArray_function_type)(  ) const;
             beadCoordinatesArray_function_type beadCoordinatesArray_function_value( &::SireMove::RBWorkspaceJM::beadCoordinatesArray );
             
             RBWorkspaceJM_exposer.def( 
@@ -69,7 +69,7 @@ void register_RBWorkspaceJM_class(){
         }
         { //::SireMove::RBWorkspaceJM::beadEnergiesArray
         
-            typedef ::QVector< SireMaths::Vector > ( ::SireMove::RBWorkspaceJM::*beadEnergiesArray_function_type )(  ) const;
+            typedef ::QVector< SireMaths::Vector > ( ::SireMove::RBWorkspaceJM::*beadEnergiesArray_function_type)(  ) const;
             beadEnergiesArray_function_type beadEnergiesArray_function_value( &::SireMove::RBWorkspaceJM::beadEnergiesArray );
             
             RBWorkspaceJM_exposer.def( 
@@ -79,7 +79,7 @@ void register_RBWorkspaceJM_class(){
         }
         { //::SireMove::RBWorkspaceJM::beadForcesArray
         
-            typedef ::QVector< SireMaths::Vector > ( ::SireMove::RBWorkspaceJM::*beadForcesArray_function_type )(  ) const;
+            typedef ::QVector< SireMaths::Vector > ( ::SireMove::RBWorkspaceJM::*beadForcesArray_function_type)(  ) const;
             beadForcesArray_function_type beadForcesArray_function_value( &::SireMove::RBWorkspaceJM::beadForcesArray );
             
             RBWorkspaceJM_exposer.def( 
@@ -89,7 +89,7 @@ void register_RBWorkspaceJM_class(){
         }
         { //::SireMove::RBWorkspaceJM::beadOrientationArray
         
-            typedef ::QVector< SireMaths::Quaternion > ( ::SireMove::RBWorkspaceJM::*beadOrientationArray_function_type )(  ) const;
+            typedef ::QVector< SireMaths::Quaternion > ( ::SireMove::RBWorkspaceJM::*beadOrientationArray_function_type)(  ) const;
             beadOrientationArray_function_type beadOrientationArray_function_value( &::SireMove::RBWorkspaceJM::beadOrientationArray );
             
             RBWorkspaceJM_exposer.def( 
@@ -99,7 +99,7 @@ void register_RBWorkspaceJM_class(){
         }
         { //::SireMove::RBWorkspaceJM::beadToWorldMatrix
         
-            typedef ::QVector< SireMaths::Matrix > ( ::SireMove::RBWorkspaceJM::*beadToWorldMatrix_function_type )(  ) const;
+            typedef ::QVector< SireMaths::Matrix > ( ::SireMove::RBWorkspaceJM::*beadToWorldMatrix_function_type)(  ) const;
             beadToWorldMatrix_function_type beadToWorldMatrix_function_value( &::SireMove::RBWorkspaceJM::beadToWorldMatrix );
             
             RBWorkspaceJM_exposer.def( 
@@ -109,7 +109,7 @@ void register_RBWorkspaceJM_class(){
         }
         { //::SireMove::RBWorkspaceJM::beadTorquesArray
         
-            typedef ::QVector< SireMaths::Vector > ( ::SireMove::RBWorkspaceJM::*beadTorquesArray_function_type )(  ) const;
+            typedef ::QVector< SireMaths::Vector > ( ::SireMove::RBWorkspaceJM::*beadTorquesArray_function_type)(  ) const;
             beadTorquesArray_function_type beadTorquesArray_function_value( &::SireMove::RBWorkspaceJM::beadTorquesArray );
             
             RBWorkspaceJM_exposer.def( 
@@ -119,7 +119,7 @@ void register_RBWorkspaceJM_class(){
         }
         { //::SireMove::RBWorkspaceJM::beadingProperty
         
-            typedef ::SireBase::PropertyName ( ::SireMove::RBWorkspaceJM::*beadingProperty_function_type )(  ) const;
+            typedef ::SireBase::PropertyName ( ::SireMove::RBWorkspaceJM::*beadingProperty_function_type)(  ) const;
             beadingProperty_function_type beadingProperty_function_value( &::SireMove::RBWorkspaceJM::beadingProperty );
             
             RBWorkspaceJM_exposer.def( 
@@ -129,7 +129,7 @@ void register_RBWorkspaceJM_class(){
         }
         { //::SireMove::RBWorkspaceJM::calculateForces
         
-            typedef bool ( ::SireMove::RBWorkspaceJM::*calculateForces_function_type )( ::SireCAS::Symbol const & ) ;
+            typedef bool ( ::SireMove::RBWorkspaceJM::*calculateForces_function_type)( ::SireCAS::Symbol const & ) ;
             calculateForces_function_type calculateForces_function_value( &::SireMove::RBWorkspaceJM::calculateForces );
             
             RBWorkspaceJM_exposer.def( 
@@ -140,7 +140,7 @@ void register_RBWorkspaceJM_class(){
         }
         { //::SireMove::RBWorkspaceJM::calculateRBForces
         
-            typedef bool ( ::SireMove::RBWorkspaceJM::*calculateRBForces_function_type )(  ) ;
+            typedef bool ( ::SireMove::RBWorkspaceJM::*calculateRBForces_function_type)(  ) ;
             calculateRBForces_function_type calculateRBForces_function_value( &::SireMove::RBWorkspaceJM::calculateRBForces );
             
             RBWorkspaceJM_exposer.def( 
@@ -150,7 +150,7 @@ void register_RBWorkspaceJM_class(){
         }
         { //::SireMove::RBWorkspaceJM::commitCoordinates
         
-            typedef void ( ::SireMove::RBWorkspaceJM::*commitCoordinates_function_type )(  ) ;
+            typedef void ( ::SireMove::RBWorkspaceJM::*commitCoordinates_function_type)(  ) ;
             commitCoordinates_function_type commitCoordinates_function_value( &::SireMove::RBWorkspaceJM::commitCoordinates );
             
             RBWorkspaceJM_exposer.def( 
@@ -160,7 +160,7 @@ void register_RBWorkspaceJM_class(){
         }
         { //::SireMove::RBWorkspaceJM::commitCoordinatesAndVelocities
         
-            typedef void ( ::SireMove::RBWorkspaceJM::*commitCoordinatesAndVelocities_function_type )(  ) ;
+            typedef void ( ::SireMove::RBWorkspaceJM::*commitCoordinatesAndVelocities_function_type)(  ) ;
             commitCoordinatesAndVelocities_function_type commitCoordinatesAndVelocities_function_value( &::SireMove::RBWorkspaceJM::commitCoordinatesAndVelocities );
             
             RBWorkspaceJM_exposer.def( 
@@ -170,7 +170,7 @@ void register_RBWorkspaceJM_class(){
         }
         { //::SireMove::RBWorkspaceJM::commitVelocities
         
-            typedef void ( ::SireMove::RBWorkspaceJM::*commitVelocities_function_type )(  ) ;
+            typedef void ( ::SireMove::RBWorkspaceJM::*commitVelocities_function_type)(  ) ;
             commitVelocities_function_type commitVelocities_function_value( &::SireMove::RBWorkspaceJM::commitVelocities );
             
             RBWorkspaceJM_exposer.def( 
@@ -180,7 +180,7 @@ void register_RBWorkspaceJM_class(){
         }
         { //::SireMove::RBWorkspaceJM::kineticEnergy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::RBWorkspaceJM::*kineticEnergy_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::RBWorkspaceJM::*kineticEnergy_function_type)(  ) const;
             kineticEnergy_function_type kineticEnergy_function_value( &::SireMove::RBWorkspaceJM::kineticEnergy );
             
             RBWorkspaceJM_exposer.def( 
@@ -190,7 +190,7 @@ void register_RBWorkspaceJM_class(){
         }
         { //::SireMove::RBWorkspaceJM::kineticEnergy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::RBWorkspaceJM::*kineticEnergy_function_type )( ::SireMol::MolNum ) const;
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::RBWorkspaceJM::*kineticEnergy_function_type)( ::SireMol::MolNum ) const;
             kineticEnergy_function_type kineticEnergy_function_value( &::SireMove::RBWorkspaceJM::kineticEnergy );
             
             RBWorkspaceJM_exposer.def( 
@@ -201,7 +201,7 @@ void register_RBWorkspaceJM_class(){
         }
         { //::SireMove::RBWorkspaceJM::kineticEnergy
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::RBWorkspaceJM::*kineticEnergy_function_type )( ::SireMol::MoleculeView const & ) const;
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::RBWorkspaceJM::*kineticEnergy_function_type)( ::SireMol::MoleculeView const & ) const;
             kineticEnergy_function_type kineticEnergy_function_value( &::SireMove::RBWorkspaceJM::kineticEnergy );
             
             RBWorkspaceJM_exposer.def( 
@@ -212,7 +212,7 @@ void register_RBWorkspaceJM_class(){
         }
         { //::SireMove::RBWorkspaceJM::nAtoms
         
-            typedef int ( ::SireMove::RBWorkspaceJM::*nAtoms_function_type )( int ) const;
+            typedef int ( ::SireMove::RBWorkspaceJM::*nAtoms_function_type)( int ) const;
             nAtoms_function_type nAtoms_function_value( &::SireMove::RBWorkspaceJM::nAtoms );
             
             RBWorkspaceJM_exposer.def( 
@@ -223,7 +223,7 @@ void register_RBWorkspaceJM_class(){
         }
         { //::SireMove::RBWorkspaceJM::nBeads
         
-            typedef int ( ::SireMove::RBWorkspaceJM::*nBeads_function_type )(  ) const;
+            typedef int ( ::SireMove::RBWorkspaceJM::*nBeads_function_type)(  ) const;
             nBeads_function_type nBeads_function_value( &::SireMove::RBWorkspaceJM::nBeads );
             
             RBWorkspaceJM_exposer.def( 
@@ -234,7 +234,7 @@ void register_RBWorkspaceJM_class(){
         RBWorkspaceJM_exposer.def( bp::self != bp::self );
         { //::SireMove::RBWorkspaceJM::operator=
         
-            typedef ::SireMove::RBWorkspaceJM & ( ::SireMove::RBWorkspaceJM::*assign_function_type )( ::SireMove::RBWorkspaceJM const & ) ;
+            typedef ::SireMove::RBWorkspaceJM & ( ::SireMove::RBWorkspaceJM::*assign_function_type)( ::SireMove::RBWorkspaceJM const & ) ;
             assign_function_type assign_function_value( &::SireMove::RBWorkspaceJM::operator= );
             
             RBWorkspaceJM_exposer.def( 
@@ -247,7 +247,7 @@ void register_RBWorkspaceJM_class(){
         RBWorkspaceJM_exposer.def( bp::self == bp::self );
         { //::SireMove::RBWorkspaceJM::regenerateVelocities
         
-            typedef void ( ::SireMove::RBWorkspaceJM::*regenerateVelocities_function_type )( ::SireMove::VelocityGenerator const & ) ;
+            typedef void ( ::SireMove::RBWorkspaceJM::*regenerateVelocities_function_type)( ::SireMove::VelocityGenerator const & ) ;
             regenerateVelocities_function_type regenerateVelocities_function_value( &::SireMove::RBWorkspaceJM::regenerateVelocities );
             
             RBWorkspaceJM_exposer.def( 
@@ -258,7 +258,7 @@ void register_RBWorkspaceJM_class(){
         }
         { //::SireMove::RBWorkspaceJM::setForceTable
         
-            typedef void ( ::SireMove::RBWorkspaceJM::*setForceTable_function_type )( ::SireFF::ForceTable & ) ;
+            typedef void ( ::SireMove::RBWorkspaceJM::*setForceTable_function_type)( ::SireFF::ForceTable & ) ;
             setForceTable_function_type setForceTable_function_value( &::SireMove::RBWorkspaceJM::setForceTable );
             
             RBWorkspaceJM_exposer.def( 
@@ -269,7 +269,7 @@ void register_RBWorkspaceJM_class(){
         }
         { //::SireMove::RBWorkspaceJM::setSystem
         
-            typedef bool ( ::SireMove::RBWorkspaceJM::*setSystem_function_type )( ::SireSystem::System const & ) ;
+            typedef bool ( ::SireMove::RBWorkspaceJM::*setSystem_function_type)( ::SireSystem::System const & ) ;
             setSystem_function_type setSystem_function_value( &::SireMove::RBWorkspaceJM::setSystem );
             
             RBWorkspaceJM_exposer.def( 

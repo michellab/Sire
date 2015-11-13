@@ -35,7 +35,7 @@ def getIncludes(file, lines):
             if m:
                 includes[m.groups()[0]] = 1
 
-    ret = includes.keys()
+    ret = list(includes.keys())
     ret.sort()
     return ret
 
@@ -83,7 +83,7 @@ class Properties:
             self._dependencies[dep] = 1
 
     def dependencies(self):
-        return self._dependencies.keys()
+        return list(self._dependencies.keys())
 
 skip_metatypes = [ "QVariant", 
                    "SireCAS::ExpressionBase",
@@ -184,7 +184,7 @@ def scanFiles(dir, module_dir, atom_properties, cg_properties,
         except:
             lines = open("%s/%s" % (module_dir,file), "r").readlines()
 
-        text = string.join(lines)
+        text = " ".join(lines)
 
         for m in re.finditer(match_class, text):
             if file not in active_files:
@@ -286,23 +286,23 @@ def scanFiles(dir, module_dir, atom_properties, cg_properties,
     #now add each active file to a single header file that can be parsed by Py++
     FILE = open("%s/active_headers.h" % module_dir, "w")
 
-    print >>FILE,"#ifndef ACTIVE_HEADERS_H\n" + \
+    print("#ifndef ACTIVE_HEADERS_H\n" + \
                  "#define ACTIVE_HEADERS_H\n\n" + \
-                 "#ifdef GCCXML_PARSE\n"
+                 "#ifdef GCCXML_PARSE\n", file=FILE)
 
-    files = active_files.keys()
+    files = list(active_files.keys())
     files.sort()
 
     for file in files:
-        print >>FILE,"#include \"%s\"" % file
+        print("#include \"%s\"" % file, file=FILE)
 
-    print >>FILE,"\n#endif\n\n#endif"
+    print("\n#endif\n\n#endif", file=FILE)
 
     FILE.close()
 
     #now write out the active_files data structure so it can be
     #used by other scripts
-    FILE = open("%s/active_headers.data" % module_dir,"w")
+    FILE = open("%s/active_headers.data" % module_dir,"wb")
     pickle.dump(active_files, FILE)
     FILE.close()
 
@@ -328,7 +328,7 @@ if __name__ == "__main__":
                 "Vol" : "SireVol" }
         
     if len(sys.argv) < 3:
-        print "USAGE: python scanheaders.py input_path output_path"
+        print("USAGE: python scanheaders.py input_path output_path")
         sys.exit(-1)
     
     siredir = sys.argv[1]
@@ -352,9 +352,9 @@ if __name__ == "__main__":
 
         FILE = open("%s/%s/module_info" % (outdir,module), "w")
 
-        print >>FILE,"Module %s" % module
-        print >>FILE,"Source %s" % modules[module]
-        print >>FILE,"Root %s" % siredir
+        print("Module %s" % module, file=FILE)
+        print("Source %s" % modules[module], file=FILE)
+        print("Root %s" % siredir, file=FILE)
 
         FILE.close()
 
@@ -369,11 +369,11 @@ if __name__ == "__main__":
 
     #write the set of exposed classes to a data file to be used
     #by other scripts
-    pickle.dump( exposed_classes, open("%s/classdb.data" % outdir, "w") )
+    pickle.dump( exposed_classes, open("%s/classdb.data" % outdir, "wb") )
 
-    pickle.dump( atom_properties, open("%s/Mol/atomprops.data" % outdir, "w") )
-    pickle.dump( cg_properties, open("%s/Mol/cgprops.data" % outdir, "w") )
-    pickle.dump( res_properties, open("%s/Mol/resprops.data" % outdir, "w") )
-    pickle.dump( chain_properties, open("%s/Mol/chainprops.data" % outdir, "w") )
-    pickle.dump( seg_properties, open("%s/Mol/segprops.data" % outdir, "w") )
-    pickle.dump( bead_properties, open("%s/Mol/beadprops.data" % outdir, "w") )
+    pickle.dump( atom_properties, open("%s/Mol/atomprops.data" % outdir, "wb") )
+    pickle.dump( cg_properties, open("%s/Mol/cgprops.data" % outdir, "wb") )
+    pickle.dump( res_properties, open("%s/Mol/resprops.data" % outdir, "wb") )
+    pickle.dump( chain_properties, open("%s/Mol/chainprops.data" % outdir, "wb") )
+    pickle.dump( seg_properties, open("%s/Mol/segprops.data" % outdir, "wb") )
+    pickle.dump( bead_properties, open("%s/Mol/beadprops.data" % outdir, "wb") )

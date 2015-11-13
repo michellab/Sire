@@ -40,7 +40,7 @@ void register_Constraint_class(){
         bp::scope Constraint_scope( Constraint_exposer );
         { //::SireSystem::Constraint::apply
         
-            typedef ::SireSystem::System ( ::SireSystem::Constraint::*apply_function_type )( ::SireSystem::System const & ) ;
+            typedef ::SireSystem::System ( ::SireSystem::Constraint::*apply_function_type)( ::SireSystem::System const & ) ;
             apply_function_type apply_function_value( &::SireSystem::Constraint::apply );
             
             Constraint_exposer.def( 
@@ -51,7 +51,7 @@ void register_Constraint_class(){
         }
         { //::SireSystem::Constraint::assertSatisfied
         
-            typedef void ( ::SireSystem::Constraint::*assertSatisfied_function_type )( ::SireSystem::System const & ) const;
+            typedef void ( ::SireSystem::Constraint::*assertSatisfied_function_type)( ::SireSystem::System const & ) const;
             assertSatisfied_function_type assertSatisfied_function_value( &::SireSystem::Constraint::assertSatisfied );
             
             Constraint_exposer.def( 
@@ -62,7 +62,7 @@ void register_Constraint_class(){
         }
         { //::SireSystem::Constraint::isSatisfied
         
-            typedef bool ( ::SireSystem::Constraint::*isSatisfied_function_type )( ::SireSystem::System const & ) const;
+            typedef bool ( ::SireSystem::Constraint::*isSatisfied_function_type)( ::SireSystem::System const & ) const;
             isSatisfied_function_type isSatisfied_function_value( &::SireSystem::Constraint::isSatisfied );
             
             Constraint_exposer.def( 
@@ -73,7 +73,7 @@ void register_Constraint_class(){
         }
         { //::SireSystem::Constraint::mayAffect
         
-            typedef bool ( ::SireSystem::Constraint::*mayAffect_function_type )( ::SireSystem::Delta const & ) const;
+            typedef bool ( ::SireSystem::Constraint::*mayAffect_function_type)( ::SireSystem::Delta const & ) const;
             mayAffect_function_type mayAffect_function_value( &::SireSystem::Constraint::mayAffect );
             
             Constraint_exposer.def( 

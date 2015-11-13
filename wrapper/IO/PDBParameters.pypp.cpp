@@ -93,7 +93,7 @@ void register_PDBParameters_class(){
         bp::scope PDBParameters_scope( PDBParameters_exposer );
         { //::SireIO::PDBParameters::alternatives
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*alternatives_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*alternatives_function_type)(  ) const;
             alternatives_function_type alternatives_function_value( &::SireIO::PDBParameters::alternatives );
             
             PDBParameters_exposer.def( 
@@ -104,7 +104,7 @@ void register_PDBParameters_class(){
         }
         { //::SireIO::PDBParameters::animationFrameSelector
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*animationFrameSelector_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*animationFrameSelector_function_type)(  ) const;
             animationFrameSelector_function_type animationFrameSelector_function_value( &::SireIO::PDBParameters::animationFrameSelector );
             
             PDBParameters_exposer.def( 
@@ -115,7 +115,7 @@ void register_PDBParameters_class(){
         }
         { //::SireIO::PDBParameters::animationFrames
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*animationFrames_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*animationFrames_function_type)(  ) const;
             animationFrames_function_type animationFrames_function_value( &::SireIO::PDBParameters::animationFrames );
             
             PDBParameters_exposer.def( 
@@ -126,7 +126,7 @@ void register_PDBParameters_class(){
         }
         { //::SireIO::PDBParameters::atomNameMangler
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*atomNameMangler_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*atomNameMangler_function_type)(  ) const;
             atomNameMangler_function_type atomNameMangler_function_value( &::SireIO::PDBParameters::atomNameMangler );
             
             PDBParameters_exposer.def( 
@@ -137,7 +137,7 @@ void register_PDBParameters_class(){
         }
         { //::SireIO::PDBParameters::bFactor
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*bFactor_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*bFactor_function_type)(  ) const;
             bFactor_function_type bFactor_function_value( &::SireIO::PDBParameters::bFactor );
             
             PDBParameters_exposer.def( 
@@ -148,7 +148,7 @@ void register_PDBParameters_class(){
         }
         { //::SireIO::PDBParameters::chainNameMangler
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*chainNameMangler_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*chainNameMangler_function_type)(  ) const;
             chainNameMangler_function_type chainNameMangler_function_value( &::SireIO::PDBParameters::chainNameMangler );
             
             PDBParameters_exposer.def( 
@@ -159,7 +159,7 @@ void register_PDBParameters_class(){
         }
         { //::SireIO::PDBParameters::formalCharge
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*formalCharge_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*formalCharge_function_type)(  ) const;
             formalCharge_function_type formalCharge_function_value( &::SireIO::PDBParameters::formalCharge );
             
             PDBParameters_exposer.def( 
@@ -170,7 +170,7 @@ void register_PDBParameters_class(){
         }
         { //::SireIO::PDBParameters::iCode
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*iCode_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*iCode_function_type)(  ) const;
             iCode_function_type iCode_function_value( &::SireIO::PDBParameters::iCode );
             
             PDBParameters_exposer.def( 
@@ -181,7 +181,7 @@ void register_PDBParameters_class(){
         }
         { //::SireIO::PDBParameters::pdbAtomName
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*pdbAtomName_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*pdbAtomName_function_type)(  ) const;
             pdbAtomName_function_type pdbAtomName_function_value( &::SireIO::PDBParameters::pdbAtomName );
             
             PDBParameters_exposer.def( 
@@ -192,7 +192,7 @@ void register_PDBParameters_class(){
         }
         { //::SireIO::PDBParameters::pdbChainName
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*pdbChainName_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*pdbChainName_function_type)(  ) const;
             pdbChainName_function_type pdbChainName_function_value( &::SireIO::PDBParameters::pdbChainName );
             
             PDBParameters_exposer.def( 
@@ -203,7 +203,7 @@ void register_PDBParameters_class(){
         }
         { //::SireIO::PDBParameters::pdbResidueName
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*pdbResidueName_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*pdbResidueName_function_type)(  ) const;
             pdbResidueName_function_type pdbResidueName_function_value( &::SireIO::PDBParameters::pdbResidueName );
             
             PDBParameters_exposer.def( 
@@ -214,7 +214,7 @@ void register_PDBParameters_class(){
         }
         { //::SireIO::PDBParameters::pdbSegmentName
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*pdbSegmentName_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*pdbSegmentName_function_type)(  ) const;
             pdbSegmentName_function_type pdbSegmentName_function_value( &::SireIO::PDBParameters::pdbSegmentName );
             
             PDBParameters_exposer.def( 
@@ -225,7 +225,7 @@ void register_PDBParameters_class(){
         }
         { //::SireIO::PDBParameters::residueNameMangler
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*residueNameMangler_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*residueNameMangler_function_type)(  ) const;
             residueNameMangler_function_type residueNameMangler_function_value( &::SireIO::PDBParameters::residueNameMangler );
             
             PDBParameters_exposer.def( 
@@ -236,7 +236,7 @@ void register_PDBParameters_class(){
         }
         { //::SireIO::PDBParameters::segmentNameMangler
         
-            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*segmentNameMangler_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireIO::PDBParameters::*segmentNameMangler_function_type)(  ) const;
             segmentNameMangler_function_type segmentNameMangler_function_value( &::SireIO::PDBParameters::segmentNameMangler );
             
             PDBParameters_exposer.def( 

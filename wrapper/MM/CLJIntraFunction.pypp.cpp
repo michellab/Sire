@@ -59,7 +59,7 @@ void register_CLJIntraFunction_class(){
         bp::scope CLJIntraFunction_scope( CLJIntraFunction_exposer );
         { //::SireMM::CLJIntraFunction::connectivity
         
-            typedef ::SireMol::Connectivity const & ( ::SireMM::CLJIntraFunction::*connectivity_function_type )(  ) const;
+            typedef ::SireMol::Connectivity const & ( ::SireMM::CLJIntraFunction::*connectivity_function_type)(  ) const;
             connectivity_function_type connectivity_function_value( &::SireMM::CLJIntraFunction::connectivity );
             
             CLJIntraFunction_exposer.def( 
@@ -70,7 +70,7 @@ void register_CLJIntraFunction_class(){
         }
         { //::SireMM::CLJIntraFunction::containsProperty
         
-            typedef bool ( ::SireMM::CLJIntraFunction::*containsProperty_function_type )( ::QString const & ) const;
+            typedef bool ( ::SireMM::CLJIntraFunction::*containsProperty_function_type)( ::QString const & ) const;
             containsProperty_function_type containsProperty_function_value( &::SireMM::CLJIntraFunction::containsProperty );
             
             CLJIntraFunction_exposer.def( 
@@ -81,7 +81,7 @@ void register_CLJIntraFunction_class(){
         }
         { //::SireMM::CLJIntraFunction::properties
         
-            typedef ::SireBase::Properties ( ::SireMM::CLJIntraFunction::*properties_function_type )(  ) const;
+            typedef ::SireBase::Properties ( ::SireMM::CLJIntraFunction::*properties_function_type)(  ) const;
             properties_function_type properties_function_value( &::SireMM::CLJIntraFunction::properties );
             
             CLJIntraFunction_exposer.def( 
@@ -91,7 +91,7 @@ void register_CLJIntraFunction_class(){
         }
         { //::SireMM::CLJIntraFunction::property
         
-            typedef ::SireBase::PropertyPtr ( ::SireMM::CLJIntraFunction::*property_function_type )( ::QString const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMM::CLJIntraFunction::*property_function_type)( ::QString const & ) const;
             property_function_type property_function_value( &::SireMM::CLJIntraFunction::property );
             
             CLJIntraFunction_exposer.def( 
@@ -102,7 +102,7 @@ void register_CLJIntraFunction_class(){
         }
         { //::SireMM::CLJIntraFunction::setConnectivity
         
-            typedef void ( ::SireMM::CLJIntraFunction::*setConnectivity_function_type )( ::SireMol::Connectivity const & ) ;
+            typedef void ( ::SireMM::CLJIntraFunction::*setConnectivity_function_type)( ::SireMol::Connectivity const & ) ;
             setConnectivity_function_type setConnectivity_function_value( &::SireMM::CLJIntraFunction::setConnectivity );
             
             CLJIntraFunction_exposer.def( 
@@ -113,7 +113,7 @@ void register_CLJIntraFunction_class(){
         }
         { //::SireMM::CLJIntraFunction::setConnectivity
         
-            typedef void ( ::SireMM::CLJIntraFunction::*setConnectivity_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireMM::CLJIntraFunction::*setConnectivity_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
             setConnectivity_function_type setConnectivity_function_value( &::SireMM::CLJIntraFunction::setConnectivity );
             
             CLJIntraFunction_exposer.def( 
@@ -124,7 +124,7 @@ void register_CLJIntraFunction_class(){
         }
         { //::SireMM::CLJIntraFunction::setProperty
         
-            typedef ::SireMM::CLJFunctionPtr ( ::SireMM::CLJIntraFunction::*setProperty_function_type )( ::QString const &,::SireBase::Property const & ) const;
+            typedef ::SireMM::CLJFunctionPtr ( ::SireMM::CLJIntraFunction::*setProperty_function_type)( ::QString const &,::SireBase::Property const & ) const;
             setProperty_function_type setProperty_function_value( &::SireMM::CLJIntraFunction::setProperty );
             
             CLJIntraFunction_exposer.def( 

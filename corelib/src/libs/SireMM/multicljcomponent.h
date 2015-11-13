@@ -39,10 +39,14 @@ SIRE_BEGIN_HEADER
 namespace SireMM
 {
 class MultiCLJComponent;
+class MultiCLJEnergy;
 }
 
 QDataStream& operator<<(QDataStream&, const SireMM::MultiCLJComponent&);
 QDataStream& operator>>(QDataStream&, SireMM::MultiCLJComponent&);
+
+QDataStream& operator<<(QDataStream&, const SireMM::MultiCLJEnergy&);
+QDataStream& operator>>(QDataStream&, SireMM::MultiCLJEnergy&);
 
 namespace SireMM
 {
@@ -125,6 +129,10 @@ private:
 */
 class SIREMM_EXPORT MultiCLJEnergy : public CLJEnergy
 {
+
+friend QDataStream& ::operator<<(QDataStream&, const MultiCLJEnergy&);
+friend QDataStream& ::operator>>(QDataStream&, MultiCLJEnergy&);
+
 public:
     typedef MultiCLJComponent Components;
 

@@ -41,7 +41,7 @@ void register_MultiDouble_class(){
         MultiDouble_exposer.def( bp::init< SireMaths::MultiDouble const & >(( bp::arg("other") )) );
         { //::SireMaths::MultiDouble::at
         
-            typedef double ( ::SireMaths::MultiDouble::*at_function_type )( int ) const;
+            typedef double ( ::SireMaths::MultiDouble::*at_function_type)( int ) const;
             at_function_type at_function_value( &::SireMaths::MultiDouble::at );
             
             MultiDouble_exposer.def( 
@@ -52,7 +52,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::compareEqual
         
-            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*compareEqual_function_type )( ::SireMaths::MultiDouble const & ) const;
+            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*compareEqual_function_type)( ::SireMaths::MultiDouble const & ) const;
             compareEqual_function_type compareEqual_function_value( &::SireMaths::MultiDouble::compareEqual );
             
             MultiDouble_exposer.def( 
@@ -63,7 +63,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::compareGreater
         
-            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*compareGreater_function_type )( ::SireMaths::MultiDouble const & ) const;
+            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*compareGreater_function_type)( ::SireMaths::MultiDouble const & ) const;
             compareGreater_function_type compareGreater_function_value( &::SireMaths::MultiDouble::compareGreater );
             
             MultiDouble_exposer.def( 
@@ -74,7 +74,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::compareGreaterEqual
         
-            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*compareGreaterEqual_function_type )( ::SireMaths::MultiDouble const & ) const;
+            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*compareGreaterEqual_function_type)( ::SireMaths::MultiDouble const & ) const;
             compareGreaterEqual_function_type compareGreaterEqual_function_value( &::SireMaths::MultiDouble::compareGreaterEqual );
             
             MultiDouble_exposer.def( 
@@ -85,7 +85,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::compareLess
         
-            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*compareLess_function_type )( ::SireMaths::MultiDouble const & ) const;
+            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*compareLess_function_type)( ::SireMaths::MultiDouble const & ) const;
             compareLess_function_type compareLess_function_value( &::SireMaths::MultiDouble::compareLess );
             
             MultiDouble_exposer.def( 
@@ -96,7 +96,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::compareLessEqual
         
-            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*compareLessEqual_function_type )( ::SireMaths::MultiDouble const & ) const;
+            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*compareLessEqual_function_type)( ::SireMaths::MultiDouble const & ) const;
             compareLessEqual_function_type compareLessEqual_function_value( &::SireMaths::MultiDouble::compareLessEqual );
             
             MultiDouble_exposer.def( 
@@ -107,7 +107,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::compareNotEqual
         
-            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*compareNotEqual_function_type )( ::SireMaths::MultiDouble const & ) const;
+            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*compareNotEqual_function_type)( ::SireMaths::MultiDouble const & ) const;
             compareNotEqual_function_type compareNotEqual_function_value( &::SireMaths::MultiDouble::compareNotEqual );
             
             MultiDouble_exposer.def( 
@@ -128,7 +128,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::doubleSum
         
-            typedef double ( ::SireMaths::MultiDouble::*doubleSum_function_type )(  ) const;
+            typedef double ( ::SireMaths::MultiDouble::*doubleSum_function_type)(  ) const;
             doubleSum_function_type doubleSum_function_value( &::SireMaths::MultiDouble::doubleSum );
             
             MultiDouble_exposer.def( 
@@ -182,7 +182,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::get
         
-            typedef double ( ::SireMaths::MultiDouble::*get_function_type )( int ) const;
+            typedef double ( ::SireMaths::MultiDouble::*get_function_type)( int ) const;
             get_function_type get_function_value( &::SireMaths::MultiDouble::get );
             
             MultiDouble_exposer.def( 
@@ -193,7 +193,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::getitem
         
-            typedef double ( ::SireMaths::MultiDouble::*getitem_function_type )( int ) const;
+            typedef double ( ::SireMaths::MultiDouble::*getitem_function_type)( int ) const;
             getitem_function_type getitem_function_value( &::SireMaths::MultiDouble::getitem );
             
             MultiDouble_exposer.def( 
@@ -204,7 +204,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::isAligned
         
-            typedef bool ( ::SireMaths::MultiDouble::*isAligned_function_type )(  ) const;
+            typedef bool ( ::SireMaths::MultiDouble::*isAligned_function_type)(  ) const;
             isAligned_function_type isAligned_function_value( &::SireMaths::MultiDouble::isAligned );
             
             MultiDouble_exposer.def( 
@@ -214,7 +214,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::logicalAnd
         
-            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*logicalAnd_function_type )( ::SireMaths::MultiDouble const & ) const;
+            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*logicalAnd_function_type)( ::SireMaths::MultiDouble const & ) const;
             logicalAnd_function_type logicalAnd_function_value( &::SireMaths::MultiDouble::logicalAnd );
             
             MultiDouble_exposer.def( 
@@ -225,7 +225,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::logicalAndNot
         
-            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*logicalAndNot_function_type )( ::SireMaths::MultiDouble const & ) const;
+            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*logicalAndNot_function_type)( ::SireMaths::MultiDouble const & ) const;
             logicalAndNot_function_type logicalAndNot_function_value( &::SireMaths::MultiDouble::logicalAndNot );
             
             MultiDouble_exposer.def( 
@@ -236,7 +236,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::logicalNot
         
-            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*logicalNot_function_type )(  ) const;
+            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*logicalNot_function_type)(  ) const;
             logicalNot_function_type logicalNot_function_value( &::SireMaths::MultiDouble::logicalNot );
             
             MultiDouble_exposer.def( 
@@ -246,7 +246,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::logicalOr
         
-            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*logicalOr_function_type )( ::SireMaths::MultiDouble const & ) const;
+            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*logicalOr_function_type)( ::SireMaths::MultiDouble const & ) const;
             logicalOr_function_type logicalOr_function_value( &::SireMaths::MultiDouble::logicalOr );
             
             MultiDouble_exposer.def( 
@@ -257,7 +257,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::logicalXor
         
-            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*logicalXor_function_type )( ::SireMaths::MultiDouble const & ) const;
+            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*logicalXor_function_type)( ::SireMaths::MultiDouble const & ) const;
             logicalXor_function_type logicalXor_function_value( &::SireMaths::MultiDouble::logicalXor );
             
             MultiDouble_exposer.def( 
@@ -268,7 +268,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::max
         
-            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*max_function_type )( ::SireMaths::MultiDouble const & ) const;
+            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*max_function_type)( ::SireMaths::MultiDouble const & ) const;
             max_function_type max_function_value( &::SireMaths::MultiDouble::max );
             
             MultiDouble_exposer.def( 
@@ -279,7 +279,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::min
         
-            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*min_function_type )( ::SireMaths::MultiDouble const & ) const;
+            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*min_function_type)( ::SireMaths::MultiDouble const & ) const;
             min_function_type min_function_value( &::SireMaths::MultiDouble::min );
             
             MultiDouble_exposer.def( 
@@ -290,7 +290,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::multiplyAdd
         
-            typedef ::SireMaths::MultiDouble & ( ::SireMaths::MultiDouble::*multiplyAdd_function_type )( ::SireMaths::MultiDouble const &,::SireMaths::MultiDouble const & ) ;
+            typedef ::SireMaths::MultiDouble & ( ::SireMaths::MultiDouble::*multiplyAdd_function_type)( ::SireMaths::MultiDouble const &,::SireMaths::MultiDouble const & ) ;
             multiplyAdd_function_type multiplyAdd_function_value( &::SireMaths::MultiDouble::multiplyAdd );
             
             MultiDouble_exposer.def( 
@@ -312,7 +312,7 @@ void register_MultiDouble_class(){
         MultiDouble_exposer.def( bp::self <= bp::self );
         { //::SireMaths::MultiDouble::operator=
         
-            typedef ::SireMaths::MultiDouble & ( ::SireMaths::MultiDouble::*assign_function_type )( ::SireMaths::MultiDouble const & ) ;
+            typedef ::SireMaths::MultiDouble & ( ::SireMaths::MultiDouble::*assign_function_type)( ::SireMaths::MultiDouble const & ) ;
             assign_function_type assign_function_value( &::SireMaths::MultiDouble::operator= );
             
             MultiDouble_exposer.def( 
@@ -324,7 +324,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::operator=
         
-            typedef ::SireMaths::MultiDouble & ( ::SireMaths::MultiDouble::*assign_function_type )( ::SireMaths::MultiFloat const & ) ;
+            typedef ::SireMaths::MultiDouble & ( ::SireMaths::MultiDouble::*assign_function_type)( ::SireMaths::MultiFloat const & ) ;
             assign_function_type assign_function_value( &::SireMaths::MultiDouble::operator= );
             
             MultiDouble_exposer.def( 
@@ -336,7 +336,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::operator=
         
-            typedef ::SireMaths::MultiDouble & ( ::SireMaths::MultiDouble::*assign_function_type )( double ) ;
+            typedef ::SireMaths::MultiDouble & ( ::SireMaths::MultiDouble::*assign_function_type)( double ) ;
             assign_function_type assign_function_value( &::SireMaths::MultiDouble::operator= );
             
             MultiDouble_exposer.def( 
@@ -351,7 +351,7 @@ void register_MultiDouble_class(){
         MultiDouble_exposer.def( bp::self >= bp::self );
         { //::SireMaths::MultiDouble::operator[]
         
-            typedef double ( ::SireMaths::MultiDouble::*__getitem___function_type )( int ) const;
+            typedef double ( ::SireMaths::MultiDouble::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMaths::MultiDouble::operator[] );
             
             MultiDouble_exposer.def( 
@@ -364,7 +364,7 @@ void register_MultiDouble_class(){
         MultiDouble_exposer.def( bp::self | bp::self );
         { //::SireMaths::MultiDouble::reciprocal
         
-            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*reciprocal_function_type )(  ) const;
+            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*reciprocal_function_type)(  ) const;
             reciprocal_function_type reciprocal_function_value( &::SireMaths::MultiDouble::reciprocal );
             
             MultiDouble_exposer.def( 
@@ -374,7 +374,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::rotate
         
-            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*rotate_function_type )(  ) const;
+            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*rotate_function_type)(  ) const;
             rotate_function_type rotate_function_value( &::SireMaths::MultiDouble::rotate );
             
             MultiDouble_exposer.def( 
@@ -384,7 +384,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::rsqrt
         
-            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*rsqrt_function_type )(  ) const;
+            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*rsqrt_function_type)(  ) const;
             rsqrt_function_type rsqrt_function_value( &::SireMaths::MultiDouble::rsqrt );
             
             MultiDouble_exposer.def( 
@@ -394,7 +394,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::set
         
-            typedef void ( ::SireMaths::MultiDouble::*set_function_type )( int,double ) ;
+            typedef void ( ::SireMaths::MultiDouble::*set_function_type)( int,double ) ;
             set_function_type set_function_value( &::SireMaths::MultiDouble::set );
             
             MultiDouble_exposer.def( 
@@ -415,7 +415,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::sqrt
         
-            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*sqrt_function_type )(  ) const;
+            typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*sqrt_function_type)(  ) const;
             sqrt_function_type sqrt_function_value( &::SireMaths::MultiDouble::sqrt );
             
             MultiDouble_exposer.def( 
@@ -425,7 +425,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::sum
         
-            typedef double ( ::SireMaths::MultiDouble::*sum_function_type )(  ) const;
+            typedef double ( ::SireMaths::MultiDouble::*sum_function_type)(  ) const;
             sum_function_type sum_function_value( &::SireMaths::MultiDouble::sum );
             
             MultiDouble_exposer.def( 
@@ -446,7 +446,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::toBinaryString
         
-            typedef ::QString ( ::SireMaths::MultiDouble::*toBinaryString_function_type )(  ) const;
+            typedef ::QString ( ::SireMaths::MultiDouble::*toBinaryString_function_type)(  ) const;
             toBinaryString_function_type toBinaryString_function_value( &::SireMaths::MultiDouble::toBinaryString );
             
             MultiDouble_exposer.def( 
@@ -467,7 +467,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::toString
         
-            typedef ::QString ( ::SireMaths::MultiDouble::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMaths::MultiDouble::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMaths::MultiDouble::toString );
             
             MultiDouble_exposer.def( 
@@ -487,7 +487,7 @@ void register_MultiDouble_class(){
         }
         { //::SireMaths::MultiDouble::what
         
-            typedef char const * ( ::SireMaths::MultiDouble::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMaths::MultiDouble::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMaths::MultiDouble::what );
             
             MultiDouble_exposer.def( 

@@ -11,6 +11,8 @@ namespace bp = boost::python;
 
 #include "SireBase/property.h"
 
+#include "SireBase/stringproperty.h"
+
 #include "SireError/errors.h"
 
 #include "SireFF/detail/atomiccoords3d.h"
@@ -55,7 +57,7 @@ void register_AngleParameterName_class(){
         bp::scope AngleParameterName_scope( AngleParameterName_exposer );
         { //::SireMM::AngleParameterName::angle
         
-            typedef ::SireBase::PropertyName const & ( ::SireMM::AngleParameterName::*angle_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireMM::AngleParameterName::*angle_function_type)(  ) const;
             angle_function_type angle_function_value( &::SireMM::AngleParameterName::angle );
             
             AngleParameterName_exposer.def( 

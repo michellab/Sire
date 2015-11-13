@@ -57,7 +57,7 @@ void register_Mopac_class(){
         Mopac_exposer.def( bp::init< Squire::Mopac const & >(( bp::arg("other") )) );
         { //::Squire::Mopac::calculateCharges
         
-            typedef ::SireMol::AtomCharges ( ::Squire::Mopac::*calculateCharges_function_type )( ::SireMol::Molecule const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::AtomCharges ( ::Squire::Mopac::*calculateCharges_function_type)( ::SireMol::Molecule const &,::SireBase::PropertyMap const & ) const;
             calculateCharges_function_type calculateCharges_function_value( &::Squire::Mopac::calculateCharges );
             
             Mopac_exposer.def( 
@@ -68,7 +68,7 @@ void register_Mopac_class(){
         }
         { //::Squire::Mopac::chargeTemplate
         
-            typedef ::QString const & ( ::Squire::Mopac::*chargeTemplate_function_type )(  ) const;
+            typedef ::QString const & ( ::Squire::Mopac::*chargeTemplate_function_type)(  ) const;
             chargeTemplate_function_type chargeTemplate_function_value( &::Squire::Mopac::chargeTemplate );
             
             Mopac_exposer.def( 
@@ -79,7 +79,7 @@ void register_Mopac_class(){
         }
         { //::Squire::Mopac::energyTemplate
         
-            typedef ::QString const & ( ::Squire::Mopac::*energyTemplate_function_type )(  ) const;
+            typedef ::QString const & ( ::Squire::Mopac::*energyTemplate_function_type)(  ) const;
             energyTemplate_function_type energyTemplate_function_value( &::Squire::Mopac::energyTemplate );
             
             Mopac_exposer.def( 
@@ -90,7 +90,7 @@ void register_Mopac_class(){
         }
         { //::Squire::Mopac::environment
         
-            typedef ::QHash< QString, QString > const & ( ::Squire::Mopac::*environment_function_type )(  ) const;
+            typedef ::QHash< QString, QString > const & ( ::Squire::Mopac::*environment_function_type)(  ) const;
             environment_function_type environment_function_value( &::Squire::Mopac::environment );
             
             Mopac_exposer.def( 
@@ -101,7 +101,7 @@ void register_Mopac_class(){
         }
         { //::Squire::Mopac::environment
         
-            typedef ::QString ( ::Squire::Mopac::*environment_function_type )( ::QString const & ) const;
+            typedef ::QString ( ::Squire::Mopac::*environment_function_type)( ::QString const & ) const;
             environment_function_type environment_function_value( &::Squire::Mopac::environment );
             
             Mopac_exposer.def( 
@@ -112,7 +112,7 @@ void register_Mopac_class(){
         }
         { //::Squire::Mopac::executable
         
-            typedef ::QString ( ::Squire::Mopac::*executable_function_type )(  ) const;
+            typedef ::QString ( ::Squire::Mopac::*executable_function_type)(  ) const;
             executable_function_type executable_function_value( &::Squire::Mopac::executable );
             
             Mopac_exposer.def( 
@@ -122,7 +122,7 @@ void register_Mopac_class(){
         }
         { //::Squire::Mopac::forceTemplate
         
-            typedef ::QString const & ( ::Squire::Mopac::*forceTemplate_function_type )(  ) const;
+            typedef ::QString const & ( ::Squire::Mopac::*forceTemplate_function_type)(  ) const;
             forceTemplate_function_type forceTemplate_function_value( &::Squire::Mopac::forceTemplate );
             
             Mopac_exposer.def( 
@@ -133,7 +133,7 @@ void register_Mopac_class(){
         }
         { //::Squire::Mopac::method
         
-            typedef ::QString const & ( ::Squire::Mopac::*method_function_type )(  ) const;
+            typedef ::QString const & ( ::Squire::Mopac::*method_function_type)(  ) const;
             method_function_type method_function_value( &::Squire::Mopac::method );
             
             Mopac_exposer.def( 
@@ -144,7 +144,7 @@ void register_Mopac_class(){
         }
         { //::Squire::Mopac::mopacInputFilename
         
-            typedef ::QString const & ( ::Squire::Mopac::*mopacInputFilename_function_type )(  ) const;
+            typedef ::QString const & ( ::Squire::Mopac::*mopacInputFilename_function_type)(  ) const;
             mopacInputFilename_function_type mopacInputFilename_function_value( &::Squire::Mopac::mopacInputFilename );
             
             Mopac_exposer.def( 
@@ -155,7 +155,7 @@ void register_Mopac_class(){
         }
         { //::Squire::Mopac::mopacOutputFilename
         
-            typedef ::QString const & ( ::Squire::Mopac::*mopacOutputFilename_function_type )(  ) const;
+            typedef ::QString const & ( ::Squire::Mopac::*mopacOutputFilename_function_type)(  ) const;
             mopacOutputFilename_function_type mopacOutputFilename_function_value( &::Squire::Mopac::mopacOutputFilename );
             
             Mopac_exposer.def( 
@@ -167,7 +167,7 @@ void register_Mopac_class(){
         Mopac_exposer.def( bp::self != bp::self );
         { //::Squire::Mopac::operator=
         
-            typedef ::Squire::Mopac & ( ::Squire::Mopac::*assign_function_type )( ::Squire::Mopac const & ) ;
+            typedef ::Squire::Mopac & ( ::Squire::Mopac::*assign_function_type)( ::Squire::Mopac const & ) ;
             assign_function_type assign_function_value( &::Squire::Mopac::operator= );
             
             Mopac_exposer.def( 
@@ -180,7 +180,7 @@ void register_Mopac_class(){
         Mopac_exposer.def( bp::self == bp::self );
         { //::Squire::Mopac::setChargeTemplate
         
-            typedef void ( ::Squire::Mopac::*setChargeTemplate_function_type )( ::QString const & ) ;
+            typedef void ( ::Squire::Mopac::*setChargeTemplate_function_type)( ::QString const & ) ;
             setChargeTemplate_function_type setChargeTemplate_function_value( &::Squire::Mopac::setChargeTemplate );
             
             Mopac_exposer.def( 
@@ -191,7 +191,7 @@ void register_Mopac_class(){
         }
         { //::Squire::Mopac::setEnergyTemplate
         
-            typedef void ( ::Squire::Mopac::*setEnergyTemplate_function_type )( ::QString const & ) ;
+            typedef void ( ::Squire::Mopac::*setEnergyTemplate_function_type)( ::QString const & ) ;
             setEnergyTemplate_function_type setEnergyTemplate_function_value( &::Squire::Mopac::setEnergyTemplate );
             
             Mopac_exposer.def( 
@@ -202,7 +202,7 @@ void register_Mopac_class(){
         }
         { //::Squire::Mopac::setEnvironment
         
-            typedef void ( ::Squire::Mopac::*setEnvironment_function_type )( ::QString const &,::QString const & ) ;
+            typedef void ( ::Squire::Mopac::*setEnvironment_function_type)( ::QString const &,::QString const & ) ;
             setEnvironment_function_type setEnvironment_function_value( &::Squire::Mopac::setEnvironment );
             
             Mopac_exposer.def( 
@@ -213,7 +213,7 @@ void register_Mopac_class(){
         }
         { //::Squire::Mopac::setExecutable
         
-            typedef void ( ::Squire::Mopac::*setExecutable_function_type )( ::QString const & ) ;
+            typedef void ( ::Squire::Mopac::*setExecutable_function_type)( ::QString const & ) ;
             setExecutable_function_type setExecutable_function_value( &::Squire::Mopac::setExecutable );
             
             Mopac_exposer.def( 
@@ -224,7 +224,7 @@ void register_Mopac_class(){
         }
         { //::Squire::Mopac::setForceTemplate
         
-            typedef void ( ::Squire::Mopac::*setForceTemplate_function_type )( ::QString const & ) ;
+            typedef void ( ::Squire::Mopac::*setForceTemplate_function_type)( ::QString const & ) ;
             setForceTemplate_function_type setForceTemplate_function_value( &::Squire::Mopac::setForceTemplate );
             
             Mopac_exposer.def( 
@@ -235,7 +235,7 @@ void register_Mopac_class(){
         }
         { //::Squire::Mopac::setMethod
         
-            typedef void ( ::Squire::Mopac::*setMethod_function_type )( ::QString const & ) ;
+            typedef void ( ::Squire::Mopac::*setMethod_function_type)( ::QString const & ) ;
             setMethod_function_type setMethod_function_value( &::Squire::Mopac::setMethod );
             
             Mopac_exposer.def( 
@@ -246,7 +246,7 @@ void register_Mopac_class(){
         }
         { //::Squire::Mopac::setMopacInputFilename
         
-            typedef void ( ::Squire::Mopac::*setMopacInputFilename_function_type )( ::QString const & ) ;
+            typedef void ( ::Squire::Mopac::*setMopacInputFilename_function_type)( ::QString const & ) ;
             setMopacInputFilename_function_type setMopacInputFilename_function_value( &::Squire::Mopac::setMopacInputFilename );
             
             Mopac_exposer.def( 
@@ -257,7 +257,7 @@ void register_Mopac_class(){
         }
         { //::Squire::Mopac::setMopacOutputFilename
         
-            typedef void ( ::Squire::Mopac::*setMopacOutputFilename_function_type )( ::QString const & ) ;
+            typedef void ( ::Squire::Mopac::*setMopacOutputFilename_function_type)( ::QString const & ) ;
             setMopacOutputFilename_function_type setMopacOutputFilename_function_value( &::Squire::Mopac::setMopacOutputFilename );
             
             Mopac_exposer.def( 
@@ -268,7 +268,7 @@ void register_Mopac_class(){
         }
         { //::Squire::Mopac::setTotalCharge
         
-            typedef void ( ::Squire::Mopac::*setTotalCharge_function_type )( int ) ;
+            typedef void ( ::Squire::Mopac::*setTotalCharge_function_type)( int ) ;
             setTotalCharge_function_type setTotalCharge_function_value( &::Squire::Mopac::setTotalCharge );
             
             Mopac_exposer.def( 
@@ -279,7 +279,7 @@ void register_Mopac_class(){
         }
         { //::Squire::Mopac::totalCharge
         
-            typedef int ( ::Squire::Mopac::*totalCharge_function_type )(  ) const;
+            typedef int ( ::Squire::Mopac::*totalCharge_function_type)(  ) const;
             totalCharge_function_type totalCharge_function_value( &::Squire::Mopac::totalCharge );
             
             Mopac_exposer.def( 

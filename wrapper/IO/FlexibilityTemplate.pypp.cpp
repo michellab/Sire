@@ -63,7 +63,7 @@ void register_FlexibilityTemplate_class(){
         FlexibilityTemplate_exposer.def( bp::init< SireIO::FlexibilityTemplate const & >(( bp::arg("other") )) );
         { //::SireIO::FlexibilityTemplate::getAngleDeltas
         
-            typedef ::QHash< SireMol::AngleID, SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 > > const & ( ::SireIO::FlexibilityTemplate::*getAngleDeltas_function_type )(  ) const;
+            typedef ::QHash< SireMol::AngleID, SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 > > const & ( ::SireIO::FlexibilityTemplate::*getAngleDeltas_function_type)(  ) const;
             getAngleDeltas_function_type getAngleDeltas_function_value( &::SireIO::FlexibilityTemplate::getAngleDeltas );
             
             FlexibilityTemplate_exposer.def( 
@@ -74,7 +74,7 @@ void register_FlexibilityTemplate_class(){
         }
         { //::SireIO::FlexibilityTemplate::getBondDeltas
         
-            typedef ::QHash< SireMol::BondID, SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 > > const & ( ::SireIO::FlexibilityTemplate::*getBondDeltas_function_type )(  ) const;
+            typedef ::QHash< SireMol::BondID, SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 > > const & ( ::SireIO::FlexibilityTemplate::*getBondDeltas_function_type)(  ) const;
             getBondDeltas_function_type getBondDeltas_function_value( &::SireIO::FlexibilityTemplate::getBondDeltas );
             
             FlexibilityTemplate_exposer.def( 
@@ -85,7 +85,7 @@ void register_FlexibilityTemplate_class(){
         }
         { //::SireIO::FlexibilityTemplate::getDelta
         
-            typedef ::SireUnits::Dimension::Length ( ::SireIO::FlexibilityTemplate::*getDelta_function_type )( ::SireMol::BondID const & ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireIO::FlexibilityTemplate::*getDelta_function_type)( ::SireMol::BondID const & ) const;
             getDelta_function_type getDelta_function_value( &::SireIO::FlexibilityTemplate::getDelta );
             
             FlexibilityTemplate_exposer.def( 
@@ -96,7 +96,7 @@ void register_FlexibilityTemplate_class(){
         }
         { //::SireIO::FlexibilityTemplate::getDelta
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireIO::FlexibilityTemplate::*getDelta_function_type )( ::SireMol::AngleID const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireIO::FlexibilityTemplate::*getDelta_function_type)( ::SireMol::AngleID const & ) const;
             getDelta_function_type getDelta_function_value( &::SireIO::FlexibilityTemplate::getDelta );
             
             FlexibilityTemplate_exposer.def( 
@@ -107,7 +107,7 @@ void register_FlexibilityTemplate_class(){
         }
         { //::SireIO::FlexibilityTemplate::getDelta
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireIO::FlexibilityTemplate::*getDelta_function_type )( ::SireMol::DihedralID const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireIO::FlexibilityTemplate::*getDelta_function_type)( ::SireMol::DihedralID const & ) const;
             getDelta_function_type getDelta_function_value( &::SireIO::FlexibilityTemplate::getDelta );
             
             FlexibilityTemplate_exposer.def( 
@@ -118,7 +118,7 @@ void register_FlexibilityTemplate_class(){
         }
         { //::SireIO::FlexibilityTemplate::getDihedralDeltas
         
-            typedef ::QHash< SireMol::DihedralID, SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 > > const & ( ::SireIO::FlexibilityTemplate::*getDihedralDeltas_function_type )(  ) const;
+            typedef ::QHash< SireMol::DihedralID, SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 > > const & ( ::SireIO::FlexibilityTemplate::*getDihedralDeltas_function_type)(  ) const;
             getDihedralDeltas_function_type getDihedralDeltas_function_value( &::SireIO::FlexibilityTemplate::getDihedralDeltas );
             
             FlexibilityTemplate_exposer.def( 
@@ -129,7 +129,7 @@ void register_FlexibilityTemplate_class(){
         }
         { //::SireIO::FlexibilityTemplate::getMaximumAngleVar
         
-            typedef int ( ::SireIO::FlexibilityTemplate::*getMaximumAngleVar_function_type )(  ) const;
+            typedef int ( ::SireIO::FlexibilityTemplate::*getMaximumAngleVar_function_type)(  ) const;
             getMaximumAngleVar_function_type getMaximumAngleVar_function_value( &::SireIO::FlexibilityTemplate::getMaximumAngleVar );
             
             FlexibilityTemplate_exposer.def( 
@@ -139,7 +139,7 @@ void register_FlexibilityTemplate_class(){
         }
         { //::SireIO::FlexibilityTemplate::getMaximumBondVar
         
-            typedef int ( ::SireIO::FlexibilityTemplate::*getMaximumBondVar_function_type )(  ) const;
+            typedef int ( ::SireIO::FlexibilityTemplate::*getMaximumBondVar_function_type)(  ) const;
             getMaximumBondVar_function_type getMaximumBondVar_function_value( &::SireIO::FlexibilityTemplate::getMaximumBondVar );
             
             FlexibilityTemplate_exposer.def( 
@@ -149,7 +149,7 @@ void register_FlexibilityTemplate_class(){
         }
         { //::SireIO::FlexibilityTemplate::getMaximumDihedralVar
         
-            typedef int ( ::SireIO::FlexibilityTemplate::*getMaximumDihedralVar_function_type )(  ) const;
+            typedef int ( ::SireIO::FlexibilityTemplate::*getMaximumDihedralVar_function_type)(  ) const;
             getMaximumDihedralVar_function_type getMaximumDihedralVar_function_value( &::SireIO::FlexibilityTemplate::getMaximumDihedralVar );
             
             FlexibilityTemplate_exposer.def( 
@@ -159,7 +159,7 @@ void register_FlexibilityTemplate_class(){
         }
         { //::SireIO::FlexibilityTemplate::getName
         
-            typedef ::QString const ( ::SireIO::FlexibilityTemplate::*getName_function_type )(  ) ;
+            typedef ::QString const ( ::SireIO::FlexibilityTemplate::*getName_function_type)(  ) ;
             getName_function_type getName_function_value( &::SireIO::FlexibilityTemplate::getName );
             
             FlexibilityTemplate_exposer.def( 
@@ -169,7 +169,7 @@ void register_FlexibilityTemplate_class(){
         }
         { //::SireIO::FlexibilityTemplate::getRotation
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireIO::FlexibilityTemplate::*getRotation_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireIO::FlexibilityTemplate::*getRotation_function_type)(  ) const;
             getRotation_function_type getRotation_function_value( &::SireIO::FlexibilityTemplate::getRotation );
             
             FlexibilityTemplate_exposer.def( 
@@ -179,7 +179,7 @@ void register_FlexibilityTemplate_class(){
         }
         { //::SireIO::FlexibilityTemplate::getTranslation
         
-            typedef ::SireUnits::Dimension::Length ( ::SireIO::FlexibilityTemplate::*getTranslation_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireIO::FlexibilityTemplate::*getTranslation_function_type)(  ) const;
             getTranslation_function_type getTranslation_function_value( &::SireIO::FlexibilityTemplate::getTranslation );
             
             FlexibilityTemplate_exposer.def( 
@@ -190,7 +190,7 @@ void register_FlexibilityTemplate_class(){
         FlexibilityTemplate_exposer.def( bp::self != bp::self );
         { //::SireIO::FlexibilityTemplate::operator=
         
-            typedef ::SireIO::FlexibilityTemplate & ( ::SireIO::FlexibilityTemplate::*assign_function_type )( ::SireIO::FlexibilityTemplate const & ) ;
+            typedef ::SireIO::FlexibilityTemplate & ( ::SireIO::FlexibilityTemplate::*assign_function_type)( ::SireIO::FlexibilityTemplate const & ) ;
             assign_function_type assign_function_value( &::SireIO::FlexibilityTemplate::operator= );
             
             FlexibilityTemplate_exposer.def( 
@@ -203,7 +203,7 @@ void register_FlexibilityTemplate_class(){
         FlexibilityTemplate_exposer.def( bp::self == bp::self );
         { //::SireIO::FlexibilityTemplate::setAngleDelta
         
-            typedef void ( ::SireIO::FlexibilityTemplate::*setAngleDelta_function_type )( ::SireMol::AngleID const &,::SireUnits::Dimension::Angle const & ) ;
+            typedef void ( ::SireIO::FlexibilityTemplate::*setAngleDelta_function_type)( ::SireMol::AngleID const &,::SireUnits::Dimension::Angle const & ) ;
             setAngleDelta_function_type setAngleDelta_function_value( &::SireIO::FlexibilityTemplate::setAngleDelta );
             
             FlexibilityTemplate_exposer.def( 
@@ -214,7 +214,7 @@ void register_FlexibilityTemplate_class(){
         }
         { //::SireIO::FlexibilityTemplate::setBondDelta
         
-            typedef void ( ::SireIO::FlexibilityTemplate::*setBondDelta_function_type )( ::SireMol::BondID const &,::SireUnits::Dimension::Length const & ) ;
+            typedef void ( ::SireIO::FlexibilityTemplate::*setBondDelta_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::Length const & ) ;
             setBondDelta_function_type setBondDelta_function_value( &::SireIO::FlexibilityTemplate::setBondDelta );
             
             FlexibilityTemplate_exposer.def( 
@@ -225,7 +225,7 @@ void register_FlexibilityTemplate_class(){
         }
         { //::SireIO::FlexibilityTemplate::setDihedralDelta
         
-            typedef void ( ::SireIO::FlexibilityTemplate::*setDihedralDelta_function_type )( ::SireMol::DihedralID const &,::SireUnits::Dimension::Angle const & ) ;
+            typedef void ( ::SireIO::FlexibilityTemplate::*setDihedralDelta_function_type)( ::SireMol::DihedralID const &,::SireUnits::Dimension::Angle const & ) ;
             setDihedralDelta_function_type setDihedralDelta_function_value( &::SireIO::FlexibilityTemplate::setDihedralDelta );
             
             FlexibilityTemplate_exposer.def( 
@@ -236,7 +236,7 @@ void register_FlexibilityTemplate_class(){
         }
         { //::SireIO::FlexibilityTemplate::setMaximumAngleVar
         
-            typedef void ( ::SireIO::FlexibilityTemplate::*setMaximumAngleVar_function_type )( int ) ;
+            typedef void ( ::SireIO::FlexibilityTemplate::*setMaximumAngleVar_function_type)( int ) ;
             setMaximumAngleVar_function_type setMaximumAngleVar_function_value( &::SireIO::FlexibilityTemplate::setMaximumAngleVar );
             
             FlexibilityTemplate_exposer.def( 
@@ -247,7 +247,7 @@ void register_FlexibilityTemplate_class(){
         }
         { //::SireIO::FlexibilityTemplate::setMaximumBondVar
         
-            typedef void ( ::SireIO::FlexibilityTemplate::*setMaximumBondVar_function_type )( int ) ;
+            typedef void ( ::SireIO::FlexibilityTemplate::*setMaximumBondVar_function_type)( int ) ;
             setMaximumBondVar_function_type setMaximumBondVar_function_value( &::SireIO::FlexibilityTemplate::setMaximumBondVar );
             
             FlexibilityTemplate_exposer.def( 
@@ -258,7 +258,7 @@ void register_FlexibilityTemplate_class(){
         }
         { //::SireIO::FlexibilityTemplate::setMaximumDihedralVar
         
-            typedef void ( ::SireIO::FlexibilityTemplate::*setMaximumDihedralVar_function_type )( int ) ;
+            typedef void ( ::SireIO::FlexibilityTemplate::*setMaximumDihedralVar_function_type)( int ) ;
             setMaximumDihedralVar_function_type setMaximumDihedralVar_function_value( &::SireIO::FlexibilityTemplate::setMaximumDihedralVar );
             
             FlexibilityTemplate_exposer.def( 
@@ -269,7 +269,7 @@ void register_FlexibilityTemplate_class(){
         }
         { //::SireIO::FlexibilityTemplate::setRotation
         
-            typedef void ( ::SireIO::FlexibilityTemplate::*setRotation_function_type )( ::SireUnits::Dimension::Angle const & ) ;
+            typedef void ( ::SireIO::FlexibilityTemplate::*setRotation_function_type)( ::SireUnits::Dimension::Angle const & ) ;
             setRotation_function_type setRotation_function_value( &::SireIO::FlexibilityTemplate::setRotation );
             
             FlexibilityTemplate_exposer.def( 
@@ -280,7 +280,7 @@ void register_FlexibilityTemplate_class(){
         }
         { //::SireIO::FlexibilityTemplate::setTranslation
         
-            typedef void ( ::SireIO::FlexibilityTemplate::*setTranslation_function_type )( ::SireUnits::Dimension::Length const & ) ;
+            typedef void ( ::SireIO::FlexibilityTemplate::*setTranslation_function_type)( ::SireUnits::Dimension::Length const & ) ;
             setTranslation_function_type setTranslation_function_value( &::SireIO::FlexibilityTemplate::setTranslation );
             
             FlexibilityTemplate_exposer.def( 

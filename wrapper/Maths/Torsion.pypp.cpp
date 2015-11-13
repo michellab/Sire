@@ -32,7 +32,7 @@ void register_Torsion_class(){
         Torsion_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const &, SireMaths::Vector const &, SireMaths::Vector const & >(( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3") )) );
         { //::SireMaths::Torsion::angle
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMaths::Torsion::*angle_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMaths::Torsion::*angle_function_type)(  ) const;
             angle_function_type angle_function_value( &::SireMaths::Torsion::angle );
             
             Torsion_exposer.def( 
@@ -42,7 +42,7 @@ void register_Torsion_class(){
         }
         { //::SireMaths::Torsion::at
         
-            typedef ::SireMaths::Vector const & ( ::SireMaths::Torsion::*at_function_type )( int ) const;
+            typedef ::SireMaths::Vector const & ( ::SireMaths::Torsion::*at_function_type)( int ) const;
             at_function_type at_function_value( &::SireMaths::Torsion::at );
             
             Torsion_exposer.def( 
@@ -54,7 +54,7 @@ void register_Torsion_class(){
         }
         { //::SireMaths::Torsion::count
         
-            typedef int ( ::SireMaths::Torsion::*count_function_type )(  ) const;
+            typedef int ( ::SireMaths::Torsion::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMaths::Torsion::count );
             
             Torsion_exposer.def( 
@@ -64,7 +64,7 @@ void register_Torsion_class(){
         }
         { //::SireMaths::Torsion::improperAngle
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMaths::Torsion::*improperAngle_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMaths::Torsion::*improperAngle_function_type)(  ) const;
             improperAngle_function_type improperAngle_function_value( &::SireMaths::Torsion::improperAngle );
             
             Torsion_exposer.def( 
@@ -74,7 +74,7 @@ void register_Torsion_class(){
         }
         { //::SireMaths::Torsion::line03
         
-            typedef ::SireMaths::Line ( ::SireMaths::Torsion::*line03_function_type )(  ) const;
+            typedef ::SireMaths::Line ( ::SireMaths::Torsion::*line03_function_type)(  ) const;
             line03_function_type line03_function_value( &::SireMaths::Torsion::line03 );
             
             Torsion_exposer.def( 
@@ -84,7 +84,7 @@ void register_Torsion_class(){
         }
         { //::SireMaths::Torsion::line12
         
-            typedef ::SireMaths::Line ( ::SireMaths::Torsion::*line12_function_type )(  ) const;
+            typedef ::SireMaths::Line ( ::SireMaths::Torsion::*line12_function_type)(  ) const;
             line12_function_type line12_function_value( &::SireMaths::Torsion::line12 );
             
             Torsion_exposer.def( 
@@ -94,7 +94,7 @@ void register_Torsion_class(){
         }
         { //::SireMaths::Torsion::operator[]
         
-            typedef ::SireMaths::Vector const & ( ::SireMaths::Torsion::*__getitem___function_type )( int ) const;
+            typedef ::SireMaths::Vector const & ( ::SireMaths::Torsion::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMaths::Torsion::operator[] );
             
             Torsion_exposer.def( 
@@ -106,7 +106,7 @@ void register_Torsion_class(){
         }
         { //::SireMaths::Torsion::point
         
-            typedef ::SireMaths::Vector const & ( ::SireMaths::Torsion::*point_function_type )( int ) const;
+            typedef ::SireMaths::Vector const & ( ::SireMaths::Torsion::*point_function_type)( int ) const;
             point_function_type point_function_value( &::SireMaths::Torsion::point );
             
             Torsion_exposer.def( 
@@ -118,7 +118,7 @@ void register_Torsion_class(){
         }
         { //::SireMaths::Torsion::toString
         
-            typedef ::QString ( ::SireMaths::Torsion::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMaths::Torsion::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMaths::Torsion::toString );
             
             Torsion_exposer.def( 
@@ -128,7 +128,7 @@ void register_Torsion_class(){
         }
         { //::SireMaths::Torsion::triangle1
         
-            typedef ::SireMaths::Triangle ( ::SireMaths::Torsion::*triangle1_function_type )(  ) const;
+            typedef ::SireMaths::Triangle ( ::SireMaths::Torsion::*triangle1_function_type)(  ) const;
             triangle1_function_type triangle1_function_value( &::SireMaths::Torsion::triangle1 );
             
             Torsion_exposer.def( 
@@ -138,7 +138,7 @@ void register_Torsion_class(){
         }
         { //::SireMaths::Torsion::triangle2
         
-            typedef ::SireMaths::Triangle ( ::SireMaths::Torsion::*triangle2_function_type )(  ) const;
+            typedef ::SireMaths::Triangle ( ::SireMaths::Torsion::*triangle2_function_type)(  ) const;
             triangle2_function_type triangle2_function_value( &::SireMaths::Torsion::triangle2 );
             
             Torsion_exposer.def( 
@@ -158,7 +158,7 @@ void register_Torsion_class(){
         }
         { //::SireMaths::Torsion::vector03
         
-            typedef ::SireMaths::Vector ( ::SireMaths::Torsion::*vector03_function_type )(  ) const;
+            typedef ::SireMaths::Vector ( ::SireMaths::Torsion::*vector03_function_type)(  ) const;
             vector03_function_type vector03_function_value( &::SireMaths::Torsion::vector03 );
             
             Torsion_exposer.def( 
@@ -168,7 +168,7 @@ void register_Torsion_class(){
         }
         { //::SireMaths::Torsion::vector12
         
-            typedef ::SireMaths::Vector ( ::SireMaths::Torsion::*vector12_function_type )(  ) const;
+            typedef ::SireMaths::Vector ( ::SireMaths::Torsion::*vector12_function_type)(  ) const;
             vector12_function_type vector12_function_value( &::SireMaths::Torsion::vector12 );
             
             Torsion_exposer.def( 
@@ -178,7 +178,7 @@ void register_Torsion_class(){
         }
         { //::SireMaths::Torsion::what
         
-            typedef char const * ( ::SireMaths::Torsion::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMaths::Torsion::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMaths::Torsion::what );
             
             Torsion_exposer.def( 

@@ -42,7 +42,7 @@ void register_ExpAverage_class(){
         ExpAverage_exposer.def( bp::init< SireMaths::ExpAverage const & >(( bp::arg("other") )) );
         { //::SireMaths::ExpAverage::accumulate
         
-            typedef void ( ::SireMaths::ExpAverage::*accumulate_function_type )( double ) ;
+            typedef void ( ::SireMaths::ExpAverage::*accumulate_function_type)( double ) ;
             accumulate_function_type accumulate_function_value( &::SireMaths::ExpAverage::accumulate );
             
             ExpAverage_exposer.def( 
@@ -53,7 +53,7 @@ void register_ExpAverage_class(){
         }
         { //::SireMaths::ExpAverage::average
         
-            typedef double ( ::SireMaths::ExpAverage::*average_function_type )(  ) const;
+            typedef double ( ::SireMaths::ExpAverage::*average_function_type)(  ) const;
             average_function_type average_function_value( &::SireMaths::ExpAverage::average );
             
             ExpAverage_exposer.def( 
@@ -63,7 +63,7 @@ void register_ExpAverage_class(){
         }
         { //::SireMaths::ExpAverage::average2
         
-            typedef double ( ::SireMaths::ExpAverage::*average2_function_type )(  ) const;
+            typedef double ( ::SireMaths::ExpAverage::*average2_function_type)(  ) const;
             average2_function_type average2_function_value( &::SireMaths::ExpAverage::average2 );
             
             ExpAverage_exposer.def( 
@@ -73,7 +73,7 @@ void register_ExpAverage_class(){
         }
         { //::SireMaths::ExpAverage::clear
         
-            typedef void ( ::SireMaths::ExpAverage::*clear_function_type )(  ) ;
+            typedef void ( ::SireMaths::ExpAverage::*clear_function_type)(  ) ;
             clear_function_type clear_function_value( &::SireMaths::ExpAverage::clear );
             
             ExpAverage_exposer.def( 
@@ -85,7 +85,7 @@ void register_ExpAverage_class(){
         ExpAverage_exposer.def( bp::self + bp::self );
         { //::SireMaths::ExpAverage::operator=
         
-            typedef ::SireMaths::ExpAverage & ( ::SireMaths::ExpAverage::*assign_function_type )( ::SireMaths::ExpAverage const & ) ;
+            typedef ::SireMaths::ExpAverage & ( ::SireMaths::ExpAverage::*assign_function_type)( ::SireMaths::ExpAverage const & ) ;
             assign_function_type assign_function_value( &::SireMaths::ExpAverage::operator= );
             
             ExpAverage_exposer.def( 

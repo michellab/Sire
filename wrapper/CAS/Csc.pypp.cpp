@@ -37,7 +37,7 @@ void register_Csc_class(){
         Csc_exposer.def( bp::init< SireCAS::Csc const & >(( bp::arg("other") )) );
         { //::SireCAS::Csc::evaluate
         
-            typedef double ( ::SireCAS::Csc::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::Csc::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Csc::evaluate );
             
             Csc_exposer.def( 
@@ -48,7 +48,7 @@ void register_Csc_class(){
         }
         { //::SireCAS::Csc::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::Csc::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::Csc::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Csc::evaluate );
             
             Csc_exposer.def( 
@@ -70,7 +70,7 @@ void register_Csc_class(){
         }
         { //::SireCAS::Csc::what
         
-            typedef char const * ( ::SireCAS::Csc::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::Csc::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::Csc::what );
             
             Csc_exposer.def( 

@@ -44,7 +44,7 @@ void register_BondSymbols_class(){
         bp::scope BondSymbols_scope( BondSymbols_exposer );
         { //::SireMM::BondSymbols::r
         
-            typedef ::SireCAS::Symbol const & ( ::SireMM::BondSymbols::*r_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMM::BondSymbols::*r_function_type)(  ) const;
             r_function_type r_function_value( &::SireMM::BondSymbols::r );
             
             BondSymbols_exposer.def( 

@@ -44,7 +44,7 @@ void register_RecordValues_class(){
         RecordValues_exposer.def( bp::init< SireMaths::RecordValues const & >(( bp::arg("other") )) );
         { //::SireMaths::RecordValues::accumulate
         
-            typedef void ( ::SireMaths::RecordValues::*accumulate_function_type )( double ) ;
+            typedef void ( ::SireMaths::RecordValues::*accumulate_function_type)( double ) ;
             accumulate_function_type accumulate_function_value( &::SireMaths::RecordValues::accumulate );
             
             RecordValues_exposer.def( 
@@ -55,7 +55,7 @@ void register_RecordValues_class(){
         }
         { //::SireMaths::RecordValues::clear
         
-            typedef void ( ::SireMaths::RecordValues::*clear_function_type )(  ) ;
+            typedef void ( ::SireMaths::RecordValues::*clear_function_type)(  ) ;
             clear_function_type clear_function_value( &::SireMaths::RecordValues::clear );
             
             RecordValues_exposer.def( 
@@ -65,7 +65,7 @@ void register_RecordValues_class(){
         }
         { //::SireMaths::RecordValues::count
         
-            typedef int ( ::SireMaths::RecordValues::*count_function_type )(  ) const;
+            typedef int ( ::SireMaths::RecordValues::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMaths::RecordValues::count );
             
             RecordValues_exposer.def( 
@@ -75,7 +75,7 @@ void register_RecordValues_class(){
         }
         { //::SireMaths::RecordValues::max
         
-            typedef double ( ::SireMaths::RecordValues::*max_function_type )(  ) const;
+            typedef double ( ::SireMaths::RecordValues::*max_function_type)(  ) const;
             max_function_type max_function_value( &::SireMaths::RecordValues::max );
             
             RecordValues_exposer.def( 
@@ -85,7 +85,7 @@ void register_RecordValues_class(){
         }
         { //::SireMaths::RecordValues::maximum
         
-            typedef double ( ::SireMaths::RecordValues::*maximum_function_type )(  ) const;
+            typedef double ( ::SireMaths::RecordValues::*maximum_function_type)(  ) const;
             maximum_function_type maximum_function_value( &::SireMaths::RecordValues::maximum );
             
             RecordValues_exposer.def( 
@@ -95,7 +95,7 @@ void register_RecordValues_class(){
         }
         { //::SireMaths::RecordValues::mean
         
-            typedef double ( ::SireMaths::RecordValues::*mean_function_type )(  ) const;
+            typedef double ( ::SireMaths::RecordValues::*mean_function_type)(  ) const;
             mean_function_type mean_function_value( &::SireMaths::RecordValues::mean );
             
             RecordValues_exposer.def( 
@@ -105,7 +105,7 @@ void register_RecordValues_class(){
         }
         { //::SireMaths::RecordValues::meanOfSquares
         
-            typedef double ( ::SireMaths::RecordValues::*meanOfSquares_function_type )(  ) const;
+            typedef double ( ::SireMaths::RecordValues::*meanOfSquares_function_type)(  ) const;
             meanOfSquares_function_type meanOfSquares_function_value( &::SireMaths::RecordValues::meanOfSquares );
             
             RecordValues_exposer.def( 
@@ -115,7 +115,7 @@ void register_RecordValues_class(){
         }
         { //::SireMaths::RecordValues::median
         
-            typedef double ( ::SireMaths::RecordValues::*median_function_type )(  ) const;
+            typedef double ( ::SireMaths::RecordValues::*median_function_type)(  ) const;
             median_function_type median_function_value( &::SireMaths::RecordValues::median );
             
             RecordValues_exposer.def( 
@@ -125,7 +125,7 @@ void register_RecordValues_class(){
         }
         { //::SireMaths::RecordValues::min
         
-            typedef double ( ::SireMaths::RecordValues::*min_function_type )(  ) const;
+            typedef double ( ::SireMaths::RecordValues::*min_function_type)(  ) const;
             min_function_type min_function_value( &::SireMaths::RecordValues::min );
             
             RecordValues_exposer.def( 
@@ -135,7 +135,7 @@ void register_RecordValues_class(){
         }
         { //::SireMaths::RecordValues::minimum
         
-            typedef double ( ::SireMaths::RecordValues::*minimum_function_type )(  ) const;
+            typedef double ( ::SireMaths::RecordValues::*minimum_function_type)(  ) const;
             minimum_function_type minimum_function_value( &::SireMaths::RecordValues::minimum );
             
             RecordValues_exposer.def( 
@@ -145,7 +145,7 @@ void register_RecordValues_class(){
         }
         { //::SireMaths::RecordValues::nValues
         
-            typedef int ( ::SireMaths::RecordValues::*nValues_function_type )(  ) const;
+            typedef int ( ::SireMaths::RecordValues::*nValues_function_type)(  ) const;
             nValues_function_type nValues_function_value( &::SireMaths::RecordValues::nValues );
             
             RecordValues_exposer.def( 
@@ -156,7 +156,7 @@ void register_RecordValues_class(){
         RecordValues_exposer.def( bp::self != bp::self );
         { //::SireMaths::RecordValues::operator=
         
-            typedef ::SireMaths::RecordValues & ( ::SireMaths::RecordValues::*assign_function_type )( ::SireMaths::RecordValues const & ) ;
+            typedef ::SireMaths::RecordValues & ( ::SireMaths::RecordValues::*assign_function_type)( ::SireMaths::RecordValues const & ) ;
             assign_function_type assign_function_value( &::SireMaths::RecordValues::operator= );
             
             RecordValues_exposer.def( 
@@ -169,7 +169,7 @@ void register_RecordValues_class(){
         RecordValues_exposer.def( bp::self == bp::self );
         { //::SireMaths::RecordValues::size
         
-            typedef int ( ::SireMaths::RecordValues::*size_function_type )(  ) const;
+            typedef int ( ::SireMaths::RecordValues::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireMaths::RecordValues::size );
             
             RecordValues_exposer.def( 
@@ -179,7 +179,7 @@ void register_RecordValues_class(){
         }
         { //::SireMaths::RecordValues::standardDeviation
         
-            typedef double ( ::SireMaths::RecordValues::*standardDeviation_function_type )(  ) const;
+            typedef double ( ::SireMaths::RecordValues::*standardDeviation_function_type)(  ) const;
             standardDeviation_function_type standardDeviation_function_value( &::SireMaths::RecordValues::standardDeviation );
             
             RecordValues_exposer.def( 
@@ -189,7 +189,7 @@ void register_RecordValues_class(){
         }
         { //::SireMaths::RecordValues::stddev
         
-            typedef double ( ::SireMaths::RecordValues::*stddev_function_type )(  ) const;
+            typedef double ( ::SireMaths::RecordValues::*stddev_function_type)(  ) const;
             stddev_function_type stddev_function_value( &::SireMaths::RecordValues::stddev );
             
             RecordValues_exposer.def( 
@@ -199,7 +199,7 @@ void register_RecordValues_class(){
         }
         { //::SireMaths::RecordValues::sum
         
-            typedef double ( ::SireMaths::RecordValues::*sum_function_type )(  ) const;
+            typedef double ( ::SireMaths::RecordValues::*sum_function_type)(  ) const;
             sum_function_type sum_function_value( &::SireMaths::RecordValues::sum );
             
             RecordValues_exposer.def( 
@@ -209,7 +209,7 @@ void register_RecordValues_class(){
         }
         { //::SireMaths::RecordValues::sum2
         
-            typedef double ( ::SireMaths::RecordValues::*sum2_function_type )(  ) const;
+            typedef double ( ::SireMaths::RecordValues::*sum2_function_type)(  ) const;
             sum2_function_type sum2_function_value( &::SireMaths::RecordValues::sum2 );
             
             RecordValues_exposer.def( 
@@ -229,7 +229,7 @@ void register_RecordValues_class(){
         }
         { //::SireMaths::RecordValues::values
         
-            typedef ::QVector< double > ( ::SireMaths::RecordValues::*values_function_type )(  ) const;
+            typedef ::QVector< double > ( ::SireMaths::RecordValues::*values_function_type)(  ) const;
             values_function_type values_function_value( &::SireMaths::RecordValues::values );
             
             RecordValues_exposer.def( 

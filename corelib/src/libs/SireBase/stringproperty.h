@@ -36,6 +36,7 @@ SIRE_BEGIN_HEADER
 namespace SireBase
 {
 class StringProperty;
+class VariantProperty;
 }
 
 QDataStream& operator<<(QDataStream&, const SireBase::StringProperty&);
@@ -57,6 +58,7 @@ friend QDataStream& ::operator>>(QDataStream&, StringProperty&);
 public:
     StringProperty();
     StringProperty(const QString &s);
+    StringProperty(const VariantProperty &other);
     StringProperty(const StringProperty &other);
     
     ~StringProperty();

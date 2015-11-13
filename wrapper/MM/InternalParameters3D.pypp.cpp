@@ -47,7 +47,7 @@ void register_InternalParameters3D_class(){
         InternalParameters3D_exposer.def( bp::init< SireMM::InternalParameters3D const & >(( bp::arg("other") )) );
         { //::SireMM::InternalParameters3D::addChangedGroups
         
-            typedef void ( ::SireMM::InternalParameters3D::*addChangedGroups_function_type )( ::SireMM::InternalParameters3D const &,::QSet< unsigned int > & ) const;
+            typedef void ( ::SireMM::InternalParameters3D::*addChangedGroups_function_type)( ::SireMM::InternalParameters3D const &,::QSet< unsigned int > & ) const;
             addChangedGroups_function_type addChangedGroups_function_value( &::SireMM::InternalParameters3D::addChangedGroups );
             
             InternalParameters3D_exposer.def( 
@@ -58,7 +58,7 @@ void register_InternalParameters3D_class(){
         }
         { //::SireMM::InternalParameters3D::applyMask
         
-            typedef ::SireMM::InternalParameters3D ( ::SireMM::InternalParameters3D::*applyMask_function_type )( ::QSet< unsigned int > const & ) const;
+            typedef ::SireMM::InternalParameters3D ( ::SireMM::InternalParameters3D::*applyMask_function_type)( ::QSet< unsigned int > const & ) const;
             applyMask_function_type applyMask_function_value( &::SireMM::InternalParameters3D::applyMask );
             
             InternalParameters3D_exposer.def( 
@@ -69,7 +69,7 @@ void register_InternalParameters3D_class(){
         }
         { //::SireMM::InternalParameters3D::atomicCoordinates
         
-            typedef ::SireVol::CoordGroupArray const & ( ::SireMM::InternalParameters3D::*atomicCoordinates_function_type )(  ) const;
+            typedef ::SireVol::CoordGroupArray const & ( ::SireMM::InternalParameters3D::*atomicCoordinates_function_type)(  ) const;
             atomicCoordinates_function_type atomicCoordinates_function_value( &::SireMM::InternalParameters3D::atomicCoordinates );
             
             InternalParameters3D_exposer.def( 
@@ -80,7 +80,7 @@ void register_InternalParameters3D_class(){
         }
         { //::SireMM::InternalParameters3D::changedAllGroups
         
-            typedef bool ( ::SireMM::InternalParameters3D::*changedAllGroups_function_type )( ::SireMM::InternalParameters3D const & ) const;
+            typedef bool ( ::SireMM::InternalParameters3D::*changedAllGroups_function_type)( ::SireMM::InternalParameters3D const & ) const;
             changedAllGroups_function_type changedAllGroups_function_value( &::SireMM::InternalParameters3D::changedAllGroups );
             
             InternalParameters3D_exposer.def( 
@@ -91,7 +91,7 @@ void register_InternalParameters3D_class(){
         }
         { //::SireMM::InternalParameters3D::getChangedGroups
         
-            typedef ::QSet< unsigned int > ( ::SireMM::InternalParameters3D::*getChangedGroups_function_type )( ::SireMM::InternalParameters3D const & ) const;
+            typedef ::QSet< unsigned int > ( ::SireMM::InternalParameters3D::*getChangedGroups_function_type)( ::SireMM::InternalParameters3D const & ) const;
             getChangedGroups_function_type getChangedGroups_function_value( &::SireMM::InternalParameters3D::getChangedGroups );
             
             InternalParameters3D_exposer.def( 
@@ -102,7 +102,7 @@ void register_InternalParameters3D_class(){
         }
         { //::SireMM::InternalParameters3D::nCutGroups
         
-            typedef int ( ::SireMM::InternalParameters3D::*nCutGroups_function_type )(  ) const;
+            typedef int ( ::SireMM::InternalParameters3D::*nCutGroups_function_type)(  ) const;
             nCutGroups_function_type nCutGroups_function_value( &::SireMM::InternalParameters3D::nCutGroups );
             
             InternalParameters3D_exposer.def( 
@@ -113,7 +113,7 @@ void register_InternalParameters3D_class(){
         InternalParameters3D_exposer.def( bp::self != bp::self );
         { //::SireMM::InternalParameters3D::operator=
         
-            typedef ::SireMM::InternalParameters3D & ( ::SireMM::InternalParameters3D::*assign_function_type )( ::SireMM::InternalParameters3D const & ) ;
+            typedef ::SireMM::InternalParameters3D & ( ::SireMM::InternalParameters3D::*assign_function_type)( ::SireMM::InternalParameters3D const & ) ;
             assign_function_type assign_function_value( &::SireMM::InternalParameters3D::operator= );
             
             InternalParameters3D_exposer.def( 
@@ -126,7 +126,7 @@ void register_InternalParameters3D_class(){
         InternalParameters3D_exposer.def( bp::self == bp::self );
         { //::SireMM::InternalParameters3D::setAtomicCoordinates
         
-            typedef void ( ::SireMM::InternalParameters3D::*setAtomicCoordinates_function_type )( ::SireFF::detail::AtomicCoords3D const & ) ;
+            typedef void ( ::SireMM::InternalParameters3D::*setAtomicCoordinates_function_type)( ::SireFF::detail::AtomicCoords3D const & ) ;
             setAtomicCoordinates_function_type setAtomicCoordinates_function_value( &::SireMM::InternalParameters3D::setAtomicCoordinates );
             
             InternalParameters3D_exposer.def( 
@@ -147,7 +147,7 @@ void register_InternalParameters3D_class(){
         }
         { //::SireMM::InternalParameters3D::what
         
-            typedef char const * ( ::SireMM::InternalParameters3D::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::InternalParameters3D::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::InternalParameters3D::what );
             
             InternalParameters3D_exposer.def( 

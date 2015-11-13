@@ -33,7 +33,7 @@ void register_CGAtomIdx_class(){
         CGAtomIdx_exposer.def( bp::init< SireMol::CGAtomIdx const & >(( bp::arg("other") )) );
         { //::SireMol::CGAtomIdx::atom
         
-            typedef ::SireID::Index ( ::SireMol::CGAtomIdx::*atom_function_type )(  ) const;
+            typedef ::SireID::Index ( ::SireMol::CGAtomIdx::*atom_function_type)(  ) const;
             atom_function_type atom_function_value( &::SireMol::CGAtomIdx::atom );
             
             CGAtomIdx_exposer.def( 
@@ -43,7 +43,7 @@ void register_CGAtomIdx_class(){
         }
         { //::SireMol::CGAtomIdx::cutGroup
         
-            typedef ::SireMol::CGIdx ( ::SireMol::CGAtomIdx::*cutGroup_function_type )(  ) const;
+            typedef ::SireMol::CGIdx ( ::SireMol::CGAtomIdx::*cutGroup_function_type)(  ) const;
             cutGroup_function_type cutGroup_function_value( &::SireMol::CGAtomIdx::cutGroup );
             
             CGAtomIdx_exposer.def( 
@@ -53,7 +53,7 @@ void register_CGAtomIdx_class(){
         }
         { //::SireMol::CGAtomIdx::hash
         
-            typedef ::uint ( ::SireMol::CGAtomIdx::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::CGAtomIdx::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::CGAtomIdx::hash );
             
             CGAtomIdx_exposer.def( 
@@ -63,7 +63,7 @@ void register_CGAtomIdx_class(){
         }
         { //::SireMol::CGAtomIdx::isNull
         
-            typedef bool ( ::SireMol::CGAtomIdx::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::CGAtomIdx::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::CGAtomIdx::isNull );
             
             CGAtomIdx_exposer.def( 
@@ -73,7 +73,7 @@ void register_CGAtomIdx_class(){
         }
         { //::SireMol::CGAtomIdx::map
         
-            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::CGAtomIdx::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::CGAtomIdx::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireMol::CGAtomIdx::map );
             
             CGAtomIdx_exposer.def( 
@@ -95,7 +95,7 @@ void register_CGAtomIdx_class(){
         CGAtomIdx_exposer.def( bp::self != bp::self );
         { //::SireMol::CGAtomIdx::operator=
         
-            typedef ::SireMol::CGAtomIdx & ( ::SireMol::CGAtomIdx::*assign_function_type )( ::SireMol::CGAtomIdx const & ) ;
+            typedef ::SireMol::CGAtomIdx & ( ::SireMol::CGAtomIdx::*assign_function_type)( ::SireMol::CGAtomIdx const & ) ;
             assign_function_type assign_function_value( &::SireMol::CGAtomIdx::operator= );
             
             CGAtomIdx_exposer.def( 
@@ -109,7 +109,7 @@ void register_CGAtomIdx_class(){
         CGAtomIdx_exposer.def( bp::self == bp::self );
         { //::SireMol::CGAtomIdx::toString
         
-            typedef ::QString ( ::SireMol::CGAtomIdx::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::CGAtomIdx::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::CGAtomIdx::toString );
             
             CGAtomIdx_exposer.def( 
@@ -129,7 +129,7 @@ void register_CGAtomIdx_class(){
         }
         { //::SireMol::CGAtomIdx::what
         
-            typedef char const * ( ::SireMol::CGAtomIdx::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::CGAtomIdx::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::CGAtomIdx::what );
             
             CGAtomIdx_exposer.def( 

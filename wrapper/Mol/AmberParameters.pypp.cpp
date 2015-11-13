@@ -45,7 +45,7 @@ void register_AmberParameters_class(){
         AmberParameters_exposer.def( bp::init< SireMol::AmberParameters const & >(( bp::arg("other") )) );
         { //::SireMol::AmberParameters::add
         
-            typedef void ( ::SireMol::AmberParameters::*add_function_type )( ::SireMol::BondID const &,double const &,double const & ) ;
+            typedef void ( ::SireMol::AmberParameters::*add_function_type)( ::SireMol::BondID const &,double const &,double const & ) ;
             add_function_type add_function_value( &::SireMol::AmberParameters::add );
             
             AmberParameters_exposer.def( 
@@ -56,7 +56,7 @@ void register_AmberParameters_class(){
         }
         { //::SireMol::AmberParameters::add
         
-            typedef void ( ::SireMol::AmberParameters::*add_function_type )( ::SireMol::AngleID const &,double const &,double const & ) ;
+            typedef void ( ::SireMol::AmberParameters::*add_function_type)( ::SireMol::AngleID const &,double const &,double const & ) ;
             add_function_type add_function_value( &::SireMol::AmberParameters::add );
             
             AmberParameters_exposer.def( 
@@ -67,7 +67,7 @@ void register_AmberParameters_class(){
         }
         { //::SireMol::AmberParameters::add
         
-            typedef void ( ::SireMol::AmberParameters::*add_function_type )( ::SireMol::DihedralID const &,double const &,double const &,double const & ) ;
+            typedef void ( ::SireMol::AmberParameters::*add_function_type)( ::SireMol::DihedralID const &,double const &,double const &,double const & ) ;
             add_function_type add_function_value( &::SireMol::AmberParameters::add );
             
             AmberParameters_exposer.def( 
@@ -78,7 +78,7 @@ void register_AmberParameters_class(){
         }
         { //::SireMol::AmberParameters::add
         
-            typedef void ( ::SireMol::AmberParameters::*add_function_type )( ::SireMol::ImproperID const &,double const &,double const &,double const & ) ;
+            typedef void ( ::SireMol::AmberParameters::*add_function_type)( ::SireMol::ImproperID const &,double const &,double const &,double const & ) ;
             add_function_type add_function_value( &::SireMol::AmberParameters::add );
             
             AmberParameters_exposer.def( 
@@ -89,7 +89,7 @@ void register_AmberParameters_class(){
         }
         { //::SireMol::AmberParameters::add14Pair
         
-            typedef void ( ::SireMol::AmberParameters::*add14Pair_function_type )( ::SireMol::BondID const &,double const &,double const & ) ;
+            typedef void ( ::SireMol::AmberParameters::*add14Pair_function_type)( ::SireMol::BondID const &,double const &,double const & ) ;
             add14Pair_function_type add14Pair_function_value( &::SireMol::AmberParameters::add14Pair );
             
             AmberParameters_exposer.def( 
@@ -100,7 +100,7 @@ void register_AmberParameters_class(){
         }
         { //::SireMol::AmberParameters::get14PairParams
         
-            typedef ::QList< double > ( ::SireMol::AmberParameters::*get14PairParams_function_type )( ::SireMol::BondID const & ) ;
+            typedef ::QList< double > ( ::SireMol::AmberParameters::*get14PairParams_function_type)( ::SireMol::BondID const & ) ;
             get14PairParams_function_type get14PairParams_function_value( &::SireMol::AmberParameters::get14PairParams );
             
             AmberParameters_exposer.def( 
@@ -111,7 +111,7 @@ void register_AmberParameters_class(){
         }
         { //::SireMol::AmberParameters::getAll14Pairs
         
-            typedef ::QList< SireMol::BondID > ( ::SireMol::AmberParameters::*getAll14Pairs_function_type )(  ) ;
+            typedef ::QList< SireMol::BondID > ( ::SireMol::AmberParameters::*getAll14Pairs_function_type)(  ) ;
             getAll14Pairs_function_type getAll14Pairs_function_value( &::SireMol::AmberParameters::getAll14Pairs );
             
             AmberParameters_exposer.def( 
@@ -121,7 +121,7 @@ void register_AmberParameters_class(){
         }
         { //::SireMol::AmberParameters::getAllAngles
         
-            typedef ::QList< SireMol::AngleID > ( ::SireMol::AmberParameters::*getAllAngles_function_type )(  ) ;
+            typedef ::QList< SireMol::AngleID > ( ::SireMol::AmberParameters::*getAllAngles_function_type)(  ) ;
             getAllAngles_function_type getAllAngles_function_value( &::SireMol::AmberParameters::getAllAngles );
             
             AmberParameters_exposer.def( 
@@ -131,7 +131,7 @@ void register_AmberParameters_class(){
         }
         { //::SireMol::AmberParameters::getAllBonds
         
-            typedef ::QList< SireMol::BondID > ( ::SireMol::AmberParameters::*getAllBonds_function_type )(  ) ;
+            typedef ::QList< SireMol::BondID > ( ::SireMol::AmberParameters::*getAllBonds_function_type)(  ) ;
             getAllBonds_function_type getAllBonds_function_value( &::SireMol::AmberParameters::getAllBonds );
             
             AmberParameters_exposer.def( 
@@ -141,7 +141,7 @@ void register_AmberParameters_class(){
         }
         { //::SireMol::AmberParameters::getAllDihedrals
         
-            typedef ::QList< SireMol::DihedralID > ( ::SireMol::AmberParameters::*getAllDihedrals_function_type )(  ) ;
+            typedef ::QList< SireMol::DihedralID > ( ::SireMol::AmberParameters::*getAllDihedrals_function_type)(  ) ;
             getAllDihedrals_function_type getAllDihedrals_function_value( &::SireMol::AmberParameters::getAllDihedrals );
             
             AmberParameters_exposer.def( 
@@ -151,7 +151,7 @@ void register_AmberParameters_class(){
         }
         { //::SireMol::AmberParameters::getAllImpropers
         
-            typedef ::QList< SireMol::ImproperID > ( ::SireMol::AmberParameters::*getAllImpropers_function_type )(  ) ;
+            typedef ::QList< SireMol::ImproperID > ( ::SireMol::AmberParameters::*getAllImpropers_function_type)(  ) ;
             getAllImpropers_function_type getAllImpropers_function_value( &::SireMol::AmberParameters::getAllImpropers );
             
             AmberParameters_exposer.def( 
@@ -161,7 +161,7 @@ void register_AmberParameters_class(){
         }
         { //::SireMol::AmberParameters::getParams
         
-            typedef ::QList< double > ( ::SireMol::AmberParameters::*getParams_function_type )( ::SireMol::BondID const & ) ;
+            typedef ::QList< double > ( ::SireMol::AmberParameters::*getParams_function_type)( ::SireMol::BondID const & ) ;
             getParams_function_type getParams_function_value( &::SireMol::AmberParameters::getParams );
             
             AmberParameters_exposer.def( 
@@ -172,7 +172,7 @@ void register_AmberParameters_class(){
         }
         { //::SireMol::AmberParameters::getParams
         
-            typedef ::QList< double > ( ::SireMol::AmberParameters::*getParams_function_type )( ::SireMol::AngleID const & ) ;
+            typedef ::QList< double > ( ::SireMol::AmberParameters::*getParams_function_type)( ::SireMol::AngleID const & ) ;
             getParams_function_type getParams_function_value( &::SireMol::AmberParameters::getParams );
             
             AmberParameters_exposer.def( 
@@ -183,7 +183,7 @@ void register_AmberParameters_class(){
         }
         { //::SireMol::AmberParameters::getParams
         
-            typedef ::QList< double > ( ::SireMol::AmberParameters::*getParams_function_type )( ::SireMol::DihedralID const & ) ;
+            typedef ::QList< double > ( ::SireMol::AmberParameters::*getParams_function_type)( ::SireMol::DihedralID const & ) ;
             getParams_function_type getParams_function_value( &::SireMol::AmberParameters::getParams );
             
             AmberParameters_exposer.def( 
@@ -194,7 +194,7 @@ void register_AmberParameters_class(){
         }
         { //::SireMol::AmberParameters::getParams
         
-            typedef ::QList< double > ( ::SireMol::AmberParameters::*getParams_function_type )( ::SireMol::ImproperID const & ) ;
+            typedef ::QList< double > ( ::SireMol::AmberParameters::*getParams_function_type)( ::SireMol::ImproperID const & ) ;
             getParams_function_type getParams_function_value( &::SireMol::AmberParameters::getParams );
             
             AmberParameters_exposer.def( 
@@ -205,7 +205,7 @@ void register_AmberParameters_class(){
         }
         { //::SireMol::AmberParameters::info
         
-            typedef ::SireMol::MoleculeInfoData const & ( ::SireMol::AmberParameters::*info_function_type )(  ) const;
+            typedef ::SireMol::MoleculeInfoData const & ( ::SireMol::AmberParameters::*info_function_type)(  ) const;
             info_function_type info_function_value( &::SireMol::AmberParameters::info );
             
             AmberParameters_exposer.def( 
@@ -216,7 +216,7 @@ void register_AmberParameters_class(){
         }
         { //::SireMol::AmberParameters::isCompatibleWith
         
-            typedef bool ( ::SireMol::AmberParameters::*isCompatibleWith_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef bool ( ::SireMol::AmberParameters::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::AmberParameters::isCompatibleWith );
             
             AmberParameters_exposer.def( 
@@ -228,7 +228,7 @@ void register_AmberParameters_class(){
         AmberParameters_exposer.def( bp::self != bp::self );
         { //::SireMol::AmberParameters::operator=
         
-            typedef ::SireMol::AmberParameters & ( ::SireMol::AmberParameters::*assign_function_type )( ::SireMol::AmberParameters const & ) ;
+            typedef ::SireMol::AmberParameters & ( ::SireMol::AmberParameters::*assign_function_type)( ::SireMol::AmberParameters const & ) ;
             assign_function_type assign_function_value( &::SireMol::AmberParameters::operator= );
             
             AmberParameters_exposer.def( 
@@ -241,7 +241,7 @@ void register_AmberParameters_class(){
         AmberParameters_exposer.def( bp::self == bp::self );
         { //::SireMol::AmberParameters::remove
         
-            typedef void ( ::SireMol::AmberParameters::*remove_function_type )( ::SireMol::BondID const & ) ;
+            typedef void ( ::SireMol::AmberParameters::*remove_function_type)( ::SireMol::BondID const & ) ;
             remove_function_type remove_function_value( &::SireMol::AmberParameters::remove );
             
             AmberParameters_exposer.def( 
@@ -252,7 +252,7 @@ void register_AmberParameters_class(){
         }
         { //::SireMol::AmberParameters::remove
         
-            typedef void ( ::SireMol::AmberParameters::*remove_function_type )( ::SireMol::AngleID const & ) ;
+            typedef void ( ::SireMol::AmberParameters::*remove_function_type)( ::SireMol::AngleID const & ) ;
             remove_function_type remove_function_value( &::SireMol::AmberParameters::remove );
             
             AmberParameters_exposer.def( 
@@ -263,7 +263,7 @@ void register_AmberParameters_class(){
         }
         { //::SireMol::AmberParameters::remove
         
-            typedef void ( ::SireMol::AmberParameters::*remove_function_type )( ::SireMol::DihedralID const & ) ;
+            typedef void ( ::SireMol::AmberParameters::*remove_function_type)( ::SireMol::DihedralID const & ) ;
             remove_function_type remove_function_value( &::SireMol::AmberParameters::remove );
             
             AmberParameters_exposer.def( 
@@ -274,7 +274,7 @@ void register_AmberParameters_class(){
         }
         { //::SireMol::AmberParameters::remove
         
-            typedef void ( ::SireMol::AmberParameters::*remove_function_type )( ::SireMol::ImproperID const & ) ;
+            typedef void ( ::SireMol::AmberParameters::*remove_function_type)( ::SireMol::ImproperID const & ) ;
             remove_function_type remove_function_value( &::SireMol::AmberParameters::remove );
             
             AmberParameters_exposer.def( 
@@ -285,7 +285,7 @@ void register_AmberParameters_class(){
         }
         { //::SireMol::AmberParameters::remove14Pair
         
-            typedef void ( ::SireMol::AmberParameters::*remove14Pair_function_type )( ::SireMol::BondID const & ) ;
+            typedef void ( ::SireMol::AmberParameters::*remove14Pair_function_type)( ::SireMol::BondID const & ) ;
             remove14Pair_function_type remove14Pair_function_value( &::SireMol::AmberParameters::remove14Pair );
             
             AmberParameters_exposer.def( 

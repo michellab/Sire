@@ -52,7 +52,7 @@ void register_CoordGroupArray_class(){
         CoordGroupArray_exposer.def( bp::init< SireVol::CoordGroupArray const & >(( bp::arg("other") )) );
         { //::SireVol::CoordGroupArray::aaBox
         
-            typedef ::SireVol::AABox ( ::SireVol::CoordGroupArray::*aaBox_function_type )(  ) const;
+            typedef ::SireVol::AABox ( ::SireVol::CoordGroupArray::*aaBox_function_type)(  ) const;
             aaBox_function_type aaBox_function_value( &::SireVol::CoordGroupArray::aaBox );
             
             CoordGroupArray_exposer.def( 
@@ -62,7 +62,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::append
         
-            typedef void ( ::SireVol::CoordGroupArray::*append_function_type )( ::SireVol::CoordGroup const & ) ;
+            typedef void ( ::SireVol::CoordGroupArray::*append_function_type)( ::SireVol::CoordGroup const & ) ;
             append_function_type append_function_value( &::SireVol::CoordGroupArray::append );
             
             CoordGroupArray_exposer.def( 
@@ -73,7 +73,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::append
         
-            typedef void ( ::SireVol::CoordGroupArray::*append_function_type )( ::SireVol::CoordGroupArray const & ) ;
+            typedef void ( ::SireVol::CoordGroupArray::*append_function_type)( ::SireVol::CoordGroupArray const & ) ;
             append_function_type append_function_value( &::SireVol::CoordGroupArray::append );
             
             CoordGroupArray_exposer.def( 
@@ -84,7 +84,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::assertValidCoordGroup
         
-            typedef void ( ::SireVol::CoordGroupArray::*assertValidCoordGroup_function_type )( ::quint32 ) const;
+            typedef void ( ::SireVol::CoordGroupArray::*assertValidCoordGroup_function_type)( ::quint32 ) const;
             assertValidCoordGroup_function_type assertValidCoordGroup_function_value( &::SireVol::CoordGroupArray::assertValidCoordGroup );
             
             CoordGroupArray_exposer.def( 
@@ -95,7 +95,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::assertValidCoordinate
         
-            typedef void ( ::SireVol::CoordGroupArray::*assertValidCoordinate_function_type )( ::quint32 ) const;
+            typedef void ( ::SireVol::CoordGroupArray::*assertValidCoordinate_function_type)( ::quint32 ) const;
             assertValidCoordinate_function_type assertValidCoordinate_function_value( &::SireVol::CoordGroupArray::assertValidCoordinate );
             
             CoordGroupArray_exposer.def( 
@@ -106,7 +106,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::assertValidIndex
         
-            typedef void ( ::SireVol::CoordGroupArray::*assertValidIndex_function_type )( ::quint32 ) const;
+            typedef void ( ::SireVol::CoordGroupArray::*assertValidIndex_function_type)( ::quint32 ) const;
             assertValidIndex_function_type assertValidIndex_function_value( &::SireVol::CoordGroupArray::assertValidIndex );
             
             CoordGroupArray_exposer.def( 
@@ -117,7 +117,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::at
         
-            typedef ::SireVol::CoordGroup const & ( ::SireVol::CoordGroupArray::*at_function_type )( ::quint32 ) const;
+            typedef ::SireVol::CoordGroup const & ( ::SireVol::CoordGroupArray::*at_function_type)( ::quint32 ) const;
             at_function_type at_function_value( &::SireVol::CoordGroupArray::at );
             
             CoordGroupArray_exposer.def( 
@@ -129,7 +129,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::changeFrame
         
-            typedef void ( ::SireVol::CoordGroupArray::*changeFrame_function_type )( ::SireMaths::AxisSet const &,::SireMaths::AxisSet const & ) ;
+            typedef void ( ::SireVol::CoordGroupArray::*changeFrame_function_type)( ::SireMaths::AxisSet const &,::SireMaths::AxisSet const & ) ;
             changeFrame_function_type changeFrame_function_value( &::SireVol::CoordGroupArray::changeFrame );
             
             CoordGroupArray_exposer.def( 
@@ -140,7 +140,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::changeFrame
         
-            typedef void ( ::SireVol::CoordGroupArray::*changeFrame_function_type )( ::quint32,::SireMaths::AxisSet const &,::SireMaths::AxisSet const & ) ;
+            typedef void ( ::SireVol::CoordGroupArray::*changeFrame_function_type)( ::quint32,::SireMaths::AxisSet const &,::SireMaths::AxisSet const & ) ;
             changeFrame_function_type changeFrame_function_value( &::SireVol::CoordGroupArray::changeFrame );
             
             CoordGroupArray_exposer.def( 
@@ -151,7 +151,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::count
         
-            typedef int ( ::SireVol::CoordGroupArray::*count_function_type )(  ) const;
+            typedef int ( ::SireVol::CoordGroupArray::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireVol::CoordGroupArray::count );
             
             CoordGroupArray_exposer.def( 
@@ -161,7 +161,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::isEmpty
         
-            typedef bool ( ::SireVol::CoordGroupArray::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireVol::CoordGroupArray::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireVol::CoordGroupArray::isEmpty );
             
             CoordGroupArray_exposer.def( 
@@ -171,7 +171,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::mapInto
         
-            typedef void ( ::SireVol::CoordGroupArray::*mapInto_function_type )( ::SireMaths::AxisSet const & ) ;
+            typedef void ( ::SireVol::CoordGroupArray::*mapInto_function_type)( ::SireMaths::AxisSet const & ) ;
             mapInto_function_type mapInto_function_value( &::SireVol::CoordGroupArray::mapInto );
             
             CoordGroupArray_exposer.def( 
@@ -182,7 +182,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::mapInto
         
-            typedef void ( ::SireVol::CoordGroupArray::*mapInto_function_type )( ::quint32,::SireMaths::AxisSet const & ) ;
+            typedef void ( ::SireVol::CoordGroupArray::*mapInto_function_type)( ::quint32,::SireMaths::AxisSet const & ) ;
             mapInto_function_type mapInto_function_value( &::SireVol::CoordGroupArray::mapInto );
             
             CoordGroupArray_exposer.def( 
@@ -193,7 +193,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::merge
         
-            typedef ::SireVol::CoordGroup ( ::SireVol::CoordGroupArray::*merge_function_type )(  ) const;
+            typedef ::SireVol::CoordGroup ( ::SireVol::CoordGroupArray::*merge_function_type)(  ) const;
             merge_function_type merge_function_value( &::SireVol::CoordGroupArray::merge );
             
             CoordGroupArray_exposer.def( 
@@ -203,7 +203,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::nCoordGroups
         
-            typedef int ( ::SireVol::CoordGroupArray::*nCoordGroups_function_type )(  ) const;
+            typedef int ( ::SireVol::CoordGroupArray::*nCoordGroups_function_type)(  ) const;
             nCoordGroups_function_type nCoordGroups_function_value( &::SireVol::CoordGroupArray::nCoordGroups );
             
             CoordGroupArray_exposer.def( 
@@ -213,7 +213,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::nCoords
         
-            typedef int ( ::SireVol::CoordGroupArray::*nCoords_function_type )(  ) const;
+            typedef int ( ::SireVol::CoordGroupArray::*nCoords_function_type)(  ) const;
             nCoords_function_type nCoords_function_value( &::SireVol::CoordGroupArray::nCoords );
             
             CoordGroupArray_exposer.def( 
@@ -224,7 +224,7 @@ void register_CoordGroupArray_class(){
         CoordGroupArray_exposer.def( bp::self != bp::self );
         { //::SireVol::CoordGroupArray::operator=
         
-            typedef ::SireVol::CoordGroupArray & ( ::SireVol::CoordGroupArray::*assign_function_type )( ::SireVol::CoordGroupArray const & ) ;
+            typedef ::SireVol::CoordGroupArray & ( ::SireVol::CoordGroupArray::*assign_function_type)( ::SireVol::CoordGroupArray const & ) ;
             assign_function_type assign_function_value( &::SireVol::CoordGroupArray::operator= );
             
             CoordGroupArray_exposer.def( 
@@ -237,7 +237,7 @@ void register_CoordGroupArray_class(){
         CoordGroupArray_exposer.def( bp::self == bp::self );
         { //::SireVol::CoordGroupArray::operator[]
         
-            typedef ::SireVol::CoordGroup const & ( ::SireVol::CoordGroupArray::*__getitem___function_type )( ::quint32 ) const;
+            typedef ::SireVol::CoordGroup const & ( ::SireVol::CoordGroupArray::*__getitem___function_type)( ::quint32 ) const;
             __getitem___function_type __getitem___function_value( &::SireVol::CoordGroupArray::operator[] );
             
             CoordGroupArray_exposer.def( 
@@ -249,7 +249,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::remove
         
-            typedef void ( ::SireVol::CoordGroupArray::*remove_function_type )( ::quint32 ) ;
+            typedef void ( ::SireVol::CoordGroupArray::*remove_function_type)( ::quint32 ) ;
             remove_function_type remove_function_value( &::SireVol::CoordGroupArray::remove );
             
             CoordGroupArray_exposer.def( 
@@ -260,7 +260,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::remove
         
-            typedef void ( ::SireVol::CoordGroupArray::*remove_function_type )( ::quint32,int ) ;
+            typedef void ( ::SireVol::CoordGroupArray::*remove_function_type)( ::quint32,int ) ;
             remove_function_type remove_function_value( &::SireVol::CoordGroupArray::remove );
             
             CoordGroupArray_exposer.def( 
@@ -271,7 +271,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::remove
         
-            typedef void ( ::SireVol::CoordGroupArray::*remove_function_type )( ::QVarLengthArray< unsigned int, 256 > const & ) ;
+            typedef void ( ::SireVol::CoordGroupArray::*remove_function_type)( ::QVarLengthArray< unsigned int, 256 > const & ) ;
             remove_function_type remove_function_value( &::SireVol::CoordGroupArray::remove );
             
             CoordGroupArray_exposer.def( 
@@ -282,7 +282,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::rotate
         
-            typedef void ( ::SireVol::CoordGroupArray::*rotate_function_type )( ::SireMaths::Quaternion const &,::SireMaths::Vector const & ) ;
+            typedef void ( ::SireVol::CoordGroupArray::*rotate_function_type)( ::SireMaths::Quaternion const &,::SireMaths::Vector const & ) ;
             rotate_function_type rotate_function_value( &::SireVol::CoordGroupArray::rotate );
             
             CoordGroupArray_exposer.def( 
@@ -293,7 +293,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::rotate
         
-            typedef void ( ::SireVol::CoordGroupArray::*rotate_function_type )( ::SireMaths::Matrix const &,::SireMaths::Vector const & ) ;
+            typedef void ( ::SireVol::CoordGroupArray::*rotate_function_type)( ::SireMaths::Matrix const &,::SireMaths::Vector const & ) ;
             rotate_function_type rotate_function_value( &::SireVol::CoordGroupArray::rotate );
             
             CoordGroupArray_exposer.def( 
@@ -304,7 +304,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::rotate
         
-            typedef void ( ::SireVol::CoordGroupArray::*rotate_function_type )( ::quint32,::SireMaths::Quaternion const &,::SireMaths::Vector const & ) ;
+            typedef void ( ::SireVol::CoordGroupArray::*rotate_function_type)( ::quint32,::SireMaths::Quaternion const &,::SireMaths::Vector const & ) ;
             rotate_function_type rotate_function_value( &::SireVol::CoordGroupArray::rotate );
             
             CoordGroupArray_exposer.def( 
@@ -315,7 +315,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::rotate
         
-            typedef void ( ::SireVol::CoordGroupArray::*rotate_function_type )( ::quint32,::SireMaths::Matrix const &,::SireMaths::Vector const & ) ;
+            typedef void ( ::SireVol::CoordGroupArray::*rotate_function_type)( ::quint32,::SireMaths::Matrix const &,::SireMaths::Vector const & ) ;
             rotate_function_type rotate_function_value( &::SireVol::CoordGroupArray::rotate );
             
             CoordGroupArray_exposer.def( 
@@ -326,7 +326,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::size
         
-            typedef int ( ::SireVol::CoordGroupArray::*size_function_type )(  ) const;
+            typedef int ( ::SireVol::CoordGroupArray::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireVol::CoordGroupArray::size );
             
             CoordGroupArray_exposer.def( 
@@ -336,7 +336,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::toString
         
-            typedef ::QString ( ::SireVol::CoordGroupArray::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireVol::CoordGroupArray::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireVol::CoordGroupArray::toString );
             
             CoordGroupArray_exposer.def( 
@@ -346,7 +346,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::transform
         
-            typedef void ( ::SireVol::CoordGroupArray::*transform_function_type )( ::SireMaths::Transform const & ) ;
+            typedef void ( ::SireVol::CoordGroupArray::*transform_function_type)( ::SireMaths::Transform const & ) ;
             transform_function_type transform_function_value( &::SireVol::CoordGroupArray::transform );
             
             CoordGroupArray_exposer.def( 
@@ -357,7 +357,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::transform
         
-            typedef void ( ::SireVol::CoordGroupArray::*transform_function_type )( ::quint32,::SireMaths::Transform const & ) ;
+            typedef void ( ::SireVol::CoordGroupArray::*transform_function_type)( ::quint32,::SireMaths::Transform const & ) ;
             transform_function_type transform_function_value( &::SireVol::CoordGroupArray::transform );
             
             CoordGroupArray_exposer.def( 
@@ -368,7 +368,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::translate
         
-            typedef void ( ::SireVol::CoordGroupArray::*translate_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireVol::CoordGroupArray::*translate_function_type)( ::SireMaths::Vector const & ) ;
             translate_function_type translate_function_value( &::SireVol::CoordGroupArray::translate );
             
             CoordGroupArray_exposer.def( 
@@ -379,7 +379,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::translate
         
-            typedef void ( ::SireVol::CoordGroupArray::*translate_function_type )( ::quint32,::SireMaths::Vector const & ) ;
+            typedef void ( ::SireVol::CoordGroupArray::*translate_function_type)( ::quint32,::SireMaths::Vector const & ) ;
             translate_function_type translate_function_value( &::SireVol::CoordGroupArray::translate );
             
             CoordGroupArray_exposer.def( 
@@ -400,7 +400,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::update
         
-            typedef void ( ::SireVol::CoordGroupArray::*update_function_type )( ::quint32,::SireVol::CoordGroup const & ) ;
+            typedef void ( ::SireVol::CoordGroupArray::*update_function_type)( ::quint32,::SireVol::CoordGroup const & ) ;
             update_function_type update_function_value( &::SireVol::CoordGroupArray::update );
             
             CoordGroupArray_exposer.def( 
@@ -411,7 +411,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::update
         
-            typedef void ( ::SireVol::CoordGroupArray::*update_function_type )( ::quint32,::QVector< SireMaths::Vector > const & ) ;
+            typedef void ( ::SireVol::CoordGroupArray::*update_function_type)( ::quint32,::QVector< SireMaths::Vector > const & ) ;
             update_function_type update_function_value( &::SireVol::CoordGroupArray::update );
             
             CoordGroupArray_exposer.def( 
@@ -422,7 +422,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::update
         
-            typedef void ( ::SireVol::CoordGroupArray::*update_function_type )( ::quint32,::SireMaths::Vector const *,int ) ;
+            typedef void ( ::SireVol::CoordGroupArray::*update_function_type)( ::quint32,::SireMaths::Vector const *,int ) ;
             update_function_type update_function_value( &::SireVol::CoordGroupArray::update );
             
             CoordGroupArray_exposer.def( 
@@ -433,7 +433,7 @@ void register_CoordGroupArray_class(){
         }
         { //::SireVol::CoordGroupArray::what
         
-            typedef char const * ( ::SireVol::CoordGroupArray::*what_function_type )(  ) const;
+            typedef char const * ( ::SireVol::CoordGroupArray::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireVol::CoordGroupArray::what );
             
             CoordGroupArray_exposer.def( 

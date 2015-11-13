@@ -50,7 +50,7 @@ void register_CenterOfGeometry_class(){
         CenterOfGeometry_exposer.def( bp::init< SireFF::CenterOfGeometry const & >(( bp::arg("other") )) );
         { //::SireFF::CenterOfGeometry::addForce
         
-            typedef bool ( ::SireFF::CenterOfGeometry::*addForce_function_type )( ::SireFF::MolForceTable &,::SireMaths::Vector const & ) const;
+            typedef bool ( ::SireFF::CenterOfGeometry::*addForce_function_type)( ::SireFF::MolForceTable &,::SireMaths::Vector const & ) const;
             addForce_function_type addForce_function_value( &::SireFF::CenterOfGeometry::addForce );
             
             CenterOfGeometry_exposer.def( 
@@ -61,7 +61,7 @@ void register_CenterOfGeometry_class(){
         }
         { //::SireFF::CenterOfGeometry::addForce
         
-            typedef bool ( ::SireFF::CenterOfGeometry::*addForce_function_type )( ::SireFF::ForceTable &,::SireMaths::Vector const & ) const;
+            typedef bool ( ::SireFF::CenterOfGeometry::*addForce_function_type)( ::SireFF::ForceTable &,::SireMaths::Vector const & ) const;
             addForce_function_type addForce_function_value( &::SireFF::CenterOfGeometry::addForce );
             
             CenterOfGeometry_exposer.def( 
@@ -72,7 +72,7 @@ void register_CenterOfGeometry_class(){
         }
         { //::SireFF::CenterOfGeometry::contains
         
-            typedef bool ( ::SireFF::CenterOfGeometry::*contains_function_type )( ::SireMol::MolNum ) const;
+            typedef bool ( ::SireFF::CenterOfGeometry::*contains_function_type)( ::SireMol::MolNum ) const;
             contains_function_type contains_function_value( &::SireFF::CenterOfGeometry::contains );
             
             CenterOfGeometry_exposer.def( 
@@ -83,7 +83,7 @@ void register_CenterOfGeometry_class(){
         }
         { //::SireFF::CenterOfGeometry::contains
         
-            typedef bool ( ::SireFF::CenterOfGeometry::*contains_function_type )( ::SireMol::MolID const & ) const;
+            typedef bool ( ::SireFF::CenterOfGeometry::*contains_function_type)( ::SireMol::MolID const & ) const;
             contains_function_type contains_function_value( &::SireFF::CenterOfGeometry::contains );
             
             CenterOfGeometry_exposer.def( 
@@ -94,7 +94,7 @@ void register_CenterOfGeometry_class(){
         }
         { //::SireFF::CenterOfGeometry::isExtraMoleculePoint
         
-            typedef bool ( ::SireFF::CenterOfGeometry::*isExtraMoleculePoint_function_type )(  ) const;
+            typedef bool ( ::SireFF::CenterOfGeometry::*isExtraMoleculePoint_function_type)(  ) const;
             isExtraMoleculePoint_function_type isExtraMoleculePoint_function_value( &::SireFF::CenterOfGeometry::isExtraMoleculePoint );
             
             CenterOfGeometry_exposer.def( 
@@ -104,7 +104,7 @@ void register_CenterOfGeometry_class(){
         }
         { //::SireFF::CenterOfGeometry::isInterMoleculePoint
         
-            typedef bool ( ::SireFF::CenterOfGeometry::*isInterMoleculePoint_function_type )(  ) const;
+            typedef bool ( ::SireFF::CenterOfGeometry::*isInterMoleculePoint_function_type)(  ) const;
             isInterMoleculePoint_function_type isInterMoleculePoint_function_value( &::SireFF::CenterOfGeometry::isInterMoleculePoint );
             
             CenterOfGeometry_exposer.def( 
@@ -114,7 +114,7 @@ void register_CenterOfGeometry_class(){
         }
         { //::SireFF::CenterOfGeometry::isIntraMoleculePoint
         
-            typedef bool ( ::SireFF::CenterOfGeometry::*isIntraMoleculePoint_function_type )(  ) const;
+            typedef bool ( ::SireFF::CenterOfGeometry::*isIntraMoleculePoint_function_type)(  ) const;
             isIntraMoleculePoint_function_type isIntraMoleculePoint_function_value( &::SireFF::CenterOfGeometry::isIntraMoleculePoint );
             
             CenterOfGeometry_exposer.def( 
@@ -124,7 +124,7 @@ void register_CenterOfGeometry_class(){
         }
         { //::SireFF::CenterOfGeometry::molecules
         
-            typedef ::SireMol::Molecules ( ::SireFF::CenterOfGeometry::*molecules_function_type )(  ) const;
+            typedef ::SireMol::Molecules ( ::SireFF::CenterOfGeometry::*molecules_function_type)(  ) const;
             molecules_function_type molecules_function_value( &::SireFF::CenterOfGeometry::molecules );
             
             CenterOfGeometry_exposer.def( 
@@ -134,7 +134,7 @@ void register_CenterOfGeometry_class(){
         }
         { //::SireFF::CenterOfGeometry::nMolecules
         
-            typedef int ( ::SireFF::CenterOfGeometry::*nMolecules_function_type )(  ) const;
+            typedef int ( ::SireFF::CenterOfGeometry::*nMolecules_function_type)(  ) const;
             nMolecules_function_type nMolecules_function_value( &::SireFF::CenterOfGeometry::nMolecules );
             
             CenterOfGeometry_exposer.def( 
@@ -145,7 +145,7 @@ void register_CenterOfGeometry_class(){
         CenterOfGeometry_exposer.def( bp::self != bp::self );
         { //::SireFF::CenterOfGeometry::operator=
         
-            typedef ::SireFF::CenterOfGeometry & ( ::SireFF::CenterOfGeometry::*assign_function_type )( ::SireFF::CenterOfGeometry const & ) ;
+            typedef ::SireFF::CenterOfGeometry & ( ::SireFF::CenterOfGeometry::*assign_function_type)( ::SireFF::CenterOfGeometry const & ) ;
             assign_function_type assign_function_value( &::SireFF::CenterOfGeometry::operator= );
             
             CenterOfGeometry_exposer.def( 
@@ -158,7 +158,7 @@ void register_CenterOfGeometry_class(){
         CenterOfGeometry_exposer.def( bp::self == bp::self );
         { //::SireFF::CenterOfGeometry::setSpace
         
-            typedef void ( ::SireFF::CenterOfGeometry::*setSpace_function_type )( ::SireVol::Space const & ) ;
+            typedef void ( ::SireFF::CenterOfGeometry::*setSpace_function_type)( ::SireVol::Space const & ) ;
             setSpace_function_type setSpace_function_value( &::SireFF::CenterOfGeometry::setSpace );
             
             CenterOfGeometry_exposer.def( 
@@ -169,7 +169,7 @@ void register_CenterOfGeometry_class(){
         }
         { //::SireFF::CenterOfGeometry::toString
         
-            typedef ::QString ( ::SireFF::CenterOfGeometry::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireFF::CenterOfGeometry::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireFF::CenterOfGeometry::toString );
             
             CenterOfGeometry_exposer.def( 
@@ -189,7 +189,7 @@ void register_CenterOfGeometry_class(){
         }
         { //::SireFF::CenterOfGeometry::update
         
-            typedef bool ( ::SireFF::CenterOfGeometry::*update_function_type )( ::SireMol::MoleculeData const & ) ;
+            typedef bool ( ::SireFF::CenterOfGeometry::*update_function_type)( ::SireMol::MoleculeData const & ) ;
             update_function_type update_function_value( &::SireFF::CenterOfGeometry::update );
             
             CenterOfGeometry_exposer.def( 
@@ -200,7 +200,7 @@ void register_CenterOfGeometry_class(){
         }
         { //::SireFF::CenterOfGeometry::update
         
-            typedef bool ( ::SireFF::CenterOfGeometry::*update_function_type )( ::SireMol::Molecules const & ) ;
+            typedef bool ( ::SireFF::CenterOfGeometry::*update_function_type)( ::SireMol::Molecules const & ) ;
             update_function_type update_function_value( &::SireFF::CenterOfGeometry::update );
             
             CenterOfGeometry_exposer.def( 
@@ -211,7 +211,7 @@ void register_CenterOfGeometry_class(){
         }
         { //::SireFF::CenterOfGeometry::update
         
-            typedef bool ( ::SireFF::CenterOfGeometry::*update_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef bool ( ::SireFF::CenterOfGeometry::*update_function_type)( ::SireMol::MoleculeGroup const & ) ;
             update_function_type update_function_value( &::SireFF::CenterOfGeometry::update );
             
             CenterOfGeometry_exposer.def( 
@@ -222,7 +222,7 @@ void register_CenterOfGeometry_class(){
         }
         { //::SireFF::CenterOfGeometry::update
         
-            typedef bool ( ::SireFF::CenterOfGeometry::*update_function_type )( ::SireMol::MolGroupsBase const & ) ;
+            typedef bool ( ::SireFF::CenterOfGeometry::*update_function_type)( ::SireMol::MolGroupsBase const & ) ;
             update_function_type update_function_value( &::SireFF::CenterOfGeometry::update );
             
             CenterOfGeometry_exposer.def( 
@@ -233,7 +233,7 @@ void register_CenterOfGeometry_class(){
         }
         { //::SireFF::CenterOfGeometry::usesMoleculesIn
         
-            typedef bool ( ::SireFF::CenterOfGeometry::*usesMoleculesIn_function_type )( ::SireFF::ForceTable const & ) const;
+            typedef bool ( ::SireFF::CenterOfGeometry::*usesMoleculesIn_function_type)( ::SireFF::ForceTable const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireFF::CenterOfGeometry::usesMoleculesIn );
             
             CenterOfGeometry_exposer.def( 
@@ -244,7 +244,7 @@ void register_CenterOfGeometry_class(){
         }
         { //::SireFF::CenterOfGeometry::usesMoleculesIn
         
-            typedef bool ( ::SireFF::CenterOfGeometry::*usesMoleculesIn_function_type )( ::SireMol::Molecules const & ) const;
+            typedef bool ( ::SireFF::CenterOfGeometry::*usesMoleculesIn_function_type)( ::SireMol::Molecules const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireFF::CenterOfGeometry::usesMoleculesIn );
             
             CenterOfGeometry_exposer.def( 
@@ -255,7 +255,7 @@ void register_CenterOfGeometry_class(){
         }
         { //::SireFF::CenterOfGeometry::usesMoleculesIn
         
-            typedef bool ( ::SireFF::CenterOfGeometry::*usesMoleculesIn_function_type )( ::SireMol::MoleculeGroup const & ) const;
+            typedef bool ( ::SireFF::CenterOfGeometry::*usesMoleculesIn_function_type)( ::SireMol::MoleculeGroup const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireFF::CenterOfGeometry::usesMoleculesIn );
             
             CenterOfGeometry_exposer.def( 
@@ -266,7 +266,7 @@ void register_CenterOfGeometry_class(){
         }
         { //::SireFF::CenterOfGeometry::usesMoleculesIn
         
-            typedef bool ( ::SireFF::CenterOfGeometry::*usesMoleculesIn_function_type )( ::SireMol::MolGroupsBase const & ) const;
+            typedef bool ( ::SireFF::CenterOfGeometry::*usesMoleculesIn_function_type)( ::SireMol::MolGroupsBase const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireFF::CenterOfGeometry::usesMoleculesIn );
             
             CenterOfGeometry_exposer.def( 
@@ -277,7 +277,7 @@ void register_CenterOfGeometry_class(){
         }
         { //::SireFF::CenterOfGeometry::wouldUpdate
         
-            typedef bool ( ::SireFF::CenterOfGeometry::*wouldUpdate_function_type )( ::SireMol::MoleculeData const & ) const;
+            typedef bool ( ::SireFF::CenterOfGeometry::*wouldUpdate_function_type)( ::SireMol::MoleculeData const & ) const;
             wouldUpdate_function_type wouldUpdate_function_value( &::SireFF::CenterOfGeometry::wouldUpdate );
             
             CenterOfGeometry_exposer.def( 
@@ -288,7 +288,7 @@ void register_CenterOfGeometry_class(){
         }
         { //::SireFF::CenterOfGeometry::wouldUpdate
         
-            typedef bool ( ::SireFF::CenterOfGeometry::*wouldUpdate_function_type )( ::SireMol::Molecules const & ) const;
+            typedef bool ( ::SireFF::CenterOfGeometry::*wouldUpdate_function_type)( ::SireMol::Molecules const & ) const;
             wouldUpdate_function_type wouldUpdate_function_value( &::SireFF::CenterOfGeometry::wouldUpdate );
             
             CenterOfGeometry_exposer.def( 
@@ -299,7 +299,7 @@ void register_CenterOfGeometry_class(){
         }
         { //::SireFF::CenterOfGeometry::wouldUpdate
         
-            typedef bool ( ::SireFF::CenterOfGeometry::*wouldUpdate_function_type )( ::SireMol::MoleculeGroup const & ) const;
+            typedef bool ( ::SireFF::CenterOfGeometry::*wouldUpdate_function_type)( ::SireMol::MoleculeGroup const & ) const;
             wouldUpdate_function_type wouldUpdate_function_value( &::SireFF::CenterOfGeometry::wouldUpdate );
             
             CenterOfGeometry_exposer.def( 
@@ -310,7 +310,7 @@ void register_CenterOfGeometry_class(){
         }
         { //::SireFF::CenterOfGeometry::wouldUpdate
         
-            typedef bool ( ::SireFF::CenterOfGeometry::*wouldUpdate_function_type )( ::SireMol::MolGroupsBase const & ) const;
+            typedef bool ( ::SireFF::CenterOfGeometry::*wouldUpdate_function_type)( ::SireMol::MolGroupsBase const & ) const;
             wouldUpdate_function_type wouldUpdate_function_value( &::SireFF::CenterOfGeometry::wouldUpdate );
             
             CenterOfGeometry_exposer.def( 

@@ -267,6 +267,21 @@ bool CLJExtractor::changed() const
            new_selected_atoms != selected_atoms;
 }
 
+/** Return whether or not there are any changes to the coordinates, charges
+    or LJ properties of the atoms */
+bool CLJExtractor::hasChangedAtoms() const
+{
+    for (int i=0; i<cljdeltas.count(); ++i)
+    {
+        if (not cljdeltas.at(i).isNull())
+        {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
 /** Return whether or not this extractor needs to be committed (i.e. whether
     or not the molecule has changed in any way) */
 bool CLJExtractor::needsCommitting() const
@@ -688,7 +703,7 @@ void CLJExtractor::update(const MoleculeView &new_molecule,
                                                   CLJAtoms(newmol.cutGroup(i), id_source, props),
                                                   cljdeltas[i]);
                 }
-                else
+                else if (not new_selected_atoms.selectedNone(i))
                 {
                     //only some of the atoms of this residue are in the forcefield
                     AtomSelection selected_cgatoms = new_selected_atoms;
@@ -798,7 +813,7 @@ void CLJExtractor::update(const MoleculeView &new_molecule,
                                                   CLJAtoms(newmol.residue(i), id_source, props),
                                                   cljdeltas[i]);
                 }
-                else
+                else if (not new_selected_atoms.selectedNone(i))
                 {
                     //only some of the atoms of this residue are in the forcefield
                     AtomSelection selected_resatoms = new_selected_atoms;
