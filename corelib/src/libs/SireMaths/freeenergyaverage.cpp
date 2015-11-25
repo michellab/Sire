@@ -222,7 +222,7 @@ const Histogram& FreeEnergyAverage::histogram() const
 QString FreeEnergyAverage::toString() const
 {
     return QObject::tr("FreeEnergyAverage( dG = %1 kcal mol-1, average = %2 kcal mol-1 "
-                       "stderr = %3 kcal mol-1, "
+                       "stdev = %3 kcal mol-1, "
                        "skew = %4 kcal mol-1, nSamples = %5, "
                        "isForwardsFreeEnergy() = %6 )")
                             .arg(this->average())
