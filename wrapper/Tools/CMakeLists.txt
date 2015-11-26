@@ -9,6 +9,7 @@
 set ( SCRIPTS
         __init__.py
         AmberLoader.py
+        Coulcutoff.py
         DCDFile.py
         FDTISingleBound.py
         FDTISingleFree.py

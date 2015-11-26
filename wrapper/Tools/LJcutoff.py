@@ -2,7 +2,7 @@
 # Evaluates free energy difference between two potential energy functions by
 # use of the Zwanzig equation 
 #
-import os,sys
+import os,sys, random
 import math
 from Sire.Tools.OpenMMMD import *
 from Sire.Tools import Parameter, resolveParameters
@@ -15,11 +15,19 @@ except ImportError:
     print ("LJcutoff.py depends on a working install of the python module mdtraj. Please install mdtraj in your sire python.")
     sys.exit(-1)
 
+try:
+    import numpy as np
+except ImportError:
+    print ("LJcutoff.py depends on a working install of the python module mdtraj. Please install mdtraj in your sire python.")
+    sys.exit(-1)
+
+
 bulk_rho = Parameter("bulk_rho", 1.0 * gram/(centimeter*centimeter*centimeter)\
                      ,"""The density of buk solvent.""")
+
 trajfile = Parameter("trajfile", "traj000000001.dcd",
                     """File name of the trajectory to process.""")
-
+stepframe = Parameter("step_frame",1,"""The number of frames to step to between two succcessive evaluations.""")
 
 def setupLJFF(system, space, cutoff=10* angstrom):
 
@@ -290,18 +298,20 @@ def updateSystemfromTraj(system, frame_xyz, cell_lengths, cell_angles):
 
     return system
 
-def Zwanzig(delta_nrgs):
-
-    kbt = k_boltz*temperature.val.value()
-    acc = 0.0
-    count = 0.0
+def getFreeEnergy(delta_nrgs):
+    free_nrg = FreeEnergyAverage(temperature.val)
     for nrg in delta_nrgs:
-        #import pdb; pdb.set_trace()
-        acc += math.exp(-nrg.value()/kbt)
-        count += 1
-    acc /= count
-    deltaG = -kbt*math.log(acc) * kcal_per_mol
+        free_nrg.accumulate(nrg.value())
+    deltaG = free_nrg.average() * kcal_per_mol
     return deltaG
+
+def resample(values):
+    nvals = len(values)
+    new_values = []
+    for x in range(0,nvals):
+        i = random.randint(0,nvals-1)
+        new_values.append(values[i])
+    return new_values
 
 @resolveParameters
 def runLambda():
@@ -358,7 +368,7 @@ def runLambda():
     # Now loop over snapshots in dcd and accumulate energies
     start_frame = 1
     end_frame = 1000000000
-    step_frame = 100
+    step_frame = stepframe.val
 
     #mdtraj_top = mdtraj.load_prmtop(topfile.val)
     mdtraj_trajfile = mdtraj.open(trajfile.val,'r')
@@ -373,22 +383,24 @@ def runLambda():
     while (current_frame <= end_frame):
         frames_xyz, cell_lengths, cell_angles = mdtraj_trajfile.read(n_frames=1)
         print ("Processing frame %s " % current_frame)
-        print (system_shortc.energy())
-        print (system_longc.energy())
+        #print (system_shortc.energy())
+        #print (system_longc.energy())
         system_shortc = updateSystemfromTraj(system_shortc, frames_xyz, cell_lengths, cell_angles)
         system_longcc = updateSystemfromTraj(system_longc, frames_xyz, cell_lengths, cell_angles)
-        print (system_shortc.energy())
-        print (system_longc.energy())
+        #print (system_shortc.energy())
+        #print (system_longc.energy())
         delta_nrg = (system_longc.energy()+E_lrc_full - system_shortc.energy())
         delta_nrgs.append(delta_nrg)
-
         current_frame += step_frame
-    print (delta_nrgs)
-    # Generate X bootstrap samples
-    # Now compute free energy change and uncertainties
-    free_nrg = FreeEnergyAverage(temperature.val)
-    for nrg in delta_nrgs:
-        free_nrg.accumulate(nrg.value())
-    deltaG = free_nrg.average() * kcal_per_mol
-    print (deltaG)
-    import pdb; pdb.set_trace()
+    #print (delta_nrgs)
+    # Now compute free energy change
+    deltaG = getFreeEnergy(delta_nrgs)
+    #print (deltaG)
+    nbootstrap = 100
+    deltaG_bootstrap = np.zeros(nbootstrap)
+    for x in range(0,nbootstrap):
+        resampled_nrgs = resample(delta_nrgs)
+        dG = getFreeEnergy(resampled_nrgs)
+        deltaG_bootstrap[x] = dG.value()
+    dev = deltaG_bootstrap.std()
+    print ("DeltaG = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (deltaG.value(), dev))

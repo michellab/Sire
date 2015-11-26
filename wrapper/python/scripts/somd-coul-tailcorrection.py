@@ -1,9 +1,10 @@
 description="""
-somd-lj-tailcorrection is a trajectory post-processing app that computes a correction 
-to computed free energy changes. This app evaluates the contributions of dispersion interactions 
-from beyond the cutoff used in the original simulation.
+somd-coul-tailcorrection is a trajectory post-processing app that computes a correction 
+to computed free energy changes. This app evaluates the free energy change to switch 
+from an atom-based barker-watts reaction field cutoff in periodic boundary conditions to 
+a coulombic description in a non periodic dielectric medium.
 """
-from Sire.Tools import LJcutoff
+from Sire.Tools import Coulcutoff
 from Sire.Tools import readParams
 from Sire.Units import *
 
@@ -13,12 +14,12 @@ import argparse
 import os
 import sys
 
-parser = argparse.ArgumentParser(description="Evaluates contribution of missing dispersion interactions"
-                                 "to a free energy change",
-                                 epilog="somd-lj-tailcorrection is built using Sire and is distributed "
-                                        "under the GPL. For more information please visit "
+parser = argparse.ArgumentParser(
+    description="Evaluates correction to free energy changes due to cutoffs truncation and finite-size effects.",
+    epilog="somd-coul-tailcorrection is built using Sire and is distributed "
+    "under the GPL. For more information please visit "
                                         "http://siremol.org",
-                                 prog="somd-lj-tailcorrection")
+                                 prog="somd-coul-tailcorrection")
 
 parser.add_argument('-C', '--config', nargs="?", 
                     help='Supply an optional CONFIG file to control the calculation.')
@@ -44,11 +45,15 @@ parser.add_argument('-c', '--coordinate_file', nargs="?",
 parser.add_argument('-m', '--morph_file', nargs="?",
                     help="The morph file describing the single topology "
                          "calculation to be performed.")
+
 parser.add_argument('-l', '--lambda_val', nargs="?", 
                     help="The lambda value at which you want to run the simulation.")
 
 parser.add_argument('-b', '--bulk_rho', nargs="?",
                     help="The density of the bulk solvent for LJ tail corrections.")
+
+parser.add_argument('-e', '--bulk_eps', nargs="?",
+                    help="The dielectric constant of the bulk solvent.")
 
 parser.add_argument('-r', '--traj_file', nargs="?",
                     help="The trajectory file to process.")
@@ -62,12 +67,12 @@ args = parser.parse_args()
 must_exit = False
 
 if args.author:
-    print("\nsomd-lj-tailcorrection was written by Julien Michel (C) 2015")
+    print("\nsomd-coul-tailcorrection was written by Julien Michel (C) 2015")
     print("It is based on the OpenMMMD module distributed in Sire.")
     must_exit = True
 
 if args.version:
-    print("somd-lj-tailcorrection -- from Sire release version <%s>" %Sire.__version__)
+    print("somd-coul-tailcorrection -- from Sire release version <%s>" %Sire.__version__)
     print("This particular release can be downloaded here: "
           "https://github.com/michellab/Sire/releases/tag/v%s" %Sire.__version__)
     must_exit = True
@@ -121,6 +126,10 @@ if args.bulk_rho:
     exec("bulk_rho = %s" % args.bulk_rho, globals())
     params["bulk_rho"] = bulk_rho
 
+if args.bulk_eps:
+    exec("bulk_eps = %s" % args.bulk_eps, globals())
+    params["bulk_eps"] = bulk_eps
+
 if args.traj_file:
     traj_file = args.traj_file
     params["trajfile"] = traj_file
@@ -148,9 +157,9 @@ if not (os.path.exists(coord_file) and os.path.exists(top_file) \
         print("(cannot find traj file %s)" % traj_file)
     sys.exit(-1)
 
-print("\nRunning a somd-lj-tailcorrection calculation using files %s, %s, %s and %s." % (top_file, coord_file, morph_file, traj_file))
+print("\nRunning a somd-coul-tailcorrection calculation using files %s, %s, %s and %s." % (top_file, coord_file, morph_file, traj_file))
 
 print (args)
 
-# Now lets run the OpenMMMD free energy calculation
-LJcutoff.runLambda(params)
+# Now lets run the calculation
+Coulcutoff.runLambda(params)
