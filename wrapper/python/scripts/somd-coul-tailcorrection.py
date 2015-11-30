@@ -49,11 +49,14 @@ parser.add_argument('-m', '--morph_file', nargs="?",
 parser.add_argument('-l', '--lambda_val', nargs="?", 
                     help="The lambda value at which you want to run the simulation.")
 
-parser.add_argument('-b', '--bulk_rho', nargs="?",
-                    help="The density of the bulk solvent for LJ tail corrections.")
+parser.add_argument('-b', '--model_rho', nargs="?",
+                    help="The density of the modelled solvent for LJ tail corrections.")
 
 parser.add_argument('-e', '--bulk_eps', nargs="?",
                     help="The dielectric constant of the bulk solvent.")
+
+parser.add_argument('-d', '--model_eps', nargs="?",
+                    help="The dielectric constant of the modelled solvent.")
 
 parser.add_argument('-r', '--traj_file', nargs="?",
                     help="The trajectory file to process.")
@@ -122,13 +125,17 @@ if args.lambda_val:
     lambda_val = float(args.lambda_val)
     params["lambda_val"] = lambda_val
 
-if args.bulk_rho:
-    exec("bulk_rho = %s" % args.bulk_rho, globals())
-    params["bulk_rho"] = bulk_rho
+if args.model_rho:
+    exec("model_rho = %s" % args.model_rho, globals())
+    params["model_rho"] = model_rho
 
 if args.bulk_eps:
     exec("bulk_eps = %s" % args.bulk_eps, globals())
     params["bulk_eps"] = bulk_eps
+
+if args.model_eps:
+    exec("model_eps = %s" % args.model_eps, globals())
+    params["model_eps"] = model_eps
 
 if args.traj_file:
     traj_file = args.traj_file

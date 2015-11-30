@@ -24,7 +24,10 @@ except ImportError:
 bulk_eps = Parameter("bulk_eps", 78.4,
                      """The dielectric constant of the bulk solvent.""")
 
-bulk_rho = Parameter("bulk_rho", 1.0 * gram/(centimeter*centimeter*centimeter)\
+model_eps = Parameter("model_eps", 78.4,
+                     """The dielectric constant of the modelled solvent.""")
+
+model_rho = Parameter("model_rho", 1.0 * gram/(centimeter*centimeter*centimeter)\
                      ,"""The density of buk solvent.""")
 
 trajfile = Parameter("trajfile", "traj000000001.dcd",
@@ -182,7 +185,7 @@ END
     os.chdir("../")
 
     cmd = "rm -rf %s" % poissondir
-    os.system(cmd)
+    #os.system(cmd)
 
     DF_BA_PBC = nrg * kJ_per_mol
 
@@ -336,14 +339,43 @@ quit
 
     os.chdir("../")
     cmd = "rm -rf %s" % poissondir
-    os.system(cmd)
+    #os.system(cmd)
 
     DF_CB_NP = nrg * kJ_per_mol
 
     return DF_CB_NP
 
+def calcQuadrupoleTrace(molecule):
+    atoms = molecule.atoms()
+    com = [0.0, 0.0, 0.0]
+    totmass = 0.0
+    for atom in atoms:
+        coords = atom.property("coordinates")
+        mass = atom.property("mass").value()
+        totmass += mass
+        for i in range(0,3):
+            com[i] += coords[i]*mass
+    for i in range(0,3):
+        com[i] /= totmass
+
+    q_trace = 0.0
+    for atom in atoms:
+        coords = atom.property("coordinates")
+        charge = atom.property("charge")
+        ri_x = coords[0] - com[0]
+        ri_y = coords[1] - com[1]
+        ri_z = coords[2] - com[2]
+        ri2 = ri_x**2 + ri_y**2 + ri_z**2
+        cont = charge.value() * ri2
+        #print ("cont %s " % cont)
+        q_trace += charge.value() * ri2
+    q_trace /= 100.0
+    print ("q_trace is %s (in e nm2)" % q_trace)
+
+    return q_trace
+
 def SummationCorrection(solutes, solvent, space, rho_solvent_model,
-                        quadrupole_trace, eps_solvent_model, BAcutoff):
+                        eps_solvent_model, BAcutoff):
     nrg = 0.0
     sol_mols = solutes.molecules()
     molnums = sol_mols.molNums()
@@ -376,6 +408,11 @@ def SummationCorrection(solutes, solvent, space, rho_solvent_model,
     nsolv = 0
     solv_mols = solvent.molecules()
     solvmolnums = solv_mols.molNums()
+
+
+    # Now that we know the mol_com, compute the quadrupole trace
+    quadrupole_trace = calcQuadrupoleTrace(solv_mols.first().molecule())
+
     for molnum in solvmolnums:
         solvent = solv_mols.molecule(molnum).molecule()
         # Find com
@@ -401,8 +438,7 @@ def SummationCorrection(solutes, solvent, space, rho_solvent_model,
     nrg = -ONE_OVER_6PI_EPS0 * mol_charge * quadrupole_trace *\
         ( ( (2*(eps_solvent_model-1) / (2*eps_solvent_model+1) )*\
               nsolv/(4*pi*(BAcutoff/10.0)**3/3.0) ) +\
-              (3/(2*eps_solvent_model)))
-    # !!! Missing (3/(2*eps_solvent_model+1)) phi_ODL term
+              (3/(2*eps_solvent_model+1)))
     #sys.exit(-1)
     DF_PSUM = nrg * kJ_per_mol
     return DF_PSUM
@@ -429,7 +465,11 @@ def runLambda():
 
     # What to do with this...
     system = createSystemFreeEnergy(molecules)
-
+    lam = Symbol("lambda")
+    solutes = system[MGName("solutes")]
+    system.setConstant(lam, lambda_val.val)
+    system.add(PerturbationConstraint(solutes))
+    #system.setComponent(lam, lambda_val.val)
     # Now loop over snapshots in dcd and accumulate energies
     start_frame = 1
     end_frame = 1000000000
@@ -446,6 +486,7 @@ def runLambda():
         frames_xyz, cell_lengths, cell_angles = mdtraj_trajfile.read(n_frames=1)
         print ("Processing frame %s " % current_frame)
         system = updateSystemfromTraj(system, frames_xyz, cell_lengths, cell_angles)
+        #import pdb; pdb.set_trace()
         # Now filter out solvent molecules
         solutes, solvent = SplitSoluteSolvent(system)
         # ???Should we center solutes to the center of the box???
@@ -455,33 +496,32 @@ def runLambda():
         print ("Poisson PBC calculation... ")
         DG_BA_PBC = PoissonPBC(PoissonPBCSolverBin.val ,solutes, \
                                system.property("space"),cutoff_dist.val.value(),\
-                               bulk_eps.val)
+                               model_eps.val)
         # Use APBS to compute DF^{CB}_{infinity}
         # ??? Should we use experimental dielectric constant rather than
         # the one from the model ???
         print ("Poisson NP calculation... ")
         DG_CB_NP = PoissonNP(PoissonNPSolverBin.val, solutes, bulk_eps.val)
+        # NOTE ! Will generate nan if all the partial charges of the solutes are zero
+        if math.isnan(DG_CB_NP.value()):
+            DG_CB_NP = 0.0 * kcal_per_mol
         DG_POL = DG_CB_NP - DG_BA_PBC
         print ("DG_POL IS %s " % DG_POL)
         # ############################################
         # Compute psum
-        # work out quadrupole trace of solvent model
-        # Also need to know bulk density
-        quadrupole_trace = 0.0082# e.nm^2 !!!SPC needs adjustment
         print ("Psum correction... ")
-        DG_PSUM = SummationCorrection(solutes, solvent, space, bulk_rho.val.value(),\
-                                      quadrupole_trace, bulk_eps.val, \
-                                      cutoff_dist.val.value())
+        DG_PSUM = SummationCorrection(solutes, solvent, space, model_rho.val.value(),\
+                                      model_eps.val, cutoff_dist.val.value())
         print ("DG_PSUM IS %s" % DG_PSUM)
         # ############################################
-        # Compute DF_excluded (this should deal with RF in vacuum issues)
+        # Compute DF_excluded (this should deal with RF in vacuum issues?)
         # Only needed for solutes with intramolecular coulombic energies
         # ###########################################
         # Compute DF_dir (only host/guest setups)
         # This deals with the interaction energies of host-guest
         # meaning will need split solutes into groups
         # ###########################################
-        #import pdb; pdb.set_trace()
+        import pdb; pdb.set_trace()
         current_frame += step_frame
 
     # Now compute average free energy
