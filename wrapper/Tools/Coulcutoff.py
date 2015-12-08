@@ -5,6 +5,7 @@ import os,sys, random
 import math
 from Sire.Tools.OpenMMMD import *
 from Sire.Tools import Parameter, resolveParameters
+from Sire.Tools.LJcutoff import getFreeEnergy, resample
 
 # Python dependencies
 #
@@ -41,7 +42,109 @@ PoissonPBCSolverBin = Parameter("PoissonPBCSolverBin","/home/julien/local/bin/pb
 PoissonNPSolverBin = Parameter("PoissonNPSolverBin","/home/julien/local/APBS-1.4.1-binary/bin/apbs","""Path to the NP Poisson solver.""")
 
 #### Hardcoded parameters (may need revision)
-solvent_residues = ["WAT","ZBK"]
+solvent_residues = ["WAT","ZBK","ZBT","CYC"]
+
+def setupCoulFF(system, space, cut_type="nocutoff", cutoff= 999* angstrom, dielectric=1.0):
+
+    print ("Creating force fields... ")
+
+    solutes = system[MGName("solutes")]
+    solute = system[MGName("solute_ref")]
+    solute_hard = system[MGName("solute_ref_hard")]
+    solute_todummy = system[MGName("solute_ref_todummy")]
+    solute_fromdummy = system[MGName("solute_ref_fromdummy")]
+
+    # Solute intramolecular LJ energy
+    solute_hard_intracoul = IntraCLJFF("solute_hard_intracoul")
+    solute_hard_intracoul.add(solute_hard)
+    if (cut_type != "nocutoff"):
+        solute_hard_intracoul.setUseReactionField(True)
+        solute_hard_intracoul.setReactionFieldDielectric(dielectric)
+
+    solute_todummy_intracoul = IntraSoftCLJFF("solute_todummy_intracoul")
+    solute_todummy_intracoul.setShiftDelta(shift_delta.val)
+    solute_todummy_intracoul.setCoulombPower(coulomb_power.val)
+    solute_todummy_intracoul.add(solute_todummy)
+    if (cut_type != "nocutoff"):
+        solute_todummy_intracoul.setUseReactionField(True)
+        solute_todummy_intracoul.setReactionFieldDielectric(dielectric)
+
+    solute_fromdummy_intracoul = IntraSoftCLJFF("solute_fromdummy_intracoul")
+    solute_fromdummy_intracoul.setShiftDelta(shift_delta.val)
+    solute_fromdummy_intracoul.setCoulombPower(coulomb_power.val)
+    solute_fromdummy_intracoul.add(solute_fromdummy)
+    if (cut_type != "nocutoff"):
+        solute_fromdummy_intracoul.setUseReactionField(True)
+        solute_fromdummy_intracoul.setReactionFieldDielectric(dielectric)
+
+    solute_hard_todummy_intracoul = IntraGroupSoftCLJFF("solute_hard:todummy_intracoul")
+    solute_hard_todummy_intracoul.setShiftDelta(shift_delta.val)
+    solute_hard_todummy_intracoul.setCoulombPower(coulomb_power.val)
+    solute_hard_todummy_intracoul.add(solute_hard, MGIdx(0))
+    solute_hard_todummy_intracoul.add(solute_todummy, MGIdx(1))
+    if (cut_type != "nocutoff"):
+        solute_hard_todummy_intracoul.setUseReactionField(True)
+        solute_hard_todummy_intracoul.setReactionFieldDielectric(dielectric)
+
+    solute_hard_fromdummy_intracoul = IntraGroupSoftCLJFF("solute_hard:fromdummy_intracoul")
+    solute_hard_fromdummy_intracoul.setShiftDelta(shift_delta.val)
+    solute_hard_fromdummy_intracoul.setCoulombPower(coulomb_power.val)
+    solute_hard_fromdummy_intracoul.add(solute_hard, MGIdx(0))
+    solute_hard_fromdummy_intracoul.add(solute_fromdummy, MGIdx(1))
+    if (cut_type != "nocutoff"):
+        solute_hard_fromdummy_intracoul.setUseReactionField(True)
+        solute_hard_fromdummy_intracoul.setReactionFieldDielectric(dielectric)
+
+    solute_todummy_fromdummy_intracoul = IntraGroupSoftCLJFF("solute_todummy:fromdummy_intracoul")
+    solute_todummy_fromdummy_intracoul.setShiftDelta(shift_delta.val)
+    solute_todummy_fromdummy_intracoul.setCoulombPower(coulomb_power.val)
+    solute_todummy_fromdummy_intracoul.add(solute_todummy, MGIdx(0))
+    solute_todummy_fromdummy_intracoul.add(solute_fromdummy, MGIdx(1))
+    if (cut_type != "nocutoff"):
+        solute_todummy_fromdummy_intracoul.setUseReactionField(True)
+        solute_todummy_fromdummy_intracoul.setReactionFieldDielectric(dielectric)    
+
+    # TOTAL
+    forcefields = [solute_hard_intracoul, solute_todummy_intracoul, solute_fromdummy_intracoul,
+                   solute_hard_todummy_intracoul, solute_hard_fromdummy_intracoul,
+                   solute_todummy_fromdummy_intracoul]
+
+    for forcefield in forcefields:
+        system.add(forcefield)
+
+    system.setProperty("space", space)
+    system.setProperty("switchingFunction", CHARMMSwitchingFunction(cutoff))
+    system.setProperty("combiningRules", VariantProperty(combining_rules.val))
+    system.setProperty("coulombPower", VariantProperty(coulomb_power.val))
+    system.setProperty("shiftDelta", VariantProperty(shift_delta.val))
+
+
+    total_nrg = solute_hard_intracoul.components().coulomb() + \
+                solute_todummy_intracoul.components().coulomb(0) + solute_fromdummy_intracoul.components().coulomb(0) + \
+                solute_hard_todummy_intracoul.components().coulomb(0) + solute_hard_fromdummy_intracoul.components().coulomb(0) + \
+                solute_todummy_fromdummy_intracoul.components().coulomb(0) 
+
+    e_total = system.totalComponent()
+
+    lam = Symbol("lambda")
+
+    system.setComponent(e_total, total_nrg)
+
+    system.setConstant(lam, 0.0)
+
+    system.add(PerturbationConstraint(solutes))
+
+    # NON BONDED Alpha constraints for the soft force fields
+    system.add(PropertyConstraint("alpha0", FFName("solute_todummy_intracoul"), lam))
+    system.add(PropertyConstraint("alpha0", FFName("solute_fromdummy_intracoul"), 1 - lam))
+    system.add(PropertyConstraint("alpha0", FFName("solute_hard:todummy_intracoul"), lam))
+    system.add(PropertyConstraint("alpha0", FFName("solute_hard:fromdummy_intracoul"), 1 - lam))
+    system.add(PropertyConstraint("alpha0", FFName("solute_todummy:fromdummy_intracoul"), Max(lam, 1 - lam)))
+
+    system.setComponent(lam, lambda_val.val)
+
+    return system
+
 
 def updateSystemfromTraj(system, frame_xyz, cell_lengths, cell_angles):
     traj_coordinates = frame_xyz[0]
@@ -168,7 +271,7 @@ END
 
     os.chdir(poissondir)
 
-    wstream = open('infile','w')
+    wstream = open('inFile','w')
     wstream.write(infile)
     wstream.close()
 
@@ -482,6 +585,36 @@ def runLambda():
     mdtraj_trajfile.seek(start_frame)
     current_frame = start_frame
 
+    system = createSystemFreeEnergy(molecules)
+    
+    system_solute_rf = System()
+    system_solute_rf.add(solutes)
+    system_solute_rf.add(system[MGName("solute_ref")])
+    system_solute_rf.add(system[MGName("solute_ref_hard")])
+    system_solute_rf.add(system[MGName("solute_ref_todummy")])
+    system_solute_rf.add(system[MGName("solute_ref_fromdummy")])
+
+    system_solute_rf = setupCoulFF(system_solute_rf, space, \
+                                  cut_type=cutoff_type.val,
+                                  cutoff=cutoff_dist.val,
+                                  dielectric=model_eps.val)
+    #import pdb; pdb.set_trace()    
+
+    system_solute_cb = System()
+    system_solute_cb.add(solutes)
+    system_solute_cb.add(system[MGName("solute_ref")])
+    system_solute_cb.add(system[MGName("solute_ref_hard")])
+    system_solute_cb.add(system[MGName("solute_ref_todummy")])
+    system_solute_cb.add(system[MGName("solute_ref_fromdummy")])
+
+    system_solute_cb = setupCoulFF(system_solute_cb, Cartesian(), \
+                                  cut_type="nocutoff")
+
+    #import pdb; pdb.set_trace()
+
+    delta_intra_nrgs = []
+    DG_corrs = []
+
     while (current_frame <= end_frame):
         frames_xyz, cell_lengths, cell_angles = mdtraj_trajfile.read(n_frames=1)
         print ("Processing frame %s " % current_frame)
@@ -514,16 +647,48 @@ def runLambda():
                                       model_eps.val, cutoff_dist.val.value())
         print ("DG_PSUM IS %s" % DG_PSUM)
         # ############################################
-        # Compute DF_excluded (this should deal with RF in vacuum issues?)
-        # Only needed for solutes with intramolecular coulombic energies
+        # Compute DF_intra 
+        # Free energy change for changing intramolecular coulombic energy calculations
+        # from a reaction field cutoff to nocutoff
+        # Update system_solute_rf
+        system_solute_rf.update(solutes)
+        system_solute_cb.update(solutes)
+        delta_intra_nrg = (system_solute_cb.energy() - system_solute_rf.energy())
+        delta_intra_nrgs.append(delta_intra_nrg)
         # ###########################################
         # Compute DF_dir (only host/guest setups)
         # This deals with the interaction energies of host-guest
         # meaning will need split solutes into groups
         # ###########################################
-        import pdb; pdb.set_trace()
+        #import pdb; pdb.set_trace()
+        DG_corr = DG_POL + DG_PSUM
+        DG_corrs.append(DG_corr)
         current_frame += step_frame
 
-    # Now compute average free energy
+    # Now compute average POL/SUM term
+    nvals = len(DG_corrs)
+    DG_avg = 0.0 * kcal_per_mol
+    dev = 0.0
+    for x in range(0,nvals):
+        DG_avg += DG_corrs[x]
+        dev += (DG_corrs[x].value())**2
+    DG_avg /= nvals
+    dev = (dev / nvals) - (DG_avg.value())**2
+    dev = math.sqrt(dev)
     # Now compute standard deviation of the distribution of free energies
-    #print ("DeltaG = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (deltaG.value(), dev))
+    #print ("DeltaG = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (DG_avg.value(), dev))
+    # Now compute free energy change
+    print (delta_intra_nrgs)
+    DG_intra = getFreeEnergy(delta_intra_nrgs)
+    #print (deltaG)
+    nbootstrap = 100
+    deltaG_bootstrap = np.zeros(nbootstrap)
+    for x in range(0,nbootstrap):
+        resampled_nrgs = resample(delta_intra_nrgs)
+        dG = getFreeEnergy(resampled_nrgs)
+        deltaG_bootstrap[x] = dG.value()
+    devintra = deltaG_bootstrap.std()
+    dev2 = math.sqrt(dev**2+devintra**2)
+    # Now compute standard deviation of the distribution of free energies
+    DG_final = DG_avg + DG_intra
+    print ("DeltaG = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (DG_final.value(), dev2))
