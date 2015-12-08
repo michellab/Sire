@@ -128,8 +128,20 @@ namespace SireBase
                             .arg(ok), CODELOC );
         
             QFileInfo f(pathbuf);
-        
-            setInstallDir( stripDir(SIRE_BIN_DIR,f.canonicalPath()) );
+
+            //sometimes we may use a python executable in python.app/Contents/MacOS.
+            //we will use a special case to remove this from the path
+            QString path = f.canonicalPath();
+            if (path.endsWith("python.app/Contents/MacOS"))
+            {
+                path.chop(25);
+                setInstallDir(path);
+            }
+            else
+            {
+                setInstallDir( stripDir(SIRE_BIN_DIR,path) );
+            }
+
             return install_dir;
         #else
         #ifdef Q_OS_LINUX

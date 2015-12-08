@@ -148,6 +148,14 @@ if ( ANACONDA_BUILD )
     execute_process( COMMAND chmod u+w ${PYTHON_LIBRARY} )
     execute_process( COMMAND ${CMAKE_INSTALL_NAME_TOOL} -id "@rpath/libpython${PYTHON_VERSION}${PYTHON_ABIFLAGS}.dylib" ${PYTHON_LIBRARY} )
     execute_process( COMMAND ${CMAKE_INSTALL_NAME_TOOL} -add_rpath "@executable_path/../lib" ${PYTHON_EXECUTABLE} )
+
+    # There may also be a python interpreter hidden in python.app/Contents/MacOS/python
+    set( PYTHON_OTHER "${ANACONDA_BASE}/python.app/Contents/MacOS/python" )
+
+    if (EXISTS "${PYTHON_OTHER}")
+      execute_process( COMMAND ${CMAKE_INSTALL_NAME_TOOL} -add_rpath "@executable_path/../lib" ${PYTHON_OTHER} )  
+    endif()
+
   endif()
 
   message( STATUS "Using anaconda/miniconda python in ${PYTHON_LIBRARIES} | ${PYTHON_INCLUDE_DIR}" )
