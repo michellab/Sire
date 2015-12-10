@@ -30,6 +30,11 @@ if ( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
   message( FATAL_ERROR "You must run CMake in a different directory to the source!" ) 
 endif ( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
 
+if ( CMAKE_GENERATOR MATCHES "Xcode" )
+  message( FATAL_ERROR "You cannot generate the Xcode project for the Python "
+            "wrappers. These are auto-generated and should not be hand-edited." )
+endif()
+
 # get the number of cores on this machine - useful for
 # compiling dependencies
 include(ProcessorCount)

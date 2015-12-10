@@ -26,7 +26,11 @@ set ( SIRE_RCCS
       sire.qrc
     )
 
-qt5_add_resources( SIRE_RCC_SRCS ${SIRE_RCCS} )
+if ( CMAKE_GENERATOR MATCHES "Xcode" )
+  message( STATUS "Xcode project is not compilable..." )
+else()
+  qt5_add_resources( SIRE_RCC_SRCS ${SIRE_RCCS} )
+endif()
 
 set ( SIRE_SOURCES
 

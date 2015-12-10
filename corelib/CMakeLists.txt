@@ -42,36 +42,76 @@ if ( NCORES EQUAL 0 )
   endif()
 endif()
 
-message(STATUS "Configuring on a machine with number of cores = ${NCORES}")
+if ( CMAKE_GENERATOR MATCHES "Xcode" )
+  message( STATUS "Creating Sire Xcode files. Note that this will "
+                  "only work if Sire has already been installed..." )
 
-# Option to compile and install into an anaconda or miniconda directory
-option( ANACONDA_BUILD "Build into an existing anaconda/miniconda installation" OFF )
+  # Look for the Sire cmake config file that should have been
+  # installed with Sire...
+  set( SIRE_APP "$ENV{HOME}/sire.app" CACHE PATH
+          "The full path to the sire.app installed Sire application." )
 
-if ( ANACONDA_BUILD )
-  message( STATUS "Building into an existing Anaconda/Miniconda installation..." )
-  # Where is anaconda installed
-  set( ANACONDA_BASE "$ENV{HOME}/miniconda3" CACHE PATH
-          "Install directory for Anaconda/Miniconda (python3)" )
+  set( SIRE_INCLUDE_DIR "${SIRE_APP}/include/Sire" )
 
-  # Make sure that there is a python3 executable in the bin directory
-  if ( NOT EXISTS "${ANACONDA_BASE}/bin/python3" )
-    message( FATAL_ERROR "Cannot find ${ANACONDA_BASE}/bin/python3. "
-                         "Please set the full path to the Anaconda or Miniconda "
-                         "installation directory." )
-  endif()
+  set ( SIRE_COMP_CMAKE "${SIRE_INCLUDE_DIR}/cmake/SireCompileVariables.cmake" )
 
-  set( SIRE_INSTALL_PREFIX "${ANACONDA_BASE}/pkgs/sire-${SIRE_VERSION}" CACHE PATH
+  # Look for the "SireCompileVariables.cmake" file in the install directory
+  if (EXISTS "${SIRE_COMP_CMAKE}")
+    include( "${SIRE_COMP_CMAKE}" )
+  else()
+    # try the anaconda path
+    set( CONDA_APP "$ENV{HOME}/sire.app/pkgs/sire-${SIRE_VERSION}" CACHE PATH
           "Install directory for Sire within the Anaconda/Miniconda distribution" )
 
-  set(CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
-           "Prefix prepended to install directories" FORCE )
-else()
-  # Option to set the install directory of Sire
-  set( SIRE_INSTALL_PREFIX "$ENV{HOME}/sire.app" CACHE PATH
-          "Install directory for Sire. This directory can be moved after compilation" )
+    set( SIRE_INCLUDE_DIR "${CONDA_APP}/include/Sire" )
+    set ( SIRE_COMP_CMAKE "${SIRE_INCLUDE_DIR}/cmake/SireCompileVariables.cmake" )
 
-  set(CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
-           "Prefix prepended to install directories" FORCE ) 
+    if (EXISTS "${SIRE_COMP_CMAKE}")
+      include( "${SIRE_COMP_CMAKE}" )
+    else()
+      message( STATUS "You need to provide the full path to sire.app and check that it contains the file ${SIRE_COMP_CMAKE}" )
+      message( FATAL_ERROR "Do this by running 'cmake -G Xcode -DSIRE_APP=/path/to/sire.app /path/to/corelib/source'" )
+    endif()
+  endif()
+
+  # Now set the C++, C and Fortran compilers to be used to compile the wrappers
+  # These have to be the same as used to compile corelib
+  set(CMAKE_C_COMPILER "${SIRE_C_COMPILER}")
+  set(CMAKE_CXX_COMPILER "${SIRE_CXX_COMPILER}")
+
+  message( STATUS "Setting C compiler to ${SIRE_C_COMPILER} and C++ compiler to ${SIRE_CXX_COMPILER}" )
+else()
+  message(STATUS "Configuring on a machine with number of cores = ${NCORES}")
+
+  # Option to compile and install into an anaconda or miniconda directory
+  option( ANACONDA_BUILD "Build into an existing anaconda/miniconda installation" OFF )
+
+  if ( ANACONDA_BUILD )
+    message( STATUS "Building into an existing Anaconda/Miniconda installation..." )
+    # Where is anaconda installed
+    set( ANACONDA_BASE "$ENV{HOME}/miniconda3" CACHE PATH
+            "Install directory for Anaconda/Miniconda (python3)" )
+
+    # Make sure that there is a python3 executable in the bin directory
+    if ( NOT EXISTS "${ANACONDA_BASE}/bin/python3" )
+      message( FATAL_ERROR "Cannot find ${ANACONDA_BASE}/bin/python3. "
+                           "Please set the full path to the Anaconda or Miniconda "
+                           "installation directory." )
+    endif()
+
+    set( SIRE_INSTALL_PREFIX "${ANACONDA_BASE}/pkgs/sire-${SIRE_VERSION}" CACHE PATH
+            "Install directory for Sire within the Anaconda/Miniconda distribution" )
+
+    set(CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
+             "Prefix prepended to install directories" FORCE )
+  else()
+    # Option to set the install directory of Sire
+    set( SIRE_INSTALL_PREFIX "$ENV{HOME}/sire.app" CACHE PATH
+            "Install directory for Sire. This directory can be moved after compilation" )
+
+    set(CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
+             "Prefix prepended to install directories" FORCE ) 
+  endif()
 endif()
 
 message( STATUS "Sire will be compiled and installed to directory ${CMAKE_INSTALL_PREFIX}" )
@@ -647,35 +687,39 @@ set(CMAKE_AUTOMOC OFF)
 # to always look for includes there:
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-# Option to disable all bundles
-option( SIRE_ENABLE_BUNDLING "Allow Sire to use bundled libraries" ON )
+if ( CMAKE_GENERATOR MATCHES "Xcode" )
+  # Xcode build - use the libraries that are already installed...
 
-# Fine-grain control of bundling each dependency
-option( SIRE_BUNDLE_TBB "Whether Sire should use its bundled copy of TBB" ON )
-option( SIRE_BUNDLE_GSL "Whether Sire should use its bundled copy of GSL" ON )
-option( SIRE_BUNDLE_CPUID "Whether Sire should use its bundled copy of libcpuid" ON )
-option( SIRE_BUNDLE_BOOST "Whether Sire should use its bundled copy of Boost" ON )
-option( SIRE_BUNDLE_BLASLAPACK "Whether Sire should use its bundled copy of BLAS and LAPACK" ON )
-option( SIRE_BUNDLE_QT "Whether Sire should use its bundled copy of Qt" ON )
-option( SIRE_BUNDLE_OPENMM "Whether Sire should use its bundled copy of OpenMM" OFF )
+else()
+  # Option to disable all bundles
+  option( SIRE_ENABLE_BUNDLING "Allow Sire to use bundled libraries" ON )
 
-save_sire_variable( "SIRE_ENABLE_BUNDLING" "${SIRE_ENABLE_BUNDLING}" )
-save_sire_variable( "SIRE_BUNDLE_TBB" "${SIRE_BUNDLE_TBB}" )
-save_sire_variable( "SIRE_BUNDLE_CPUID" "${SIRE_BUNDLE_CPUID}" )
-save_sire_variable( "SIRE_BUNDLE_GSL" "${SIRE_BUNDLE_GSL}" )
-save_sire_variable( "SIRE_BUNDLE_BOOST" "${SIRE_BUNDLE_BOOST}" )
-save_sire_variable( "SIRE_BUNDLE_BLASLAPACK" "${SIRE_BUNDLE_BLASLAPACK}" )
-save_sire_variable( "SIRE_BUNDLE_QT" "${SIRE_BUNDLE_QT}" )
-save_sire_variable( "SIRE_BUNDLE_OPENMM" "${SIRE_BUNDLE_OPENMM}" )
+  # Fine-grain control of bundling each dependency
+  option( SIRE_BUNDLE_TBB "Whether Sire should use its bundled copy of TBB" ON )
+  option( SIRE_BUNDLE_GSL "Whether Sire should use its bundled copy of GSL" ON )
+  option( SIRE_BUNDLE_CPUID "Whether Sire should use its bundled copy of libcpuid" ON )
+  option( SIRE_BUNDLE_BOOST "Whether Sire should use its bundled copy of Boost" ON )
+  option( SIRE_BUNDLE_BLASLAPACK "Whether Sire should use its bundled copy of BLAS and LAPACK" ON )
+  option( SIRE_BUNDLE_QT "Whether Sire should use its bundled copy of Qt" ON )
+  option( SIRE_BUNDLE_OPENMM "Whether Sire should use its bundled copy of OpenMM" OFF )
+ 
+  save_sire_variable( "SIRE_ENABLE_BUNDLING" "${SIRE_ENABLE_BUNDLING}" )
+  save_sire_variable( "SIRE_BUNDLE_TBB" "${SIRE_BUNDLE_TBB}" )
+  save_sire_variable( "SIRE_BUNDLE_CPUID" "${SIRE_BUNDLE_CPUID}" )
+  save_sire_variable( "SIRE_BUNDLE_GSL" "${SIRE_BUNDLE_GSL}" )
+  save_sire_variable( "SIRE_BUNDLE_BOOST" "${SIRE_BUNDLE_BOOST}" )
+  save_sire_variable( "SIRE_BUNDLE_BLASLAPACK" "${SIRE_BUNDLE_BLASLAPACK}" )
+  save_sire_variable( "SIRE_BUNDLE_QT" "${SIRE_BUNDLE_QT}" )
+  save_sire_variable( "SIRE_BUNDLE_OPENMM" "${SIRE_BUNDLE_OPENMM}" )
 
-set (SIRE_FOUND_TBB FALSE)
-set (SIRE_FOUND_GSL FALSE)
-set (SIRE_FOUND_BOOST FALSE)
-set (SIRE_FOUND_BLASLAPACK FALSE)
-set (SIRE_FOUND_QT FALSE)
-set (SIRE_FOUND_OPENMM FALSE)
+  set (SIRE_FOUND_TBB FALSE)
+  set (SIRE_FOUND_GSL FALSE)
+  set (SIRE_FOUND_BOOST FALSE)
+  set (SIRE_FOUND_BLASLAPACK FALSE)
+  set (SIRE_FOUND_QT FALSE)
+  set (SIRE_FOUND_OPENMM FALSE)
 
-if ( ${SIRE_ENABLE_BUNDLING} )
+  if ( ${SIRE_ENABLE_BUNDLING} )
     message( STATUS "Sire will be compiled to use its own copy of bundled libraries." )
 
     set( BUNDLE_BUILDDIR "${CMAKE_BINARY_DIR}/build_bundled" )
@@ -730,6 +774,7 @@ if ( ${SIRE_ENABLE_BUNDLING} )
                DESTINATION ${CMAKE_INSTALL_PREFIX}
                USE_SOURCE_PERMISSIONS )
     endif()
+  endif()
 endif()
 
 if ( NOT ${SIRE_FOUND_QT} )
