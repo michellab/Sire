@@ -745,8 +745,7 @@ def runLambda():
         resampled_nrgs = resample(delta_func_nrgs)
         dG = getFreeEnergy(resampled_nrgs)
         deltaG_bootstrap[x] = dG.value()
-    devintra = deltaG_bootstrap.std()
-    dev_FUNC = math.sqrt(dev**2+devintra**2)
+    dev_FUNC = deltaG_bootstrap.std()
     # Now compute standard deviation of the distribution of free energies
     print ("DG_POL = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (DG_POL_AVG.value(), dev_POL))
     print ("DG_PSUM = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (DG_PSUM_AVG.value(), dev_PSUM))
