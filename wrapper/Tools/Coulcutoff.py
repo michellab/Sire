@@ -747,6 +747,6 @@ def runLambda():
         deltaG_bootstrap[x] = dG.value()
     dev_FUNC = deltaG_bootstrap.std()
     # Now compute standard deviation of the distribution of free energies
-    print ("DG_POL = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (DG_POL_AVG.value(), dev_POL))
-    print ("DG_PSUM = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (DG_PSUM_AVG.value(), dev_PSUM))
+    print ("DG_POL = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (DG_POL_avg.value(), dev_POL))
+    print ("DG_PSUM = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (DG_PSUM_avg.value(), dev_PSUM))
     print ("DG_FUNC = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (DG_FUNC.value(), dev_FUNC))
