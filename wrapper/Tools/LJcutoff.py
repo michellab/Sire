@@ -169,6 +169,12 @@ def addAnalyticalLRC(system, cutoff, bulk_density):
     LJsites = 0
     # Is this always the right molecule?
     mol = solvent_mols.first().molecule()
+    if (mol.nAtoms() == 1):
+        print ("This does not seem to be a solvent molecule. Picking up another one...")
+        mol = solvent_mols.last().molecule()
+        if (mol.nAtoms() == 1):
+            print ("This also does not seem to be a solvent molecule ! Abort!")
+            sys.exit(-1)
     #molecule(molnum).molecule()
     atoms = mol.atoms()
     natoms = mol.nAtoms()
@@ -381,8 +387,9 @@ def runLambda():
     delta_nrgs = []
 
     while (current_frame <= end_frame):
-        frames_xyz, cell_lengths, cell_angles = mdtraj_trajfile.read(n_frames=1)
         print ("Processing frame %s " % current_frame)
+        print ("CURRENT POSITION %s " % mdtraj_trajfile.tell() )
+        frames_xyz, cell_lengths, cell_angles = mdtraj_trajfile.read(n_frames=1)
         #print (system_shortc.energy())
         #print (system_longc.energy())
         system_shortc = updateSystemfromTraj(system_shortc, frames_xyz, cell_lengths, cell_angles)
@@ -392,6 +399,7 @@ def runLambda():
         delta_nrg = (system_longc.energy()+E_lrc_full - system_shortc.energy())
         delta_nrgs.append(delta_nrg)
         current_frame += step_frame
+        mdtraj_trajfile.seek(current_frame)
     #print (delta_nrgs)
     # Now compute free energy change
     deltaG = getFreeEnergy(delta_nrgs)
@@ -403,4 +411,4 @@ def runLambda():
         dG = getFreeEnergy(resampled_nrgs)
         deltaG_bootstrap[x] = dG.value()
     dev = deltaG_bootstrap.std()
-    print ("DeltaG = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (deltaG.value(), dev))
+    print ("DG_LJ = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (deltaG.value(), dev))
