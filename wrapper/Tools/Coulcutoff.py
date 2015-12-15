@@ -527,6 +527,7 @@ def SummationCorrection(solutes, solvent, space, rho_solvent_model,
 
     for molnum in molnums:
         mol = sol_mols.molecule(molnum).molecule()
+        print ("PSUM using mol %s " % mol)
         #import pdb; pdb.set_trace()
         atoms = mol.atoms()
         mol_charge = 0.0
@@ -537,7 +538,7 @@ def SummationCorrection(solutes, solvent, space, rho_solvent_model,
             charge = atom.property("charge").value()
             mass = atom.property("mass").value()
             coords = atom.property("coordinates")
-            # What about PBC ? 
+            # What about PBC ?
             mol_com[0] += coords[0]*mass
             mol_com[1] += coords[1]*mass
             mol_com[2] += coords[2]*mass
@@ -614,7 +615,7 @@ def runLambda():
     solutes = system[MGName("solutes")]
     system.setConstant(lam, lambda_val.val)
     system.add(PerturbationConstraint(solutes))
-    #system.setComponent(lam, lambda_val.val)
+    system.setComponent(lam, lambda_val.val)
     # Now loop over snapshots in dcd and accumulate energies
     start_frame = 1
     end_frame = 1000000000
@@ -627,8 +628,8 @@ def runLambda():
     mdtraj_trajfile.seek(start_frame)
     current_frame = start_frame
 
-    system = createSystemFreeEnergy(molecules)
-    
+    #system = createSystemFreeEnergy(molecules)
+
     system_solute_rf = System()
     system_solute_rf.add(solutes)
     system_solute_rf.add(system[MGName("solute_ref")])
