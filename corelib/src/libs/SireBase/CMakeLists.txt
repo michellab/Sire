@@ -37,6 +37,7 @@ set ( SIREBASE_HEADERS
       lengthproperty.h
       majorminorversion.h
       meminfo.h
+      nullproperty.hpp
       numberproperty.h
       packedarray2d.h
       packedarray2d.hpp
