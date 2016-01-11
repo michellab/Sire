@@ -69,6 +69,138 @@ void register_RanGenerator_class(){
                 , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
+        { //::SireMaths::RanGenerator::nrand
+        
+            typedef ::QVector< double > ( ::SireMaths::RanGenerator::*nrand_function_type)( int ) const;
+            nrand_function_type nrand_function_value( &::SireMaths::RanGenerator::nrand );
+            
+            RanGenerator_exposer.def( 
+                "nrand"
+                , nrand_function_value
+                , ( bp::arg("n") ) );
+        
+        }
+        { //::SireMaths::RanGenerator::nrand
+        
+            typedef ::QVector< double > ( ::SireMaths::RanGenerator::*nrand_function_type)( int,double ) const;
+            nrand_function_type nrand_function_value( &::SireMaths::RanGenerator::nrand );
+            
+            RanGenerator_exposer.def( 
+                "nrand"
+                , nrand_function_value
+                , ( bp::arg("n"), bp::arg("maxval") ) );
+        
+        }
+        { //::SireMaths::RanGenerator::nrand
+        
+            typedef ::QVector< double > ( ::SireMaths::RanGenerator::*nrand_function_type)( int,double,double ) const;
+            nrand_function_type nrand_function_value( &::SireMaths::RanGenerator::nrand );
+            
+            RanGenerator_exposer.def( 
+                "nrand"
+                , nrand_function_value
+                , ( bp::arg("n"), bp::arg("minval"), bp::arg("maxval") ) );
+        
+        }
+        { //::SireMaths::RanGenerator::nrand
+        
+            typedef void ( ::SireMaths::RanGenerator::*nrand_function_type)( ::QVector< double > & ) const;
+            nrand_function_type nrand_function_value( &::SireMaths::RanGenerator::nrand );
+            
+            RanGenerator_exposer.def( 
+                "nrand"
+                , nrand_function_value
+                , ( bp::arg("result") ) );
+        
+        }
+        { //::SireMaths::RanGenerator::nrand
+        
+            typedef void ( ::SireMaths::RanGenerator::*nrand_function_type)( ::QVector< double > &,double ) const;
+            nrand_function_type nrand_function_value( &::SireMaths::RanGenerator::nrand );
+            
+            RanGenerator_exposer.def( 
+                "nrand"
+                , nrand_function_value
+                , ( bp::arg("result"), bp::arg("maxval") ) );
+        
+        }
+        { //::SireMaths::RanGenerator::nrand
+        
+            typedef void ( ::SireMaths::RanGenerator::*nrand_function_type)( ::QVector< double > &,double,double ) const;
+            nrand_function_type nrand_function_value( &::SireMaths::RanGenerator::nrand );
+            
+            RanGenerator_exposer.def( 
+                "nrand"
+                , nrand_function_value
+                , ( bp::arg("result"), bp::arg("minval"), bp::arg("maxval") ) );
+        
+        }
+        { //::SireMaths::RanGenerator::nrandNorm
+        
+            typedef void ( ::SireMaths::RanGenerator::*nrandNorm_function_type)( ::QVector< double > &,double,double ) const;
+            nrandNorm_function_type nrandNorm_function_value( &::SireMaths::RanGenerator::nrandNorm );
+            
+            RanGenerator_exposer.def( 
+                "nrandNorm"
+                , nrandNorm_function_value
+                , ( bp::arg("result"), bp::arg("mean"), bp::arg("variance") ) );
+        
+        }
+        { //::SireMaths::RanGenerator::nrandNorm
+        
+            typedef ::QVector< double > ( ::SireMaths::RanGenerator::*nrandNorm_function_type)( int,double,double ) const;
+            nrandNorm_function_type nrandNorm_function_value( &::SireMaths::RanGenerator::nrandNorm );
+            
+            RanGenerator_exposer.def( 
+                "nrandNorm"
+                , nrandNorm_function_value
+                , ( bp::arg("n"), bp::arg("mean"), bp::arg("variance") ) );
+        
+        }
+        { //::SireMaths::RanGenerator::nvectorOnSphere
+        
+            typedef void ( ::SireMaths::RanGenerator::*nvectorOnSphere_function_type)( ::QVector< SireMaths::Vector > & ) const;
+            nvectorOnSphere_function_type nvectorOnSphere_function_value( &::SireMaths::RanGenerator::nvectorOnSphere );
+            
+            RanGenerator_exposer.def( 
+                "nvectorOnSphere"
+                , nvectorOnSphere_function_value
+                , ( bp::arg("result") ) );
+        
+        }
+        { //::SireMaths::RanGenerator::nvectorOnSphere
+        
+            typedef void ( ::SireMaths::RanGenerator::*nvectorOnSphere_function_type)( ::QVector< SireMaths::Vector > &,double ) const;
+            nvectorOnSphere_function_type nvectorOnSphere_function_value( &::SireMaths::RanGenerator::nvectorOnSphere );
+            
+            RanGenerator_exposer.def( 
+                "nvectorOnSphere"
+                , nvectorOnSphere_function_value
+                , ( bp::arg("result"), bp::arg("radius") ) );
+        
+        }
+        { //::SireMaths::RanGenerator::nvectorOnSphere
+        
+            typedef ::QVector< SireMaths::Vector > ( ::SireMaths::RanGenerator::*nvectorOnSphere_function_type)( int ) const;
+            nvectorOnSphere_function_type nvectorOnSphere_function_value( &::SireMaths::RanGenerator::nvectorOnSphere );
+            
+            RanGenerator_exposer.def( 
+                "nvectorOnSphere"
+                , nvectorOnSphere_function_value
+                , ( bp::arg("n") ) );
+        
+        }
+        { //::SireMaths::RanGenerator::nvectorOnSphere
+        
+            typedef ::QVector< SireMaths::Vector > ( ::SireMaths::RanGenerator::*nvectorOnSphere_function_type)( int,double ) const;
+            nvectorOnSphere_function_type nvectorOnSphere_function_value( &::SireMaths::RanGenerator::nvectorOnSphere );
+            
+            RanGenerator_exposer.def( 
+                "nvectorOnSphere"
+                , nvectorOnSphere_function_value
+                , ( bp::arg("n"), bp::arg("radius") ) );
+        
+        }
         RanGenerator_exposer.def( bp::self != bp::self );
         { //::SireMaths::RanGenerator::operator=
         
