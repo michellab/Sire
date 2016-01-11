@@ -146,7 +146,7 @@ MultiDouble::MultiDouble(const double *array, int size)
     }
     else
     {
-        float tmp[MULTIFLOAT_SIZE];
+        double tmp[MULTIFLOAT_SIZE];
         
         for (int i=0; i<size; ++i)
         {

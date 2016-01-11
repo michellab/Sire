@@ -100,14 +100,31 @@ public:
     double rand(double maxval) const;
     double rand(double minval, double maxval) const;
 
+    QVector<double> nrand(int n) const;
+    QVector<double> nrand(int n, double maxval) const;
+    QVector<double> nrand(int n, double minval, double maxval) const;
+    
+    void nrand(QVector<double> &result) const;
+    void nrand(QVector<double> &result, double maxval) const;
+    void nrand(QVector<double> &result, double minval, double maxval) const;
+
     double rand53() const;
     double rand53(double maxval) const;
     double rand53(double minval, double maxval) const;
 
     double randNorm(double mean, double variance) const;
 
+    void nrandNorm(QVector<double> &result, double mean, double variance) const;
+    QVector<double> nrandNorm(int n, double mean, double variance) const;
+
     Vector vectorOnSphere() const;
     Vector vectorOnSphere(double radius) const;
+
+    void nvectorOnSphere(QVector<Vector> &result) const;
+    void nvectorOnSphere(QVector<Vector> &result, double radius) const;
+    
+    QVector<Vector> nvectorOnSphere(int n) const;
+    QVector<Vector> nvectorOnSphere(int n, double radius) const;
 
     bool randBool() const;
 

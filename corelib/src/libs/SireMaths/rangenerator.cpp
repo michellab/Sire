@@ -424,7 +424,134 @@ double RanGenerator::rand(double maxval) const
 /** Return a random real number on [minval,maxval] */
 double RanGenerator::rand(double minval, double maxval) const
 {
-    return minval + rand() * (maxval-minval);
+    if (minval > maxval)
+        return rand(maxval, minval);
+    else
+        return minval + rand() * (maxval-minval);
+}
+
+/** Fill the passed array of doubles with random numbers. This replaces each
+    value in the array with a random number on [0,1] */
+void RanGenerator::nrand(QVector<double> &result) const
+{
+    const int n = result.count();
+
+    if (n > 0)
+    {
+        QMutexLocker lkr( &(nonconst_d().mutex) );
+    
+        double *d = result.data();
+    
+        for (int i=0; i<n; ++i)
+        {
+            d[i] = nonconst_d().mersenne_generator.rand();
+        }
+    }
+}
+
+/** Fill the passed array of doubles with random numbers. This replaces each
+    value in the array with a random number on [0,maxval] */
+void RanGenerator::nrand(QVector<double> &result, double maxval) const
+{
+    const int n = result.count();
+
+    if (n > 0)
+    {
+        double *d = result.data();
+
+        if (maxval == 0)
+        {
+            for (int i=0; i<n; ++i)
+            {
+                d[i] = 0;
+            }
+        }
+        else
+        {
+            QMutexLocker lkr( &(nonconst_d().mutex) );
+
+            for (int i=0; i<n; ++i)
+            {
+                d[i] = maxval * nonconst_d().mersenne_generator.rand();
+            }
+        }
+    }
+}
+
+/** Fill the passed array of doubles with random numbers. This replaces each
+    value in the array with a random number on [minval,maxval] */
+void RanGenerator::nrand(QVector<double> &result, double minval, double maxval) const
+{
+    if (minval < maxval)
+    {
+        nrand(result, maxval, minval);
+        return;
+    }
+
+    const int n = result.count();
+
+    if (n > 0)
+    {
+        double *d = result.data();
+        
+        const double diff = maxval - minval;
+        
+        if (diff == 0)
+        {
+            for (int i=0; i<n; ++i)
+            {
+                d[i] = 0;
+            }
+        }
+        else
+        {
+            QMutexLocker lkr( &(nonconst_d().mutex) );
+
+            for (int i=0; i<n; ++i)
+            {
+                d[i] = minval + (diff * nonconst_d().mersenne_generator.rand());
+            }
+        }
+    }
+}
+
+/** Return an array of 'n' random numbers on [0,1] */
+QVector<double> RanGenerator::nrand(int n) const
+{
+    if (n > 0)
+    {
+        QVector<double> result(n);
+        this->nrand(result);
+        return result;
+    }
+    else
+        return QVector<double>();
+}
+
+/** Return an array of 'n' random numbers on [0,maxval] */
+QVector<double> RanGenerator::nrand(int n, double maxval) const
+{
+    if (n > 0)
+    {
+        QVector<double> result(n);
+        this->nrand(result, maxval);
+        return result;
+    }
+    else
+        return QVector<double>();
+}
+
+/** Return an array of 'n' random numbers on [minval,maxval] */
+QVector<double> RanGenerator::nrand(int n, double minval, double maxval) const
+{
+    if (n > 0)
+    {
+        QVector<double> result(n);
+        this->nrand(result, minval, maxval);
+        return result;
+    }
+    else
+        return QVector<double>();
 }
 
 /** Return a high-precision random real number on [0,1) */
@@ -446,7 +573,7 @@ double RanGenerator::rand53(double minval, double maxval) const
     return minval + rand53()*(maxval-minval);
 }
 
-/** Return a high-precision random number from the normal distribution
+/** Return a random number from the normal distribution
     with supplied mean and variance. */
 double RanGenerator::randNorm(double mean, double variance) const
 {
@@ -467,21 +594,52 @@ double RanGenerator::randNorm(double mean, double variance) const
     //return mean + r * std::cos(phi);
 }
 
+/** Fill the passed array with random numbers drawn from the normal
+    distribution with supplied mean and variance */
+void RanGenerator::nrandNorm(QVector<double> &result, double mean, double variance) const
+{
+    const int n = result.count();
+    
+    if (n > 0)
+    {
+        double *d = result.data();
+        
+        QMutexLocker lkr( &(nonconst_d().mutex) );
+        
+        for (int i=0; i<n; ++i)
+        {
+            d[i] = nonconst_d().mersenne_generator.randNorm(mean, variance);
+        }
+    }
+}
+
+/** Return an array of 'N' random numbers drawn from the normal distribution with
+    supplied mean and variance */
+QVector<double> RanGenerator::nrandNorm(int n, double mean, double variance) const
+{
+    if (n > 0)
+    {
+        QVector<double> result(n);
+        this->nrandNorm(result, mean, variance);
+        return result;
+    }
+    else
+        return QVector<double>();
+}
+
 /** Return a random vector on the unit sphere */
 Vector RanGenerator::vectorOnSphere() const
 {
-    RanGeneratorPvt &ranpvt = nonconst_d();
-
-    QMutexLocker lkr( &(ranpvt.mutex) );
+    QMutexLocker lkr( &(nonconst_d().mutex) );
 
     while( true )
     {
         //use von Neumann acceptance/rejection method
         Vector v;
 
-        v.setX( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand53() );
-        v.setY( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand53() );
-        v.setZ( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand53() );
+        v.setX( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
+        v.setY( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
+        v.setZ( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
 
         double lgth2 = v.length2();
 
@@ -493,10 +651,96 @@ Vector RanGenerator::vectorOnSphere() const
     }
 }
 
+/** Fill the passed array with random vectors on a unit sphere */
+void RanGenerator::nvectorOnSphere(QVector<Vector> &result) const
+{
+    const int n = result.count();
+    
+    if (n > 0)
+    {
+        QMutexLocker lkr( &(nonconst_d().mutex) );
+        
+        int i=0;
+        
+        while (i < n)
+        {
+            Vector &v = result[i];
+            
+            v.setX( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
+            v.setY( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
+            v.setZ( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
+            
+            const double lgth2 = v.length2();
+            
+            if (lgth2 < 1)
+            {
+                v /= std::sqrt(lgth2);
+                i += 1;
+            }
+        }
+    }
+}
+
+/** Return an array of 'n' random vectors on a unit sphere */
+QVector<Vector> RanGenerator::nvectorOnSphere(int n) const
+{
+    if (n > 0)
+    {
+        QVector<Vector> result(n);
+        this->nvectorOnSphere(result);
+        return result;
+    }
+    else
+        return QVector<Vector>();
+}
+
 /** Return a random vector on the sphere with radius 'radius' */
 Vector RanGenerator::vectorOnSphere(double radius) const
 {
     return radius * this->vectorOnSphere();
+}
+
+/** Fill the passed array with random vectors on a sphere with radius 'radius' */
+void RanGenerator::nvectorOnSphere(QVector<Vector> &result, double radius) const
+{
+    const int n = result.count();
+    
+    if (n > 0)
+    {
+        QMutexLocker lkr( &(nonconst_d().mutex) );
+        
+        int i=0;
+        
+        while (i < n)
+        {
+            Vector &v = result[i];
+            
+            v.setX( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
+            v.setY( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
+            v.setZ( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
+            
+            const double lgth2 = v.length2();
+            
+            if (lgth2 < 1)
+            {
+                v *= (radius * std::sqrt(lgth2));
+                i += 1;
+            }
+        }
+    }
+}
+
+/** Return an array of 'n' random vectors on a sphere of radius 'radius' */
+QVector<Vector> RanGenerator::nvectorOnSphere(int n, double radius) const
+{
+    if (n > 0)
+    {
+        QVector<Vector> result(n);
+        this->nvectorOnSphere(result, radius);
+        return result;
+    }
+    else
+        return QVector<Vector>();
 }
 
 /** Return a random 32bit unsigned integer in [0,2^32 - 1] */
