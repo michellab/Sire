@@ -91,6 +91,8 @@ public:
     bool operator==(const RanGenerator &other) const;
     bool operator!=(const RanGenerator &other) const;
 
+    void detach();
+
     void seed();
     void seed(quint32 seed);
     void seed(const QVector<quint32> &seed);
@@ -148,7 +150,6 @@ public:
 
 private:
     detail::RanGeneratorPvt& nonconst_d() const;
-    void detach();
 
     /** Shared pointer to the actual generator */
     boost::shared_ptr<detail::RanGeneratorPvt> d;
