@@ -48,6 +48,16 @@ void register_RanGenerator_class(){
         RanGenerator_exposer.def( bp::init< quint32 >(( bp::arg("seed") )) );
         RanGenerator_exposer.def( bp::init< QVector< unsigned int > const & >(( bp::arg("seed") )) );
         RanGenerator_exposer.def( bp::init< SireMaths::RanGenerator const & >(( bp::arg("other") )) );
+        { //::SireMaths::RanGenerator::detach
+        
+            typedef void ( ::SireMaths::RanGenerator::*detach_function_type)(  ) ;
+            detach_function_type detach_function_value( &::SireMaths::RanGenerator::detach );
+            
+            RanGenerator_exposer.def( 
+                "detach"
+                , detach_function_value );
+        
+        }
         { //::SireMaths::RanGenerator::getState
         
             typedef ::QVector< unsigned int > ( ::SireMaths::RanGenerator::*getState_function_type)(  ) const;
