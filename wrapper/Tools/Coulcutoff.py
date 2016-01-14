@@ -12,13 +12,13 @@ from Sire.Tools.LJcutoff import getFreeEnergy, resample
 try:
     import mdtraj
 except ImportError:
-    print ("LJcutoff.py depends on a working install of the python module mdtraj. Please install mdtraj in your sire python.")
+    print ("CoulCutoff.py depends on a working install of the python module mdtraj. Please install mdtraj in your sire python.")
     sys.exit(-1)
 
 try:
     import numpy as np
 except ImportError:
-    print ("LJcutoff.py depends on a working install of the python module mdtraj. Please install mdtraj in your sire python.")
+    print ("CoulCutoff.py depends on a working install of the python module mdtraj. Please install mdtraj in your sire python.")
     sys.exit(-1)
 
 
@@ -47,7 +47,7 @@ ion_residues = ["Cl-","Na+"]
 DIME = 97
 
 
-def setupCoulFF(system, space, cut_type="nocutoff", cutoff= 999* angstrom, dielectric=1.0):
+def setupIntraCoulFF(system, space, cut_type="nocutoff", cutoff= 999* angstrom, dielectric=1.0):
 
     print ("Creating force fields... ")
 
@@ -148,6 +148,43 @@ def setupCoulFF(system, space, cut_type="nocutoff", cutoff= 999* angstrom, diele
 
     return system
 
+def setupInterCoulFF(system, space, cut_type="nocutoff", cutoff= 999* angstrom, dielectric=1.0):
+
+    solute = system[MGName("solute_ref")]
+    other_solutes = system[MGName("molecules")]
+    mols = other_solutes.molecules()
+    molnums = mols.molNums()
+
+    for molnum in molnums:
+        mol = other_solutes.molecule(molnum).molecule()
+        if solute.contains(mol):
+            other_solutes.remove(mol)
+        if mol.residues()[0].name().value() in solvent_residues:
+            other_solutes.remove(mol)
+        if mol.residues()[0].name().value() in ion_residues:
+            other_solutes.remove(mol)
+
+    print ("There are %s mols left " % other_solutes.nMolecules())
+
+    inter_nonbondedff = InterGroupCLJFF("solute_red:other_solutes")
+    if (cutoff_type.val != "nocutoff"):
+        inter_nonbondedff.setUseReactionField(True)
+        inter_nonbondedff.setReactionFieldDielectric(rf_dielectric.val)
+
+    inter_nonbondedff.add(solute, MGIdx(0))
+    inter_nonbondedff.add(other_solutes, MGIdx(1))
+
+    system.add(inter_nonbondedff)
+
+    system.setProperty("space", space)
+    system.setProperty("switchingFunction", CHARMMSwitchingFunction(cutoff))
+    system.setProperty("combiningRules", VariantProperty(combining_rules.val))    
+
+    total_nrg = inter_nonbondedff.components().coulomb() 
+    e_total = system.totalComponent()
+    system.setComponent(e_total, total_nrg)
+
+    return system
 
 def updateSystemfromTraj(system, frame_xyz, cell_lengths, cell_angles):
     traj_coordinates = frame_xyz[0]
@@ -249,8 +286,9 @@ def centerAll(solutes, solvent, space):
 
     return solutes, solvent
 
-def PoissonPBC(binary, solutes, space, cutoff, dielectric, framenum):
+def PoissonPBC(binary, solutes, space, cutoff, dielectric, framenum, solute_ref, zerorefcharges=False):
 
+    mol_solref = solute_ref.molecules().first().molecule()
     space_x = space.dimensions()[0]/10.0 # nm
     space_y = space.dimensions()[1]/10.0 #
     space_z = space.dimensions()[2]/10.0 #
@@ -263,25 +301,30 @@ def PoissonPBC(binary, solutes, space, cutoff, dielectric, framenum):
     dielec = dielectric
     cut = cutoff/10.0
 
+    iterations=200# CHANGE ME BACK TO 200 !
+
     infilepart1 = """GRID
 %s %s %s
 %8.5f %8.5f %8.5f
 4
 END
 ITERATION
-200 1.5 0.1 -0.001
+%s 1.5 0.1 -0.001
 0 50 50 50 1
 END
 ELECTRO
 %s %8.5f
-""" % (DIME, DIME, DIME, space_x, space_y, space_z, nions, dielec)
+""" % (DIME, DIME, DIME, space_x, space_y, space_z, iterations, nions, dielec)
 
     infilepart2 = ""
     for molnum in molnums:
         mol = sol_mols.molecule(molnum).molecule()
         atoms = mol.atoms()
         for atom in atoms:
-            charge = atom.property("charge").value()
+            if (mol.name() == mol_solref.name() and zerorefcharges == True):
+                charge = 0.0
+            else:
+                charge = atom.property("charge").value()
             sigma = atom.property("LJ").sigma().value()
             radius = 0.5*(sigma*2**(1/6.))/10.0 # to nm. Is this a decently good approximation?
             coords = atom.property("coordinates")/10.0 # to nm 
@@ -301,7 +344,10 @@ END
     #    print (line)
     #import pdb; pdb.set_trace()
 
-    poissondir = "poisson-pbc-%s" % framenum
+    if (zerorefcharges == True):
+        poissondir = "poisson-pbc-%s-zeroref" % framenum
+    else:
+        poissondir = "poisson-pbc-%s" % framenum
 
     cmd = " mkdir -p %s" % poissondir
     os.system(cmd)
@@ -331,7 +377,10 @@ END
 
     return DF_BA_PBC
 
-def PoissonNP(binary, solutes, dielectric,framenum, space):
+def PoissonNP(binary, solutes, dielectric,framenum, space,\
+              solute_ref, zerorefcharges=False):
+
+    mol_solref = solute_ref.molecules().first().molecule()
     # Here write input file for apbs...
     DF_CB_NP = 0.0 * kcal_per_mol
     space_x = space.dimensions()[0]
@@ -359,7 +408,11 @@ def PoissonNP(binary, solutes, dielectric,framenum, space):
         atoms = mol.atoms()
         for atom in atoms:
             name = atom.name().value()
-            charge = atom.property("charge").value()
+            if (mol.name() == mol_solref.name() and zerorefcharges == True):
+                charge = 0.0
+            else:
+                charge = atom.property("charge").value()
+            #charge = atom.property("charge").value()
             sigma = atom.property("LJ").sigma().value()
             radius = 0.5*(sigma*2**(1/6.)) # Ang. Is this a decently good approximation?
             coords = atom.property("coordinates") # APBS uses angstroms
@@ -379,7 +432,11 @@ def PoissonNP(binary, solutes, dielectric,framenum, space):
 
     xmlin = xmlinpart1 + xmlinpart2 + xmlinpart3
 
-    poissondir = "poisson-np-%s" % framenum 
+    if (zerorefcharges ==True):
+        poissondir = "poisson-np-%s-zeroref" % framenum
+    else:
+        poissondir = "poisson-np-%s" % framenum
+
     cmd = "mkdir -p %s" % poissondir
     os.system(cmd)
 
@@ -519,15 +576,18 @@ def calcQuadrupoleTrace(molecule):
 
     return q_trace
 
-def SummationCorrection(solutes, solvent, space, rho_solvent_model,
+def SummationCorrection(solutes, solvent, solute_ref, space, rho_solvent_model,
                         eps_solvent_model, BAcutoff):
     nrg = 0.0
+    mol_solref = solute_ref.molecules().first().molecule()
     sol_mols = solutes.molecules()
     molnums = sol_mols.molNums()
 
     for molnum in molnums:
         mol = sol_mols.molecule(molnum).molecule()
-        print ("PSUM using mol %s " % mol)
+        if mol.name() != mol_solref.name():
+            continue
+        print ("PSUM using mol %s (natoms %s )" % (mol, mol.nAtoms()) )
         #import pdb; pdb.set_trace()
         atoms = mol.atoms()
         mol_charge = 0.0
@@ -548,7 +608,7 @@ def SummationCorrection(solutes, solvent, space, rho_solvent_model,
             mol_com[x] = mol_com[x]/mol_mass
         #print (mol_com)
         #print (mol_charge)
-        # JM 11/15 This code only deals with the first solute molecule at present
+        # JM 01/16 This code only deals with a single solute == solute_ref
         break
 
     nsolv = 0
@@ -613,6 +673,7 @@ def runLambda():
     system = createSystemFreeEnergy(molecules)
     lam = Symbol("lambda")
     solutes = system[MGName("solutes")]
+    solute_ref = system[MGName("solute_ref")]
     system.setConstant(lam, lambda_val.val)
     system.add(PerturbationConstraint(solutes))
     system.setComponent(lam, lambda_val.val)
@@ -637,10 +698,10 @@ def runLambda():
     system_solute_rf.add(system[MGName("solute_ref_todummy")])
     system_solute_rf.add(system[MGName("solute_ref_fromdummy")])
 
-    system_solute_rf = setupCoulFF(system_solute_rf, space, \
-                                  cut_type=cutoff_type.val,
-                                  cutoff=cutoff_dist.val,
-                                  dielectric=model_eps.val)
+    system_solute_rf = setupIntraCoulFF(system_solute_rf, space, \
+                                        cut_type=cutoff_type.val,
+                                        cutoff=cutoff_dist.val,
+                                        dielectric=model_eps.val)
     #import pdb; pdb.set_trace()
 
     system_solute_cb = System()
@@ -650,12 +711,31 @@ def runLambda():
     system_solute_cb.add(system[MGName("solute_ref_todummy")])
     system_solute_cb.add(system[MGName("solute_ref_fromdummy")])
 
-    system_solute_cb = setupCoulFF(system_solute_cb, Cartesian(), \
-                                  cut_type="nocutoff")
+    system_solute_cb = setupIntraCoulFF(system_solute_cb, Cartesian(), \
+                                        cut_type="nocutoff")
+
+
+    system_solute_host_rf = System()
+    system_solute_host_rf.add(system[MGName("molecules")])
+    system_solute_host_rf.add(system[MGName("solute_ref")])
+    system_solute_host_rf.add(system[MGName("solute_ref")])
+
+    system_solute_host_rf = setupInterCoulFF(system_solute_host_rf, space, \
+                                             cut_type=cutoff_type.val,
+                                             cutoff=cutoff_dist.val,
+                                             dielectric=model_eps.val)
+
+    system_solute_host_cb = System()
+    system_solute_host_cb.add(system[MGName("molecules")])
+    system_solute_host_cb.add(system[MGName("solute_ref")])
+
+    system_solute_host_cb = setupInterCoulFF(system_solute_host_cb, Cartesian(), \
+                                             cut_type="nocutoff")
 
     #import pdb; pdb.set_trace()
 
     delta_func_nrgs = []
+    delta_dir_nrgs = []
     DG_pols = []
     DG_psums = []
 
@@ -675,27 +755,59 @@ def runLambda():
         # Compute free energy corrections
         # ############################################
         # Use PH' solver to compute DF^{BA}_{PBC}
+        # First calculation - using all charges
         print ("Poisson PBC calculation... ")
-        DG_BA_PBC = PoissonPBC(PoissonPBCSolverBin.val ,solutes, \
-                               system.property("space"),cutoff_dist.val.value(),\
-                               model_eps.val,
-                               current_frame)
+        #DG_BA_PBC = 0.0 * kcal_per_mol
+        DG_BA_PBC_HG = PoissonPBC(PoissonPBCSolverBin.val ,solutes, \
+                                  system.property("space"),cutoff_dist.val.value(),\
+                                  model_eps.val,
+                                  current_frame,solute_ref, zerorefcharges=False)
+        # Second calculation - setting charges of solute_ref to 0.
+        DG_BA_PBC_H = PoissonPBC(PoissonPBCSolverBin.val ,solutes, \
+                                  system.property("space"),cutoff_dist.val.value(),\
+                                  model_eps.val,
+                                  current_frame,solute_ref, zerorefcharges=True)
+
         # Use APBS to compute DF^{CB}_{infinity}
         # ??? Should we use experimental dielectric constant rather than
         # the one from the model ???
         print ("Poisson NP calculation... ")
-        DG_CB_NP = PoissonNP(PoissonNPSolverBin.val, solutes, bulk_eps.val,\
-                             current_frame, system.property("space"))
+        #DG_CB_NP = 0.0 * kcal_per_mol
+        # First calculation - using all charges
+        DG_CB_NP_HG = PoissonNP(PoissonNPSolverBin.val, solutes, bulk_eps.val,\
+                                current_frame, system.property("space"),\
+                                solute_ref, zerorefcharges=False)
         # NOTE ! Will generate nan if all the partial charges of the solutes are zero
-        if math.isnan(DG_CB_NP.value()):
-            DG_CB_NP = 0.0 * kcal_per_mol
-        DG_POL = DG_CB_NP - DG_BA_PBC
+        if math.isnan(DG_CB_NP_HG.value()):
+            DG_CB_NP_PL = 0.0 * kcal_per_mol
+        # Second calculation - setting charges of solute_ref to 0
+        DG_CB_NP_H = PoissonNP(PoissonNPSolverBin.val, solutes, bulk_eps.val,\
+                                current_frame, system.property("space"),\
+                                solute_ref, zerorefcharges=True)
+        if math.isnan(DG_CB_NP_H.value()):
+            DG_CB_NP_H = 0.0 * kcal_per_mol
+        #DG_POL = DG_CB_NP - DG_BA_PBC
+        system_solute_host_rf.update(solutes)
+        system_solute_host_cb.update(solutes)
+        Udir_cb = system_solute_host_cb.energy()
+        Udir_rf = system_solute_host_rf.energy() 
+        #delta_dir_nrgs.append(delta_dir_nrg)
+        DG_POL = (DG_CB_NP_HG-DG_CB_NP_H+Udir_cb) - \
+                 (DG_BA_PBC_HG-DG_BA_PBC_H+Udir_rf)
         DG_pols.append(DG_POL)
+        print ("DG_CB_NP_HG IS %s " % DG_CB_NP_HG)
+        print ("DG_CB_NP_H IS %s " % DG_CB_NP_H)
+        print ("Udir_CB IS %s " % Udir_cb)
+        print ("DG_BA_PBC_HG IS %s " % DG_BA_PBC_HG)
+        print ("DG_BA_PBC_H IS %s " % DG_BA_PBC_H)
+        print ("Udir_rf IS %s " % Udir_rf)
         print ("DG_POL IS %s " % DG_POL)
+        #import pdb; pdb.set_trace()
         # ############################################
         # Compute psum
         print ("Psum correction... ")
-        DG_PSUM = SummationCorrection(solutes, solvent, space, model_rho.val.value(),\
+        DG_PSUM = SummationCorrection(solutes, solvent, solute_ref,\
+                                      space, model_rho.val.value(),\
                                       model_eps.val, cutoff_dist.val.value())
         DG_psums.append(DG_PSUM)
         print ("DG_PSUM IS %s" % DG_PSUM)
@@ -707,16 +819,13 @@ def runLambda():
         system_solute_cb.update(solutes)
         delta_func_nrg = (system_solute_cb.energy() - system_solute_rf.energy())
         delta_func_nrgs.append(delta_func_nrg)
-        # ###########################################
-        # Compute DF_dir (only host/guest setups)
-        # This deals with the interaction energies of host-guest
-        # meaning will need split solutes into groups
-        # ###########################################
         #import pdb; pdb.set_trace()
         current_frame += step_frame
         mdtraj_trajfile.seek(current_frame)#step_frame, whence=1)
 
     # Now compute average POL term and uncertainty
+    # Note that POL and DIR are correlated, so should evaluate sum of these terms 
+    # for bootstrap
     nvals = len(DG_pols)
     DG_POL_avg = 0.0 * kcal_per_mol
     dev_POL = 0.0
@@ -747,7 +856,6 @@ def runLambda():
         dG = getFreeEnergy(resampled_nrgs)
         deltaG_bootstrap[x] = dG.value()
     dev_FUNC = deltaG_bootstrap.std()
-    # Now compute standard deviation of the distribution of free energies
     print ("DG_POL = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (DG_POL_avg.value(), dev_POL))
     print ("DG_PSUM = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (DG_PSUM_avg.value(), dev_PSUM))
     print ("DG_FUNC = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (DG_FUNC.value(), dev_FUNC))
