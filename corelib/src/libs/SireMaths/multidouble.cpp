@@ -558,6 +558,12 @@ void MultiDouble::set(int i, double value)
     v.a[i] = value;
 }
 
+/** Set the ith value without checking that i is valid */
+void MultiDouble::quickSet(int i, double value)
+{
+    v.a[i] = value;
+}
+
 /** Return the ith value in the multifloat */
 double MultiDouble::get(int i) const
 {

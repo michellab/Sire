@@ -72,6 +72,9 @@ public:
     static QVector<double> toArray(const QVector<MultiDouble> &array);
     static QVector<double> toDoubleArray(const QVector<MultiDouble> &array);
     
+    template<class T>
+    static MultiDouble fromGenerator(const T &generator);
+    
     MultiDouble& operator=(const MultiDouble &other);
     MultiDouble& operator=(const MultiFloat &other);
     MultiDouble& operator=(double value);
@@ -107,6 +110,8 @@ public:
     
     void set(int i, double value);
     double get(int i) const;
+    
+    void quickSet(int i, double value);
     
     double at(int i) const;
     double getitem(int i) const;
@@ -340,6 +345,30 @@ MultiDouble::MultiDouble(const MultiDouble &other)
 inline
 MultiDouble::~MultiDouble()
 {}
+
+/** Create a MultiDouble by drawing numbers from the passed generator */
+template<class T>
+MultiDouble MultiDouble::fromGenerator(const T &generator)
+{
+    MultiDouble ret;
+
+    #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
+        ret.v.x[0] = _mm256_set_pd(generator(), generator(), generator(), generator());
+        ret.v.x[1] = _mm256_set_pd(generator(), generator(), generator(), generator());
+    #else
+    #ifdef MULTIFLOAT_SSE_IS_AVAILABLE
+        ret.v.x[0] = _mm_set_pd(generator(), generator());
+        ret.v.x[1] = _mm_set_pd(generator(), generator());
+    #else
+        for (int i=0; i<MULTIFLOAT_SIZE; ++i)
+        {
+            ret.v.a[i] = generator();
+        }
+    #endif
+    #endif
+    
+    return ret;
+}
 
 /** Return the ith value in the MultiDouble - note that
     this is a fast function that does no bounds checking */
