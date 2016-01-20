@@ -430,6 +430,43 @@ double RanGenerator::rand(double minval, double maxval) const
         return minval + rand() * (maxval-minval);
 }
 
+/** Take hold of the generator lock. Only you can now generate
+    random numbers while this lock is held */
+void RanGenerator::lock() const
+{
+    nonconst_d().mutex.lock();
+}
+
+/** Release the generator lock */
+void RanGenerator::unlock() const
+{
+    nonconst_d().mutex.unlock();
+}
+
+/** Return a random real number on [0,1]. Should only be called while
+    you hold the generator lock */
+double RanGenerator::locked_rand() const
+{
+    return nonconst_d().mersenne_generator.rand();
+}
+
+/** Return a random real number on [0,maxval]. Should only be called while
+    you hold the generator lock */
+double RanGenerator::locked_rand(double maxval) const
+{
+    return maxval * locked_rand();
+}
+
+/** Return a random real number on [minval,maxval]. Should only be called while
+    you hold the generator lock */
+double RanGenerator::locked_rand(double minval, double maxval) const
+{
+    if (minval > maxval)
+        return locked_rand(maxval, minval);
+    else
+        return minval + locked_rand() * (maxval-minval);
+}
+
 /** Fill the passed array of doubles with random numbers. This replaces each
     value in the array with a random number on [0,1] */
 void RanGenerator::nrand(QVector<double> &result) const
@@ -578,20 +615,15 @@ double RanGenerator::rand53(double minval, double maxval) const
 double RanGenerator::randNorm(double mean, double variance) const
 {
     QMutexLocker lkr( &(nonconst_d().mutex) );
-
     return nonconst_d().mersenne_generator.randNorm(mean, variance);
+}
 
-    //double rand0 = nonconst_d().mersenne_generator.rand53();
-    //double rand1 = nonconst_d().mersenne_generator.rand53();
-
-    //lkr.unlock();
-
-    // Return a real number from a normal (Gaussian) distribution with given
-    // mean and variance by Box-Muller method
-    //double r = std::sqrt( -2.0 * log(1.0-rand0) ) * variance;
-    //double phi = 2.0 * 3.14159265358979323846264338328 * rand1;
-
-    //return mean + r * std::cos(phi);
+/** Return a random number from the normal distribution
+    with supplied mean and variance. You must hold the generator
+    lock when calling this function */
+double RanGenerator::locked_randNorm(double mean, double variance) const
+{
+    return nonconst_d().mersenne_generator.randNorm(mean, variance);
 }
 
 /** Fill the passed array with random numbers drawn from the normal
@@ -632,6 +664,29 @@ Vector RanGenerator::vectorOnSphere() const
 {
     QMutexLocker lkr( &(nonconst_d().mutex) );
 
+    while( true )
+    {
+        //use von Neumann acceptance/rejection method
+        Vector v;
+
+        v.setX( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
+        v.setY( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
+        v.setZ( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
+
+        double lgth2 = v.length2();
+
+        if (lgth2 < 1)
+        {
+            v /= std::sqrt(lgth2);
+            return v;
+        }
+    }
+}
+
+/** Return a random vector on the unit sphere. You must hold the generator
+    lock when calling this function */
+Vector RanGenerator::locked_vectorOnSphere() const
+{
     while( true )
     {
         //use von Neumann acceptance/rejection method
@@ -698,6 +753,13 @@ QVector<Vector> RanGenerator::nvectorOnSphere(int n) const
 Vector RanGenerator::vectorOnSphere(double radius) const
 {
     return radius * this->vectorOnSphere();
+}
+
+/** Return a random vector on the sphere with radius 'radius'.
+    You must hold the generator lock when calling this function */
+Vector RanGenerator::locked_vectorOnSphere(double radius) const
+{
+    return radius * this->locked_vectorOnSphere();
 }
 
 /** Fill the passed array with random vectors on a sphere with radius 'radius' */

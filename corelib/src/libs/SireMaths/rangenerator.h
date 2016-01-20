@@ -30,6 +30,7 @@
 #define SIREMATHS_RANGENERATOR_H
 
 #include <boost/shared_ptr.hpp>
+#include <boost/noncopyable.hpp>
 
 #include <QVector>
 
@@ -102,6 +103,10 @@ public:
     double rand(double maxval) const;
     double rand(double minval, double maxval) const;
 
+    double locked_rand() const;
+    double locked_rand(double maxval) const;
+    double locked_rand(double minval, double maxval) const;
+
     QVector<double> nrand(int n) const;
     QVector<double> nrand(int n, double maxval) const;
     QVector<double> nrand(int n, double minval, double maxval) const;
@@ -116,11 +121,18 @@ public:
 
     double randNorm(double mean, double variance) const;
 
+    double locked_randNorm() const;
+    double locked_randNorm(double maxval) const;
+    double locked_randNorm(double minval, double maxval) const;
+
     void nrandNorm(QVector<double> &result, double mean, double variance) const;
     QVector<double> nrandNorm(int n, double mean, double variance) const;
 
     Vector vectorOnSphere() const;
     Vector vectorOnSphere(double radius) const;
+
+    Vector locked_vectorOnSphere() const;
+    Vector locked_vectorOnSphere(double radius) const;
 
     void nvectorOnSphere(QVector<Vector> &result) const;
     void nvectorOnSphere(QVector<Vector> &result, double radius) const;
@@ -141,6 +153,9 @@ public:
     QVector<quint32> getState() const;
     void setState(const QVector<quint32> &state);
     
+    void lock() const;
+    void unlock() const;
+    
     static const RanGenerator& global();
     
     static void seedGlobal();
@@ -153,6 +168,43 @@ private:
 
     /** Shared pointer to the actual generator */
     boost::shared_ptr<detail::RanGeneratorPvt> d;
+};
+
+
+/** This is a small locker class that holds a lock on the random
+    number generator */
+class RanGeneratorLocker : boost::noncopyable
+{
+public:
+    RanGeneratorLocker() : boost::noncopyable(), rangen(0)
+    {}
+    
+    RanGeneratorLocker(const RanGenerator *r) : boost::noncopyable(), rangen(r)
+    {
+        if (rangen)
+            rangen->lock();
+    }
+    
+    ~RanGeneratorLocker()
+    {
+        if (rangen)
+        {
+            rangen->unlock();
+            rangen = 0;
+        }
+    }
+    
+    void unlock()
+    {
+        if (rangen)
+        {
+            rangen->unlock();
+            rangen = 0;
+        }
+    }
+    
+private:
+    const RanGenerator *rangen;
 };
 
 }
