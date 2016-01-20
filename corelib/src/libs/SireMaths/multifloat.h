@@ -34,6 +34,10 @@
 
 #include <QVector>
 
+#ifdef SIRE_HAS_CPP_11
+    #include <functional>
+#endif
+
 #if defined(_MSC_VER)
 #define _ALIGNED(x) __declspec(align(x))
 #else
@@ -141,10 +145,11 @@ public:
     MultiFloat(const MultiFloat &other);
     MultiFloat(const MultiInt &other);
     
-    ~MultiFloat();
+    #ifdef SIRE_HAS_CPP_11
+        MultiFloat(const std::function<float ()> &func);
+    #endif
     
-    template<class T>
-    static MultiFloat fromGenerator(const T &generator);
+    ~MultiFloat();
     
     bool isAligned() const;
     
@@ -412,6 +417,27 @@ MultiFloat::MultiFloat(float val)
     #endif
 }
 
+#ifdef SIRE_HAS_CPP_11
+    /** Construct from the passed function that generates floats */
+    inline MultiFloat::MultiFloat(const std::function<float ()> &generator)
+    {
+        assertAligned();
+        #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
+            v.x = _mm256_set_ps(generator(), generator(), generator(), generator(),
+                                generator(), generator(), generator(), generator());
+        #else
+        #ifdef MULTIFLOAT_SSE_IS_AVAILABLE
+            v.x = _mm_set_ps(generator(), generator(), generator(), generator());
+        #else
+            for (int i=0; i<MULTIFLOAT_SIZE; ++i)
+            {
+                v.a[i] = generator();
+            }
+        #endif
+        #endif
+    }
+#endif
+
 /** Copy constructor */
 inline
 MultiFloat::MultiFloat(const MultiFloat &other)
@@ -428,30 +454,6 @@ MultiFloat::MultiFloat(const MultiFloat &other)
        }
     #endif
     #endif
-}
-
-/** Create a MultiDouble by drawing numbers from the passed generator */
-template<class T>
-SIRE_OUTOFLINE_TEMPLATE
-MultiFloat MultiFloat::fromGenerator(const T &generator)
-{
-    MultiFloat ret;
-
-    #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
-        ret.v.x = _mm256_set_ps(generator(), generator(), generator(), generator(),
-                                generator(), generator(), generator(), generator());
-    #else
-    #ifdef MULTIFLOAT_SSE_IS_AVAILABLE
-        ret.v.x = _mm_set_ps(generator(), generator(), generator(), generator());
-    #else
-        for (int i=0; i<MULTIFLOAT_SIZE; ++i)
-        {
-            ret.v.a[i] = generator();
-        }
-    #endif
-    #endif
-    
-    return ret;
 }
 
 /** Assignment operator */

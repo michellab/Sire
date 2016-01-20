@@ -32,6 +32,10 @@
 #include "SireMaths/vector.h"
 #include "SireMaths/multidouble.h"
 
+#ifdef SIRE_HAS_CPP_11
+    #include <functional>
+#endif
+
 SIRE_BEGIN_HEADER
 
 namespace SireMaths
@@ -67,6 +71,11 @@ public:
     MultiVector(const Vector *array, int size);
     MultiVector(const QVector<Vector> &array);
     
+    #ifdef SIRE_HAS_CPP_11
+        MultiVector(const std::function<double ()> &func);
+        MultiVector(const std::function<Vector ()> &func);
+    #endif
+    
     MultiVector(const MultiVector &other);
     
     ~MultiVector();
@@ -87,9 +96,6 @@ public:
     MultiDouble* data();
     const MultiDouble* data() const;
     const MultiDouble* constData() const;
-
-    template<class T>
-    static MultiVector fromGenerator(const T &generator);
 
     MultiDouble bearing() const;
     MultiDouble bearingXY(const MultiVector &v) const;
@@ -206,23 +212,27 @@ inline MultiVector::MultiVector(const MultiDouble &x, const MultiDouble &y, cons
     sc[2] = z;
 }
 
-/** Construct a MultiVector from the passed generator. The generator must
-    generate vectors */
-template<class T>
-MultiVector MultiVector::fromGenerator(const T &generator)
-{
-    MultiDouble x, y, z;
-    
-    for (int i=0; i<MultiDouble::count(); ++i)
+#ifdef SIRE_HAS_CPP_11
+    /** Construct a MultiVector from the passed function */
+    inline MultiVector::MultiVector(const std::function<double ()> &generator)
     {
-        Vector v = generator();
-        x.set(i, v.x());
-        y.set(i, v.y());
-        z.set(i, v.z());
+        sc[0] = MultiDouble(generator);
+        sc[1] = MultiDouble(generator);
+        sc[2] = MultiDouble(generator);
     }
     
-    return MultiVector(x, y, z);
-}
+    /** Construct a MultiVector from the passed function */
+    inline MultiVector::MultiVector(const std::function<Vector ()> &generator)
+    {
+        for (int i=0; i<MultiDouble::count(); ++i)
+        {
+            Vector v = generator();
+            sc[0].set(i, v.x());
+            sc[1].set(i, v.y());
+            sc[2].set(i, v.z());
+        }
+    }
+#endif
 
 /** Copy assignment operator */
 inline MultiVector& MultiVector::operator=(const MultiVector &other)

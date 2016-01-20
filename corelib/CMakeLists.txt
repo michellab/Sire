@@ -370,7 +370,7 @@ set(NEED_UNDEF_STRICT_ANSI FALSE)
 if (SIRE_HAS_CPP_11)
   message(STATUS "Compiler supports C++ 2011")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-  set(SIRE_CXX11_FLAGS "${SIRE_CXX11_FLAGS} -std=c++11")
+  set(SIRE_CXX11_FLAGS "${SIRE_CXX11_FLAGS} -DSIRE_HAS_CPP_11 -std=c++11")
 
   if (NEED_UNDEF_STRICT_ANSI)
     message( STATUS "Undefining __STRICT_ANSI__ because of compile problems")

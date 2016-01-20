@@ -618,12 +618,28 @@ double RanGenerator::randNorm(double mean, double variance) const
     return nonconst_d().mersenne_generator.randNorm(mean, variance);
 }
 
+/** Return a random number generated from the normal distribution 
+    with mean 0 and standard deviation 1 */
+double RanGenerator::randNorm() const
+{
+    QMutexLocker lkr( &(nonconst_d().mutex) );
+    return nonconst_d().mersenne_generator.randNorm(1,0);
+}
+
 /** Return a random number from the normal distribution
     with supplied mean and variance. You must hold the generator
     lock when calling this function */
 double RanGenerator::locked_randNorm(double mean, double variance) const
 {
     return nonconst_d().mersenne_generator.randNorm(mean, variance);
+}
+
+/** Return a random number generated from the normal distribution 
+    with mean 0 and standard deviation 1. You must hold the generator
+    lock when calling this function */
+double RanGenerator::locked_randNorm() const
+{
+    return nonconst_d().mersenne_generator.randNorm(1,0);
 }
 
 /** Fill the passed array with random numbers drawn from the normal
@@ -659,22 +675,20 @@ QVector<double> RanGenerator::nrandNorm(int n, double mean, double variance) con
         return QVector<double>();
 }
 
-/** Return a random vector on the unit sphere */
-Vector RanGenerator::vectorOnSphere() const
+/** Return a random vector on the unit sphere. You must hold the generator
+    lock when calling this function */
+Vector RanGenerator::locked_vectorOnSphere() const
 {
-    QMutexLocker lkr( &(nonconst_d().mutex) );
-
-    while( true )
+    while (true)
     {
-        //use von Neumann acceptance/rejection method
         Vector v;
-
+        
         v.setX( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
         v.setY( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
         v.setZ( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
-
-        double lgth2 = v.length2();
-
+        
+        const double lgth2 = v.length2();
+        
         if (lgth2 < 1)
         {
             v /= std::sqrt(lgth2);
@@ -683,27 +697,11 @@ Vector RanGenerator::vectorOnSphere() const
     }
 }
 
-/** Return a random vector on the unit sphere. You must hold the generator
-    lock when calling this function */
-Vector RanGenerator::locked_vectorOnSphere() const
+/** Return a random vector on the unit sphere */
+Vector RanGenerator::vectorOnSphere() const
 {
-    while( true )
-    {
-        //use von Neumann acceptance/rejection method
-        Vector v;
-
-        v.setX( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
-        v.setY( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
-        v.setZ( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
-
-        double lgth2 = v.length2();
-
-        if (lgth2 < 1)
-        {
-            v /= std::sqrt(lgth2);
-            return v;
-        }
-    }
+    QMutexLocker lkr( &(nonconst_d().mutex) );
+    return locked_vectorOnSphere();
 }
 
 /** Fill the passed array with random vectors on a unit sphere */

@@ -119,6 +119,7 @@ public:
     double rand53(double maxval) const;
     double rand53(double minval, double maxval) const;
 
+    double randNorm() const;
     double randNorm(double mean, double variance) const;
 
     double locked_randNorm() const;
