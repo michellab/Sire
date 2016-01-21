@@ -32,6 +32,8 @@
 
 #include "SireError/errors.h"
 
+#include <QDebug>
+
 using namespace SireMaths;
 using namespace SireID;
 
@@ -441,14 +443,51 @@ MultiVector MultiVector::generate(
 /** Return the cross product of v0 and v1 */
 MultiVector MultiVector::cross(const MultiVector &v0, const MultiVector &v1)
 {
-    MultiVector result;
+    MultiDouble nx = v0.sc[1]*v1.sc[2] - v0.sc[2]*v1.sc[1];
+    MultiDouble ny = v0.sc[2]*v1.sc[0] - v0.sc[0]*v1.sc[2];
+    MultiDouble nz = v0.sc[0]*v1.sc[1] - v0.sc[1]*v1.sc[0];
+
+    MultiDouble length(nx);
+    length *= nx;
+    length.multiplyAdd(ny, ny);
+    length.multiplyAdd(nz, nz);
+    length = length.sqrt();
     
-    for (int i=0; i<MultiDouble::count(); ++i)
+    MultiDouble near_parallel = length.compareLess( MultiDouble(0.01) );
+
+    if (near_parallel.sum() > 0)
     {
-        result.set(i, Vector::cross(v0.at(i), v1.at(i)));
-    }
+        qDebug() << "NEAR PARALLEL" << near_parallel.toString()
+                 << length.toString();
     
-    return result;
+        //at least one of the pairs of vectors is parallel (or near parallel)
+        // - manually calculate each cross product
+        int nfixed = 0;
+        
+        for (int i=0; i<MultiDouble::count(); ++i)
+        {
+            if (near_parallel.at(i) > 0)
+            {
+                Vector normal = Vector::cross(v0.at(i), v1.at(i));
+                nx.set(i, normal.x());
+                ny.set(i, normal.y());
+                nz.set(i, normal.z());
+                length.set(i, 1.0);
+                nfixed += 1;
+            }
+        }
+        
+        if (nfixed == MultiDouble::count())
+        {
+            //we have already made the vector
+            return MultiVector(nx, ny, nz);
+        }
+    }
+
+    //return the normalised vector
+    MultiDouble inv_length = length.reciprocal();
+    
+    return MultiVector( nx*inv_length, ny*inv_length, nz*inv_length );
 }
 
 /** Return the manhattan length of the vector */
