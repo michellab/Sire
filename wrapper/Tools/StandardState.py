@@ -3,7 +3,7 @@
 # restraints under standard state conditions
 
 import os,sys, random
-import math
+from mathh import *
 from Sire.Tools.OpenMMMD import *
 from Sire.Tools import Parameter, resolveParameters
 
@@ -108,10 +108,9 @@ def run():
             restraint_dictionary = line
             print("Found restraint dictionary %s" % restraint_dictionary)
         else:
-            continue
-    if restraint_dictionary is None:
-        print("No restraint dictionary found in %s" % simfile.val)
-        sys.exit(-1)
+            print("No restraint dictionary found")
+            sys.exit[-1]
+
 
     #ast automatically transform a string into a dictionary
     rest_dict=ast.literal_eval(restraint_dictionary.strip("distance restraint dictionary="))
