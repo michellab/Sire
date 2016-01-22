@@ -120,6 +120,18 @@ static inline v8si _mm256_##fn(v8si x, int a) \
   return(ret); \
 }
 
+#ifndef __clang__
+#  ifdef __GNUC__
+#    if __GNUC_PREREQ(4,9)
+#       warning GCC >= 4.9 GENERATES BROKEN AVX FOR LOG/EXP, SO THIS IS DISABLED
+#       define AVX_MATHFUNC_BROKEN_INTO 1
+#       define AVX_MATHFUNC_BROKEN_EXP 1
+#       define AVX_MATHFUNC_BROKEN_LOG 1
+#    endif
+#  endif
+#endif
+
+#ifndef AVX_MATHFUNC_BROKEN_INFO
 #warning "Using SSE2 to perform AVX2 bitshift ops"
 AVX2_BITOP_USING_SSE2(slli_epi32)
 AVX2_BITOP_USING_SSE2(srli_epi32)
@@ -145,14 +157,17 @@ AVX2_INTOP_USING_SSE2(andnot_si128)
 AVX2_INTOP_USING_SSE2(cmpeq_epi32)
 AVX2_INTOP_USING_SSE2(sub_epi32)
 AVX2_INTOP_USING_SSE2(add_epi32)
+#endif /* ifndef AVX_MATHFUNC_BROKEN_INFO */
 
 #endif /* __AVX2__ */
 
 
+#ifndef AVX_MATHFUNC_BROKEN_LOG
 /* natural logarithm computed for 8 simultaneous float 
    return NaN for x <= 0
 */
 v8sf log256_ps(v8sf x) {
+
   v8si imm0;
   v8sf one = *(v8sf*)_ps256_1;
 
@@ -223,6 +238,7 @@ v8sf log256_ps(v8sf x) {
   x = _mm256_or_ps(x, invalid_mask); // negative arg will be NAN
   return x;
 }
+#endif /* AVX_MATHFUNC_BROKEN_LOG */
 
 _PS256_CONST(exp_hi,	88.3762626647949f);
 _PS256_CONST(exp_lo,	-88.3762626647949f);
@@ -238,7 +254,9 @@ _PS256_CONST(cephes_exp_p3, 4.1665795894E-2);
 _PS256_CONST(cephes_exp_p4, 1.6666665459E-1);
 _PS256_CONST(cephes_exp_p5, 5.0000001201E-1);
 
+#ifndef AVX_MATHFUNC_BROKEN_EXP
 v8sf exp256_ps(v8sf x) {
+
   v8sf tmp = _mm256_setzero_ps(), fx;
   v8si imm0;
   v8sf one = *(v8sf*)_ps256_1;
@@ -293,6 +311,7 @@ v8sf exp256_ps(v8sf x) {
   y = _mm256_mul_ps(y, pow2n);
   return y;
 }
+#endif /* AVX_MATHFUNC_BROKEN_EXP */
 
 _PS256_CONST(minus_cephes_DP1, -0.78515625);
 _PS256_CONST(minus_cephes_DP2, -2.4187564849853515625e-4);

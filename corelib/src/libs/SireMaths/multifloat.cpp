@@ -68,12 +68,32 @@ using namespace SireMaths;
         
         MultiFloat SIREMATHS_EXPORT exp(const MultiFloat &val)
         {
-            return MultiFloat( exp256_ps(val.v.x) );
+            #ifndef AVX_MATHFUNC_BROKEN_EXP
+                return MultiFloat( exp256_ps(val.v.x) );
+            #else
+                MultiFloat ret;
+                for (int i=0; i<MultiFloat::count(); ++i)
+                {
+                    ret.quickSet(i, std::exp(val.at(i)));
+                }
+
+                return ret;
+            #endif
         }
         
         MultiFloat SIREMATHS_EXPORT log(const MultiFloat &val)
         {
-            return MultiFloat( log256_ps(val.v.x) );
+            #ifndef AVX_MATHFUNC_BROKEN_LOG
+                return MultiFloat( log256_ps(val.v.x) );
+            #else
+                MultiFloat ret;
+                for (int i=0; i<MultiFloat::count(); ++i)
+                {
+                    ret.quickSet(i, std::log(val.at(i)));
+                }
+
+                return ret;
+            #endif
         }
         
         void SIREMATHS_EXPORT sincos(const MultiFloat &val, MultiFloat &sval, MultiFloat &cval)
