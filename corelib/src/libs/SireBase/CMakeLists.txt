@@ -60,7 +60,7 @@ set ( SIREBASE_HEADERS
       tempdir.h
       trigarray2d.h
       trigarray2d.hpp
-
+      unittest.h
     )
 
 # Define the sources in SireBase
@@ -97,6 +97,7 @@ set ( SIREBASE_SOURCES
       stringproperty.cpp    
       tempdir.cpp
       trigarray2d.cpp 
+      unittest.cpp
 
       ${SIREBASE_HEADERS}
     )
