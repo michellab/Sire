@@ -96,6 +96,31 @@ MultiQuaternion::MultiQuaternion(const MultiFloat &angle, const MultiVector &axi
     sc[2] = sintheta * axis.z();
 }
 
+/** Construct a quaternion which represents a rotation of 'angle' around 'axis' */
+MultiQuaternion::MultiQuaternion(const MultiDouble &angle, const MultiVector &axis)
+{
+    //the unit quaternion can be represented by;
+    // Q = cos(theta) + u*sin(theta)
+    // which represents a rotation of 2*theta around the
+    // vector u
+
+    MultiFloat sintheta;
+    {
+        MultiFloat half_angle(angle);
+        half_angle *= 0.5;
+        MultiFloat costheta;
+        sincos(half_angle, sintheta, costheta);
+        sc[3] = costheta;
+    }
+
+    //the vector must be normalised
+    MultiVector norm = axis.normalise();
+
+    sc[0] = sintheta * axis.x();
+    sc[1] = sintheta * axis.y();
+    sc[2] = sintheta * axis.z();
+}
+
 MultiQuaternion::~MultiQuaternion()
 {}
 

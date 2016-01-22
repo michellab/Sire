@@ -27,6 +27,8 @@
 \*********************************************/
 
 #include "SireMaths/multivector.h"
+#include "SireMaths/multiquaternion.h"
+
 #include "SireMaths/rangenerator.h"
 #include "SireMaths/quaternion.h"
 #include "SireError/errors.h"
@@ -161,59 +163,6 @@ void test_getset()
     assert_equal( MultiVector(v), mv );
 }
 
-MultiVector rotate(const MultiDouble &angle, const MultiVector &vec, 
-                   const MultiVector &to_rotate)
-{
-    //construct a quaternion that represents this rotation
-    MultiDouble qx, qy, qz, qw;
-    {
-        MultiFloat costheta, sintheta;
-        MultiFloat half_angle(angle);
-        half_angle *= 0.5;
-
-        sincos(half_angle, sintheta, costheta);
-        
-        MultiVector norm_vec = vec.normalise();
-        
-        qx = sintheta * norm_vec.x();
-        qy = sintheta * norm_vec.y();
-        qz = sintheta * norm_vec.z();
-        qw = costheta;
-    }
-    
-    //now rotate the vector
-    {
-        const MultiDouble sx2 = qx*qx;
-        const MultiDouble sy2 = qy*qy;
-        const MultiDouble sz2 = qz*qz;
-        
-        const MultiDouble sxy = qx*qy;
-        const MultiDouble sxz = qx*qz;
-        const MultiDouble syz = qy*qz;
-        
-        const MultiDouble swx = qw*qx;
-        const MultiDouble swy = qw*qy;
-        const MultiDouble swz = qw*qz;
-
-        const MultiDouble two(2.0);
-        const MultiDouble half(0.5);
-
-        MultiDouble nx = two*( ((half - sy2 - sz2) * to_rotate.x()) +
-                               ((sxy - swz)        * to_rotate.y()) +
-                               ((sxz + swy)        * to_rotate.z()) );
-        
-        MultiDouble ny = two*( ((sxy + swz)        * to_rotate.x()) +
-                               ((half - sx2 - sz2) * to_rotate.y()) +
-                               ((syz - swx)        * to_rotate.z()) );
-
-        MultiDouble nz = two*( ((sxz - swy)        * to_rotate.x()) +
-                               ((syz + swx)        * to_rotate.y()) +
-                               ((half - sx2 - sy2) * to_rotate.z()) );
-        
-        return MultiVector(nx, ny, nz);
-    }
-}
-
 void test_rotate()
 {
     QVector<Vector> axis(MultiVector::count()), vec(MultiVector::count());
@@ -232,7 +181,7 @@ void test_rotate()
     MultiVector mvec(vec);
     MultiDouble mangle(angle);
 
-    MultiVector mresult = rotate(mangle, maxis, mvec);
+    MultiVector mresult = MultiQuaternion(mangle, maxis).rotate(mvec);
 
     for (int i=0; i<MultiVector::count(); ++i)
     {
