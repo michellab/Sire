@@ -117,10 +117,18 @@ SIRE_BEGIN_HEADER
 namespace SireMaths
 {
 
+class MultiFloat;
 class MultiFixed;
 class MultiDouble;
 class MultiUInt;
 class MultiInt;
+
+MultiFloat cos(const MultiFloat &val);
+MultiFloat sin(const MultiFloat &val);
+MultiFloat log(const MultiFloat &val);
+MultiFloat exp(const MultiFloat &val);
+
+void sincos(const MultiFloat &val, MultiFloat &sinval, MultiFloat &cosval);
 
 /** This class provides a vectorised float. This represents
     a single vector of floats on the compiled machine, e.g.
@@ -130,6 +138,14 @@ class MultiInt;
 */
 class SIREMATHS_EXPORT MultiFloat
 {
+
+friend MultiFloat cos(const MultiFloat &val);
+friend MultiFloat sin(const MultiFloat &val);
+friend MultiFloat log(const MultiFloat &val);
+friend MultiFloat exp(const MultiFloat &val);
+
+friend void sincos(const MultiFloat &val, MultiFloat &sinval, MultiFloat &cosval);
+
 public:
     MultiFloat();
     

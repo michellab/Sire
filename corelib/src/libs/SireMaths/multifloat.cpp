@@ -40,6 +40,7 @@
 using namespace SireMaths;
 
 #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
+    #include "ThirdParty/avx_mathfun.h"
     static inline bool isAligned32(const void *pointer)
     {
         return (quintptr)pointer % size_t(32) == 0;
@@ -52,8 +53,39 @@ using namespace SireMaths;
                     "An unaligned MultiFloat has been created! %1")
                         .arg((quintptr)pointer % size_t(32)), place );
     }
+
+    namespace SireMaths
+    {
+        MultiFloat SIREMATHS_EXPORT cos(const MultiFloat &val)
+        {
+            return MultiFloat( cos256_ps(val.v.x) );
+        }
+        
+        MultiFloat SIREMATHS_EXPORT sin(const MultiFloat &val)
+        {
+            return MultiFloat( sin256_ps(val.v.x) );
+        }
+        
+        MultiFloat SIREMATHS_EXPORT exp(const MultiFloat &val)
+        {
+            return MultiFloat( exp256_ps(val.v.x) );
+        }
+        
+        MultiFloat SIREMATHS_EXPORT log(const MultiFloat &val)
+        {
+            return MultiFloat( log256_ps(val.v.x) );
+        }
+        
+        void SIREMATHS_EXPORT sincos(const MultiFloat &val, MultiFloat &sval, MultiFloat &cval)
+        {
+            sincos256_ps(val.v.x, &(sval.v.x), &(cval.v.x));
+        }
+    }
+
 #else
 #ifdef MULTIFLOAT_SSE_IS_AVAILABLE
+    #include "ThirdParty/sse_mathfun.h"
+
     static inline bool isAligned16(const void *pointer)
     {
         return (quintptr)pointer % size_t(16) == 0;
@@ -66,6 +98,35 @@ using namespace SireMaths;
                     "An unaligned MultiFloat has been created! %1")
                         .arg((quintptr)pointer % size_t(16)), place );
     }
+
+    namespace SireMaths
+    {
+        MultiFloat SIREMATHS_EXPORT cos(const MultiFloat &val)
+        {
+            return MultiFloat( cos_ps(val.v.x) );
+        }
+        
+        MultiFloat SIREMATHS_EXPORT sin(const MultiFloat &val)
+        {
+            return MultiFloat( sin_ps(val.v.x) );
+        }
+        
+        MultiFloat SIREMATHS_EXPORT exp(const MultiFloat &val)
+        {
+            return MultiFloat( exp_ps(val.v.x) );
+        }
+        
+        MultiFloat SIREMATHS_EXPORT log(const MultiFloat &val)
+        {
+            return MultiFloat( log_ps(val.v.x) );
+        }
+        
+        void SIREMATHS_EXPORT sincos(const MultiFloat &val, MultiFloat &sval, MultiFloat &cval)
+        {
+            sincos_ps(val.v.x, &(sval.v.x), &(cval.v.x));
+        }
+    }
+
 #else
     static inline bool isAligned32(const void *pointer)
     {
@@ -79,6 +140,67 @@ using namespace SireMaths;
                     "An unaligned MultiFloat has been created! %1")
                         .arg((quintptr)pointer % size_t(32)), place );
     }
+
+    namespace SireMaths
+    {
+        MultiFloat SIREMATHS_EXPORT cos(const MultiFloat &val)
+        {
+            MultiFloat ret;
+            
+            for (int i=0; i<MultiFloat::count(); ++i)
+            {
+                ret.v.a[i] = std::cos(val.v.a[i]);
+            }
+        
+            return ret;
+        }
+        
+        MultiFloat SIREMATHS_EXPORT sin(const MultiFloat &val)
+        {
+            MultiFloat ret;
+            
+            for (int i=0; i<MultiFloat::count(); ++i)
+            {
+                ret.v.a[i] = std::sin(val.v.a[i]);
+            }
+        
+            return ret;
+        }
+        
+        MultiFloat SIREMATHS_EXPORT exp(const MultiFloat &val)
+        {
+            MultiFloat ret;
+            
+            for (int i=0; i<MultiFloat::count(); ++i)
+            {
+                ret.v.a[i] = std::exp(val.v.a[i]);
+            }
+        
+            return ret;
+        }
+        
+        MultiFloat SIREMATHS_EXPORT log(const MultiFloat &val)
+        {
+            MultiFloat ret;
+            
+            for (int i=0; i<MultiFloat::count(); ++i)
+            {
+                ret.v.a[i] = std::log(val.v.a[i]);
+            }
+        
+            return ret;
+        }
+        
+        void SIREMATHS_EXPORT sincos(const MultiFloat &val, MultiFloat &sval, MultiFloat &cval)
+        {
+            for (int i=0; i<MultiFloat::count(); ++i)
+            {
+                sval.v.a[i] = std::sin(val.v.a[i]);
+                cval.v.a[i] = std::cos(val.v.a[i]);
+            }
+        }
+    }
+
 #endif
 #endif
 

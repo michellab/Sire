@@ -40,6 +40,15 @@ SIRE_BEGIN_HEADER
 namespace SireMaths
 {
 
+class MultiDouble;
+
+MultiDouble cos(const MultiDouble &val);
+MultiDouble sin(const MultiDouble &val);
+MultiDouble log(const MultiDouble &val);
+MultiDouble exp(const MultiDouble &val);
+
+void sincos(const MultiDouble &val, MultiDouble &sinval, MultiDouble &cosval);
+
 /** This class provides a vectorised double. This represents
     two vectors of doubles on the compiled machine, e.g.
     4 doubles if we use SSE2, 8 doubles for AVX. This
@@ -50,6 +59,14 @@ namespace SireMaths
 */
 class SIREMATHS_EXPORT MultiDouble
 {
+
+friend MultiDouble cos(const MultiDouble &val);
+friend MultiDouble sin(const MultiDouble &val);
+friend MultiDouble log(const MultiDouble &val);
+friend MultiDouble exp(const MultiDouble &val);
+
+friend void sincos(const MultiDouble &val, MultiDouble &sinval, MultiDouble &cosval);
+
 public:
     MultiDouble();
     
@@ -1220,6 +1237,34 @@ inline
 double MultiDouble::doubleSum() const
 {
     return this->sum();
+}
+
+inline MultiDouble cos(const MultiDouble &val)
+{
+    return cos(MultiFloat(val));
+}
+
+inline MultiDouble sin(const MultiDouble &val)
+{
+    return sin(MultiFloat(val));
+}
+
+inline MultiDouble log(const MultiDouble &val)
+{
+    return log(MultiFloat(val));
+}
+
+inline MultiDouble exp(const MultiDouble &val)
+{
+    return exp(MultiFloat(val));
+}
+
+inline void sincos(const MultiDouble &val, MultiDouble &sinval, MultiDouble &cosval)
+{
+    MultiFloat c, s;
+    sincos(MultiFloat(val), c, s);
+    sinval = s;
+    cosval = c;
 }
 
 #endif // #ifndef SIRE_SKIP_INLINE_FUNCTIONS

@@ -165,34 +165,20 @@ MultiVector rotate(const MultiDouble &angle, const MultiVector &vec,
                    const MultiVector &to_rotate)
 {
     //construct a quaternion that represents this rotation
-    MultiDouble qx(1), qy(1), qz(1), qw(0);
+    MultiDouble qx, qy, qz, qw;
     {
-        MultiDouble costheta, sintheta;
+        MultiFloat costheta, sintheta;
+        MultiFloat half_angle(angle);
+        half_angle *= 0.5;
 
-        for (int i=0; i<MultiDouble::count(); ++i)
-        {
-            costheta.set(i, std::cos(0.5*angle.at(i)));
-            sintheta.set(i, std::sin(0.5*angle.at(i)));
-        }
+        sincos(half_angle, sintheta, costheta);
         
         MultiVector norm_vec = vec.normalise();
         
-        MultiDouble qx = sintheta * norm_vec.x();
-        MultiDouble qy = sintheta * norm_vec.y();
-        MultiDouble qz = sintheta * norm_vec.z();
-        MultiDouble qw = costheta;
-        
-        MultiDouble l(qx);
-        l *= l;
-        l.multiplyAdd( qy, qy );
-        l.multiplyAdd( qz, qz );
-        l.multiplyAdd( qw, qw );
-        
-        l = l.reciprocal();
-        
-        qx *= l;
-        qy *= l;
-        qz *= l;
+        qx = sintheta * norm_vec.x();
+        qy = sintheta * norm_vec.y();
+        qz = sintheta * norm_vec.z();
+        qw = costheta;
     }
     
     //now rotate the vector
@@ -238,7 +224,7 @@ void test_rotate()
     {
         axis[i] = rangen.vectorOnSphere(1);
         vec[i] = rangen.vectorOnSphere(5);
-        angle[i] = rangen.rand(0, 0.5*SireMaths::pi);
+        angle[i] = rangen.rand(-2.0*SireMaths::pi, 2.0*SireMaths::pi);
         result[i] = Quaternion(Angle(angle[i]),axis[i]).rotate(vec[i]);
     }
 
@@ -250,7 +236,10 @@ void test_rotate()
 
     for (int i=0; i<MultiVector::count(); ++i)
     {
-        assert_equal( mresult.at(i), result[i] );
+        for (int j=0; j<3; ++j)
+        {
+            assert_nearly_equal( mresult.at(i)[j], result[i][j], 1e-5 );
+        }
     }
 }
 
