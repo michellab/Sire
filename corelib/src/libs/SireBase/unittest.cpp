@@ -80,6 +80,8 @@ QString UnitTest::name() const
     return test_name;
 }
 
+static QTextStream cerr( stderr, QIODevice::WriteOnly );
+
 /** Run this test a total of 'nrepeats' times, printing out information
     if 'verbose' is true */
 bool UnitTest::run(int nrepeats, bool verbose)
@@ -88,8 +90,6 @@ bool UnitTest::run(int nrepeats, bool verbose)
 
     if (nrepeats <= 0)
         return true;
-
-    QTextStream cerr( stderr, QIODevice::WriteOnly );
     
     try
     {
@@ -160,28 +160,39 @@ QList< boost::shared_ptr<UnitTest> > UnitTest::tests()
     screen and returning the number of tests that failed */
 int UnitTest::runAll(bool verbose)
 {
-    QTextStream cerr( stderr, QIODevice::WriteOnly );
-    
     QMutexLocker lkr(&global_mutex);
     
-    cerr << QObject::tr("== Running Unit Tests ==\n\n");
+    cerr << QObject::tr("\n== Running Unit Tests ==\n\n");
     
-    int i = 0;
+    int i = 1;
     const int n = all_tests.count();
     int nfailed = 0;
     
     foreach( boost::shared_ptr<UnitTest> test, all_tests )
     {
-        cerr << QObject::tr("(%1/%2) %3...").arg(i+1).arg(n).arg(test->name());
+        cerr << QObject::tr("(%1/%2) %3 ").arg(i).arg(n).arg(test->name());
         bool passed = test->run(1, verbose);
+
+        if (passed and not verbose)
+        {
+            //if the test was really quick, then run it several times to try different inputs
+            if (test->runTime() < 500000000)
+            {
+                passed = test->run( qMin( int(500000000 / test->runTime()), 10 ), verbose );
+            }
+        }
         
         if (passed)
+        {
             cerr << QObject::tr("(passed - took %1 ms)\n").arg( 0.000001 * test->runTime() );
+        }
         else
         {
             cerr << QObject::tr("(failed)\n");
             nfailed += 1;
         }
+        
+        i += 1;
     }
     
     if (nfailed > 0)

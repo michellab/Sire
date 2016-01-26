@@ -131,7 +131,7 @@ static inline v8si _mm256_##fn(v8si x, int a) \
 #  endif
 #endif
 
-#ifndef AVX_MATHFUNC_BROKEN_INFO
+#ifndef AVX_MATHFUNC_BROKEN_INTO
 #warning "Using SSE2 to perform AVX2 bitshift ops"
 AVX2_BITOP_USING_SSE2(slli_epi32)
 AVX2_BITOP_USING_SSE2(srli_epi32)
