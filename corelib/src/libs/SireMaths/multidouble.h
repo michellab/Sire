@@ -182,6 +182,8 @@ public:
     double sum() const;
     double doubleSum() const;
 
+    static void swap(MultiDouble &d0, int idx0, MultiDouble &d1, int idx1);
+
 private:
     /* Give other Multi??? classes access to the raw vector */
     friend class MultiFloat;

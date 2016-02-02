@@ -186,6 +186,8 @@ public:
     friend MultiQuaternion operator*(const MultiVector &p1, const MultiQuaternion &p2);
     friend MultiQuaternion operator*(const MultiQuaternion &p1, const MultiVector &p2);
 
+    static void swap(MultiVector &v0, int idx0, MultiVector &v1, int idx1);
+
 protected:
     /** The three values, representing the vectorised x, y and z components */
     MultiDouble sc[3];

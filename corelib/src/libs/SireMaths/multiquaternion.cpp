@@ -477,3 +477,12 @@ Quaternion MultiQuaternion::getitem(int i) const
 {
     return operator[](i);
 }
+
+/** Swap the values of the value at index idx0 in 'f0' with the value at index 'idx' in 'f1' */
+void MultiQuaternion::swap(MultiQuaternion &v0, int idx0, MultiQuaternion &v1, int idx1)
+{
+    MultiDouble::swap(v0.sc[0], idx0, v1.sc[0], idx1);
+    MultiDouble::swap(v0.sc[1], idx0, v1.sc[1], idx1);
+    MultiDouble::swap(v0.sc[2], idx0, v1.sc[2], idx1);
+    MultiDouble::swap(v0.sc[3], idx0, v1.sc[3], idx1);
+}

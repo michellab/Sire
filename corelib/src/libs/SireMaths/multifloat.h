@@ -293,6 +293,8 @@ public:
     float sum() const;
     double doubleSum() const;
 
+    static void swap(MultiFloat &f0, int idx0, MultiFloat &f1, int idx1);
+
 private:
     /* Make the other Multi?? classes friends, so that they
        can read the vector data directly */

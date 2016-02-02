@@ -856,3 +856,11 @@ QString MultiFloat::toBinaryString() const
     
     return QObject::tr("{ %1 }").arg(vals.join(", "));
 }
+
+/** Swap the values of the value at index idx0 in 'f0' with the value at index 'idx' in 'f1' */
+void MultiFloat::swap(MultiFloat &f0, int idx0, MultiFloat &f1, int idx1)
+{
+    float tmp = f0.v.a[idx0];
+    f0.v.a[idx0] = f1.v.a[idx1];
+    f1.v.a[idx1] = tmp;
+}
