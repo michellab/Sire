@@ -192,16 +192,12 @@ Vector MultiVector::getitem(int i) const
 /** Return a normalised form of the vector */
 MultiVector MultiVector::normalise() const
 {
-    MultiDouble l = length2();
+    MultiDouble l = length();
 
-    for (int i=0; i<MultiDouble::count(); ++i)
-    {
-        if (SireMaths::isZero(l.get(i)))
-            throw SireMaths::math_error(QObject::tr(
-                "Cannot normalise a zero vector, %1").arg(this->toString()),CODELOC);
-    }
+    MultiDouble mask = l.compareEqual( MultiDouble(0) );
 
-    l = l.sqrt().reciprocal();
+    l = mask.logicalAnd( l.reciprocal() );
+    
     return MultiVector(sc[0]*l,sc[1]*l,sc[2]*l);
 }
 
@@ -485,7 +481,8 @@ MultiVector MultiVector::cross(const MultiVector &v0, const MultiVector &v1)
     }
 
     //return the normalised vector
-    MultiDouble inv_length = length.reciprocal();
+    MultiDouble mask = length.compareEqual( MultiDouble(0) );
+    MultiDouble inv_length = mask.logicalAnd(length.reciprocal());
     
     return MultiVector( nx*inv_length, ny*inv_length, nz*inv_length );
 }

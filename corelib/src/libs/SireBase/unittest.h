@@ -107,6 +107,17 @@ void assert_equal( const T &a, const T &b, const QString &code_location )
     }
 }
 
+/** Assert that the passed two objects are not equal */
+template<class T>
+void assert_not_equal( const T &a, const T &b, const QString &code_location )
+{
+    if (a == b)
+    {
+        throw SireError::assertation_failed( QObject::tr("EQUAL!\n\n%1\n\n!=\n\n%2")
+			.arg(Sire::toString(a)).arg(Sire::toString(b)), code_location );
+    }
+}
+
 /** Assert that hte passed two objects are equal to within the specified range */
 template<class T>
 void assert_nearly_equal( const T &a, const T &b, const T &range, const QString &code_location )

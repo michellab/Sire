@@ -80,7 +80,7 @@ QString UnitTest::name() const
     return test_name;
 }
 
-static QTextStream cerr( stderr, QIODevice::WriteOnly );
+static QTextStream cerr( stderr, QIODevice::WriteOnly | QIODevice::Unbuffered );
 
 /** Run this test a total of 'nrepeats' times, printing out information
     if 'verbose' is true */
@@ -99,6 +99,7 @@ bool UnitTest::run(int nrepeats, bool verbose)
         {
             (*test_function)(verbose);
             cerr << ".";
+            cerr.flush();
         }
         quint64 ns = t.nsecsElapsed();
         
@@ -163,6 +164,7 @@ int UnitTest::runAll(bool verbose)
     QMutexLocker lkr(&global_mutex);
     
     cerr << QObject::tr("\n== Running Unit Tests ==\n\n");
+    cerr.flush();
     
     int i = 1;
     const int n = all_tests.count();
@@ -171,6 +173,7 @@ int UnitTest::runAll(bool verbose)
     foreach( boost::shared_ptr<UnitTest> test, all_tests )
     {
         cerr << QObject::tr("(%1/%2) %3 ").arg(i).arg(n).arg(test->name());
+        cerr.flush();
         bool passed = test->run(1, verbose);
 
         if (passed and not verbose)
@@ -185,10 +188,12 @@ int UnitTest::runAll(bool verbose)
         if (passed)
         {
             cerr << QObject::tr("(passed - took %1 ms)\n").arg( 0.000001 * test->runTime() );
+            cerr.flush();
         }
         else
         {
             cerr << QObject::tr("(failed)\n");
+            cerr.flush();
             nfailed += 1;
         }
         
