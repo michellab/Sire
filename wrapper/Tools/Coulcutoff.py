@@ -6,6 +6,7 @@ import math
 from Sire.Tools.OpenMMMD import *
 from Sire.Tools import Parameter, resolveParameters
 from Sire.Tools.LJcutoff import getFreeEnergy, resample
+from Sire.Units import *
 
 # Python dependencies
 #
@@ -167,9 +168,14 @@ def setupInterCoulFF(system, space, cut_type="nocutoff", cutoff= 999* angstrom, 
     print ("There are %s mols left " % other_solutes.nMolecules())
 
     inter_nonbondedff = InterGroupCLJFF("solute_red:other_solutes")
-    if (cutoff_type.val != "nocutoff"):
+    # JM bug in old code. Should be.
+    #if (cutoff_type.val != "nocutoff"):
+    #    inter_nonbondedff.setUseReactionField(True)
+    #    inter_nonbondedff.setReactionFieldDielectric(rf_dielectric.val)
+    # This should be correct
+    if (cut_type != "nocutoff"):
         inter_nonbondedff.setUseReactionField(True)
-        inter_nonbondedff.setReactionFieldDielectric(rf_dielectric.val)
+        inter_nonbondedff.setReactionFieldDielectric(dielectric)
 
     inter_nonbondedff.add(solute, MGIdx(0))
     inter_nonbondedff.add(other_solutes, MGIdx(1))
@@ -576,6 +582,59 @@ def calcQuadrupoleTrace(molecule):
 
     return q_trace
 
+def DirectSummation(solutes, space,
+                    cutoff, dielectric,
+                    framenum,  solute_ref, zerorefcharges=False):
+    Udir_cb = 0.0
+    Udir_pbc = 0.0
+    # Initialise reaction-field parameters
+    krf = ( 1 / cutoff**3 ) * ( dielectric - 1.0 ) / ( 2 * dielectric + 1.0 )
+    crf = (1 / cutoff ) * (3 * dielectric / ( 2 * dielectric + 1.0 ) )
+    
+    # Select atoms for summation
+    mol_solref = solute_ref.molecules().first().molecule()
+    coords = []
+    charges = []
+    sol_mols = solutes.molecules()
+    molnums = sol_mols.molNums()
+    for molnum in molnums:
+        mol = sol_mols.molecule(molnum).molecule()
+        atoms = mol.atoms()
+        for atom in atoms:
+            coord = atom.property("coordinates")
+            if (mol.name() == mol_solref.name() and zerorefcharges == True):
+                charge = 0.0
+            else:
+                charge = atom.property("charge").value()
+            coords.append(coord)
+            charges.append(charge)
+    # Now have array of atoms to consider for calculation, do double loop
+    natoms = len(coords)
+    for i in range(0,natoms):
+        ri = coords[i]
+        qi = charges[i]
+        for j in range(i+1,natoms):
+            rj = coords[j]
+            qj = charges[j]
+            # Compute Coulombic energy
+            rij2_np = (rj[0]-ri[0])**2+(rj[1]-ri[1])**2+(rj[2]-ri[2])**2
+            rij_np = math.sqrt(rij2_np)
+            coul_nrg = one_over_four_pi_eps0 * ( (qi*qj) /rij_np )
+            # Compute Barker-Watts reaction field energy
+            rij_pbc = space.calcDist(ri,rj)
+            if rij_pbc > cutoff:
+                rf_nrg = 0.0
+            else:
+                rf_nrg =  qi*qj*one_over_four_pi_eps0 * ( 1/rij_pbc +\
+                                                          krf*rij_pbc**2 - crf )
+            Udir_cb += coul_nrg
+            Udir_pbc += rf_nrg
+
+    Udir_cb = Udir_cb * kcal_per_mol
+    Udir_pbc = Udir_pbc * kcal_per_mol
+    return Udir_cb, Udir_pbc
+    #import pdb; pdb.set_trace()
+
 def SummationCorrection(solutes, solvent, solute_ref, space, rho_solvent_model,
                         eps_solvent_model, BAcutoff):
     nrg = 0.0
@@ -757,12 +816,13 @@ def runLambda():
         # Use PH' solver to compute DF^{BA}_{PBC}
         # First calculation - using all charges
         print ("Poisson PBC calculation... ")
-        #DG_BA_PBC = 0.0 * kcal_per_mol
+        DG_BA_PBC_HG = 0.0 * kcal_per_mol
         DG_BA_PBC_HG = PoissonPBC(PoissonPBCSolverBin.val ,solutes, \
                                   system.property("space"),cutoff_dist.val.value(),\
                                   model_eps.val,
                                   current_frame,solute_ref, zerorefcharges=False)
         # Second calculation - setting charges of solute_ref to 0.
+        DG_BA_PBC_H = 0.0 * kcal_per_mol
         DG_BA_PBC_H = PoissonPBC(PoissonPBCSolverBin.val ,solutes, \
                                   system.property("space"),cutoff_dist.val.value(),\
                                   model_eps.val,
@@ -772,35 +832,44 @@ def runLambda():
         # ??? Should we use experimental dielectric constant rather than
         # the one from the model ???
         print ("Poisson NP calculation... ")
-        #DG_CB_NP = 0.0 * kcal_per_mol
+        DG_CB_NP_HG = 0.0 * kcal_per_mol
         # First calculation - using all charges
         DG_CB_NP_HG = PoissonNP(PoissonNPSolverBin.val, solutes, bulk_eps.val,\
                                 current_frame, system.property("space"),\
                                 solute_ref, zerorefcharges=False)
         # NOTE ! Will generate nan if all the partial charges of the solutes are zero
         if math.isnan(DG_CB_NP_HG.value()):
-            DG_CB_NP_PL = 0.0 * kcal_per_mol
+            DG_CB_NP_HG = 0.0 * kcal_per_mol
         # Second calculation - setting charges of solute_ref to 0
+        DG_CB_NP_H = 0.0 * kcal_per_mol
         DG_CB_NP_H = PoissonNP(PoissonNPSolverBin.val, solutes, bulk_eps.val,\
                                 current_frame, system.property("space"),\
                                 solute_ref, zerorefcharges=True)
         if math.isnan(DG_CB_NP_H.value()):
             DG_CB_NP_H = 0.0 * kcal_per_mol
-        #DG_POL = DG_CB_NP - DG_BA_PBC
-        system_solute_host_rf.update(solutes)
-        system_solute_host_cb.update(solutes)
-        Udir_cb = system_solute_host_cb.energy()
-        Udir_rf = system_solute_host_rf.energy() 
+        #OLD CODE WHERE WE TAKE INTERACTION ENERGY. WRONG.
+        #system_solute_host_rf.update(solutes)
+        #system_solute_host_cb.update(solutes)
+        #Udir_cb = system_solute_host_cb.energy()
+        #Udir_rf = system_solute_host_rf.energy()
+        Udir_cb_hg, Udir_pbc_hg = DirectSummation(solutes, system.property("space"),
+                                                  cutoff_dist.val.value(), model_eps.val,
+                                                  current_frame, solute_ref, zerorefcharges=False)
+        Udir_cb_h, Udir_pbc_h = DirectSummation(solutes, system.property("space"),
+                                                cutoff_dist.val.value(), model_eps.val,
+                                                current_frame, solute_ref, zerorefcharges=True)
         #delta_dir_nrgs.append(delta_dir_nrg)
-        DG_POL = (DG_CB_NP_HG-DG_CB_NP_H+Udir_cb) - \
-                 (DG_BA_PBC_HG-DG_BA_PBC_H+Udir_rf)
+        DG_POL = (DG_CB_NP_HG - DG_CB_NP_H + Udir_cb_hg - Udir_cb_h) - \
+                 (DG_BA_PBC_HG - DG_BA_PBC_H + Udir_pbc_hg - Udir_pbc_h)
         DG_pols.append(DG_POL)
         print ("DG_CB_NP_HG IS %s " % DG_CB_NP_HG)
         print ("DG_CB_NP_H IS %s " % DG_CB_NP_H)
-        print ("Udir_CB IS %s " % Udir_cb)
+        print ("Udir_CB_hg IS %s " % Udir_cb_hg)
+        print ("Udir_CB_h IS %s " % Udir_cb_h)
         print ("DG_BA_PBC_HG IS %s " % DG_BA_PBC_HG)
         print ("DG_BA_PBC_H IS %s " % DG_BA_PBC_H)
-        print ("Udir_rf IS %s " % Udir_rf)
+        print ("Udir_pbc_hg IS %s " % Udir_pbc_hg)
+        print ("Udir_pbc_h  IS %s " % Udir_pbc_h)
         print ("DG_POL IS %s " % DG_POL)
         #import pdb; pdb.set_trace()
         # ############################################
@@ -819,6 +888,12 @@ def runLambda():
         system_solute_cb.update(solutes)
         delta_func_nrg = (system_solute_cb.energy() - system_solute_rf.energy())
         delta_func_nrgs.append(delta_func_nrg)
+
+        # ###########################################
+        # Compute DG_exc
+        # Difference in electrostatic interactions  
+        #
+
         #import pdb; pdb.set_trace()
         current_frame += step_frame
         mdtraj_trajfile.seek(current_frame)#step_frame, whence=1)
