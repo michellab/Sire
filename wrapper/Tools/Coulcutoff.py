@@ -420,6 +420,8 @@ ELECTRO
     probecharges = {}
     nzeroq = 0
     nions = 0
+    srad = 0.14
+    #srad = 0.0
     for molnum in molnums:
         mol = sol_mols.molecule(molnum).molecule()
         atoms = mol.atoms()
@@ -434,11 +436,11 @@ ELECTRO
                 else:
                     charge = probecharge
                     sigma = atom.property("LJ").sigma().value()
-                    radius = 0.5*(sigma*2**(1/6.))/10.0 #0.14# nm
+                    radius = 0.5*(sigma*2**(1/6.))/10.0 + srad # nm
             else:
                 charge = atom.property("charge").value()
                 sigma = atom.property("LJ").sigma().value()
-                radius = 0.5*(sigma*2**(1/6.))/10.0 #0.14# nm. Is this a decently good approximation?
+                radius = 0.5*(sigma*2**(1/6.))/10.0 + srad# nm. Is this a decently good approximation?
             coords = atom.property("coordinates")/10.0 # to nm
             line = "%8.5f %8.5f %8.5f %8.5f %8.5f\n" % (charge, radius, coords[0], coords[1], coords[2])
             nions += 1
@@ -1289,6 +1291,7 @@ def runLambda():
     delta_func_nrgs = []
     delta_dir_nrgs = []
     DG_pols = []
+    DG_dirs = []
     DG_psums = []
     DG_excluded = []
 
@@ -1371,9 +1374,12 @@ def runLambda():
                                                 cutoff_dist.val.value(), model_eps.val,
                                                 current_frame, solute_ref, zerorefcharges=True)
         #delta_dir_nrgs.append(delta_dir_nrg)
-        DG_PB = (DG_CB_NP_HG + DG_CB_NP_H + Udir_cb_hg - Udir_cb_h) - \
-                 (DG_BA_PBC_HG + DG_BA_PBC_H + Udir_pbc_hg - Udir_pbc_h)
-        DG_pols.append(DG_PB)
+        #DG_PB = (DG_CB_NP_HG + DG_CB_NP_H + Udir_cb_hg - Udir_cb_h) - \
+        #         (DG_BA_PBC_HG + DG_BA_PBC_H + Udir_pbc_hg - Udir_pbc_h)
+        DG_POL = (DG_CB_NP_HG + DG_CB_NP_H) - (DG_BA_PBC_HG + DG_BA_PBC_H)
+        DG_pols.append(DG_POL)
+        DG_DIR = Udirinter_cb - Udirinter_rf
+        DG_dirs.append(DG_DIR)
         print ("DG_CB_NP_HG IS %s " % DG_CB_NP_HG)
         print ("DG_CB_NP_H IS %s " % DG_CB_NP_H)
         print ("Udir_CB_hg IS %s " % Udir_cb_hg)
@@ -1384,7 +1390,8 @@ def runLambda():
         print ("Udir_pbc_h  IS %s " % Udir_pbc_h)
         print ("Udirinter_cb is %s " %  Udirinter_cb)
         print ("Udirinter_rf is %s " %  Udirinter_rf)
-        print ("DG_PB IS %s " % DG_PB)
+        print ("DG_POL IS %s " % DG_POL)
+        print ("DG_DIR IS %s " % DG_DIR)
         # Now compute term for excluded atoms
         #system_solute_rf.update(solutes)
         #system_solute_cb.update(solutes)
@@ -1431,6 +1438,16 @@ def runLambda():
     DG_POL_avg /= nvals
     dev_POL = (dev_POL / nvals) - (DG_POL_avg.value())**2
     dev_POL = math.sqrt(dev_POL)
+    # Now do the same for DG_DIR
+    nvals = len(DG_dirs)
+    DG_DIR_avg = 0.0 * kcal_per_mol
+    dev_DIR = 0.0
+    for x in range(0,nvals):
+        DG_DIR_avg += DG_dirs[x]
+        dev_DIR += (DG_dirs[x].value())**2
+    DG_DIR_avg /= nvals
+    dev_DIR = (dev_DIR / nvals) - (DG_DIR_avg.value())**2
+    dev_DIR = math.sqrt(dev_DIR)
     # Now do the same for PSUM
     nvals = len(DG_psums)
     DG_PSUM_avg = 0.0 * kcal_per_mol
@@ -1451,6 +1468,17 @@ def runLambda():
     DG_EXC_avg /= nvals
     dev_EXC = (dev_EXC / nvals) - (DG_EXC_avg.value())**2
     dev_EXC = math.sqrt(dev_EXC)
+    # Now do the same for 'ALL' = POL + DIR + PSUM
+    nvals = len(DG_pols)
+    DG_ALL_avg = 0.0 * kcal_per_mol
+    dev_ALL = 0.0
+    for x in range(0,nvals):
+        val = DG_pols[x] + DG_dirs[x] + DG_psums[x]
+        DG_ALL_avg += val
+        dev_ALL += (val.value())**2
+    DG_ALL_avg /= nvals
+    dev_ALL = (dev_ALL / nvals) - (DG_ALL_avg.value())**2
+    dev_ALL = math.sqrt(dev_ALL)
     # Now we do the FUNC free energy correction
     #print (delta_func_nrgs)
     DG_FUNC = getFreeEnergy(delta_func_nrgs)
@@ -1463,6 +1491,8 @@ def runLambda():
         deltaG_bootstrap[x] = dG.value()
     dev_FUNC = deltaG_bootstrap.std()
     print ("DG_POL = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (DG_POL_avg.value(), dev_POL))
+    print ("DG_DIR = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (DG_DIR_avg.value(), dev_DIR))
     print ("DG_PSUM = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (DG_PSUM_avg.value(), dev_PSUM))
+    print ("DG_COR = %8.5f +/- %8.5f kcal/mol ( 1 sigma, nsamples %s) " % (DG_ALL_avg.value(),dev_ALL,len(DG_pols)))
     print ("DG_EXC = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (DG_EXC_avg.value(), dev_EXC))    
     print ("DG_FUNC = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (DG_FUNC.value(), dev_FUNC))
