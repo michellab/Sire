@@ -434,11 +434,11 @@ ELECTRO
                 else:
                     charge = probecharge
                     sigma = atom.property("LJ").sigma().value()
-                    radius = 0.5*(sigma*2**(1/6.))/10.0 +0.14# nm
+                    radius = 0.5*(sigma*2**(1/6.))/10.0 #0.14# nm
             else:
                 charge = atom.property("charge").value()
                 sigma = atom.property("LJ").sigma().value()
-                radius = 0.5*(sigma*2**(1/6.))/10.0 +0.14# nm. Is this a decently good approximation?
+                radius = 0.5*(sigma*2**(1/6.))/10.0 #0.14# nm. Is this a decently good approximation?
             coords = atom.property("coordinates")/10.0 # to nm
             line = "%8.5f %8.5f %8.5f %8.5f %8.5f\n" % (charge, radius, coords[0], coords[1], coords[2])
             nions += 1
@@ -1135,6 +1135,72 @@ def SummationCorrection(solutes, solvent, solute_ref, space, rho_solvent_model,
     DF_PSUM = nrg * kJ_per_mol
     return DF_PSUM
 
+def SummationCorrection2(solutes, solvent, solute_ref, space, rho_solvent_model,
+                         eps_solvent_model, BAcutoff):
+    nrg_tot = 0.0
+    solv_mols = solvent.molecules()
+    solvmolnums = solv_mols.molNums()
+    # Now that we know the mol_com, compute the quadrupole trace
+    quadrupole_trace = calcQuadrupoleTrace(solv_mols.first().molecule())
+
+    solv_coms = []
+
+    for molnum in solvmolnums:
+        solvent = solv_mols.molecule(molnum).molecule()
+        # Find com
+        solv_com = [0.0, 0.0, 0.0]
+        solv_atoms = solvent.atoms()
+        solv_mass = 0.0
+        for solv_atom in solv_atoms:
+            coords = solv_atom.property("coordinates")
+            mass = solv_atom.property("mass").value()
+            solv_mass += mass
+            for i in range(0,3):
+                solv_com[i] += coords[i]*mass
+        for i in range(0,3):
+            solv_com[i] /= solv_mass
+        solv_coms.append(solv_com)
+
+    mol_solref = solute_ref.molecules().first().molecule()
+    sol_mols = solutes.molecules()
+    molnums = sol_mols.molNums()
+
+    for molnum in molnums:
+        mol = sol_mols.molecule(molnum).molecule()
+        if mol.name() != mol_solref.name():
+            continue
+        print ("PSUM using mol %s (natoms %s )" % (mol, mol.nAtoms()) )
+        #import pdb; pdb.set_trace()
+        atoms = mol.atoms()
+        #mol_charge = 0.0
+        #mol_com = [0.0, 0.0, 0.0]
+        #mol_mass = 0.0
+        for atom in atoms:
+            nsolv = 0
+            name = atom.name().value()
+            sol_charge = atom.property("charge").value()
+            #mass = atom.property("mass").value()
+            sol_coords = atom.property("coordinates")
+            for solv_com in solv_coms:
+                d = space.calcDist(sol_coords, Vector(solv_com))
+                if d < BAcutoff:
+                    nsolv += 1
+            #print (nsolv)
+            ONE_OVER_6PI_EPS0 = 290.98622868361923
+            nrg = -ONE_OVER_6PI_EPS0 * sol_charge * quadrupole_trace *\
+                  ( ( (2*(eps_solvent_model-1) / (2*eps_solvent_model+1) )*\
+                      nsolv/(4*pi*(BAcutoff/10.0)**3/3.0) ) +\
+                    (3/(2*eps_solvent_model+1)))
+            #print (sol_charge,nsolv,nrg)
+            nrg_tot += nrg
+        # JM 04/16 This code only deals with a single solute == solute_ref
+        break
+
+    DF_PSUM = nrg_tot * kJ_per_mol
+    return DF_PSUM
+
+
+
 @resolveParameters
 def runLambda():
     try:
@@ -1238,7 +1304,6 @@ def runLambda():
         PDB().write(solutes, "solutes-%s.pdb" % current_frame )
         #print (solutes.molecules().first().molecule().property("coordinates").toVector()[0])
         NPCoulPots(solutes, solute_ref)
-        #import pdb; pdb.set_trace()
         # ???Should we center solutes to the center of the box???
         # Compute free energy corrections
         # ############################################
@@ -1294,10 +1359,11 @@ def runLambda():
         if math.isnan(DG_CB_NP_H.value()):
             DG_CB_NP_H = 0.0 * kcal_per_mol
         #OLD CODE WHERE WE TAKE INTERACTION ENERGY. WRONG.
-        #system_solute_host_rf.update(solutes)
-        #system_solute_host_cb.update(solutes)
-        #Udir_cb = system_solute_host_cb.energy()
-        #Udir_rf = system_solute_host_rf.energy()
+        system_solute_host_rf.update(solutes)
+        system_solute_host_cb.update(solutes)
+        Udirinter_cb = system_solute_host_cb.energy()
+        Udirinter_rf = system_solute_host_rf.energy()
+        # Direct summation code
         Udir_cb_hg, Udir_pbc_hg = DirectSummation(solutes, system.property("space"),
                                                   cutoff_dist.val.value(), model_eps.val,
                                                   current_frame, solute_ref, zerorefcharges=False)
@@ -1316,6 +1382,8 @@ def runLambda():
         print ("DG_BA_PBC_H IS %s " % DG_BA_PBC_H)
         print ("Udir_pbc_hg IS %s " % Udir_pbc_hg)
         print ("Udir_pbc_h  IS %s " % Udir_pbc_h)
+        print ("Udirinter_cb is %s " %  Udirinter_cb)
+        print ("Udirinter_rf is %s " %  Udirinter_rf)
         print ("DG_PB IS %s " % DG_PB)
         # Now compute term for excluded atoms
         #system_solute_rf.update(solutes)
@@ -1332,7 +1400,10 @@ def runLambda():
         # ############################################
         # Compute psum
         print ("Psum correction... ")
-        DG_PSUM = SummationCorrection(solutes, solvent, solute_ref,\
+        #DG_PSUM = SummationCorrection(solutes, solvent, solute_ref,\
+        #                              space, model_rho.val.value(),\
+        #                              model_eps.val, cutoff_dist.val.value())
+        DG_PSUM = SummationCorrection2(solutes, solvent, solute_ref,\
                                       space, model_rho.val.value(),\
                                       model_eps.val, cutoff_dist.val.value())
         DG_psums.append(DG_PSUM)
