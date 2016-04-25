@@ -32,6 +32,29 @@ void register_IntraGroupCLJFF_class(){
         { //::SireFF::Intra2B2G3DFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > >::energy
         
             typedef SireFF::Intra2B2G3DFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > > exported_class_t;
+            typedef ::SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > ( ::SireFF::Intra2B2G3DFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > >::*energy_function_type)(  ) ;
+            energy_function_type energy_function_value( &::SireFF::Intra2B2G3DFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > >::energy );
+            
+            IntraGroupCLJFF_exposer.def( 
+                "energy"
+                , energy_function_value );
+        
+        }
+        { //::SireFF::Intra2B2G3DFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > >::energy
+        
+            typedef SireFF::Intra2B2G3DFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > > exported_class_t;
+            typedef ::SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > ( ::SireFF::Intra2B2G3DFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > >::*energy_function_type)( ::SireCAS::Symbol const & ) ;
+            energy_function_type energy_function_value( &::SireFF::Intra2B2G3DFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > >::energy );
+            
+            IntraGroupCLJFF_exposer.def( 
+                "energy"
+                , energy_function_value
+                , ( bp::arg("component") ) );
+        
+        }
+        { //::SireFF::Intra2B2G3DFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > >::energy
+        
+            typedef SireFF::Intra2B2G3DFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > > exported_class_t;
             typedef void ( ::SireFF::Intra2B2G3DFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > >::*energy_function_type)( ::SireFF::EnergyTable &,double ) ;
             energy_function_type energy_function_value( &::SireFF::Intra2B2G3DFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > >::energy );
             

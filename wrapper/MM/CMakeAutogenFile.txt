@@ -37,12 +37,19 @@ set ( PYPP_SOURCES
        RestraintFF.pypp.cpp
        InterSoftCLJFFBase.pypp.cpp
        InternalSymbolsBase.pypp.cpp
+       IntraCoulombFF.pypp.cpp
        IntraCLJFFBase.pypp.cpp
+       IntraLJFF.pypp.cpp
        IntraCoulombFFBase.pypp.cpp
+       IntraGroupCoulombFF.pypp.cpp
        IntraGroupCLJFFBase.pypp.cpp
+       IntraGroupLJFF.pypp.cpp
        IntraGroupCoulombFFBase.pypp.cpp
+       IntraGroupSoftCLJFF.pypp.cpp
        IntraGroupLJFFBase.pypp.cpp
+       IntraCLJFF.pypp.cpp
        IntraGroupSoftCLJFFBase.pypp.cpp
+       IntraSoftCLJFF.pypp.cpp
        IntraLJFFBase.pypp.cpp
        IntraSoftCLJFFBase.pypp.cpp
        LJParameterName3D.pypp.cpp
@@ -62,15 +69,7 @@ set ( PYPP_SOURCES
        TwoAtomPerturbation.pypp.cpp
        UreyBradleyComponent.pypp.cpp
        SoftCLJPotentialInterface_InterSoftCLJPotential_.pypp.cpp
-       IntraGroupCLJFF.pypp.cpp
-       IntraGroupCoulombFF.pypp.cpp
-       IntraGroupLJFF.pypp.cpp
        SoftCLJPotentialInterface_IntraSoftCLJPotential_.pypp.cpp
-       IntraGroupSoftCLJFF.pypp.cpp
-       IntraCLJFF.pypp.cpp
-       IntraCoulombFF.pypp.cpp
-       IntraLJFF.pypp.cpp
-       IntraSoftCLJFF.pypp.cpp
        AngleRestraint.pypp.cpp
        Restraint.pypp.cpp
        AtomFunctions.pypp.cpp
@@ -148,6 +147,7 @@ set ( PYPP_SOURCES
        NoCutoff.pypp.cpp
        NullCLJFunction.pypp.cpp
        NullRestraint.pypp.cpp
+       IntraGroupCLJFF.pypp.cpp
        TestFF.pypp.cpp
        ThreeAtomFunctions.pypp.cpp
        TwoAtomFunctions.pypp.cpp
