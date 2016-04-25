@@ -70,6 +70,9 @@ public:
     bool operator!=(const Inter2B2G3DFF<Potential> &other) const;
     
     Inter2B2G3DFF<Potential>* clone() const;
+
+    SireUnits::Dimension::MolarEnergy energy();
+    SireUnits::Dimension::MolarEnergy energy(const Symbol &component);
     
     void energy(EnergyTable &energytable, double scale_energy=1);
     
@@ -449,6 +452,20 @@ void Inter2B2G3DFF<Potential>::recalculateEnergy()
         Potential::finishedEvaluation();
         throw;
     }
+}
+
+template<class Potential>
+SIRE_OUTOFLINE_TEMPLATE
+SireUnits::Dimension::MolarEnergy Inter2B2G3DFF<Potential>::energy()
+{
+    return Inter2B2GFF<Potential>::energy();
+}
+
+template<class Potential>
+SIRE_OUTOFLINE_TEMPLATE
+SireUnits::Dimension::MolarEnergy Inter2B2G3DFF<Potential>::energy(const Symbol &component)
+{
+    return Inter2B2GFF<Potential>::energy(component);
 }
 
 /** Calculate the energies of the molecules in the passed forcetable

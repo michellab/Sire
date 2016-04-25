@@ -40,6 +40,14 @@
 using namespace SireMaths;
 
 #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
+
+    #if defined(__clang__)
+        //the new clang on OS X breaks compilation of AVX functions
+        #define AVX_MATHFUNC_BROKEN_INTO 1
+        #define AVX_MATHFUNC_BROKEN_LOG 1
+        #define AVX_MATHFUNC_BROKEN_EXP 1
+    #endif
+
     #include "ThirdParty/avx_mathfun.h"
     static inline bool isAligned32(const void *pointer)
     {

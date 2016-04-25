@@ -42,7 +42,7 @@
 #define _ALIGNED(x) __declspec(align(x))
 #else
 #if defined(__clang__)
-#define _ALIGNED(x) __declspec(align(x))
+#define _ALIGNED(x) __attribute__ ((aligned(x)))
 #else
 #if defined(__GNUC__)
 #define _ALIGNED(x) __attribute__ ((aligned(x)))
