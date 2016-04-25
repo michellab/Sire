@@ -123,7 +123,7 @@ fi
 if [ ! -e "build/miniconda.sh" ]; then
     echo "** Downloading miniconda from ${MINICONDA}... **"
     echo "** wget ${MINICONDA} -O build/miniconda.sh 2>/dev/null || curl -O ${MINICONDA} -o build/miniconda.sh  **"
-    wget ${MINICONDA} -O build/miniconda.sh 2>/dev/null curl -O ${MINICONDA} -o build/miniconda.sh
+    wget ${MINICONDA} -O build/miniconda.sh 2>/dev/null || curl -O ${MINICONDA} -o build/miniconda.sh
 fi
 
 # Now unpack miniconda and install it into the requested directory
