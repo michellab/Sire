@@ -5,8 +5,8 @@ set ( PYPP_SOURCES
        NumberProperty.pypp.cpp
        StringProperty.pypp.cpp
        StringMangler.pypp.cpp
-       Array2D_double_.pypp.cpp
        _Base_free_functions.pypp.cpp
+       Array2D_double_.pypp.cpp
        Array2DBase.pypp.cpp
        vector_less__double__greater_.pypp.cpp
        PropertyName.pypp.cpp
