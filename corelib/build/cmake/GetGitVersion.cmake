@@ -32,6 +32,13 @@ IF (GIT_EXECUTABLE)
 
    set( SVN_REPOSITORY_URL "${GIT_REMOTE_URL} | ${GIT_BRANCH}" )
    set( SVN_VERSION_NUMBER "${GIT_COMMIT_INFO}" )
+   set( SVN_REPOSITORY_BRANCH "${GIT_BRANCH}" )
+
+   if ( GIT_UNCLEAN )
+     set( SVN_IS_CLEAN 0 )
+   else()
+     set( SVN_IS_CLEAN 1 )
+   endif()
 
    message( STATUS "REPOSITORY_URL = ${SVN_REPOSITORY_URL}" )
    message( STATUS "VERSION_NUMBER = ${SVN_VERSION_NUMBER}" )

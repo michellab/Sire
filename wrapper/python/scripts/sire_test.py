@@ -2,13 +2,14 @@
 import os
 import sys
 
+from Sire import try_import
+
 import Sire.Config
 
-try:
-    import nose
-except:
-    print("Cannot import nose. Must install nose via sire.app/bin/install_package install nose")
-    sys.exit(-1)
+try_import("pycurl", package_registry={"pycurl":"PyCurl"})
+try_import("nose")
+
+sys.exit(-1)
 
 testdir = Sire.Config.test_directory
 

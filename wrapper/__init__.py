@@ -37,7 +37,7 @@ def _install_package(name, package_registry):
     try:
         print("\nTrying to install %s from package %s using %s/conda...\n" \
                   % (name,package,binpath))
-        ok = system("%s/conda install %s" % (binpath,package))
+        ok = system("%s/conda install %s -y" % (binpath,package))
 
         if ok == 0:
             # installed ok

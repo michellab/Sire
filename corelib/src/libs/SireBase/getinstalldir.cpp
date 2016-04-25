@@ -80,6 +80,19 @@ namespace SireBase
         return QString(SIRE_REPOSITORY_VERSION);
     }
 
+    /** This function returns the branch of the repository for this version of Sire */
+    QString SIREBASE_EXPORT getRepositoryBranch()
+    {
+        return QString(SIRE_REPOSITORY_BRANCH);
+    }
+    
+    /** Return whether this is a clean copy from this repository version
+        (i.e. there have been no local changes to the code) */
+    bool SIREBASE_EXPORT getRepositoryVersionIsClean()
+    {
+        return SIRE_REPOSITORY_VERSION_IS_CLEAN;
+    }
+
     /** This function is used to set the path to the installation directory.
         This can be used to override the path found from the running
         executable. This is useful when Sire is loaded as an external

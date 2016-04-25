@@ -344,9 +344,6 @@ add_subdirectory (System)
 add_subdirectory (Units)
 add_subdirectory (Vol)
 
-#also install of the unit tests
-add_subdirectory (tests)
-
 #also compile Sire's python executable
 add_subdirectory (python)
 
