@@ -32,6 +32,8 @@ namespace bp = boost::python;
 
 #include "restraintff.h"
 
+#include <memory>
+
 #include "restraintff.h"
 
 SireMM::RestraintFF __copy__(const SireMM::RestraintFF &other){ return SireMM::RestraintFF(other); }
