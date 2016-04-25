@@ -34,6 +34,8 @@ set ( CONFIGDIRS
 # installation
 install( FILES ${SCRIPTS} DESTINATION ${SIRE_PYTHON}/Sire/Tools )
 
+message( STATUS "SIRE SHARE IS ${SIRE_SHARE} | ${CONFIGDIRS}")
+
 install( DIRECTORY ${CONFIGDIRS} DESTINATION ${SIRE_SHARE}/Tools
          PATTERN .svn EXCLUDE )
 

@@ -200,12 +200,20 @@ set (SIRE_CMAKEFILES "include/Sire/cmake")
 # Sire share directory (for parameters etc.)
 set (SIRE_SHARE "share/Sire")
 
-#if (ANACONDA_BUILD)
-#  set( SIRE_SHARE "${ANACONDA_BASE}/share/Sire" )
-#endif()
+if (ANACONDA_BUILD)
+  set( SIRE_SHARE_EXPORT "pkgs/sire-${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}/share/Sire" )
+else()
+  set( SIRE_SHARE_EXPORT "${SIRE_SHARE}")
+endif()
 
 # Where will the test files be saved?
 set (SIRE_TEST "test")
+
+if (ANACONDA_BUILD)
+  set( SIRE_TEST_EXPORT "pkgs/sire-${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}/test" )
+else()
+  set( SIRE_SHARE_EXPORT "${SIRE_SHARE}")
+endif()
 
 # Add these directories to the RPATH variable for the libraries / executables,
 # so that they can find each other when loading

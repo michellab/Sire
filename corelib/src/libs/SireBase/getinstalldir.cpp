@@ -226,6 +226,8 @@ namespace SireBase
     /** This returns the release version of Sire */
     QString SIREBASE_EXPORT getReleaseVersion()
     {
-        return "2014.2";
+        return QString("%1.%2.%3").arg(SIRE_VERSION_MAJOR)
+                                  .arg(SIRE_VERSION_MINOR)
+                                  .arg(SIRE_VERSION_PATCH);
     }
 }
