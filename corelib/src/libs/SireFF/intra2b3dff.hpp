@@ -71,6 +71,9 @@ public:
     bool operator!=(const Intra2B3DFF<Potential> &other) const;
     
     Intra2B3DFF<Potential>* clone() const;
+
+    SireUnits::Dimension::MolarEnergy energy();
+    SireUnits::Dimension::MolarEnergy energy(const Symbol &component);
     
     void energy(EnergyTable &energytable, double scale_energy=1);
     
@@ -183,6 +186,20 @@ SIRE_OUTOFLINE_TEMPLATE
 Intra2B3DFF<Potential>* Intra2B3DFF<Potential>::clone() const
 {
     return new Intra2B3DFF<Potential>(*this);
+}
+
+template<class Potential>
+SIRE_OUTOFLINE_TEMPLATE
+SireUnits::Dimension::MolarEnergy Intra2B3DFF<Potential>::energy()
+{
+    return Intra2BFF<Potential>::energy();
+}
+
+template<class Potential>
+SIRE_OUTOFLINE_TEMPLATE
+SireUnits::Dimension::MolarEnergy Intra2B3DFF<Potential>::energy(const Symbol &component)
+{
+    return Intra2BFF<Potential>::energy(component);
 }
 
 /** Calculate the energies of the molecules in the passed forcetable
