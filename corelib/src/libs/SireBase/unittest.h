@@ -189,4 +189,6 @@ inline void assert_false( bool result, const QString &code_location )
 
 }
 
+SIRE_EXPOSE_CLASS( SireBase::UnitTest )
+
 #endif

@@ -83,6 +83,14 @@ else:
 
 print("You should find the unit tests in %s" % unittestdir)
 
+print("\nRunning C++ unit tests...\n")
+#try:
+#    Sire.Base.runAllTests()
+#except:
+#    pass
+
+print("\nNow running Python-based unit tests...\n")
+
 testdir = unittestdir
 
 if len(sys.argv) > 1:
