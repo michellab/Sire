@@ -13,11 +13,11 @@ set ( PYPP_SOURCES
        InterGroupCLJFF.pypp.cpp
        CLJParameterNames.pypp.cpp
        CLJParameterNames3D.pypp.cpp
-       InternalFF.pypp.cpp
        InternalComponent.pypp.cpp
        CLJPotentialInterface_IntraCLJPotential_.pypp.cpp
        CLJPotentialInterface_IntraSoftCLJPotential_.pypp.cpp
        ChargeParameterName3D.pypp.cpp
+       InternalFF.pypp.cpp
        CoulombPotentialInterface_InterCoulombPotential_.pypp.cpp
        CoulombPotentialInterface_IntraCoulombPotential_.pypp.cpp
        InterCoulombFF.pypp.cpp

@@ -116,6 +116,27 @@ void register_InternalFF_class(){
         }
         { //::SireMM::InternalFF::energy
         
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::InternalFF::*energy_function_type)(  ) ;
+            energy_function_type energy_function_value( &::SireMM::InternalFF::energy );
+            
+            InternalFF_exposer.def( 
+                "energy"
+                , energy_function_value );
+        
+        }
+        { //::SireMM::InternalFF::energy
+        
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMM::InternalFF::*energy_function_type)( ::SireCAS::Symbol const & ) ;
+            energy_function_type energy_function_value( &::SireMM::InternalFF::energy );
+            
+            InternalFF_exposer.def( 
+                "energy"
+                , energy_function_value
+                , ( bp::arg("component") ) );
+        
+        }
+        { //::SireMM::InternalFF::energy
+        
             typedef void ( ::SireMM::InternalFF::*energy_function_type)( ::SireFF::EnergyTable &,double ) ;
             energy_function_type energy_function_value( &::SireMM::InternalFF::energy );
             
