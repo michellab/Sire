@@ -44,6 +44,7 @@ set ( PYPP_SOURCES
        PackedArray2D_double_Array.pypp.cpp
        PackedArray2D_int_Array.pypp.cpp
        Properties.pypp.cpp
+       UnitTest.pypp.cpp
        SireBase_containers.cpp
        SireBase_properties.cpp
        SireBase_registrars.cpp
