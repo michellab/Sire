@@ -390,10 +390,6 @@ CLJAtoms::CLJAtoms(const CLJAtom &cljatom)
 {
     if (cljatom.isNull())
         return;
-
-    QElapsedTimer t;
-    t.start();
-    
 /*
             xa[idx] = atm.x;
             ya[idx] = atm.y;
@@ -410,10 +406,6 @@ CLJAtoms::CLJAtoms(const CLJAtom &cljatom)
     _sig = MultiFloat::fromArray( &(cljatom.sig), 1 );
     _eps = MultiFloat::fromArray( &(cljatom.eps), 1 );
     _id = MultiInt::fromArray( &(cljatom.idnum), 1 );
-
-    quint64 ns = t.nsecsElapsed();
-
-    qDebug() << "Converting a single atom took " << (0.000001*ns) << "ms";
 }
 
 /** Construct from the passed array of CLJAtom atoms */

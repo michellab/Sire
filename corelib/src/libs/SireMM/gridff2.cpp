@@ -594,17 +594,6 @@ static int gridIndexToArrayIndex(int ix, int iy, int iz, int dimx, int dimy, int
 }
 
 static void getGridPoint(int ipt, const Vector &min, int dimx, int dimy, int dimz,
-                         double grid_spacing, MultiDouble &x, MultiDouble &y, MultiDouble &z)
-{
-    int ix, iy, iz;
-    arrayIndexToGridIndex(ipt, dimx, dimy, dimz, ix, iy, iz);
-
-    x = MultiDouble( min.x() + ix*grid_spacing );
-    y = MultiDouble( min.y() + iy*grid_spacing );
-    z = MultiDouble( min.z() + iz*grid_spacing );
-}
-
-static void getGridPoint(int ipt, const Vector &min, int dimx, int dimy, int dimz,
                          double grid_spacing, MultiFloat &x, MultiFloat &y, MultiFloat &z)
 {
     int ix, iy, iz;
@@ -765,11 +754,6 @@ void GridFF2::addToGrid(const QVector<float> &vx,
             pot[ipt] += cnrg.sum();
         }
     }
-    
-    qint64 ns = t.nsecsElapsed();
-    
-    qDebug() << "Added" << vx.count() << "more atoms to" << npts << "grid points in"
-             << (0.000001 * ns) << "ms";
 }
 
 inline double getDist(double p, double minp, double maxp)
@@ -883,10 +867,6 @@ void GridFF2::rebuildGrid()
                     .arg(lj_cutoff).arg(coul_cutoff), CODELOC );
     }
 
-    qDebug() << "REBUILDING THE GRID FOR FORCEFIELD" << this->name().value()
-             << "USING A LJ_CUTOFF OF" << lj_cutoff << "A, A COULOMB CUTOFF OF"
-             << coul_cutoff << "A AND A GRID SPACING OF" << grid_spacing << "A...";
-
     //find the bounding box that contains all of the atoms from group0
     AABox group0_box;
     
@@ -910,16 +890,12 @@ void GridFF2::rebuildGrid()
         }
     }
     
-    qDebug() << "Molecules contained in" << group0_box.toString();
-    
     //now add the buffer region onto the box - this extends the grid by
     //buffer_size in all dimensions
     if (buffer_size > 0)
         gridbox = AABox::from( group0_box.minCoords() - Vector(buffer_size),
                                group0_box.maxCoords() + Vector(buffer_size) );
                          
-    qDebug() << "The potential grid extends over" << gridbox.toString();
-    
     //now work out how many gridpoints are needed in each dimension
     if (grid_spacing <= 0)
         grid_spacing = 0.5;
@@ -930,27 +906,19 @@ void GridFF2::rebuildGrid()
     dimy = 2 + int(boxsize.y() / grid_spacing);
     dimz = 2 + int(boxsize.z() / grid_spacing);
     
-    qDebug() << "Box grid has points:" << dimx << "x" << dimy << "x" << dimz;
-
     const quint32 MAX_DIM = 250;
 
     while ( dimx > MAX_DIM or dimy > MAX_DIM or dimz > MAX_DIM )
     {
-        qDebug() << "WARNING: DIMENSION EXCEEDS" << MAX_DIM;
-
         double grid_x = boxsize.x() / MAX_DIM;
         double grid_y = boxsize.y() / MAX_DIM;
         double grid_z = boxsize.z() / MAX_DIM;
         
         grid_spacing = qMax( grid_x, qMax(grid_y,grid_z) );
 
-        qDebug() << "RESIZING GRID TO" << grid_spacing << "A";
-
         dimx = 1 + int(boxsize.x() / grid_spacing);
         dimy = 1 + int(boxsize.y() / grid_spacing);
         dimz = 1 + int(boxsize.z() / grid_spacing);
-        
-        qDebug() << "New box grid has points:" << dimx << "x" << dimy << "x" << dimz;
     }
     
     Vector maxpoint = gridbox.minCoords() + Vector( (dimx-1) * grid_spacing,
@@ -959,8 +927,6 @@ void GridFF2::rebuildGrid()
 
     gridbox = AABox::from(gridbox.minCoords(), maxpoint);
     const Vector &grid_center = gridbox.center();
-    
-    qDebug() << "Adjusted grid extends over" << gridbox.toString();
     
     //create space for the grid
     gridpot = QVector<double>(dimx*dimy*dimz, 0.0);
@@ -976,7 +942,6 @@ void GridFF2::rebuildGrid()
     
     const ChunkedVector<CLJMolecule> &cljmols = mols[1].moleculesByIndex();
     const Space &spce = this->space();
-    qDebug() << "Grid space equals:" << spce.toString();
     
     QVector<float> far_mols_x;
     QVector<float> far_mols_y;
@@ -995,8 +960,6 @@ void GridFF2::rebuildGrid()
     
     if (fixedatoms_coords.count() > 0)
     {
-        qDebug() << "Adding all of the fixed atom points to the grid...";
-
         for (int i=0; i<fixedatoms_coords.count(); ++i)
         {
             const SireMM::detail::CLJParameter &params = fixedatoms_params.constData()[i];
@@ -1058,16 +1021,10 @@ void GridFF2::rebuildGrid()
         far_mols_y.clear();
         far_mols_z.clear();
         far_mols_q.clear();
-        qDebug() << "Added all of the fixed atoms to the grid.";
-        qDebug() << "The number of explicitly evaluated atoms is now" << atomcount;
-        qDebug() << "The number of grid evaluated atoms is now" << gridcount;
     }
     
     if (not cljmols.isEmpty())
     {
-        qDebug()
-            << "Building the list of close molecules and adding far molecules to the grid...";
-
         int nmols = 0;
     
         for (ChunkedVector<CLJMolecule>::const_iterator it = cljmols.constBegin();
@@ -1138,8 +1095,6 @@ void GridFF2::rebuildGrid()
                                     far_mols_y.clear();
                                     far_mols_z.clear();
                                     far_mols_q.clear();
-                                    qDebug() << "Added" << nmols << "of" << cljmols.count()
-                                             << "molecules to the grid...";
                                 }
                             }
                         }
@@ -1154,9 +1109,6 @@ void GridFF2::rebuildGrid()
         far_mols_y.clear();
         far_mols_z.clear();
         far_mols_q.clear();
-        qDebug() << "Added all of the group 1 molecules to the grid.";
-        qDebug() << "The number of explicitly evaluated atoms is now" << atomcount;
-        qDebug() << "The number of grid evaluated atoms is now" << gridcount;
     }
  
     // convert the QVector<float> arrays into QVector<MultiFloat>
@@ -1182,8 +1134,6 @@ void GridFF2::rebuildGrid()
         {
             grid_sum += gridpot.at(ipt);
         }
-        
-        qDebug() << "Sum of grid potentials is" << grid_sum;
     }
 }
 
@@ -1619,7 +1569,6 @@ void GridFF2::recalculateEnergy()
     if (gridpot.isEmpty())
     {
         //the grid is empty
-        qDebug() << "GRID RECALCULATED AS IT DOES NOT EXIST";
         must_recalculate = true;
     }
     else if (not changed_mols[1].isEmpty())
@@ -1633,9 +1582,6 @@ void GridFF2::recalculateEnergy()
             if (not (it->newParts().isEmpty() and it->oldParts().isEmpty()))
             {
                 //a part of this molecule in the forcefield has changed
-                qDebug() << "MOLECULE" << it.key().toString()
-                         << "FROM GROUP 2 HAS CHANGED. RECALCULATING THE GRID!!!";
-                         
                 must_recalculate = true;
                 break;
             }
@@ -1660,8 +1606,6 @@ void GridFF2::recalculateEnergy()
     else if (changed_mols[0].isEmpty())
     {
         //probably not recording changes - assume everything has changed
-        qDebug() << "RECALCULATING AS NOTHING APPEARS TO HAVE CHANGED"
-                 << "BUT WE HAVE BEEN MARKED AS DIRTY";
         must_recalculate = true;
     }
     
@@ -1674,7 +1618,6 @@ void GridFF2::recalculateEnergy()
         this->rebuildGrid();
 
         qint64 ns = t.nsecsElapsed();
-        qDebug() << "REBUILD GRID TOOK" << (0.000001*ns) << "ms";
         t.restart();
 
         double total_cnrg(0);
@@ -1712,8 +1655,6 @@ void GridFF2::recalculateEnergy()
                 {
                     //this group lies outside the grid - we need to recalculate
                     //the grid
-                    qDebug() << "MOLECULE" << cljmol.number().toString() << "HAS MOVED"
-                             << "OUTSIDE THE GRID. MUST RECALCULATE!";
                     this->mustNowRecalculateFromScratch();
                     this->recalculateEnergy();
                     return;
@@ -1735,7 +1676,6 @@ void GridFF2::recalculateEnergy()
         }
 
         ns = t.nsecsElapsed();
-        qDebug() << "CALCULATING ENERGY TOOK" << (0.000001*ns) << "ms";
 
         this->components().setEnergy(*this, CLJEnergy(total_cnrg,total_ljnrg));
     }
@@ -1776,8 +1716,6 @@ void GridFF2::recalculateEnergy()
                     {
                         //this group lies outside the grid - we need to recalculate
                         //the grid
-                        qDebug() << "MOLECULE" << cljmol.number().toString() << "HAS MOVED"
-                                 << "OUTSIDE THE GRID. MUST RECALCULATE!";
                         this->mustNowRecalculateFromScratch();
                         this->recalculateEnergy();
                         return;
@@ -1824,8 +1762,6 @@ void GridFF2::recalculateEnergy()
                         {
                             //this group lies outside the grid - we need to recalculate
                             //the grid
-                            qDebug() << "MOLECULE" << oldmol.number().toString() << "HAS MOVED"
-                                     << "OUTSIDE THE GRID. MUST RECALCULATE!";
                             this->mustNowRecalculateFromScratch();
                             this->recalculateEnergy();
                             return;
@@ -1859,8 +1795,6 @@ void GridFF2::recalculateEnergy()
                         {
                             //this group lies outside the grid - we need to recalculate
                             //the grid
-                            qDebug() << "MOLECULE" << newmol.number().toString() << "HAS MOVED"
-                                     << "OUTSIDE THE GRID. MUST RECALCULATE!";
                             this->mustNowRecalculateFromScratch();
                             this->recalculateEnergy();
                             return;

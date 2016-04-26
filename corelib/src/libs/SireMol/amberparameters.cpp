@@ -216,29 +216,39 @@ QList<AngleID> AmberParameters::getAllAngles()
   return angles.keys();
 }
 
-void AmberParameters::add(const DihedralID &dihedral, const double &v, const double &periodicity, const double &phase) 
+void AmberParameters::add(const DihedralID &dihedral, const double &v, const double &periodicity,
+                          const double &phase)
 {
+    QList<double> params;
 
-  QList<double> params;
-
-
-  // If dihedral already exists, we will append parameters
-  QList<DihedralID> keys = dihedrals.keys();
-  for ( int i=0 ; i < keys.length() ; i++ )
+    // If dihedral already exists, we will append parameters
+    QHash< DihedralID,QList<double> >::const_iterator it = dihedrals.constFind(dihedral);
+    
+    bool is_mirrored = false;
+    
+    if (it != dihedrals.constEnd())
     {
-      DihedralID dict_dih = keys[i];
-      if ( dict_dih == dihedral or dict_dih == dihedral.mirror()  )
-	{
-	  params = dihedrals.value( dict_dih);
-	  break;
-	}
+        params = *it;
     }
+    else
+    {
+        it = dihedrals.constFind(dihedral.mirror());
+        
+        if (it != dihedrals.constEnd())
+        {
+            params = *it;
+            is_mirrored = true;
+        }
+    }
+    
+    params.append(v);
+    params.append(periodicity);
+    params.append(phase);
 
-  params.append(v);
-  params.append(periodicity);
-  params.append(phase);
-
-  dihedrals.insert( dihedral, params);
+    if (is_mirrored)
+        dihedrals.insert( dihedral.mirror(), params );
+    else
+        dihedrals.insert( dihedral, params );
 }
 
 void AmberParameters::remove(const DihedralID &dihedral)
@@ -256,27 +266,23 @@ QList<DihedralID> AmberParameters::getAllDihedrals()
   return dihedrals.keys();
 }
 
-void AmberParameters::add(const ImproperID &improper, const double &v, const double &periodicity, const double &phase) 
+void AmberParameters::add(const ImproperID &improper, const double &v,
+                          const double &periodicity, const double &phase)
 {
-  QList<double> params;
+    QList<double> params;
 
-    // If improper already exists, we will append parameters
-    QList<ImproperID> keys = impropers.keys();
-    for ( int i=0 ; i < keys.count() ; i++ )
+    QHash< ImproperID, QList<double> >::const_iterator it = impropers.constFind(improper);
+    
+    if (it != impropers.constEnd())
     {
-      ImproperID dict_dih = keys[i];
-      if ( dict_dih == improper ) //or dict_dih == improper.mirror()  )
-	{
-	  params = impropers.value( dict_dih);
-	  break;
-	}
+        params = *it;
     }
 
-  params.append(v);
-  params.append(periodicity);
-  params.append(phase);
+    params.append(v);
+    params.append(periodicity);
+    params.append(phase);
 
-  impropers.insert( improper, params);
+    impropers.insert( improper, params );
 }
 
 void AmberParameters::remove(const ImproperID &improper)

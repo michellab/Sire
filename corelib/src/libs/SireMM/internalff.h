@@ -510,6 +510,9 @@ public:
     bool containsProperty(const QString &name) const;
     const Properties& properties() const;
     
+    SireUnits::Dimension::MolarEnergy energy();
+    SireUnits::Dimension::MolarEnergy energy(const Symbol &component);
+    
     void energy(EnergyTable &energytable, double scale_energy=1);
     
     void energy(EnergyTable &energytable, const Symbol &symbol,
@@ -601,6 +604,16 @@ private:
 ////////
 //////// Inline functions of InternalFF
 ////////
+
+inline SireUnits::Dimension::MolarEnergy InternalFF::energy()
+{
+    return G1FF::energy();
+}
+
+inline SireUnits::Dimension::MolarEnergy InternalFF::energy(const Symbol &component)
+{
+    return G1FF::energy(component);
+}
 
 /** Return all of the symbols used in the internal energy functions */
 inline const InternalSymbols& InternalFF::symbols() const

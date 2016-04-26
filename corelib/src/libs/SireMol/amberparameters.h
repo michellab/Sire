@@ -72,8 +72,8 @@ using SireMol::Molecule;
 using SireMol::MoleculeData;
 using SireMol::MoleculeInfoData;
 
-/** This class stores AMBER bonded force field parameters for a collection of bonds, angles and dihedrals
-
+/** This class stores AMBER bonded force field parameters for 
+    a collection of bonds, angles and dihedrals
 
     @author Julien Michel
  */

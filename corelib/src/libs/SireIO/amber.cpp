@@ -568,26 +568,39 @@ static void setAtomParameters(AtomEditor &editatom, MolEditor &editmol,
 }
 
 /** Set the connectivity property of molecule editmol*/
-static void setConnectivity(MolEditor &editmol, int pointer,
-                            const QList<int> &bondsArray,
-                            ConnectivityEditor &connectivity,
-                            const PropertyName &connectivity_property)
+static int setConnectivity(MolEditor &editmol, int pointer,
+                           const QList<int> &bondsArray,
+                           ConnectivityEditor &connectivity,
+                           const PropertyName &connectivity_property,
+                           int last_idx = -1)
 {
-    //QSet<AtomNum> moleculeAtomNumbers = _pvt_selectAtomsbyNumber(editmol);
     int atomStart = editmol.atoms().at(0).number().value();
     int atomEnd = editmol.atoms().at(-1).number().value();
+    int start_idx = last_idx;
+    bool got_to_end = true;
 
-    //qDebug() << " atomStart " << atomStart << " atomEnd " << atomEnd;
-    for (int i=0 ; i < 3 * pointer ; i = i + 3)
+    if (last_idx < 0)
+        start_idx = 0;
+    else if (last_idx >= pointer)
+        return last_idx;
+
+    for (int i=start_idx; i < pointer ; ++i)
     {
-        /** Might be faster*/
-        int index0 = bondsArray[ i ] / 3 + 1 ;
-        int index1 = bondsArray[ i + 1] / 3 + 1 ;
+        int index0 = bondsArray[ 3*i ] / 3 + 1 ;
+        int index1 = bondsArray[ 3*i + 1 ] / 3 + 1 ;
 
-        if ( index0 < atomStart || index0 > atomEnd ||
-                index1 < atomStart || index1 > atomEnd )
+        if ( index0 < atomStart or index1 < atomStart )
         {
+            //we haven't yet reached the indices for this molecule
             continue;
+        }
+        else if ( index0 > atomEnd or index1 > atomEnd )
+        {
+            //the indices are sequential, so we have finished with this molecule
+            //(assumes that the indicies refer to increasing molecule, i.e. sorted)
+            last_idx = i+1;
+            got_to_end = false;
+            break;
         }
 
         AtomNum number0 = AtomNum( index0 );
@@ -597,35 +610,56 @@ static void setConnectivity(MolEditor &editmol, int pointer,
         connectivity.connect( atom0, atom1 );
     }
 
+    if (got_to_end)
+        last_idx = pointer;
+
     editmol.setProperty( connectivity_property.source(), connectivity.commit() );
+
+    return last_idx;
 }
 
 /** Set the property bonds for molecule editmol*/
-static void setBonds(MolEditor &editmol, int pointer,
-                     const QList<int> &bondsArray,
-                     const QList<double> &bond_force_constant,
-                     const QList<double> &bond_equil_value,
-                     TwoAtomFunctions &bondfuncs,
-                     const PropertyName &bond_property,
-                     AmberParameters &amberparams,
-                     const PropertyName &amberparameters_property)
+static int setBonds(MolEditor &editmol, int pointer,
+                    const QList<int> &bondsArray,
+                    const QList<double> &bond_force_constant,
+                    const QList<double> &bond_equil_value,
+                    TwoAtomFunctions &bondfuncs,
+                    const PropertyName &bond_property,
+                    AmberParameters &amberparams,
+                    const PropertyName &amberparameters_property,
+                    int last_idx=-1)
 {
-    //QSet<AtomNum> moleculeAtomNumbers = _pvt_selectAtomsbyNumber(editmol);
     int atomStart = editmol.atoms().at(0).number().value();
     int atomEnd = editmol.atoms().at(-1).number().value();
 
-    for (int i=0 ; i < 3 * pointer ; i = i + 3)
-    {
-        int index0 = bondsArray[ i ] / 3 + 1 ;
-        int index1 = bondsArray[ i + 1] / 3 + 1 ;
+    int start_idx = last_idx;
+    if (last_idx < 0)
+        start_idx = 0;
+    else if (last_idx >= pointer)
+        return last_idx;
 
-        if ( index0 < atomStart || index0 > atomEnd ||
-                index1 < atomStart || index1 > atomEnd )
+    bool got_to_end = true;
+
+    for (int i=start_idx; i<pointer; ++i)
+    {
+        int index0 = bondsArray[ i*3 ] / 3 + 1 ;
+        int index1 = bondsArray[ i*3 + 1] / 3 + 1 ;
+
+        if ( index0 < atomStart or index1 < atomStart )
         {
+            //we haven't yet reached the indices for this molecule
             continue;
         }
+        else if ( index0 > atomEnd or index1 > atomEnd )
+        {
+            //the indices are sequential, so we have finished with this molecule
+            //(assumes that the indicies refer to increasing molecule, i.e. sorted)
+            last_idx = i+1;
+            got_to_end = false;
+            break;
+        }
 
-        int paramIndex = bondsArray[ i + 2 ];
+        int paramIndex = bondsArray[ i*3 + 2 ];
 
         AtomNum number0 = AtomNum( index0 );
         AtomNum number1 = AtomNum( index1 );
@@ -642,45 +676,65 @@ static void setBonds(MolEditor &editmol, int pointer,
 
         BondID bond = BondID(atom0, atom1);
         amberparams.add( bond, k, r0);
-
     }
+
+    if (got_to_end)
+        last_idx = pointer;
 
     editmol.setProperty( bond_property.source(), bondfuncs );
 
     editmol.setProperty( amberparameters_property.source(), amberparams);
+
+    return last_idx;
 }
 
-static void setAngles(MolEditor &editmol, int pointer,
-                      const QList<int> &anglesArray,
-                      const QList<double> &ang_force_constant,
-                      const QList<double> &ang_equil_value,
-                      ThreeAtomFunctions &anglefuncs,
-                      const PropertyName &angle_property,
-                      AmberParameters &amberparams,
-                      const PropertyName &amberparameters_property)
+static int setAngles(MolEditor &editmol, int pointer,
+                     const QList<int> &anglesArray,
+                     const QList<double> &ang_force_constant,
+                     const QList<double> &ang_equil_value,
+                     ThreeAtomFunctions &anglefuncs,
+                     const PropertyName &angle_property,
+                     AmberParameters &amberparams,
+                     const PropertyName &amberparameters_property,
+                     int last_idx=-1)
 {
     //QSet<AtomNum> moleculeAtomNumbers = _pvt_selectAtomsbyNumber(editmol);
     int atomStart = editmol.atoms().at(0).number().value();
     int atomEnd = editmol.atoms().at(-1).number().value();
 
-    for (int i=0 ; i < 4 * pointer ; i = i + 4)
-    {
-        int index0 = anglesArray[ i ] / 3 + 1 ;
-        int index1 = anglesArray[ i + 1] / 3 + 1 ;
-        int index2 = anglesArray[ i + 2] / 3 + 1 ;
+    int start_idx = last_idx;
+    if (last_idx < 0)
+        start_idx = 0;
+    else if (last_idx >= pointer)
+        return last_idx;
+    
+    bool got_to_end = true;
 
-        if ( index0 < atomStart || index0 > atomEnd ||
-                index1 < atomStart || index1 > atomEnd ||
-                index2 < atomStart || index2 > atomEnd )
+    for (int i=start_idx; i<pointer; ++i)
+    {
+        int index0 = anglesArray[ i*4 ] / 3 + 1 ;
+        int index1 = anglesArray[ i*4 + 1] / 3 + 1 ;
+        int index2 = anglesArray[ i*4 + 2] / 3 + 1 ;
+
+        if ( index0 < atomStart or index1 < atomStart or index2 < atomStart )
         {
+            //we haven't yet reached the indices for this molecule
             continue;
+        }
+        else if ( index0 > atomEnd or index1 > atomEnd or index2 > atomEnd )
+        {
+            //the indices are sequential, so we have finished with this molecule
+            //(assumes that the indicies refer to increasing molecule, i.e. sorted)
+            last_idx = i+1;
+            got_to_end = false;
+            break;
         }
 
         AtomNum number0 = AtomNum( index0 );
         AtomNum number1 = AtomNum( index1 );
         AtomNum number2 = AtomNum( index2 );
 
-        int paramIndex = anglesArray[ i + 3 ];
+        int paramIndex = anglesArray[ i*4 + 3 ];
         AtomIdx atom0 = editmol.select( number0 ).index();
         AtomIdx atom1 = editmol.select( number1 ).index();
         AtomIdx atom2 = editmol.select( number2 ).index();
@@ -697,28 +751,34 @@ static void setAngles(MolEditor &editmol, int pointer,
         amberparams.add( angle, k, theta0);
     }
 
+    if (got_to_end)
+        last_idx = pointer;
+
     editmol.setProperty( angle_property.source(), anglefuncs );
 
     editmol.setProperty( amberparameters_property.source(), amberparams);
+
+    return last_idx;
 }
 
-static void setDihedrals(MolEditor &editmol, int pointer,
+static int setDihedrals(MolEditor &editmol, int pointer,
                          const QList<int> &dihedralsArray,
                          const QList<double> &dih_force_constant,
                          const QList<double> &dih_periodicity,
                          const QList<double> &dih_phase,
-			 const QList<double> &sceefactor, 
-			 const QList<double> &scnbfactor,
+                         const QList<double> &sceefactor,
+                         const QList<double> &scnbfactor,
                          FourAtomFunctions &dihedralfuncs,
                          const PropertyName &dihedral_property,
                          FourAtomFunctions &improperfuncs,
                          const PropertyName &improper_property,
                          QHash<AtomNum, QList<AtomNum> > &atoms14,
-			 QHash<AtomNum, QHash<AtomNum, double> > &atoms14sclee, 
-			 QHash<AtomNum, QHash<AtomNum, double> > &atoms14sclnb,
-			 double coul_14scl, double lj_14scl,
+                         QHash<AtomNum, QHash<AtomNum, double> > &atoms14sclee,
+                         QHash<AtomNum, QHash<AtomNum, double> > &atoms14sclnb,
+                         double coul_14scl, double lj_14scl,
                          AmberParameters &amberparams,
-                         const PropertyName &amberparameters_property)
+                         const PropertyName &amberparameters_property,
+                         int last_idx)
 {
     //QSet<AtomNum> moleculeAtomNumbers = _pvt_selectAtomsbyNumber(editmol);
     int atomStart = editmol.atoms().at(0).number().value();
@@ -727,7 +787,15 @@ static void setDihedrals(MolEditor &editmol, int pointer,
     QHash<DofID,Expression> improper_hash;
     QHash<DofID,Expression> dihedral_hash;
 
-    for (int i= 0 ; i < 5 * pointer ; i = i + 5)
+    int start_idx = last_idx;
+    if (last_idx < 0)
+        start_idx = 0;
+    else if (last_idx >= pointer)
+        return last_idx;
+
+    bool got_to_end = true;
+
+    for (int i=start_idx; i<pointer; ++i)
     {
         bool ignored = false;
         bool improper = false;
@@ -736,13 +804,13 @@ static void setDihedrals(MolEditor &editmol, int pointer,
         //         << dihedralsArray[ i + 2 ] << dihedralsArray[ i + 3]
         //         << dihedralsArray[ i + 4];
 
-        int index0 = dihedralsArray[ i ] ;
+        int index0 = dihedralsArray[ i*5 ] ;
         index0 = index0 / 3 + 1 ;
 
-        int index1 = dihedralsArray[ i + 1 ] ;
+        int index1 = dihedralsArray[ i*5 + 1 ] ;
         index1 = index1 / 3 + 1 ;
 
-        int index2 = dihedralsArray[ i + 2 ] ;
+        int index2 = dihedralsArray[ i*5 + 2 ] ;
 
         // Note that if index2 is negative it indicates that end group interactions
         // re ignored (= non bonded) this could be because this quad of atoms has
@@ -751,12 +819,12 @@ static void setDihedrals(MolEditor &editmol, int pointer,
         if (index2 < 0)
         {
             ignored = true;
-            index2 = - index2 ;
+            index2 = -index2 ;
         }
 
         index2 = index2 / 3 + 1 ;
 
-        int index3 = dihedralsArray[ i + 3 ] ;
+        int index3 = dihedralsArray[ i*5 + 3 ] ;
 
         // Note that if index3 is negative, it indicates that the dihedral is an improper
         if (index3 < 0)
@@ -767,15 +835,21 @@ static void setDihedrals(MolEditor &editmol, int pointer,
 
         index3 = index3 / 3 + 1 ;
 
-        if ( index0 < atomStart || index0 > atomEnd ||
-                index1 < atomStart || index1 > atomEnd ||
-                index2 < atomStart || index2 > atomEnd ||
-                index3 < atomStart || index3 > atomEnd )
+        if ( index0 < atomStart or index1 < atomStart or index2 < atomStart or index3 < atomStart )
         {
+            //we haven't yet reached the indices for this molecule
             continue;
         }
+        else if ( index0 > atomEnd or index1 > atomEnd or index2 > atomEnd or index3 > atomEnd )
+        {
+            //the indices are sequential, so we have finished with this molecule
+            //(assumes that the indicies refer to increasing molecule, i.e. sorted)
+            last_idx = i+1;
+            got_to_end = false;
+            break;
+        }
 
-        int paramIndex = dihedralsArray[ i + 4 ];
+        int paramIndex = dihedralsArray[ i*5 + 4 ];
 
         AtomNum number0 = AtomNum( index0 );
         AtomNum number1 = AtomNum( index1 );
@@ -787,14 +861,15 @@ static void setDihedrals(MolEditor &editmol, int pointer,
         double k = dih_force_constant[ paramIndex - 1 ];// kcal_per_mol
         double periodicity = dih_periodicity[ paramIndex - 1] * radians.to(radians);
         double phase = dih_phase[ paramIndex - 1];
-	// Assume default values for 14 scaling factors
-	// Note that these are NOT inversed after reading from input
-	double sclee14 = 1/coul_14scl;
-	double sclnb14 = 1/lj_14scl;
-	if (sceefactor.size() > 0)
-	  sclee14 = sceefactor[ paramIndex - 1 ];
-	if (scnbfactor.size() > 0)
-	  sclnb14 = scnbfactor[ paramIndex - 1 ];
+
+        // Assume default values for 14 scaling factors
+        // Note that these are NOT inversed after reading from input
+        double sclee14 = 1/coul_14scl;
+        double sclnb14 = 1/lj_14scl;
+        if (sceefactor.size() > 0)
+            sclee14 = sceefactor[ paramIndex - 1 ];
+        if (scnbfactor.size() > 0)
+            sclnb14 = scnbfactor[ paramIndex - 1 ];
 
         Expression dihedral_func = k * ( 1 + Cos( periodicity * ( phi - 0 ) - phase ) );
 
@@ -811,7 +886,7 @@ static void setDihedrals(MolEditor &editmol, int pointer,
         else
         {
             DihedralID dih = DihedralID( atom0.index(), atom1.index(), atom2.index(), atom3.index() );
-	    amberparams.add( dih, k, periodicity, phase);
+            amberparams.add( dih, k, periodicity, phase);
         }
 
         // Actually, we just save the terms in an array of atom indices
@@ -820,9 +895,6 @@ static void setDihedrals(MolEditor &editmol, int pointer,
         //if (improper and k > 0.00001)
         if (improper)
         {
-	  //qDebug() << "IMPROPER" << atom0.name().value() << atom1.name().value()
-	  //         << atom2.name().value() << atom3.name().value() << " K "
-	  //         << k << " period " << periodicity << " phase " << phase ;
             DofID improperid = DofID( atom0.index(), atom1.index(),
                                       atom2.index(), atom3.index() );
 
@@ -834,9 +906,6 @@ static void setDihedrals(MolEditor &editmol, int pointer,
         //else if ( k > 0.00001)
         else
         {
-            //qDebug() << " DIHEDRAL " << atom0.name().value() << atom1.name().value()
-            //         << atom2.name().value() << atom3.name().value() << " K "
-            //         << k << " period " << periodicity << " phase " << phase ;
             DofID dihid = DofID( atom0.index(), atom1.index(),
                                  atom2.index(), atom3.index() );
 
@@ -848,20 +917,18 @@ static void setDihedrals(MolEditor &editmol, int pointer,
 
         if (not ignored and not improper)
         {
-	  /* Work out the scale factors to use*/
-	  /* Complain if scale factor is senseless*/
-	  if (sclee14 < 0.00001)
-	    {
-	      throw SireError::program_bug( QObject::tr(
+            if (sclee14 < 0.00001)
+            {
+                throw SireError::program_bug( QObject::tr(
 	   " A 1,4 pair has a coulombic scaling factor of 0.0 in the top file which would mean an infinite energy ! "),
 					    CODELOC );
-	    }
-	  if (sclnb14 < 0.00001)
-	    {
-	      throw SireError::program_bug( QObject::tr(
+            }
+            if (sclnb14 < 0.00001)
+            {
+                throw SireError::program_bug( QObject::tr(
 	   " A 1,4 pair has a LJ scaling factor of 0.0 in the top file which would mean an infinite energy ! "),
 					    CODELOC );
-	    }
+            }
 
             /**Save this in 14 array */
             if (not atoms14.contains(atom0.number()))
@@ -874,12 +941,12 @@ static void setDihedrals(MolEditor &editmol, int pointer,
             if ( not atoms14[atom0.number()].contains(atom3.number()) )
             {
                 atoms14[atom0.number()].append(atom3.number());
-		/* JM 07/14 Save scale factor for this pair*/
-		atoms14sclee[atom0.number()][atom3.number()] = 1/sclee14;
-		atoms14sclnb[atom0.number()][atom3.number()] = 1/sclnb14;
-		// Add pair (atom0,atom3) = (1/sclee14, 1/sclnb14) to amber parameters object
-		BondID pair = BondID(atom0.index() , atom3.index() );
-		amberparams.add14Pair( pair, 1/sclee14, 1/sclnb14 );
+                /* JM 07/14 Save scale factor for this pair*/
+                atoms14sclee[atom0.number()][atom3.number()] = 1/sclee14;
+                atoms14sclnb[atom0.number()][atom3.number()] = 1/sclnb14;
+                // Add pair (atom0,atom3) = (1/sclee14, 1/sclnb14) to amber parameters object
+                BondID pair = BondID(atom0.index() , atom3.index() );
+                amberparams.add14Pair( pair, 1/sclee14, 1/sclnb14 );
             }
 
             if (not atoms14.contains(atom3.number()))
@@ -891,13 +958,15 @@ static void setDihedrals(MolEditor &editmol, int pointer,
             if ( not atoms14[atom3.number()].contains(atom0.number()) )
             {
                 atoms14[atom3.number()].append(atom0.number());
-		/* JM 07/14 Save scale factor for this pair*/
-		atoms14sclee[atom3.number()][atom0.number()] = 1/sclee14;
-		atoms14sclnb[atom3.number()][atom0.number()] = 1/sclnb14;
+                /* JM 07/14 Save scale factor for this pair*/
+                atoms14sclee[atom3.number()][atom0.number()] = 1/sclee14;
+                atoms14sclnb[atom3.number()][atom0.number()] = 1/sclnb14;
             }
-
         }
     }
+
+    if (got_to_end)
+        last_idx = pointer;
 
     /** We can now create the appropriate dihedrals*/
     for (QHash<DofID,Expression>::const_iterator it = dihedral_hash.constBegin();
@@ -920,6 +989,8 @@ static void setDihedrals(MolEditor &editmol, int pointer,
     editmol.setProperty( improper_property.source(), improperfuncs );
 
     editmol.setProperty( amberparameters_property.source(), amberparams);
+
+    return last_idx;
 }
 
 static void setNonBondedPairs(MolEditor &editmol, int pointer,
@@ -1550,7 +1621,6 @@ tuple<MoleculeGroup,SpacePtr> Amber::readCrdTop(const QString &crdfile,
         throw SireError::file_error(top_f, CODELOC);
     }
 
-    qDebug() << "Reading topology file" << topfile;
     QTextStream ts(&top_f);
 
     // TOP file format generated by sleap in Amber-tools 1.4
@@ -1808,7 +1878,6 @@ tuple<MoleculeGroup,SpacePtr> Amber::readCrdTop(const QString &crdfile,
     //qDebug() << " Finished reading the top file";
 
     // Now read the contents of the crd file to get the coordinates
-    qDebug() << "Reading coordinate file" << crdfile;
     QFile crd_f(crdfile);
 
     if ( not (crd_f.exists() and crd_f.open(QIODevice::ReadOnly) ) )
@@ -1919,12 +1988,17 @@ tuple<MoleculeGroup,SpacePtr> Amber::readCrdTop(const QString &crdfile,
                             pointers[NATOM], pointers[NBONH], pointers[MBONA]);
     }
 
-    qDebug() << "Building" << total_molecules << "molecule(s)...";
+    int idx_inc_h = 0;
+    int idx_exc_h = 0;
+    int idx_bnd_inc_h = 0;
+    int idx_bnd_exc_h = 0;
+    int idx_ang_inc_h = 0;
+    int idx_ang_exc_h = 0;
+    int idx_dih_inc_h = 0;
+    int idx_dih_exc_h = 0;
+
     for (int i=0; i < total_molecules ; i++)
     {
-        if (i > 0 and i % 1000 == 0)
-            qDebug() << "...building molecule" << i << "...";
-
         //qDebug() << " Parameterizing molecule " << i;
         /** First pass, use StructureEditors to build the layout of the molecule*/
         MolStructureEditor molstructeditor;
@@ -1996,15 +2070,15 @@ tuple<MoleculeGroup,SpacePtr> Amber::readCrdTop(const QString &crdfile,
 
         CLJNBPairs nbpairs;
         QHash<AtomNum, QList<AtomNum> > atoms14;
-	// JM 07/14 Store info about variable scale factors
-	QHash<AtomNum, QHash<AtomNum, double> > atoms14sclee;
-	QHash<AtomNum, QHash<AtomNum, double> > atoms14sclnb;
+        // JM 07/14 Store info about variable scale factors
+        QHash<AtomNum, QHash<AtomNum, double> > atoms14sclee;
+        QHash<AtomNum, QHash<AtomNum, double> > atoms14sclnb;
 
         int natoms = editmol.nAtoms();
 
         for (int i=0; i < natoms ; ++i)
         {
-	  //qDebug() << " Parameterizing atom " << i;
+            //qDebug() << " Parameterizing atom " << i;
             // Now that the structure of the molecule has been built, we assign the
             // following atom properties: coordinates, charge, mass, lj , amber_atom_type
             // and element (if element is available)
@@ -2032,81 +2106,79 @@ tuple<MoleculeGroup,SpacePtr> Amber::readCrdTop(const QString &crdfile,
         if (natoms > 1)
         {
             //qDebug() << " Setting up connectivity ";
-            setConnectivity(editmol, pointers[NBONH],
-                            bond_inc_h,
-                            connectivity, connectivity_property);
+            idx_inc_h = setConnectivity(editmol, pointers[NBONH],
+                                        bond_inc_h,
+                                        connectivity, connectivity_property, idx_inc_h);
 
-            setConnectivity(editmol, pointers[MBONA],
-                            bonds_exc_h,
-                            connectivity, connectivity_property);
+            idx_exc_h = setConnectivity(editmol, pointers[MBONA],
+                                        bonds_exc_h,
+                                        connectivity, connectivity_property, idx_exc_h);
 
             // Next all the forcefield terms
             //qDebug() << " Setting up bonds ";
-            setBonds(editmol, pointers[NBONH],
-                     bond_inc_h,
-                     bond_force_constant, bond_equil_value,
-                     bondfuncs, bond_property,
-                     amberparams, amberparameters_property);
+            idx_bnd_inc_h = setBonds(editmol, pointers[NBONH],
+                                     bond_inc_h,
+                                     bond_force_constant, bond_equil_value,
+                                     bondfuncs, bond_property,
+                                     amberparams, amberparameters_property,
+                                     idx_bnd_inc_h);
 
-            setBonds(editmol, pointers[MBONA],
-                     bonds_exc_h,
-                     bond_force_constant, bond_equil_value,
-                     bondfuncs, bond_property,
-                     amberparams, amberparameters_property);
+            idx_bnd_exc_h = setBonds(editmol, pointers[MBONA],
+                                     bonds_exc_h,
+                                     bond_force_constant, bond_equil_value,
+                                     bondfuncs, bond_property,
+                                     amberparams, amberparameters_property,
+                                     idx_bnd_exc_h);
         }
 
         if (natoms > 2)
         {
             //qDebug() << " Setting up angles ";
-            setAngles(editmol, pointers[NTHETH],
-                      angs_inc_h,
-                      ang_force_constant, ang_equil_value,
-                      anglefuncs, angle_property,
-                      amberparams, amberparameters_property);
+            idx_ang_inc_h = setAngles(editmol, pointers[NTHETH],
+                                      angs_inc_h,
+                                      ang_force_constant, ang_equil_value,
+                                      anglefuncs, angle_property,
+                                      amberparams, amberparameters_property,
+                                      idx_ang_inc_h);
 
-            setAngles(editmol, pointers[MTHETA],
-                      angs_exc_h,
-                      ang_force_constant, ang_equil_value,
-                      anglefuncs, angle_property,
-                      amberparams, amberparameters_property);
+            idx_ang_exc_h = setAngles(editmol, pointers[MTHETA],
+                                      angs_exc_h,
+                                      ang_force_constant, ang_equil_value,
+                                      anglefuncs, angle_property,
+                                      amberparams, amberparameters_property,
+                                      idx_ang_exc_h);
         }
 
         if (natoms >3)
         {
             //qDebug() << " Setting up dihedrals ";
-            setDihedrals(editmol, pointers[NPHIH],
-                         dihs_inc_h,
-                         dih_force_constant, dih_periodicity, dih_phase, 
-			 sceefactor, scnbfactor,
-                         dihedralfuncs, dihedral_property,
-                         improperfuncs, improper_property,
-                         atoms14, atoms14sclee, atoms14sclnb,
-			 coul_14scl, lj_14scl,
-                         amberparams, amberparameters_property);
+            idx_dih_inc_h = setDihedrals(editmol, pointers[NPHIH],
+                                         dihs_inc_h,
+                                         dih_force_constant, dih_periodicity, dih_phase,
+                                         sceefactor, scnbfactor,
+                                         dihedralfuncs, dihedral_property,
+                                         improperfuncs, improper_property,
+                                         atoms14, atoms14sclee, atoms14sclnb,
+                                         coul_14scl, lj_14scl,
+                                         amberparams, amberparameters_property,
+                                         idx_dih_inc_h);
 
-            setDihedrals(editmol, pointers[MPHIA],
-                         dihs_exc_h,
-                         dih_force_constant, dih_periodicity, dih_phase,
-			 sceefactor, scnbfactor,
-                         dihedralfuncs, dihedral_property,
-                         improperfuncs, improper_property,
-                         atoms14, atoms14sclee, atoms14sclnb,
-			 coul_14scl, lj_14scl,
-                         amberparams, amberparameters_property);
+            idx_dih_exc_h = setDihedrals(editmol, pointers[MPHIA],
+                                         dihs_exc_h,
+                                         dih_force_constant, dih_periodicity, dih_phase,
+                                         sceefactor, scnbfactor,
+                                         dihedralfuncs, dihedral_property,
+                                         improperfuncs, improper_property,
+                                         atoms14, atoms14sclee, atoms14sclnb,
+                                         coul_14scl, lj_14scl,
+                                         amberparams, amberparameters_property,
+                                         idx_dih_exc_h);
         }
 
-        // Set non bonded pairs
-        // if (natoms >1)
-	// JM 04/14 set NB pairs even if monoatomic
-        //{
-	//qDebug() << " Setting up non bonded pairs";
-
-	setNonBondedPairs(editmol, pointers[NEXT],
-			  num_excluded_atoms, exc_atom_list,
-			  nbpairs, nb_property,
-			  atoms14, atoms14sclee, atoms14sclnb); 
-	//			  coul_14scl, lj_14scl);
-	//}
+        setNonBondedPairs(editmol, pointers[NEXT],
+                          num_excluded_atoms, exc_atom_list,
+                          nbpairs, nb_property,
+                          atoms14, atoms14sclee, atoms14sclnb);
 
         molecule = editmol.commit();
 
@@ -2114,7 +2186,6 @@ tuple<MoleculeGroup,SpacePtr> Amber::readCrdTop(const QString &crdfile,
         ++molnum;
     }
 
-    qDebug() << " Getting space information ";
     // Now the box information
     SpacePtr spce;
 
@@ -2149,10 +2220,6 @@ tuple<MoleculeGroup,SpacePtr> Amber::readCrdTop(const QString &crdfile,
         /** Default is a non periodic system */
         spce = Cartesian();
     }
-
-    qDebug() << "Read space" << spce.read().toString();
-
-    qDebug() << "...complete";
 
     return tuple<MoleculeGroup, SpacePtr>(molecules, spce);
 }
