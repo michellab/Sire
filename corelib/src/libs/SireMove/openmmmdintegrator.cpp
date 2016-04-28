@@ -382,6 +382,7 @@ QString OpenMMMDIntegrator::toString() const
 
 void OpenMMMDIntegrator::initialise()
 {
+    qDebug()<<CODELOC;
     bool Debug = false;
 
     if (Debug)
@@ -538,8 +539,7 @@ void OpenMMMDIntegrator::initialise()
     {
         const double converted_Temperature = convertTo(Temperature.value(), kelvin);
         const double converted_Pressure = convertTo(Pressure.value(), bar);
-        nonbond_openmm->setUseDispersionCorrection(LJ_dispersion);
-
+     
         OpenMM::MonteCarloBarostat * barostat = new OpenMM::MonteCarloBarostat(converted_Pressure, converted_Temperature, MCBarostat_frequency);
         system_openmm->addForce(barostat);
 
@@ -553,6 +553,9 @@ void OpenMMMDIntegrator::initialise()
         }
     }
 
+    
+    //Setting Lennard Jones dispersion globally, since its default is set to true!    
+    nonbond_openmm->setUseDispersionCorrection(LJ_dispersion);
 
     //OpenMM Bonded Forces
 
@@ -643,8 +646,8 @@ void OpenMMMDIntegrator::initialise()
             Atom at = molatoms.at(j);
             AtomNum atnum = at.number();
 
-            if (Debug)
-                qDebug() << " openMM_index " << system_index << " Sire Atom Number " << atnum.toString();
+            //if (Debug)
+                //qDebug() << " openMM_index " << system_index << " Sire Atom Number " << atnum.toString();
 
             AtomNumToOpenMMIndex[atnum.value()] = system_index;
 
@@ -655,7 +658,7 @@ void OpenMMMDIntegrator::initialise()
             AtomName atname = at.name();
 
             if (Debug)
-                qDebug() << " atname " << atname.value() << " mol " << i;
+                //qDebug() << " atname " << atname.value() << " mol " << i;
 
             if (atname == AtomName("EPW"))
             {
@@ -715,11 +718,11 @@ void OpenMMMDIntegrator::initialise()
                     int h1_index = AtomNumToOpenMMIndex[h1atom.number().value()];
                     int h2_index = AtomNumToOpenMMIndex[h2atom.number().value()];
 
-                    if (Debug)
-                        qDebug() << "virtual site " << system_index <<
-                        " o " << o_index << " h1 " << h1_index <<
-                        " h2 " << h2_index << " 1 - weightH " << 1 - weightH <<
-                        " weightH/2 " << weightH / 2;
+                    //if (Debug)
+                        //qDebug() << "virtual site " << system_index <<
+                        //" o " << o_index << " h1 " << h1_index <<
+                        //" h2 " << h2_index << " 1 - weightH " << 1 - weightH <<
+                        //" weightH/2 " << weightH / 2;
 
                     OpenMM::ThreeParticleAverageSite * vsite = new OpenMM::ThreeParticleAverageSite(o_index, h1_index, h2_index, 1 - weightH, weightH / 2, weightH / 2);
 
@@ -764,8 +767,8 @@ void OpenMMMDIntegrator::initialise()
                 Properties restrainedAtoms = molecule.property("restrainedatoms").asA<Properties>();
 
                 int nrestrainedatoms = restrainedAtoms.property(QString("nrestrainedatoms")).asA<VariantProperty>().toInt();
-                if (Debug)
-                    qDebug() << " nrestrainedatoms " << nrestrainedatoms;
+                //if (Debug)
+                    //qDebug() << " nrestrainedatoms " << nrestrainedatoms;
 
                 for (int i = 0; i < nrestrainedatoms; i++)
                 {
@@ -777,8 +780,8 @@ void OpenMMMDIntegrator::initialise()
 
                     int openmmindex = AtomNumToOpenMMIndex[atomnum];
 
-                    if (Debug)
-                        qDebug() << " atomnum " << atomnum << " openmmindex " << openmmindex << " x " << xref << " y " << yref << " z " << zref << " k " << k;
+                    //if (Debug)
+                       // qDebug() << " atomnum " << atomnum << " openmmindex " << openmmindex << " x " << xref << " y " << yref << " z " << zref << " k " << k;
 
                     int posrestrdim = 4;
                     std::vector<double> params(posrestrdim);
@@ -801,11 +804,11 @@ void OpenMMMDIntegrator::initialise()
         if (!hasConnectivity)
         {
             num_atoms_till_i = num_atoms_till_i + num_atoms_molecule;
-            if (Debug)
-            {
-                qDebug() << "\nAtoms = " << num_atoms_molecule << " Num atoms till i =" << num_atoms_till_i << "\n";
-                qDebug() << "\n*********************MONOATOMIC MOLECULE DETECTED**************************\n";
-            }
+           // if (Debug)
+            //{
+               // qDebug() << "\nAtoms = " << num_atoms_molecule << " Num atoms till i =" << num_atoms_till_i << "\n";
+               // qDebug() << "\n*********************MONOATOMIC MOLECULE DETECTED**************************\n";
+            //}
             continue;
         }
 
@@ -849,18 +852,18 @@ void OpenMMMDIntegrator::initialise()
             {
                 bondStretch_openmm->addBond(idx0, idx1, r0 * OpenMM::NmPerAngstrom,
                                             k * 2.0 * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-                if (Debug)
-                    qDebug() << "\nBOND ADDED TO " << atom0 << " AND " << atom1 << "\n";
+                //if (Debug)
+                   // qDebug() << "\nBOND ADDED TO " << atom0 << " AND " << atom1 << "\n";
             }
             else if (flag_constraint == ALLBONDS || flag_constraint == HANGLES)
             {
-                if (Debug)
-                    qDebug() << " atname0 " << atname0.toString() << " atname1 " << atname1.toString();
+                //if (Debug)
+                   // qDebug() << " atname0 " << atname0.toString() << " atname1 " << atname1.toString();
                 if (atname0 != AtomName("EPW") && atname1 != AtomName("EPW"))
                 {
                     system_openmm->addConstraint(idx0, idx1, r0 * OpenMM::NmPerAngstrom);
-                    if (Debug)
-                        qDebug() << "\nALLBONDS or HANGLES ADDED BOND CONSTRAINT TO " << atom0 << " AND " << atom1 << "\n";
+                    //if (Debug)
+                    //    qDebug() << "\nALLBONDS or HANGLES ADDED BOND CONSTRAINT TO " << atom0 << " AND " << atom1 << "\n";
                 }
             }
             else if (flag_constraint == HBONDS)
@@ -868,15 +871,15 @@ void OpenMMMDIntegrator::initialise()
                 if ((atom0[6] == 'H') || (atom1[6] == 'H'))
                 {
                     system_openmm->addConstraint(idx0, idx1, r0 * OpenMM::NmPerAngstrom);
-                    if (Debug)
-                        qDebug() << "\nHBONDS ADDED BOND CONSTRAINT TO " << atom0 << " AND " << atom1 << "\n";
+                    //if (Debug)
+                     //   qDebug() << "\nHBONDS ADDED BOND CONSTRAINT TO " << atom0 << " AND " << atom1 << "\n";
                 }
                 else
                 {
                     bondStretch_openmm->addBond(idx0, idx1, r0 * OpenMM::NmPerAngstrom,
                                                 k * 2.0 * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
-                    if (Debug)
-                        qDebug() << "\nHBONDS ADDED BOND TO " << atom0 << " AND " << atom1 << "\n";
+                    //if (Debug)
+                    //    qDebug() << "\nHBONDS ADDED BOND TO " << atom0 << " AND " << atom1 << "\n";
                 }
             }
             //Bond exclusion List
@@ -912,27 +915,27 @@ void OpenMMMDIntegrator::initialise()
                 if (((atom0[6] == 'H') && (atom2[6] == 'H')))
                 {
                     system_openmm->addConstraint(idx0, idx2, diff.length() * OpenMM::NmPerAngstrom);
-                    if (Debug)
-                        qDebug() << "\nHANGLES ANGLE CONSTRAINT TO " << atom0 << " AND " << atom2 << "\n";
+                    //if (Debug)
+                    //    qDebug() << "\nHANGLES ANGLE CONSTRAINT TO " << atom0 << " AND " << atom2 << "\n";
                 }
                 else if (((atom0[6] == 'H') && (atom1[6] == 'O')) || ((atom1[6] == 'O') && (atom2[6] == 'H')))
                 {
                     system_openmm->addConstraint(idx0, idx2, diff.length() * OpenMM::NmPerAngstrom);
-                    if (Debug)
-                        qDebug() << "\n ANGLE CONSTRAINT TO " << atom0 << " AND " << atom2 << "\n";
+                    //if (Debug)
+                    //    qDebug() << "\n ANGLE CONSTRAINT TO " << atom0 << " AND " << atom2 << "\n";
                 }
                 else
                 {
                     bondBend_openmm->addAngle(idx0, idx1, idx2, theta0, k * 2.0 * OpenMM::KJPerKcal);
-                    if (Debug)
-                        qDebug() << "\n ANGLE TO " << atom0 << " AND " << atom1 << " AND " << atom2 << "\n";
+                    //if (Debug)
+                    //    qDebug() << "\n ANGLE TO " << atom0 << " AND " << atom1 << " AND " << atom2 << "\n";
                 }
             }
             else
             {
                 bondBend_openmm->addAngle(idx0, idx1, idx2, theta0, k * 2.0 * OpenMM::KJPerKcal);
-                if (Debug)
-                    qDebug() << "\n ANGLE TO " << atom0 << " AND " << atom1 << " AND " << atom2 << "\n";
+                //if (Debug)
+                //    qDebug() << "\n ANGLE TO " << atom0 << " AND " << atom1 << " AND " << atom2 << "\n";
             }
         }//end of angles
 
@@ -1046,8 +1049,8 @@ void OpenMMMDIntegrator::initialise()
         double sigma = 0.5 * (sig1 + sig2);
         double epsilon = ljscl * sqrt(eps1 * eps2);
         nonbond_openmm->addException(p1, p2, chargeprod, sigma, epsilon, true);
-        if (Debug)
-            qDebug() << "manual exception " << p1 << " " << p2 << " cscl " << cscl << " ljscl " << ljscl << "\n";
+        //if (Debug)
+        //    qDebug() << "manual exception " << p1 << " " << p2 << " cscl " << cscl << " ljscl " << ljscl << "\n";
     }
 
     if (CMMremoval_frequency > 0)
@@ -1056,8 +1059,8 @@ void OpenMMMDIntegrator::initialise()
 
         system_openmm->addForce(cmmotionremover);
 
-        if (Debug)
-            qDebug() << "\n\nWill remove Center of Mass motion every " << CMMremoval_frequency << " steps\n\n";
+        //if (Debug)
+        //    qDebug() << "\n\nWill remove Center of Mass motion every " << CMMremoval_frequency << " steps\n\n";
     }
 
     this->openmm_system = system_openmm;
@@ -1298,6 +1301,35 @@ MolarEnergy OpenMMMDIntegrator::getPotentialEnergy(const System &system)
     return nrg;
 }
 
+/**
+ * <Returns the kinetic energy of the OpenMM system>
+ * minimizeEnergy will find the nearest local potential energy minimum,
+ * given the current Sire::System. It calls the
+ * LocalEnergyMinimizer :: minimize() function of OpenMM.
+ * @param system                Sire System including molegroup, forcefield
+ *                              positions etc
+ * @return                      Kinetic energy computed with OpenMM. 
+ */
+MolarEnergy OpenMMMDIntegrator::getKineticEnergy(const System &system)
+{
+    //We need to compute the OpenMM kinetic energy because of the Verlet half
+    //step algorithm. Sire kinetic energies will not be the same as the OpenMM 
+    //ones.
+    IntegratorWorkspacePtr ws = this->createWorkspace(molgroup);
+    ws.edit().setSystem(system);
+
+    createContext(ws.edit(), 2 * femtosecond);
+
+    int infoMask = 0;
+    infoMask = infoMask + OpenMM::State::Energy;
+    OpenMM::State state_openmm = openmm_context->getState(infoMask);
+
+    MolarEnergy nrg = state_openmm.getKineticEnergy() * kJ_per_mol;
+    this->destroyContext();
+
+    return nrg;
+}
+
 
 /**
  * <Runs an energy Minimisation on the current system.>
@@ -1387,7 +1419,7 @@ System OpenMMMDIntegrator::equilibrateSystem(System &system,
                                       SireUnits::Dimension::Time equib_time_step,
                                       int equib_steps)
 {
-    bool Debug = true;
+    bool Debug = false;
     const double AKMAPerPs = 0.04888821;
 
     const MoleculeGroup moleculegroup = this->molgroup.read();
@@ -1419,7 +1451,8 @@ System OpenMMMDIntegrator::equilibrateSystem(System &system,
 
     const int nmols = ws.nMolecules();
     int k = 0;
-
+    double Ekin_sire = 0;
+    double Ekin_openmm = 0;
     for (int i = 0; i < nmols; i++)
     {
 
@@ -1429,6 +1462,10 @@ System OpenMMMDIntegrator::equilibrateSystem(System &system,
 
         for (int j = 0; j < ws.nAtoms(i); j++)
         {
+            if(Debug)
+            {
+                qDebug() <<"Sire momenta before update "<<sire_momenta[j].toString();
+            }
             sire_coords[j] = Vector(positions_openmm[j + k][0] * (OpenMM::AngstromsPerNm),
                                     positions_openmm[j + k][1] * (OpenMM::AngstromsPerNm),
                                     positions_openmm[j + k][2] * (OpenMM::AngstromsPerNm));
@@ -1436,9 +1473,11 @@ System OpenMMMDIntegrator::equilibrateSystem(System &system,
             sire_momenta[j] = Vector(velocities_openmm[j + k][0] * m[j] * (OpenMM::AngstromsPerNm) * AKMAPerPs,
                                      velocities_openmm[j + k][1] * m[j] * (OpenMM::AngstromsPerNm) * AKMAPerPs,
                                      velocities_openmm[j + k][2] * m[j] * (OpenMM::AngstromsPerNm) * AKMAPerPs);
+          
         }
         k = k + ws.nAtoms(i);
     }
+
 
     ws.commitCoordinatesAndVelocities();
     // update periodic box
@@ -1461,7 +1500,7 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
                                    SireUnits::Dimension::Time timestep,
                                    int nmoves, bool record_stats)
 {
-    bool Debug = true;
+    bool Debug = false;
 
     createContext(workspace, timestep);
 
@@ -1486,11 +1525,25 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
     infoMask = OpenMM::State::Positions;
     infoMask = infoMask + OpenMM::State::Velocities;
     infoMask = infoMask + OpenMM::State::Energy;
+    state_openmm = openmm_context->getState(infoMask);
+    double EnergyInKcal = (state_openmm.getPotentialEnergy() + state_openmm.getKineticEnergy())* OpenMM::KcalPerKJ;
 
     const double dt = convertTo(timestep.value(), picosecond);
 
     if (Debug)
-        qDebug() << " Doing " << nmoves << " steps of dynamics ";
+    {
+        qDebug() << " Total energy from Openmm is "<<EnergyInKcal;
+    }
+      if (Debug)
+    {
+        qDebug() <<"\n"; 
+        qDebug() <<"-------------info before ---------------";
+        qDebug() << "Kinetic energy Sire is "<<ws.kineticEnergy();
+        qDebug() << "Kinetic energy OpenMM is "<<state_openmm.getKineticEnergy()*OpenMM::KcalPerKJ;
+        //qDebug() << "Total energy from Sire after step is "<<ws.energy()+ws.kineticEnergy();
+        qDebug() <<"---------------------------------";
+        qDebug() <<"\n";
+    }
 
     // Coordinates are buffered every coord_freq steps
     int coord_freq = buffer_frequency;
@@ -1527,8 +1580,10 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
     double mypotential_energy = state_openmm.getPotentialEnergy();
 
     if (Debug)
-        qDebug() << " pot nrg bef dyn " << mypotential_energy;
-
+    {
+        qDebug() << " pot nrg bef dyn " << mypotential_energy*0.239006;
+        qDebug() << "pot nrg sire bef dyn "<<workspace.nonConstsystem().energy();
+    }
 
     //Time skipping
     const double time_skip = convertTo(timeskip.value(), picosecond);
@@ -1546,8 +1601,10 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
             throw SireError::program_bug(QObject::tr("Time to Skip is greater than the simulation time"), CODELOC);
             exit(-1);
         }
+        //OpenMM::integrator = (openmm_context->getIntegrator());
 
         (openmm_context->getIntegrator()).step(new_nmoves);
+
 
         nmoves = (nmoves - new_nmoves);
 
@@ -1593,8 +1650,6 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
     velocities_openmm = state_openmm.getVelocities();
     double potential_energy = state_openmm.getPotentialEnergy();
 
-    if (Debug)
-        qDebug() << " pot nrg " << potential_energy;
 
     IsFiniteNumber = (potential_energy <= DBL_MAX && potential_energy >= -DBL_MAX);
 
@@ -1618,15 +1673,20 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
     }
 
     int k = 0;
-
+    double Ekin_openmm=0;
+    double Ekin_sire=0;
     for (int i = 0; i < nmols; i++)
     {
         Vector *sire_coords = ws.coordsArray(i);
         Vector *sire_momenta = ws.momentaArray(i);
         const double *m = ws.massArray(i);
-
+        
         for (int j = 0; j < ws.nAtoms(i); j++)
         {
+            if(Debug)
+            {
+                qDebug() <<"Sire momenta before update "<<sire_momenta[j].toString();
+            }
 
             sire_coords[j] = Vector(positions_openmm[j + k][0] * (OpenMM::AngstromsPerNm),
                                     positions_openmm[j + k][1] * (OpenMM::AngstromsPerNm),
@@ -1647,10 +1707,24 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
                                      velocities_openmm[j + k][0] * m[j] * (OpenMM::AngstromsPerNm) * AKMAPerPs,
                                      velocities_openmm[j + k][1] * m[j] * (OpenMM::AngstromsPerNm) * AKMAPerPs,
                                      velocities_openmm[j + k][2] * m[j] * (OpenMM::AngstromsPerNm) * AKMAPerPs);
+            if (Debug)
+            {
+                double vsqrt = velocities_openmm[j + k][0]*velocities_openmm[j + k][0];
+                vsqrt += velocities_openmm[j + k][1]*velocities_openmm[j + k][1];
+                vsqrt += velocities_openmm[j + k][2]*velocities_openmm[j + k][2];
+                Ekin_openmm+=0.5*vsqrt*m[j]; 
+                OpenMM::System *system_openmm = openmm_system;
+                double mass = system_openmm->getParticleMass(j);
+                qDebug()<<"particle mass "<<mass;   
+                qDebug()<<"j is : "<<j<<" k is ";
+;
+            }
         }
 
         k = k + ws.nAtoms(i);
     }
+    //if (Debug)
+    //    qDebug()<< "Kinetic energy calculated by hand opennmm "<<Ekin_openmm*OpenMM::KcalPerKJ;
 
     System & ptr_sys = ws.nonConstsystem();
     ptr_sys.mustNowRecalculateFromScratch();
@@ -1673,6 +1747,24 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
     else
     {
         molgroup.edit().update(ws.system().molecules());
+    }
+
+    EnergyInKcal = (state_openmm.getPotentialEnergy() + state_openmm.getKineticEnergy())* OpenMM::KcalPerKJ;
+
+
+    if (Debug)
+    {
+        qDebug() <<"-------------OpenMM infor ---------------";
+        qDebug() << "Potential energy Openmm is "<<state_openmm.getPotentialEnergy()*OpenMM::KcalPerKJ;
+        qDebug() << "Kinteic energy Openmm is "<<state_openmm.getKineticEnergy()*OpenMM::KcalPerKJ;
+        qDebug() << "Total energy from Openmm  after step is "<<EnergyInKcal;
+        qDebug() <<"-------------Sire info ---------------";
+        qDebug() << "Potential energy Sire is"<<ptr_sys.energy();
+        qDebug() << "Kinteic energy Sire is "<<ws.kineticEnergy();
+        qDebug()<< "Kinetic energy calculated by hand opennmm "<<Ekin_openmm*OpenMM::KcalPerKJ;
+
+        qDebug() << "Total energy from Sire after step is "<<ptr_sys.energy()+ws.kineticEnergy();
+        qDebug() <<"---------------------------------";
     }
 
     /** Clear all buffers */
