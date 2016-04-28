@@ -21,6 +21,7 @@ before_install:
 
 script:
   - bash compile_sire.sh
+  - $HOME/sire.app/bin/sire_test
 
 after_success:
   - echo "Time to go home and have a cup of tea! :)"
