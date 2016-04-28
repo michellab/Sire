@@ -170,6 +170,14 @@ use_single_topology = Parameter("single topology", False,
 use_dual_topology = Parameter("dual topology", True,
                               """Whether or not to use dual topology to morph from ligand 0 to ligand 1.""")
 
+mirror_stages = Parameter("mirror stages", False,
+                     """Whether or not to mirror the stages, i.e. make stage 2 into a
+                        mirror of stage 1. This will mean that stage 2 will be ligand 1
+                        bound to the protein in its conformation for ligand 0, swapped
+                        to ligand 0 bound to the protein in its conformation for ligand 0.
+                        This result should be exactly equal and opposite to the stage 
+                        1 result.""")
+
 save_pdb = Parameter("save pdb", True,
                      """Whether or not to write a PDB of the system after each iteration.""")
 
@@ -427,6 +435,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
     if MGName("mobile_solutes") in protein_system.mgNames():
         mobile_bound_solutes_group.add( protein_system[MGName("mobile_solutes")] )
         mobile_bound_solutes_group.remove(ligand_mol0)
+        mobile_bound_solutes_group.remove(ligand_mol1)
         if mobile_bound_solutes_group.nMolecules() > 0:
             bound_leg.add(mobile_bound_solutes_group)
     
@@ -1409,7 +1418,16 @@ def mergeLSRC(sys0, ligand0_mol, sys1, ligand1_mol, watersys):
     (stage1,moves1) = createStage(stage1, sys0, ligand0_mol, ligand1_mol, watersys, AtomResultMatcher(mapping), "stage1")
 
     # now create stage 2
-    (stage2,moves2) = createStage(stage2, sys1, ligand1_mol, ligand0_mol, watersys, AtomResultMatcher(mapping,True), "stage2")
+    if mirror_stages.val:
+        # Update the coordinates of ligand 1 so that they are aligned to the 
+        # bound copy of ligand 0
+        ligand1_mol = stage1[ligand1_mol.number()].molecule()
+        Sire.Stream.save( (ligand0_mol,ligand1_mol), "ligands.s3")
+        (stage2,moves2) = createStage(stage2, sys0, ligand1_mol, ligand0_mol, 
+                                      watersys, AtomResultMatcher(mapping,True), "stage2")
+    else:
+        (stage2,moves2) = createStage(stage2, sys1, ligand1_mol, ligand0_mol, 
+                                      watersys, AtomResultMatcher(mapping,True), "stage2")
 
     return (stage1, moves1, stage2, moves2)
 
