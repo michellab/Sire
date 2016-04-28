@@ -63,7 +63,8 @@ with tempfile.TemporaryDirectory() as tempdir:
     os.system("%s %s %s %s" % (python_exe, remove_path, tmp_sire, siredir))
 
     print("Using 'makeself' to create the self-extracting installer...")
-    os.system("%s --current %s %s \"Sire Molecular Simulation Framework\" ./tmp_sire.app/share/Sire/build/install_sire.sh" \
-                   % (makeself, tempdir, sire_run))
+    share_dir = Sire.Base.getShareDir().replace(Sire.Base.getInstallDir(),"./tmp_sire.app")
+    os.system("%s --current %s %s \"Sire Molecular Simulation Framework\" %s/build/install_sire.sh" \
+                   % (makeself, tempdir, sire_run, share_dir))
 
 print( "\nAll done :-). Just type %s to install Sire." % sire_run )

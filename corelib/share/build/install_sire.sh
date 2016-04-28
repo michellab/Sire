@@ -41,7 +41,7 @@ if [ ! -d "$install_dir" ]; then
   exit -1
 fi
 
-$install_dir/bin/python $install_dir/share/Sire/build/restore_path.py $install_dir
+$install_dir/bin/python $install_dir/pkgs/sire-*/share/Sire/build/restore_path.py $install_dir
 
 echo " "
 echo "##############################################################################"
