@@ -6,10 +6,8 @@
 #
 ################################
 
-# project version - cannot use SIRE_VERSION_X as
-# these no longer work with cmake 3
-set (S_VERSION_MAJOR "2015")
-set (S_VERSION_MINOR "0")
+set (S_VERSION_MAJOR "2016")
+set (S_VERSION_MINOR "1")
 set (S_VERSION_PATCH "0")             
 
 set (SIRE_VERSION "${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}")
