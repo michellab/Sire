@@ -3,8 +3,8 @@ set ( PYPP_SOURCES
        DofID.pypp.cpp
        DLMRigidBody.pypp.cpp
        OpenMMFrEnergyDT.pypp.cpp
-       OpenMMFrEnergyST.pypp.cpp
        OpenMMMDIntegrator.pypp.cpp
+       OpenMMFrEnergyST.pypp.cpp
        SupraMoves.pypp.cpp
        SpecifiedGroupsDeleter.pypp.cpp
        SupraMove.pypp.cpp

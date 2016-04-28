@@ -248,6 +248,17 @@ void register_OpenMMMDIntegrator_class(){
                 , getIntegrator_function_value );
         
         }
+        { //::SireMove::OpenMMMDIntegrator::getKineticEnergy
+        
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::OpenMMMDIntegrator::*getKineticEnergy_function_type)( ::SireSystem::System const & ) ;
+            getKineticEnergy_function_type getKineticEnergy_function_value( &::SireMove::OpenMMMDIntegrator::getKineticEnergy );
+            
+            OpenMMMDIntegrator_exposer.def( 
+                "getKineticEnergy"
+                , getKineticEnergy_function_value
+                , ( bp::arg("system") ) );
+        
+        }
         { //::SireMove::OpenMMMDIntegrator::getLJDispersion
         
             typedef bool ( ::SireMove::OpenMMMDIntegrator::*getLJDispersion_function_type)(  ) ;

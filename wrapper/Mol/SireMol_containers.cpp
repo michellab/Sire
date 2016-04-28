@@ -166,6 +166,7 @@ void register_SireMol_containers()
     register_dict< QHash< MolNum,Selector<Chain> >, MolNum, Selector<Chain> >();
     register_dict< QHash< MolNum,Selector<Segment> >, MolNum, Selector<Segment> >();
     register_dict< QHash<MolNum,double>, MolNum, double >();
+    register_dict< QHash<AtomIdx,AtomIdx>, AtomIdx, AtomIdx >();
 
     register_set< QSet<AtomIdx>, AtomIdx >();
     register_set< QSet<ResIdx>, ResIdx >();

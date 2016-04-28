@@ -10,6 +10,7 @@ module_info
 active_headers.data
 exposed_decl.pypp.txt
 named_tuple.py
+wrapper/Py++/pyplusplus
 *.pyc
 *.data
 
