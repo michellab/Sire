@@ -1259,7 +1259,7 @@ void OpenMMMDIntegrator::createContext(IntegratorWorkspace &workspace,
             system_index++;
         }
     }
-    openmmKineticEnergy = state_openmm.getKineticEnergy()* OpenMM::KcalPerKJ*kcal_per_mol;
+    //openmmKineticEnergy = state_openmm.getKineticEnergy()* OpenMM::KcalPerKJ*kcal_per_mol;
 
     if (system_index != nats)
     {
@@ -1311,7 +1311,7 @@ MolarEnergy OpenMMMDIntegrator::getPotentialEnergy(const System &system)
  *                              positions etc
  * @return                      Kinetic energy computed with OpenMM. 
  */
-MolarEnergy OpenMMMDIntegrator::getOpenMMKineticEnergy()
+MolarEnergy OpenMMMDIntegrator::getKineticEnergy()
 {
     //We need to compute the OpenMM kinetic energy because of the Verlet half
     //step algorithm. Sire kinetic energies will not be the same as the OpenMM 
