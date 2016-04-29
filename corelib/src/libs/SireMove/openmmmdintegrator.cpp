@@ -1259,6 +1259,7 @@ void OpenMMMDIntegrator::createContext(IntegratorWorkspace &workspace,
             system_index++;
         }
     }
+    openmmKineticEnergy = state_openmm.getKineticEnergy()* OpenMM::KcalPerKJ*kcal_per_mol;
 
     if (system_index != nats)
     {
@@ -1310,24 +1311,20 @@ MolarEnergy OpenMMMDIntegrator::getPotentialEnergy(const System &system)
  *                              positions etc
  * @return                      Kinetic energy computed with OpenMM. 
  */
-MolarEnergy OpenMMMDIntegrator::getKineticEnergy(const System &system)
+MolarEnergy OpenMMMDIntegrator::getOpenMMKineticEnergy()
 {
     //We need to compute the OpenMM kinetic energy because of the Verlet half
     //step algorithm. Sire kinetic energies will not be the same as the OpenMM 
     //ones.
-    IntegratorWorkspacePtr ws = this->createWorkspace(molgroup);
-    ws.edit().setSystem(system);
-
-    createContext(ws.edit(), 2 * femtosecond);
-
-    int infoMask = 0;
-    infoMask = infoMask + OpenMM::State::Energy;
-    OpenMM::State state_openmm = openmm_context->getState(infoMask);
-
-    MolarEnergy nrg = state_openmm.getKineticEnergy() * kJ_per_mol;
-    this->destroyContext();
-
-    return nrg;
+    if (!isSystemInitialised)
+    {
+        throw SireError::program_bug(QObject::tr(
+                                                 "System was not initialised! Initialise first before requesting energies!"), CODELOC);
+    }
+    else
+    {
+        return openmmKineticEnergy;
+    }
 }
 
 
@@ -1441,11 +1438,13 @@ System OpenMMMDIntegrator::equilibrateSystem(System &system,
     (openmm_context->getIntegrator()).step(equib_steps);
     
     int infoMask = OpenMM::State::Positions;
-    infoMask = infoMask + OpenMM::State::Velocities;
+    infoMask = infoMask + OpenMM::State::Velocities+OpenMM::State::Energy;
     OpenMM::State state_openmm = openmm_context->getState(infoMask);
     std::vector<OpenMM::Vec3> positions_openmm = state_openmm.getPositions();
     std::vector<OpenMM::Vec3> velocities_openmm = state_openmm.getVelocities();
-
+    
+    openmmKineticEnergy = state_openmm.getKineticEnergy()* OpenMM::KcalPerKJ*kcal_per_mol;
+    
     // Recast to atomicvelocityworkspace because want to use commitCoordinates() method to update system
     AtomicVelocityWorkspace &ws = workspace.edit().asA<AtomicVelocityWorkspace>();
 
@@ -1725,6 +1724,7 @@ void OpenMMMDIntegrator::integrate(IntegratorWorkspace &workspace, const Symbol 
     }
     //if (Debug)
     //    qDebug()<< "Kinetic energy calculated by hand opennmm "<<Ekin_openmm*OpenMM::KcalPerKJ;
+    openmmKineticEnergy = state_openmm.getKineticEnergy()*OpenMM::KcalPerKJ*kcal_per_mol;
 
     System & ptr_sys = ws.nonConstsystem();
     ptr_sys.mustNowRecalculateFromScratch();

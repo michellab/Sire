@@ -86,7 +86,7 @@ namespace SireMove {
         void initialise();
 
         SireUnits::Dimension::MolarEnergy getPotentialEnergy(const System &system);
-        SireUnits::Dimension::MolarEnergy getKineticEnergy(const System &system);
+        SireUnits::Dimension::MolarEnergy getKineticEnergy();
 
         System minimiseEnergy(System &system, double tolerance, int max_iteration);
 
@@ -234,6 +234,8 @@ namespace SireMove {
         SireUnits::Dimension::Time timeskip;
 
         bool is_periodic;
+        
+        MolarEnergy openmmKineticEnergy;
 
     };
 
