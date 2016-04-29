@@ -43,7 +43,7 @@ void register_Integrator_class(){
         bp::scope Integrator_scope( Integrator_exposer );
         { //::SireMove::Integrator::createWorkspace
         
-            typedef ::SireMove::IntegratorWorkspacePtr ( ::SireMove::Integrator::*createWorkspace_function_type )( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireMove::IntegratorWorkspacePtr ( ::SireMove::Integrator::*createWorkspace_function_type)( ::SireBase::PropertyMap const & ) const;
             createWorkspace_function_type createWorkspace_function_value( &::SireMove::Integrator::createWorkspace );
             
             Integrator_exposer.def( 
@@ -54,7 +54,7 @@ void register_Integrator_class(){
         }
         { //::SireMove::Integrator::createWorkspace
         
-            typedef ::SireMove::IntegratorWorkspacePtr ( ::SireMove::Integrator::*createWorkspace_function_type )( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMove::IntegratorWorkspacePtr ( ::SireMove::Integrator::*createWorkspace_function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
             createWorkspace_function_type createWorkspace_function_value( &::SireMove::Integrator::createWorkspace );
             
             Integrator_exposer.def( 
@@ -65,7 +65,7 @@ void register_Integrator_class(){
         }
         { //::SireMove::Integrator::ensemble
         
-            typedef ::SireMove::Ensemble ( ::SireMove::Integrator::*ensemble_function_type )(  ) const;
+            typedef ::SireMove::Ensemble ( ::SireMove::Integrator::*ensemble_function_type)(  ) const;
             ensemble_function_type ensemble_function_value( &::SireMove::Integrator::ensemble );
             
             Integrator_exposer.def( 
@@ -75,7 +75,7 @@ void register_Integrator_class(){
         }
         { //::SireMove::Integrator::integrate
         
-            typedef void ( ::SireMove::Integrator::*integrate_function_type )( ::SireMove::IntegratorWorkspace &,::SireCAS::Symbol const &,::SireUnits::Dimension::Time,int,bool ) ;
+            typedef void ( ::SireMove::Integrator::*integrate_function_type)( ::SireMove::IntegratorWorkspace &,::SireCAS::Symbol const &,::SireUnits::Dimension::Time,int,bool ) ;
             integrate_function_type integrate_function_value( &::SireMove::Integrator::integrate );
             
             Integrator_exposer.def( 
@@ -86,7 +86,7 @@ void register_Integrator_class(){
         }
         { //::SireMove::Integrator::isTimeReversible
         
-            typedef bool ( ::SireMove::Integrator::*isTimeReversible_function_type )(  ) const;
+            typedef bool ( ::SireMove::Integrator::*isTimeReversible_function_type)(  ) const;
             isTimeReversible_function_type isTimeReversible_function_value( &::SireMove::Integrator::isTimeReversible );
             
             Integrator_exposer.def( 
@@ -107,7 +107,7 @@ void register_Integrator_class(){
         }
         { //::SireMove::Integrator::toString
         
-            typedef ::QString ( ::SireMove::Integrator::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMove::Integrator::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMove::Integrator::toString );
             
             Integrator_exposer.def( 

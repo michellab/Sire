@@ -28,9 +28,9 @@ set ( SIREPYTHON_SOURCES
     )
 
 # Create the library that holds all of the class wrappers
-add_executable (python ${SIREPYTHON_SOURCES})
+add_executable (sire_python ${SIREPYTHON_SOURCES})
 
-target_link_libraries (python
+target_link_libraries (sire_python
                        SirePython
                        SIRE_SireCluster
                        SIRE_Squire
@@ -45,17 +45,17 @@ target_link_libraries (python
                       )
 
 # installation
-install( TARGETS python
+install( TARGETS sire_python
          RUNTIME DESTINATION ${SIRE_BIN}
          LIBRARY DESTINATION ${SIRE_LIBS}
          ARCHIVE DESTINATION ${SIRE_ARCHIVES}
        )
 
 if (APPLE)
-  add_custom_command(TARGET python
+  add_custom_command(TARGET sire_python
       POST_BUILD
-      COMMAND ${CMAKE_INSTALL_NAME_TOOL} -add_rpath "@executable_path/../${SIRE_LIBS}" python
-      COMMAND ${CMAKE_INSTALL_NAME_TOOL} -add_rpath "@executable_path/../${SIRE_BUNDLED_LIBS}" python )
+      COMMAND ${CMAKE_INSTALL_NAME_TOOL} -add_rpath "@executable_path/../${SIRE_LIBS}" sire_python
+      COMMAND ${CMAKE_INSTALL_NAME_TOOL} -add_rpath "@executable_path/../${SIRE_BUNDLED_LIBS}" sire_python )
 endif()
          
 install (DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/scripts
@@ -69,8 +69,7 @@ file(GLOB EXTRA_SCRIPTS "${CMAKE_CURRENT_SOURCE_DIR}/scripts/*.py")
 foreach ( EXTRA_SCRIPT ${EXTRA_SCRIPTS} )
   # get the filename and strip off the .py extension
   get_filename_component(PYSCRIPT ${EXTRA_SCRIPT} NAME_WE)
-  message( STATUS "Linking ${PYSCRIPT} to python..." )
   install( CODE "execute_process(COMMAND \"${CMAKE_COMMAND}\"
-                                      -E create_symlink python ${PYSCRIPT}
+                                      -E create_symlink sire_python ${PYSCRIPT}
                                  WORKING_DIRECTORY \"${CMAKE_INSTALL_PREFIX}/${SIRE_BIN}\")" )
 endforeach()

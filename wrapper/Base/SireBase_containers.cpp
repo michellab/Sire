@@ -41,6 +41,7 @@
 #include "Base/convertpackedarray.hpp"
 
 #include "SireBase/propertymap.h"
+#include "SireBase/unittest.h"
 
 using namespace SireBase;
 
@@ -48,6 +49,8 @@ using boost::python::register_tuple;
 
 void register_SireBase_containers()
 {
+    register_list< QList< boost::shared_ptr<UnitTest> > >();
+
     #if QT_VERSION >= 0x402000
     register_dict< QHash<QString,PropertyName> >();
 

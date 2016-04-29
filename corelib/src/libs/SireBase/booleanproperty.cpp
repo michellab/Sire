@@ -66,6 +66,12 @@ BooleanProperty::BooleanProperty(bool value)
                : ConcreteProperty<BooleanProperty,Property>(), val(value)
 {}
 
+/** Construct from a VariantProperty */
+BooleanProperty::BooleanProperty(const VariantProperty &other)
+                : ConcreteProperty<BooleanProperty,Property>(other),
+                  val( other.convertTo<bool>() )
+{}
+
 /** Copy constructor */
 BooleanProperty::BooleanProperty(const BooleanProperty &other)
                : ConcreteProperty<BooleanProperty,Property>(other), val(other.val)

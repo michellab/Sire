@@ -44,7 +44,7 @@ void register_QMComponent_class(){
         QMComponent_exposer.def( bp::init< Squire::QMComponent const & >(( bp::arg("other") )) );
         { //::Squire::QMComponent::changeEnergy
         
-            typedef void ( ::Squire::QMComponent::*changeEnergy_function_type )( ::SireFF::FF &,::Squire::QMEnergy const & ) const;
+            typedef void ( ::Squire::QMComponent::*changeEnergy_function_type)( ::SireFF::FF &,::Squire::QMEnergy const & ) const;
             changeEnergy_function_type changeEnergy_function_value( &::Squire::QMComponent::changeEnergy );
             
             QMComponent_exposer.def( 
@@ -55,7 +55,7 @@ void register_QMComponent_class(){
         }
         { //::Squire::QMComponent::setEnergy
         
-            typedef void ( ::Squire::QMComponent::*setEnergy_function_type )( ::SireFF::FF &,::Squire::QMEnergy const & ) const;
+            typedef void ( ::Squire::QMComponent::*setEnergy_function_type)( ::SireFF::FF &,::Squire::QMEnergy const & ) const;
             setEnergy_function_type setEnergy_function_value( &::Squire::QMComponent::setEnergy );
             
             QMComponent_exposer.def( 
@@ -66,7 +66,7 @@ void register_QMComponent_class(){
         }
         { //::Squire::QMComponent::symbols
         
-            typedef ::SireCAS::Symbols ( ::Squire::QMComponent::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::Squire::QMComponent::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::Squire::QMComponent::symbols );
             
             QMComponent_exposer.def( 
@@ -76,7 +76,7 @@ void register_QMComponent_class(){
         }
         { //::Squire::QMComponent::total
         
-            typedef ::Squire::QMComponent const & ( ::Squire::QMComponent::*total_function_type )(  ) const;
+            typedef ::Squire::QMComponent const & ( ::Squire::QMComponent::*total_function_type)(  ) const;
             total_function_type total_function_value( &::Squire::QMComponent::total );
             
             QMComponent_exposer.def( 
@@ -97,7 +97,7 @@ void register_QMComponent_class(){
         }
         { //::Squire::QMComponent::what
         
-            typedef char const * ( ::Squire::QMComponent::*what_function_type )(  ) const;
+            typedef char const * ( ::Squire::QMComponent::*what_function_type)(  ) const;
             what_function_type what_function_value( &::Squire::QMComponent::what );
             
             QMComponent_exposer.def( 

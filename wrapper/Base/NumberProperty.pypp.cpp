@@ -32,11 +32,12 @@ void register_NumberProperty_class(){
         NumberProperty_exposer.def( bp::init< double >(( bp::arg("value") )) );
         NumberProperty_exposer.def( bp::init< int >(( bp::arg("value") )) );
         NumberProperty_exposer.def( bp::init< qint64 >(( bp::arg("value") )) );
+        NumberProperty_exposer.def( bp::init< SireBase::VariantProperty const & >(( bp::arg("other") )) );
         NumberProperty_exposer.def( bp::init< SireBase::NumberProperty const & >(( bp::arg("other") )) );
         NumberProperty_exposer.def( bp::self != bp::self );
         { //::SireBase::NumberProperty::operator=
         
-            typedef ::SireBase::NumberProperty & ( ::SireBase::NumberProperty::*assign_function_type )( ::SireBase::NumberProperty const & ) ;
+            typedef ::SireBase::NumberProperty & ( ::SireBase::NumberProperty::*assign_function_type)( ::SireBase::NumberProperty const & ) ;
             assign_function_type assign_function_value( &::SireBase::NumberProperty::operator= );
             
             NumberProperty_exposer.def( 
@@ -49,7 +50,7 @@ void register_NumberProperty_class(){
         NumberProperty_exposer.def( bp::self == bp::self );
         { //::SireBase::NumberProperty::toDouble
         
-            typedef double ( ::SireBase::NumberProperty::*toDouble_function_type )(  ) const;
+            typedef double ( ::SireBase::NumberProperty::*toDouble_function_type)(  ) const;
             toDouble_function_type toDouble_function_value( &::SireBase::NumberProperty::toDouble );
             
             NumberProperty_exposer.def( 
@@ -59,7 +60,7 @@ void register_NumberProperty_class(){
         }
         { //::SireBase::NumberProperty::toInt
         
-            typedef ::qint64 ( ::SireBase::NumberProperty::*toInt_function_type )(  ) const;
+            typedef ::qint64 ( ::SireBase::NumberProperty::*toInt_function_type)(  ) const;
             toInt_function_type toInt_function_value( &::SireBase::NumberProperty::toInt );
             
             NumberProperty_exposer.def( 
@@ -69,7 +70,7 @@ void register_NumberProperty_class(){
         }
         { //::SireBase::NumberProperty::toString
         
-            typedef ::QString ( ::SireBase::NumberProperty::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireBase::NumberProperty::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireBase::NumberProperty::toString );
             
             NumberProperty_exposer.def( 
@@ -89,7 +90,7 @@ void register_NumberProperty_class(){
         }
         { //::SireBase::NumberProperty::value
         
-            typedef double ( ::SireBase::NumberProperty::*value_function_type )(  ) const;
+            typedef double ( ::SireBase::NumberProperty::*value_function_type)(  ) const;
             value_function_type value_function_value( &::SireBase::NumberProperty::value );
             
             NumberProperty_exposer.def( 

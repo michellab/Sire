@@ -35,7 +35,7 @@ void register_IntraGroupCoulombFFBase_class(){
         { //::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::components
         
             typedef SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > > exported_class_t;
-            typedef ::SireMM::CoulombComponent const & ( ::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::*components_function_type )(  ) const;
+            typedef ::SireMM::CoulombComponent const & ( ::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::*components_function_type)(  ) const;
             components_function_type components_function_value( &::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::components );
             
             IntraGroupCoulombFFBase_exposer.def( 
@@ -47,7 +47,7 @@ void register_IntraGroupCoulombFFBase_class(){
         { //::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::containsProperty
         
             typedef SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > > exported_class_t;
-            typedef bool ( ::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::*containsProperty_function_type )( ::QString const & ) const;
+            typedef bool ( ::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::*containsProperty_function_type)( ::QString const & ) const;
             containsProperty_function_type containsProperty_function_value( &::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::containsProperty );
             
             IntraGroupCoulombFFBase_exposer.def( 
@@ -59,7 +59,7 @@ void register_IntraGroupCoulombFFBase_class(){
         { //::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::mustNowRecalculateFromScratch
         
             typedef SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > > exported_class_t;
-            typedef void ( ::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::*mustNowRecalculateFromScratch_function_type )(  ) ;
+            typedef void ( ::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::*mustNowRecalculateFromScratch_function_type)(  ) ;
             mustNowRecalculateFromScratch_function_type mustNowRecalculateFromScratch_function_value( &::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::mustNowRecalculateFromScratch );
             
             IntraGroupCoulombFFBase_exposer.def( 
@@ -71,7 +71,7 @@ void register_IntraGroupCoulombFFBase_class(){
         { //::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::operator=
         
             typedef SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > > exported_class_t;
-            typedef ::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > > & ( ::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::*assign_function_type )( ::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > > const & ) ;
+            typedef ::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > > & ( ::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::*assign_function_type)( ::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > > const & ) ;
             assign_function_type assign_function_value( &::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::operator= );
             
             IntraGroupCoulombFFBase_exposer.def( 
@@ -85,7 +85,7 @@ void register_IntraGroupCoulombFFBase_class(){
         { //::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::properties
         
             typedef SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > > exported_class_t;
-            typedef ::SireBase::Properties const & ( ::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::*properties_function_type )(  ) const;
+            typedef ::SireBase::Properties const & ( ::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::*properties_function_type)(  ) const;
             properties_function_type properties_function_value( &::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::properties );
             
             IntraGroupCoulombFFBase_exposer.def( 
@@ -97,7 +97,7 @@ void register_IntraGroupCoulombFFBase_class(){
         { //::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::property
         
             typedef SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > > exported_class_t;
-            typedef ::SireBase::Property const & ( ::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::*property_function_type )( ::QString const & ) const;
+            typedef ::SireBase::Property const & ( ::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::*property_function_type)( ::QString const & ) const;
             property_function_type property_function_value( &::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::property );
             
             IntraGroupCoulombFFBase_exposer.def( 
@@ -110,7 +110,7 @@ void register_IntraGroupCoulombFFBase_class(){
         { //::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::setProperty
         
             typedef SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > > exported_class_t;
-            typedef bool ( ::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::*setProperty_function_type )( ::QString const &,::SireBase::Property const & ) ;
+            typedef bool ( ::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::*setProperty_function_type)( ::QString const &,::SireBase::Property const & ) ;
             setProperty_function_type setProperty_function_value( &::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::setProperty );
             
             IntraGroupCoulombFFBase_exposer.def( 
@@ -133,7 +133,7 @@ void register_IntraGroupCoulombFFBase_class(){
         { //::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::what
         
             typedef SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > > exported_class_t;
-            typedef char const * ( ::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::*what_function_type )(  ) const;
+            typedef char const * ( ::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::what );
             
             IntraGroupCoulombFFBase_exposer.def( 

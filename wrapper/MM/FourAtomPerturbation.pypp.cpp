@@ -49,7 +49,7 @@ void register_FourAtomPerturbation_class(){
         FourAtomPerturbation_exposer.def( bp::init< SireMM::FourAtomPerturbation const & >(( bp::arg("other") )) );
         { //::SireMM::FourAtomPerturbation::atom0
         
-            typedef ::SireMol::AtomID const & ( ::SireMM::FourAtomPerturbation::*atom0_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMM::FourAtomPerturbation::*atom0_function_type)(  ) const;
             atom0_function_type atom0_function_value( &::SireMM::FourAtomPerturbation::atom0 );
             
             FourAtomPerturbation_exposer.def( 
@@ -60,7 +60,7 @@ void register_FourAtomPerturbation_class(){
         }
         { //::SireMM::FourAtomPerturbation::atom1
         
-            typedef ::SireMol::AtomID const & ( ::SireMM::FourAtomPerturbation::*atom1_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMM::FourAtomPerturbation::*atom1_function_type)(  ) const;
             atom1_function_type atom1_function_value( &::SireMM::FourAtomPerturbation::atom1 );
             
             FourAtomPerturbation_exposer.def( 
@@ -71,7 +71,7 @@ void register_FourAtomPerturbation_class(){
         }
         { //::SireMM::FourAtomPerturbation::atom2
         
-            typedef ::SireMol::AtomID const & ( ::SireMM::FourAtomPerturbation::*atom2_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMM::FourAtomPerturbation::*atom2_function_type)(  ) const;
             atom2_function_type atom2_function_value( &::SireMM::FourAtomPerturbation::atom2 );
             
             FourAtomPerturbation_exposer.def( 
@@ -82,7 +82,7 @@ void register_FourAtomPerturbation_class(){
         }
         { //::SireMM::FourAtomPerturbation::atom3
         
-            typedef ::SireMol::AtomID const & ( ::SireMM::FourAtomPerturbation::*atom3_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMM::FourAtomPerturbation::*atom3_function_type)(  ) const;
             atom3_function_type atom3_function_value( &::SireMM::FourAtomPerturbation::atom3 );
             
             FourAtomPerturbation_exposer.def( 
@@ -94,7 +94,7 @@ void register_FourAtomPerturbation_class(){
         FourAtomPerturbation_exposer.def( bp::self != bp::self );
         { //::SireMM::FourAtomPerturbation::operator=
         
-            typedef ::SireMM::FourAtomPerturbation & ( ::SireMM::FourAtomPerturbation::*assign_function_type )( ::SireMM::FourAtomPerturbation const & ) ;
+            typedef ::SireMM::FourAtomPerturbation & ( ::SireMM::FourAtomPerturbation::*assign_function_type)( ::SireMM::FourAtomPerturbation const & ) ;
             assign_function_type assign_function_value( &::SireMM::FourAtomPerturbation::operator= );
             
             FourAtomPerturbation_exposer.def( 
@@ -107,7 +107,7 @@ void register_FourAtomPerturbation_class(){
         FourAtomPerturbation_exposer.def( bp::self == bp::self );
         { //::SireMM::FourAtomPerturbation::requiredProperties
         
-            typedef ::QSet< QString > ( ::SireMM::FourAtomPerturbation::*requiredProperties_function_type )(  ) const;
+            typedef ::QSet< QString > ( ::SireMM::FourAtomPerturbation::*requiredProperties_function_type)(  ) const;
             requiredProperties_function_type requiredProperties_function_value( &::SireMM::FourAtomPerturbation::requiredProperties );
             
             FourAtomPerturbation_exposer.def( 
@@ -117,7 +117,7 @@ void register_FourAtomPerturbation_class(){
         }
         { //::SireMM::FourAtomPerturbation::toString
         
-            typedef ::QString ( ::SireMM::FourAtomPerturbation::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMM::FourAtomPerturbation::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMM::FourAtomPerturbation::toString );
             
             FourAtomPerturbation_exposer.def( 
@@ -137,7 +137,7 @@ void register_FourAtomPerturbation_class(){
         }
         { //::SireMM::FourAtomPerturbation::wouldChange
         
-            typedef bool ( ::SireMM::FourAtomPerturbation::*wouldChange_function_type )( ::SireMol::Molecule const &,::SireCAS::Values const & ) const;
+            typedef bool ( ::SireMM::FourAtomPerturbation::*wouldChange_function_type)( ::SireMol::Molecule const &,::SireCAS::Values const & ) const;
             wouldChange_function_type wouldChange_function_value( &::SireMM::FourAtomPerturbation::wouldChange );
             
             FourAtomPerturbation_exposer.def( 

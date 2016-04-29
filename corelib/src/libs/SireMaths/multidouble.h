@@ -31,10 +31,23 @@
 
 #include "SireMaths/multifloat.h"
 
+#ifdef SIRE_HAS_CPP_11
+    #include <functional>
+#endif
+
 SIRE_BEGIN_HEADER
 
 namespace SireMaths
 {
+
+class MultiDouble;
+
+MultiDouble cos(const MultiDouble &val);
+MultiDouble sin(const MultiDouble &val);
+MultiDouble log(const MultiDouble &val);
+MultiDouble exp(const MultiDouble &val);
+
+void sincos(const MultiDouble &val, MultiDouble &sinval, MultiDouble &cosval);
 
 /** This class provides a vectorised double. This represents
     two vectors of doubles on the compiled machine, e.g.
@@ -46,6 +59,14 @@ namespace SireMaths
 */
 class SIREMATHS_EXPORT MultiDouble
 {
+
+friend MultiDouble cos(const MultiDouble &val);
+friend MultiDouble sin(const MultiDouble &val);
+friend MultiDouble log(const MultiDouble &val);
+friend MultiDouble exp(const MultiDouble &val);
+
+friend void sincos(const MultiDouble &val, MultiDouble &sinval, MultiDouble &cosval);
+
 public:
     MultiDouble();
     
@@ -58,6 +79,10 @@ public:
     MultiDouble(const MultiFloat &other);
     
     MultiDouble(const MultiDouble &other);
+    
+    #ifdef SIRE_HAS_CPP_11
+        MultiDouble(const std::function<double ()> &func);
+    #endif
     
     ~MultiDouble();
     
@@ -108,6 +133,8 @@ public:
     void set(int i, double value);
     double get(int i) const;
     
+    void quickSet(int i, double value);
+    
     double at(int i) const;
     double getitem(int i) const;
     
@@ -154,6 +181,8 @@ public:
     
     double sum() const;
     double doubleSum() const;
+
+    static void swap(MultiDouble &d0, int idx0, MultiDouble &d1, int idx1);
 
 private:
     /* Give other Multi??? classes access to the raw vector */
@@ -265,6 +294,30 @@ MultiDouble::MultiDouble(double val)
     #endif
     #endif
 }
+
+/** Construct using the passed function to generate doubles */
+#ifdef SIRE_HAS_CPP_11
+    inline
+    MultiDouble::MultiDouble(const std::function<double ()> &generator)
+    {
+        assertAligned();
+
+        #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
+            v.x[0] = _mm256_set_pd(generator(), generator(), generator(), generator());
+            v.x[1] = _mm256_set_pd(generator(), generator(), generator(), generator());
+        #else
+        #ifdef MULTIFLOAT_SSE_IS_AVAILABLE
+            v.x[0] = _mm_set_pd(generator(), generator());
+            v.x[1] = _mm_set_pd(generator(), generator());
+        #else
+            for (int i=0; i<MULTIFLOAT_SIZE; ++i)
+            {
+                v.a[i] = generator();
+            }
+        #endif
+        #endif
+    }
+#endif
 
 /** Copy construct from a MultiFloat */
 inline
@@ -1186,6 +1239,34 @@ inline
 double MultiDouble::doubleSum() const
 {
     return this->sum();
+}
+
+inline MultiDouble cos(const MultiDouble &val)
+{
+    return cos(MultiFloat(val));
+}
+
+inline MultiDouble sin(const MultiDouble &val)
+{
+    return sin(MultiFloat(val));
+}
+
+inline MultiDouble log(const MultiDouble &val)
+{
+    return log(MultiFloat(val));
+}
+
+inline MultiDouble exp(const MultiDouble &val)
+{
+    return exp(MultiFloat(val));
+}
+
+inline void sincos(const MultiDouble &val, MultiDouble &sinval, MultiDouble &cosval)
+{
+    MultiFloat c, s;
+    sincos(MultiFloat(val), c, s);
+    sinval = s;
+    cosval = c;
 }
 
 #endif // #ifndef SIRE_SKIP_INLINE_FUNCTIONS

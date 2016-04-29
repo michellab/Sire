@@ -54,7 +54,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::add
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*add_function_type )( ::SireMol::Selector< SireMol::Segment > const & ) const;
+            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*add_function_type)( ::SireMol::Selector< SireMol::Segment > const & ) const;
             add_function_type add_function_value( &::SireMol::Selector< SireMol::Segment >::add );
             
             Selector_Segment__exposer.def( 
@@ -66,7 +66,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::add
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*add_function_type )( ::SireMol::Segment const & ) const;
+            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*add_function_type)( ::SireMol::Segment const & ) const;
             add_function_type add_function_value( &::SireMol::Selector< SireMol::Segment >::add );
             
             Selector_Segment__exposer.def( 
@@ -78,7 +78,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::add
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*add_function_type )( ::SireMol::SegID const & ) const;
+            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*add_function_type)( ::SireMol::SegID const & ) const;
             add_function_type add_function_value( &::SireMol::Selector< SireMol::Segment >::add );
             
             Selector_Segment__exposer.def( 
@@ -90,7 +90,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::at
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Segment ( ::SireMol::Selector< SireMol::Segment >::*at_function_type )( int ) const;
+            typedef ::SireMol::Segment ( ::SireMol::Selector< SireMol::Segment >::*at_function_type)( int ) const;
             at_function_type at_function_value( &::SireMol::Selector< SireMol::Segment >::at );
             
             Selector_Segment__exposer.def( 
@@ -102,7 +102,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::at
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*at_function_type )( int,int ) const;
+            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*at_function_type)( int,int ) const;
             at_function_type at_function_value( &::SireMol::Selector< SireMol::Segment >::at );
             
             Selector_Segment__exposer.def( 
@@ -114,7 +114,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::contains
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Segment >::*contains_function_type )( ::SireMol::Selector< SireMol::Segment > const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Segment >::*contains_function_type)( ::SireMol::Selector< SireMol::Segment > const & ) const;
             contains_function_type contains_function_value( &::SireMol::Selector< SireMol::Segment >::contains );
             
             Selector_Segment__exposer.def( 
@@ -126,7 +126,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::contains
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Segment >::*contains_function_type )( ::SireMol::Segment const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Segment >::*contains_function_type)( ::SireMol::Segment const & ) const;
             contains_function_type contains_function_value( &::SireMol::Selector< SireMol::Segment >::contains );
             
             Selector_Segment__exposer.def( 
@@ -138,7 +138,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::contains
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Segment >::*contains_function_type )( ::SireMol::SegID const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Segment >::*contains_function_type)( ::SireMol::SegID const & ) const;
             contains_function_type contains_function_value( &::SireMol::Selector< SireMol::Segment >::contains );
             
             Selector_Segment__exposer.def( 
@@ -150,7 +150,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::count
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef int ( ::SireMol::Selector< SireMol::Segment >::*count_function_type )(  ) const;
+            typedef int ( ::SireMol::Selector< SireMol::Segment >::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMol::Selector< SireMol::Segment >::count );
             
             Selector_Segment__exposer.def( 
@@ -161,7 +161,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::evaluate
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Evaluator ( ::SireMol::Selector< SireMol::Segment >::*evaluate_function_type )(  ) const;
+            typedef ::SireMol::Evaluator ( ::SireMol::Selector< SireMol::Segment >::*evaluate_function_type)(  ) const;
             evaluate_function_type evaluate_function_value( &::SireMol::Selector< SireMol::Segment >::evaluate );
             
             Selector_Segment__exposer.def( 
@@ -172,7 +172,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::evaluate
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Evaluator ( ::SireMol::Selector< SireMol::Segment >::*evaluate_function_type )( int ) const;
+            typedef ::SireMol::Evaluator ( ::SireMol::Selector< SireMol::Segment >::*evaluate_function_type)( int ) const;
             evaluate_function_type evaluate_function_value( &::SireMol::Selector< SireMol::Segment >::evaluate );
             
             Selector_Segment__exposer.def( 
@@ -184,7 +184,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::evaluate
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Evaluator ( ::SireMol::Selector< SireMol::Segment >::*evaluate_function_type )( int,int ) const;
+            typedef ::SireMol::Evaluator ( ::SireMol::Selector< SireMol::Segment >::*evaluate_function_type)( int,int ) const;
             evaluate_function_type evaluate_function_value( &::SireMol::Selector< SireMol::Segment >::evaluate );
             
             Selector_Segment__exposer.def( 
@@ -196,7 +196,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::hasMetadata
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Segment >::*hasMetadata_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Segment >::*hasMetadata_function_type)( ::SireBase::PropertyName const & ) const;
             hasMetadata_function_type hasMetadata_function_value( &::SireMol::Selector< SireMol::Segment >::hasMetadata );
             
             Selector_Segment__exposer.def( 
@@ -208,7 +208,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::hasMetadata
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Segment >::*hasMetadata_function_type )( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Segment >::*hasMetadata_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
             hasMetadata_function_type hasMetadata_function_value( &::SireMol::Selector< SireMol::Segment >::hasMetadata );
             
             Selector_Segment__exposer.def( 
@@ -220,7 +220,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::hasProperty
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Segment >::*hasProperty_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Segment >::*hasProperty_function_type)( ::SireBase::PropertyName const & ) const;
             hasProperty_function_type hasProperty_function_value( &::SireMol::Selector< SireMol::Segment >::hasProperty );
             
             Selector_Segment__exposer.def( 
@@ -232,7 +232,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::index
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::SegIdx ( ::SireMol::Selector< SireMol::Segment >::*index_function_type )( int ) const;
+            typedef ::SireMol::SegIdx ( ::SireMol::Selector< SireMol::Segment >::*index_function_type)( int ) const;
             index_function_type index_function_value( &::SireMol::Selector< SireMol::Segment >::index );
             
             Selector_Segment__exposer.def( 
@@ -244,7 +244,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::intersection
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*intersection_function_type )( ::SireMol::Selector< SireMol::Segment > const & ) const;
+            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*intersection_function_type)( ::SireMol::Selector< SireMol::Segment > const & ) const;
             intersection_function_type intersection_function_value( &::SireMol::Selector< SireMol::Segment >::intersection );
             
             Selector_Segment__exposer.def( 
@@ -256,7 +256,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::intersection
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*intersection_function_type )( ::SireMol::Segment const & ) const;
+            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*intersection_function_type)( ::SireMol::Segment const & ) const;
             intersection_function_type intersection_function_value( &::SireMol::Selector< SireMol::Segment >::intersection );
             
             Selector_Segment__exposer.def( 
@@ -268,7 +268,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::intersection
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*intersection_function_type )( ::SireMol::SegID const & ) const;
+            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*intersection_function_type)( ::SireMol::SegID const & ) const;
             intersection_function_type intersection_function_value( &::SireMol::Selector< SireMol::Segment >::intersection );
             
             Selector_Segment__exposer.def( 
@@ -280,7 +280,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::intersects
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Segment >::*intersects_function_type )( ::SireMol::Selector< SireMol::Segment > const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Segment >::*intersects_function_type)( ::SireMol::Selector< SireMol::Segment > const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::Selector< SireMol::Segment >::intersects );
             
             Selector_Segment__exposer.def( 
@@ -292,7 +292,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::intersects
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Segment >::*intersects_function_type )( ::SireMol::Segment const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Segment >::*intersects_function_type)( ::SireMol::Segment const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::Selector< SireMol::Segment >::intersects );
             
             Selector_Segment__exposer.def( 
@@ -304,7 +304,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::intersects
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Segment >::*intersects_function_type )( ::SireMol::SegID const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Segment >::*intersects_function_type)( ::SireMol::SegID const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::Selector< SireMol::Segment >::intersects );
             
             Selector_Segment__exposer.def( 
@@ -316,7 +316,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::invert
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*invert_function_type )(  ) const;
+            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*invert_function_type)(  ) const;
             invert_function_type invert_function_value( &::SireMol::Selector< SireMol::Segment >::invert );
             
             Selector_Segment__exposer.def( 
@@ -327,7 +327,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::isEmpty
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Segment >::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Segment >::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::Selector< SireMol::Segment >::isEmpty );
             
             Selector_Segment__exposer.def( 
@@ -338,7 +338,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::metadataKeys
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::QStringList ( ::SireMol::Selector< SireMol::Segment >::*metadataKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireMol::Selector< SireMol::Segment >::*metadataKeys_function_type)(  ) const;
             metadataKeys_function_type metadataKeys_function_value( &::SireMol::Selector< SireMol::Segment >::metadataKeys );
             
             Selector_Segment__exposer.def( 
@@ -349,7 +349,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::metadataKeys
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::QStringList ( ::SireMol::Selector< SireMol::Segment >::*metadataKeys_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef ::QStringList ( ::SireMol::Selector< SireMol::Segment >::*metadataKeys_function_type)( ::SireBase::PropertyName const & ) const;
             metadataKeys_function_type metadataKeys_function_value( &::SireMol::Selector< SireMol::Segment >::metadataKeys );
             
             Selector_Segment__exposer.def( 
@@ -361,7 +361,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::move
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Selector< SireMol::Segment > > ( ::SireMol::Selector< SireMol::Segment >::*move_function_type )(  ) const;
+            typedef ::SireMol::Mover< SireMol::Selector< SireMol::Segment > > ( ::SireMol::Selector< SireMol::Segment >::*move_function_type)(  ) const;
             move_function_type move_function_value( &::SireMol::Selector< SireMol::Segment >::move );
             
             Selector_Segment__exposer.def( 
@@ -372,7 +372,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::move
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Selector< SireMol::Segment > > ( ::SireMol::Selector< SireMol::Segment >::*move_function_type )( int ) const;
+            typedef ::SireMol::Mover< SireMol::Selector< SireMol::Segment > > ( ::SireMol::Selector< SireMol::Segment >::*move_function_type)( int ) const;
             move_function_type move_function_value( &::SireMol::Selector< SireMol::Segment >::move );
             
             Selector_Segment__exposer.def( 
@@ -384,7 +384,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::move
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Selector< SireMol::Segment > > ( ::SireMol::Selector< SireMol::Segment >::*move_function_type )( int,int ) const;
+            typedef ::SireMol::Mover< SireMol::Selector< SireMol::Segment > > ( ::SireMol::Selector< SireMol::Segment >::*move_function_type)( int,int ) const;
             move_function_type move_function_value( &::SireMol::Selector< SireMol::Segment >::move );
             
             Selector_Segment__exposer.def( 
@@ -397,7 +397,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::operator()
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Segment ( ::SireMol::Selector< SireMol::Segment >::*__call___function_type )( int ) const;
+            typedef ::SireMol::Segment ( ::SireMol::Selector< SireMol::Segment >::*__call___function_type)( int ) const;
             __call___function_type __call___function_value( &::SireMol::Selector< SireMol::Segment >::operator() );
             
             Selector_Segment__exposer.def( 
@@ -409,7 +409,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::operator()
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*__call___function_type )( int,int ) const;
+            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireMol::Selector< SireMol::Segment >::operator() );
             
             Selector_Segment__exposer.def( 
@@ -427,7 +427,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::operator=
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Segment > & ( ::SireMol::Selector< SireMol::Segment >::*assign_function_type )( ::SireMol::Selector< SireMol::Segment > const & ) ;
+            typedef ::SireMol::Selector< SireMol::Segment > & ( ::SireMol::Selector< SireMol::Segment >::*assign_function_type)( ::SireMol::Selector< SireMol::Segment > const & ) ;
             assign_function_type assign_function_value( &::SireMol::Selector< SireMol::Segment >::operator= );
             
             Selector_Segment__exposer.def( 
@@ -440,7 +440,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::operator=
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Segment > & ( ::SireMol::Selector< SireMol::Segment >::*assign_function_type )( ::SireMol::Segment const & ) ;
+            typedef ::SireMol::Selector< SireMol::Segment > & ( ::SireMol::Selector< SireMol::Segment >::*assign_function_type)( ::SireMol::Segment const & ) ;
             assign_function_type assign_function_value( &::SireMol::Selector< SireMol::Segment >::operator= );
             
             Selector_Segment__exposer.def( 
@@ -454,7 +454,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::operator[]
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Segment ( ::SireMol::Selector< SireMol::Segment >::*__getitem___function_type )( int ) const;
+            typedef ::SireMol::Segment ( ::SireMol::Selector< SireMol::Segment >::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::Selector< SireMol::Segment >::operator[] );
             
             Selector_Segment__exposer.def( 
@@ -466,7 +466,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::propertyKeys
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::QStringList ( ::SireMol::Selector< SireMol::Segment >::*propertyKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireMol::Selector< SireMol::Segment >::*propertyKeys_function_type)(  ) const;
             propertyKeys_function_type propertyKeys_function_value( &::SireMol::Selector< SireMol::Segment >::propertyKeys );
             
             Selector_Segment__exposer.def( 
@@ -477,7 +477,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::selectedAll
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Segment >::*selectedAll_function_type )(  ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Segment >::*selectedAll_function_type)(  ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::Selector< SireMol::Segment >::selectedAll );
             
             Selector_Segment__exposer.def( 
@@ -488,7 +488,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::selection
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::AtomSelection ( ::SireMol::Selector< SireMol::Segment >::*selection_function_type )(  ) const;
+            typedef ::SireMol::AtomSelection ( ::SireMol::Selector< SireMol::Segment >::*selection_function_type)(  ) const;
             selection_function_type selection_function_value( &::SireMol::Selector< SireMol::Segment >::selection );
             
             Selector_Segment__exposer.def( 
@@ -499,7 +499,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::selection
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::AtomSelection ( ::SireMol::Selector< SireMol::Segment >::*selection_function_type )( int ) const;
+            typedef ::SireMol::AtomSelection ( ::SireMol::Selector< SireMol::Segment >::*selection_function_type)( int ) const;
             selection_function_type selection_function_value( &::SireMol::Selector< SireMol::Segment >::selection );
             
             Selector_Segment__exposer.def( 
@@ -511,7 +511,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::selection
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::AtomSelection ( ::SireMol::Selector< SireMol::Segment >::*selection_function_type )( int,int ) const;
+            typedef ::SireMol::AtomSelection ( ::SireMol::Selector< SireMol::Segment >::*selection_function_type)( int,int ) const;
             selection_function_type selection_function_value( &::SireMol::Selector< SireMol::Segment >::selection );
             
             Selector_Segment__exposer.def( 
@@ -523,7 +523,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::selector
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*selector_function_type )(  ) const;
+            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*selector_function_type)(  ) const;
             selector_function_type selector_function_value( &::SireMol::Selector< SireMol::Segment >::selector );
             
             Selector_Segment__exposer.def( 
@@ -534,7 +534,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::selector
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*selector_function_type )( int ) const;
+            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*selector_function_type)( int ) const;
             selector_function_type selector_function_value( &::SireMol::Selector< SireMol::Segment >::selector );
             
             Selector_Segment__exposer.def( 
@@ -546,7 +546,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::selector
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*selector_function_type )( int,int ) const;
+            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*selector_function_type)( int,int ) const;
             selector_function_type selector_function_value( &::SireMol::Selector< SireMol::Segment >::selector );
             
             Selector_Segment__exposer.def( 
@@ -558,7 +558,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::subtract
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*subtract_function_type )( ::SireMol::Selector< SireMol::Segment > const & ) const;
+            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*subtract_function_type)( ::SireMol::Selector< SireMol::Segment > const & ) const;
             subtract_function_type subtract_function_value( &::SireMol::Selector< SireMol::Segment >::subtract );
             
             Selector_Segment__exposer.def( 
@@ -570,7 +570,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::subtract
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*subtract_function_type )( ::SireMol::Segment const & ) const;
+            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*subtract_function_type)( ::SireMol::Segment const & ) const;
             subtract_function_type subtract_function_value( &::SireMol::Selector< SireMol::Segment >::subtract );
             
             Selector_Segment__exposer.def( 
@@ -582,7 +582,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::subtract
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*subtract_function_type )( ::SireMol::SegID const & ) const;
+            typedef ::SireMol::Selector< SireMol::Segment > ( ::SireMol::Selector< SireMol::Segment >::*subtract_function_type)( ::SireMol::SegID const & ) const;
             subtract_function_type subtract_function_value( &::SireMol::Selector< SireMol::Segment >::subtract );
             
             Selector_Segment__exposer.def( 
@@ -594,7 +594,7 @@ void register_Selector_Segment__class(){
         { //::SireMol::Selector< SireMol::Segment >::toString
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
-            typedef ::QString ( ::SireMol::Selector< SireMol::Segment >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::Selector< SireMol::Segment >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::Selector< SireMol::Segment >::toString );
             
             Selector_Segment__exposer.def( 

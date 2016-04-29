@@ -43,7 +43,7 @@ void register_TIPMF_class(){
         TIPMF_exposer.def( bp::init< SireAnalysis::TIPMF const & >(( bp::arg("other") )) );
         { //::SireAnalysis::TIPMF::dropEndPoints
         
-            typedef ::SireAnalysis::TIPMF ( ::SireAnalysis::TIPMF::*dropEndPoints_function_type )(  ) const;
+            typedef ::SireAnalysis::TIPMF ( ::SireAnalysis::TIPMF::*dropEndPoints_function_type)(  ) const;
             dropEndPoints_function_type dropEndPoints_function_value( &::SireAnalysis::TIPMF::dropEndPoints );
             
             TIPMF_exposer.def( 
@@ -53,7 +53,7 @@ void register_TIPMF_class(){
         }
         { //::SireAnalysis::TIPMF::gradients
         
-            typedef ::QVector< SireAnalysis::DataPoint > ( ::SireAnalysis::TIPMF::*gradients_function_type )(  ) const;
+            typedef ::QVector< SireAnalysis::DataPoint > ( ::SireAnalysis::TIPMF::*gradients_function_type)(  ) const;
             gradients_function_type gradients_function_value( &::SireAnalysis::TIPMF::gradients );
             
             TIPMF_exposer.def( 
@@ -63,7 +63,7 @@ void register_TIPMF_class(){
         }
         { //::SireAnalysis::TIPMF::integral
         
-            typedef double ( ::SireAnalysis::TIPMF::*integral_function_type )(  ) const;
+            typedef double ( ::SireAnalysis::TIPMF::*integral_function_type)(  ) const;
             integral_function_type integral_function_value( &::SireAnalysis::TIPMF::integral );
             
             TIPMF_exposer.def( 
@@ -74,7 +74,7 @@ void register_TIPMF_class(){
         TIPMF_exposer.def( bp::self != bp::self );
         { //::SireAnalysis::TIPMF::operator=
         
-            typedef ::SireAnalysis::TIPMF & ( ::SireAnalysis::TIPMF::*assign_function_type )( ::SireAnalysis::TIPMF const & ) ;
+            typedef ::SireAnalysis::TIPMF & ( ::SireAnalysis::TIPMF::*assign_function_type)( ::SireAnalysis::TIPMF const & ) ;
             assign_function_type assign_function_value( &::SireAnalysis::TIPMF::operator= );
             
             TIPMF_exposer.def( 
@@ -87,7 +87,7 @@ void register_TIPMF_class(){
         TIPMF_exposer.def( bp::self == bp::self );
         { //::SireAnalysis::TIPMF::order
         
-            typedef int ( ::SireAnalysis::TIPMF::*order_function_type )(  ) const;
+            typedef int ( ::SireAnalysis::TIPMF::*order_function_type)(  ) const;
             order_function_type order_function_value( &::SireAnalysis::TIPMF::order );
             
             TIPMF_exposer.def( 
@@ -97,7 +97,7 @@ void register_TIPMF_class(){
         }
         { //::SireAnalysis::TIPMF::quadrature
         
-            typedef double ( ::SireAnalysis::TIPMF::*quadrature_function_type )(  ) const;
+            typedef double ( ::SireAnalysis::TIPMF::*quadrature_function_type)(  ) const;
             quadrature_function_type quadrature_function_value( &::SireAnalysis::TIPMF::quadrature );
             
             TIPMF_exposer.def( 
@@ -107,7 +107,7 @@ void register_TIPMF_class(){
         }
         { //::SireAnalysis::TIPMF::rangeMax
         
-            typedef double ( ::SireAnalysis::TIPMF::*rangeMax_function_type )(  ) const;
+            typedef double ( ::SireAnalysis::TIPMF::*rangeMax_function_type)(  ) const;
             rangeMax_function_type rangeMax_function_value( &::SireAnalysis::TIPMF::rangeMax );
             
             TIPMF_exposer.def( 
@@ -117,7 +117,7 @@ void register_TIPMF_class(){
         }
         { //::SireAnalysis::TIPMF::rangeMin
         
-            typedef double ( ::SireAnalysis::TIPMF::*rangeMin_function_type )(  ) const;
+            typedef double ( ::SireAnalysis::TIPMF::*rangeMin_function_type)(  ) const;
             rangeMin_function_type rangeMin_function_value( &::SireAnalysis::TIPMF::rangeMin );
             
             TIPMF_exposer.def( 
@@ -127,7 +127,7 @@ void register_TIPMF_class(){
         }
         { //::SireAnalysis::TIPMF::setGradients
         
-            typedef void ( ::SireAnalysis::TIPMF::*setGradients_function_type )( ::QVector< SireAnalysis::DataPoint > const & ) ;
+            typedef void ( ::SireAnalysis::TIPMF::*setGradients_function_type)( ::QVector< SireAnalysis::DataPoint > const & ) ;
             setGradients_function_type setGradients_function_value( &::SireAnalysis::TIPMF::setGradients );
             
             TIPMF_exposer.def( 
@@ -138,7 +138,7 @@ void register_TIPMF_class(){
         }
         { //::SireAnalysis::TIPMF::setOrder
         
-            typedef void ( ::SireAnalysis::TIPMF::*setOrder_function_type )( ::qint32 ) ;
+            typedef void ( ::SireAnalysis::TIPMF::*setOrder_function_type)( ::qint32 ) ;
             setOrder_function_type setOrder_function_value( &::SireAnalysis::TIPMF::setOrder );
             
             TIPMF_exposer.def( 
@@ -149,7 +149,7 @@ void register_TIPMF_class(){
         }
         { //::SireAnalysis::TIPMF::setRange
         
-            typedef void ( ::SireAnalysis::TIPMF::*setRange_function_type )( double,double ) ;
+            typedef void ( ::SireAnalysis::TIPMF::*setRange_function_type)( double,double ) ;
             setRange_function_type setRange_function_value( &::SireAnalysis::TIPMF::setRange );
             
             TIPMF_exposer.def( 
@@ -160,7 +160,7 @@ void register_TIPMF_class(){
         }
         { //::SireAnalysis::TIPMF::smoothedGradients
         
-            typedef ::QVector< SireAnalysis::DataPoint > ( ::SireAnalysis::TIPMF::*smoothedGradients_function_type )(  ) const;
+            typedef ::QVector< SireAnalysis::DataPoint > ( ::SireAnalysis::TIPMF::*smoothedGradients_function_type)(  ) const;
             smoothedGradients_function_type smoothedGradients_function_value( &::SireAnalysis::TIPMF::smoothedGradients );
             
             TIPMF_exposer.def( 
@@ -170,7 +170,7 @@ void register_TIPMF_class(){
         }
         { //::SireAnalysis::TIPMF::toString
         
-            typedef ::QString ( ::SireAnalysis::TIPMF::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireAnalysis::TIPMF::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireAnalysis::TIPMF::toString );
             
             TIPMF_exposer.def( 
@@ -190,7 +190,7 @@ void register_TIPMF_class(){
         }
         { //::SireAnalysis::TIPMF::what
         
-            typedef char const * ( ::SireAnalysis::TIPMF::*what_function_type )(  ) const;
+            typedef char const * ( ::SireAnalysis::TIPMF::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireAnalysis::TIPMF::what );
             
             TIPMF_exposer.def( 

@@ -36,7 +36,7 @@ void register_SupraMoves_class(){
         bp::scope SupraMoves_scope( SupraMoves_exposer );
         { //::SireMove::SupraMoves::clearStatistics
         
-            typedef void ( ::SireMove::SupraMoves::*clearStatistics_function_type )(  ) ;
+            typedef void ( ::SireMove::SupraMoves::*clearStatistics_function_type)(  ) ;
             clearStatistics_function_type clearStatistics_function_value( &::SireMove::SupraMoves::clearStatistics );
             
             SupraMoves_exposer.def( 
@@ -46,7 +46,7 @@ void register_SupraMoves_class(){
         }
         { //::SireMove::SupraMoves::count
         
-            typedef int ( ::SireMove::SupraMoves::*count_function_type )(  ) const;
+            typedef int ( ::SireMove::SupraMoves::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMove::SupraMoves::count );
             
             SupraMoves_exposer.def( 
@@ -56,7 +56,7 @@ void register_SupraMoves_class(){
         }
         { //::SireMove::SupraMoves::move
         
-            typedef void ( ::SireMove::SupraMoves::*move_function_type )( ::SireMove::SupraSystem &,int,bool ) ;
+            typedef void ( ::SireMove::SupraMoves::*move_function_type)( ::SireMove::SupraSystem &,int,bool ) ;
             move_function_type move_function_value( &::SireMove::SupraMoves::move );
             
             SupraMoves_exposer.def( 
@@ -67,7 +67,7 @@ void register_SupraMoves_class(){
         }
         { //::SireMove::SupraMoves::moves
         
-            typedef ::QList< SireBase::PropPtr< SireMove::SupraMove > > ( ::SireMove::SupraMoves::*moves_function_type )(  ) const;
+            typedef ::QList< SireBase::PropPtr< SireMove::SupraMove > > ( ::SireMove::SupraMoves::*moves_function_type)(  ) const;
             moves_function_type moves_function_value( &::SireMove::SupraMoves::moves );
             
             SupraMoves_exposer.def( 
@@ -77,7 +77,7 @@ void register_SupraMoves_class(){
         }
         { //::SireMove::SupraMoves::nMoves
         
-            typedef int ( ::SireMove::SupraMoves::*nMoves_function_type )(  ) const;
+            typedef int ( ::SireMove::SupraMoves::*nMoves_function_type)(  ) const;
             nMoves_function_type nMoves_function_value( &::SireMove::SupraMoves::nMoves );
             
             SupraMoves_exposer.def( 
@@ -87,7 +87,7 @@ void register_SupraMoves_class(){
         }
         { //::SireMove::SupraMoves::nSubMoveTypes
         
-            typedef int ( ::SireMove::SupraMoves::*nSubMoveTypes_function_type )(  ) const;
+            typedef int ( ::SireMove::SupraMoves::*nSubMoveTypes_function_type)(  ) const;
             nSubMoveTypes_function_type nSubMoveTypes_function_value( &::SireMove::SupraMoves::nSubMoveTypes );
             
             SupraMoves_exposer.def( 
@@ -108,7 +108,7 @@ void register_SupraMoves_class(){
         }
         { //::SireMove::SupraMoves::operator[]
         
-            typedef ::SireMove::SupraMove const & ( ::SireMove::SupraMoves::*__getitem___function_type )( int ) const;
+            typedef ::SireMove::SupraMove const & ( ::SireMove::SupraMoves::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMove::SupraMoves::operator[] );
             
             SupraMoves_exposer.def( 
@@ -120,7 +120,7 @@ void register_SupraMoves_class(){
         }
         { //::SireMove::SupraMoves::size
         
-            typedef int ( ::SireMove::SupraMoves::*size_function_type )(  ) const;
+            typedef int ( ::SireMove::SupraMoves::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireMove::SupraMoves::size );
             
             SupraMoves_exposer.def( 
@@ -130,7 +130,7 @@ void register_SupraMoves_class(){
         }
         { //::SireMove::SupraMoves::toString
         
-            typedef ::QString ( ::SireMove::SupraMoves::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMove::SupraMoves::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMove::SupraMoves::toString );
             
             SupraMoves_exposer.def( 

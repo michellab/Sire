@@ -947,7 +947,7 @@ def setupForcefields(system, space):
         # Start by creating a template GridFF forcefield, which can be duplicated
         # for each grid. This ensures that only a single copy of the fixed atoms
         # will be saved in the system, saving space and improving efficiency
-        gridff = GridFF("template")
+        gridff = GridFF2("template")
         gridff.addFixedAtoms(fixed_atoms)
         gridff.setGridSpacing( grid_spacing.val )
         gridff.setBuffer( grid_buffer.val )

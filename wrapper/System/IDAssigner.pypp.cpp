@@ -69,7 +69,7 @@ void register_IDAssigner_class(){
         IDAssigner_exposer.def( bp::init< SireSystem::IDAssigner const & >(( bp::arg("other") )) );
         { //::SireSystem::IDAssigner::identifiedMolecules
         
-            typedef ::QVector< SireMol::PartialMolecule > ( ::SireSystem::IDAssigner::*identifiedMolecules_function_type )(  ) const;
+            typedef ::QVector< SireMol::PartialMolecule > ( ::SireSystem::IDAssigner::*identifiedMolecules_function_type)(  ) const;
             identifiedMolecules_function_type identifiedMolecules_function_value( &::SireSystem::IDAssigner::identifiedMolecules );
             
             IDAssigner_exposer.def( 
@@ -79,7 +79,7 @@ void register_IDAssigner_class(){
         }
         { //::SireSystem::IDAssigner::moleculeGroup
         
-            typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::IDAssigner::*moleculeGroup_function_type )(  ) const;
+            typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::IDAssigner::*moleculeGroup_function_type)(  ) const;
             moleculeGroup_function_type moleculeGroup_function_value( &::SireSystem::IDAssigner::moleculeGroup );
             
             IDAssigner_exposer.def( 
@@ -90,7 +90,7 @@ void register_IDAssigner_class(){
         }
         { //::SireSystem::IDAssigner::nPoints
         
-            typedef int ( ::SireSystem::IDAssigner::*nPoints_function_type )(  ) const;
+            typedef int ( ::SireSystem::IDAssigner::*nPoints_function_type)(  ) const;
             nPoints_function_type nPoints_function_value( &::SireSystem::IDAssigner::nPoints );
             
             IDAssigner_exposer.def( 
@@ -101,7 +101,7 @@ void register_IDAssigner_class(){
         IDAssigner_exposer.def( bp::self != bp::self );
         { //::SireSystem::IDAssigner::operator=
         
-            typedef ::SireSystem::IDAssigner & ( ::SireSystem::IDAssigner::*assign_function_type )( ::SireSystem::IDAssigner const & ) ;
+            typedef ::SireSystem::IDAssigner & ( ::SireSystem::IDAssigner::*assign_function_type)( ::SireSystem::IDAssigner const & ) ;
             assign_function_type assign_function_value( &::SireSystem::IDAssigner::operator= );
             
             IDAssigner_exposer.def( 
@@ -114,7 +114,7 @@ void register_IDAssigner_class(){
         IDAssigner_exposer.def( bp::self == bp::self );
         { //::SireSystem::IDAssigner::points
         
-            typedef ::QVector< SireBase::PropPtr< SireFF::Point > > ( ::SireSystem::IDAssigner::*points_function_type )(  ) const;
+            typedef ::QVector< SireBase::PropPtr< SireFF::Point > > ( ::SireSystem::IDAssigner::*points_function_type)(  ) const;
             points_function_type points_function_value( &::SireSystem::IDAssigner::points );
             
             IDAssigner_exposer.def( 
@@ -124,7 +124,7 @@ void register_IDAssigner_class(){
         }
         { //::SireSystem::IDAssigner::propertyMap
         
-            typedef ::SireBase::PropertyMap const & ( ::SireSystem::IDAssigner::*propertyMap_function_type )(  ) const;
+            typedef ::SireBase::PropertyMap const & ( ::SireSystem::IDAssigner::*propertyMap_function_type)(  ) const;
             propertyMap_function_type propertyMap_function_value( &::SireSystem::IDAssigner::propertyMap );
             
             IDAssigner_exposer.def( 
@@ -135,7 +135,7 @@ void register_IDAssigner_class(){
         }
         { //::SireSystem::IDAssigner::space
         
-            typedef ::SireVol::Space const & ( ::SireSystem::IDAssigner::*space_function_type )(  ) const;
+            typedef ::SireVol::Space const & ( ::SireSystem::IDAssigner::*space_function_type)(  ) const;
             space_function_type space_function_value( &::SireSystem::IDAssigner::space );
             
             IDAssigner_exposer.def( 
@@ -146,7 +146,7 @@ void register_IDAssigner_class(){
         }
         { //::SireSystem::IDAssigner::toString
         
-            typedef ::QString ( ::SireSystem::IDAssigner::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireSystem::IDAssigner::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireSystem::IDAssigner::toString );
             
             IDAssigner_exposer.def( 
@@ -166,7 +166,7 @@ void register_IDAssigner_class(){
         }
         { //::SireSystem::IDAssigner::update
         
-            typedef void ( ::SireSystem::IDAssigner::*update_function_type )( ::SireSystem::System const & ) ;
+            typedef void ( ::SireSystem::IDAssigner::*update_function_type)( ::SireSystem::System const & ) ;
             update_function_type update_function_value( &::SireSystem::IDAssigner::update );
             
             IDAssigner_exposer.def( 
@@ -177,7 +177,7 @@ void register_IDAssigner_class(){
         }
         { //::SireSystem::IDAssigner::what
         
-            typedef char const * ( ::SireSystem::IDAssigner::*what_function_type )(  ) const;
+            typedef char const * ( ::SireSystem::IDAssigner::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireSystem::IDAssigner::what );
             
             IDAssigner_exposer.def( 

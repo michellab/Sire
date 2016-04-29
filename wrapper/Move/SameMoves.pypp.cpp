@@ -58,7 +58,7 @@ void register_SameMoves_class(){
         SameMoves_exposer.def( bp::init< SireMove::SameMoves const & >(( bp::arg("other") )) );
         { //::SireMove::SameMoves::clearStatistics
         
-            typedef void ( ::SireMove::SameMoves::*clearStatistics_function_type )(  ) ;
+            typedef void ( ::SireMove::SameMoves::*clearStatistics_function_type)(  ) ;
             clearStatistics_function_type clearStatistics_function_value( &::SireMove::SameMoves::clearStatistics );
             
             SameMoves_exposer.def( 
@@ -68,7 +68,7 @@ void register_SameMoves_class(){
         }
         { //::SireMove::SameMoves::energyComponent
         
-            typedef ::SireCAS::Symbol const & ( ::SireMove::SameMoves::*energyComponent_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMove::SameMoves::*energyComponent_function_type)(  ) const;
             energyComponent_function_type energyComponent_function_value( &::SireMove::SameMoves::energyComponent );
             
             SameMoves_exposer.def( 
@@ -79,7 +79,7 @@ void register_SameMoves_class(){
         }
         { //::SireMove::SameMoves::move
         
-            typedef ::SireSystem::System ( ::SireMove::SameMoves::*move_function_type )( ::SireSystem::System const &,int,bool ) ;
+            typedef ::SireSystem::System ( ::SireMove::SameMoves::*move_function_type)( ::SireSystem::System const &,int,bool ) ;
             move_function_type move_function_value( &::SireMove::SameMoves::move );
             
             SameMoves_exposer.def( 
@@ -90,7 +90,7 @@ void register_SameMoves_class(){
         }
         { //::SireMove::SameMoves::moves
         
-            typedef ::QList< SireBase::PropPtr< SireMove::Move > > ( ::SireMove::SameMoves::*moves_function_type )(  ) const;
+            typedef ::QList< SireBase::PropPtr< SireMove::Move > > ( ::SireMove::SameMoves::*moves_function_type)(  ) const;
             moves_function_type moves_function_value( &::SireMove::SameMoves::moves );
             
             SameMoves_exposer.def( 
@@ -101,7 +101,7 @@ void register_SameMoves_class(){
         SameMoves_exposer.def( bp::self != bp::self );
         { //::SireMove::SameMoves::operator=
         
-            typedef ::SireMove::SameMoves & ( ::SireMove::SameMoves::*assign_function_type )( ::SireMove::SameMoves const & ) ;
+            typedef ::SireMove::SameMoves & ( ::SireMove::SameMoves::*assign_function_type)( ::SireMove::SameMoves const & ) ;
             assign_function_type assign_function_value( &::SireMove::SameMoves::operator= );
             
             SameMoves_exposer.def( 
@@ -114,7 +114,7 @@ void register_SameMoves_class(){
         SameMoves_exposer.def( bp::self == bp::self );
         { //::SireMove::SameMoves::setEnergyComponent
         
-            typedef void ( ::SireMove::SameMoves::*setEnergyComponent_function_type )( ::SireCAS::Symbol const & ) ;
+            typedef void ( ::SireMove::SameMoves::*setEnergyComponent_function_type)( ::SireCAS::Symbol const & ) ;
             setEnergyComponent_function_type setEnergyComponent_function_value( &::SireMove::SameMoves::setEnergyComponent );
             
             SameMoves_exposer.def( 
@@ -125,7 +125,7 @@ void register_SameMoves_class(){
         }
         { //::SireMove::SameMoves::setGenerator
         
-            typedef void ( ::SireMove::SameMoves::*setGenerator_function_type )( ::SireMaths::RanGenerator const & ) ;
+            typedef void ( ::SireMove::SameMoves::*setGenerator_function_type)( ::SireMaths::RanGenerator const & ) ;
             setGenerator_function_type setGenerator_function_value( &::SireMove::SameMoves::setGenerator );
             
             SameMoves_exposer.def( 
@@ -136,7 +136,7 @@ void register_SameMoves_class(){
         }
         { //::SireMove::SameMoves::setSpaceProperty
         
-            typedef void ( ::SireMove::SameMoves::*setSpaceProperty_function_type )( ::SireBase::PropertyName const & ) ;
+            typedef void ( ::SireMove::SameMoves::*setSpaceProperty_function_type)( ::SireBase::PropertyName const & ) ;
             setSpaceProperty_function_type setSpaceProperty_function_value( &::SireMove::SameMoves::setSpaceProperty );
             
             SameMoves_exposer.def( 
@@ -147,7 +147,7 @@ void register_SameMoves_class(){
         }
         { //::SireMove::SameMoves::spaceProperty
         
-            typedef ::SireBase::PropertyName const & ( ::SireMove::SameMoves::*spaceProperty_function_type )(  ) const;
+            typedef ::SireBase::PropertyName const & ( ::SireMove::SameMoves::*spaceProperty_function_type)(  ) const;
             spaceProperty_function_type spaceProperty_function_value( &::SireMove::SameMoves::spaceProperty );
             
             SameMoves_exposer.def( 
@@ -158,7 +158,7 @@ void register_SameMoves_class(){
         }
         { //::SireMove::SameMoves::toString
         
-            typedef ::QString ( ::SireMove::SameMoves::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMove::SameMoves::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMove::SameMoves::toString );
             
             SameMoves_exposer.def( 

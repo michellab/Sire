@@ -39,7 +39,7 @@ void register_NullQM_class(){
         NullQM_exposer.def( bp::self != bp::self );
         { //::Squire::NullQM::operator=
         
-            typedef ::Squire::NullQM & ( ::Squire::NullQM::*assign_function_type )( ::Squire::NullQM const & ) ;
+            typedef ::Squire::NullQM & ( ::Squire::NullQM::*assign_function_type)( ::Squire::NullQM const & ) ;
             assign_function_type assign_function_value( &::Squire::NullQM::operator= );
             
             NullQM_exposer.def( 
@@ -52,7 +52,7 @@ void register_NullQM_class(){
         NullQM_exposer.def( bp::self == bp::self );
         { //::Squire::NullQM::supportsLatticeCharges
         
-            typedef bool ( ::Squire::NullQM::*supportsLatticeCharges_function_type )(  ) const;
+            typedef bool ( ::Squire::NullQM::*supportsLatticeCharges_function_type)(  ) const;
             supportsLatticeCharges_function_type supportsLatticeCharges_function_value( &::Squire::NullQM::supportsLatticeCharges );
             
             NullQM_exposer.def( 

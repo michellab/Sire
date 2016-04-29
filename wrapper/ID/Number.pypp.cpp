@@ -23,7 +23,7 @@ void register_Number_class(){
         bp::scope Number_scope( Number_exposer );
         { //::SireID::Number::hash
         
-            typedef ::uint ( ::SireID::Number::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireID::Number::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireID::Number::hash );
             
             Number_exposer.def( 
@@ -33,7 +33,7 @@ void register_Number_class(){
         }
         { //::SireID::Number::isNull
         
-            typedef bool ( ::SireID::Number::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireID::Number::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireID::Number::isNull );
             
             Number_exposer.def( 
@@ -53,7 +53,7 @@ void register_Number_class(){
         }
         { //::SireID::Number::value
         
-            typedef ::qint32 ( ::SireID::Number::*value_function_type )(  ) const;
+            typedef ::qint32 ( ::SireID::Number::*value_function_type)(  ) const;
             value_function_type value_function_value( &::SireID::Number::value );
             
             Number_exposer.def( 

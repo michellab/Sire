@@ -46,7 +46,7 @@ void register_StringArrayProperty_class(){
         StringArrayProperty_exposer.def( bp::self + bp::self );
         { //::SireBase::StringArrayProperty::operator=
         
-            typedef ::SireBase::StringArrayProperty & ( ::SireBase::StringArrayProperty::*assign_function_type )( ::SireBase::StringArrayProperty const & ) ;
+            typedef ::SireBase::StringArrayProperty & ( ::SireBase::StringArrayProperty::*assign_function_type)( ::SireBase::StringArrayProperty const & ) ;
             assign_function_type assign_function_value( &::SireBase::StringArrayProperty::operator= );
             
             StringArrayProperty_exposer.def( 

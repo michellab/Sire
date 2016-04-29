@@ -70,7 +70,7 @@ void register_CGName_class(){
         CGName_exposer.def( bp::init< SireMol::CGName const & >(( bp::arg("other") )) );
         { //::SireMol::CGName::hash
         
-            typedef ::uint ( ::SireMol::CGName::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::CGName::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::CGName::hash );
             
             CGName_exposer.def( 
@@ -80,7 +80,7 @@ void register_CGName_class(){
         }
         { //::SireMol::CGName::isNull
         
-            typedef bool ( ::SireMol::CGName::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::CGName::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::CGName::isNull );
             
             CGName_exposer.def( 
@@ -90,7 +90,7 @@ void register_CGName_class(){
         }
         { //::SireMol::CGName::map
         
-            typedef ::QList< SireMol::CGIdx > ( ::SireMol::CGName::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::CGIdx > ( ::SireMol::CGName::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireMol::CGName::map );
             
             CGName_exposer.def( 
@@ -102,7 +102,7 @@ void register_CGName_class(){
         CGName_exposer.def( bp::self != bp::self );
         { //::SireMol::CGName::operator=
         
-            typedef ::SireMol::CGName & ( ::SireMol::CGName::*assign_function_type )( ::SireMol::CGName const & ) ;
+            typedef ::SireMol::CGName & ( ::SireMol::CGName::*assign_function_type)( ::SireMol::CGName const & ) ;
             assign_function_type assign_function_value( &::SireMol::CGName::operator= );
             
             CGName_exposer.def( 
@@ -116,7 +116,7 @@ void register_CGName_class(){
         CGName_exposer.def( bp::self == bp::self );
         { //::SireMol::CGName::toString
         
-            typedef ::QString ( ::SireMol::CGName::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::CGName::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::CGName::toString );
             
             CGName_exposer.def( 
@@ -136,7 +136,7 @@ void register_CGName_class(){
         }
         { //::SireMol::CGName::what
         
-            typedef char const * ( ::SireMol::CGName::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::CGName::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::CGName::what );
             
             CGName_exposer.def( 

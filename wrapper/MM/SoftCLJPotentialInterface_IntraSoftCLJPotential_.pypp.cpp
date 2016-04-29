@@ -26,7 +26,7 @@ void register_SoftCLJPotentialInterface_IntraSoftCLJPotential__class(){
         { //::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::alpha
         
             typedef SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > exported_class_t;
-            typedef double ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*alpha_function_type )(  ) const;
+            typedef double ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*alpha_function_type)(  ) const;
             alpha_function_type alpha_function_value( &::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::alpha );
             
             SoftCLJPotentialInterface_IntraSoftCLJPotential__exposer.def( 
@@ -37,7 +37,7 @@ void register_SoftCLJPotentialInterface_IntraSoftCLJPotential__class(){
         { //::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::alpha
         
             typedef SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > exported_class_t;
-            typedef double ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*alpha_function_type )( int ) const;
+            typedef double ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*alpha_function_type)( int ) const;
             alpha_function_type alpha_function_value( &::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::alpha );
             
             SoftCLJPotentialInterface_IntraSoftCLJPotential__exposer.def( 
@@ -49,7 +49,7 @@ void register_SoftCLJPotentialInterface_IntraSoftCLJPotential__class(){
         { //::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::clearAlphas
         
             typedef SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > exported_class_t;
-            typedef void ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*clearAlphas_function_type )(  ) ;
+            typedef void ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*clearAlphas_function_type)(  ) ;
             clearAlphas_function_type clearAlphas_function_value( &::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::clearAlphas );
             
             SoftCLJPotentialInterface_IntraSoftCLJPotential__exposer.def( 
@@ -60,7 +60,7 @@ void register_SoftCLJPotentialInterface_IntraSoftCLJPotential__class(){
         { //::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::coulombPower
         
             typedef SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > exported_class_t;
-            typedef int ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*coulombPower_function_type )(  ) const;
+            typedef int ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*coulombPower_function_type)(  ) const;
             coulombPower_function_type coulombPower_function_value( &::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::coulombPower );
             
             SoftCLJPotentialInterface_IntraSoftCLJPotential__exposer.def( 
@@ -71,7 +71,7 @@ void register_SoftCLJPotentialInterface_IntraSoftCLJPotential__class(){
         { //::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::hasAlphaValue
         
             typedef SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > exported_class_t;
-            typedef bool ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*hasAlphaValue_function_type )( int ) const;
+            typedef bool ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*hasAlphaValue_function_type)( int ) const;
             hasAlphaValue_function_type hasAlphaValue_function_value( &::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::hasAlphaValue );
             
             SoftCLJPotentialInterface_IntraSoftCLJPotential__exposer.def( 
@@ -83,7 +83,7 @@ void register_SoftCLJPotentialInterface_IntraSoftCLJPotential__class(){
         { //::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::ljPower
         
             typedef SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > exported_class_t;
-            typedef int ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*ljPower_function_type )(  ) const;
+            typedef int ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*ljPower_function_type)(  ) const;
             ljPower_function_type ljPower_function_value( &::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::ljPower );
             
             SoftCLJPotentialInterface_IntraSoftCLJPotential__exposer.def( 
@@ -94,7 +94,7 @@ void register_SoftCLJPotentialInterface_IntraSoftCLJPotential__class(){
         { //::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::nActiveAlphaComponents
         
             typedef SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > exported_class_t;
-            typedef int ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*nActiveAlphaComponents_function_type )(  ) const;
+            typedef int ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*nActiveAlphaComponents_function_type)(  ) const;
             nActiveAlphaComponents_function_type nActiveAlphaComponents_function_value( &::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::nActiveAlphaComponents );
             
             SoftCLJPotentialInterface_IntraSoftCLJPotential__exposer.def( 
@@ -105,7 +105,7 @@ void register_SoftCLJPotentialInterface_IntraSoftCLJPotential__class(){
         { //::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::removeAlpha
         
             typedef SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > exported_class_t;
-            typedef bool ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*removeAlpha_function_type )( int ) ;
+            typedef bool ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*removeAlpha_function_type)( int ) ;
             removeAlpha_function_type removeAlpha_function_value( &::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::removeAlpha );
             
             SoftCLJPotentialInterface_IntraSoftCLJPotential__exposer.def( 
@@ -117,7 +117,7 @@ void register_SoftCLJPotentialInterface_IntraSoftCLJPotential__class(){
         { //::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::setAlpha
         
             typedef SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > exported_class_t;
-            typedef bool ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*setAlpha_function_type )( double ) ;
+            typedef bool ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*setAlpha_function_type)( double ) ;
             setAlpha_function_type setAlpha_function_value( &::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::setAlpha );
             
             SoftCLJPotentialInterface_IntraSoftCLJPotential__exposer.def( 
@@ -129,7 +129,7 @@ void register_SoftCLJPotentialInterface_IntraSoftCLJPotential__class(){
         { //::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::setAlpha
         
             typedef SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > exported_class_t;
-            typedef bool ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*setAlpha_function_type )( int,double ) ;
+            typedef bool ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*setAlpha_function_type)( int,double ) ;
             setAlpha_function_type setAlpha_function_value( &::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::setAlpha );
             
             SoftCLJPotentialInterface_IntraSoftCLJPotential__exposer.def( 
@@ -141,7 +141,7 @@ void register_SoftCLJPotentialInterface_IntraSoftCLJPotential__class(){
         { //::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::setCoulombPower
         
             typedef SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > exported_class_t;
-            typedef bool ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*setCoulombPower_function_type )( int ) ;
+            typedef bool ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*setCoulombPower_function_type)( int ) ;
             setCoulombPower_function_type setCoulombPower_function_value( &::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::setCoulombPower );
             
             SoftCLJPotentialInterface_IntraSoftCLJPotential__exposer.def( 
@@ -153,7 +153,7 @@ void register_SoftCLJPotentialInterface_IntraSoftCLJPotential__class(){
         { //::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::setLJPower
         
             typedef SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > exported_class_t;
-            typedef bool ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*setLJPower_function_type )( int ) ;
+            typedef bool ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*setLJPower_function_type)( int ) ;
             setLJPower_function_type setLJPower_function_value( &::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::setLJPower );
             
             SoftCLJPotentialInterface_IntraSoftCLJPotential__exposer.def( 
@@ -165,7 +165,7 @@ void register_SoftCLJPotentialInterface_IntraSoftCLJPotential__class(){
         { //::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::setShiftDelta
         
             typedef SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > exported_class_t;
-            typedef bool ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*setShiftDelta_function_type )( double ) ;
+            typedef bool ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*setShiftDelta_function_type)( double ) ;
             setShiftDelta_function_type setShiftDelta_function_value( &::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::setShiftDelta );
             
             SoftCLJPotentialInterface_IntraSoftCLJPotential__exposer.def( 
@@ -177,7 +177,7 @@ void register_SoftCLJPotentialInterface_IntraSoftCLJPotential__class(){
         { //::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::shiftDelta
         
             typedef SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > exported_class_t;
-            typedef double ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*shiftDelta_function_type )(  ) const;
+            typedef double ( ::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::*shiftDelta_function_type)(  ) const;
             shiftDelta_function_type shiftDelta_function_value( &::SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential >::shiftDelta );
             
             SoftCLJPotentialInterface_IntraSoftCLJPotential__exposer.def( 

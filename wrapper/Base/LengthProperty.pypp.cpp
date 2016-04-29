@@ -30,11 +30,12 @@ void register_LengthProperty_class(){
         LengthProperty_exposer_t LengthProperty_exposer = LengthProperty_exposer_t( "LengthProperty", bp::init< >() );
         bp::scope LengthProperty_scope( LengthProperty_exposer );
         LengthProperty_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("value") )) );
+        LengthProperty_exposer.def( bp::init< SireBase::VariantProperty const & >(( bp::arg("other") )) );
         LengthProperty_exposer.def( bp::init< SireBase::LengthProperty const & >(( bp::arg("other") )) );
         LengthProperty_exposer.def( bp::self != bp::self );
         { //::SireBase::LengthProperty::operator=
         
-            typedef ::SireBase::LengthProperty & ( ::SireBase::LengthProperty::*assign_function_type )( ::SireBase::LengthProperty const & ) ;
+            typedef ::SireBase::LengthProperty & ( ::SireBase::LengthProperty::*assign_function_type)( ::SireBase::LengthProperty const & ) ;
             assign_function_type assign_function_value( &::SireBase::LengthProperty::operator= );
             
             LengthProperty_exposer.def( 
@@ -47,7 +48,7 @@ void register_LengthProperty_class(){
         LengthProperty_exposer.def( bp::self == bp::self );
         { //::SireBase::LengthProperty::toString
         
-            typedef ::QString ( ::SireBase::LengthProperty::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireBase::LengthProperty::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireBase::LengthProperty::toString );
             
             LengthProperty_exposer.def( 
@@ -67,7 +68,7 @@ void register_LengthProperty_class(){
         }
         { //::SireBase::LengthProperty::value
         
-            typedef ::SireUnits::Dimension::Length ( ::SireBase::LengthProperty::*value_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireBase::LengthProperty::*value_function_type)(  ) const;
             value_function_type value_function_value( &::SireBase::LengthProperty::value );
             
             LengthProperty_exposer.def( 

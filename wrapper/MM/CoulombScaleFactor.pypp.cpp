@@ -28,7 +28,7 @@ void register_CoulombScaleFactor_class(){
         CoulombScaleFactor_exposer.def( bp::init< SireMM::CoulombScaleFactor const & >(( bp::arg("other") )) );
         { //::SireMM::CoulombScaleFactor::coulomb
         
-            typedef double ( ::SireMM::CoulombScaleFactor::*coulomb_function_type )(  ) const;
+            typedef double ( ::SireMM::CoulombScaleFactor::*coulomb_function_type)(  ) const;
             coulomb_function_type coulomb_function_value( &::SireMM::CoulombScaleFactor::coulomb );
             
             CoulombScaleFactor_exposer.def( 
@@ -39,7 +39,7 @@ void register_CoulombScaleFactor_class(){
         CoulombScaleFactor_exposer.def( bp::self != bp::self );
         { //::SireMM::CoulombScaleFactor::operator=
         
-            typedef ::SireMM::CoulombScaleFactor & ( ::SireMM::CoulombScaleFactor::*assign_function_type )( ::SireMM::CoulombScaleFactor const & ) ;
+            typedef ::SireMM::CoulombScaleFactor & ( ::SireMM::CoulombScaleFactor::*assign_function_type)( ::SireMM::CoulombScaleFactor const & ) ;
             assign_function_type assign_function_value( &::SireMM::CoulombScaleFactor::operator= );
             
             CoulombScaleFactor_exposer.def( 
@@ -62,7 +62,7 @@ void register_CoulombScaleFactor_class(){
         }
         { //::SireMM::CoulombScaleFactor::what
         
-            typedef char const * ( ::SireMM::CoulombScaleFactor::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::CoulombScaleFactor::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::CoulombScaleFactor::what );
             
             CoulombScaleFactor_exposer.def( 

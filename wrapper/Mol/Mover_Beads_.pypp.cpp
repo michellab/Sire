@@ -77,7 +77,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::align
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*align_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*align_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
             align_function_type align_function_value( &::SireMol::Mover< SireMol::Beads >::align );
             
             Mover_Beads__exposer.def( 
@@ -90,7 +90,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::align
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*align_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*align_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
             align_function_type align_function_value( &::SireMol::Mover< SireMol::Beads >::align );
             
             Mover_Beads__exposer.def( 
@@ -103,7 +103,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::align
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*align_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*align_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
             align_function_type align_function_value( &::SireMol::Mover< SireMol::Beads >::align );
             
             Mover_Beads__exposer.def( 
@@ -116,7 +116,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::align
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*align_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*align_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
             align_function_type align_function_value( &::SireMol::Mover< SireMol::Beads >::align );
             
             Mover_Beads__exposer.def( 
@@ -129,7 +129,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::alignTo
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*alignTo_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*alignTo_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
             alignTo_function_type alignTo_function_value( &::SireMol::Mover< SireMol::Beads >::alignTo );
             
             Mover_Beads__exposer.def( 
@@ -142,7 +142,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::alignTo
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*alignTo_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*alignTo_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
             alignTo_function_type alignTo_function_value( &::SireMol::Mover< SireMol::Beads >::alignTo );
             
             Mover_Beads__exposer.def( 
@@ -155,7 +155,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::alignTo
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*alignTo_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomSelection const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*alignTo_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomSelection const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
             alignTo_function_type alignTo_function_value( &::SireMol::Mover< SireMol::Beads >::alignTo );
             
             Mover_Beads__exposer.def( 
@@ -168,7 +168,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::alignTo
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*alignTo_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomSelection const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*alignTo_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomSelection const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
             alignTo_function_type alignTo_function_value( &::SireMol::Mover< SireMol::Beads >::alignTo );
             
             Mover_Beads__exposer.def( 
@@ -181,7 +181,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::change
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*change_function_type )( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*change_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 >,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::Beads >::change );
             
             Mover_Beads__exposer.def( 
@@ -194,7 +194,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::change
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*change_function_type )( ::SireMol::AngleID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*change_function_type)( ::SireMol::AngleID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::Beads >::change );
             
             Mover_Beads__exposer.def( 
@@ -207,7 +207,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::change
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*change_function_type )( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*change_function_type)( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::Beads >::change );
             
             Mover_Beads__exposer.def( 
@@ -220,7 +220,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::change
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*change_function_type )( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*change_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::Beads >::change );
             
             Mover_Beads__exposer.def( 
@@ -233,7 +233,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::change
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*change_function_type )( ::SireMol::ImproperID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*change_function_type)( ::SireMol::ImproperID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::Beads >::change );
             
             Mover_Beads__exposer.def( 
@@ -246,7 +246,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::changeFrame
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*changeFrame_function_type )( ::SireMaths::AxisSet const &,::SireMaths::AxisSet const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*changeFrame_function_type)( ::SireMaths::AxisSet const &,::SireMaths::AxisSet const &,::SireBase::PropertyMap const & ) ;
             changeFrame_function_type changeFrame_function_value( &::SireMol::Mover< SireMol::Beads >::changeFrame );
             
             Mover_Beads__exposer.def( 
@@ -259,7 +259,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::commit
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Beads ( ::SireMol::Mover< SireMol::Beads >::*commit_function_type )(  ) const;
+            typedef ::SireMol::Beads ( ::SireMol::Mover< SireMol::Beads >::*commit_function_type)(  ) const;
             commit_function_type commit_function_value( &::SireMol::Mover< SireMol::Beads >::commit );
             
             Mover_Beads__exposer.def( 
@@ -270,7 +270,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::mapInto
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*mapInto_function_type )( ::SireMaths::AxisSet const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*mapInto_function_type)( ::SireMaths::AxisSet const &,::SireBase::PropertyMap const & ) ;
             mapInto_function_type mapInto_function_value( &::SireMol::Mover< SireMol::Beads >::mapInto );
             
             Mover_Beads__exposer.def( 
@@ -283,7 +283,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::operator=
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*assign_function_type )( ::SireMol::Mover< SireMol::Beads > const & ) ;
+            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*assign_function_type)( ::SireMol::Mover< SireMol::Beads > const & ) ;
             assign_function_type assign_function_value( &::SireMol::Mover< SireMol::Beads >::operator= );
             
             Mover_Beads__exposer.def( 
@@ -296,7 +296,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::operator=
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*assign_function_type )( ::SireMol::Beads const & ) ;
+            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*assign_function_type)( ::SireMol::Beads const & ) ;
             assign_function_type assign_function_value( &::SireMol::Mover< SireMol::Beads >::operator= );
             
             Mover_Beads__exposer.def( 
@@ -309,7 +309,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::rotate
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*rotate_function_type )( ::SireMaths::Quaternion const &,::SireMaths::Vector const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*rotate_function_type)( ::SireMaths::Quaternion const &,::SireMaths::Vector const &,::SireBase::PropertyMap const & ) ;
             rotate_function_type rotate_function_value( &::SireMol::Mover< SireMol::Beads >::rotate );
             
             Mover_Beads__exposer.def( 
@@ -322,7 +322,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::rotate
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*rotate_function_type )( ::SireMaths::Matrix const &,::SireMaths::Vector const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*rotate_function_type)( ::SireMaths::Matrix const &,::SireMaths::Vector const &,::SireBase::PropertyMap const & ) ;
             rotate_function_type rotate_function_value( &::SireMol::Mover< SireMol::Beads >::rotate );
             
             Mover_Beads__exposer.def( 
@@ -335,7 +335,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::set
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*set_function_type )( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*set_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 >,::SireBase::PropertyMap const & ) ;
             set_function_type set_function_value( &::SireMol::Mover< SireMol::Beads >::set );
             
             Mover_Beads__exposer.def( 
@@ -348,7 +348,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::set
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*set_function_type )( ::SireMol::AngleID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*set_function_type)( ::SireMol::AngleID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             set_function_type set_function_value( &::SireMol::Mover< SireMol::Beads >::set );
             
             Mover_Beads__exposer.def( 
@@ -361,7 +361,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::set
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*set_function_type )( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*set_function_type)( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             set_function_type set_function_value( &::SireMol::Mover< SireMol::Beads >::set );
             
             Mover_Beads__exposer.def( 
@@ -374,7 +374,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::set
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*set_function_type )( ::SireMol::ImproperID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*set_function_type)( ::SireMol::ImproperID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             set_function_type set_function_value( &::SireMol::Mover< SireMol::Beads >::set );
             
             Mover_Beads__exposer.def( 
@@ -387,7 +387,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::setAll
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*setAll_function_type )( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*setAll_function_type)( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             setAll_function_type setAll_function_value( &::SireMol::Mover< SireMol::Beads >::setAll );
             
             Mover_Beads__exposer.def( 
@@ -400,7 +400,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::toString
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::QString ( ::SireMol::Mover< SireMol::Beads >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::Mover< SireMol::Beads >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::Mover< SireMol::Beads >::toString );
             
             Mover_Beads__exposer.def( 
@@ -411,7 +411,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::transform
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*transform_function_type )( ::SireMaths::Transform const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*transform_function_type)( ::SireMaths::Transform const &,::SireBase::PropertyMap const & ) ;
             transform_function_type transform_function_value( &::SireMol::Mover< SireMol::Beads >::transform );
             
             Mover_Beads__exposer.def( 
@@ -424,7 +424,7 @@ void register_Mover_Beads__class(){
         { //::SireMol::Mover< SireMol::Beads >::translate
         
             typedef SireMol::Mover< SireMol::Beads > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*translate_function_type )( ::SireMaths::Vector const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Beads > & ( ::SireMol::Mover< SireMol::Beads >::*translate_function_type)( ::SireMaths::Vector const &,::SireBase::PropertyMap const & ) ;
             translate_function_type translate_function_value( &::SireMol::Mover< SireMol::Beads >::translate );
             
             Mover_Beads__exposer.def( 

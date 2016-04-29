@@ -46,7 +46,7 @@ void register_ThreeAtomFunctions_class(){
         ThreeAtomFunctions_exposer.def( bp::init< SireMM::ThreeAtomFunctions const & >(( bp::arg("other") )) );
         { //::SireMM::ThreeAtomFunctions::clear
         
-            typedef void ( ::SireMM::ThreeAtomFunctions::*clear_function_type )( ::SireMol::AtomIdx ) ;
+            typedef void ( ::SireMM::ThreeAtomFunctions::*clear_function_type)( ::SireMol::AtomIdx ) ;
             clear_function_type clear_function_value( &::SireMM::ThreeAtomFunctions::clear );
             
             ThreeAtomFunctions_exposer.def( 
@@ -57,7 +57,7 @@ void register_ThreeAtomFunctions_class(){
         }
         { //::SireMM::ThreeAtomFunctions::clear
         
-            typedef void ( ::SireMM::ThreeAtomFunctions::*clear_function_type )( ::SireMol::AtomID const & ) ;
+            typedef void ( ::SireMM::ThreeAtomFunctions::*clear_function_type)( ::SireMol::AtomID const & ) ;
             clear_function_type clear_function_value( &::SireMM::ThreeAtomFunctions::clear );
             
             ThreeAtomFunctions_exposer.def( 
@@ -68,7 +68,7 @@ void register_ThreeAtomFunctions_class(){
         }
         { //::SireMM::ThreeAtomFunctions::clear
         
-            typedef void ( ::SireMM::ThreeAtomFunctions::*clear_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx ) ;
+            typedef void ( ::SireMM::ThreeAtomFunctions::*clear_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx ) ;
             clear_function_type clear_function_value( &::SireMM::ThreeAtomFunctions::clear );
             
             ThreeAtomFunctions_exposer.def( 
@@ -79,7 +79,7 @@ void register_ThreeAtomFunctions_class(){
         }
         { //::SireMM::ThreeAtomFunctions::clear
         
-            typedef void ( ::SireMM::ThreeAtomFunctions::*clear_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) ;
+            typedef void ( ::SireMM::ThreeAtomFunctions::*clear_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) ;
             clear_function_type clear_function_value( &::SireMM::ThreeAtomFunctions::clear );
             
             ThreeAtomFunctions_exposer.def( 
@@ -90,7 +90,7 @@ void register_ThreeAtomFunctions_class(){
         }
         { //::SireMM::ThreeAtomFunctions::clear
         
-            typedef void ( ::SireMM::ThreeAtomFunctions::*clear_function_type )( ::SireMol::AngleID const & ) ;
+            typedef void ( ::SireMM::ThreeAtomFunctions::*clear_function_type)( ::SireMol::AngleID const & ) ;
             clear_function_type clear_function_value( &::SireMM::ThreeAtomFunctions::clear );
             
             ThreeAtomFunctions_exposer.def( 
@@ -101,7 +101,7 @@ void register_ThreeAtomFunctions_class(){
         }
         { //::SireMM::ThreeAtomFunctions::clear
         
-            typedef void ( ::SireMM::ThreeAtomFunctions::*clear_function_type )(  ) ;
+            typedef void ( ::SireMM::ThreeAtomFunctions::*clear_function_type)(  ) ;
             clear_function_type clear_function_value( &::SireMM::ThreeAtomFunctions::clear );
             
             ThreeAtomFunctions_exposer.def( 
@@ -111,7 +111,7 @@ void register_ThreeAtomFunctions_class(){
         }
         { //::SireMM::ThreeAtomFunctions::force
         
-            typedef ::SireCAS::Expression ( ::SireMM::ThreeAtomFunctions::*force_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx,::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireMM::ThreeAtomFunctions::*force_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx,::SireCAS::Symbol const & ) const;
             force_function_type force_function_value( &::SireMM::ThreeAtomFunctions::force );
             
             ThreeAtomFunctions_exposer.def( 
@@ -122,7 +122,7 @@ void register_ThreeAtomFunctions_class(){
         }
         { //::SireMM::ThreeAtomFunctions::force
         
-            typedef ::SireCAS::Expression ( ::SireMM::ThreeAtomFunctions::*force_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireMM::ThreeAtomFunctions::*force_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireCAS::Symbol const & ) const;
             force_function_type force_function_value( &::SireMM::ThreeAtomFunctions::force );
             
             ThreeAtomFunctions_exposer.def( 
@@ -133,7 +133,7 @@ void register_ThreeAtomFunctions_class(){
         }
         { //::SireMM::ThreeAtomFunctions::force
         
-            typedef ::SireCAS::Expression ( ::SireMM::ThreeAtomFunctions::*force_function_type )( ::SireMol::AngleID const &,::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireMM::ThreeAtomFunctions::*force_function_type)( ::SireMol::AngleID const &,::SireCAS::Symbol const & ) const;
             force_function_type force_function_value( &::SireMM::ThreeAtomFunctions::force );
             
             ThreeAtomFunctions_exposer.def( 
@@ -144,7 +144,7 @@ void register_ThreeAtomFunctions_class(){
         }
         { //::SireMM::ThreeAtomFunctions::forces
         
-            typedef ::QVector< SireMM::ThreeAtomFunction > ( ::SireMM::ThreeAtomFunctions::*forces_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::QVector< SireMM::ThreeAtomFunction > ( ::SireMM::ThreeAtomFunctions::*forces_function_type)( ::SireCAS::Symbol const & ) const;
             forces_function_type forces_function_value( &::SireMM::ThreeAtomFunctions::forces );
             
             ThreeAtomFunctions_exposer.def( 
@@ -155,7 +155,7 @@ void register_ThreeAtomFunctions_class(){
         }
         { //::SireMM::ThreeAtomFunctions::includeOnly
         
-            typedef ::SireMM::ThreeAtomFunctions ( ::SireMM::ThreeAtomFunctions::*includeOnly_function_type )( ::SireMol::AtomSelection const &,bool ) const;
+            typedef ::SireMM::ThreeAtomFunctions ( ::SireMM::ThreeAtomFunctions::*includeOnly_function_type)( ::SireMol::AtomSelection const &,bool ) const;
             includeOnly_function_type includeOnly_function_value( &::SireMM::ThreeAtomFunctions::includeOnly );
             
             ThreeAtomFunctions_exposer.def( 
@@ -166,7 +166,7 @@ void register_ThreeAtomFunctions_class(){
         }
         { //::SireMM::ThreeAtomFunctions::isEmpty
         
-            typedef bool ( ::SireMM::ThreeAtomFunctions::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMM::ThreeAtomFunctions::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMM::ThreeAtomFunctions::isEmpty );
             
             ThreeAtomFunctions_exposer.def( 
@@ -176,7 +176,7 @@ void register_ThreeAtomFunctions_class(){
         }
         { //::SireMM::ThreeAtomFunctions::nFunctions
         
-            typedef int ( ::SireMM::ThreeAtomFunctions::*nFunctions_function_type )(  ) const;
+            typedef int ( ::SireMM::ThreeAtomFunctions::*nFunctions_function_type)(  ) const;
             nFunctions_function_type nFunctions_function_value( &::SireMM::ThreeAtomFunctions::nFunctions );
             
             ThreeAtomFunctions_exposer.def( 
@@ -187,7 +187,7 @@ void register_ThreeAtomFunctions_class(){
         ThreeAtomFunctions_exposer.def( bp::self != bp::self );
         { //::SireMM::ThreeAtomFunctions::operator=
         
-            typedef ::SireMM::ThreeAtomFunctions & ( ::SireMM::ThreeAtomFunctions::*assign_function_type )( ::SireMM::ThreeAtomFunctions const & ) ;
+            typedef ::SireMM::ThreeAtomFunctions & ( ::SireMM::ThreeAtomFunctions::*assign_function_type)( ::SireMM::ThreeAtomFunctions const & ) ;
             assign_function_type assign_function_value( &::SireMM::ThreeAtomFunctions::operator= );
             
             ThreeAtomFunctions_exposer.def( 
@@ -200,7 +200,7 @@ void register_ThreeAtomFunctions_class(){
         ThreeAtomFunctions_exposer.def( bp::self == bp::self );
         { //::SireMM::ThreeAtomFunctions::potential
         
-            typedef ::SireCAS::Expression ( ::SireMM::ThreeAtomFunctions::*potential_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
+            typedef ::SireCAS::Expression ( ::SireMM::ThreeAtomFunctions::*potential_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
             potential_function_type potential_function_value( &::SireMM::ThreeAtomFunctions::potential );
             
             ThreeAtomFunctions_exposer.def( 
@@ -211,7 +211,7 @@ void register_ThreeAtomFunctions_class(){
         }
         { //::SireMM::ThreeAtomFunctions::potential
         
-            typedef ::SireCAS::Expression ( ::SireMM::ThreeAtomFunctions::*potential_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef ::SireCAS::Expression ( ::SireMM::ThreeAtomFunctions::*potential_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             potential_function_type potential_function_value( &::SireMM::ThreeAtomFunctions::potential );
             
             ThreeAtomFunctions_exposer.def( 
@@ -222,7 +222,7 @@ void register_ThreeAtomFunctions_class(){
         }
         { //::SireMM::ThreeAtomFunctions::potential
         
-            typedef ::SireCAS::Expression ( ::SireMM::ThreeAtomFunctions::*potential_function_type )( ::SireMol::AngleID const & ) const;
+            typedef ::SireCAS::Expression ( ::SireMM::ThreeAtomFunctions::*potential_function_type)( ::SireMol::AngleID const & ) const;
             potential_function_type potential_function_value( &::SireMM::ThreeAtomFunctions::potential );
             
             ThreeAtomFunctions_exposer.def( 
@@ -233,7 +233,7 @@ void register_ThreeAtomFunctions_class(){
         }
         { //::SireMM::ThreeAtomFunctions::potentials
         
-            typedef ::QVector< SireMM::ThreeAtomFunction > ( ::SireMM::ThreeAtomFunctions::*potentials_function_type )(  ) const;
+            typedef ::QVector< SireMM::ThreeAtomFunction > ( ::SireMM::ThreeAtomFunctions::*potentials_function_type)(  ) const;
             potentials_function_type potentials_function_value( &::SireMM::ThreeAtomFunctions::potentials );
             
             ThreeAtomFunctions_exposer.def( 
@@ -243,7 +243,7 @@ void register_ThreeAtomFunctions_class(){
         }
         { //::SireMM::ThreeAtomFunctions::set
         
-            typedef void ( ::SireMM::ThreeAtomFunctions::*set_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx,::SireCAS::Expression const & ) ;
+            typedef void ( ::SireMM::ThreeAtomFunctions::*set_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx,::SireCAS::Expression const & ) ;
             set_function_type set_function_value( &::SireMM::ThreeAtomFunctions::set );
             
             ThreeAtomFunctions_exposer.def( 
@@ -254,7 +254,7 @@ void register_ThreeAtomFunctions_class(){
         }
         { //::SireMM::ThreeAtomFunctions::set
         
-            typedef void ( ::SireMM::ThreeAtomFunctions::*set_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireCAS::Expression const & ) ;
+            typedef void ( ::SireMM::ThreeAtomFunctions::*set_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireCAS::Expression const & ) ;
             set_function_type set_function_value( &::SireMM::ThreeAtomFunctions::set );
             
             ThreeAtomFunctions_exposer.def( 
@@ -265,7 +265,7 @@ void register_ThreeAtomFunctions_class(){
         }
         { //::SireMM::ThreeAtomFunctions::set
         
-            typedef void ( ::SireMM::ThreeAtomFunctions::*set_function_type )( ::SireMol::AngleID const &,::SireCAS::Expression const & ) ;
+            typedef void ( ::SireMM::ThreeAtomFunctions::*set_function_type)( ::SireMol::AngleID const &,::SireCAS::Expression const & ) ;
             set_function_type set_function_value( &::SireMM::ThreeAtomFunctions::set );
             
             ThreeAtomFunctions_exposer.def( 
@@ -276,7 +276,7 @@ void register_ThreeAtomFunctions_class(){
         }
         { //::SireMM::ThreeAtomFunctions::substitute
         
-            typedef void ( ::SireMM::ThreeAtomFunctions::*substitute_function_type )( ::SireCAS::Identities const & ) ;
+            typedef void ( ::SireMM::ThreeAtomFunctions::*substitute_function_type)( ::SireCAS::Identities const & ) ;
             substitute_function_type substitute_function_value( &::SireMM::ThreeAtomFunctions::substitute );
             
             ThreeAtomFunctions_exposer.def( 
@@ -287,7 +287,7 @@ void register_ThreeAtomFunctions_class(){
         }
         { //::SireMM::ThreeAtomFunctions::toString
         
-            typedef ::QString ( ::SireMM::ThreeAtomFunctions::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMM::ThreeAtomFunctions::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMM::ThreeAtomFunctions::toString );
             
             ThreeAtomFunctions_exposer.def( 

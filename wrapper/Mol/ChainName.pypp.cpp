@@ -70,7 +70,7 @@ void register_ChainName_class(){
         ChainName_exposer.def( bp::init< SireMol::ChainName const & >(( bp::arg("other") )) );
         { //::SireMol::ChainName::hash
         
-            typedef ::uint ( ::SireMol::ChainName::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::ChainName::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::ChainName::hash );
             
             ChainName_exposer.def( 
@@ -80,7 +80,7 @@ void register_ChainName_class(){
         }
         { //::SireMol::ChainName::isNull
         
-            typedef bool ( ::SireMol::ChainName::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::ChainName::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::ChainName::isNull );
             
             ChainName_exposer.def( 
@@ -90,7 +90,7 @@ void register_ChainName_class(){
         }
         { //::SireMol::ChainName::map
         
-            typedef ::QList< SireMol::ChainIdx > ( ::SireMol::ChainName::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::ChainIdx > ( ::SireMol::ChainName::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireMol::ChainName::map );
             
             ChainName_exposer.def( 
@@ -102,7 +102,7 @@ void register_ChainName_class(){
         ChainName_exposer.def( bp::self != bp::self );
         { //::SireMol::ChainName::operator=
         
-            typedef ::SireMol::ChainName & ( ::SireMol::ChainName::*assign_function_type )( ::SireMol::ChainName const & ) ;
+            typedef ::SireMol::ChainName & ( ::SireMol::ChainName::*assign_function_type)( ::SireMol::ChainName const & ) ;
             assign_function_type assign_function_value( &::SireMol::ChainName::operator= );
             
             ChainName_exposer.def( 
@@ -116,7 +116,7 @@ void register_ChainName_class(){
         ChainName_exposer.def( bp::self == bp::self );
         { //::SireMol::ChainName::toString
         
-            typedef ::QString ( ::SireMol::ChainName::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::ChainName::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::ChainName::toString );
             
             ChainName_exposer.def( 
@@ -136,7 +136,7 @@ void register_ChainName_class(){
         }
         { //::SireMol::ChainName::what
         
-            typedef char const * ( ::SireMol::ChainName::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::ChainName::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::ChainName::what );
             
             ChainName_exposer.def( 

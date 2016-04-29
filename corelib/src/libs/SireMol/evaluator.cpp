@@ -56,6 +56,8 @@
 #include "SireUnits/dimensions.h"
 #include "SireUnits/units.h"
 
+#include "SireError/errors.h"
+
 #include "SireStream/datastream.h"
 
 #include <QDebug>
@@ -976,6 +978,8 @@ AxisSet Evaluator::principalAxes(Vector &principal_moments,
         const AtomMasses &masses = d->property(mass_property).asA<AtomMasses>();
         
         // JM 08/14 buggy in current code
+        #warning BUGGY IN CURRENT CODE
+        throw SireError::program_bug( QObject::tr("CODE IS BROKEN"), CODELOC );
         //return ::getPrincipalAxes(coords, masses, selected_atoms,
         //                          principal_moments);
     }
@@ -984,6 +988,8 @@ AxisSet Evaluator::principalAxes(Vector &principal_moments,
         const AtomElements &elements = d->property(map["element"]).asA<AtomElements>();
         
         // JM 08/14 buggy in current code
+        #warning BUGGY IN CURRENT CODE
+        throw SireError::program_bug( QObject::tr("CODE IS BROKEN"), CODELOC );
         //return ::getPrincipalAxes(coords, elements, selected_atoms,
         //                          principal_moments);
     }

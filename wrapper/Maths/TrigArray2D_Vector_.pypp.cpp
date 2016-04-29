@@ -55,7 +55,7 @@ void register_TrigArray2D_Vector__class(){
         { //::SireBase::TrigArray2D< SireMaths::Vector >::at
         
             typedef SireBase::TrigArray2D< SireMaths::Vector > exported_class_t;
-            typedef ::SireMaths::Vector const & ( ::SireBase::TrigArray2D< SireMaths::Vector >::*at_function_type )( int,int ) const;
+            typedef ::SireMaths::Vector const & ( ::SireBase::TrigArray2D< SireMaths::Vector >::*at_function_type)( int,int ) const;
             at_function_type at_function_value( &::SireBase::TrigArray2D< SireMaths::Vector >::at );
             
             TrigArray2D_Vector__exposer.def( 
@@ -68,7 +68,7 @@ void register_TrigArray2D_Vector__class(){
         { //::SireBase::TrigArray2D< SireMaths::Vector >::get
         
             typedef SireBase::TrigArray2D< SireMaths::Vector > exported_class_t;
-            typedef ::SireMaths::Vector const & ( ::SireBase::TrigArray2D< SireMaths::Vector >::*get_function_type )( int,int ) const;
+            typedef ::SireMaths::Vector const & ( ::SireBase::TrigArray2D< SireMaths::Vector >::*get_function_type)( int,int ) const;
             get_function_type get_function_value( &::SireBase::TrigArray2D< SireMaths::Vector >::get );
             
             TrigArray2D_Vector__exposer.def( 
@@ -82,7 +82,7 @@ void register_TrigArray2D_Vector__class(){
         { //::SireBase::TrigArray2D< SireMaths::Vector >::operator()
         
             typedef SireBase::TrigArray2D< SireMaths::Vector > exported_class_t;
-            typedef ::SireMaths::Vector const & ( ::SireBase::TrigArray2D< SireMaths::Vector >::*__call___function_type )( int,int ) const;
+            typedef ::SireMaths::Vector const & ( ::SireBase::TrigArray2D< SireMaths::Vector >::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireBase::TrigArray2D< SireMaths::Vector >::operator() );
             
             TrigArray2D_Vector__exposer.def( 
@@ -95,7 +95,7 @@ void register_TrigArray2D_Vector__class(){
         { //::SireBase::TrigArray2D< SireMaths::Vector >::operator=
         
             typedef SireBase::TrigArray2D< SireMaths::Vector > exported_class_t;
-            typedef ::SireBase::TrigArray2D< SireMaths::Vector > & ( ::SireBase::TrigArray2D< SireMaths::Vector >::*assign_function_type )( ::SireBase::TrigArray2D< SireMaths::Vector > const & ) ;
+            typedef ::SireBase::TrigArray2D< SireMaths::Vector > & ( ::SireBase::TrigArray2D< SireMaths::Vector >::*assign_function_type)( ::SireBase::TrigArray2D< SireMaths::Vector > const & ) ;
             assign_function_type assign_function_value( &::SireBase::TrigArray2D< SireMaths::Vector >::operator= );
             
             TrigArray2D_Vector__exposer.def( 
@@ -109,7 +109,7 @@ void register_TrigArray2D_Vector__class(){
         { //::SireBase::TrigArray2D< SireMaths::Vector >::redimension
         
             typedef SireBase::TrigArray2D< SireMaths::Vector > exported_class_t;
-            typedef void ( ::SireBase::TrigArray2D< SireMaths::Vector >::*redimension_function_type )( int ) ;
+            typedef void ( ::SireBase::TrigArray2D< SireMaths::Vector >::*redimension_function_type)( int ) ;
             redimension_function_type redimension_function_value( &::SireBase::TrigArray2D< SireMaths::Vector >::redimension );
             
             TrigArray2D_Vector__exposer.def( 
@@ -121,7 +121,7 @@ void register_TrigArray2D_Vector__class(){
         { //::SireBase::TrigArray2D< SireMaths::Vector >::set
         
             typedef SireBase::TrigArray2D< SireMaths::Vector > exported_class_t;
-            typedef void ( ::SireBase::TrigArray2D< SireMaths::Vector >::*set_function_type )( int,int,::SireMaths::Vector const & ) ;
+            typedef void ( ::SireBase::TrigArray2D< SireMaths::Vector >::*set_function_type)( int,int,::SireMaths::Vector const & ) ;
             set_function_type set_function_value( &::SireBase::TrigArray2D< SireMaths::Vector >::set );
             
             TrigArray2D_Vector__exposer.def( 
@@ -133,7 +133,7 @@ void register_TrigArray2D_Vector__class(){
         { //::SireBase::TrigArray2D< SireMaths::Vector >::setAll
         
             typedef SireBase::TrigArray2D< SireMaths::Vector > exported_class_t;
-            typedef void ( ::SireBase::TrigArray2D< SireMaths::Vector >::*setAll_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireBase::TrigArray2D< SireMaths::Vector >::*setAll_function_type)( ::SireMaths::Vector const & ) ;
             setAll_function_type setAll_function_value( &::SireBase::TrigArray2D< SireMaths::Vector >::setAll );
             
             TrigArray2D_Vector__exposer.def( 
@@ -145,7 +145,7 @@ void register_TrigArray2D_Vector__class(){
         { //::SireBase::TrigArray2D< SireMaths::Vector >::toString
         
             typedef SireBase::TrigArray2D< SireMaths::Vector > exported_class_t;
-            typedef ::QString ( ::SireBase::TrigArray2D< SireMaths::Vector >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireBase::TrigArray2D< SireMaths::Vector >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireBase::TrigArray2D< SireMaths::Vector >::toString );
             
             TrigArray2D_Vector__exposer.def( 
@@ -156,7 +156,7 @@ void register_TrigArray2D_Vector__class(){
         { //::SireBase::TrigArray2D< SireMaths::Vector >::transpose
         
             typedef SireBase::TrigArray2D< SireMaths::Vector > exported_class_t;
-            typedef ::SireBase::TrigArray2D< SireMaths::Vector > ( ::SireBase::TrigArray2D< SireMaths::Vector >::*transpose_function_type )(  ) const;
+            typedef ::SireBase::TrigArray2D< SireMaths::Vector > ( ::SireBase::TrigArray2D< SireMaths::Vector >::*transpose_function_type)(  ) const;
             transpose_function_type transpose_function_value( &::SireBase::TrigArray2D< SireMaths::Vector >::transpose );
             
             TrigArray2D_Vector__exposer.def( 

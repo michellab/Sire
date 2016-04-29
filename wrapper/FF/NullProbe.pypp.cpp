@@ -31,7 +31,7 @@ void register_NullProbe_class(){
         NullProbe_exposer.def( bp::self != bp::self );
         { //::SireFF::NullProbe::operator=
         
-            typedef ::SireFF::NullProbe & ( ::SireFF::NullProbe::*assign_function_type )( ::SireFF::NullProbe const & ) ;
+            typedef ::SireFF::NullProbe & ( ::SireFF::NullProbe::*assign_function_type)( ::SireFF::NullProbe const & ) ;
             assign_function_type assign_function_value( &::SireFF::NullProbe::operator= );
             
             NullProbe_exposer.def( 

@@ -946,7 +946,7 @@ static double getKineticEnergy(const QVector<double> &masses,
     
     for (int i=0; i<nats; ++i)
     {
-      //qDebug() << " i " << i << " m[i] " << masses_array[i] << "mom_array[i] " << mom_array[i].toString();
+        //qDebug() << " i " << i << " m[i] " << masses_array[i] << "mom_array[i] " << mom_array[i].toString();
         if (masses_array[i] != 0)
             nrg += mom_array[i].length2() / masses_array[i];
     }

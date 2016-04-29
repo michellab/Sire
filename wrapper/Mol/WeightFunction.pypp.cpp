@@ -53,7 +53,7 @@ void register_WeightFunction_class(){
         }
         { //::SireMol::WeightFunction::operator()
         
-            typedef double ( ::SireMol::WeightFunction::*__call___function_type )( ::SireMol::MoleculeData const &,::SireMol::AtomSelection const &,::SireMol::AtomSelection const &,::SireBase::PropertyMap const & ) const;
+            typedef double ( ::SireMol::WeightFunction::*__call___function_type)( ::SireMol::MoleculeData const &,::SireMol::AtomSelection const &,::SireMol::AtomSelection const &,::SireBase::PropertyMap const & ) const;
             __call___function_type __call___function_value( &::SireMol::WeightFunction::operator() );
             
             WeightFunction_exposer.def( 
@@ -64,7 +64,7 @@ void register_WeightFunction_class(){
         }
         { //::SireMol::WeightFunction::operator()
         
-            typedef double ( ::SireMol::WeightFunction::*__call___function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef double ( ::SireMol::WeightFunction::*__call___function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             __call___function_type __call___function_value( &::SireMol::WeightFunction::operator() );
             
             WeightFunction_exposer.def( 
@@ -75,7 +75,7 @@ void register_WeightFunction_class(){
         }
         { //::SireMol::WeightFunction::operator()
         
-            typedef double ( ::SireMol::WeightFunction::*__call___function_type )( ::SireMol::MoleculeView const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef double ( ::SireMol::WeightFunction::*__call___function_type)( ::SireMol::MoleculeView const &,::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             __call___function_type __call___function_value( &::SireMol::WeightFunction::operator() );
             
             WeightFunction_exposer.def( 

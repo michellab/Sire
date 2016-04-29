@@ -50,7 +50,7 @@ void register_CenterOfMass_class(){
         CenterOfMass_exposer.def( bp::init< SireFF::CenterOfMass const & >(( bp::arg("other") )) );
         { //::SireFF::CenterOfMass::addForce
         
-            typedef bool ( ::SireFF::CenterOfMass::*addForce_function_type )( ::SireFF::MolForceTable &,::SireMaths::Vector const & ) const;
+            typedef bool ( ::SireFF::CenterOfMass::*addForce_function_type)( ::SireFF::MolForceTable &,::SireMaths::Vector const & ) const;
             addForce_function_type addForce_function_value( &::SireFF::CenterOfMass::addForce );
             
             CenterOfMass_exposer.def( 
@@ -61,7 +61,7 @@ void register_CenterOfMass_class(){
         }
         { //::SireFF::CenterOfMass::addForce
         
-            typedef bool ( ::SireFF::CenterOfMass::*addForce_function_type )( ::SireFF::ForceTable &,::SireMaths::Vector const & ) const;
+            typedef bool ( ::SireFF::CenterOfMass::*addForce_function_type)( ::SireFF::ForceTable &,::SireMaths::Vector const & ) const;
             addForce_function_type addForce_function_value( &::SireFF::CenterOfMass::addForce );
             
             CenterOfMass_exposer.def( 
@@ -72,7 +72,7 @@ void register_CenterOfMass_class(){
         }
         { //::SireFF::CenterOfMass::contains
         
-            typedef bool ( ::SireFF::CenterOfMass::*contains_function_type )( ::SireMol::MolNum ) const;
+            typedef bool ( ::SireFF::CenterOfMass::*contains_function_type)( ::SireMol::MolNum ) const;
             contains_function_type contains_function_value( &::SireFF::CenterOfMass::contains );
             
             CenterOfMass_exposer.def( 
@@ -83,7 +83,7 @@ void register_CenterOfMass_class(){
         }
         { //::SireFF::CenterOfMass::contains
         
-            typedef bool ( ::SireFF::CenterOfMass::*contains_function_type )( ::SireMol::MolID const & ) const;
+            typedef bool ( ::SireFF::CenterOfMass::*contains_function_type)( ::SireMol::MolID const & ) const;
             contains_function_type contains_function_value( &::SireFF::CenterOfMass::contains );
             
             CenterOfMass_exposer.def( 
@@ -94,7 +94,7 @@ void register_CenterOfMass_class(){
         }
         { //::SireFF::CenterOfMass::isExtraMoleculePoint
         
-            typedef bool ( ::SireFF::CenterOfMass::*isExtraMoleculePoint_function_type )(  ) const;
+            typedef bool ( ::SireFF::CenterOfMass::*isExtraMoleculePoint_function_type)(  ) const;
             isExtraMoleculePoint_function_type isExtraMoleculePoint_function_value( &::SireFF::CenterOfMass::isExtraMoleculePoint );
             
             CenterOfMass_exposer.def( 
@@ -104,7 +104,7 @@ void register_CenterOfMass_class(){
         }
         { //::SireFF::CenterOfMass::isInterMoleculePoint
         
-            typedef bool ( ::SireFF::CenterOfMass::*isInterMoleculePoint_function_type )(  ) const;
+            typedef bool ( ::SireFF::CenterOfMass::*isInterMoleculePoint_function_type)(  ) const;
             isInterMoleculePoint_function_type isInterMoleculePoint_function_value( &::SireFF::CenterOfMass::isInterMoleculePoint );
             
             CenterOfMass_exposer.def( 
@@ -114,7 +114,7 @@ void register_CenterOfMass_class(){
         }
         { //::SireFF::CenterOfMass::isIntraMoleculePoint
         
-            typedef bool ( ::SireFF::CenterOfMass::*isIntraMoleculePoint_function_type )(  ) const;
+            typedef bool ( ::SireFF::CenterOfMass::*isIntraMoleculePoint_function_type)(  ) const;
             isIntraMoleculePoint_function_type isIntraMoleculePoint_function_value( &::SireFF::CenterOfMass::isIntraMoleculePoint );
             
             CenterOfMass_exposer.def( 
@@ -124,7 +124,7 @@ void register_CenterOfMass_class(){
         }
         { //::SireFF::CenterOfMass::molecules
         
-            typedef ::SireMol::Molecules ( ::SireFF::CenterOfMass::*molecules_function_type )(  ) const;
+            typedef ::SireMol::Molecules ( ::SireFF::CenterOfMass::*molecules_function_type)(  ) const;
             molecules_function_type molecules_function_value( &::SireFF::CenterOfMass::molecules );
             
             CenterOfMass_exposer.def( 
@@ -134,7 +134,7 @@ void register_CenterOfMass_class(){
         }
         { //::SireFF::CenterOfMass::nMolecules
         
-            typedef int ( ::SireFF::CenterOfMass::*nMolecules_function_type )(  ) const;
+            typedef int ( ::SireFF::CenterOfMass::*nMolecules_function_type)(  ) const;
             nMolecules_function_type nMolecules_function_value( &::SireFF::CenterOfMass::nMolecules );
             
             CenterOfMass_exposer.def( 
@@ -145,7 +145,7 @@ void register_CenterOfMass_class(){
         CenterOfMass_exposer.def( bp::self != bp::self );
         { //::SireFF::CenterOfMass::operator=
         
-            typedef ::SireFF::CenterOfMass & ( ::SireFF::CenterOfMass::*assign_function_type )( ::SireFF::CenterOfMass const & ) ;
+            typedef ::SireFF::CenterOfMass & ( ::SireFF::CenterOfMass::*assign_function_type)( ::SireFF::CenterOfMass const & ) ;
             assign_function_type assign_function_value( &::SireFF::CenterOfMass::operator= );
             
             CenterOfMass_exposer.def( 
@@ -158,7 +158,7 @@ void register_CenterOfMass_class(){
         CenterOfMass_exposer.def( bp::self == bp::self );
         { //::SireFF::CenterOfMass::setSpace
         
-            typedef void ( ::SireFF::CenterOfMass::*setSpace_function_type )( ::SireVol::Space const & ) ;
+            typedef void ( ::SireFF::CenterOfMass::*setSpace_function_type)( ::SireVol::Space const & ) ;
             setSpace_function_type setSpace_function_value( &::SireFF::CenterOfMass::setSpace );
             
             CenterOfMass_exposer.def( 
@@ -169,7 +169,7 @@ void register_CenterOfMass_class(){
         }
         { //::SireFF::CenterOfMass::toString
         
-            typedef ::QString ( ::SireFF::CenterOfMass::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireFF::CenterOfMass::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireFF::CenterOfMass::toString );
             
             CenterOfMass_exposer.def( 
@@ -189,7 +189,7 @@ void register_CenterOfMass_class(){
         }
         { //::SireFF::CenterOfMass::update
         
-            typedef bool ( ::SireFF::CenterOfMass::*update_function_type )( ::SireMol::MoleculeData const & ) ;
+            typedef bool ( ::SireFF::CenterOfMass::*update_function_type)( ::SireMol::MoleculeData const & ) ;
             update_function_type update_function_value( &::SireFF::CenterOfMass::update );
             
             CenterOfMass_exposer.def( 
@@ -200,7 +200,7 @@ void register_CenterOfMass_class(){
         }
         { //::SireFF::CenterOfMass::update
         
-            typedef bool ( ::SireFF::CenterOfMass::*update_function_type )( ::SireMol::Molecules const & ) ;
+            typedef bool ( ::SireFF::CenterOfMass::*update_function_type)( ::SireMol::Molecules const & ) ;
             update_function_type update_function_value( &::SireFF::CenterOfMass::update );
             
             CenterOfMass_exposer.def( 
@@ -211,7 +211,7 @@ void register_CenterOfMass_class(){
         }
         { //::SireFF::CenterOfMass::update
         
-            typedef bool ( ::SireFF::CenterOfMass::*update_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef bool ( ::SireFF::CenterOfMass::*update_function_type)( ::SireMol::MoleculeGroup const & ) ;
             update_function_type update_function_value( &::SireFF::CenterOfMass::update );
             
             CenterOfMass_exposer.def( 
@@ -222,7 +222,7 @@ void register_CenterOfMass_class(){
         }
         { //::SireFF::CenterOfMass::update
         
-            typedef bool ( ::SireFF::CenterOfMass::*update_function_type )( ::SireMol::MolGroupsBase const & ) ;
+            typedef bool ( ::SireFF::CenterOfMass::*update_function_type)( ::SireMol::MolGroupsBase const & ) ;
             update_function_type update_function_value( &::SireFF::CenterOfMass::update );
             
             CenterOfMass_exposer.def( 
@@ -233,7 +233,7 @@ void register_CenterOfMass_class(){
         }
         { //::SireFF::CenterOfMass::usesMoleculesIn
         
-            typedef bool ( ::SireFF::CenterOfMass::*usesMoleculesIn_function_type )( ::SireFF::ForceTable const & ) const;
+            typedef bool ( ::SireFF::CenterOfMass::*usesMoleculesIn_function_type)( ::SireFF::ForceTable const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireFF::CenterOfMass::usesMoleculesIn );
             
             CenterOfMass_exposer.def( 
@@ -244,7 +244,7 @@ void register_CenterOfMass_class(){
         }
         { //::SireFF::CenterOfMass::usesMoleculesIn
         
-            typedef bool ( ::SireFF::CenterOfMass::*usesMoleculesIn_function_type )( ::SireMol::Molecules const & ) const;
+            typedef bool ( ::SireFF::CenterOfMass::*usesMoleculesIn_function_type)( ::SireMol::Molecules const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireFF::CenterOfMass::usesMoleculesIn );
             
             CenterOfMass_exposer.def( 
@@ -255,7 +255,7 @@ void register_CenterOfMass_class(){
         }
         { //::SireFF::CenterOfMass::usesMoleculesIn
         
-            typedef bool ( ::SireFF::CenterOfMass::*usesMoleculesIn_function_type )( ::SireMol::MoleculeGroup const & ) const;
+            typedef bool ( ::SireFF::CenterOfMass::*usesMoleculesIn_function_type)( ::SireMol::MoleculeGroup const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireFF::CenterOfMass::usesMoleculesIn );
             
             CenterOfMass_exposer.def( 
@@ -266,7 +266,7 @@ void register_CenterOfMass_class(){
         }
         { //::SireFF::CenterOfMass::usesMoleculesIn
         
-            typedef bool ( ::SireFF::CenterOfMass::*usesMoleculesIn_function_type )( ::SireMol::MolGroupsBase const & ) const;
+            typedef bool ( ::SireFF::CenterOfMass::*usesMoleculesIn_function_type)( ::SireMol::MolGroupsBase const & ) const;
             usesMoleculesIn_function_type usesMoleculesIn_function_value( &::SireFF::CenterOfMass::usesMoleculesIn );
             
             CenterOfMass_exposer.def( 
@@ -277,7 +277,7 @@ void register_CenterOfMass_class(){
         }
         { //::SireFF::CenterOfMass::wouldUpdate
         
-            typedef bool ( ::SireFF::CenterOfMass::*wouldUpdate_function_type )( ::SireMol::MoleculeData const & ) const;
+            typedef bool ( ::SireFF::CenterOfMass::*wouldUpdate_function_type)( ::SireMol::MoleculeData const & ) const;
             wouldUpdate_function_type wouldUpdate_function_value( &::SireFF::CenterOfMass::wouldUpdate );
             
             CenterOfMass_exposer.def( 
@@ -288,7 +288,7 @@ void register_CenterOfMass_class(){
         }
         { //::SireFF::CenterOfMass::wouldUpdate
         
-            typedef bool ( ::SireFF::CenterOfMass::*wouldUpdate_function_type )( ::SireMol::Molecules const & ) const;
+            typedef bool ( ::SireFF::CenterOfMass::*wouldUpdate_function_type)( ::SireMol::Molecules const & ) const;
             wouldUpdate_function_type wouldUpdate_function_value( &::SireFF::CenterOfMass::wouldUpdate );
             
             CenterOfMass_exposer.def( 
@@ -299,7 +299,7 @@ void register_CenterOfMass_class(){
         }
         { //::SireFF::CenterOfMass::wouldUpdate
         
-            typedef bool ( ::SireFF::CenterOfMass::*wouldUpdate_function_type )( ::SireMol::MoleculeGroup const & ) const;
+            typedef bool ( ::SireFF::CenterOfMass::*wouldUpdate_function_type)( ::SireMol::MoleculeGroup const & ) const;
             wouldUpdate_function_type wouldUpdate_function_value( &::SireFF::CenterOfMass::wouldUpdate );
             
             CenterOfMass_exposer.def( 
@@ -310,7 +310,7 @@ void register_CenterOfMass_class(){
         }
         { //::SireFF::CenterOfMass::wouldUpdate
         
-            typedef bool ( ::SireFF::CenterOfMass::*wouldUpdate_function_type )( ::SireMol::MolGroupsBase const & ) const;
+            typedef bool ( ::SireFF::CenterOfMass::*wouldUpdate_function_type)( ::SireMol::MolGroupsBase const & ) const;
             wouldUpdate_function_type wouldUpdate_function_value( &::SireFF::CenterOfMass::wouldUpdate );
             
             CenterOfMass_exposer.def( 

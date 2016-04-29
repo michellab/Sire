@@ -166,6 +166,8 @@ public:
     const PropertyName& coordinatesProperty() const;
     const PropertyName& spaceProperty() const;
 
+    bool isBiased() const;
+
 private:
     void updateWeights(const MoleculeGroup &new_group);
     void recalculateWeights();

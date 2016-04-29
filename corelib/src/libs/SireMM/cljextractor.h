@@ -111,6 +111,8 @@ public:
     bool changed() const;
     bool needsCommitting() const;
     
+    bool hasChangedAtoms() const;
+    
     bool isEmpty() const;
     bool isNull() const;
     

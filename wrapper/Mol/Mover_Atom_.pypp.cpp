@@ -105,7 +105,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::align
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*align_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*align_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
             align_function_type align_function_value( &::SireMol::Mover< SireMol::Atom >::align );
             
             Mover_Atom__exposer.def( 
@@ -118,7 +118,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::align
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*align_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*align_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
             align_function_type align_function_value( &::SireMol::Mover< SireMol::Atom >::align );
             
             Mover_Atom__exposer.def( 
@@ -131,7 +131,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::align
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*align_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*align_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
             align_function_type align_function_value( &::SireMol::Mover< SireMol::Atom >::align );
             
             Mover_Atom__exposer.def( 
@@ -144,7 +144,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::align
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*align_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*align_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
             align_function_type align_function_value( &::SireMol::Mover< SireMol::Atom >::align );
             
             Mover_Atom__exposer.def( 
@@ -157,7 +157,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::alignTo
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*alignTo_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*alignTo_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
             alignTo_function_type alignTo_function_value( &::SireMol::Mover< SireMol::Atom >::alignTo );
             
             Mover_Atom__exposer.def( 
@@ -170,7 +170,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::alignTo
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*alignTo_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*alignTo_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
             alignTo_function_type alignTo_function_value( &::SireMol::Mover< SireMol::Atom >::alignTo );
             
             Mover_Atom__exposer.def( 
@@ -183,7 +183,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::alignTo
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*alignTo_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomSelection const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*alignTo_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomSelection const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const & ) ;
             alignTo_function_type alignTo_function_value( &::SireMol::Mover< SireMol::Atom >::alignTo );
             
             Mover_Atom__exposer.def( 
@@ -196,7 +196,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::alignTo
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*alignTo_function_type )( ::SireMol::MoleculeView const &,::SireMol::AtomSelection const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*alignTo_function_type)( ::SireMol::MoleculeView const &,::SireMol::AtomSelection const &,::SireMol::AtomMatcher const &,::SireBase::PropertyMap const &,::SireBase::PropertyMap const & ) ;
             alignTo_function_type alignTo_function_value( &::SireMol::Mover< SireMol::Atom >::alignTo );
             
             Mover_Atom__exposer.def( 
@@ -209,7 +209,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::change
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*change_function_type )( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*change_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 >,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::Atom >::change );
             
             Mover_Atom__exposer.def( 
@@ -222,7 +222,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::change
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*change_function_type )( ::SireMol::AngleID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*change_function_type)( ::SireMol::AngleID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::Atom >::change );
             
             Mover_Atom__exposer.def( 
@@ -235,7 +235,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::change
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*change_function_type )( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*change_function_type)( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::Atom >::change );
             
             Mover_Atom__exposer.def( 
@@ -248,7 +248,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::change
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*change_function_type )( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*change_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::Atom >::change );
             
             Mover_Atom__exposer.def( 
@@ -261,7 +261,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::change
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*change_function_type )( ::SireMol::ImproperID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*change_function_type)( ::SireMol::ImproperID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::Atom >::change );
             
             Mover_Atom__exposer.def( 
@@ -274,7 +274,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::changeFrame
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*changeFrame_function_type )( ::SireMaths::AxisSet const &,::SireMaths::AxisSet const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*changeFrame_function_type)( ::SireMaths::AxisSet const &,::SireMaths::AxisSet const &,::SireBase::PropertyMap const & ) ;
             changeFrame_function_type changeFrame_function_value( &::SireMol::Mover< SireMol::Atom >::changeFrame );
             
             Mover_Atom__exposer.def( 
@@ -287,7 +287,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::commit
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Atom ( ::SireMol::Mover< SireMol::Atom >::*commit_function_type )(  ) const;
+            typedef ::SireMol::Atom ( ::SireMol::Mover< SireMol::Atom >::*commit_function_type)(  ) const;
             commit_function_type commit_function_value( &::SireMol::Mover< SireMol::Atom >::commit );
             
             Mover_Atom__exposer.def( 
@@ -298,7 +298,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::mapInto
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*mapInto_function_type )( ::SireMaths::AxisSet const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*mapInto_function_type)( ::SireMaths::AxisSet const &,::SireBase::PropertyMap const & ) ;
             mapInto_function_type mapInto_function_value( &::SireMol::Mover< SireMol::Atom >::mapInto );
             
             Mover_Atom__exposer.def( 
@@ -311,7 +311,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::operator=
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*assign_function_type )( ::SireMol::Mover< SireMol::Atom > const & ) ;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*assign_function_type)( ::SireMol::Mover< SireMol::Atom > const & ) ;
             assign_function_type assign_function_value( &::SireMol::Mover< SireMol::Atom >::operator= );
             
             Mover_Atom__exposer.def( 
@@ -324,7 +324,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::operator=
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*assign_function_type )( ::SireMol::Atom const & ) ;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*assign_function_type)( ::SireMol::Atom const & ) ;
             assign_function_type assign_function_value( &::SireMol::Mover< SireMol::Atom >::operator= );
             
             Mover_Atom__exposer.def( 
@@ -337,7 +337,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::rotate
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*rotate_function_type )( ::SireMaths::Quaternion const &,::SireMaths::Vector const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*rotate_function_type)( ::SireMaths::Quaternion const &,::SireMaths::Vector const &,::SireBase::PropertyMap const & ) ;
             rotate_function_type rotate_function_value( &::SireMol::Mover< SireMol::Atom >::rotate );
             
             Mover_Atom__exposer.def( 
@@ -350,7 +350,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::rotate
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*rotate_function_type )( ::SireMaths::Matrix const &,::SireMaths::Vector const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*rotate_function_type)( ::SireMaths::Matrix const &,::SireMaths::Vector const &,::SireBase::PropertyMap const & ) ;
             rotate_function_type rotate_function_value( &::SireMol::Mover< SireMol::Atom >::rotate );
             
             Mover_Atom__exposer.def( 
@@ -363,7 +363,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::set
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*set_function_type )( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*set_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 >,::SireBase::PropertyMap const & ) ;
             set_function_type set_function_value( &::SireMol::Mover< SireMol::Atom >::set );
             
             Mover_Atom__exposer.def( 
@@ -376,7 +376,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::set
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*set_function_type )( ::SireMol::AngleID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*set_function_type)( ::SireMol::AngleID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             set_function_type set_function_value( &::SireMol::Mover< SireMol::Atom >::set );
             
             Mover_Atom__exposer.def( 
@@ -389,7 +389,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::set
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*set_function_type )( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*set_function_type)( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             set_function_type set_function_value( &::SireMol::Mover< SireMol::Atom >::set );
             
             Mover_Atom__exposer.def( 
@@ -402,7 +402,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::set
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*set_function_type )( ::SireMol::ImproperID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*set_function_type)( ::SireMol::ImproperID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             set_function_type set_function_value( &::SireMol::Mover< SireMol::Atom >::set );
             
             Mover_Atom__exposer.def( 
@@ -415,7 +415,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::setAll
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*setAll_function_type )( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*setAll_function_type)( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
             setAll_function_type setAll_function_value( &::SireMol::Mover< SireMol::Atom >::setAll );
             
             Mover_Atom__exposer.def( 
@@ -428,7 +428,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::toString
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::QString ( ::SireMol::Mover< SireMol::Atom >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::Mover< SireMol::Atom >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::Mover< SireMol::Atom >::toString );
             
             Mover_Atom__exposer.def( 
@@ -439,7 +439,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::transform
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*transform_function_type )( ::SireMaths::Transform const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*transform_function_type)( ::SireMaths::Transform const &,::SireBase::PropertyMap const & ) ;
             transform_function_type transform_function_value( &::SireMol::Mover< SireMol::Atom >::transform );
             
             Mover_Atom__exposer.def( 
@@ -452,7 +452,7 @@ void register_Mover_Atom__class(){
         { //::SireMol::Mover< SireMol::Atom >::translate
         
             typedef SireMol::Mover< SireMol::Atom > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*translate_function_type )( ::SireMaths::Vector const &,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Atom > & ( ::SireMol::Mover< SireMol::Atom >::*translate_function_type)( ::SireMaths::Vector const &,::SireBase::PropertyMap const & ) ;
             translate_function_type translate_function_value( &::SireMol::Mover< SireMol::Atom >::translate );
             
             Mover_Atom__exposer.def( 

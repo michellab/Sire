@@ -34,7 +34,7 @@ void register_Beads_class(){
         Beads_exposer.def( bp::init< SireMol::Beads const & >(( bp::arg("other") )) );
         { //::SireMol::Beads::at
         
-            typedef ::SireMol::Bead ( ::SireMol::Beads::*at_function_type )( ::SireMol::BeadIdx ) const;
+            typedef ::SireMol::Bead ( ::SireMol::Beads::*at_function_type)( ::SireMol::BeadIdx ) const;
             at_function_type at_function_value( &::SireMol::Beads::at );
             
             Beads_exposer.def( 
@@ -45,7 +45,7 @@ void register_Beads_class(){
         }
         { //::SireMol::Beads::atomIdxs
         
-            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::Beads::*atomIdxs_function_type )(  ) const;
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::Beads::*atomIdxs_function_type)(  ) const;
             atomIdxs_function_type atomIdxs_function_value( &::SireMol::Beads::atomIdxs );
             
             Beads_exposer.def( 
@@ -55,7 +55,7 @@ void register_Beads_class(){
         }
         { //::SireMol::Beads::atomProperty
         
-            typedef ::SireBase::PropertyPtr ( ::SireMol::Beads::*atomProperty_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::Beads::*atomProperty_function_type)( ::SireBase::PropertyName const & ) const;
             atomProperty_function_type atomProperty_function_value( &::SireMol::Beads::atomProperty );
             
             Beads_exposer.def( 
@@ -66,7 +66,7 @@ void register_Beads_class(){
         }
         { //::SireMol::Beads::bead
         
-            typedef ::SireMol::Bead ( ::SireMol::Beads::*bead_function_type )( ::SireMol::BeadIdx ) const;
+            typedef ::SireMol::Bead ( ::SireMol::Beads::*bead_function_type)( ::SireMol::BeadIdx ) const;
             bead_function_type bead_function_value( &::SireMol::Beads::bead );
             
             Beads_exposer.def( 
@@ -77,7 +77,7 @@ void register_Beads_class(){
         }
         { //::SireMol::Beads::beading
         
-            typedef ::SireMol::Beading const & ( ::SireMol::Beads::*beading_function_type )(  ) const;
+            typedef ::SireMol::Beading const & ( ::SireMol::Beads::*beading_function_type)(  ) const;
             beading_function_type beading_function_value( &::SireMol::Beads::beading );
             
             Beads_exposer.def( 
@@ -88,7 +88,7 @@ void register_Beads_class(){
         }
         { //::SireMol::Beads::contains
         
-            typedef bool ( ::SireMol::Beads::*contains_function_type )( ::SireMol::AtomIdx ) const;
+            typedef bool ( ::SireMol::Beads::*contains_function_type)( ::SireMol::AtomIdx ) const;
             contains_function_type contains_function_value( &::SireMol::Beads::contains );
             
             Beads_exposer.def( 
@@ -99,7 +99,7 @@ void register_Beads_class(){
         }
         { //::SireMol::Beads::contains
         
-            typedef bool ( ::SireMol::Beads::*contains_function_type )( ::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMol::Beads::*contains_function_type)( ::SireMol::AtomID const & ) const;
             contains_function_type contains_function_value( &::SireMol::Beads::contains );
             
             Beads_exposer.def( 
@@ -110,7 +110,7 @@ void register_Beads_class(){
         }
         { //::SireMol::Beads::count
         
-            typedef int ( ::SireMol::Beads::*count_function_type )(  ) const;
+            typedef int ( ::SireMol::Beads::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMol::Beads::count );
             
             Beads_exposer.def( 
@@ -120,7 +120,7 @@ void register_Beads_class(){
         }
         { //::SireMol::Beads::evaluate
         
-            typedef ::SireMol::Evaluator ( ::SireMol::Beads::*evaluate_function_type )(  ) const;
+            typedef ::SireMol::Evaluator ( ::SireMol::Beads::*evaluate_function_type)(  ) const;
             evaluate_function_type evaluate_function_value( &::SireMol::Beads::evaluate );
             
             Beads_exposer.def( 
@@ -130,7 +130,7 @@ void register_Beads_class(){
         }
         { //::SireMol::Beads::hasMetadata
         
-            typedef bool ( ::SireMol::Beads::*hasMetadata_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Beads::*hasMetadata_function_type)( ::SireBase::PropertyName const & ) const;
             hasMetadata_function_type hasMetadata_function_value( &::SireMol::Beads::hasMetadata );
             
             Beads_exposer.def( 
@@ -141,7 +141,7 @@ void register_Beads_class(){
         }
         { //::SireMol::Beads::hasMetadata
         
-            typedef bool ( ::SireMol::Beads::*hasMetadata_function_type )( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Beads::*hasMetadata_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
             hasMetadata_function_type hasMetadata_function_value( &::SireMol::Beads::hasMetadata );
             
             Beads_exposer.def( 
@@ -152,7 +152,7 @@ void register_Beads_class(){
         }
         { //::SireMol::Beads::hasProperty
         
-            typedef bool ( ::SireMol::Beads::*hasProperty_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Beads::*hasProperty_function_type)( ::SireBase::PropertyName const & ) const;
             hasProperty_function_type hasProperty_function_value( &::SireMol::Beads::hasProperty );
             
             Beads_exposer.def( 
@@ -163,7 +163,7 @@ void register_Beads_class(){
         }
         { //::SireMol::Beads::intersects
         
-            typedef bool ( ::SireMol::Beads::*intersects_function_type )( ::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMol::Beads::*intersects_function_type)( ::SireMol::AtomID const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::Beads::intersects );
             
             Beads_exposer.def( 
@@ -174,7 +174,7 @@ void register_Beads_class(){
         }
         { //::SireMol::Beads::isEmpty
         
-            typedef bool ( ::SireMol::Beads::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::Beads::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::Beads::isEmpty );
             
             Beads_exposer.def( 
@@ -184,7 +184,7 @@ void register_Beads_class(){
         }
         { //::SireMol::Beads::metadataKeys
         
-            typedef ::QStringList ( ::SireMol::Beads::*metadataKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireMol::Beads::*metadataKeys_function_type)(  ) const;
             metadataKeys_function_type metadataKeys_function_value( &::SireMol::Beads::metadataKeys );
             
             Beads_exposer.def( 
@@ -194,7 +194,7 @@ void register_Beads_class(){
         }
         { //::SireMol::Beads::metadataKeys
         
-            typedef ::QStringList ( ::SireMol::Beads::*metadataKeys_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef ::QStringList ( ::SireMol::Beads::*metadataKeys_function_type)( ::SireBase::PropertyName const & ) const;
             metadataKeys_function_type metadataKeys_function_value( &::SireMol::Beads::metadataKeys );
             
             Beads_exposer.def( 
@@ -205,7 +205,7 @@ void register_Beads_class(){
         }
         { //::SireMol::Beads::move
         
-            typedef ::SireMol::Mover< SireMol::Beads > ( ::SireMol::Beads::*move_function_type )(  ) const;
+            typedef ::SireMol::Mover< SireMol::Beads > ( ::SireMol::Beads::*move_function_type)(  ) const;
             move_function_type move_function_value( &::SireMol::Beads::move );
             
             Beads_exposer.def( 
@@ -215,7 +215,7 @@ void register_Beads_class(){
         }
         { //::SireMol::Beads::nAtoms
         
-            typedef int ( ::SireMol::Beads::*nAtoms_function_type )(  ) const;
+            typedef int ( ::SireMol::Beads::*nAtoms_function_type)(  ) const;
             nAtoms_function_type nAtoms_function_value( &::SireMol::Beads::nAtoms );
             
             Beads_exposer.def( 
@@ -225,7 +225,7 @@ void register_Beads_class(){
         }
         { //::SireMol::Beads::nBeads
         
-            typedef int ( ::SireMol::Beads::*nBeads_function_type )(  ) const;
+            typedef int ( ::SireMol::Beads::*nBeads_function_type)(  ) const;
             nBeads_function_type nBeads_function_value( &::SireMol::Beads::nBeads );
             
             Beads_exposer.def( 
@@ -236,7 +236,7 @@ void register_Beads_class(){
         Beads_exposer.def( bp::self != bp::self );
         { //::SireMol::Beads::operator=
         
-            typedef ::SireMol::Beads & ( ::SireMol::Beads::*assign_function_type )( ::SireMol::Beads const & ) ;
+            typedef ::SireMol::Beads & ( ::SireMol::Beads::*assign_function_type)( ::SireMol::Beads const & ) ;
             assign_function_type assign_function_value( &::SireMol::Beads::operator= );
             
             Beads_exposer.def( 
@@ -249,7 +249,7 @@ void register_Beads_class(){
         Beads_exposer.def( bp::self == bp::self );
         { //::SireMol::Beads::operator[]
         
-            typedef ::SireMol::Bead ( ::SireMol::Beads::*__getitem___function_type )( ::SireMol::BeadIdx ) const;
+            typedef ::SireMol::Bead ( ::SireMol::Beads::*__getitem___function_type)( ::SireMol::BeadIdx ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::Beads::operator[] );
             
             Beads_exposer.def( 
@@ -260,7 +260,7 @@ void register_Beads_class(){
         }
         { //::SireMol::Beads::propertyKeys
         
-            typedef ::QStringList ( ::SireMol::Beads::*propertyKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireMol::Beads::*propertyKeys_function_type)(  ) const;
             propertyKeys_function_type propertyKeys_function_value( &::SireMol::Beads::propertyKeys );
             
             Beads_exposer.def( 
@@ -270,7 +270,7 @@ void register_Beads_class(){
         }
         { //::SireMol::Beads::selectedAll
         
-            typedef bool ( ::SireMol::Beads::*selectedAll_function_type )(  ) const;
+            typedef bool ( ::SireMol::Beads::*selectedAll_function_type)(  ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::Beads::selectedAll );
             
             Beads_exposer.def( 
@@ -280,7 +280,7 @@ void register_Beads_class(){
         }
         { //::SireMol::Beads::selection
         
-            typedef ::SireMol::AtomSelection ( ::SireMol::Beads::*selection_function_type )(  ) const;
+            typedef ::SireMol::AtomSelection ( ::SireMol::Beads::*selection_function_type)(  ) const;
             selection_function_type selection_function_value( &::SireMol::Beads::selection );
             
             Beads_exposer.def( 
@@ -290,7 +290,7 @@ void register_Beads_class(){
         }
         { //::SireMol::Beads::size
         
-            typedef int ( ::SireMol::Beads::*size_function_type )(  ) const;
+            typedef int ( ::SireMol::Beads::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireMol::Beads::size );
             
             Beads_exposer.def( 
@@ -300,7 +300,7 @@ void register_Beads_class(){
         }
         { //::SireMol::Beads::toString
         
-            typedef ::QString ( ::SireMol::Beads::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::Beads::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::Beads::toString );
             
             Beads_exposer.def( 
@@ -320,7 +320,7 @@ void register_Beads_class(){
         }
         { //::SireMol::Beads::update
         
-            typedef void ( ::SireMol::Beads::*update_function_type )( ::SireMol::MoleculeData const & ) ;
+            typedef void ( ::SireMol::Beads::*update_function_type)( ::SireMol::MoleculeData const & ) ;
             update_function_type update_function_value( &::SireMol::Beads::update );
             
             Beads_exposer.def( 

@@ -4958,21 +4958,8 @@ Properties StructureEditor::properties() const
             }
             catch(...)
             {
-                qDebug() << QObject::tr("WARNING: Could not convert the old property "
-                                        "at key %1 with type %2 to match the new, edited "
-                                        "molecule. This property has been deleted.")
-                        .arg(key, updated_property->what());
-            
                 updated_property = NullProperty();
             }
-        }
-        else
-        {
-            qDebug() << QObject::tr("WARNING: The old property at key %1 with type %2 "
-                                    "is not a molecule property (MolViewProperty) so has "
-                                    "not been edited by the change in molecule. This may mean "
-                                    "that this property is incompatible with the new molecule.")
-                            .arg(key, updated_property->what());
         }
         
         if (not updated_property.isNull())

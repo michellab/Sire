@@ -29,7 +29,7 @@ void register_SysID_class(){
         bp::scope SysID_scope( SysID_exposer );
         { //::SireSystem::SysID::map
         
-            typedef ::QList< SireSystem::SysIdx > ( ::SireSystem::SysID::*map_function_type )( ::SireSystem::Systems const & ) const;
+            typedef ::QList< SireSystem::SysIdx > ( ::SireSystem::SysID::*map_function_type)( ::SireSystem::Systems const & ) const;
             map_function_type map_function_value( &::SireSystem::SysID::map );
             
             SysID_exposer.def( 
@@ -41,7 +41,7 @@ void register_SysID_class(){
         SysID_exposer.def( bp::self & bp::self );
         { //::SireSystem::SysID::operator()
         
-            typedef ::SireID::Specify< SireSystem::SysID > ( ::SireSystem::SysID::*__call___function_type )( int ) const;
+            typedef ::SireID::Specify< SireSystem::SysID > ( ::SireSystem::SysID::*__call___function_type)( int ) const;
             __call___function_type __call___function_value( &::SireSystem::SysID::operator() );
             
             SysID_exposer.def( 
@@ -52,7 +52,7 @@ void register_SysID_class(){
         }
         { //::SireSystem::SysID::operator()
         
-            typedef ::SireID::Specify< SireSystem::SysID > ( ::SireSystem::SysID::*__call___function_type )( int,int ) const;
+            typedef ::SireID::Specify< SireSystem::SysID > ( ::SireSystem::SysID::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireSystem::SysID::operator() );
             
             SysID_exposer.def( 
@@ -65,7 +65,7 @@ void register_SysID_class(){
         SysID_exposer.def( bp::self + bp::self );
         { //::SireSystem::SysID::operator[]
         
-            typedef ::SireID::Specify< SireSystem::SysID > ( ::SireSystem::SysID::*__getitem___function_type )( int ) const;
+            typedef ::SireID::Specify< SireSystem::SysID > ( ::SireSystem::SysID::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireSystem::SysID::operator[] );
             
             SysID_exposer.def( 

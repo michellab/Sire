@@ -51,7 +51,7 @@ void register_AtomIdxMatcher_class(){
         AtomIdxMatcher_exposer.def( bp::self != bp::self );
         { //::SireMol::AtomIdxMatcher::operator=
         
-            typedef ::SireMol::AtomIdxMatcher & ( ::SireMol::AtomIdxMatcher::*assign_function_type )( ::SireMol::AtomIdxMatcher const & ) ;
+            typedef ::SireMol::AtomIdxMatcher & ( ::SireMol::AtomIdxMatcher::*assign_function_type)( ::SireMol::AtomIdxMatcher const & ) ;
             assign_function_type assign_function_value( &::SireMol::AtomIdxMatcher::operator= );
             
             AtomIdxMatcher_exposer.def( 
@@ -64,7 +64,7 @@ void register_AtomIdxMatcher_class(){
         AtomIdxMatcher_exposer.def( bp::self == bp::self );
         { //::SireMol::AtomIdxMatcher::toString
         
-            typedef ::QString ( ::SireMol::AtomIdxMatcher::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::AtomIdxMatcher::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::AtomIdxMatcher::toString );
             
             AtomIdxMatcher_exposer.def( 
@@ -84,7 +84,7 @@ void register_AtomIdxMatcher_class(){
         }
         { //::SireMol::AtomIdxMatcher::what
         
-            typedef char const * ( ::SireMol::AtomIdxMatcher::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::AtomIdxMatcher::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::AtomIdxMatcher::what );
             
             AtomIdxMatcher_exposer.def( 

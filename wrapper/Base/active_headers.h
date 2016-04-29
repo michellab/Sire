@@ -31,6 +31,7 @@
 #include "tempdir.h"
 #include "trigarray2d.h"
 #include "trigarray2d.hpp"
+#include "unittest.h"
 
 #endif
 

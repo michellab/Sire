@@ -44,7 +44,7 @@ void register_Cartesian_class(){
         Cartesian_exposer.def( bp::init< SireVol::Cartesian const & >(( bp::arg("other") )) );
         { //::SireVol::Cartesian::beyond
         
-            typedef bool ( ::SireVol::Cartesian::*beyond_function_type )( double,::SireVol::AABox const &,::SireVol::AABox const & ) const;
+            typedef bool ( ::SireVol::Cartesian::*beyond_function_type)( double,::SireVol::AABox const &,::SireVol::AABox const & ) const;
             beyond_function_type beyond_function_value( &::SireVol::Cartesian::beyond );
             
             Cartesian_exposer.def( 
@@ -55,7 +55,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::beyond
         
-            typedef bool ( ::SireVol::Cartesian::*beyond_function_type )( double,::SireVol::CoordGroup const &,::SireVol::CoordGroup const & ) const;
+            typedef bool ( ::SireVol::Cartesian::*beyond_function_type)( double,::SireVol::CoordGroup const &,::SireVol::CoordGroup const & ) const;
             beyond_function_type beyond_function_value( &::SireVol::Cartesian::beyond );
             
             Cartesian_exposer.def( 
@@ -66,7 +66,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::calcAngle
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireVol::Cartesian::*calcAngle_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireVol::Cartesian::*calcAngle_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
             calcAngle_function_type calcAngle_function_value( &::SireVol::Cartesian::calcAngle );
             
             Cartesian_exposer.def( 
@@ -77,7 +77,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::calcDihedral
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireVol::Cartesian::*calcDihedral_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const &,::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireVol::Cartesian::*calcDihedral_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const &,::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
             calcDihedral_function_type calcDihedral_function_value( &::SireVol::Cartesian::calcDihedral );
             
             Cartesian_exposer.def( 
@@ -88,7 +88,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::calcDist
         
-            typedef double ( ::SireVol::Cartesian::*calcDist_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            typedef double ( ::SireVol::Cartesian::*calcDist_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
             calcDist_function_type calcDist_function_value( &::SireVol::Cartesian::calcDist );
             
             Cartesian_exposer.def( 
@@ -99,7 +99,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::calcDist
         
-            typedef double ( ::SireVol::Cartesian::*calcDist_function_type )( ::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
+            typedef double ( ::SireVol::Cartesian::*calcDist_function_type)( ::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
             calcDist_function_type calcDist_function_value( &::SireVol::Cartesian::calcDist );
             
             Cartesian_exposer.def( 
@@ -110,7 +110,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::calcDist
         
-            typedef double ( ::SireVol::Cartesian::*calcDist_function_type )( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
+            typedef double ( ::SireVol::Cartesian::*calcDist_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
             calcDist_function_type calcDist_function_value( &::SireVol::Cartesian::calcDist );
             
             Cartesian_exposer.def( 
@@ -121,7 +121,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::calcDist
         
-            typedef double ( ::SireVol::Cartesian::*calcDist_function_type )( ::SireVol::CoordGroup const &,::SireMaths::Vector const &,::SireVol::DistMatrix & ) const;
+            typedef double ( ::SireVol::Cartesian::*calcDist_function_type)( ::SireVol::CoordGroup const &,::SireMaths::Vector const &,::SireVol::DistMatrix & ) const;
             calcDist_function_type calcDist_function_value( &::SireVol::Cartesian::calcDist );
             
             Cartesian_exposer.def( 
@@ -132,7 +132,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::calcDist2
         
-            typedef double ( ::SireVol::Cartesian::*calcDist2_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            typedef double ( ::SireVol::Cartesian::*calcDist2_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
             calcDist2_function_type calcDist2_function_value( &::SireVol::Cartesian::calcDist2 );
             
             Cartesian_exposer.def( 
@@ -143,7 +143,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::calcDist2
         
-            typedef double ( ::SireVol::Cartesian::*calcDist2_function_type )( ::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
+            typedef double ( ::SireVol::Cartesian::*calcDist2_function_type)( ::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
             calcDist2_function_type calcDist2_function_value( &::SireVol::Cartesian::calcDist2 );
             
             Cartesian_exposer.def( 
@@ -154,7 +154,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::calcDist2
         
-            typedef double ( ::SireVol::Cartesian::*calcDist2_function_type )( ::SireVol::CoordGroup const &,::SireMaths::Vector const &,::SireVol::DistMatrix & ) const;
+            typedef double ( ::SireVol::Cartesian::*calcDist2_function_type)( ::SireVol::CoordGroup const &,::SireMaths::Vector const &,::SireVol::DistMatrix & ) const;
             calcDist2_function_type calcDist2_function_value( &::SireVol::Cartesian::calcDist2 );
             
             Cartesian_exposer.def( 
@@ -165,7 +165,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::calcDist2
         
-            typedef double ( ::SireVol::Cartesian::*calcDist2_function_type )( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
+            typedef double ( ::SireVol::Cartesian::*calcDist2_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
             calcDist2_function_type calcDist2_function_value( &::SireVol::Cartesian::calcDist2 );
             
             Cartesian_exposer.def( 
@@ -176,7 +176,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::calcDistVector
         
-            typedef ::SireMaths::DistVector ( ::SireVol::Cartesian::*calcDistVector_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            typedef ::SireMaths::DistVector ( ::SireVol::Cartesian::*calcDistVector_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
             calcDistVector_function_type calcDistVector_function_value( &::SireVol::Cartesian::calcDistVector );
             
             Cartesian_exposer.def( 
@@ -187,7 +187,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::calcDistVectors
         
-            typedef double ( ::SireVol::Cartesian::*calcDistVectors_function_type )( ::SireVol::CoordGroup const &,::SireVol::DistVectorMatrix & ) const;
+            typedef double ( ::SireVol::Cartesian::*calcDistVectors_function_type)( ::SireVol::CoordGroup const &,::SireVol::DistVectorMatrix & ) const;
             calcDistVectors_function_type calcDistVectors_function_value( &::SireVol::Cartesian::calcDistVectors );
             
             Cartesian_exposer.def( 
@@ -198,7 +198,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::calcDistVectors
         
-            typedef double ( ::SireVol::Cartesian::*calcDistVectors_function_type )( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistVectorMatrix & ) const;
+            typedef double ( ::SireVol::Cartesian::*calcDistVectors_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistVectorMatrix & ) const;
             calcDistVectors_function_type calcDistVectors_function_value( &::SireVol::Cartesian::calcDistVectors );
             
             Cartesian_exposer.def( 
@@ -209,7 +209,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::calcDistVectors
         
-            typedef double ( ::SireVol::Cartesian::*calcDistVectors_function_type )( ::SireVol::CoordGroup const &,::SireMaths::Vector const &,::SireVol::DistVectorMatrix & ) const;
+            typedef double ( ::SireVol::Cartesian::*calcDistVectors_function_type)( ::SireVol::CoordGroup const &,::SireMaths::Vector const &,::SireVol::DistVectorMatrix & ) const;
             calcDistVectors_function_type calcDistVectors_function_value( &::SireVol::Cartesian::calcDistVectors );
             
             Cartesian_exposer.def( 
@@ -220,7 +220,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::calcInvDist
         
-            typedef double ( ::SireVol::Cartesian::*calcInvDist_function_type )( ::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
+            typedef double ( ::SireVol::Cartesian::*calcInvDist_function_type)( ::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
             calcInvDist_function_type calcInvDist_function_value( &::SireVol::Cartesian::calcInvDist );
             
             Cartesian_exposer.def( 
@@ -231,7 +231,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::calcInvDist
         
-            typedef double ( ::SireVol::Cartesian::*calcInvDist_function_type )( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
+            typedef double ( ::SireVol::Cartesian::*calcInvDist_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
             calcInvDist_function_type calcInvDist_function_value( &::SireVol::Cartesian::calcInvDist );
             
             Cartesian_exposer.def( 
@@ -242,7 +242,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::calcInvDist2
         
-            typedef double ( ::SireVol::Cartesian::*calcInvDist2_function_type )( ::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
+            typedef double ( ::SireVol::Cartesian::*calcInvDist2_function_type)( ::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
             calcInvDist2_function_type calcInvDist2_function_value( &::SireVol::Cartesian::calcInvDist2 );
             
             Cartesian_exposer.def( 
@@ -253,7 +253,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::calcInvDist2
         
-            typedef double ( ::SireVol::Cartesian::*calcInvDist2_function_type )( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
+            typedef double ( ::SireVol::Cartesian::*calcInvDist2_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,::SireVol::DistMatrix & ) const;
             calcInvDist2_function_type calcInvDist2_function_value( &::SireVol::Cartesian::calcInvDist2 );
             
             Cartesian_exposer.def( 
@@ -264,7 +264,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::getBoxCenter
         
-            typedef ::SireMaths::Vector ( ::SireVol::Cartesian::*getBoxCenter_function_type )( ::SireMaths::Vector const & ) const;
+            typedef ::SireMaths::Vector ( ::SireVol::Cartesian::*getBoxCenter_function_type)( ::SireMaths::Vector const & ) const;
             getBoxCenter_function_type getBoxCenter_function_value( &::SireVol::Cartesian::getBoxCenter );
             
             Cartesian_exposer.def( 
@@ -275,7 +275,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::getBoxCenter
         
-            typedef ::SireMaths::Vector ( ::SireVol::Cartesian::*getBoxCenter_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            typedef ::SireMaths::Vector ( ::SireVol::Cartesian::*getBoxCenter_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
             getBoxCenter_function_type getBoxCenter_function_value( &::SireVol::Cartesian::getBoxCenter );
             
             Cartesian_exposer.def( 
@@ -286,7 +286,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::getCopiesWithin
         
-            typedef ::QList< boost::tuples::tuple< double, SireVol::CoordGroup, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > > ( ::SireVol::Cartesian::*getCopiesWithin_function_type )( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,double ) const;
+            typedef ::QList< boost::tuples::tuple< double, SireVol::CoordGroup, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > > ( ::SireVol::Cartesian::*getCopiesWithin_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const &,double ) const;
             getCopiesWithin_function_type getCopiesWithin_function_value( &::SireVol::Cartesian::getCopiesWithin );
             
             Cartesian_exposer.def( 
@@ -297,7 +297,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::getImagesWithin
         
-            typedef ::QVector< SireMaths::Vector > ( ::SireVol::Cartesian::*getImagesWithin_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const &,double ) const;
+            typedef ::QVector< SireMaths::Vector > ( ::SireVol::Cartesian::*getImagesWithin_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const &,double ) const;
             getImagesWithin_function_type getImagesWithin_function_value( &::SireVol::Cartesian::getImagesWithin );
             
             Cartesian_exposer.def( 
@@ -308,7 +308,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::getMinimumImage
         
-            typedef ::SireVol::CoordGroup ( ::SireVol::Cartesian::*getMinimumImage_function_type )( ::SireVol::CoordGroup const &,::SireMaths::Vector const & ) const;
+            typedef ::SireVol::CoordGroup ( ::SireVol::Cartesian::*getMinimumImage_function_type)( ::SireVol::CoordGroup const &,::SireMaths::Vector const & ) const;
             getMinimumImage_function_type getMinimumImage_function_value( &::SireVol::Cartesian::getMinimumImage );
             
             Cartesian_exposer.def( 
@@ -319,7 +319,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::getMinimumImage
         
-            typedef ::SireVol::CoordGroupArray ( ::SireVol::Cartesian::*getMinimumImage_function_type )( ::SireVol::CoordGroupArray const &,::SireMaths::Vector const &,bool ) const;
+            typedef ::SireVol::CoordGroupArray ( ::SireVol::Cartesian::*getMinimumImage_function_type)( ::SireVol::CoordGroupArray const &,::SireMaths::Vector const &,bool ) const;
             getMinimumImage_function_type getMinimumImage_function_value( &::SireVol::Cartesian::getMinimumImage );
             
             Cartesian_exposer.def( 
@@ -330,7 +330,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::getMinimumImage
         
-            typedef ::SireVol::AABox ( ::SireVol::Cartesian::*getMinimumImage_function_type )( ::SireVol::AABox const &,::SireMaths::Vector const & ) const;
+            typedef ::SireVol::AABox ( ::SireVol::Cartesian::*getMinimumImage_function_type)( ::SireVol::AABox const &,::SireMaths::Vector const & ) const;
             getMinimumImage_function_type getMinimumImage_function_value( &::SireVol::Cartesian::getMinimumImage );
             
             Cartesian_exposer.def( 
@@ -341,7 +341,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::getMinimumImage
         
-            typedef ::SireMaths::Vector ( ::SireVol::Cartesian::*getMinimumImage_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
+            typedef ::SireMaths::Vector ( ::SireVol::Cartesian::*getMinimumImage_function_type)( ::SireMaths::Vector const &,::SireMaths::Vector const & ) const;
             getMinimumImage_function_type getMinimumImage_function_value( &::SireVol::Cartesian::getMinimumImage );
             
             Cartesian_exposer.def( 
@@ -352,7 +352,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::getRandomPoint
         
-            typedef ::SireMaths::Vector ( ::SireVol::Cartesian::*getRandomPoint_function_type )( ::SireMaths::Vector const &,::SireMaths::RanGenerator const & ) const;
+            typedef ::SireMaths::Vector ( ::SireVol::Cartesian::*getRandomPoint_function_type)( ::SireMaths::Vector const &,::SireMaths::RanGenerator const & ) const;
             getRandomPoint_function_type getRandomPoint_function_value( &::SireVol::Cartesian::getRandomPoint );
             
             Cartesian_exposer.def( 
@@ -363,7 +363,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::isCartesian
         
-            typedef bool ( ::SireVol::Cartesian::*isCartesian_function_type )(  ) const;
+            typedef bool ( ::SireVol::Cartesian::*isCartesian_function_type)(  ) const;
             isCartesian_function_type isCartesian_function_value( &::SireVol::Cartesian::isCartesian );
             
             Cartesian_exposer.def( 
@@ -373,7 +373,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::isPeriodic
         
-            typedef bool ( ::SireVol::Cartesian::*isPeriodic_function_type )(  ) const;
+            typedef bool ( ::SireVol::Cartesian::*isPeriodic_function_type)(  ) const;
             isPeriodic_function_type isPeriodic_function_value( &::SireVol::Cartesian::isPeriodic );
             
             Cartesian_exposer.def( 
@@ -383,7 +383,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::minimumDistance
         
-            typedef double ( ::SireVol::Cartesian::*minimumDistance_function_type )( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const & ) const;
+            typedef double ( ::SireVol::Cartesian::*minimumDistance_function_type)( ::SireVol::CoordGroup const &,::SireVol::CoordGroup const & ) const;
             minimumDistance_function_type minimumDistance_function_value( &::SireVol::Cartesian::minimumDistance );
             
             Cartesian_exposer.def( 
@@ -394,7 +394,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::minimumDistance
         
-            typedef double ( ::SireVol::Cartesian::*minimumDistance_function_type )( ::SireVol::CoordGroup const & ) const;
+            typedef double ( ::SireVol::Cartesian::*minimumDistance_function_type)( ::SireVol::CoordGroup const & ) const;
             minimumDistance_function_type minimumDistance_function_value( &::SireVol::Cartesian::minimumDistance );
             
             Cartesian_exposer.def( 
@@ -405,7 +405,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::minimumDistance
         
-            typedef double ( ::SireVol::Cartesian::*minimumDistance_function_type )( ::SireVol::AABox const &,::SireVol::AABox const & ) const;
+            typedef double ( ::SireVol::Cartesian::*minimumDistance_function_type)( ::SireVol::AABox const &,::SireVol::AABox const & ) const;
             minimumDistance_function_type minimumDistance_function_value( &::SireVol::Cartesian::minimumDistance );
             
             Cartesian_exposer.def( 
@@ -416,7 +416,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::minimumDistance
         
-            typedef double ( ::SireVol::Cartesian::*minimumDistance_function_type )( ::SireMaths::Vector const &,::SireVol::AABox const & ) const;
+            typedef double ( ::SireVol::Cartesian::*minimumDistance_function_type)( ::SireMaths::Vector const &,::SireVol::AABox const & ) const;
             minimumDistance_function_type minimumDistance_function_value( &::SireVol::Cartesian::minimumDistance );
             
             Cartesian_exposer.def( 
@@ -428,7 +428,7 @@ void register_Cartesian_class(){
         Cartesian_exposer.def( bp::self != bp::self );
         { //::SireVol::Cartesian::operator=
         
-            typedef ::SireVol::Cartesian & ( ::SireVol::Cartesian::*assign_function_type )( ::SireVol::Cartesian const & ) ;
+            typedef ::SireVol::Cartesian & ( ::SireVol::Cartesian::*assign_function_type)( ::SireVol::Cartesian const & ) ;
             assign_function_type assign_function_value( &::SireVol::Cartesian::operator= );
             
             Cartesian_exposer.def( 
@@ -441,7 +441,7 @@ void register_Cartesian_class(){
         Cartesian_exposer.def( bp::self == bp::self );
         { //::SireVol::Cartesian::setVolume
         
-            typedef ::SireVol::SpacePtr ( ::SireVol::Cartesian::*setVolume_function_type )( ::SireUnits::Dimension::Volume ) const;
+            typedef ::SireVol::SpacePtr ( ::SireVol::Cartesian::*setVolume_function_type)( ::SireUnits::Dimension::Volume ) const;
             setVolume_function_type setVolume_function_value( &::SireVol::Cartesian::setVolume );
             
             Cartesian_exposer.def( 
@@ -452,7 +452,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::toString
         
-            typedef ::QString ( ::SireVol::Cartesian::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireVol::Cartesian::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireVol::Cartesian::toString );
             
             Cartesian_exposer.def( 
@@ -472,7 +472,7 @@ void register_Cartesian_class(){
         }
         { //::SireVol::Cartesian::volume
         
-            typedef ::SireUnits::Dimension::Volume ( ::SireVol::Cartesian::*volume_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Volume ( ::SireVol::Cartesian::*volume_function_type)(  ) const;
             volume_function_type volume_function_value( &::SireVol::Cartesian::volume );
             
             Cartesian_exposer.def( 

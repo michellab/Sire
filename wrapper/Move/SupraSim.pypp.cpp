@@ -30,7 +30,7 @@ void register_SupraSim_class(){
         SupraSim_exposer.def( bp::init< SireMove::SupraSim const & >(( bp::arg("other") )) );
         { //::SireMove::SupraSim::abort
         
-            typedef void ( ::SireMove::SupraSim::*abort_function_type )(  ) ;
+            typedef void ( ::SireMove::SupraSim::*abort_function_type)(  ) ;
             abort_function_type abort_function_value( &::SireMove::SupraSim::abort );
             
             SupraSim_exposer.def( 
@@ -40,7 +40,7 @@ void register_SupraSim_class(){
         }
         { //::SireMove::SupraSim::hasFinished
         
-            typedef bool ( ::SireMove::SupraSim::*hasFinished_function_type )(  ) ;
+            typedef bool ( ::SireMove::SupraSim::*hasFinished_function_type)(  ) ;
             hasFinished_function_type hasFinished_function_value( &::SireMove::SupraSim::hasFinished );
             
             SupraSim_exposer.def( 
@@ -50,7 +50,7 @@ void register_SupraSim_class(){
         }
         { //::SireMove::SupraSim::initialMoves
         
-            typedef ::SireMove::SupraMovesPtr ( ::SireMove::SupraSim::*initialMoves_function_type )(  ) ;
+            typedef ::SireMove::SupraMovesPtr ( ::SireMove::SupraSim::*initialMoves_function_type)(  ) ;
             initialMoves_function_type initialMoves_function_value( &::SireMove::SupraSim::initialMoves );
             
             SupraSim_exposer.def( 
@@ -60,7 +60,7 @@ void register_SupraSim_class(){
         }
         { //::SireMove::SupraSim::initialSystem
         
-            typedef ::SireMove::SupraSystemPtr ( ::SireMove::SupraSim::*initialSystem_function_type )(  ) ;
+            typedef ::SireMove::SupraSystemPtr ( ::SireMove::SupraSim::*initialSystem_function_type)(  ) ;
             initialSystem_function_type initialSystem_function_value( &::SireMove::SupraSim::initialSystem );
             
             SupraSim_exposer.def( 
@@ -70,7 +70,7 @@ void register_SupraSim_class(){
         }
         { //::SireMove::SupraSim::input
         
-            typedef ::SireMove::SupraSimPacket ( ::SireMove::SupraSim::*input_function_type )(  ) ;
+            typedef ::SireMove::SupraSimPacket ( ::SireMove::SupraSim::*input_function_type)(  ) ;
             input_function_type input_function_value( &::SireMove::SupraSim::input );
             
             SupraSim_exposer.def( 
@@ -80,7 +80,7 @@ void register_SupraSim_class(){
         }
         { //::SireMove::SupraSim::interimMoves
         
-            typedef ::SireMove::SupraMovesPtr ( ::SireMove::SupraSim::*interimMoves_function_type )(  ) ;
+            typedef ::SireMove::SupraMovesPtr ( ::SireMove::SupraSim::*interimMoves_function_type)(  ) ;
             interimMoves_function_type interimMoves_function_value( &::SireMove::SupraSim::interimMoves );
             
             SupraSim_exposer.def( 
@@ -90,7 +90,7 @@ void register_SupraSim_class(){
         }
         { //::SireMove::SupraSim::interimResult
         
-            typedef ::SireMove::SupraSimPacket ( ::SireMove::SupraSim::*interimResult_function_type )(  ) ;
+            typedef ::SireMove::SupraSimPacket ( ::SireMove::SupraSim::*interimResult_function_type)(  ) ;
             interimResult_function_type interimResult_function_value( &::SireMove::SupraSim::interimResult );
             
             SupraSim_exposer.def( 
@@ -100,7 +100,7 @@ void register_SupraSim_class(){
         }
         { //::SireMove::SupraSim::interimSystem
         
-            typedef ::SireMove::SupraSystemPtr ( ::SireMove::SupraSim::*interimSystem_function_type )(  ) ;
+            typedef ::SireMove::SupraSystemPtr ( ::SireMove::SupraSim::*interimSystem_function_type)(  ) ;
             interimSystem_function_type interimSystem_function_value( &::SireMove::SupraSim::interimSystem );
             
             SupraSim_exposer.def( 
@@ -110,7 +110,7 @@ void register_SupraSim_class(){
         }
         { //::SireMove::SupraSim::isError
         
-            typedef bool ( ::SireMove::SupraSim::*isError_function_type )(  ) ;
+            typedef bool ( ::SireMove::SupraSim::*isError_function_type)(  ) ;
             isError_function_type isError_function_value( &::SireMove::SupraSim::isError );
             
             SupraSim_exposer.def( 
@@ -120,7 +120,7 @@ void register_SupraSim_class(){
         }
         { //::SireMove::SupraSim::isRunning
         
-            typedef bool ( ::SireMove::SupraSim::*isRunning_function_type )(  ) ;
+            typedef bool ( ::SireMove::SupraSim::*isRunning_function_type)(  ) ;
             isRunning_function_type isRunning_function_value( &::SireMove::SupraSim::isRunning );
             
             SupraSim_exposer.def( 
@@ -130,7 +130,7 @@ void register_SupraSim_class(){
         }
         { //::SireMove::SupraSim::moves
         
-            typedef ::SireMove::SupraMovesPtr ( ::SireMove::SupraSim::*moves_function_type )(  ) ;
+            typedef ::SireMove::SupraMovesPtr ( ::SireMove::SupraSim::*moves_function_type)(  ) ;
             moves_function_type moves_function_value( &::SireMove::SupraSim::moves );
             
             SupraSim_exposer.def( 
@@ -141,7 +141,7 @@ void register_SupraSim_class(){
         SupraSim_exposer.def( bp::self != bp::self );
         { //::SireMove::SupraSim::operator=
         
-            typedef ::SireMove::SupraSim & ( ::SireMove::SupraSim::*assign_function_type )( ::SireMove::SupraSim const & ) ;
+            typedef ::SireMove::SupraSim & ( ::SireMove::SupraSim::*assign_function_type)( ::SireMove::SupraSim const & ) ;
             assign_function_type assign_function_value( &::SireMove::SupraSim::operator= );
             
             SupraSim_exposer.def( 
@@ -154,7 +154,7 @@ void register_SupraSim_class(){
         SupraSim_exposer.def( bp::self == bp::self );
         { //::SireMove::SupraSim::progress
         
-            typedef float ( ::SireMove::SupraSim::*progress_function_type )(  ) ;
+            typedef float ( ::SireMove::SupraSim::*progress_function_type)(  ) ;
             progress_function_type progress_function_value( &::SireMove::SupraSim::progress );
             
             SupraSim_exposer.def( 
@@ -164,7 +164,7 @@ void register_SupraSim_class(){
         }
         { //::SireMove::SupraSim::result
         
-            typedef ::SireMove::SupraSimPacket ( ::SireMove::SupraSim::*result_function_type )(  ) ;
+            typedef ::SireMove::SupraSimPacket ( ::SireMove::SupraSim::*result_function_type)(  ) ;
             result_function_type result_function_value( &::SireMove::SupraSim::result );
             
             SupraSim_exposer.def( 
@@ -240,7 +240,7 @@ void register_SupraSim_class(){
         }
         { //::SireMove::SupraSim::stop
         
-            typedef void ( ::SireMove::SupraSim::*stop_function_type )(  ) ;
+            typedef void ( ::SireMove::SupraSim::*stop_function_type)(  ) ;
             stop_function_type stop_function_value( &::SireMove::SupraSim::stop );
             
             SupraSim_exposer.def( 
@@ -250,7 +250,7 @@ void register_SupraSim_class(){
         }
         { //::SireMove::SupraSim::system
         
-            typedef ::SireMove::SupraSystemPtr ( ::SireMove::SupraSim::*system_function_type )(  ) ;
+            typedef ::SireMove::SupraSystemPtr ( ::SireMove::SupraSim::*system_function_type)(  ) ;
             system_function_type system_function_value( &::SireMove::SupraSim::system );
             
             SupraSim_exposer.def( 
@@ -260,7 +260,7 @@ void register_SupraSim_class(){
         }
         { //::SireMove::SupraSim::throwError
         
-            typedef void ( ::SireMove::SupraSim::*throwError_function_type )(  ) ;
+            typedef void ( ::SireMove::SupraSim::*throwError_function_type)(  ) ;
             throwError_function_type throwError_function_value( &::SireMove::SupraSim::throwError );
             
             SupraSim_exposer.def( 
@@ -270,7 +270,7 @@ void register_SupraSim_class(){
         }
         { //::SireMove::SupraSim::wait
         
-            typedef void ( ::SireMove::SupraSim::*wait_function_type )(  ) ;
+            typedef void ( ::SireMove::SupraSim::*wait_function_type)(  ) ;
             wait_function_type wait_function_value( &::SireMove::SupraSim::wait );
             
             SupraSim_exposer.def( 
@@ -280,7 +280,7 @@ void register_SupraSim_class(){
         }
         { //::SireMove::SupraSim::wait
         
-            typedef bool ( ::SireMove::SupraSim::*wait_function_type )( int ) ;
+            typedef bool ( ::SireMove::SupraSim::*wait_function_type)( int ) ;
             wait_function_type wait_function_value( &::SireMove::SupraSim::wait );
             
             SupraSim_exposer.def( 
@@ -291,7 +291,7 @@ void register_SupraSim_class(){
         }
         { //::SireMove::SupraSim::wasAborted
         
-            typedef bool ( ::SireMove::SupraSim::*wasAborted_function_type )(  ) ;
+            typedef bool ( ::SireMove::SupraSim::*wasAborted_function_type)(  ) ;
             wasAborted_function_type wasAborted_function_value( &::SireMove::SupraSim::wasAborted );
             
             SupraSim_exposer.def( 
@@ -301,7 +301,7 @@ void register_SupraSim_class(){
         }
         { //::SireMove::SupraSim::wasStopped
         
-            typedef bool ( ::SireMove::SupraSim::*wasStopped_function_type )(  ) ;
+            typedef bool ( ::SireMove::SupraSim::*wasStopped_function_type)(  ) ;
             wasStopped_function_type wasStopped_function_value( &::SireMove::SupraSim::wasStopped );
             
             SupraSim_exposer.def( 

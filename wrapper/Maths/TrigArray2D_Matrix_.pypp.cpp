@@ -55,7 +55,7 @@ void register_TrigArray2D_Matrix__class(){
         { //::SireBase::TrigArray2D< SireMaths::Matrix >::at
         
             typedef SireBase::TrigArray2D< SireMaths::Matrix > exported_class_t;
-            typedef ::SireMaths::Matrix const & ( ::SireBase::TrigArray2D< SireMaths::Matrix >::*at_function_type )( int,int ) const;
+            typedef ::SireMaths::Matrix const & ( ::SireBase::TrigArray2D< SireMaths::Matrix >::*at_function_type)( int,int ) const;
             at_function_type at_function_value( &::SireBase::TrigArray2D< SireMaths::Matrix >::at );
             
             TrigArray2D_Matrix__exposer.def( 
@@ -68,7 +68,7 @@ void register_TrigArray2D_Matrix__class(){
         { //::SireBase::TrigArray2D< SireMaths::Matrix >::get
         
             typedef SireBase::TrigArray2D< SireMaths::Matrix > exported_class_t;
-            typedef ::SireMaths::Matrix const & ( ::SireBase::TrigArray2D< SireMaths::Matrix >::*get_function_type )( int,int ) const;
+            typedef ::SireMaths::Matrix const & ( ::SireBase::TrigArray2D< SireMaths::Matrix >::*get_function_type)( int,int ) const;
             get_function_type get_function_value( &::SireBase::TrigArray2D< SireMaths::Matrix >::get );
             
             TrigArray2D_Matrix__exposer.def( 
@@ -82,7 +82,7 @@ void register_TrigArray2D_Matrix__class(){
         { //::SireBase::TrigArray2D< SireMaths::Matrix >::operator()
         
             typedef SireBase::TrigArray2D< SireMaths::Matrix > exported_class_t;
-            typedef ::SireMaths::Matrix const & ( ::SireBase::TrigArray2D< SireMaths::Matrix >::*__call___function_type )( int,int ) const;
+            typedef ::SireMaths::Matrix const & ( ::SireBase::TrigArray2D< SireMaths::Matrix >::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireBase::TrigArray2D< SireMaths::Matrix >::operator() );
             
             TrigArray2D_Matrix__exposer.def( 
@@ -95,7 +95,7 @@ void register_TrigArray2D_Matrix__class(){
         { //::SireBase::TrigArray2D< SireMaths::Matrix >::operator=
         
             typedef SireBase::TrigArray2D< SireMaths::Matrix > exported_class_t;
-            typedef ::SireBase::TrigArray2D< SireMaths::Matrix > & ( ::SireBase::TrigArray2D< SireMaths::Matrix >::*assign_function_type )( ::SireBase::TrigArray2D< SireMaths::Matrix > const & ) ;
+            typedef ::SireBase::TrigArray2D< SireMaths::Matrix > & ( ::SireBase::TrigArray2D< SireMaths::Matrix >::*assign_function_type)( ::SireBase::TrigArray2D< SireMaths::Matrix > const & ) ;
             assign_function_type assign_function_value( &::SireBase::TrigArray2D< SireMaths::Matrix >::operator= );
             
             TrigArray2D_Matrix__exposer.def( 
@@ -109,7 +109,7 @@ void register_TrigArray2D_Matrix__class(){
         { //::SireBase::TrigArray2D< SireMaths::Matrix >::redimension
         
             typedef SireBase::TrigArray2D< SireMaths::Matrix > exported_class_t;
-            typedef void ( ::SireBase::TrigArray2D< SireMaths::Matrix >::*redimension_function_type )( int ) ;
+            typedef void ( ::SireBase::TrigArray2D< SireMaths::Matrix >::*redimension_function_type)( int ) ;
             redimension_function_type redimension_function_value( &::SireBase::TrigArray2D< SireMaths::Matrix >::redimension );
             
             TrigArray2D_Matrix__exposer.def( 
@@ -121,7 +121,7 @@ void register_TrigArray2D_Matrix__class(){
         { //::SireBase::TrigArray2D< SireMaths::Matrix >::set
         
             typedef SireBase::TrigArray2D< SireMaths::Matrix > exported_class_t;
-            typedef void ( ::SireBase::TrigArray2D< SireMaths::Matrix >::*set_function_type )( int,int,::SireMaths::Matrix const & ) ;
+            typedef void ( ::SireBase::TrigArray2D< SireMaths::Matrix >::*set_function_type)( int,int,::SireMaths::Matrix const & ) ;
             set_function_type set_function_value( &::SireBase::TrigArray2D< SireMaths::Matrix >::set );
             
             TrigArray2D_Matrix__exposer.def( 
@@ -133,7 +133,7 @@ void register_TrigArray2D_Matrix__class(){
         { //::SireBase::TrigArray2D< SireMaths::Matrix >::setAll
         
             typedef SireBase::TrigArray2D< SireMaths::Matrix > exported_class_t;
-            typedef void ( ::SireBase::TrigArray2D< SireMaths::Matrix >::*setAll_function_type )( ::SireMaths::Matrix const & ) ;
+            typedef void ( ::SireBase::TrigArray2D< SireMaths::Matrix >::*setAll_function_type)( ::SireMaths::Matrix const & ) ;
             setAll_function_type setAll_function_value( &::SireBase::TrigArray2D< SireMaths::Matrix >::setAll );
             
             TrigArray2D_Matrix__exposer.def( 
@@ -145,7 +145,7 @@ void register_TrigArray2D_Matrix__class(){
         { //::SireBase::TrigArray2D< SireMaths::Matrix >::toString
         
             typedef SireBase::TrigArray2D< SireMaths::Matrix > exported_class_t;
-            typedef ::QString ( ::SireBase::TrigArray2D< SireMaths::Matrix >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireBase::TrigArray2D< SireMaths::Matrix >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireBase::TrigArray2D< SireMaths::Matrix >::toString );
             
             TrigArray2D_Matrix__exposer.def( 
@@ -156,7 +156,7 @@ void register_TrigArray2D_Matrix__class(){
         { //::SireBase::TrigArray2D< SireMaths::Matrix >::transpose
         
             typedef SireBase::TrigArray2D< SireMaths::Matrix > exported_class_t;
-            typedef ::SireBase::TrigArray2D< SireMaths::Matrix > ( ::SireBase::TrigArray2D< SireMaths::Matrix >::*transpose_function_type )(  ) const;
+            typedef ::SireBase::TrigArray2D< SireMaths::Matrix > ( ::SireBase::TrigArray2D< SireMaths::Matrix >::*transpose_function_type)(  ) const;
             transpose_function_type transpose_function_value( &::SireBase::TrigArray2D< SireMaths::Matrix >::transpose );
             
             TrigArray2D_Matrix__exposer.def( 

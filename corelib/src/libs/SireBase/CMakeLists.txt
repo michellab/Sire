@@ -37,6 +37,7 @@ set ( SIREBASE_HEADERS
       lengthproperty.h
       majorminorversion.h
       meminfo.h
+      nullproperty.hpp
       numberproperty.h
       packedarray2d.h
       packedarray2d.hpp
@@ -59,7 +60,7 @@ set ( SIREBASE_HEADERS
       tempdir.h
       trigarray2d.h
       trigarray2d.hpp
-
+      unittest.h
     )
 
 # Define the sources in SireBase
@@ -96,6 +97,7 @@ set ( SIREBASE_SOURCES
       stringproperty.cpp    
       tempdir.cpp
       trigarray2d.cpp 
+      unittest.cpp
 
       ${SIREBASE_HEADERS}
     )
@@ -104,7 +106,7 @@ add_library (SireBase ${SIREBASE_SOURCES})
 
 set_target_properties (SireBase PROPERTIES
                        VERSION ${SIRE_VERSION}
-                       SOVERSION ${SIRE_VERSION_MAJOR}
+                       SOVERSION ${S_VERSION_MAJOR}
                       )
 
 # Link to other Sire libraries

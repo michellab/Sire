@@ -50,7 +50,7 @@ void register_UserBeading_class(){
         UserBeading_exposer.def( bp::init< SireMol::UserBeading const & >(( bp::arg("other") )) );
         { //::SireMol::UserBeading::atomBeads
         
-            typedef ::SireMol::AtomBeads const & ( ::SireMol::UserBeading::*atomBeads_function_type )(  ) const;
+            typedef ::SireMol::AtomBeads const & ( ::SireMol::UserBeading::*atomBeads_function_type)(  ) const;
             atomBeads_function_type atomBeads_function_value( &::SireMol::UserBeading::atomBeads );
             
             UserBeading_exposer.def( 
@@ -61,7 +61,7 @@ void register_UserBeading_class(){
         }
         { //::SireMol::UserBeading::isCompatibleWith
         
-            typedef bool ( ::SireMol::UserBeading::*isCompatibleWith_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef bool ( ::SireMol::UserBeading::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::UserBeading::isCompatibleWith );
             
             UserBeading_exposer.def( 
@@ -73,7 +73,7 @@ void register_UserBeading_class(){
         UserBeading_exposer.def( bp::self != bp::self );
         { //::SireMol::UserBeading::operator=
         
-            typedef ::SireMol::UserBeading & ( ::SireMol::UserBeading::*assign_function_type )( ::SireMol::UserBeading const & ) ;
+            typedef ::SireMol::UserBeading & ( ::SireMol::UserBeading::*assign_function_type)( ::SireMol::UserBeading const & ) ;
             assign_function_type assign_function_value( &::SireMol::UserBeading::operator= );
             
             UserBeading_exposer.def( 

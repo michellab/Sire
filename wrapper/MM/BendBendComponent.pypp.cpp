@@ -32,7 +32,7 @@ void register_BendBendComponent_class(){
         BendBendComponent_exposer.def( bp::init< SireMM::BendBendComponent const & >(( bp::arg("other") )) );
         { //::SireMM::BendBendComponent::changeEnergy
         
-            typedef void ( ::SireMM::BendBendComponent::*changeEnergy_function_type )( ::SireFF::FF &,::SireMM::BendBendEnergy const & ) const;
+            typedef void ( ::SireMM::BendBendComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::BendBendEnergy const & ) const;
             changeEnergy_function_type changeEnergy_function_value( &::SireMM::BendBendComponent::changeEnergy );
             
             BendBendComponent_exposer.def( 
@@ -43,7 +43,7 @@ void register_BendBendComponent_class(){
         }
         { //::SireMM::BendBendComponent::setEnergy
         
-            typedef void ( ::SireMM::BendBendComponent::*setEnergy_function_type )( ::SireFF::FF &,::SireMM::BendBendEnergy const & ) const;
+            typedef void ( ::SireMM::BendBendComponent::*setEnergy_function_type)( ::SireFF::FF &,::SireMM::BendBendEnergy const & ) const;
             setEnergy_function_type setEnergy_function_value( &::SireMM::BendBendComponent::setEnergy );
             
             BendBendComponent_exposer.def( 
@@ -54,7 +54,7 @@ void register_BendBendComponent_class(){
         }
         { //::SireMM::BendBendComponent::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireMM::BendBendComponent::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireMM::BendBendComponent::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireMM::BendBendComponent::symbols );
             
             BendBendComponent_exposer.def( 
@@ -64,7 +64,7 @@ void register_BendBendComponent_class(){
         }
         { //::SireMM::BendBendComponent::total
         
-            typedef ::SireMM::BendBendComponent const & ( ::SireMM::BendBendComponent::*total_function_type )(  ) const;
+            typedef ::SireMM::BendBendComponent const & ( ::SireMM::BendBendComponent::*total_function_type)(  ) const;
             total_function_type total_function_value( &::SireMM::BendBendComponent::total );
             
             BendBendComponent_exposer.def( 
@@ -85,7 +85,7 @@ void register_BendBendComponent_class(){
         }
         { //::SireMM::BendBendComponent::what
         
-            typedef char const * ( ::SireMM::BendBendComponent::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::BendBendComponent::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::BendBendComponent::what );
             
             BendBendComponent_exposer.def( 

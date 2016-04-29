@@ -35,7 +35,7 @@ void register_Ln_class(){
         Ln_exposer.def( bp::init< SireCAS::Ln const & >(( bp::arg("other") )) );
         { //::SireCAS::Ln::evaluate
         
-            typedef double ( ::SireCAS::Ln::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::Ln::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Ln::evaluate );
             
             Ln_exposer.def( 
@@ -46,7 +46,7 @@ void register_Ln_class(){
         }
         { //::SireCAS::Ln::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::Ln::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::Ln::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Ln::evaluate );
             
             Ln_exposer.def( 
@@ -68,7 +68,7 @@ void register_Ln_class(){
         }
         { //::SireCAS::Ln::what
         
-            typedef char const * ( ::SireCAS::Ln::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::Ln::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::Ln::what );
             
             Ln_exposer.def( 

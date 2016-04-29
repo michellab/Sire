@@ -74,6 +74,9 @@ public:
     
     Inter2B3DFF<Potential>* clone() const;
 
+    SireUnits::Dimension::MolarEnergy energy();
+    SireUnits::Dimension::MolarEnergy energy(const Symbol &component);
+
     void energy(EnergyTable &energytable, double scale_energy=1);
     
     void energy(EnergyTable &energytable, const Symbol &symbol,
@@ -509,6 +512,20 @@ void Inter2B3DFF<Potential>::recalculateEnergy()
         Potential::finishedEvaluation();
         throw;
     }
+}
+
+template<class Potential>
+SIRE_OUTOFLINE_TEMPLATE
+SireUnits::Dimension::MolarEnergy Inter2B3DFF<Potential>::energy()
+{
+    return Inter2BFF<Potential>::energy();
+}
+
+template<class Potential>
+SIRE_OUTOFLINE_TEMPLATE
+SireUnits::Dimension::MolarEnergy Inter2B3DFF<Potential>::energy(const Symbol &component)
+{
+    return Inter2BFF<Potential>::energy(component);
 }
 
 /** Calculate the energies of the molecules in the passed forcetable

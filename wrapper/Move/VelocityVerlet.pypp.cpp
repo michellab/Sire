@@ -56,7 +56,7 @@ void register_VelocityVerlet_class(){
         VelocityVerlet_exposer.def( bp::init< SireMove::VelocityVerlet const & >(( bp::arg("other") )) );
         { //::SireMove::VelocityVerlet::createWorkspace
         
-            typedef ::SireMove::IntegratorWorkspacePtr ( ::SireMove::VelocityVerlet::*createWorkspace_function_type )( ::SireBase::PropertyMap const & ) const;
+            typedef ::SireMove::IntegratorWorkspacePtr ( ::SireMove::VelocityVerlet::*createWorkspace_function_type)( ::SireBase::PropertyMap const & ) const;
             createWorkspace_function_type createWorkspace_function_value( &::SireMove::VelocityVerlet::createWorkspace );
             
             VelocityVerlet_exposer.def( 
@@ -67,7 +67,7 @@ void register_VelocityVerlet_class(){
         }
         { //::SireMove::VelocityVerlet::createWorkspace
         
-            typedef ::SireMove::IntegratorWorkspacePtr ( ::SireMove::VelocityVerlet::*createWorkspace_function_type )( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMove::IntegratorWorkspacePtr ( ::SireMove::VelocityVerlet::*createWorkspace_function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) const;
             createWorkspace_function_type createWorkspace_function_value( &::SireMove::VelocityVerlet::createWorkspace );
             
             VelocityVerlet_exposer.def( 
@@ -78,7 +78,7 @@ void register_VelocityVerlet_class(){
         }
         { //::SireMove::VelocityVerlet::ensemble
         
-            typedef ::SireMove::Ensemble ( ::SireMove::VelocityVerlet::*ensemble_function_type )(  ) const;
+            typedef ::SireMove::Ensemble ( ::SireMove::VelocityVerlet::*ensemble_function_type)(  ) const;
             ensemble_function_type ensemble_function_value( &::SireMove::VelocityVerlet::ensemble );
             
             VelocityVerlet_exposer.def( 
@@ -88,7 +88,7 @@ void register_VelocityVerlet_class(){
         }
         { //::SireMove::VelocityVerlet::integrate
         
-            typedef void ( ::SireMove::VelocityVerlet::*integrate_function_type )( ::SireMove::IntegratorWorkspace &,::SireCAS::Symbol const &,::SireUnits::Dimension::Time,int,bool ) ;
+            typedef void ( ::SireMove::VelocityVerlet::*integrate_function_type)( ::SireMove::IntegratorWorkspace &,::SireCAS::Symbol const &,::SireUnits::Dimension::Time,int,bool ) ;
             integrate_function_type integrate_function_value( &::SireMove::VelocityVerlet::integrate );
             
             VelocityVerlet_exposer.def( 
@@ -99,7 +99,7 @@ void register_VelocityVerlet_class(){
         }
         { //::SireMove::VelocityVerlet::isTimeReversible
         
-            typedef bool ( ::SireMove::VelocityVerlet::*isTimeReversible_function_type )(  ) const;
+            typedef bool ( ::SireMove::VelocityVerlet::*isTimeReversible_function_type)(  ) const;
             isTimeReversible_function_type isTimeReversible_function_value( &::SireMove::VelocityVerlet::isTimeReversible );
             
             VelocityVerlet_exposer.def( 
@@ -110,7 +110,7 @@ void register_VelocityVerlet_class(){
         VelocityVerlet_exposer.def( bp::self != bp::self );
         { //::SireMove::VelocityVerlet::operator=
         
-            typedef ::SireMove::VelocityVerlet & ( ::SireMove::VelocityVerlet::*assign_function_type )( ::SireMove::VelocityVerlet const & ) ;
+            typedef ::SireMove::VelocityVerlet & ( ::SireMove::VelocityVerlet::*assign_function_type)( ::SireMove::VelocityVerlet const & ) ;
             assign_function_type assign_function_value( &::SireMove::VelocityVerlet::operator= );
             
             VelocityVerlet_exposer.def( 
@@ -123,7 +123,7 @@ void register_VelocityVerlet_class(){
         VelocityVerlet_exposer.def( bp::self == bp::self );
         { //::SireMove::VelocityVerlet::toString
         
-            typedef ::QString ( ::SireMove::VelocityVerlet::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMove::VelocityVerlet::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMove::VelocityVerlet::toString );
             
             VelocityVerlet_exposer.def( 

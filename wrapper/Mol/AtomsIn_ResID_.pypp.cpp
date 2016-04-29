@@ -72,7 +72,7 @@ void register_AtomsIn_ResID__class(){
         { //::SireMol::AtomsIn< SireMol::ResID >::hash
         
             typedef SireMol::AtomsIn< SireMol::ResID > exported_class_t;
-            typedef ::uint ( ::SireMol::AtomsIn< SireMol::ResID >::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::AtomsIn< SireMol::ResID >::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::AtomsIn< SireMol::ResID >::hash );
             
             AtomsIn_ResID__exposer.def( 
@@ -83,7 +83,7 @@ void register_AtomsIn_ResID__class(){
         { //::SireMol::AtomsIn< SireMol::ResID >::isNull
         
             typedef SireMol::AtomsIn< SireMol::ResID > exported_class_t;
-            typedef bool ( ::SireMol::AtomsIn< SireMol::ResID >::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::AtomsIn< SireMol::ResID >::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::AtomsIn< SireMol::ResID >::isNull );
             
             AtomsIn_ResID__exposer.def( 
@@ -94,7 +94,7 @@ void register_AtomsIn_ResID__class(){
         { //::SireMol::AtomsIn< SireMol::ResID >::map
         
             typedef SireMol::AtomsIn< SireMol::ResID > exported_class_t;
-            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::AtomsIn< SireMol::ResID >::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::AtomsIn< SireMol::ResID >::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireMol::AtomsIn< SireMol::ResID >::map );
             
             AtomsIn_ResID__exposer.def( 
@@ -108,7 +108,7 @@ void register_AtomsIn_ResID__class(){
         { //::SireMol::AtomsIn< SireMol::ResID >::operator=
         
             typedef SireMol::AtomsIn< SireMol::ResID > exported_class_t;
-            typedef ::SireMol::AtomsIn< SireMol::ResID > & ( ::SireMol::AtomsIn< SireMol::ResID >::*assign_function_type )( ::SireMol::AtomsIn< SireMol::ResID > const & ) ;
+            typedef ::SireMol::AtomsIn< SireMol::ResID > & ( ::SireMol::AtomsIn< SireMol::ResID >::*assign_function_type)( ::SireMol::AtomsIn< SireMol::ResID > const & ) ;
             assign_function_type assign_function_value( &::SireMol::AtomsIn< SireMol::ResID >::operator= );
             
             AtomsIn_ResID__exposer.def( 
@@ -123,7 +123,7 @@ void register_AtomsIn_ResID__class(){
         { //::SireMol::AtomsIn< SireMol::ResID >::toString
         
             typedef SireMol::AtomsIn< SireMol::ResID > exported_class_t;
-            typedef ::QString ( ::SireMol::AtomsIn< SireMol::ResID >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::AtomsIn< SireMol::ResID >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::AtomsIn< SireMol::ResID >::toString );
             
             AtomsIn_ResID__exposer.def( 
@@ -145,7 +145,7 @@ void register_AtomsIn_ResID__class(){
         { //::SireMol::AtomsIn< SireMol::ResID >::what
         
             typedef SireMol::AtomsIn< SireMol::ResID > exported_class_t;
-            typedef char const * ( ::SireMol::AtomsIn< SireMol::ResID >::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::AtomsIn< SireMol::ResID >::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::AtomsIn< SireMol::ResID >::what );
             
             AtomsIn_ResID__exposer.def( 

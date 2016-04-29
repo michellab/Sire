@@ -63,7 +63,7 @@ void register_FlexibilityLibrary_class(){
         FlexibilityLibrary_exposer.def( bp::init< SireIO::FlexibilityLibrary const & >(( bp::arg("other") )) );
         { //::SireIO::FlexibilityLibrary::add
         
-            typedef void ( ::SireIO::FlexibilityLibrary::*add_function_type )( ::SireIO::FlexibilityLibrary const & ) ;
+            typedef void ( ::SireIO::FlexibilityLibrary::*add_function_type)( ::SireIO::FlexibilityLibrary const & ) ;
             add_function_type add_function_value( &::SireIO::FlexibilityLibrary::add );
             
             FlexibilityLibrary_exposer.def( 
@@ -74,7 +74,7 @@ void register_FlexibilityLibrary_class(){
         }
         { //::SireIO::FlexibilityLibrary::getFlexibility
         
-            typedef ::SireMove::Flexibility ( ::SireIO::FlexibilityLibrary::*getFlexibility_function_type )( ::SireMol::MoleculeView const & ) const;
+            typedef ::SireMove::Flexibility ( ::SireIO::FlexibilityLibrary::*getFlexibility_function_type)( ::SireMol::MoleculeView const & ) const;
             getFlexibility_function_type getFlexibility_function_value( &::SireIO::FlexibilityLibrary::getFlexibility );
             
             FlexibilityLibrary_exposer.def( 
@@ -85,7 +85,7 @@ void register_FlexibilityLibrary_class(){
         }
         { //::SireIO::FlexibilityLibrary::getTemplate
         
-            typedef ::SireIO::FlexibilityTemplate const & ( ::SireIO::FlexibilityLibrary::*getTemplate_function_type )( ::QString const & ) ;
+            typedef ::SireIO::FlexibilityTemplate const & ( ::SireIO::FlexibilityLibrary::*getTemplate_function_type)( ::QString const & ) ;
             getTemplate_function_type getTemplate_function_value( &::SireIO::FlexibilityLibrary::getTemplate );
             
             FlexibilityLibrary_exposer.def( 
@@ -97,7 +97,7 @@ void register_FlexibilityLibrary_class(){
         }
         { //::SireIO::FlexibilityLibrary::loadTemplates
         
-            typedef void ( ::SireIO::FlexibilityLibrary::*loadTemplates_function_type )( ::QString const & ) ;
+            typedef void ( ::SireIO::FlexibilityLibrary::*loadTemplates_function_type)( ::QString const & ) ;
             loadTemplates_function_type loadTemplates_function_value( &::SireIO::FlexibilityLibrary::loadTemplates );
             
             FlexibilityLibrary_exposer.def( 
@@ -110,7 +110,7 @@ void register_FlexibilityLibrary_class(){
         FlexibilityLibrary_exposer.def( bp::self + bp::self );
         { //::SireIO::FlexibilityLibrary::operator=
         
-            typedef ::SireIO::FlexibilityLibrary & ( ::SireIO::FlexibilityLibrary::*assign_function_type )( ::SireIO::FlexibilityLibrary const & ) ;
+            typedef ::SireIO::FlexibilityLibrary & ( ::SireIO::FlexibilityLibrary::*assign_function_type)( ::SireIO::FlexibilityLibrary const & ) ;
             assign_function_type assign_function_value( &::SireIO::FlexibilityLibrary::operator= );
             
             FlexibilityLibrary_exposer.def( 
@@ -123,7 +123,7 @@ void register_FlexibilityLibrary_class(){
         FlexibilityLibrary_exposer.def( bp::self == bp::self );
         { //::SireIO::FlexibilityLibrary::setTemplate
         
-            typedef void ( ::SireIO::FlexibilityLibrary::*setTemplate_function_type )( ::QString const &,::SireIO::FlexibilityTemplate const & ) ;
+            typedef void ( ::SireIO::FlexibilityLibrary::*setTemplate_function_type)( ::QString const &,::SireIO::FlexibilityTemplate const & ) ;
             setTemplate_function_type setTemplate_function_value( &::SireIO::FlexibilityLibrary::setTemplate );
             
             FlexibilityLibrary_exposer.def( 

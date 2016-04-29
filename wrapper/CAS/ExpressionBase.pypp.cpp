@@ -45,7 +45,7 @@ void register_ExpressionBase_class(){
         ExpressionBase_exposer.def( bp::init< SireCAS::ExpressionBase const & >(( bp::arg("other") )) );
         { //::SireCAS::ExpressionBase::children
         
-            typedef ::SireCAS::Expressions ( ::SireCAS::ExpressionBase::*children_function_type )(  ) const;
+            typedef ::SireCAS::Expressions ( ::SireCAS::ExpressionBase::*children_function_type)(  ) const;
             children_function_type children_function_value( &::SireCAS::ExpressionBase::children );
             
             ExpressionBase_exposer.def( 
@@ -55,7 +55,7 @@ void register_ExpressionBase_class(){
         }
         { //::SireCAS::ExpressionBase::conjugate
         
-            typedef ::SireCAS::Expression ( ::SireCAS::ExpressionBase::*conjugate_function_type )(  ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::ExpressionBase::*conjugate_function_type)(  ) const;
             conjugate_function_type conjugate_function_value( &::SireCAS::ExpressionBase::conjugate );
             
             ExpressionBase_exposer.def( 
@@ -65,7 +65,7 @@ void register_ExpressionBase_class(){
         }
         { //::SireCAS::ExpressionBase::differentiate
         
-            typedef ::SireCAS::Expression ( ::SireCAS::ExpressionBase::*differentiate_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::ExpressionBase::*differentiate_function_type)( ::SireCAS::Symbol const & ) const;
             differentiate_function_type differentiate_function_value( &::SireCAS::ExpressionBase::differentiate );
             
             ExpressionBase_exposer.def( 
@@ -76,7 +76,7 @@ void register_ExpressionBase_class(){
         }
         { //::SireCAS::ExpressionBase::evaluate
         
-            typedef double ( ::SireCAS::ExpressionBase::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::ExpressionBase::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::ExpressionBase::evaluate );
             
             ExpressionBase_exposer.def( 
@@ -87,7 +87,7 @@ void register_ExpressionBase_class(){
         }
         { //::SireCAS::ExpressionBase::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::ExpressionBase::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::ExpressionBase::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::ExpressionBase::evaluate );
             
             ExpressionBase_exposer.def( 
@@ -98,7 +98,7 @@ void register_ExpressionBase_class(){
         }
         { //::SireCAS::ExpressionBase::expand
         
-            typedef ::QList< SireCAS::Factor > ( ::SireCAS::ExpressionBase::*expand_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::QList< SireCAS::Factor > ( ::SireCAS::ExpressionBase::*expand_function_type)( ::SireCAS::Symbol const & ) const;
             expand_function_type expand_function_value( &::SireCAS::ExpressionBase::expand );
             
             ExpressionBase_exposer.def( 
@@ -109,7 +109,7 @@ void register_ExpressionBase_class(){
         }
         { //::SireCAS::ExpressionBase::functions
         
-            typedef ::SireCAS::Functions ( ::SireCAS::ExpressionBase::*functions_function_type )(  ) const;
+            typedef ::SireCAS::Functions ( ::SireCAS::ExpressionBase::*functions_function_type)(  ) const;
             functions_function_type functions_function_value( &::SireCAS::ExpressionBase::functions );
             
             ExpressionBase_exposer.def( 
@@ -119,7 +119,7 @@ void register_ExpressionBase_class(){
         }
         { //::SireCAS::ExpressionBase::hash
         
-            typedef ::uint ( ::SireCAS::ExpressionBase::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireCAS::ExpressionBase::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireCAS::ExpressionBase::hash );
             
             ExpressionBase_exposer.def( 
@@ -129,7 +129,7 @@ void register_ExpressionBase_class(){
         }
         { //::SireCAS::ExpressionBase::integrate
         
-            typedef ::SireCAS::Expression ( ::SireCAS::ExpressionBase::*integrate_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::ExpressionBase::*integrate_function_type)( ::SireCAS::Symbol const & ) const;
             integrate_function_type integrate_function_value( &::SireCAS::ExpressionBase::integrate );
             
             ExpressionBase_exposer.def( 
@@ -140,7 +140,7 @@ void register_ExpressionBase_class(){
         }
         { //::SireCAS::ExpressionBase::isComplex
         
-            typedef bool ( ::SireCAS::ExpressionBase::*isComplex_function_type )(  ) const;
+            typedef bool ( ::SireCAS::ExpressionBase::*isComplex_function_type)(  ) const;
             isComplex_function_type isComplex_function_value( &::SireCAS::ExpressionBase::isComplex );
             
             ExpressionBase_exposer.def( 
@@ -150,7 +150,7 @@ void register_ExpressionBase_class(){
         }
         { //::SireCAS::ExpressionBase::isCompound
         
-            typedef bool ( ::SireCAS::ExpressionBase::*isCompound_function_type )(  ) const;
+            typedef bool ( ::SireCAS::ExpressionBase::*isCompound_function_type)(  ) const;
             isCompound_function_type isCompound_function_value( &::SireCAS::ExpressionBase::isCompound );
             
             ExpressionBase_exposer.def( 
@@ -160,7 +160,7 @@ void register_ExpressionBase_class(){
         }
         { //::SireCAS::ExpressionBase::isConstant
         
-            typedef bool ( ::SireCAS::ExpressionBase::*isConstant_function_type )(  ) const;
+            typedef bool ( ::SireCAS::ExpressionBase::*isConstant_function_type)(  ) const;
             isConstant_function_type isConstant_function_value( &::SireCAS::ExpressionBase::isConstant );
             
             ExpressionBase_exposer.def( 
@@ -170,7 +170,7 @@ void register_ExpressionBase_class(){
         }
         { //::SireCAS::ExpressionBase::isFunction
         
-            typedef bool ( ::SireCAS::ExpressionBase::*isFunction_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef bool ( ::SireCAS::ExpressionBase::*isFunction_function_type)( ::SireCAS::Symbol const & ) const;
             isFunction_function_type isFunction_function_value( &::SireCAS::ExpressionBase::isFunction );
             
             ExpressionBase_exposer.def( 
@@ -182,7 +182,7 @@ void register_ExpressionBase_class(){
         ExpressionBase_exposer.def( bp::self != bp::self );
         { //::SireCAS::ExpressionBase::operator=
         
-            typedef ::SireCAS::ExpressionBase & ( ::SireCAS::ExpressionBase::*assign_function_type )( ::SireCAS::ExpressionBase const & ) ;
+            typedef ::SireCAS::ExpressionBase & ( ::SireCAS::ExpressionBase::*assign_function_type)( ::SireCAS::ExpressionBase const & ) ;
             assign_function_type assign_function_value( &::SireCAS::ExpressionBase::operator= );
             
             ExpressionBase_exposer.def( 
@@ -194,7 +194,7 @@ void register_ExpressionBase_class(){
         }
         { //::SireCAS::ExpressionBase::operator=
         
-            typedef ::SireCAS::ExpressionBase & ( ::SireCAS::ExpressionBase::*assign_function_type )( ::SireCAS::ExBase const & ) ;
+            typedef ::SireCAS::ExpressionBase & ( ::SireCAS::ExpressionBase::*assign_function_type)( ::SireCAS::ExBase const & ) ;
             assign_function_type assign_function_value( &::SireCAS::ExpressionBase::operator= );
             
             ExpressionBase_exposer.def( 
@@ -207,7 +207,7 @@ void register_ExpressionBase_class(){
         ExpressionBase_exposer.def( bp::self == bp::self );
         { //::SireCAS::ExpressionBase::series
         
-            typedef ::SireCAS::Expression ( ::SireCAS::ExpressionBase::*series_function_type )( ::SireCAS::Symbol const &,int ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::ExpressionBase::*series_function_type)( ::SireCAS::Symbol const &,int ) const;
             series_function_type series_function_value( &::SireCAS::ExpressionBase::series );
             
             ExpressionBase_exposer.def( 
@@ -218,7 +218,7 @@ void register_ExpressionBase_class(){
         }
         { //::SireCAS::ExpressionBase::simplify
         
-            typedef ::SireCAS::Expression ( ::SireCAS::ExpressionBase::*simplify_function_type )( int ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::ExpressionBase::*simplify_function_type)( int ) const;
             simplify_function_type simplify_function_value( &::SireCAS::ExpressionBase::simplify );
             
             ExpressionBase_exposer.def( 
@@ -229,7 +229,7 @@ void register_ExpressionBase_class(){
         }
         { //::SireCAS::ExpressionBase::substitute
         
-            typedef ::SireCAS::Expression ( ::SireCAS::ExpressionBase::*substitute_function_type )( ::SireCAS::Identities const & ) const;
+            typedef ::SireCAS::Expression ( ::SireCAS::ExpressionBase::*substitute_function_type)( ::SireCAS::Identities const & ) const;
             substitute_function_type substitute_function_value( &::SireCAS::ExpressionBase::substitute );
             
             ExpressionBase_exposer.def( 
@@ -240,7 +240,7 @@ void register_ExpressionBase_class(){
         }
         { //::SireCAS::ExpressionBase::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireCAS::ExpressionBase::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireCAS::ExpressionBase::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireCAS::ExpressionBase::symbols );
             
             ExpressionBase_exposer.def( 
@@ -250,7 +250,7 @@ void register_ExpressionBase_class(){
         }
         { //::SireCAS::ExpressionBase::toOpenMMString
         
-            typedef ::QString ( ::SireCAS::ExpressionBase::*toOpenMMString_function_type )(  ) const;
+            typedef ::QString ( ::SireCAS::ExpressionBase::*toOpenMMString_function_type)(  ) const;
             toOpenMMString_function_type toOpenMMString_function_value( &::SireCAS::ExpressionBase::toOpenMMString );
             
             ExpressionBase_exposer.def( 
@@ -260,7 +260,7 @@ void register_ExpressionBase_class(){
         }
         { //::SireCAS::ExpressionBase::toString
         
-            typedef ::QString ( ::SireCAS::ExpressionBase::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireCAS::ExpressionBase::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireCAS::ExpressionBase::toString );
             
             ExpressionBase_exposer.def( 
@@ -270,7 +270,7 @@ void register_ExpressionBase_class(){
         }
         { //::SireCAS::ExpressionBase::what
         
-            typedef char const * ( ::SireCAS::ExpressionBase::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::ExpressionBase::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::ExpressionBase::what );
             
             ExpressionBase_exposer.def( 

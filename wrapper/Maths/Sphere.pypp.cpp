@@ -38,7 +38,7 @@ void register_Sphere_class(){
         Sphere_exposer.def( bp::init< SireMaths::Sphere const & >(( bp::arg("other") )) );
         { //::SireMaths::Sphere::center
         
-            typedef ::SireMaths::Vector const & ( ::SireMaths::Sphere::*center_function_type )(  ) const;
+            typedef ::SireMaths::Vector const & ( ::SireMaths::Sphere::*center_function_type)(  ) const;
             center_function_type center_function_value( &::SireMaths::Sphere::center );
             
             Sphere_exposer.def( 
@@ -66,12 +66,12 @@ void register_Sphere_class(){
             Sphere_exposer.def( 
                 "combinedVolumeMC"
                 , combinedVolumeMC_function_value
-                , ( bp::arg("spheres"), bp::arg("nsamples")=(long long int)(-0x00000000000000001) ) );
+                , ( bp::arg("spheres"), bp::arg("nsamples")=(::qint64)(-0x00000000000000001) ) );
         
         }
         { //::SireMaths::Sphere::contains
         
-            typedef bool ( ::SireMaths::Sphere::*contains_function_type )( ::SireMaths::Vector const & ) const;
+            typedef bool ( ::SireMaths::Sphere::*contains_function_type)( ::SireMaths::Vector const & ) const;
             contains_function_type contains_function_value( &::SireMaths::Sphere::contains );
             
             Sphere_exposer.def( 
@@ -82,7 +82,7 @@ void register_Sphere_class(){
         }
         { //::SireMaths::Sphere::contains
         
-            typedef bool ( ::SireMaths::Sphere::*contains_function_type )( ::SireMaths::Sphere const & ) const;
+            typedef bool ( ::SireMaths::Sphere::*contains_function_type)( ::SireMaths::Sphere const & ) const;
             contains_function_type contains_function_value( &::SireMaths::Sphere::contains );
             
             Sphere_exposer.def( 
@@ -93,7 +93,7 @@ void register_Sphere_class(){
         }
         { //::SireMaths::Sphere::intersectionVolume
         
-            typedef double ( ::SireMaths::Sphere::*intersectionVolume_function_type )( ::SireMaths::Sphere const & ) const;
+            typedef double ( ::SireMaths::Sphere::*intersectionVolume_function_type)( ::SireMaths::Sphere const & ) const;
             intersectionVolume_function_type intersectionVolume_function_value( &::SireMaths::Sphere::intersectionVolume );
             
             Sphere_exposer.def( 
@@ -104,7 +104,7 @@ void register_Sphere_class(){
         }
         { //::SireMaths::Sphere::intersectionVolume
         
-            typedef double ( ::SireMaths::Sphere::*intersectionVolume_function_type )( ::SireMaths::Sphere const &,::SireMaths::Sphere const & ) const;
+            typedef double ( ::SireMaths::Sphere::*intersectionVolume_function_type)( ::SireMaths::Sphere const &,::SireMaths::Sphere const & ) const;
             intersectionVolume_function_type intersectionVolume_function_value( &::SireMaths::Sphere::intersectionVolume );
             
             Sphere_exposer.def( 
@@ -115,7 +115,7 @@ void register_Sphere_class(){
         }
         { //::SireMaths::Sphere::intersects
         
-            typedef bool ( ::SireMaths::Sphere::*intersects_function_type )( ::SireMaths::Sphere const & ) const;
+            typedef bool ( ::SireMaths::Sphere::*intersects_function_type)( ::SireMaths::Sphere const & ) const;
             intersects_function_type intersects_function_value( &::SireMaths::Sphere::intersects );
             
             Sphere_exposer.def( 
@@ -128,7 +128,7 @@ void register_Sphere_class(){
         Sphere_exposer.def( bp::self == bp::self );
         { //::SireMaths::Sphere::position
         
-            typedef ::SireMaths::Vector const & ( ::SireMaths::Sphere::*position_function_type )(  ) const;
+            typedef ::SireMaths::Vector const & ( ::SireMaths::Sphere::*position_function_type)(  ) const;
             position_function_type position_function_value( &::SireMaths::Sphere::position );
             
             Sphere_exposer.def( 
@@ -139,7 +139,7 @@ void register_Sphere_class(){
         }
         { //::SireMaths::Sphere::radius
         
-            typedef double ( ::SireMaths::Sphere::*radius_function_type )(  ) const;
+            typedef double ( ::SireMaths::Sphere::*radius_function_type)(  ) const;
             radius_function_type radius_function_value( &::SireMaths::Sphere::radius );
             
             Sphere_exposer.def( 
@@ -149,7 +149,7 @@ void register_Sphere_class(){
         }
         { //::SireMaths::Sphere::setCenter
         
-            typedef void ( ::SireMaths::Sphere::*setCenter_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireMaths::Sphere::*setCenter_function_type)( ::SireMaths::Vector const & ) ;
             setCenter_function_type setCenter_function_value( &::SireMaths::Sphere::setCenter );
             
             Sphere_exposer.def( 
@@ -160,7 +160,7 @@ void register_Sphere_class(){
         }
         { //::SireMaths::Sphere::setPosition
         
-            typedef void ( ::SireMaths::Sphere::*setPosition_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireMaths::Sphere::*setPosition_function_type)( ::SireMaths::Vector const & ) ;
             setPosition_function_type setPosition_function_value( &::SireMaths::Sphere::setPosition );
             
             Sphere_exposer.def( 
@@ -171,7 +171,7 @@ void register_Sphere_class(){
         }
         { //::SireMaths::Sphere::setRadius
         
-            typedef void ( ::SireMaths::Sphere::*setRadius_function_type )( double ) ;
+            typedef void ( ::SireMaths::Sphere::*setRadius_function_type)( double ) ;
             setRadius_function_type setRadius_function_value( &::SireMaths::Sphere::setRadius );
             
             Sphere_exposer.def( 
@@ -182,7 +182,7 @@ void register_Sphere_class(){
         }
         { //::SireMaths::Sphere::surfaceArea
         
-            typedef double ( ::SireMaths::Sphere::*surfaceArea_function_type )(  ) const;
+            typedef double ( ::SireMaths::Sphere::*surfaceArea_function_type)(  ) const;
             surfaceArea_function_type surfaceArea_function_value( &::SireMaths::Sphere::surfaceArea );
             
             Sphere_exposer.def( 
@@ -192,7 +192,7 @@ void register_Sphere_class(){
         }
         { //::SireMaths::Sphere::toString
         
-            typedef ::QString ( ::SireMaths::Sphere::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMaths::Sphere::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMaths::Sphere::toString );
             
             Sphere_exposer.def( 
@@ -202,7 +202,7 @@ void register_Sphere_class(){
         }
         { //::SireMaths::Sphere::translate
         
-            typedef ::SireMaths::Sphere ( ::SireMaths::Sphere::*translate_function_type )( ::SireMaths::Vector const & ) const;
+            typedef ::SireMaths::Sphere ( ::SireMaths::Sphere::*translate_function_type)( ::SireMaths::Vector const & ) const;
             translate_function_type translate_function_value( &::SireMaths::Sphere::translate );
             
             Sphere_exposer.def( 
@@ -223,7 +223,7 @@ void register_Sphere_class(){
         }
         { //::SireMaths::Sphere::volume
         
-            typedef double ( ::SireMaths::Sphere::*volume_function_type )(  ) const;
+            typedef double ( ::SireMaths::Sphere::*volume_function_type)(  ) const;
             volume_function_type volume_function_value( &::SireMaths::Sphere::volume );
             
             Sphere_exposer.def( 
@@ -233,7 +233,7 @@ void register_Sphere_class(){
         }
         { //::SireMaths::Sphere::what
         
-            typedef char const * ( ::SireMaths::Sphere::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMaths::Sphere::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMaths::Sphere::what );
             
             Sphere_exposer.def( 

@@ -70,7 +70,7 @@ void register_ViewsOfMol_class(){
         ViewsOfMol_exposer.def( bp::init< SireMol::ViewsOfMol const & >(( bp::arg("other") )) );
         { //::SireMol::ViewsOfMol::add
         
-            typedef void ( ::SireMol::ViewsOfMol::*add_function_type )( ::SireMol::AtomSelection const & ) ;
+            typedef void ( ::SireMol::ViewsOfMol::*add_function_type)( ::SireMol::AtomSelection const & ) ;
             add_function_type add_function_value( &::SireMol::ViewsOfMol::add );
             
             ViewsOfMol_exposer.def( 
@@ -81,7 +81,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::add
         
-            typedef void ( ::SireMol::ViewsOfMol::*add_function_type )( ::QList< SireMol::AtomSelection > const & ) ;
+            typedef void ( ::SireMol::ViewsOfMol::*add_function_type)( ::QList< SireMol::AtomSelection > const & ) ;
             add_function_type add_function_value( &::SireMol::ViewsOfMol::add );
             
             ViewsOfMol_exposer.def( 
@@ -92,7 +92,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::addIfUnique
         
-            typedef bool ( ::SireMol::ViewsOfMol::*addIfUnique_function_type )( ::SireMol::AtomSelection const & ) ;
+            typedef bool ( ::SireMol::ViewsOfMol::*addIfUnique_function_type)( ::SireMol::AtomSelection const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireMol::ViewsOfMol::addIfUnique );
             
             ViewsOfMol_exposer.def( 
@@ -103,7 +103,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::addIfUnique
         
-            typedef ::QList< SireMol::AtomSelection > ( ::SireMol::ViewsOfMol::*addIfUnique_function_type )( ::QList< SireMol::AtomSelection > const & ) ;
+            typedef ::QList< SireMol::AtomSelection > ( ::SireMol::ViewsOfMol::*addIfUnique_function_type)( ::QList< SireMol::AtomSelection > const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireMol::ViewsOfMol::addIfUnique );
             
             ViewsOfMol_exposer.def( 
@@ -114,7 +114,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::all
         
-            typedef ::SireMol::PartialMolecule ( ::SireMol::ViewsOfMol::*all_function_type )(  ) const;
+            typedef ::SireMol::PartialMolecule ( ::SireMol::ViewsOfMol::*all_function_type)(  ) const;
             all_function_type all_function_value( &::SireMol::ViewsOfMol::all );
             
             ViewsOfMol_exposer.def( 
@@ -124,7 +124,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::assertNoOverlap
         
-            typedef void ( ::SireMol::ViewsOfMol::*assertNoOverlap_function_type )(  ) const;
+            typedef void ( ::SireMol::ViewsOfMol::*assertNoOverlap_function_type)(  ) const;
             assertNoOverlap_function_type assertNoOverlap_function_value( &::SireMol::ViewsOfMol::assertNoOverlap );
             
             ViewsOfMol_exposer.def( 
@@ -134,7 +134,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::at
         
-            typedef ::SireMol::PartialMolecule ( ::SireMol::ViewsOfMol::*at_function_type )( int ) const;
+            typedef ::SireMol::PartialMolecule ( ::SireMol::ViewsOfMol::*at_function_type)( int ) const;
             at_function_type at_function_value( &::SireMol::ViewsOfMol::at );
             
             ViewsOfMol_exposer.def( 
@@ -145,7 +145,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::contains
         
-            typedef bool ( ::SireMol::ViewsOfMol::*contains_function_type )( ::SireMol::AtomIdx ) const;
+            typedef bool ( ::SireMol::ViewsOfMol::*contains_function_type)( ::SireMol::AtomIdx ) const;
             contains_function_type contains_function_value( &::SireMol::ViewsOfMol::contains );
             
             ViewsOfMol_exposer.def( 
@@ -156,7 +156,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::contains
         
-            typedef bool ( ::SireMol::ViewsOfMol::*contains_function_type )( ::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMol::ViewsOfMol::*contains_function_type)( ::SireMol::AtomID const & ) const;
             contains_function_type contains_function_value( &::SireMol::ViewsOfMol::contains );
             
             ViewsOfMol_exposer.def( 
@@ -167,7 +167,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::contains
         
-            typedef bool ( ::SireMol::ViewsOfMol::*contains_function_type )( ::SireMol::AtomSelection const & ) const;
+            typedef bool ( ::SireMol::ViewsOfMol::*contains_function_type)( ::SireMol::AtomSelection const & ) const;
             contains_function_type contains_function_value( &::SireMol::ViewsOfMol::contains );
             
             ViewsOfMol_exposer.def( 
@@ -178,7 +178,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::contains
         
-            typedef bool ( ::SireMol::ViewsOfMol::*contains_function_type )( ::QList< SireMol::AtomSelection > const & ) const;
+            typedef bool ( ::SireMol::ViewsOfMol::*contains_function_type)( ::QList< SireMol::AtomSelection > const & ) const;
             contains_function_type contains_function_value( &::SireMol::ViewsOfMol::contains );
             
             ViewsOfMol_exposer.def( 
@@ -189,7 +189,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::count
         
-            typedef int ( ::SireMol::ViewsOfMol::*count_function_type )(  ) const;
+            typedef int ( ::SireMol::ViewsOfMol::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMol::ViewsOfMol::count );
             
             ViewsOfMol_exposer.def( 
@@ -199,7 +199,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::evaluate
         
-            typedef ::SireMol::Evaluator ( ::SireMol::ViewsOfMol::*evaluate_function_type )(  ) const;
+            typedef ::SireMol::Evaluator ( ::SireMol::ViewsOfMol::*evaluate_function_type)(  ) const;
             evaluate_function_type evaluate_function_value( &::SireMol::ViewsOfMol::evaluate );
             
             ViewsOfMol_exposer.def( 
@@ -209,7 +209,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::evaluate
         
-            typedef ::SireMol::Evaluator ( ::SireMol::ViewsOfMol::*evaluate_function_type )( int ) const;
+            typedef ::SireMol::Evaluator ( ::SireMol::ViewsOfMol::*evaluate_function_type)( int ) const;
             evaluate_function_type evaluate_function_value( &::SireMol::ViewsOfMol::evaluate );
             
             ViewsOfMol_exposer.def( 
@@ -220,7 +220,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::hasMetadata
         
-            typedef bool ( ::SireMol::ViewsOfMol::*hasMetadata_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::ViewsOfMol::*hasMetadata_function_type)( ::SireBase::PropertyName const & ) const;
             hasMetadata_function_type hasMetadata_function_value( &::SireMol::ViewsOfMol::hasMetadata );
             
             ViewsOfMol_exposer.def( 
@@ -231,7 +231,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::hasMetadata
         
-            typedef bool ( ::SireMol::ViewsOfMol::*hasMetadata_function_type )( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::ViewsOfMol::*hasMetadata_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
             hasMetadata_function_type hasMetadata_function_value( &::SireMol::ViewsOfMol::hasMetadata );
             
             ViewsOfMol_exposer.def( 
@@ -242,7 +242,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::hasProperty
         
-            typedef bool ( ::SireMol::ViewsOfMol::*hasProperty_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::ViewsOfMol::*hasProperty_function_type)( ::SireBase::PropertyName const & ) const;
             hasProperty_function_type hasProperty_function_value( &::SireMol::ViewsOfMol::hasProperty );
             
             ViewsOfMol_exposer.def( 
@@ -253,7 +253,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::indexOf
         
-            typedef int ( ::SireMol::ViewsOfMol::*indexOf_function_type )( ::SireMol::AtomSelection const &,int ) const;
+            typedef int ( ::SireMol::ViewsOfMol::*indexOf_function_type)( ::SireMol::AtomSelection const &,int ) const;
             indexOf_function_type indexOf_function_value( &::SireMol::ViewsOfMol::indexOf );
             
             ViewsOfMol_exposer.def( 
@@ -264,7 +264,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::intersects
         
-            typedef bool ( ::SireMol::ViewsOfMol::*intersects_function_type )( ::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMol::ViewsOfMol::*intersects_function_type)( ::SireMol::AtomID const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::ViewsOfMol::intersects );
             
             ViewsOfMol_exposer.def( 
@@ -275,7 +275,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::intersects
         
-            typedef bool ( ::SireMol::ViewsOfMol::*intersects_function_type )( ::SireMol::AtomSelection const & ) const;
+            typedef bool ( ::SireMol::ViewsOfMol::*intersects_function_type)( ::SireMol::AtomSelection const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::ViewsOfMol::intersects );
             
             ViewsOfMol_exposer.def( 
@@ -286,7 +286,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::isEmpty
         
-            typedef bool ( ::SireMol::ViewsOfMol::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::ViewsOfMol::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::ViewsOfMol::isEmpty );
             
             ViewsOfMol_exposer.def( 
@@ -296,7 +296,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::join
         
-            typedef ::SireMol::PartialMolecule ( ::SireMol::ViewsOfMol::*join_function_type )(  ) const;
+            typedef ::SireMol::PartialMolecule ( ::SireMol::ViewsOfMol::*join_function_type)(  ) const;
             join_function_type join_function_value( &::SireMol::ViewsOfMol::join );
             
             ViewsOfMol_exposer.def( 
@@ -306,7 +306,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::metadataKeys
         
-            typedef ::QStringList ( ::SireMol::ViewsOfMol::*metadataKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireMol::ViewsOfMol::*metadataKeys_function_type)(  ) const;
             metadataKeys_function_type metadataKeys_function_value( &::SireMol::ViewsOfMol::metadataKeys );
             
             ViewsOfMol_exposer.def( 
@@ -316,7 +316,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::metadataKeys
         
-            typedef ::QStringList ( ::SireMol::ViewsOfMol::*metadataKeys_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef ::QStringList ( ::SireMol::ViewsOfMol::*metadataKeys_function_type)( ::SireBase::PropertyName const & ) const;
             metadataKeys_function_type metadataKeys_function_value( &::SireMol::ViewsOfMol::metadataKeys );
             
             ViewsOfMol_exposer.def( 
@@ -327,7 +327,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::molecule
         
-            typedef ::SireMol::Molecule ( ::SireMol::ViewsOfMol::*molecule_function_type )(  ) const;
+            typedef ::SireMol::Molecule ( ::SireMol::ViewsOfMol::*molecule_function_type)(  ) const;
             molecule_function_type molecule_function_value( &::SireMol::ViewsOfMol::molecule );
             
             ViewsOfMol_exposer.def( 
@@ -337,7 +337,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::move
         
-            typedef ::SireMol::Mover< SireMol::ViewsOfMol > ( ::SireMol::ViewsOfMol::*move_function_type )(  ) const;
+            typedef ::SireMol::Mover< SireMol::ViewsOfMol > ( ::SireMol::ViewsOfMol::*move_function_type)(  ) const;
             move_function_type move_function_value( &::SireMol::ViewsOfMol::move );
             
             ViewsOfMol_exposer.def( 
@@ -347,7 +347,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::move
         
-            typedef ::SireMol::Mover< SireMol::ViewsOfMol > ( ::SireMol::ViewsOfMol::*move_function_type )( int ) const;
+            typedef ::SireMol::Mover< SireMol::ViewsOfMol > ( ::SireMol::ViewsOfMol::*move_function_type)( int ) const;
             move_function_type move_function_value( &::SireMol::ViewsOfMol::move );
             
             ViewsOfMol_exposer.def( 
@@ -358,7 +358,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::nViews
         
-            typedef int ( ::SireMol::ViewsOfMol::*nViews_function_type )(  ) const;
+            typedef int ( ::SireMol::ViewsOfMol::*nViews_function_type)(  ) const;
             nViews_function_type nViews_function_value( &::SireMol::ViewsOfMol::nViews );
             
             ViewsOfMol_exposer.def( 
@@ -368,7 +368,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::name
         
-            typedef ::SireMol::MolName const & ( ::SireMol::ViewsOfMol::*name_function_type )(  ) const;
+            typedef ::SireMol::MolName const & ( ::SireMol::ViewsOfMol::*name_function_type)(  ) const;
             name_function_type name_function_value( &::SireMol::ViewsOfMol::name );
             
             ViewsOfMol_exposer.def( 
@@ -379,7 +379,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::number
         
-            typedef ::SireMol::MolNum ( ::SireMol::ViewsOfMol::*number_function_type )(  ) const;
+            typedef ::SireMol::MolNum ( ::SireMol::ViewsOfMol::*number_function_type)(  ) const;
             number_function_type number_function_value( &::SireMol::ViewsOfMol::number );
             
             ViewsOfMol_exposer.def( 
@@ -392,7 +392,7 @@ void register_ViewsOfMol_class(){
         ViewsOfMol_exposer.def( bp::self - bp::self );
         { //::SireMol::ViewsOfMol::operator=
         
-            typedef ::SireMol::ViewsOfMol & ( ::SireMol::ViewsOfMol::*assign_function_type )( ::SireMol::ViewsOfMol const & ) ;
+            typedef ::SireMol::ViewsOfMol & ( ::SireMol::ViewsOfMol::*assign_function_type)( ::SireMol::ViewsOfMol const & ) ;
             assign_function_type assign_function_value( &::SireMol::ViewsOfMol::operator= );
             
             ViewsOfMol_exposer.def( 
@@ -404,7 +404,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::operator=
         
-            typedef ::SireMol::ViewsOfMol & ( ::SireMol::ViewsOfMol::*assign_function_type )( ::SireMol::Selector< SireMol::Atom > const & ) ;
+            typedef ::SireMol::ViewsOfMol & ( ::SireMol::ViewsOfMol::*assign_function_type)( ::SireMol::Selector< SireMol::Atom > const & ) ;
             assign_function_type assign_function_value( &::SireMol::ViewsOfMol::operator= );
             
             ViewsOfMol_exposer.def( 
@@ -416,7 +416,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::operator=
         
-            typedef ::SireMol::ViewsOfMol & ( ::SireMol::ViewsOfMol::*assign_function_type )( ::SireMol::Selector< SireMol::CutGroup > const & ) ;
+            typedef ::SireMol::ViewsOfMol & ( ::SireMol::ViewsOfMol::*assign_function_type)( ::SireMol::Selector< SireMol::CutGroup > const & ) ;
             assign_function_type assign_function_value( &::SireMol::ViewsOfMol::operator= );
             
             ViewsOfMol_exposer.def( 
@@ -428,7 +428,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::operator=
         
-            typedef ::SireMol::ViewsOfMol & ( ::SireMol::ViewsOfMol::*assign_function_type )( ::SireMol::Selector< SireMol::Residue > const & ) ;
+            typedef ::SireMol::ViewsOfMol & ( ::SireMol::ViewsOfMol::*assign_function_type)( ::SireMol::Selector< SireMol::Residue > const & ) ;
             assign_function_type assign_function_value( &::SireMol::ViewsOfMol::operator= );
             
             ViewsOfMol_exposer.def( 
@@ -440,7 +440,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::operator=
         
-            typedef ::SireMol::ViewsOfMol & ( ::SireMol::ViewsOfMol::*assign_function_type )( ::SireMol::Selector< SireMol::Chain > const & ) ;
+            typedef ::SireMol::ViewsOfMol & ( ::SireMol::ViewsOfMol::*assign_function_type)( ::SireMol::Selector< SireMol::Chain > const & ) ;
             assign_function_type assign_function_value( &::SireMol::ViewsOfMol::operator= );
             
             ViewsOfMol_exposer.def( 
@@ -452,7 +452,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::operator=
         
-            typedef ::SireMol::ViewsOfMol & ( ::SireMol::ViewsOfMol::*assign_function_type )( ::SireMol::Selector< SireMol::Segment > const & ) ;
+            typedef ::SireMol::ViewsOfMol & ( ::SireMol::ViewsOfMol::*assign_function_type)( ::SireMol::Selector< SireMol::Segment > const & ) ;
             assign_function_type assign_function_value( &::SireMol::ViewsOfMol::operator= );
             
             ViewsOfMol_exposer.def( 
@@ -464,7 +464,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::operator=
         
-            typedef ::SireMol::ViewsOfMol & ( ::SireMol::ViewsOfMol::*assign_function_type )( ::SireMol::MoleculeView const & ) ;
+            typedef ::SireMol::ViewsOfMol & ( ::SireMol::ViewsOfMol::*assign_function_type)( ::SireMol::MoleculeView const & ) ;
             assign_function_type assign_function_value( &::SireMol::ViewsOfMol::operator= );
             
             ViewsOfMol_exposer.def( 
@@ -477,7 +477,7 @@ void register_ViewsOfMol_class(){
         ViewsOfMol_exposer.def( bp::self == bp::self );
         { //::SireMol::ViewsOfMol::operator[]
         
-            typedef ::SireMol::PartialMolecule ( ::SireMol::ViewsOfMol::*__getitem___function_type )( int ) const;
+            typedef ::SireMol::PartialMolecule ( ::SireMol::ViewsOfMol::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::ViewsOfMol::operator[] );
             
             ViewsOfMol_exposer.def( 
@@ -488,7 +488,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::propertyKeys
         
-            typedef ::QStringList ( ::SireMol::ViewsOfMol::*propertyKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireMol::ViewsOfMol::*propertyKeys_function_type)(  ) const;
             propertyKeys_function_type propertyKeys_function_value( &::SireMol::ViewsOfMol::propertyKeys );
             
             ViewsOfMol_exposer.def( 
@@ -498,7 +498,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::remove
         
-            typedef bool ( ::SireMol::ViewsOfMol::*remove_function_type )( ::SireMol::AtomSelection const & ) ;
+            typedef bool ( ::SireMol::ViewsOfMol::*remove_function_type)( ::SireMol::AtomSelection const & ) ;
             remove_function_type remove_function_value( &::SireMol::ViewsOfMol::remove );
             
             ViewsOfMol_exposer.def( 
@@ -509,7 +509,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::remove
         
-            typedef ::QList< SireMol::AtomSelection > ( ::SireMol::ViewsOfMol::*remove_function_type )( ::QList< SireMol::AtomSelection > const & ) ;
+            typedef ::QList< SireMol::AtomSelection > ( ::SireMol::ViewsOfMol::*remove_function_type)( ::QList< SireMol::AtomSelection > const & ) ;
             remove_function_type remove_function_value( &::SireMol::ViewsOfMol::remove );
             
             ViewsOfMol_exposer.def( 
@@ -520,7 +520,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::removeAll
         
-            typedef bool ( ::SireMol::ViewsOfMol::*removeAll_function_type )( ::SireMol::AtomSelection const & ) ;
+            typedef bool ( ::SireMol::ViewsOfMol::*removeAll_function_type)( ::SireMol::AtomSelection const & ) ;
             removeAll_function_type removeAll_function_value( &::SireMol::ViewsOfMol::removeAll );
             
             ViewsOfMol_exposer.def( 
@@ -531,7 +531,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::removeAll
         
-            typedef ::QList< SireMol::AtomSelection > ( ::SireMol::ViewsOfMol::*removeAll_function_type )( ::QList< SireMol::AtomSelection > const & ) ;
+            typedef ::QList< SireMol::AtomSelection > ( ::SireMol::ViewsOfMol::*removeAll_function_type)( ::QList< SireMol::AtomSelection > const & ) ;
             removeAll_function_type removeAll_function_value( &::SireMol::ViewsOfMol::removeAll );
             
             ViewsOfMol_exposer.def( 
@@ -542,7 +542,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::removeAll
         
-            typedef void ( ::SireMol::ViewsOfMol::*removeAll_function_type )(  ) ;
+            typedef void ( ::SireMol::ViewsOfMol::*removeAll_function_type)(  ) ;
             removeAll_function_type removeAll_function_value( &::SireMol::ViewsOfMol::removeAll );
             
             ViewsOfMol_exposer.def( 
@@ -552,7 +552,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::removeAt
         
-            typedef ::SireMol::AtomSelection ( ::SireMol::ViewsOfMol::*removeAt_function_type )( int ) ;
+            typedef ::SireMol::AtomSelection ( ::SireMol::ViewsOfMol::*removeAt_function_type)( int ) ;
             removeAt_function_type removeAt_function_value( &::SireMol::ViewsOfMol::removeAt );
             
             ViewsOfMol_exposer.def( 
@@ -563,7 +563,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::removeDuplicates
         
-            typedef ::QList< SireMol::AtomSelection > ( ::SireMol::ViewsOfMol::*removeDuplicates_function_type )(  ) ;
+            typedef ::QList< SireMol::AtomSelection > ( ::SireMol::ViewsOfMol::*removeDuplicates_function_type)(  ) ;
             removeDuplicates_function_type removeDuplicates_function_value( &::SireMol::ViewsOfMol::removeDuplicates );
             
             ViewsOfMol_exposer.def( 
@@ -573,7 +573,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::selectedAll
         
-            typedef bool ( ::SireMol::ViewsOfMol::*selectedAll_function_type )(  ) const;
+            typedef bool ( ::SireMol::ViewsOfMol::*selectedAll_function_type)(  ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::ViewsOfMol::selectedAll );
             
             ViewsOfMol_exposer.def( 
@@ -583,7 +583,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::selection
         
-            typedef ::SireMol::AtomSelection ( ::SireMol::ViewsOfMol::*selection_function_type )(  ) const;
+            typedef ::SireMol::AtomSelection ( ::SireMol::ViewsOfMol::*selection_function_type)(  ) const;
             selection_function_type selection_function_value( &::SireMol::ViewsOfMol::selection );
             
             ViewsOfMol_exposer.def( 
@@ -593,7 +593,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::selection
         
-            typedef ::SireMol::AtomSelection const & ( ::SireMol::ViewsOfMol::*selection_function_type )( int ) const;
+            typedef ::SireMol::AtomSelection const & ( ::SireMol::ViewsOfMol::*selection_function_type)( int ) const;
             selection_function_type selection_function_value( &::SireMol::ViewsOfMol::selection );
             
             ViewsOfMol_exposer.def( 
@@ -605,7 +605,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::selections
         
-            typedef ::QList< SireMol::AtomSelection > ( ::SireMol::ViewsOfMol::*selections_function_type )(  ) const;
+            typedef ::QList< SireMol::AtomSelection > ( ::SireMol::ViewsOfMol::*selections_function_type)(  ) const;
             selections_function_type selections_function_value( &::SireMol::ViewsOfMol::selections );
             
             ViewsOfMol_exposer.def( 
@@ -615,7 +615,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::toString
         
-            typedef ::QString ( ::SireMol::ViewsOfMol::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::ViewsOfMol::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::ViewsOfMol::toString );
             
             ViewsOfMol_exposer.def( 
@@ -635,7 +635,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::unite
         
-            typedef bool ( ::SireMol::ViewsOfMol::*unite_function_type )( ::SireMol::AtomSelection const & ) ;
+            typedef bool ( ::SireMol::ViewsOfMol::*unite_function_type)( ::SireMol::AtomSelection const & ) ;
             unite_function_type unite_function_value( &::SireMol::ViewsOfMol::unite );
             
             ViewsOfMol_exposer.def( 
@@ -646,7 +646,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::unite
         
-            typedef ::QList< SireMol::AtomSelection > ( ::SireMol::ViewsOfMol::*unite_function_type )( ::QList< SireMol::AtomSelection > const & ) ;
+            typedef ::QList< SireMol::AtomSelection > ( ::SireMol::ViewsOfMol::*unite_function_type)( ::QList< SireMol::AtomSelection > const & ) ;
             unite_function_type unite_function_value( &::SireMol::ViewsOfMol::unite );
             
             ViewsOfMol_exposer.def( 
@@ -657,7 +657,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::version
         
-            typedef ::quint64 ( ::SireMol::ViewsOfMol::*version_function_type )(  ) const;
+            typedef ::quint64 ( ::SireMol::ViewsOfMol::*version_function_type)(  ) const;
             version_function_type version_function_value( &::SireMol::ViewsOfMol::version );
             
             ViewsOfMol_exposer.def( 
@@ -667,7 +667,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::version
         
-            typedef ::quint64 ( ::SireMol::ViewsOfMol::*version_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef ::quint64 ( ::SireMol::ViewsOfMol::*version_function_type)( ::SireBase::PropertyName const & ) const;
             version_function_type version_function_value( &::SireMol::ViewsOfMol::version );
             
             ViewsOfMol_exposer.def( 
@@ -678,7 +678,7 @@ void register_ViewsOfMol_class(){
         }
         { //::SireMol::ViewsOfMol::viewAt
         
-            typedef ::SireMol::AtomSelection const & ( ::SireMol::ViewsOfMol::*viewAt_function_type )( int ) const;
+            typedef ::SireMol::AtomSelection const & ( ::SireMol::ViewsOfMol::*viewAt_function_type)( int ) const;
             viewAt_function_type viewAt_function_value( &::SireMol::ViewsOfMol::viewAt );
             
             ViewsOfMol_exposer.def( 

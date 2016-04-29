@@ -32,7 +32,7 @@ void register_DihedralComponent_class(){
         DihedralComponent_exposer.def( bp::init< SireMM::DihedralComponent const & >(( bp::arg("other") )) );
         { //::SireMM::DihedralComponent::changeEnergy
         
-            typedef void ( ::SireMM::DihedralComponent::*changeEnergy_function_type )( ::SireFF::FF &,::SireMM::DihedralEnergy const & ) const;
+            typedef void ( ::SireMM::DihedralComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::DihedralEnergy const & ) const;
             changeEnergy_function_type changeEnergy_function_value( &::SireMM::DihedralComponent::changeEnergy );
             
             DihedralComponent_exposer.def( 
@@ -43,7 +43,7 @@ void register_DihedralComponent_class(){
         }
         { //::SireMM::DihedralComponent::setEnergy
         
-            typedef void ( ::SireMM::DihedralComponent::*setEnergy_function_type )( ::SireFF::FF &,::SireMM::DihedralEnergy const & ) const;
+            typedef void ( ::SireMM::DihedralComponent::*setEnergy_function_type)( ::SireFF::FF &,::SireMM::DihedralEnergy const & ) const;
             setEnergy_function_type setEnergy_function_value( &::SireMM::DihedralComponent::setEnergy );
             
             DihedralComponent_exposer.def( 
@@ -54,7 +54,7 @@ void register_DihedralComponent_class(){
         }
         { //::SireMM::DihedralComponent::symbols
         
-            typedef ::SireCAS::Symbols ( ::SireMM::DihedralComponent::*symbols_function_type )(  ) const;
+            typedef ::SireCAS::Symbols ( ::SireMM::DihedralComponent::*symbols_function_type)(  ) const;
             symbols_function_type symbols_function_value( &::SireMM::DihedralComponent::symbols );
             
             DihedralComponent_exposer.def( 
@@ -64,7 +64,7 @@ void register_DihedralComponent_class(){
         }
         { //::SireMM::DihedralComponent::total
         
-            typedef ::SireMM::DihedralComponent const & ( ::SireMM::DihedralComponent::*total_function_type )(  ) const;
+            typedef ::SireMM::DihedralComponent const & ( ::SireMM::DihedralComponent::*total_function_type)(  ) const;
             total_function_type total_function_value( &::SireMM::DihedralComponent::total );
             
             DihedralComponent_exposer.def( 
@@ -85,7 +85,7 @@ void register_DihedralComponent_class(){
         }
         { //::SireMM::DihedralComponent::what
         
-            typedef char const * ( ::SireMM::DihedralComponent::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::DihedralComponent::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::DihedralComponent::what );
             
             DihedralComponent_exposer.def( 

@@ -44,7 +44,7 @@ void register_ImproperSymbols_class(){
         bp::scope ImproperSymbols_scope( ImproperSymbols_exposer );
         { //::SireMM::ImproperSymbols::phi
         
-            typedef ::SireCAS::Symbol const & ( ::SireMM::ImproperSymbols::*phi_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMM::ImproperSymbols::*phi_function_type)(  ) const;
             phi_function_type phi_function_value( &::SireMM::ImproperSymbols::phi );
             
             ImproperSymbols_exposer.def( 
@@ -55,7 +55,7 @@ void register_ImproperSymbols_class(){
         }
         { //::SireMM::ImproperSymbols::theta
         
-            typedef ::SireCAS::Symbol const & ( ::SireMM::ImproperSymbols::*theta_function_type )(  ) const;
+            typedef ::SireCAS::Symbol const & ( ::SireMM::ImproperSymbols::*theta_function_type)(  ) const;
             theta_function_type theta_function_value( &::SireMM::ImproperSymbols::theta );
             
             ImproperSymbols_exposer.def( 

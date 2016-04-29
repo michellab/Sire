@@ -53,7 +53,7 @@ void register_Array2D_Vector__class(){
         { //::SireBase::Array2D< SireMaths::Vector >::at
         
             typedef SireBase::Array2D< SireMaths::Vector > exported_class_t;
-            typedef ::SireMaths::Vector const & ( ::SireBase::Array2D< SireMaths::Vector >::*at_function_type )( int,int ) const;
+            typedef ::SireMaths::Vector const & ( ::SireBase::Array2D< SireMaths::Vector >::*at_function_type)( int,int ) const;
             at_function_type at_function_value( &::SireBase::Array2D< SireMaths::Vector >::at );
             
             Array2D_Vector__exposer.def( 
@@ -66,7 +66,7 @@ void register_Array2D_Vector__class(){
         { //::SireBase::Array2D< SireMaths::Vector >::get
         
             typedef SireBase::Array2D< SireMaths::Vector > exported_class_t;
-            typedef ::SireMaths::Vector const & ( ::SireBase::Array2D< SireMaths::Vector >::*get_function_type )( int,int ) const;
+            typedef ::SireMaths::Vector const & ( ::SireBase::Array2D< SireMaths::Vector >::*get_function_type)( int,int ) const;
             get_function_type get_function_value( &::SireBase::Array2D< SireMaths::Vector >::get );
             
             Array2D_Vector__exposer.def( 
@@ -80,7 +80,7 @@ void register_Array2D_Vector__class(){
         { //::SireBase::Array2D< SireMaths::Vector >::operator()
         
             typedef SireBase::Array2D< SireMaths::Vector > exported_class_t;
-            typedef ::SireMaths::Vector const & ( ::SireBase::Array2D< SireMaths::Vector >::*__call___function_type )( int,int ) const;
+            typedef ::SireMaths::Vector const & ( ::SireBase::Array2D< SireMaths::Vector >::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireBase::Array2D< SireMaths::Vector >::operator() );
             
             Array2D_Vector__exposer.def( 
@@ -93,7 +93,7 @@ void register_Array2D_Vector__class(){
         { //::SireBase::Array2D< SireMaths::Vector >::operator=
         
             typedef SireBase::Array2D< SireMaths::Vector > exported_class_t;
-            typedef ::SireBase::Array2D< SireMaths::Vector > & ( ::SireBase::Array2D< SireMaths::Vector >::*assign_function_type )( ::SireBase::Array2D< SireMaths::Vector > const & ) ;
+            typedef ::SireBase::Array2D< SireMaths::Vector > & ( ::SireBase::Array2D< SireMaths::Vector >::*assign_function_type)( ::SireBase::Array2D< SireMaths::Vector > const & ) ;
             assign_function_type assign_function_value( &::SireBase::Array2D< SireMaths::Vector >::operator= );
             
             Array2D_Vector__exposer.def( 
@@ -107,7 +107,7 @@ void register_Array2D_Vector__class(){
         { //::SireBase::Array2D< SireMaths::Vector >::redimension
         
             typedef SireBase::Array2D< SireMaths::Vector > exported_class_t;
-            typedef void ( ::SireBase::Array2D< SireMaths::Vector >::*redimension_function_type )( int,int ) ;
+            typedef void ( ::SireBase::Array2D< SireMaths::Vector >::*redimension_function_type)( int,int ) ;
             redimension_function_type redimension_function_value( &::SireBase::Array2D< SireMaths::Vector >::redimension );
             
             Array2D_Vector__exposer.def( 
@@ -119,7 +119,7 @@ void register_Array2D_Vector__class(){
         { //::SireBase::Array2D< SireMaths::Vector >::set
         
             typedef SireBase::Array2D< SireMaths::Vector > exported_class_t;
-            typedef void ( ::SireBase::Array2D< SireMaths::Vector >::*set_function_type )( int,int,::SireMaths::Vector const & ) ;
+            typedef void ( ::SireBase::Array2D< SireMaths::Vector >::*set_function_type)( int,int,::SireMaths::Vector const & ) ;
             set_function_type set_function_value( &::SireBase::Array2D< SireMaths::Vector >::set );
             
             Array2D_Vector__exposer.def( 
@@ -131,7 +131,7 @@ void register_Array2D_Vector__class(){
         { //::SireBase::Array2D< SireMaths::Vector >::setAll
         
             typedef SireBase::Array2D< SireMaths::Vector > exported_class_t;
-            typedef void ( ::SireBase::Array2D< SireMaths::Vector >::*setAll_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireBase::Array2D< SireMaths::Vector >::*setAll_function_type)( ::SireMaths::Vector const & ) ;
             setAll_function_type setAll_function_value( &::SireBase::Array2D< SireMaths::Vector >::setAll );
             
             Array2D_Vector__exposer.def( 
@@ -143,7 +143,7 @@ void register_Array2D_Vector__class(){
         { //::SireBase::Array2D< SireMaths::Vector >::toString
         
             typedef SireBase::Array2D< SireMaths::Vector > exported_class_t;
-            typedef ::QString ( ::SireBase::Array2D< SireMaths::Vector >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireBase::Array2D< SireMaths::Vector >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireBase::Array2D< SireMaths::Vector >::toString );
             
             Array2D_Vector__exposer.def( 
@@ -154,7 +154,7 @@ void register_Array2D_Vector__class(){
         { //::SireBase::Array2D< SireMaths::Vector >::transpose
         
             typedef SireBase::Array2D< SireMaths::Vector > exported_class_t;
-            typedef ::SireBase::Array2D< SireMaths::Vector > ( ::SireBase::Array2D< SireMaths::Vector >::*transpose_function_type )(  ) const;
+            typedef ::SireBase::Array2D< SireMaths::Vector > ( ::SireBase::Array2D< SireMaths::Vector >::*transpose_function_type)(  ) const;
             transpose_function_type transpose_function_value( &::SireBase::Array2D< SireMaths::Vector >::transpose );
             
             Array2D_Vector__exposer.def( 

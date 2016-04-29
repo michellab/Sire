@@ -36,7 +36,7 @@ void register_VectorProperty_class(){
         VectorProperty_exposer.def( bp::self != bp::self );
         { //::SireMaths::VectorProperty::operator=
         
-            typedef ::SireMaths::VectorProperty & ( ::SireMaths::VectorProperty::*assign_function_type )( ::SireMaths::VectorProperty const & ) ;
+            typedef ::SireMaths::VectorProperty & ( ::SireMaths::VectorProperty::*assign_function_type)( ::SireMaths::VectorProperty const & ) ;
             assign_function_type assign_function_value( &::SireMaths::VectorProperty::operator= );
             
             VectorProperty_exposer.def( 
@@ -48,7 +48,7 @@ void register_VectorProperty_class(){
         }
         { //::SireMaths::VectorProperty::operator=
         
-            typedef ::SireMaths::VectorProperty & ( ::SireMaths::VectorProperty::*assign_function_type )( ::SireMaths::Vector const & ) ;
+            typedef ::SireMaths::VectorProperty & ( ::SireMaths::VectorProperty::*assign_function_type)( ::SireMaths::Vector const & ) ;
             assign_function_type assign_function_value( &::SireMaths::VectorProperty::operator= );
             
             VectorProperty_exposer.def( 
@@ -61,7 +61,7 @@ void register_VectorProperty_class(){
         VectorProperty_exposer.def( bp::self == bp::self );
         { //::SireMaths::VectorProperty::toString
         
-            typedef ::QString ( ::SireMaths::VectorProperty::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMaths::VectorProperty::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMaths::VectorProperty::toString );
             
             VectorProperty_exposer.def( 
@@ -81,7 +81,7 @@ void register_VectorProperty_class(){
         }
         { //::SireMaths::VectorProperty::what
         
-            typedef char const * ( ::SireMaths::VectorProperty::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMaths::VectorProperty::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMaths::VectorProperty::what );
             
             VectorProperty_exposer.def( 

@@ -47,7 +47,7 @@ void register_MolFieldTable_class(){
         MolFieldTable_exposer.def( bp::init< SireFF::MolFieldTable const & >(( bp::arg("other") )) );
         { //::SireFF::MolFieldTable::add
         
-            typedef bool ( ::SireFF::MolFieldTable::*add_function_type )( ::SireMol::CGAtomIdx const &,::SireMaths::Vector const & ) ;
+            typedef bool ( ::SireFF::MolFieldTable::*add_function_type)( ::SireMol::CGAtomIdx const &,::SireMaths::Vector const & ) ;
             add_function_type add_function_value( &::SireFF::MolFieldTable::add );
             
             MolFieldTable_exposer.def( 
@@ -58,7 +58,7 @@ void register_MolFieldTable_class(){
         }
         { //::SireFF::MolFieldTable::add
         
-            typedef bool ( ::SireFF::MolFieldTable::*add_function_type )( ::SireMol::AtomSelection const &,::SireMaths::Vector const & ) ;
+            typedef bool ( ::SireFF::MolFieldTable::*add_function_type)( ::SireMol::AtomSelection const &,::SireMaths::Vector const & ) ;
             add_function_type add_function_value( &::SireFF::MolFieldTable::add );
             
             MolFieldTable_exposer.def( 
@@ -69,7 +69,7 @@ void register_MolFieldTable_class(){
         }
         { //::SireFF::MolFieldTable::add
         
-            typedef void ( ::SireFF::MolFieldTable::*add_function_type )( ::SireFF::MolFieldTable const & ) ;
+            typedef void ( ::SireFF::MolFieldTable::*add_function_type)( ::SireFF::MolFieldTable const & ) ;
             add_function_type add_function_value( &::SireFF::MolFieldTable::add );
             
             MolFieldTable_exposer.def( 
@@ -80,7 +80,7 @@ void register_MolFieldTable_class(){
         }
         { //::SireFF::MolFieldTable::add
         
-            typedef void ( ::SireFF::MolFieldTable::*add_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireFF::MolFieldTable::*add_function_type)( ::SireMaths::Vector const & ) ;
             add_function_type add_function_value( &::SireFF::MolFieldTable::add );
             
             MolFieldTable_exposer.def( 
@@ -91,7 +91,7 @@ void register_MolFieldTable_class(){
         }
         { //::SireFF::MolFieldTable::divide
         
-            typedef void ( ::SireFF::MolFieldTable::*divide_function_type )( double ) ;
+            typedef void ( ::SireFF::MolFieldTable::*divide_function_type)( double ) ;
             divide_function_type divide_function_value( &::SireFF::MolFieldTable::divide );
             
             MolFieldTable_exposer.def( 
@@ -102,7 +102,7 @@ void register_MolFieldTable_class(){
         }
         { //::SireFF::MolFieldTable::initialise
         
-            typedef void ( ::SireFF::MolFieldTable::*initialise_function_type )(  ) ;
+            typedef void ( ::SireFF::MolFieldTable::*initialise_function_type)(  ) ;
             initialise_function_type initialise_function_value( &::SireFF::MolFieldTable::initialise );
             
             MolFieldTable_exposer.def( 
@@ -112,7 +112,7 @@ void register_MolFieldTable_class(){
         }
         { //::SireFF::MolFieldTable::map
         
-            typedef int ( ::SireFF::MolFieldTable::*map_function_type )( ::SireMol::CGIdx ) const;
+            typedef int ( ::SireFF::MolFieldTable::*map_function_type)( ::SireMol::CGIdx ) const;
             map_function_type map_function_value( &::SireFF::MolFieldTable::map );
             
             MolFieldTable_exposer.def( 
@@ -123,7 +123,7 @@ void register_MolFieldTable_class(){
         }
         { //::SireFF::MolFieldTable::molNum
         
-            typedef ::SireMol::MolNum ( ::SireFF::MolFieldTable::*molNum_function_type )(  ) const;
+            typedef ::SireMol::MolNum ( ::SireFF::MolFieldTable::*molNum_function_type)(  ) const;
             molNum_function_type molNum_function_value( &::SireFF::MolFieldTable::molNum );
             
             MolFieldTable_exposer.def( 
@@ -133,7 +133,7 @@ void register_MolFieldTable_class(){
         }
         { //::SireFF::MolFieldTable::molUID
         
-            typedef ::QUuid const & ( ::SireFF::MolFieldTable::*molUID_function_type )(  ) const;
+            typedef ::QUuid const & ( ::SireFF::MolFieldTable::*molUID_function_type)(  ) const;
             molUID_function_type molUID_function_value( &::SireFF::MolFieldTable::molUID );
             
             MolFieldTable_exposer.def( 
@@ -144,7 +144,7 @@ void register_MolFieldTable_class(){
         }
         { //::SireFF::MolFieldTable::multiply
         
-            typedef void ( ::SireFF::MolFieldTable::*multiply_function_type )( double ) ;
+            typedef void ( ::SireFF::MolFieldTable::*multiply_function_type)( double ) ;
             multiply_function_type multiply_function_value( &::SireFF::MolFieldTable::multiply );
             
             MolFieldTable_exposer.def( 
@@ -155,7 +155,7 @@ void register_MolFieldTable_class(){
         }
         { //::SireFF::MolFieldTable::nCutGroups
         
-            typedef int ( ::SireFF::MolFieldTable::*nCutGroups_function_type )(  ) const;
+            typedef int ( ::SireFF::MolFieldTable::*nCutGroups_function_type)(  ) const;
             nCutGroups_function_type nCutGroups_function_value( &::SireFF::MolFieldTable::nCutGroups );
             
             MolFieldTable_exposer.def( 
@@ -165,7 +165,7 @@ void register_MolFieldTable_class(){
         }
         { //::SireFF::MolFieldTable::nSelectedCutGroups
         
-            typedef int ( ::SireFF::MolFieldTable::*nSelectedCutGroups_function_type )(  ) const;
+            typedef int ( ::SireFF::MolFieldTable::*nSelectedCutGroups_function_type)(  ) const;
             nSelectedCutGroups_function_type nSelectedCutGroups_function_value( &::SireFF::MolFieldTable::nSelectedCutGroups );
             
             MolFieldTable_exposer.def( 
@@ -183,7 +183,7 @@ void register_MolFieldTable_class(){
         MolFieldTable_exposer.def( bp::self / bp::other< double >() );
         { //::SireFF::MolFieldTable::operator=
         
-            typedef ::SireFF::MolFieldTable & ( ::SireFF::MolFieldTable::*assign_function_type )( ::SireFF::MolFieldTable const & ) ;
+            typedef ::SireFF::MolFieldTable & ( ::SireFF::MolFieldTable::*assign_function_type)( ::SireFF::MolFieldTable const & ) ;
             assign_function_type assign_function_value( &::SireFF::MolFieldTable::operator= );
             
             MolFieldTable_exposer.def( 
@@ -195,7 +195,7 @@ void register_MolFieldTable_class(){
         }
         { //::SireFF::MolFieldTable::operator=
         
-            typedef ::SireFF::MolFieldTable & ( ::SireFF::MolFieldTable::*assign_function_type )( ::SireMaths::Vector const & ) ;
+            typedef ::SireFF::MolFieldTable & ( ::SireFF::MolFieldTable::*assign_function_type)( ::SireMaths::Vector const & ) ;
             assign_function_type assign_function_value( &::SireFF::MolFieldTable::operator= );
             
             MolFieldTable_exposer.def( 
@@ -208,7 +208,7 @@ void register_MolFieldTable_class(){
         MolFieldTable_exposer.def( bp::self == bp::self );
         { //::SireFF::MolFieldTable::selected
         
-            typedef bool ( ::SireFF::MolFieldTable::*selected_function_type )( ::SireMol::CGIdx ) const;
+            typedef bool ( ::SireFF::MolFieldTable::*selected_function_type)( ::SireMol::CGIdx ) const;
             selected_function_type selected_function_value( &::SireFF::MolFieldTable::selected );
             
             MolFieldTable_exposer.def( 
@@ -219,7 +219,7 @@ void register_MolFieldTable_class(){
         }
         { //::SireFF::MolFieldTable::selectedAll
         
-            typedef bool ( ::SireFF::MolFieldTable::*selectedAll_function_type )(  ) const;
+            typedef bool ( ::SireFF::MolFieldTable::*selectedAll_function_type)(  ) const;
             selectedAll_function_type selectedAll_function_value( &::SireFF::MolFieldTable::selectedAll );
             
             MolFieldTable_exposer.def( 
@@ -229,7 +229,7 @@ void register_MolFieldTable_class(){
         }
         { //::SireFF::MolFieldTable::setAll
         
-            typedef void ( ::SireFF::MolFieldTable::*setAll_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireFF::MolFieldTable::*setAll_function_type)( ::SireMaths::Vector const & ) ;
             setAll_function_type setAll_function_value( &::SireFF::MolFieldTable::setAll );
             
             MolFieldTable_exposer.def( 
@@ -240,7 +240,7 @@ void register_MolFieldTable_class(){
         }
         { //::SireFF::MolFieldTable::subtract
         
-            typedef bool ( ::SireFF::MolFieldTable::*subtract_function_type )( ::SireMol::CGAtomIdx const &,::SireMaths::Vector const & ) ;
+            typedef bool ( ::SireFF::MolFieldTable::*subtract_function_type)( ::SireMol::CGAtomIdx const &,::SireMaths::Vector const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::MolFieldTable::subtract );
             
             MolFieldTable_exposer.def( 
@@ -251,7 +251,7 @@ void register_MolFieldTable_class(){
         }
         { //::SireFF::MolFieldTable::subtract
         
-            typedef bool ( ::SireFF::MolFieldTable::*subtract_function_type )( ::SireMol::AtomSelection const &,::SireMaths::Vector const & ) ;
+            typedef bool ( ::SireFF::MolFieldTable::*subtract_function_type)( ::SireMol::AtomSelection const &,::SireMaths::Vector const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::MolFieldTable::subtract );
             
             MolFieldTable_exposer.def( 
@@ -262,7 +262,7 @@ void register_MolFieldTable_class(){
         }
         { //::SireFF::MolFieldTable::subtract
         
-            typedef void ( ::SireFF::MolFieldTable::*subtract_function_type )( ::SireFF::MolFieldTable const & ) ;
+            typedef void ( ::SireFF::MolFieldTable::*subtract_function_type)( ::SireFF::MolFieldTable const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::MolFieldTable::subtract );
             
             MolFieldTable_exposer.def( 
@@ -273,7 +273,7 @@ void register_MolFieldTable_class(){
         }
         { //::SireFF::MolFieldTable::subtract
         
-            typedef void ( ::SireFF::MolFieldTable::*subtract_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireFF::MolFieldTable::*subtract_function_type)( ::SireMaths::Vector const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::MolFieldTable::subtract );
             
             MolFieldTable_exposer.def( 
@@ -284,7 +284,7 @@ void register_MolFieldTable_class(){
         }
         { //::SireFF::MolFieldTable::toVector
         
-            typedef ::QVector< SireMaths::Vector > ( ::SireFF::MolFieldTable::*toVector_function_type )(  ) const;
+            typedef ::QVector< SireMaths::Vector > ( ::SireFF::MolFieldTable::*toVector_function_type)(  ) const;
             toVector_function_type toVector_function_value( &::SireFF::MolFieldTable::toVector );
             
             MolFieldTable_exposer.def( 
@@ -294,7 +294,7 @@ void register_MolFieldTable_class(){
         }
         { //::SireFF::MolFieldTable::toVector
         
-            typedef ::QVector< SireMaths::Vector > ( ::SireFF::MolFieldTable::*toVector_function_type )( ::SireMol::AtomSelection const & ) const;
+            typedef ::QVector< SireMaths::Vector > ( ::SireFF::MolFieldTable::*toVector_function_type)( ::SireMol::AtomSelection const & ) const;
             toVector_function_type toVector_function_value( &::SireFF::MolFieldTable::toVector );
             
             MolFieldTable_exposer.def( 
@@ -315,7 +315,7 @@ void register_MolFieldTable_class(){
         }
         { //::SireFF::MolFieldTable::what
         
-            typedef char const * ( ::SireFF::MolFieldTable::*what_function_type )(  ) const;
+            typedef char const * ( ::SireFF::MolFieldTable::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireFF::MolFieldTable::what );
             
             MolFieldTable_exposer.def( 

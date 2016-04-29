@@ -3,6 +3,6 @@
 foreach $file (@ARGV)
 {
     system("touch $file");
-    system("./build/applyheader.pl $file");
+    system("perl ./build/applyheader.pl $file");
 }
 

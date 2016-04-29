@@ -7,6 +7,8 @@
 
 namespace bp = boost::python;
 
+#include "SireError/errors.h"
+
 #include "SireMaths/multidouble.h"
 
 #include "SireMaths/multifloat.h"
@@ -64,7 +66,7 @@ void register_CLJShiftFunction_class(){
         CLJShiftFunction_exposer.def( bp::self != bp::self );
         { //::SireMM::CLJShiftFunction::operator=
         
-            typedef ::SireMM::CLJShiftFunction & ( ::SireMM::CLJShiftFunction::*assign_function_type )( ::SireMM::CLJShiftFunction const & ) ;
+            typedef ::SireMM::CLJShiftFunction & ( ::SireMM::CLJShiftFunction::*assign_function_type)( ::SireMM::CLJShiftFunction const & ) ;
             assign_function_type assign_function_value( &::SireMM::CLJShiftFunction::operator= );
             
             CLJShiftFunction_exposer.def( 
@@ -77,7 +79,7 @@ void register_CLJShiftFunction_class(){
         CLJShiftFunction_exposer.def( bp::self == bp::self );
         { //::SireMM::CLJShiftFunction::supportsGridCalculation
         
-            typedef bool ( ::SireMM::CLJShiftFunction::*supportsGridCalculation_function_type )(  ) const;
+            typedef bool ( ::SireMM::CLJShiftFunction::*supportsGridCalculation_function_type)(  ) const;
             supportsGridCalculation_function_type supportsGridCalculation_function_value( &::SireMM::CLJShiftFunction::supportsGridCalculation );
             
             CLJShiftFunction_exposer.def( 
@@ -87,7 +89,7 @@ void register_CLJShiftFunction_class(){
         }
         { //::SireMM::CLJShiftFunction::toString
         
-            typedef ::QString ( ::SireMM::CLJShiftFunction::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMM::CLJShiftFunction::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMM::CLJShiftFunction::toString );
             
             CLJShiftFunction_exposer.def( 
@@ -107,7 +109,7 @@ void register_CLJShiftFunction_class(){
         }
         { //::SireMM::CLJShiftFunction::what
         
-            typedef char const * ( ::SireMM::CLJShiftFunction::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::CLJShiftFunction::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::CLJShiftFunction::what );
             
             CLJShiftFunction_exposer.def( 

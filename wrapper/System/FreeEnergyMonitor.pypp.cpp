@@ -53,7 +53,7 @@ void register_FreeEnergyMonitor_class(){
         FreeEnergyMonitor_exposer.def( bp::init< SireSystem::FreeEnergyMonitor const & >(( bp::arg("other") )) );
         { //::SireSystem::FreeEnergyMonitor::binWidth
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireSystem::FreeEnergyMonitor::*binWidth_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireSystem::FreeEnergyMonitor::*binWidth_function_type)(  ) const;
             binWidth_function_type binWidth_function_value( &::SireSystem::FreeEnergyMonitor::binWidth );
             
             FreeEnergyMonitor_exposer.def( 
@@ -63,7 +63,7 @@ void register_FreeEnergyMonitor_class(){
         }
         { //::SireSystem::FreeEnergyMonitor::clearStatistics
         
-            typedef void ( ::SireSystem::FreeEnergyMonitor::*clearStatistics_function_type )(  ) ;
+            typedef void ( ::SireSystem::FreeEnergyMonitor::*clearStatistics_function_type)(  ) ;
             clearStatistics_function_type clearStatistics_function_value( &::SireSystem::FreeEnergyMonitor::clearStatistics );
             
             FreeEnergyMonitor_exposer.def( 
@@ -73,7 +73,7 @@ void register_FreeEnergyMonitor_class(){
         }
         { //::SireSystem::FreeEnergyMonitor::conserveMemory
         
-            typedef void ( ::SireSystem::FreeEnergyMonitor::*conserveMemory_function_type )( ::SireSystem::FreeEnergyMonitor const & ) ;
+            typedef void ( ::SireSystem::FreeEnergyMonitor::*conserveMemory_function_type)( ::SireSystem::FreeEnergyMonitor const & ) ;
             conserveMemory_function_type conserveMemory_function_value( &::SireSystem::FreeEnergyMonitor::conserveMemory );
             
             FreeEnergyMonitor_exposer.def( 
@@ -84,7 +84,7 @@ void register_FreeEnergyMonitor_class(){
         }
         { //::SireSystem::FreeEnergyMonitor::coulombFreeEnergies
         
-            typedef ::QVector< SireMaths::FreeEnergyAverage > ( ::SireSystem::FreeEnergyMonitor::*coulombFreeEnergies_function_type )(  ) const;
+            typedef ::QVector< SireMaths::FreeEnergyAverage > ( ::SireSystem::FreeEnergyMonitor::*coulombFreeEnergies_function_type)(  ) const;
             coulombFreeEnergies_function_type coulombFreeEnergies_function_value( &::SireSystem::FreeEnergyMonitor::coulombFreeEnergies );
             
             FreeEnergyMonitor_exposer.def( 
@@ -94,7 +94,7 @@ void register_FreeEnergyMonitor_class(){
         }
         { //::SireSystem::FreeEnergyMonitor::coulombPower
         
-            typedef int ( ::SireSystem::FreeEnergyMonitor::*coulombPower_function_type )(  ) const;
+            typedef int ( ::SireSystem::FreeEnergyMonitor::*coulombPower_function_type)(  ) const;
             coulombPower_function_type coulombPower_function_value( &::SireSystem::FreeEnergyMonitor::coulombPower );
             
             FreeEnergyMonitor_exposer.def( 
@@ -104,7 +104,7 @@ void register_FreeEnergyMonitor_class(){
         }
         { //::SireSystem::FreeEnergyMonitor::deltaLambda
         
-            typedef double ( ::SireSystem::FreeEnergyMonitor::*deltaLambda_function_type )(  ) const;
+            typedef double ( ::SireSystem::FreeEnergyMonitor::*deltaLambda_function_type)(  ) const;
             deltaLambda_function_type deltaLambda_function_value( &::SireSystem::FreeEnergyMonitor::deltaLambda );
             
             FreeEnergyMonitor_exposer.def( 
@@ -114,7 +114,7 @@ void register_FreeEnergyMonitor_class(){
         }
         { //::SireSystem::FreeEnergyMonitor::freeEnergies
         
-            typedef ::QVector< SireMaths::FreeEnergyAverage > ( ::SireSystem::FreeEnergyMonitor::*freeEnergies_function_type )(  ) const;
+            typedef ::QVector< SireMaths::FreeEnergyAverage > ( ::SireSystem::FreeEnergyMonitor::*freeEnergies_function_type)(  ) const;
             freeEnergies_function_type freeEnergies_function_value( &::SireSystem::FreeEnergyMonitor::freeEnergies );
             
             FreeEnergyMonitor_exposer.def( 
@@ -124,7 +124,7 @@ void register_FreeEnergyMonitor_class(){
         }
         { //::SireSystem::FreeEnergyMonitor::groupA
         
-            typedef ::SireSystem::AssignerGroup const & ( ::SireSystem::FreeEnergyMonitor::*groupA_function_type )(  ) const;
+            typedef ::SireSystem::AssignerGroup const & ( ::SireSystem::FreeEnergyMonitor::*groupA_function_type)(  ) const;
             groupA_function_type groupA_function_value( &::SireSystem::FreeEnergyMonitor::groupA );
             
             FreeEnergyMonitor_exposer.def( 
@@ -135,7 +135,7 @@ void register_FreeEnergyMonitor_class(){
         }
         { //::SireSystem::FreeEnergyMonitor::groupB
         
-            typedef ::SireSystem::AssignerGroup const & ( ::SireSystem::FreeEnergyMonitor::*groupB_function_type )(  ) const;
+            typedef ::SireSystem::AssignerGroup const & ( ::SireSystem::FreeEnergyMonitor::*groupB_function_type)(  ) const;
             groupB_function_type groupB_function_value( &::SireSystem::FreeEnergyMonitor::groupB );
             
             FreeEnergyMonitor_exposer.def( 
@@ -146,7 +146,7 @@ void register_FreeEnergyMonitor_class(){
         }
         { //::SireSystem::FreeEnergyMonitor::isCompatible
         
-            typedef bool ( ::SireSystem::FreeEnergyMonitor::*isCompatible_function_type )( ::SireSystem::FreeEnergyMonitor const & ) const;
+            typedef bool ( ::SireSystem::FreeEnergyMonitor::*isCompatible_function_type)( ::SireSystem::FreeEnergyMonitor const & ) const;
             isCompatible_function_type isCompatible_function_value( &::SireSystem::FreeEnergyMonitor::isCompatible );
             
             FreeEnergyMonitor_exposer.def( 
@@ -157,7 +157,7 @@ void register_FreeEnergyMonitor_class(){
         }
         { //::SireSystem::FreeEnergyMonitor::isCompatibleExceptLambda
         
-            typedef bool ( ::SireSystem::FreeEnergyMonitor::*isCompatibleExceptLambda_function_type )( ::SireSystem::FreeEnergyMonitor const & ) const;
+            typedef bool ( ::SireSystem::FreeEnergyMonitor::*isCompatibleExceptLambda_function_type)( ::SireSystem::FreeEnergyMonitor const & ) const;
             isCompatibleExceptLambda_function_type isCompatibleExceptLambda_function_value( &::SireSystem::FreeEnergyMonitor::isCompatibleExceptLambda );
             
             FreeEnergyMonitor_exposer.def( 
@@ -168,7 +168,7 @@ void register_FreeEnergyMonitor_class(){
         }
         { //::SireSystem::FreeEnergyMonitor::isEmpty
         
-            typedef bool ( ::SireSystem::FreeEnergyMonitor::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireSystem::FreeEnergyMonitor::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireSystem::FreeEnergyMonitor::isEmpty );
             
             FreeEnergyMonitor_exposer.def( 
@@ -178,7 +178,7 @@ void register_FreeEnergyMonitor_class(){
         }
         { //::SireSystem::FreeEnergyMonitor::lambdaComponent
         
-            typedef ::SireCAS::Symbol ( ::SireSystem::FreeEnergyMonitor::*lambdaComponent_function_type )(  ) const;
+            typedef ::SireCAS::Symbol ( ::SireSystem::FreeEnergyMonitor::*lambdaComponent_function_type)(  ) const;
             lambdaComponent_function_type lambdaComponent_function_value( &::SireSystem::FreeEnergyMonitor::lambdaComponent );
             
             FreeEnergyMonitor_exposer.def( 
@@ -188,7 +188,7 @@ void register_FreeEnergyMonitor_class(){
         }
         { //::SireSystem::FreeEnergyMonitor::lambdaValue
         
-            typedef double ( ::SireSystem::FreeEnergyMonitor::*lambdaValue_function_type )(  ) const;
+            typedef double ( ::SireSystem::FreeEnergyMonitor::*lambdaValue_function_type)(  ) const;
             lambdaValue_function_type lambdaValue_function_value( &::SireSystem::FreeEnergyMonitor::lambdaValue );
             
             FreeEnergyMonitor_exposer.def( 
@@ -198,7 +198,7 @@ void register_FreeEnergyMonitor_class(){
         }
         { //::SireSystem::FreeEnergyMonitor::ljFreeEnergies
         
-            typedef ::QVector< SireMaths::FreeEnergyAverage > ( ::SireSystem::FreeEnergyMonitor::*ljFreeEnergies_function_type )(  ) const;
+            typedef ::QVector< SireMaths::FreeEnergyAverage > ( ::SireSystem::FreeEnergyMonitor::*ljFreeEnergies_function_type)(  ) const;
             ljFreeEnergies_function_type ljFreeEnergies_function_value( &::SireSystem::FreeEnergyMonitor::ljFreeEnergies );
             
             FreeEnergyMonitor_exposer.def( 
@@ -219,7 +219,7 @@ void register_FreeEnergyMonitor_class(){
         }
         { //::SireSystem::FreeEnergyMonitor::monitor
         
-            typedef void ( ::SireSystem::FreeEnergyMonitor::*monitor_function_type )( ::SireSystem::System & ) ;
+            typedef void ( ::SireSystem::FreeEnergyMonitor::*monitor_function_type)( ::SireSystem::System & ) ;
             monitor_function_type monitor_function_value( &::SireSystem::FreeEnergyMonitor::monitor );
             
             FreeEnergyMonitor_exposer.def( 
@@ -230,7 +230,7 @@ void register_FreeEnergyMonitor_class(){
         }
         { //::SireSystem::FreeEnergyMonitor::nSamples
         
-            typedef int ( ::SireSystem::FreeEnergyMonitor::*nSamples_function_type )(  ) const;
+            typedef int ( ::SireSystem::FreeEnergyMonitor::*nSamples_function_type)(  ) const;
             nSamples_function_type nSamples_function_value( &::SireSystem::FreeEnergyMonitor::nSamples );
             
             FreeEnergyMonitor_exposer.def( 
@@ -242,7 +242,7 @@ void register_FreeEnergyMonitor_class(){
         FreeEnergyMonitor_exposer.def( bp::self + bp::self );
         { //::SireSystem::FreeEnergyMonitor::operator=
         
-            typedef ::SireSystem::FreeEnergyMonitor & ( ::SireSystem::FreeEnergyMonitor::*assign_function_type )( ::SireSystem::FreeEnergyMonitor const & ) ;
+            typedef ::SireSystem::FreeEnergyMonitor & ( ::SireSystem::FreeEnergyMonitor::*assign_function_type)( ::SireSystem::FreeEnergyMonitor const & ) ;
             assign_function_type assign_function_value( &::SireSystem::FreeEnergyMonitor::operator= );
             
             FreeEnergyMonitor_exposer.def( 
@@ -255,7 +255,7 @@ void register_FreeEnergyMonitor_class(){
         FreeEnergyMonitor_exposer.def( bp::self == bp::self );
         { //::SireSystem::FreeEnergyMonitor::referenceGroup
         
-            typedef ::SireSystem::AssignerGroup const & ( ::SireSystem::FreeEnergyMonitor::*referenceGroup_function_type )(  ) const;
+            typedef ::SireSystem::AssignerGroup const & ( ::SireSystem::FreeEnergyMonitor::*referenceGroup_function_type)(  ) const;
             referenceGroup_function_type referenceGroup_function_value( &::SireSystem::FreeEnergyMonitor::referenceGroup );
             
             FreeEnergyMonitor_exposer.def( 
@@ -266,7 +266,7 @@ void register_FreeEnergyMonitor_class(){
         }
         { //::SireSystem::FreeEnergyMonitor::referenceViews
         
-            typedef ::QVector< SireMol::PartialMolecule > ( ::SireSystem::FreeEnergyMonitor::*referenceViews_function_type )(  ) const;
+            typedef ::QVector< SireMol::PartialMolecule > ( ::SireSystem::FreeEnergyMonitor::*referenceViews_function_type)(  ) const;
             referenceViews_function_type referenceViews_function_value( &::SireSystem::FreeEnergyMonitor::referenceViews );
             
             FreeEnergyMonitor_exposer.def( 
@@ -276,7 +276,7 @@ void register_FreeEnergyMonitor_class(){
         }
         { //::SireSystem::FreeEnergyMonitor::setBinWidth
         
-            typedef void ( ::SireSystem::FreeEnergyMonitor::*setBinWidth_function_type )( ::SireUnits::Dimension::MolarEnergy const & ) ;
+            typedef void ( ::SireSystem::FreeEnergyMonitor::*setBinWidth_function_type)( ::SireUnits::Dimension::MolarEnergy const & ) ;
             setBinWidth_function_type setBinWidth_function_value( &::SireSystem::FreeEnergyMonitor::setBinWidth );
             
             FreeEnergyMonitor_exposer.def( 
@@ -287,7 +287,7 @@ void register_FreeEnergyMonitor_class(){
         }
         { //::SireSystem::FreeEnergyMonitor::setCoulombPower
         
-            typedef void ( ::SireSystem::FreeEnergyMonitor::*setCoulombPower_function_type )( int ) ;
+            typedef void ( ::SireSystem::FreeEnergyMonitor::*setCoulombPower_function_type)( int ) ;
             setCoulombPower_function_type setCoulombPower_function_value( &::SireSystem::FreeEnergyMonitor::setCoulombPower );
             
             FreeEnergyMonitor_exposer.def( 
@@ -298,7 +298,7 @@ void register_FreeEnergyMonitor_class(){
         }
         { //::SireSystem::FreeEnergyMonitor::setDeltaLambda
         
-            typedef void ( ::SireSystem::FreeEnergyMonitor::*setDeltaLambda_function_type )( double ) ;
+            typedef void ( ::SireSystem::FreeEnergyMonitor::*setDeltaLambda_function_type)( double ) ;
             setDeltaLambda_function_type setDeltaLambda_function_value( &::SireSystem::FreeEnergyMonitor::setDeltaLambda );
             
             FreeEnergyMonitor_exposer.def( 
@@ -309,7 +309,7 @@ void register_FreeEnergyMonitor_class(){
         }
         { //::SireSystem::FreeEnergyMonitor::setLambdaComponent
         
-            typedef void ( ::SireSystem::FreeEnergyMonitor::*setLambdaComponent_function_type )( ::SireCAS::Symbol const & ) ;
+            typedef void ( ::SireSystem::FreeEnergyMonitor::*setLambdaComponent_function_type)( ::SireCAS::Symbol const & ) ;
             setLambdaComponent_function_type setLambdaComponent_function_value( &::SireSystem::FreeEnergyMonitor::setLambdaComponent );
             
             FreeEnergyMonitor_exposer.def( 
@@ -320,7 +320,7 @@ void register_FreeEnergyMonitor_class(){
         }
         { //::SireSystem::FreeEnergyMonitor::setShiftDelta
         
-            typedef void ( ::SireSystem::FreeEnergyMonitor::*setShiftDelta_function_type )( double ) ;
+            typedef void ( ::SireSystem::FreeEnergyMonitor::*setShiftDelta_function_type)( double ) ;
             setShiftDelta_function_type setShiftDelta_function_value( &::SireSystem::FreeEnergyMonitor::setShiftDelta );
             
             FreeEnergyMonitor_exposer.def( 
@@ -331,7 +331,7 @@ void register_FreeEnergyMonitor_class(){
         }
         { //::SireSystem::FreeEnergyMonitor::setTemperature
         
-            typedef void ( ::SireSystem::FreeEnergyMonitor::*setTemperature_function_type )( ::SireUnits::Dimension::Temperature const & ) ;
+            typedef void ( ::SireSystem::FreeEnergyMonitor::*setTemperature_function_type)( ::SireUnits::Dimension::Temperature const & ) ;
             setTemperature_function_type setTemperature_function_value( &::SireSystem::FreeEnergyMonitor::setTemperature );
             
             FreeEnergyMonitor_exposer.def( 
@@ -342,7 +342,7 @@ void register_FreeEnergyMonitor_class(){
         }
         { //::SireSystem::FreeEnergyMonitor::shiftDelta
         
-            typedef double ( ::SireSystem::FreeEnergyMonitor::*shiftDelta_function_type )(  ) const;
+            typedef double ( ::SireSystem::FreeEnergyMonitor::*shiftDelta_function_type)(  ) const;
             shiftDelta_function_type shiftDelta_function_value( &::SireSystem::FreeEnergyMonitor::shiftDelta );
             
             FreeEnergyMonitor_exposer.def( 
@@ -352,7 +352,7 @@ void register_FreeEnergyMonitor_class(){
         }
         { //::SireSystem::FreeEnergyMonitor::temperature
         
-            typedef ::SireUnits::Dimension::Temperature ( ::SireSystem::FreeEnergyMonitor::*temperature_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Temperature ( ::SireSystem::FreeEnergyMonitor::*temperature_function_type)(  ) const;
             temperature_function_type temperature_function_value( &::SireSystem::FreeEnergyMonitor::temperature );
             
             FreeEnergyMonitor_exposer.def( 
@@ -372,7 +372,7 @@ void register_FreeEnergyMonitor_class(){
         }
         { //::SireSystem::FreeEnergyMonitor::usesSoftCore
         
-            typedef bool ( ::SireSystem::FreeEnergyMonitor::*usesSoftCore_function_type )(  ) const;
+            typedef bool ( ::SireSystem::FreeEnergyMonitor::*usesSoftCore_function_type)(  ) const;
             usesSoftCore_function_type usesSoftCore_function_value( &::SireSystem::FreeEnergyMonitor::usesSoftCore );
             
             FreeEnergyMonitor_exposer.def( 

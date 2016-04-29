@@ -37,7 +37,7 @@ void register_Abs_class(){
         Abs_exposer.def( bp::init< SireCAS::Abs const & >(( bp::arg("other") )) );
         { //::SireCAS::Abs::evaluate
         
-            typedef double ( ::SireCAS::Abs::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::Abs::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Abs::evaluate );
             
             Abs_exposer.def( 
@@ -48,7 +48,7 @@ void register_Abs_class(){
         }
         { //::SireCAS::Abs::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::Abs::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::Abs::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Abs::evaluate );
             
             Abs_exposer.def( 
@@ -70,7 +70,7 @@ void register_Abs_class(){
         }
         { //::SireCAS::Abs::what
         
-            typedef char const * ( ::SireCAS::Abs::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::Abs::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::Abs::what );
             
             Abs_exposer.def( 

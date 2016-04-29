@@ -8,11 +8,12 @@ import argparse
 import os
 import sys
 
-parser = argparse.ArgumentParser(description="Perform molecular dynamics single topology free energy calculations using OpenMM",
-                                 epilog="sommmd-freenrg is built using Sire and OpenMM and is distributed "
+parser = argparse.ArgumentParser(description="Perform molecular dynamics single topology free energy calculations "
+                                             "using OpenMM",
+                                 epilog="somd-freenrg is built using Sire and OpenMM and is distributed "
                                         "under the GPL. For more information please visit "
-                                        "http://siremol.org/sommmd",
-                                 prog="sommmd")
+                                        "http://siremol.org",
+                                 prog="somd-freenrg")
 
 parser.add_argument('-C', '--config', nargs="?", 
                     help='Supply an optional CONFIG file to control the calculation.')
@@ -57,13 +58,14 @@ args = parser.parse_args()
 must_exit = False
 
 if args.author:
-    print("\nsommmd-freenrg was written by Gaetano Calabro, Julien Michel and Christopher Woods (C) 2014")
+    print("\nsomd-freenrg was written by Gaetano Calabro, Julien Michel and Christopher Woods (C) 2014")
     print("It is based on the OpenMMMD module distributed in Sire.")
     must_exit = True
 
 if args.version:
-    print("\sommmd-freenrg version 0.1")
-    print(Sire.Config.versionString())
+    print("somd-freenrg -- from Sire release version <%s>" %Sire.__version__)
+    print("This particular release can be downloaded here: "
+          "https://github.com/michellab/Sire/releases/tag/v%s" %Sire.__version__)
     must_exit = True
 
 if args.help_config:
@@ -134,7 +136,7 @@ if not (os.path.exists(coord_file) and os.path.exists(top_file) and os.path.exis
         print("(cannot find morph file %s)" % morph_file)
     sys.exit(-1)
 
-print("\nRunning a sommmd-freenrg calculation using files %s, %s and %s." % (top_file, coord_file, morph_file))
+print("\nRunning a somd-freenrg calculation using files %s, %s and %s." % (top_file, coord_file, morph_file))
 
 # Now lets run the OpenMMMD free energy calculation
 OpenMMMD.runFreeNrg(params)

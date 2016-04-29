@@ -100,6 +100,14 @@ NumberProperty::NumberProperty(qint64 value)
     val.ival = value;
 }
 
+/** Construct from the passed VariantProperty */
+NumberProperty::NumberProperty(const VariantProperty &other)
+               : ConcreteProperty<NumberProperty,Property>(),
+                 is_int(false)
+{
+    val.dval = other.convertTo<double>();
+}
+
 /** Copy constructor */
 NumberProperty::NumberProperty(const NumberProperty &other)
                : ConcreteProperty<NumberProperty,Property>(other),

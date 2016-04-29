@@ -48,7 +48,7 @@ void register_TwoAtomFunctions_class(){
         TwoAtomFunctions_exposer.def( bp::init< SireMM::TwoAtomFunctions const & >(( bp::arg("other") )) );
         { //::SireMM::TwoAtomFunctions::clear
         
-            typedef void ( ::SireMM::TwoAtomFunctions::*clear_function_type )( ::SireMol::AtomIdx ) ;
+            typedef void ( ::SireMM::TwoAtomFunctions::*clear_function_type)( ::SireMol::AtomIdx ) ;
             clear_function_type clear_function_value( &::SireMM::TwoAtomFunctions::clear );
             
             TwoAtomFunctions_exposer.def( 
@@ -59,7 +59,7 @@ void register_TwoAtomFunctions_class(){
         }
         { //::SireMM::TwoAtomFunctions::clear
         
-            typedef void ( ::SireMM::TwoAtomFunctions::*clear_function_type )( ::SireMol::AtomID const & ) ;
+            typedef void ( ::SireMM::TwoAtomFunctions::*clear_function_type)( ::SireMol::AtomID const & ) ;
             clear_function_type clear_function_value( &::SireMM::TwoAtomFunctions::clear );
             
             TwoAtomFunctions_exposer.def( 
@@ -70,7 +70,7 @@ void register_TwoAtomFunctions_class(){
         }
         { //::SireMM::TwoAtomFunctions::clear
         
-            typedef void ( ::SireMM::TwoAtomFunctions::*clear_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx ) ;
+            typedef void ( ::SireMM::TwoAtomFunctions::*clear_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx ) ;
             clear_function_type clear_function_value( &::SireMM::TwoAtomFunctions::clear );
             
             TwoAtomFunctions_exposer.def( 
@@ -81,7 +81,7 @@ void register_TwoAtomFunctions_class(){
         }
         { //::SireMM::TwoAtomFunctions::clear
         
-            typedef void ( ::SireMM::TwoAtomFunctions::*clear_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const & ) ;
+            typedef void ( ::SireMM::TwoAtomFunctions::*clear_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const & ) ;
             clear_function_type clear_function_value( &::SireMM::TwoAtomFunctions::clear );
             
             TwoAtomFunctions_exposer.def( 
@@ -92,7 +92,7 @@ void register_TwoAtomFunctions_class(){
         }
         { //::SireMM::TwoAtomFunctions::clear
         
-            typedef void ( ::SireMM::TwoAtomFunctions::*clear_function_type )( ::SireMol::BondID const & ) ;
+            typedef void ( ::SireMM::TwoAtomFunctions::*clear_function_type)( ::SireMol::BondID const & ) ;
             clear_function_type clear_function_value( &::SireMM::TwoAtomFunctions::clear );
             
             TwoAtomFunctions_exposer.def( 
@@ -103,7 +103,7 @@ void register_TwoAtomFunctions_class(){
         }
         { //::SireMM::TwoAtomFunctions::clear
         
-            typedef void ( ::SireMM::TwoAtomFunctions::*clear_function_type )(  ) ;
+            typedef void ( ::SireMM::TwoAtomFunctions::*clear_function_type)(  ) ;
             clear_function_type clear_function_value( &::SireMM::TwoAtomFunctions::clear );
             
             TwoAtomFunctions_exposer.def( 
@@ -113,7 +113,7 @@ void register_TwoAtomFunctions_class(){
         }
         { //::SireMM::TwoAtomFunctions::force
         
-            typedef ::SireCAS::Expression ( ::SireMM::TwoAtomFunctions::*force_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireMM::TwoAtomFunctions::*force_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireCAS::Symbol const & ) const;
             force_function_type force_function_value( &::SireMM::TwoAtomFunctions::force );
             
             TwoAtomFunctions_exposer.def( 
@@ -124,7 +124,7 @@ void register_TwoAtomFunctions_class(){
         }
         { //::SireMM::TwoAtomFunctions::force
         
-            typedef ::SireCAS::Expression ( ::SireMM::TwoAtomFunctions::*force_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireMM::TwoAtomFunctions::*force_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireCAS::Symbol const & ) const;
             force_function_type force_function_value( &::SireMM::TwoAtomFunctions::force );
             
             TwoAtomFunctions_exposer.def( 
@@ -135,7 +135,7 @@ void register_TwoAtomFunctions_class(){
         }
         { //::SireMM::TwoAtomFunctions::force
         
-            typedef ::SireCAS::Expression ( ::SireMM::TwoAtomFunctions::*force_function_type )( ::SireMol::BondID const &,::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireMM::TwoAtomFunctions::*force_function_type)( ::SireMol::BondID const &,::SireCAS::Symbol const & ) const;
             force_function_type force_function_value( &::SireMM::TwoAtomFunctions::force );
             
             TwoAtomFunctions_exposer.def( 
@@ -146,7 +146,7 @@ void register_TwoAtomFunctions_class(){
         }
         { //::SireMM::TwoAtomFunctions::forces
         
-            typedef ::QVector< SireMM::TwoAtomFunction > ( ::SireMM::TwoAtomFunctions::*forces_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::QVector< SireMM::TwoAtomFunction > ( ::SireMM::TwoAtomFunctions::*forces_function_type)( ::SireCAS::Symbol const & ) const;
             forces_function_type forces_function_value( &::SireMM::TwoAtomFunctions::forces );
             
             TwoAtomFunctions_exposer.def( 
@@ -157,7 +157,7 @@ void register_TwoAtomFunctions_class(){
         }
         { //::SireMM::TwoAtomFunctions::includeOnly
         
-            typedef ::SireMM::TwoAtomFunctions ( ::SireMM::TwoAtomFunctions::*includeOnly_function_type )( ::SireMol::AtomSelection const &,bool ) const;
+            typedef ::SireMM::TwoAtomFunctions ( ::SireMM::TwoAtomFunctions::*includeOnly_function_type)( ::SireMol::AtomSelection const &,bool ) const;
             includeOnly_function_type includeOnly_function_value( &::SireMM::TwoAtomFunctions::includeOnly );
             
             TwoAtomFunctions_exposer.def( 
@@ -168,7 +168,7 @@ void register_TwoAtomFunctions_class(){
         }
         { //::SireMM::TwoAtomFunctions::isEmpty
         
-            typedef bool ( ::SireMM::TwoAtomFunctions::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMM::TwoAtomFunctions::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMM::TwoAtomFunctions::isEmpty );
             
             TwoAtomFunctions_exposer.def( 
@@ -178,7 +178,7 @@ void register_TwoAtomFunctions_class(){
         }
         { //::SireMM::TwoAtomFunctions::nFunctions
         
-            typedef int ( ::SireMM::TwoAtomFunctions::*nFunctions_function_type )(  ) const;
+            typedef int ( ::SireMM::TwoAtomFunctions::*nFunctions_function_type)(  ) const;
             nFunctions_function_type nFunctions_function_value( &::SireMM::TwoAtomFunctions::nFunctions );
             
             TwoAtomFunctions_exposer.def( 
@@ -189,7 +189,7 @@ void register_TwoAtomFunctions_class(){
         TwoAtomFunctions_exposer.def( bp::self != bp::self );
         { //::SireMM::TwoAtomFunctions::operator=
         
-            typedef ::SireMM::TwoAtomFunctions & ( ::SireMM::TwoAtomFunctions::*assign_function_type )( ::SireMM::TwoAtomFunctions const & ) ;
+            typedef ::SireMM::TwoAtomFunctions & ( ::SireMM::TwoAtomFunctions::*assign_function_type)( ::SireMM::TwoAtomFunctions const & ) ;
             assign_function_type assign_function_value( &::SireMM::TwoAtomFunctions::operator= );
             
             TwoAtomFunctions_exposer.def( 
@@ -202,7 +202,7 @@ void register_TwoAtomFunctions_class(){
         TwoAtomFunctions_exposer.def( bp::self == bp::self );
         { //::SireMM::TwoAtomFunctions::potential
         
-            typedef ::SireCAS::Expression ( ::SireMM::TwoAtomFunctions::*potential_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
+            typedef ::SireCAS::Expression ( ::SireMM::TwoAtomFunctions::*potential_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
             potential_function_type potential_function_value( &::SireMM::TwoAtomFunctions::potential );
             
             TwoAtomFunctions_exposer.def( 
@@ -213,7 +213,7 @@ void register_TwoAtomFunctions_class(){
         }
         { //::SireMM::TwoAtomFunctions::potential
         
-            typedef ::SireCAS::Expression ( ::SireMM::TwoAtomFunctions::*potential_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef ::SireCAS::Expression ( ::SireMM::TwoAtomFunctions::*potential_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             potential_function_type potential_function_value( &::SireMM::TwoAtomFunctions::potential );
             
             TwoAtomFunctions_exposer.def( 
@@ -224,7 +224,7 @@ void register_TwoAtomFunctions_class(){
         }
         { //::SireMM::TwoAtomFunctions::potential
         
-            typedef ::SireCAS::Expression ( ::SireMM::TwoAtomFunctions::*potential_function_type )( ::SireMol::BondID const & ) const;
+            typedef ::SireCAS::Expression ( ::SireMM::TwoAtomFunctions::*potential_function_type)( ::SireMol::BondID const & ) const;
             potential_function_type potential_function_value( &::SireMM::TwoAtomFunctions::potential );
             
             TwoAtomFunctions_exposer.def( 
@@ -235,7 +235,7 @@ void register_TwoAtomFunctions_class(){
         }
         { //::SireMM::TwoAtomFunctions::potentials
         
-            typedef ::QVector< SireMM::TwoAtomFunction > ( ::SireMM::TwoAtomFunctions::*potentials_function_type )(  ) const;
+            typedef ::QVector< SireMM::TwoAtomFunction > ( ::SireMM::TwoAtomFunctions::*potentials_function_type)(  ) const;
             potentials_function_type potentials_function_value( &::SireMM::TwoAtomFunctions::potentials );
             
             TwoAtomFunctions_exposer.def( 
@@ -245,7 +245,7 @@ void register_TwoAtomFunctions_class(){
         }
         { //::SireMM::TwoAtomFunctions::set
         
-            typedef void ( ::SireMM::TwoAtomFunctions::*set_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireCAS::Expression const & ) ;
+            typedef void ( ::SireMM::TwoAtomFunctions::*set_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireCAS::Expression const & ) ;
             set_function_type set_function_value( &::SireMM::TwoAtomFunctions::set );
             
             TwoAtomFunctions_exposer.def( 
@@ -256,7 +256,7 @@ void register_TwoAtomFunctions_class(){
         }
         { //::SireMM::TwoAtomFunctions::set
         
-            typedef void ( ::SireMM::TwoAtomFunctions::*set_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireCAS::Expression const & ) ;
+            typedef void ( ::SireMM::TwoAtomFunctions::*set_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireCAS::Expression const & ) ;
             set_function_type set_function_value( &::SireMM::TwoAtomFunctions::set );
             
             TwoAtomFunctions_exposer.def( 
@@ -267,7 +267,7 @@ void register_TwoAtomFunctions_class(){
         }
         { //::SireMM::TwoAtomFunctions::set
         
-            typedef void ( ::SireMM::TwoAtomFunctions::*set_function_type )( ::SireMol::BondID const &,::SireCAS::Expression const & ) ;
+            typedef void ( ::SireMM::TwoAtomFunctions::*set_function_type)( ::SireMol::BondID const &,::SireCAS::Expression const & ) ;
             set_function_type set_function_value( &::SireMM::TwoAtomFunctions::set );
             
             TwoAtomFunctions_exposer.def( 
@@ -278,7 +278,7 @@ void register_TwoAtomFunctions_class(){
         }
         { //::SireMM::TwoAtomFunctions::substitute
         
-            typedef void ( ::SireMM::TwoAtomFunctions::*substitute_function_type )( ::SireCAS::Identities const & ) ;
+            typedef void ( ::SireMM::TwoAtomFunctions::*substitute_function_type)( ::SireCAS::Identities const & ) ;
             substitute_function_type substitute_function_value( &::SireMM::TwoAtomFunctions::substitute );
             
             TwoAtomFunctions_exposer.def( 
@@ -289,7 +289,7 @@ void register_TwoAtomFunctions_class(){
         }
         { //::SireMM::TwoAtomFunctions::toString
         
-            typedef ::QString ( ::SireMM::TwoAtomFunctions::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMM::TwoAtomFunctions::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMM::TwoAtomFunctions::toString );
             
             TwoAtomFunctions_exposer.def( 

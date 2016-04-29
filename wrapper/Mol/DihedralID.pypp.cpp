@@ -44,7 +44,7 @@ void register_DihedralID_class(){
         DihedralID_exposer.def( bp::init< SireMol::DihedralID const & >(( bp::arg("other") )) );
         { //::SireMol::DihedralID::atom0
         
-            typedef ::SireMol::AtomID const & ( ::SireMol::DihedralID::*atom0_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMol::DihedralID::*atom0_function_type)(  ) const;
             atom0_function_type atom0_function_value( &::SireMol::DihedralID::atom0 );
             
             DihedralID_exposer.def( 
@@ -55,7 +55,7 @@ void register_DihedralID_class(){
         }
         { //::SireMol::DihedralID::atom1
         
-            typedef ::SireMol::AtomID const & ( ::SireMol::DihedralID::*atom1_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMol::DihedralID::*atom1_function_type)(  ) const;
             atom1_function_type atom1_function_value( &::SireMol::DihedralID::atom1 );
             
             DihedralID_exposer.def( 
@@ -66,7 +66,7 @@ void register_DihedralID_class(){
         }
         { //::SireMol::DihedralID::atom2
         
-            typedef ::SireMol::AtomID const & ( ::SireMol::DihedralID::*atom2_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMol::DihedralID::*atom2_function_type)(  ) const;
             atom2_function_type atom2_function_value( &::SireMol::DihedralID::atom2 );
             
             DihedralID_exposer.def( 
@@ -77,7 +77,7 @@ void register_DihedralID_class(){
         }
         { //::SireMol::DihedralID::atom3
         
-            typedef ::SireMol::AtomID const & ( ::SireMol::DihedralID::*atom3_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMol::DihedralID::*atom3_function_type)(  ) const;
             atom3_function_type atom3_function_value( &::SireMol::DihedralID::atom3 );
             
             DihedralID_exposer.def( 
@@ -88,7 +88,7 @@ void register_DihedralID_class(){
         }
         { //::SireMol::DihedralID::hash
         
-            typedef ::uint ( ::SireMol::DihedralID::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::DihedralID::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::DihedralID::hash );
             
             DihedralID_exposer.def( 
@@ -98,7 +98,7 @@ void register_DihedralID_class(){
         }
         { //::SireMol::DihedralID::isNull
         
-            typedef bool ( ::SireMol::DihedralID::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::DihedralID::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::DihedralID::isNull );
             
             DihedralID_exposer.def( 
@@ -108,7 +108,7 @@ void register_DihedralID_class(){
         }
         { //::SireMol::DihedralID::map
         
-            typedef ::boost::tuples::tuple< SireMol::AtomIdx, SireMol::AtomIdx, SireMol::AtomIdx, SireMol::AtomIdx, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::DihedralID::*map_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomIdx, SireMol::AtomIdx, SireMol::AtomIdx, SireMol::AtomIdx, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::DihedralID::*map_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             map_function_type map_function_value( &::SireMol::DihedralID::map );
             
             DihedralID_exposer.def( 
@@ -119,7 +119,7 @@ void register_DihedralID_class(){
         }
         { //::SireMol::DihedralID::map
         
-            typedef ::boost::tuples::tuple< SireMol::AtomIdx, SireMol::AtomIdx, SireMol::AtomIdx, SireMol::AtomIdx, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::DihedralID::*map_function_type )( ::SireMol::MoleculeInfoData const &,::SireMol::MoleculeInfoData const &,::SireMol::MoleculeInfoData const &,::SireMol::MoleculeInfoData const & ) const;
+            typedef ::boost::tuples::tuple< SireMol::AtomIdx, SireMol::AtomIdx, SireMol::AtomIdx, SireMol::AtomIdx, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMol::DihedralID::*map_function_type)( ::SireMol::MoleculeInfoData const &,::SireMol::MoleculeInfoData const &,::SireMol::MoleculeInfoData const &,::SireMol::MoleculeInfoData const & ) const;
             map_function_type map_function_value( &::SireMol::DihedralID::map );
             
             DihedralID_exposer.def( 
@@ -130,7 +130,7 @@ void register_DihedralID_class(){
         }
         { //::SireMol::DihedralID::mirror
         
-            typedef ::SireMol::DihedralID ( ::SireMol::DihedralID::*mirror_function_type )(  ) const;
+            typedef ::SireMol::DihedralID ( ::SireMol::DihedralID::*mirror_function_type)(  ) const;
             mirror_function_type mirror_function_value( &::SireMol::DihedralID::mirror );
             
             DihedralID_exposer.def( 
@@ -141,7 +141,7 @@ void register_DihedralID_class(){
         DihedralID_exposer.def( bp::self != bp::self );
         { //::SireMol::DihedralID::operator=
         
-            typedef ::SireMol::DihedralID & ( ::SireMol::DihedralID::*assign_function_type )( ::SireMol::DihedralID const & ) ;
+            typedef ::SireMol::DihedralID & ( ::SireMol::DihedralID::*assign_function_type)( ::SireMol::DihedralID const & ) ;
             assign_function_type assign_function_value( &::SireMol::DihedralID::operator= );
             
             DihedralID_exposer.def( 
@@ -155,7 +155,7 @@ void register_DihedralID_class(){
         DihedralID_exposer.def( bp::self == bp::self );
         { //::SireMol::DihedralID::size
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMol::DihedralID::*size_function_type )( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMol::DihedralID::*size_function_type)( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             size_function_type size_function_value( &::SireMol::DihedralID::size );
             
             DihedralID_exposer.def( 
@@ -166,7 +166,7 @@ void register_DihedralID_class(){
         }
         { //::SireMol::DihedralID::size
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMol::DihedralID::*size_function_type )( ::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMol::DihedralID::*size_function_type)( ::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             size_function_type size_function_value( &::SireMol::DihedralID::size );
             
             DihedralID_exposer.def( 
@@ -177,7 +177,7 @@ void register_DihedralID_class(){
         }
         { //::SireMol::DihedralID::size
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMol::DihedralID::*size_function_type )( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMol::DihedralID::*size_function_type)( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             size_function_type size_function_value( &::SireMol::DihedralID::size );
             
             DihedralID_exposer.def( 
@@ -188,7 +188,7 @@ void register_DihedralID_class(){
         }
         { //::SireMol::DihedralID::toString
         
-            typedef ::QString ( ::SireMol::DihedralID::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::DihedralID::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::DihedralID::toString );
             
             DihedralID_exposer.def( 
@@ -198,7 +198,7 @@ void register_DihedralID_class(){
         }
         { //::SireMol::DihedralID::torsion
         
-            typedef ::SireMaths::Torsion ( ::SireMol::DihedralID::*torsion_function_type )( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::Torsion ( ::SireMol::DihedralID::*torsion_function_type)( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             torsion_function_type torsion_function_value( &::SireMol::DihedralID::torsion );
             
             DihedralID_exposer.def( 
@@ -209,7 +209,7 @@ void register_DihedralID_class(){
         }
         { //::SireMol::DihedralID::torsion
         
-            typedef ::SireMaths::Torsion ( ::SireMol::DihedralID::*torsion_function_type )( ::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::Torsion ( ::SireMol::DihedralID::*torsion_function_type)( ::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             torsion_function_type torsion_function_value( &::SireMol::DihedralID::torsion );
             
             DihedralID_exposer.def( 
@@ -220,7 +220,7 @@ void register_DihedralID_class(){
         }
         { //::SireMol::DihedralID::torsion
         
-            typedef ::SireMaths::Torsion ( ::SireMol::DihedralID::*torsion_function_type )( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMaths::Torsion ( ::SireMol::DihedralID::*torsion_function_type)( ::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const &,::SireMol::MoleculeData const &,::SireBase::PropertyMap const & ) const;
             torsion_function_type torsion_function_value( &::SireMol::DihedralID::torsion );
             
             DihedralID_exposer.def( 
@@ -241,7 +241,7 @@ void register_DihedralID_class(){
         }
         { //::SireMol::DihedralID::what
         
-            typedef char const * ( ::SireMol::DihedralID::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::DihedralID::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::DihedralID::what );
             
             DihedralID_exposer.def( 

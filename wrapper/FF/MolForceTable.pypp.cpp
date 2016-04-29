@@ -45,7 +45,7 @@ void register_MolForceTable_class(){
         MolForceTable_exposer.def( bp::init< SireFF::MolForceTable const & >(( bp::arg("other") )) );
         { //::SireFF::MolForceTable::add
         
-            typedef bool ( ::SireFF::MolForceTable::*add_function_type )( ::SireMol::CGAtomIdx const &,::SireMaths::Vector const & ) ;
+            typedef bool ( ::SireFF::MolForceTable::*add_function_type)( ::SireMol::CGAtomIdx const &,::SireMaths::Vector const & ) ;
             add_function_type add_function_value( &::SireFF::MolForceTable::add );
             
             MolForceTable_exposer.def( 
@@ -56,7 +56,7 @@ void register_MolForceTable_class(){
         }
         { //::SireFF::MolForceTable::add
         
-            typedef bool ( ::SireFF::MolForceTable::*add_function_type )( ::SireMol::AtomSelection const &,::SireMaths::Vector const & ) ;
+            typedef bool ( ::SireFF::MolForceTable::*add_function_type)( ::SireMol::AtomSelection const &,::SireMaths::Vector const & ) ;
             add_function_type add_function_value( &::SireFF::MolForceTable::add );
             
             MolForceTable_exposer.def( 
@@ -67,7 +67,7 @@ void register_MolForceTable_class(){
         }
         { //::SireFF::MolForceTable::add
         
-            typedef void ( ::SireFF::MolForceTable::*add_function_type )( ::SireFF::MolForceTable const & ) ;
+            typedef void ( ::SireFF::MolForceTable::*add_function_type)( ::SireFF::MolForceTable const & ) ;
             add_function_type add_function_value( &::SireFF::MolForceTable::add );
             
             MolForceTable_exposer.def( 
@@ -78,7 +78,7 @@ void register_MolForceTable_class(){
         }
         { //::SireFF::MolForceTable::add
         
-            typedef void ( ::SireFF::MolForceTable::*add_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireFF::MolForceTable::*add_function_type)( ::SireMaths::Vector const & ) ;
             add_function_type add_function_value( &::SireFF::MolForceTable::add );
             
             MolForceTable_exposer.def( 
@@ -89,7 +89,7 @@ void register_MolForceTable_class(){
         }
         { //::SireFF::MolForceTable::divide
         
-            typedef void ( ::SireFF::MolForceTable::*divide_function_type )( double ) ;
+            typedef void ( ::SireFF::MolForceTable::*divide_function_type)( double ) ;
             divide_function_type divide_function_value( &::SireFF::MolForceTable::divide );
             
             MolForceTable_exposer.def( 
@@ -100,7 +100,7 @@ void register_MolForceTable_class(){
         }
         { //::SireFF::MolForceTable::initialise
         
-            typedef void ( ::SireFF::MolForceTable::*initialise_function_type )(  ) ;
+            typedef void ( ::SireFF::MolForceTable::*initialise_function_type)(  ) ;
             initialise_function_type initialise_function_value( &::SireFF::MolForceTable::initialise );
             
             MolForceTable_exposer.def( 
@@ -110,7 +110,7 @@ void register_MolForceTable_class(){
         }
         { //::SireFF::MolForceTable::map
         
-            typedef int ( ::SireFF::MolForceTable::*map_function_type )( ::SireMol::CGIdx ) const;
+            typedef int ( ::SireFF::MolForceTable::*map_function_type)( ::SireMol::CGIdx ) const;
             map_function_type map_function_value( &::SireFF::MolForceTable::map );
             
             MolForceTable_exposer.def( 
@@ -121,7 +121,7 @@ void register_MolForceTable_class(){
         }
         { //::SireFF::MolForceTable::molNum
         
-            typedef ::SireMol::MolNum ( ::SireFF::MolForceTable::*molNum_function_type )(  ) const;
+            typedef ::SireMol::MolNum ( ::SireFF::MolForceTable::*molNum_function_type)(  ) const;
             molNum_function_type molNum_function_value( &::SireFF::MolForceTable::molNum );
             
             MolForceTable_exposer.def( 
@@ -131,7 +131,7 @@ void register_MolForceTable_class(){
         }
         { //::SireFF::MolForceTable::molUID
         
-            typedef ::QUuid const & ( ::SireFF::MolForceTable::*molUID_function_type )(  ) const;
+            typedef ::QUuid const & ( ::SireFF::MolForceTable::*molUID_function_type)(  ) const;
             molUID_function_type molUID_function_value( &::SireFF::MolForceTable::molUID );
             
             MolForceTable_exposer.def( 
@@ -142,7 +142,7 @@ void register_MolForceTable_class(){
         }
         { //::SireFF::MolForceTable::multiply
         
-            typedef void ( ::SireFF::MolForceTable::*multiply_function_type )( double ) ;
+            typedef void ( ::SireFF::MolForceTable::*multiply_function_type)( double ) ;
             multiply_function_type multiply_function_value( &::SireFF::MolForceTable::multiply );
             
             MolForceTable_exposer.def( 
@@ -153,7 +153,7 @@ void register_MolForceTable_class(){
         }
         { //::SireFF::MolForceTable::nCutGroups
         
-            typedef int ( ::SireFF::MolForceTable::*nCutGroups_function_type )(  ) const;
+            typedef int ( ::SireFF::MolForceTable::*nCutGroups_function_type)(  ) const;
             nCutGroups_function_type nCutGroups_function_value( &::SireFF::MolForceTable::nCutGroups );
             
             MolForceTable_exposer.def( 
@@ -163,7 +163,7 @@ void register_MolForceTable_class(){
         }
         { //::SireFF::MolForceTable::nSelectedCutGroups
         
-            typedef int ( ::SireFF::MolForceTable::*nSelectedCutGroups_function_type )(  ) const;
+            typedef int ( ::SireFF::MolForceTable::*nSelectedCutGroups_function_type)(  ) const;
             nSelectedCutGroups_function_type nSelectedCutGroups_function_value( &::SireFF::MolForceTable::nSelectedCutGroups );
             
             MolForceTable_exposer.def( 
@@ -181,7 +181,7 @@ void register_MolForceTable_class(){
         MolForceTable_exposer.def( bp::self / bp::other< double >() );
         { //::SireFF::MolForceTable::operator=
         
-            typedef ::SireFF::MolForceTable & ( ::SireFF::MolForceTable::*assign_function_type )( ::SireFF::MolForceTable const & ) ;
+            typedef ::SireFF::MolForceTable & ( ::SireFF::MolForceTable::*assign_function_type)( ::SireFF::MolForceTable const & ) ;
             assign_function_type assign_function_value( &::SireFF::MolForceTable::operator= );
             
             MolForceTable_exposer.def( 
@@ -193,7 +193,7 @@ void register_MolForceTable_class(){
         }
         { //::SireFF::MolForceTable::operator=
         
-            typedef ::SireFF::MolForceTable & ( ::SireFF::MolForceTable::*assign_function_type )( ::SireMaths::Vector const & ) ;
+            typedef ::SireFF::MolForceTable & ( ::SireFF::MolForceTable::*assign_function_type)( ::SireMaths::Vector const & ) ;
             assign_function_type assign_function_value( &::SireFF::MolForceTable::operator= );
             
             MolForceTable_exposer.def( 
@@ -206,7 +206,7 @@ void register_MolForceTable_class(){
         MolForceTable_exposer.def( bp::self == bp::self );
         { //::SireFF::MolForceTable::selected
         
-            typedef bool ( ::SireFF::MolForceTable::*selected_function_type )( ::SireMol::CGIdx ) const;
+            typedef bool ( ::SireFF::MolForceTable::*selected_function_type)( ::SireMol::CGIdx ) const;
             selected_function_type selected_function_value( &::SireFF::MolForceTable::selected );
             
             MolForceTable_exposer.def( 
@@ -217,7 +217,7 @@ void register_MolForceTable_class(){
         }
         { //::SireFF::MolForceTable::selectedAll
         
-            typedef bool ( ::SireFF::MolForceTable::*selectedAll_function_type )(  ) const;
+            typedef bool ( ::SireFF::MolForceTable::*selectedAll_function_type)(  ) const;
             selectedAll_function_type selectedAll_function_value( &::SireFF::MolForceTable::selectedAll );
             
             MolForceTable_exposer.def( 
@@ -227,7 +227,7 @@ void register_MolForceTable_class(){
         }
         { //::SireFF::MolForceTable::setAll
         
-            typedef void ( ::SireFF::MolForceTable::*setAll_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireFF::MolForceTable::*setAll_function_type)( ::SireMaths::Vector const & ) ;
             setAll_function_type setAll_function_value( &::SireFF::MolForceTable::setAll );
             
             MolForceTable_exposer.def( 
@@ -238,7 +238,7 @@ void register_MolForceTable_class(){
         }
         { //::SireFF::MolForceTable::subtract
         
-            typedef bool ( ::SireFF::MolForceTable::*subtract_function_type )( ::SireMol::CGAtomIdx const &,::SireMaths::Vector const & ) ;
+            typedef bool ( ::SireFF::MolForceTable::*subtract_function_type)( ::SireMol::CGAtomIdx const &,::SireMaths::Vector const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::MolForceTable::subtract );
             
             MolForceTable_exposer.def( 
@@ -249,7 +249,7 @@ void register_MolForceTable_class(){
         }
         { //::SireFF::MolForceTable::subtract
         
-            typedef bool ( ::SireFF::MolForceTable::*subtract_function_type )( ::SireMol::AtomSelection const &,::SireMaths::Vector const & ) ;
+            typedef bool ( ::SireFF::MolForceTable::*subtract_function_type)( ::SireMol::AtomSelection const &,::SireMaths::Vector const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::MolForceTable::subtract );
             
             MolForceTable_exposer.def( 
@@ -260,7 +260,7 @@ void register_MolForceTable_class(){
         }
         { //::SireFF::MolForceTable::subtract
         
-            typedef void ( ::SireFF::MolForceTable::*subtract_function_type )( ::SireFF::MolForceTable const & ) ;
+            typedef void ( ::SireFF::MolForceTable::*subtract_function_type)( ::SireFF::MolForceTable const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::MolForceTable::subtract );
             
             MolForceTable_exposer.def( 
@@ -271,7 +271,7 @@ void register_MolForceTable_class(){
         }
         { //::SireFF::MolForceTable::subtract
         
-            typedef void ( ::SireFF::MolForceTable::*subtract_function_type )( ::SireMaths::Vector const & ) ;
+            typedef void ( ::SireFF::MolForceTable::*subtract_function_type)( ::SireMaths::Vector const & ) ;
             subtract_function_type subtract_function_value( &::SireFF::MolForceTable::subtract );
             
             MolForceTable_exposer.def( 
@@ -282,7 +282,7 @@ void register_MolForceTable_class(){
         }
         { //::SireFF::MolForceTable::toVector
         
-            typedef ::QVector< SireMaths::Vector > ( ::SireFF::MolForceTable::*toVector_function_type )(  ) const;
+            typedef ::QVector< SireMaths::Vector > ( ::SireFF::MolForceTable::*toVector_function_type)(  ) const;
             toVector_function_type toVector_function_value( &::SireFF::MolForceTable::toVector );
             
             MolForceTable_exposer.def( 
@@ -292,7 +292,7 @@ void register_MolForceTable_class(){
         }
         { //::SireFF::MolForceTable::toVector
         
-            typedef ::QVector< SireMaths::Vector > ( ::SireFF::MolForceTable::*toVector_function_type )( ::SireMol::AtomSelection const & ) const;
+            typedef ::QVector< SireMaths::Vector > ( ::SireFF::MolForceTable::*toVector_function_type)( ::SireMol::AtomSelection const & ) const;
             toVector_function_type toVector_function_value( &::SireFF::MolForceTable::toVector );
             
             MolForceTable_exposer.def( 
@@ -313,7 +313,7 @@ void register_MolForceTable_class(){
         }
         { //::SireFF::MolForceTable::what
         
-            typedef char const * ( ::SireFF::MolForceTable::*what_function_type )(  ) const;
+            typedef char const * ( ::SireFF::MolForceTable::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireFF::MolForceTable::what );
             
             MolForceTable_exposer.def( 

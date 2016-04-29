@@ -43,7 +43,7 @@ void register_FEP_class(){
         FEP_exposer.def( bp::init< SireAnalysis::FEP const & >(( bp::arg("other") )) );
         { //::SireAnalysis::FEP::add
         
-            typedef void ( ::SireAnalysis::FEP::*add_function_type )( ::QList< double > const &,::QMap< double, SireMaths::FreeEnergyAverage > const & ) ;
+            typedef void ( ::SireAnalysis::FEP::*add_function_type)( ::QList< double > const &,::QMap< double, SireMaths::FreeEnergyAverage > const & ) ;
             add_function_type add_function_value( &::SireAnalysis::FEP::add );
             
             FEP_exposer.def( 
@@ -54,7 +54,7 @@ void register_FEP_class(){
         }
         { //::SireAnalysis::FEP::add
         
-            typedef void ( ::SireAnalysis::FEP::*add_function_type )( ::QList< double > const &,::QMap< double, SireMaths::FreeEnergyAverage > const &,::QMap< double, SireMaths::FreeEnergyAverage > const & ) ;
+            typedef void ( ::SireAnalysis::FEP::*add_function_type)( ::QList< double > const &,::QMap< double, SireMaths::FreeEnergyAverage > const &,::QMap< double, SireMaths::FreeEnergyAverage > const & ) ;
             add_function_type add_function_value( &::SireAnalysis::FEP::add );
             
             FEP_exposer.def( 
@@ -65,7 +65,7 @@ void register_FEP_class(){
         }
         { //::SireAnalysis::FEP::add
         
-            typedef void ( ::SireAnalysis::FEP::*add_function_type )( ::SireAnalysis::FEPDeltas const & ) ;
+            typedef void ( ::SireAnalysis::FEP::*add_function_type)( ::SireAnalysis::FEPDeltas const & ) ;
             add_function_type add_function_value( &::SireAnalysis::FEP::add );
             
             FEP_exposer.def( 
@@ -76,7 +76,7 @@ void register_FEP_class(){
         }
         { //::SireAnalysis::FEP::at
         
-            typedef ::SireAnalysis::FEPDeltas ( ::SireAnalysis::FEP::*at_function_type )( int ) const;
+            typedef ::SireAnalysis::FEPDeltas ( ::SireAnalysis::FEP::*at_function_type)( int ) const;
             at_function_type at_function_value( &::SireAnalysis::FEP::at );
             
             FEP_exposer.def( 
@@ -87,7 +87,7 @@ void register_FEP_class(){
         }
         { //::SireAnalysis::FEP::clear
         
-            typedef void ( ::SireAnalysis::FEP::*clear_function_type )(  ) ;
+            typedef void ( ::SireAnalysis::FEP::*clear_function_type)(  ) ;
             clear_function_type clear_function_value( &::SireAnalysis::FEP::clear );
             
             FEP_exposer.def( 
@@ -97,7 +97,7 @@ void register_FEP_class(){
         }
         { //::SireAnalysis::FEP::count
         
-            typedef int ( ::SireAnalysis::FEP::*count_function_type )(  ) const;
+            typedef int ( ::SireAnalysis::FEP::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireAnalysis::FEP::count );
             
             FEP_exposer.def( 
@@ -107,7 +107,7 @@ void register_FEP_class(){
         }
         { //::SireAnalysis::FEP::deltas
         
-            typedef ::QList< SireAnalysis::FEPDeltas > ( ::SireAnalysis::FEP::*deltas_function_type )(  ) const;
+            typedef ::QList< SireAnalysis::FEPDeltas > ( ::SireAnalysis::FEP::*deltas_function_type)(  ) const;
             deltas_function_type deltas_function_value( &::SireAnalysis::FEP::deltas );
             
             FEP_exposer.def( 
@@ -117,7 +117,7 @@ void register_FEP_class(){
         }
         { //::SireAnalysis::FEP::lambdaValues
         
-            typedef ::QList< double > ( ::SireAnalysis::FEP::*lambdaValues_function_type )(  ) const;
+            typedef ::QList< double > ( ::SireAnalysis::FEP::*lambdaValues_function_type)(  ) const;
             lambdaValues_function_type lambdaValues_function_value( &::SireAnalysis::FEP::lambdaValues );
             
             FEP_exposer.def( 
@@ -127,7 +127,7 @@ void register_FEP_class(){
         }
         { //::SireAnalysis::FEP::merge
         
-            typedef ::SireAnalysis::FEPDeltas ( ::SireAnalysis::FEP::*merge_function_type )( int,int ) const;
+            typedef ::SireAnalysis::FEPDeltas ( ::SireAnalysis::FEP::*merge_function_type)( int,int ) const;
             merge_function_type merge_function_value( &::SireAnalysis::FEP::merge );
             
             FEP_exposer.def( 
@@ -138,7 +138,7 @@ void register_FEP_class(){
         }
         { //::SireAnalysis::FEP::merge
         
-            typedef ::SireAnalysis::FEPDeltas ( ::SireAnalysis::FEP::*merge_function_type )( ::QList< int > ) const;
+            typedef ::SireAnalysis::FEPDeltas ( ::SireAnalysis::FEP::*merge_function_type)( ::QList< int > ) const;
             merge_function_type merge_function_value( &::SireAnalysis::FEP::merge );
             
             FEP_exposer.def( 
@@ -149,7 +149,7 @@ void register_FEP_class(){
         }
         { //::SireAnalysis::FEP::nIterations
         
-            typedef int ( ::SireAnalysis::FEP::*nIterations_function_type )(  ) const;
+            typedef int ( ::SireAnalysis::FEP::*nIterations_function_type)(  ) const;
             nIterations_function_type nIterations_function_value( &::SireAnalysis::FEP::nIterations );
             
             FEP_exposer.def( 
@@ -159,7 +159,7 @@ void register_FEP_class(){
         }
         { //::SireAnalysis::FEP::nLambdaValues
         
-            typedef int ( ::SireAnalysis::FEP::*nLambdaValues_function_type )(  ) const;
+            typedef int ( ::SireAnalysis::FEP::*nLambdaValues_function_type)(  ) const;
             nLambdaValues_function_type nLambdaValues_function_value( &::SireAnalysis::FEP::nLambdaValues );
             
             FEP_exposer.def( 
@@ -169,7 +169,7 @@ void register_FEP_class(){
         }
         { //::SireAnalysis::FEP::nSamples
         
-            typedef ::qint64 ( ::SireAnalysis::FEP::*nSamples_function_type )(  ) const;
+            typedef ::qint64 ( ::SireAnalysis::FEP::*nSamples_function_type)(  ) const;
             nSamples_function_type nSamples_function_value( &::SireAnalysis::FEP::nSamples );
             
             FEP_exposer.def( 
@@ -179,7 +179,7 @@ void register_FEP_class(){
         }
         { //::SireAnalysis::FEP::nWindows
         
-            typedef int ( ::SireAnalysis::FEP::*nWindows_function_type )(  ) const;
+            typedef int ( ::SireAnalysis::FEP::*nWindows_function_type)(  ) const;
             nWindows_function_type nWindows_function_value( &::SireAnalysis::FEP::nWindows );
             
             FEP_exposer.def( 
@@ -190,7 +190,7 @@ void register_FEP_class(){
         FEP_exposer.def( bp::self != bp::self );
         { //::SireAnalysis::FEP::operator=
         
-            typedef ::SireAnalysis::FEP & ( ::SireAnalysis::FEP::*assign_function_type )( ::SireAnalysis::FEP const & ) ;
+            typedef ::SireAnalysis::FEP & ( ::SireAnalysis::FEP::*assign_function_type)( ::SireAnalysis::FEP const & ) ;
             assign_function_type assign_function_value( &::SireAnalysis::FEP::operator= );
             
             FEP_exposer.def( 
@@ -203,7 +203,7 @@ void register_FEP_class(){
         FEP_exposer.def( bp::self == bp::self );
         { //::SireAnalysis::FEP::operator[]
         
-            typedef ::SireAnalysis::FEPDeltas ( ::SireAnalysis::FEP::*__getitem___function_type )( int ) const;
+            typedef ::SireAnalysis::FEPDeltas ( ::SireAnalysis::FEP::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireAnalysis::FEP::operator[] );
             
             FEP_exposer.def( 
@@ -214,7 +214,7 @@ void register_FEP_class(){
         }
         { //::SireAnalysis::FEP::removeAt
         
-            typedef void ( ::SireAnalysis::FEP::*removeAt_function_type )( int ) ;
+            typedef void ( ::SireAnalysis::FEP::*removeAt_function_type)( int ) ;
             removeAt_function_type removeAt_function_value( &::SireAnalysis::FEP::removeAt );
             
             FEP_exposer.def( 
@@ -225,7 +225,7 @@ void register_FEP_class(){
         }
         { //::SireAnalysis::FEP::removeRange
         
-            typedef void ( ::SireAnalysis::FEP::*removeRange_function_type )( int,int ) ;
+            typedef void ( ::SireAnalysis::FEP::*removeRange_function_type)( int,int ) ;
             removeRange_function_type removeRange_function_value( &::SireAnalysis::FEP::removeRange );
             
             FEP_exposer.def( 
@@ -236,7 +236,7 @@ void register_FEP_class(){
         }
         { //::SireAnalysis::FEP::rollingAverage
         
-            typedef ::QList< SireAnalysis::FEPDeltas > ( ::SireAnalysis::FEP::*rollingAverage_function_type )( int ) const;
+            typedef ::QList< SireAnalysis::FEPDeltas > ( ::SireAnalysis::FEP::*rollingAverage_function_type)( int ) const;
             rollingAverage_function_type rollingAverage_function_value( &::SireAnalysis::FEP::rollingAverage );
             
             FEP_exposer.def( 
@@ -247,7 +247,7 @@ void register_FEP_class(){
         }
         { //::SireAnalysis::FEP::set
         
-            typedef void ( ::SireAnalysis::FEP::*set_function_type )( int,::QList< double > const &,::QMap< double, SireMaths::FreeEnergyAverage > const & ) ;
+            typedef void ( ::SireAnalysis::FEP::*set_function_type)( int,::QList< double > const &,::QMap< double, SireMaths::FreeEnergyAverage > const & ) ;
             set_function_type set_function_value( &::SireAnalysis::FEP::set );
             
             FEP_exposer.def( 
@@ -258,7 +258,7 @@ void register_FEP_class(){
         }
         { //::SireAnalysis::FEP::set
         
-            typedef void ( ::SireAnalysis::FEP::*set_function_type )( int,::QList< double > const &,::QMap< double, SireMaths::FreeEnergyAverage > const &,::QMap< double, SireMaths::FreeEnergyAverage > const & ) ;
+            typedef void ( ::SireAnalysis::FEP::*set_function_type)( int,::QList< double > const &,::QMap< double, SireMaths::FreeEnergyAverage > const &,::QMap< double, SireMaths::FreeEnergyAverage > const & ) ;
             set_function_type set_function_value( &::SireAnalysis::FEP::set );
             
             FEP_exposer.def( 
@@ -269,7 +269,7 @@ void register_FEP_class(){
         }
         { //::SireAnalysis::FEP::set
         
-            typedef void ( ::SireAnalysis::FEP::*set_function_type )( int,::SireAnalysis::FEPDeltas const & ) ;
+            typedef void ( ::SireAnalysis::FEP::*set_function_type)( int,::SireAnalysis::FEPDeltas const & ) ;
             set_function_type set_function_value( &::SireAnalysis::FEP::set );
             
             FEP_exposer.def( 
@@ -280,7 +280,7 @@ void register_FEP_class(){
         }
         { //::SireAnalysis::FEP::size
         
-            typedef int ( ::SireAnalysis::FEP::*size_function_type )(  ) const;
+            typedef int ( ::SireAnalysis::FEP::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireAnalysis::FEP::size );
             
             FEP_exposer.def( 
@@ -290,7 +290,7 @@ void register_FEP_class(){
         }
         { //::SireAnalysis::FEP::toString
         
-            typedef ::QString ( ::SireAnalysis::FEP::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireAnalysis::FEP::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireAnalysis::FEP::toString );
             
             FEP_exposer.def( 
@@ -310,7 +310,7 @@ void register_FEP_class(){
         }
         { //::SireAnalysis::FEP::what
         
-            typedef char const * ( ::SireAnalysis::FEP::*what_function_type )(  ) const;
+            typedef char const * ( ::SireAnalysis::FEP::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireAnalysis::FEP::what );
             
             FEP_exposer.def( 
@@ -320,7 +320,7 @@ void register_FEP_class(){
         }
         { //::SireAnalysis::FEP::windows
         
-            typedef ::QList< double > ( ::SireAnalysis::FEP::*windows_function_type )(  ) const;
+            typedef ::QList< double > ( ::SireAnalysis::FEP::*windows_function_type)(  ) const;
             windows_function_type windows_function_value( &::SireAnalysis::FEP::windows );
             
             FEP_exposer.def( 

@@ -87,6 +87,8 @@
 
 #include "TrimString.pypp.hpp"
 
+#include "UnitTest.pypp.hpp"
+
 #include "UpperCaseString.pypp.hpp"
 
 #include "VariantProperty.pypp.hpp"
@@ -191,6 +193,8 @@ BOOST_PYTHON_MODULE(_Base){
     register_TrigArray2D_double__class();
 
     register_TrimString_class();
+
+    register_UnitTest_class();
 
     register_UpperCaseString_class();
 

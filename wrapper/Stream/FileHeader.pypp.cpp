@@ -62,7 +62,7 @@ void register_FileHeader_class(){
         FileHeader_exposer.def( bp::init< SireStream::FileHeader const & >(( bp::arg("other") )) );
         { //::SireStream::FileHeader::assertCompatible
         
-            typedef void ( ::SireStream::FileHeader::*assertCompatible_function_type )(  ) const;
+            typedef void ( ::SireStream::FileHeader::*assertCompatible_function_type)(  ) const;
             assertCompatible_function_type assertCompatible_function_value( &::SireStream::FileHeader::assertCompatible );
             
             FileHeader_exposer.def( 
@@ -72,7 +72,7 @@ void register_FileHeader_class(){
         }
         { //::SireStream::FileHeader::assertNotCorrupted
         
-            typedef void ( ::SireStream::FileHeader::*assertNotCorrupted_function_type )( ::QByteArray const & ) const;
+            typedef void ( ::SireStream::FileHeader::*assertNotCorrupted_function_type)( ::QByteArray const & ) const;
             assertNotCorrupted_function_type assertNotCorrupted_function_value( &::SireStream::FileHeader::assertNotCorrupted );
             
             FileHeader_exposer.def( 
@@ -83,7 +83,7 @@ void register_FileHeader_class(){
         }
         { //::SireStream::FileHeader::buildVersion
         
-            typedef ::QString ( ::SireStream::FileHeader::*buildVersion_function_type )(  ) const;
+            typedef ::QString ( ::SireStream::FileHeader::*buildVersion_function_type)(  ) const;
             buildVersion_function_type buildVersion_function_value( &::SireStream::FileHeader::buildVersion );
             
             FileHeader_exposer.def( 
@@ -93,7 +93,7 @@ void register_FileHeader_class(){
         }
         { //::SireStream::FileHeader::compressionRatio
         
-            typedef double ( ::SireStream::FileHeader::*compressionRatio_function_type )(  ) const;
+            typedef double ( ::SireStream::FileHeader::*compressionRatio_function_type)(  ) const;
             compressionRatio_function_type compressionRatio_function_value( &::SireStream::FileHeader::compressionRatio );
             
             FileHeader_exposer.def( 
@@ -103,7 +103,7 @@ void register_FileHeader_class(){
         }
         { //::SireStream::FileHeader::createdBy
         
-            typedef ::QString const & ( ::SireStream::FileHeader::*createdBy_function_type )(  ) const;
+            typedef ::QString const & ( ::SireStream::FileHeader::*createdBy_function_type)(  ) const;
             createdBy_function_type createdBy_function_value( &::SireStream::FileHeader::createdBy );
             
             FileHeader_exposer.def( 
@@ -114,7 +114,7 @@ void register_FileHeader_class(){
         }
         { //::SireStream::FileHeader::createdWhen
         
-            typedef ::QDateTime const & ( ::SireStream::FileHeader::*createdWhen_function_type )(  ) const;
+            typedef ::QDateTime const & ( ::SireStream::FileHeader::*createdWhen_function_type)(  ) const;
             createdWhen_function_type createdWhen_function_value( &::SireStream::FileHeader::createdWhen );
             
             FileHeader_exposer.def( 
@@ -125,7 +125,7 @@ void register_FileHeader_class(){
         }
         { //::SireStream::FileHeader::createdWhere
         
-            typedef ::QString const & ( ::SireStream::FileHeader::*createdWhere_function_type )(  ) const;
+            typedef ::QString const & ( ::SireStream::FileHeader::*createdWhere_function_type)(  ) const;
             createdWhere_function_type createdWhere_function_value( &::SireStream::FileHeader::createdWhere );
             
             FileHeader_exposer.def( 
@@ -136,7 +136,7 @@ void register_FileHeader_class(){
         }
         { //::SireStream::FileHeader::dataType
         
-            typedef ::QString ( ::SireStream::FileHeader::*dataType_function_type )(  ) const;
+            typedef ::QString ( ::SireStream::FileHeader::*dataType_function_type)(  ) const;
             dataType_function_type dataType_function_value( &::SireStream::FileHeader::dataType );
             
             FileHeader_exposer.def( 
@@ -146,7 +146,7 @@ void register_FileHeader_class(){
         }
         { //::SireStream::FileHeader::dataTypes
         
-            typedef ::QStringList const & ( ::SireStream::FileHeader::*dataTypes_function_type )(  ) const;
+            typedef ::QStringList const & ( ::SireStream::FileHeader::*dataTypes_function_type)(  ) const;
             dataTypes_function_type dataTypes_function_value( &::SireStream::FileHeader::dataTypes );
             
             FileHeader_exposer.def( 
@@ -157,7 +157,7 @@ void register_FileHeader_class(){
         }
         { //::SireStream::FileHeader::digest
         
-            typedef ::SireStream::MD5Sum const & ( ::SireStream::FileHeader::*digest_function_type )(  ) const;
+            typedef ::SireStream::MD5Sum const & ( ::SireStream::FileHeader::*digest_function_type)(  ) const;
             digest_function_type digest_function_value( &::SireStream::FileHeader::digest );
             
             FileHeader_exposer.def( 
@@ -168,7 +168,7 @@ void register_FileHeader_class(){
         }
         { //::SireStream::FileHeader::locale
         
-            typedef ::QLocale const & ( ::SireStream::FileHeader::*locale_function_type )(  ) const;
+            typedef ::QLocale const & ( ::SireStream::FileHeader::*locale_function_type)(  ) const;
             locale_function_type locale_function_value( &::SireStream::FileHeader::locale );
             
             FileHeader_exposer.def( 
@@ -179,7 +179,7 @@ void register_FileHeader_class(){
         }
         { //::SireStream::FileHeader::operator=
         
-            typedef ::SireStream::FileHeader & ( ::SireStream::FileHeader::*assign_function_type )( ::SireStream::FileHeader const & ) ;
+            typedef ::SireStream::FileHeader & ( ::SireStream::FileHeader::*assign_function_type)( ::SireStream::FileHeader const & ) ;
             assign_function_type assign_function_value( &::SireStream::FileHeader::operator= );
             
             FileHeader_exposer.def( 
@@ -191,7 +191,7 @@ void register_FileHeader_class(){
         }
         { //::SireStream::FileHeader::repository
         
-            typedef ::QString ( ::SireStream::FileHeader::*repository_function_type )(  ) const;
+            typedef ::QString ( ::SireStream::FileHeader::*repository_function_type)(  ) const;
             repository_function_type repository_function_value( &::SireStream::FileHeader::repository );
             
             FileHeader_exposer.def( 
@@ -201,7 +201,7 @@ void register_FileHeader_class(){
         }
         { //::SireStream::FileHeader::requireLibrary
         
-            typedef bool ( ::SireStream::FileHeader::*requireLibrary_function_type )( ::QString const & ) const;
+            typedef bool ( ::SireStream::FileHeader::*requireLibrary_function_type)( ::QString const & ) const;
             requireLibrary_function_type requireLibrary_function_value( &::SireStream::FileHeader::requireLibrary );
             
             FileHeader_exposer.def( 
@@ -212,7 +212,7 @@ void register_FileHeader_class(){
         }
         { //::SireStream::FileHeader::requiredLibraries
         
-            typedef ::QStringList ( ::SireStream::FileHeader::*requiredLibraries_function_type )(  ) const;
+            typedef ::QStringList ( ::SireStream::FileHeader::*requiredLibraries_function_type)(  ) const;
             requiredLibraries_function_type requiredLibraries_function_value( &::SireStream::FileHeader::requiredLibraries );
             
             FileHeader_exposer.def( 
@@ -222,7 +222,7 @@ void register_FileHeader_class(){
         }
         { //::SireStream::FileHeader::requiredMemory
         
-            typedef ::quint32 ( ::SireStream::FileHeader::*requiredMemory_function_type )(  ) const;
+            typedef ::quint32 ( ::SireStream::FileHeader::*requiredMemory_function_type)(  ) const;
             requiredMemory_function_type requiredMemory_function_value( &::SireStream::FileHeader::requiredMemory );
             
             FileHeader_exposer.def( 
@@ -232,7 +232,7 @@ void register_FileHeader_class(){
         }
         { //::SireStream::FileHeader::requiredVersion
         
-            typedef ::quint32 ( ::SireStream::FileHeader::*requiredVersion_function_type )( ::QString const & ) const;
+            typedef ::quint32 ( ::SireStream::FileHeader::*requiredVersion_function_type)( ::QString const & ) const;
             requiredVersion_function_type requiredVersion_function_value( &::SireStream::FileHeader::requiredVersion );
             
             FileHeader_exposer.def( 
@@ -243,7 +243,7 @@ void register_FileHeader_class(){
         }
         { //::SireStream::FileHeader::systemInfo
         
-            typedef ::QString const & ( ::SireStream::FileHeader::*systemInfo_function_type )(  ) const;
+            typedef ::QString const & ( ::SireStream::FileHeader::*systemInfo_function_type)(  ) const;
             systemInfo_function_type systemInfo_function_value( &::SireStream::FileHeader::systemInfo );
             
             FileHeader_exposer.def( 
@@ -254,7 +254,7 @@ void register_FileHeader_class(){
         }
         { //::SireStream::FileHeader::toString
         
-            typedef ::QString ( ::SireStream::FileHeader::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireStream::FileHeader::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireStream::FileHeader::toString );
             
             FileHeader_exposer.def( 
@@ -264,7 +264,7 @@ void register_FileHeader_class(){
         }
         { //::SireStream::FileHeader::version
         
-            typedef ::quint32 ( ::SireStream::FileHeader::*version_function_type )(  ) const;
+            typedef ::quint32 ( ::SireStream::FileHeader::*version_function_type)(  ) const;
             version_function_type version_function_value( &::SireStream::FileHeader::version );
             
             FileHeader_exposer.def( 

@@ -53,7 +53,7 @@ void register_NullFF_class(){
         NullFF_exposer.def( bp::init< SireFF::NullFF const & >(( bp::arg("other") )) );
         { //::SireFF::NullFF::accept
         
-            typedef void ( ::SireFF::NullFF::*accept_function_type )(  ) ;
+            typedef void ( ::SireFF::NullFF::*accept_function_type)(  ) ;
             accept_function_type accept_function_value( &::SireFF::NullFF::accept );
             
             NullFF_exposer.def( 
@@ -63,7 +63,7 @@ void register_NullFF_class(){
         }
         { //::SireFF::NullFF::at
         
-            typedef ::SireMol::MoleculeGroup const & ( ::SireFF::NullFF::*at_function_type )( ::SireMol::MGNum ) const;
+            typedef ::SireMol::MoleculeGroup const & ( ::SireFF::NullFF::*at_function_type)( ::SireMol::MGNum ) const;
             at_function_type at_function_value( &::SireFF::NullFF::at );
             
             NullFF_exposer.def( 
@@ -75,7 +75,7 @@ void register_NullFF_class(){
         }
         { //::SireFF::NullFF::components
         
-            typedef ::SireFF::FFComponent const & ( ::SireFF::NullFF::*components_function_type )(  ) const;
+            typedef ::SireFF::FFComponent const & ( ::SireFF::NullFF::*components_function_type)(  ) const;
             components_function_type components_function_value( &::SireFF::NullFF::components );
             
             NullFF_exposer.def( 
@@ -86,7 +86,7 @@ void register_NullFF_class(){
         }
         { //::SireFF::NullFF::containsProperty
         
-            typedef bool ( ::SireFF::NullFF::*containsProperty_function_type )( ::QString const & ) const;
+            typedef bool ( ::SireFF::NullFF::*containsProperty_function_type)( ::QString const & ) const;
             containsProperty_function_type containsProperty_function_value( &::SireFF::NullFF::containsProperty );
             
             NullFF_exposer.def( 
@@ -97,7 +97,7 @@ void register_NullFF_class(){
         }
         { //::SireFF::NullFF::mustNowRecalculateFromScratch
         
-            typedef void ( ::SireFF::NullFF::*mustNowRecalculateFromScratch_function_type )(  ) ;
+            typedef void ( ::SireFF::NullFF::*mustNowRecalculateFromScratch_function_type)(  ) ;
             mustNowRecalculateFromScratch_function_type mustNowRecalculateFromScratch_function_value( &::SireFF::NullFF::mustNowRecalculateFromScratch );
             
             NullFF_exposer.def( 
@@ -107,7 +107,7 @@ void register_NullFF_class(){
         }
         { //::SireFF::NullFF::needsAccepting
         
-            typedef bool ( ::SireFF::NullFF::*needsAccepting_function_type )(  ) const;
+            typedef bool ( ::SireFF::NullFF::*needsAccepting_function_type)(  ) const;
             needsAccepting_function_type needsAccepting_function_value( &::SireFF::NullFF::needsAccepting );
             
             NullFF_exposer.def( 
@@ -118,7 +118,7 @@ void register_NullFF_class(){
         NullFF_exposer.def( bp::self != bp::self );
         { //::SireFF::NullFF::operator=
         
-            typedef ::SireFF::NullFF & ( ::SireFF::NullFF::*assign_function_type )( ::SireFF::NullFF const & ) ;
+            typedef ::SireFF::NullFF & ( ::SireFF::NullFF::*assign_function_type)( ::SireFF::NullFF const & ) ;
             assign_function_type assign_function_value( &::SireFF::NullFF::operator= );
             
             NullFF_exposer.def( 
@@ -131,7 +131,7 @@ void register_NullFF_class(){
         NullFF_exposer.def( bp::self == bp::self );
         { //::SireFF::NullFF::properties
         
-            typedef ::SireBase::Properties const & ( ::SireFF::NullFF::*properties_function_type )(  ) const;
+            typedef ::SireBase::Properties const & ( ::SireFF::NullFF::*properties_function_type)(  ) const;
             properties_function_type properties_function_value( &::SireFF::NullFF::properties );
             
             NullFF_exposer.def( 
@@ -142,7 +142,7 @@ void register_NullFF_class(){
         }
         { //::SireFF::NullFF::property
         
-            typedef ::SireBase::Property const & ( ::SireFF::NullFF::*property_function_type )( ::QString const & ) const;
+            typedef ::SireBase::Property const & ( ::SireFF::NullFF::*property_function_type)( ::QString const & ) const;
             property_function_type property_function_value( &::SireFF::NullFF::property );
             
             NullFF_exposer.def( 
@@ -154,7 +154,7 @@ void register_NullFF_class(){
         }
         { //::SireFF::NullFF::setProperty
         
-            typedef bool ( ::SireFF::NullFF::*setProperty_function_type )( ::QString const &,::SireBase::Property const & ) ;
+            typedef bool ( ::SireFF::NullFF::*setProperty_function_type)( ::QString const &,::SireBase::Property const & ) ;
             setProperty_function_type setProperty_function_value( &::SireFF::NullFF::setProperty );
             
             NullFF_exposer.def( 
@@ -165,7 +165,7 @@ void register_NullFF_class(){
         }
         { //::SireFF::NullFF::toString
         
-            typedef ::QString ( ::SireFF::NullFF::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireFF::NullFF::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireFF::NullFF::toString );
             
             NullFF_exposer.def( 

@@ -46,7 +46,7 @@ void register_IntegerArrayProperty_class(){
         IntegerArrayProperty_exposer.def( bp::self + bp::self );
         { //::SireBase::IntegerArrayProperty::operator=
         
-            typedef ::SireBase::IntegerArrayProperty & ( ::SireBase::IntegerArrayProperty::*assign_function_type )( ::SireBase::IntegerArrayProperty const & ) ;
+            typedef ::SireBase::IntegerArrayProperty & ( ::SireBase::IntegerArrayProperty::*assign_function_type)( ::SireBase::IntegerArrayProperty const & ) ;
             assign_function_type assign_function_value( &::SireBase::IntegerArrayProperty::operator= );
             
             IntegerArrayProperty_exposer.def( 

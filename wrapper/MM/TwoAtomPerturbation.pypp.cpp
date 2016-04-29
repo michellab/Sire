@@ -49,7 +49,7 @@ void register_TwoAtomPerturbation_class(){
         TwoAtomPerturbation_exposer.def( bp::init< SireMM::TwoAtomPerturbation const & >(( bp::arg("other") )) );
         { //::SireMM::TwoAtomPerturbation::atom0
         
-            typedef ::SireMol::AtomID const & ( ::SireMM::TwoAtomPerturbation::*atom0_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMM::TwoAtomPerturbation::*atom0_function_type)(  ) const;
             atom0_function_type atom0_function_value( &::SireMM::TwoAtomPerturbation::atom0 );
             
             TwoAtomPerturbation_exposer.def( 
@@ -60,7 +60,7 @@ void register_TwoAtomPerturbation_class(){
         }
         { //::SireMM::TwoAtomPerturbation::atom1
         
-            typedef ::SireMol::AtomID const & ( ::SireMM::TwoAtomPerturbation::*atom1_function_type )(  ) const;
+            typedef ::SireMol::AtomID const & ( ::SireMM::TwoAtomPerturbation::*atom1_function_type)(  ) const;
             atom1_function_type atom1_function_value( &::SireMM::TwoAtomPerturbation::atom1 );
             
             TwoAtomPerturbation_exposer.def( 
@@ -72,7 +72,7 @@ void register_TwoAtomPerturbation_class(){
         TwoAtomPerturbation_exposer.def( bp::self != bp::self );
         { //::SireMM::TwoAtomPerturbation::operator=
         
-            typedef ::SireMM::TwoAtomPerturbation & ( ::SireMM::TwoAtomPerturbation::*assign_function_type )( ::SireMM::TwoAtomPerturbation const & ) ;
+            typedef ::SireMM::TwoAtomPerturbation & ( ::SireMM::TwoAtomPerturbation::*assign_function_type)( ::SireMM::TwoAtomPerturbation const & ) ;
             assign_function_type assign_function_value( &::SireMM::TwoAtomPerturbation::operator= );
             
             TwoAtomPerturbation_exposer.def( 
@@ -85,7 +85,7 @@ void register_TwoAtomPerturbation_class(){
         TwoAtomPerturbation_exposer.def( bp::self == bp::self );
         { //::SireMM::TwoAtomPerturbation::requiredProperties
         
-            typedef ::QSet< QString > ( ::SireMM::TwoAtomPerturbation::*requiredProperties_function_type )(  ) const;
+            typedef ::QSet< QString > ( ::SireMM::TwoAtomPerturbation::*requiredProperties_function_type)(  ) const;
             requiredProperties_function_type requiredProperties_function_value( &::SireMM::TwoAtomPerturbation::requiredProperties );
             
             TwoAtomPerturbation_exposer.def( 
@@ -95,7 +95,7 @@ void register_TwoAtomPerturbation_class(){
         }
         { //::SireMM::TwoAtomPerturbation::toString
         
-            typedef ::QString ( ::SireMM::TwoAtomPerturbation::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMM::TwoAtomPerturbation::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMM::TwoAtomPerturbation::toString );
             
             TwoAtomPerturbation_exposer.def( 
@@ -115,7 +115,7 @@ void register_TwoAtomPerturbation_class(){
         }
         { //::SireMM::TwoAtomPerturbation::wouldChange
         
-            typedef bool ( ::SireMM::TwoAtomPerturbation::*wouldChange_function_type )( ::SireMol::Molecule const &,::SireCAS::Values const & ) const;
+            typedef bool ( ::SireMM::TwoAtomPerturbation::*wouldChange_function_type)( ::SireMol::Molecule const &,::SireCAS::Values const & ) const;
             wouldChange_function_type wouldChange_function_value( &::SireMM::TwoAtomPerturbation::wouldChange );
             
             TwoAtomPerturbation_exposer.def( 

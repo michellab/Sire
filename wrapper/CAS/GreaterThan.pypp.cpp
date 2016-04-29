@@ -49,7 +49,7 @@ void register_GreaterThan_class(){
         GreaterThan_exposer.def( bp::init< SireCAS::GreaterThan const & >(( bp::arg("other") )) );
         { //::SireCAS::GreaterThan::alwaysFalse
         
-            typedef bool ( ::SireCAS::GreaterThan::*alwaysFalse_function_type )(  ) const;
+            typedef bool ( ::SireCAS::GreaterThan::*alwaysFalse_function_type)(  ) const;
             alwaysFalse_function_type alwaysFalse_function_value( &::SireCAS::GreaterThan::alwaysFalse );
             
             GreaterThan_exposer.def( 
@@ -59,7 +59,7 @@ void register_GreaterThan_class(){
         }
         { //::SireCAS::GreaterThan::alwaysTrue
         
-            typedef bool ( ::SireCAS::GreaterThan::*alwaysTrue_function_type )(  ) const;
+            typedef bool ( ::SireCAS::GreaterThan::*alwaysTrue_function_type)(  ) const;
             alwaysTrue_function_type alwaysTrue_function_value( &::SireCAS::GreaterThan::alwaysTrue );
             
             GreaterThan_exposer.def( 
@@ -69,7 +69,7 @@ void register_GreaterThan_class(){
         }
         { //::SireCAS::GreaterThan::operator=
         
-            typedef ::SireCAS::GreaterThan & ( ::SireCAS::GreaterThan::*assign_function_type )( ::SireCAS::GreaterThan const & ) ;
+            typedef ::SireCAS::GreaterThan & ( ::SireCAS::GreaterThan::*assign_function_type)( ::SireCAS::GreaterThan const & ) ;
             assign_function_type assign_function_value( &::SireCAS::GreaterThan::operator= );
             
             GreaterThan_exposer.def( 
@@ -93,7 +93,7 @@ void register_GreaterThan_class(){
         }
         { //::SireCAS::GreaterThan::what
         
-            typedef char const * ( ::SireCAS::GreaterThan::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::GreaterThan::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::GreaterThan::what );
             
             GreaterThan_exposer.def( 

@@ -44,7 +44,7 @@ void register_SpaceWrapper_class(){
         SpaceWrapper_exposer.def( bp::init< SireSystem::SpaceWrapper const & >(( bp::arg("other") )) );
         { //::SireSystem::SpaceWrapper::moleculeGroup
         
-            typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::SpaceWrapper::*moleculeGroup_function_type )(  ) const;
+            typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::SpaceWrapper::*moleculeGroup_function_type)(  ) const;
             moleculeGroup_function_type moleculeGroup_function_value( &::SireSystem::SpaceWrapper::moleculeGroup );
             
             SpaceWrapper_exposer.def( 
@@ -56,7 +56,7 @@ void register_SpaceWrapper_class(){
         SpaceWrapper_exposer.def( bp::self != bp::self );
         { //::SireSystem::SpaceWrapper::operator=
         
-            typedef ::SireSystem::SpaceWrapper & ( ::SireSystem::SpaceWrapper::*assign_function_type )( ::SireSystem::SpaceWrapper const & ) ;
+            typedef ::SireSystem::SpaceWrapper & ( ::SireSystem::SpaceWrapper::*assign_function_type)( ::SireSystem::SpaceWrapper const & ) ;
             assign_function_type assign_function_value( &::SireSystem::SpaceWrapper::operator= );
             
             SpaceWrapper_exposer.def( 
@@ -69,7 +69,7 @@ void register_SpaceWrapper_class(){
         SpaceWrapper_exposer.def( bp::self == bp::self );
         { //::SireSystem::SpaceWrapper::point
         
-            typedef ::SireFF::Point const & ( ::SireSystem::SpaceWrapper::*point_function_type )(  ) const;
+            typedef ::SireFF::Point const & ( ::SireSystem::SpaceWrapper::*point_function_type)(  ) const;
             point_function_type point_function_value( &::SireSystem::SpaceWrapper::point );
             
             SpaceWrapper_exposer.def( 
@@ -80,7 +80,7 @@ void register_SpaceWrapper_class(){
         }
         { //::SireSystem::SpaceWrapper::propertyMap
         
-            typedef ::SireBase::PropertyMap const & ( ::SireSystem::SpaceWrapper::*propertyMap_function_type )(  ) const;
+            typedef ::SireBase::PropertyMap const & ( ::SireSystem::SpaceWrapper::*propertyMap_function_type)(  ) const;
             propertyMap_function_type propertyMap_function_value( &::SireSystem::SpaceWrapper::propertyMap );
             
             SpaceWrapper_exposer.def( 

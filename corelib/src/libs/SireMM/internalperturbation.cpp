@@ -1024,7 +1024,9 @@ bool FourAtomPerturbation::wouldChange(const Molecule &molecule,
                                             
     Expression new_function = perturbExpression().substitute(idents);
     
-    return new_function != funcs.potential(atm0, atm1, atm2, atm3);
+    // Use DihedralID as this looks up both atm0-atm1-atm2-atm3
+    //                                  and atm3-atm2-atm1-atm0
+    return new_function != funcs.potential( DihedralID(atm0, atm1, atm2, atm3) );
 }
 
 /** Perturb the four atom function in passed molecule using the reaction
@@ -1063,12 +1065,12 @@ void FourAtomPerturbation::perturbMolecule(MolEditor &molecule,
 
     Expression new_function = perturbExpression().substitute(idents);
     
-    Expression old_function = funcs.potential(atm0, atm1, atm2, atm3);
+    // Use DihedralID as this looks up both atm0-atm1-atm2-atm3 and 
+    //                                      atm3-atm2-atm1-atm0
+    Expression old_function = funcs.potential( DihedralID(atm0, atm1, atm2, atm3) );
 
     if (new_property or (new_function != old_function))
     {
-        //funcs.set(atm0, atm1, atm2, atm3, new_function);
-      // What if this is dealing with impropers?
         funcs.set( DihedralID(atm0, atm1, atm2, atm3), new_function);
         molecule.setProperty(param_property, funcs);
     }

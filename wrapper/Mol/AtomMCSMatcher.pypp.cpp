@@ -58,7 +58,7 @@ void register_AtomMCSMatcher_class(){
         AtomMCSMatcher_exposer.def( bp::init< SireMol::AtomMCSMatcher const & >(( bp::arg("other") )) );
         { //::SireMol::AtomMCSMatcher::matchingLightAtoms
         
-            typedef bool ( ::SireMol::AtomMCSMatcher::*matchingLightAtoms_function_type )(  ) const;
+            typedef bool ( ::SireMol::AtomMCSMatcher::*matchingLightAtoms_function_type)(  ) const;
             matchingLightAtoms_function_type matchingLightAtoms_function_value( &::SireMol::AtomMCSMatcher::matchingLightAtoms );
             
             AtomMCSMatcher_exposer.def( 
@@ -69,7 +69,7 @@ void register_AtomMCSMatcher_class(){
         AtomMCSMatcher_exposer.def( bp::self != bp::self );
         { //::SireMol::AtomMCSMatcher::operator=
         
-            typedef ::SireMol::AtomMCSMatcher & ( ::SireMol::AtomMCSMatcher::*assign_function_type )( ::SireMol::AtomMCSMatcher const & ) ;
+            typedef ::SireMol::AtomMCSMatcher & ( ::SireMol::AtomMCSMatcher::*assign_function_type)( ::SireMol::AtomMCSMatcher const & ) ;
             assign_function_type assign_function_value( &::SireMol::AtomMCSMatcher::operator= );
             
             AtomMCSMatcher_exposer.def( 
@@ -82,7 +82,7 @@ void register_AtomMCSMatcher_class(){
         AtomMCSMatcher_exposer.def( bp::self == bp::self );
         { //::SireMol::AtomMCSMatcher::preMatcher
         
-            typedef ::SireMol::AtomMatcher const & ( ::SireMol::AtomMCSMatcher::*preMatcher_function_type )(  ) const;
+            typedef ::SireMol::AtomMatcher const & ( ::SireMol::AtomMCSMatcher::*preMatcher_function_type)(  ) const;
             preMatcher_function_type preMatcher_function_value( &::SireMol::AtomMCSMatcher::preMatcher );
             
             AtomMCSMatcher_exposer.def( 
@@ -93,7 +93,7 @@ void register_AtomMCSMatcher_class(){
         }
         { //::SireMol::AtomMCSMatcher::timeout
         
-            typedef ::SireUnits::Dimension::Time ( ::SireMol::AtomMCSMatcher::*timeout_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Time ( ::SireMol::AtomMCSMatcher::*timeout_function_type)(  ) const;
             timeout_function_type timeout_function_value( &::SireMol::AtomMCSMatcher::timeout );
             
             AtomMCSMatcher_exposer.def( 
@@ -103,7 +103,7 @@ void register_AtomMCSMatcher_class(){
         }
         { //::SireMol::AtomMCSMatcher::toString
         
-            typedef ::QString ( ::SireMol::AtomMCSMatcher::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::AtomMCSMatcher::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::AtomMCSMatcher::toString );
             
             AtomMCSMatcher_exposer.def( 
@@ -123,7 +123,7 @@ void register_AtomMCSMatcher_class(){
         }
         { //::SireMol::AtomMCSMatcher::what
         
-            typedef char const * ( ::SireMol::AtomMCSMatcher::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::AtomMCSMatcher::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::AtomMCSMatcher::what );
             
             AtomMCSMatcher_exposer.def( 

@@ -80,6 +80,19 @@ namespace SireBase
         return QString(SIRE_REPOSITORY_VERSION);
     }
 
+    /** This function returns the branch of the repository for this version of Sire */
+    QString SIREBASE_EXPORT getRepositoryBranch()
+    {
+        return QString(SIRE_REPOSITORY_BRANCH);
+    }
+    
+    /** Return whether this is a clean copy from this repository version
+        (i.e. there have been no local changes to the code) */
+    bool SIREBASE_EXPORT getRepositoryVersionIsClean()
+    {
+        return SIRE_REPOSITORY_VERSION_IS_CLEAN;
+    }
+
     /** This function is used to set the path to the installation directory.
         This can be used to override the path found from the running
         executable. This is useful when Sire is loaded as an external
@@ -128,8 +141,20 @@ namespace SireBase
                             .arg(ok), CODELOC );
         
             QFileInfo f(pathbuf);
-        
-            setInstallDir( stripDir(SIRE_BIN_DIR,f.canonicalPath()) );
+
+            //sometimes we may use a python executable in python.app/Contents/MacOS.
+            //we will use a special case to remove this from the path
+            QString path = f.canonicalPath();
+            if (path.endsWith("python.app/Contents/MacOS"))
+            {
+                path.chop(25);
+                setInstallDir(path);
+            }
+            else
+            {
+                setInstallDir( stripDir(SIRE_BIN_DIR,path) );
+            }
+
             return install_dir;
         #else
         #ifdef Q_OS_LINUX
@@ -201,6 +226,8 @@ namespace SireBase
     /** This returns the release version of Sire */
     QString SIREBASE_EXPORT getReleaseVersion()
     {
-        return "2014.2";
+        return QString("%1.%2.%3").arg(SIRE_VERSION_MAJOR)
+                                  .arg(SIRE_VERSION_MINOR)
+                                  .arg(SIRE_VERSION_PATCH);
     }
 }

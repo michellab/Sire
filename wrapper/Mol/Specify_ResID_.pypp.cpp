@@ -71,7 +71,7 @@ void register_Specify_ResID__class(){
         { //::SireID::Specify< SireMol::ResID >::hash
         
             typedef SireID::Specify< SireMol::ResID > exported_class_t;
-            typedef ::uint ( ::SireID::Specify< SireMol::ResID >::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireID::Specify< SireMol::ResID >::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireID::Specify< SireMol::ResID >::hash );
             
             Specify_ResID__exposer.def( 
@@ -82,7 +82,7 @@ void register_Specify_ResID__class(){
         { //::SireID::Specify< SireMol::ResID >::isNull
         
             typedef SireID::Specify< SireMol::ResID > exported_class_t;
-            typedef bool ( ::SireID::Specify< SireMol::ResID >::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireID::Specify< SireMol::ResID >::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireID::Specify< SireMol::ResID >::isNull );
             
             Specify_ResID__exposer.def( 
@@ -93,7 +93,7 @@ void register_Specify_ResID__class(){
         { //::SireID::Specify< SireMol::ResID >::map
         
             typedef SireID::Specify< SireMol::ResID > exported_class_t;
-            typedef ::QList< SireMol::ResIdx > ( ::SireID::Specify< SireMol::ResID >::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::ResIdx > ( ::SireID::Specify< SireMol::ResID >::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireID::Specify< SireMol::ResID >::map );
             
             Specify_ResID__exposer.def( 
@@ -107,7 +107,7 @@ void register_Specify_ResID__class(){
         { //::SireID::Specify< SireMol::ResID >::operator()
         
             typedef SireID::Specify< SireMol::ResID > exported_class_t;
-            typedef ::SireID::Specify< SireMol::ResID > ( ::SireID::Specify< SireMol::ResID >::*__call___function_type )( int ) const;
+            typedef ::SireID::Specify< SireMol::ResID > ( ::SireID::Specify< SireMol::ResID >::*__call___function_type)( int ) const;
             __call___function_type __call___function_value( &::SireID::Specify< SireMol::ResID >::operator() );
             
             Specify_ResID__exposer.def( 
@@ -119,7 +119,7 @@ void register_Specify_ResID__class(){
         { //::SireID::Specify< SireMol::ResID >::operator()
         
             typedef SireID::Specify< SireMol::ResID > exported_class_t;
-            typedef ::SireID::Specify< SireMol::ResID > ( ::SireID::Specify< SireMol::ResID >::*__call___function_type )( int,int ) const;
+            typedef ::SireID::Specify< SireMol::ResID > ( ::SireID::Specify< SireMol::ResID >::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireID::Specify< SireMol::ResID >::operator() );
             
             Specify_ResID__exposer.def( 
@@ -131,7 +131,7 @@ void register_Specify_ResID__class(){
         { //::SireID::Specify< SireMol::ResID >::operator=
         
             typedef SireID::Specify< SireMol::ResID > exported_class_t;
-            typedef ::SireID::Specify< SireMol::ResID > & ( ::SireID::Specify< SireMol::ResID >::*assign_function_type )( ::SireID::Specify< SireMol::ResID > const & ) ;
+            typedef ::SireID::Specify< SireMol::ResID > & ( ::SireID::Specify< SireMol::ResID >::*assign_function_type)( ::SireID::Specify< SireMol::ResID > const & ) ;
             assign_function_type assign_function_value( &::SireID::Specify< SireMol::ResID >::operator= );
             
             Specify_ResID__exposer.def( 
@@ -146,7 +146,7 @@ void register_Specify_ResID__class(){
         { //::SireID::Specify< SireMol::ResID >::operator[]
         
             typedef SireID::Specify< SireMol::ResID > exported_class_t;
-            typedef ::SireID::Specify< SireMol::ResID > ( ::SireID::Specify< SireMol::ResID >::*__getitem___function_type )( int ) const;
+            typedef ::SireID::Specify< SireMol::ResID > ( ::SireID::Specify< SireMol::ResID >::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireID::Specify< SireMol::ResID >::operator[] );
             
             Specify_ResID__exposer.def( 
@@ -158,7 +158,7 @@ void register_Specify_ResID__class(){
         { //::SireID::Specify< SireMol::ResID >::toString
         
             typedef SireID::Specify< SireMol::ResID > exported_class_t;
-            typedef ::QString ( ::SireID::Specify< SireMol::ResID >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireID::Specify< SireMol::ResID >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireID::Specify< SireMol::ResID >::toString );
             
             Specify_ResID__exposer.def( 
@@ -180,7 +180,7 @@ void register_Specify_ResID__class(){
         { //::SireID::Specify< SireMol::ResID >::what
         
             typedef SireID::Specify< SireMol::ResID > exported_class_t;
-            typedef char const * ( ::SireID::Specify< SireMol::ResID >::*what_function_type )(  ) const;
+            typedef char const * ( ::SireID::Specify< SireMol::ResID >::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireID::Specify< SireMol::ResID >::what );
             
             Specify_ResID__exposer.def( 

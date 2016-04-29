@@ -7,6 +7,8 @@
 
 namespace bp = boost::python;
 
+#include "SireError/errors.h"
+
 #include "SireMaths/multidouble.h"
 
 #include "SireMaths/multifloat.h"
@@ -64,7 +66,7 @@ void register_CLJIntraShiftFunction_class(){
         CLJIntraShiftFunction_exposer.def( bp::self != bp::self );
         { //::SireMM::CLJIntraShiftFunction::operator=
         
-            typedef ::SireMM::CLJIntraShiftFunction & ( ::SireMM::CLJIntraShiftFunction::*assign_function_type )( ::SireMM::CLJIntraShiftFunction const & ) ;
+            typedef ::SireMM::CLJIntraShiftFunction & ( ::SireMM::CLJIntraShiftFunction::*assign_function_type)( ::SireMM::CLJIntraShiftFunction const & ) ;
             assign_function_type assign_function_value( &::SireMM::CLJIntraShiftFunction::operator= );
             
             CLJIntraShiftFunction_exposer.def( 
@@ -87,7 +89,7 @@ void register_CLJIntraShiftFunction_class(){
         }
         { //::SireMM::CLJIntraShiftFunction::what
         
-            typedef char const * ( ::SireMM::CLJIntraShiftFunction::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMM::CLJIntraShiftFunction::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMM::CLJIntraShiftFunction::what );
             
             CLJIntraShiftFunction_exposer.def( 

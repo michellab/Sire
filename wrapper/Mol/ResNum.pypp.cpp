@@ -73,7 +73,7 @@ void register_ResNum_class(){
         ResNum_exposer.def( bp::init< SireMol::ResNum const & >(( bp::arg("other") )) );
         { //::SireMol::ResNum::hash
         
-            typedef ::uint ( ::SireMol::ResNum::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::ResNum::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::ResNum::hash );
             
             ResNum_exposer.def( 
@@ -83,7 +83,7 @@ void register_ResNum_class(){
         }
         { //::SireMol::ResNum::isNull
         
-            typedef bool ( ::SireMol::ResNum::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::ResNum::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::ResNum::isNull );
             
             ResNum_exposer.def( 
@@ -93,7 +93,7 @@ void register_ResNum_class(){
         }
         { //::SireMol::ResNum::map
         
-            typedef ::QList< SireMol::ResIdx > ( ::SireMol::ResNum::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::ResIdx > ( ::SireMol::ResNum::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireMol::ResNum::map );
             
             ResNum_exposer.def( 
@@ -107,7 +107,7 @@ void register_ResNum_class(){
         ResNum_exposer.def( bp::self <= bp::self );
         { //::SireMol::ResNum::operator=
         
-            typedef ::SireMol::ResNum & ( ::SireMol::ResNum::*assign_function_type )( ::SireMol::ResNum const & ) ;
+            typedef ::SireMol::ResNum & ( ::SireMol::ResNum::*assign_function_type)( ::SireMol::ResNum const & ) ;
             assign_function_type assign_function_value( &::SireMol::ResNum::operator= );
             
             ResNum_exposer.def( 
@@ -123,7 +123,7 @@ void register_ResNum_class(){
         ResNum_exposer.def( bp::self >= bp::self );
         { //::SireMol::ResNum::toString
         
-            typedef ::QString ( ::SireMol::ResNum::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::ResNum::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::ResNum::toString );
             
             ResNum_exposer.def( 
@@ -143,7 +143,7 @@ void register_ResNum_class(){
         }
         { //::SireMol::ResNum::what
         
-            typedef char const * ( ::SireMol::ResNum::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::ResNum::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::ResNum::what );
             
             ResNum_exposer.def( 

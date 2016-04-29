@@ -33,7 +33,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::array
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef ::SireBase::PackedArray2D< SireMM::LJParameter > const & ( ::SireMol::AtomProperty< SireMM::LJParameter >::*array_function_type )(  ) const;
+            typedef ::SireBase::PackedArray2D< SireMM::LJParameter > const & ( ::SireMol::AtomProperty< SireMM::LJParameter >::*array_function_type)(  ) const;
             array_function_type array_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::array );
             
             AtomLJs_exposer.def( 
@@ -45,7 +45,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::assertCanConvert
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMM::LJParameter >::*assertCanConvert_function_type )( ::QVariant const & ) const;
+            typedef void ( ::SireMol::AtomProperty< SireMM::LJParameter >::*assertCanConvert_function_type)( ::QVariant const & ) const;
             assertCanConvert_function_type assertCanConvert_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::assertCanConvert );
             
             AtomLJs_exposer.def( 
@@ -57,7 +57,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::assignFrom
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMM::LJParameter >::*assignFrom_function_type )( ::SireMol::AtomProperty< QVariant > const & ) ;
+            typedef void ( ::SireMol::AtomProperty< SireMM::LJParameter >::*assignFrom_function_type)( ::SireMol::AtomProperty< QVariant > const & ) ;
             assignFrom_function_type assignFrom_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::assignFrom );
             
             AtomLJs_exposer.def( 
@@ -69,7 +69,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::at
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< SireMM::LJParameter > const & ( ::SireMol::AtomProperty< SireMM::LJParameter >::*at_function_type )( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::detail::PackedArray2D_Array< SireMM::LJParameter > const & ( ::SireMol::AtomProperty< SireMM::LJParameter >::*at_function_type)( ::SireMol::CGIdx ) const;
             at_function_type at_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::at );
             
             AtomLJs_exposer.def( 
@@ -82,7 +82,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::at
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef ::SireMM::LJParameter const & ( ::SireMol::AtomProperty< SireMM::LJParameter >::*at_function_type )( ::SireMol::CGAtomIdx const & ) const;
+            typedef ::SireMM::LJParameter const & ( ::SireMol::AtomProperty< SireMM::LJParameter >::*at_function_type)( ::SireMol::CGAtomIdx const & ) const;
             at_function_type at_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::at );
             
             AtomLJs_exposer.def( 
@@ -95,7 +95,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::canConvert
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef bool ( ::SireMol::AtomProperty< SireMM::LJParameter >::*canConvert_function_type )( ::QVariant const & ) const;
+            typedef bool ( ::SireMol::AtomProperty< SireMM::LJParameter >::*canConvert_function_type)( ::QVariant const & ) const;
             canConvert_function_type canConvert_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::canConvert );
             
             AtomLJs_exposer.def( 
@@ -107,7 +107,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::copyFrom
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMM::LJParameter >::*copyFrom_function_type )( ::QVector< SireMM::LJParameter > const & ) ;
+            typedef void ( ::SireMol::AtomProperty< SireMM::LJParameter >::*copyFrom_function_type)( ::QVector< SireMM::LJParameter > const & ) ;
             copyFrom_function_type copyFrom_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::copyFrom );
             
             AtomLJs_exposer.def( 
@@ -119,7 +119,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::copyFrom
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireMM::LJParameter >::*copyFrom_function_type )( ::QVector< SireMM::LJParameter > const &,::SireMol::AtomSelection const & ) ;
+            typedef void ( ::SireMol::AtomProperty< SireMM::LJParameter >::*copyFrom_function_type)( ::QVector< SireMM::LJParameter > const &,::SireMol::AtomSelection const & ) ;
             copyFrom_function_type copyFrom_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::copyFrom );
             
             AtomLJs_exposer.def( 
@@ -131,7 +131,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::count
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< SireMM::LJParameter >::*count_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomProperty< SireMM::LJParameter >::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::count );
             
             AtomLJs_exposer.def( 
@@ -142,7 +142,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::divide
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMM::LJParameter >::*divide_function_type )( ::QVector< SireMol::AtomSelection > const & ) const;
+            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMM::LJParameter >::*divide_function_type)( ::QVector< SireMol::AtomSelection > const & ) const;
             divide_function_type divide_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::divide );
             
             AtomLJs_exposer.def( 
@@ -154,7 +154,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::divideByResidue
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMM::LJParameter >::*divideByResidue_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMM::LJParameter >::*divideByResidue_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             divideByResidue_function_type divideByResidue_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::divideByResidue );
             
             AtomLJs_exposer.def( 
@@ -178,7 +178,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::get
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< SireMM::LJParameter > const & ( ::SireMol::AtomProperty< SireMM::LJParameter >::*get_function_type )( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::detail::PackedArray2D_Array< SireMM::LJParameter > const & ( ::SireMol::AtomProperty< SireMM::LJParameter >::*get_function_type)( ::SireMol::CGIdx ) const;
             get_function_type get_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::get );
             
             AtomLJs_exposer.def( 
@@ -191,7 +191,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::get
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef ::SireMM::LJParameter const & ( ::SireMol::AtomProperty< SireMM::LJParameter >::*get_function_type )( ::SireMol::CGAtomIdx const & ) const;
+            typedef ::SireMM::LJParameter const & ( ::SireMol::AtomProperty< SireMM::LJParameter >::*get_function_type)( ::SireMol::CGAtomIdx const & ) const;
             get_function_type get_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::get );
             
             AtomLJs_exposer.def( 
@@ -204,7 +204,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::isCompatibleWith
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef bool ( ::SireMol::AtomProperty< SireMM::LJParameter >::*isCompatibleWith_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef bool ( ::SireMol::AtomProperty< SireMM::LJParameter >::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::isCompatibleWith );
             
             AtomLJs_exposer.def( 
@@ -216,7 +216,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::isEmpty
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef bool ( ::SireMol::AtomProperty< SireMM::LJParameter >::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::AtomProperty< SireMM::LJParameter >::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::isEmpty );
             
             AtomLJs_exposer.def( 
@@ -227,7 +227,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::matchToSelection
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef ::SireMol::AtomProperty< SireMM::LJParameter > ( ::SireMol::AtomProperty< SireMM::LJParameter >::*matchToSelection_function_type )( ::SireMol::AtomSelection const & ) const;
+            typedef ::SireMol::AtomProperty< SireMM::LJParameter > ( ::SireMol::AtomProperty< SireMM::LJParameter >::*matchToSelection_function_type)( ::SireMol::AtomSelection const & ) const;
             matchToSelection_function_type matchToSelection_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::matchToSelection );
             
             AtomLJs_exposer.def( 
@@ -239,7 +239,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::merge
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMM::LJParameter >::*merge_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMM::LJParameter >::*merge_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             merge_function_type merge_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::merge );
             
             AtomLJs_exposer.def( 
@@ -251,7 +251,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::nAtoms
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< SireMM::LJParameter >::*nAtoms_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomProperty< SireMM::LJParameter >::*nAtoms_function_type)(  ) const;
             nAtoms_function_type nAtoms_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::nAtoms );
             
             AtomLJs_exposer.def( 
@@ -262,7 +262,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::nAtoms
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< SireMM::LJParameter >::*nAtoms_function_type )( ::SireMol::CGIdx ) const;
+            typedef int ( ::SireMol::AtomProperty< SireMM::LJParameter >::*nAtoms_function_type)( ::SireMol::CGIdx ) const;
             nAtoms_function_type nAtoms_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::nAtoms );
             
             AtomLJs_exposer.def( 
@@ -274,7 +274,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::nCutGroups
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< SireMM::LJParameter >::*nCutGroups_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomProperty< SireMM::LJParameter >::*nCutGroups_function_type)(  ) const;
             nCutGroups_function_type nCutGroups_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::nCutGroups );
             
             AtomLJs_exposer.def( 
@@ -286,7 +286,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::operator=
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef ::SireMol::AtomProperty< SireMM::LJParameter > & ( ::SireMol::AtomProperty< SireMM::LJParameter >::*assign_function_type )( ::SireMol::AtomProperty< SireMM::LJParameter > const & ) ;
+            typedef ::SireMol::AtomProperty< SireMM::LJParameter > & ( ::SireMol::AtomProperty< SireMM::LJParameter >::*assign_function_type)( ::SireMol::AtomProperty< SireMM::LJParameter > const & ) ;
             assign_function_type assign_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::operator= );
             
             AtomLJs_exposer.def( 
@@ -300,7 +300,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::operator[]
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< SireMM::LJParameter > const & ( ::SireMol::AtomProperty< SireMM::LJParameter >::*__getitem___function_type )( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::detail::PackedArray2D_Array< SireMM::LJParameter > const & ( ::SireMol::AtomProperty< SireMM::LJParameter >::*__getitem___function_type)( ::SireMol::CGIdx ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::operator[] );
             
             AtomLJs_exposer.def( 
@@ -313,7 +313,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::operator[]
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef ::SireMM::LJParameter const & ( ::SireMol::AtomProperty< SireMM::LJParameter >::*__getitem___function_type )( ::SireMol::CGAtomIdx const & ) const;
+            typedef ::SireMM::LJParameter const & ( ::SireMol::AtomProperty< SireMM::LJParameter >::*__getitem___function_type)( ::SireMol::CGAtomIdx const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::operator[] );
             
             AtomLJs_exposer.def( 
@@ -326,7 +326,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::set
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef ::SireMol::AtomProperty< SireMM::LJParameter > & ( ::SireMol::AtomProperty< SireMM::LJParameter >::*set_function_type )( ::SireMol::CGAtomIdx const &,::SireMM::LJParameter const & ) ;
+            typedef ::SireMol::AtomProperty< SireMM::LJParameter > & ( ::SireMol::AtomProperty< SireMM::LJParameter >::*set_function_type)( ::SireMol::CGAtomIdx const &,::SireMM::LJParameter const & ) ;
             set_function_type set_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::set );
             
             AtomLJs_exposer.def( 
@@ -339,7 +339,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::set
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef ::SireMol::AtomProperty< SireMM::LJParameter > & ( ::SireMol::AtomProperty< SireMM::LJParameter >::*set_function_type )( ::SireMol::CGIdx,::QVector< SireMM::LJParameter > const & ) ;
+            typedef ::SireMol::AtomProperty< SireMM::LJParameter > & ( ::SireMol::AtomProperty< SireMM::LJParameter >::*set_function_type)( ::SireMol::CGIdx,::QVector< SireMM::LJParameter > const & ) ;
             set_function_type set_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::set );
             
             AtomLJs_exposer.def( 
@@ -352,7 +352,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::size
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< SireMM::LJParameter >::*size_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomProperty< SireMM::LJParameter >::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::size );
             
             AtomLJs_exposer.def( 
@@ -363,7 +363,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::toString
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef ::QString ( ::SireMol::AtomProperty< SireMM::LJParameter >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::AtomProperty< SireMM::LJParameter >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::toString );
             
             AtomLJs_exposer.def( 
@@ -374,7 +374,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::toVariant
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef ::SireMol::AtomProperty< QVariant > ( ::SireMol::AtomProperty< SireMM::LJParameter >::*toVariant_function_type )(  ) const;
+            typedef ::SireMol::AtomProperty< QVariant > ( ::SireMol::AtomProperty< SireMM::LJParameter >::*toVariant_function_type)(  ) const;
             toVariant_function_type toVariant_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::toVariant );
             
             AtomLJs_exposer.def( 
@@ -385,7 +385,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::toVector
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef ::QVector< SireMM::LJParameter > ( ::SireMol::AtomProperty< SireMM::LJParameter >::*toVector_function_type )(  ) const;
+            typedef ::QVector< SireMM::LJParameter > ( ::SireMol::AtomProperty< SireMM::LJParameter >::*toVector_function_type)(  ) const;
             toVector_function_type toVector_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::toVector );
             
             AtomLJs_exposer.def( 
@@ -396,7 +396,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::toVector
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef ::QVector< SireMM::LJParameter > ( ::SireMol::AtomProperty< SireMM::LJParameter >::*toVector_function_type )( ::SireMol::AtomSelection const & ) const;
+            typedef ::QVector< SireMM::LJParameter > ( ::SireMol::AtomProperty< SireMM::LJParameter >::*toVector_function_type)( ::SireMol::AtomSelection const & ) const;
             toVector_function_type toVector_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::toVector );
             
             AtomLJs_exposer.def( 

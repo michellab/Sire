@@ -46,7 +46,7 @@ void register_HarmonicSwitchingFunction_class(){
         HarmonicSwitchingFunction_exposer.def( bp::init< SireMM::HarmonicSwitchingFunction const & >(( bp::arg("other") )) );
         { //::SireMM::HarmonicSwitchingFunction::dElectrostaticScaleFactor
         
-            typedef double ( ::SireMM::HarmonicSwitchingFunction::*dElectrostaticScaleFactor_function_type )( ::SireUnits::Dimension::Length ) const;
+            typedef double ( ::SireMM::HarmonicSwitchingFunction::*dElectrostaticScaleFactor_function_type)( ::SireUnits::Dimension::Length ) const;
             dElectrostaticScaleFactor_function_type dElectrostaticScaleFactor_function_value( &::SireMM::HarmonicSwitchingFunction::dElectrostaticScaleFactor );
             
             HarmonicSwitchingFunction_exposer.def( 
@@ -57,7 +57,7 @@ void register_HarmonicSwitchingFunction_class(){
         }
         { //::SireMM::HarmonicSwitchingFunction::dVDWScaleFactor
         
-            typedef double ( ::SireMM::HarmonicSwitchingFunction::*dVDWScaleFactor_function_type )( ::SireUnits::Dimension::Length ) const;
+            typedef double ( ::SireMM::HarmonicSwitchingFunction::*dVDWScaleFactor_function_type)( ::SireUnits::Dimension::Length ) const;
             dVDWScaleFactor_function_type dVDWScaleFactor_function_value( &::SireMM::HarmonicSwitchingFunction::dVDWScaleFactor );
             
             HarmonicSwitchingFunction_exposer.def( 
@@ -68,7 +68,7 @@ void register_HarmonicSwitchingFunction_class(){
         }
         { //::SireMM::HarmonicSwitchingFunction::electrostaticScaleFactor
         
-            typedef double ( ::SireMM::HarmonicSwitchingFunction::*electrostaticScaleFactor_function_type )( ::SireUnits::Dimension::Length ) const;
+            typedef double ( ::SireMM::HarmonicSwitchingFunction::*electrostaticScaleFactor_function_type)( ::SireUnits::Dimension::Length ) const;
             electrostaticScaleFactor_function_type electrostaticScaleFactor_function_value( &::SireMM::HarmonicSwitchingFunction::electrostaticScaleFactor );
             
             HarmonicSwitchingFunction_exposer.def( 
@@ -80,7 +80,7 @@ void register_HarmonicSwitchingFunction_class(){
         HarmonicSwitchingFunction_exposer.def( bp::self != bp::self );
         { //::SireMM::HarmonicSwitchingFunction::operator=
         
-            typedef ::SireMM::HarmonicSwitchingFunction & ( ::SireMM::HarmonicSwitchingFunction::*assign_function_type )( ::SireMM::HarmonicSwitchingFunction const & ) ;
+            typedef ::SireMM::HarmonicSwitchingFunction & ( ::SireMM::HarmonicSwitchingFunction::*assign_function_type)( ::SireMM::HarmonicSwitchingFunction const & ) ;
             assign_function_type assign_function_value( &::SireMM::HarmonicSwitchingFunction::operator= );
             
             HarmonicSwitchingFunction_exposer.def( 
@@ -93,7 +93,7 @@ void register_HarmonicSwitchingFunction_class(){
         HarmonicSwitchingFunction_exposer.def( bp::self == bp::self );
         { //::SireMM::HarmonicSwitchingFunction::toString
         
-            typedef ::QString ( ::SireMM::HarmonicSwitchingFunction::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMM::HarmonicSwitchingFunction::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMM::HarmonicSwitchingFunction::toString );
             
             HarmonicSwitchingFunction_exposer.def( 
@@ -113,7 +113,7 @@ void register_HarmonicSwitchingFunction_class(){
         }
         { //::SireMM::HarmonicSwitchingFunction::vdwScaleFactor
         
-            typedef double ( ::SireMM::HarmonicSwitchingFunction::*vdwScaleFactor_function_type )( ::SireUnits::Dimension::Length ) const;
+            typedef double ( ::SireMM::HarmonicSwitchingFunction::*vdwScaleFactor_function_type)( ::SireUnits::Dimension::Length ) const;
             vdwScaleFactor_function_type vdwScaleFactor_function_value( &::SireMM::HarmonicSwitchingFunction::vdwScaleFactor );
             
             HarmonicSwitchingFunction_exposer.def( 

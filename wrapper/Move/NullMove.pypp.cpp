@@ -44,7 +44,7 @@ void register_NullMove_class(){
         NullMove_exposer.def( bp::init< SireMove::NullMove const & >(( bp::arg("other") )) );
         { //::SireMove::NullMove::clearStatistics
         
-            typedef void ( ::SireMove::NullMove::*clearStatistics_function_type )(  ) ;
+            typedef void ( ::SireMove::NullMove::*clearStatistics_function_type)(  ) ;
             clearStatistics_function_type clearStatistics_function_value( &::SireMove::NullMove::clearStatistics );
             
             NullMove_exposer.def( 
@@ -54,7 +54,7 @@ void register_NullMove_class(){
         }
         { //::SireMove::NullMove::ensemble
         
-            typedef ::SireMove::Ensemble ( ::SireMove::NullMove::*ensemble_function_type )(  ) const;
+            typedef ::SireMove::Ensemble ( ::SireMove::NullMove::*ensemble_function_type)(  ) const;
             ensemble_function_type ensemble_function_value( &::SireMove::NullMove::ensemble );
             
             NullMove_exposer.def( 
@@ -64,7 +64,7 @@ void register_NullMove_class(){
         }
         { //::SireMove::NullMove::move
         
-            typedef void ( ::SireMove::NullMove::*move_function_type )( ::SireSystem::System &,int,bool ) ;
+            typedef void ( ::SireMove::NullMove::*move_function_type)( ::SireSystem::System &,int,bool ) ;
             move_function_type move_function_value( &::SireMove::NullMove::move );
             
             NullMove_exposer.def( 
@@ -75,7 +75,7 @@ void register_NullMove_class(){
         }
         { //::SireMove::NullMove::nMoves
         
-            typedef int ( ::SireMove::NullMove::*nMoves_function_type )(  ) const;
+            typedef int ( ::SireMove::NullMove::*nMoves_function_type)(  ) const;
             nMoves_function_type nMoves_function_value( &::SireMove::NullMove::nMoves );
             
             NullMove_exposer.def( 
@@ -86,7 +86,7 @@ void register_NullMove_class(){
         NullMove_exposer.def( bp::self != bp::self );
         { //::SireMove::NullMove::operator=
         
-            typedef ::SireMove::NullMove & ( ::SireMove::NullMove::*assign_function_type )( ::SireMove::NullMove const & ) ;
+            typedef ::SireMove::NullMove & ( ::SireMove::NullMove::*assign_function_type)( ::SireMove::NullMove const & ) ;
             assign_function_type assign_function_value( &::SireMove::NullMove::operator= );
             
             NullMove_exposer.def( 
@@ -99,7 +99,7 @@ void register_NullMove_class(){
         NullMove_exposer.def( bp::self == bp::self );
         { //::SireMove::NullMove::setGenerator
         
-            typedef void ( ::SireMove::NullMove::*setGenerator_function_type )( ::SireMaths::RanGenerator const & ) ;
+            typedef void ( ::SireMove::NullMove::*setGenerator_function_type)( ::SireMaths::RanGenerator const & ) ;
             setGenerator_function_type setGenerator_function_value( &::SireMove::NullMove::setGenerator );
             
             NullMove_exposer.def( 
@@ -110,7 +110,7 @@ void register_NullMove_class(){
         }
         { //::SireMove::NullMove::toString
         
-            typedef ::QString ( ::SireMove::NullMove::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMove::NullMove::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMove::NullMove::toString );
             
             NullMove_exposer.def( 

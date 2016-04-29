@@ -62,7 +62,7 @@ void register_ZMatrixCoordsLine_class(){
         ZMatrixCoordsLine_exposer.def( bp::init< SireMove::ZMatrixCoordsLine const & >(( bp::arg("other") )) );
         { //::SireMove::ZMatrixCoordsLine::angleSize
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMove::ZMatrixCoordsLine::*angleSize_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMove::ZMatrixCoordsLine::*angleSize_function_type)(  ) const;
             angleSize_function_type angleSize_function_value( &::SireMove::ZMatrixCoordsLine::angleSize );
             
             ZMatrixCoordsLine_exposer.def( 
@@ -72,7 +72,7 @@ void register_ZMatrixCoordsLine_class(){
         }
         { //::SireMove::ZMatrixCoordsLine::bondLength
         
-            typedef ::SireUnits::Dimension::Length ( ::SireMove::ZMatrixCoordsLine::*bondLength_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Length ( ::SireMove::ZMatrixCoordsLine::*bondLength_function_type)(  ) const;
             bondLength_function_type bondLength_function_value( &::SireMove::ZMatrixCoordsLine::bondLength );
             
             ZMatrixCoordsLine_exposer.def( 
@@ -82,7 +82,7 @@ void register_ZMatrixCoordsLine_class(){
         }
         { //::SireMove::ZMatrixCoordsLine::dihedralSize
         
-            typedef ::SireUnits::Dimension::Angle ( ::SireMove::ZMatrixCoordsLine::*dihedralSize_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Angle ( ::SireMove::ZMatrixCoordsLine::*dihedralSize_function_type)(  ) const;
             dihedralSize_function_type dihedralSize_function_value( &::SireMove::ZMatrixCoordsLine::dihedralSize );
             
             ZMatrixCoordsLine_exposer.def( 
@@ -93,7 +93,7 @@ void register_ZMatrixCoordsLine_class(){
         ZMatrixCoordsLine_exposer.def( bp::self != bp::self );
         { //::SireMove::ZMatrixCoordsLine::operator=
         
-            typedef ::SireMove::ZMatrixCoordsLine & ( ::SireMove::ZMatrixCoordsLine::*assign_function_type )( ::SireMove::ZMatrixCoordsLine const & ) ;
+            typedef ::SireMove::ZMatrixCoordsLine & ( ::SireMove::ZMatrixCoordsLine::*assign_function_type)( ::SireMove::ZMatrixCoordsLine const & ) ;
             assign_function_type assign_function_value( &::SireMove::ZMatrixCoordsLine::operator= );
             
             ZMatrixCoordsLine_exposer.def( 
@@ -106,7 +106,7 @@ void register_ZMatrixCoordsLine_class(){
         ZMatrixCoordsLine_exposer.def( bp::self == bp::self );
         { //::SireMove::ZMatrixCoordsLine::setAngle
         
-            typedef void ( ::SireMove::ZMatrixCoordsLine::*setAngle_function_type )( ::SireUnits::Dimension::Angle const & ) ;
+            typedef void ( ::SireMove::ZMatrixCoordsLine::*setAngle_function_type)( ::SireUnits::Dimension::Angle const & ) ;
             setAngle_function_type setAngle_function_value( &::SireMove::ZMatrixCoordsLine::setAngle );
             
             ZMatrixCoordsLine_exposer.def( 
@@ -117,7 +117,7 @@ void register_ZMatrixCoordsLine_class(){
         }
         { //::SireMove::ZMatrixCoordsLine::setBond
         
-            typedef void ( ::SireMove::ZMatrixCoordsLine::*setBond_function_type )( ::SireUnits::Dimension::Length const & ) ;
+            typedef void ( ::SireMove::ZMatrixCoordsLine::*setBond_function_type)( ::SireUnits::Dimension::Length const & ) ;
             setBond_function_type setBond_function_value( &::SireMove::ZMatrixCoordsLine::setBond );
             
             ZMatrixCoordsLine_exposer.def( 
@@ -128,7 +128,7 @@ void register_ZMatrixCoordsLine_class(){
         }
         { //::SireMove::ZMatrixCoordsLine::setDihedral
         
-            typedef void ( ::SireMove::ZMatrixCoordsLine::*setDihedral_function_type )( ::SireUnits::Dimension::Angle const & ) ;
+            typedef void ( ::SireMove::ZMatrixCoordsLine::*setDihedral_function_type)( ::SireUnits::Dimension::Angle const & ) ;
             setDihedral_function_type setDihedral_function_value( &::SireMove::ZMatrixCoordsLine::setDihedral );
             
             ZMatrixCoordsLine_exposer.def( 
@@ -139,7 +139,7 @@ void register_ZMatrixCoordsLine_class(){
         }
         { //::SireMove::ZMatrixCoordsLine::toString
         
-            typedef ::QString ( ::SireMove::ZMatrixCoordsLine::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMove::ZMatrixCoordsLine::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMove::ZMatrixCoordsLine::toString );
             
             ZMatrixCoordsLine_exposer.def( 
@@ -159,7 +159,7 @@ void register_ZMatrixCoordsLine_class(){
         }
         { //::SireMove::ZMatrixCoordsLine::what
         
-            typedef char const * ( ::SireMove::ZMatrixCoordsLine::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMove::ZMatrixCoordsLine::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMove::ZMatrixCoordsLine::what );
             
             ZMatrixCoordsLine_exposer.def( 

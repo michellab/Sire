@@ -44,7 +44,7 @@ void register_Gradients_class(){
         Gradients_exposer.def( bp::init< SireAnalysis::Gradients const & >(( bp::arg("other") )) );
         { //::SireAnalysis::Gradients::analyticData
         
-            typedef ::QMap< double, SireMaths::AverageAndStddev > ( ::SireAnalysis::Gradients::*analyticData_function_type )(  ) const;
+            typedef ::QMap< double, SireMaths::AverageAndStddev > ( ::SireAnalysis::Gradients::*analyticData_function_type)(  ) const;
             analyticData_function_type analyticData_function_value( &::SireAnalysis::Gradients::analyticData );
             
             Gradients_exposer.def( 
@@ -54,7 +54,7 @@ void register_Gradients_class(){
         }
         { //::SireAnalysis::Gradients::backwards
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireAnalysis::Gradients::*backwards_function_type )( double ) const;
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireAnalysis::Gradients::*backwards_function_type)( double ) const;
             backwards_function_type backwards_function_value( &::SireAnalysis::Gradients::backwards );
             
             Gradients_exposer.def( 
@@ -65,7 +65,7 @@ void register_Gradients_class(){
         }
         { //::SireAnalysis::Gradients::backwardsData
         
-            typedef ::QMap< double, SireMaths::FreeEnergyAverage > ( ::SireAnalysis::Gradients::*backwardsData_function_type )(  ) const;
+            typedef ::QMap< double, SireMaths::FreeEnergyAverage > ( ::SireAnalysis::Gradients::*backwardsData_function_type)(  ) const;
             backwardsData_function_type backwardsData_function_value( &::SireAnalysis::Gradients::backwardsData );
             
             Gradients_exposer.def( 
@@ -75,7 +75,7 @@ void register_Gradients_class(){
         }
         { //::SireAnalysis::Gradients::backwardsValues
         
-            typedef ::QVector< SireAnalysis::DataPoint > ( ::SireAnalysis::Gradients::*backwardsValues_function_type )(  ) const;
+            typedef ::QVector< SireAnalysis::DataPoint > ( ::SireAnalysis::Gradients::*backwardsValues_function_type)(  ) const;
             backwardsValues_function_type backwardsValues_function_value( &::SireAnalysis::Gradients::backwardsValues );
             
             Gradients_exposer.def( 
@@ -85,7 +85,7 @@ void register_Gradients_class(){
         }
         { //::SireAnalysis::Gradients::deltaLambda
         
-            typedef double ( ::SireAnalysis::Gradients::*deltaLambda_function_type )(  ) const;
+            typedef double ( ::SireAnalysis::Gradients::*deltaLambda_function_type)(  ) const;
             deltaLambda_function_type deltaLambda_function_value( &::SireAnalysis::Gradients::deltaLambda );
             
             Gradients_exposer.def( 
@@ -95,7 +95,7 @@ void register_Gradients_class(){
         }
         { //::SireAnalysis::Gradients::forwards
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireAnalysis::Gradients::*forwards_function_type )( double ) const;
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireAnalysis::Gradients::*forwards_function_type)( double ) const;
             forwards_function_type forwards_function_value( &::SireAnalysis::Gradients::forwards );
             
             Gradients_exposer.def( 
@@ -106,7 +106,7 @@ void register_Gradients_class(){
         }
         { //::SireAnalysis::Gradients::forwardsData
         
-            typedef ::QMap< double, SireMaths::FreeEnergyAverage > ( ::SireAnalysis::Gradients::*forwardsData_function_type )(  ) const;
+            typedef ::QMap< double, SireMaths::FreeEnergyAverage > ( ::SireAnalysis::Gradients::*forwardsData_function_type)(  ) const;
             forwardsData_function_type forwardsData_function_value( &::SireAnalysis::Gradients::forwardsData );
             
             Gradients_exposer.def( 
@@ -116,7 +116,7 @@ void register_Gradients_class(){
         }
         { //::SireAnalysis::Gradients::forwardsValues
         
-            typedef ::QVector< SireAnalysis::DataPoint > ( ::SireAnalysis::Gradients::*forwardsValues_function_type )(  ) const;
+            typedef ::QVector< SireAnalysis::DataPoint > ( ::SireAnalysis::Gradients::*forwardsValues_function_type)(  ) const;
             forwardsValues_function_type forwardsValues_function_value( &::SireAnalysis::Gradients::forwardsValues );
             
             Gradients_exposer.def( 
@@ -126,7 +126,7 @@ void register_Gradients_class(){
         }
         { //::SireAnalysis::Gradients::gradient
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireAnalysis::Gradients::*gradient_function_type )( double ) const;
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireAnalysis::Gradients::*gradient_function_type)( double ) const;
             gradient_function_type gradient_function_value( &::SireAnalysis::Gradients::gradient );
             
             Gradients_exposer.def( 
@@ -137,7 +137,7 @@ void register_Gradients_class(){
         }
         { //::SireAnalysis::Gradients::integrate
         
-            typedef ::SireAnalysis::TIPMF ( ::SireAnalysis::Gradients::*integrate_function_type )(  ) const;
+            typedef ::SireAnalysis::TIPMF ( ::SireAnalysis::Gradients::*integrate_function_type)(  ) const;
             integrate_function_type integrate_function_value( &::SireAnalysis::Gradients::integrate );
             
             Gradients_exposer.def( 
@@ -147,7 +147,7 @@ void register_Gradients_class(){
         }
         { //::SireAnalysis::Gradients::integrate
         
-            typedef ::SireAnalysis::TIPMF ( ::SireAnalysis::Gradients::*integrate_function_type )( int ) const;
+            typedef ::SireAnalysis::TIPMF ( ::SireAnalysis::Gradients::*integrate_function_type)( int ) const;
             integrate_function_type integrate_function_value( &::SireAnalysis::Gradients::integrate );
             
             Gradients_exposer.def( 
@@ -158,7 +158,7 @@ void register_Gradients_class(){
         }
         { //::SireAnalysis::Gradients::integrate
         
-            typedef ::SireAnalysis::TIPMF ( ::SireAnalysis::Gradients::*integrate_function_type )( double,double ) const;
+            typedef ::SireAnalysis::TIPMF ( ::SireAnalysis::Gradients::*integrate_function_type)( double,double ) const;
             integrate_function_type integrate_function_value( &::SireAnalysis::Gradients::integrate );
             
             Gradients_exposer.def( 
@@ -169,7 +169,7 @@ void register_Gradients_class(){
         }
         { //::SireAnalysis::Gradients::integrate
         
-            typedef ::SireAnalysis::TIPMF ( ::SireAnalysis::Gradients::*integrate_function_type )( double,double,int ) const;
+            typedef ::SireAnalysis::TIPMF ( ::SireAnalysis::Gradients::*integrate_function_type)( double,double,int ) const;
             integrate_function_type integrate_function_value( &::SireAnalysis::Gradients::integrate );
             
             Gradients_exposer.def( 
@@ -180,7 +180,7 @@ void register_Gradients_class(){
         }
         { //::SireAnalysis::Gradients::isEmpty
         
-            typedef bool ( ::SireAnalysis::Gradients::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireAnalysis::Gradients::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireAnalysis::Gradients::isEmpty );
             
             Gradients_exposer.def( 
@@ -190,7 +190,7 @@ void register_Gradients_class(){
         }
         { //::SireAnalysis::Gradients::keys
         
-            typedef ::QList< double > ( ::SireAnalysis::Gradients::*keys_function_type )(  ) const;
+            typedef ::QList< double > ( ::SireAnalysis::Gradients::*keys_function_type)(  ) const;
             keys_function_type keys_function_value( &::SireAnalysis::Gradients::keys );
             
             Gradients_exposer.def( 
@@ -200,7 +200,7 @@ void register_Gradients_class(){
         }
         { //::SireAnalysis::Gradients::lambdaValues
         
-            typedef ::QList< double > ( ::SireAnalysis::Gradients::*lambdaValues_function_type )(  ) const;
+            typedef ::QList< double > ( ::SireAnalysis::Gradients::*lambdaValues_function_type)(  ) const;
             lambdaValues_function_type lambdaValues_function_value( &::SireAnalysis::Gradients::lambdaValues );
             
             Gradients_exposer.def( 
@@ -221,7 +221,7 @@ void register_Gradients_class(){
         }
         { //::SireAnalysis::Gradients::nLambdaValues
         
-            typedef int ( ::SireAnalysis::Gradients::*nLambdaValues_function_type )(  ) const;
+            typedef int ( ::SireAnalysis::Gradients::*nLambdaValues_function_type)(  ) const;
             nLambdaValues_function_type nLambdaValues_function_value( &::SireAnalysis::Gradients::nLambdaValues );
             
             Gradients_exposer.def( 
@@ -231,7 +231,7 @@ void register_Gradients_class(){
         }
         { //::SireAnalysis::Gradients::nSamples
         
-            typedef ::qint64 ( ::SireAnalysis::Gradients::*nSamples_function_type )(  ) const;
+            typedef ::qint64 ( ::SireAnalysis::Gradients::*nSamples_function_type)(  ) const;
             nSamples_function_type nSamples_function_value( &::SireAnalysis::Gradients::nSamples );
             
             Gradients_exposer.def( 
@@ -243,7 +243,7 @@ void register_Gradients_class(){
         Gradients_exposer.def( bp::self + bp::self );
         { //::SireAnalysis::Gradients::operator=
         
-            typedef ::SireAnalysis::Gradients & ( ::SireAnalysis::Gradients::*assign_function_type )( ::SireAnalysis::Gradients const & ) ;
+            typedef ::SireAnalysis::Gradients & ( ::SireAnalysis::Gradients::*assign_function_type)( ::SireAnalysis::Gradients const & ) ;
             assign_function_type assign_function_value( &::SireAnalysis::Gradients::operator= );
             
             Gradients_exposer.def( 
@@ -256,7 +256,7 @@ void register_Gradients_class(){
         Gradients_exposer.def( bp::self == bp::self );
         { //::SireAnalysis::Gradients::operator[]
         
-            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireAnalysis::Gradients::*__getitem___function_type )( double ) const;
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireAnalysis::Gradients::*__getitem___function_type)( double ) const;
             __getitem___function_type __getitem___function_value( &::SireAnalysis::Gradients::operator[] );
             
             Gradients_exposer.def( 
@@ -267,7 +267,7 @@ void register_Gradients_class(){
         }
         { //::SireAnalysis::Gradients::temperature
         
-            typedef ::SireUnits::Dimension::Temperature ( ::SireAnalysis::Gradients::*temperature_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Temperature ( ::SireAnalysis::Gradients::*temperature_function_type)(  ) const;
             temperature_function_type temperature_function_value( &::SireAnalysis::Gradients::temperature );
             
             Gradients_exposer.def( 
@@ -277,7 +277,7 @@ void register_Gradients_class(){
         }
         { //::SireAnalysis::Gradients::toString
         
-            typedef ::QString ( ::SireAnalysis::Gradients::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireAnalysis::Gradients::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireAnalysis::Gradients::toString );
             
             Gradients_exposer.def( 
@@ -297,7 +297,7 @@ void register_Gradients_class(){
         }
         { //::SireAnalysis::Gradients::values
         
-            typedef ::QVector< SireAnalysis::DataPoint > ( ::SireAnalysis::Gradients::*values_function_type )(  ) const;
+            typedef ::QVector< SireAnalysis::DataPoint > ( ::SireAnalysis::Gradients::*values_function_type)(  ) const;
             values_function_type values_function_value( &::SireAnalysis::Gradients::values );
             
             Gradients_exposer.def( 
@@ -307,7 +307,7 @@ void register_Gradients_class(){
         }
         { //::SireAnalysis::Gradients::what
         
-            typedef char const * ( ::SireAnalysis::Gradients::*what_function_type )(  ) const;
+            typedef char const * ( ::SireAnalysis::Gradients::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireAnalysis::Gradients::what );
             
             Gradients_exposer.def( 

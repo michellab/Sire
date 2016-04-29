@@ -39,7 +39,7 @@ void register_MultiUInt_class(){
         MultiUInt_exposer.def( bp::init< SireMaths::MultiUInt const & >(( bp::arg("other") )) );
         { //::SireMaths::MultiUInt::at
         
-            typedef ::quint32 ( ::SireMaths::MultiUInt::*at_function_type )( int ) const;
+            typedef ::quint32 ( ::SireMaths::MultiUInt::*at_function_type)( int ) const;
             at_function_type at_function_value( &::SireMaths::MultiUInt::at );
             
             MultiUInt_exposer.def( 
@@ -50,7 +50,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::compareEqual
         
-            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*compareEqual_function_type )( ::SireMaths::MultiUInt const & ) const;
+            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*compareEqual_function_type)( ::SireMaths::MultiUInt const & ) const;
             compareEqual_function_type compareEqual_function_value( &::SireMaths::MultiUInt::compareEqual );
             
             MultiUInt_exposer.def( 
@@ -61,7 +61,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::compareGreater
         
-            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*compareGreater_function_type )( ::SireMaths::MultiUInt const & ) const;
+            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*compareGreater_function_type)( ::SireMaths::MultiUInt const & ) const;
             compareGreater_function_type compareGreater_function_value( &::SireMaths::MultiUInt::compareGreater );
             
             MultiUInt_exposer.def( 
@@ -72,7 +72,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::compareGreaterEqual
         
-            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*compareGreaterEqual_function_type )( ::SireMaths::MultiUInt const & ) const;
+            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*compareGreaterEqual_function_type)( ::SireMaths::MultiUInt const & ) const;
             compareGreaterEqual_function_type compareGreaterEqual_function_value( &::SireMaths::MultiUInt::compareGreaterEqual );
             
             MultiUInt_exposer.def( 
@@ -83,7 +83,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::compareLess
         
-            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*compareLess_function_type )( ::SireMaths::MultiUInt const & ) const;
+            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*compareLess_function_type)( ::SireMaths::MultiUInt const & ) const;
             compareLess_function_type compareLess_function_value( &::SireMaths::MultiUInt::compareLess );
             
             MultiUInt_exposer.def( 
@@ -94,7 +94,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::compareLessEqual
         
-            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*compareLessEqual_function_type )( ::SireMaths::MultiUInt const & ) const;
+            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*compareLessEqual_function_type)( ::SireMaths::MultiUInt const & ) const;
             compareLessEqual_function_type compareLessEqual_function_value( &::SireMaths::MultiUInt::compareLessEqual );
             
             MultiUInt_exposer.def( 
@@ -105,7 +105,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::compareNotEqual
         
-            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*compareNotEqual_function_type )( ::SireMaths::MultiUInt const & ) const;
+            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*compareNotEqual_function_type)( ::SireMaths::MultiUInt const & ) const;
             compareNotEqual_function_type compareNotEqual_function_value( &::SireMaths::MultiUInt::compareNotEqual );
             
             MultiUInt_exposer.def( 
@@ -126,7 +126,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::doubleSum
         
-            typedef ::quint64 ( ::SireMaths::MultiUInt::*doubleSum_function_type )(  ) const;
+            typedef ::quint64 ( ::SireMaths::MultiUInt::*doubleSum_function_type)(  ) const;
             doubleSum_function_type doubleSum_function_value( &::SireMaths::MultiUInt::doubleSum );
             
             MultiUInt_exposer.def( 
@@ -158,7 +158,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::get
         
-            typedef ::quint32 ( ::SireMaths::MultiUInt::*get_function_type )( int ) const;
+            typedef ::quint32 ( ::SireMaths::MultiUInt::*get_function_type)( int ) const;
             get_function_type get_function_value( &::SireMaths::MultiUInt::get );
             
             MultiUInt_exposer.def( 
@@ -169,7 +169,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::getitem
         
-            typedef ::quint32 ( ::SireMaths::MultiUInt::*getitem_function_type )( int ) const;
+            typedef ::quint32 ( ::SireMaths::MultiUInt::*getitem_function_type)( int ) const;
             getitem_function_type getitem_function_value( &::SireMaths::MultiUInt::getitem );
             
             MultiUInt_exposer.def( 
@@ -180,7 +180,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::hasBinaryOne
         
-            typedef bool ( ::SireMaths::MultiUInt::*hasBinaryOne_function_type )(  ) const;
+            typedef bool ( ::SireMaths::MultiUInt::*hasBinaryOne_function_type)(  ) const;
             hasBinaryOne_function_type hasBinaryOne_function_value( &::SireMaths::MultiUInt::hasBinaryOne );
             
             MultiUInt_exposer.def( 
@@ -190,7 +190,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::hasBinaryZero
         
-            typedef bool ( ::SireMaths::MultiUInt::*hasBinaryZero_function_type )(  ) const;
+            typedef bool ( ::SireMaths::MultiUInt::*hasBinaryZero_function_type)(  ) const;
             hasBinaryZero_function_type hasBinaryZero_function_value( &::SireMaths::MultiUInt::hasBinaryZero );
             
             MultiUInt_exposer.def( 
@@ -200,7 +200,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::isAligned
         
-            typedef bool ( ::SireMaths::MultiUInt::*isAligned_function_type )(  ) const;
+            typedef bool ( ::SireMaths::MultiUInt::*isAligned_function_type)(  ) const;
             isAligned_function_type isAligned_function_value( &::SireMaths::MultiUInt::isAligned );
             
             MultiUInt_exposer.def( 
@@ -210,7 +210,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::isBinaryOne
         
-            typedef bool ( ::SireMaths::MultiUInt::*isBinaryOne_function_type )(  ) const;
+            typedef bool ( ::SireMaths::MultiUInt::*isBinaryOne_function_type)(  ) const;
             isBinaryOne_function_type isBinaryOne_function_value( &::SireMaths::MultiUInt::isBinaryOne );
             
             MultiUInt_exposer.def( 
@@ -220,7 +220,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::isBinaryZero
         
-            typedef bool ( ::SireMaths::MultiUInt::*isBinaryZero_function_type )(  ) const;
+            typedef bool ( ::SireMaths::MultiUInt::*isBinaryZero_function_type)(  ) const;
             isBinaryZero_function_type isBinaryZero_function_value( &::SireMaths::MultiUInt::isBinaryZero );
             
             MultiUInt_exposer.def( 
@@ -230,7 +230,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::isNotBinaryOne
         
-            typedef bool ( ::SireMaths::MultiUInt::*isNotBinaryOne_function_type )(  ) const;
+            typedef bool ( ::SireMaths::MultiUInt::*isNotBinaryOne_function_type)(  ) const;
             isNotBinaryOne_function_type isNotBinaryOne_function_value( &::SireMaths::MultiUInt::isNotBinaryOne );
             
             MultiUInt_exposer.def( 
@@ -240,7 +240,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::isNotBinaryZero
         
-            typedef bool ( ::SireMaths::MultiUInt::*isNotBinaryZero_function_type )(  ) const;
+            typedef bool ( ::SireMaths::MultiUInt::*isNotBinaryZero_function_type)(  ) const;
             isNotBinaryZero_function_type isNotBinaryZero_function_value( &::SireMaths::MultiUInt::isNotBinaryZero );
             
             MultiUInt_exposer.def( 
@@ -250,7 +250,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::logicalAnd
         
-            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*logicalAnd_function_type )( ::SireMaths::MultiUInt const & ) const;
+            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*logicalAnd_function_type)( ::SireMaths::MultiUInt const & ) const;
             logicalAnd_function_type logicalAnd_function_value( &::SireMaths::MultiUInt::logicalAnd );
             
             MultiUInt_exposer.def( 
@@ -261,7 +261,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::logicalAndNot
         
-            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*logicalAndNot_function_type )( ::SireMaths::MultiUInt const & ) const;
+            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*logicalAndNot_function_type)( ::SireMaths::MultiUInt const & ) const;
             logicalAndNot_function_type logicalAndNot_function_value( &::SireMaths::MultiUInt::logicalAndNot );
             
             MultiUInt_exposer.def( 
@@ -272,7 +272,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::logicalNot
         
-            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*logicalNot_function_type )(  ) const;
+            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*logicalNot_function_type)(  ) const;
             logicalNot_function_type logicalNot_function_value( &::SireMaths::MultiUInt::logicalNot );
             
             MultiUInt_exposer.def( 
@@ -282,7 +282,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::logicalOr
         
-            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*logicalOr_function_type )( ::SireMaths::MultiUInt const & ) const;
+            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*logicalOr_function_type)( ::SireMaths::MultiUInt const & ) const;
             logicalOr_function_type logicalOr_function_value( &::SireMaths::MultiUInt::logicalOr );
             
             MultiUInt_exposer.def( 
@@ -293,7 +293,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::logicalXor
         
-            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*logicalXor_function_type )( ::SireMaths::MultiUInt const & ) const;
+            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*logicalXor_function_type)( ::SireMaths::MultiUInt const & ) const;
             logicalXor_function_type logicalXor_function_value( &::SireMaths::MultiUInt::logicalXor );
             
             MultiUInt_exposer.def( 
@@ -304,7 +304,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::max
         
-            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*max_function_type )( ::SireMaths::MultiUInt const & ) const;
+            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*max_function_type)( ::SireMaths::MultiUInt const & ) const;
             max_function_type max_function_value( &::SireMaths::MultiUInt::max );
             
             MultiUInt_exposer.def( 
@@ -315,7 +315,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::min
         
-            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*min_function_type )( ::SireMaths::MultiUInt const & ) const;
+            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*min_function_type)( ::SireMaths::MultiUInt const & ) const;
             min_function_type min_function_value( &::SireMaths::MultiUInt::min );
             
             MultiUInt_exposer.def( 
@@ -333,7 +333,7 @@ void register_MultiUInt_class(){
         MultiUInt_exposer.def( bp::self <= bp::self );
         { //::SireMaths::MultiUInt::operator=
         
-            typedef ::SireMaths::MultiUInt & ( ::SireMaths::MultiUInt::*assign_function_type )( ::SireMaths::MultiUInt const & ) ;
+            typedef ::SireMaths::MultiUInt & ( ::SireMaths::MultiUInt::*assign_function_type)( ::SireMaths::MultiUInt const & ) ;
             assign_function_type assign_function_value( &::SireMaths::MultiUInt::operator= );
             
             MultiUInt_exposer.def( 
@@ -345,7 +345,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::operator=
         
-            typedef ::SireMaths::MultiUInt & ( ::SireMaths::MultiUInt::*assign_function_type )( ::quint32 ) ;
+            typedef ::SireMaths::MultiUInt & ( ::SireMaths::MultiUInt::*assign_function_type)( ::quint32 ) ;
             assign_function_type assign_function_value( &::SireMaths::MultiUInt::operator= );
             
             MultiUInt_exposer.def( 
@@ -360,7 +360,7 @@ void register_MultiUInt_class(){
         MultiUInt_exposer.def( bp::self >= bp::self );
         { //::SireMaths::MultiUInt::operator[]
         
-            typedef ::quint32 ( ::SireMaths::MultiUInt::*__getitem___function_type )( int ) const;
+            typedef ::quint32 ( ::SireMaths::MultiUInt::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMaths::MultiUInt::operator[] );
             
             MultiUInt_exposer.def( 
@@ -373,7 +373,7 @@ void register_MultiUInt_class(){
         MultiUInt_exposer.def( bp::self | bp::self );
         { //::SireMaths::MultiUInt::reinterpretCastToFloat
         
-            typedef ::SireMaths::MultiFloat ( ::SireMaths::MultiUInt::*reinterpretCastToFloat_function_type )(  ) const;
+            typedef ::SireMaths::MultiFloat ( ::SireMaths::MultiUInt::*reinterpretCastToFloat_function_type)(  ) const;
             reinterpretCastToFloat_function_type reinterpretCastToFloat_function_value( &::SireMaths::MultiUInt::reinterpretCastToFloat );
             
             MultiUInt_exposer.def( 
@@ -383,7 +383,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::rotate
         
-            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*rotate_function_type )(  ) const;
+            typedef ::SireMaths::MultiUInt ( ::SireMaths::MultiUInt::*rotate_function_type)(  ) const;
             rotate_function_type rotate_function_value( &::SireMaths::MultiUInt::rotate );
             
             MultiUInt_exposer.def( 
@@ -393,7 +393,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::set
         
-            typedef void ( ::SireMaths::MultiUInt::*set_function_type )( int,::quint32 ) ;
+            typedef void ( ::SireMaths::MultiUInt::*set_function_type)( int,::quint32 ) ;
             set_function_type set_function_value( &::SireMaths::MultiUInt::set );
             
             MultiUInt_exposer.def( 
@@ -414,7 +414,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::sum
         
-            typedef ::quint32 ( ::SireMaths::MultiUInt::*sum_function_type )(  ) const;
+            typedef ::quint32 ( ::SireMaths::MultiUInt::*sum_function_type)(  ) const;
             sum_function_type sum_function_value( &::SireMaths::MultiUInt::sum );
             
             MultiUInt_exposer.def( 
@@ -435,7 +435,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::toBinaryString
         
-            typedef ::QString ( ::SireMaths::MultiUInt::*toBinaryString_function_type )(  ) const;
+            typedef ::QString ( ::SireMaths::MultiUInt::*toBinaryString_function_type)(  ) const;
             toBinaryString_function_type toBinaryString_function_value( &::SireMaths::MultiUInt::toBinaryString );
             
             MultiUInt_exposer.def( 
@@ -445,7 +445,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::toString
         
-            typedef ::QString ( ::SireMaths::MultiUInt::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMaths::MultiUInt::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMaths::MultiUInt::toString );
             
             MultiUInt_exposer.def( 
@@ -465,7 +465,7 @@ void register_MultiUInt_class(){
         }
         { //::SireMaths::MultiUInt::what
         
-            typedef char const * ( ::SireMaths::MultiUInt::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMaths::MultiUInt::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMaths::MultiUInt::what );
             
             MultiUInt_exposer.def( 

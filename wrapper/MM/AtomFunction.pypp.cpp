@@ -31,7 +31,7 @@ void register_AtomFunction_class(){
         bp::scope AtomFunction_scope( AtomFunction_exposer );
         { //::SireMM::AtomFunction::function
         
-            typedef ::SireCAS::Expression const & ( ::SireMM::AtomFunction::*function_function_type )(  ) const;
+            typedef ::SireCAS::Expression const & ( ::SireMM::AtomFunction::*function_function_type)(  ) const;
             function_function_type function_function_value( &::SireMM::AtomFunction::function );
             
             AtomFunction_exposer.def( 

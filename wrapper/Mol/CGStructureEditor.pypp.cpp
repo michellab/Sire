@@ -61,7 +61,7 @@ void register_CGStructureEditor_class(){
         CGStructureEditor_exposer.def( bp::init< SireMol::CGStructureEditor const & >(( bp::arg("other") )) );
         { //::SireMol::CGStructureEditor::add
         
-            typedef ::SireMol::AtomStructureEditor ( ::SireMol::CGStructureEditor::*add_function_type )( ::SireMol::AtomName const & ) ;
+            typedef ::SireMol::AtomStructureEditor ( ::SireMol::CGStructureEditor::*add_function_type)( ::SireMol::AtomName const & ) ;
             add_function_type add_function_value( &::SireMol::CGStructureEditor::add );
             
             CGStructureEditor_exposer.def( 
@@ -72,7 +72,7 @@ void register_CGStructureEditor_class(){
         }
         { //::SireMol::CGStructureEditor::add
         
-            typedef ::SireMol::AtomStructureEditor ( ::SireMol::CGStructureEditor::*add_function_type )( ::SireMol::AtomNum ) ;
+            typedef ::SireMol::AtomStructureEditor ( ::SireMol::CGStructureEditor::*add_function_type)( ::SireMol::AtomNum ) ;
             add_function_type add_function_value( &::SireMol::CGStructureEditor::add );
             
             CGStructureEditor_exposer.def( 
@@ -83,7 +83,7 @@ void register_CGStructureEditor_class(){
         }
         { //::SireMol::CGStructureEditor::atom
         
-            typedef ::SireMol::AtomStructureEditor ( ::SireMol::CGStructureEditor::*atom_function_type )( int ) ;
+            typedef ::SireMol::AtomStructureEditor ( ::SireMol::CGStructureEditor::*atom_function_type)( int ) ;
             atom_function_type atom_function_value( &::SireMol::CGStructureEditor::atom );
             
             CGStructureEditor_exposer.def( 
@@ -94,7 +94,7 @@ void register_CGStructureEditor_class(){
         }
         { //::SireMol::CGStructureEditor::atom
         
-            typedef ::SireMol::AtomStructureEditor ( ::SireMol::CGStructureEditor::*atom_function_type )( ::SireMol::AtomID const & ) ;
+            typedef ::SireMol::AtomStructureEditor ( ::SireMol::CGStructureEditor::*atom_function_type)( ::SireMol::AtomID const & ) ;
             atom_function_type atom_function_value( &::SireMol::CGStructureEditor::atom );
             
             CGStructureEditor_exposer.def( 
@@ -105,7 +105,7 @@ void register_CGStructureEditor_class(){
         }
         { //::SireMol::CGStructureEditor::commit
         
-            typedef ::SireMol::CutGroup ( ::SireMol::CGStructureEditor::*commit_function_type )(  ) const;
+            typedef ::SireMol::CutGroup ( ::SireMol::CGStructureEditor::*commit_function_type)(  ) const;
             commit_function_type commit_function_value( &::SireMol::CGStructureEditor::commit );
             
             CGStructureEditor_exposer.def( 
@@ -115,7 +115,7 @@ void register_CGStructureEditor_class(){
         }
         { //::SireMol::CGStructureEditor::index
         
-            typedef ::SireMol::CGIdx ( ::SireMol::CGStructureEditor::*index_function_type )(  ) const;
+            typedef ::SireMol::CGIdx ( ::SireMol::CGStructureEditor::*index_function_type)(  ) const;
             index_function_type index_function_value( &::SireMol::CGStructureEditor::index );
             
             CGStructureEditor_exposer.def( 
@@ -125,7 +125,7 @@ void register_CGStructureEditor_class(){
         }
         { //::SireMol::CGStructureEditor::molecule
         
-            typedef ::SireMol::MolStructureEditor ( ::SireMol::CGStructureEditor::*molecule_function_type )(  ) ;
+            typedef ::SireMol::MolStructureEditor ( ::SireMol::CGStructureEditor::*molecule_function_type)(  ) ;
             molecule_function_type molecule_function_value( &::SireMol::CGStructureEditor::molecule );
             
             CGStructureEditor_exposer.def( 
@@ -135,7 +135,7 @@ void register_CGStructureEditor_class(){
         }
         { //::SireMol::CGStructureEditor::nAtoms
         
-            typedef int ( ::SireMol::CGStructureEditor::*nAtoms_function_type )(  ) const;
+            typedef int ( ::SireMol::CGStructureEditor::*nAtoms_function_type)(  ) const;
             nAtoms_function_type nAtoms_function_value( &::SireMol::CGStructureEditor::nAtoms );
             
             CGStructureEditor_exposer.def( 
@@ -145,7 +145,7 @@ void register_CGStructureEditor_class(){
         }
         { //::SireMol::CGStructureEditor::name
         
-            typedef ::SireMol::CGName const & ( ::SireMol::CGStructureEditor::*name_function_type )(  ) const;
+            typedef ::SireMol::CGName const & ( ::SireMol::CGStructureEditor::*name_function_type)(  ) const;
             name_function_type name_function_value( &::SireMol::CGStructureEditor::name );
             
             CGStructureEditor_exposer.def( 
@@ -156,7 +156,7 @@ void register_CGStructureEditor_class(){
         }
         { //::SireMol::CGStructureEditor::operator=
         
-            typedef ::SireMol::CGStructureEditor & ( ::SireMol::CGStructureEditor::*assign_function_type )( ::SireMol::CutGroup const & ) ;
+            typedef ::SireMol::CGStructureEditor & ( ::SireMol::CGStructureEditor::*assign_function_type)( ::SireMol::CutGroup const & ) ;
             assign_function_type assign_function_value( &::SireMol::CGStructureEditor::operator= );
             
             CGStructureEditor_exposer.def( 
@@ -168,7 +168,7 @@ void register_CGStructureEditor_class(){
         }
         { //::SireMol::CGStructureEditor::operator=
         
-            typedef ::SireMol::CGStructureEditor & ( ::SireMol::CGStructureEditor::*assign_function_type )( ::SireMol::CGStructureEditor const & ) ;
+            typedef ::SireMol::CGStructureEditor & ( ::SireMol::CGStructureEditor::*assign_function_type)( ::SireMol::CGStructureEditor const & ) ;
             assign_function_type assign_function_value( &::SireMol::CGStructureEditor::operator= );
             
             CGStructureEditor_exposer.def( 
@@ -180,7 +180,7 @@ void register_CGStructureEditor_class(){
         }
         { //::SireMol::CGStructureEditor::reindex
         
-            typedef ::SireMol::CGStructureEditor & ( ::SireMol::CGStructureEditor::*reindex_function_type )( ::SireMol::CGIdx ) ;
+            typedef ::SireMol::CGStructureEditor & ( ::SireMol::CGStructureEditor::*reindex_function_type)( ::SireMol::CGIdx ) ;
             reindex_function_type reindex_function_value( &::SireMol::CGStructureEditor::reindex );
             
             CGStructureEditor_exposer.def( 
@@ -192,7 +192,7 @@ void register_CGStructureEditor_class(){
         }
         { //::SireMol::CGStructureEditor::remove
         
-            typedef ::SireMol::MolStructureEditor ( ::SireMol::CGStructureEditor::*remove_function_type )(  ) ;
+            typedef ::SireMol::MolStructureEditor ( ::SireMol::CGStructureEditor::*remove_function_type)(  ) ;
             remove_function_type remove_function_value( &::SireMol::CGStructureEditor::remove );
             
             CGStructureEditor_exposer.def( 
@@ -203,7 +203,7 @@ void register_CGStructureEditor_class(){
         }
         { //::SireMol::CGStructureEditor::remove
         
-            typedef ::SireMol::CGStructureEditor & ( ::SireMol::CGStructureEditor::*remove_function_type )( ::SireMol::AtomID const & ) ;
+            typedef ::SireMol::CGStructureEditor & ( ::SireMol::CGStructureEditor::*remove_function_type)( ::SireMol::AtomID const & ) ;
             remove_function_type remove_function_value( &::SireMol::CGStructureEditor::remove );
             
             CGStructureEditor_exposer.def( 
@@ -215,7 +215,7 @@ void register_CGStructureEditor_class(){
         }
         { //::SireMol::CGStructureEditor::remove
         
-            typedef ::SireMol::CGStructureEditor & ( ::SireMol::CGStructureEditor::*remove_function_type )( int ) ;
+            typedef ::SireMol::CGStructureEditor & ( ::SireMol::CGStructureEditor::*remove_function_type)( int ) ;
             remove_function_type remove_function_value( &::SireMol::CGStructureEditor::remove );
             
             CGStructureEditor_exposer.def( 
@@ -227,7 +227,7 @@ void register_CGStructureEditor_class(){
         }
         { //::SireMol::CGStructureEditor::rename
         
-            typedef ::SireMol::CGStructureEditor & ( ::SireMol::CGStructureEditor::*rename_function_type )( ::SireMol::CGName const & ) ;
+            typedef ::SireMol::CGStructureEditor & ( ::SireMol::CGStructureEditor::*rename_function_type)( ::SireMol::CGName const & ) ;
             rename_function_type rename_function_value( &::SireMol::CGStructureEditor::rename );
             
             CGStructureEditor_exposer.def( 
@@ -239,7 +239,7 @@ void register_CGStructureEditor_class(){
         }
         { //::SireMol::CGStructureEditor::select
         
-            typedef ::SireMol::AtomStructureEditor ( ::SireMol::CGStructureEditor::*select_function_type )( int ) ;
+            typedef ::SireMol::AtomStructureEditor ( ::SireMol::CGStructureEditor::*select_function_type)( int ) ;
             select_function_type select_function_value( &::SireMol::CGStructureEditor::select );
             
             CGStructureEditor_exposer.def( 
@@ -250,7 +250,7 @@ void register_CGStructureEditor_class(){
         }
         { //::SireMol::CGStructureEditor::select
         
-            typedef ::SireMol::AtomStructureEditor ( ::SireMol::CGStructureEditor::*select_function_type )( ::SireMol::AtomID const & ) ;
+            typedef ::SireMol::AtomStructureEditor ( ::SireMol::CGStructureEditor::*select_function_type)( ::SireMol::AtomID const & ) ;
             select_function_type select_function_value( &::SireMol::CGStructureEditor::select );
             
             CGStructureEditor_exposer.def( 
@@ -261,7 +261,7 @@ void register_CGStructureEditor_class(){
         }
         { //::SireMol::CGStructureEditor::selectedAll
         
-            typedef bool ( ::SireMol::CGStructureEditor::*selectedAll_function_type )(  ) const;
+            typedef bool ( ::SireMol::CGStructureEditor::*selectedAll_function_type)(  ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::CGStructureEditor::selectedAll );
             
             CGStructureEditor_exposer.def( 
@@ -271,7 +271,7 @@ void register_CGStructureEditor_class(){
         }
         { //::SireMol::CGStructureEditor::toString
         
-            typedef ::QString ( ::SireMol::CGStructureEditor::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::CGStructureEditor::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::CGStructureEditor::toString );
             
             CGStructureEditor_exposer.def( 
@@ -281,7 +281,7 @@ void register_CGStructureEditor_class(){
         }
         { //::SireMol::CGStructureEditor::transfer
         
-            typedef ::SireMol::CGStructureEditor & ( ::SireMol::CGStructureEditor::*transfer_function_type )( ::SireMol::AtomID const &,::SireMol::CGID const & ) ;
+            typedef ::SireMol::CGStructureEditor & ( ::SireMol::CGStructureEditor::*transfer_function_type)( ::SireMol::AtomID const &,::SireMol::CGID const & ) ;
             transfer_function_type transfer_function_value( &::SireMol::CGStructureEditor::transfer );
             
             CGStructureEditor_exposer.def( 
@@ -293,7 +293,7 @@ void register_CGStructureEditor_class(){
         }
         { //::SireMol::CGStructureEditor::transfer
         
-            typedef ::SireMol::CGStructureEditor & ( ::SireMol::CGStructureEditor::*transfer_function_type )( int,::SireMol::CGID const & ) ;
+            typedef ::SireMol::CGStructureEditor & ( ::SireMol::CGStructureEditor::*transfer_function_type)( int,::SireMol::CGID const & ) ;
             transfer_function_type transfer_function_value( &::SireMol::CGStructureEditor::transfer );
             
             CGStructureEditor_exposer.def( 
@@ -305,7 +305,7 @@ void register_CGStructureEditor_class(){
         }
         { //::SireMol::CGStructureEditor::transferAll
         
-            typedef ::SireMol::CGStructureEditor & ( ::SireMol::CGStructureEditor::*transferAll_function_type )( ::SireMol::CGID const & ) ;
+            typedef ::SireMol::CGStructureEditor & ( ::SireMol::CGStructureEditor::*transferAll_function_type)( ::SireMol::CGID const & ) ;
             transferAll_function_type transferAll_function_value( &::SireMol::CGStructureEditor::transferAll );
             
             CGStructureEditor_exposer.def( 
@@ -327,7 +327,7 @@ void register_CGStructureEditor_class(){
         }
         { //::SireMol::CGStructureEditor::what
         
-            typedef char const * ( ::SireMol::CGStructureEditor::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::CGStructureEditor::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::CGStructureEditor::what );
             
             CGStructureEditor_exposer.def( 

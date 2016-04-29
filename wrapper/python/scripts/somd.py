@@ -1,4 +1,3 @@
-
 from Sire.Tools import OpenMMMD
 from Sire.Tools import readParams
 
@@ -9,12 +8,12 @@ import os
 import sys
 
 parser = argparse.ArgumentParser(description="Perform molecular dynamics using OpenMM",
-                                 epilog="sommmd is built using Sire and OpenMM and is distributed "
+                                 epilog="somd is built using Sire and OpenMM and is distributed "
                                         "under the GPL. For more information please visit "
-                                        "http://siremol.org/sommmd",
-                                 prog="sommmd")
+                                        "http://siremol.org",
+                                 prog="somd")
 
-parser.add_argument('-C', '--config', nargs="?", 
+parser.add_argument('-C', '--config', nargs="?",
                     help='Supply an optional CONFIG file to control the calculation.')
 
 parser.add_argument('-H', '--help-config', action="store_true",
@@ -50,13 +49,14 @@ args = parser.parse_args()
 must_exit = False
 
 if args.author:
-    print("\nsommmd was written by Gaetano Calabro, Julien Michel and Christopher Woods (C) 2014")
+    print("\nsomd was written by Gaetano Calabro, Julien Michel, Antonia Mey and Christopher Woods (C) 2015")
     print("It is based on the OpenMMMD module distributed in Sire.")
     must_exit = True
 
 if args.version:
-    print("\sommmd version 0.1")
-    print(Sire.Config.versionString())
+    print("somd -- from Sire release version <%s>" %Sire.__version__)
+    print("This particular release can be downloaded here: "
+          "https://github.com/michellab/Sire/releases/tag/v%s" %Sire.__version__)
     must_exit = True
 
 if args.help_config:
@@ -113,7 +113,7 @@ if not (os.path.exists(coord_file) and os.path.exists(top_file)):
 
     sys.exit(-1)
 
-print("\nRunning a sommmd calculation using files %s and %s." % (top_file,coord_file))
+#print("\nRunning a somd calculation using files %s and %s." % (top_file, coord_file))
 
 # Now lets run the OpenMMMD calculation
 OpenMMMD.run(params)

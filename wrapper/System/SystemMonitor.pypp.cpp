@@ -31,7 +31,7 @@ void register_SystemMonitor_class(){
         bp::scope SystemMonitor_scope( SystemMonitor_exposer );
         { //::SireSystem::SystemMonitor::clearStatistics
         
-            typedef void ( ::SireSystem::SystemMonitor::*clearStatistics_function_type )(  ) ;
+            typedef void ( ::SireSystem::SystemMonitor::*clearStatistics_function_type)(  ) ;
             clearStatistics_function_type clearStatistics_function_value( &::SireSystem::SystemMonitor::clearStatistics );
             
             SystemMonitor_exposer.def( 
@@ -41,7 +41,7 @@ void register_SystemMonitor_class(){
         }
         { //::SireSystem::SystemMonitor::monitor
         
-            typedef void ( ::SireSystem::SystemMonitor::*monitor_function_type )( ::SireSystem::System & ) ;
+            typedef void ( ::SireSystem::SystemMonitor::*monitor_function_type)( ::SireSystem::System & ) ;
             monitor_function_type monitor_function_value( &::SireSystem::SystemMonitor::monitor );
             
             SystemMonitor_exposer.def( 

@@ -33,7 +33,7 @@ void register_SegFloatProperty_class(){
         { //::SireMol::SegProperty< double >::array
         
             typedef SireMol::SegProperty< double > exported_class_t;
-            typedef ::QVector< double > const & ( ::SireMol::SegProperty< double >::*array_function_type )(  ) const;
+            typedef ::QVector< double > const & ( ::SireMol::SegProperty< double >::*array_function_type)(  ) const;
             array_function_type array_function_value( &::SireMol::SegProperty< double >::array );
             
             SegFloatProperty_exposer.def( 
@@ -45,7 +45,7 @@ void register_SegFloatProperty_class(){
         { //::SireMol::SegProperty< double >::assertCanConvert
         
             typedef SireMol::SegProperty< double > exported_class_t;
-            typedef void ( ::SireMol::SegProperty< double >::*assertCanConvert_function_type )( ::QVariant const & ) const;
+            typedef void ( ::SireMol::SegProperty< double >::*assertCanConvert_function_type)( ::QVariant const & ) const;
             assertCanConvert_function_type assertCanConvert_function_value( &::SireMol::SegProperty< double >::assertCanConvert );
             
             SegFloatProperty_exposer.def( 
@@ -57,7 +57,7 @@ void register_SegFloatProperty_class(){
         { //::SireMol::SegProperty< double >::assignFrom
         
             typedef SireMol::SegProperty< double > exported_class_t;
-            typedef void ( ::SireMol::SegProperty< double >::*assignFrom_function_type )( ::SireMol::SegProperty< QVariant > const & ) ;
+            typedef void ( ::SireMol::SegProperty< double >::*assignFrom_function_type)( ::SireMol::SegProperty< QVariant > const & ) ;
             assignFrom_function_type assignFrom_function_value( &::SireMol::SegProperty< double >::assignFrom );
             
             SegFloatProperty_exposer.def( 
@@ -69,7 +69,7 @@ void register_SegFloatProperty_class(){
         { //::SireMol::SegProperty< double >::at
         
             typedef SireMol::SegProperty< double > exported_class_t;
-            typedef double const & ( ::SireMol::SegProperty< double >::*at_function_type )( ::SireMol::SegIdx const & ) const;
+            typedef double const & ( ::SireMol::SegProperty< double >::*at_function_type)( ::SireMol::SegIdx const & ) const;
             at_function_type at_function_value( &::SireMol::SegProperty< double >::at );
             
             SegFloatProperty_exposer.def( 
@@ -82,7 +82,7 @@ void register_SegFloatProperty_class(){
         { //::SireMol::SegProperty< double >::canConvert
         
             typedef SireMol::SegProperty< double > exported_class_t;
-            typedef bool ( ::SireMol::SegProperty< double >::*canConvert_function_type )( ::QVariant const & ) const;
+            typedef bool ( ::SireMol::SegProperty< double >::*canConvert_function_type)( ::QVariant const & ) const;
             canConvert_function_type canConvert_function_value( &::SireMol::SegProperty< double >::canConvert );
             
             SegFloatProperty_exposer.def( 
@@ -94,7 +94,7 @@ void register_SegFloatProperty_class(){
         { //::SireMol::SegProperty< double >::count
         
             typedef SireMol::SegProperty< double > exported_class_t;
-            typedef int ( ::SireMol::SegProperty< double >::*count_function_type )(  ) const;
+            typedef int ( ::SireMol::SegProperty< double >::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMol::SegProperty< double >::count );
             
             SegFloatProperty_exposer.def( 
@@ -117,7 +117,7 @@ void register_SegFloatProperty_class(){
         { //::SireMol::SegProperty< double >::get
         
             typedef SireMol::SegProperty< double > exported_class_t;
-            typedef double const & ( ::SireMol::SegProperty< double >::*get_function_type )( ::SireMol::SegIdx const & ) const;
+            typedef double const & ( ::SireMol::SegProperty< double >::*get_function_type)( ::SireMol::SegIdx const & ) const;
             get_function_type get_function_value( &::SireMol::SegProperty< double >::get );
             
             SegFloatProperty_exposer.def( 
@@ -130,7 +130,7 @@ void register_SegFloatProperty_class(){
         { //::SireMol::SegProperty< double >::isCompatibleWith
         
             typedef SireMol::SegProperty< double > exported_class_t;
-            typedef bool ( ::SireMol::SegProperty< double >::*isCompatibleWith_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef bool ( ::SireMol::SegProperty< double >::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::SegProperty< double >::isCompatibleWith );
             
             SegFloatProperty_exposer.def( 
@@ -142,7 +142,7 @@ void register_SegFloatProperty_class(){
         { //::SireMol::SegProperty< double >::isEmpty
         
             typedef SireMol::SegProperty< double > exported_class_t;
-            typedef bool ( ::SireMol::SegProperty< double >::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::SegProperty< double >::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::SegProperty< double >::isEmpty );
             
             SegFloatProperty_exposer.def( 
@@ -153,7 +153,7 @@ void register_SegFloatProperty_class(){
         { //::SireMol::SegProperty< double >::nSegments
         
             typedef SireMol::SegProperty< double > exported_class_t;
-            typedef int ( ::SireMol::SegProperty< double >::*nSegments_function_type )(  ) const;
+            typedef int ( ::SireMol::SegProperty< double >::*nSegments_function_type)(  ) const;
             nSegments_function_type nSegments_function_value( &::SireMol::SegProperty< double >::nSegments );
             
             SegFloatProperty_exposer.def( 
@@ -165,7 +165,7 @@ void register_SegFloatProperty_class(){
         { //::SireMol::SegProperty< double >::operator=
         
             typedef SireMol::SegProperty< double > exported_class_t;
-            typedef ::SireMol::SegProperty< double > & ( ::SireMol::SegProperty< double >::*assign_function_type )( ::SireMol::SegProperty< double > const & ) ;
+            typedef ::SireMol::SegProperty< double > & ( ::SireMol::SegProperty< double >::*assign_function_type)( ::SireMol::SegProperty< double > const & ) ;
             assign_function_type assign_function_value( &::SireMol::SegProperty< double >::operator= );
             
             SegFloatProperty_exposer.def( 
@@ -179,7 +179,7 @@ void register_SegFloatProperty_class(){
         { //::SireMol::SegProperty< double >::operator[]
         
             typedef SireMol::SegProperty< double > exported_class_t;
-            typedef double const & ( ::SireMol::SegProperty< double >::*__getitem___function_type )( ::SireMol::SegIdx const & ) const;
+            typedef double const & ( ::SireMol::SegProperty< double >::*__getitem___function_type)( ::SireMol::SegIdx const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::SegProperty< double >::operator[] );
             
             SegFloatProperty_exposer.def( 
@@ -192,7 +192,7 @@ void register_SegFloatProperty_class(){
         { //::SireMol::SegProperty< double >::set
         
             typedef SireMol::SegProperty< double > exported_class_t;
-            typedef ::SireMol::SegProperty< double > & ( ::SireMol::SegProperty< double >::*set_function_type )( ::SireMol::SegIdx,double const & ) ;
+            typedef ::SireMol::SegProperty< double > & ( ::SireMol::SegProperty< double >::*set_function_type)( ::SireMol::SegIdx,double const & ) ;
             set_function_type set_function_value( &::SireMol::SegProperty< double >::set );
             
             SegFloatProperty_exposer.def( 
@@ -205,7 +205,7 @@ void register_SegFloatProperty_class(){
         { //::SireMol::SegProperty< double >::size
         
             typedef SireMol::SegProperty< double > exported_class_t;
-            typedef int ( ::SireMol::SegProperty< double >::*size_function_type )(  ) const;
+            typedef int ( ::SireMol::SegProperty< double >::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireMol::SegProperty< double >::size );
             
             SegFloatProperty_exposer.def( 
@@ -216,7 +216,7 @@ void register_SegFloatProperty_class(){
         { //::SireMol::SegProperty< double >::toString
         
             typedef SireMol::SegProperty< double > exported_class_t;
-            typedef ::QString ( ::SireMol::SegProperty< double >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::SegProperty< double >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::SegProperty< double >::toString );
             
             SegFloatProperty_exposer.def( 
@@ -227,7 +227,7 @@ void register_SegFloatProperty_class(){
         { //::SireMol::SegProperty< double >::toVariant
         
             typedef SireMol::SegProperty< double > exported_class_t;
-            typedef ::SireMol::SegProperty< QVariant > ( ::SireMol::SegProperty< double >::*toVariant_function_type )(  ) const;
+            typedef ::SireMol::SegProperty< QVariant > ( ::SireMol::SegProperty< double >::*toVariant_function_type)(  ) const;
             toVariant_function_type toVariant_function_value( &::SireMol::SegProperty< double >::toVariant );
             
             SegFloatProperty_exposer.def( 

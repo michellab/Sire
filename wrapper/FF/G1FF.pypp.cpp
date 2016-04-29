@@ -50,7 +50,7 @@ void register_G1FF_class(){
         bp::scope G1FF_scope( G1FF_exposer );
         { //::SireFF::G1FF::accept
         
-            typedef void ( ::SireFF::G1FF::*accept_function_type )(  ) ;
+            typedef void ( ::SireFF::G1FF::*accept_function_type)(  ) ;
             accept_function_type accept_function_value( &::SireFF::G1FF::accept );
             
             G1FF_exposer.def( 
@@ -60,7 +60,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::add
         
-            typedef void ( ::SireFF::G1FF::*add_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::G1FF::*add_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireFF::G1FF::add );
             
             G1FF_exposer.def( 
@@ -71,7 +71,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::add
         
-            typedef void ( ::SireFF::G1FF::*add_function_type )( ::SireMol::ViewsOfMol const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::G1FF::*add_function_type)( ::SireMol::ViewsOfMol const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireFF::G1FF::add );
             
             G1FF_exposer.def( 
@@ -82,7 +82,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::add
         
-            typedef void ( ::SireFF::G1FF::*add_function_type )( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::G1FF::*add_function_type)( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireFF::G1FF::add );
             
             G1FF_exposer.def( 
@@ -93,7 +93,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::add
         
-            typedef void ( ::SireFF::G1FF::*add_function_type )( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::G1FF::*add_function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
             add_function_type add_function_value( &::SireFF::G1FF::add );
             
             G1FF_exposer.def( 
@@ -104,7 +104,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::add
         
-            typedef void ( ::SireFF::G1FF::*add_function_type )( ::SireMol::MoleculeView const & ) ;
+            typedef void ( ::SireFF::G1FF::*add_function_type)( ::SireMol::MoleculeView const & ) ;
             add_function_type add_function_value( &::SireFF::G1FF::add );
             
             G1FF_exposer.def( 
@@ -115,7 +115,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::add
         
-            typedef void ( ::SireFF::G1FF::*add_function_type )( ::SireMol::ViewsOfMol const & ) ;
+            typedef void ( ::SireFF::G1FF::*add_function_type)( ::SireMol::ViewsOfMol const & ) ;
             add_function_type add_function_value( &::SireFF::G1FF::add );
             
             G1FF_exposer.def( 
@@ -126,7 +126,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::add
         
-            typedef void ( ::SireFF::G1FF::*add_function_type )( ::SireMol::Molecules const & ) ;
+            typedef void ( ::SireFF::G1FF::*add_function_type)( ::SireMol::Molecules const & ) ;
             add_function_type add_function_value( &::SireFF::G1FF::add );
             
             G1FF_exposer.def( 
@@ -137,7 +137,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::add
         
-            typedef void ( ::SireFF::G1FF::*add_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireFF::G1FF::*add_function_type)( ::SireMol::MoleculeGroup const & ) ;
             add_function_type add_function_value( &::SireFF::G1FF::add );
             
             G1FF_exposer.def( 
@@ -148,7 +148,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::addIfUnique
         
-            typedef void ( ::SireFF::G1FF::*addIfUnique_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::G1FF::*addIfUnique_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireFF::G1FF::addIfUnique );
             
             G1FF_exposer.def( 
@@ -159,7 +159,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::addIfUnique
         
-            typedef void ( ::SireFF::G1FF::*addIfUnique_function_type )( ::SireMol::ViewsOfMol const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::G1FF::*addIfUnique_function_type)( ::SireMol::ViewsOfMol const &,::SireBase::PropertyMap const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireFF::G1FF::addIfUnique );
             
             G1FF_exposer.def( 
@@ -170,7 +170,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::addIfUnique
         
-            typedef void ( ::SireFF::G1FF::*addIfUnique_function_type )( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::G1FF::*addIfUnique_function_type)( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireFF::G1FF::addIfUnique );
             
             G1FF_exposer.def( 
@@ -181,7 +181,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::addIfUnique
         
-            typedef void ( ::SireFF::G1FF::*addIfUnique_function_type )( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::G1FF::*addIfUnique_function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireFF::G1FF::addIfUnique );
             
             G1FF_exposer.def( 
@@ -192,7 +192,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::addIfUnique
         
-            typedef void ( ::SireFF::G1FF::*addIfUnique_function_type )( ::SireMol::MoleculeView const & ) ;
+            typedef void ( ::SireFF::G1FF::*addIfUnique_function_type)( ::SireMol::MoleculeView const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireFF::G1FF::addIfUnique );
             
             G1FF_exposer.def( 
@@ -203,7 +203,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::addIfUnique
         
-            typedef void ( ::SireFF::G1FF::*addIfUnique_function_type )( ::SireMol::ViewsOfMol const & ) ;
+            typedef void ( ::SireFF::G1FF::*addIfUnique_function_type)( ::SireMol::ViewsOfMol const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireFF::G1FF::addIfUnique );
             
             G1FF_exposer.def( 
@@ -214,7 +214,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::addIfUnique
         
-            typedef void ( ::SireFF::G1FF::*addIfUnique_function_type )( ::SireMol::Molecules const & ) ;
+            typedef void ( ::SireFF::G1FF::*addIfUnique_function_type)( ::SireMol::Molecules const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireFF::G1FF::addIfUnique );
             
             G1FF_exposer.def( 
@@ -225,7 +225,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::addIfUnique
         
-            typedef void ( ::SireFF::G1FF::*addIfUnique_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireFF::G1FF::*addIfUnique_function_type)( ::SireMol::MoleculeGroup const & ) ;
             addIfUnique_function_type addIfUnique_function_value( &::SireFF::G1FF::addIfUnique );
             
             G1FF_exposer.def( 
@@ -236,7 +236,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::assertContains
         
-            typedef void ( ::SireFF::G1FF::*assertContains_function_type )( ::SireMol::MGNum ) const;
+            typedef void ( ::SireFF::G1FF::*assertContains_function_type)( ::SireMol::MGNum ) const;
             assertContains_function_type assertContains_function_value( &::SireFF::G1FF::assertContains );
             
             G1FF_exposer.def( 
@@ -247,7 +247,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::at
         
-            typedef ::SireMol::MoleculeGroup const & ( ::SireFF::G1FF::*at_function_type )( ::SireMol::MGNum ) const;
+            typedef ::SireMol::MoleculeGroup const & ( ::SireFF::G1FF::*at_function_type)( ::SireMol::MGNum ) const;
             at_function_type at_function_value( &::SireFF::G1FF::at );
             
             G1FF_exposer.def( 
@@ -259,7 +259,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::needsAccepting
         
-            typedef bool ( ::SireFF::G1FF::*needsAccepting_function_type )(  ) const;
+            typedef bool ( ::SireFF::G1FF::*needsAccepting_function_type)(  ) const;
             needsAccepting_function_type needsAccepting_function_value( &::SireFF::G1FF::needsAccepting );
             
             G1FF_exposer.def( 
@@ -269,7 +269,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::remove
         
-            typedef bool ( ::SireFF::G1FF::*remove_function_type )( ::SireMol::MoleculeView const & ) ;
+            typedef bool ( ::SireFF::G1FF::*remove_function_type)( ::SireMol::MoleculeView const & ) ;
             remove_function_type remove_function_value( &::SireFF::G1FF::remove );
             
             G1FF_exposer.def( 
@@ -280,7 +280,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::remove
         
-            typedef bool ( ::SireFF::G1FF::*remove_function_type )( ::SireMol::ViewsOfMol const & ) ;
+            typedef bool ( ::SireFF::G1FF::*remove_function_type)( ::SireMol::ViewsOfMol const & ) ;
             remove_function_type remove_function_value( &::SireFF::G1FF::remove );
             
             G1FF_exposer.def( 
@@ -291,7 +291,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::remove
         
-            typedef bool ( ::SireFF::G1FF::*remove_function_type )( ::SireMol::Molecules const & ) ;
+            typedef bool ( ::SireFF::G1FF::*remove_function_type)( ::SireMol::Molecules const & ) ;
             remove_function_type remove_function_value( &::SireFF::G1FF::remove );
             
             G1FF_exposer.def( 
@@ -302,7 +302,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::remove
         
-            typedef bool ( ::SireFF::G1FF::*remove_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef bool ( ::SireFF::G1FF::*remove_function_type)( ::SireMol::MoleculeGroup const & ) ;
             remove_function_type remove_function_value( &::SireFF::G1FF::remove );
             
             G1FF_exposer.def( 
@@ -313,7 +313,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::remove
         
-            typedef bool ( ::SireFF::G1FF::*remove_function_type )( ::SireMol::MolNum ) ;
+            typedef bool ( ::SireFF::G1FF::*remove_function_type)( ::SireMol::MolNum ) ;
             remove_function_type remove_function_value( &::SireFF::G1FF::remove );
             
             G1FF_exposer.def( 
@@ -324,7 +324,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::remove
         
-            typedef bool ( ::SireFF::G1FF::*remove_function_type )( ::QSet< SireMol::MolNum > const & ) ;
+            typedef bool ( ::SireFF::G1FF::*remove_function_type)( ::QSet< SireMol::MolNum > const & ) ;
             remove_function_type remove_function_value( &::SireFF::G1FF::remove );
             
             G1FF_exposer.def( 
@@ -335,7 +335,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::removeAll
         
-            typedef bool ( ::SireFF::G1FF::*removeAll_function_type )(  ) ;
+            typedef bool ( ::SireFF::G1FF::*removeAll_function_type)(  ) ;
             removeAll_function_type removeAll_function_value( &::SireFF::G1FF::removeAll );
             
             G1FF_exposer.def( 
@@ -345,7 +345,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::removeAll
         
-            typedef bool ( ::SireFF::G1FF::*removeAll_function_type )( ::SireMol::MoleculeView const & ) ;
+            typedef bool ( ::SireFF::G1FF::*removeAll_function_type)( ::SireMol::MoleculeView const & ) ;
             removeAll_function_type removeAll_function_value( &::SireFF::G1FF::removeAll );
             
             G1FF_exposer.def( 
@@ -356,7 +356,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::removeAll
         
-            typedef bool ( ::SireFF::G1FF::*removeAll_function_type )( ::SireMol::ViewsOfMol const & ) ;
+            typedef bool ( ::SireFF::G1FF::*removeAll_function_type)( ::SireMol::ViewsOfMol const & ) ;
             removeAll_function_type removeAll_function_value( &::SireFF::G1FF::removeAll );
             
             G1FF_exposer.def( 
@@ -367,7 +367,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::removeAll
         
-            typedef bool ( ::SireFF::G1FF::*removeAll_function_type )( ::SireMol::Molecules const & ) ;
+            typedef bool ( ::SireFF::G1FF::*removeAll_function_type)( ::SireMol::Molecules const & ) ;
             removeAll_function_type removeAll_function_value( &::SireFF::G1FF::removeAll );
             
             G1FF_exposer.def( 
@@ -378,7 +378,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::removeAll
         
-            typedef bool ( ::SireFF::G1FF::*removeAll_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef bool ( ::SireFF::G1FF::*removeAll_function_type)( ::SireMol::MoleculeGroup const & ) ;
             removeAll_function_type removeAll_function_value( &::SireFF::G1FF::removeAll );
             
             G1FF_exposer.def( 
@@ -389,7 +389,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::setContents
         
-            typedef void ( ::SireFF::G1FF::*setContents_function_type )( ::SireMol::MoleculeView const & ) ;
+            typedef void ( ::SireFF::G1FF::*setContents_function_type)( ::SireMol::MoleculeView const & ) ;
             setContents_function_type setContents_function_value( &::SireFF::G1FF::setContents );
             
             G1FF_exposer.def( 
@@ -400,7 +400,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::setContents
         
-            typedef void ( ::SireFF::G1FF::*setContents_function_type )( ::SireMol::ViewsOfMol const & ) ;
+            typedef void ( ::SireFF::G1FF::*setContents_function_type)( ::SireMol::ViewsOfMol const & ) ;
             setContents_function_type setContents_function_value( &::SireFF::G1FF::setContents );
             
             G1FF_exposer.def( 
@@ -411,7 +411,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::setContents
         
-            typedef void ( ::SireFF::G1FF::*setContents_function_type )( ::SireMol::Molecules const & ) ;
+            typedef void ( ::SireFF::G1FF::*setContents_function_type)( ::SireMol::Molecules const & ) ;
             setContents_function_type setContents_function_value( &::SireFF::G1FF::setContents );
             
             G1FF_exposer.def( 
@@ -422,7 +422,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::setContents
         
-            typedef void ( ::SireFF::G1FF::*setContents_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireFF::G1FF::*setContents_function_type)( ::SireMol::MoleculeGroup const & ) ;
             setContents_function_type setContents_function_value( &::SireFF::G1FF::setContents );
             
             G1FF_exposer.def( 
@@ -433,7 +433,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::setContents
         
-            typedef void ( ::SireFF::G1FF::*setContents_function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::G1FF::*setContents_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
             setContents_function_type setContents_function_value( &::SireFF::G1FF::setContents );
             
             G1FF_exposer.def( 
@@ -444,7 +444,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::setContents
         
-            typedef void ( ::SireFF::G1FF::*setContents_function_type )( ::SireMol::ViewsOfMol const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::G1FF::*setContents_function_type)( ::SireMol::ViewsOfMol const &,::SireBase::PropertyMap const & ) ;
             setContents_function_type setContents_function_value( &::SireFF::G1FF::setContents );
             
             G1FF_exposer.def( 
@@ -455,7 +455,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::setContents
         
-            typedef void ( ::SireFF::G1FF::*setContents_function_type )( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::G1FF::*setContents_function_type)( ::SireMol::Molecules const &,::SireBase::PropertyMap const & ) ;
             setContents_function_type setContents_function_value( &::SireFF::G1FF::setContents );
             
             G1FF_exposer.def( 
@@ -466,7 +466,7 @@ void register_G1FF_class(){
         }
         { //::SireFF::G1FF::setContents
         
-            typedef void ( ::SireFF::G1FF::*setContents_function_type )( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
+            typedef void ( ::SireFF::G1FF::*setContents_function_type)( ::SireMol::MoleculeGroup const &,::SireBase::PropertyMap const & ) ;
             setContents_function_type setContents_function_value( &::SireFF::G1FF::setContents );
             
             G1FF_exposer.def( 

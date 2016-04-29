@@ -505,7 +505,9 @@ void ZMatMove::move(System &system, int nmoves, bool record_stats)
                 tuple<PartialMolecule,double> mol_and_bias = smplr.read().sample();
 
                 const PartialMolecule &oldmol = mol_and_bias.get<0>();
-                old_bias = mol_and_bias.get<1>();
+                
+                if (smplr.read().isBiased())
+                    old_bias = mol_and_bias.get<1>();
 
                 ZMatrixCoords zmatrix( oldmol.molecule(), map );
 
@@ -573,8 +575,9 @@ void ZMatMove::move(System &system, int nmoves, bool record_stats)
                 //get the new bias on this molecule
                 smplr.edit().updateFrom(system);
         
-                new_bias = smplr.read().probabilityOf( PartialMolecule(newmol,
-                                                       oldmol.selection()) );
+                if (smplr.read().isBiased())
+                    new_bias = smplr.read().probabilityOf( PartialMolecule(newmol,
+                                                           oldmol.selection()) );
             }
 
             //calculate the energy of the system

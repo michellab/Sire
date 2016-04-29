@@ -20,6 +20,7 @@
 #include "multifloat.h"
 #include "multiint.h"
 #include "multiuint.h"
+#include "multivector.h"
 #include "n4matrix.h"
 #include "nmatrix.h"
 #include "nvector.h"

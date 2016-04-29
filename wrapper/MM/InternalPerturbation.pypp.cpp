@@ -41,7 +41,7 @@ void register_InternalPerturbation_class(){
         bp::scope InternalPerturbation_scope( InternalPerturbation_exposer );
         { //::SireMM::InternalPerturbation::baseExpression
         
-            typedef ::SireCAS::Expression const & ( ::SireMM::InternalPerturbation::*baseExpression_function_type )(  ) const;
+            typedef ::SireCAS::Expression const & ( ::SireMM::InternalPerturbation::*baseExpression_function_type)(  ) const;
             baseExpression_function_type baseExpression_function_value( &::SireMM::InternalPerturbation::baseExpression );
             
             InternalPerturbation_exposer.def( 
@@ -52,7 +52,7 @@ void register_InternalPerturbation_class(){
         }
         { //::SireMM::InternalPerturbation::finalForms
         
-            typedef ::SireCAS::Identities const & ( ::SireMM::InternalPerturbation::*finalForms_function_type )(  ) const;
+            typedef ::SireCAS::Identities const & ( ::SireMM::InternalPerturbation::*finalForms_function_type)(  ) const;
             finalForms_function_type finalForms_function_value( &::SireMM::InternalPerturbation::finalForms );
             
             InternalPerturbation_exposer.def( 
@@ -63,7 +63,7 @@ void register_InternalPerturbation_class(){
         }
         { //::SireMM::InternalPerturbation::initialForms
         
-            typedef ::SireCAS::Identities const & ( ::SireMM::InternalPerturbation::*initialForms_function_type )(  ) const;
+            typedef ::SireCAS::Identities const & ( ::SireMM::InternalPerturbation::*initialForms_function_type)(  ) const;
             initialForms_function_type initialForms_function_value( &::SireMM::InternalPerturbation::initialForms );
             
             InternalPerturbation_exposer.def( 
@@ -74,7 +74,7 @@ void register_InternalPerturbation_class(){
         }
         { //::SireMM::InternalPerturbation::perturbExpression
         
-            typedef ::SireCAS::Expression const & ( ::SireMM::InternalPerturbation::*perturbExpression_function_type )(  ) const;
+            typedef ::SireCAS::Expression const & ( ::SireMM::InternalPerturbation::*perturbExpression_function_type)(  ) const;
             perturbExpression_function_type perturbExpression_function_value( &::SireMM::InternalPerturbation::perturbExpression );
             
             InternalPerturbation_exposer.def( 
@@ -85,7 +85,7 @@ void register_InternalPerturbation_class(){
         }
         { //::SireMM::InternalPerturbation::recreate
         
-            typedef ::SireMol::PerturbationPtr ( ::SireMM::InternalPerturbation::*recreate_function_type )( ::SireCAS::Expression const & ) const;
+            typedef ::SireMol::PerturbationPtr ( ::SireMM::InternalPerturbation::*recreate_function_type)( ::SireCAS::Expression const & ) const;
             recreate_function_type recreate_function_value( &::SireMM::InternalPerturbation::recreate );
             
             InternalPerturbation_exposer.def( 
@@ -96,7 +96,7 @@ void register_InternalPerturbation_class(){
         }
         { //::SireMM::InternalPerturbation::recreate
         
-            typedef ::SireMol::PerturbationPtr ( ::SireMM::InternalPerturbation::*recreate_function_type )( ::SireCAS::Expression const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::PerturbationPtr ( ::SireMM::InternalPerturbation::*recreate_function_type)( ::SireCAS::Expression const &,::SireBase::PropertyMap const & ) const;
             recreate_function_type recreate_function_value( &::SireMM::InternalPerturbation::recreate );
             
             InternalPerturbation_exposer.def( 
@@ -107,7 +107,7 @@ void register_InternalPerturbation_class(){
         }
         { //::SireMM::InternalPerturbation::substitute
         
-            typedef ::SireMol::PerturbationPtr ( ::SireMM::InternalPerturbation::*substitute_function_type )( ::SireCAS::Identities const & ) const;
+            typedef ::SireMol::PerturbationPtr ( ::SireMM::InternalPerturbation::*substitute_function_type)( ::SireCAS::Identities const & ) const;
             substitute_function_type substitute_function_value( &::SireMM::InternalPerturbation::substitute );
             
             InternalPerturbation_exposer.def( 

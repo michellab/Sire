@@ -83,7 +83,7 @@ void register_Chain_class(){
         Chain_exposer.def( bp::init< SireMol::Chain const & >(( bp::arg("other") )) );
         { //::SireMol::Chain::assertContainsMetadata
         
-            typedef void ( ::SireMol::Chain::*assertContainsMetadata_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef void ( ::SireMol::Chain::*assertContainsMetadata_function_type)( ::SireBase::PropertyName const & ) const;
             assertContainsMetadata_function_type assertContainsMetadata_function_value( &::SireMol::Chain::assertContainsMetadata );
             
             Chain_exposer.def( 
@@ -94,7 +94,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::assertContainsMetadata
         
-            typedef void ( ::SireMol::Chain::*assertContainsMetadata_function_type )( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
+            typedef void ( ::SireMol::Chain::*assertContainsMetadata_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
             assertContainsMetadata_function_type assertContainsMetadata_function_value( &::SireMol::Chain::assertContainsMetadata );
             
             Chain_exposer.def( 
@@ -105,7 +105,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::assertContainsProperty
         
-            typedef void ( ::SireMol::Chain::*assertContainsProperty_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef void ( ::SireMol::Chain::*assertContainsProperty_function_type)( ::SireBase::PropertyName const & ) const;
             assertContainsProperty_function_type assertContainsProperty_function_value( &::SireMol::Chain::assertContainsProperty );
             
             Chain_exposer.def( 
@@ -116,7 +116,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::atomIdxs
         
-            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::Chain::*atomIdxs_function_type )(  ) const;
+            typedef ::QList< SireMol::AtomIdx > ( ::SireMol::Chain::*atomIdxs_function_type)(  ) const;
             atomIdxs_function_type atomIdxs_function_value( &::SireMol::Chain::atomIdxs );
             
             Chain_exposer.def( 
@@ -126,7 +126,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::contains
         
-            typedef bool ( ::SireMol::Chain::*contains_function_type )( ::SireMol::AtomIdx ) const;
+            typedef bool ( ::SireMol::Chain::*contains_function_type)( ::SireMol::AtomIdx ) const;
             contains_function_type contains_function_value( &::SireMol::Chain::contains );
             
             Chain_exposer.def( 
@@ -137,7 +137,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::contains
         
-            typedef bool ( ::SireMol::Chain::*contains_function_type )( ::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMol::Chain::*contains_function_type)( ::SireMol::AtomID const & ) const;
             contains_function_type contains_function_value( &::SireMol::Chain::contains );
             
             Chain_exposer.def( 
@@ -148,7 +148,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::contains
         
-            typedef bool ( ::SireMol::Chain::*contains_function_type )( ::SireMol::ResIdx ) const;
+            typedef bool ( ::SireMol::Chain::*contains_function_type)( ::SireMol::ResIdx ) const;
             contains_function_type contains_function_value( &::SireMol::Chain::contains );
             
             Chain_exposer.def( 
@@ -159,7 +159,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::contains
         
-            typedef bool ( ::SireMol::Chain::*contains_function_type )( ::SireMol::ResID const & ) const;
+            typedef bool ( ::SireMol::Chain::*contains_function_type)( ::SireMol::ResID const & ) const;
             contains_function_type contains_function_value( &::SireMol::Chain::contains );
             
             Chain_exposer.def( 
@@ -170,7 +170,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::edit
         
-            typedef ::SireMol::ChainEditor ( ::SireMol::Chain::*edit_function_type )(  ) const;
+            typedef ::SireMol::ChainEditor ( ::SireMol::Chain::*edit_function_type)(  ) const;
             edit_function_type edit_function_value( &::SireMol::Chain::edit );
             
             Chain_exposer.def( 
@@ -180,7 +180,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::evaluate
         
-            typedef ::SireMol::Evaluator ( ::SireMol::Chain::*evaluate_function_type )(  ) const;
+            typedef ::SireMol::Evaluator ( ::SireMol::Chain::*evaluate_function_type)(  ) const;
             evaluate_function_type evaluate_function_value( &::SireMol::Chain::evaluate );
             
             Chain_exposer.def( 
@@ -190,7 +190,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::hasMetadata
         
-            typedef bool ( ::SireMol::Chain::*hasMetadata_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Chain::*hasMetadata_function_type)( ::SireBase::PropertyName const & ) const;
             hasMetadata_function_type hasMetadata_function_value( &::SireMol::Chain::hasMetadata );
             
             Chain_exposer.def( 
@@ -201,7 +201,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::hasMetadata
         
-            typedef bool ( ::SireMol::Chain::*hasMetadata_function_type )( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Chain::*hasMetadata_function_type)( ::SireBase::PropertyName const &,::SireBase::PropertyName const & ) const;
             hasMetadata_function_type hasMetadata_function_value( &::SireMol::Chain::hasMetadata );
             
             Chain_exposer.def( 
@@ -212,7 +212,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::hasProperty
         
-            typedef bool ( ::SireMol::Chain::*hasProperty_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef bool ( ::SireMol::Chain::*hasProperty_function_type)( ::SireBase::PropertyName const & ) const;
             hasProperty_function_type hasProperty_function_value( &::SireMol::Chain::hasProperty );
             
             Chain_exposer.def( 
@@ -223,7 +223,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::index
         
-            typedef ::SireMol::ChainIdx ( ::SireMol::Chain::*index_function_type )(  ) const;
+            typedef ::SireMol::ChainIdx ( ::SireMol::Chain::*index_function_type)(  ) const;
             index_function_type index_function_value( &::SireMol::Chain::index );
             
             Chain_exposer.def( 
@@ -233,7 +233,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::intersects
         
-            typedef bool ( ::SireMol::Chain::*intersects_function_type )( ::SireMol::AtomID const & ) const;
+            typedef bool ( ::SireMol::Chain::*intersects_function_type)( ::SireMol::AtomID const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::Chain::intersects );
             
             Chain_exposer.def( 
@@ -244,7 +244,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::intersects
         
-            typedef bool ( ::SireMol::Chain::*intersects_function_type )( ::SireMol::ResID const & ) const;
+            typedef bool ( ::SireMol::Chain::*intersects_function_type)( ::SireMol::ResID const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::Chain::intersects );
             
             Chain_exposer.def( 
@@ -255,7 +255,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::isEmpty
         
-            typedef bool ( ::SireMol::Chain::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::Chain::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::Chain::isEmpty );
             
             Chain_exposer.def( 
@@ -265,7 +265,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::metadataKeys
         
-            typedef ::QStringList ( ::SireMol::Chain::*metadataKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireMol::Chain::*metadataKeys_function_type)(  ) const;
             metadataKeys_function_type metadataKeys_function_value( &::SireMol::Chain::metadataKeys );
             
             Chain_exposer.def( 
@@ -275,7 +275,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::metadataKeys
         
-            typedef ::QStringList ( ::SireMol::Chain::*metadataKeys_function_type )( ::SireBase::PropertyName const & ) const;
+            typedef ::QStringList ( ::SireMol::Chain::*metadataKeys_function_type)( ::SireBase::PropertyName const & ) const;
             metadataKeys_function_type metadataKeys_function_value( &::SireMol::Chain::metadataKeys );
             
             Chain_exposer.def( 
@@ -286,7 +286,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::move
         
-            typedef ::SireMol::Mover< SireMol::Chain > ( ::SireMol::Chain::*move_function_type )(  ) const;
+            typedef ::SireMol::Mover< SireMol::Chain > ( ::SireMol::Chain::*move_function_type)(  ) const;
             move_function_type move_function_value( &::SireMol::Chain::move );
             
             Chain_exposer.def( 
@@ -296,7 +296,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::nAtoms
         
-            typedef int ( ::SireMol::Chain::*nAtoms_function_type )(  ) const;
+            typedef int ( ::SireMol::Chain::*nAtoms_function_type)(  ) const;
             nAtoms_function_type nAtoms_function_value( &::SireMol::Chain::nAtoms );
             
             Chain_exposer.def( 
@@ -306,7 +306,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::nResidues
         
-            typedef int ( ::SireMol::Chain::*nResidues_function_type )(  ) const;
+            typedef int ( ::SireMol::Chain::*nResidues_function_type)(  ) const;
             nResidues_function_type nResidues_function_value( &::SireMol::Chain::nResidues );
             
             Chain_exposer.def( 
@@ -316,7 +316,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::name
         
-            typedef ::SireMol::ChainName ( ::SireMol::Chain::*name_function_type )(  ) const;
+            typedef ::SireMol::ChainName ( ::SireMol::Chain::*name_function_type)(  ) const;
             name_function_type name_function_value( &::SireMol::Chain::name );
             
             Chain_exposer.def( 
@@ -327,7 +327,7 @@ void register_Chain_class(){
         Chain_exposer.def( bp::self != bp::self );
         { //::SireMol::Chain::operator=
         
-            typedef ::SireMol::Chain & ( ::SireMol::Chain::*assign_function_type )( ::SireMol::Chain const & ) ;
+            typedef ::SireMol::Chain & ( ::SireMol::Chain::*assign_function_type)( ::SireMol::Chain const & ) ;
             assign_function_type assign_function_value( &::SireMol::Chain::operator= );
             
             Chain_exposer.def( 
@@ -340,7 +340,7 @@ void register_Chain_class(){
         Chain_exposer.def( bp::self == bp::self );
         { //::SireMol::Chain::propertyKeys
         
-            typedef ::QStringList ( ::SireMol::Chain::*propertyKeys_function_type )(  ) const;
+            typedef ::QStringList ( ::SireMol::Chain::*propertyKeys_function_type)(  ) const;
             propertyKeys_function_type propertyKeys_function_value( &::SireMol::Chain::propertyKeys );
             
             Chain_exposer.def( 
@@ -350,7 +350,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::resIdxs
         
-            typedef ::QList< SireMol::ResIdx > const & ( ::SireMol::Chain::*resIdxs_function_type )(  ) const;
+            typedef ::QList< SireMol::ResIdx > const & ( ::SireMol::Chain::*resIdxs_function_type)(  ) const;
             resIdxs_function_type resIdxs_function_value( &::SireMol::Chain::resIdxs );
             
             Chain_exposer.def( 
@@ -361,7 +361,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::selectedAll
         
-            typedef bool ( ::SireMol::Chain::*selectedAll_function_type )(  ) const;
+            typedef bool ( ::SireMol::Chain::*selectedAll_function_type)(  ) const;
             selectedAll_function_type selectedAll_function_value( &::SireMol::Chain::selectedAll );
             
             Chain_exposer.def( 
@@ -371,7 +371,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::selection
         
-            typedef ::SireMol::AtomSelection ( ::SireMol::Chain::*selection_function_type )(  ) const;
+            typedef ::SireMol::AtomSelection ( ::SireMol::Chain::*selection_function_type)(  ) const;
             selection_function_type selection_function_value( &::SireMol::Chain::selection );
             
             Chain_exposer.def( 
@@ -381,7 +381,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::selector
         
-            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Chain::*selector_function_type )(  ) const;
+            typedef ::SireMol::Selector< SireMol::Chain > ( ::SireMol::Chain::*selector_function_type)(  ) const;
             selector_function_type selector_function_value( &::SireMol::Chain::selector );
             
             Chain_exposer.def( 
@@ -391,7 +391,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::toString
         
-            typedef ::QString ( ::SireMol::Chain::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::Chain::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::Chain::toString );
             
             Chain_exposer.def( 
@@ -411,7 +411,7 @@ void register_Chain_class(){
         }
         { //::SireMol::Chain::update
         
-            typedef void ( ::SireMol::Chain::*update_function_type )( ::SireMol::MoleculeData const & ) ;
+            typedef void ( ::SireMol::Chain::*update_function_type)( ::SireMol::MoleculeData const & ) ;
             update_function_type update_function_value( &::SireMol::Chain::update );
             
             Chain_exposer.def( 

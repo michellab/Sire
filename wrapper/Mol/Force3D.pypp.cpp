@@ -32,7 +32,7 @@ void register_Force3D_class(){
         { //::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::at
         
             typedef SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > exported_class_t;
-            typedef ::SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > const & ( ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::*at_function_type )( int ) const;
+            typedef ::SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > const & ( ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::*at_function_type)( int ) const;
             at_function_type at_function_value( &::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::at );
             
             Force3D_exposer.def( 
@@ -45,7 +45,7 @@ void register_Force3D_class(){
         { //::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::count
         
             typedef SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > exported_class_t;
-            typedef int ( ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::*count_function_type )(  ) const;
+            typedef int ( ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::count );
             
             Force3D_exposer.def( 
@@ -62,7 +62,7 @@ void register_Force3D_class(){
         { //::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::operator=
         
             typedef SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > exported_class_t;
-            typedef ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > & ( ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::*assign_function_type )( ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > const & ) ;
+            typedef ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > & ( ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::*assign_function_type)( ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > const & ) ;
             assign_function_type assign_function_value( &::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::operator= );
             
             Force3D_exposer.def( 
@@ -76,7 +76,7 @@ void register_Force3D_class(){
         { //::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::operator[]
         
             typedef SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > exported_class_t;
-            typedef ::SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > const & ( ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::*__getitem___function_type )( int ) const;
+            typedef ::SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > const & ( ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::operator[] );
             
             Force3D_exposer.def( 
@@ -89,7 +89,7 @@ void register_Force3D_class(){
         { //::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::set
         
             typedef SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > exported_class_t;
-            typedef void ( ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::*set_function_type )( int,::SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > const & ) ;
+            typedef void ( ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::*set_function_type)( int,::SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > const & ) ;
             set_function_type set_function_value( &::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::set );
             
             Force3D_exposer.def( 
@@ -101,7 +101,7 @@ void register_Force3D_class(){
         { //::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::toString
         
             typedef SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > exported_class_t;
-            typedef ::QString ( ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::toString );
             
             Force3D_exposer.def( 
@@ -123,7 +123,7 @@ void register_Force3D_class(){
         { //::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::value
         
             typedef SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > exported_class_t;
-            typedef ::SireMaths::Vector ( ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::*value_function_type )(  ) const;
+            typedef ::SireMaths::Vector ( ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::*value_function_type)(  ) const;
             value_function_type value_function_value( &::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::value );
             
             Force3D_exposer.def( 
@@ -134,7 +134,7 @@ void register_Force3D_class(){
         { //::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::x
         
             typedef SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > exported_class_t;
-            typedef ::SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > const & ( ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::*x_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > const & ( ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::*x_function_type)(  ) const;
             x_function_type x_function_value( &::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::x );
             
             Force3D_exposer.def( 
@@ -146,7 +146,7 @@ void register_Force3D_class(){
         { //::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::y
         
             typedef SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > exported_class_t;
-            typedef ::SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > const & ( ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::*y_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > const & ( ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::*y_function_type)(  ) const;
             y_function_type y_function_value( &::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::y );
             
             Force3D_exposer.def( 
@@ -158,7 +158,7 @@ void register_Force3D_class(){
         { //::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::z
         
             typedef SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > exported_class_t;
-            typedef ::SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > const & ( ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::*z_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > const & ( ::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::*z_function_type)(  ) const;
             z_function_type z_function_value( &::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > >::z );
             
             Force3D_exposer.def( 

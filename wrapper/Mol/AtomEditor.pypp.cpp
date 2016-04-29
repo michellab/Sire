@@ -65,7 +65,7 @@ void register_AtomEditor_class(){
         AtomEditor_exposer.def( bp::init< SireMol::AtomEditor const & >(( bp::arg("other") )) );
         { //::SireMol::AtomEditor::operator=
         
-            typedef ::SireMol::AtomEditor & ( ::SireMol::AtomEditor::*assign_function_type )( ::SireMol::Atom const & ) ;
+            typedef ::SireMol::AtomEditor & ( ::SireMol::AtomEditor::*assign_function_type)( ::SireMol::Atom const & ) ;
             assign_function_type assign_function_value( &::SireMol::AtomEditor::operator= );
             
             AtomEditor_exposer.def( 
@@ -77,7 +77,7 @@ void register_AtomEditor_class(){
         }
         { //::SireMol::AtomEditor::operator=
         
-            typedef ::SireMol::AtomEditor & ( ::SireMol::AtomEditor::*assign_function_type )( ::SireMol::AtomEditor const & ) ;
+            typedef ::SireMol::AtomEditor & ( ::SireMol::AtomEditor::*assign_function_type)( ::SireMol::AtomEditor const & ) ;
             assign_function_type assign_function_value( &::SireMol::AtomEditor::operator= );
             
             AtomEditor_exposer.def( 
@@ -89,7 +89,7 @@ void register_AtomEditor_class(){
         }
         { //::SireMol::AtomEditor::reindex
         
-            typedef ::SireMol::AtomStructureEditor ( ::SireMol::AtomEditor::*reindex_function_type )( ::SireMol::AtomIdx ) const;
+            typedef ::SireMol::AtomStructureEditor ( ::SireMol::AtomEditor::*reindex_function_type)( ::SireMol::AtomIdx ) const;
             reindex_function_type reindex_function_value( &::SireMol::AtomEditor::reindex );
             
             AtomEditor_exposer.def( 
@@ -100,7 +100,7 @@ void register_AtomEditor_class(){
         }
         { //::SireMol::AtomEditor::remove
         
-            typedef ::SireMol::MolStructureEditor ( ::SireMol::AtomEditor::*remove_function_type )(  ) const;
+            typedef ::SireMol::MolStructureEditor ( ::SireMol::AtomEditor::*remove_function_type)(  ) const;
             remove_function_type remove_function_value( &::SireMol::AtomEditor::remove );
             
             AtomEditor_exposer.def( 
@@ -110,7 +110,7 @@ void register_AtomEditor_class(){
         }
         { //::SireMol::AtomEditor::rename
         
-            typedef ::SireMol::AtomEditor & ( ::SireMol::AtomEditor::*rename_function_type )( ::SireMol::AtomName const & ) ;
+            typedef ::SireMol::AtomEditor & ( ::SireMol::AtomEditor::*rename_function_type)( ::SireMol::AtomName const & ) ;
             rename_function_type rename_function_value( &::SireMol::AtomEditor::rename );
             
             AtomEditor_exposer.def( 
@@ -122,7 +122,7 @@ void register_AtomEditor_class(){
         }
         { //::SireMol::AtomEditor::renumber
         
-            typedef ::SireMol::AtomEditor & ( ::SireMol::AtomEditor::*renumber_function_type )( ::SireMol::AtomNum ) ;
+            typedef ::SireMol::AtomEditor & ( ::SireMol::AtomEditor::*renumber_function_type)( ::SireMol::AtomNum ) ;
             renumber_function_type renumber_function_value( &::SireMol::AtomEditor::renumber );
             
             AtomEditor_exposer.def( 
@@ -134,7 +134,7 @@ void register_AtomEditor_class(){
         }
         { //::SireMol::AtomEditor::reparent
         
-            typedef ::SireMol::AtomStructureEditor ( ::SireMol::AtomEditor::*reparent_function_type )( ::SireMol::CGIdx ) const;
+            typedef ::SireMol::AtomStructureEditor ( ::SireMol::AtomEditor::*reparent_function_type)( ::SireMol::CGIdx ) const;
             reparent_function_type reparent_function_value( &::SireMol::AtomEditor::reparent );
             
             AtomEditor_exposer.def( 
@@ -145,7 +145,7 @@ void register_AtomEditor_class(){
         }
         { //::SireMol::AtomEditor::reparent
         
-            typedef ::SireMol::AtomStructureEditor ( ::SireMol::AtomEditor::*reparent_function_type )( ::SireMol::CGID const & ) const;
+            typedef ::SireMol::AtomStructureEditor ( ::SireMol::AtomEditor::*reparent_function_type)( ::SireMol::CGID const & ) const;
             reparent_function_type reparent_function_value( &::SireMol::AtomEditor::reparent );
             
             AtomEditor_exposer.def( 
@@ -156,7 +156,7 @@ void register_AtomEditor_class(){
         }
         { //::SireMol::AtomEditor::reparent
         
-            typedef ::SireMol::AtomStructureEditor ( ::SireMol::AtomEditor::*reparent_function_type )( ::SireMol::ResIdx ) const;
+            typedef ::SireMol::AtomStructureEditor ( ::SireMol::AtomEditor::*reparent_function_type)( ::SireMol::ResIdx ) const;
             reparent_function_type reparent_function_value( &::SireMol::AtomEditor::reparent );
             
             AtomEditor_exposer.def( 
@@ -167,7 +167,7 @@ void register_AtomEditor_class(){
         }
         { //::SireMol::AtomEditor::reparent
         
-            typedef ::SireMol::AtomStructureEditor ( ::SireMol::AtomEditor::*reparent_function_type )( ::SireMol::ResID const & ) const;
+            typedef ::SireMol::AtomStructureEditor ( ::SireMol::AtomEditor::*reparent_function_type)( ::SireMol::ResID const & ) const;
             reparent_function_type reparent_function_value( &::SireMol::AtomEditor::reparent );
             
             AtomEditor_exposer.def( 
@@ -178,7 +178,7 @@ void register_AtomEditor_class(){
         }
         { //::SireMol::AtomEditor::reparent
         
-            typedef ::SireMol::AtomStructureEditor ( ::SireMol::AtomEditor::*reparent_function_type )( ::SireMol::SegIdx ) const;
+            typedef ::SireMol::AtomStructureEditor ( ::SireMol::AtomEditor::*reparent_function_type)( ::SireMol::SegIdx ) const;
             reparent_function_type reparent_function_value( &::SireMol::AtomEditor::reparent );
             
             AtomEditor_exposer.def( 
@@ -189,7 +189,7 @@ void register_AtomEditor_class(){
         }
         { //::SireMol::AtomEditor::reparent
         
-            typedef ::SireMol::AtomStructureEditor ( ::SireMol::AtomEditor::*reparent_function_type )( ::SireMol::SegID const & ) const;
+            typedef ::SireMol::AtomStructureEditor ( ::SireMol::AtomEditor::*reparent_function_type)( ::SireMol::SegID const & ) const;
             reparent_function_type reparent_function_value( &::SireMol::AtomEditor::reparent );
             
             AtomEditor_exposer.def( 
@@ -200,7 +200,7 @@ void register_AtomEditor_class(){
         }
         { //::SireMol::AtomEditor::toString
         
-            typedef ::QString ( ::SireMol::AtomEditor::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::AtomEditor::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::AtomEditor::toString );
             
             AtomEditor_exposer.def( 
@@ -220,7 +220,7 @@ void register_AtomEditor_class(){
         }
         { //::SireMol::AtomEditor::what
         
-            typedef char const * ( ::SireMol::AtomEditor::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::AtomEditor::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::AtomEditor::what );
             
             AtomEditor_exposer.def( 

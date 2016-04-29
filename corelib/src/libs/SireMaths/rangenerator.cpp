@@ -424,7 +424,171 @@ double RanGenerator::rand(double maxval) const
 /** Return a random real number on [minval,maxval] */
 double RanGenerator::rand(double minval, double maxval) const
 {
-    return minval + rand() * (maxval-minval);
+    if (minval > maxval)
+        return rand(maxval, minval);
+    else
+        return minval + rand() * (maxval-minval);
+}
+
+/** Take hold of the generator lock. Only you can now generate
+    random numbers while this lock is held */
+void RanGenerator::lock() const
+{
+    nonconst_d().mutex.lock();
+}
+
+/** Release the generator lock */
+void RanGenerator::unlock() const
+{
+    nonconst_d().mutex.unlock();
+}
+
+/** Return a random real number on [0,1]. Should only be called while
+    you hold the generator lock */
+double RanGenerator::locked_rand() const
+{
+    return nonconst_d().mersenne_generator.rand();
+}
+
+/** Return a random real number on [0,maxval]. Should only be called while
+    you hold the generator lock */
+double RanGenerator::locked_rand(double maxval) const
+{
+    return maxval * locked_rand();
+}
+
+/** Return a random real number on [minval,maxval]. Should only be called while
+    you hold the generator lock */
+double RanGenerator::locked_rand(double minval, double maxval) const
+{
+    if (minval > maxval)
+        return locked_rand(maxval, minval);
+    else
+        return minval + locked_rand() * (maxval-minval);
+}
+
+/** Fill the passed array of doubles with random numbers. This replaces each
+    value in the array with a random number on [0,1] */
+void RanGenerator::nrand(QVector<double> &result) const
+{
+    const int n = result.count();
+
+    if (n > 0)
+    {
+        QMutexLocker lkr( &(nonconst_d().mutex) );
+    
+        double *d = result.data();
+    
+        for (int i=0; i<n; ++i)
+        {
+            d[i] = nonconst_d().mersenne_generator.rand();
+        }
+    }
+}
+
+/** Fill the passed array of doubles with random numbers. This replaces each
+    value in the array with a random number on [0,maxval] */
+void RanGenerator::nrand(QVector<double> &result, double maxval) const
+{
+    const int n = result.count();
+
+    if (n > 0)
+    {
+        double *d = result.data();
+
+        if (maxval == 0)
+        {
+            for (int i=0; i<n; ++i)
+            {
+                d[i] = 0;
+            }
+        }
+        else
+        {
+            QMutexLocker lkr( &(nonconst_d().mutex) );
+
+            for (int i=0; i<n; ++i)
+            {
+                d[i] = maxval * nonconst_d().mersenne_generator.rand();
+            }
+        }
+    }
+}
+
+/** Fill the passed array of doubles with random numbers. This replaces each
+    value in the array with a random number on [minval,maxval] */
+void RanGenerator::nrand(QVector<double> &result, double minval, double maxval) const
+{
+    if (minval < maxval)
+    {
+        nrand(result, maxval, minval);
+        return;
+    }
+
+    const int n = result.count();
+
+    if (n > 0)
+    {
+        double *d = result.data();
+        
+        const double diff = maxval - minval;
+        
+        if (diff == 0)
+        {
+            for (int i=0; i<n; ++i)
+            {
+                d[i] = 0;
+            }
+        }
+        else
+        {
+            QMutexLocker lkr( &(nonconst_d().mutex) );
+
+            for (int i=0; i<n; ++i)
+            {
+                d[i] = minval + (diff * nonconst_d().mersenne_generator.rand());
+            }
+        }
+    }
+}
+
+/** Return an array of 'n' random numbers on [0,1] */
+QVector<double> RanGenerator::nrand(int n) const
+{
+    if (n > 0)
+    {
+        QVector<double> result(n);
+        this->nrand(result);
+        return result;
+    }
+    else
+        return QVector<double>();
+}
+
+/** Return an array of 'n' random numbers on [0,maxval] */
+QVector<double> RanGenerator::nrand(int n, double maxval) const
+{
+    if (n > 0)
+    {
+        QVector<double> result(n);
+        this->nrand(result, maxval);
+        return result;
+    }
+    else
+        return QVector<double>();
+}
+
+/** Return an array of 'n' random numbers on [minval,maxval] */
+QVector<double> RanGenerator::nrand(int n, double minval, double maxval) const
+{
+    if (n > 0)
+    {
+        QVector<double> result(n);
+        this->nrand(result, minval, maxval);
+        return result;
+    }
+    else
+        return QVector<double>();
 }
 
 /** Return a high-precision random real number on [0,1) */
@@ -446,45 +610,85 @@ double RanGenerator::rand53(double minval, double maxval) const
     return minval + rand53()*(maxval-minval);
 }
 
-/** Return a high-precision random number from the normal distribution
+/** Return a random number from the normal distribution
     with supplied mean and variance. */
 double RanGenerator::randNorm(double mean, double variance) const
 {
     QMutexLocker lkr( &(nonconst_d().mutex) );
-
     return nonconst_d().mersenne_generator.randNorm(mean, variance);
-
-    //double rand0 = nonconst_d().mersenne_generator.rand53();
-    //double rand1 = nonconst_d().mersenne_generator.rand53();
-
-    //lkr.unlock();
-
-    // Return a real number from a normal (Gaussian) distribution with given
-    // mean and variance by Box-Muller method
-    //double r = std::sqrt( -2.0 * log(1.0-rand0) ) * variance;
-    //double phi = 2.0 * 3.14159265358979323846264338328 * rand1;
-
-    //return mean + r * std::cos(phi);
 }
 
-/** Return a random vector on the unit sphere */
-Vector RanGenerator::vectorOnSphere() const
+/** Return a random number generated from the normal distribution 
+    with mean 0 and standard deviation 1 */
+double RanGenerator::randNorm() const
 {
-    RanGeneratorPvt &ranpvt = nonconst_d();
+    QMutexLocker lkr( &(nonconst_d().mutex) );
+    return nonconst_d().mersenne_generator.randNorm(1,0);
+}
 
-    QMutexLocker lkr( &(ranpvt.mutex) );
+/** Return a random number from the normal distribution
+    with supplied mean and variance. You must hold the generator
+    lock when calling this function */
+double RanGenerator::locked_randNorm(double mean, double variance) const
+{
+    return nonconst_d().mersenne_generator.randNorm(mean, variance);
+}
 
-    while( true )
+/** Return a random number generated from the normal distribution 
+    with mean 0 and standard deviation 1. You must hold the generator
+    lock when calling this function */
+double RanGenerator::locked_randNorm() const
+{
+    return nonconst_d().mersenne_generator.randNorm(1,0);
+}
+
+/** Fill the passed array with random numbers drawn from the normal
+    distribution with supplied mean and variance */
+void RanGenerator::nrandNorm(QVector<double> &result, double mean, double variance) const
+{
+    const int n = result.count();
+    
+    if (n > 0)
     {
-        //use von Neumann acceptance/rejection method
+        double *d = result.data();
+        
+        QMutexLocker lkr( &(nonconst_d().mutex) );
+        
+        for (int i=0; i<n; ++i)
+        {
+            d[i] = nonconst_d().mersenne_generator.randNorm(mean, variance);
+        }
+    }
+}
+
+/** Return an array of 'N' random numbers drawn from the normal distribution with
+    supplied mean and variance */
+QVector<double> RanGenerator::nrandNorm(int n, double mean, double variance) const
+{
+    if (n > 0)
+    {
+        QVector<double> result(n);
+        this->nrandNorm(result, mean, variance);
+        return result;
+    }
+    else
+        return QVector<double>();
+}
+
+/** Return a random vector on the unit sphere. You must hold the generator
+    lock when calling this function */
+Vector RanGenerator::locked_vectorOnSphere() const
+{
+    while (true)
+    {
         Vector v;
-
-        v.setX( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand53() );
-        v.setY( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand53() );
-        v.setZ( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand53() );
-
-        double lgth2 = v.length2();
-
+        
+        v.setX( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
+        v.setY( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
+        v.setZ( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
+        
+        const double lgth2 = v.length2();
+        
         if (lgth2 < 1)
         {
             v /= std::sqrt(lgth2);
@@ -493,10 +697,110 @@ Vector RanGenerator::vectorOnSphere() const
     }
 }
 
+/** Return a random vector on the unit sphere */
+Vector RanGenerator::vectorOnSphere() const
+{
+    QMutexLocker lkr( &(nonconst_d().mutex) );
+    return locked_vectorOnSphere();
+}
+
+/** Fill the passed array with random vectors on a unit sphere */
+void RanGenerator::nvectorOnSphere(QVector<Vector> &result) const
+{
+    const int n = result.count();
+    
+    if (n > 0)
+    {
+        QMutexLocker lkr( &(nonconst_d().mutex) );
+        
+        int i=0;
+        
+        while (i < n)
+        {
+            Vector &v = result[i];
+            
+            v.setX( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
+            v.setY( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
+            v.setZ( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
+            
+            const double lgth2 = v.length2();
+            
+            if (lgth2 < 1)
+            {
+                v /= std::sqrt(lgth2);
+                i += 1;
+            }
+        }
+    }
+}
+
+/** Return an array of 'n' random vectors on a unit sphere */
+QVector<Vector> RanGenerator::nvectorOnSphere(int n) const
+{
+    if (n > 0)
+    {
+        QVector<Vector> result(n);
+        this->nvectorOnSphere(result);
+        return result;
+    }
+    else
+        return QVector<Vector>();
+}
+
 /** Return a random vector on the sphere with radius 'radius' */
 Vector RanGenerator::vectorOnSphere(double radius) const
 {
     return radius * this->vectorOnSphere();
+}
+
+/** Return a random vector on the sphere with radius 'radius'.
+    You must hold the generator lock when calling this function */
+Vector RanGenerator::locked_vectorOnSphere(double radius) const
+{
+    return radius * this->locked_vectorOnSphere();
+}
+
+/** Fill the passed array with random vectors on a sphere with radius 'radius' */
+void RanGenerator::nvectorOnSphere(QVector<Vector> &result, double radius) const
+{
+    const int n = result.count();
+    
+    if (n > 0)
+    {
+        QMutexLocker lkr( &(nonconst_d().mutex) );
+        
+        int i=0;
+        
+        while (i < n)
+        {
+            Vector &v = result[i];
+            
+            v.setX( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
+            v.setY( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
+            v.setZ( 1.0 - 2.0 * nonconst_d().mersenne_generator.rand() );
+            
+            const double lgth2 = v.length2();
+            
+            if (lgth2 < 1)
+            {
+                v *= (radius * std::sqrt(lgth2));
+                i += 1;
+            }
+        }
+    }
+}
+
+/** Return an array of 'n' random vectors on a sphere of radius 'radius' */
+QVector<Vector> RanGenerator::nvectorOnSphere(int n, double radius) const
+{
+    if (n > 0)
+    {
+        QVector<Vector> result(n);
+        this->nvectorOnSphere(result, radius);
+        return result;
+    }
+    else
+        return QVector<Vector>();
 }
 
 /** Return a random 32bit unsigned integer in [0,2^32 - 1] */

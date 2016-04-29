@@ -41,7 +41,7 @@ void register_VariantProperty_class(){
         VariantProperty_exposer.def( bp::self != bp::self );
         { //::SireBase::VariantProperty::operator=
         
-            typedef ::SireBase::VariantProperty & ( ::SireBase::VariantProperty::*assign_function_type )( ::QVariant const & ) ;
+            typedef ::SireBase::VariantProperty & ( ::SireBase::VariantProperty::*assign_function_type)( ::QVariant const & ) ;
             assign_function_type assign_function_value( &::SireBase::VariantProperty::operator= );
             
             VariantProperty_exposer.def( 
@@ -53,7 +53,7 @@ void register_VariantProperty_class(){
         }
         { //::SireBase::VariantProperty::operator=
         
-            typedef ::SireBase::VariantProperty & ( ::SireBase::VariantProperty::*assign_function_type )( ::SireBase::VariantProperty const & ) ;
+            typedef ::SireBase::VariantProperty & ( ::SireBase::VariantProperty::*assign_function_type)( ::SireBase::VariantProperty const & ) ;
             assign_function_type assign_function_value( &::SireBase::VariantProperty::operator= );
             
             VariantProperty_exposer.def( 
@@ -66,7 +66,7 @@ void register_VariantProperty_class(){
         VariantProperty_exposer.def( bp::self == bp::self );
         { //::SireBase::VariantProperty::toString
         
-            typedef ::QString ( ::SireBase::VariantProperty::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireBase::VariantProperty::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireBase::VariantProperty::toString );
             
             VariantProperty_exposer.def( 

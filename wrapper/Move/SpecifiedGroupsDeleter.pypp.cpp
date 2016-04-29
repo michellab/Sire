@@ -41,7 +41,7 @@ void register_SpecifiedGroupsDeleter_class(){
         SpecifiedGroupsDeleter_exposer.def( bp::init< SireMove::SpecifiedGroupsDeleter const & >(( bp::arg("other") )) );
         { //::SireMove::SpecifiedGroupsDeleter::deleteFrom
         
-            typedef ::boost::tuples::tuple< SireMol::Molecule, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMove::SpecifiedGroupsDeleter::*deleteFrom_function_type )( ::SireSystem::System & ) ;
+            typedef ::boost::tuples::tuple< SireMol::Molecule, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMove::SpecifiedGroupsDeleter::*deleteFrom_function_type)( ::SireSystem::System & ) ;
             deleteFrom_function_type deleteFrom_function_value( &::SireMove::SpecifiedGroupsDeleter::deleteFrom );
             
             SpecifiedGroupsDeleter_exposer.def( 
@@ -52,7 +52,7 @@ void register_SpecifiedGroupsDeleter_class(){
         }
         { //::SireMove::SpecifiedGroupsDeleter::generator
         
-            typedef ::SireMaths::RanGenerator const & ( ::SireMove::SpecifiedGroupsDeleter::*generator_function_type )(  ) const;
+            typedef ::SireMaths::RanGenerator const & ( ::SireMove::SpecifiedGroupsDeleter::*generator_function_type)(  ) const;
             generator_function_type generator_function_value( &::SireMove::SpecifiedGroupsDeleter::generator );
             
             SpecifiedGroupsDeleter_exposer.def( 
@@ -63,7 +63,7 @@ void register_SpecifiedGroupsDeleter_class(){
         }
         { //::SireMove::SpecifiedGroupsDeleter::group
         
-            typedef ::SireMol::MoleculeGroup const & ( ::SireMove::SpecifiedGroupsDeleter::*group_function_type )(  ) const;
+            typedef ::SireMol::MoleculeGroup const & ( ::SireMove::SpecifiedGroupsDeleter::*group_function_type)(  ) const;
             group_function_type group_function_value( &::SireMove::SpecifiedGroupsDeleter::group );
             
             SpecifiedGroupsDeleter_exposer.def( 
@@ -75,7 +75,7 @@ void register_SpecifiedGroupsDeleter_class(){
         SpecifiedGroupsDeleter_exposer.def( bp::self != bp::self );
         { //::SireMove::SpecifiedGroupsDeleter::operator=
         
-            typedef ::SireMove::SpecifiedGroupsDeleter & ( ::SireMove::SpecifiedGroupsDeleter::*assign_function_type )( ::SireMove::SpecifiedGroupsDeleter const & ) ;
+            typedef ::SireMove::SpecifiedGroupsDeleter & ( ::SireMove::SpecifiedGroupsDeleter::*assign_function_type)( ::SireMove::SpecifiedGroupsDeleter const & ) ;
             assign_function_type assign_function_value( &::SireMove::SpecifiedGroupsDeleter::operator= );
             
             SpecifiedGroupsDeleter_exposer.def( 
@@ -88,7 +88,7 @@ void register_SpecifiedGroupsDeleter_class(){
         SpecifiedGroupsDeleter_exposer.def( bp::self == bp::self );
         { //::SireMove::SpecifiedGroupsDeleter::sampler
         
-            typedef ::SireMove::Sampler const & ( ::SireMove::SpecifiedGroupsDeleter::*sampler_function_type )(  ) const;
+            typedef ::SireMove::Sampler const & ( ::SireMove::SpecifiedGroupsDeleter::*sampler_function_type)(  ) const;
             sampler_function_type sampler_function_value( &::SireMove::SpecifiedGroupsDeleter::sampler );
             
             SpecifiedGroupsDeleter_exposer.def( 
@@ -99,7 +99,7 @@ void register_SpecifiedGroupsDeleter_class(){
         }
         { //::SireMove::SpecifiedGroupsDeleter::setGenerator
         
-            typedef void ( ::SireMove::SpecifiedGroupsDeleter::*setGenerator_function_type )( ::SireMaths::RanGenerator const & ) ;
+            typedef void ( ::SireMove::SpecifiedGroupsDeleter::*setGenerator_function_type)( ::SireMaths::RanGenerator const & ) ;
             setGenerator_function_type setGenerator_function_value( &::SireMove::SpecifiedGroupsDeleter::setGenerator );
             
             SpecifiedGroupsDeleter_exposer.def( 
@@ -110,7 +110,7 @@ void register_SpecifiedGroupsDeleter_class(){
         }
         { //::SireMove::SpecifiedGroupsDeleter::setGroup
         
-            typedef void ( ::SireMove::SpecifiedGroupsDeleter::*setGroup_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireMove::SpecifiedGroupsDeleter::*setGroup_function_type)( ::SireMol::MoleculeGroup const & ) ;
             setGroup_function_type setGroup_function_value( &::SireMove::SpecifiedGroupsDeleter::setGroup );
             
             SpecifiedGroupsDeleter_exposer.def( 
@@ -121,7 +121,7 @@ void register_SpecifiedGroupsDeleter_class(){
         }
         { //::SireMove::SpecifiedGroupsDeleter::setSampler
         
-            typedef void ( ::SireMove::SpecifiedGroupsDeleter::*setSampler_function_type )( ::SireMove::Sampler const & ) ;
+            typedef void ( ::SireMove::SpecifiedGroupsDeleter::*setSampler_function_type)( ::SireMove::Sampler const & ) ;
             setSampler_function_type setSampler_function_value( &::SireMove::SpecifiedGroupsDeleter::setSampler );
             
             SpecifiedGroupsDeleter_exposer.def( 
@@ -132,7 +132,7 @@ void register_SpecifiedGroupsDeleter_class(){
         }
         { //::SireMove::SpecifiedGroupsDeleter::setSampler
         
-            typedef void ( ::SireMove::SpecifiedGroupsDeleter::*setSampler_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireMove::SpecifiedGroupsDeleter::*setSampler_function_type)( ::SireMol::MoleculeGroup const & ) ;
             setSampler_function_type setSampler_function_value( &::SireMove::SpecifiedGroupsDeleter::setSampler );
             
             SpecifiedGroupsDeleter_exposer.def( 
@@ -143,7 +143,7 @@ void register_SpecifiedGroupsDeleter_class(){
         }
         { //::SireMove::SpecifiedGroupsDeleter::setSpecifiedGroups
         
-            typedef void ( ::SireMove::SpecifiedGroupsDeleter::*setSpecifiedGroups_function_type )( ::SireMol::MGID const & ) ;
+            typedef void ( ::SireMove::SpecifiedGroupsDeleter::*setSpecifiedGroups_function_type)( ::SireMol::MGID const & ) ;
             setSpecifiedGroups_function_type setSpecifiedGroups_function_value( &::SireMove::SpecifiedGroupsDeleter::setSpecifiedGroups );
             
             SpecifiedGroupsDeleter_exposer.def( 
@@ -154,7 +154,7 @@ void register_SpecifiedGroupsDeleter_class(){
         }
         { //::SireMove::SpecifiedGroupsDeleter::specifiedGroups
         
-            typedef ::SireMol::MGID const & ( ::SireMove::SpecifiedGroupsDeleter::*specifiedGroups_function_type )(  ) const;
+            typedef ::SireMol::MGID const & ( ::SireMove::SpecifiedGroupsDeleter::*specifiedGroups_function_type)(  ) const;
             specifiedGroups_function_type specifiedGroups_function_value( &::SireMove::SpecifiedGroupsDeleter::specifiedGroups );
             
             SpecifiedGroupsDeleter_exposer.def( 

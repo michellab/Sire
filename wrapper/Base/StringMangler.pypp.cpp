@@ -29,7 +29,7 @@ void register_StringMangler_class(){
         bp::scope StringMangler_scope( StringMangler_exposer );
         { //::SireBase::StringMangler::mangle
         
-            typedef ::QString ( ::SireBase::StringMangler::*mangle_function_type )( ::QString const & ) const;
+            typedef ::QString ( ::SireBase::StringMangler::*mangle_function_type)( ::QString const & ) const;
             mangle_function_type mangle_function_value( &::SireBase::StringMangler::mangle );
             
             StringMangler_exposer.def( 
@@ -51,7 +51,7 @@ void register_StringMangler_class(){
         }
         { //::SireBase::StringMangler::operator()
         
-            typedef ::QString ( ::SireBase::StringMangler::*__call___function_type )( ::QString const & ) const;
+            typedef ::QString ( ::SireBase::StringMangler::*__call___function_type)( ::QString const & ) const;
             __call___function_type __call___function_value( &::SireBase::StringMangler::operator() );
             
             StringMangler_exposer.def( 

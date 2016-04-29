@@ -56,7 +56,7 @@ void register_VolumeMove_class(){
         VolumeMove_exposer.def( bp::init< SireMove::VolumeMove const & >(( bp::arg("other") )) );
         { //::SireMove::VolumeMove::groupID
         
-            typedef ::SireMol::MGID const & ( ::SireMove::VolumeMove::*groupID_function_type )(  ) const;
+            typedef ::SireMol::MGID const & ( ::SireMove::VolumeMove::*groupID_function_type)(  ) const;
             groupID_function_type groupID_function_value( &::SireMove::VolumeMove::groupID );
             
             VolumeMove_exposer.def( 
@@ -67,7 +67,7 @@ void register_VolumeMove_class(){
         }
         { //::SireMove::VolumeMove::maximumVolumeChange
         
-            typedef ::SireUnits::Dimension::Volume const & ( ::SireMove::VolumeMove::*maximumVolumeChange_function_type )(  ) const;
+            typedef ::SireUnits::Dimension::Volume const & ( ::SireMove::VolumeMove::*maximumVolumeChange_function_type)(  ) const;
             maximumVolumeChange_function_type maximumVolumeChange_function_value( &::SireMove::VolumeMove::maximumVolumeChange );
             
             VolumeMove_exposer.def( 
@@ -78,7 +78,7 @@ void register_VolumeMove_class(){
         }
         { //::SireMove::VolumeMove::move
         
-            typedef void ( ::SireMove::VolumeMove::*move_function_type )( ::SireSystem::System &,int,bool ) ;
+            typedef void ( ::SireMove::VolumeMove::*move_function_type)( ::SireSystem::System &,int,bool ) ;
             move_function_type move_function_value( &::SireMove::VolumeMove::move );
             
             VolumeMove_exposer.def( 
@@ -90,7 +90,7 @@ void register_VolumeMove_class(){
         VolumeMove_exposer.def( bp::self != bp::self );
         { //::SireMove::VolumeMove::operator=
         
-            typedef ::SireMove::VolumeMove & ( ::SireMove::VolumeMove::*assign_function_type )( ::SireMove::VolumeMove const & ) ;
+            typedef ::SireMove::VolumeMove & ( ::SireMove::VolumeMove::*assign_function_type)( ::SireMove::VolumeMove const & ) ;
             assign_function_type assign_function_value( &::SireMove::VolumeMove::operator= );
             
             VolumeMove_exposer.def( 
@@ -103,7 +103,7 @@ void register_VolumeMove_class(){
         VolumeMove_exposer.def( bp::self == bp::self );
         { //::SireMove::VolumeMove::setGenerator
         
-            typedef void ( ::SireMove::VolumeMove::*setGenerator_function_type )( ::SireMaths::RanGenerator const & ) ;
+            typedef void ( ::SireMove::VolumeMove::*setGenerator_function_type)( ::SireMaths::RanGenerator const & ) ;
             setGenerator_function_type setGenerator_function_value( &::SireMove::VolumeMove::setGenerator );
             
             VolumeMove_exposer.def( 
@@ -114,7 +114,7 @@ void register_VolumeMove_class(){
         }
         { //::SireMove::VolumeMove::setMaximumVolumeChange
         
-            typedef void ( ::SireMove::VolumeMove::*setMaximumVolumeChange_function_type )( ::SireUnits::Dimension::Volume const & ) ;
+            typedef void ( ::SireMove::VolumeMove::*setMaximumVolumeChange_function_type)( ::SireUnits::Dimension::Volume const & ) ;
             setMaximumVolumeChange_function_type setMaximumVolumeChange_function_value( &::SireMove::VolumeMove::setMaximumVolumeChange );
             
             VolumeMove_exposer.def( 
@@ -125,7 +125,7 @@ void register_VolumeMove_class(){
         }
         { //::SireMove::VolumeMove::setVolumeChanger
         
-            typedef void ( ::SireMove::VolumeMove::*setVolumeChanger_function_type )( ::SireMove::VolumeChanger const & ) ;
+            typedef void ( ::SireMove::VolumeMove::*setVolumeChanger_function_type)( ::SireMove::VolumeChanger const & ) ;
             setVolumeChanger_function_type setVolumeChanger_function_value( &::SireMove::VolumeMove::setVolumeChanger );
             
             VolumeMove_exposer.def( 
@@ -136,7 +136,7 @@ void register_VolumeMove_class(){
         }
         { //::SireMove::VolumeMove::setVolumeChanger
         
-            typedef void ( ::SireMove::VolumeMove::*setVolumeChanger_function_type )( ::SireMol::MoleculeGroup const & ) ;
+            typedef void ( ::SireMove::VolumeMove::*setVolumeChanger_function_type)( ::SireMol::MoleculeGroup const & ) ;
             setVolumeChanger_function_type setVolumeChanger_function_value( &::SireMove::VolumeMove::setVolumeChanger );
             
             VolumeMove_exposer.def( 
@@ -147,7 +147,7 @@ void register_VolumeMove_class(){
         }
         { //::SireMove::VolumeMove::toString
         
-            typedef ::QString ( ::SireMove::VolumeMove::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMove::VolumeMove::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMove::VolumeMove::toString );
             
             VolumeMove_exposer.def( 
@@ -167,7 +167,7 @@ void register_VolumeMove_class(){
         }
         { //::SireMove::VolumeMove::volumeChanger
         
-            typedef ::SireMove::VolumeChanger const & ( ::SireMove::VolumeMove::*volumeChanger_function_type )(  ) const;
+            typedef ::SireMove::VolumeChanger const & ( ::SireMove::VolumeMove::*volumeChanger_function_type)(  ) const;
             volumeChanger_function_type volumeChanger_function_value( &::SireMove::VolumeMove::volumeChanger );
             
             VolumeMove_exposer.def( 

@@ -16,6 +16,8 @@ This will create the "bcp" utility in the boost bin directory
 
 I copy this file into my path.
 
+== Now, to generate the file boost_headers.tar.gz needed by corelib ==
+
 To generate the list of needed boost header files, type
 
 mkdir tmp
@@ -23,5 +25,53 @@ bcp --scan /path/to/corelib/src/libs/*/* --boost=/path/to/boost_1_54_0/ ./tmp
 
 This will copy all of the header files into tmp/boost
 
-Simply tar this up and you have the file :-)
+Simply tar this up and you have the file :-), e.g.
+
+cd tmp
+tar -zcvf boost_headers.tar.gz boost
+cp boost_headers.tar.gz /path/to/Sire/corelib/src/bundled
+
+== Now, to generate the file boost_python.tar.gz needed by wrapper ==
+
+You will need a new tmp directory, e.g. tmp2
+
+mkdir tmp2
+bcp -scan /path/to/wrapper/*/* --boost=/path/to/boost_1_54_0/ ./tmp2
+
+This will copy all of the header files into tmp2/boost and the
+boost python source into tmp/libs/python/src
+
+Now, we need to prepare a directory called boost_python
+
+cd tmp
+mkdir boost_python
+mkdir boost_python/build
+mv libs/python/src boost_python
+mkdir boost_python/src/include
+mv boost boost_python/src/include
+
+This will now have created a self-contained boost_python directory with
+an empty "build" directory, and then a "src" directory that contains the
+boost python source, plus a "src/include" directory that contains all of
+the necessary boost/python header files.
+
+The next step is to copy in the template CMakeLists.txt file that is
+contained in the Sire/wrapper/bundled/template_boost_cmake.txt so
+that it is in boost_python/src/CMakeLists.txt
+
+cp /path/to/Sire/wrapper/bundled/template_boost_cmake.txt boost_python/src/CMakeLists.txt
+
+Next, edit this CMakeLists.txt file to ensure that all of the .cpp files
+that are contained in boost_python/src are listed, e.g.
+
+cd boost_python/src; ls -1 *.cpp */*.cpp; cd -
+
+will list all of the files. Ensure these are all included, e.g.
+by copying and pasting them into place.
+
+Finally, tar up the boost_python directory and place it into the
+wrapper directory
+
+tar -zcvf boost_python.tar.gz boost_python
+cp boost_python.tar.gz /path/to/Sire/wrapper/bundled/boost_python.tar.gz
 

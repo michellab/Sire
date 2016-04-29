@@ -66,7 +66,7 @@ void register_BondHunter_class(){
         }
         { //::SireMol::BondHunter::operator()
         
-            typedef ::SireMol::Connectivity ( ::SireMol::BondHunter::*__call___function_type )( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
+            typedef ::SireMol::Connectivity ( ::SireMol::BondHunter::*__call___function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
             __call___function_type __call___function_value( &::SireMol::BondHunter::operator() );
             
             BondHunter_exposer.def( 

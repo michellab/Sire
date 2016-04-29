@@ -36,7 +36,7 @@ void register_GTOPair_class(){
         bp::scope GTOPair_scope( GTOPair_exposer );
         { //::Squire::GTOPair::K
         
-            typedef double ( ::Squire::GTOPair::*K_function_type )(  ) const;
+            typedef double ( ::Squire::GTOPair::*K_function_type)(  ) const;
             K_function_type K_function_value( &::Squire::GTOPair::K );
             
             GTOPair_exposer.def( 
@@ -46,7 +46,7 @@ void register_GTOPair_class(){
         }
         { //::Squire::GTOPair::K_AB
         
-            typedef double ( ::Squire::GTOPair::*K_AB_function_type )(  ) const;
+            typedef double ( ::Squire::GTOPair::*K_AB_function_type)(  ) const;
             K_AB_function_type K_AB_function_value( &::Squire::GTOPair::K_AB );
             
             GTOPair_exposer.def( 
@@ -56,7 +56,7 @@ void register_GTOPair_class(){
         }
         { //::Squire::GTOPair::K_CD
         
-            typedef double ( ::Squire::GTOPair::*K_CD_function_type )(  ) const;
+            typedef double ( ::Squire::GTOPair::*K_CD_function_type)(  ) const;
             K_CD_function_type K_CD_function_value( &::Squire::GTOPair::K_CD );
             
             GTOPair_exposer.def( 
@@ -66,7 +66,7 @@ void register_GTOPair_class(){
         }
         { //::Squire::GTOPair::P
         
-            typedef ::SireMaths::Vector const & ( ::Squire::GTOPair::*P_function_type )(  ) const;
+            typedef ::SireMaths::Vector const & ( ::Squire::GTOPair::*P_function_type)(  ) const;
             P_function_type P_function_value( &::Squire::GTOPair::P );
             
             GTOPair_exposer.def( 
@@ -77,7 +77,7 @@ void register_GTOPair_class(){
         }
         { //::Squire::GTOPair::Q
         
-            typedef ::SireMaths::Vector const & ( ::Squire::GTOPair::*Q_function_type )(  ) const;
+            typedef ::SireMaths::Vector const & ( ::Squire::GTOPair::*Q_function_type)(  ) const;
             Q_function_type Q_function_value( &::Squire::GTOPair::Q );
             
             GTOPair_exposer.def( 
@@ -88,7 +88,7 @@ void register_GTOPair_class(){
         }
         { //::Squire::GTOPair::Q_AB
         
-            typedef double ( ::Squire::GTOPair::*Q_AB_function_type )(  ) const;
+            typedef double ( ::Squire::GTOPair::*Q_AB_function_type)(  ) const;
             Q_AB_function_type Q_AB_function_value( &::Squire::GTOPair::Q_AB );
             
             GTOPair_exposer.def( 
@@ -98,7 +98,7 @@ void register_GTOPair_class(){
         }
         { //::Squire::GTOPair::Q_CD
         
-            typedef double ( ::Squire::GTOPair::*Q_CD_function_type )(  ) const;
+            typedef double ( ::Squire::GTOPair::*Q_CD_function_type)(  ) const;
             Q_CD_function_type Q_CD_function_value( &::Squire::GTOPair::Q_CD );
             
             GTOPair_exposer.def( 
@@ -108,7 +108,7 @@ void register_GTOPair_class(){
         }
         { //::Squire::GTOPair::R2
         
-            typedef double ( ::Squire::GTOPair::*R2_function_type )(  ) const;
+            typedef double ( ::Squire::GTOPair::*R2_function_type)(  ) const;
             R2_function_type R2_function_value( &::Squire::GTOPair::R2 );
             
             GTOPair_exposer.def( 
@@ -140,7 +140,7 @@ void register_GTOPair_class(){
         }
         { //::Squire::GTOPair::eta
         
-            typedef double ( ::Squire::GTOPair::*eta_function_type )(  ) const;
+            typedef double ( ::Squire::GTOPair::*eta_function_type)(  ) const;
             eta_function_type eta_function_value( &::Squire::GTOPair::eta );
             
             GTOPair_exposer.def( 
@@ -150,7 +150,7 @@ void register_GTOPair_class(){
         }
         { //::Squire::GTOPair::isNull
         
-            typedef bool ( ::Squire::GTOPair::*isNull_function_type )(  ) const;
+            typedef bool ( ::Squire::GTOPair::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::Squire::GTOPair::isNull );
             
             GTOPair_exposer.def( 
@@ -193,7 +193,7 @@ void register_GTOPair_class(){
         }
         { //::Squire::GTOPair::ss
         
-            typedef double ( ::Squire::GTOPair::*ss_function_type )(  ) const;
+            typedef double ( ::Squire::GTOPair::*ss_function_type)(  ) const;
             ss_function_type ss_function_value( &::Squire::GTOPair::ss );
             
             GTOPair_exposer.def( 
@@ -213,7 +213,7 @@ void register_GTOPair_class(){
         }
         { //::Squire::GTOPair::xi
         
-            typedef double ( ::Squire::GTOPair::*xi_function_type )(  ) const;
+            typedef double ( ::Squire::GTOPair::*xi_function_type)(  ) const;
             xi_function_type xi_function_value( &::Squire::GTOPair::xi );
             
             GTOPair_exposer.def( 
@@ -223,7 +223,7 @@ void register_GTOPair_class(){
         }
         { //::Squire::GTOPair::zeta
         
-            typedef double ( ::Squire::GTOPair::*zeta_function_type )(  ) const;
+            typedef double ( ::Squire::GTOPair::*zeta_function_type)(  ) const;
             zeta_function_type zeta_function_value( &::Squire::GTOPair::zeta );
             
             GTOPair_exposer.def( 

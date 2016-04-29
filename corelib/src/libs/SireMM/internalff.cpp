@@ -33,6 +33,7 @@
 #include "SireMaths/torsion.h"
 
 #include "SireBase/property.h"
+#include "SireBase/stringproperty.h"
 
 #include "SireMol/mover.hpp"
 
@@ -425,7 +426,7 @@ void InternalPotential::calculatePhysicalEnergy(
                                           getCoords(dihedral.atom3(), cgroup_array) );
                            
             vals.set(phi, ang.to(radians));
-            
+
             dihnrg += dihedral.function().evaluate(vals);
         }
         
@@ -2088,12 +2089,14 @@ static const RegisterMetaType<InternalFF> r_internalff;
 QDataStream SIREMM_EXPORT &operator<<(QDataStream &ds,
                                       const InternalFF &internalff)
 {
-    writeHeader(ds, r_internalff, 1);
+    writeHeader(ds, r_internalff, 2);
     
     SharedDataStream sds(ds);
     
     sds << internalff.mols << internalff.changed_mols
         << internalff.props
+        << internalff.cljgroups
+        << internalff.propmaps
         << static_cast<const G1FF&>(internalff);
         
     return ds;
@@ -2105,18 +2108,42 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
 {
     VersionID v = readHeader(ds, r_internalff);
     
-    if (v == 1)
+    if (v == 2)
+    {
+        SharedDataStream sds(ds);
+        
+        sds >> internalff.mols >> internalff.changed_mols
+            >> internalff.props
+            >> internalff.cljgroups
+            >> internalff.propmaps
+            >> static_cast<G1FF&>(internalff);
+        
+        internalff._pvt_updateName();
+        internalff.isstrict = internalff.props.property("strict")
+                                        .asA<VariantProperty>()
+                                        .convertTo<bool>();
+        
+        internalff.calc_14_nrgs = internalff.props.property("calculate14")
+                                            .asA<VariantProperty>()
+                                            .convertTo<bool>();
+    }
+    else if (v == 1)
     {
         SharedDataStream sds(ds);
         
         sds >> internalff.mols >> internalff.changed_mols
             >> internalff.props
             >> static_cast<G1FF&>(internalff);
-            
+        
+        internalff.cljgroups.clear();
+        internalff.propmaps.clear();
+        
         internalff._pvt_updateName();
         internalff.isstrict = internalff.props.property("strict")
                                         .asA<VariantProperty>()
                                         .convertTo<bool>();
+        
+        internalff.calc_14_nrgs = false;
     }
     else
         throw version_error(v, "1", r_internalff, CODELOC);
@@ -2127,18 +2154,22 @@ QDataStream SIREMM_EXPORT &operator>>(QDataStream &ds,
 /** Constructor */
 InternalFF::InternalFF()
            : ConcreteProperty<InternalFF,G1FF>(),
-             FF3D(), InternalPotential()
+             FF3D(), InternalPotential(), calc_14_nrgs(false)
 {
     props.setProperty("strict", VariantProperty(true));
+    props.setProperty("calculate14", VariantProperty(calc_14_nrgs));
+    props.setProperty("combiningRules", VariantProperty("arithmetic"));
 }
 
 /** Construct a named internal forcefield */
 InternalFF::InternalFF(const QString &name)
            : ConcreteProperty<InternalFF,G1FF>(),
-             FF3D(), InternalPotential()
+             FF3D(), InternalPotential(), calc_14_nrgs(false)
 {
     G1FF::setName(name);
     props.setProperty("strict", VariantProperty(true));
+    props.setProperty("calculate14", VariantProperty(calc_14_nrgs));
+    props.setProperty("combiningRules", VariantProperty("arithmetic"));
 }
 
 /** Copy constructor */
@@ -2146,7 +2177,11 @@ InternalFF::InternalFF(const InternalFF &other)
            : ConcreteProperty<InternalFF,G1FF>(other),
              FF3D(other), InternalPotential(other),
              mols(other.mols), changed_mols(other.changed_mols),
-             ffcomponents(other.ffcomponents), props(other.props)
+             cljgroups(other.cljgroups),
+             propmaps(other.propmaps),
+             ffcomponents(other.ffcomponents),
+             props(other.props),
+             calc_14_nrgs(other.calc_14_nrgs)
 {}
 
 /** Destructor */
@@ -2166,6 +2201,10 @@ InternalFF& InternalFF::operator=(const InternalFF &other)
         changed_mols = other.changed_mols;
         ffcomponents = other.ffcomponents;
         props = other.props;
+        
+        cljgroups = other.cljgroups;
+        propmaps = other.propmaps;
+        calc_14_nrgs = other.calc_14_nrgs;
     }
     
     return *this;
@@ -2174,7 +2213,8 @@ InternalFF& InternalFF::operator=(const InternalFF &other)
 /** Comparison operator */
 bool InternalFF::operator==(const InternalFF &other) const
 {
-    return G1FF::operator==(other);
+    return G1FF::operator==(other) and cljgroups == other.cljgroups and
+           propmaps == other.propmaps and calc_14_nrgs == other.calc_14_nrgs;
 }
 
 /** Comparison operator */
@@ -2264,6 +2304,13 @@ bool InternalFF::setStrict(bool strict)
         
         mols = new_mols;
         this->mustNowRecalculateFromScratch();
+        
+        for (QHash<MolNum,CLJ14Group>::iterator it = cljgroups.begin();
+             it != cljgroups.end();
+             ++it)
+        {
+            it.value().setStrict(isstrict);
+        }
     }
     catch(...)
     {
@@ -2274,6 +2321,144 @@ bool InternalFF::setStrict(bool strict)
     props.setProperty( "strict", VariantProperty(isstrict) );
     
     return true;
+}
+
+/** Turn on the calculate of 1-4 nonbonded terms */
+void InternalFF::enable14Calculation()
+{
+    if (not calc_14_nrgs)
+    {
+        calc_14_nrgs = true;
+        bool is_strict = this->isStrict();
+        CLJFunction::COMBINING_RULES combining_rules = this->combiningRules();
+
+        const ChunkedVector<InternalPotential::Molecule> &mols_array = mols.moleculesByIndex();
+    
+        for (int i=0; i<mols.count(); ++i)
+        {
+            cljgroups.insert( mols_array[i].number(),
+                              CLJ14Group(mols_array[i].molecule(), combining_rules, is_strict,
+                                         propmaps.value(mols_array[i].number(),
+                                                        PropertyMap())) );
+        }
+    }
+}
+
+/** Disable calculation of the 1-4 nonbonded terms */
+void InternalFF::disable14Calculation()
+{
+    if (calc_14_nrgs)
+    {
+        calc_14_nrgs = false;
+        cljgroups.clear();
+    }
+}
+
+/** Turn on or off use of arithmetic combining rules when calculating
+    the 1-4 nonbonded energy */
+void InternalFF::setArithmeticCombiningRules(bool on)
+{
+    if (on)
+        this->setCombiningRules( CLJFunction::ARITHMETIC );
+    else
+        this->setCombiningRules( CLJFunction::GEOMETRIC );
+}
+
+/** Turn on or off use of geometric combining rules when calculating
+    the 1-4 nonbonded energy */
+void InternalFF::setGeometricCombiningRules(bool on)
+{
+    if (on)
+        this->setCombiningRules( CLJFunction::GEOMETRIC );
+    else
+        this->setCombiningRules( CLJFunction::ARITHMETIC );
+}
+
+/** Return the type of combining rules used when calculating the 1-4 
+    nonbonded energy */
+CLJFunction::COMBINING_RULES InternalFF::combiningRules() const
+{
+    QString rules = props.property("combiningRules").asA<VariantProperty>().convertTo<QString>();
+    
+    if (rules == QLatin1String("arithmetic"))
+        return CLJFunction::ARITHMETIC;
+    else if (rules == QLatin1String("geometric"))
+        return CLJFunction::GEOMETRIC;
+    else
+    {
+        qDebug() << "WARNING: COULD NOT INTERPRET COMBINING RULES FROM STRING"
+                 << rules << ". USING ARITHMETIC COMBINING RULES";
+        return CLJFunction::ARITHMETIC;
+    }
+}
+
+/** Set the combining rules used when calculating the 1-4 nonbonded energy,
+    returning whether or not this changes the forcefield */
+bool InternalFF::setCombiningRules(CLJFunction::COMBINING_RULES rules)
+{
+    CLJFunction::COMBINING_RULES old_rules = this->combiningRules();
+    
+    if (rules != old_rules)
+    {
+        for (QHash<MolNum,CLJ14Group>::iterator it = cljgroups.begin();
+             it != cljgroups.end();
+             ++it)
+        {
+            it.value().setCombiningRules(rules);
+        }
+        
+        switch(rules)
+        {
+        case CLJFunction::ARITHMETIC:
+            props.setProperty("combiningRules", VariantProperty("arithmetic"));
+            break;
+        case CLJFunction::GEOMETRIC:
+            props.setProperty("combiningRules", VariantProperty("geometric"));
+            break;
+        }
+        
+        return false;
+    }
+    else
+        return false;
+}
+
+/** Return whether or not arithmetic combining rules are used for the 1-4 
+    nonbonded energy calculation */
+bool InternalFF::usingArithmeticCombiningRules() const
+{
+    return combiningRules() == CLJFunction::ARITHMETIC;
+}
+
+/** Return whether or not geometric combining rules are used for the 1-4 
+    nonbonded energy calculation */
+bool InternalFF::usingGeometricCombiningRules() const
+{
+    return combiningRules() == CLJFunction::GEOMETRIC;
+}
+
+/** Turn on or off the calculation of the 1-4 terms, returning whether
+    or not this changes the forcefield */
+bool InternalFF::setUse14Calculation(bool on)
+{
+    if (calc_14_nrgs != on)
+    {
+        if (on)
+            this->enable14Calculation();
+        else
+            this->disable14Calculation();
+        
+        return true;
+    }
+    else
+        return false;
+}
+
+/** Return whether or not this forcefield also calculates the 
+    1-4 nonbonded terms */
+bool InternalFF::uses14Calculation() const
+{
+    return calc_14_nrgs;
 }
 
 /** Set the property 'name' to the value 'value'
@@ -2287,6 +2472,29 @@ bool InternalFF::setProperty(const QString &name, const Property &value)
     {
         return this->setStrict( value.asA<VariantProperty>()
                                      .convertTo<bool>() );
+    }
+    else if (name == QLatin1String("combiningRules"))
+    {
+        QString rules = value.asA<VariantProperty>().convertTo<QString>();
+
+        CLJFunction::COMBINING_RULES new_rules;
+        
+        if (rules == QLatin1String("arithmetic"))
+            new_rules = CLJFunction::ARITHMETIC;
+        else if (rules == QLatin1String("geometric"))
+            new_rules = CLJFunction::GEOMETRIC;
+        else
+            throw SireError::invalid_arg( QObject::tr(
+                    "Cannot recognise combining rules type from string '%1'. "
+                    "Available rules are 'arithmetic' and 'geometric'.")
+                        .arg(rules), CODELOC );
+        
+        return this->setCombiningRules(new_rules);
+    }
+    else if (name == QLatin1String("calculate14"))
+    {
+        return this->setUse14Calculation( value.asA<VariantProperty>()
+                                               .convertTo<bool>() );
     }
     else
         throw SireBase::missing_property( QObject::tr(
@@ -2401,6 +2609,13 @@ void InternalFF::mustNowRecalculateFromScratch()
     
     //clear any delta information
     changed_mols.clear();
+    
+    for (QHash<MolNum,CLJ14Group>::iterator it = cljgroups.begin();
+         it != cljgroups.end();
+         ++it)
+    {
+        it.value().mustNowRecalculateFromScratch();
+    }
 }
 
 /** Internal function used to get a handle on the forcefield components */
@@ -2430,6 +2645,23 @@ void InternalFF::recalculateEnergy()
             InternalPotential::calculateEnergy( mols_array[i], total_nrg );
         }
         
+        if (calc_14_nrgs)
+        {
+            double cnrg = 0;
+            double ljnrg = 0;
+        
+            for (QHash<MolNum,CLJ14Group>::iterator it = cljgroups.begin();
+                 it != cljgroups.end();
+                 ++it)
+            {
+                boost::tuple<double,double> nrg = it.value().energy();
+                cnrg += nrg.get<0>();
+                ljnrg += nrg.get<1>();
+            }
+            
+            total_nrg += Intra14Energy(cnrg, ljnrg);
+        }
+        
         this->components().setEnergy(*this, total_nrg);
     }
     else
@@ -2438,6 +2670,17 @@ void InternalFF::recalculateEnergy()
         //change in energy
         Energy old_nrg;
         Energy new_nrg;
+
+        if (calc_14_nrgs)
+        {
+            //need to set clean so that we can get the old CLJ energy
+            this->setClean();
+            double old_cnrg = FF::energy(this->components().intra14Coulomb());
+            double old_ljnrg = FF::energy(this->components().intra14LJ());
+            this->setDirty();
+            
+            old_nrg += Intra14Energy(old_cnrg, old_ljnrg);
+        }
         
         for (QHash<MolNum,ChangedMolecule>::const_iterator 
                                         it = changed_mols.constBegin();
@@ -2458,6 +2701,23 @@ void InternalFF::recalculateEnergy()
             }
         }
         
+        if (calc_14_nrgs)
+        {
+            double cnrg(0);
+            double ljnrg(0);
+
+            for (QHash<MolNum,CLJ14Group>::iterator it = cljgroups.begin();
+                 it != cljgroups.end();
+                 ++it)
+            {
+                boost::tuple<double,double> nrg = it.value().energy();
+                cnrg += nrg.get<0>();
+                ljnrg += nrg.get<1>();
+            }
+
+            new_nrg += Intra14Energy(cnrg, ljnrg);
+        }
+
         this->components().changeEnergy(*this, new_nrg - old_nrg);
         
         //can now forget about the changes :-)
@@ -2485,6 +2745,24 @@ void InternalFF::_pvt_added(const PartialMolecule &molecule, const PropertyMap &
     {
         mols.add(molecule, map, *this, false);
     }
+    
+    if (not map.isDefault())
+    {
+        propmaps.insert(molecule.number(), map);
+    }
+    
+    if (calc_14_nrgs)
+    {
+        if (cljgroups.contains(molecule.number()))
+        {
+            cljgroups[molecule.number()].add(molecule);
+        }
+        else
+        {
+            cljgroups.insert(molecule.number(),
+                             CLJ14Group(molecule, combiningRules(), isStrict(), map));
+        }
+    }
 }
 
 /** Record the fact that the molecule 'mol' has been removed from this forcefield */
@@ -2498,6 +2776,24 @@ void InternalFF::_pvt_removed(const PartialMolecule &molecule)
     else
     {
         mols.remove(molecule, *this, false);
+    }
+    
+    if (calc_14_nrgs)
+    {
+        if (cljgroups.contains(molecule.number()))
+        {
+            cljgroups[molecule.number()].remove(molecule);
+            
+            if (cljgroups[molecule.number()].isNull())
+            {
+                cljgroups.remove(molecule.number());
+            }
+        }
+    }
+    
+    if (not this->contains(molecule.number()))
+    {
+        propmaps.remove(molecule.number());
     }
 }
 
@@ -2518,6 +2814,14 @@ void InternalFF::_pvt_changed(const SireMol::Molecule &molecule, bool auto_updat
     {
         mols.change(molecule, *this, false);
     }
+    
+    if (calc_14_nrgs)
+    {
+        if (cljgroups.contains(molecule.number()))
+        {
+            cljgroups[molecule.number()].update(molecule);
+        }
+    }
 }
 
 /** Record that the provided list of molecules have changed 
@@ -2530,6 +2834,7 @@ void InternalFF::_pvt_changed(const QList<SireMol::Molecule> &molecules, bool au
 {
     InternalFF::Molecules old_mols = mols;
     QHash<MolNum,ChangedMolecule> old_changed_mols = changed_mols;
+    QHash<MolNum,CLJ14Group> old_cljgroups = cljgroups;
 
     try
     {
@@ -2548,11 +2853,23 @@ void InternalFF::_pvt_changed(const QList<SireMol::Molecule> &molecules, bool au
                 mols.change(molecule, *this, false);
             }
         }
+        
+        if (calc_14_nrgs)
+        {
+            foreach (const SireMol::Molecule &molecule, molecules)
+            {
+                if (cljgroups.contains(molecule.number()))
+                {
+                    cljgroups[molecule.number()].update(molecule);
+                }
+            }
+        }
     }
     catch(...)
     {
         mols = old_mols;
         changed_mols = old_changed_mols;
+        cljgroups = old_cljgroups;
         throw;
     }
 }
@@ -2561,6 +2878,7 @@ void InternalFF::_pvt_changed(const QList<SireMol::Molecule> &molecules, bool au
 void InternalFF::_pvt_removedAll()
 {
     mols.clear();
+    cljgroups.clear();
     this->mustNowRecalculateFromScratch();
 }
     
@@ -2569,7 +2887,14 @@ void InternalFF::_pvt_removedAll()
 bool InternalFF::_pvt_wouldChangeProperties(MolNum molnum, 
                                             const PropertyMap &map) const
 {
-    return mols.wouldChangeProperties(molnum, map);
+    if (mols.wouldChangeProperties(molnum, map))
+        return true;
+
+    else if (cljgroups.contains(molnum))
+        return cljgroups[molnum].wouldChangeProperties(map);
+
+    else
+        return false;
 }
 
 const char* InternalFF::typeName()

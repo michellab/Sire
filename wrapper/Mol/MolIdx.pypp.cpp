@@ -41,7 +41,7 @@ void register_MolIdx_class(){
         MolIdx_exposer.def( bp::init< SireMol::MolIdx const & >(( bp::arg("other") )) );
         { //::SireMol::MolIdx::hash
         
-            typedef ::uint ( ::SireMol::MolIdx::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireMol::MolIdx::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireMol::MolIdx::hash );
             
             MolIdx_exposer.def( 
@@ -51,7 +51,7 @@ void register_MolIdx_class(){
         }
         { //::SireMol::MolIdx::isNull
         
-            typedef bool ( ::SireMol::MolIdx::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireMol::MolIdx::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireMol::MolIdx::isNull );
             
             MolIdx_exposer.def( 
@@ -61,7 +61,7 @@ void register_MolIdx_class(){
         }
         { //::SireMol::MolIdx::map
         
-            typedef ::QList< SireMol::MolNum > ( ::SireMol::MolIdx::*map_function_type )( ::SireMol::Molecules const & ) const;
+            typedef ::QList< SireMol::MolNum > ( ::SireMol::MolIdx::*map_function_type)( ::SireMol::Molecules const & ) const;
             map_function_type map_function_value( &::SireMol::MolIdx::map );
             
             MolIdx_exposer.def( 
@@ -72,7 +72,7 @@ void register_MolIdx_class(){
         }
         { //::SireMol::MolIdx::map
         
-            typedef ::QList< SireMol::MolNum > ( ::SireMol::MolIdx::*map_function_type )( ::SireMol::MoleculeGroup const & ) const;
+            typedef ::QList< SireMol::MolNum > ( ::SireMol::MolIdx::*map_function_type)( ::SireMol::MoleculeGroup const & ) const;
             map_function_type map_function_value( &::SireMol::MolIdx::map );
             
             MolIdx_exposer.def( 
@@ -83,7 +83,7 @@ void register_MolIdx_class(){
         }
         { //::SireMol::MolIdx::map
         
-            typedef ::QList< SireMol::MolNum > ( ::SireMol::MolIdx::*map_function_type )( ::SireMol::MolGroupsBase const & ) const;
+            typedef ::QList< SireMol::MolNum > ( ::SireMol::MolIdx::*map_function_type)( ::SireMol::MolGroupsBase const & ) const;
             map_function_type map_function_value( &::SireMol::MolIdx::map );
             
             MolIdx_exposer.def( 
@@ -104,7 +104,7 @@ void register_MolIdx_class(){
         }
         { //::SireMol::MolIdx::operator=
         
-            typedef ::SireMol::MolIdx & ( ::SireMol::MolIdx::*assign_function_type )( ::SireMol::MolIdx const & ) ;
+            typedef ::SireMol::MolIdx & ( ::SireMol::MolIdx::*assign_function_type)( ::SireMol::MolIdx const & ) ;
             assign_function_type assign_function_value( &::SireMol::MolIdx::operator= );
             
             MolIdx_exposer.def( 
@@ -116,7 +116,7 @@ void register_MolIdx_class(){
         }
         { //::SireMol::MolIdx::toString
         
-            typedef ::QString ( ::SireMol::MolIdx::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::MolIdx::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::MolIdx::toString );
             
             MolIdx_exposer.def( 
@@ -136,7 +136,7 @@ void register_MolIdx_class(){
         }
         { //::SireMol::MolIdx::what
         
-            typedef char const * ( ::SireMol::MolIdx::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMol::MolIdx::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMol::MolIdx::what );
             
             MolIdx_exposer.def( 

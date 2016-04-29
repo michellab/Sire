@@ -37,7 +37,7 @@ add_library (SireAnalysis ${SIREANALYSIS_SOURCES})
 
 set_target_properties (SireAnalysis PROPERTIES
                        VERSION ${SIRE_VERSION}
-                       SOVERSION ${SIRE_VERSION_MAJOR}
+                       SOVERSION ${S_VERSION_MAJOR}
                       )
 
 # Link to other Sire libraries

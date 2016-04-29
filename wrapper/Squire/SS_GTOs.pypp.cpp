@@ -39,7 +39,7 @@ void register_SS_GTOs_class(){
         SS_GTOs_exposer.def( bp::init< Squire::SS_GTOs const & >(( bp::arg("other") )) );
         { //::Squire::SS_GTOs::coulomb_integral
         
-            typedef ::SireMaths::TrigMatrix ( ::Squire::SS_GTOs::*coulomb_integral_function_type )( ::Squire::SS_GTOs const & ) const;
+            typedef ::SireMaths::TrigMatrix ( ::Squire::SS_GTOs::*coulomb_integral_function_type)( ::Squire::SS_GTOs const & ) const;
             coulomb_integral_function_type coulomb_integral_function_value( &::Squire::SS_GTOs::coulomb_integral );
             
             SS_GTOs_exposer.def( 
@@ -50,7 +50,7 @@ void register_SS_GTOs_class(){
         }
         { //::Squire::SS_GTOs::exchange_integral
         
-            typedef ::SireMaths::TrigMatrix ( ::Squire::SS_GTOs::*exchange_integral_function_type )( ::Squire::SS_GTOs const & ) const;
+            typedef ::SireMaths::TrigMatrix ( ::Squire::SS_GTOs::*exchange_integral_function_type)( ::Squire::SS_GTOs const & ) const;
             exchange_integral_function_type exchange_integral_function_value( &::Squire::SS_GTOs::exchange_integral );
             
             SS_GTOs_exposer.def( 
@@ -61,7 +61,7 @@ void register_SS_GTOs_class(){
         }
         { //::Squire::SS_GTOs::kinetic_integral
         
-            typedef ::SireMaths::TrigMatrix ( ::Squire::SS_GTOs::*kinetic_integral_function_type )(  ) const;
+            typedef ::SireMaths::TrigMatrix ( ::Squire::SS_GTOs::*kinetic_integral_function_type)(  ) const;
             kinetic_integral_function_type kinetic_integral_function_value( &::Squire::SS_GTOs::kinetic_integral );
             
             SS_GTOs_exposer.def( 
@@ -71,7 +71,7 @@ void register_SS_GTOs_class(){
         }
         { //::Squire::SS_GTOs::operator=
         
-            typedef ::Squire::SS_GTOs & ( ::Squire::SS_GTOs::*assign_function_type )( ::Squire::SS_GTOs const & ) ;
+            typedef ::Squire::SS_GTOs & ( ::Squire::SS_GTOs::*assign_function_type)( ::Squire::SS_GTOs const & ) ;
             assign_function_type assign_function_value( &::Squire::SS_GTOs::operator= );
             
             SS_GTOs_exposer.def( 
@@ -83,7 +83,7 @@ void register_SS_GTOs_class(){
         }
         { //::Squire::SS_GTOs::overlap_integral
         
-            typedef ::SireMaths::TrigMatrix ( ::Squire::SS_GTOs::*overlap_integral_function_type )(  ) const;
+            typedef ::SireMaths::TrigMatrix ( ::Squire::SS_GTOs::*overlap_integral_function_type)(  ) const;
             overlap_integral_function_type overlap_integral_function_value( &::Squire::SS_GTOs::overlap_integral );
             
             SS_GTOs_exposer.def( 
@@ -93,7 +93,7 @@ void register_SS_GTOs_class(){
         }
         { //::Squire::SS_GTOs::potential_integral
         
-            typedef ::SireMaths::TrigMatrix ( ::Squire::SS_GTOs::*potential_integral_function_type )( ::QVector< Squire::PointCharge > const & ) const;
+            typedef ::SireMaths::TrigMatrix ( ::Squire::SS_GTOs::*potential_integral_function_type)( ::QVector< Squire::PointCharge > const & ) const;
             potential_integral_function_type potential_integral_function_value( &::Squire::SS_GTOs::potential_integral );
             
             SS_GTOs_exposer.def( 
@@ -104,7 +104,7 @@ void register_SS_GTOs_class(){
         }
         { //::Squire::SS_GTOs::potential_integral
         
-            typedef ::SireMaths::TrigMatrix ( ::Squire::SS_GTOs::*potential_integral_function_type )( ::QVector< Squire::PointCharge > const &,int ) const;
+            typedef ::SireMaths::TrigMatrix ( ::Squire::SS_GTOs::*potential_integral_function_type)( ::QVector< Squire::PointCharge > const &,int ) const;
             potential_integral_function_type potential_integral_function_value( &::Squire::SS_GTOs::potential_integral );
             
             SS_GTOs_exposer.def( 

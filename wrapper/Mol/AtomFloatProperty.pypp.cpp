@@ -55,7 +55,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::array
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef ::SireBase::PackedArray2D< double > const & ( ::SireMol::AtomProperty< double >::*array_function_type )(  ) const;
+            typedef ::SireBase::PackedArray2D< double > const & ( ::SireMol::AtomProperty< double >::*array_function_type)(  ) const;
             array_function_type array_function_value( &::SireMol::AtomProperty< double >::array );
             
             AtomFloatProperty_exposer.def( 
@@ -67,7 +67,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::assertCanConvert
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< double >::*assertCanConvert_function_type )( ::QVariant const & ) const;
+            typedef void ( ::SireMol::AtomProperty< double >::*assertCanConvert_function_type)( ::QVariant const & ) const;
             assertCanConvert_function_type assertCanConvert_function_value( &::SireMol::AtomProperty< double >::assertCanConvert );
             
             AtomFloatProperty_exposer.def( 
@@ -79,7 +79,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::assignFrom
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< double >::*assignFrom_function_type )( ::SireMol::AtomProperty< QVariant > const & ) ;
+            typedef void ( ::SireMol::AtomProperty< double >::*assignFrom_function_type)( ::SireMol::AtomProperty< QVariant > const & ) ;
             assignFrom_function_type assignFrom_function_value( &::SireMol::AtomProperty< double >::assignFrom );
             
             AtomFloatProperty_exposer.def( 
@@ -91,7 +91,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::at
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< double > const & ( ::SireMol::AtomProperty< double >::*at_function_type )( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::detail::PackedArray2D_Array< double > const & ( ::SireMol::AtomProperty< double >::*at_function_type)( ::SireMol::CGIdx ) const;
             at_function_type at_function_value( &::SireMol::AtomProperty< double >::at );
             
             AtomFloatProperty_exposer.def( 
@@ -104,7 +104,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::at
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef double const & ( ::SireMol::AtomProperty< double >::*at_function_type )( ::SireMol::CGAtomIdx const & ) const;
+            typedef double const & ( ::SireMol::AtomProperty< double >::*at_function_type)( ::SireMol::CGAtomIdx const & ) const;
             at_function_type at_function_value( &::SireMol::AtomProperty< double >::at );
             
             AtomFloatProperty_exposer.def( 
@@ -117,7 +117,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::canConvert
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef bool ( ::SireMol::AtomProperty< double >::*canConvert_function_type )( ::QVariant const & ) const;
+            typedef bool ( ::SireMol::AtomProperty< double >::*canConvert_function_type)( ::QVariant const & ) const;
             canConvert_function_type canConvert_function_value( &::SireMol::AtomProperty< double >::canConvert );
             
             AtomFloatProperty_exposer.def( 
@@ -129,7 +129,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::copyFrom
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< double >::*copyFrom_function_type )( ::QVector< double > const & ) ;
+            typedef void ( ::SireMol::AtomProperty< double >::*copyFrom_function_type)( ::QVector< double > const & ) ;
             copyFrom_function_type copyFrom_function_value( &::SireMol::AtomProperty< double >::copyFrom );
             
             AtomFloatProperty_exposer.def( 
@@ -141,7 +141,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::copyFrom
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< double >::*copyFrom_function_type )( ::QVector< double > const &,::SireMol::AtomSelection const & ) ;
+            typedef void ( ::SireMol::AtomProperty< double >::*copyFrom_function_type)( ::QVector< double > const &,::SireMol::AtomSelection const & ) ;
             copyFrom_function_type copyFrom_function_value( &::SireMol::AtomProperty< double >::copyFrom );
             
             AtomFloatProperty_exposer.def( 
@@ -153,7 +153,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::count
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< double >::*count_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomProperty< double >::*count_function_type)(  ) const;
             count_function_type count_function_value( &::SireMol::AtomProperty< double >::count );
             
             AtomFloatProperty_exposer.def( 
@@ -164,7 +164,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::divide
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< double >::*divide_function_type )( ::QVector< SireMol::AtomSelection > const & ) const;
+            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< double >::*divide_function_type)( ::QVector< SireMol::AtomSelection > const & ) const;
             divide_function_type divide_function_value( &::SireMol::AtomProperty< double >::divide );
             
             AtomFloatProperty_exposer.def( 
@@ -176,7 +176,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::divideByResidue
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< double >::*divideByResidue_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< double >::*divideByResidue_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             divideByResidue_function_type divideByResidue_function_value( &::SireMol::AtomProperty< double >::divideByResidue );
             
             AtomFloatProperty_exposer.def( 
@@ -200,7 +200,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::get
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< double > const & ( ::SireMol::AtomProperty< double >::*get_function_type )( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::detail::PackedArray2D_Array< double > const & ( ::SireMol::AtomProperty< double >::*get_function_type)( ::SireMol::CGIdx ) const;
             get_function_type get_function_value( &::SireMol::AtomProperty< double >::get );
             
             AtomFloatProperty_exposer.def( 
@@ -213,7 +213,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::get
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef double const & ( ::SireMol::AtomProperty< double >::*get_function_type )( ::SireMol::CGAtomIdx const & ) const;
+            typedef double const & ( ::SireMol::AtomProperty< double >::*get_function_type)( ::SireMol::CGAtomIdx const & ) const;
             get_function_type get_function_value( &::SireMol::AtomProperty< double >::get );
             
             AtomFloatProperty_exposer.def( 
@@ -226,7 +226,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::isCompatibleWith
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef bool ( ::SireMol::AtomProperty< double >::*isCompatibleWith_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef bool ( ::SireMol::AtomProperty< double >::*isCompatibleWith_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             isCompatibleWith_function_type isCompatibleWith_function_value( &::SireMol::AtomProperty< double >::isCompatibleWith );
             
             AtomFloatProperty_exposer.def( 
@@ -238,7 +238,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::isEmpty
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef bool ( ::SireMol::AtomProperty< double >::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMol::AtomProperty< double >::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMol::AtomProperty< double >::isEmpty );
             
             AtomFloatProperty_exposer.def( 
@@ -249,7 +249,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::matchToSelection
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef ::SireMol::AtomProperty< double > ( ::SireMol::AtomProperty< double >::*matchToSelection_function_type )( ::SireMol::AtomSelection const & ) const;
+            typedef ::SireMol::AtomProperty< double > ( ::SireMol::AtomProperty< double >::*matchToSelection_function_type)( ::SireMol::AtomSelection const & ) const;
             matchToSelection_function_type matchToSelection_function_value( &::SireMol::AtomProperty< double >::matchToSelection );
             
             AtomFloatProperty_exposer.def( 
@@ -261,7 +261,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::merge
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< double >::*merge_function_type )( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< double >::*merge_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             merge_function_type merge_function_value( &::SireMol::AtomProperty< double >::merge );
             
             AtomFloatProperty_exposer.def( 
@@ -273,7 +273,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::nAtoms
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< double >::*nAtoms_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomProperty< double >::*nAtoms_function_type)(  ) const;
             nAtoms_function_type nAtoms_function_value( &::SireMol::AtomProperty< double >::nAtoms );
             
             AtomFloatProperty_exposer.def( 
@@ -284,7 +284,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::nAtoms
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< double >::*nAtoms_function_type )( ::SireMol::CGIdx ) const;
+            typedef int ( ::SireMol::AtomProperty< double >::*nAtoms_function_type)( ::SireMol::CGIdx ) const;
             nAtoms_function_type nAtoms_function_value( &::SireMol::AtomProperty< double >::nAtoms );
             
             AtomFloatProperty_exposer.def( 
@@ -296,7 +296,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::nCutGroups
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< double >::*nCutGroups_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomProperty< double >::*nCutGroups_function_type)(  ) const;
             nCutGroups_function_type nCutGroups_function_value( &::SireMol::AtomProperty< double >::nCutGroups );
             
             AtomFloatProperty_exposer.def( 
@@ -308,7 +308,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::operator=
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef ::SireMol::AtomProperty< double > & ( ::SireMol::AtomProperty< double >::*assign_function_type )( ::SireMol::AtomProperty< double > const & ) ;
+            typedef ::SireMol::AtomProperty< double > & ( ::SireMol::AtomProperty< double >::*assign_function_type)( ::SireMol::AtomProperty< double > const & ) ;
             assign_function_type assign_function_value( &::SireMol::AtomProperty< double >::operator= );
             
             AtomFloatProperty_exposer.def( 
@@ -322,7 +322,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::operator[]
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< double > const & ( ::SireMol::AtomProperty< double >::*__getitem___function_type )( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::detail::PackedArray2D_Array< double > const & ( ::SireMol::AtomProperty< double >::*__getitem___function_type)( ::SireMol::CGIdx ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< double >::operator[] );
             
             AtomFloatProperty_exposer.def( 
@@ -335,7 +335,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::operator[]
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef double const & ( ::SireMol::AtomProperty< double >::*__getitem___function_type )( ::SireMol::CGAtomIdx const & ) const;
+            typedef double const & ( ::SireMol::AtomProperty< double >::*__getitem___function_type)( ::SireMol::CGAtomIdx const & ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< double >::operator[] );
             
             AtomFloatProperty_exposer.def( 
@@ -348,7 +348,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::set
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef ::SireMol::AtomProperty< double > & ( ::SireMol::AtomProperty< double >::*set_function_type )( ::SireMol::CGAtomIdx const &,double const & ) ;
+            typedef ::SireMol::AtomProperty< double > & ( ::SireMol::AtomProperty< double >::*set_function_type)( ::SireMol::CGAtomIdx const &,double const & ) ;
             set_function_type set_function_value( &::SireMol::AtomProperty< double >::set );
             
             AtomFloatProperty_exposer.def( 
@@ -361,7 +361,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::set
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef ::SireMol::AtomProperty< double > & ( ::SireMol::AtomProperty< double >::*set_function_type )( ::SireMol::CGIdx,::QVector< double > const & ) ;
+            typedef ::SireMol::AtomProperty< double > & ( ::SireMol::AtomProperty< double >::*set_function_type)( ::SireMol::CGIdx,::QVector< double > const & ) ;
             set_function_type set_function_value( &::SireMol::AtomProperty< double >::set );
             
             AtomFloatProperty_exposer.def( 
@@ -374,7 +374,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::size
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef int ( ::SireMol::AtomProperty< double >::*size_function_type )(  ) const;
+            typedef int ( ::SireMol::AtomProperty< double >::*size_function_type)(  ) const;
             size_function_type size_function_value( &::SireMol::AtomProperty< double >::size );
             
             AtomFloatProperty_exposer.def( 
@@ -385,7 +385,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::toString
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef ::QString ( ::SireMol::AtomProperty< double >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMol::AtomProperty< double >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMol::AtomProperty< double >::toString );
             
             AtomFloatProperty_exposer.def( 
@@ -396,7 +396,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::toVariant
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef ::SireMol::AtomProperty< QVariant > ( ::SireMol::AtomProperty< double >::*toVariant_function_type )(  ) const;
+            typedef ::SireMol::AtomProperty< QVariant > ( ::SireMol::AtomProperty< double >::*toVariant_function_type)(  ) const;
             toVariant_function_type toVariant_function_value( &::SireMol::AtomProperty< double >::toVariant );
             
             AtomFloatProperty_exposer.def( 
@@ -407,7 +407,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::toVector
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef ::QVector< double > ( ::SireMol::AtomProperty< double >::*toVector_function_type )(  ) const;
+            typedef ::QVector< double > ( ::SireMol::AtomProperty< double >::*toVector_function_type)(  ) const;
             toVector_function_type toVector_function_value( &::SireMol::AtomProperty< double >::toVector );
             
             AtomFloatProperty_exposer.def( 
@@ -418,7 +418,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::toVector
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef ::QVector< double > ( ::SireMol::AtomProperty< double >::*toVector_function_type )( ::SireMol::AtomSelection const & ) const;
+            typedef ::QVector< double > ( ::SireMol::AtomProperty< double >::*toVector_function_type)( ::SireMol::AtomSelection const & ) const;
             toVector_function_type toVector_function_value( &::SireMol::AtomProperty< double >::toVector );
             
             AtomFloatProperty_exposer.def( 

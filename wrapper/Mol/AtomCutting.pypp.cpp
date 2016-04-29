@@ -51,7 +51,7 @@ void register_AtomCutting_class(){
         AtomCutting_exposer.def( bp::self != bp::self );
         { //::SireMol::AtomCutting::operator()
         
-            typedef ::SireMol::MolStructureEditor ( ::SireMol::AtomCutting::*__call___function_type )( ::SireMol::MolStructureEditor & ) const;
+            typedef ::SireMol::MolStructureEditor ( ::SireMol::AtomCutting::*__call___function_type)( ::SireMol::MolStructureEditor & ) const;
             __call___function_type __call___function_value( &::SireMol::AtomCutting::operator() );
             
             AtomCutting_exposer.def( 
@@ -62,7 +62,7 @@ void register_AtomCutting_class(){
         }
         { //::SireMol::AtomCutting::operator=
         
-            typedef ::SireMol::AtomCutting & ( ::SireMol::AtomCutting::*assign_function_type )( ::SireMol::AtomCutting const & ) ;
+            typedef ::SireMol::AtomCutting & ( ::SireMol::AtomCutting::*assign_function_type)( ::SireMol::AtomCutting const & ) ;
             assign_function_type assign_function_value( &::SireMol::AtomCutting::operator= );
             
             AtomCutting_exposer.def( 

@@ -41,7 +41,7 @@ void register_S_GTO_class(){
         S_GTO_exposer.def( bp::init< Squire::S_GTO const & >(( bp::arg("other") )) );
         { //::Squire::S_GTO::angularMomentum
         
-            typedef int ( ::Squire::S_GTO::*angularMomentum_function_type )(  ) const;
+            typedef int ( ::Squire::S_GTO::*angularMomentum_function_type)(  ) const;
             angularMomentum_function_type angularMomentum_function_value( &::Squire::S_GTO::angularMomentum );
             
             S_GTO_exposer.def( 
@@ -51,7 +51,7 @@ void register_S_GTO_class(){
         }
         { //::Squire::S_GTO::nOrbitals
         
-            typedef int ( ::Squire::S_GTO::*nOrbitals_function_type )(  ) const;
+            typedef int ( ::Squire::S_GTO::*nOrbitals_function_type)(  ) const;
             nOrbitals_function_type nOrbitals_function_value( &::Squire::S_GTO::nOrbitals );
             
             S_GTO_exposer.def( 
@@ -62,7 +62,7 @@ void register_S_GTO_class(){
         S_GTO_exposer.def( bp::self != bp::self );
         { //::Squire::S_GTO::operator=
         
-            typedef ::Squire::S_GTO & ( ::Squire::S_GTO::*assign_function_type )( ::Squire::S_GTO const & ) ;
+            typedef ::Squire::S_GTO & ( ::Squire::S_GTO::*assign_function_type)( ::Squire::S_GTO const & ) ;
             assign_function_type assign_function_value( &::Squire::S_GTO::operator= );
             
             S_GTO_exposer.def( 
@@ -75,7 +75,7 @@ void register_S_GTO_class(){
         S_GTO_exposer.def( bp::self == bp::self );
         { //::Squire::S_GTO::toString
         
-            typedef ::QString ( ::Squire::S_GTO::*toString_function_type )(  ) const;
+            typedef ::QString ( ::Squire::S_GTO::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::Squire::S_GTO::toString );
             
             S_GTO_exposer.def( 

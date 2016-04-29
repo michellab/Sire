@@ -410,7 +410,12 @@ void MolecularDynamics::move(System &system, int nmoves, bool record_stats)
 {
     if (nmoves <= 0)
         return;
-        
+
+    //first, calculate the energy of the system - this is to prevent a
+    //weird bug that causes systems to blow up if the energy has not been
+    //calculated - THIS NEEDS FIXING!
+    system.energy();
+
     MolecularDynamics old_state(*this);
         
     System old_system_state(system);

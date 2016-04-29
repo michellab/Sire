@@ -6,32 +6,111 @@
 #
 ################################
 
+set (S_VERSION_MAJOR "2016")
+set (S_VERSION_MINOR "1")
+set (S_VERSION_PATCH "0")             
+
+set (SIRE_VERSION "${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}")
+
 ############
 ############ SETTING INITIAL SIRE VARIABLES
 ############
 
-# require cmake >= 2.8.12
-cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
+# require cmake >= 2.8.11.2
+cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
 cmake_policy(VERSION 2.8)
 
 # use loose loop syntax in CMakeLists files
 set( CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE )
 
+# Option used to control the number of cores for the compile
+set ( BUILD_NCORES "0" 
+      CACHE STRING 
+      "The number of cores used to compile Sire. Leave this at 0 to automatically work this out." )
+
+string(REGEX MATCH "[0-9]+" NCORES ${BUILD_NCORES})
+
 # get the number of cores on this machine - useful for
 # compiling dependencies
-include(ProcessorCount)
-ProcessorCount(NCORES)
-if (NCORES EQUAL 0)
+if ( NCORES EQUAL 0 )
+  include(ProcessorCount)
+  ProcessorCount(NCORES)
+  if (NCORES EQUAL 0)
     set( NCORES 1 )
+  endif()
 endif()
-message(STATUS "Configuring on a machine with number of cores = ${NCORES}")
 
-# Option to set the install directory of Sire
-set( SIRE_INSTALL_PREFIX "$ENV{HOME}/sire.app" CACHE PATH
-        "Install directory for Sire. This directory can be moved after compilation" )
+if ( CMAKE_GENERATOR MATCHES "Xcode" )
+  message( STATUS "Creating Sire Xcode files. Note that this will "
+                  "only work if Sire has already been installed..." )
 
-set(CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
-         "Prefix prepended to install directories" FORCE ) 
+  # Look for the Sire cmake config file that should have been
+  # installed with Sire...
+  set( SIRE_APP "$ENV{HOME}/sire.app" CACHE PATH
+          "The full path to the sire.app installed Sire application." )
+
+  set( SIRE_INCLUDE_DIR "${SIRE_APP}/include/Sire" )
+
+  set ( SIRE_COMP_CMAKE "${SIRE_INCLUDE_DIR}/cmake/SireCompileVariables.cmake" )
+
+  # Look for the "SireCompileVariables.cmake" file in the install directory
+  if (EXISTS "${SIRE_COMP_CMAKE}")
+    include( "${SIRE_COMP_CMAKE}" )
+  else()
+    # try the anaconda path
+    set( CONDA_APP "$ENV{HOME}/sire.app/pkgs/sire-${SIRE_VERSION}" CACHE PATH
+          "Install directory for Sire within the Anaconda/Miniconda distribution" )
+
+    set( SIRE_INCLUDE_DIR "${CONDA_APP}/include/Sire" )
+    set ( SIRE_COMP_CMAKE "${SIRE_INCLUDE_DIR}/cmake/SireCompileVariables.cmake" )
+
+    if (EXISTS "${SIRE_COMP_CMAKE}")
+      include( "${SIRE_COMP_CMAKE}" )
+    else()
+      message( STATUS "You need to provide the full path to sire.app and check that it contains the file ${SIRE_COMP_CMAKE}" )
+      message( FATAL_ERROR "Do this by running 'cmake -G Xcode -DSIRE_APP=/path/to/sire.app /path/to/corelib/source'" )
+    endif()
+  endif()
+
+  # Now set the C++, C and Fortran compilers to be used to compile the wrappers
+  # These have to be the same as used to compile corelib
+  set(CMAKE_C_COMPILER "${SIRE_C_COMPILER}")
+  set(CMAKE_CXX_COMPILER "${SIRE_CXX_COMPILER}")
+
+  message( STATUS "Setting C compiler to ${SIRE_C_COMPILER} and C++ compiler to ${SIRE_CXX_COMPILER}" )
+else()
+  message(STATUS "Configuring on a machine with number of cores = ${NCORES}")
+
+  # Option to compile and install into an anaconda or miniconda directory
+  option( ANACONDA_BUILD "Build into an existing anaconda/miniconda installation" OFF )
+
+  if ( ANACONDA_BUILD )
+    message( STATUS "Building into an existing Anaconda/Miniconda installation..." )
+    # Where is anaconda installed
+    set( ANACONDA_BASE "$ENV{HOME}/miniconda3" CACHE PATH
+            "Install directory for Anaconda/Miniconda (python3)" )
+
+    # Make sure that there is a python3 executable in the bin directory
+    if ( NOT EXISTS "${ANACONDA_BASE}/bin/python3" )
+      message( FATAL_ERROR "Cannot find ${ANACONDA_BASE}/bin/python3. "
+                           "Please set the full path to the Anaconda or Miniconda "
+                           "installation directory." )
+    endif()
+
+    set( SIRE_INSTALL_PREFIX "${ANACONDA_BASE}/pkgs/sire-${SIRE_VERSION}" CACHE PATH
+            "Install directory for Sire within the Anaconda/Miniconda distribution" )
+
+    set(CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
+             "Prefix prepended to install directories" FORCE )
+  else()
+    # Option to set the install directory of Sire
+    set( SIRE_INSTALL_PREFIX "$ENV{HOME}/sire.app" CACHE PATH
+            "Install directory for Sire. This directory can be moved after compilation" )
+
+    set(CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
+             "Prefix prepended to install directories" FORCE ) 
+  endif()
+endif()
 
 message( STATUS "Sire will be compiled and installed to directory ${CMAKE_INSTALL_PREFIX}" )
 
@@ -58,24 +137,24 @@ macro( SAVE_SIRE_VARIABLE _var _value )
         "set( ${_var} \"${_value}\" )\n")
 endmacro (SAVE_SIRE_VARIABLE)
 
-# project version
-set (SIRE_VERSION_MAJOR "0")
-set (SIRE_VERSION_MINOR "0")
-set (SIRE_VERSION_PATCH "1")
-
-set (SIRE_VERSION "${SIRE_VERSION_MAJOR}.${SIRE_VERSION_MINOR}.${SIRE_VERSION_PATCH}")
-
 math (EXPR SIRE_VERSION_NUMBER 
-      "${SIRE_VERSION_MAJOR}*100000 + ${SIRE_VERSION_MINOR}*100 + ${SIRE_VERSION_PATCH}")
+      "${S_VERSION_MAJOR}*100000 + ${S_VERSION_MINOR}*100 + ${S_VERSION_PATCH}")
 
-set (SIRE_VERSION_STRING "${SIRE_VERSION_MAJOR}_${SIRE_VERSION_MINOR}_${SIRE_VERSION_PATCH}")
+set (SIRE_VERSION_STRING "${S_VERSION_MAJOR}_${S_VERSION_MINOR}_${S_VERSION_PATCH}")
 
-save_sire_variable( "SIRE_VERSION_MAJOR" "${SIRE_VERSION_MAJOR}" )
-save_sire_variable( "SIRE_VERSION_MINOR" "${SIRE_VERSION_MINOR}" )
-save_sire_variable( "SIRE_VERSION_PATCH" "${SIRE_VERSION_PATCH}" )
-save_sire_variable( "SIRE_VERSION" "${SIRE_VERSION}" )
+save_sire_variable( "S_VERSION_MAJOR" "${S_VERSION_MAJOR}" )
+save_sire_variable( "S_VERSION_MINOR" "${S_VERSION_MINOR}" )
+save_sire_variable( "S_VERSION_PATCH" "${S_VERSION_PATCH}" )
+save_sire_variable( "SIREE_VERSION" "${SIRE_VERSION}" )
 save_sire_variable( "SIRE_VERSION_STRING" "${SIRE_VERSION_STRING}" )
 save_sire_variable( "SIRE_APP_DIR" "${CMAKE_INSTALL_PREFIX}" )
+
+save_sire_variable( "SIRE_ANACONDA_BUILD" "${ANACONDA_BUILD}" )
+save_sire_variable( "BUILD_NCORES" "${NCORES}" )
+
+if (ANACONDA_BUILD)
+  save_sire_variable( "SIRE_ANACONDA_BASE" "${ANACONDA_BASE}" )
+endif()
 
 # Ensure that the Sire's directories are searched for header files
 # before the system directories - this prevents problems in case
@@ -99,7 +178,17 @@ set (SIRE_BIN "bin")
 set (SIRE_LIBS "lib")
 # Where to install all bundled components
 set (SIRE_BUNDLED_DIR "bundled" )
+
+#if (ANACONDA_BUILD)
+#  # For an anaconda build, we copy all of the bundled
+#  # libraries into the anaconda lib directory
+#  set (SIRE_BUNDLED_LIBS "${ANACONDA_BASE}/lib")
+#else()
+#  set (SIRE_BUNDLED_LIBS "${SIRE_BUNDLED_DIR}/lib")
+#endif()
+
 set (SIRE_BUNDLED_LIBS "${SIRE_BUNDLED_DIR}/lib")
+
 # Static library install dir
 set (SIRE_ARCHIVES "lib/static")
 # Include (header) files install dir
@@ -108,8 +197,21 @@ set (SIRE_INCLUDES "include/Sire")
 set (SIRE_CMAKEFILES "include/Sire/cmake")
 # Sire share directory (for parameters etc.)
 set (SIRE_SHARE "share/Sire")
+
+if (ANACONDA_BUILD)
+  set( SIRE_SHARE_EXPORT "pkgs/sire-${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}/share/Sire" )
+else()
+  set( SIRE_SHARE_EXPORT "${SIRE_SHARE}")
+endif()
+
 # Where will the test files be saved?
 set (SIRE_TEST "test")
+
+if (ANACONDA_BUILD)
+  set( SIRE_TEST_EXPORT "pkgs/sire-${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}/test" )
+else()
+  set( SIRE_SHARE_EXPORT "${SIRE_SHARE}")
+endif()
 
 # Add these directories to the RPATH variable for the libraries / executables,
 # so that they can find each other when loading
@@ -206,6 +308,10 @@ endif()
 #  on the head node, and yet you still want to run tests!)
 option( SIRE_DISABLE_MPI "Turn off MPI compilation and linking" ON )
 
+# Add an option to say whether or not to use OpenMM
+option( SIRE_USE_OPENMM "Set whether or not to compile in support for OpenMM" ON )
+save_sire_variable( "SIRE_USE_OPENMM" "${SIRE_USE_OPENMM}" )
+
 #############
 ############# PLATFORM TESTS
 #############
@@ -270,7 +376,7 @@ set(NEED_UNDEF_STRICT_ANSI FALSE)
 if (SIRE_HAS_CPP_11)
   message(STATUS "Compiler supports C++ 2011")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-  set(SIRE_CXX11_FLAGS "${SIRE_CXX11_FLAGS} -std=c++11")
+  set(SIRE_CXX11_FLAGS "${SIRE_CXX11_FLAGS} -DSIRE_HAS_CPP_11 -std=c++11")
 
   if (NEED_UNDEF_STRICT_ANSI)
     message( STATUS "Undefining __STRICT_ANSI__ because of compile problems")
@@ -342,46 +448,67 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
     CHECK_CXX_COMPILER_FLAG( "-msse2" HAVE_SSE_FLAG )
     CHECK_CXX_COMPILER_FLAG( "-mavx" HAVE_AVX_FLAG )
 
+    set( SIRE_SKIP_AVX 1 )
+
     if ( NOT SIRE_DISABLE_AVX)
 
       if ( HAVE_IMMINTRIN_H AND HAVE_AVX_FLAG )
 
-        # we have immintrin.h so we have AVX
-        message( STATUS "Compiling with AVX enabled. Resulting binary will only work on newer Intel CPUs" )
+        # we have immintrin.h so we can compile AVX - check if we can run it
+        INCLUDE(CheckCSourceRuns)
+        set(CMAKE_REQUIRED_FLAGS "-mavx")
+        check_c_source_runs("
+           #include <immintrin.h>
+           int main()
+           {
+              __m256i a = _mm256_setzero_si256();
+              return 0;
+           }"
+           CAN_RUN_AVX_PROGRAM)
+
+        if (CAN_RUN_AVX_PROGRAM)
+          message( STATUS "Compiling with AVX enabled. Resulting binary will only work on newer Intel CPUs" )
         
-        CHECK_CXX_COMPILER_FLAG( "-mavx2" HAVE_AVX2_FLAG )
+          set( SIRE_SKIP_AVX 0 )
 
-        if ( SIRE_ENABLE_AVX2 AND HAVE_AVX2_FLAG )
-          message( STATUS "Compiling with AVX2 enabled. Resulting binary will only work on really new Intel CPUs" )
-          set( SIRE_VECTOR_FLAGS "-mavx2 -DSIRE_USE_AVX -DSIRE_USE_AVX2" )
-        else()
-          set ( SIRE_VECTOR_FLAGS "-mavx -DSIRE_USE_AVX" )
-        endif()
-      elseif ( HAVE_EMMINTRIN_H AND HAVE_SSE_FLAG )
-        # we have emmintrin.h so we have SSE
-        message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
+          CHECK_CXX_COMPILER_FLAG( "-mavx2" HAVE_AVX2_FLAG )
 
-        CHECK_CXX_COMPILER_FLAG( "-msse4.1" HAVE_SSE4_FLAG )
-
-        if ( SIRE_ENABLE_SSE4 AND HAVE_SMMINTRIN_H AND HAVE_SSE4_FLAG )
-          message( STATUS "Compiling with SSE4 enabled. Resulting binary will only work on newer Intel CPUs" )
-          set( SIRE_VECTOR_FLAGS "-msse4.1 -DSIRE_USE_SSE -DSIRE_USE_SSE4" )
-        else()
-          set ( SIRE_VECTOR_FLAGS "-msse2 -DSIRE_USE_SSE" )
+          if ( SIRE_ENABLE_AVX2 AND HAVE_AVX2_FLAG )
+            message( STATUS "Compiling with AVX2 enabled. Resulting binary will only work on really new Intel CPUs" )
+            set( SIRE_VECTOR_FLAGS "-mavx2 -DSIRE_USE_AVX -DSIRE_USE_AVX2" )
+          else()
+            set ( SIRE_VECTOR_FLAGS "-mavx -DSIRE_USE_AVX" )
+          endif()
         endif()
       endif()
-    elseif (NOT SIRE_DISABLE_SSE)   
-        # we have emmintrin.h so we have SSE
-        message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
 
-        CHECK_CXX_COMPILER_FLAG( "-msse4.1" HAVE_SSE4_FLAG )
+      if ( SIRE_SKIP_AVX )
+        if ( HAVE_EMMINTRIN_H AND HAVE_SSE_FLAG )
+          # we have emmintrin.h so we have SSE
+          message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
 
-        if ( SIRE_ENABLE_SSE4 AND HAVE_SMMINTRIN_H AND HAVE_SSE4_FLAG )
-          message( STATUS "Compiling with SSE4 enabled. Resulting binary will only work on newer Intel CPUs" )
-          set( SIRE_VECTOR_FLAGS "-msse4.1 -DSIRE_USE_SSE -DSIRE_USE_SSE4" )
-        else()
-          set ( SIRE_VECTOR_FLAGS "-msse2 -DSIRE_USE_SSE" )
-        endif()  
+          CHECK_CXX_COMPILER_FLAG( "-msse4.1" HAVE_SSE4_FLAG )
+
+          if ( SIRE_ENABLE_SSE4 AND HAVE_SMMINTRIN_H AND HAVE_SSE4_FLAG )
+            message( STATUS "Compiling with SSE4 enabled. Resulting binary will only work on newer Intel CPUs" )
+            set( SIRE_VECTOR_FLAGS "-msse4.1 -DSIRE_USE_SSE -DSIRE_USE_SSE4" )
+          else()
+            set ( SIRE_VECTOR_FLAGS "-msse2 -DSIRE_USE_SSE" )
+          endif()
+        elseif (NOT SIRE_DISABLE_SSE)   
+          # we have emmintrin.h so we have SSE
+          message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
+
+          CHECK_CXX_COMPILER_FLAG( "-msse4.1" HAVE_SSE4_FLAG )
+
+          if ( SIRE_ENABLE_SSE4 AND HAVE_SMMINTRIN_H AND HAVE_SSE4_FLAG )
+            message( STATUS "Compiling with SSE4 enabled. Resulting binary will only work on newer Intel CPUs" )
+            set( SIRE_VECTOR_FLAGS "-msse4.1 -DSIRE_USE_SSE -DSIRE_USE_SSE4" )
+          else()
+            set ( SIRE_VECTOR_FLAGS "-msse2 -DSIRE_USE_SSE" )
+          endif()  
+        endif()
+      endif()
     endif()
 
     # Now gcc 4 specific options
@@ -434,20 +561,39 @@ elseif ( ${SIRE_CXX_COMPILER_ID} MATCHES "CLANG" )
     CHECK_CXX_COMPILER_FLAG( "-msse2" HAVE_SSE_FLAG )
     CHECK_CXX_COMPILER_FLAG( "-mavx" HAVE_AVX_FLAG )
 
+    set( SIRE_SKIP_AVX 1 )
+
     if ( NOT SIRE_DISABLE_AVX )
       if ( HAVE_IMMINTRIN_H AND HAVE_AVX_FLAG )
-        # we have immintrin.h so we have AVX
-        message( STATUS "Compiling with AVX enabled. Resulting binary will only work on newer Intel CPUs" )
+        # we have immintrin.h so we can compile AVX - check if we can run it
+        INCLUDE(CheckCSourceRuns)
+        set(CMAKE_REQUIRED_FLAGS "-mavx")
+        CHECK_C_SOURCE_RUNS("
+           #include <immintrin.h>
+           int main()
+           {
+              __m256i a = _mm256_setzero_si256();
+              return 0;
+           }"
+           CAN_RUN_AVX_PROGRAM)
 
-        CHECK_CXX_COMPILER_FLAG( "-mavx2" HAVE_AVX2_FLAG )
+        if (CAN_RUN_AVX_PROGRAM)        
+          message( STATUS "Compiling with AVX enabled. Resulting binary will only work on newer Intel CPUs" )
+          set( SIRE_SKIP_AVX 0 )
+          CHECK_CXX_COMPILER_FLAG( "-mavx2" HAVE_AVX2_FLAG )
 
-        if ( SIRE_ENABLE_AVX2 AND HAVE_AVX2_FLAG )
-          message( STATUS "Compiling with AVX2 enabled. Resulting binary will only work on really new Intel CPUs")
-          set( SIRE_VECTOR_FLAGS "-mavx2 -DSIRE_USE_AVX -DSIRE_USE_AVX2" )
-        else()
-          set ( SIRE_VECTOR_FLAGS "-mavx -DSIRE_USE_AVX" )
-        endif() 
-     elseif ( HAVE_EMMINTRIN_H AND HAVE_SSE_FLAG )
+          if ( SIRE_ENABLE_AVX2 AND HAVE_AVX2_FLAG )
+            message( STATUS "Compiling with AVX2 enabled. Resulting binary will only work on really new Intel CPUs")
+            set( SIRE_VECTOR_FLAGS "-mavx2 -DSIRE_USE_AVX -DSIRE_USE_AVX2" )
+          else()
+            set ( SIRE_VECTOR_FLAGS "-mavx -DSIRE_USE_AVX" )
+          endif()
+        endif()
+      endif()
+    endif()
+
+    if ( SIRE_SKIP_AVX )
+      if ( HAVE_EMMINTRIN_H AND HAVE_SSE_FLAG )
         # we have emmintrin.h so we have SSE
         message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
 
@@ -459,8 +605,7 @@ elseif ( ${SIRE_CXX_COMPILER_ID} MATCHES "CLANG" )
         else()
           set ( SIRE_VECTOR_FLAGS "-msse2 -DSIRE_USE_SSE" )
         endif() 
-     endif()
-    elseif( NOT SIRE_DISABLE_SSE )
+      elseif( NOT SIRE_DISABLE_SSE )
         # we have emmintrin.h so we have SSE
         message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
 
@@ -472,6 +617,7 @@ elseif ( ${SIRE_CXX_COMPILER_ID} MATCHES "CLANG" )
         else()
           set ( SIRE_VECTOR_FLAGS "-msse2 -DSIRE_USE_SSE" )
         endif()    
+      endif()
     endif()
        
     set ( SIRE_VISIBILITY_FLAGS "-DSIRE_VISIBILITY_AVAILABLE -fvisibility=hidden -fvisibility-inlines-hidden" )
@@ -547,35 +693,39 @@ set(CMAKE_AUTOMOC OFF)
 # to always look for includes there:
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-# Option to disable all bundles
-option( SIRE_ENABLE_BUNDLING "Allow Sire to use bundled libraries" ON )
+if ( CMAKE_GENERATOR MATCHES "Xcode" )
+  # Xcode build - use the libraries that are already installed...
 
-# Fine-grain control of bundling each dependency
-option( SIRE_BUNDLE_TBB "Whether Sire should use its bundled copy of TBB" ON )
-option( SIRE_BUNDLE_GSL "Whether Sire should use its bundled copy of GSL" ON )
-option( SIRE_BUNDLE_CPUID "Whether Sire should use its bundled copy of libcpuid" ON )
-option( SIRE_BUNDLE_BOOST "Whether Sire should use its bundled copy of Boost" ON )
-option( SIRE_BUNDLE_BLASLAPACK "Whether Sire should use its bundled copy of BLAS and LAPACK" ON )
-option( SIRE_BUNDLE_QT "Whether Sire should use its bundled copy of Qt" ON )
-option( SIRE_BUNDLE_OPENMM "Whether Sire should use its bundled copy of OpenMM" OFF )
+else()
+  # Option to disable all bundles
+  option( SIRE_ENABLE_BUNDLING "Allow Sire to use bundled libraries" ON )
 
-save_sire_variable( "SIRE_ENABLE_BUNDLING" "${SIRE_ENABLE_BUNDLING}" )
-save_sire_variable( "SIRE_BUNDLE_TBB" "${SIRE_BUNDLE_TBB}" )
-save_sire_variable( "SIRE_BUNDLE_CPUID" "${SIRE_BUNDLE_CPUID}" )
-save_sire_variable( "SIRE_BUNDLE_GSL" "${SIRE_BUNDLE_GSL}" )
-save_sire_variable( "SIRE_BUNDLE_BOOST" "${SIRE_BUNDLE_BOOST}" )
-save_sire_variable( "SIRE_BUNDLE_BLASLAPACK" "${SIRE_BUNDLE_BLASLAPACK}" )
-save_sire_variable( "SIRE_BUNDLE_QT" "${SIRE_BUNDLE_QT}" )
-save_sire_variable( "SIRE_BUNDLE_OPENMM" "${SIRE_BUNDLE_OPENMM}" )
+  # Fine-grain control of bundling each dependency
+  option( SIRE_BUNDLE_TBB "Whether Sire should use its bundled copy of TBB" ON )
+  option( SIRE_BUNDLE_GSL "Whether Sire should use its bundled copy of GSL" ON )
+  option( SIRE_BUNDLE_CPUID "Whether Sire should use its bundled copy of libcpuid" ON )
+  option( SIRE_BUNDLE_BOOST "Whether Sire should use its bundled copy of Boost" ON )
+  option( SIRE_BUNDLE_BLASLAPACK "Whether Sire should use its bundled copy of BLAS and LAPACK" ON )
+  option( SIRE_BUNDLE_QT "Whether Sire should use its bundled copy of Qt" ON )
+  option( SIRE_BUNDLE_OPENMM "Whether Sire should use its bundled copy of OpenMM" OFF )
+ 
+  save_sire_variable( "SIRE_ENABLE_BUNDLING" "${SIRE_ENABLE_BUNDLING}" )
+  save_sire_variable( "SIRE_BUNDLE_TBB" "${SIRE_BUNDLE_TBB}" )
+  save_sire_variable( "SIRE_BUNDLE_CPUID" "${SIRE_BUNDLE_CPUID}" )
+  save_sire_variable( "SIRE_BUNDLE_GSL" "${SIRE_BUNDLE_GSL}" )
+  save_sire_variable( "SIRE_BUNDLE_BOOST" "${SIRE_BUNDLE_BOOST}" )
+  save_sire_variable( "SIRE_BUNDLE_BLASLAPACK" "${SIRE_BUNDLE_BLASLAPACK}" )
+  save_sire_variable( "SIRE_BUNDLE_QT" "${SIRE_BUNDLE_QT}" )
+  save_sire_variable( "SIRE_BUNDLE_OPENMM" "${SIRE_BUNDLE_OPENMM}" )
 
-set (SIRE_FOUND_TBB FALSE)
-set (SIRE_FOUND_GSL FALSE)
-set (SIRE_FOUND_BOOST FALSE)
-set (SIRE_FOUND_BLASLAPACK FALSE)
-set (SIRE_FOUND_QT FALSE)
-set (SIRE_FOUND_OPENMM FALSE)
+  set (SIRE_FOUND_TBB FALSE)
+  set (SIRE_FOUND_GSL FALSE)
+  set (SIRE_FOUND_BOOST FALSE)
+  set (SIRE_FOUND_BLASLAPACK FALSE)
+  set (SIRE_FOUND_QT FALSE)
+  set (SIRE_FOUND_OPENMM FALSE)
 
-if ( ${SIRE_ENABLE_BUNDLING} )
+  if ( ${SIRE_ENABLE_BUNDLING} )
     message( STATUS "Sire will be compiled to use its own copy of bundled libraries." )
 
     set( BUNDLE_BUILDDIR "${CMAKE_BINARY_DIR}/build_bundled" )
@@ -630,6 +780,7 @@ if ( ${SIRE_ENABLE_BUNDLING} )
                DESTINATION ${CMAKE_INSTALL_PREFIX}
                USE_SOURCE_PERMISSIONS )
     endif()
+  endif()
 endif()
 
 if ( NOT ${SIRE_FOUND_QT} )
@@ -637,23 +788,34 @@ if ( NOT ${SIRE_FOUND_QT} )
     find_package( Qt5Core REQUIRED )
 endif()
 
-if ( NOT ${SIRE_FOUND_OPENMM} )
-    # look for OpenMM in the system
-    # Now look for OpenMM
-    option (OPENMM_HOME "The location of the OpenMM installation" "/usr/local/openmm")
-    set(OpenMM_ROOT_DIR "${OPENMM_HOME}")
-    FIND_PACKAGE( OpenMM )
+if ( SIRE_USE_OPENMM )
+  if ( NOT ${SIRE_FOUND_OPENMM} )
+      # look for OpenMM in the system
+      # Now look for OpenMM
+      if (ANACONDA_BUILD)
+        set(OpenMM_ROOT_DIR "${ANACONDA_BASE}")
+        set(OPENMM_ROOT_DIR "${ANACONDA_BASE}")
+        FIND_PACKAGE( OpenMM )
+      else()
+        option (OPENMM_HOME "The location of the OpenMM installation" "/usr/local/openmm")
+        set(OpenMM_ROOT_DIR "${OPENMM_HOME}")
+        FIND_PACKAGE( OpenMM )
+      endif()
 
-    save_sire_variable( "SIRE_OpenMM_FOUND" "${OpenMM_FOUND}" )
+      save_sire_variable( "SIRE_OpenMM_FOUND" "${OpenMM_FOUND}" )
 
-    if ( ${OpenMM_FOUND} )
-       message( STATUS "Found OpenMM at ${OpenMM_ROOT_DIR}" )
-       save_sire_variable( "SIRE_OpenMM_INCLUDE_DIR" "${OpenMM_INCLUDE_DIR}" )
-       save_sire_variable( "SIRE_OpenMM_LIBRARIES" "${OpenMM_LIBRARIES}" )
-       save_sire_variable( "SIRE_OpenMM_LIBRARY_DIR" "${OpenMM_LIBRARY_DIR}" )
-    else()
-       message( STATUS "Could not find OpenMM. OpenMM support is disabled." )
-    endif()
+      if ( ${OpenMM_FOUND} )
+         message( STATUS "Found OpenMM at ${OpenMM_ROOT_DIR}" )
+         save_sire_variable( "SIRE_OpenMM_INCLUDE_DIR" "${OpenMM_INCLUDE_DIR}" )
+         save_sire_variable( "SIRE_OpenMM_LIBRARIES" "${OpenMM_LIBRARIES}" )
+         save_sire_variable( "SIRE_OpenMM_LIBRARY_DIR" "${OpenMM_LIBRARY_DIR}" )
+      else()
+         message( STATUS "Could not find OpenMM. OpenMM support is disabled." )
+      endif()
+  else()
+    message( STATUS "Disabling use of OpenMM at user request.")
+    save_sire_variable( "SIRE_OpenMM_FOUND" "${SIRE_USE_OPENMM}" )
+  endif()
 endif()
 
 get_target_property(QT5_LOCATION Qt5::Core LOCATION)
@@ -853,7 +1015,7 @@ add_subdirectory (src/apps)
 ################
 
 # Finally, write the version header file and finish off the component dependencies file
-include( GetSvnVersion )
+include( GetGitVersion )
 
 # install the extra includes file in the Sire/cmake directory
 install (FILES ${SIRE_VARIABLES_FILE} 

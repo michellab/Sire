@@ -46,7 +46,7 @@ void register_FourAtomFunctions_class(){
         FourAtomFunctions_exposer.def( bp::init< SireMM::FourAtomFunctions const & >(( bp::arg("other") )) );
         { //::SireMM::FourAtomFunctions::clear
         
-            typedef void ( ::SireMM::FourAtomFunctions::*clear_function_type )( ::SireMol::AtomIdx ) ;
+            typedef void ( ::SireMM::FourAtomFunctions::*clear_function_type)( ::SireMol::AtomIdx ) ;
             clear_function_type clear_function_value( &::SireMM::FourAtomFunctions::clear );
             
             FourAtomFunctions_exposer.def( 
@@ -57,7 +57,7 @@ void register_FourAtomFunctions_class(){
         }
         { //::SireMM::FourAtomFunctions::clear
         
-            typedef void ( ::SireMM::FourAtomFunctions::*clear_function_type )( ::SireMol::AtomID const & ) ;
+            typedef void ( ::SireMM::FourAtomFunctions::*clear_function_type)( ::SireMol::AtomID const & ) ;
             clear_function_type clear_function_value( &::SireMM::FourAtomFunctions::clear );
             
             FourAtomFunctions_exposer.def( 
@@ -68,7 +68,7 @@ void register_FourAtomFunctions_class(){
         }
         { //::SireMM::FourAtomFunctions::clear
         
-            typedef void ( ::SireMM::FourAtomFunctions::*clear_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx ) ;
+            typedef void ( ::SireMM::FourAtomFunctions::*clear_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx ) ;
             clear_function_type clear_function_value( &::SireMM::FourAtomFunctions::clear );
             
             FourAtomFunctions_exposer.def( 
@@ -79,7 +79,7 @@ void register_FourAtomFunctions_class(){
         }
         { //::SireMM::FourAtomFunctions::clear
         
-            typedef void ( ::SireMM::FourAtomFunctions::*clear_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) ;
+            typedef void ( ::SireMM::FourAtomFunctions::*clear_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) ;
             clear_function_type clear_function_value( &::SireMM::FourAtomFunctions::clear );
             
             FourAtomFunctions_exposer.def( 
@@ -90,7 +90,7 @@ void register_FourAtomFunctions_class(){
         }
         { //::SireMM::FourAtomFunctions::clear
         
-            typedef void ( ::SireMM::FourAtomFunctions::*clear_function_type )( ::SireMol::DihedralID const & ) ;
+            typedef void ( ::SireMM::FourAtomFunctions::*clear_function_type)( ::SireMol::DihedralID const & ) ;
             clear_function_type clear_function_value( &::SireMM::FourAtomFunctions::clear );
             
             FourAtomFunctions_exposer.def( 
@@ -101,7 +101,7 @@ void register_FourAtomFunctions_class(){
         }
         { //::SireMM::FourAtomFunctions::clear
         
-            typedef void ( ::SireMM::FourAtomFunctions::*clear_function_type )( ::SireMol::ImproperID const & ) ;
+            typedef void ( ::SireMM::FourAtomFunctions::*clear_function_type)( ::SireMol::ImproperID const & ) ;
             clear_function_type clear_function_value( &::SireMM::FourAtomFunctions::clear );
             
             FourAtomFunctions_exposer.def( 
@@ -112,7 +112,7 @@ void register_FourAtomFunctions_class(){
         }
         { //::SireMM::FourAtomFunctions::clear
         
-            typedef void ( ::SireMM::FourAtomFunctions::*clear_function_type )(  ) ;
+            typedef void ( ::SireMM::FourAtomFunctions::*clear_function_type)(  ) ;
             clear_function_type clear_function_value( &::SireMM::FourAtomFunctions::clear );
             
             FourAtomFunctions_exposer.def( 
@@ -122,7 +122,7 @@ void register_FourAtomFunctions_class(){
         }
         { //::SireMM::FourAtomFunctions::force
         
-            typedef ::SireCAS::Expression ( ::SireMM::FourAtomFunctions::*force_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx,::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireMM::FourAtomFunctions::*force_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx,::SireCAS::Symbol const & ) const;
             force_function_type force_function_value( &::SireMM::FourAtomFunctions::force );
             
             FourAtomFunctions_exposer.def( 
@@ -133,7 +133,7 @@ void register_FourAtomFunctions_class(){
         }
         { //::SireMM::FourAtomFunctions::force
         
-            typedef ::SireCAS::Expression ( ::SireMM::FourAtomFunctions::*force_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireMM::FourAtomFunctions::*force_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireCAS::Symbol const & ) const;
             force_function_type force_function_value( &::SireMM::FourAtomFunctions::force );
             
             FourAtomFunctions_exposer.def( 
@@ -144,7 +144,7 @@ void register_FourAtomFunctions_class(){
         }
         { //::SireMM::FourAtomFunctions::force
         
-            typedef ::SireCAS::Expression ( ::SireMM::FourAtomFunctions::*force_function_type )( ::SireMol::DihedralID const &,::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireMM::FourAtomFunctions::*force_function_type)( ::SireMol::DihedralID const &,::SireCAS::Symbol const & ) const;
             force_function_type force_function_value( &::SireMM::FourAtomFunctions::force );
             
             FourAtomFunctions_exposer.def( 
@@ -155,7 +155,7 @@ void register_FourAtomFunctions_class(){
         }
         { //::SireMM::FourAtomFunctions::force
         
-            typedef ::SireCAS::Expression ( ::SireMM::FourAtomFunctions::*force_function_type )( ::SireMol::ImproperID const &,::SireCAS::Symbol const & ) const;
+            typedef ::SireCAS::Expression ( ::SireMM::FourAtomFunctions::*force_function_type)( ::SireMol::ImproperID const &,::SireCAS::Symbol const & ) const;
             force_function_type force_function_value( &::SireMM::FourAtomFunctions::force );
             
             FourAtomFunctions_exposer.def( 
@@ -166,7 +166,7 @@ void register_FourAtomFunctions_class(){
         }
         { //::SireMM::FourAtomFunctions::forces
         
-            typedef ::QVector< SireMM::FourAtomFunction > ( ::SireMM::FourAtomFunctions::*forces_function_type )( ::SireCAS::Symbol const & ) const;
+            typedef ::QVector< SireMM::FourAtomFunction > ( ::SireMM::FourAtomFunctions::*forces_function_type)( ::SireCAS::Symbol const & ) const;
             forces_function_type forces_function_value( &::SireMM::FourAtomFunctions::forces );
             
             FourAtomFunctions_exposer.def( 
@@ -177,7 +177,7 @@ void register_FourAtomFunctions_class(){
         }
         { //::SireMM::FourAtomFunctions::includeOnly
         
-            typedef ::SireMM::FourAtomFunctions ( ::SireMM::FourAtomFunctions::*includeOnly_function_type )( ::SireMol::AtomSelection const &,bool ) const;
+            typedef ::SireMM::FourAtomFunctions ( ::SireMM::FourAtomFunctions::*includeOnly_function_type)( ::SireMol::AtomSelection const &,bool ) const;
             includeOnly_function_type includeOnly_function_value( &::SireMM::FourAtomFunctions::includeOnly );
             
             FourAtomFunctions_exposer.def( 
@@ -188,7 +188,7 @@ void register_FourAtomFunctions_class(){
         }
         { //::SireMM::FourAtomFunctions::isEmpty
         
-            typedef bool ( ::SireMM::FourAtomFunctions::*isEmpty_function_type )(  ) const;
+            typedef bool ( ::SireMM::FourAtomFunctions::*isEmpty_function_type)(  ) const;
             isEmpty_function_type isEmpty_function_value( &::SireMM::FourAtomFunctions::isEmpty );
             
             FourAtomFunctions_exposer.def( 
@@ -198,7 +198,7 @@ void register_FourAtomFunctions_class(){
         }
         { //::SireMM::FourAtomFunctions::nFunctions
         
-            typedef int ( ::SireMM::FourAtomFunctions::*nFunctions_function_type )(  ) const;
+            typedef int ( ::SireMM::FourAtomFunctions::*nFunctions_function_type)(  ) const;
             nFunctions_function_type nFunctions_function_value( &::SireMM::FourAtomFunctions::nFunctions );
             
             FourAtomFunctions_exposer.def( 
@@ -209,7 +209,7 @@ void register_FourAtomFunctions_class(){
         FourAtomFunctions_exposer.def( bp::self != bp::self );
         { //::SireMM::FourAtomFunctions::operator=
         
-            typedef ::SireMM::FourAtomFunctions & ( ::SireMM::FourAtomFunctions::*assign_function_type )( ::SireMM::FourAtomFunctions const & ) ;
+            typedef ::SireMM::FourAtomFunctions & ( ::SireMM::FourAtomFunctions::*assign_function_type)( ::SireMM::FourAtomFunctions const & ) ;
             assign_function_type assign_function_value( &::SireMM::FourAtomFunctions::operator= );
             
             FourAtomFunctions_exposer.def( 
@@ -222,7 +222,7 @@ void register_FourAtomFunctions_class(){
         FourAtomFunctions_exposer.def( bp::self == bp::self );
         { //::SireMM::FourAtomFunctions::potential
         
-            typedef ::SireCAS::Expression ( ::SireMM::FourAtomFunctions::*potential_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
+            typedef ::SireCAS::Expression ( ::SireMM::FourAtomFunctions::*potential_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx ) const;
             potential_function_type potential_function_value( &::SireMM::FourAtomFunctions::potential );
             
             FourAtomFunctions_exposer.def( 
@@ -233,7 +233,7 @@ void register_FourAtomFunctions_class(){
         }
         { //::SireMM::FourAtomFunctions::potential
         
-            typedef ::SireCAS::Expression ( ::SireMM::FourAtomFunctions::*potential_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
+            typedef ::SireCAS::Expression ( ::SireMM::FourAtomFunctions::*potential_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const & ) const;
             potential_function_type potential_function_value( &::SireMM::FourAtomFunctions::potential );
             
             FourAtomFunctions_exposer.def( 
@@ -244,7 +244,7 @@ void register_FourAtomFunctions_class(){
         }
         { //::SireMM::FourAtomFunctions::potential
         
-            typedef ::SireCAS::Expression ( ::SireMM::FourAtomFunctions::*potential_function_type )( ::SireMol::DihedralID const & ) const;
+            typedef ::SireCAS::Expression ( ::SireMM::FourAtomFunctions::*potential_function_type)( ::SireMol::DihedralID const & ) const;
             potential_function_type potential_function_value( &::SireMM::FourAtomFunctions::potential );
             
             FourAtomFunctions_exposer.def( 
@@ -255,7 +255,7 @@ void register_FourAtomFunctions_class(){
         }
         { //::SireMM::FourAtomFunctions::potential
         
-            typedef ::SireCAS::Expression ( ::SireMM::FourAtomFunctions::*potential_function_type )( ::SireMol::ImproperID const & ) const;
+            typedef ::SireCAS::Expression ( ::SireMM::FourAtomFunctions::*potential_function_type)( ::SireMol::ImproperID const & ) const;
             potential_function_type potential_function_value( &::SireMM::FourAtomFunctions::potential );
             
             FourAtomFunctions_exposer.def( 
@@ -266,7 +266,7 @@ void register_FourAtomFunctions_class(){
         }
         { //::SireMM::FourAtomFunctions::potentials
         
-            typedef ::QVector< SireMM::FourAtomFunction > ( ::SireMM::FourAtomFunctions::*potentials_function_type )(  ) const;
+            typedef ::QVector< SireMM::FourAtomFunction > ( ::SireMM::FourAtomFunctions::*potentials_function_type)(  ) const;
             potentials_function_type potentials_function_value( &::SireMM::FourAtomFunctions::potentials );
             
             FourAtomFunctions_exposer.def( 
@@ -276,7 +276,7 @@ void register_FourAtomFunctions_class(){
         }
         { //::SireMM::FourAtomFunctions::set
         
-            typedef void ( ::SireMM::FourAtomFunctions::*set_function_type )( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx,::SireCAS::Expression const & ) ;
+            typedef void ( ::SireMM::FourAtomFunctions::*set_function_type)( ::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx,::SireMol::AtomIdx,::SireCAS::Expression const & ) ;
             set_function_type set_function_value( &::SireMM::FourAtomFunctions::set );
             
             FourAtomFunctions_exposer.def( 
@@ -287,7 +287,7 @@ void register_FourAtomFunctions_class(){
         }
         { //::SireMM::FourAtomFunctions::set
         
-            typedef void ( ::SireMM::FourAtomFunctions::*set_function_type )( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireCAS::Expression const & ) ;
+            typedef void ( ::SireMM::FourAtomFunctions::*set_function_type)( ::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireMol::AtomID const &,::SireCAS::Expression const & ) ;
             set_function_type set_function_value( &::SireMM::FourAtomFunctions::set );
             
             FourAtomFunctions_exposer.def( 
@@ -298,7 +298,7 @@ void register_FourAtomFunctions_class(){
         }
         { //::SireMM::FourAtomFunctions::set
         
-            typedef void ( ::SireMM::FourAtomFunctions::*set_function_type )( ::SireMol::DihedralID const &,::SireCAS::Expression const & ) ;
+            typedef void ( ::SireMM::FourAtomFunctions::*set_function_type)( ::SireMol::DihedralID const &,::SireCAS::Expression const & ) ;
             set_function_type set_function_value( &::SireMM::FourAtomFunctions::set );
             
             FourAtomFunctions_exposer.def( 
@@ -309,7 +309,7 @@ void register_FourAtomFunctions_class(){
         }
         { //::SireMM::FourAtomFunctions::set
         
-            typedef void ( ::SireMM::FourAtomFunctions::*set_function_type )( ::SireMol::ImproperID const &,::SireCAS::Expression const & ) ;
+            typedef void ( ::SireMM::FourAtomFunctions::*set_function_type)( ::SireMol::ImproperID const &,::SireCAS::Expression const & ) ;
             set_function_type set_function_value( &::SireMM::FourAtomFunctions::set );
             
             FourAtomFunctions_exposer.def( 
@@ -320,7 +320,7 @@ void register_FourAtomFunctions_class(){
         }
         { //::SireMM::FourAtomFunctions::substitute
         
-            typedef void ( ::SireMM::FourAtomFunctions::*substitute_function_type )( ::SireCAS::Identities const & ) ;
+            typedef void ( ::SireMM::FourAtomFunctions::*substitute_function_type)( ::SireCAS::Identities const & ) ;
             substitute_function_type substitute_function_value( &::SireMM::FourAtomFunctions::substitute );
             
             FourAtomFunctions_exposer.def( 
@@ -331,7 +331,7 @@ void register_FourAtomFunctions_class(){
         }
         { //::SireMM::FourAtomFunctions::toString
         
-            typedef ::QString ( ::SireMM::FourAtomFunctions::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireMM::FourAtomFunctions::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireMM::FourAtomFunctions::toString );
             
             FourAtomFunctions_exposer.def( 

@@ -34,11 +34,15 @@
 
 #include <QVector>
 
+#ifdef SIRE_HAS_CPP_11
+    #include <functional>
+#endif
+
 #if defined(_MSC_VER)
 #define _ALIGNED(x) __declspec(align(x))
 #else
 #if defined(__clang__)
-#define _ALIGNED(x) __declspec(align(x))
+#define _ALIGNED(x) __attribute__ ((aligned(x)))
 #else
 #if defined(__GNUC__)
 #define _ALIGNED(x) __attribute__ ((aligned(x)))
@@ -113,10 +117,18 @@ SIRE_BEGIN_HEADER
 namespace SireMaths
 {
 
+class MultiFloat;
 class MultiFixed;
 class MultiDouble;
 class MultiUInt;
 class MultiInt;
+
+MultiFloat cos(const MultiFloat &val);
+MultiFloat sin(const MultiFloat &val);
+MultiFloat log(const MultiFloat &val);
+MultiFloat exp(const MultiFloat &val);
+
+void sincos(const MultiFloat &val, MultiFloat &sinval, MultiFloat &cosval);
 
 /** This class provides a vectorised float. This represents
     a single vector of floats on the compiled machine, e.g.
@@ -126,6 +138,14 @@ class MultiInt;
 */
 class SIREMATHS_EXPORT MultiFloat
 {
+
+friend MultiFloat cos(const MultiFloat &val);
+friend MultiFloat sin(const MultiFloat &val);
+friend MultiFloat log(const MultiFloat &val);
+friend MultiFloat exp(const MultiFloat &val);
+
+friend void sincos(const MultiFloat &val, MultiFloat &sinval, MultiFloat &cosval);
+
 public:
     MultiFloat();
     
@@ -140,6 +160,10 @@ public:
     MultiFloat(const MultiDouble &other);
     MultiFloat(const MultiFloat &other);
     MultiFloat(const MultiInt &other);
+    
+    #ifdef SIRE_HAS_CPP_11
+        MultiFloat(const std::function<float ()> &func);
+    #endif
     
     ~MultiFloat();
     
@@ -268,6 +292,8 @@ public:
     
     float sum() const;
     double doubleSum() const;
+
+    static void swap(MultiFloat &f0, int idx0, MultiFloat &f1, int idx1);
 
 private:
     /* Make the other Multi?? classes friends, so that they
@@ -408,6 +434,27 @@ MultiFloat::MultiFloat(float val)
     #endif
     #endif
 }
+
+#ifdef SIRE_HAS_CPP_11
+    /** Construct from the passed function that generates floats */
+    inline MultiFloat::MultiFloat(const std::function<float ()> &generator)
+    {
+        assertAligned();
+        #ifdef MULTIFLOAT_AVX_IS_AVAILABLE
+            v.x = _mm256_set_ps(generator(), generator(), generator(), generator(),
+                                generator(), generator(), generator(), generator());
+        #else
+        #ifdef MULTIFLOAT_SSE_IS_AVAILABLE
+            v.x = _mm_set_ps(generator(), generator(), generator(), generator());
+        #else
+            for (int i=0; i<MULTIFLOAT_SIZE; ++i)
+            {
+                v.a[i] = generator();
+            }
+        #endif
+        #endif
+    }
+#endif
 
 /** Copy constructor */
 inline

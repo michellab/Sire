@@ -1,0 +1,6 @@
+#distinguishing between wrappers for OpenMM and no OpenMM support
+set ( SIRE_OPENMM_WRAPPERS
+    OpenMMFrEnergyST.pypp.cpp
+    OpenMMFrEnergyDT.pypp.cpp
+    OpenMMMDIntegrator.pypp.cpp
+    )

@@ -91,7 +91,7 @@ void register_PerturbationsLibrary_class(){
         PerturbationsLibrary_exposer.def( bp::init< SireIO::PerturbationsLibrary const & >(( bp::arg("other") )) );
         { //::SireIO::PerturbationsLibrary::add
         
-            typedef void ( ::SireIO::PerturbationsLibrary::*add_function_type )( ::SireIO::PerturbationsLibrary const & ) ;
+            typedef void ( ::SireIO::PerturbationsLibrary::*add_function_type)( ::SireIO::PerturbationsLibrary const & ) ;
             add_function_type add_function_value( &::SireIO::PerturbationsLibrary::add );
             
             PerturbationsLibrary_exposer.def( 
@@ -102,7 +102,7 @@ void register_PerturbationsLibrary_class(){
         }
         { //::SireIO::PerturbationsLibrary::applyTemplate
         
-            typedef ::SireMol::Molecule ( ::SireIO::PerturbationsLibrary::*applyTemplate_function_type )( ::SireMol::Molecule const & ) const;
+            typedef ::SireMol::Molecule ( ::SireIO::PerturbationsLibrary::*applyTemplate_function_type)( ::SireMol::Molecule const & ) const;
             applyTemplate_function_type applyTemplate_function_value( &::SireIO::PerturbationsLibrary::applyTemplate );
             
             PerturbationsLibrary_exposer.def( 
@@ -113,7 +113,7 @@ void register_PerturbationsLibrary_class(){
         }
         { //::SireIO::PerturbationsLibrary::getTemplate
         
-            typedef ::SireIO::PerturbationsTemplate const & ( ::SireIO::PerturbationsLibrary::*getTemplate_function_type )( ::QString const & ) ;
+            typedef ::SireIO::PerturbationsTemplate const & ( ::SireIO::PerturbationsLibrary::*getTemplate_function_type)( ::QString const & ) ;
             getTemplate_function_type getTemplate_function_value( &::SireIO::PerturbationsLibrary::getTemplate );
             
             PerturbationsLibrary_exposer.def( 
@@ -125,7 +125,7 @@ void register_PerturbationsLibrary_class(){
         }
         { //::SireIO::PerturbationsLibrary::loadTemplates
         
-            typedef void ( ::SireIO::PerturbationsLibrary::*loadTemplates_function_type )( ::QString const & ) ;
+            typedef void ( ::SireIO::PerturbationsLibrary::*loadTemplates_function_type)( ::QString const & ) ;
             loadTemplates_function_type loadTemplates_function_value( &::SireIO::PerturbationsLibrary::loadTemplates );
             
             PerturbationsLibrary_exposer.def( 
@@ -138,7 +138,7 @@ void register_PerturbationsLibrary_class(){
         PerturbationsLibrary_exposer.def( bp::self + bp::self );
         { //::SireIO::PerturbationsLibrary::operator=
         
-            typedef ::SireIO::PerturbationsLibrary & ( ::SireIO::PerturbationsLibrary::*assign_function_type )( ::SireIO::PerturbationsLibrary const & ) ;
+            typedef ::SireIO::PerturbationsLibrary & ( ::SireIO::PerturbationsLibrary::*assign_function_type)( ::SireIO::PerturbationsLibrary const & ) ;
             assign_function_type assign_function_value( &::SireIO::PerturbationsLibrary::operator= );
             
             PerturbationsLibrary_exposer.def( 
@@ -151,7 +151,7 @@ void register_PerturbationsLibrary_class(){
         PerturbationsLibrary_exposer.def( bp::self == bp::self );
         { //::SireIO::PerturbationsLibrary::setTemplate
         
-            typedef void ( ::SireIO::PerturbationsLibrary::*setTemplate_function_type )( ::QString const &,::SireIO::PerturbationsTemplate const & ) ;
+            typedef void ( ::SireIO::PerturbationsLibrary::*setTemplate_function_type)( ::QString const &,::SireIO::PerturbationsTemplate const & ) ;
             setTemplate_function_type setTemplate_function_value( &::SireIO::PerturbationsLibrary::setTemplate );
             
             PerturbationsLibrary_exposer.def( 

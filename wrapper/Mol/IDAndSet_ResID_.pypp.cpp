@@ -72,7 +72,7 @@ void register_IDAndSet_ResID__class(){
         { //::SireID::IDAndSet< SireMol::ResID >::IDs
         
             typedef SireID::IDAndSet< SireMol::ResID > exported_class_t;
-            typedef ::QSet< SireMol::ResIdentifier > const & ( ::SireID::IDAndSet< SireMol::ResID >::*IDs_function_type )(  ) const;
+            typedef ::QSet< SireMol::ResIdentifier > const & ( ::SireID::IDAndSet< SireMol::ResID >::*IDs_function_type)(  ) const;
             IDs_function_type IDs_function_value( &::SireID::IDAndSet< SireMol::ResID >::IDs );
             
             IDAndSet_ResID__exposer.def( 
@@ -84,7 +84,7 @@ void register_IDAndSet_ResID__class(){
         { //::SireID::IDAndSet< SireMol::ResID >::hash
         
             typedef SireID::IDAndSet< SireMol::ResID > exported_class_t;
-            typedef ::uint ( ::SireID::IDAndSet< SireMol::ResID >::*hash_function_type )(  ) const;
+            typedef ::uint ( ::SireID::IDAndSet< SireMol::ResID >::*hash_function_type)(  ) const;
             hash_function_type hash_function_value( &::SireID::IDAndSet< SireMol::ResID >::hash );
             
             IDAndSet_ResID__exposer.def( 
@@ -95,7 +95,7 @@ void register_IDAndSet_ResID__class(){
         { //::SireID::IDAndSet< SireMol::ResID >::isNull
         
             typedef SireID::IDAndSet< SireMol::ResID > exported_class_t;
-            typedef bool ( ::SireID::IDAndSet< SireMol::ResID >::*isNull_function_type )(  ) const;
+            typedef bool ( ::SireID::IDAndSet< SireMol::ResID >::*isNull_function_type)(  ) const;
             isNull_function_type isNull_function_value( &::SireID::IDAndSet< SireMol::ResID >::isNull );
             
             IDAndSet_ResID__exposer.def( 
@@ -106,7 +106,7 @@ void register_IDAndSet_ResID__class(){
         { //::SireID::IDAndSet< SireMol::ResID >::map
         
             typedef SireID::IDAndSet< SireMol::ResID > exported_class_t;
-            typedef ::QList< SireMol::ResIdx > ( ::SireID::IDAndSet< SireMol::ResID >::*map_function_type )( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::ResIdx > ( ::SireID::IDAndSet< SireMol::ResID >::*map_function_type)( ::SireMol::MolInfo const & ) const;
             map_function_type map_function_value( &::SireID::IDAndSet< SireMol::ResID >::map );
             
             IDAndSet_ResID__exposer.def( 
@@ -121,7 +121,7 @@ void register_IDAndSet_ResID__class(){
         { //::SireID::IDAndSet< SireMol::ResID >::operator=
         
             typedef SireID::IDAndSet< SireMol::ResID > exported_class_t;
-            typedef ::SireID::IDAndSet< SireMol::ResID > & ( ::SireID::IDAndSet< SireMol::ResID >::*assign_function_type )( ::SireID::IDAndSet< SireMol::ResID > const & ) ;
+            typedef ::SireID::IDAndSet< SireMol::ResID > & ( ::SireID::IDAndSet< SireMol::ResID >::*assign_function_type)( ::SireID::IDAndSet< SireMol::ResID > const & ) ;
             assign_function_type assign_function_value( &::SireID::IDAndSet< SireMol::ResID >::operator= );
             
             IDAndSet_ResID__exposer.def( 
@@ -134,7 +134,7 @@ void register_IDAndSet_ResID__class(){
         { //::SireID::IDAndSet< SireMol::ResID >::operator=
         
             typedef SireID::IDAndSet< SireMol::ResID > exported_class_t;
-            typedef ::SireID::IDAndSet< SireMol::ResID > & ( ::SireID::IDAndSet< SireMol::ResID >::*assign_function_type )( ::SireMol::ResID const & ) ;
+            typedef ::SireID::IDAndSet< SireMol::ResID > & ( ::SireID::IDAndSet< SireMol::ResID >::*assign_function_type)( ::SireMol::ResID const & ) ;
             assign_function_type assign_function_value( &::SireID::IDAndSet< SireMol::ResID >::operator= );
             
             IDAndSet_ResID__exposer.def( 
@@ -150,7 +150,7 @@ void register_IDAndSet_ResID__class(){
         { //::SireID::IDAndSet< SireMol::ResID >::toString
         
             typedef SireID::IDAndSet< SireMol::ResID > exported_class_t;
-            typedef ::QString ( ::SireID::IDAndSet< SireMol::ResID >::*toString_function_type )(  ) const;
+            typedef ::QString ( ::SireID::IDAndSet< SireMol::ResID >::*toString_function_type)(  ) const;
             toString_function_type toString_function_value( &::SireID::IDAndSet< SireMol::ResID >::toString );
             
             IDAndSet_ResID__exposer.def( 
@@ -172,7 +172,7 @@ void register_IDAndSet_ResID__class(){
         { //::SireID::IDAndSet< SireMol::ResID >::what
         
             typedef SireID::IDAndSet< SireMol::ResID > exported_class_t;
-            typedef char const * ( ::SireID::IDAndSet< SireMol::ResID >::*what_function_type )(  ) const;
+            typedef char const * ( ::SireID::IDAndSet< SireMol::ResID >::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireID::IDAndSet< SireMol::ResID >::what );
             
             IDAndSet_ResID__exposer.def( 

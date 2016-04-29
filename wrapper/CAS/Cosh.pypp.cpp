@@ -39,7 +39,7 @@ void register_Cosh_class(){
         Cosh_exposer.def( bp::init< SireCAS::Cosh const & >(( bp::arg("other") )) );
         { //::SireCAS::Cosh::evaluate
         
-            typedef double ( ::SireCAS::Cosh::*evaluate_function_type )( ::SireCAS::Values const & ) const;
+            typedef double ( ::SireCAS::Cosh::*evaluate_function_type)( ::SireCAS::Values const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Cosh::evaluate );
             
             Cosh_exposer.def( 
@@ -50,7 +50,7 @@ void register_Cosh_class(){
         }
         { //::SireCAS::Cosh::evaluate
         
-            typedef ::SireMaths::Complex ( ::SireCAS::Cosh::*evaluate_function_type )( ::SireCAS::ComplexValues const & ) const;
+            typedef ::SireMaths::Complex ( ::SireCAS::Cosh::*evaluate_function_type)( ::SireCAS::ComplexValues const & ) const;
             evaluate_function_type evaluate_function_value( &::SireCAS::Cosh::evaluate );
             
             Cosh_exposer.def( 
@@ -72,7 +72,7 @@ void register_Cosh_class(){
         }
         { //::SireCAS::Cosh::what
         
-            typedef char const * ( ::SireCAS::Cosh::*what_function_type )(  ) const;
+            typedef char const * ( ::SireCAS::Cosh::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireCAS::Cosh::what );
             
             Cosh_exposer.def( 

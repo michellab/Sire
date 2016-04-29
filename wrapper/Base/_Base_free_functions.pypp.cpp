@@ -165,6 +165,38 @@ namespace bp = boost::python;
 
 #include "getinstalldir.h"
 
+#include "SireError/errors.h"
+
+#include "getinstalldir.h"
+
+#include "sire_config.h"
+
+#include "sire_version.h"
+
+#include <QDebug>
+
+#include <QDir>
+
+#include <QFileInfo>
+
+#include "getinstalldir.h"
+
+#include "SireError/errors.h"
+
+#include "getinstalldir.h"
+
+#include "sire_config.h"
+
+#include "sire_version.h"
+
+#include <QDebug>
+
+#include <QDir>
+
+#include <QFileInfo>
+
+#include "getinstalldir.h"
+
 #include "increment.h"
 
 #include "increment.h"
@@ -452,6 +484,17 @@ void register_free_functions(){
     
     }
 
+    { //::SireBase::getRepositoryBranch
+    
+        typedef ::QString ( *getRepositoryBranch_function_type )(  );
+        getRepositoryBranch_function_type getRepositoryBranch_function_value( &::SireBase::getRepositoryBranch );
+        
+        bp::def( 
+            "getRepositoryBranch"
+            , getRepositoryBranch_function_value );
+    
+    }
+
     { //::SireBase::getRepositoryURL
     
         typedef ::QString ( *getRepositoryURL_function_type )(  );
@@ -471,6 +514,17 @@ void register_free_functions(){
         bp::def( 
             "getRepositoryVersion"
             , getRepositoryVersion_function_value );
+    
+    }
+
+    { //::SireBase::getRepositoryVersionIsClean
+    
+        typedef bool ( *getRepositoryVersionIsClean_function_type )(  );
+        getRepositoryVersionIsClean_function_type getRepositoryVersionIsClean_function_value( &::SireBase::getRepositoryVersionIsClean );
+        
+        bp::def( 
+            "getRepositoryVersionIsClean"
+            , getRepositoryVersionIsClean_function_value );
     
     }
 

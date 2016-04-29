@@ -32,7 +32,7 @@ void register_SupraSimPacket_class(){
         SupraSimPacket_exposer.def( bp::init< SireMove::SupraSimPacket const & >(( bp::arg("other") )) );
         { //::SireMove::SupraSimPacket::approximatePacketSize
         
-            typedef int ( ::SireMove::SupraSimPacket::*approximatePacketSize_function_type )(  ) const;
+            typedef int ( ::SireMove::SupraSimPacket::*approximatePacketSize_function_type)(  ) const;
             approximatePacketSize_function_type approximatePacketSize_function_value( &::SireMove::SupraSimPacket::approximatePacketSize );
             
             SupraSimPacket_exposer.def( 
@@ -42,7 +42,7 @@ void register_SupraSimPacket_class(){
         }
         { //::SireMove::SupraSimPacket::hasFinished
         
-            typedef bool ( ::SireMove::SupraSimPacket::*hasFinished_function_type )(  ) const;
+            typedef bool ( ::SireMove::SupraSimPacket::*hasFinished_function_type)(  ) const;
             hasFinished_function_type hasFinished_function_value( &::SireMove::SupraSimPacket::hasFinished );
             
             SupraSimPacket_exposer.def( 
@@ -52,7 +52,7 @@ void register_SupraSimPacket_class(){
         }
         { //::SireMove::SupraSimPacket::moves
         
-            typedef ::SireMove::SupraMoves const & ( ::SireMove::SupraSimPacket::*moves_function_type )(  ) const;
+            typedef ::SireMove::SupraMoves const & ( ::SireMove::SupraSimPacket::*moves_function_type)(  ) const;
             moves_function_type moves_function_value( &::SireMove::SupraSimPacket::moves );
             
             SupraSimPacket_exposer.def( 
@@ -63,7 +63,7 @@ void register_SupraSimPacket_class(){
         }
         { //::SireMove::SupraSimPacket::nCompleted
         
-            typedef int ( ::SireMove::SupraSimPacket::*nCompleted_function_type )(  ) const;
+            typedef int ( ::SireMove::SupraSimPacket::*nCompleted_function_type)(  ) const;
             nCompleted_function_type nCompleted_function_value( &::SireMove::SupraSimPacket::nCompleted );
             
             SupraSimPacket_exposer.def( 
@@ -73,7 +73,7 @@ void register_SupraSimPacket_class(){
         }
         { //::SireMove::SupraSimPacket::nMoves
         
-            typedef int ( ::SireMove::SupraSimPacket::*nMoves_function_type )(  ) const;
+            typedef int ( ::SireMove::SupraSimPacket::*nMoves_function_type)(  ) const;
             nMoves_function_type nMoves_function_value( &::SireMove::SupraSimPacket::nMoves );
             
             SupraSimPacket_exposer.def( 
@@ -84,7 +84,7 @@ void register_SupraSimPacket_class(){
         SupraSimPacket_exposer.def( bp::self != bp::self );
         { //::SireMove::SupraSimPacket::operator=
         
-            typedef ::SireMove::SupraSimPacket & ( ::SireMove::SupraSimPacket::*assign_function_type )( ::SireMove::SupraSimPacket const & ) ;
+            typedef ::SireMove::SupraSimPacket & ( ::SireMove::SupraSimPacket::*assign_function_type)( ::SireMove::SupraSimPacket const & ) ;
             assign_function_type assign_function_value( &::SireMove::SupraSimPacket::operator= );
             
             SupraSimPacket_exposer.def( 
@@ -97,7 +97,7 @@ void register_SupraSimPacket_class(){
         SupraSimPacket_exposer.def( bp::self == bp::self );
         { //::SireMove::SupraSimPacket::recordingStatistics
         
-            typedef bool ( ::SireMove::SupraSimPacket::*recordingStatistics_function_type )(  ) const;
+            typedef bool ( ::SireMove::SupraSimPacket::*recordingStatistics_function_type)(  ) const;
             recordingStatistics_function_type recordingStatistics_function_value( &::SireMove::SupraSimPacket::recordingStatistics );
             
             SupraSimPacket_exposer.def( 
@@ -107,7 +107,7 @@ void register_SupraSimPacket_class(){
         }
         { //::SireMove::SupraSimPacket::shouldPack
         
-            typedef bool ( ::SireMove::SupraSimPacket::*shouldPack_function_type )(  ) const;
+            typedef bool ( ::SireMove::SupraSimPacket::*shouldPack_function_type)(  ) const;
             shouldPack_function_type shouldPack_function_value( &::SireMove::SupraSimPacket::shouldPack );
             
             SupraSimPacket_exposer.def( 
@@ -117,7 +117,7 @@ void register_SupraSimPacket_class(){
         }
         { //::SireMove::SupraSimPacket::system
         
-            typedef ::SireMove::SupraSystem const & ( ::SireMove::SupraSimPacket::*system_function_type )(  ) const;
+            typedef ::SireMove::SupraSystem const & ( ::SireMove::SupraSimPacket::*system_function_type)(  ) const;
             system_function_type system_function_value( &::SireMove::SupraSimPacket::system );
             
             SupraSimPacket_exposer.def( 
@@ -138,7 +138,7 @@ void register_SupraSimPacket_class(){
         }
         { //::SireMove::SupraSimPacket::what
         
-            typedef char const * ( ::SireMove::SupraSimPacket::*what_function_type )(  ) const;
+            typedef char const * ( ::SireMove::SupraSimPacket::*what_function_type)(  ) const;
             what_function_type what_function_value( &::SireMove::SupraSimPacket::what );
             
             SupraSimPacket_exposer.def( 

@@ -61,7 +61,7 @@ void register_EnergyMonitor_class(){
         EnergyMonitor_exposer.def( bp::init< SireSystem::EnergyMonitor const & >(( bp::arg("other") )) );
         { //::SireSystem::EnergyMonitor::alpha
         
-            typedef double ( ::SireSystem::EnergyMonitor::*alpha_function_type )(  ) const;
+            typedef double ( ::SireSystem::EnergyMonitor::*alpha_function_type)(  ) const;
             alpha_function_type alpha_function_value( &::SireSystem::EnergyMonitor::alpha );
             
             EnergyMonitor_exposer.def( 
@@ -71,7 +71,7 @@ void register_EnergyMonitor_class(){
         }
         { //::SireSystem::EnergyMonitor::assigner0
         
-            typedef ::SireSystem::IDAssigner const & ( ::SireSystem::EnergyMonitor::*assigner0_function_type )(  ) const;
+            typedef ::SireSystem::IDAssigner const & ( ::SireSystem::EnergyMonitor::*assigner0_function_type)(  ) const;
             assigner0_function_type assigner0_function_value( &::SireSystem::EnergyMonitor::assigner0 );
             
             EnergyMonitor_exposer.def( 
@@ -82,7 +82,7 @@ void register_EnergyMonitor_class(){
         }
         { //::SireSystem::EnergyMonitor::assigner1
         
-            typedef ::SireSystem::IDAssigner const & ( ::SireSystem::EnergyMonitor::*assigner1_function_type )(  ) const;
+            typedef ::SireSystem::IDAssigner const & ( ::SireSystem::EnergyMonitor::*assigner1_function_type)(  ) const;
             assigner1_function_type assigner1_function_value( &::SireSystem::EnergyMonitor::assigner1 );
             
             EnergyMonitor_exposer.def( 
@@ -93,7 +93,7 @@ void register_EnergyMonitor_class(){
         }
         { //::SireSystem::EnergyMonitor::clearStatistics
         
-            typedef void ( ::SireSystem::EnergyMonitor::*clearStatistics_function_type )(  ) ;
+            typedef void ( ::SireSystem::EnergyMonitor::*clearStatistics_function_type)(  ) ;
             clearStatistics_function_type clearStatistics_function_value( &::SireSystem::EnergyMonitor::clearStatistics );
             
             EnergyMonitor_exposer.def( 
@@ -103,7 +103,7 @@ void register_EnergyMonitor_class(){
         }
         { //::SireSystem::EnergyMonitor::coulombEnergies
         
-            typedef ::SireBase::Array2D< SireBase::PropPtr< SireMaths::Accumulator > > ( ::SireSystem::EnergyMonitor::*coulombEnergies_function_type )(  ) const;
+            typedef ::SireBase::Array2D< SireBase::PropPtr< SireMaths::Accumulator > > ( ::SireSystem::EnergyMonitor::*coulombEnergies_function_type)(  ) const;
             coulombEnergies_function_type coulombEnergies_function_value( &::SireSystem::EnergyMonitor::coulombEnergies );
             
             EnergyMonitor_exposer.def( 
@@ -113,7 +113,7 @@ void register_EnergyMonitor_class(){
         }
         { //::SireSystem::EnergyMonitor::coulombPower
         
-            typedef int ( ::SireSystem::EnergyMonitor::*coulombPower_function_type )(  ) const;
+            typedef int ( ::SireSystem::EnergyMonitor::*coulombPower_function_type)(  ) const;
             coulombPower_function_type coulombPower_function_value( &::SireSystem::EnergyMonitor::coulombPower );
             
             EnergyMonitor_exposer.def( 
@@ -123,7 +123,7 @@ void register_EnergyMonitor_class(){
         }
         { //::SireSystem::EnergyMonitor::group0
         
-            typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::EnergyMonitor::*group0_function_type )(  ) const;
+            typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::EnergyMonitor::*group0_function_type)(  ) const;
             group0_function_type group0_function_value( &::SireSystem::EnergyMonitor::group0 );
             
             EnergyMonitor_exposer.def( 
@@ -134,7 +134,7 @@ void register_EnergyMonitor_class(){
         }
         { //::SireSystem::EnergyMonitor::group1
         
-            typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::EnergyMonitor::*group1_function_type )(  ) const;
+            typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::EnergyMonitor::*group1_function_type)(  ) const;
             group1_function_type group1_function_value( &::SireSystem::EnergyMonitor::group1 );
             
             EnergyMonitor_exposer.def( 
@@ -145,7 +145,7 @@ void register_EnergyMonitor_class(){
         }
         { //::SireSystem::EnergyMonitor::ljEnergies
         
-            typedef ::SireBase::Array2D< SireBase::PropPtr< SireMaths::Accumulator > > ( ::SireSystem::EnergyMonitor::*ljEnergies_function_type )(  ) const;
+            typedef ::SireBase::Array2D< SireBase::PropPtr< SireMaths::Accumulator > > ( ::SireSystem::EnergyMonitor::*ljEnergies_function_type)(  ) const;
             ljEnergies_function_type ljEnergies_function_value( &::SireSystem::EnergyMonitor::ljEnergies );
             
             EnergyMonitor_exposer.def( 
@@ -155,7 +155,7 @@ void register_EnergyMonitor_class(){
         }
         { //::SireSystem::EnergyMonitor::monitor
         
-            typedef void ( ::SireSystem::EnergyMonitor::*monitor_function_type )( ::SireSystem::System & ) ;
+            typedef void ( ::SireSystem::EnergyMonitor::*monitor_function_type)( ::SireSystem::System & ) ;
             monitor_function_type monitor_function_value( &::SireSystem::EnergyMonitor::monitor );
             
             EnergyMonitor_exposer.def( 
@@ -167,7 +167,7 @@ void register_EnergyMonitor_class(){
         EnergyMonitor_exposer.def( bp::self != bp::self );
         { //::SireSystem::EnergyMonitor::operator=
         
-            typedef ::SireSystem::EnergyMonitor & ( ::SireSystem::EnergyMonitor::*assign_function_type )( ::SireSystem::EnergyMonitor const & ) ;
+            typedef ::SireSystem::EnergyMonitor & ( ::SireSystem::EnergyMonitor::*assign_function_type)( ::SireSystem::EnergyMonitor const & ) ;
             assign_function_type assign_function_value( &::SireSystem::EnergyMonitor::operator= );
             
             EnergyMonitor_exposer.def( 
@@ -180,7 +180,7 @@ void register_EnergyMonitor_class(){
         EnergyMonitor_exposer.def( bp::self == bp::self );
         { //::SireSystem::EnergyMonitor::setAlpha
         
-            typedef void ( ::SireSystem::EnergyMonitor::*setAlpha_function_type )( double ) ;
+            typedef void ( ::SireSystem::EnergyMonitor::*setAlpha_function_type)( double ) ;
             setAlpha_function_type setAlpha_function_value( &::SireSystem::EnergyMonitor::setAlpha );
             
             EnergyMonitor_exposer.def( 
@@ -191,7 +191,7 @@ void register_EnergyMonitor_class(){
         }
         { //::SireSystem::EnergyMonitor::setAlphaComponent
         
-            typedef void ( ::SireSystem::EnergyMonitor::*setAlphaComponent_function_type )( ::SireCAS::Symbol const & ) ;
+            typedef void ( ::SireSystem::EnergyMonitor::*setAlphaComponent_function_type)( ::SireCAS::Symbol const & ) ;
             setAlphaComponent_function_type setAlphaComponent_function_value( &::SireSystem::EnergyMonitor::setAlphaComponent );
             
             EnergyMonitor_exposer.def( 
@@ -202,7 +202,7 @@ void register_EnergyMonitor_class(){
         }
         { //::SireSystem::EnergyMonitor::setCoulombPower
         
-            typedef void ( ::SireSystem::EnergyMonitor::*setCoulombPower_function_type )( int ) ;
+            typedef void ( ::SireSystem::EnergyMonitor::*setCoulombPower_function_type)( int ) ;
             setCoulombPower_function_type setCoulombPower_function_value( &::SireSystem::EnergyMonitor::setCoulombPower );
             
             EnergyMonitor_exposer.def( 
@@ -213,7 +213,7 @@ void register_EnergyMonitor_class(){
         }
         { //::SireSystem::EnergyMonitor::setShiftDelta
         
-            typedef void ( ::SireSystem::EnergyMonitor::*setShiftDelta_function_type )( double ) ;
+            typedef void ( ::SireSystem::EnergyMonitor::*setShiftDelta_function_type)( double ) ;
             setShiftDelta_function_type setShiftDelta_function_value( &::SireSystem::EnergyMonitor::setShiftDelta );
             
             EnergyMonitor_exposer.def( 
@@ -224,7 +224,7 @@ void register_EnergyMonitor_class(){
         }
         { //::SireSystem::EnergyMonitor::shiftDelta
         
-            typedef double ( ::SireSystem::EnergyMonitor::*shiftDelta_function_type )(  ) const;
+            typedef double ( ::SireSystem::EnergyMonitor::*shiftDelta_function_type)(  ) const;
             shiftDelta_function_type shiftDelta_function_value( &::SireSystem::EnergyMonitor::shiftDelta );
             
             EnergyMonitor_exposer.def( 
@@ -244,7 +244,7 @@ void register_EnergyMonitor_class(){
         }
         { //::SireSystem::EnergyMonitor::usesSoftCore
         
-            typedef bool ( ::SireSystem::EnergyMonitor::*usesSoftCore_function_type )(  ) const;
+            typedef bool ( ::SireSystem::EnergyMonitor::*usesSoftCore_function_type)(  ) const;
             usesSoftCore_function_type usesSoftCore_function_value( &::SireSystem::EnergyMonitor::usesSoftCore );
             
             EnergyMonitor_exposer.def( 
@@ -254,7 +254,7 @@ void register_EnergyMonitor_class(){
         }
         { //::SireSystem::EnergyMonitor::views0
         
-            typedef ::QVector< SireMol::PartialMolecule > ( ::SireSystem::EnergyMonitor::*views0_function_type )(  ) const;
+            typedef ::QVector< SireMol::PartialMolecule > ( ::SireSystem::EnergyMonitor::*views0_function_type)(  ) const;
             views0_function_type views0_function_value( &::SireSystem::EnergyMonitor::views0 );
             
             EnergyMonitor_exposer.def( 
@@ -264,7 +264,7 @@ void register_EnergyMonitor_class(){
         }
         { //::SireSystem::EnergyMonitor::views1
         
-            typedef ::QVector< SireMol::PartialMolecule > ( ::SireSystem::EnergyMonitor::*views1_function_type )(  ) const;
+            typedef ::QVector< SireMol::PartialMolecule > ( ::SireSystem::EnergyMonitor::*views1_function_type)(  ) const;
             views1_function_type views1_function_value( &::SireSystem::EnergyMonitor::views1 );
             
             EnergyMonitor_exposer.def( 

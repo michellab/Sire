@@ -50,7 +50,7 @@ void register_G2FF_class(){
         bp::scope G2FF_scope( G2FF_exposer );
         { //::SireFF::G2FF::accept
         
-            typedef void ( ::SireFF::G2FF::*accept_function_type )(  ) ;
+            typedef void ( ::SireFF::G2FF::*accept_function_type)(  ) ;
             accept_function_type accept_function_value( &::SireFF::G2FF::accept );
             
             G2FF_exposer.def( 
@@ -60,7 +60,7 @@ void register_G2FF_class(){
         }
         { //::SireFF::G2FF::assertContains
         
-            typedef void ( ::SireFF::G2FF::*assertContains_function_type )( ::SireMol::MGNum ) const;
+            typedef void ( ::SireFF::G2FF::*assertContains_function_type)( ::SireMol::MGNum ) const;
             assertContains_function_type assertContains_function_value( &::SireFF::G2FF::assertContains );
             
             G2FF_exposer.def( 
@@ -71,7 +71,7 @@ void register_G2FF_class(){
         }
         { //::SireFF::G2FF::at
         
-            typedef ::SireMol::MoleculeGroup const & ( ::SireFF::G2FF::*at_function_type )( ::SireMol::MGNum ) const;
+            typedef ::SireMol::MoleculeGroup const & ( ::SireFF::G2FF::*at_function_type)( ::SireMol::MGNum ) const;
             at_function_type at_function_value( &::SireFF::G2FF::at );
             
             G2FF_exposer.def( 
@@ -83,7 +83,7 @@ void register_G2FF_class(){
         }
         { //::SireFF::G2FF::needsAccepting
         
-            typedef bool ( ::SireFF::G2FF::*needsAccepting_function_type )(  ) const;
+            typedef bool ( ::SireFF::G2FF::*needsAccepting_function_type)(  ) const;
             needsAccepting_function_type needsAccepting_function_value( &::SireFF::G2FF::needsAccepting );
             
             G2FF_exposer.def( 

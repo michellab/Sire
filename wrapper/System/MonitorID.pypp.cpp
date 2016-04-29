@@ -35,7 +35,7 @@ void register_MonitorID_class(){
         bp::scope MonitorID_scope( MonitorID_exposer );
         { //::SireSystem::MonitorID::map
         
-            typedef ::QList< SireSystem::MonitorName > ( ::SireSystem::MonitorID::*map_function_type )( ::SireSystem::SystemMonitors const & ) const;
+            typedef ::QList< SireSystem::MonitorName > ( ::SireSystem::MonitorID::*map_function_type)( ::SireSystem::SystemMonitors const & ) const;
             map_function_type map_function_value( &::SireSystem::MonitorID::map );
             
             MonitorID_exposer.def( 
@@ -47,7 +47,7 @@ void register_MonitorID_class(){
         MonitorID_exposer.def( bp::self & bp::self );
         { //::SireSystem::MonitorID::operator()
         
-            typedef ::SireID::Specify< SireSystem::MonitorID > ( ::SireSystem::MonitorID::*__call___function_type )( int ) const;
+            typedef ::SireID::Specify< SireSystem::MonitorID > ( ::SireSystem::MonitorID::*__call___function_type)( int ) const;
             __call___function_type __call___function_value( &::SireSystem::MonitorID::operator() );
             
             MonitorID_exposer.def( 
@@ -58,7 +58,7 @@ void register_MonitorID_class(){
         }
         { //::SireSystem::MonitorID::operator()
         
-            typedef ::SireID::Specify< SireSystem::MonitorID > ( ::SireSystem::MonitorID::*__call___function_type )( int,int ) const;
+            typedef ::SireID::Specify< SireSystem::MonitorID > ( ::SireSystem::MonitorID::*__call___function_type)( int,int ) const;
             __call___function_type __call___function_value( &::SireSystem::MonitorID::operator() );
             
             MonitorID_exposer.def( 
@@ -71,7 +71,7 @@ void register_MonitorID_class(){
         MonitorID_exposer.def( bp::self + bp::self );
         { //::SireSystem::MonitorID::operator[]
         
-            typedef ::SireID::Specify< SireSystem::MonitorID > ( ::SireSystem::MonitorID::*__getitem___function_type )( int ) const;
+            typedef ::SireID::Specify< SireSystem::MonitorID > ( ::SireSystem::MonitorID::*__getitem___function_type)( int ) const;
             __getitem___function_type __getitem___function_value( &::SireSystem::MonitorID::operator[] );
             
             MonitorID_exposer.def( 
