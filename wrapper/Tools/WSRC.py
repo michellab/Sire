@@ -998,7 +998,7 @@ def mergeSystems(protein_system, water_system, ligand_mol):
         bound_ligand_fixed.add(ligand_mols, MGIdx(0))
         bound_ligand_fixed.add(fixed_bound_group, MGIdx(1))
     else:
-        bound_ligand_fixed = GridFF("bound:ligand-fixed")
+        bound_ligand_fixed = GridFF2("bound:ligand-fixed")
         bound_ligand_fixed = setCLJProperties(bound_ligand_fixed)
         bound_ligand_fixed = setGridProperties(bound_ligand_fixed)
 
@@ -1015,7 +1015,7 @@ def mergeSystems(protein_system, water_system, ligand_mol):
         bound_swap_fixed.add(swap_water_mols, MGIdx(0))
         bound_swap_fixed.add( fixed_bound_group, MGIdx(1) )
     else:
-        bound_swap_fixed = GridFF("bound:swap-fixed")
+        bound_swap_fixed = GridFF2("bound:swap-fixed")
         bound_swap_fixed = setCLJProperties(bound_swap_fixed)
         # The swap water cluster is more mobile, so needs a bigger grid buffer
         bound_swap_fixed = setGridProperties(bound_swap_fixed, 6*angstrom)
@@ -1055,7 +1055,7 @@ def mergeSystems(protein_system, water_system, ligand_mol):
         free_ligand_fixed.add(ligand_mols, MGIdx(0))
         free_ligand_fixed.add(fixed_free_group, MGIdx(1))
     else:
-        free_ligand_fixed = GridFF("free:ligand-fixed")
+        free_ligand_fixed = GridFF2("free:ligand-fixed")
         free_ligand_fixed = setCLJProperties(free_ligand_fixed)
         free_ligand_fixed = setGridProperties(free_ligand_fixed)
 
@@ -1072,7 +1072,7 @@ def mergeSystems(protein_system, water_system, ligand_mol):
         free_swap_fixed.add(swap_water_mols, MGIdx(0))
         free_swap_fixed.add(fixed_free_group, MGIdx(1))
     else:
-        free_swap_fixed = GridFF("free:swap-fixed")
+        free_swap_fixed = GridFF2("free:swap-fixed")
         free_swap_fixed = setCLJProperties(free_swap_fixed)
         # The swap water cluster is more mobile so needs a bigger grid buffer
         free_swap_fixed = setGridProperties(free_swap_fixed, 6*angstrom)
@@ -1095,7 +1095,7 @@ def mergeSystems(protein_system, water_system, ligand_mol):
         bound_mobile_fixed.add(fixed_bound_group, MGIdx(1))
         bound_forcefields.append(bound_mobile_fixed)
     else:
-        bound_mobile_fixed = GridFF("bound:mobile-fixed")
+        bound_mobile_fixed = GridFF2("bound:mobile-fixed")
         bound_mobile_fixed = setCLJProperties(bound_mobile_fixed)
         bound_mobile_fixed = setGridProperties(bound_mobile_fixed)
 
@@ -1160,7 +1160,7 @@ def mergeSystems(protein_system, water_system, ligand_mol):
         free_mobile_fixed.add(fixed_free_group, MGIdx(1))
         free_forcefields.append(free_mobile_fixed)
     else:
-        free_mobile_fixed = GridFF("free:mobile-fixed")
+        free_mobile_fixed = GridFF2("free:mobile-fixed")
         free_mobile_fixed = setCLJProperties(free_mobile_fixed)
         free_mobile_fixed = setGridProperties(free_mobile_fixed)
 

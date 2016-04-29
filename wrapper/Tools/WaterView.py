@@ -357,14 +357,14 @@ def makeSim(system, ligand_mol, watersys):
             stage2_mobile_fixed.add(stage2_mobile_group, MGIdx(0))
             stage2_mobile_fixed.add(stage2_fixed_group, MGIdx(1))
         else:
-            stage1_mobile_fixed = GridFF("mobile-fixed")
+            stage1_mobile_fixed = GridFF2("mobile-fixed")
             stage1_mobile_fixed = setCLJProperties(stage1_mobile_fixed)
             stage1_mobile_fixed = setGridProperties(stage1_mobile_fixed)
 
             stage1_mobile_fixed.add(stage1_mobile_group, MGIdx(0))
             stage1_mobile_fixed.addFixedAtoms(stage1_fixed_group)
 
-            stage2_mobile_fixed = GridFF("mobile-fixed")
+            stage2_mobile_fixed = GridFF2("mobile-fixed")
             stage2_mobile_fixed = setCLJProperties(stage2_mobile_fixed)
             stage2_mobile_fixed = setGridProperties(stage2_mobile_fixed)
 
