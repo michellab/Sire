@@ -778,7 +778,7 @@ def loadQMMMSystem():
             forcefields.append(ligand_fixed)
 
         else:
-            ligand_fixed = GridFF("system:ligand-fixed")
+            ligand_fixed = GridFF2("system:ligand-fixed")
             ligand_fixed = setCLJProperties(ligand_fixed, space)
             ligand_fixed = setGridProperties(ligand_fixed)
 
@@ -816,7 +816,7 @@ def loadQMMMSystem():
         other_nrg += mobile_fixed.components().total()
         forcefields.append(mobile_fixed)
     else:
-        mobile_fixed = GridFF("mobile-fixed")
+        mobile_fixed = GridFF2("mobile-fixed")
         mobile_fixed = setCLJProperties(mobile_fixed, space)
         mobile_fixed = setGridProperties(mobile_fixed)
 

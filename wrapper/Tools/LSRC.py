@@ -673,14 +673,14 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
         bound_ligand1_fixed.add(ligand_mol1, MGIdx(0))
         bound_ligand1_fixed.add(fixed_bound_group, MGIdx(1))
     else:
-        bound_ligand0_fixed = GridFF("bound:ligand0-fixed")
+        bound_ligand0_fixed = GridFF2("bound:ligand0-fixed")
         bound_ligand0_fixed = setCLJProperties(bound_ligand0_fixed)
         bound_ligand0_fixed = setGridProperties(bound_ligand0_fixed)
 
         bound_ligand0_fixed.add(ligand_mol0, MGIdx(0))
         bound_ligand0_fixed.addFixedAtoms( fixed_bound_group )
 
-        bound_ligand1_fixed = GridFF("bound:ligand1-fixed")
+        bound_ligand1_fixed = GridFF2("bound:ligand1-fixed")
         bound_ligand1_fixed = setCLJProperties(bound_ligand1_fixed)
         bound_ligand1_fixed = setGridProperties(bound_ligand1_fixed)
 
@@ -724,14 +724,14 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
         free_ligand1_fixed.add(ligand_mol1, MGIdx(0))
         free_ligand1_fixed.add(fixed_free_group, MGIdx(1))
     else:
-        free_ligand0_fixed = GridFF("free:ligand0-fixed")
+        free_ligand0_fixed = GridFF2("free:ligand0-fixed")
         free_ligand0_fixed = setCLJProperties(free_ligand0_fixed)
         free_ligand0_fixed = setGridProperties(free_ligand0_fixed)
 
         free_ligand0_fixed.add(ligand_mol0, MGIdx(0))
         free_ligand0_fixed.addFixedAtoms(fixed_free_group)
 
-        free_ligand1_fixed = GridFF("free:ligand1-fixed")
+        free_ligand1_fixed = GridFF2("free:ligand1-fixed")
         free_ligand1_fixed = setCLJProperties(free_ligand1_fixed)
         free_ligand1_fixed = setGridProperties(free_ligand1_fixed)
 
@@ -753,7 +753,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
         bound_mobile_fixed.add(fixed_bound_group, MGIdx(1))
         bound_forcefields.append(bound_mobile_fixed)
     else:
-        bound_mobile_fixed = GridFF("bound:mobile-fixed")
+        bound_mobile_fixed = GridFF2("bound:mobile-fixed")
         bound_mobile_fixed = setCLJProperties(bound_mobile_fixed)
         bound_mobile_fixed = setGridProperties(bound_mobile_fixed)
 
@@ -818,7 +818,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
         free_mobile_fixed.add(fixed_free_group, MGIdx(1))
         free_forcefields.append(free_mobile_fixed)
     else:
-        free_mobile_fixed = GridFF("free:mobile-fixed")
+        free_mobile_fixed = GridFF2("free:mobile-fixed")
         free_mobile_fixed = setCLJProperties(free_mobile_fixed)
         free_mobile_fixed = setGridProperties(free_mobile_fixed)
 
