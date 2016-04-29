@@ -3,7 +3,12 @@ SIRE changelog
 
 devel branch:
 
-    Updated gradient compuation in openmmfreenergst to finite differece gradients
+    [2016.1.0] April 29 2016 - Merge of Bristol and Edinburgh codes, moved to miniconda
+     and clean packaging system, including OpenMM fully, added in nautilus, somd etc.,
+     added optimised forcefields, added a proper unit testing suite.
+
+
+    [OLD] Updated gradient compuation in openmmfreenergst to finite differece gradients
     Allow the computation of reduced perturbed energies in openmmfreenergst of all computed lambda values
     Separated minimization and equilibration from production run.
     Implemented mass repartitioning for hydrogens atoms to allow for larger integration timesteps
