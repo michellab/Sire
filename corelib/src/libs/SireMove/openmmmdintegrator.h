@@ -235,7 +235,7 @@ namespace SireMove {
 
         bool is_periodic;
         
-        MolarEnergy openmmKineticEnergy;
+        SireUnits::Dimension::MolarEnergy openmmKineticEnergy;
 
     };
 
