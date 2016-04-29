@@ -334,7 +334,7 @@ const MoleculeInfoData& Flexibility::info() const
 
 static QString getAtom(const AtomIdx &idx, const MoleculeInfoData &molinfo)
 {
-    return QString("%1:%2").arg( molinfo.name(idx), molinfo.number(idx) );
+    return QString("%1:%2").arg( molinfo.name(idx) ).arg( molinfo.number(idx) );
 }
 
 /** Return a string representation of this flexibility */
@@ -361,9 +361,9 @@ QString Flexibility::toString() const
     {
         const DofID &bond = it.key();
     
-        lines.append(QObject::tr("%1-%2 = %3")
-                    .arg(getAtom(bond.atom0(),*molinfo), getAtom(bond.atom1(),*molinfo))
-                    .arg(it.value().toString()));
+        lines.append(QObject::tr("%2-%3 = %1")
+                    .arg(it.value().toString())
+                    .arg(getAtom(bond.atom0(),*molinfo), getAtom(bond.atom1(),*molinfo)));
     }
     
     for (QHash<DofID,Angle>::const_iterator it = angle_deltas.constBegin();

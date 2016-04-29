@@ -579,10 +579,12 @@ static int setConnectivity(MolEditor &editmol, int pointer,
     int start_idx = last_idx;
     bool got_to_end = true;
 
-    if (last_idx < 0)
+    /*if (last_idx < 0)
         start_idx = 0;
     else if (last_idx >= pointer)
-        return last_idx;
+        return last_idx;*/
+
+    start_idx = 0;
 
     for (int i=start_idx; i < pointer ; ++i)
     {
@@ -600,14 +602,16 @@ static int setConnectivity(MolEditor &editmol, int pointer,
             //(assumes that the indicies refer to increasing molecule, i.e. sorted)
             last_idx = i+1;
             got_to_end = false;
-            break;
+            continue;
         }
-
-        AtomNum number0 = AtomNum( index0 );
-        AtomNum number1 = AtomNum( index1 );
-        AtomIdx atom0 = editmol.select( number0 ).index();
-        AtomIdx atom1 = editmol.select( number1 ).index();
-        connectivity.connect( atom0, atom1 );
+        else
+        {
+            AtomNum number0 = AtomNum( index0 );
+            AtomNum number1 = AtomNum( index1 );
+            AtomIdx atom0 = editmol.select( number0 ).index();
+            AtomIdx atom1 = editmol.select( number1 ).index();
+            connectivity.connect( atom0, atom1 );
+        }
     }
 
     if (got_to_end)
@@ -633,12 +637,14 @@ static int setBonds(MolEditor &editmol, int pointer,
     int atomEnd = editmol.atoms().at(-1).number().value();
 
     int start_idx = last_idx;
-    if (last_idx < 0)
+    /*if (last_idx < 0)
         start_idx = 0;
     else if (last_idx >= pointer)
-        return last_idx;
+        return last_idx;*/
 
     bool got_to_end = true;
+
+    start_idx = 0;
 
     for (int i=start_idx; i<pointer; ++i)
     {
@@ -656,26 +662,28 @@ static int setBonds(MolEditor &editmol, int pointer,
             //(assumes that the indicies refer to increasing molecule, i.e. sorted)
             last_idx = i+1;
             got_to_end = false;
-            break;
+            continue;
         }
+        else
+        {
+            int paramIndex = bondsArray[ i*3 + 2 ];
 
-        int paramIndex = bondsArray[ i*3 + 2 ];
+            AtomNum number0 = AtomNum( index0 );
+            AtomNum number1 = AtomNum( index1 );
+            AtomIdx atom0 = editmol.select( number0 ).index();
+            AtomIdx atom1 = editmol.select( number1 ).index();
 
-        AtomNum number0 = AtomNum( index0 );
-        AtomNum number1 = AtomNum( index1 );
-        AtomIdx atom0 = editmol.select( number0 ).index();
-        AtomIdx atom1 = editmol.select( number1 ).index();
+            Symbol r = InternalPotential::symbols().bond().r();
 
-        Symbol r = InternalPotential::symbols().bond().r();
+            double k = bond_force_constant[ paramIndex -1 ];
+            double r0 = bond_equil_value[ paramIndex - 1 ];
 
-        double k = bond_force_constant[ paramIndex -1 ];
-        double r0 = bond_equil_value[ paramIndex - 1 ];
+            Expression bondfunc = k * SireMaths::pow_2(r - r0);
+            bondfuncs.set( atom0, atom1, bondfunc );
 
-        Expression bondfunc = k * SireMaths::pow_2(r - r0);
-        bondfuncs.set( atom0, atom1, bondfunc );
-
-        BondID bond = BondID(atom0, atom1);
-        amberparams.add( bond, k, r0);
+            BondID bond = BondID(atom0, atom1);
+            amberparams.add( bond, k, r0);
+        }
     }
 
     if (got_to_end)
@@ -703,12 +711,14 @@ static int setAngles(MolEditor &editmol, int pointer,
     int atomEnd = editmol.atoms().at(-1).number().value();
 
     int start_idx = last_idx;
-    if (last_idx < 0)
+    /*if (last_idx < 0)
         start_idx = 0;
     else if (last_idx >= pointer)
-        return last_idx;
+        return last_idx;*/
     
     bool got_to_end = true;
+
+    start_idx = 0;
 
     for (int i=start_idx; i<pointer; ++i)
     {
@@ -727,28 +737,30 @@ static int setAngles(MolEditor &editmol, int pointer,
             //(assumes that the indicies refer to increasing molecule, i.e. sorted)
             last_idx = i+1;
             got_to_end = false;
-            break;
+            continue;
         }
+        else
+        {
+            AtomNum number0 = AtomNum( index0 );
+            AtomNum number1 = AtomNum( index1 );
+            AtomNum number2 = AtomNum( index2 );
 
-        AtomNum number0 = AtomNum( index0 );
-        AtomNum number1 = AtomNum( index1 );
-        AtomNum number2 = AtomNum( index2 );
+            int paramIndex = anglesArray[ i*4 + 3 ];
+            AtomIdx atom0 = editmol.select( number0 ).index();
+            AtomIdx atom1 = editmol.select( number1 ).index();
+            AtomIdx atom2 = editmol.select( number2 ).index();
 
-        int paramIndex = anglesArray[ i*4 + 3 ];
-        AtomIdx atom0 = editmol.select( number0 ).index();
-        AtomIdx atom1 = editmol.select( number1 ).index();
-        AtomIdx atom2 = editmol.select( number2 ).index();
+            Symbol theta = InternalPotential::symbols().angle().theta();
 
-        Symbol theta = InternalPotential::symbols().angle().theta();
+            double k = ang_force_constant[ paramIndex - 1 ];
+            double theta0 = ang_equil_value[ paramIndex - 1 ];// radians
 
-        double k = ang_force_constant[ paramIndex - 1 ];
-        double theta0 = ang_equil_value[ paramIndex - 1 ];// radians
+            Expression anglefunc = k * SireMaths::pow_2(theta - theta0);
+            anglefuncs.set( atom0, atom1, atom2, anglefunc );
 
-        Expression anglefunc = k * SireMaths::pow_2(theta - theta0);
-        anglefuncs.set( atom0, atom1, atom2, anglefunc );
-
-        AngleID angle = AngleID(atom0, atom1, atom2);
-        amberparams.add( angle, k, theta0);
+            AngleID angle = AngleID(atom0, atom1, atom2);
+            amberparams.add( angle, k, theta0);
+        }
     }
 
     if (got_to_end)
@@ -788,12 +800,14 @@ static int setDihedrals(MolEditor &editmol, int pointer,
     QHash<DofID,Expression> dihedral_hash;
 
     int start_idx = last_idx;
-    if (last_idx < 0)
+    /*if (last_idx < 0)
         start_idx = 0;
     else if (last_idx >= pointer)
-        return last_idx;
+        return last_idx;*/
 
     bool got_to_end = true;
+
+    start_idx = 0;
 
     for (int i=start_idx; i<pointer; ++i)
     {
@@ -846,121 +860,123 @@ static int setDihedrals(MolEditor &editmol, int pointer,
             //(assumes that the indicies refer to increasing molecule, i.e. sorted)
             last_idx = i+1;
             got_to_end = false;
-            break;
-        }
-
-        int paramIndex = dihedralsArray[ i*5 + 4 ];
-
-        AtomNum number0 = AtomNum( index0 );
-        AtomNum number1 = AtomNum( index1 );
-        AtomNum number2 = AtomNum( index2 );
-        AtomNum number3 = AtomNum( index3 );
-
-        Symbol phi = InternalPotential::symbols().dihedral().phi();
-
-        double k = dih_force_constant[ paramIndex - 1 ];// kcal_per_mol
-        double periodicity = dih_periodicity[ paramIndex - 1] * radians.to(radians);
-        double phase = dih_phase[ paramIndex - 1];
-
-        // Assume default values for 14 scaling factors
-        // Note that these are NOT inversed after reading from input
-        double sclee14 = 1/coul_14scl;
-        double sclnb14 = 1/lj_14scl;
-        if (sceefactor.size() > 0)
-            sclee14 = sceefactor[ paramIndex - 1 ];
-        if (scnbfactor.size() > 0)
-            sclnb14 = scnbfactor[ paramIndex - 1 ];
-
-        Expression dihedral_func = k * ( 1 + Cos( periodicity * ( phi - 0 ) - phase ) );
-
-        Atom atom0 = editmol.select( number0 );
-        Atom atom1 = editmol.select( number1 );
-        Atom atom2 = editmol.select( number2 );
-        Atom atom3 = editmol.select( number3 );
-
-        if (improper)
-        {
-            ImproperID dih = ImproperID( atom0.index(), atom1.index(), atom2.index(), atom3.index() );
-            amberparams.add( dih, k, periodicity, phase);
+            continue;
         }
         else
         {
-            DihedralID dih = DihedralID( atom0.index(), atom1.index(), atom2.index(), atom3.index() );
-            amberparams.add( dih, k, periodicity, phase);
-        }
+            int paramIndex = dihedralsArray[ i*5 + 4 ];
 
-        // Actually, we just save the terms in an array of atom indices
-        // because some dihedrals may have multi-term
-        // JM Feb 13. Maybe better to create improper/dihedral functions with null terms in case they are changed by a perturbation?
-        //if (improper and k > 0.00001)
-        if (improper)
-        {
-            DofID improperid = DofID( atom0.index(), atom1.index(),
-                                      atom2.index(), atom3.index() );
+            AtomNum number0 = AtomNum( index0 );
+            AtomNum number1 = AtomNum( index1 );
+            AtomNum number2 = AtomNum( index2 );
+            AtomNum number3 = AtomNum( index3 );
 
-            if ( improper_hash.contains(improperid) )
-                improper_hash[improperid] += dihedral_func;
+            Symbol phi = InternalPotential::symbols().dihedral().phi();
+
+            double k = dih_force_constant[ paramIndex - 1 ];// kcal_per_mol
+            double periodicity = dih_periodicity[ paramIndex - 1] * radians.to(radians);
+            double phase = dih_phase[ paramIndex - 1];
+
+            // Assume default values for 14 scaling factors
+            // Note that these are NOT inversed after reading from input
+            double sclee14 = 1/coul_14scl;
+            double sclnb14 = 1/lj_14scl;
+            if (sceefactor.size() > 0)
+                sclee14 = sceefactor[ paramIndex - 1 ];
+            if (scnbfactor.size() > 0)
+                sclnb14 = scnbfactor[ paramIndex - 1 ];
+
+            Expression dihedral_func = k * ( 1 + Cos( periodicity * ( phi - 0 ) - phase ) );
+
+            Atom atom0 = editmol.select( number0 );
+            Atom atom1 = editmol.select( number1 );
+            Atom atom2 = editmol.select( number2 );
+            Atom atom3 = editmol.select( number3 );
+
+            if (improper)
+            {
+                ImproperID dih = ImproperID( atom0.index(), atom1.index(), atom2.index(), atom3.index() );
+                amberparams.add( dih, k, periodicity, phase);
+            }
             else
-                improper_hash.insert(improperid, dihedral_func);
-        }
-        //else if ( k > 0.00001)
-        else
-        {
-            DofID dihid = DofID( atom0.index(), atom1.index(),
-                                 atom2.index(), atom3.index() );
+            {
+                DihedralID dih = DihedralID( atom0.index(), atom1.index(), atom2.index(), atom3.index() );
+                amberparams.add( dih, k, periodicity, phase);
+            }
 
-            if ( dihedral_hash.contains(dihid) )
-                dihedral_hash[dihid] += dihedral_func;
+            // Actually, we just save the terms in an array of atom indices
+            // because some dihedrals may have multi-term
+            // JM Feb 13. Maybe better to create improper/dihedral functions with null terms in case they are changed by a perturbation?
+            //if (improper and k > 0.00001)
+            if (improper)
+            {
+                DofID improperid = DofID( atom0.index(), atom1.index(),
+                                          atom2.index(), atom3.index() );
+
+                if ( improper_hash.contains(improperid) )
+                    improper_hash[improperid] += dihedral_func;
+                else
+                    improper_hash.insert(improperid, dihedral_func);
+            }
+            //else if ( k > 0.00001)
             else
-                dihedral_hash.insert( dihid, dihedral_func);
-        }
+            {
+                DofID dihid = DofID( atom0.index(), atom1.index(),
+                                     atom2.index(), atom3.index() );
 
-        if (not ignored and not improper)
-        {
-            if (sclee14 < 0.00001)
-            {
-                throw SireError::program_bug( QObject::tr(
-	   " A 1,4 pair has a coulombic scaling factor of 0.0 in the top file which would mean an infinite energy ! "),
-					    CODELOC );
-            }
-            if (sclnb14 < 0.00001)
-            {
-                throw SireError::program_bug( QObject::tr(
-	   " A 1,4 pair has a LJ scaling factor of 0.0 in the top file which would mean an infinite energy ! "),
-					    CODELOC );
+                if ( dihedral_hash.contains(dihid) )
+                    dihedral_hash[dihid] += dihedral_func;
+                else
+                    dihedral_hash.insert( dihid, dihedral_func);
             }
 
-            /**Save this in 14 array */
-            if (not atoms14.contains(atom0.number()))
+            if (not ignored and not improper)
             {
-                QList<AtomNum> list;
-                atoms14.insert( atom0.number(), list);
-            }
+                if (sclee14 < 0.00001)
+                {
+                    throw SireError::program_bug( QObject::tr(
+           " A 1,4 pair has a coulombic scaling factor of 0.0 in the top file which would mean an infinite energy ! "),
+                            CODELOC );
+                }
+                if (sclnb14 < 0.00001)
+                {
+                    throw SireError::program_bug( QObject::tr(
+           " A 1,4 pair has a LJ scaling factor of 0.0 in the top file which would mean an infinite energy ! "),
+                            CODELOC );
+                }
 
-            /** Not sure this can happens but to be safe.. */
-            if ( not atoms14[atom0.number()].contains(atom3.number()) )
-            {
-                atoms14[atom0.number()].append(atom3.number());
-                /* JM 07/14 Save scale factor for this pair*/
-                atoms14sclee[atom0.number()][atom3.number()] = 1/sclee14;
-                atoms14sclnb[atom0.number()][atom3.number()] = 1/sclnb14;
-                // Add pair (atom0,atom3) = (1/sclee14, 1/sclnb14) to amber parameters object
-                BondID pair = BondID(atom0.index() , atom3.index() );
-                amberparams.add14Pair( pair, 1/sclee14, 1/sclnb14 );
-            }
+                /**Save this in 14 array */
+                if (not atoms14.contains(atom0.number()))
+                {
+                    QList<AtomNum> list;
+                    atoms14.insert( atom0.number(), list);
+                }
 
-            if (not atoms14.contains(atom3.number()))
-            {
-                QList<AtomNum> list;
-                atoms14.insert( atom3.number(), list);
-            }
+                /** Not sure this can happens but to be safe.. */
+                if ( not atoms14[atom0.number()].contains(atom3.number()) )
+                {
+                    atoms14[atom0.number()].append(atom3.number());
+                    /* JM 07/14 Save scale factor for this pair*/
+                    atoms14sclee[atom0.number()][atom3.number()] = 1/sclee14;
+                    atoms14sclnb[atom0.number()][atom3.number()] = 1/sclnb14;
+                    // Add pair (atom0,atom3) = (1/sclee14, 1/sclnb14) to amber parameters object
+                    BondID pair = BondID(atom0.index() , atom3.index() );
+                    amberparams.add14Pair( pair, 1/sclee14, 1/sclnb14 );
+                }
 
-            if ( not atoms14[atom3.number()].contains(atom0.number()) )
-            {
-                atoms14[atom3.number()].append(atom0.number());
-                /* JM 07/14 Save scale factor for this pair*/
-                atoms14sclee[atom3.number()][atom0.number()] = 1/sclee14;
-                atoms14sclnb[atom3.number()][atom0.number()] = 1/sclnb14;
+                if (not atoms14.contains(atom3.number()))
+                {
+                    QList<AtomNum> list;
+                    atoms14.insert( atom3.number(), list);
+                }
+
+                if ( not atoms14[atom3.number()].contains(atom0.number()) )
+                {
+                    atoms14[atom3.number()].append(atom0.number());
+                    /* JM 07/14 Save scale factor for this pair*/
+                    atoms14sclee[atom3.number()][atom0.number()] = 1/sclee14;
+                    atoms14sclnb[atom3.number()][atom0.number()] = 1/sclnb14;
+                }
             }
         }
     }

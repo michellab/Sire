@@ -384,8 +384,6 @@ void GridFF2::addFixedAtoms(const SireMol::Molecules &fixed_atoms, const Propert
     
     LJParameterDB::lock();
     
-    qDebug() << CODELOC;
-
     for (SireMol::Molecules::const_iterator it = fixed_atoms.constBegin();
          it != fixed_atoms.constEnd();
          ++it)
@@ -393,50 +391,21 @@ void GridFF2::addFixedAtoms(const SireMol::Molecules &fixed_atoms, const Propert
         SireMol::Molecule mol = it->molecule();
         AtomSelection selection = it->selection();
  
-        qDebug() << mol.number().toString() << selection.selectedAll();
-        qDebug() << "get coords" << selection.toString();
         const QVector<Vector> coords = mol.property(coords_property)
                                         .asA<AtomCoords>().toVector(selection);
 
-        qDebug() << "get charges" << selection.nSelected();
-        
-        qDebug() << mol.hasProperty(chg_property);
-
         PropertyPtr p_chgs = mol.property(chg_property);
-        qDebug() << p_chgs.read().what();
 
         AtomCharges chgs = mol.property(chg_property).asA<AtomCharges>();
-
-        qDebug() << "picked up charges";
-
-        qDebug() << "count" << chgs.count();
-        qDebug() << "natoms" << chgs.nAtoms();
-
-        qDebug() << chgs.array().nArrays();
-        qDebug() << chgs.array().constData();
-
-        if (mol.number() == MolNum(159201) or mol.number() == MolNum(159202))
-        {
-            qDebug() << "STREAMING MOLECULE" << mol.number().toString();
-            SireStream::saveToFile(mol, QString("badmol_%1.s3").arg(mol.number().value()));
-        }
-
-        qDebug() << chgs.toString();
 
         const QVector<SireUnits::Dimension::Charge> charges = mol.property(chg_property)
                                         .asA<AtomCharges>().toVector(selection);
         
-        qDebug() << "get LJs";
-
         const QVector<LJParameter> ljs = mol.property(lj_property)
                                             .asA<AtomLJs>().toVector(selection);
 
-        qDebug() << "got all!";
-
         int nats = coords.count();
         
-        qDebug() << "number of atoms" << nats;
-
         fixedatoms_coords.reserve( fixedatoms_coords.count() + nats );
         fixedatoms_params.reserve( fixedatoms_params.count() + nats );
         
@@ -451,24 +420,16 @@ void GridFF2::addFixedAtoms(const SireMol::Molecules &fixed_atoms, const Propert
 
             fixedatoms_params.append(cljparam);
         }
-
-        qDebug() << "finished mol";
     }
     
-    qDebug() << "all done";
-
     LJParameterDB::unlock();
 
     need_update_ljpairs = true;
-    
-    qDebug() << "squeeze";
 
     fixedatoms_coords.squeeze();
     fixedatoms_params.squeeze();
 
     this->mustNowRecalculateFromScratch();
-
-    qDebug() << "all done";
 }
 
 /** Add all of the atoms in the molecules in the passed molecule group to the set
