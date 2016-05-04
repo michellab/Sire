@@ -102,7 +102,7 @@ if must_exit:
     sys.exit(0)
 
 if args.input:
-    input_file = args.input
+    input_file = args.input[0]
 else:
     input_file = None
 
