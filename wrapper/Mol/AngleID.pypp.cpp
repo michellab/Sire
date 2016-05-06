@@ -281,6 +281,7 @@ void register_AngleID_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AngleID_exposer.def( "__str__", &__str__< ::SireMol::AngleID > );
         AngleID_exposer.def( "__repr__", &__str__< ::SireMol::AngleID > );
+        AngleID_exposer.def( "__hash__", &::SireMol::AngleID::hash );
     }
 
 }

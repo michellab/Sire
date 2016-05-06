@@ -94,6 +94,7 @@ void register_MonitorID_class(){
         MonitorID_exposer.staticmethod( "typeName" );
         MonitorID_exposer.def( "__str__", &__str__< ::SireSystem::MonitorID > );
         MonitorID_exposer.def( "__repr__", &__str__< ::SireSystem::MonitorID > );
+        MonitorID_exposer.def( "__hash__", &::SireSystem::MonitorID::hash );
     }
 
 }

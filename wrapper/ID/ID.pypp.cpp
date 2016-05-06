@@ -80,6 +80,7 @@ void register_ID_class(){
         ID_exposer.staticmethod( "typeName" );
         ID_exposer.def( "__str__", &__str__< ::SireID::ID > );
         ID_exposer.def( "__repr__", &__str__< ::SireID::ID > );
+        ID_exposer.def( "__hash__", &::SireID::ID::hash );
     }
 
 }

@@ -125,6 +125,7 @@ void register_Intra14Component_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Intra14Component_exposer.def( "__str__", &__str__< ::SireMM::Intra14Component > );
         Intra14Component_exposer.def( "__repr__", &__str__< ::SireMM::Intra14Component > );
+        Intra14Component_exposer.def( "__hash__", &::SireMM::Intra14Component::hash );
     }
 
 }

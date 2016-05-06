@@ -102,6 +102,7 @@ void register_MGID_class(){
         MGID_exposer.staticmethod( "typeName" );
         MGID_exposer.def( "__str__", &__str__< ::SireMol::MGID > );
         MGID_exposer.def( "__repr__", &__str__< ::SireMol::MGID > );
+        MGID_exposer.def( "__hash__", &::SireMol::MGID::hash );
     }
 
 }

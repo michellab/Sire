@@ -191,6 +191,7 @@ void register_Constant_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Constant_exposer.def( "__str__", &__str__< ::SireCAS::Constant > );
         Constant_exposer.def( "__repr__", &__str__< ::SireCAS::Constant > );
+        Constant_exposer.def( "__hash__", &::SireCAS::Constant::hash );
     }
 
 }

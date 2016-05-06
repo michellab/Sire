@@ -88,6 +88,7 @@ void register_Sin_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Sin_exposer.def( "__str__", &__str__< ::SireCAS::Sin > );
         Sin_exposer.def( "__repr__", &__str__< ::SireCAS::Sin > );
+        Sin_exposer.def( "__hash__", &::SireCAS::Sin::hash );
     }
 
 }

@@ -96,6 +96,7 @@ void register_ArcCosh_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         ArcCosh_exposer.def( "__str__", &__str__< ::SireCAS::ArcCosh > );
         ArcCosh_exposer.def( "__repr__", &__str__< ::SireCAS::ArcCosh > );
+        ArcCosh_exposer.def( "__hash__", &::SireCAS::ArcCosh::hash );
     }
 
 }

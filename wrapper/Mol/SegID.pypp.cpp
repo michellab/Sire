@@ -257,6 +257,7 @@ void register_SegID_class(){
         SegID_exposer.staticmethod( "typeName" );
         SegID_exposer.def( "__str__", &__str__< ::SireMol::SegID > );
         SegID_exposer.def( "__repr__", &__str__< ::SireMol::SegID > );
+        SegID_exposer.def( "__hash__", &::SireMol::SegID::hash );
     }
 
 }

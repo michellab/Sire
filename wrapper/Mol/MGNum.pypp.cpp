@@ -136,6 +136,7 @@ void register_MGNum_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         MGNum_exposer.def( "__str__", &__str__< ::SireMol::MGNum > );
         MGNum_exposer.def( "__repr__", &__str__< ::SireMol::MGNum > );
+        MGNum_exposer.def( "__hash__", &::SireMol::MGNum::hash );
     }
 
 }

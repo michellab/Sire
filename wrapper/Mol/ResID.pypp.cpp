@@ -271,6 +271,7 @@ void register_ResID_class(){
         ResID_exposer.staticmethod( "typeName" );
         ResID_exposer.def( "__str__", &__str__< ::SireMol::ResID > );
         ResID_exposer.def( "__repr__", &__str__< ::SireMol::ResID > );
+        ResID_exposer.def( "__hash__", &::SireMol::ResID::hash );
     }
 
 }

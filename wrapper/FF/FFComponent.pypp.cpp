@@ -98,6 +98,7 @@ void register_FFComponent_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         FFComponent_exposer.def( "__str__", &__str__< ::SireFF::FFComponent > );
         FFComponent_exposer.def( "__repr__", &__str__< ::SireFF::FFComponent > );
+        FFComponent_exposer.def( "__hash__", &::SireFF::FFComponent::hash );
     }
 
 }

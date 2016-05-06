@@ -186,6 +186,7 @@ void register_IDAndSet_ChainID__class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         IDAndSet_ChainID__exposer.def( "__str__", &__str__< ::SireID::IDAndSet<SireMol::ChainID> > );
         IDAndSet_ChainID__exposer.def( "__repr__", &__str__< ::SireID::IDAndSet<SireMol::ChainID> > );
+        IDAndSet_ChainID__exposer.def( "__hash__", &::SireID::IDAndSet<SireMol::ChainID>::hash );
     }
 
 }

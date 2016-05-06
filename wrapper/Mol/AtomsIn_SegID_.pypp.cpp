@@ -159,6 +159,7 @@ void register_AtomsIn_SegID__class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AtomsIn_SegID__exposer.def( "__str__", &__str__< ::SireMol::AtomsIn<SireMol::SegID> > );
         AtomsIn_SegID__exposer.def( "__repr__", &__str__< ::SireMol::AtomsIn<SireMol::SegID> > );
+        AtomsIn_SegID__exposer.def( "__hash__", &::SireMol::AtomsIn<SireMol::SegID>::hash );
     }
 
 }

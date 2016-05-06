@@ -94,6 +94,7 @@ void register_FFID_class(){
         FFID_exposer.staticmethod( "typeName" );
         FFID_exposer.def( "__str__", &__str__< ::SireFF::FFID > );
         FFID_exposer.def( "__repr__", &__str__< ::SireFF::FFID > );
+        FFID_exposer.def( "__hash__", &::SireFF::FFID::hash );
     }
 
 }
