@@ -281,6 +281,7 @@ void register_MultiCLJComponent_class(){
         MultiCLJComponent_exposer.def( "__str__", &__str__< ::SireMM::MultiCLJComponent > );
         MultiCLJComponent_exposer.def( "__repr__", &__str__< ::SireMM::MultiCLJComponent > );
         MultiCLJComponent_exposer.def( "__len__", &__len_size< ::SireMM::MultiCLJComponent > );
+        MultiCLJComponent_exposer.def( "__hash__", &::SireMM::MultiCLJComponent::hash );
     }
 
 }

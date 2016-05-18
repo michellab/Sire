@@ -49,41 +49,51 @@ namespace bp = boost::python;
 
 #include "atomeditor.h"
 
-#include "SireBase/quickcopy.hpp"
-
-#include "atomforces.h"
-
-#include "SireError/errors.h"
-
-#include "SireVol/space.h"
-
-#include "atommasses.h"
+#include "atomljs.h"
 
 #include "atompolarisabilities.h"
 
-#include "SireMaths/align.h"
+#include "atomforces.h"
 
-#include "atomvelocities.h"
-
-#include "atomelements.h"
+#include "SireStream/shareddatastream.h"
 
 #include "atombeads.h"
 
-#include "atomproperty.hpp"
+#include "SireError/errors.h"
 
-#include "SireMaths/vector.h"
+#include "atomelements.h"
 
-#include "SireStream/datastream.h"
+#include "atommasses.h"
 
 #include "atomcoords.h"
 
-#include "atomenergies.h"
+#include "SireStream/datastream.h"
+
+#include "atomproperty.hpp"
 
 #include "atomcharges.h"
 
-#include "atomljs.h"
+#include "SireVol/space.h"
 
-#include "SireStream/shareddatastream.h"
+#include "SireBase/quickcopy.hpp"
+
+#include "atomvelocities.h"
+
+#include "SireMaths/vector.h"
+
+#include "SireMaths/align.h"
+
+#include "atomenergies.h"
+
+SireMol::AtomEditorBase& set_Metadata_SireMM_AtomLJs_function1(
+                                  SireMol::AtomEditorBase &molview,
+                                   const QString &metakey, const SireMM::LJParameter &p)
+                                   { return molview.setMetadata< SireMM::LJParameter >(metakey, p); }
+
+SireMol::AtomEditorBase& set_Metadata_SireMM_AtomLJs_function2(
+                                  SireMol::AtomEditorBase &molview,
+                                   const QString &key, const QString &metakey, const SireMM::LJParameter &p)
+                                   { return molview.setMetadata< SireMM::LJParameter >(key, metakey, p); }
 
 SireMol::AtomEditorBase& set_Metadata_SireMol_AtomBeads_function1(
                                   SireMol::AtomEditorBase &molview,
@@ -214,16 +224,6 @@ SireMol::AtomEditorBase& set_Metadata_SireMol_AtomVariantProperty_function2(
                                   SireMol::AtomEditorBase &molview,
                                    const QString &key, const QString &metakey, const QVariant &p)
                                    { return molview.setMetadata< QVariant >(key, metakey, p); }
-
-SireMol::AtomEditorBase& set_Metadata_SireMM_AtomLJs_function1(
-                                  SireMol::AtomEditorBase &molview,
-                                   const QString &metakey, const SireMM::LJParameter &p)
-                                   { return molview.setMetadata< SireMM::LJParameter >(metakey, p); }
-
-SireMol::AtomEditorBase& set_Metadata_SireMM_AtomLJs_function2(
-                                  SireMol::AtomEditorBase &molview,
-                                   const QString &key, const QString &metakey, const SireMM::LJParameter &p)
-                                   { return molview.setMetadata< SireMM::LJParameter >(key, metakey, p); }
 
 #include "Helpers/str.hpp"
 
@@ -484,6 +484,10 @@ void register_AtomEditorBase_class(){
                 , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() ) );
         
         }
+        AtomEditorBase_exposer.def( "_set_property_SireMM_LJParameter", 
+                                           &SireMol::AtomEditorBase::setProperty< SireMM::LJParameter >, bp::return_self< >() );
+        AtomEditorBase_exposer.def( "_set_metadata_SireMM_LJParameter", &set_Metadata_SireMM_AtomLJs_function1, bp::return_self< >());
+        AtomEditorBase_exposer.def( "_set_metadata_SireMM_LJParameter", &set_Metadata_SireMM_AtomLJs_function2, bp::return_self< >());
         AtomEditorBase_exposer.def( "_set_property_SireMol_BeadNum", 
                                            &SireMol::AtomEditorBase::setProperty< SireMol::BeadNum >, bp::return_self< >() );
         AtomEditorBase_exposer.def( "_set_metadata_SireMol_BeadNum", &set_Metadata_SireMol_AtomBeads_function1, bp::return_self< >());
@@ -536,10 +540,6 @@ void register_AtomEditorBase_class(){
                                            &SireMol::AtomEditorBase::setProperty< QVariant >, bp::return_self< >() );
         AtomEditorBase_exposer.def( "_set_metadata_QVariant", &set_Metadata_SireMol_AtomVariantProperty_function1, bp::return_self< >());
         AtomEditorBase_exposer.def( "_set_metadata_QVariant", &set_Metadata_SireMol_AtomVariantProperty_function2, bp::return_self< >());
-        AtomEditorBase_exposer.def( "_set_property_SireMM_LJParameter", 
-                                           &SireMol::AtomEditorBase::setProperty< SireMM::LJParameter >, bp::return_self< >() );
-        AtomEditorBase_exposer.def( "_set_metadata_SireMM_LJParameter", &set_Metadata_SireMM_AtomLJs_function1, bp::return_self< >());
-        AtomEditorBase_exposer.def( "_set_metadata_SireMM_LJParameter", &set_Metadata_SireMM_AtomLJs_function2, bp::return_self< >());
         AtomEditorBase_exposer.def( "__str__", &__str__< ::SireMol::Editor<SireMol::AtomEditor, SireMol::Atom> > );
         AtomEditorBase_exposer.def( "__repr__", &__str__< ::SireMol::Editor<SireMol::AtomEditor, SireMol::Atom> > );
     }

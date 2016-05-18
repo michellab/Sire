@@ -38,6 +38,7 @@ void register_BeadID_class(){
         BeadID_exposer.staticmethod( "typeName" );
         BeadID_exposer.def( "__str__", &__str__< ::SireMol::BeadID > );
         BeadID_exposer.def( "__repr__", &__str__< ::SireMol::BeadID > );
+        BeadID_exposer.def( "__hash__", &::SireMol::BeadID::hash );
     }
 
 }

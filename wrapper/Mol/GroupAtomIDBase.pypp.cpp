@@ -35,6 +35,7 @@ void register_GroupAtomIDBase_class(){
         bp::scope GroupAtomIDBase_scope( GroupAtomIDBase_exposer );
         GroupAtomIDBase_exposer.def( "__str__", &__str__< ::SireMol::GroupAtomIDBase > );
         GroupAtomIDBase_exposer.def( "__repr__", &__str__< ::SireMol::GroupAtomIDBase > );
+        GroupAtomIDBase_exposer.def( "__hash__", &::SireMol::GroupAtomIDBase::hash );
     }
 
 }

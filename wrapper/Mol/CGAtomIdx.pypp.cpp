@@ -148,6 +148,7 @@ void register_CGAtomIdx_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         CGAtomIdx_exposer.def( "__str__", &__str__< ::SireMol::CGAtomIdx > );
         CGAtomIdx_exposer.def( "__repr__", &__str__< ::SireMol::CGAtomIdx > );
+        CGAtomIdx_exposer.def( "__hash__", &::SireMol::CGAtomIdx::hash );
     }
 
 }

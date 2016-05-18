@@ -68,6 +68,7 @@ void register_Number_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Number_exposer.def( "__str__", &pvt_get_name);
         Number_exposer.def( "__repr__", &pvt_get_name);
+        Number_exposer.def( "__hash__", &::SireID::Number::hash );
     }
 
 }

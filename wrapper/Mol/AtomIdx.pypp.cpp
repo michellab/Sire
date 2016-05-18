@@ -165,6 +165,7 @@ void register_AtomIdx_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         AtomIdx_exposer.def( "__str__", &__str__< ::SireMol::AtomIdx > );
         AtomIdx_exposer.def( "__repr__", &__str__< ::SireMol::AtomIdx > );
+        AtomIdx_exposer.def( "__hash__", &::SireMol::AtomIdx::hash );
     }
 
 }

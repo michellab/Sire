@@ -218,6 +218,7 @@ void register_DoubleFunc_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         DoubleFunc_exposer.def( "__str__", &__str__< ::SireCAS::DoubleFunc > );
         DoubleFunc_exposer.def( "__repr__", &__str__< ::SireCAS::DoubleFunc > );
+        DoubleFunc_exposer.def( "__hash__", &::SireCAS::DoubleFunc::hash );
     }
 
 }

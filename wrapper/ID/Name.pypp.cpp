@@ -78,6 +78,7 @@ void register_Name_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         Name_exposer.def( "__str__", &pvt_get_name);
         Name_exposer.def( "__repr__", &pvt_get_name);
+        Name_exposer.def( "__hash__", &::SireID::Name::hash );
     }
 
 }

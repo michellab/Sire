@@ -271,6 +271,7 @@ void register_AtomID_class(){
         AtomID_exposer.staticmethod( "typeName" );
         AtomID_exposer.def( "__str__", &__str__< ::SireMol::AtomID > );
         AtomID_exposer.def( "__repr__", &__str__< ::SireMol::AtomID > );
+        AtomID_exposer.def( "__hash__", &::SireMol::AtomID::hash );
     }
 
 }

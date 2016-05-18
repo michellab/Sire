@@ -92,6 +92,7 @@ void register_ArcCos_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         ArcCos_exposer.def( "__str__", &__str__< ::SireCAS::ArcCos > );
         ArcCos_exposer.def( "__repr__", &__str__< ::SireCAS::ArcCos > );
+        ArcCos_exposer.def( "__hash__", &::SireCAS::ArcCos::hash );
     }
 
 }

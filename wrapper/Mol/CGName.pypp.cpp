@@ -154,6 +154,7 @@ void register_CGName_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         CGName_exposer.def( "__str__", &__str__< ::SireMol::CGName > );
         CGName_exposer.def( "__repr__", &__str__< ::SireMol::CGName > );
+        CGName_exposer.def( "__hash__", &::SireMol::CGName::hash );
     }
 
 }

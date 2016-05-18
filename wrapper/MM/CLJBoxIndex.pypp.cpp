@@ -298,6 +298,7 @@ void register_CLJBoxIndex_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         CLJBoxIndex_exposer.def( "__str__", &__str__< ::SireMM::CLJBoxIndex > );
         CLJBoxIndex_exposer.def( "__repr__", &__str__< ::SireMM::CLJBoxIndex > );
+        CLJBoxIndex_exposer.def( "__hash__", &::SireMM::CLJBoxIndex::hash );
     }
 
 }

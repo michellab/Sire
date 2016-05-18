@@ -39,7 +39,11 @@ namespace bp = boost::python;
 
 #include <QtGlobal>
 
+#include <boost/config.hpp>
+
 #include <cstdlib>
+
+#include <memory>
 
 #include <sys/utsname.h>
 

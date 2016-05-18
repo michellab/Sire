@@ -158,6 +158,7 @@ void register_IDOrSet_MonitorID__class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         IDOrSet_MonitorID__exposer.def( "__str__", &__str__< ::SireID::IDOrSet<SireSystem::MonitorID> > );
         IDOrSet_MonitorID__exposer.def( "__repr__", &__str__< ::SireID::IDOrSet<SireSystem::MonitorID> > );
+        IDOrSet_MonitorID__exposer.def( "__hash__", &::SireID::IDOrSet<SireSystem::MonitorID>::hash );
     }
 
 }

@@ -138,6 +138,7 @@ void register_MolID_class(){
         MolID_exposer.staticmethod( "typeName" );
         MolID_exposer.def( "__str__", &__str__< ::SireMol::MolID > );
         MolID_exposer.def( "__repr__", &__str__< ::SireMol::MolID > );
+        MolID_exposer.def( "__hash__", &::SireMol::MolID::hash );
     }
 
 }

@@ -107,6 +107,7 @@ void register_SegCGID_class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         SegCGID_exposer.def( "__str__", &__str__< ::SireMol::GroupGroupID<SireMol::SegID, SireMol::CGID> > );
         SegCGID_exposer.def( "__repr__", &__str__< ::SireMol::GroupGroupID<SireMol::SegID, SireMol::CGID> > );
+        SegCGID_exposer.def( "__hash__", &::SireMol::GroupGroupID<SireMol::SegID, SireMol::CGID>::hash );
     }
 
 }

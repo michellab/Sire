@@ -190,6 +190,7 @@ void register_IDOrSet_AtomID__class(){
                             bp::return_internal_reference<1, bp::with_custodian_and_ward<1,2> >() );
         IDOrSet_AtomID__exposer.def( "__str__", &__str__< ::SireID::IDOrSet<SireMol::AtomID> > );
         IDOrSet_AtomID__exposer.def( "__repr__", &__str__< ::SireID::IDOrSet<SireMol::AtomID> > );
+        IDOrSet_AtomID__exposer.def( "__hash__", &::SireID::IDOrSet<SireMol::AtomID>::hash );
     }
 
 }

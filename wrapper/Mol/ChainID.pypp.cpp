@@ -289,6 +289,7 @@ void register_ChainID_class(){
         ChainID_exposer.staticmethod( "typeName" );
         ChainID_exposer.def( "__str__", &__str__< ::SireMol::ChainID > );
         ChainID_exposer.def( "__repr__", &__str__< ::SireMol::ChainID > );
+        ChainID_exposer.def( "__hash__", &::SireMol::ChainID::hash );
     }
 
 }

@@ -397,6 +397,10 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
    if has_function(c, "getitem"):
        c.add_registration_code("def( \"__getitem__\", &%s::getitem )" % c.decl_string )
 
+   #is there a .hash() function?
+   if has_function(c, "hash"):
+       c.add_registration_code("def( \"__hash__\", &%s::hash )" % c.decl_string )
+
    #provide an alias for this class
    if (classname in aliases):
       c.alias = " ".join( aliases[classname].split("::")[1:] )
