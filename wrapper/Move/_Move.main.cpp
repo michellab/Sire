@@ -81,6 +81,8 @@
 
 #include "RepExMove.pypp.hpp"
 
+#include "RepExMove2.pypp.hpp"
+
 #include "RepExSubMove.pypp.hpp"
 
 #include "Replica.pypp.hpp"
@@ -255,6 +257,8 @@ BOOST_PYTHON_MODULE(_Move){
     register_RBWorkspaceJM_class();
 
     register_RepExMove_class();
+
+    register_RepExMove2_class();
 
     register_RepExSubMove_class();
 

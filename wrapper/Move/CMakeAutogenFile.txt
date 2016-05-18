@@ -74,6 +74,7 @@ set ( PYPP_SOURCES
        Sampler.pypp.cpp
        ScaleVolumeFromCenter.pypp.cpp
        SupraSubMoves.pypp.cpp
+       RepExMove2.pypp.cpp
        SimStore.pypp.cpp
        SupraMove.pypp.cpp
        SireMove_containers.cpp

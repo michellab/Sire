@@ -28,6 +28,7 @@
 #include "rbworkspace.h"
 #include "rbworkspacejm.h"
 #include "repexmove.h"
+#include "repexmove2.h"
 #include "replica.h"
 #include "replicas.h"
 #include "rigidbodymc.h"
