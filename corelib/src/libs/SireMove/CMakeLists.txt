@@ -36,6 +36,7 @@ set ( SIREMOVE_HEADERS
       rbworkspace.h
       rbworkspacejm.h
       repexmove.h
+      repexmove2.h
       replica.h
       replicas.h
       rigidbodymc.h
@@ -94,6 +95,7 @@ set ( SIREMOVE_SOURCES
       rbworkspace.cpp
       rbworkspacejm.cpp
       repexmove.cpp
+      repexmove2.cpp
       replica.cpp
       replicas.cpp
       rigidbodymc.cpp
