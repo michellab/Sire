@@ -44,6 +44,7 @@
 
 #include "tbb/task.h"
 
+#include <QVector>
 #include <QDebug>
 
 using namespace SireMove;
@@ -232,18 +233,20 @@ class RunReplicaTask : public tbb::task
     bool record_stats;
     
 public:
-    RunReplicaTask(SupraSubSystemPtr *replica_, bool record_stats_)
-        : replica(replica_), record_stats(record_stats_)
+    RunReplicaTask(SupraSubSystemPtr &replica_, bool record_stats_)
+        : replica(&replica_), record_stats(record_stats_)
     {}
     
     tbb::task* execute()
     {
         if (replica == 0)
-            return;
+            return 0;
 
         //actually perform the replica moves, recording statistics
         //if record_stats is true
-        result->edit().subMove(record_stats);
+        replica->edit().subMove(record_stats);
+        
+        return 0;
     }
 };
 
@@ -260,7 +263,7 @@ class RunReplicasTask : public tbb::task
 public:
     RunReplicasTask(QVector<SupraSubSystemPtr> &replicas_,
                     bool record_stats_)
-     : replicas( replicas_.data() ), nreplicas(replicas_.count(), record_stats( record_stats_ )
+     : replicas( replicas_.data() ), nreplicas(replicas_.count()), record_stats( record_stats_ )
     {}
     
     task* execute()
@@ -285,6 +288,179 @@ public:
         
         //spawn all child tasks and wait for them to complete
         this->spawn_and_wait_for_all(tasks);
+        
+        return 0;
+    }
+};
+
+/** Internal function used to test the passed pair of replicas - 
+    this returns whether or not the test has passed */
+bool replicaTest(Replica &replica_a, Replica &replica_b,
+                 const RanGenerator &rangenerator)
+{
+    //get the ensembles of the two replicas
+    const Ensemble &ensemble_a = replica_a.ensemble();
+    const Ensemble &ensemble_b = replica_b.ensemble();
+    
+    if ( (ensemble_a.isNVT() and ensemble_a.isNVT()) or 
+         (ensemble_b.isNPT() and ensemble_b.isNPT()) )
+    {
+        bool need_pv = (ensemble_a.isNPT() and ensemble_b.isNPT());
+    
+        //get the values of the thermodynamic parameters
+        double beta_a = 1.0 / (k_boltz * ensemble_a.temperature()).value();
+        double beta_b = 1.0 / (k_boltz * ensemble_b.temperature()).value();
+        
+        Pressure p_a(0);
+        Pressure p_b(0);
+        
+        if (need_pv)
+        {
+            p_a = ensemble_a.pressure();
+            p_b = ensemble_b.pressure();
+        }
+        
+        //now get the values of the system properties at their current state,
+        //and at their swapped states
+        double H_a_i = replica_a.energy().value();
+        double H_b_i = replica_b.energy().value();
+
+        double H_a_j = H_a_i;
+        double H_b_j = H_b_j;
+
+        if (replica_a.lambdaValue() != replica_b.lambdaValue() or
+            replica_a.energyComponent() != replica_b.energyComponent())
+        {
+            //there will be a change in energy associated with the swap
+            System swapped = replica_a.subSystem();
+
+            //evaluate the energy of replica A swapped into the B state
+            swapped.setComponent(replica_a.lambdaComponent(), replica_b.lambdaValue());
+            H_a_j = swapped.energy( replica_b.energyComponent() ).value();
+            
+            //evaluate the energy of replica B swapped into the A state
+            swapped = replica_b.subSystem();
+            swapped.setComponent(replica_b.lambdaComponent(), replica_a.lambdaValue());
+            H_b_j = swapped.energy( replica_a.energyComponent() ).value();
+        }
+        
+        double V_a_i(0);
+        double V_a_j(0);
+
+        double V_b_i(0);
+        double V_b_j(0);
+        
+        if (need_pv)
+        {
+            V_a_i = replica_a.volume().value();
+            V_a_j = V_a_i;
+            
+            V_b_i = replica_b.volume().value();
+            V_b_j = V_b_i;
+
+            if (replica_a.spaceProperty() != replica_b.spaceProperty())
+            {
+                //the space property changes, so volume could change
+                V_a_j = replica_a.subSystem().property(replica_b.spaceProperty())
+                                 .asA<Space>().volume().value();
+
+                V_b_j = replica_b.subSystem().property(replica_a.spaceProperty())
+                                 .asA<Space>().volume().value();
+            }
+        }
+        
+        //now calculate delta needed for the Monte Carlo test
+        //
+        //  For derivation see Appendix C of Christopher Woods' thesis
+        //   (or original replica exchange literature of course!)
+        //
+        //  delta = beta_b * [ H_b_i - H_b_j + P_b (V_b_i - V_b_j) ] + 
+        //          beta_a * [ H_a_i - H_a_j + P_a (V_a_i - V_a_j) ]
+        
+        double delta = beta_b * ( H_b_i - H_b_j + p_b*(V_b_i - V_b_j) ) +
+                       beta_a * ( H_a_i - H_a_j + p_a*(V_a_i - V_a_j) );
+        
+        bool move_passed = ( delta > 0 or (std::exp(delta) >= rangenerator.rand()) );
+        
+        return move_passed;
+    }
+    else
+    {
+        throw SireError::incompatible_error( QObject::tr(
+            "There is no available replica exchange test that allows tests between "
+            "replicas with ensembles %1 and %2.")
+                .arg(ensemble_a.toString(), ensemble_b.toString()), CODELOC );
+                
+    }
+
+    return false;
+}
+
+/** This is a task that runs two replicas, and then tests whether or not
+    they should be swapped */
+class RunSwapTask : public tbb::task
+{
+    SupraSubSystemPtr *replica_a;
+    SupraSubSystemPtr *replica_b;
+    bool record_stats;
+    const RanGenerator *rangenerator;
+    QVector< std::pair<int,int> > *to_swap;
+    int *naccept;
+    int *nreject;
+    QMutex *swap_mutex;
+    int idx_a;
+    int idx_b;
+
+public:
+    RunSwapTask(SupraSubSystemPtr &replica_a_, SupraSubSystemPtr &replica_b_,
+                bool record_stats_, const RanGenerator *rangenerator_,
+                QVector< std::pair<int,int> > *to_swap_,
+                int *naccept_, int *nreject_, QMutex *swap_mutex_,
+                int idx_a_, int idx_b_)
+        : replica_a(&replica_a_), replica_b(&replica_b_), record_stats(record_stats_),
+          rangenerator(rangenerator_),
+          to_swap(to_swap_), naccept(naccept_), nreject(nreject_), swap_mutex(swap_mutex_),
+          idx_a(idx_a_), idx_b(idx_b_)
+    {}
+    
+    tbb::task* execute()
+    {
+        if (replica_a == 0 or replica_b == 0 or replica_a == replica_b)
+            return 0;
+        
+        //set the reference count to 2 + 1 (two child tasks, plus add one as we will wait
+        //for both replicas to finish)
+        this->set_ref_count( 2 + 1 );
+        
+        //spawn tasks for both replicas
+        RunReplicaTask &task_a = *new( this->allocate_child() )
+                                       RunReplicaTask(*replica_a, record_stats);
+        
+        RunReplicaTask &task_b = *new( this->allocate_child() )
+                                       RunReplicaTask(*replica_b, record_stats);
+        
+        this->spawn(task_a);
+        this->spawn_and_wait_for_all(task_b);
+        
+        //now apply the replica exchange test
+        bool test_passed = replicaTest(replica_a->edit().asA<Replica>(),
+                                       replica_b->edit().asA<Replica>(),
+                                       *rangenerator);
+        
+        //serialise access to to_swap, naccept and nreject
+        QMutexLocker lkr(swap_mutex);
+        
+        if (test_passed)
+        {
+            to_swap->append( std::pair<int,int>(idx_a,idx_b) );
+            *naccept += 1;
+        }
+        else
+        {
+            *nreject += 1;
+        }
+        
+        return 0;
     }
 };
 
@@ -297,6 +473,7 @@ class RunReplicasWithSwapTask : public tbb::task
     const int nreplicas;
     bool record_stats;
     bool even_pairs;
+    const RanGenerator *rangenerator;
     QVector< std::pair<int,int> > *to_swap;
     int *naccept;
     int *nreject;
@@ -304,11 +481,13 @@ class RunReplicasWithSwapTask : public tbb::task
     
 public:
     RunReplicasWithSwapTask(QVector<SupraSubSystemPtr> &replicas_,
-                            bool record_stats_, bool even_pairs_,
+                            bool record_stats_,
+                            const RanGenerator &rangenerator_,
                             QVector< std::pair<int,int> > *to_swap_,
                             int *naccept_, int *nreject_, QMutex *swap_mutex_)
-     : replicas( replicas_.data() ), nreplicas(replicas_.count(), record_stats( record_stats_ ),
-       even_pairs(even_pairs_), to_swap(to_swap_), naccept(naccept_), nreject(nreject_),
+     : replicas( replicas_.data() ), nreplicas(replicas_.count()), record_stats( record_stats_ ),
+       even_pairs(rangenerator_.randBool()), rangenerator(&rangenerator_),
+       to_swap(to_swap_), naccept(naccept_), nreject(nreject_),
        swap_mutex(swap_mutex_)
     {}
     
@@ -319,6 +498,7 @@ public:
         
         //create a list of tasks to be run
         tbb::task_list tasks;
+        int ntasks = 0;
         
         int start = 0;
         
@@ -329,6 +509,7 @@ public:
                                      RunReplicaTask(replicas[0], record_stats);
             
             tasks.push_back(task);
+            ntasks += 1;
             
             start = 1;
         }
@@ -338,10 +519,12 @@ public:
             //create a child task that runs a pair of replicas, and then
             //performs a replica exchange test between the pair
             RunSwapTask &task = *new( this->allocate_child() )
-                                    RunSwapTask(replicas[i], replicas[i+1],
-                                                to_swap, naccept, nreject, swap_mutex);
+                                    RunSwapTask(replicas[i], replicas[i+1], record_stats,
+                                                rangenerator, to_swap, naccept, nreject,
+                                                swap_mutex, i, i+1);
             
             tasks.push_back(task);
+            ntasks += 1;
         }
         
         //make sure that any dangling end replica is also run
@@ -352,14 +535,17 @@ public:
                                       RunReplicaTask(replicas[nreplicas-1], record_stats);
             
             tasks.push_back(task);
+            ntasks += 1;
         }
 
         //set the reference count to nreplicas + 1 (add one as we will wait
         //for all replicas to finish)
-        this->set_ref_count( tasks.count() + 1 );
+        this->set_ref_count( ntasks + 1 );
         
         //spawn all child tasks and wait for them to complete
         this->spawn_and_wait_for_all(tasks);
+        
+        return 0;
     }
 };
 
@@ -403,14 +589,20 @@ void RepExMove2::performMove(Replicas &replicas, bool record_stats)
     }
     else
     {
+        int naccepted = 0;
+        int nrejected = 0;
+    
         //we will perform replica exchange moves between pairs
-        RunReplicasWithSwapsTask &parent_task = *new( tbb::task::allocate_root() )
-                                RunReplicasWithSwapsTask(results, record_stats,
-                                                         generator().randBool(),
-                                                         &to_swap, &naccept, &nreject,
-                                                         &swap_mutex);
+        RunReplicasWithSwapTask &parent_task = *new( tbb::task::allocate_root() )
+                                RunReplicasWithSwapTask(results, record_stats,
+                                                        generator(),
+                                                        &to_swap, &naccepted, &nrejected,
+                                                        &swap_mutex);
 
         tbb::task::spawn_root_and_wait(parent_task);
+        
+        naccept += naccepted;
+        nreject += nrejected;
     }
     
     //copy the results back into the replicas
@@ -418,17 +610,14 @@ void RepExMove2::performMove(Replicas &replicas, bool record_stats)
     
     for (int i=0; i<nreplicas; ++i)
     {
-        submoves[i] = subsims[i].result().subMoves().asA<SameSupraSubMoves>()[0]
-                                         .asA<RepExSubMove>();
-        
-        replicas.setReplica( i, results[i].read().subSystem() );
+        replicas.setReplica( i, results[i].read() );
     }
 
     //clear up the results to save memory
     results.clear();
     
     //now perform any swaps
-    foreach( const std::pair<int,int> &swap, to_swap )
+    for( const std::pair<int,int> &swap : to_swap )
     {
         replicas.swapSystems(swap.first, swap.second, swap_monitors);
     }
