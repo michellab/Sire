@@ -1,12 +1,33 @@
 sudo: false
 
 language: cpp
-dist: trusty
+
+compiler:
+ - gcc
+ - clang
+
+# Travis CI is powered with Ubuntu 12.04, whose toolchain is outdated.
+addons:
+  apt:
+    # Travis white list of ppa.
+    # https://github.com/travis-ci/apt-source-whitelist/blob/master/ubuntu.json
+    sources:
+      - ubuntu-toolchain-r-test     # For gcc 4.9
+      - kubuntu-backports           # For cmake 2.8.12
+      - llvm-toolchain-precise-3.6  # For clang 3.6
+    # Travis whitelist of packages.
+    # https://github.com/travis-ci/apt-package-whitelist/blob/master/ubuntu-precise
+    packages:
+      - cmake
+      - g++-4.9
+      - clang-3.6
 
 before_install:
   - export NCORES=2
   - export SIRE_DONT_PHONEHOME=1
   - export INSTALL_SIRE_DIR=$HOME/sire.app
+  - if [ "$CC" = "gcc"   ]; then export CC=gcc-4.9 CXX=g++-4.9; fi       # Make sure that gcc-4.9 is selected.
+  - if [ "$CC" = "clang" ]; then export CC=clang-3.6 CXX=clang++-3.6; fi # Make sure that clang-3.6 is selected.
 
 script:
   - bash compile_sire.sh
