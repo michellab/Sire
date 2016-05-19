@@ -25,6 +25,7 @@ else()
       execute_process(
           COMMAND ${CMAKE_COMMAND} -E tar xzf ${GSL_ZIPFILE}
           WORKING_DIRECTORY ${BUNDLE_BUILDDIR}
+          OUTPUT_QUIET
       )
     endif()
 
@@ -33,15 +34,18 @@ else()
 
     message( STATUS "Patience... Configuring GSL..." )
     execute_process( COMMAND ${GSL_BUILD_DIR}/configure ${GSL_OPTIONS}
-                     WORKING_DIRECTORY ${GSL_BUILD_DIR} )
+                     WORKING_DIRECTORY ${GSL_BUILD_DIR}
+                     OUTPUT_QUIET )
 
     message( STATUS "Patience... Compiling GSL..." )
     execute_process( COMMAND ${CMAKE_MAKE_PROGRAM} -k -j ${NCORES}
-                     WORKING_DIRECTORY ${GSL_BUILD_DIR} )
+                     WORKING_DIRECTORY ${GSL_BUILD_DIR}
+                     OUTPUT_QUIET )
 
     message( STATUS "Patience... Installing GSL..." )
     execute_process( COMMAND ${CMAKE_MAKE_PROGRAM} install
-                   WORKING_DIRECTORY ${GSL_BUILD_DIR} )
+                     WORKING_DIRECTORY ${GSL_BUILD_DIR}
+                     OUTPUT_QUIET )
 
     if (APPLE)
       set( GSL_LIBRARY "${BUNDLE_STAGEDIR}/lib/libgsl.dylib" )

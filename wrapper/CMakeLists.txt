@@ -218,15 +218,22 @@ set( CMAKE_EXE_LINKER_FLAGS    "${CMAKE_EXE_LINKER_FLAGS} ${SIRE_EXE_LINK_FLAGS}
 
 include (CheckCXXCompilerFlag)
 
-CHECK_CXX_COMPILER_FLAG( "-Wno-unused-variable" SIRE_HAS_NO_UNUSED_VARIABLE )
-CHECK_CXX_COMPILER_FLAG( "-Wno-overloaded-virtual" SIRE_HAS_NO_OVERLOADED_VIRTUAL )
+CHECK_CXX_COMPILER_FLAG( "-w" SIRE_HAS_NO_WARNINGS_FLAG )
 
-if (SIRE_HAS_NO_UNUSED_VARIABLE)
-  set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-variable")
-endif()
+if (SIRE_HAS_NO_WARNINGS_FLAG)
+  message(STATUS "Inhibiting all compiler warnings, as the wrappers generate a lot!")
+  set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w" )
+else()
+  CHECK_CXX_COMPILER_FLAG( "-Wno-unused-variable" SIRE_HAS_NO_UNUSED_VARIABLE )
+  CHECK_CXX_COMPILER_FLAG( "-Wno-overloaded-virtual" SIRE_HAS_NO_OVERLOADED_VIRTUAL )
 
-if (SIRE_HAS_NO_OVERLOADED_VIRTUAL)
-  set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-overloaded-virtual")
+  if (SIRE_HAS_NO_UNUSED_VARIABLE)
+    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-variable")
+  endif()
+
+  if (SIRE_HAS_NO_OVERLOADED_VIRTUAL)
+    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-overloaded-virtual")
+  endif()
 endif()
 
 message( STATUS  "CMAKE_SYSTEM_NAME      == ${CMAKE_SYSTEM_NAME}" )

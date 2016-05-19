@@ -19,6 +19,7 @@ else()
     execute_process(
           COMMAND ${CMAKE_COMMAND} -E tar xzf ${BOOST_ZIPFILE}
           WORKING_DIRECTORY ${BUNDLE_STAGEDIR}/include
+          OUTPUT_QUIET
       )
     endif()
 endif()

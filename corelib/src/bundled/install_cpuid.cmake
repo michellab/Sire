@@ -23,6 +23,7 @@ else()
       execute_process(
           COMMAND ${CMAKE_COMMAND} -E tar xzf ${CPUID_ZIPFILE}
           WORKING_DIRECTORY ${BUNDLE_BUILDDIR}
+          OUTPUT_QUIET
       )
     endif()
 
@@ -39,15 +40,18 @@ else()
 
     message( STATUS "Patience... Configuring libcpuid..." )
     execute_process( COMMAND ${CPUID_BUILD_DIR}/configure ${CPUID_OPTIONS}
-                     WORKING_DIRECTORY ${CPUID_BUILD_DIR} )
+                     WORKING_DIRECTORY ${CPUID_BUILD_DIR}
+                     OUTPUT_QUIET )
 
     message( STATUS "Patience... Compiling libcpuid..." )
     execute_process( COMMAND ${CMAKE_MAKE_PROGRAM} -k -j ${NCORES}
-                     WORKING_DIRECTORY ${CPUID_BUILD_DIR} )
+                     WORKING_DIRECTORY ${CPUID_BUILD_DIR}
+                     OUTPUT_QUIET )
 
     message( STATUS "Patience... Installing libcpuid..." )
     execute_process( COMMAND ${CMAKE_MAKE_PROGRAM} install
-                   WORKING_DIRECTORY ${CPUID_BUILD_DIR} )
+                     WORKING_DIRECTORY ${CPUID_BUILD_DIR}
+                     OUTPUT_QUIET )
 
     if (APPLE)
       set( CPUID_LIBRARY "${BUNDLE_STAGEDIR}/lib/libcpuid.dylib" )
