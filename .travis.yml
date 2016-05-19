@@ -1,6 +1,7 @@
 language: cpp
 compiler:
   - gcc
+  - clang
 
 sudo: false
 
@@ -17,7 +18,6 @@ addons:
 before_install:
   - export NCORES=2
   - export INSTALL_SIRE_DIR=$HOME/sire.app
-  - if [ "$CC" = "gcc" ]; then export CC="gcc-4.6" CXX="g++-4.6"; fi
 
 script:
   - bash compile_sire.sh
