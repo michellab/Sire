@@ -1,12 +1,44 @@
+sudo: false
+
+dist: precise
 language: cpp
 
-compiler:
-  - gcc
-  - clang
-
-dist: trusty
-
-sudo: false
+matrix:
+  include:
+    - compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-4.9
+      env: COMPILER=g++-4.9
+    - compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+      env: COMPILER=g++-5
+    - compiler: clang
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-precise-3.6
+          packages:
+            - clang-3.6
+      env: COMPILER=clang++-3.6
+    - compiler: clang
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-precise-3.7
+          packages:
+            - clang-3.7
+      env: COMPILER=clang++-3.7
 
 addons:
   apt:
@@ -15,11 +47,10 @@ addons:
     packages:
       - cmake
       - build-essential
-      - libgtk2.0-dev 
-      - libgl1-mesa-dev
 
 before_install:
   - export NCORES=2
+  - export SIRE_DONT_PHONEHOME=1
   - export INSTALL_SIRE_DIR=$HOME/sire.app
 
 script:
