@@ -19,14 +19,21 @@ set (SIRE_VERSION "${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}")
 # require cmake >= 2.8.11.2
 cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
 cmake_policy(VERSION 2.8)
-cmake_policy(SET CMP0042 OLD)  # managing OS X @rpath manually
-cmake_policy(SET CMP0048 OLD)  # want to manage versions myself!
-
-# Get rid of install messages (too verbose!)
-set( CMAKE_INSTALL_MESSAGE "NEVER" )
 
 # use loose loop syntax in CMakeLists files
 set( CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE )
+
+if(COMMAND CMAKE_POLICY)
+  if (POLICY CMP0042)
+    cmake_policy(SET CMP0042 OLD)  # managing OS X @rpath manually
+  endif()
+  if (POLICY CMP0048)
+    cmake_policy(SET CMP0048 OLD)  # want to manage versions myself!
+  endif()
+endif()
+
+# Get rid of install messages (too verbose!)
+set( CMAKE_INSTALL_MESSAGE "NEVER" )
 
 # Option used to control the number of cores for the compile
 set ( BUILD_NCORES "0" 
@@ -611,7 +618,27 @@ elseif ( ${SIRE_CXX_COMPILER_ID} MATCHES "CLANG" )
     set ( SIRE_WARNALL_FLAGS  "-Wall" )
     set ( SIRE_DEBUG_FLAGS   "-g" )
 
-    set ( SIRE_RELEASE_FLAGS "-O3 -ffast-math" )
+    # an old incompatibility between clang and gcc means that some 
+    # distributions will fail if use -ffast-math
+    set(CMAKE_OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
+    set(CMAKE_REQUIRED_FLAGS "-O3 -ffast-math")
+    CHECK_CXX_SOURCE_RUNS("
+           #include <cmath>
+           #include <iostream>
+           int main()
+           {
+              std::cout << std::sin(0.0) << std::endl;
+              return 0;
+           }"
+           CAN_USE_FFAST_MATH)
+    set(CMAKE_REQUIRED_FLAGS ${CMAKE_OLD_REQUIRED_FLAGS})    
+
+    if (CAN_USE_FFAST_MATH)
+      set ( SIRE_RELEASE_FLAGS "-O3 -ffast-math" )
+    else()
+      message("Disabling -ffast-math as incompatible clang and gcc")
+      set ( SIRE_RELEASE_FLAGS "-O3" )
+    endif()
 
     # -fomit-frame-pointer breaks backtrace on an apple
     set ( SIRE_RELEASE_FLAGS "${SIRE_RELEASE_FLAGS} -fomit-frame-pointer" )

@@ -21,14 +21,21 @@ set (SIRE_VERSION "${SIRE_VERSION_MAJOR}.${SIRE_VERSION_MINOR}.${SIRE_VERSION_PA
 # require cmake >= 2.8.11.2
 cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
 cmake_policy(VERSION 2.8)
-cmake_policy(SET CMP0042 OLD)  # managing OS X @rpath manually
-cmake_policy(SET CMP0048 OLD)  # want to manage versions myself!
-
-# Get rid of install messages (too verbose!)
-set( CMAKE_INSTALL_MESSAGE "NEVER" )
 
 # use loose loop syntax in CMakeLists files
 set( CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE )
+
+if(COMMAND CMAKE_POLICY)
+  if (POLICY CMP0042)
+    cmake_policy(SET CMP0042 OLD)  # managing OS X @rpath manually
+  endif()
+  if (POLICY CMP0048)
+    cmake_policy(SET CMP0048 OLD)  # want to manage versions myself!
+  endif()
+endif()
+
+# Get rid of install messages (too verbose!)
+set( CMAKE_INSTALL_MESSAGE "NEVER" )
 
 # Absolutely can't run cmake in the source directory!
 if ( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
