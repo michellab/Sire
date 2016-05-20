@@ -63,7 +63,6 @@ else()
     message( STATUS "TBB will be built in the directory ${TBB_INSTALL_DIR}" )
 
     message( STATUS "Patience... Compiling TBB from source...")
-    message( STATUS ${TBB_OPTIONS} )
     execute_process( COMMAND ${CMAKE_MAKE_PROGRAM} -j ${NCORES} ${TBB_OPTIONS} tbb
                      WORKING_DIRECTORY ${TBB_BUILD_DIR}
                      OUTPUT_QUIET ERROR_QUIET
