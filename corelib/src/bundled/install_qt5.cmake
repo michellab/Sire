@@ -46,7 +46,7 @@ if ( NEED_BUILD_QT )
       execute_process(
           COMMAND ${CMAKE_COMMAND} -E tar xzf ${QT_ZIPFILE}
           WORKING_DIRECTORY ${BUNDLE_BUILDDIR}
-          OUTPUT_QUIET
+          OUTPUT_QUIET ERROR_QUIET
       )
 
       if (EXISTS "${QT_PATCHFILE}")
@@ -54,7 +54,7 @@ if ( NEED_BUILD_QT )
         execute_process(
           COMMAND ${CMAKE_COMMAND} -E tar xzf ${QT_PATCHFILE}
           WORKING_DIRECTORY ${BUNDLE_BUILDDIR}
-          OUTPUT_QUIET
+          OUTPUT_QUIET ERROR_QUIET
         )
       endif()
     endif()
@@ -110,7 +110,7 @@ if ( NEED_BUILD_QT )
     execute_process( COMMAND ${QT_BUILD_DIR}/configure ${QT_OPTIONS}
                      WORKING_DIRECTORY ${QT_BUILD_DIR}
                      RESULT_VARIABLE QT_CONFIGURE_FAILED
-                     OUTPUT_QUIET )
+                     OUTPUT_QUIET ERROR_QUIET )
 
     if (QT_CONFIGURE_FAILED)
       message( FATAL_ERROR "Cannot configure Qt5. Please go to the mailing list for help.")
@@ -120,7 +120,7 @@ if ( NEED_BUILD_QT )
     execute_process( COMMAND ${CMAKE_MAKE_PROGRAM} -k -j ${NCORES}
                      WORKING_DIRECTORY ${QT_BUILD_DIR}
                      RESULT_VARIABLE QT_BUILD_FAILED
-                     OUTPUT_QUIET )
+                     OUTPUT_QUIET ERROR_QUIET )
 
     if (QT_BUILD_FAILED)
       message( FATAL_ERROR "Cannot build Qt5. Please go to the mailing list for help.")
@@ -130,7 +130,7 @@ if ( NEED_BUILD_QT )
     execute_process( COMMAND ${CMAKE_MAKE_PROGRAM} install
                      WORKING_DIRECTORY ${QT_BUILD_DIR}
                      RESULT_VARIABLE QT_INSTALL_FAILED
-                     OUTPUT_QUIET )
+                     OUTPUT_QUIET ERROR_QUIET )
 
     if (QT_INSTALL_FAILED)
       message( FATAL_ERROR "Cannot install Qt5. Please go to the mailing list for help.")

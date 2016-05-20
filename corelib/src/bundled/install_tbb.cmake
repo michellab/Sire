@@ -24,7 +24,7 @@ else()
       execute_process(
           COMMAND ${CMAKE_COMMAND} -E tar xzf ${TBB_ZIPFILE}
           WORKING_DIRECTORY ${BUNDLE_BUILDDIR}
-          OUTPUT_QUIET
+          OUTPUT_QUIET ERROR_QUIET
       )
     endif()
 
@@ -63,16 +63,17 @@ else()
     message( STATUS "TBB will be built in the directory ${TBB_INSTALL_DIR}" )
 
     message( STATUS "Patience... Compiling TBB from source...")
+    message( STATUS ${TBB_OPTIONS} )
     execute_process( COMMAND ${CMAKE_MAKE_PROGRAM} -j ${NCORES} ${TBB_OPTIONS} tbb
                      WORKING_DIRECTORY ${TBB_BUILD_DIR}
-                     OUTPUT_QUIET
+                     OUTPUT_QUIET ERROR_QUIET
                    )
     message( STATUS "...complete" )
 
     message( STATUS "Patience... Compiling TBB malloc from source...")
     execute_process( COMMAND ${CMAKE_MAKE_PROGRAM} -j ${NCORES} ${TBB_OPTIONS} tbbmalloc
                      WORKING_DIRECTORY ${TBB_BUILD_DIR}
-                     OUTPUT_QUIET
+                     OUTPUT_QUIET ERROR_QUIET
                     )
     message( STATUS "...complete" )
 

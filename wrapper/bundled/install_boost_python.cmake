@@ -23,7 +23,7 @@ else()
       execute_process(
           COMMAND ${CMAKE_COMMAND} -E tar xzf ${BOOST_PYTHON_ZIPFILE}
           WORKING_DIRECTORY ${BUNDLE_BUILDDIR}
-          OUTPUT_QUIET
+          OUTPUT_QUIET ERROR_QUIET
       )
     endif()
   endif()
@@ -42,21 +42,21 @@ else()
   execute_process(
           COMMAND ${CMAKE_COMMAND} ${COMPILE_OPTIONS}
           WORKING_DIRECTORY ${BOOST_PYTHON_BUILD_DIR}
-          OUTPUT_QUIET
+          OUTPUT_QUIET ERROR_QUIET
   )
 
   message( STATUS "Patience... Building boost::python" )
   execute_process(
           COMMAND ${CMAKE_MAKE_PROGRAM} -k -j ${NCORES}
           WORKING_DIRECTORY ${BOOST_PYTHON_BUILD_DIR}
-          OUTPUT_QUIET
+          OUTPUT_QUIET ERROR_QUIET
   )
 
   message( STATUS "Patience... Installing boost::python" )
   execute_process(
           COMMAND ${CMAKE_MAKE_PROGRAM} install
           WORKING_DIRECTORY ${BOOST_PYTHON_BUILD_DIR}
-          OUTPUT_QUIET
+          OUTPUT_QUIET ERROR_QUIET
   )
 
   if (APPLE)

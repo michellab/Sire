@@ -365,6 +365,31 @@ set( SIRE_EXE_LINK_FLAGS "" CACHE INTERNAL "Flags needed to link executables" )
 include (CheckCXXCompilerFlag)
 
 CHECK_CXX_COMPILER_FLAG( "-stdlib=libc++" SIRE_HAS_CPP_LIB )
+
+if (SIRE_HAS_CPP_LIB)
+  include(CheckCXXSourceRuns)
+
+  message(STATUS "Checking that we can link to libc++")
+  set(CMAKE_OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
+  set(CMAKE_REQUIRED_FLAGS "-stdlib=libc++")
+  check_cxx_source_runs("
+           #include <cstdlib>
+           #include <iostream>
+           int main()
+           {
+              std::cout << std::atof('3.0') << std::endl;
+              return 0;
+           }" CAN_USE_LIBCPP)
+  set(CMAKE_REQUIRED_FLAGS ${CMAKE_OLD_REQUIRED_FLAGS})
+
+  if (CAN_USE_LIBCPP)
+    message(STATUS "libc++ is available and can be used")
+  else()
+    message(STATUS "libc++ is not available. Using the normal alternative.")
+    set( SIRE_HAS_CPP_LIB 0 )
+  endif()
+endif()
+
 CHECK_CXX_COMPILER_FLAG( "-std=c++11" SIRE_HAS_CPP_11 )
 CHECK_CXX_COMPILER_FLAG( "-std=c++1y" SIRE_HAS_CPP_1Y )
 CHECK_CXX_COMPILER_FLAG( "-std=c++14" SIRE_HAS_CPP_14 )
@@ -491,6 +516,7 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
 
         # we have immintrin.h so we can compile AVX - check if we can run it
         INCLUDE(CheckCSourceRuns)
+        set(CMAKE_OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
         set(CMAKE_REQUIRED_FLAGS "-mavx")
         check_c_source_runs("
            #include <immintrin.h>
@@ -500,6 +526,7 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
               return 0;
            }"
            CAN_RUN_AVX_PROGRAM)
+        set(CMAKE_REQUIRED_FLAGS ${CMAKE_OLD_REQUIRED_FLAGS})
 
         if (CAN_RUN_AVX_PROGRAM)
           message( STATUS "Compiling with AVX enabled. Resulting binary will only work on newer Intel CPUs" )
@@ -602,6 +629,7 @@ elseif ( ${SIRE_CXX_COMPILER_ID} MATCHES "CLANG" )
       if ( HAVE_IMMINTRIN_H AND HAVE_AVX_FLAG )
         # we have immintrin.h so we can compile AVX - check if we can run it
         INCLUDE(CheckCSourceRuns)
+        set(CMAKE_OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
         set(CMAKE_REQUIRED_FLAGS "-mavx")
         CHECK_C_SOURCE_RUNS("
            #include <immintrin.h>
@@ -611,6 +639,7 @@ elseif ( ${SIRE_CXX_COMPILER_ID} MATCHES "CLANG" )
               return 0;
            }"
            CAN_RUN_AVX_PROGRAM)
+        set(CMAKE_REQUIRED_FLAGS ${CMAKE_OLD_REQUIRED_FLAGS})
 
         if (CAN_RUN_AVX_PROGRAM)        
           message( STATUS "Compiling with AVX enabled. Resulting binary will only work on newer Intel CPUs" )
