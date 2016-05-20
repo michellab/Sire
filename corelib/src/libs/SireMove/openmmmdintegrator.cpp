@@ -26,6 +26,8 @@
  *
 \*********************************************/
 
+#define _GLIBCXX_USE_CXX11_ABI 0
+
 #include "openmmmdintegrator.h"
 #include "ensemble.h"
 
