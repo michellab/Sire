@@ -19,6 +19,11 @@ set (SIRE_VERSION "${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}")
 # require cmake >= 2.8.11.2
 cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
 cmake_policy(VERSION 2.8)
+cmake_policy(SET CMP0042 OLD)  # managing OS X @rpath manually
+cmake_policy(SET CMP0048 OLD)  # want to manage versions myself!
+
+# Get rid of install messages (too verbose!)
+set( CMAKE_INSTALL_MESSAGE "NEVER" )
 
 # use loose loop syntax in CMakeLists files
 set( CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE )
