@@ -17,6 +17,7 @@ from glob import glob
 
 sys.path.append("../AutoGenerate")
 from scanheaders import *
+from doxygen import *
 
 from pyplusplus.module_builder import module_builder_t
 from pyplusplus.decl_wrappers import calldef_wrapper
@@ -459,7 +460,8 @@ def write_wrappers(mb, module, huge_classes, header_files = [] ):
  
    #build a code creator - this must be done after the above, as
    #otherwise our modifications above won't take effect
-   mb.build_code_creator( module_name="_%s" % module )
+   mb.build_code_creator( module_name="_%s" % module,
+                          doc_extractor=doxygen_doc_extractor() )
 
    #get rid of the standard headers
    mb.code_creator.replace_included_headers( header_files )
