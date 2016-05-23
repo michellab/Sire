@@ -154,58 +154,6 @@ void register_Values_class(){
                 , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7"), bp::arg("symval8"), bp::arg("symval9") ) );
         
         }
-        { //::SireCAS::Values::begin
-        
-            typedef ::QHash< unsigned int, double >::const_iterator ( ::SireCAS::Values::*begin_function_type)(  ) const;
-            begin_function_type begin_function_value( &::SireCAS::Values::begin );
-            
-            Values_exposer.def( 
-                "begin"
-                , begin_function_value );
-        
-        }
-        { //::SireCAS::Values::constBegin
-        
-            typedef ::QHash< unsigned int, double >::const_iterator ( ::SireCAS::Values::*constBegin_function_type)(  ) const;
-            constBegin_function_type constBegin_function_value( &::SireCAS::Values::constBegin );
-            
-            Values_exposer.def( 
-                "constBegin"
-                , constBegin_function_value );
-        
-        }
-        { //::SireCAS::Values::constEnd
-        
-            typedef ::QHash< unsigned int, double >::const_iterator ( ::SireCAS::Values::*constEnd_function_type)(  ) const;
-            constEnd_function_type constEnd_function_value( &::SireCAS::Values::constEnd );
-            
-            Values_exposer.def( 
-                "constEnd"
-                , constEnd_function_value );
-        
-        }
-        { //::SireCAS::Values::constFind
-        
-            typedef ::QHash< unsigned int, double >::const_iterator ( ::SireCAS::Values::*constFind_function_type)( ::SireCAS::SymbolID ) const;
-            constFind_function_type constFind_function_value( &::SireCAS::Values::constFind );
-            
-            Values_exposer.def( 
-                "constFind"
-                , constFind_function_value
-                , ( bp::arg("symbolid") ) );
-        
-        }
-        { //::SireCAS::Values::constFind
-        
-            typedef ::QHash< unsigned int, double >::const_iterator ( ::SireCAS::Values::*constFind_function_type)( ::SireCAS::Symbol const & ) const;
-            constFind_function_type constFind_function_value( &::SireCAS::Values::constFind );
-            
-            Values_exposer.def( 
-                "constFind"
-                , constFind_function_value
-                , ( bp::arg("symbol") ) );
-        
-        }
         { //::SireCAS::Values::contains
         
             typedef bool ( ::SireCAS::Values::*contains_function_type)( ::SireCAS::Symbol const & ) const;
@@ -225,16 +173,6 @@ void register_Values_class(){
             Values_exposer.def( 
                 "count"
                 , count_function_value );
-        
-        }
-        { //::SireCAS::Values::end
-        
-            typedef ::QHash< unsigned int, double >::const_iterator ( ::SireCAS::Values::*end_function_type)(  ) const;
-            end_function_type end_function_value( &::SireCAS::Values::end );
-            
-            Values_exposer.def( 
-                "end"
-                , end_function_value );
         
         }
         { //::SireCAS::Values::isEmpty
@@ -327,7 +265,7 @@ void register_Values_class(){
         }
         { //::SireCAS::Values::set
         
-            typedef void ( ::SireCAS::Values::*set_function_type)( ::QHash< unsigned int, double >::const_iterator const & ) ;
+            typedef void ( ::SireCAS::Values::*set_function_type)( ::SireCAS::Values::const_iterator const & ) ;
             set_function_type set_function_value( &::SireCAS::Values::set );
             
             Values_exposer.def( 
@@ -399,8 +337,8 @@ void register_Values_class(){
         
         }
         Values_exposer.staticmethod( "typeName" );
-        Values_exposer.def( bp::self + bp::self );
         Values_exposer.def( bp::self + bp::other< SireCAS::SymbolValue >() );
+        Values_exposer.def( bp::self + bp::self );
         Values_exposer.def( "__copy__", &__copy__);
         Values_exposer.def( "__deepcopy__", &__copy__);
         Values_exposer.def( "clone", &__copy__);

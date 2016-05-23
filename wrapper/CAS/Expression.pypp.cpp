@@ -610,24 +610,24 @@ void register_Expression_class(){
         
         }
         Expression_exposer.staticmethod( "typeName" );
-        Expression_exposer.def( bp::self * bp::other< SireMaths::Complex >() );
-        Expression_exposer.def( bp::self * bp::other< double >() );
-        Expression_exposer.def( bp::other< double >() * bp::self );
         Expression_exposer.def( bp::self * bp::self );
+        Expression_exposer.def( bp::other< double >() * bp::self );
+        Expression_exposer.def( bp::self * bp::other< double >() );
+        Expression_exposer.def( bp::self * bp::other< SireMaths::Complex >() );
         Expression_exposer.def( bp::self * bp::other< SireCAS::ExBase >() );
-        Expression_exposer.def( bp::self + bp::other< SireMaths::Complex >() );
-        Expression_exposer.def( bp::other< double >() + bp::self );
-        Expression_exposer.def( bp::self + bp::other< double >() );
         Expression_exposer.def( bp::self + bp::self );
+        Expression_exposer.def( bp::self + bp::other< double >() );
+        Expression_exposer.def( bp::other< double >() + bp::self );
+        Expression_exposer.def( bp::self + bp::other< SireMaths::Complex >() );
         Expression_exposer.def( bp::self + bp::other< SireCAS::ExBase >() );
-        Expression_exposer.def( bp::other< double >() - bp::self );
-        Expression_exposer.def( bp::self - bp::other< double >() );
         Expression_exposer.def( bp::self - bp::self );
+        Expression_exposer.def( bp::self - bp::other< double >() );
+        Expression_exposer.def( bp::other< double >() - bp::self );
         Expression_exposer.def( bp::self - bp::other< SireCAS::ExBase >() );
-        Expression_exposer.def( bp::self / bp::other< SireMaths::Complex >() );
-        Expression_exposer.def( bp::other< double >() / bp::self );
-        Expression_exposer.def( bp::self / bp::other< double >() );
         Expression_exposer.def( bp::self / bp::self );
+        Expression_exposer.def( bp::self / bp::other< double >() );
+        Expression_exposer.def( bp::other< double >() / bp::self );
+        Expression_exposer.def( bp::self / bp::other< SireMaths::Complex >() );
         Expression_exposer.def( bp::self / bp::other< SireCAS::ExBase >() );
         Expression_exposer.def( self + self );
         Expression_exposer.def( self - self );

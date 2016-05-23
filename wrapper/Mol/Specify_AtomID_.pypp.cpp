@@ -93,7 +93,7 @@ void register_Specify_AtomID__class(){
         { //::SireID::Specify< SireMol::AtomID >::map
         
             typedef SireID::Specify< SireMol::AtomID > exported_class_t;
-            typedef ::QList< SireMol::AtomIdx > ( ::SireID::Specify< SireMol::AtomID >::*map_function_type)( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::AtomIdx > ( ::SireID::Specify< SireMol::AtomID >::*map_function_type)( ::SireMol::AtomID::SearchObject const & ) const;
             map_function_type map_function_value( &::SireID::Specify< SireMol::AtomID >::map );
             
             Specify_AtomID__exposer.def( 

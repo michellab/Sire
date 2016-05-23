@@ -69,7 +69,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::at
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< SireMM::LJParameter > const & ( ::SireMol::AtomProperty< SireMM::LJParameter >::*at_function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< SireMM::LJParameter >::Array const & ( ::SireMol::AtomProperty< SireMM::LJParameter >::*at_function_type)( ::SireMol::CGIdx ) const;
             at_function_type at_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::at );
             
             AtomLJs_exposer.def( 
@@ -142,7 +142,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::divide
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMM::LJParameter >::*divide_function_type)( ::QVector< SireMol::AtomSelection > const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireMM::LJParameter >::*divide_function_type)( ::QVector< SireMol::AtomSelection > const & ) const;
             divide_function_type divide_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::divide );
             
             AtomLJs_exposer.def( 
@@ -154,7 +154,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::divideByResidue
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMM::LJParameter >::*divideByResidue_function_type)( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireMM::LJParameter >::*divideByResidue_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             divideByResidue_function_type divideByResidue_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::divideByResidue );
             
             AtomLJs_exposer.def( 
@@ -178,7 +178,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::get
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< SireMM::LJParameter > const & ( ::SireMol::AtomProperty< SireMM::LJParameter >::*get_function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< SireMM::LJParameter >::Array const & ( ::SireMol::AtomProperty< SireMM::LJParameter >::*get_function_type)( ::SireMol::CGIdx ) const;
             get_function_type get_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::get );
             
             AtomLJs_exposer.def( 
@@ -239,7 +239,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::merge
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMM::LJParameter >::*merge_function_type)( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireMM::LJParameter >::*merge_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             merge_function_type merge_function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::merge );
             
             AtomLJs_exposer.def( 
@@ -300,7 +300,7 @@ void register_AtomLJs_class(){
         { //::SireMol::AtomProperty< SireMM::LJParameter >::operator[]
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< SireMM::LJParameter > const & ( ::SireMol::AtomProperty< SireMM::LJParameter >::*__getitem___function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< SireMM::LJParameter >::Array const & ( ::SireMol::AtomProperty< SireMM::LJParameter >::*__getitem___function_type)( ::SireMol::CGIdx ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireMM::LJParameter >::operator[] );
             
             AtomLJs_exposer.def( 

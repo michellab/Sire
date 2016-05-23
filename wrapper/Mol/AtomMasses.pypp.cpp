@@ -71,7 +71,7 @@ void register_AtomMasses_class(){
         { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::at
         
             typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -0x00000000000000001, 0 > > const & ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::*at_function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::Array const & ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::*at_function_type)( ::SireMol::CGIdx ) const;
             at_function_type at_function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::at );
             
             AtomMasses_exposer.def( 
@@ -109,7 +109,7 @@ void register_AtomMasses_class(){
         { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::copyFrom
         
             typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::*copyFrom_function_type)( ::QVector< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -0x00000000000000001, 0 > > const & ) ;
+            typedef void ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::*copyFrom_function_type)( ::QVector< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > > const & ) ;
             copyFrom_function_type copyFrom_function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::copyFrom );
             
             AtomMasses_exposer.def( 
@@ -121,7 +121,7 @@ void register_AtomMasses_class(){
         { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::copyFrom
         
             typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > > exported_class_t;
-            typedef void ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::*copyFrom_function_type)( ::QVector< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -0x00000000000000001, 0 > > const &,::SireMol::AtomSelection const & ) ;
+            typedef void ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::*copyFrom_function_type)( ::QVector< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > > const &,::SireMol::AtomSelection const & ) ;
             copyFrom_function_type copyFrom_function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::copyFrom );
             
             AtomMasses_exposer.def( 
@@ -144,7 +144,7 @@ void register_AtomMasses_class(){
         { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::divide
         
             typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::*divide_function_type)( ::QVector< SireMol::AtomSelection > const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::*divide_function_type)( ::QVector< SireMol::AtomSelection > const & ) const;
             divide_function_type divide_function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::divide );
             
             AtomMasses_exposer.def( 
@@ -156,7 +156,7 @@ void register_AtomMasses_class(){
         { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::divideByResidue
         
             typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::*divideByResidue_function_type)( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::*divideByResidue_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             divideByResidue_function_type divideByResidue_function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::divideByResidue );
             
             AtomMasses_exposer.def( 
@@ -180,7 +180,7 @@ void register_AtomMasses_class(){
         { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::get
         
             typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -0x00000000000000001, 0 > > const & ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::*get_function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::Array const & ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::*get_function_type)( ::SireMol::CGIdx ) const;
             get_function_type get_function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::get );
             
             AtomMasses_exposer.def( 
@@ -241,7 +241,7 @@ void register_AtomMasses_class(){
         { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::merge
         
             typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::*merge_function_type)( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::*merge_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             merge_function_type merge_function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::merge );
             
             AtomMasses_exposer.def( 
@@ -302,7 +302,7 @@ void register_AtomMasses_class(){
         { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::operator[]
         
             typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -0x00000000000000001, 0 > > const & ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::*__getitem___function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::Array const & ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::*__getitem___function_type)( ::SireMol::CGIdx ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::operator[] );
             
             AtomMasses_exposer.def( 
@@ -341,7 +341,7 @@ void register_AtomMasses_class(){
         { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::set
         
             typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > > exported_class_t;
-            typedef ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > > & ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::*set_function_type)( ::SireMol::CGIdx,::QVector< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -0x00000000000000001, 0 > > const & ) ;
+            typedef ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > > & ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::*set_function_type)( ::SireMol::CGIdx,::QVector< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > > const & ) ;
             set_function_type set_function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::set );
             
             AtomMasses_exposer.def( 
@@ -387,7 +387,7 @@ void register_AtomMasses_class(){
         { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::toVector
         
             typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > > exported_class_t;
-            typedef ::QVector< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -0x00000000000000001, 0 > > ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::*toVector_function_type)(  ) const;
+            typedef ::QVector< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > > ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::*toVector_function_type)(  ) const;
             toVector_function_type toVector_function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::toVector );
             
             AtomMasses_exposer.def( 
@@ -398,7 +398,7 @@ void register_AtomMasses_class(){
         { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::toVector
         
             typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > > exported_class_t;
-            typedef ::QVector< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -0x00000000000000001, 0 > > ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::*toVector_function_type)( ::SireMol::AtomSelection const & ) const;
+            typedef ::QVector< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > > ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::*toVector_function_type)( ::SireMol::AtomSelection const & ) const;
             toVector_function_type toVector_function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 1, 0, 0, 0, 0, -1, 0 > >::toVector );
             
             AtomMasses_exposer.def( 

@@ -35,7 +35,7 @@ void register_IntraCLJFFBase_class(){
         { //::SireFF::Intra2BFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > >::components
         
             typedef SireFF::Intra2BFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > > exported_class_t;
-            typedef ::SireMM::CLJComponent const & ( ::SireFF::Intra2BFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > >::*components_function_type)(  ) const;
+            typedef ::SireFF::Intra2BFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > >::Components const & ( ::SireFF::Intra2BFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > >::*components_function_type)(  ) const;
             components_function_type components_function_value( &::SireFF::Intra2BFF< SireMM::CLJPotentialInterface< SireMM::IntraCLJPotential > >::components );
             
             IntraCLJFFBase_exposer.def( 

@@ -95,28 +95,6 @@ void register_ChunkedVector_double__class(){
                 , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
-        { //::SireBase::ChunkedVector< double, 100 >::begin
-        
-            typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef ::SireBase::ChunkedVector< double, 100 >::iterator ( ::SireBase::ChunkedVector< double, 100 >::*begin_function_type)(  ) ;
-            begin_function_type begin_function_value( &::SireBase::ChunkedVector< double, 100 >::begin );
-            
-            ChunkedVector_double__exposer.def( 
-                "begin"
-                , begin_function_value );
-        
-        }
-        { //::SireBase::ChunkedVector< double, 100 >::begin
-        
-            typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef ::SireBase::ChunkedVector< double, 100 >::const_iterator ( ::SireBase::ChunkedVector< double, 100 >::*begin_function_type)(  ) const;
-            begin_function_type begin_function_value( &::SireBase::ChunkedVector< double, 100 >::begin );
-            
-            ChunkedVector_double__exposer.def( 
-                "begin"
-                , begin_function_value );
-        
-        }
         { //::SireBase::ChunkedVector< double, 100 >::capacity
         
             typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
@@ -137,28 +115,6 @@ void register_ChunkedVector_double__class(){
             ChunkedVector_double__exposer.def( 
                 "clear"
                 , clear_function_value );
-        
-        }
-        { //::SireBase::ChunkedVector< double, 100 >::constBegin
-        
-            typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef ::SireBase::ChunkedVector< double, 100 >::const_iterator ( ::SireBase::ChunkedVector< double, 100 >::*constBegin_function_type)(  ) const;
-            constBegin_function_type constBegin_function_value( &::SireBase::ChunkedVector< double, 100 >::constBegin );
-            
-            ChunkedVector_double__exposer.def( 
-                "constBegin"
-                , constBegin_function_value );
-        
-        }
-        { //::SireBase::ChunkedVector< double, 100 >::constEnd
-        
-            typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef ::SireBase::ChunkedVector< double, 100 >::const_iterator ( ::SireBase::ChunkedVector< double, 100 >::*constEnd_function_type)(  ) const;
-            constEnd_function_type constEnd_function_value( &::SireBase::ChunkedVector< double, 100 >::constEnd );
-            
-            ChunkedVector_double__exposer.def( 
-                "constEnd"
-                , constEnd_function_value );
         
         }
         { //::SireBase::ChunkedVector< double, 100 >::count
@@ -182,28 +138,6 @@ void register_ChunkedVector_double__class(){
                 "count"
                 , count_function_value
                 , ( bp::arg("value") ) );
-        
-        }
-        { //::SireBase::ChunkedVector< double, 100 >::end
-        
-            typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef ::SireBase::ChunkedVector< double, 100 >::iterator ( ::SireBase::ChunkedVector< double, 100 >::*end_function_type)(  ) ;
-            end_function_type end_function_value( &::SireBase::ChunkedVector< double, 100 >::end );
-            
-            ChunkedVector_double__exposer.def( 
-                "end"
-                , end_function_value );
-        
-        }
-        { //::SireBase::ChunkedVector< double, 100 >::end
-        
-            typedef SireBase::ChunkedVector< double, 100 > exported_class_t;
-            typedef ::SireBase::ChunkedVector< double, 100 >::const_iterator ( ::SireBase::ChunkedVector< double, 100 >::*end_function_type)(  ) const;
-            end_function_type end_function_value( &::SireBase::ChunkedVector< double, 100 >::end );
-            
-            ChunkedVector_double__exposer.def( 
-                "end"
-                , end_function_value );
         
         }
         { //::SireBase::ChunkedVector< double, 100 >::fromList

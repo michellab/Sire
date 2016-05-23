@@ -145,7 +145,7 @@ void register_PropertyList_class(){
             PropertyList_exposer.def( 
                 "mid"
                 , mid_function_value
-                , ( bp::arg("pos"), bp::arg("length")=(int)(-0x00000000000000001) ) );
+                , ( bp::arg("pos"), bp::arg("length")=(int)(-1) ) );
         
         }
         { //::SireBase::PropertyList::move

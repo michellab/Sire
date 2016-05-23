@@ -297,58 +297,6 @@ void register_MoleculeGroup_class(){
                 , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
-        { //::SireMol::MoleculeGroup::begin
-        
-            typedef ::SireBase::ChunkedHash< SireMol::MolNum, SireMol::ViewsOfMol, 100 >::const_iterator ( ::SireMol::MoleculeGroup::*begin_function_type)(  ) const;
-            begin_function_type begin_function_value( &::SireMol::MoleculeGroup::begin );
-            
-            MoleculeGroup_exposer.def( 
-                "begin"
-                , begin_function_value );
-        
-        }
-        { //::SireMol::MoleculeGroup::constBegin
-        
-            typedef ::SireBase::ChunkedHash< SireMol::MolNum, SireMol::ViewsOfMol, 100 >::const_iterator ( ::SireMol::MoleculeGroup::*constBegin_function_type)(  ) const;
-            constBegin_function_type constBegin_function_value( &::SireMol::MoleculeGroup::constBegin );
-            
-            MoleculeGroup_exposer.def( 
-                "constBegin"
-                , constBegin_function_value );
-        
-        }
-        { //::SireMol::MoleculeGroup::constEnd
-        
-            typedef ::SireBase::ChunkedHash< SireMol::MolNum, SireMol::ViewsOfMol, 100 >::const_iterator ( ::SireMol::MoleculeGroup::*constEnd_function_type)(  ) const;
-            constEnd_function_type constEnd_function_value( &::SireMol::MoleculeGroup::constEnd );
-            
-            MoleculeGroup_exposer.def( 
-                "constEnd"
-                , constEnd_function_value );
-        
-        }
-        { //::SireMol::MoleculeGroup::constFind
-        
-            typedef ::SireBase::ChunkedHash< SireMol::MolNum, SireMol::ViewsOfMol, 100 >::const_iterator ( ::SireMol::MoleculeGroup::*constFind_function_type)( ::SireMol::MolNum ) const;
-            constFind_function_type constFind_function_value( &::SireMol::MoleculeGroup::constFind );
-            
-            MoleculeGroup_exposer.def( 
-                "constFind"
-                , constFind_function_value
-                , ( bp::arg("molnum") ) );
-        
-        }
-        { //::SireMol::MoleculeGroup::constFind
-        
-            typedef ::SireBase::ChunkedHash< SireMol::MolNum, SireMol::ViewsOfMol, 100 >::const_iterator ( ::SireMol::MoleculeGroup::*constFind_function_type)( ::SireMol::MolID const & ) const;
-            constFind_function_type constFind_function_value( &::SireMol::MoleculeGroup::constFind );
-            
-            MoleculeGroup_exposer.def( 
-                "constFind"
-                , constFind_function_value
-                , ( bp::arg("molid") ) );
-        
-        }
         { //::SireMol::MoleculeGroup::contains
         
             typedef bool ( ::SireMol::MoleculeGroup::*contains_function_type)( ::SireMol::MolNum ) const;
@@ -435,38 +383,6 @@ void register_MoleculeGroup_class(){
                 "contains"
                 , contains_function_value
                 , ( bp::arg("MoleculeGroup") ) );
-        
-        }
-        { //::SireMol::MoleculeGroup::end
-        
-            typedef ::SireBase::ChunkedHash< SireMol::MolNum, SireMol::ViewsOfMol, 100 >::const_iterator ( ::SireMol::MoleculeGroup::*end_function_type)(  ) const;
-            end_function_type end_function_value( &::SireMol::MoleculeGroup::end );
-            
-            MoleculeGroup_exposer.def( 
-                "end"
-                , end_function_value );
-        
-        }
-        { //::SireMol::MoleculeGroup::find
-        
-            typedef ::SireBase::ChunkedHash< SireMol::MolNum, SireMol::ViewsOfMol, 100 >::const_iterator ( ::SireMol::MoleculeGroup::*find_function_type)( ::SireMol::MolNum ) const;
-            find_function_type find_function_value( &::SireMol::MoleculeGroup::find );
-            
-            MoleculeGroup_exposer.def( 
-                "find"
-                , find_function_value
-                , ( bp::arg("molnum") ) );
-        
-        }
-        { //::SireMol::MoleculeGroup::find
-        
-            typedef ::SireBase::ChunkedHash< SireMol::MolNum, SireMol::ViewsOfMol, 100 >::const_iterator ( ::SireMol::MoleculeGroup::*find_function_type)( ::SireMol::MolID const & ) const;
-            find_function_type find_function_value( &::SireMol::MoleculeGroup::find );
-            
-            MoleculeGroup_exposer.def( 
-                "find"
-                , find_function_value
-                , ( bp::arg("molid") ) );
         
         }
         { //::SireMol::MoleculeGroup::first

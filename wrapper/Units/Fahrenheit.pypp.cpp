@@ -18,7 +18,7 @@ SireUnits::Fahrenheit __copy__(const SireUnits::Fahrenheit &other){ return SireU
 void register_Fahrenheit_class(){
 
     { //::SireUnits::Fahrenheit
-        typedef bp::class_< SireUnits::Fahrenheit, bp::bases< SireUnits::Dimension::TempBase > > Fahrenheit_exposer_t;
+        typedef bp::class_< SireUnits::Fahrenheit > Fahrenheit_exposer_t;
         Fahrenheit_exposer_t Fahrenheit_exposer = Fahrenheit_exposer_t( "Fahrenheit", bp::init< >() );
         bp::scope Fahrenheit_scope( Fahrenheit_exposer );
         Fahrenheit_exposer.def( bp::init< double >(( bp::arg("value") )) );

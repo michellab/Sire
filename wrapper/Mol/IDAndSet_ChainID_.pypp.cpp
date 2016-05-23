@@ -64,6 +64,7 @@ void register_IDAndSet_ChainID__class(){
         IDAndSet_ChainID__exposer.def( bp::init< SireMol::ChainID const & >(( bp::arg("id") )) );
         IDAndSet_ChainID__exposer.def( bp::init< SireMol::ChainID const &, SireMol::ChainID const & >(( bp::arg("id0"), bp::arg("id1") )) );
         IDAndSet_ChainID__exposer.def( bp::init< QList< SireMol::ChainIdentifier > const & >(( bp::arg("ids") )) );
+        IDAndSet_ChainID__exposer.def( bp::init< SireID::IDAndSet< SireMol::ChainID > const & >(( bp::arg("ids") )) );
         IDAndSet_ChainID__exposer.def( bp::init< SireID::IDAndSet< SireMol::ChainID > const & >(( bp::arg("other") )) );
         { //::SireID::IDAndSet< SireMol::ChainID >::IDs
         
@@ -102,7 +103,7 @@ void register_IDAndSet_ChainID__class(){
         { //::SireID::IDAndSet< SireMol::ChainID >::map
         
             typedef SireID::IDAndSet< SireMol::ChainID > exported_class_t;
-            typedef ::QList< SireMol::ChainIdx > ( ::SireID::IDAndSet< SireMol::ChainID >::*map_function_type)( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::ChainIdx > ( ::SireID::IDAndSet< SireMol::ChainID >::*map_function_type)( ::SireID::IDAndSet< SireMol::ChainID >::SearchObject const & ) const;
             map_function_type map_function_value( &::SireID::IDAndSet< SireMol::ChainID >::map );
             
             IDAndSet_ChainID__exposer.def( 

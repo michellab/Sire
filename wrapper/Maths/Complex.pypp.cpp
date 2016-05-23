@@ -27,7 +27,7 @@ void register_Complex_class(){
 
     { //::SireMaths::Complex
         typedef bp::class_< SireMaths::Complex > Complex_exposer_t;
-        Complex_exposer_t Complex_exposer = Complex_exposer_t( "Complex", bp::init< bp::optional< double, double > >(( bp::arg("r")=0.0, bp::arg("i")=0.0 )) );
+        Complex_exposer_t Complex_exposer = Complex_exposer_t( "Complex", bp::init< bp::optional< double, double > >(( bp::arg("r")=0., bp::arg("i")=0. )) );
         bp::scope Complex_scope( Complex_exposer );
         Complex_exposer.def( bp::init< gsl_complex const & >(( bp::arg("complex") )) );
         Complex_exposer.def( bp::init< SireMaths::Complex const & >(( bp::arg("other") )) );
@@ -279,18 +279,18 @@ void register_Complex_class(){
         Complex_exposer.staticmethod( "polar" );
         Complex_exposer.staticmethod( "rect" );
         Complex_exposer.staticmethod( "typeName" );
-        Complex_exposer.def( bp::other< double >() * bp::self );
-        Complex_exposer.def( bp::self * bp::other< double >() );
         Complex_exposer.def( bp::self * bp::self );
-        Complex_exposer.def( bp::other< double >() + bp::self );
-        Complex_exposer.def( bp::self + bp::other< double >() );
+        Complex_exposer.def( bp::self * bp::other< double >() );
+        Complex_exposer.def( bp::other< double >() * bp::self );
         Complex_exposer.def( bp::self + bp::self );
-        Complex_exposer.def( bp::other< double >() - bp::self );
-        Complex_exposer.def( bp::self - bp::other< double >() );
+        Complex_exposer.def( bp::self + bp::other< double >() );
+        Complex_exposer.def( bp::other< double >() + bp::self );
         Complex_exposer.def( bp::self - bp::self );
-        Complex_exposer.def( bp::other< double >() / bp::self );
-        Complex_exposer.def( bp::self / bp::other< double >() );
+        Complex_exposer.def( bp::self - bp::other< double >() );
+        Complex_exposer.def( bp::other< double >() - bp::self );
         Complex_exposer.def( bp::self / bp::self );
+        Complex_exposer.def( bp::self / bp::other< double >() );
+        Complex_exposer.def( bp::other< double >() / bp::self );
         Complex_exposer.def( "__copy__", &__copy__);
         Complex_exposer.def( "__deepcopy__", &__copy__);
         Complex_exposer.def( "clone", &__copy__);

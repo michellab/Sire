@@ -658,6 +658,17 @@ void register_MultiFloat_class(){
                 , sum_function_value );
         
         }
+        { //::SireMaths::MultiFloat::swap
+        
+            typedef void ( *swap_function_type )( ::SireMaths::MultiFloat &,int,::SireMaths::MultiFloat &,int );
+            swap_function_type swap_function_value( &::SireMaths::MultiFloat::swap );
+            
+            MultiFloat_exposer.def( 
+                "swap"
+                , swap_function_value
+                , ( bp::arg("f0"), bp::arg("idx0"), bp::arg("f1"), bp::arg("idx1") ) );
+        
+        }
         { //::SireMaths::MultiFloat::toArray
         
             typedef ::QVector< float > ( *toArray_function_type )( ::QVector< SireMaths::MultiFloat > const & );
@@ -723,6 +734,7 @@ void register_MultiFloat_class(){
         MultiFloat_exposer.staticmethod( "count" );
         MultiFloat_exposer.staticmethod( "fromArray" );
         MultiFloat_exposer.staticmethod( "size" );
+        MultiFloat_exposer.staticmethod( "swap" );
         MultiFloat_exposer.staticmethod( "toArray" );
         MultiFloat_exposer.staticmethod( "toDoubleArray" );
         MultiFloat_exposer.staticmethod( "typeName" );

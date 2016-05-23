@@ -59,7 +59,7 @@ void register_Specify_SysID__class(){
         { //::SireID::Specify< SireSystem::SysID >::map
         
             typedef SireID::Specify< SireSystem::SysID > exported_class_t;
-            typedef ::QList< SireSystem::SysIdx > ( ::SireID::Specify< SireSystem::SysID >::*map_function_type)( ::SireSystem::Systems const & ) const;
+            typedef ::QList< SireSystem::SysIdx > ( ::SireID::Specify< SireSystem::SysID >::*map_function_type)( ::SireSystem::SysID::SearchObject const & ) const;
             map_function_type map_function_value( &::SireID::Specify< SireSystem::SysID >::map );
             
             Specify_SysID__exposer.def( 

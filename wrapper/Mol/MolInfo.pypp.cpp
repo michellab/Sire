@@ -282,6 +282,17 @@ void register_MolInfo_class(){
                 , getSegments_function_value );
         
         }
+        { //::SireMol::MolInfo::intersection
+        
+            typedef ::QList< SireMol::AtomIdx > ( *intersection_function_type )( ::QList< SireMol::AtomIdx > const &,::QList< SireMol::AtomIdx > const & );
+            intersection_function_type intersection_function_value( &::SireMol::MolInfo::intersection );
+            
+            MolInfo_exposer.def( 
+                "intersection"
+                , intersection_function_value
+                , ( bp::arg("list0"), bp::arg("list1") ) );
+        
+        }
         { //::SireMol::MolInfo::map
         
             typedef ::QList< SireMol::AtomIdx > ( ::SireMol::MolInfo::*map_function_type)( ::SireMol::AtomName const & ) const;
@@ -601,6 +612,7 @@ void register_MolInfo_class(){
                 , ( bp::arg("segid") ) );
         
         }
+        MolInfo_exposer.staticmethod( "intersection" );
         MolInfo_exposer.def( "__str__", &pvt_get_name);
         MolInfo_exposer.def( "__repr__", &pvt_get_name);
     }

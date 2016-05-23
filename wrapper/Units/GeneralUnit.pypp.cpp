@@ -32,7 +32,7 @@ SireUnits::Dimension::GeneralUnit __copy__(const SireUnits::Dimension::GeneralUn
 void register_GeneralUnit_class(){
 
     { //::SireUnits::Dimension::GeneralUnit
-        typedef bp::class_< SireUnits::Dimension::GeneralUnit, bp::bases< SireUnits::Dimension::Unit > > GeneralUnit_exposer_t;
+        typedef bp::class_< SireUnits::Dimension::GeneralUnit > GeneralUnit_exposer_t;
         GeneralUnit_exposer_t GeneralUnit_exposer = GeneralUnit_exposer_t( "GeneralUnit", bp::init< >() );
         bp::scope GeneralUnit_scope( GeneralUnit_exposer );
         GeneralUnit_exposer.def( bp::init< SireUnits::Dimension::GeneralUnit const & >(( bp::arg("other") )) );

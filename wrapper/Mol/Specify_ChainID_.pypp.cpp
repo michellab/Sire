@@ -89,7 +89,7 @@ void register_Specify_ChainID__class(){
         { //::SireID::Specify< SireMol::ChainID >::map
         
             typedef SireID::Specify< SireMol::ChainID > exported_class_t;
-            typedef ::QList< SireMol::ChainIdx > ( ::SireID::Specify< SireMol::ChainID >::*map_function_type)( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::ChainIdx > ( ::SireID::Specify< SireMol::ChainID >::*map_function_type)( ::SireMol::ChainID::SearchObject const & ) const;
             map_function_type map_function_value( &::SireID::Specify< SireMol::ChainID >::map );
             
             Specify_ChainID__exposer.def( 

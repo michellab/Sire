@@ -41,7 +41,7 @@ void register_CoulombPotentialInterface_IntraCoulombPotential__class(){
         { //::SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential >::parameters
         
             typedef SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > exported_class_t;
-            typedef ::SireMM::ScaledChargeParameterNames3D ( *parameters_function_type )(  );
+            typedef ::SireMM::IntraCoulombPotential::ParameterNames ( *parameters_function_type )(  );
             parameters_function_type parameters_function_value( &::SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential >::parameters );
             
             CoulombPotentialInterface_IntraCoulombPotential__exposer.def( 

@@ -71,7 +71,7 @@ void register_AtomElements_class(){
         { //::SireMol::AtomProperty< SireMol::Element >::at
         
             typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< SireMol::Element > const & ( ::SireMol::AtomProperty< SireMol::Element >::*at_function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< SireMol::Element >::Array const & ( ::SireMol::AtomProperty< SireMol::Element >::*at_function_type)( ::SireMol::CGIdx ) const;
             at_function_type at_function_value( &::SireMol::AtomProperty< SireMol::Element >::at );
             
             AtomElements_exposer.def( 
@@ -144,7 +144,7 @@ void register_AtomElements_class(){
         { //::SireMol::AtomProperty< SireMol::Element >::divide
         
             typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMol::Element >::*divide_function_type)( ::QVector< SireMol::AtomSelection > const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireMol::Element >::*divide_function_type)( ::QVector< SireMol::AtomSelection > const & ) const;
             divide_function_type divide_function_value( &::SireMol::AtomProperty< SireMol::Element >::divide );
             
             AtomElements_exposer.def( 
@@ -156,7 +156,7 @@ void register_AtomElements_class(){
         { //::SireMol::AtomProperty< SireMol::Element >::divideByResidue
         
             typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMol::Element >::*divideByResidue_function_type)( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireMol::Element >::*divideByResidue_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             divideByResidue_function_type divideByResidue_function_value( &::SireMol::AtomProperty< SireMol::Element >::divideByResidue );
             
             AtomElements_exposer.def( 
@@ -180,7 +180,7 @@ void register_AtomElements_class(){
         { //::SireMol::AtomProperty< SireMol::Element >::get
         
             typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< SireMol::Element > const & ( ::SireMol::AtomProperty< SireMol::Element >::*get_function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< SireMol::Element >::Array const & ( ::SireMol::AtomProperty< SireMol::Element >::*get_function_type)( ::SireMol::CGIdx ) const;
             get_function_type get_function_value( &::SireMol::AtomProperty< SireMol::Element >::get );
             
             AtomElements_exposer.def( 
@@ -241,7 +241,7 @@ void register_AtomElements_class(){
         { //::SireMol::AtomProperty< SireMol::Element >::merge
         
             typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMol::Element >::*merge_function_type)( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireMol::Element >::*merge_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             merge_function_type merge_function_value( &::SireMol::AtomProperty< SireMol::Element >::merge );
             
             AtomElements_exposer.def( 
@@ -302,7 +302,7 @@ void register_AtomElements_class(){
         { //::SireMol::AtomProperty< SireMol::Element >::operator[]
         
             typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< SireMol::Element > const & ( ::SireMol::AtomProperty< SireMol::Element >::*__getitem___function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< SireMol::Element >::Array const & ( ::SireMol::AtomProperty< SireMol::Element >::*__getitem___function_type)( ::SireMol::CGIdx ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireMol::Element >::operator[] );
             
             AtomElements_exposer.def( 

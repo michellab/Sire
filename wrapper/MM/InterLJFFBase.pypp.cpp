@@ -35,7 +35,7 @@ void register_InterLJFFBase_class(){
         { //::SireFF::Inter2BFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::components
         
             typedef SireFF::Inter2BFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > > exported_class_t;
-            typedef ::SireMM::LJComponent const & ( ::SireFF::Inter2BFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*components_function_type)(  ) const;
+            typedef ::SireFF::Inter2BFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::Components const & ( ::SireFF::Inter2BFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::*components_function_type)(  ) const;
             components_function_type components_function_value( &::SireFF::Inter2BFF< SireMM::LJPotentialInterface< SireMM::InterLJPotential > >::components );
             
             InterLJFFBase_exposer.def( 

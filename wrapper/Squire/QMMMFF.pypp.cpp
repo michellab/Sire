@@ -64,7 +64,7 @@ void register_QMMMFF_class(){
         }
         { //::Squire::QMMMFF::components
         
-            typedef ::Squire::QMComponent const & ( ::Squire::QMMMFF::*components_function_type)(  ) const;
+            typedef ::Squire::QMMMFF::Components const & ( ::Squire::QMMMFF::*components_function_type)(  ) const;
             components_function_type components_function_value( &::Squire::QMMMFF::components );
             
             QMMMFF_exposer.def( 
@@ -251,7 +251,7 @@ void register_QMMMFF_class(){
         QMMMFF_exposer.def( bp::self == bp::self );
         { //::Squire::QMMMFF::parameters
         
-            typedef ::Squire::ChargeElementParameterNames3D ( ::Squire::QMMMFF::*parameters_function_type)(  ) const;
+            typedef ::Squire::QMMMFF::Parameters ( ::Squire::QMMMFF::*parameters_function_type)(  ) const;
             parameters_function_type parameters_function_value( &::Squire::QMMMFF::parameters );
             
             QMMMFF_exposer.def( 

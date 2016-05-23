@@ -187,16 +187,6 @@ void register_Molecules_class(){
                 , bp::return_value_policy<bp::clone_const_reference>() );
         
         }
-        { //::SireMol::Molecules::begin
-        
-            typedef ::SireBase::ChunkedHash< SireMol::MolNum, SireMol::ViewsOfMol, 100 >::const_iterator ( ::SireMol::Molecules::*begin_function_type)(  ) const;
-            begin_function_type begin_function_value( &::SireMol::Molecules::begin );
-            
-            Molecules_exposer.def( 
-                "begin"
-                , begin_function_value );
-        
-        }
         { //::SireMol::Molecules::clear
         
             typedef void ( ::SireMol::Molecules::*clear_function_type)(  ) ;
@@ -205,37 +195,6 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "clear"
                 , clear_function_value );
-        
-        }
-        { //::SireMol::Molecules::constBegin
-        
-            typedef ::SireBase::ChunkedHash< SireMol::MolNum, SireMol::ViewsOfMol, 100 >::const_iterator ( ::SireMol::Molecules::*constBegin_function_type)(  ) const;
-            constBegin_function_type constBegin_function_value( &::SireMol::Molecules::constBegin );
-            
-            Molecules_exposer.def( 
-                "constBegin"
-                , constBegin_function_value );
-        
-        }
-        { //::SireMol::Molecules::constEnd
-        
-            typedef ::SireBase::ChunkedHash< SireMol::MolNum, SireMol::ViewsOfMol, 100 >::const_iterator ( ::SireMol::Molecules::*constEnd_function_type)(  ) const;
-            constEnd_function_type constEnd_function_value( &::SireMol::Molecules::constEnd );
-            
-            Molecules_exposer.def( 
-                "constEnd"
-                , constEnd_function_value );
-        
-        }
-        { //::SireMol::Molecules::constFind
-        
-            typedef ::SireBase::ChunkedHash< SireMol::MolNum, SireMol::ViewsOfMol, 100 >::const_iterator ( ::SireMol::Molecules::*constFind_function_type)( ::SireMol::MolNum ) const;
-            constFind_function_type constFind_function_value( &::SireMol::Molecules::constFind );
-            
-            Molecules_exposer.def( 
-                "constFind"
-                , constFind_function_value
-                , ( bp::arg("molnum") ) );
         
         }
         { //::SireMol::Molecules::contains
@@ -290,27 +249,6 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "count"
                 , count_function_value );
-        
-        }
-        { //::SireMol::Molecules::end
-        
-            typedef ::SireBase::ChunkedHash< SireMol::MolNum, SireMol::ViewsOfMol, 100 >::const_iterator ( ::SireMol::Molecules::*end_function_type)(  ) const;
-            end_function_type end_function_value( &::SireMol::Molecules::end );
-            
-            Molecules_exposer.def( 
-                "end"
-                , end_function_value );
-        
-        }
-        { //::SireMol::Molecules::find
-        
-            typedef ::SireBase::ChunkedHash< SireMol::MolNum, SireMol::ViewsOfMol, 100 >::const_iterator ( ::SireMol::Molecules::*find_function_type)( ::SireMol::MolNum ) const;
-            find_function_type find_function_value( &::SireMol::Molecules::find );
-            
-            Molecules_exposer.def( 
-                "find"
-                , find_function_value
-                , ( bp::arg("molnum") ) );
         
         }
         { //::SireMol::Molecules::first

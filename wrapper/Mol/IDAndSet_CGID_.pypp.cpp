@@ -64,6 +64,7 @@ void register_IDAndSet_CGID__class(){
         IDAndSet_CGID__exposer.def( bp::init< SireMol::CGID const & >(( bp::arg("id") )) );
         IDAndSet_CGID__exposer.def( bp::init< SireMol::CGID const &, SireMol::CGID const & >(( bp::arg("id0"), bp::arg("id1") )) );
         IDAndSet_CGID__exposer.def( bp::init< QList< SireMol::CGIdentifier > const & >(( bp::arg("ids") )) );
+        IDAndSet_CGID__exposer.def( bp::init< SireID::IDAndSet< SireMol::CGID > const & >(( bp::arg("ids") )) );
         IDAndSet_CGID__exposer.def( bp::init< SireID::IDAndSet< SireMol::CGID > const & >(( bp::arg("other") )) );
         { //::SireID::IDAndSet< SireMol::CGID >::IDs
         
@@ -102,7 +103,7 @@ void register_IDAndSet_CGID__class(){
         { //::SireID::IDAndSet< SireMol::CGID >::map
         
             typedef SireID::IDAndSet< SireMol::CGID > exported_class_t;
-            typedef ::QList< SireMol::CGIdx > ( ::SireID::IDAndSet< SireMol::CGID >::*map_function_type)( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::CGIdx > ( ::SireID::IDAndSet< SireMol::CGID >::*map_function_type)( ::SireID::IDAndSet< SireMol::CGID >::SearchObject const & ) const;
             map_function_type map_function_value( &::SireID::IDAndSet< SireMol::CGID >::map );
             
             IDAndSet_CGID__exposer.def( 

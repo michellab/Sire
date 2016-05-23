@@ -91,7 +91,7 @@ void register_AtomStringProperty_class(){
         { //::SireMol::AtomProperty< QString >::at
         
             typedef SireMol::AtomProperty< QString > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< QString > const & ( ::SireMol::AtomProperty< QString >::*at_function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< QString >::Array const & ( ::SireMol::AtomProperty< QString >::*at_function_type)( ::SireMol::CGIdx ) const;
             at_function_type at_function_value( &::SireMol::AtomProperty< QString >::at );
             
             AtomStringProperty_exposer.def( 
@@ -164,7 +164,7 @@ void register_AtomStringProperty_class(){
         { //::SireMol::AtomProperty< QString >::divide
         
             typedef SireMol::AtomProperty< QString > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< QString >::*divide_function_type)( ::QVector< SireMol::AtomSelection > const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< QString >::*divide_function_type)( ::QVector< SireMol::AtomSelection > const & ) const;
             divide_function_type divide_function_value( &::SireMol::AtomProperty< QString >::divide );
             
             AtomStringProperty_exposer.def( 
@@ -176,7 +176,7 @@ void register_AtomStringProperty_class(){
         { //::SireMol::AtomProperty< QString >::divideByResidue
         
             typedef SireMol::AtomProperty< QString > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< QString >::*divideByResidue_function_type)( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< QString >::*divideByResidue_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             divideByResidue_function_type divideByResidue_function_value( &::SireMol::AtomProperty< QString >::divideByResidue );
             
             AtomStringProperty_exposer.def( 
@@ -200,7 +200,7 @@ void register_AtomStringProperty_class(){
         { //::SireMol::AtomProperty< QString >::get
         
             typedef SireMol::AtomProperty< QString > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< QString > const & ( ::SireMol::AtomProperty< QString >::*get_function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< QString >::Array const & ( ::SireMol::AtomProperty< QString >::*get_function_type)( ::SireMol::CGIdx ) const;
             get_function_type get_function_value( &::SireMol::AtomProperty< QString >::get );
             
             AtomStringProperty_exposer.def( 
@@ -261,7 +261,7 @@ void register_AtomStringProperty_class(){
         { //::SireMol::AtomProperty< QString >::merge
         
             typedef SireMol::AtomProperty< QString > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< QString >::*merge_function_type)( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< QString >::*merge_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             merge_function_type merge_function_value( &::SireMol::AtomProperty< QString >::merge );
             
             AtomStringProperty_exposer.def( 
@@ -322,7 +322,7 @@ void register_AtomStringProperty_class(){
         { //::SireMol::AtomProperty< QString >::operator[]
         
             typedef SireMol::AtomProperty< QString > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< QString > const & ( ::SireMol::AtomProperty< QString >::*__getitem___function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< QString >::Array const & ( ::SireMol::AtomProperty< QString >::*__getitem___function_type)( ::SireMol::CGIdx ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< QString >::operator[] );
             
             AtomStringProperty_exposer.def( 

@@ -53,7 +53,7 @@ void register_CovalentBondHunter_class(){
 
     { //::SireMol::CovalentBondHunter
         typedef bp::class_< SireMol::CovalentBondHunter, bp::bases< SireMol::BondHunter, SireBase::Property > > CovalentBondHunter_exposer_t;
-        CovalentBondHunter_exposer_t CovalentBondHunter_exposer = CovalentBondHunter_exposer_t( "CovalentBondHunter", bp::init< bp::optional< double > >(( bp::arg("tolerance")=1.100000000000000088817841970012523233890533447265625e+0 )) );
+        CovalentBondHunter_exposer_t CovalentBondHunter_exposer = CovalentBondHunter_exposer_t( "CovalentBondHunter", bp::init< bp::optional< double > >(( bp::arg("tolerance")=1.1000000000000001 )) );
         bp::scope CovalentBondHunter_scope( CovalentBondHunter_exposer );
         CovalentBondHunter_exposer.def( bp::init< SireMol::CovalentBondHunter const & >(( bp::arg("other") )) );
         CovalentBondHunter_exposer.def( bp::self != bp::self );

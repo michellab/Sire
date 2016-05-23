@@ -32,7 +32,7 @@ void register_InterSoftCLJFF_class(){
         { //::SireFF::Inter2B3DFF< SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential > >::energy
         
             typedef SireFF::Inter2B3DFF< SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential > > exported_class_t;
-            typedef ::SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > ( ::SireFF::Inter2B3DFF< SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential > >::*energy_function_type)(  ) ;
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireFF::Inter2B3DFF< SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential > >::*energy_function_type)(  ) ;
             energy_function_type energy_function_value( &::SireFF::Inter2B3DFF< SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential > >::energy );
             
             InterSoftCLJFF_exposer.def( 
@@ -43,7 +43,7 @@ void register_InterSoftCLJFF_class(){
         { //::SireFF::Inter2B3DFF< SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential > >::energy
         
             typedef SireFF::Inter2B3DFF< SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential > > exported_class_t;
-            typedef ::SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > ( ::SireFF::Inter2B3DFF< SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential > >::*energy_function_type)( ::SireCAS::Symbol const & ) ;
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireFF::Inter2B3DFF< SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential > >::*energy_function_type)( ::SireCAS::Symbol const & ) ;
             energy_function_type energy_function_value( &::SireFF::Inter2B3DFF< SireMM::SoftCLJPotentialInterface< SireMM::InterSoftCLJPotential > >::energy );
             
             InterSoftCLJFF_exposer.def( 

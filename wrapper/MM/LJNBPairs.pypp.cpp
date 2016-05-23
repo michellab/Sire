@@ -25,8 +25,8 @@ void register_LJNBPairs_class(){
         typedef bp::class_< SireMM::LJNBPairs, bp::bases< SireMM::AtomPairs<SireMM::LJScaleFactor>, SireMol::MoleculeProperty, SireMol::MolViewProperty, SireBase::Property > > LJNBPairs_exposer_t;
         LJNBPairs_exposer_t LJNBPairs_exposer = LJNBPairs_exposer_t( "LJNBPairs", bp::init< >() );
         bp::scope LJNBPairs_scope( LJNBPairs_exposer );
-        LJNBPairs_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireMM::LJScaleFactor const & > >(( bp::arg("molview"), bp::arg("default_scale")=SireMM::LJScaleFactor(1.0e+0) )) );
-        LJNBPairs_exposer.def( bp::init< SireMol::MoleculeInfoData const &, bp::optional< SireMM::LJScaleFactor const & > >(( bp::arg("molinfo"), bp::arg("default_scale")=SireMM::LJScaleFactor(1.0e+0) )) );
+        LJNBPairs_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireMM::LJScaleFactor const & > >(( bp::arg("molview"), bp::arg("default_scale")=SireMM::LJScaleFactor(1) )) );
+        LJNBPairs_exposer.def( bp::init< SireMol::MoleculeInfoData const &, bp::optional< SireMM::LJScaleFactor const & > >(( bp::arg("molinfo"), bp::arg("default_scale")=SireMM::LJScaleFactor(1) )) );
         LJNBPairs_exposer.def( bp::init< SireMM::CLJNBPairs const & >(( bp::arg("cljpairs") )) );
         LJNBPairs_exposer.def( bp::init< SireMM::LJNBPairs const & >(( bp::arg("other") )) );
         LJNBPairs_exposer.def( bp::self != bp::self );

@@ -34,6 +34,7 @@ void register_IDAndSet_SysID__class(){
         IDAndSet_SysID__exposer.def( bp::init< SireSystem::SysID const & >(( bp::arg("id") )) );
         IDAndSet_SysID__exposer.def( bp::init< SireSystem::SysID const &, SireSystem::SysID const & >(( bp::arg("id0"), bp::arg("id1") )) );
         IDAndSet_SysID__exposer.def( bp::init< QList< SireSystem::SysIdentifier > const & >(( bp::arg("ids") )) );
+        IDAndSet_SysID__exposer.def( bp::init< SireID::IDAndSet< SireSystem::SysID > const & >(( bp::arg("ids") )) );
         IDAndSet_SysID__exposer.def( bp::init< SireID::IDAndSet< SireSystem::SysID > const & >(( bp::arg("other") )) );
         { //::SireID::IDAndSet< SireSystem::SysID >::IDs
         
@@ -72,7 +73,7 @@ void register_IDAndSet_SysID__class(){
         { //::SireID::IDAndSet< SireSystem::SysID >::map
         
             typedef SireID::IDAndSet< SireSystem::SysID > exported_class_t;
-            typedef ::QList< SireSystem::SysIdx > ( ::SireID::IDAndSet< SireSystem::SysID >::*map_function_type)( ::SireSystem::Systems const & ) const;
+            typedef ::QList< SireSystem::SysIdx > ( ::SireID::IDAndSet< SireSystem::SysID >::*map_function_type)( ::SireID::IDAndSet< SireSystem::SysID >::SearchObject const & ) const;
             map_function_type map_function_value( &::SireID::IDAndSet< SireSystem::SysID >::map );
             
             IDAndSet_SysID__exposer.def( 

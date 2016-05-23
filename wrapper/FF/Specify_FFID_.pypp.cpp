@@ -61,7 +61,7 @@ void register_Specify_FFID__class(){
         { //::SireID::Specify< SireFF::FFID >::map
         
             typedef SireID::Specify< SireFF::FFID > exported_class_t;
-            typedef ::QList< SireFF::FFIdx > ( ::SireID::Specify< SireFF::FFID >::*map_function_type)( ::SireFF::ForceFields const & ) const;
+            typedef ::QList< SireFF::FFIdx > ( ::SireID::Specify< SireFF::FFID >::*map_function_type)( ::SireFF::FFID::SearchObject const & ) const;
             map_function_type map_function_value( &::SireID::Specify< SireFF::FFID >::map );
             
             Specify_FFID__exposer.def( 

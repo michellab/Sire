@@ -71,7 +71,7 @@ void register_AtomPolarisabilities_class(){
         { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::at
         
             typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > > const & ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::*at_function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::Array const & ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::*at_function_type)( ::SireMol::CGIdx ) const;
             at_function_type at_function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::at );
             
             AtomPolarisabilities_exposer.def( 
@@ -144,7 +144,7 @@ void register_AtomPolarisabilities_class(){
         { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::divide
         
             typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::*divide_function_type)( ::QVector< SireMol::AtomSelection > const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::*divide_function_type)( ::QVector< SireMol::AtomSelection > const & ) const;
             divide_function_type divide_function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::divide );
             
             AtomPolarisabilities_exposer.def( 
@@ -156,7 +156,7 @@ void register_AtomPolarisabilities_class(){
         { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::divideByResidue
         
             typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::*divideByResidue_function_type)( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::*divideByResidue_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             divideByResidue_function_type divideByResidue_function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::divideByResidue );
             
             AtomPolarisabilities_exposer.def( 
@@ -180,7 +180,7 @@ void register_AtomPolarisabilities_class(){
         { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::get
         
             typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > > const & ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::*get_function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::Array const & ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::*get_function_type)( ::SireMol::CGIdx ) const;
             get_function_type get_function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::get );
             
             AtomPolarisabilities_exposer.def( 
@@ -241,7 +241,7 @@ void register_AtomPolarisabilities_class(){
         { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::merge
         
             typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::*merge_function_type)( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::*merge_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             merge_function_type merge_function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::merge );
             
             AtomPolarisabilities_exposer.def( 
@@ -302,7 +302,7 @@ void register_AtomPolarisabilities_class(){
         { //::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::operator[]
         
             typedef SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > > const & ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::*__getitem___function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::Array const & ( ::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::*__getitem___function_type)( ::SireMol::CGIdx ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireUnits::Dimension::PhysUnit< 0, 3, 0, 0, 0, 0, 0 > >::operator[] );
             
             AtomPolarisabilities_exposer.def( 

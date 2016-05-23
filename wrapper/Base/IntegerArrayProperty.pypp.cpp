@@ -39,7 +39,7 @@ void register_IntegerArrayProperty_class(){
         typedef bp::class_< SireBase::IntegerArrayProperty, bp::bases< SireBase::Property > > IntegerArrayProperty_exposer_t;
         IntegerArrayProperty_exposer_t IntegerArrayProperty_exposer = IntegerArrayProperty_exposer_t( "IntegerArrayProperty", bp::init< >() );
         bp::scope IntegerArrayProperty_scope( IntegerArrayProperty_exposer );
-        IntegerArrayProperty_exposer.def( bp::init< QList< long long int > const & >(( bp::arg("array") )) );
+        IntegerArrayProperty_exposer.def( bp::init< QList< long long > const & >(( bp::arg("array") )) );
         IntegerArrayProperty_exposer.def( bp::init< QVector< long long > const & >(( bp::arg("array") )) );
         IntegerArrayProperty_exposer.def( bp::init< SireBase::IntegerArrayProperty const & >(( bp::arg("other") )) );
         IntegerArrayProperty_exposer.def( bp::self != bp::self );

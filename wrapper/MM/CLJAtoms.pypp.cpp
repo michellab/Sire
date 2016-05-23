@@ -115,7 +115,7 @@ void register_CLJAtoms_class(){
             CLJAtoms_exposer.def( 
                 "append"
                 , append_function_value
-                , ( bp::arg("atoms"), bp::arg("n")=(int)(-0x00000000000000001) ) );
+                , ( bp::arg("atoms"), bp::arg("n")=(int)(-1) ) );
         
         }
         { //::SireMM::CLJAtoms::at

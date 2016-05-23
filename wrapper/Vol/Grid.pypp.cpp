@@ -155,7 +155,7 @@ void register_Grid_class(){
             Grid_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("rotmat"), bp::arg("center")=SireMaths::Vector(0.0) ) );
+                , ( bp::arg("rotmat"), bp::arg("center")=SireMaths::Vector(0) ) );
         
         }
         { //::SireVol::Grid::rotate
@@ -166,7 +166,7 @@ void register_Grid_class(){
             Grid_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("quat"), bp::arg("center")=SireMaths::Vector(0.0) ) );
+                , ( bp::arg("quat"), bp::arg("center")=SireMaths::Vector(0) ) );
         
         }
         { //::SireVol::Grid::scale

@@ -18,7 +18,7 @@ SireUnits::Celsius __copy__(const SireUnits::Celsius &other){ return SireUnits::
 void register_Celsius_class(){
 
     { //::SireUnits::Celsius
-        typedef bp::class_< SireUnits::Celsius, bp::bases< SireUnits::Dimension::TempBase > > Celsius_exposer_t;
+        typedef bp::class_< SireUnits::Celsius > Celsius_exposer_t;
         Celsius_exposer_t Celsius_exposer = Celsius_exposer_t( "Celsius", bp::init< >() );
         bp::scope Celsius_scope( Celsius_exposer );
         Celsius_exposer.def( bp::init< double >(( bp::arg("value") )) );
@@ -90,10 +90,10 @@ void register_Celsius_class(){
                 , bp::return_self< >() );
         
         }
-        Celsius_exposer.def( bp::other< int >() * bp::self );
         Celsius_exposer.def( bp::other< double >() * bp::self );
-        Celsius_exposer.def( bp::other< int >() / bp::self );
+        Celsius_exposer.def( bp::other< int >() * bp::self );
         Celsius_exposer.def( bp::other< double >() / bp::self );
+        Celsius_exposer.def( bp::other< int >() / bp::self );
         Celsius_exposer.def( bp::other<double>() * bp::self );
         Celsius_exposer.def( bp::other<double>() / bp::self );
         Celsius_exposer.def( "__copy__", &__copy__);

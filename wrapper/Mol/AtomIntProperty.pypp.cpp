@@ -91,7 +91,7 @@ void register_AtomIntProperty_class(){
         { //::SireMol::AtomProperty< long long >::at
         
             typedef SireMol::AtomProperty< long long > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< long long int > const & ( ::SireMol::AtomProperty< long long >::*at_function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< long long >::Array const & ( ::SireMol::AtomProperty< long long >::*at_function_type)( ::SireMol::CGIdx ) const;
             at_function_type at_function_value( &::SireMol::AtomProperty< long long >::at );
             
             AtomIntProperty_exposer.def( 
@@ -164,7 +164,7 @@ void register_AtomIntProperty_class(){
         { //::SireMol::AtomProperty< long long >::divide
         
             typedef SireMol::AtomProperty< long long > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< long long >::*divide_function_type)( ::QVector< SireMol::AtomSelection > const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< long long >::*divide_function_type)( ::QVector< SireMol::AtomSelection > const & ) const;
             divide_function_type divide_function_value( &::SireMol::AtomProperty< long long >::divide );
             
             AtomIntProperty_exposer.def( 
@@ -176,7 +176,7 @@ void register_AtomIntProperty_class(){
         { //::SireMol::AtomProperty< long long >::divideByResidue
         
             typedef SireMol::AtomProperty< long long > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< long long >::*divideByResidue_function_type)( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< long long >::*divideByResidue_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             divideByResidue_function_type divideByResidue_function_value( &::SireMol::AtomProperty< long long >::divideByResidue );
             
             AtomIntProperty_exposer.def( 
@@ -200,7 +200,7 @@ void register_AtomIntProperty_class(){
         { //::SireMol::AtomProperty< long long >::get
         
             typedef SireMol::AtomProperty< long long > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< long long int > const & ( ::SireMol::AtomProperty< long long >::*get_function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< long long >::Array const & ( ::SireMol::AtomProperty< long long >::*get_function_type)( ::SireMol::CGIdx ) const;
             get_function_type get_function_value( &::SireMol::AtomProperty< long long >::get );
             
             AtomIntProperty_exposer.def( 
@@ -261,7 +261,7 @@ void register_AtomIntProperty_class(){
         { //::SireMol::AtomProperty< long long >::merge
         
             typedef SireMol::AtomProperty< long long > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< long long >::*merge_function_type)( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< long long >::*merge_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             merge_function_type merge_function_value( &::SireMol::AtomProperty< long long >::merge );
             
             AtomIntProperty_exposer.def( 
@@ -322,7 +322,7 @@ void register_AtomIntProperty_class(){
         { //::SireMol::AtomProperty< long long >::operator[]
         
             typedef SireMol::AtomProperty< long long > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< long long int > const & ( ::SireMol::AtomProperty< long long >::*__getitem___function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< long long >::Array const & ( ::SireMol::AtomProperty< long long >::*__getitem___function_type)( ::SireMol::CGIdx ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< long long >::operator[] );
             
             AtomIntProperty_exposer.def( 

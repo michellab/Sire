@@ -93,7 +93,7 @@ void register_Specify_ResID__class(){
         { //::SireID::Specify< SireMol::ResID >::map
         
             typedef SireID::Specify< SireMol::ResID > exported_class_t;
-            typedef ::QList< SireMol::ResIdx > ( ::SireID::Specify< SireMol::ResID >::*map_function_type)( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::ResIdx > ( ::SireID::Specify< SireMol::ResID >::*map_function_type)( ::SireMol::ResID::SearchObject const & ) const;
             map_function_type map_function_value( &::SireID::Specify< SireMol::ResID >::map );
             
             Specify_ResID__exposer.def( 

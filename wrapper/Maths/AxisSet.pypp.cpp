@@ -27,7 +27,7 @@ void register_AxisSet_class(){
         typedef bp::class_< SireMaths::AxisSet > AxisSet_exposer_t;
         AxisSet_exposer_t AxisSet_exposer = AxisSet_exposer_t( "AxisSet", bp::init< >() );
         bp::scope AxisSet_scope( AxisSet_exposer );
-        AxisSet_exposer.def( bp::init< SireMaths::Matrix const &, bp::optional< SireMaths::Vector > >(( bp::arg("matrx"), bp::arg("orign")=SireMaths::Vector(0.0) )) );
+        AxisSet_exposer.def( bp::init< SireMaths::Matrix const &, bp::optional< SireMaths::Vector > >(( bp::arg("matrx"), bp::arg("orign")=SireMaths::Vector() )) );
         AxisSet_exposer.def( bp::init< SireMaths::AxisSet const & >(( bp::arg("other") )) );
         { //::SireMaths::AxisSet::fromFrame
         

@@ -47,7 +47,7 @@ void register_Vector_class(){
 
     { //::SireMaths::Vector
         typedef bp::class_< SireMaths::Vector > Vector_exposer_t;
-        Vector_exposer_t Vector_exposer = Vector_exposer_t( "Vector", bp::init< bp::optional< double > >(( bp::arg("val")=0.0 )) );
+        Vector_exposer_t Vector_exposer = Vector_exposer_t( "Vector", bp::init< bp::optional< double > >(( bp::arg("val")=0. )) );
         bp::scope Vector_scope( Vector_exposer );
         Vector_exposer.def( bp::init< double, double, double >(( bp::arg("xpos"), bp::arg("ypos"), bp::arg("zpos") )) );
         Vector_exposer.def( bp::init< boost::tuples::tuple< double, double, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > const & >(( bp::arg("pos") )) );
@@ -614,8 +614,8 @@ void register_Vector_class(){
         Vector_exposer.staticmethod( "invDistance2" );
         Vector_exposer.staticmethod( "typeName" );
         Vector_exposer.def( bp::self * bp::other< SireMaths::Quaternion >() );
-        Vector_exposer.def( bp::other< double >() * bp::self );
         Vector_exposer.def( bp::self * bp::other< double >() );
+        Vector_exposer.def( bp::other< double >() * bp::self );
         Vector_exposer.def( bp::self + bp::self );
         Vector_exposer.def( bp::self - bp::self );
         Vector_exposer.def( bp::self / bp::other< double >() );

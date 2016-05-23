@@ -91,7 +91,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::at
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< double > const & ( ::SireMol::AtomProperty< double >::*at_function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< double >::Array const & ( ::SireMol::AtomProperty< double >::*at_function_type)( ::SireMol::CGIdx ) const;
             at_function_type at_function_value( &::SireMol::AtomProperty< double >::at );
             
             AtomFloatProperty_exposer.def( 
@@ -164,7 +164,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::divide
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< double >::*divide_function_type)( ::QVector< SireMol::AtomSelection > const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< double >::*divide_function_type)( ::QVector< SireMol::AtomSelection > const & ) const;
             divide_function_type divide_function_value( &::SireMol::AtomProperty< double >::divide );
             
             AtomFloatProperty_exposer.def( 
@@ -176,7 +176,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::divideByResidue
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< double >::*divideByResidue_function_type)( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< double >::*divideByResidue_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             divideByResidue_function_type divideByResidue_function_value( &::SireMol::AtomProperty< double >::divideByResidue );
             
             AtomFloatProperty_exposer.def( 
@@ -200,7 +200,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::get
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< double > const & ( ::SireMol::AtomProperty< double >::*get_function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< double >::Array const & ( ::SireMol::AtomProperty< double >::*get_function_type)( ::SireMol::CGIdx ) const;
             get_function_type get_function_value( &::SireMol::AtomProperty< double >::get );
             
             AtomFloatProperty_exposer.def( 
@@ -261,7 +261,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::merge
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< double >::*merge_function_type)( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< double >::*merge_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             merge_function_type merge_function_value( &::SireMol::AtomProperty< double >::merge );
             
             AtomFloatProperty_exposer.def( 
@@ -322,7 +322,7 @@ void register_AtomFloatProperty_class(){
         { //::SireMol::AtomProperty< double >::operator[]
         
             typedef SireMol::AtomProperty< double > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< double > const & ( ::SireMol::AtomProperty< double >::*__getitem___function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< double >::Array const & ( ::SireMol::AtomProperty< double >::*__getitem___function_type)( ::SireMol::CGIdx ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< double >::operator[] );
             
             AtomFloatProperty_exposer.def( 

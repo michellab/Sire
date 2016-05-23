@@ -74,7 +74,7 @@ void register_InternalFF_class(){
         }
         { //::SireMM::InternalFF::components
         
-            typedef ::SireMM::InternalComponent const & ( ::SireMM::InternalFF::*components_function_type)(  ) const;
+            typedef ::SireMM::InternalFF::Components const & ( ::SireMM::InternalFF::*components_function_type)(  ) const;
             components_function_type components_function_value( &::SireMM::InternalFF::components );
             
             InternalFF_exposer.def( 
@@ -259,7 +259,7 @@ void register_InternalFF_class(){
         InternalFF_exposer.def( bp::self == bp::self );
         { //::SireMM::InternalFF::parameters
         
-            typedef ::SireMM::InternalParameterNames3D const & ( ::SireMM::InternalFF::*parameters_function_type)(  ) const;
+            typedef ::SireMM::InternalFF::ParameterNames const & ( ::SireMM::InternalFF::*parameters_function_type)(  ) const;
             parameters_function_type parameters_function_value( &::SireMM::InternalFF::parameters );
             
             InternalFF_exposer.def( 

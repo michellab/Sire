@@ -61,7 +61,7 @@ void register_Specify_MonitorID__class(){
         { //::SireID::Specify< SireSystem::MonitorID >::map
         
             typedef SireID::Specify< SireSystem::MonitorID > exported_class_t;
-            typedef ::QList< SireSystem::MonitorName > ( ::SireID::Specify< SireSystem::MonitorID >::*map_function_type)( ::SireSystem::SystemMonitors const & ) const;
+            typedef ::QList< SireSystem::MonitorName > ( ::SireID::Specify< SireSystem::MonitorID >::*map_function_type)( ::SireSystem::MonitorID::SearchObject const & ) const;
             map_function_type map_function_value( &::SireID::Specify< SireSystem::MonitorID >::map );
             
             Specify_MonitorID__exposer.def( 

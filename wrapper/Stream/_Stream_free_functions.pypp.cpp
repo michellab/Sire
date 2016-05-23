@@ -187,18 +187,6 @@ void register_free_functions(){
 
     { //::SireStream::getDataHeader
     
-        typedef ::SireStream::FileHeader ( *getDataHeader_function_type )( ::QString const & );
-        getDataHeader_function_type getDataHeader_function_value( &::SireStream::getDataHeader );
-        
-        bp::def( 
-            "getDataHeader"
-            , getDataHeader_function_value
-            , ( bp::arg("filename") ) );
-    
-    }
-
-    { //::SireStream::getDataHeader
-    
         typedef ::SireStream::FileHeader ( *getDataHeader_function_type )( ::QByteArray const & );
         getDataHeader_function_type getDataHeader_function_value( &::SireStream::getDataHeader );
         
@@ -206,6 +194,18 @@ void register_free_functions(){
             "getDataHeader"
             , getDataHeader_function_value
             , ( bp::arg("data") ) );
+    
+    }
+
+    { //::SireStream::getDataHeader
+    
+        typedef ::SireStream::FileHeader ( *getDataHeader_function_type )( ::QString const & );
+        getDataHeader_function_type getDataHeader_function_value( &::SireStream::getDataHeader );
+        
+        bp::def( 
+            "getDataHeader"
+            , getDataHeader_function_value
+            , ( bp::arg("filename") ) );
     
     }
 

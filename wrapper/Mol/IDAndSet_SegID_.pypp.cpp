@@ -64,6 +64,7 @@ void register_IDAndSet_SegID__class(){
         IDAndSet_SegID__exposer.def( bp::init< SireMol::SegID const & >(( bp::arg("id") )) );
         IDAndSet_SegID__exposer.def( bp::init< SireMol::SegID const &, SireMol::SegID const & >(( bp::arg("id0"), bp::arg("id1") )) );
         IDAndSet_SegID__exposer.def( bp::init< QList< SireMol::SegIdentifier > const & >(( bp::arg("ids") )) );
+        IDAndSet_SegID__exposer.def( bp::init< SireID::IDAndSet< SireMol::SegID > const & >(( bp::arg("ids") )) );
         IDAndSet_SegID__exposer.def( bp::init< SireID::IDAndSet< SireMol::SegID > const & >(( bp::arg("other") )) );
         { //::SireID::IDAndSet< SireMol::SegID >::IDs
         
@@ -102,7 +103,7 @@ void register_IDAndSet_SegID__class(){
         { //::SireID::IDAndSet< SireMol::SegID >::map
         
             typedef SireID::IDAndSet< SireMol::SegID > exported_class_t;
-            typedef ::QList< SireMol::SegIdx > ( ::SireID::IDAndSet< SireMol::SegID >::*map_function_type)( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::SegIdx > ( ::SireID::IDAndSet< SireMol::SegID >::*map_function_type)( ::SireID::IDAndSet< SireMol::SegID >::SearchObject const & ) const;
             map_function_type map_function_value( &::SireID::IDAndSet< SireMol::SegID >::map );
             
             IDAndSet_SegID__exposer.def( 

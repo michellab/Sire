@@ -69,7 +69,7 @@ void register_NullGrid_class(){
             NullGrid_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("rotmat"), bp::arg("center")=SireMaths::Vector(0.0) ) );
+                , ( bp::arg("rotmat"), bp::arg("center")=SireMaths::Vector(0) ) );
         
         }
         { //::SireVol::NullGrid::rotate
@@ -80,7 +80,7 @@ void register_NullGrid_class(){
             NullGrid_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("quat"), bp::arg("center")=SireMaths::Vector(0.0) ) );
+                , ( bp::arg("quat"), bp::arg("center")=SireMaths::Vector(0) ) );
         
         }
         { //::SireVol::NullGrid::scale

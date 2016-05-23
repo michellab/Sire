@@ -36,6 +36,7 @@ void register_IDOrSet_FFID__class(){
         IDOrSet_FFID__exposer.def( bp::init< SireFF::FFID const & >(( bp::arg("id") )) );
         IDOrSet_FFID__exposer.def( bp::init< SireFF::FFID const &, SireFF::FFID const & >(( bp::arg("id0"), bp::arg("id1") )) );
         IDOrSet_FFID__exposer.def( bp::init< QList< SireFF::FFIdentifier > const & >(( bp::arg("ids") )) );
+        IDOrSet_FFID__exposer.def( bp::init< SireID::IDOrSet< SireFF::FFID > const & >(( bp::arg("ids") )) );
         IDOrSet_FFID__exposer.def( bp::init< SireID::IDOrSet< SireFF::FFID > const & >(( bp::arg("other") )) );
         { //::SireID::IDOrSet< SireFF::FFID >::IDs
         
@@ -74,7 +75,7 @@ void register_IDOrSet_FFID__class(){
         { //::SireID::IDOrSet< SireFF::FFID >::map
         
             typedef SireID::IDOrSet< SireFF::FFID > exported_class_t;
-            typedef ::QList< SireFF::FFIdx > ( ::SireID::IDOrSet< SireFF::FFID >::*map_function_type)( ::SireFF::ForceFields const & ) const;
+            typedef ::QList< SireFF::FFIdx > ( ::SireID::IDOrSet< SireFF::FFID >::*map_function_type)( ::SireID::IDOrSet< SireFF::FFID >::SearchObject const & ) const;
             map_function_type map_function_value( &::SireID::IDOrSet< SireFF::FFID >::map );
             
             IDOrSet_FFID__exposer.def( 

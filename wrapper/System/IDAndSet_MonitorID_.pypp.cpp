@@ -36,6 +36,7 @@ void register_IDAndSet_MonitorID__class(){
         IDAndSet_MonitorID__exposer.def( bp::init< SireSystem::MonitorID const & >(( bp::arg("id") )) );
         IDAndSet_MonitorID__exposer.def( bp::init< SireSystem::MonitorID const &, SireSystem::MonitorID const & >(( bp::arg("id0"), bp::arg("id1") )) );
         IDAndSet_MonitorID__exposer.def( bp::init< QList< SireSystem::MonitorIdentifier > const & >(( bp::arg("ids") )) );
+        IDAndSet_MonitorID__exposer.def( bp::init< SireID::IDAndSet< SireSystem::MonitorID > const & >(( bp::arg("ids") )) );
         IDAndSet_MonitorID__exposer.def( bp::init< SireID::IDAndSet< SireSystem::MonitorID > const & >(( bp::arg("other") )) );
         { //::SireID::IDAndSet< SireSystem::MonitorID >::IDs
         
@@ -74,7 +75,7 @@ void register_IDAndSet_MonitorID__class(){
         { //::SireID::IDAndSet< SireSystem::MonitorID >::map
         
             typedef SireID::IDAndSet< SireSystem::MonitorID > exported_class_t;
-            typedef ::QList< SireSystem::MonitorName > ( ::SireID::IDAndSet< SireSystem::MonitorID >::*map_function_type)( ::SireSystem::SystemMonitors const & ) const;
+            typedef ::QList< SireSystem::MonitorName > ( ::SireID::IDAndSet< SireSystem::MonitorID >::*map_function_type)( ::SireID::IDAndSet< SireSystem::MonitorID >::SearchObject const & ) const;
             map_function_type map_function_value( &::SireID::IDAndSet< SireSystem::MonitorID >::map );
             
             IDAndSet_MonitorID__exposer.def( 

@@ -52,7 +52,7 @@ void register_QMFF_class(){
         QMFF_exposer.def( bp::init< Squire::QMFF const & >(( bp::arg("other") )) );
         { //::Squire::QMFF::components
         
-            typedef ::Squire::QMComponent const & ( ::Squire::QMFF::*components_function_type)(  ) const;
+            typedef ::Squire::QMPotential::Components const & ( ::Squire::QMFF::*components_function_type)(  ) const;
             components_function_type components_function_value( &::Squire::QMFF::components );
             
             QMFF_exposer.def( 
@@ -229,7 +229,7 @@ void register_QMFF_class(){
         QMFF_exposer.def( bp::self == bp::self );
         { //::Squire::QMFF::parameters
         
-            typedef ::SireFF::detail::AtomicParameters3D< SireMol::Element > ( ::Squire::QMFF::*parameters_function_type)(  ) const;
+            typedef ::Squire::QMFF::Parameters ( ::Squire::QMFF::*parameters_function_type)(  ) const;
             parameters_function_type parameters_function_value( &::Squire::QMFF::parameters );
             
             QMFF_exposer.def( 

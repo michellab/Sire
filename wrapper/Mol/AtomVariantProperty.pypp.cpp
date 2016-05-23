@@ -91,7 +91,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::at
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< QVariant > const & ( ::SireMol::AtomProperty< QVariant >::*at_function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< QVariant >::Array const & ( ::SireMol::AtomProperty< QVariant >::*at_function_type)( ::SireMol::CGIdx ) const;
             at_function_type at_function_value( &::SireMol::AtomProperty< QVariant >::at );
             
             AtomVariantProperty_exposer.def( 
@@ -164,7 +164,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::divide
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< QVariant >::*divide_function_type)( ::QVector< SireMol::AtomSelection > const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< QVariant >::*divide_function_type)( ::QVector< SireMol::AtomSelection > const & ) const;
             divide_function_type divide_function_value( &::SireMol::AtomProperty< QVariant >::divide );
             
             AtomVariantProperty_exposer.def( 
@@ -176,7 +176,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::divideByResidue
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< QVariant >::*divideByResidue_function_type)( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< QVariant >::*divideByResidue_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             divideByResidue_function_type divideByResidue_function_value( &::SireMol::AtomProperty< QVariant >::divideByResidue );
             
             AtomVariantProperty_exposer.def( 
@@ -200,7 +200,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::get
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< QVariant > const & ( ::SireMol::AtomProperty< QVariant >::*get_function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< QVariant >::Array const & ( ::SireMol::AtomProperty< QVariant >::*get_function_type)( ::SireMol::CGIdx ) const;
             get_function_type get_function_value( &::SireMol::AtomProperty< QVariant >::get );
             
             AtomVariantProperty_exposer.def( 
@@ -261,7 +261,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::merge
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< QVariant >::*merge_function_type)( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< QVariant >::*merge_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             merge_function_type merge_function_value( &::SireMol::AtomProperty< QVariant >::merge );
             
             AtomVariantProperty_exposer.def( 
@@ -322,7 +322,7 @@ void register_AtomVariantProperty_class(){
         { //::SireMol::AtomProperty< QVariant >::operator[]
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< QVariant > const & ( ::SireMol::AtomProperty< QVariant >::*__getitem___function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< QVariant >::Array const & ( ::SireMol::AtomProperty< QVariant >::*__getitem___function_type)( ::SireMol::CGIdx ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< QVariant >::operator[] );
             
             AtomVariantProperty_exposer.def( 

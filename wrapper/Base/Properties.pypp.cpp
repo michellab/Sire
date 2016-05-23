@@ -36,8 +36,9 @@ void register_Properties_class(){
 
     { //::SireBase::Properties
         typedef bp::class_< SireBase::Properties, bp::bases< SireBase::Property > > Properties_exposer_t;
-        Properties_exposer_t Properties_exposer = Properties_exposer_t( "Properties", bp::init< >() );
+        Properties_exposer_t Properties_exposer = Properties_exposer_t( "Properties", bp::no_init );
         bp::scope Properties_scope( Properties_exposer );
+        Properties_exposer.def( bp::init< >() );
         Properties_exposer.def( bp::init< SireBase::Properties const & >(( bp::arg("other") )) );
         { //::SireBase::Properties::allMetadata
         
@@ -95,16 +96,6 @@ void register_Properties_class(){
                 , ( bp::arg("key") ) );
         
         }
-        { //::SireBase::Properties::begin
-        
-            typedef ::QHash< QString, SireBase::PropPtr< SireBase::Property > >::const_iterator ( ::SireBase::Properties::*begin_function_type)(  ) const;
-            begin_function_type begin_function_value( &::SireBase::Properties::begin );
-            
-            Properties_exposer.def( 
-                "begin"
-                , begin_function_value );
-        
-        }
         { //::SireBase::Properties::clear
         
             typedef void ( ::SireBase::Properties::*clear_function_type)(  ) ;
@@ -115,37 +106,6 @@ void register_Properties_class(){
                 , clear_function_value );
         
         }
-        { //::SireBase::Properties::constBegin
-        
-            typedef ::QHash< QString, SireBase::PropPtr< SireBase::Property > >::const_iterator ( ::SireBase::Properties::*constBegin_function_type)(  ) const;
-            constBegin_function_type constBegin_function_value( &::SireBase::Properties::constBegin );
-            
-            Properties_exposer.def( 
-                "constBegin"
-                , constBegin_function_value );
-        
-        }
-        { //::SireBase::Properties::constEnd
-        
-            typedef ::QHash< QString, SireBase::PropPtr< SireBase::Property > >::const_iterator ( ::SireBase::Properties::*constEnd_function_type)(  ) const;
-            constEnd_function_type constEnd_function_value( &::SireBase::Properties::constEnd );
-            
-            Properties_exposer.def( 
-                "constEnd"
-                , constEnd_function_value );
-        
-        }
-        { //::SireBase::Properties::constFind
-        
-            typedef ::QHash< QString, SireBase::PropPtr< SireBase::Property > >::const_iterator ( ::SireBase::Properties::*constFind_function_type)( ::QString const & ) const;
-            constFind_function_type constFind_function_value( &::SireBase::Properties::constFind );
-            
-            Properties_exposer.def( 
-                "constFind"
-                , constFind_function_value
-                , ( bp::arg("key") ) );
-        
-        }
         { //::SireBase::Properties::count
         
             typedef int ( ::SireBase::Properties::*count_function_type)(  ) const;
@@ -154,27 +114,6 @@ void register_Properties_class(){
             Properties_exposer.def( 
                 "count"
                 , count_function_value );
-        
-        }
-        { //::SireBase::Properties::end
-        
-            typedef ::QHash< QString, SireBase::PropPtr< SireBase::Property > >::const_iterator ( ::SireBase::Properties::*end_function_type)(  ) const;
-            end_function_type end_function_value( &::SireBase::Properties::end );
-            
-            Properties_exposer.def( 
-                "end"
-                , end_function_value );
-        
-        }
-        { //::SireBase::Properties::find
-        
-            typedef ::QHash< QString, SireBase::PropPtr< SireBase::Property > >::const_iterator ( ::SireBase::Properties::*find_function_type)( ::QString const & ) const;
-            find_function_type find_function_value( &::SireBase::Properties::find );
-            
-            Properties_exposer.def( 
-                "find"
-                , find_function_value
-                , ( bp::arg("key") ) );
         
         }
         { //::SireBase::Properties::hasMetadata

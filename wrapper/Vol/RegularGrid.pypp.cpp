@@ -126,7 +126,7 @@ void register_RegularGrid_class(){
             RegularGrid_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("rotmat"), bp::arg("center")=SireMaths::Vector(0.0) ) );
+                , ( bp::arg("rotmat"), bp::arg("center")=SireMaths::Vector(0) ) );
         
         }
         { //::SireVol::RegularGrid::rotate
@@ -137,7 +137,7 @@ void register_RegularGrid_class(){
             RegularGrid_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("quat"), bp::arg("center")=SireMaths::Vector(0.0) ) );
+                , ( bp::arg("quat"), bp::arg("center")=SireMaths::Vector(0) ) );
         
         }
         { //::SireVol::RegularGrid::scale

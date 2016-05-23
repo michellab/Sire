@@ -54,7 +54,7 @@ void register_Selector_Residue__class(){
         Selector_Residue__exposer.def( bp::init< SireMol::Residue const & >(( bp::arg("view") )) );
         Selector_Residue__exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("moldata") )) );
         Selector_Residue__exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::AtomSelection const & >(( bp::arg("moldata"), bp::arg("selected_atoms") )) );
-        Selector_Residue__exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::ResID const & >(( bp::arg("moldata"), bp::arg("viewid") )) );
+        Selector_Residue__exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::Residue::ID const & >(( bp::arg("moldata"), bp::arg("viewid") )) );
         Selector_Residue__exposer.def( bp::init< SireMol::MoleculeData const &, QList< SireMol::ResIdx > const & >(( bp::arg("moldata"), bp::arg("idxs") )) );
         Selector_Residue__exposer.def( bp::init< SireMol::Selector< SireMol::Residue > const & >(( bp::arg("other") )) );
         { //::SireMol::Selector< SireMol::Residue >::add
@@ -84,7 +84,7 @@ void register_Selector_Residue__class(){
         { //::SireMol::Selector< SireMol::Residue >::add
         
             typedef SireMol::Selector< SireMol::Residue > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Residue > ( ::SireMol::Selector< SireMol::Residue >::*add_function_type)( ::SireMol::ResID const & ) const;
+            typedef ::SireMol::Selector< SireMol::Residue > ( ::SireMol::Selector< SireMol::Residue >::*add_function_type)( ::SireMol::Residue::ID const & ) const;
             add_function_type add_function_value( &::SireMol::Selector< SireMol::Residue >::add );
             
             Selector_Residue__exposer.def( 
@@ -144,7 +144,7 @@ void register_Selector_Residue__class(){
         { //::SireMol::Selector< SireMol::Residue >::contains
         
             typedef SireMol::Selector< SireMol::Residue > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Residue >::*contains_function_type)( ::SireMol::ResID const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Residue >::*contains_function_type)( ::SireMol::Residue::ID const & ) const;
             contains_function_type contains_function_value( &::SireMol::Selector< SireMol::Residue >::contains );
             
             Selector_Residue__exposer.def( 
@@ -238,7 +238,7 @@ void register_Selector_Residue__class(){
         { //::SireMol::Selector< SireMol::Residue >::index
         
             typedef SireMol::Selector< SireMol::Residue > exported_class_t;
-            typedef ::SireMol::ResIdx ( ::SireMol::Selector< SireMol::Residue >::*index_function_type)( int ) const;
+            typedef ::SireMol::Residue::Index ( ::SireMol::Selector< SireMol::Residue >::*index_function_type)( int ) const;
             index_function_type index_function_value( &::SireMol::Selector< SireMol::Residue >::index );
             
             Selector_Residue__exposer.def( 
@@ -274,7 +274,7 @@ void register_Selector_Residue__class(){
         { //::SireMol::Selector< SireMol::Residue >::intersection
         
             typedef SireMol::Selector< SireMol::Residue > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Residue > ( ::SireMol::Selector< SireMol::Residue >::*intersection_function_type)( ::SireMol::ResID const & ) const;
+            typedef ::SireMol::Selector< SireMol::Residue > ( ::SireMol::Selector< SireMol::Residue >::*intersection_function_type)( ::SireMol::Residue::ID const & ) const;
             intersection_function_type intersection_function_value( &::SireMol::Selector< SireMol::Residue >::intersection );
             
             Selector_Residue__exposer.def( 
@@ -310,7 +310,7 @@ void register_Selector_Residue__class(){
         { //::SireMol::Selector< SireMol::Residue >::intersects
         
             typedef SireMol::Selector< SireMol::Residue > exported_class_t;
-            typedef bool ( ::SireMol::Selector< SireMol::Residue >::*intersects_function_type)( ::SireMol::ResID const & ) const;
+            typedef bool ( ::SireMol::Selector< SireMol::Residue >::*intersects_function_type)( ::SireMol::Residue::ID const & ) const;
             intersects_function_type intersects_function_value( &::SireMol::Selector< SireMol::Residue >::intersects );
             
             Selector_Residue__exposer.def( 
@@ -588,7 +588,7 @@ void register_Selector_Residue__class(){
         { //::SireMol::Selector< SireMol::Residue >::subtract
         
             typedef SireMol::Selector< SireMol::Residue > exported_class_t;
-            typedef ::SireMol::Selector< SireMol::Residue > ( ::SireMol::Selector< SireMol::Residue >::*subtract_function_type)( ::SireMol::ResID const & ) const;
+            typedef ::SireMol::Selector< SireMol::Residue > ( ::SireMol::Selector< SireMol::Residue >::*subtract_function_type)( ::SireMol::Residue::ID const & ) const;
             subtract_function_type subtract_function_value( &::SireMol::Selector< SireMol::Residue >::subtract );
             
             Selector_Residue__exposer.def( 

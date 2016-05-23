@@ -177,7 +177,7 @@ void register_Mover_Selector_CutGroup__class(){
         { //::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::change
         
             typedef SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > & ( ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::*change_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > & ( ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::*change_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::Length,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::change );
             
             Mover_Selector_CutGroup__exposer.def( 
@@ -190,7 +190,7 @@ void register_Mover_Selector_CutGroup__class(){
         { //::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::change
         
             typedef SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > & ( ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::*change_function_type)( ::SireMol::AngleID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > & ( ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::*change_function_type)( ::SireMol::AngleID const &,::SireUnits::Dimension::Angle,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::change );
             
             Mover_Selector_CutGroup__exposer.def( 
@@ -203,7 +203,7 @@ void register_Mover_Selector_CutGroup__class(){
         { //::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::change
         
             typedef SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > & ( ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::*change_function_type)( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > & ( ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::*change_function_type)( ::SireMol::DihedralID const &,::SireUnits::Dimension::Angle,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::change );
             
             Mover_Selector_CutGroup__exposer.def( 
@@ -216,7 +216,7 @@ void register_Mover_Selector_CutGroup__class(){
         { //::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::change
         
             typedef SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > & ( ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::*change_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > & ( ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::*change_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::Angle,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::change );
             
             Mover_Selector_CutGroup__exposer.def( 
@@ -229,7 +229,7 @@ void register_Mover_Selector_CutGroup__class(){
         { //::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::change
         
             typedef SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > & ( ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::*change_function_type)( ::SireMol::ImproperID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > & ( ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::*change_function_type)( ::SireMol::ImproperID const &,::SireUnits::Dimension::Angle,::SireBase::PropertyMap const & ) ;
             change_function_type change_function_value( &::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::change );
             
             Mover_Selector_CutGroup__exposer.def( 
@@ -331,7 +331,7 @@ void register_Mover_Selector_CutGroup__class(){
         { //::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::set
         
             typedef SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > & ( ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::*set_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::PhysUnit< 0, 1, 0, 0, 0, 0, 0 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > & ( ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::*set_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::Length,::SireBase::PropertyMap const & ) ;
             set_function_type set_function_value( &::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::set );
             
             Mover_Selector_CutGroup__exposer.def( 
@@ -344,7 +344,7 @@ void register_Mover_Selector_CutGroup__class(){
         { //::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::set
         
             typedef SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > & ( ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::*set_function_type)( ::SireMol::AngleID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > & ( ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::*set_function_type)( ::SireMol::AngleID const &,::SireUnits::Dimension::Angle,::SireBase::PropertyMap const & ) ;
             set_function_type set_function_value( &::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::set );
             
             Mover_Selector_CutGroup__exposer.def( 
@@ -357,7 +357,7 @@ void register_Mover_Selector_CutGroup__class(){
         { //::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::set
         
             typedef SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > & ( ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::*set_function_type)( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > & ( ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::*set_function_type)( ::SireMol::DihedralID const &,::SireUnits::Dimension::Angle,::SireBase::PropertyMap const & ) ;
             set_function_type set_function_value( &::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::set );
             
             Mover_Selector_CutGroup__exposer.def( 
@@ -370,7 +370,7 @@ void register_Mover_Selector_CutGroup__class(){
         { //::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::set
         
             typedef SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > & ( ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::*set_function_type)( ::SireMol::ImproperID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > & ( ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::*set_function_type)( ::SireMol::ImproperID const &,::SireUnits::Dimension::Angle,::SireBase::PropertyMap const & ) ;
             set_function_type set_function_value( &::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::set );
             
             Mover_Selector_CutGroup__exposer.def( 
@@ -383,7 +383,7 @@ void register_Mover_Selector_CutGroup__class(){
         { //::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::setAll
         
             typedef SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > exported_class_t;
-            typedef ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > & ( ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::*setAll_function_type)( ::SireMol::DihedralID const &,::SireUnits::Dimension::PhysUnit< 0, 0, 0, 0, 0, 0, 1 >,::SireBase::PropertyMap const & ) ;
+            typedef ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > > & ( ::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::*setAll_function_type)( ::SireMol::DihedralID const &,::SireUnits::Dimension::Angle,::SireBase::PropertyMap const & ) ;
             setAll_function_type setAll_function_value( &::SireMol::Mover< SireMol::Selector< SireMol::CutGroup > >::setAll );
             
             Mover_Selector_CutGroup__exposer.def( 

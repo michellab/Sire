@@ -21,6 +21,8 @@ namespace bp = boost::python;
 
 #include "SireStream/shareddatastream.h"
 
+#include "SireStream/streamdata.hpp"
+
 #include "SireUnits/units.h"
 
 #include "atomljs.h"

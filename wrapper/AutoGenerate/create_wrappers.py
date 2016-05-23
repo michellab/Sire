@@ -11,6 +11,7 @@ import os
 import sys
 import pickle
 import re
+import logging
 
 from glob import glob
 
@@ -24,6 +25,7 @@ from pyplusplus.code_creators import algorithm
 from pyplusplus.code_creators import free_function_t
 from pyplusplus.code_creators import mem_fun_t
 from pyplusplus.decl_wrappers import call_policies
+import pyplusplus
 
 from pygccxml.declarations.matchers import access_type_matcher_t
 from pygccxml import declarations
@@ -44,10 +46,18 @@ def _generate_bases(self, base_creators):
         if base_desc.access != declarations.ACCESS_TYPES.PUBLIC:
             continue
 
-        #only include bases that are in the global list
-        if (base_desc.related_class.demangled in all_exposed_classes):
-            bases.append( algorithm.create_identifier( self, base_desc.related_class.decl_string ) )
-    
+        try:
+            #only include bases that are in the global list
+            if (base_desc.related_class.demangled in all_exposed_classes):
+                bases.append( algorithm.create_identifier( self, base_desc.related_class.decl_string ) )
+        except:
+            # doesn't work with CastXML
+            demangled = "%s::%s" % (base_desc.related_class.parent.name,
+                                    base_desc.related_class.name)
+
+            if (demangled in all_exposed_classes):
+                bases.append( algorithm.create_identifier( self, base_desc.related_class.decl_string ) )
+
     if not bases:
         return None
     
@@ -178,7 +188,13 @@ def export_function(mb, function, includes):
                    for include in includes:
                        f.add_declaration_code("#include %s" % include)
    except:
-       print("Something went wrong exporting %s" % name)
+       for f in mb.free_functions(name):
+           # demangled doesn't work with CastXML      
+           if root.find(str(f.parent.name)) != -1:
+               f.include()
+
+               for include in includes:
+                   f.add_declaration_code("#include %s" % include)
 
 def has_clone_function(t):
     c = None
@@ -284,7 +300,9 @@ def export_class(mb, classname, aliases, includes, special_code, auto_str_functi
    for decl in c.decls():
        try:
            if str(decl.return_type) != "char const *":
-               if str(decl.return_type).endswith("*"):
+               rt = str(decl.return_type)
+               if rt.endswith("*") or \
+                  rt.endswith("::iterator") or rt.endswith("::const_iterator"):
                    decl.exclude()
        except:
            pass
@@ -578,6 +596,10 @@ if __name__ == "__main__":
     boost_include_dirs = [ boostdir ]
     gsl_include_dirs = [ gsldir ]
 
+    generator_path, generator_name = pygccxml.utils.find_xml_generator()
+
+    print("%s | %s" % (generator_path, generator_name))
+
     if openmm_include_dir is not None:
         if os.path.exists("%s/OpenMM.h" % openmm_include_dir):
             print("Generating wrappers including OpenMM from %s" % openmm_include_dir)
@@ -586,30 +608,47 @@ if __name__ == "__main__":
             print("Cannot find %s/OpenMM.h - disabling generation of OpenMM wrappers." % openmm_include_dir)
             openmm_include_dirs = None
 
+    if os.getenv("VERBOSE"):
+        pygccxml.utils.loggers.cxx_parser.setLevel(logging.DEBUG)
+
     if openmm_include_dirs is None:
         #construct a module builder that will build all of the wrappers for this module
-        mb = module_builder_t( files = [ "active_headers.h" ],
-                           cflags = "-m64 -fPIC",
-                           include_paths = sire_include_dirs + qt_include_dirs +
+        xml_generator_config = pygccxml.parser.xml_generator_configuration_t( 
+                                xml_generator_path=generator_path,
+                                xml_generator=generator_name,
+                                compiler="gcc",
+                                cflags = "-m64 -fPIC",
+                                include_paths = sire_include_dirs + qt_include_dirs +
                                            boost_include_dirs + gsl_include_dirs,
-                           define_symbols = ["GCCXML_PARSE", "__PIE__",
-                                             "SIRE_SKIP_INLINE_FUNCTIONS",
-                                             "SIREN_SKIP_INLINE_FUNCTIONS",
-                                             "SIRE_INSTANTIATE_TEMPLATES",
-                                             "SIREN_INSTANTIATE_TEMPLATES"] )
+                                define_symbols = ["GCCXML_PARSE", "__PIE__",
+                                                  "SIRE_SKIP_INLINE_FUNCTIONS",
+                                                  "SIREN_SKIP_INLINE_FUNCTIONS",
+                                                  "SIRE_INSTANTIATE_TEMPLATES",
+                                                  "SIREN_INSTANTIATE_TEMPLATES"]
+                         )
+
+        mb = module_builder_t( files = [ "active_headers.h" ],
+                               gccxml_config=xml_generator_config )
     else:
         #construct a module builder that will build all of the wrappers for this module
-        mb = module_builder_t( files = [ "active_headers.h" ],
-                           cflags = "-m64 -fPIC",
-                           include_paths = sire_include_dirs + qt_include_dirs +
-                                           boost_include_dirs + gsl_include_dirs + 
+        xml_generator_config = pygccxml.parser.xml_generator_configuration_t(
+                                xml_generator_path=generator_path,
+                                xml_generator=generator_name,
+                                compiler="gcc",
+                                cflags = "-m64 -fPIC",
+                                include_paths = sire_include_dirs + qt_include_dirs +
+                                           boost_include_dirs + gsl_include_dirs +
                                            openmm_include_dirs,
-                           define_symbols = ["GCCXML_PARSE", "__PIE__",
-                                             "SIRE_USE_OPENMM",
-                                             "SIRE_SKIP_INLINE_FUNCTIONS",
-                                             "SIREN_SKIP_INLINE_FUNCTIONS",
-                                             "SIRE_INSTANTIATE_TEMPLATES",
-                                             "SIREN_INSTANTIATE_TEMPLATES"] )
+                                define_symbols = ["GCCXML_PARSE", "__PIE__",
+                                                  "SIRE_USE_OPENMM",
+                                                  "SIRE_SKIP_INLINE_FUNCTIONS",
+                                                  "SIREN_SKIP_INLINE_FUNCTIONS",
+                                                  "SIRE_INSTANTIATE_TEMPLATES",
+                                                  "SIREN_INSTANTIATE_TEMPLATES"]
+                         )
+
+        mb = module_builder_t( files = [ "active_headers.h" ],
+                               gccxml_config=xml_generator_config )
 
 
     #get rid of all virtual python functions - this is to stop slow wrapper code

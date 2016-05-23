@@ -73,7 +73,7 @@ void register_Specify_MGID__class(){
         { //::SireID::Specify< SireMol::MGID >::map
         
             typedef SireID::Specify< SireMol::MGID > exported_class_t;
-            typedef ::QList< SireMol::MGNum > ( ::SireID::Specify< SireMol::MGID >::*map_function_type)( ::SireMol::MolGroupsBase const & ) const;
+            typedef ::QList< SireMol::MGNum > ( ::SireID::Specify< SireMol::MGID >::*map_function_type)( ::SireMol::MGID::SearchObject const & ) const;
             map_function_type map_function_value( &::SireID::Specify< SireMol::MGID >::map );
             
             Specify_MGID__exposer.def( 

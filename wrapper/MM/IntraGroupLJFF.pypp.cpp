@@ -32,7 +32,7 @@ void register_IntraGroupLJFF_class(){
         { //::SireFF::Intra2B2G3DFF< SireMM::LJPotentialInterface< SireMM::IntraLJPotential > >::energy
         
             typedef SireFF::Intra2B2G3DFF< SireMM::LJPotentialInterface< SireMM::IntraLJPotential > > exported_class_t;
-            typedef ::SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > ( ::SireFF::Intra2B2G3DFF< SireMM::LJPotentialInterface< SireMM::IntraLJPotential > >::*energy_function_type)(  ) ;
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireFF::Intra2B2G3DFF< SireMM::LJPotentialInterface< SireMM::IntraLJPotential > >::*energy_function_type)(  ) ;
             energy_function_type energy_function_value( &::SireFF::Intra2B2G3DFF< SireMM::LJPotentialInterface< SireMM::IntraLJPotential > >::energy );
             
             IntraGroupLJFF_exposer.def( 
@@ -43,7 +43,7 @@ void register_IntraGroupLJFF_class(){
         { //::SireFF::Intra2B2G3DFF< SireMM::LJPotentialInterface< SireMM::IntraLJPotential > >::energy
         
             typedef SireFF::Intra2B2G3DFF< SireMM::LJPotentialInterface< SireMM::IntraLJPotential > > exported_class_t;
-            typedef ::SireUnits::Dimension::PhysUnit< 1, 2, -2, 0, 0, -1, 0 > ( ::SireFF::Intra2B2G3DFF< SireMM::LJPotentialInterface< SireMM::IntraLJPotential > >::*energy_function_type)( ::SireCAS::Symbol const & ) ;
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireFF::Intra2B2G3DFF< SireMM::LJPotentialInterface< SireMM::IntraLJPotential > >::*energy_function_type)( ::SireCAS::Symbol const & ) ;
             energy_function_type energy_function_value( &::SireFF::Intra2B2G3DFF< SireMM::LJPotentialInterface< SireMM::IntraLJPotential > >::energy );
             
             IntraGroupLJFF_exposer.def( 

@@ -7,24 +7,6 @@
 
 namespace bp = boost::python;
 
-#include "SireError/errors.h"
-
-#include "SireMaths/boys.h"
-
-#include "SireMaths/maths.h"
-
-#include "SireStream/datastream.h"
-
-#include "SireStream/shareddatastream.h"
-
-#include "pointcharge.h"
-
-#include "pointdipole.h"
-
-#include "sgto.h"
-
-#include "sgto.h"
-
 #include "SireBase/array2d.hpp"
 
 #include "SireError/errors.h"
@@ -1950,240 +1932,30 @@ namespace bp = boost::python;
 #include "pointdipole.h"
 
 #include "pgto.h"
+
+#include "SireError/errors.h"
+
+#include "SireMaths/boys.h"
+
+#include "SireMaths/maths.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "pointcharge.h"
+
+#include "pointdipole.h"
+
+#include "sgto.h"
+
+#include "sgto.h"
 
 void register_free_functions(){
 
     { //::Squire::electron_integral
     
-        typedef void ( *electron_integral_function_type )( ::Squire::PP_GTO const &,::Squire::PP_GTO const &,int,::SireBase::Array2D< SireMaths::Matrix > & );
-        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
-        
-        bp::def( 
-            "electron_integral"
-            , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m"), bp::arg("matrix") ) );
-    
-    }
-
-    { //::Squire::electron_integral
-    
-        typedef ::SireBase::Array2D< SireMaths::Matrix > ( *electron_integral_function_type )( ::Squire::PP_GTO const &,::Squire::PP_GTO const &,int );
-        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
-        
-        bp::def( 
-            "electron_integral"
-            , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") ) );
-    
-    }
-
-    { //::Squire::electron_integral
-    
-        typedef void ( *electron_integral_function_type )( ::Squire::PS_GTO const &,::Squire::PP_GTO const &,int,::SireBase::Array2D< SireMaths::Vector > & );
-        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
-        
-        bp::def( 
-            "electron_integral"
-            , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m"), bp::arg("matrix") ) );
-    
-    }
-
-    { //::Squire::electron_integral
-    
-        typedef void ( *electron_integral_function_type )( ::Squire::PP_GTO const &,::Squire::PS_GTO const &,int,::SireBase::Array2D< SireMaths::Vector > & );
-        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
-        
-        bp::def( 
-            "electron_integral"
-            , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m"), bp::arg("matrix") ) );
-    
-    }
-
-    { //::Squire::electron_integral
-    
-        typedef ::SireBase::Array2D< SireMaths::Vector > ( *electron_integral_function_type )( ::Squire::PS_GTO const &,::Squire::PP_GTO const &,int );
-        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
-        
-        bp::def( 
-            "electron_integral"
-            , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") ) );
-    
-    }
-
-    { //::Squire::electron_integral
-    
-        typedef ::SireBase::Array2D< SireMaths::Vector > ( *electron_integral_function_type )( ::Squire::PP_GTO const &,::Squire::PS_GTO const &,int );
-        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
-        
-        bp::def( 
-            "electron_integral"
-            , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") ) );
-    
-    }
-
-    { //::Squire::electron_integral
-    
-        typedef ::SireMaths::Matrix ( *electron_integral_function_type )( ::Squire::SS_GTO const &,::Squire::PP_GTO const &,int );
-        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
-        
-        bp::def( 
-            "electron_integral"
-            , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") ) );
-    
-    }
-
-    { //::Squire::electron_integral
-    
-        typedef ::SireMaths::Matrix ( *electron_integral_function_type )( ::Squire::PP_GTO const &,::Squire::SS_GTO const &,int );
-        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
-        
-        bp::def( 
-            "electron_integral"
-            , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") ) );
-    
-    }
-
-    { //::Squire::electron_integral
-    
-        typedef ::SireMaths::Matrix ( *electron_integral_function_type )( ::Squire::PS_GTO const &,::Squire::PS_GTO const &,int );
-        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
-        
-        bp::def( 
-            "electron_integral"
-            , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") ) );
-    
-    }
-
-    { //::Squire::electron_integral
-    
-        typedef ::SireMaths::Vector ( *electron_integral_function_type )( ::Squire::SS_GTO const &,::Squire::PS_GTO const &,int );
-        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
-        
-        bp::def( 
-            "electron_integral"
-            , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") ) );
-    
-    }
-
-    { //::Squire::electron_integral
-    
-        typedef ::SireMaths::Vector ( *electron_integral_function_type )( ::Squire::PS_GTO const &,::Squire::SS_GTO const &,int );
-        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
-        
-        bp::def( 
-            "electron_integral"
-            , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") ) );
-    
-    }
-
-    { //::Squire::electron_integral
-    
-        typedef void ( *electron_integral_function_type )( ::Squire::PP_GTO const &,::Squire::PP_GTO const &,::SireBase::Array2D< SireMaths::Matrix > & );
-        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
-        
-        bp::def( 
-            "electron_integral"
-            , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("matrix") ) );
-    
-    }
-
-    { //::Squire::electron_integral
-    
-        typedef ::SireBase::Array2D< SireMaths::Matrix > ( *electron_integral_function_type )( ::Squire::PP_GTO const &,::Squire::PP_GTO const & );
-        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
-        
-        bp::def( 
-            "electron_integral"
-            , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q") ) );
-    
-    }
-
-    { //::Squire::electron_integral
-    
-        typedef void ( *electron_integral_function_type )( ::Squire::PS_GTO const &,::Squire::PP_GTO const &,::SireBase::Array2D< SireMaths::Vector > & );
-        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
-        
-        bp::def( 
-            "electron_integral"
-            , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("matrix") ) );
-    
-    }
-
-    { //::Squire::electron_integral
-    
-        typedef void ( *electron_integral_function_type )( ::Squire::PP_GTO const &,::Squire::PS_GTO const &,::SireBase::Array2D< SireMaths::Vector > & );
-        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
-        
-        bp::def( 
-            "electron_integral"
-            , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("matrix") ) );
-    
-    }
-
-    { //::Squire::electron_integral
-    
-        typedef ::SireBase::Array2D< SireMaths::Vector > ( *electron_integral_function_type )( ::Squire::PS_GTO const &,::Squire::PP_GTO const & );
-        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
-        
-        bp::def( 
-            "electron_integral"
-            , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q") ) );
-    
-    }
-
-    { //::Squire::electron_integral
-    
-        typedef ::SireBase::Array2D< SireMaths::Vector > ( *electron_integral_function_type )( ::Squire::PP_GTO const &,::Squire::PS_GTO const & );
-        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
-        
-        bp::def( 
-            "electron_integral"
-            , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q") ) );
-    
-    }
-
-    { //::Squire::electron_integral
-    
-        typedef ::SireMaths::Matrix ( *electron_integral_function_type )( ::Squire::SS_GTO const &,::Squire::PP_GTO const & );
-        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
-        
-        bp::def( 
-            "electron_integral"
-            , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q") ) );
-    
-    }
-
-    { //::Squire::electron_integral
-    
-        typedef ::SireMaths::Matrix ( *electron_integral_function_type )( ::Squire::PP_GTO const &,::Squire::SS_GTO const & );
-        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
-        
-        bp::def( 
-            "electron_integral"
-            , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q") ) );
-    
-    }
-
-    { //::Squire::electron_integral
-    
-        typedef ::SireMaths::Matrix ( *electron_integral_function_type )( ::Squire::PS_GTO const &,::Squire::PS_GTO const & );
+        typedef ::SireMaths::Vector ( *electron_integral_function_type )( ::Squire::PS_GTO const &,::Squire::SS_GTO const & );
         electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
         
         bp::def( 
@@ -2207,7 +1979,247 @@ void register_free_functions(){
 
     { //::Squire::electron_integral
     
-        typedef ::SireMaths::Vector ( *electron_integral_function_type )( ::Squire::PS_GTO const &,::Squire::SS_GTO const & );
+        typedef ::SireMaths::Matrix ( *electron_integral_function_type )( ::Squire::PS_GTO const &,::Squire::PS_GTO const & );
+        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
+        
+        bp::def( 
+            "electron_integral"
+            , electron_integral_function_value
+            , ( bp::arg("P"), bp::arg("Q") ) );
+    
+    }
+
+    { //::Squire::electron_integral
+    
+        typedef ::SireMaths::Matrix ( *electron_integral_function_type )( ::Squire::PP_GTO const &,::Squire::SS_GTO const & );
+        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
+        
+        bp::def( 
+            "electron_integral"
+            , electron_integral_function_value
+            , ( bp::arg("P"), bp::arg("Q") ) );
+    
+    }
+
+    { //::Squire::electron_integral
+    
+        typedef ::SireMaths::Matrix ( *electron_integral_function_type )( ::Squire::SS_GTO const &,::Squire::PP_GTO const & );
+        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
+        
+        bp::def( 
+            "electron_integral"
+            , electron_integral_function_value
+            , ( bp::arg("P"), bp::arg("Q") ) );
+    
+    }
+
+    { //::Squire::electron_integral
+    
+        typedef ::SireBase::Array2D< SireMaths::Vector > ( *electron_integral_function_type )( ::Squire::PP_GTO const &,::Squire::PS_GTO const & );
+        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
+        
+        bp::def( 
+            "electron_integral"
+            , electron_integral_function_value
+            , ( bp::arg("P"), bp::arg("Q") ) );
+    
+    }
+
+    { //::Squire::electron_integral
+    
+        typedef ::SireBase::Array2D< SireMaths::Vector > ( *electron_integral_function_type )( ::Squire::PS_GTO const &,::Squire::PP_GTO const & );
+        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
+        
+        bp::def( 
+            "electron_integral"
+            , electron_integral_function_value
+            , ( bp::arg("P"), bp::arg("Q") ) );
+    
+    }
+
+    { //::Squire::electron_integral
+    
+        typedef void ( *electron_integral_function_type )( ::Squire::PP_GTO const &,::Squire::PS_GTO const &,::SireBase::Array2D< SireMaths::Vector > & );
+        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
+        
+        bp::def( 
+            "electron_integral"
+            , electron_integral_function_value
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("matrix") ) );
+    
+    }
+
+    { //::Squire::electron_integral
+    
+        typedef void ( *electron_integral_function_type )( ::Squire::PS_GTO const &,::Squire::PP_GTO const &,::SireBase::Array2D< SireMaths::Vector > & );
+        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
+        
+        bp::def( 
+            "electron_integral"
+            , electron_integral_function_value
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("matrix") ) );
+    
+    }
+
+    { //::Squire::electron_integral
+    
+        typedef ::SireBase::Array2D< SireMaths::Matrix > ( *electron_integral_function_type )( ::Squire::PP_GTO const &,::Squire::PP_GTO const & );
+        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
+        
+        bp::def( 
+            "electron_integral"
+            , electron_integral_function_value
+            , ( bp::arg("P"), bp::arg("Q") ) );
+    
+    }
+
+    { //::Squire::electron_integral
+    
+        typedef void ( *electron_integral_function_type )( ::Squire::PP_GTO const &,::Squire::PP_GTO const &,::SireBase::Array2D< SireMaths::Matrix > & );
+        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
+        
+        bp::def( 
+            "electron_integral"
+            , electron_integral_function_value
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("matrix") ) );
+    
+    }
+
+    { //::Squire::electron_integral
+    
+        typedef ::SireMaths::Vector ( *electron_integral_function_type )( ::Squire::PS_GTO const &,::Squire::SS_GTO const &,int );
+        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
+        
+        bp::def( 
+            "electron_integral"
+            , electron_integral_function_value
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") ) );
+    
+    }
+
+    { //::Squire::electron_integral
+    
+        typedef ::SireMaths::Vector ( *electron_integral_function_type )( ::Squire::SS_GTO const &,::Squire::PS_GTO const &,int );
+        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
+        
+        bp::def( 
+            "electron_integral"
+            , electron_integral_function_value
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") ) );
+    
+    }
+
+    { //::Squire::electron_integral
+    
+        typedef ::SireMaths::Matrix ( *electron_integral_function_type )( ::Squire::PS_GTO const &,::Squire::PS_GTO const &,int );
+        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
+        
+        bp::def( 
+            "electron_integral"
+            , electron_integral_function_value
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") ) );
+    
+    }
+
+    { //::Squire::electron_integral
+    
+        typedef ::SireMaths::Matrix ( *electron_integral_function_type )( ::Squire::PP_GTO const &,::Squire::SS_GTO const &,int );
+        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
+        
+        bp::def( 
+            "electron_integral"
+            , electron_integral_function_value
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") ) );
+    
+    }
+
+    { //::Squire::electron_integral
+    
+        typedef ::SireMaths::Matrix ( *electron_integral_function_type )( ::Squire::SS_GTO const &,::Squire::PP_GTO const &,int );
+        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
+        
+        bp::def( 
+            "electron_integral"
+            , electron_integral_function_value
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") ) );
+    
+    }
+
+    { //::Squire::electron_integral
+    
+        typedef ::SireBase::Array2D< SireMaths::Vector > ( *electron_integral_function_type )( ::Squire::PP_GTO const &,::Squire::PS_GTO const &,int );
+        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
+        
+        bp::def( 
+            "electron_integral"
+            , electron_integral_function_value
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") ) );
+    
+    }
+
+    { //::Squire::electron_integral
+    
+        typedef ::SireBase::Array2D< SireMaths::Vector > ( *electron_integral_function_type )( ::Squire::PS_GTO const &,::Squire::PP_GTO const &,int );
+        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
+        
+        bp::def( 
+            "electron_integral"
+            , electron_integral_function_value
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") ) );
+    
+    }
+
+    { //::Squire::electron_integral
+    
+        typedef void ( *electron_integral_function_type )( ::Squire::PP_GTO const &,::Squire::PS_GTO const &,int,::SireBase::Array2D< SireMaths::Vector > & );
+        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
+        
+        bp::def( 
+            "electron_integral"
+            , electron_integral_function_value
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m"), bp::arg("matrix") ) );
+    
+    }
+
+    { //::Squire::electron_integral
+    
+        typedef void ( *electron_integral_function_type )( ::Squire::PS_GTO const &,::Squire::PP_GTO const &,int,::SireBase::Array2D< SireMaths::Vector > & );
+        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
+        
+        bp::def( 
+            "electron_integral"
+            , electron_integral_function_value
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m"), bp::arg("matrix") ) );
+    
+    }
+
+    { //::Squire::electron_integral
+    
+        typedef ::SireBase::Array2D< SireMaths::Matrix > ( *electron_integral_function_type )( ::Squire::PP_GTO const &,::Squire::PP_GTO const &,int );
+        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
+        
+        bp::def( 
+            "electron_integral"
+            , electron_integral_function_value
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") ) );
+    
+    }
+
+    { //::Squire::electron_integral
+    
+        typedef void ( *electron_integral_function_type )( ::Squire::PP_GTO const &,::Squire::PP_GTO const &,int,::SireBase::Array2D< SireMaths::Matrix > & );
+        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
+        
+        bp::def( 
+            "electron_integral"
+            , electron_integral_function_value
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m"), bp::arg("matrix") ) );
+    
+    }
+
+    { //::Squire::electron_integral
+    
+        typedef double ( *electron_integral_function_type )( ::Squire::SS_GTO const &,::Squire::SS_GTO const & );
         electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
         
         bp::def( 
@@ -2229,21 +2241,9 @@ void register_free_functions(){
     
     }
 
-    { //::Squire::electron_integral
-    
-        typedef double ( *electron_integral_function_type )( ::Squire::SS_GTO const &,::Squire::SS_GTO const & );
-        electron_integral_function_type electron_integral_function_value( &::Squire::electron_integral );
-        
-        bp::def( 
-            "electron_integral"
-            , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q") ) );
-    
-    }
-
     { //::Squire::kinetic_integral
     
-        typedef ::SireMaths::Matrix ( *kinetic_integral_function_type )( ::Squire::PP_GTO const & );
+        typedef ::SireMaths::Vector ( *kinetic_integral_function_type )( ::Squire::PS_GTO const & );
         kinetic_integral_function_type kinetic_integral_function_value( &::Squire::kinetic_integral );
         
         bp::def( 
@@ -2255,7 +2255,7 @@ void register_free_functions(){
 
     { //::Squire::kinetic_integral
     
-        typedef ::SireMaths::Vector ( *kinetic_integral_function_type )( ::Squire::PS_GTO const & );
+        typedef ::SireMaths::Matrix ( *kinetic_integral_function_type )( ::Squire::PP_GTO const & );
         kinetic_integral_function_type kinetic_integral_function_value( &::Squire::kinetic_integral );
         
         bp::def( 
@@ -2279,7 +2279,7 @@ void register_free_functions(){
 
     { //::Squire::overlap_integral
     
-        typedef ::SireMaths::Matrix ( *overlap_integral_function_type )( ::Squire::PP_GTO const & );
+        typedef ::SireMaths::Vector ( *overlap_integral_function_type )( ::Squire::PS_GTO const & );
         overlap_integral_function_type overlap_integral_function_value( &::Squire::overlap_integral );
         
         bp::def( 
@@ -2291,7 +2291,7 @@ void register_free_functions(){
 
     { //::Squire::overlap_integral
     
-        typedef ::SireMaths::Vector ( *overlap_integral_function_type )( ::Squire::PS_GTO const & );
+        typedef ::SireMaths::Matrix ( *overlap_integral_function_type )( ::Squire::PP_GTO const & );
         overlap_integral_function_type overlap_integral_function_value( &::Squire::overlap_integral );
         
         bp::def( 
@@ -2315,163 +2315,7 @@ void register_free_functions(){
 
     { //::Squire::potential_integral
     
-        typedef ::SireMaths::Matrix ( *potential_integral_function_type )( ::Squire::PointDipole const &,::Squire::PP_GTO const &,int );
-        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
-        
-        bp::def( 
-            "potential_integral"
-            , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
-    
-    }
-
-    { //::Squire::potential_integral
-    
-        typedef ::SireMaths::Matrix ( *potential_integral_function_type )( ::Squire::PointCharge const &,::Squire::PP_GTO const &,int );
-        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
-        
-        bp::def( 
-            "potential_integral"
-            , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
-    
-    }
-
-    { //::Squire::potential_integral
-    
-        typedef ::SireMaths::Matrix ( *potential_integral_function_type )( ::QVector< Squire::PointDipole > const &,::Squire::PP_GTO const &,int );
-        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
-        
-        bp::def( 
-            "potential_integral"
-            , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
-    
-    }
-
-    { //::Squire::potential_integral
-    
-        typedef ::SireMaths::Matrix ( *potential_integral_function_type )( ::QVector< Squire::PointCharge > const &,::Squire::PP_GTO const &,int );
-        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
-        
-        bp::def( 
-            "potential_integral"
-            , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
-    
-    }
-
-    { //::Squire::potential_integral
-    
-        typedef ::SireMaths::Matrix ( *potential_integral_function_type )( ::Squire::PointDipole const &,::Squire::PP_GTO const & );
-        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
-        
-        bp::def( 
-            "potential_integral"
-            , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P") ) );
-    
-    }
-
-    { //::Squire::potential_integral
-    
-        typedef ::SireMaths::Matrix ( *potential_integral_function_type )( ::Squire::PointCharge const &,::Squire::PP_GTO const & );
-        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
-        
-        bp::def( 
-            "potential_integral"
-            , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P") ) );
-    
-    }
-
-    { //::Squire::potential_integral
-    
-        typedef ::SireMaths::Matrix ( *potential_integral_function_type )( ::QVector< Squire::PointDipole > const &,::Squire::PP_GTO const & );
-        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
-        
-        bp::def( 
-            "potential_integral"
-            , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P") ) );
-    
-    }
-
-    { //::Squire::potential_integral
-    
-        typedef ::SireMaths::Matrix ( *potential_integral_function_type )( ::QVector< Squire::PointCharge > const &,::Squire::PP_GTO const & );
-        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
-        
-        bp::def( 
-            "potential_integral"
-            , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P") ) );
-    
-    }
-
-    { //::Squire::potential_integral
-    
-        typedef ::SireMaths::Vector ( *potential_integral_function_type )( ::Squire::PointDipole const &,::Squire::PS_GTO const &,int );
-        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
-        
-        bp::def( 
-            "potential_integral"
-            , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
-    
-    }
-
-    { //::Squire::potential_integral
-    
-        typedef ::SireMaths::Vector ( *potential_integral_function_type )( ::Squire::PointCharge const &,::Squire::PS_GTO const &,int );
-        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
-        
-        bp::def( 
-            "potential_integral"
-            , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
-    
-    }
-
-    { //::Squire::potential_integral
-    
-        typedef ::SireMaths::Vector ( *potential_integral_function_type )( ::QVector< Squire::PointDipole > const &,::Squire::PS_GTO const &,int );
-        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
-        
-        bp::def( 
-            "potential_integral"
-            , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
-    
-    }
-
-    { //::Squire::potential_integral
-    
-        typedef ::SireMaths::Vector ( *potential_integral_function_type )( ::QVector< Squire::PointCharge > const &,::Squire::PS_GTO const &,int );
-        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
-        
-        bp::def( 
-            "potential_integral"
-            , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
-    
-    }
-
-    { //::Squire::potential_integral
-    
-        typedef ::SireMaths::Vector ( *potential_integral_function_type )( ::Squire::PointDipole const &,::Squire::PS_GTO const & );
-        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
-        
-        bp::def( 
-            "potential_integral"
-            , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P") ) );
-    
-    }
-
-    { //::Squire::potential_integral
-    
-        typedef ::SireMaths::Vector ( *potential_integral_function_type )( ::Squire::PointCharge const &,::Squire::PS_GTO const & );
+        typedef ::SireMaths::Vector ( *potential_integral_function_type )( ::QVector< Squire::PointCharge > const &,::Squire::PS_GTO const & );
         potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
         
         bp::def( 
@@ -2495,7 +2339,7 @@ void register_free_functions(){
 
     { //::Squire::potential_integral
     
-        typedef ::SireMaths::Vector ( *potential_integral_function_type )( ::QVector< Squire::PointCharge > const &,::Squire::PS_GTO const & );
+        typedef ::SireMaths::Vector ( *potential_integral_function_type )( ::Squire::PointCharge const &,::Squire::PS_GTO const & );
         potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
         
         bp::def( 
@@ -2507,7 +2351,19 @@ void register_free_functions(){
 
     { //::Squire::potential_integral
     
-        typedef double ( *potential_integral_function_type )( ::Squire::PointDipole const &,::Squire::SS_GTO const &,int );
+        typedef ::SireMaths::Vector ( *potential_integral_function_type )( ::Squire::PointDipole const &,::Squire::PS_GTO const & );
+        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
+        
+        bp::def( 
+            "potential_integral"
+            , potential_integral_function_value
+            , ( bp::arg("C"), bp::arg("P") ) );
+    
+    }
+
+    { //::Squire::potential_integral
+    
+        typedef ::SireMaths::Vector ( *potential_integral_function_type )( ::QVector< Squire::PointCharge > const &,::Squire::PS_GTO const &,int );
         potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
         
         bp::def( 
@@ -2519,7 +2375,7 @@ void register_free_functions(){
 
     { //::Squire::potential_integral
     
-        typedef double ( *potential_integral_function_type )( ::Squire::PointCharge const &,::Squire::SS_GTO const &,int );
+        typedef ::SireMaths::Vector ( *potential_integral_function_type )( ::QVector< Squire::PointDipole > const &,::Squire::PS_GTO const &,int );
         potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
         
         bp::def( 
@@ -2531,31 +2387,7 @@ void register_free_functions(){
 
     { //::Squire::potential_integral
     
-        typedef double ( *potential_integral_function_type )( ::Squire::PointDipole const &,::Squire::SS_GTO const & );
-        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
-        
-        bp::def( 
-            "potential_integral"
-            , potential_integral_function_value
-            , ( bp::arg("Q"), bp::arg("P") ) );
-    
-    }
-
-    { //::Squire::potential_integral
-    
-        typedef double ( *potential_integral_function_type )( ::Squire::PointCharge const &,::Squire::SS_GTO const & );
-        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
-        
-        bp::def( 
-            "potential_integral"
-            , potential_integral_function_value
-            , ( bp::arg("Q"), bp::arg("P") ) );
-    
-    }
-
-    { //::Squire::potential_integral
-    
-        typedef double ( *potential_integral_function_type )( ::QVector< Squire::PointDipole > const &,::Squire::SS_GTO const &,int );
+        typedef ::SireMaths::Vector ( *potential_integral_function_type )( ::Squire::PointCharge const &,::Squire::PS_GTO const &,int );
         potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
         
         bp::def( 
@@ -2567,13 +2399,121 @@ void register_free_functions(){
 
     { //::Squire::potential_integral
     
-        typedef double ( *potential_integral_function_type )( ::QVector< Squire::PointCharge > const &,::Squire::SS_GTO const &,int );
+        typedef ::SireMaths::Vector ( *potential_integral_function_type )( ::Squire::PointDipole const &,::Squire::PS_GTO const &,int );
         potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
         
         bp::def( 
             "potential_integral"
             , potential_integral_function_value
             , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
+    
+    }
+
+    { //::Squire::potential_integral
+    
+        typedef ::SireMaths::Matrix ( *potential_integral_function_type )( ::QVector< Squire::PointCharge > const &,::Squire::PP_GTO const & );
+        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
+        
+        bp::def( 
+            "potential_integral"
+            , potential_integral_function_value
+            , ( bp::arg("C"), bp::arg("P") ) );
+    
+    }
+
+    { //::Squire::potential_integral
+    
+        typedef ::SireMaths::Matrix ( *potential_integral_function_type )( ::QVector< Squire::PointDipole > const &,::Squire::PP_GTO const & );
+        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
+        
+        bp::def( 
+            "potential_integral"
+            , potential_integral_function_value
+            , ( bp::arg("C"), bp::arg("P") ) );
+    
+    }
+
+    { //::Squire::potential_integral
+    
+        typedef ::SireMaths::Matrix ( *potential_integral_function_type )( ::Squire::PointCharge const &,::Squire::PP_GTO const & );
+        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
+        
+        bp::def( 
+            "potential_integral"
+            , potential_integral_function_value
+            , ( bp::arg("C"), bp::arg("P") ) );
+    
+    }
+
+    { //::Squire::potential_integral
+    
+        typedef ::SireMaths::Matrix ( *potential_integral_function_type )( ::Squire::PointDipole const &,::Squire::PP_GTO const & );
+        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
+        
+        bp::def( 
+            "potential_integral"
+            , potential_integral_function_value
+            , ( bp::arg("C"), bp::arg("P") ) );
+    
+    }
+
+    { //::Squire::potential_integral
+    
+        typedef ::SireMaths::Matrix ( *potential_integral_function_type )( ::QVector< Squire::PointCharge > const &,::Squire::PP_GTO const &,int );
+        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
+        
+        bp::def( 
+            "potential_integral"
+            , potential_integral_function_value
+            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
+    
+    }
+
+    { //::Squire::potential_integral
+    
+        typedef ::SireMaths::Matrix ( *potential_integral_function_type )( ::QVector< Squire::PointDipole > const &,::Squire::PP_GTO const &,int );
+        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
+        
+        bp::def( 
+            "potential_integral"
+            , potential_integral_function_value
+            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
+    
+    }
+
+    { //::Squire::potential_integral
+    
+        typedef ::SireMaths::Matrix ( *potential_integral_function_type )( ::Squire::PointCharge const &,::Squire::PP_GTO const &,int );
+        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
+        
+        bp::def( 
+            "potential_integral"
+            , potential_integral_function_value
+            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
+    
+    }
+
+    { //::Squire::potential_integral
+    
+        typedef ::SireMaths::Matrix ( *potential_integral_function_type )( ::Squire::PointDipole const &,::Squire::PP_GTO const &,int );
+        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
+        
+        bp::def( 
+            "potential_integral"
+            , potential_integral_function_value
+            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
+    
+    }
+
+    { //::Squire::potential_integral
+    
+        typedef double ( *potential_integral_function_type )( ::QVector< Squire::PointCharge > const &,::Squire::SS_GTO const & );
+        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
+        
+        bp::def( 
+            "potential_integral"
+            , potential_integral_function_value
+            , ( bp::arg("C"), bp::arg("P") ) );
     
     }
 
@@ -2591,13 +2531,73 @@ void register_free_functions(){
 
     { //::Squire::potential_integral
     
-        typedef double ( *potential_integral_function_type )( ::QVector< Squire::PointCharge > const &,::Squire::SS_GTO const & );
+        typedef double ( *potential_integral_function_type )( ::QVector< Squire::PointCharge > const &,::Squire::SS_GTO const &,int );
         potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
         
         bp::def( 
             "potential_integral"
             , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P") ) );
+            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
+    
+    }
+
+    { //::Squire::potential_integral
+    
+        typedef double ( *potential_integral_function_type )( ::QVector< Squire::PointDipole > const &,::Squire::SS_GTO const &,int );
+        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
+        
+        bp::def( 
+            "potential_integral"
+            , potential_integral_function_value
+            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
+    
+    }
+
+    { //::Squire::potential_integral
+    
+        typedef double ( *potential_integral_function_type )( ::Squire::PointCharge const &,::Squire::SS_GTO const & );
+        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
+        
+        bp::def( 
+            "potential_integral"
+            , potential_integral_function_value
+            , ( bp::arg("Q"), bp::arg("P") ) );
+    
+    }
+
+    { //::Squire::potential_integral
+    
+        typedef double ( *potential_integral_function_type )( ::Squire::PointDipole const &,::Squire::SS_GTO const & );
+        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
+        
+        bp::def( 
+            "potential_integral"
+            , potential_integral_function_value
+            , ( bp::arg("Q"), bp::arg("P") ) );
+    
+    }
+
+    { //::Squire::potential_integral
+    
+        typedef double ( *potential_integral_function_type )( ::Squire::PointCharge const &,::Squire::SS_GTO const &,int );
+        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
+        
+        bp::def( 
+            "potential_integral"
+            , potential_integral_function_value
+            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
+    
+    }
+
+    { //::Squire::potential_integral
+    
+        typedef double ( *potential_integral_function_type )( ::Squire::PointDipole const &,::Squire::SS_GTO const &,int );
+        potential_integral_function_type potential_integral_function_value( &::Squire::potential_integral );
+        
+        bp::def( 
+            "potential_integral"
+            , potential_integral_function_value
+            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
     
     }
 

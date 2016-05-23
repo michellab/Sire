@@ -43,8 +43,8 @@ void register_SymbolValue_class(){
                 , value_function_value );
         
         }
-        SymbolValue_exposer.def( bp::self + bp::other< SireCAS::Values >() );
         SymbolValue_exposer.def( bp::self + bp::self );
+        SymbolValue_exposer.def( bp::self + bp::other< SireCAS::Values >() );
         SymbolValue_exposer.def( "__copy__", &__copy__);
         SymbolValue_exposer.def( "__deepcopy__", &__copy__);
         SymbolValue_exposer.def( "clone", &__copy__);

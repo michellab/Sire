@@ -347,7 +347,7 @@ void register_PeriodicBox_class(){
             PeriodicBox_exposer.def( 
                 "maxCoords"
                 , maxCoords_function_value
-                , ( bp::arg("center")=SireMaths::Vector(0.0) ) );
+                , ( bp::arg("center")=SireMaths::Vector(0) ) );
         
         }
         { //::SireVol::PeriodicBox::minCoords
@@ -358,7 +358,7 @@ void register_PeriodicBox_class(){
             PeriodicBox_exposer.def( 
                 "minCoords"
                 , minCoords_function_value
-                , ( bp::arg("center")=SireMaths::Vector(0.0) ) );
+                , ( bp::arg("center")=SireMaths::Vector(0) ) );
         
         }
         { //::SireVol::PeriodicBox::minimumDistance

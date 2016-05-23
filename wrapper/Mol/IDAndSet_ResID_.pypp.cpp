@@ -68,6 +68,7 @@ void register_IDAndSet_ResID__class(){
         IDAndSet_ResID__exposer.def( bp::init< SireMol::ResID const & >(( bp::arg("id") )) );
         IDAndSet_ResID__exposer.def( bp::init< SireMol::ResID const &, SireMol::ResID const & >(( bp::arg("id0"), bp::arg("id1") )) );
         IDAndSet_ResID__exposer.def( bp::init< QList< SireMol::ResIdentifier > const & >(( bp::arg("ids") )) );
+        IDAndSet_ResID__exposer.def( bp::init< SireID::IDAndSet< SireMol::ResID > const & >(( bp::arg("ids") )) );
         IDAndSet_ResID__exposer.def( bp::init< SireID::IDAndSet< SireMol::ResID > const & >(( bp::arg("other") )) );
         { //::SireID::IDAndSet< SireMol::ResID >::IDs
         
@@ -106,7 +107,7 @@ void register_IDAndSet_ResID__class(){
         { //::SireID::IDAndSet< SireMol::ResID >::map
         
             typedef SireID::IDAndSet< SireMol::ResID > exported_class_t;
-            typedef ::QList< SireMol::ResIdx > ( ::SireID::IDAndSet< SireMol::ResID >::*map_function_type)( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::ResIdx > ( ::SireID::IDAndSet< SireMol::ResID >::*map_function_type)( ::SireID::IDAndSet< SireMol::ResID >::SearchObject const & ) const;
             map_function_type map_function_value( &::SireID::IDAndSet< SireMol::ResID >::map );
             
             IDAndSet_ResID__exposer.def( 

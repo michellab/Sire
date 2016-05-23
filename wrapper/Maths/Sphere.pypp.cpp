@@ -66,7 +66,7 @@ void register_Sphere_class(){
             Sphere_exposer.def( 
                 "combinedVolumeMC"
                 , combinedVolumeMC_function_value
-                , ( bp::arg("spheres"), bp::arg("nsamples")=(::qint64)(-0x00000000000000001) ) );
+                , ( bp::arg("spheres"), bp::arg("nsamples")=(::qint64)(-1) ) );
         
         }
         { //::SireMaths::Sphere::contains

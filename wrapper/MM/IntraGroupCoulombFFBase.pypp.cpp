@@ -35,7 +35,7 @@ void register_IntraGroupCoulombFFBase_class(){
         { //::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::components
         
             typedef SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > > exported_class_t;
-            typedef ::SireMM::CoulombComponent const & ( ::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::*components_function_type)(  ) const;
+            typedef ::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::Components const & ( ::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::*components_function_type)(  ) const;
             components_function_type components_function_value( &::SireFF::Intra2B2GFF< SireMM::CoulombPotentialInterface< SireMM::IntraCoulombPotential > >::components );
             
             IntraGroupCoulombFFBase_exposer.def( 

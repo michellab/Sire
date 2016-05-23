@@ -53,7 +53,7 @@ void register_CLJPotentialInterface_InterSoftCLJPotential__class(){
         { //::SireMM::CLJPotentialInterface< SireMM::InterSoftCLJPotential >::parameters
         
             typedef SireMM::CLJPotentialInterface< SireMM::InterSoftCLJPotential > exported_class_t;
-            typedef ::SireMM::CLJParameterNames3D ( *parameters_function_type )(  );
+            typedef ::SireMM::InterSoftCLJPotential::ParameterNames ( *parameters_function_type )(  );
             parameters_function_type parameters_function_value( &::SireMM::CLJPotentialInterface< SireMM::InterSoftCLJPotential >::parameters );
             
             CLJPotentialInterface_InterSoftCLJPotential__exposer.def( 

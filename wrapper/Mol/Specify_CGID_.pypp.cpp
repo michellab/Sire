@@ -89,7 +89,7 @@ void register_Specify_CGID__class(){
         { //::SireID::Specify< SireMol::CGID >::map
         
             typedef SireID::Specify< SireMol::CGID > exported_class_t;
-            typedef ::QList< SireMol::CGIdx > ( ::SireID::Specify< SireMol::CGID >::*map_function_type)( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::CGIdx > ( ::SireID::Specify< SireMol::CGID >::*map_function_type)( ::SireMol::CGID::SearchObject const & ) const;
             map_function_type map_function_value( &::SireID::Specify< SireMol::CGID >::map );
             
             Specify_CGID__exposer.def( 

@@ -120,7 +120,7 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "covariance"
                 , covariance_function_value
-                , ( bp::arg("p"), bp::arg("q"), bp::arg("n")=(int)(-0x00000000000000001) ) );
+                , ( bp::arg("p"), bp::arg("q"), bp::arg("n")=(int)(-1) ) );
         
         }
         { //::SireMaths::Matrix::determinant
@@ -454,10 +454,10 @@ void register_Matrix_class(){
         Matrix_exposer.staticmethod( "identity" );
         Matrix_exposer.staticmethod( "typeName" );
         Matrix_exposer.staticmethod( "zero" );
-        Matrix_exposer.def( bp::other< double >() * bp::self );
-        Matrix_exposer.def( bp::self * bp::other< double >() );
         Matrix_exposer.def( bp::self * bp::self );
         Matrix_exposer.def( bp::self * bp::other< SireMaths::Vector >() );
+        Matrix_exposer.def( bp::self * bp::other< double >() );
+        Matrix_exposer.def( bp::other< double >() * bp::self );
         Matrix_exposer.def( bp::self + bp::self );
         Matrix_exposer.def( bp::self - bp::self );
         Matrix_exposer.def( "__copy__", &__copy__);

@@ -10,6 +10,7 @@ namespace bp = boost::python;
 #include "SireError/errors.h"
 
 #include "multidouble.h"
+#include "multivector.h"
 
 #include <QDebug>
 
@@ -362,6 +363,17 @@ void register_MultiDouble_class(){
         }
         MultiDouble_exposer.def( bp::self ^ bp::self );
         MultiDouble_exposer.def( bp::self | bp::self );
+        { //::SireMaths::MultiDouble::quickSet
+        
+            typedef void ( ::SireMaths::MultiDouble::*quickSet_function_type)( int,double ) ;
+            quickSet_function_type quickSet_function_value( &::SireMaths::MultiDouble::quickSet );
+            
+            MultiDouble_exposer.def( 
+                "quickSet"
+                , quickSet_function_value
+                , ( bp::arg("i"), bp::arg("value") ) );
+        
+        }
         { //::SireMaths::MultiDouble::reciprocal
         
             typedef ::SireMaths::MultiDouble ( ::SireMaths::MultiDouble::*reciprocal_function_type)(  ) const;
@@ -433,6 +445,17 @@ void register_MultiDouble_class(){
                 , sum_function_value );
         
         }
+        { //::SireMaths::MultiDouble::swap
+        
+            typedef void ( *swap_function_type )( ::SireMaths::MultiDouble &,int,::SireMaths::MultiDouble &,int );
+            swap_function_type swap_function_value( &::SireMaths::MultiDouble::swap );
+            
+            MultiDouble_exposer.def( 
+                "swap"
+                , swap_function_value
+                , ( bp::arg("d0"), bp::arg("idx0"), bp::arg("d1"), bp::arg("idx1") ) );
+        
+        }
         { //::SireMaths::MultiDouble::toArray
         
             typedef ::QVector< double > ( *toArray_function_type )( ::QVector< SireMaths::MultiDouble > const & );
@@ -498,9 +521,11 @@ void register_MultiDouble_class(){
         MultiDouble_exposer.staticmethod( "count" );
         MultiDouble_exposer.staticmethod( "fromArray" );
         MultiDouble_exposer.staticmethod( "size" );
+        MultiDouble_exposer.staticmethod( "swap" );
         MultiDouble_exposer.staticmethod( "toArray" );
         MultiDouble_exposer.staticmethod( "toDoubleArray" );
         MultiDouble_exposer.staticmethod( "typeName" );
+        MultiDouble_exposer.def( bp::self * bp::other< SireMaths::MultiVector >() );
         MultiDouble_exposer.def( "__copy__", &__copy__);
         MultiDouble_exposer.def( "__deepcopy__", &__copy__);
         MultiDouble_exposer.def( "clone", &__copy__);

@@ -79,6 +79,90 @@ void register_RanGenerator_class(){
                 , bp::return_value_policy< bp::copy_const_reference >() );
         
         }
+        { //::SireMaths::RanGenerator::lock
+        
+            typedef void ( ::SireMaths::RanGenerator::*lock_function_type)(  ) const;
+            lock_function_type lock_function_value( &::SireMaths::RanGenerator::lock );
+            
+            RanGenerator_exposer.def( 
+                "lock"
+                , lock_function_value );
+        
+        }
+        { //::SireMaths::RanGenerator::locked_rand
+        
+            typedef double ( ::SireMaths::RanGenerator::*locked_rand_function_type)(  ) const;
+            locked_rand_function_type locked_rand_function_value( &::SireMaths::RanGenerator::locked_rand );
+            
+            RanGenerator_exposer.def( 
+                "locked_rand"
+                , locked_rand_function_value );
+        
+        }
+        { //::SireMaths::RanGenerator::locked_rand
+        
+            typedef double ( ::SireMaths::RanGenerator::*locked_rand_function_type)( double ) const;
+            locked_rand_function_type locked_rand_function_value( &::SireMaths::RanGenerator::locked_rand );
+            
+            RanGenerator_exposer.def( 
+                "locked_rand"
+                , locked_rand_function_value
+                , ( bp::arg("maxval") ) );
+        
+        }
+        { //::SireMaths::RanGenerator::locked_rand
+        
+            typedef double ( ::SireMaths::RanGenerator::*locked_rand_function_type)( double,double ) const;
+            locked_rand_function_type locked_rand_function_value( &::SireMaths::RanGenerator::locked_rand );
+            
+            RanGenerator_exposer.def( 
+                "locked_rand"
+                , locked_rand_function_value
+                , ( bp::arg("minval"), bp::arg("maxval") ) );
+        
+        }
+        { //::SireMaths::RanGenerator::locked_randNorm
+        
+            typedef double ( ::SireMaths::RanGenerator::*locked_randNorm_function_type)(  ) const;
+            locked_randNorm_function_type locked_randNorm_function_value( &::SireMaths::RanGenerator::locked_randNorm );
+            
+            RanGenerator_exposer.def( 
+                "locked_randNorm"
+                , locked_randNorm_function_value );
+        
+        }
+        { //::SireMaths::RanGenerator::locked_randNorm
+        
+            typedef double ( ::SireMaths::RanGenerator::*locked_randNorm_function_type)( double,double ) const;
+            locked_randNorm_function_type locked_randNorm_function_value( &::SireMaths::RanGenerator::locked_randNorm );
+            
+            RanGenerator_exposer.def( 
+                "locked_randNorm"
+                , locked_randNorm_function_value
+                , ( bp::arg("minval"), bp::arg("maxval") ) );
+        
+        }
+        { //::SireMaths::RanGenerator::locked_vectorOnSphere
+        
+            typedef ::SireMaths::Vector ( ::SireMaths::RanGenerator::*locked_vectorOnSphere_function_type)(  ) const;
+            locked_vectorOnSphere_function_type locked_vectorOnSphere_function_value( &::SireMaths::RanGenerator::locked_vectorOnSphere );
+            
+            RanGenerator_exposer.def( 
+                "locked_vectorOnSphere"
+                , locked_vectorOnSphere_function_value );
+        
+        }
+        { //::SireMaths::RanGenerator::locked_vectorOnSphere
+        
+            typedef ::SireMaths::Vector ( ::SireMaths::RanGenerator::*locked_vectorOnSphere_function_type)( double ) const;
+            locked_vectorOnSphere_function_type locked_vectorOnSphere_function_value( &::SireMaths::RanGenerator::locked_vectorOnSphere );
+            
+            RanGenerator_exposer.def( 
+                "locked_vectorOnSphere"
+                , locked_vectorOnSphere_function_value
+                , ( bp::arg("radius") ) );
+        
+        }
         { //::SireMaths::RanGenerator::nrand
         
             typedef ::QVector< double > ( ::SireMaths::RanGenerator::*nrand_function_type)( int ) const;
@@ -365,6 +449,16 @@ void register_RanGenerator_class(){
         }
         { //::SireMaths::RanGenerator::randNorm
         
+            typedef double ( ::SireMaths::RanGenerator::*randNorm_function_type)(  ) const;
+            randNorm_function_type randNorm_function_value( &::SireMaths::RanGenerator::randNorm );
+            
+            RanGenerator_exposer.def( 
+                "randNorm"
+                , randNorm_function_value );
+        
+        }
+        { //::SireMaths::RanGenerator::randNorm
+        
             typedef double ( ::SireMaths::RanGenerator::*randNorm_function_type)( double,double ) const;
             randNorm_function_type randNorm_function_value( &::SireMaths::RanGenerator::randNorm );
             
@@ -479,6 +573,16 @@ void register_RanGenerator_class(){
             RanGenerator_exposer.def( 
                 "typeName"
                 , typeName_function_value );
+        
+        }
+        { //::SireMaths::RanGenerator::unlock
+        
+            typedef void ( ::SireMaths::RanGenerator::*unlock_function_type)(  ) const;
+            unlock_function_type unlock_function_value( &::SireMaths::RanGenerator::unlock );
+            
+            RanGenerator_exposer.def( 
+                "unlock"
+                , unlock_function_value );
         
         }
         { //::SireMaths::RanGenerator::vectorOnSphere

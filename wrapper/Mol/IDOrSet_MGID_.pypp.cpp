@@ -48,6 +48,7 @@ void register_IDOrSet_MGID__class(){
         IDOrSet_MGID__exposer.def( bp::init< SireMol::MGID const & >(( bp::arg("id") )) );
         IDOrSet_MGID__exposer.def( bp::init< SireMol::MGID const &, SireMol::MGID const & >(( bp::arg("id0"), bp::arg("id1") )) );
         IDOrSet_MGID__exposer.def( bp::init< QList< SireMol::MGIdentifier > const & >(( bp::arg("ids") )) );
+        IDOrSet_MGID__exposer.def( bp::init< SireID::IDOrSet< SireMol::MGID > const & >(( bp::arg("ids") )) );
         IDOrSet_MGID__exposer.def( bp::init< SireID::IDOrSet< SireMol::MGID > const & >(( bp::arg("other") )) );
         { //::SireID::IDOrSet< SireMol::MGID >::IDs
         
@@ -86,7 +87,7 @@ void register_IDOrSet_MGID__class(){
         { //::SireID::IDOrSet< SireMol::MGID >::map
         
             typedef SireID::IDOrSet< SireMol::MGID > exported_class_t;
-            typedef ::QList< SireMol::MGNum > ( ::SireID::IDOrSet< SireMol::MGID >::*map_function_type)( ::SireMol::MolGroupsBase const & ) const;
+            typedef ::QList< SireMol::MGNum > ( ::SireID::IDOrSet< SireMol::MGID >::*map_function_type)( ::SireID::IDOrSet< SireMol::MGID >::SearchObject const & ) const;
             map_function_type map_function_value( &::SireID::IDOrSet< SireMol::MGID >::map );
             
             IDOrSet_MGID__exposer.def( 

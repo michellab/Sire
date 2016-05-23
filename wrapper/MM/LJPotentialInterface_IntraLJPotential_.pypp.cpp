@@ -53,7 +53,7 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
         { //::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::parameters
         
             typedef SireMM::LJPotentialInterface< SireMM::IntraLJPotential > exported_class_t;
-            typedef ::SireMM::ScaledLJParameterNames3D ( *parameters_function_type )(  );
+            typedef ::SireMM::IntraLJPotential::ParameterNames ( *parameters_function_type )(  );
             parameters_function_type parameters_function_value( &::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::parameters );
             
             LJPotentialInterface_IntraLJPotential__exposer.def( 
