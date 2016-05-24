@@ -17,6 +17,16 @@ namespace bp = boost::python;
 
 #include "multivector.h"
 
+#include "multifloat.h"
+
+#include "multiint.h"
+
+#include "multidouble.h"
+
+#include "multivector.h"
+
+#include "multiquaternion.h"
+
 SireMaths::MultiVector __copy__(const SireMaths::MultiVector &other){ return SireMaths::MultiVector(other); }
 
 #include "Helpers/str.hpp"
@@ -675,7 +685,6 @@ void register_MultiVector_class(){
         MultiVector_exposer.def( bp::self * bp::other< SireMaths::MultiQuaternion >() );
         MultiVector_exposer.def( bp::self + bp::self );
         MultiVector_exposer.def( bp::self - bp::self );
-        MultiVector_exposer.def( bp::self / bp::self );
         MultiVector_exposer.def( bp::self / bp::other< SireMaths::MultiDouble >() );
         MultiVector_exposer.def( "__copy__", &__copy__);
         MultiVector_exposer.def( "__deepcopy__", &__copy__);

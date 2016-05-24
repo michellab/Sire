@@ -141,18 +141,6 @@ void register_RanGenerator_class(){
         }
         { //::SireMaths::RanGenerator::locked_randNorm
         
-            typedef double ( ::SireMaths::RanGenerator::*locked_randNorm_function_type)( double ) const;
-            locked_randNorm_function_type locked_randNorm_function_value( &::SireMaths::RanGenerator::locked_randNorm );
-            
-            RanGenerator_exposer.def( 
-                "locked_randNorm"
-                , locked_randNorm_function_value
-                , ( bp::arg("maxval") )
-                , "" );
-        
-        }
-        { //::SireMaths::RanGenerator::locked_randNorm
-        
             typedef double ( ::SireMaths::RanGenerator::*locked_randNorm_function_type)( double,double ) const;
             locked_randNorm_function_type locked_randNorm_function_value( &::SireMaths::RanGenerator::locked_randNorm );
             

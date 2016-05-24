@@ -123,7 +123,6 @@ public:
     double randNorm(double mean, double variance) const;
 
     double locked_randNorm() const;
-    double locked_randNorm(double maxval) const;
     double locked_randNorm(double minval, double maxval) const;
 
     void nrandNorm(QVector<double> &result, double mean, double variance) const;

@@ -48,7 +48,7 @@ using namespace SireMaths;
         #define AVX_MATHFUNC_BROKEN_EXP 1
     #endif
 
-    #include "ThirdParty/avx_mathfun.h"
+    #include "ThirdParty/avx_mathfun.h" // CONDITIONAL_INCLUDE
     static inline bool isAligned32(const void *pointer)
     {
         return (quintptr)pointer % size_t(32) == 0;
@@ -112,7 +112,7 @@ using namespace SireMaths;
 
 #else
 #ifdef MULTIFLOAT_SSE_IS_AVAILABLE
-    #include "ThirdParty/sse_mathfun.h"
+    #include "ThirdParty/sse_mathfun.h" // CONDITIONAL_INCLUDE
 
     static inline bool isAligned16(const void *pointer)
     {

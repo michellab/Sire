@@ -21,6 +21,12 @@ namespace bp = boost::python;
 
 #include "multiint.h"
 
+#include "multidouble.h"
+
+#include "multivector.h"
+
+#include "multiquaternion.h"
+
 SireMaths::MultiUInt __copy__(const SireMaths::MultiUInt &other){ return SireMaths::MultiUInt(other); }
 
 #include "Helpers/str.hpp"

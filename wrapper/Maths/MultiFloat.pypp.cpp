@@ -9,10 +9,6 @@ namespace bp = boost::python;
 
 #include "SireError/errors.h"
 
-#include "ThirdParty/avx_mathfun.h"
-
-#include "ThirdParty/sse_mathfun.h"
-
 #include "multidouble.h"
 
 #include "multifloat.h"
@@ -30,6 +26,12 @@ namespace bp = boost::python;
 #include "multifloat.h"
 
 #include "multiint.h"
+
+#include "multidouble.h"
+
+#include "multivector.h"
+
+#include "multiquaternion.h"
 
 SireMaths::MultiFloat __copy__(const SireMaths::MultiFloat &other){ return SireMaths::MultiFloat(other); }
 
