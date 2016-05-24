@@ -617,10 +617,10 @@ void RepExMove2::performMove(Replicas &replicas, bool record_stats)
     results.clear();
     
     //now perform any swaps
-    for( const std::pair<int,int> &swap : to_swap )
-    {
-        replicas.swapSystems(swap.first, swap.second, swap_monitors);
-    }
+    //for( const std::pair<int,int> &swap : to_swap )
+    //{
+    //    replicas.swapSystems(swap.first, swap.second, swap_monitors);
+    //}
 
     to_swap.clear();
     
