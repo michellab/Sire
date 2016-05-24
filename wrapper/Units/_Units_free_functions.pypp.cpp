@@ -185,7 +185,8 @@ void register_free_functions(){
         bp::def( 
             "acute"
             , acute_function_value
-            , ( bp::arg("angle") ) );
+            , ( bp::arg("angle") )
+            , "" );
     
     }
 
@@ -197,7 +198,8 @@ void register_free_functions(){
         bp::def( 
             "convert"
             , convert_function_value
-            , ( bp::arg("val"), bp::arg("from_units"), bp::arg("to_units") ) );
+            , ( bp::arg("val"), bp::arg("from_units"), bp::arg("to_units") )
+            , "" );
     
     }
 
@@ -209,7 +211,8 @@ void register_free_functions(){
         bp::def( 
             "convert"
             , convert_function_value
-            , ( bp::arg("val"), bp::arg("from_units"), bp::arg("to_units") ) );
+            , ( bp::arg("val"), bp::arg("from_units"), bp::arg("to_units") )
+            , "" );
     
     }
 
@@ -221,7 +224,8 @@ void register_free_functions(){
         bp::def( 
             "convert"
             , convert_function_value
-            , ( bp::arg("val"), bp::arg("from_units"), bp::arg("to_units") ) );
+            , ( bp::arg("val"), bp::arg("from_units"), bp::arg("to_units") )
+            , "" );
     
     }
 
@@ -233,7 +237,8 @@ void register_free_functions(){
         bp::def( 
             "convert"
             , convert_function_value
-            , ( bp::arg("val"), bp::arg("to_units") ) );
+            , ( bp::arg("val"), bp::arg("to_units") )
+            , "" );
     
     }
 
@@ -245,7 +250,8 @@ void register_free_functions(){
         bp::def( 
             "convert"
             , convert_function_value
-            , ( bp::arg("val"), bp::arg("to_units") ) );
+            , ( bp::arg("val"), bp::arg("to_units") )
+            , "" );
     
     }
 
@@ -257,7 +263,8 @@ void register_free_functions(){
         bp::def( 
             "convertFrom"
             , convertFrom_function_value
-            , ( bp::arg("val"), bp::arg("from_units") ) );
+            , ( bp::arg("val"), bp::arg("from_units") )
+            , "" );
     
     }
 
@@ -269,7 +276,8 @@ void register_free_functions(){
         bp::def( 
             "convertFrom"
             , convertFrom_function_value
-            , ( bp::arg("val"), bp::arg("from_units") ) );
+            , ( bp::arg("val"), bp::arg("from_units") )
+            , "" );
     
     }
 
@@ -281,7 +289,8 @@ void register_free_functions(){
         bp::def( 
             "convertTo"
             , convertTo_function_value
-            , ( bp::arg("val"), bp::arg("to_units") ) );
+            , ( bp::arg("val"), bp::arg("to_units") )
+            , "" );
     
     }
 
@@ -293,7 +302,8 @@ void register_free_functions(){
         bp::def( 
             "convertTo"
             , convertTo_function_value
-            , ( bp::arg("val"), bp::arg("to_units") ) );
+            , ( bp::arg("val"), bp::arg("to_units") )
+            , "" );
     
     }
 

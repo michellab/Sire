@@ -34,6 +34,24 @@ import pygccxml
 
 all_exposed_classes = {}
 
+def demangle(c):
+    """Internal function that does its best job to demangle a class into
+       a recognisable string"""
+    bases = []
+
+    base = c.parent
+    while base:
+        try:
+            if base.name != "::":
+                bases.insert(0, base.name)
+            base = base.parent
+        except:
+            base = None
+
+    bases.append(c.name)
+    print("Demangled '%s' to '%s'" % (c.name, "::".join(bases)))
+    return "::".join(bases)
+
 def _generate_bases(self, base_creators):
     """This is a new version of the Py++ generate_bases function that only
        adds in bases that are known to be exposed (known via the global list
@@ -53,8 +71,7 @@ def _generate_bases(self, base_creators):
                 bases.append( algorithm.create_identifier( self, base_desc.related_class.decl_string ) )
         except:
             # doesn't work with CastXML
-            demangled = "%s::%s" % (base_desc.related_class.parent.name,
-                                    base_desc.related_class.name)
+            demangled = demangle(base_desc.related_class)
 
             if (demangled in all_exposed_classes):
                 bases.append( algorithm.create_identifier( self, base_desc.related_class.decl_string ) )
