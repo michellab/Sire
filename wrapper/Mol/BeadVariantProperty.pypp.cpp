@@ -25,11 +25,11 @@ void register_BeadVariantProperty_class(){
 
     { //::SireMol::BeadProperty< QVariant >
         typedef bp::class_< SireMol::BeadProperty< QVariant >, bp::bases< SireMol::BeadProp, SireMol::MolViewProperty, SireBase::Property > > BeadVariantProperty_exposer_t;
-        BeadVariantProperty_exposer_t BeadVariantProperty_exposer = BeadVariantProperty_exposer_t( "BeadVariantProperty", bp::init< >() );
+        BeadVariantProperty_exposer_t BeadVariantProperty_exposer = BeadVariantProperty_exposer_t( "BeadVariantProperty", "", bp::init< >("") );
         bp::scope BeadVariantProperty_scope( BeadVariantProperty_exposer );
-        BeadVariantProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const &, SireMol::Beading const & >(( bp::arg("molinfo"), bp::arg("beading") )) );
-        BeadVariantProperty_exposer.def( bp::init< QVector< QVariant > const &, SireMol::Beading const & >(( bp::arg("values"), bp::arg("beading") )) );
-        BeadVariantProperty_exposer.def( bp::init< SireMol::BeadProperty< QVariant > const & >(( bp::arg("other") )) );
+        BeadVariantProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const &, SireMol::Beading const & >(( bp::arg("molinfo"), bp::arg("beading") ), "") );
+        BeadVariantProperty_exposer.def( bp::init< QVector< QVariant > const &, SireMol::Beading const & >(( bp::arg("values"), bp::arg("beading") ), "") );
+        BeadVariantProperty_exposer.def( bp::init< SireMol::BeadProperty< QVariant > const & >(( bp::arg("other") ), "") );
         { //::SireMol::BeadProperty< QVariant >::array
         
             typedef SireMol::BeadProperty< QVariant > exported_class_t;
@@ -39,7 +39,8 @@ void register_BeadVariantProperty_class(){
             BeadVariantProperty_exposer.def( 
                 "array"
                 , array_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::BeadProperty< QVariant >::assertCanConvert
@@ -51,7 +52,8 @@ void register_BeadVariantProperty_class(){
             BeadVariantProperty_exposer.def( 
                 "assertCanConvert"
                 , assertCanConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::BeadProperty< QVariant >::assignFrom
@@ -63,7 +65,8 @@ void register_BeadVariantProperty_class(){
             BeadVariantProperty_exposer.def( 
                 "assignFrom"
                 , assignFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::BeadProperty< QVariant >::at
@@ -76,7 +79,8 @@ void register_BeadVariantProperty_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("beadidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::BeadProperty< QVariant >::canConvert
@@ -88,7 +92,8 @@ void register_BeadVariantProperty_class(){
             BeadVariantProperty_exposer.def( 
                 "canConvert"
                 , canConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::BeadProperty< QVariant >::count
@@ -99,7 +104,8 @@ void register_BeadVariantProperty_class(){
             
             BeadVariantProperty_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMol::BeadProperty< QVariant >::fromVariant
@@ -111,7 +117,8 @@ void register_BeadVariantProperty_class(){
             BeadVariantProperty_exposer.def( 
                 "fromVariant"
                 , fromVariant_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::BeadProperty< QVariant >::get
@@ -124,7 +131,8 @@ void register_BeadVariantProperty_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("beadidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::BeadProperty< QVariant >::isCompatibleWith
@@ -136,7 +144,8 @@ void register_BeadVariantProperty_class(){
             BeadVariantProperty_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::BeadProperty< QVariant >::isEmpty
@@ -147,7 +156,8 @@ void register_BeadVariantProperty_class(){
             
             BeadVariantProperty_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMol::BeadProperty< QVariant >::nBeads
@@ -158,7 +168,8 @@ void register_BeadVariantProperty_class(){
             
             BeadVariantProperty_exposer.def( 
                 "nBeads"
-                , nBeads_function_value );
+                , nBeads_function_value
+                , "" );
         
         }
         BeadVariantProperty_exposer.def( bp::self != bp::self );
@@ -172,7 +183,8 @@ void register_BeadVariantProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         BeadVariantProperty_exposer.def( bp::self == bp::self );
@@ -186,7 +198,8 @@ void register_BeadVariantProperty_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("beadidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::BeadProperty< QVariant >::set
@@ -199,7 +212,8 @@ void register_BeadVariantProperty_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("beadidx"), bp::arg("value") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::BeadProperty< QVariant >::size
@@ -210,7 +224,8 @@ void register_BeadVariantProperty_class(){
             
             BeadVariantProperty_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "" );
         
         }
         { //::SireMol::BeadProperty< QVariant >::toString
@@ -221,7 +236,8 @@ void register_BeadVariantProperty_class(){
             
             BeadVariantProperty_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::BeadProperty< QVariant >::toVariant
@@ -232,7 +248,8 @@ void register_BeadVariantProperty_class(){
             
             BeadVariantProperty_exposer.def( 
                 "toVariant"
-                , toVariant_function_value );
+                , toVariant_function_value
+                , "" );
         
         }
         { //::SireMol::BeadProperty< QVariant >::typeName
@@ -243,7 +260,8 @@ void register_BeadVariantProperty_class(){
             
             BeadVariantProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         BeadVariantProperty_exposer.staticmethod( "fromVariant" );

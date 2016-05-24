@@ -39,9 +39,9 @@ void register_NullMove_class(){
 
     { //::SireMove::NullMove
         typedef bp::class_< SireMove::NullMove, bp::bases< SireMove::Move, SireBase::Property > > NullMove_exposer_t;
-        NullMove_exposer_t NullMove_exposer = NullMove_exposer_t( "NullMove", bp::init< >() );
+        NullMove_exposer_t NullMove_exposer = NullMove_exposer_t( "NullMove", "This is a null move - it doesnt change the system at all", bp::init< >("Constructor") );
         bp::scope NullMove_scope( NullMove_exposer );
-        NullMove_exposer.def( bp::init< SireMove::NullMove const & >(( bp::arg("other") )) );
+        NullMove_exposer.def( bp::init< SireMove::NullMove const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::NullMove::clearStatistics
         
             typedef void ( ::SireMove::NullMove::*clearStatistics_function_type)(  ) ;
@@ -49,7 +49,8 @@ void register_NullMove_class(){
             
             NullMove_exposer.def( 
                 "clearStatistics"
-                , clearStatistics_function_value );
+                , clearStatistics_function_value
+                , "There are no statistics to clear" );
         
         }
         { //::SireMove::NullMove::ensemble
@@ -59,7 +60,8 @@ void register_NullMove_class(){
             
             NullMove_exposer.def( 
                 "ensemble"
-                , ensemble_function_value );
+                , ensemble_function_value
+                , "NullMove doesnt change anything (so must be NVE)" );
         
         }
         { //::SireMove::NullMove::move
@@ -70,7 +72,8 @@ void register_NullMove_class(){
             NullMove_exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats") ) );
+                , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats") )
+                , "NullMove doesnt perform any moves - no matter how hard you try" );
         
         }
         { //::SireMove::NullMove::nMoves
@@ -80,7 +83,8 @@ void register_NullMove_class(){
             
             NullMove_exposer.def( 
                 "nMoves"
-                , nMoves_function_value );
+                , nMoves_function_value
+                , "There have been and never will be any NullMove events" );
         
         }
         NullMove_exposer.def( bp::self != bp::self );
@@ -93,7 +97,8 @@ void register_NullMove_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         NullMove_exposer.def( bp::self == bp::self );
@@ -105,7 +110,8 @@ void register_NullMove_class(){
             NullMove_exposer.def( 
                 "setGenerator"
                 , setGenerator_function_value
-                , ( bp::arg("rangenerator") ) );
+                , ( bp::arg("rangenerator") )
+                , "The NullMove does not use a random number generator" );
         
         }
         { //::SireMove::NullMove::toString
@@ -115,7 +121,8 @@ void register_NullMove_class(){
             
             NullMove_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation" );
         
         }
         { //::SireMove::NullMove::typeName
@@ -125,7 +132,8 @@ void register_NullMove_class(){
             
             NullMove_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         NullMove_exposer.staticmethod( "typeName" );

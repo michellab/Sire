@@ -21,10 +21,10 @@ void register_SysIdx_class(){
 
     { //::SireSystem::SysIdx
         typedef bp::class_< SireSystem::SysIdx, bp::bases< SireSystem::SysID, SireID::ID, SireID::IndexBase > > SysIdx_exposer_t;
-        SysIdx_exposer_t SysIdx_exposer = SysIdx_exposer_t( "SysIdx", bp::init< >() );
+        SysIdx_exposer_t SysIdx_exposer = SysIdx_exposer_t( "SysIdx", "This is an ID object that is used to index simulation systems (e.g. index\nin a list or array).\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope SysIdx_scope( SysIdx_exposer );
-        SysIdx_exposer.def( bp::init< qint32 >(( bp::arg("idx") )) );
-        SysIdx_exposer.def( bp::init< SireSystem::SysIdx const & >(( bp::arg("other") )) );
+        SysIdx_exposer.def( bp::init< qint32 >(( bp::arg("idx") ), "") );
+        SysIdx_exposer.def( bp::init< SireSystem::SysIdx const & >(( bp::arg("other") ), "") );
         { //::SireSystem::SysIdx::hash
         
             typedef ::uint ( ::SireSystem::SysIdx::*hash_function_type)(  ) const;
@@ -32,7 +32,8 @@ void register_SysIdx_class(){
             
             SysIdx_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireSystem::SysIdx::isNull
@@ -42,7 +43,8 @@ void register_SysIdx_class(){
             
             SysIdx_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireSystem::SysIdx::map
@@ -53,7 +55,8 @@ void register_SysIdx_class(){
             SysIdx_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("systems") ) );
+                , ( bp::arg("systems") )
+                , "" );
         
         }
         { //::SireSystem::SysIdx::null
@@ -63,7 +66,8 @@ void register_SysIdx_class(){
             
             SysIdx_exposer.def( 
                 "null"
-                , null_function_value );
+                , null_function_value
+                , "" );
         
         }
         { //::SireSystem::SysIdx::operator=
@@ -75,7 +79,8 @@ void register_SysIdx_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireSystem::SysIdx::toString
@@ -85,7 +90,8 @@ void register_SysIdx_class(){
             
             SysIdx_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireSystem::SysIdx::typeName
@@ -95,7 +101,8 @@ void register_SysIdx_class(){
             
             SysIdx_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireSystem::SysIdx::what
@@ -105,7 +112,8 @@ void register_SysIdx_class(){
             
             SysIdx_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         SysIdx_exposer.staticmethod( "null" );

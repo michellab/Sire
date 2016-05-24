@@ -51,15 +51,15 @@ void register_Matrix_class(){
 
     { //::SireMaths::Matrix
         typedef bp::class_< SireMaths::Matrix > Matrix_exposer_t;
-        Matrix_exposer_t Matrix_exposer = Matrix_exposer_t( "Matrix", bp::init< >() );
+        Matrix_exposer_t Matrix_exposer = Matrix_exposer_t( "Matrix", "\nThis class represents a 3x3 square matrix, used to represent 3D transformations.\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a default Matrix (identity matrix)") );
         bp::scope Matrix_scope( Matrix_exposer );
-        Matrix_exposer.def( bp::init< double >(( bp::arg("diagonal_value") )) );
-        Matrix_exposer.def( bp::init< double, double, double, double, double, double, double, double, double >(( bp::arg("xx"), bp::arg("xy"), bp::arg("xz"), bp::arg("yx"), bp::arg("yy"), bp::arg("yz"), bp::arg("zx"), bp::arg("zy"), bp::arg("zz") )) );
-        Matrix_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const &, SireMaths::Vector const & >(( bp::arg("r1"), bp::arg("r2"), bp::arg("r3") )) );
-        Matrix_exposer.def( bp::init< boost::tuples::tuple< SireMaths::Vector, SireMaths::Vector, SireMaths::Vector, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > const & >(( bp::arg("rows") )) );
-        Matrix_exposer.def( bp::init< SireMaths::NMatrix const & >(( bp::arg("m") )) );
-        Matrix_exposer.def( bp::init< gsl_matrix const * >(( bp::arg("m") )) );
-        Matrix_exposer.def( bp::init< SireMaths::Matrix const & >(( bp::arg("m") )) );
+        Matrix_exposer.def( bp::init< double >(( bp::arg("diagonal_value") ), "Construct a matrix whose diagonal elements equal diagonal_value\nand whose off-diagonal elements equal zero") );
+        Matrix_exposer.def( bp::init< double, double, double, double, double, double, double, double, double >(( bp::arg("xx"), bp::arg("xy"), bp::arg("xz"), bp::arg("yx"), bp::arg("yy"), bp::arg("yz"), bp::arg("zx"), bp::arg("zy"), bp::arg("zz") ), "Construct a Matrix. Elements listed as row 1, then\nrow 2, then row 3.") );
+        Matrix_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const &, SireMaths::Vector const & >(( bp::arg("r1"), bp::arg("r2"), bp::arg("r3") ), "Construct a matrix from three vectors - each vector is a row") );
+        Matrix_exposer.def( bp::init< boost::tuples::tuple< SireMaths::Vector, SireMaths::Vector, SireMaths::Vector, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > const & >(( bp::arg("rows") ), "Construct a matrix from a tuple of three vectors - each\nvector is a row") );
+        Matrix_exposer.def( bp::init< SireMaths::NMatrix const & >(( bp::arg("m") ), "Construct from an NMatrix") );
+        Matrix_exposer.def( bp::init< gsl_matrix const * >(( bp::arg("m") ), "Construct from a GSL matrix. This must obviously be a 3x3 matrix") );
+        Matrix_exposer.def( bp::init< SireMaths::Matrix const & >(( bp::arg("m") ), "Copy constructor") );
         { //::SireMaths::Matrix::at
         
             typedef double ( ::SireMaths::Matrix::*at_function_type)( int,int ) const;
@@ -68,7 +68,8 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "Return the element at index i,j" );
         
         }
         { //::SireMaths::Matrix::checkedOffset
@@ -79,7 +80,8 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "checkedOffset"
                 , checkedOffset_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "Return the offset into the array of the value at index [i,j]\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMaths::Matrix::column0
@@ -89,7 +91,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "column0"
-                , column0_function_value );
+                , column0_function_value
+                , "Return each column" );
         
         }
         { //::SireMaths::Matrix::column1
@@ -99,7 +102,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "column1"
-                , column1_function_value );
+                , column1_function_value
+                , "Return each column" );
         
         }
         { //::SireMaths::Matrix::column2
@@ -109,7 +113,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "column2"
-                , column2_function_value );
+                , column2_function_value
+                , "Return each column" );
         
         }
         { //::SireMaths::Matrix::covariance
@@ -120,7 +125,8 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "covariance"
                 , covariance_function_value
-                , ( bp::arg("p"), bp::arg("q"), bp::arg("n")=(int)(-1) ) );
+                , ( bp::arg("p"), bp::arg("q"), bp::arg("n")=(int)(-1) )
+                , "Return the covariance matrix of the passed arrays of points. This\nmatches point p[i] against point q[i], and only calculates up to either\nthe specified number of points, if n > 0, or to min(len(p),len(q))" );
         
         }
         { //::SireMaths::Matrix::determinant
@@ -130,7 +136,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "determinant"
-                , determinant_function_value );
+                , determinant_function_value
+                , "Return the determinant of the matrix" );
         
         }
         { //::SireMaths::Matrix::diagonalise
@@ -140,7 +147,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "diagonalise"
-                , diagonalise_function_value );
+                , diagonalise_function_value
+                , "Return the eigenvectors and eigenvalues of this matrix" );
         
         }
         { //::SireMaths::Matrix::enforceSymmetric
@@ -150,7 +158,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "enforceSymmetric"
-                , enforceSymmetric_function_value );
+                , enforceSymmetric_function_value
+                , "Ensure that this matrix is symmetric - this is done by copying the upper-right\ndiagonal to the lower-left diagonal. Note that you should only really use this\nfunction on matricies that you know are symmetric, but may have lost some of\ntheir symmetry due to numerical rounding error" );
         
         }
         { //::SireMaths::Matrix::getPrincipalAxes
@@ -160,7 +169,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "getPrincipalAxes"
-                , getPrincipalAxes_function_value );
+                , getPrincipalAxes_function_value
+                , "Obtain the principal axes of this matrix. This can only be performed if this\nmatrix is symmetric. You should only call this function for matricies that\nyou know are symmetric, as this function will assume that the matrix is\nsymmetric, and will thus only use the upper-right diagonal of values.\nThe returned principal axes will be sorted from the highest eigenvalue to\nthe lowest." );
         
         }
         { //::SireMaths::Matrix::identity
@@ -170,7 +180,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "identity"
-                , identity_function_value );
+                , identity_function_value
+                , "Return the identity matrix" );
         
         }
         { //::SireMaths::Matrix::inverse
@@ -180,7 +191,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "inverse"
-                , inverse_function_value );
+                , inverse_function_value
+                , "Return the inverse of this matrix. Throws a math_error if this\nmatrix cannot be inverted." );
         
         }
         { //::SireMaths::Matrix::isIdentity
@@ -190,7 +202,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "isIdentity"
-                , isIdentity_function_value );
+                , isIdentity_function_value
+                , "Return whether or not this matrix is equal to the identity matrix" );
         
         }
         { //::SireMaths::Matrix::isSymmetric
@@ -200,7 +213,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "isSymmetric"
-                , isSymmetric_function_value );
+                , isSymmetric_function_value
+                , "Return whether or not this is a symmetric matrix" );
         
         }
         { //::SireMaths::Matrix::offset
@@ -211,7 +225,8 @@ void register_Matrix_class(){
             Matrix_exposer.def( 
                 "offset"
                 , offset_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         Matrix_exposer.def( bp::self != bp::self );
@@ -224,7 +239,8 @@ void register_Matrix_class(){
                 "__call__"
                 , __call___function_value
                 , ( bp::arg("i"), bp::arg("j") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMaths::Matrix::operator=
@@ -236,7 +252,8 @@ void register_Matrix_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Matrix_exposer.def( bp::self == bp::self );
@@ -247,7 +264,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "row0"
-                , row0_function_value );
+                , row0_function_value
+                , "Return each row" );
         
         }
         { //::SireMaths::Matrix::row1
@@ -257,7 +275,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "row1"
-                , row1_function_value );
+                , row1_function_value
+                , "Return each row" );
         
         }
         { //::SireMaths::Matrix::row2
@@ -267,7 +286,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "row2"
-                , row2_function_value );
+                , row2_function_value
+                , "Return each row" );
         
         }
         { //::SireMaths::Matrix::setToIdentity
@@ -277,7 +297,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "setToIdentity"
-                , setToIdentity_function_value );
+                , setToIdentity_function_value
+                , "Set the matrix to identity" );
         
         }
         { //::SireMaths::Matrix::singleValueDecomposition
@@ -287,7 +308,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "singleValueDecomposition"
-                , singleValueDecomposition_function_value );
+                , singleValueDecomposition_function_value
+                , "Return the single value decomposition of this matrix.\nThis calculates the decomposition of this matrix\ninto U S V^T, returning U, S and V in the tuple\n" );
         
         }
         { //::SireMaths::Matrix::svd
@@ -297,7 +319,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "svd"
-                , svd_function_value );
+                , svd_function_value
+                , "Return the single value decomposition of this matrix.\nThis calculates the decomposition of this matrix\ninto U S V^T, returning U, S and V in the tuple\n" );
         
         }
         { //::SireMaths::Matrix::toString
@@ -307,7 +330,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a QString representation of the matrix" );
         
         }
         { //::SireMaths::Matrix::trace
@@ -317,7 +341,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "trace"
-                , trace_function_value );
+                , trace_function_value
+                , "Return the trace of the matrix" );
         
         }
         { //::SireMaths::Matrix::transpose
@@ -327,7 +352,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "transpose"
-                , transpose_function_value );
+                , transpose_function_value
+                , "Return the transpose of the matrix" );
         
         }
         { //::SireMaths::Matrix::typeName
@@ -337,7 +363,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMaths::Matrix::what
@@ -347,7 +374,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         { //::SireMaths::Matrix::xx
@@ -357,7 +385,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "xx"
-                , xx_function_value );
+                , xx_function_value
+                , "" );
         
         }
         { //::SireMaths::Matrix::xy
@@ -367,7 +396,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "xy"
-                , xy_function_value );
+                , xy_function_value
+                , "" );
         
         }
         { //::SireMaths::Matrix::xz
@@ -377,7 +407,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "xz"
-                , xz_function_value );
+                , xz_function_value
+                , "" );
         
         }
         { //::SireMaths::Matrix::yx
@@ -387,7 +418,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "yx"
-                , yx_function_value );
+                , yx_function_value
+                , "" );
         
         }
         { //::SireMaths::Matrix::yy
@@ -397,7 +429,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "yy"
-                , yy_function_value );
+                , yy_function_value
+                , "" );
         
         }
         { //::SireMaths::Matrix::yz
@@ -407,7 +440,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "yz"
-                , yz_function_value );
+                , yz_function_value
+                , "" );
         
         }
         { //::SireMaths::Matrix::zero
@@ -417,7 +451,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "zero"
-                , zero_function_value );
+                , zero_function_value
+                , "Return the null matrix" );
         
         }
         { //::SireMaths::Matrix::zx
@@ -427,7 +462,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "zx"
-                , zx_function_value );
+                , zx_function_value
+                , "" );
         
         }
         { //::SireMaths::Matrix::zy
@@ -437,7 +473,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "zy"
-                , zy_function_value );
+                , zy_function_value
+                , "" );
         
         }
         { //::SireMaths::Matrix::zz
@@ -447,7 +484,8 @@ void register_Matrix_class(){
             
             Matrix_exposer.def( 
                 "zz"
-                , zz_function_value );
+                , zz_function_value
+                , "" );
         
         }
         Matrix_exposer.staticmethod( "covariance" );

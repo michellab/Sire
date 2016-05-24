@@ -35,12 +35,12 @@ void register_FEP_class(){
 
     { //::SireAnalysis::FEP
         typedef bp::class_< SireAnalysis::FEP, bp::bases< SireBase::Property > > FEP_exposer_t;
-        FEP_exposer_t FEP_exposer = FEP_exposer_t( "FEP", bp::init< >() );
+        FEP_exposer_t FEP_exposer = FEP_exposer_t( "FEP", "This class is used to analyse the free energies that are\ncalculated during a free energy perturbation (FEP) simulation\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope FEP_scope( FEP_exposer );
-        FEP_exposer.def( bp::init< QList< double > const &, QMap< double, SireMaths::FreeEnergyAverage > const & >(( bp::arg("windows"), bp::arg("deltas") )) );
-        FEP_exposer.def( bp::init< QList< double > const &, QMap< double, SireMaths::FreeEnergyAverage > const &, QMap< double, SireMaths::FreeEnergyAverage > const & >(( bp::arg("windows"), bp::arg("forwards_deltas"), bp::arg("backwards_deltas") )) );
-        FEP_exposer.def( bp::init< SireAnalysis::FEPDeltas const & >(( bp::arg("deltas") )) );
-        FEP_exposer.def( bp::init< SireAnalysis::FEP const & >(( bp::arg("other") )) );
+        FEP_exposer.def( bp::init< QList< double > const &, QMap< double, SireMaths::FreeEnergyAverage > const & >(( bp::arg("windows"), bp::arg("deltas") ), "Construct to use the passed set of windows, with the free energy deltas from\neach window to the window above") );
+        FEP_exposer.def( bp::init< QList< double > const &, QMap< double, SireMaths::FreeEnergyAverage > const &, QMap< double, SireMaths::FreeEnergyAverage > const & >(( bp::arg("windows"), bp::arg("forwards_deltas"), bp::arg("backwards_deltas") ), "Construct to use the passed windows, with the free energy deltas from\neach window to the window above in forwards_deltas and from the window\nbelow to each window in backwards_deltas") );
+        FEP_exposer.def( bp::init< SireAnalysis::FEPDeltas const & >(( bp::arg("deltas") ), "Construct to use the passed FEP deltas") );
+        FEP_exposer.def( bp::init< SireAnalysis::FEP const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireAnalysis::FEP::add
         
             typedef void ( ::SireAnalysis::FEP::*add_function_type)( ::QList< double > const &,::QMap< double, SireMaths::FreeEnergyAverage > const & ) ;
@@ -49,7 +49,8 @@ void register_FEP_class(){
             FEP_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("windows"), bp::arg("deltas") ) );
+                , ( bp::arg("windows"), bp::arg("deltas") )
+                , "Add the data for the next iteration, which contains the deltas for the passed windows,\nwith the free energy being for each window to the next window" );
         
         }
         { //::SireAnalysis::FEP::add
@@ -60,7 +61,8 @@ void register_FEP_class(){
             FEP_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("windows"), bp::arg("forwards_deltas"), bp::arg("backwards_deltas") ) );
+                , ( bp::arg("windows"), bp::arg("forwards_deltas"), bp::arg("backwards_deltas") )
+                , "Add the data for the next iteration, which contains the deltas for the passed windows,\nwith forwards_deltas containing the free energy from each window to the next window,\nand backwards_deltas containing the free energy from the previous window to each window" );
         
         }
         { //::SireAnalysis::FEP::add
@@ -71,7 +73,8 @@ void register_FEP_class(){
             FEP_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("deltas") ) );
+                , ( bp::arg("deltas") )
+                , "Add the data for the next iteration" );
         
         }
         { //::SireAnalysis::FEP::at
@@ -82,7 +85,8 @@ void register_FEP_class(){
             FEP_exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return the deltas for the ith iteration" );
         
         }
         { //::SireAnalysis::FEP::clear
@@ -92,7 +96,8 @@ void register_FEP_class(){
             
             FEP_exposer.def( 
                 "clear"
-                , clear_function_value );
+                , clear_function_value
+                , "Remove all values from the histogram" );
         
         }
         { //::SireAnalysis::FEP::count
@@ -102,7 +107,8 @@ void register_FEP_class(){
             
             FEP_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of iterations" );
         
         }
         { //::SireAnalysis::FEP::deltas
@@ -112,7 +118,8 @@ void register_FEP_class(){
             
             FEP_exposer.def( 
                 "deltas"
-                , deltas_function_value );
+                , deltas_function_value
+                , "Return the deltas for all iterations" );
         
         }
         { //::SireAnalysis::FEP::lambdaValues
@@ -122,7 +129,8 @@ void register_FEP_class(){
             
             FEP_exposer.def( 
                 "lambdaValues"
-                , lambdaValues_function_value );
+                , lambdaValues_function_value
+                , "Return the values of all windows" );
         
         }
         { //::SireAnalysis::FEP::merge
@@ -133,7 +141,8 @@ void register_FEP_class(){
             FEP_exposer.def( 
                 "merge"
                 , merge_function_value
-                , ( bp::arg("start"), bp::arg("end") ) );
+                , ( bp::arg("start"), bp::arg("end") )
+                , "Merge the deltas for iterations start->end" );
         
         }
         { //::SireAnalysis::FEP::merge
@@ -144,7 +153,8 @@ void register_FEP_class(){
             FEP_exposer.def( 
                 "merge"
                 , merge_function_value
-                , ( bp::arg("indicies") ) );
+                , ( bp::arg("indicies") )
+                , "Merge the deltas at the passed indicies" );
         
         }
         { //::SireAnalysis::FEP::nIterations
@@ -154,7 +164,8 @@ void register_FEP_class(){
             
             FEP_exposer.def( 
                 "nIterations"
-                , nIterations_function_value );
+                , nIterations_function_value
+                , "Return the number of iterations" );
         
         }
         { //::SireAnalysis::FEP::nLambdaValues
@@ -164,7 +175,8 @@ void register_FEP_class(){
             
             FEP_exposer.def( 
                 "nLambdaValues"
-                , nLambdaValues_function_value );
+                , nLambdaValues_function_value
+                , "Return the number of lambda values (windows)" );
         
         }
         { //::SireAnalysis::FEP::nSamples
@@ -174,7 +186,8 @@ void register_FEP_class(){
             
             FEP_exposer.def( 
                 "nSamples"
-                , nSamples_function_value );
+                , nSamples_function_value
+                , "Return the total number of samples in the simulation" );
         
         }
         { //::SireAnalysis::FEP::nWindows
@@ -184,7 +197,8 @@ void register_FEP_class(){
             
             FEP_exposer.def( 
                 "nWindows"
-                , nWindows_function_value );
+                , nWindows_function_value
+                , "Return the number of windows" );
         
         }
         FEP_exposer.def( bp::self != bp::self );
@@ -197,7 +211,8 @@ void register_FEP_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         FEP_exposer.def( bp::self == bp::self );
@@ -209,7 +224,8 @@ void register_FEP_class(){
             FEP_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireAnalysis::FEP::removeAt
@@ -220,7 +236,8 @@ void register_FEP_class(){
             FEP_exposer.def( 
                 "removeAt"
                 , removeAt_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Remove the data for iteration i" );
         
         }
         { //::SireAnalysis::FEP::removeRange
@@ -231,7 +248,8 @@ void register_FEP_class(){
             FEP_exposer.def( 
                 "removeRange"
                 , removeRange_function_value
-                , ( bp::arg("start"), bp::arg("end") ) );
+                , ( bp::arg("start"), bp::arg("end") )
+                , "Remove every iteration from start to end (inclusively)" );
         
         }
         { //::SireAnalysis::FEP::rollingAverage
@@ -242,7 +260,8 @@ void register_FEP_class(){
             FEP_exposer.def( 
                 "rollingAverage"
                 , rollingAverage_function_value
-                , ( bp::arg("niterations") ) );
+                , ( bp::arg("niterations") )
+                , "Return a list of Gradients that represents the rolling average over niterations\niterations over this TI data set. If this data set contains 100 iterations, and\nwe calculate the rolling average over 50 iterations, then the returned Gradients\nwill be the average from 1-50, then 2-51, 3-52.....51-100" );
         
         }
         { //::SireAnalysis::FEP::set
@@ -253,7 +272,8 @@ void register_FEP_class(){
             FEP_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("i"), bp::arg("windows"), bp::arg("deltas") ) );
+                , ( bp::arg("i"), bp::arg("windows"), bp::arg("deltas") )
+                , "Set the deltas for the ith iteration" );
         
         }
         { //::SireAnalysis::FEP::set
@@ -264,7 +284,8 @@ void register_FEP_class(){
             FEP_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("i"), bp::arg("windows"), bp::arg("forwards_deltas"), bp::arg("backwards_deltas") ) );
+                , ( bp::arg("i"), bp::arg("windows"), bp::arg("forwards_deltas"), bp::arg("backwards_deltas") )
+                , "Set the deltas for the ith iteration" );
         
         }
         { //::SireAnalysis::FEP::set
@@ -275,7 +296,8 @@ void register_FEP_class(){
             FEP_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("i"), bp::arg("deltas") ) );
+                , ( bp::arg("i"), bp::arg("deltas") )
+                , "Set the deltas for the ith iteration" );
         
         }
         { //::SireAnalysis::FEP::size
@@ -285,7 +307,8 @@ void register_FEP_class(){
             
             FEP_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "Return the number of iterations" );
         
         }
         { //::SireAnalysis::FEP::toString
@@ -295,7 +318,8 @@ void register_FEP_class(){
             
             FEP_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireAnalysis::FEP::typeName
@@ -305,7 +329,8 @@ void register_FEP_class(){
             
             FEP_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireAnalysis::FEP::what
@@ -315,7 +340,8 @@ void register_FEP_class(){
             
             FEP_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         { //::SireAnalysis::FEP::windows
@@ -325,7 +351,8 @@ void register_FEP_class(){
             
             FEP_exposer.def( 
                 "windows"
-                , windows_function_value );
+                , windows_function_value
+                , "Return the value of all windows" );
         
         }
         FEP_exposer.staticmethod( "typeName" );

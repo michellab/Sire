@@ -37,9 +37,9 @@ void register_HMCGenerator_class(){
 
     { //::SireMove::HMCGenerator
         typedef bp::class_< SireMove::HMCGenerator, bp::bases< SireMove::HMCVelGen, SireMove::VelocityGenerator, SireBase::Property > > HMCGenerator_exposer_t;
-        HMCGenerator_exposer_t HMCGenerator_exposer = HMCGenerator_exposer_t( "HMCGenerator", bp::init< >() );
+        HMCGenerator_exposer_t HMCGenerator_exposer = HMCGenerator_exposer_t( "HMCGenerator", "This is the velocity generator used for the standard\nHybrid Monte Carlo move. This generates velocities such\nthat the acceptance test is just based on the change\nin total energy, which, for a good integrator, is\nnear zero, so nearly all moves should be accepted", bp::init< >("Constructor") );
         bp::scope HMCGenerator_scope( HMCGenerator_exposer );
-        HMCGenerator_exposer.def( bp::init< SireMove::HMCGenerator const & >(( bp::arg("other") )) );
+        HMCGenerator_exposer.def( bp::init< SireMove::HMCGenerator const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::HMCGenerator::generate
         
             typedef double ( ::SireMove::HMCGenerator::*generate_function_type)( ::SireSystem::System const &,::SireMove::MolecularDynamics & ) ;
@@ -48,7 +48,8 @@ void register_HMCGenerator_class(){
             HMCGenerator_exposer.def( 
                 "generate"
                 , generate_function_value
-                , ( bp::arg("system"), bp::arg("md") ) );
+                , ( bp::arg("system"), bp::arg("md") )
+                , "Generate the velocities for the passed MD move, returning\nthe biasing factor" );
         
         }
         { //::SireMove::HMCGenerator::generate
@@ -59,7 +60,8 @@ void register_HMCGenerator_class(){
             HMCGenerator_exposer.def( 
                 "generate"
                 , generate_function_value
-                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Generate the velocities for the passed molecule view" );
         
         }
         { //::SireMove::HMCGenerator::getBias
@@ -70,7 +72,8 @@ void register_HMCGenerator_class(){
             HMCGenerator_exposer.def( 
                 "getBias"
                 , getBias_function_value
-                , ( bp::arg("md") ) );
+                , ( bp::arg("md") )
+                , "Return the bias of the current state of the passed MD move" );
         
         }
         HMCGenerator_exposer.def( bp::self != bp::self );
@@ -83,7 +86,8 @@ void register_HMCGenerator_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         HMCGenerator_exposer.def( bp::self == bp::self );
@@ -94,7 +98,8 @@ void register_HMCGenerator_class(){
             
             HMCGenerator_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         HMCGenerator_exposer.staticmethod( "typeName" );

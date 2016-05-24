@@ -58,10 +58,10 @@ void register_InternalFF_class(){
 
     { //::SireMM::InternalFF
         typedef bp::class_< SireMM::InternalFF, bp::bases< SireFF::FF3D, SireFF::G1FF, SireFF::FF, SireMol::MolGroupsBase, SireBase::Property > > InternalFF_exposer_t;
-        InternalFF_exposer_t InternalFF_exposer = InternalFF_exposer_t( "InternalFF", bp::init< >() );
+        InternalFF_exposer_t InternalFF_exposer = InternalFF_exposer_t( "InternalFF", "This is a forcefield that calculates the energies and forces\ncaused by molecular mechanics style internal intramolecular\npotentials, e.g. bond, angle, dihedral, urey bradley terms\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope InternalFF_scope( InternalFF_exposer );
-        InternalFF_exposer.def( bp::init< QString const & >(( bp::arg("name") )) );
-        InternalFF_exposer.def( bp::init< SireMM::InternalFF const & >(( bp::arg("other") )) );
+        InternalFF_exposer.def( bp::init< QString const & >(( bp::arg("name") ), "Construct a named internal forcefield") );
+        InternalFF_exposer.def( bp::init< SireMM::InternalFF const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::InternalFF::combiningRules
         
             typedef ::SireMM::CLJFunction::COMBINING_RULES ( ::SireMM::InternalFF::*combiningRules_function_type)(  ) const;
@@ -69,7 +69,8 @@ void register_InternalFF_class(){
             
             InternalFF_exposer.def( 
                 "combiningRules"
-                , combiningRules_function_value );
+                , combiningRules_function_value
+                , "Return the type of combining rules used when calculating the 1-4\nnonbonded energy" );
         
         }
         { //::SireMM::InternalFF::components
@@ -80,7 +81,8 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "components"
                 , components_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::InternalFF::containsProperty
@@ -91,7 +93,8 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "containsProperty"
                 , containsProperty_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "Return whether this forcefield contains the property called name" );
         
         }
         { //::SireMM::InternalFF::disable14Calculation
@@ -101,7 +104,8 @@ void register_InternalFF_class(){
             
             InternalFF_exposer.def( 
                 "disable14Calculation"
-                , disable14Calculation_function_value );
+                , disable14Calculation_function_value
+                , "Disable calculation of the 1-4 nonbonded terms" );
         
         }
         { //::SireMM::InternalFF::enable14Calculation
@@ -111,7 +115,8 @@ void register_InternalFF_class(){
             
             InternalFF_exposer.def( 
                 "enable14Calculation"
-                , enable14Calculation_function_value );
+                , enable14Calculation_function_value
+                , "Turn on the calculate of 1-4 nonbonded terms" );
         
         }
         { //::SireMM::InternalFF::energy
@@ -121,7 +126,8 @@ void register_InternalFF_class(){
             
             InternalFF_exposer.def( 
                 "energy"
-                , energy_function_value );
+                , energy_function_value
+                , "" );
         
         }
         { //::SireMM::InternalFF::energy
@@ -132,7 +138,8 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "energy"
                 , energy_function_value
-                , ( bp::arg("component") ) );
+                , ( bp::arg("component") )
+                , "" );
         
         }
         { //::SireMM::InternalFF::energy
@@ -143,7 +150,8 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "energy"
                 , energy_function_value
-                , ( bp::arg("energytable"), bp::arg("scale_energy")=1 ) );
+                , ( bp::arg("energytable"), bp::arg("scale_energy")=1 )
+                , "Calculate the energies in molecules in the passed energy table\ncaused by this potential, and add them onto the energies already\nin the energy table (optionally scaled by scale_energy)" );
         
         }
         { //::SireMM::InternalFF::energy
@@ -154,7 +162,8 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "energy"
                 , energy_function_value
-                , ( bp::arg("energytable"), bp::arg("symbol"), bp::arg("scale_energy")=1 ) );
+                , ( bp::arg("energytable"), bp::arg("symbol"), bp::arg("scale_energy")=1 )
+                , "Calculate the energies of molecules in the passed energies table\ncaused by the component of this potential represented by\nsymbol, and add them onto the energies already\nin the energy table (optionally scaled by scale_energy)" );
         
         }
         { //::SireMM::InternalFF::field
@@ -165,7 +174,8 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "field"
                 , field_function_value
-                , ( bp::arg("fieldtable"), bp::arg("scale_field")=1 ) );
+                , ( bp::arg("fieldtable"), bp::arg("scale_field")=1 )
+                , "" );
         
         }
         { //::SireMM::InternalFF::field
@@ -176,7 +186,8 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "field"
                 , field_function_value
-                , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("scale_field")=1 ) );
+                , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("scale_field")=1 )
+                , "" );
         
         }
         { //::SireMM::InternalFF::field
@@ -187,7 +198,8 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "field"
                 , field_function_value
-                , ( bp::arg("fieldtable"), bp::arg("probe"), bp::arg("scale_field")=1 ) );
+                , ( bp::arg("fieldtable"), bp::arg("probe"), bp::arg("scale_field")=1 )
+                , "" );
         
         }
         { //::SireMM::InternalFF::field
@@ -198,7 +210,8 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "field"
                 , field_function_value
-                , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_field")=1 ) );
+                , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_field")=1 )
+                , "" );
         
         }
         { //::SireMM::InternalFF::force
@@ -209,7 +222,8 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "force"
                 , force_function_value
-                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 ) );
+                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
+                , "Calculate the forces acting on molecules in the passed force table\ncaused by this potential, and add them onto the forces already\nin the force table (optionally scaled by scale_force)" );
         
         }
         { //::SireMM::InternalFF::force
@@ -220,7 +234,8 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "force"
                 , force_function_value
-                , ( bp::arg("forcetable"), bp::arg("symbol"), bp::arg("scale_force")=1 ) );
+                , ( bp::arg("forcetable"), bp::arg("symbol"), bp::arg("scale_force")=1 )
+                , "Calculate the forces acting on molecules in the passed force table\ncaused by the component of this potential represented by\nsymbol, and add them onto the forces already\nin the force table (optionally scaled by scale_force)" );
         
         }
         { //::SireMM::InternalFF::isStrict
@@ -230,7 +245,8 @@ void register_InternalFF_class(){
             
             InternalFF_exposer.def( 
                 "isStrict"
-                , isStrict_function_value );
+                , isStrict_function_value
+                , "" );
         
         }
         { //::SireMM::InternalFF::mustNowRecalculateFromScratch
@@ -240,7 +256,8 @@ void register_InternalFF_class(){
             
             InternalFF_exposer.def( 
                 "mustNowRecalculateFromScratch"
-                , mustNowRecalculateFromScratch_function_value );
+                , mustNowRecalculateFromScratch_function_value
+                , "Set it that the forcefield must now be recalculate from scratch" );
         
         }
         InternalFF_exposer.def( bp::self != bp::self );
@@ -253,7 +270,8 @@ void register_InternalFF_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         InternalFF_exposer.def( bp::self == bp::self );
@@ -265,7 +283,8 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "parameters"
                 , parameters_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::InternalFF::potential
@@ -276,7 +295,8 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "potential"
                 , potential_function_value
-                , ( bp::arg("potentialtable"), bp::arg("scale_potential")=1 ) );
+                , ( bp::arg("potentialtable"), bp::arg("scale_potential")=1 )
+                , "" );
         
         }
         { //::SireMM::InternalFF::potential
@@ -287,7 +307,8 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "potential"
                 , potential_function_value
-                , ( bp::arg("potentialtable"), bp::arg("component"), bp::arg("scale_potential")=1 ) );
+                , ( bp::arg("potentialtable"), bp::arg("component"), bp::arg("scale_potential")=1 )
+                , "" );
         
         }
         { //::SireMM::InternalFF::potential
@@ -298,7 +319,8 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "potential"
                 , potential_function_value
-                , ( bp::arg("potentialtable"), bp::arg("probe"), bp::arg("scale_potential")=1 ) );
+                , ( bp::arg("potentialtable"), bp::arg("probe"), bp::arg("scale_potential")=1 )
+                , "" );
         
         }
         { //::SireMM::InternalFF::potential
@@ -309,7 +331,8 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "potential"
                 , potential_function_value
-                , ( bp::arg("potentialtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_potential")=1 ) );
+                , ( bp::arg("potentialtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_potential")=1 )
+                , "" );
         
         }
         { //::SireMM::InternalFF::properties
@@ -320,7 +343,8 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "properties"
                 , properties_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the values of all of the properties of this forcefield" );
         
         }
         { //::SireMM::InternalFF::property
@@ -332,7 +356,8 @@ void register_InternalFF_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the property with name name\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMM::InternalFF::setArithmeticCombiningRules
@@ -343,7 +368,8 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "setArithmeticCombiningRules"
                 , setArithmeticCombiningRules_function_value
-                , ( bp::arg("on") ) );
+                , ( bp::arg("on") )
+                , "Turn on or off use of arithmetic combining rules when calculating\nthe 1-4 nonbonded energy" );
         
         }
         { //::SireMM::InternalFF::setCombiningRules
@@ -354,7 +380,8 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "setCombiningRules"
                 , setCombiningRules_function_value
-                , ( bp::arg("rules") ) );
+                , ( bp::arg("rules") )
+                , "Set the combining rules used when calculating the 1-4 nonbonded energy,\nreturning whether or not this changes the forcefield" );
         
         }
         { //::SireMM::InternalFF::setGeometricCombiningRules
@@ -365,7 +392,8 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "setGeometricCombiningRules"
                 , setGeometricCombiningRules_function_value
-                , ( bp::arg("on") ) );
+                , ( bp::arg("on") )
+                , "Turn on or off use of geometric combining rules when calculating\nthe 1-4 nonbonded energy" );
         
         }
         { //::SireMM::InternalFF::setProperty
@@ -376,7 +404,8 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "setProperty"
                 , setProperty_function_value
-                , ( bp::arg("name"), bp::arg("property") ) );
+                , ( bp::arg("name"), bp::arg("property") )
+                , "Set the property name to the value value\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\n" );
         
         }
         { //::SireMM::InternalFF::setStrict
@@ -387,7 +416,8 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "setStrict"
                 , setStrict_function_value
-                , ( bp::arg("isstrict") ) );
+                , ( bp::arg("isstrict") )
+                , "Set whether or not this strictly include terms that\ninvolve only selected atoms. Otherwise this includes\nterms that involve at least one selected atom" );
         
         }
         { //::SireMM::InternalFF::setUse14Calculation
@@ -398,7 +428,8 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "setUse14Calculation"
                 , setUse14Calculation_function_value
-                , ( bp::arg("on") ) );
+                , ( bp::arg("on") )
+                , "Turn on or off the calculation of the 1-4 terms, returning whether\nor not this changes the forcefield" );
         
         }
         { //::SireMM::InternalFF::symbols
@@ -409,7 +440,8 @@ void register_InternalFF_class(){
             InternalFF_exposer.def( 
                 "symbols"
                 , symbols_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::InternalFF::typeName
@@ -419,7 +451,8 @@ void register_InternalFF_class(){
             
             InternalFF_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::InternalFF::uses14Calculation
@@ -429,7 +462,8 @@ void register_InternalFF_class(){
             
             InternalFF_exposer.def( 
                 "uses14Calculation"
-                , uses14Calculation_function_value );
+                , uses14Calculation_function_value
+                , "Return whether or not this forcefield also calculates the\n1-4 nonbonded terms" );
         
         }
         { //::SireMM::InternalFF::usingArithmeticCombiningRules
@@ -439,7 +473,8 @@ void register_InternalFF_class(){
             
             InternalFF_exposer.def( 
                 "usingArithmeticCombiningRules"
-                , usingArithmeticCombiningRules_function_value );
+                , usingArithmeticCombiningRules_function_value
+                , "Return whether or not arithmetic combining rules are used for the 1-4\nnonbonded energy calculation" );
         
         }
         { //::SireMM::InternalFF::usingGeometricCombiningRules
@@ -449,7 +484,8 @@ void register_InternalFF_class(){
             
             InternalFF_exposer.def( 
                 "usingGeometricCombiningRules"
-                , usingGeometricCombiningRules_function_value );
+                , usingGeometricCombiningRules_function_value
+                , "Return whether or not geometric combining rules are used for the 1-4\nnonbonded energy calculation" );
         
         }
         InternalFF_exposer.staticmethod( "typeName" );

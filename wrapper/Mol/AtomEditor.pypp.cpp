@@ -59,10 +59,10 @@ void register_AtomEditor_class(){
 
     { //::SireMol::AtomEditor
         typedef bp::class_< SireMol::AtomEditor, bp::bases< SireMol::Editor<SireMol::AtomEditor, SireMol::Atom>, SireMol::Atom, SireMol::MoleculeView, SireBase::Property > > AtomEditor_exposer_t;
-        AtomEditor_exposer_t AtomEditor_exposer = AtomEditor_exposer_t( "AtomEditor", bp::init< >() );
+        AtomEditor_exposer_t AtomEditor_exposer = AtomEditor_exposer_t( "AtomEditor", "This class is used to edit an atom in a molecule. This\nclass is able to edit everything about the molecule\nexcept for its relationship to other parts of the\nmolecule. To do that, you need an AtomStructureEditor\n(which is created automatically by the reparent()\nfunction)\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope AtomEditor_scope( AtomEditor_exposer );
-        AtomEditor_exposer.def( bp::init< SireMol::Atom const & >(( bp::arg("atom") )) );
-        AtomEditor_exposer.def( bp::init< SireMol::AtomEditor const & >(( bp::arg("other") )) );
+        AtomEditor_exposer.def( bp::init< SireMol::Atom const & >(( bp::arg("atom") ), "Construct an editor that edits a copy of atom") );
+        AtomEditor_exposer.def( bp::init< SireMol::AtomEditor const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::AtomEditor::operator=
         
             typedef ::SireMol::AtomEditor & ( ::SireMol::AtomEditor::*assign_function_type)( ::SireMol::Atom const & ) ;
@@ -72,7 +72,8 @@ void register_AtomEditor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::AtomEditor::operator=
@@ -84,7 +85,8 @@ void register_AtomEditor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::AtomEditor::reindex
@@ -95,7 +97,8 @@ void register_AtomEditor_class(){
             AtomEditor_exposer.def( 
                 "reindex"
                 , reindex_function_value
-                , ( bp::arg("atomidx") ) );
+                , ( bp::arg("atomidx") )
+                , "Reindex this atom so that it lies at index newidx. Note\nthat if newidx is greater than the number of atoms, then\nthis will move this atom to be the last in the list" );
         
         }
         { //::SireMol::AtomEditor::remove
@@ -105,7 +108,8 @@ void register_AtomEditor_class(){
             
             AtomEditor_exposer.def( 
                 "remove"
-                , remove_function_value );
+                , remove_function_value
+                , "Remove this atom from the molecule, returning an editor\nthat can further edit the structure of the molecule" );
         
         }
         { //::SireMol::AtomEditor::rename
@@ -117,7 +121,8 @@ void register_AtomEditor_class(){
                 "rename"
                 , rename_function_value
                 , ( bp::arg("name") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Rename this atom so that it is called newname" );
         
         }
         { //::SireMol::AtomEditor::renumber
@@ -129,7 +134,8 @@ void register_AtomEditor_class(){
                 "renumber"
                 , renumber_function_value
                 , ( bp::arg("number") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Renumber this atom so that it has number newnum" );
         
         }
         { //::SireMol::AtomEditor::reparent
@@ -140,7 +146,8 @@ void register_AtomEditor_class(){
             AtomEditor_exposer.def( 
                 "reparent"
                 , reparent_function_value
-                , ( bp::arg("cgidx") ) );
+                , ( bp::arg("cgidx") )
+                , "Reparent this atom so that it will be placed into the CutGroup\nwith index cgidx - this returns the updated atom in\nan AtomStructureEditor, which is optimised for further\nediting of the molecule structure\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomEditor::reparent
@@ -151,7 +158,8 @@ void register_AtomEditor_class(){
             AtomEditor_exposer.def( 
                 "reparent"
                 , reparent_function_value
-                , ( bp::arg("cgid") ) );
+                , ( bp::arg("cgid") )
+                , "Reparent this atom so that it will be placed into the CutGroup\nwith ID cgid - this returns the updated atom in\nan AtomStructureEditor, which is optimised for further\nediting of the molecule structure\nThrow: SireMol::missing_cutgroup\nThrow: SireMol::duplicate_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomEditor::reparent
@@ -162,7 +170,8 @@ void register_AtomEditor_class(){
             AtomEditor_exposer.def( 
                 "reparent"
                 , reparent_function_value
-                , ( bp::arg("residx") ) );
+                , ( bp::arg("residx") )
+                , "Reparent this atom so that it will be placed into the residue\nwith index residx - this returns the updated atom in\nan AtomStructureEditor, which is optimised for further\nediting of the molecule structure\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomEditor::reparent
@@ -173,7 +182,8 @@ void register_AtomEditor_class(){
             AtomEditor_exposer.def( 
                 "reparent"
                 , reparent_function_value
-                , ( bp::arg("resid") ) );
+                , ( bp::arg("resid") )
+                , "Reparent this atom so that it will be placed into the residue\nwith ID resid - this returns the updated atom in\nan AtomStructureEditor, which is optimised for further\nediting of the molecule structure\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomEditor::reparent
@@ -184,7 +194,8 @@ void register_AtomEditor_class(){
             AtomEditor_exposer.def( 
                 "reparent"
                 , reparent_function_value
-                , ( bp::arg("segidx") ) );
+                , ( bp::arg("segidx") )
+                , "Reparent this atom so that it will be placed into the segment\nwith index segidx - this returns the updated atom in\nan AtomStructureEditor, which is optimised for further\nediting of the molecule structure\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomEditor::reparent
@@ -195,7 +206,8 @@ void register_AtomEditor_class(){
             AtomEditor_exposer.def( 
                 "reparent"
                 , reparent_function_value
-                , ( bp::arg("segid") ) );
+                , ( bp::arg("segid") )
+                , "Reparent this atom so that it will be placed into the segment\nwith ID segid - this returns the updated atom in\nan AtomStructureEditor, which is optimised for further\nediting of the molecule structure\nThrow: SireMol::missing_segment\nThrow: SireMol::duplicate_segment\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomEditor::toString
@@ -205,7 +217,8 @@ void register_AtomEditor_class(){
             
             AtomEditor_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this editor" );
         
         }
         { //::SireMol::AtomEditor::typeName
@@ -215,7 +228,8 @@ void register_AtomEditor_class(){
             
             AtomEditor_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::AtomEditor::what
@@ -225,7 +239,8 @@ void register_AtomEditor_class(){
             
             AtomEditor_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         AtomEditor_exposer.staticmethod( "typeName" );

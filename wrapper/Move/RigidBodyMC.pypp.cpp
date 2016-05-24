@@ -66,11 +66,11 @@ void register_RigidBodyMC_class(){
 
     { //::SireMove::RigidBodyMC
         typedef bp::class_< SireMove::RigidBodyMC, bp::bases< SireMove::MonteCarlo, SireMove::Move, SireBase::Property > > RigidBodyMC_exposer_t;
-        RigidBodyMC_exposer_t RigidBodyMC_exposer = RigidBodyMC_exposer_t( "RigidBodyMC", bp::init< bp::optional< SireBase::PropertyMap const & > >(( bp::arg("map")=SireBase::PropertyMap() )) );
+        RigidBodyMC_exposer_t RigidBodyMC_exposer = RigidBodyMC_exposer_t( "RigidBodyMC", "This class implements a rigid body Monte Carlo move that\nmay be applied to a random molecule within a MoleculeGroup\n\nAuthor: Christopher Woods\n", bp::init< bp::optional< SireBase::PropertyMap const & > >(( bp::arg("map")=SireBase::PropertyMap() ), "Null constructor") );
         bp::scope RigidBodyMC_scope( RigidBodyMC_exposer );
-        RigidBodyMC_exposer.def( bp::init< SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )) );
-        RigidBodyMC_exposer.def( bp::init< SireMove::Sampler const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("sampler"), bp::arg("map")=SireBase::PropertyMap() )) );
-        RigidBodyMC_exposer.def( bp::init< SireMove::RigidBodyMC const & >(( bp::arg("other") )) );
+        RigidBodyMC_exposer.def( bp::init< SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ), "Construct a move that moves molecule views from the molecule group molgroup,\nselecting views randomly, with each view having an equal chance of\nbeing chosen") );
+        RigidBodyMC_exposer.def( bp::init< SireMove::Sampler const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("sampler"), bp::arg("map")=SireBase::PropertyMap() ), "Construct a move that moves molecules returned by the sampler sampler") );
+        RigidBodyMC_exposer.def( bp::init< SireMove::RigidBodyMC const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::RigidBodyMC::centerOfRotation
         
             typedef ::SireMove::GetPoint const & ( ::SireMove::RigidBodyMC::*centerOfRotation_function_type)(  ) const;
@@ -79,7 +79,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "centerOfRotation"
                 , centerOfRotation_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the function used to get the center of rotation of each molecule" );
         
         }
         { //::SireMove::RigidBodyMC::disableReflectionSphere
@@ -89,7 +90,8 @@ void register_RigidBodyMC_class(){
             
             RigidBodyMC_exposer.def( 
                 "disableReflectionSphere"
-                , disableReflectionSphere_function_value );
+                , disableReflectionSphere_function_value
+                , "Completely switch off use of the reflection sphere or volume" );
         
         }
         { //::SireMove::RigidBodyMC::disableReflectionVolume
@@ -99,7 +101,8 @@ void register_RigidBodyMC_class(){
             
             RigidBodyMC_exposer.def( 
                 "disableReflectionVolume"
-                , disableReflectionVolume_function_value );
+                , disableReflectionVolume_function_value
+                , "Completely switch off use of the reflection sphere or volume" );
         
         }
         { //::SireMove::RigidBodyMC::extract
@@ -110,7 +113,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "extract"
                 , extract_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Extract from mols all molecules that are within the reflection sphere  volume\ndescribed by this move. This allows the molecules that will be affected by this\nmove to be separated out from the rest.\nNote that this returns all molecules if a reflection sphere or volume is not used\n" );
         
         }
         { //::SireMove::RigidBodyMC::extract
@@ -121,7 +125,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "extract"
                 , extract_function_value
-                , ( bp::arg("molecules"), bp::arg("buffer") ) );
+                , ( bp::arg("molecules"), bp::arg("buffer") )
+                , "Extract from mols all molecules that are within the reflection sphere  volume\ndescribed by this move. This allows the molecules that will be affected by this\nmove to be separated out from the rest.\nIf buffer is greater than zero, then this will also extract molecules that are\nwithin buffer of the reflection volume, and will additionally translate those\nmolecules so that they are moved into the volume. The buffer can be used\nto pack more molecules into the volume than would be achieved just with a simple\nselection.\nNote that this returns all molecules if a reflection sphere or volume is not used\n" );
         
         }
         { //::SireMove::RigidBodyMC::maximumRotation
@@ -131,7 +136,8 @@ void register_RigidBodyMC_class(){
             
             RigidBodyMC_exposer.def( 
                 "maximumRotation"
-                , maximumRotation_function_value );
+                , maximumRotation_function_value
+                , "Return the maximum rotation for each move" );
         
         }
         { //::SireMove::RigidBodyMC::maximumTranslation
@@ -141,7 +147,8 @@ void register_RigidBodyMC_class(){
             
             RigidBodyMC_exposer.def( 
                 "maximumTranslation"
-                , maximumTranslation_function_value );
+                , maximumTranslation_function_value
+                , "Return the maximum translation for each move" );
         
         }
         { //::SireMove::RigidBodyMC::moleculeGroup
@@ -152,7 +159,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the molecule group from which random molecule views\nare drawn" );
         
         }
         { //::SireMove::RigidBodyMC::move
@@ -163,7 +171,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , "Attempt n rigid body moves of the views of the system system" );
         
         }
         RigidBodyMC_exposer.def( bp::self != bp::self );
@@ -176,7 +185,8 @@ void register_RigidBodyMC_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         RigidBodyMC_exposer.def( bp::self == bp::self );
@@ -187,7 +197,8 @@ void register_RigidBodyMC_class(){
             
             RigidBodyMC_exposer.def( 
                 "reflectedVolume"
-                , reflectedVolume_function_value );
+                , reflectedVolume_function_value
+                , "Return the volume of space occupied by the reflection volume" );
         
         }
         { //::SireMove::RigidBodyMC::reflectionSphereCenter
@@ -197,7 +208,8 @@ void register_RigidBodyMC_class(){
             
             RigidBodyMC_exposer.def( 
                 "reflectionSphereCenter"
-                , reflectionSphereCenter_function_value );
+                , reflectionSphereCenter_function_value
+                , "Return the center of the reflection sphere. Returns a zero vector\nif a reflection sphere is not being used" );
         
         }
         { //::SireMove::RigidBodyMC::reflectionSphereCenter
@@ -208,7 +220,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "reflectionSphereCenter"
                 , reflectionSphereCenter_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Return the center of the reflection sphere for molecule molnum. Returns a zero vector\nif a reflection sphere is not being used" );
         
         }
         { //::SireMove::RigidBodyMC::reflectionSphereCenter
@@ -219,7 +232,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "reflectionSphereCenter"
                 , reflectionSphereCenter_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "Return the center of the reflection sphere for molecule mol. Returns a null vector\nif a reflection sphere is not being used" );
         
         }
         { //::SireMove::RigidBodyMC::reflectionSphereRadius
@@ -229,7 +243,8 @@ void register_RigidBodyMC_class(){
             
             RigidBodyMC_exposer.def( 
                 "reflectionSphereRadius"
-                , reflectionSphereRadius_function_value );
+                , reflectionSphereRadius_function_value
+                , "Return the radius of the reflection sphere. This returns zero\nif the reflection sphere is not being used" );
         
         }
         { //::SireMove::RigidBodyMC::reflectionSphereRadius
@@ -240,7 +255,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "reflectionSphereRadius"
                 , reflectionSphereRadius_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Return the radius of the reflection sphere for molecule molnum. This returns zero\nif the reflection sphere is not being used" );
         
         }
         { //::SireMove::RigidBodyMC::reflectionSphereRadius
@@ -251,7 +267,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "reflectionSphereRadius"
                 , reflectionSphereRadius_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "Return the radius of the reflection sphere for molecule mol. This returns zero\nif the reflection sphere is not being used" );
         
         }
         { //::SireMove::RigidBodyMC::reflectionVolume
@@ -261,7 +278,8 @@ void register_RigidBodyMC_class(){
             
             RigidBodyMC_exposer.def( 
                 "reflectionVolume"
-                , reflectionVolume_function_value );
+                , reflectionVolume_function_value
+                , "Return the set of spheres that are used to define the reflection volume.\nThis returns an empty list if the reflection volume  sphere is not used" );
         
         }
         { //::SireMove::RigidBodyMC::reflectionVolumePoints
@@ -271,7 +289,8 @@ void register_RigidBodyMC_class(){
             
             RigidBodyMC_exposer.def( 
                 "reflectionVolumePoints"
-                , reflectionVolumePoints_function_value );
+                , reflectionVolumePoints_function_value
+                , "Return the points used to define the reflection volume. This will\nbe a single point if a reflection sphere is used. If a reflection\nsphere or volume is not used then this returns an empty list" );
         
         }
         { //::SireMove::RigidBodyMC::reflectionVolumeRadius
@@ -281,7 +300,8 @@ void register_RigidBodyMC_class(){
             
             RigidBodyMC_exposer.def( 
                 "reflectionVolumeRadius"
-                , reflectionVolumeRadius_function_value );
+                , reflectionVolumeRadius_function_value
+                , "Return the reflection volume radius (same as the reflection sphere radius)" );
         
         }
         { //::SireMove::RigidBodyMC::sampler
@@ -292,7 +312,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "sampler"
                 , sampler_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the sampler that is used to draw random molecules" );
         
         }
         { //::SireMove::RigidBodyMC::setCenterOfRotation
@@ -303,7 +324,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "setCenterOfRotation"
                 , setCenterOfRotation_function_value
-                , ( bp::arg("center_function") ) );
+                , ( bp::arg("center_function") )
+                , "Set the function used to get the center of rotation for each molecule" );
         
         }
         { //::SireMove::RigidBodyMC::setGenerator
@@ -314,7 +336,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "setGenerator"
                 , setGenerator_function_value
-                , ( bp::arg("rangenerator") ) );
+                , ( bp::arg("rangenerator") )
+                , "Set the random number generator used by this move" );
         
         }
         { //::SireMove::RigidBodyMC::setMaximumRotation
@@ -325,7 +348,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "setMaximumRotation"
                 , setMaximumRotation_function_value
-                , ( bp::arg("max_rotation") ) );
+                , ( bp::arg("max_rotation") )
+                , "Set the maximum delta for any rotation" );
         
         }
         { //::SireMove::RigidBodyMC::setMaximumTranslation
@@ -336,7 +360,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "setMaximumTranslation"
                 , setMaximumTranslation_function_value
-                , ( bp::arg("max_translation") ) );
+                , ( bp::arg("max_translation") )
+                , "Set the maximum delta for any translation" );
         
         }
         { //::SireMove::RigidBodyMC::setReflectionSphere
@@ -347,7 +372,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "setReflectionSphere"
                 , setReflectionSphere_function_value
-                , ( bp::arg("sphere_center"), bp::arg("sphere_radius") ) );
+                , ( bp::arg("sphere_center"), bp::arg("sphere_radius") )
+                , "Turn on rigid body move reflections. This makes sure that only\nmolecules within the specified sphere can be moved, and any moves\nare reflected so that these molecules will always remain within\nthe sphere" );
         
         }
         { //::SireMove::RigidBodyMC::setReflectionSphere
@@ -358,7 +384,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "setReflectionSphere"
                 , setReflectionSphere_function_value
-                , ( bp::arg("molnum"), bp::arg("sphere_center"), bp::arg("sphere_radius") ) );
+                , ( bp::arg("molnum"), bp::arg("sphere_center"), bp::arg("sphere_radius") )
+                , "Turn on rigid body move reflections for molecule molnum. This makes sure\nthis molecule is moved only within the sphere centered at sphere_center\nwith radius sphere_radius. Any moves are reflected so that\nthis molecule will always remain within the sphere" );
         
         }
         { //::SireMove::RigidBodyMC::setReflectionSphere
@@ -369,7 +396,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "setReflectionSphere"
                 , setReflectionSphere_function_value
-                , ( bp::arg("molview"), bp::arg("sphere_center"), bp::arg("sphere_radius") ) );
+                , ( bp::arg("molview"), bp::arg("sphere_center"), bp::arg("sphere_radius") )
+                , "Turn on rigid body move reflections for molecule mol. This makes sure\nthis molecule is moved only within the sphere centered at sphere_center\nwith radius sphere_radius. Any moves are reflected so that\nthis molecule will always remain within the sphere" );
         
         }
         { //::SireMove::RigidBodyMC::setReflectionVolume
@@ -380,7 +408,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "setReflectionVolume"
                 , setReflectionVolume_function_value
-                , ( bp::arg("points"), bp::arg("radius") ) );
+                , ( bp::arg("points"), bp::arg("radius") )
+                , "Turn on and specify a reflection volume. This is like a reflection sphere,\nexcept now the reflection volume is formed as the intersection of the spheres\nwhose centers are in points, all with radii radius. This replaces any\nreflection sphere set (although not molecule-specific reflection spheres)" );
         
         }
         { //::SireMove::RigidBodyMC::setReflectionVolume
@@ -391,7 +420,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "setReflectionVolume"
                 , setReflectionVolume_function_value
-                , ( bp::arg("molecule"), bp::arg("radius"), bp::arg("heavy_atoms_only"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecule"), bp::arg("radius"), bp::arg("heavy_atoms_only"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Turn on and specify the reflection volume by using the coordinates of\nall of the atoms in the passed molecule view (excluding light atoms\nif heavy_atoms_only is true)" );
         
         }
         { //::SireMove::RigidBodyMC::setReflectionVolume
@@ -402,7 +432,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "setReflectionVolume"
                 , setReflectionVolume_function_value
-                , ( bp::arg("molecule"), bp::arg("radius"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecule"), bp::arg("radius"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Turn on and specify the reflection volume by using the coordinates of\nall of the heavy atoms in the passed molecule view" );
         
         }
         { //::SireMove::RigidBodyMC::setSampler
@@ -413,7 +444,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "setSampler"
                 , setSampler_function_value
-                , ( bp::arg("sampler") ) );
+                , ( bp::arg("sampler") )
+                , "Set the sampler (and contained molecule group) that provides\nthe random molecules to be moved. This gives the sampler the\nsame random number generator that is used by this move" );
         
         }
         { //::SireMove::RigidBodyMC::setSampler
@@ -424,7 +456,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "setSampler"
                 , setSampler_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "Set the sampler to be one that selects views at random\nfrom the molecule group molgroup (each view has an\nequal chance of being chosen)" );
         
         }
         { //::SireMove::RigidBodyMC::setSharedRotationCenter
@@ -435,7 +468,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "setSharedRotationCenter"
                 , setSharedRotationCenter_function_value
-                , ( bp::arg("on") ) );
+                , ( bp::arg("on") )
+                , "Set whether or not to use the same rotation center for all\nsynchronised molecules" );
         
         }
         { //::SireMove::RigidBodyMC::setSynchronisedRotation
@@ -446,7 +480,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "setSynchronisedRotation"
                 , setSynchronisedRotation_function_value
-                , ( bp::arg("on") ) );
+                , ( bp::arg("on") )
+                , "Set whether or not to synchronise rotation of all of the views" );
         
         }
         { //::SireMove::RigidBodyMC::setSynchronisedTranslation
@@ -457,7 +492,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "setSynchronisedTranslation"
                 , setSynchronisedTranslation_function_value
-                , ( bp::arg("on") ) );
+                , ( bp::arg("on") )
+                , "Set whether or not to synchronise translation of all of the views" );
         
         }
         { //::SireMove::RigidBodyMC::sharedRotationCenter
@@ -467,7 +503,8 @@ void register_RigidBodyMC_class(){
             
             RigidBodyMC_exposer.def( 
                 "sharedRotationCenter"
-                , sharedRotationCenter_function_value );
+                , sharedRotationCenter_function_value
+                , "Return whether or not synchronised rotation uses the same\ncenter of rotation for all molecules" );
         
         }
         { //::SireMove::RigidBodyMC::synchronisedRotation
@@ -477,7 +514,8 @@ void register_RigidBodyMC_class(){
             
             RigidBodyMC_exposer.def( 
                 "synchronisedRotation"
-                , synchronisedRotation_function_value );
+                , synchronisedRotation_function_value
+                , "Return whether or not rotation of all molecules is synchronised" );
         
         }
         { //::SireMove::RigidBodyMC::synchronisedTranslation
@@ -487,7 +525,8 @@ void register_RigidBodyMC_class(){
             
             RigidBodyMC_exposer.def( 
                 "synchronisedTranslation"
-                , synchronisedTranslation_function_value );
+                , synchronisedTranslation_function_value
+                , "Return whether or not translation of all molecules is synchronised" );
         
         }
         { //::SireMove::RigidBodyMC::toString
@@ -497,7 +536,8 @@ void register_RigidBodyMC_class(){
             
             RigidBodyMC_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this move" );
         
         }
         { //::SireMove::RigidBodyMC::typeName
@@ -507,7 +547,8 @@ void register_RigidBodyMC_class(){
             
             RigidBodyMC_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMove::RigidBodyMC::usesReflectionMoves
@@ -517,7 +558,8 @@ void register_RigidBodyMC_class(){
             
             RigidBodyMC_exposer.def( 
                 "usesReflectionMoves"
-                , usesReflectionMoves_function_value );
+                , usesReflectionMoves_function_value
+                , "Return whether or not these moves use a reflection sphere" );
         
         }
         { //::SireMove::RigidBodyMC::usesReflectionMoves
@@ -528,7 +570,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "usesReflectionMoves"
                 , usesReflectionMoves_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Return whether or not these moves use a reflection sphere for molecule molnum" );
         
         }
         { //::SireMove::RigidBodyMC::usesReflectionMoves
@@ -539,7 +582,8 @@ void register_RigidBodyMC_class(){
             RigidBodyMC_exposer.def( 
                 "usesReflectionMoves"
                 , usesReflectionMoves_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "Return whether or not these moves use a reflection sphere for molecule mol" );
         
         }
         { //::SireMove::RigidBodyMC::usesReflectionVolume
@@ -549,7 +593,8 @@ void register_RigidBodyMC_class(){
             
             RigidBodyMC_exposer.def( 
                 "usesReflectionVolume"
-                , usesReflectionVolume_function_value );
+                , usesReflectionVolume_function_value
+                , "Return whether or not rigid body moves are confined to a reflection volume.\nNote that this also returns true if we are using a reflection sphere\n(as a sphere is just a special case of a reflection volume)" );
         
         }
         RigidBodyMC_exposer.staticmethod( "typeName" );

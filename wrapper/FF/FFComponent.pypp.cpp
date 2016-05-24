@@ -28,7 +28,7 @@ void register_FFComponent_class(){
 
     { //::SireFF::FFComponent
         typedef bp::class_< SireFF::FFComponent, bp::bases< SireCAS::Symbol, SireCAS::ExBase >, boost::noncopyable > FFComponent_exposer_t;
-        FFComponent_exposer_t FFComponent_exposer = FFComponent_exposer_t( "FFComponent", bp::no_init );
+        FFComponent_exposer_t FFComponent_exposer = FFComponent_exposer_t( "FFComponent", "This is the base class of all Symbols that represent forcefield\ncomponents.\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope FFComponent_scope( FFComponent_exposer );
         { //::SireFF::FFComponent::componentName
         
@@ -37,7 +37,8 @@ void register_FFComponent_class(){
             
             FFComponent_exposer.def( 
                 "componentName"
-                , componentName_function_value );
+                , componentName_function_value
+                , "Return the name of the component of the potential energy\nsurface that this symbol represents" );
         
         }
         { //::SireFF::FFComponent::forceFieldName
@@ -47,7 +48,8 @@ void register_FFComponent_class(){
             
             FFComponent_exposer.def( 
                 "forceFieldName"
-                , forceFieldName_function_value );
+                , forceFieldName_function_value
+                , "Return the name of the forcefield that owns this component" );
         
         }
         { //::SireFF::FFComponent::symbols
@@ -57,7 +59,8 @@ void register_FFComponent_class(){
             
             FFComponent_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "" );
         
         }
         { //::SireFF::FFComponent::total
@@ -68,7 +71,8 @@ void register_FFComponent_class(){
             FFComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireFF::FFComponent::typeName
@@ -78,7 +82,8 @@ void register_FFComponent_class(){
             
             FFComponent_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireFF::FFComponent::what
@@ -88,7 +93,8 @@ void register_FFComponent_class(){
             
             FFComponent_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         FFComponent_exposer.staticmethod( "typeName" );

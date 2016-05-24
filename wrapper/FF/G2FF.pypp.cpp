@@ -46,7 +46,7 @@ void register_G2FF_class(){
 
     { //::SireFF::G2FF
         typedef bp::class_< SireFF::G2FF, bp::bases< SireFF::FF, SireMol::MolGroupsBase, SireBase::Property >, boost::noncopyable > G2FF_exposer_t;
-        G2FF_exposer_t G2FF_exposer = G2FF_exposer_t( "G2FF", bp::no_init );
+        G2FF_exposer_t G2FF_exposer = G2FF_exposer_t( "G2FF", "This is the base class of all forcefields that hold\ntwo groups of molecules, e.g. InterGroupCLJFF, that calculates\nthe CLJ energy between two groups of molecules, or\nQMMMFF, that calculates the QMMM energy of a QM group\nof molecules interacting with an MM group\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope G2FF_scope( G2FF_exposer );
         { //::SireFF::G2FF::accept
         
@@ -55,7 +55,8 @@ void register_G2FF_class(){
             
             G2FF_exposer.def( 
                 "accept"
-                , accept_function_value );
+                , accept_function_value
+                , "Tell the forcefield that the last move was accepted. This tells the\nforcefield to make permanent any temporary changes that were used a workspace\nto avoid memory allocation during a move" );
         
         }
         { //::SireFF::G2FF::assertContains
@@ -66,7 +67,8 @@ void register_G2FF_class(){
             G2FF_exposer.def( 
                 "assertContains"
                 , assertContains_function_value
-                , ( bp::arg("mgnum") ) );
+                , ( bp::arg("mgnum") )
+                , "Assert that this forcefield contains the group with number mgnum\nThrow: SireMol::missing_group\n" );
         
         }
         { //::SireFF::G2FF::at
@@ -78,7 +80,8 @@ void register_G2FF_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("mgnum") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the molecule group with number mgnum\nThrow: SireMol::missing_group\n" );
         
         }
         { //::SireFF::G2FF::needsAccepting
@@ -88,7 +91,8 @@ void register_G2FF_class(){
             
             G2FF_exposer.def( 
                 "needsAccepting"
-                , needsAccepting_function_value );
+                , needsAccepting_function_value
+                , "Return whether or not this forcefield is using any temporary workspace\nthat needs to be accepted" );
         
         }
         G2FF_exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireFF::G2FF >,

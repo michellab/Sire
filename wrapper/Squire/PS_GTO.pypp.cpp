@@ -35,11 +35,11 @@ void register_PS_GTO_class(){
 
     { //::Squire::PS_GTO
         typedef bp::class_< Squire::PS_GTO, bp::bases< Squire::GTOPair, Squire::ShellPair, SireBase::Property > > PS_GTO_exposer_t;
-        PS_GTO_exposer_t PS_GTO_exposer = PS_GTO_exposer_t( "PS_GTO", bp::init< >() );
+        PS_GTO_exposer_t PS_GTO_exposer = PS_GTO_exposer_t( "PS_GTO", "This is a combined S-P GTO shell pair", bp::init< >("Constructor") );
         bp::scope PS_GTO_scope( PS_GTO_exposer );
-        PS_GTO_exposer.def( bp::init< SireMaths::Vector const &, Squire::S_GTO const &, SireMaths::Vector const &, Squire::P_GTO const & >(( bp::arg("A"), bp::arg("a"), bp::arg("B"), bp::arg("b") )) );
-        PS_GTO_exposer.def( bp::init< SireMaths::Vector const &, Squire::P_GTO const &, SireMaths::Vector const &, Squire::S_GTO const & >(( bp::arg("A"), bp::arg("a"), bp::arg("B"), bp::arg("b") )) );
-        PS_GTO_exposer.def( bp::init< Squire::PS_GTO const & >(( bp::arg("other") )) );
+        PS_GTO_exposer.def( bp::init< SireMaths::Vector const &, Squire::S_GTO const &, SireMaths::Vector const &, Squire::P_GTO const & >(( bp::arg("A"), bp::arg("a"), bp::arg("B"), bp::arg("b") ), "Construct combining orbital a at position A with orbital b at\nposition B") );
+        PS_GTO_exposer.def( bp::init< SireMaths::Vector const &, Squire::P_GTO const &, SireMaths::Vector const &, Squire::S_GTO const & >(( bp::arg("A"), bp::arg("a"), bp::arg("B"), bp::arg("b") ), "Construct combining orbital a at position A with orbital b at\nposition B") );
+        PS_GTO_exposer.def( bp::init< Squire::PS_GTO const & >(( bp::arg("other") ), "Copy constructor") );
         { //::Squire::PS_GTO::P_minus_A
         
             typedef ::SireMaths::Vector const & ( ::Squire::PS_GTO::*P_minus_A_function_type)(  ) const;
@@ -48,7 +48,8 @@ void register_PS_GTO_class(){
             PS_GTO_exposer.def( 
                 "P_minus_A"
                 , P_minus_A_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::Squire::PS_GTO::P_minus_B
@@ -59,7 +60,8 @@ void register_PS_GTO_class(){
             PS_GTO_exposer.def( 
                 "P_minus_B"
                 , P_minus_B_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::Squire::PS_GTO::Q_minus_C
@@ -70,7 +72,8 @@ void register_PS_GTO_class(){
             PS_GTO_exposer.def( 
                 "Q_minus_C"
                 , Q_minus_C_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::Squire::PS_GTO::Q_minus_D
@@ -81,7 +84,8 @@ void register_PS_GTO_class(){
             PS_GTO_exposer.def( 
                 "Q_minus_D"
                 , Q_minus_D_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::Squire::PS_GTO::angularMomentum0
@@ -91,7 +95,8 @@ void register_PS_GTO_class(){
             
             PS_GTO_exposer.def( 
                 "angularMomentum0"
-                , angularMomentum0_function_value );
+                , angularMomentum0_function_value
+                , "Return the angular momentum of the first GTO shell in this pair" );
         
         }
         { //::Squire::PS_GTO::angularMomentum1
@@ -101,7 +106,8 @@ void register_PS_GTO_class(){
             
             PS_GTO_exposer.def( 
                 "angularMomentum1"
-                , angularMomentum1_function_value );
+                , angularMomentum1_function_value
+                , "Return the angular momentum of the second GTO shell in this pair" );
         
         }
         { //::Squire::PS_GTO::nOrbitals0
@@ -111,7 +117,8 @@ void register_PS_GTO_class(){
             
             PS_GTO_exposer.def( 
                 "nOrbitals0"
-                , nOrbitals0_function_value );
+                , nOrbitals0_function_value
+                , "Return the number of orbitals in the first GTO shell in this pair" );
         
         }
         { //::Squire::PS_GTO::nOrbitals1
@@ -121,7 +128,8 @@ void register_PS_GTO_class(){
             
             PS_GTO_exposer.def( 
                 "nOrbitals1"
-                , nOrbitals1_function_value );
+                , nOrbitals1_function_value
+                , "Return the number of orbitals in the second GTO shell in this pair" );
         
         }
         PS_GTO_exposer.def( bp::self != bp::self );
@@ -134,7 +142,8 @@ void register_PS_GTO_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         PS_GTO_exposer.def( bp::self == bp::self );
@@ -145,7 +154,8 @@ void register_PS_GTO_class(){
             
             PS_GTO_exposer.def( 
                 "scale"
-                , scale_function_value );
+                , scale_function_value
+                , "" );
         
         }
         { //::Squire::PS_GTO::typeName
@@ -155,7 +165,8 @@ void register_PS_GTO_class(){
             
             PS_GTO_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         PS_GTO_exposer.staticmethod( "typeName" );

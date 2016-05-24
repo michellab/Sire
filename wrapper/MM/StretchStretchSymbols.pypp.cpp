@@ -40,7 +40,7 @@ void register_StretchStretchSymbols_class(){
 
     { //::SireMM::StretchStretchSymbols
         typedef bp::class_< SireMM::StretchStretchSymbols, bp::bases< SireMM::InternalSymbolsBase > > StretchStretchSymbols_exposer_t;
-        StretchStretchSymbols_exposer_t StretchStretchSymbols_exposer = StretchStretchSymbols_exposer_t( "StretchStretchSymbols", bp::init< >() );
+        StretchStretchSymbols_exposer_t StretchStretchSymbols_exposer = StretchStretchSymbols_exposer_t( "StretchStretchSymbols", "This class holds the symbols required for the stretch-stretch parameters.\nThese are functions of the bond distances among three atoms, 0 1 and 2,\nso distances between atoms 0-1 (r01), 2-1 (r21) and 1-2 (r12)", bp::init< >("") );
         bp::scope StretchStretchSymbols_scope( StretchStretchSymbols_exposer );
         { //::SireMM::StretchStretchSymbols::r01
         
@@ -50,7 +50,8 @@ void register_StretchStretchSymbols_class(){
             StretchStretchSymbols_exposer.def( 
                 "r01"
                 , r01_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol representing the bond length r_\n{01}" );
         
         }
         { //::SireMM::StretchStretchSymbols::r12
@@ -61,7 +62,8 @@ void register_StretchStretchSymbols_class(){
             StretchStretchSymbols_exposer.def( 
                 "r12"
                 , r12_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol representing the bond length r_\n{12}" );
         
         }
         { //::SireMM::StretchStretchSymbols::r21
@@ -72,7 +74,8 @@ void register_StretchStretchSymbols_class(){
             StretchStretchSymbols_exposer.def( 
                 "r21"
                 , r21_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol representing the bond length r_\n{21}" );
         
         }
         StretchStretchSymbols_exposer.def( "__copy__", &__copy__);

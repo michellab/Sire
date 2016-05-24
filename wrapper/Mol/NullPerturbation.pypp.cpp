@@ -37,9 +37,9 @@ void register_NullPerturbation_class(){
 
     { //::SireMol::NullPerturbation
         typedef bp::class_< SireMol::NullPerturbation, bp::bases< SireMol::Perturbation, SireBase::Property > > NullPerturbation_exposer_t;
-        NullPerturbation_exposer_t NullPerturbation_exposer = NullPerturbation_exposer_t( "NullPerturbation", bp::init< >() );
+        NullPerturbation_exposer_t NullPerturbation_exposer = NullPerturbation_exposer_t( "NullPerturbation", "This is a null perturbation that does nothing", bp::init< >("") );
         bp::scope NullPerturbation_scope( NullPerturbation_exposer );
-        NullPerturbation_exposer.def( bp::init< SireMol::NullPerturbation const & >(( bp::arg("other") )) );
+        NullPerturbation_exposer.def( bp::init< SireMol::NullPerturbation const & >(( bp::arg("other") ), "") );
         NullPerturbation_exposer.def( bp::self != bp::self );
         { //::SireMol::NullPerturbation::operator=
         
@@ -50,7 +50,8 @@ void register_NullPerturbation_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         NullPerturbation_exposer.def( bp::self == bp::self );
@@ -61,7 +62,8 @@ void register_NullPerturbation_class(){
             
             NullPerturbation_exposer.def( 
                 "requiredProperties"
-                , requiredProperties_function_value );
+                , requiredProperties_function_value
+                , "" );
         
         }
         { //::SireMol::NullPerturbation::requiredSymbols
@@ -71,7 +73,8 @@ void register_NullPerturbation_class(){
             
             NullPerturbation_exposer.def( 
                 "requiredSymbols"
-                , requiredSymbols_function_value );
+                , requiredSymbols_function_value
+                , "" );
         
         }
         { //::SireMol::NullPerturbation::typeName
@@ -81,7 +84,8 @@ void register_NullPerturbation_class(){
             
             NullPerturbation_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::NullPerturbation::wouldChange
@@ -92,7 +96,8 @@ void register_NullPerturbation_class(){
             NullPerturbation_exposer.def( 
                 "wouldChange"
                 , wouldChange_function_value
-                , ( bp::arg("molecule"), bp::arg("values") ) );
+                , ( bp::arg("molecule"), bp::arg("values") )
+                , "" );
         
         }
         NullPerturbation_exposer.staticmethod( "typeName" );

@@ -23,7 +23,7 @@ void register_OrbitalShell_class(){
 
     { //::Squire::OrbitalShell
         typedef bp::class_< Squire::OrbitalShell, bp::bases< Squire::Orbital, SireBase::Property >, boost::noncopyable > OrbitalShell_exposer_t;
-        OrbitalShell_exposer_t OrbitalShell_exposer = OrbitalShell_exposer_t( "OrbitalShell", bp::no_init );
+        OrbitalShell_exposer_t OrbitalShell_exposer = OrbitalShell_exposer_t( "OrbitalShell", "This is the base class of a shell of orbitals. An orbital\nshell contains the typical atomic orbitals (e.g. a p-shell\ncontains 3 orbitals, p_x, p_y and p_z)\n\nOrbitalShell classes (like Orbital) are designed to hold\ninformation about an orbital, and are not meant to be\nused directly in an integral program (indeed, an orbital\nnormally doesnt even have coordinate information, as\nthis is provided by the molecule that holds the orbital).\n\nOrbital classes are thus virtual and not designed for speed.\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope OrbitalShell_scope( OrbitalShell_exposer );
         { //::Squire::OrbitalShell::angularMomentum
         
@@ -32,7 +32,8 @@ void register_OrbitalShell_class(){
             
             OrbitalShell_exposer.def( 
                 "angularMomentum"
-                , angularMomentum_function_value );
+                , angularMomentum_function_value
+                , "" );
         
         }
         { //::Squire::OrbitalShell::nOrbitals
@@ -42,7 +43,8 @@ void register_OrbitalShell_class(){
             
             OrbitalShell_exposer.def( 
                 "nOrbitals"
-                , nOrbitals_function_value );
+                , nOrbitals_function_value
+                , "" );
         
         }
         { //::Squire::OrbitalShell::typeName
@@ -52,7 +54,8 @@ void register_OrbitalShell_class(){
             
             OrbitalShell_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         OrbitalShell_exposer.staticmethod( "typeName" );

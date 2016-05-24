@@ -46,12 +46,12 @@ void register_Constraints_class(){
 
     { //::SireSystem::Constraints
         typedef bp::class_< SireSystem::Constraints, bp::bases< SireBase::Property > > Constraints_exposer_t;
-        Constraints_exposer_t Constraints_exposer = Constraints_exposer_t( "Constraints", bp::init< >() );
+        Constraints_exposer_t Constraints_exposer = Constraints_exposer_t( "Constraints", "This class is used to hold and organise a collection of Constraint objects\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope Constraints_scope( Constraints_exposer );
-        Constraints_exposer.def( bp::init< SireSystem::Constraint const & >(( bp::arg("constraint") )) );
-        Constraints_exposer.def( bp::init< QVector< SireBase::PropPtr< SireSystem::Constraint > > const & >(( bp::arg("constraints") )) );
-        Constraints_exposer.def( bp::init< QList< SireBase::PropPtr< SireSystem::Constraint > > const & >(( bp::arg("constraints") )) );
-        Constraints_exposer.def( bp::init< SireSystem::Constraints const & >(( bp::arg("other") )) );
+        Constraints_exposer.def( bp::init< SireSystem::Constraint const & >(( bp::arg("constraint") ), "Construct to contain just the constraint constraint") );
+        Constraints_exposer.def( bp::init< QVector< SireBase::PropPtr< SireSystem::Constraint > > const & >(( bp::arg("constraints") ), "Construct from the passed list of constraints") );
+        Constraints_exposer.def( bp::init< QList< SireBase::PropPtr< SireSystem::Constraint > > const & >(( bp::arg("constraints") ), "Construct from the passed list of constraints") );
+        Constraints_exposer.def( bp::init< SireSystem::Constraints const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireSystem::Constraints::add
         
             typedef void ( ::SireSystem::Constraints::*add_function_type)( ::SireSystem::Constraint const & ) ;
@@ -60,7 +60,8 @@ void register_Constraints_class(){
             Constraints_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("constraint") ) );
+                , ( bp::arg("constraint") )
+                , "Add the passed constraint to this set - this is only added\nif it does not exist in this set" );
         
         }
         { //::SireSystem::Constraints::add
@@ -71,7 +72,8 @@ void register_Constraints_class(){
             Constraints_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("constraints") ) );
+                , ( bp::arg("constraints") )
+                , "Add all of the passed constraints to this set. This only\nadds the constraints that are not already part of this set" );
         
         }
         { //::SireSystem::Constraints::apply
@@ -82,7 +84,8 @@ void register_Constraints_class(){
             Constraints_exposer.def( 
                 "apply"
                 , apply_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "Apply all of the constraints to the passed system. This\nreturns a system that satisfies all of the constraints" );
         
         }
         { //::SireSystem::Constraints::areSatisfied
@@ -93,7 +96,8 @@ void register_Constraints_class(){
             Constraints_exposer.def( 
                 "areSatisfied"
                 , areSatisfied_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "Return whether or not all of the constraints in this set are\nsatisfied in the passed system" );
         
         }
         { //::SireSystem::Constraints::assertSatisfied
@@ -104,7 +108,8 @@ void register_Constraints_class(){
             Constraints_exposer.def( 
                 "assertSatisfied"
                 , assertSatisfied_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "Assert that all of the constraints in this set are satisfied\nin the passed system\nThrow: SireSystem::constraint_error\n" );
         
         }
         { //::SireSystem::Constraints::constraints
@@ -114,7 +119,8 @@ void register_Constraints_class(){
             
             Constraints_exposer.def( 
                 "constraints"
-                , constraints_function_value );
+                , constraints_function_value
+                , "Return the list of all of the constraints in this set" );
         
         }
         { //::SireSystem::Constraints::count
@@ -124,7 +130,8 @@ void register_Constraints_class(){
             
             Constraints_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of constraints in this set" );
         
         }
         { //::SireSystem::Constraints::isEmpty
@@ -134,7 +141,8 @@ void register_Constraints_class(){
             
             Constraints_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether this is empty (contains no constraints)" );
         
         }
         { //::SireSystem::Constraints::nConstraints
@@ -144,7 +152,8 @@ void register_Constraints_class(){
             
             Constraints_exposer.def( 
                 "nConstraints"
-                , nConstraints_function_value );
+                , nConstraints_function_value
+                , "Return the number of constraints in this set" );
         
         }
         Constraints_exposer.def( bp::self != bp::self );
@@ -157,7 +166,8 @@ void register_Constraints_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Constraints_exposer.def( bp::self == bp::self );
@@ -170,7 +180,8 @@ void register_Constraints_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireSystem::Constraints::remove
@@ -181,7 +192,8 @@ void register_Constraints_class(){
             Constraints_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("constraint") ) );
+                , ( bp::arg("constraint") )
+                , "Remove the constraint constraint from this set - this\ndoes nothing if this constraint is not part of this set" );
         
         }
         { //::SireSystem::Constraints::remove
@@ -192,7 +204,8 @@ void register_Constraints_class(){
             Constraints_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("constraints") ) );
+                , ( bp::arg("constraints") )
+                , "Remove all of the constraints in constraints from this\nset - this ignores constraints that are not in this set" );
         
         }
         { //::SireSystem::Constraints::removeAt
@@ -203,7 +216,8 @@ void register_Constraints_class(){
             Constraints_exposer.def( 
                 "removeAt"
                 , removeAt_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Remove the constraint at index i" );
         
         }
         { //::SireSystem::Constraints::size
@@ -213,7 +227,8 @@ void register_Constraints_class(){
             
             Constraints_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "Return the number of constraints in this set" );
         
         }
         { //::SireSystem::Constraints::typeName
@@ -223,7 +238,8 @@ void register_Constraints_class(){
             
             Constraints_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireSystem::Constraints::what
@@ -233,7 +249,8 @@ void register_Constraints_class(){
             
             Constraints_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Constraints_exposer.staticmethod( "typeName" );

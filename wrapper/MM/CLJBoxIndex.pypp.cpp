@@ -43,10 +43,10 @@ void register_CLJBoxIndex_class(){
 
     { //::SireMM::CLJBoxIndex
         typedef bp::class_< SireMM::CLJBoxIndex > CLJBoxIndex_exposer_t;
-        CLJBoxIndex_exposer_t CLJBoxIndex_exposer = CLJBoxIndex_exposer_t( "CLJBoxIndex", bp::init< >() );
+        CLJBoxIndex_exposer_t CLJBoxIndex_exposer = CLJBoxIndex_exposer_t( "CLJBoxIndex", "This class provides a simple i,j,k index of a box in the grid,\nwith, optionally, the index of a particular atom in the grid box", bp::init< >("Null constructor") );
         bp::scope CLJBoxIndex_scope( CLJBoxIndex_exposer );
-        CLJBoxIndex_exposer.def( bp::init< qint16, qint16, qint16, bp::optional< qint16 > >(( bp::arg("i"), bp::arg("j"), bp::arg("k"), bp::arg("atom_idx")=(::qint16)(-1) )) );
-        CLJBoxIndex_exposer.def( bp::init< SireMM::CLJBoxIndex const & >(( bp::arg("other") )) );
+        CLJBoxIndex_exposer.def( bp::init< qint16, qint16, qint16, bp::optional< qint16 > >(( bp::arg("i"), bp::arg("j"), bp::arg("k"), bp::arg("atom_idx")=(::qint16)(-1) ), "Construct the index of the box at index i,j,k with (optionally supplied)\nindex of a particular atom in the box") );
+        CLJBoxIndex_exposer.def( bp::init< SireMM::CLJBoxIndex const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::CLJBoxIndex::box
         
             typedef ::SireVol::AABox ( ::SireMM::CLJBoxIndex::*box_function_type)( ::SireUnits::Dimension::Length ) const;
@@ -55,7 +55,8 @@ void register_CLJBoxIndex_class(){
             CLJBoxIndex_exposer.def( 
                 "box"
                 , box_function_value
-                , ( bp::arg("box_length") ) );
+                , ( bp::arg("box_length") )
+                , "Return the AABox that describes this box (for a given box length of box_length).\nThe boxes are arranged so that the box at (0,0,0) has its center at (0,0,0) and\nextends to (-0.5length,-0.5length,-0.5length) to (0.5length,0.5length,0.5length)" );
         
         }
         { //::SireMM::CLJBoxIndex::boxOnly
@@ -65,7 +66,8 @@ void register_CLJBoxIndex_class(){
             
             CLJBoxIndex_exposer.def( 
                 "boxOnly"
-                , boxOnly_function_value );
+                , boxOnly_function_value
+                , "Return a copy of this index that contains only the box index (not the atom index)" );
         
         }
         { //::SireMM::CLJBoxIndex::countNonDummies
@@ -76,7 +78,8 @@ void register_CLJBoxIndex_class(){
             CLJBoxIndex_exposer.def( 
                 "countNonDummies"
                 , countNonDummies_function_value
-                , ( bp::arg("indicies") ) );
+                , ( bp::arg("indicies") )
+                , "Return the number of non-dummy indicies in the passed array" );
         
         }
         { //::SireMM::CLJBoxIndex::createWithBoxLength
@@ -87,7 +90,8 @@ void register_CLJBoxIndex_class(){
             CLJBoxIndex_exposer.def( 
                 "createWithBoxLength"
                 , createWithBoxLength_function_value
-                , ( bp::arg("x"), bp::arg("y"), bp::arg("z"), bp::arg("box_length") ) );
+                , ( bp::arg("x"), bp::arg("y"), bp::arg("z"), bp::arg("box_length") )
+                , "Create the index for the box that contains the point x,y,z in a set of boxes\nof length box_length" );
         
         }
         { //::SireMM::CLJBoxIndex::createWithBoxLength
@@ -98,7 +102,8 @@ void register_CLJBoxIndex_class(){
             CLJBoxIndex_exposer.def( 
                 "createWithBoxLength"
                 , createWithBoxLength_function_value
-                , ( bp::arg("coords"), bp::arg("box_length") ) );
+                , ( bp::arg("coords"), bp::arg("box_length") )
+                , "Create the index for the box that contains the point x,y,z in a set of boxes\nof length box_length" );
         
         }
         { //::SireMM::CLJBoxIndex::createWithInverseBoxLength
@@ -109,7 +114,8 @@ void register_CLJBoxIndex_class(){
             CLJBoxIndex_exposer.def( 
                 "createWithInverseBoxLength"
                 , createWithInverseBoxLength_function_value
-                , ( bp::arg("x"), bp::arg("y"), bp::arg("z"), bp::arg("inv_length") ) );
+                , ( bp::arg("x"), bp::arg("y"), bp::arg("z"), bp::arg("inv_length") )
+                , "Create the index for the box that contains the point x,y,z in a set of boxes\nof length 1  inv_box_length" );
         
         }
         { //::SireMM::CLJBoxIndex::createWithInverseBoxLength
@@ -120,7 +126,8 @@ void register_CLJBoxIndex_class(){
             CLJBoxIndex_exposer.def( 
                 "createWithInverseBoxLength"
                 , createWithInverseBoxLength_function_value
-                , ( bp::arg("coords"), bp::arg("inv_length") ) );
+                , ( bp::arg("coords"), bp::arg("inv_length") )
+                , "Create the index for the box that contains the point x,y,z in a set of boxes\nof length 1  inv_box_length" );
         
         }
         { //::SireMM::CLJBoxIndex::hasAtomIndex
@@ -130,7 +137,8 @@ void register_CLJBoxIndex_class(){
             
             CLJBoxIndex_exposer.def( 
                 "hasAtomIndex"
-                , hasAtomIndex_function_value );
+                , hasAtomIndex_function_value
+                , "" );
         
         }
         { //::SireMM::CLJBoxIndex::hash
@@ -140,7 +148,8 @@ void register_CLJBoxIndex_class(){
             
             CLJBoxIndex_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMM::CLJBoxIndex::i
@@ -150,7 +159,8 @@ void register_CLJBoxIndex_class(){
             
             CLJBoxIndex_exposer.def( 
                 "i"
-                , i_function_value );
+                , i_function_value
+                , "" );
         
         }
         { //::SireMM::CLJBoxIndex::index
@@ -160,7 +170,8 @@ void register_CLJBoxIndex_class(){
             
             CLJBoxIndex_exposer.def( 
                 "index"
-                , index_function_value );
+                , index_function_value
+                , "" );
         
         }
         { //::SireMM::CLJBoxIndex::isNull
@@ -170,7 +181,8 @@ void register_CLJBoxIndex_class(){
             
             CLJBoxIndex_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Return whether or not this is null" );
         
         }
         { //::SireMM::CLJBoxIndex::j
@@ -180,7 +192,8 @@ void register_CLJBoxIndex_class(){
             
             CLJBoxIndex_exposer.def( 
                 "j"
-                , j_function_value );
+                , j_function_value
+                , "" );
         
         }
         { //::SireMM::CLJBoxIndex::k
@@ -190,7 +203,8 @@ void register_CLJBoxIndex_class(){
             
             CLJBoxIndex_exposer.def( 
                 "k"
-                , k_function_value );
+                , k_function_value
+                , "" );
         
         }
         { //::SireMM::CLJBoxIndex::max
@@ -201,7 +215,8 @@ void register_CLJBoxIndex_class(){
             CLJBoxIndex_exposer.def( 
                 "max"
                 , max_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return the maximum box indicies of the two passed boxes" );
         
         }
         { //::SireMM::CLJBoxIndex::min
@@ -212,7 +227,8 @@ void register_CLJBoxIndex_class(){
             CLJBoxIndex_exposer.def( 
                 "min"
                 , min_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return the minimum box indicies of the two passed boxes" );
         
         }
         { //::SireMM::CLJBoxIndex::null
@@ -222,7 +238,8 @@ void register_CLJBoxIndex_class(){
             
             CLJBoxIndex_exposer.def( 
                 "null"
-                , null_function_value );
+                , null_function_value
+                , "Return a null CLJBoxIndex" );
         
         }
         CLJBoxIndex_exposer.def( bp::self != bp::self );
@@ -237,7 +254,8 @@ void register_CLJBoxIndex_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CLJBoxIndex_exposer.def( bp::self == bp::self );
@@ -251,7 +269,8 @@ void register_CLJBoxIndex_class(){
             CLJBoxIndex_exposer.def( 
                 "sameBox"
                 , sameBox_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMM::CLJBoxIndex::toString
@@ -261,7 +280,8 @@ void register_CLJBoxIndex_class(){
             
             CLJBoxIndex_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMM::CLJBoxIndex::typeName
@@ -271,7 +291,8 @@ void register_CLJBoxIndex_class(){
             
             CLJBoxIndex_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::CLJBoxIndex::what
@@ -281,7 +302,8 @@ void register_CLJBoxIndex_class(){
             
             CLJBoxIndex_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         CLJBoxIndex_exposer.staticmethod( "countNonDummies" );

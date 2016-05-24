@@ -67,10 +67,10 @@ void register_AtomIdx_class(){
 
     { //::SireMol::AtomIdx
         typedef bp::class_< SireMol::AtomIdx, bp::bases< SireMol::AtomID, SireID::ID, SireID::IndexBase > > AtomIdx_exposer_t;
-        AtomIdx_exposer_t AtomIdx_exposer = AtomIdx_exposer_t( "AtomIdx", bp::init< >() );
+        AtomIdx_exposer_t AtomIdx_exposer = AtomIdx_exposer_t( "AtomIdx", "This is an ID object that is used to index atoms (e.g. index\nin a list or array, or in a molecule).\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope AtomIdx_scope( AtomIdx_exposer );
-        AtomIdx_exposer.def( bp::init< qint32 >(( bp::arg("idx") )) );
-        AtomIdx_exposer.def( bp::init< SireMol::AtomIdx const & >(( bp::arg("other") )) );
+        AtomIdx_exposer.def( bp::init< qint32 >(( bp::arg("idx") ), "") );
+        AtomIdx_exposer.def( bp::init< SireMol::AtomIdx const & >(( bp::arg("other") ), "") );
         { //::SireMol::AtomIdx::hash
         
             typedef ::uint ( ::SireMol::AtomIdx::*hash_function_type)(  ) const;
@@ -78,7 +78,8 @@ void register_AtomIdx_class(){
             
             AtomIdx_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::AtomIdx::isNull
@@ -88,7 +89,8 @@ void register_AtomIdx_class(){
             
             AtomIdx_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::AtomIdx::map
@@ -99,7 +101,8 @@ void register_AtomIdx_class(){
             AtomIdx_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::AtomIdx::null
@@ -109,7 +112,8 @@ void register_AtomIdx_class(){
             
             AtomIdx_exposer.def( 
                 "null"
-                , null_function_value );
+                , null_function_value
+                , "" );
         
         }
         { //::SireMol::AtomIdx::operator=
@@ -121,7 +125,8 @@ void register_AtomIdx_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::AtomIdx::toString
@@ -131,7 +136,8 @@ void register_AtomIdx_class(){
             
             AtomIdx_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::AtomIdx::typeName
@@ -141,7 +147,8 @@ void register_AtomIdx_class(){
             
             AtomIdx_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::AtomIdx::what
@@ -151,7 +158,8 @@ void register_AtomIdx_class(){
             
             AtomIdx_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         AtomIdx_exposer.staticmethod( "null" );

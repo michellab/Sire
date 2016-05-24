@@ -41,18 +41,18 @@ void register_CLJShiftFunction_class(){
 
     { //::SireMM::CLJShiftFunction
         typedef bp::class_< SireMM::CLJShiftFunction, bp::bases< SireMM::CLJCutoffFunction, SireMM::CLJFunction, SireBase::Property > > CLJShiftFunction_exposer_t;
-        CLJShiftFunction_exposer_t CLJShiftFunction_exposer = CLJShiftFunction_exposer_t( "CLJShiftFunction", bp::init< >() );
+        CLJShiftFunction_exposer_t CLJShiftFunction_exposer = CLJShiftFunction_exposer_t( "CLJShiftFunction", "This CLJFunction calculates the intermolecular coulomb and LJ energy of the passed\nCLJAtoms using a force shifted electrostatics cutoff\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope CLJShiftFunction_scope( CLJShiftFunction_exposer );
-        CLJShiftFunction_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("cutoff") )) );
-        CLJShiftFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("coul_cutoff"), bp::arg("lj_cutoff") )) );
-        CLJShiftFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length >(( bp::arg("space"), bp::arg("cutoff") )) );
-        CLJShiftFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("space"), bp::arg("coul_cutoff"), bp::arg("lj_cutoff") )) );
-        CLJShiftFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("cutoff"), bp::arg("combining_rules") )) );
-        CLJShiftFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("coul_cutoff"), bp::arg("lj_cutoff"), bp::arg("combining_rules") )) );
-        CLJShiftFunction_exposer.def( bp::init< SireVol::Space const &, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("space"), bp::arg("combining_rules") )) );
-        CLJShiftFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("space"), bp::arg("cutoff"), bp::arg("combining_rules") )) );
-        CLJShiftFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length, SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("space"), bp::arg("coul_cutoff"), bp::arg("lj_cutoff"), bp::arg("combining_rules") )) );
-        CLJShiftFunction_exposer.def( bp::init< SireMM::CLJShiftFunction const & >(( bp::arg("other") )) );
+        CLJShiftFunction_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("cutoff") ), "Copy constructor") );
+        CLJShiftFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("coul_cutoff"), bp::arg("lj_cutoff") ), "") );
+        CLJShiftFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length >(( bp::arg("space"), bp::arg("cutoff") ), "") );
+        CLJShiftFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("space"), bp::arg("coul_cutoff"), bp::arg("lj_cutoff") ), "") );
+        CLJShiftFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("cutoff"), bp::arg("combining_rules") ), "") );
+        CLJShiftFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("coul_cutoff"), bp::arg("lj_cutoff"), bp::arg("combining_rules") ), "") );
+        CLJShiftFunction_exposer.def( bp::init< SireVol::Space const &, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("space"), bp::arg("combining_rules") ), "") );
+        CLJShiftFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("space"), bp::arg("cutoff"), bp::arg("combining_rules") ), "") );
+        CLJShiftFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length, SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("space"), bp::arg("coul_cutoff"), bp::arg("lj_cutoff"), bp::arg("combining_rules") ), "") );
+        CLJShiftFunction_exposer.def( bp::init< SireMM::CLJShiftFunction const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::CLJShiftFunction::defaultShiftFunction
         
             typedef ::SireMM::CLJFunctionPtr ( *defaultShiftFunction_function_type )(  );
@@ -60,7 +60,8 @@ void register_CLJShiftFunction_class(){
             
             CLJShiftFunction_exposer.def( 
                 "defaultShiftFunction"
-                , defaultShiftFunction_function_value );
+                , defaultShiftFunction_function_value
+                , "" );
         
         }
         CLJShiftFunction_exposer.def( bp::self != bp::self );
@@ -73,7 +74,8 @@ void register_CLJShiftFunction_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CLJShiftFunction_exposer.def( bp::self == bp::self );
@@ -84,7 +86,8 @@ void register_CLJShiftFunction_class(){
             
             CLJShiftFunction_exposer.def( 
                 "supportsGridCalculation"
-                , supportsGridCalculation_function_value );
+                , supportsGridCalculation_function_value
+                , "This function does support calculations using a grid" );
         
         }
         { //::SireMM::CLJShiftFunction::toString
@@ -94,7 +97,8 @@ void register_CLJShiftFunction_class(){
             
             CLJShiftFunction_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMM::CLJShiftFunction::typeName
@@ -104,7 +108,8 @@ void register_CLJShiftFunction_class(){
             
             CLJShiftFunction_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::CLJShiftFunction::what
@@ -114,7 +119,8 @@ void register_CLJShiftFunction_class(){
             
             CLJShiftFunction_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         CLJShiftFunction_exposer.staticmethod( "defaultShiftFunction" );

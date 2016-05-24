@@ -45,18 +45,18 @@ void register_AtomIDMatcher_class(){
 
     { //::SireMol::AtomIDMatcher
         typedef bp::class_< SireMol::AtomIDMatcher, bp::bases< SireMol::AtomMatcher, SireBase::Property > > AtomIDMatcher_exposer_t;
-        AtomIDMatcher_exposer_t AtomIDMatcher_exposer = AtomIDMatcher_exposer_t( "AtomIDMatcher", bp::init< >() );
+        AtomIDMatcher_exposer_t AtomIDMatcher_exposer = AtomIDMatcher_exposer_t( "AtomIDMatcher", "This is an atom matcher that allows the user to specify\nexactly how one atom matches another in the molecule\nby mapping one AtomIdentifier to another\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope AtomIDMatcher_scope( AtomIDMatcher_exposer );
-        AtomIDMatcher_exposer.def( bp::init< QList< QPair< QString, QString > > const & >(( bp::arg("match_names") )) );
-        AtomIDMatcher_exposer.def( bp::init< QList< QPair< int, int > > const & >(( bp::arg("match_idxs") )) );
-        AtomIDMatcher_exposer.def( bp::init< QList< QPair< SireMol::AtomIdentifier, SireMol::AtomIdentifier > > const & >(( bp::arg("match_ids") )) );
-        AtomIDMatcher_exposer.def( bp::init< QList< boost::tuples::tuple< QString, QString, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > > const & >(( bp::arg("match_names") )) );
-        AtomIDMatcher_exposer.def( bp::init< QList< boost::tuples::tuple< int, int, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > > const & >(( bp::arg("match_idxs") )) );
-        AtomIDMatcher_exposer.def( bp::init< QList< boost::tuples::tuple< SireMol::AtomIdentifier, SireMol::AtomIdentifier, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > > const & >(( bp::arg("match_ids") )) );
-        AtomIDMatcher_exposer.def( bp::init< QHash< QString, QString > const & >(( bp::arg("match_names") )) );
-        AtomIDMatcher_exposer.def( bp::init< QHash< int, int > const & >(( bp::arg("match_idxs") )) );
-        AtomIDMatcher_exposer.def( bp::init< QHash< SireMol::AtomIdentifier, SireMol::AtomIdentifier > const & >(( bp::arg("match_ids") )) );
-        AtomIDMatcher_exposer.def( bp::init< SireMol::AtomIDMatcher const & >(( bp::arg("other") )) );
+        AtomIDMatcher_exposer.def( bp::init< QList< QPair< QString, QString > > const & >(( bp::arg("match_names") ), "Construct to match atom names") );
+        AtomIDMatcher_exposer.def( bp::init< QList< QPair< int, int > > const & >(( bp::arg("match_idxs") ), "Construct to match atom indexes") );
+        AtomIDMatcher_exposer.def( bp::init< QList< QPair< SireMol::AtomIdentifier, SireMol::AtomIdentifier > > const & >(( bp::arg("match_ids") ), "Construct to match specified AtomIdentifiers") );
+        AtomIDMatcher_exposer.def( bp::init< QList< boost::tuples::tuple< QString, QString, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > > const & >(( bp::arg("match_names") ), "Construct to match atom names") );
+        AtomIDMatcher_exposer.def( bp::init< QList< boost::tuples::tuple< int, int, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > > const & >(( bp::arg("match_idxs") ), "Construct to match atom indexes") );
+        AtomIDMatcher_exposer.def( bp::init< QList< boost::tuples::tuple< SireMol::AtomIdentifier, SireMol::AtomIdentifier, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > > const & >(( bp::arg("match_ids") ), "Construct to match specified AtomIdentifiers") );
+        AtomIDMatcher_exposer.def( bp::init< QHash< QString, QString > const & >(( bp::arg("match_names") ), "Construct to match atom names") );
+        AtomIDMatcher_exposer.def( bp::init< QHash< int, int > const & >(( bp::arg("match_idxs") ), "Construct to match atom indexes") );
+        AtomIDMatcher_exposer.def( bp::init< QHash< SireMol::AtomIdentifier, SireMol::AtomIdentifier > const & >(( bp::arg("match_ids") ), "Construct to match specified AtomIdentifiers") );
+        AtomIDMatcher_exposer.def( bp::init< SireMol::AtomIDMatcher const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::AtomIDMatcher::isNull
         
             typedef bool ( ::SireMol::AtomIDMatcher::*isNull_function_type)(  ) const;
@@ -64,7 +64,8 @@ void register_AtomIDMatcher_class(){
             
             AtomIDMatcher_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Return whether or not this matcher is null (cannot be used for matching)" );
         
         }
         AtomIDMatcher_exposer.def( bp::self != bp::self );
@@ -77,7 +78,8 @@ void register_AtomIDMatcher_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AtomIDMatcher_exposer.def( bp::self == bp::self );
@@ -88,7 +90,8 @@ void register_AtomIDMatcher_class(){
             
             AtomIDMatcher_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::AtomIDMatcher::typeName
@@ -98,7 +101,8 @@ void register_AtomIDMatcher_class(){
             
             AtomIDMatcher_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::AtomIDMatcher::what
@@ -108,7 +112,8 @@ void register_AtomIDMatcher_class(){
             
             AtomIDMatcher_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         AtomIDMatcher_exposer.staticmethod( "typeName" );

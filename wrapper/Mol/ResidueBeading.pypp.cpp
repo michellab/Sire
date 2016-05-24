@@ -43,9 +43,9 @@ void register_ResidueBeading_class(){
 
     { //::SireMol::ResidueBeading
         typedef bp::class_< SireMol::ResidueBeading, bp::bases< SireMol::Beading, SireMol::MolViewProperty, SireBase::Property > > ResidueBeading_exposer_t;
-        ResidueBeading_exposer_t ResidueBeading_exposer = ResidueBeading_exposer_t( "ResidueBeading", bp::init< >() );
+        ResidueBeading_exposer_t ResidueBeading_exposer = ResidueBeading_exposer_t( "ResidueBeading", "This is a beading function that breaks a molecule into beads\nwith one bead per residue\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope ResidueBeading_scope( ResidueBeading_exposer );
-        ResidueBeading_exposer.def( bp::init< SireMol::ResidueBeading const & >(( bp::arg("other") )) );
+        ResidueBeading_exposer.def( bp::init< SireMol::ResidueBeading const & >(( bp::arg("other") ), "Copy constructor") );
         ResidueBeading_exposer.def( bp::self != bp::self );
         { //::SireMol::ResidueBeading::operator=
         
@@ -56,7 +56,8 @@ void register_ResidueBeading_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         ResidueBeading_exposer.def( bp::self == bp::self );
@@ -67,7 +68,8 @@ void register_ResidueBeading_class(){
             
             ResidueBeading_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         ResidueBeading_exposer.staticmethod( "typeName" );

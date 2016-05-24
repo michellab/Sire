@@ -26,10 +26,10 @@ void register_SupraSimPacket_class(){
 
     { //::SireMove::SupraSimPacket
         typedef bp::class_< SireMove::SupraSimPacket, bp::bases< SireCluster::WorkPacketBase > > SupraSimPacket_exposer_t;
-        SupraSimPacket_exposer_t SupraSimPacket_exposer = SupraSimPacket_exposer_t( "SupraSimPacket", bp::init< >() );
+        SupraSimPacket_exposer_t SupraSimPacket_exposer = SupraSimPacket_exposer_t( "SupraSimPacket", "This is a workpacket that is used to run part of a supra-simulation\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope SupraSimPacket_scope( SupraSimPacket_exposer );
-        SupraSimPacket_exposer.def( bp::init< SireMove::SupraSystem const &, SireMove::SupraMoves const &, int, bool >(( bp::arg("suprasystem"), bp::arg("supramoves"), bp::arg("nmoves"), bp::arg("record_stats") )) );
-        SupraSimPacket_exposer.def( bp::init< SireMove::SupraSimPacket const & >(( bp::arg("other") )) );
+        SupraSimPacket_exposer.def( bp::init< SireMove::SupraSystem const &, SireMove::SupraMoves const &, int, bool >(( bp::arg("suprasystem"), bp::arg("supramoves"), bp::arg("nmoves"), bp::arg("record_stats") ), "Construct to perform the passed supra-moves on the passed supra-system.\nThe packet is to run nmoves blocks of these moves, recording\nstatistics if record_stats is true") );
+        SupraSimPacket_exposer.def( bp::init< SireMove::SupraSimPacket const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::SupraSimPacket::approximatePacketSize
         
             typedef int ( ::SireMove::SupraSimPacket::*approximatePacketSize_function_type)(  ) const;
@@ -37,7 +37,8 @@ void register_SupraSimPacket_class(){
             
             SupraSimPacket_exposer.def( 
                 "approximatePacketSize"
-                , approximatePacketSize_function_value );
+                , approximatePacketSize_function_value
+                , "This will be large..." );
         
         }
         { //::SireMove::SupraSimPacket::hasFinished
@@ -47,7 +48,8 @@ void register_SupraSimPacket_class(){
             
             SupraSimPacket_exposer.def( 
                 "hasFinished"
-                , hasFinished_function_value );
+                , hasFinished_function_value
+                , "Return whether or not the simulation has finished" );
         
         }
         { //::SireMove::SupraSimPacket::moves
@@ -58,7 +60,8 @@ void register_SupraSimPacket_class(){
             SupraSimPacket_exposer.def( 
                 "moves"
                 , moves_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the supra-moves being applied to the supra-system" );
         
         }
         { //::SireMove::SupraSimPacket::nCompleted
@@ -68,7 +71,8 @@ void register_SupraSimPacket_class(){
             
             SupraSimPacket_exposer.def( 
                 "nCompleted"
-                , nCompleted_function_value );
+                , nCompleted_function_value
+                , "Return the number of supra-moves that have been completed so far" );
         
         }
         { //::SireMove::SupraSimPacket::nMoves
@@ -78,7 +82,8 @@ void register_SupraSimPacket_class(){
             
             SupraSimPacket_exposer.def( 
                 "nMoves"
-                , nMoves_function_value );
+                , nMoves_function_value
+                , "Return the number of supra-moves to be applied to the supra-system" );
         
         }
         SupraSimPacket_exposer.def( bp::self != bp::self );
@@ -91,7 +96,8 @@ void register_SupraSimPacket_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         SupraSimPacket_exposer.def( bp::self == bp::self );
@@ -102,7 +108,8 @@ void register_SupraSimPacket_class(){
             
             SupraSimPacket_exposer.def( 
                 "recordingStatistics"
-                , recordingStatistics_function_value );
+                , recordingStatistics_function_value
+                , "Set whether or not statistics are being recorded during the moves" );
         
         }
         { //::SireMove::SupraSimPacket::shouldPack
@@ -112,7 +119,8 @@ void register_SupraSimPacket_class(){
             
             SupraSimPacket_exposer.def( 
                 "shouldPack"
-                , shouldPack_function_value );
+                , shouldPack_function_value
+                , "This probably shouldnt be packed to disk, as there will be a lot\nof data sharing between this packet and other copies at different\nstages of the simulation (I think) - it is also already heavily\npacked (e.g. to disk) and I dont want that data to be pulled\ninto memory" );
         
         }
         { //::SireMove::SupraSimPacket::system
@@ -123,7 +131,8 @@ void register_SupraSimPacket_class(){
             SupraSimPacket_exposer.def( 
                 "system"
                 , system_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the supra-system being simulated" );
         
         }
         { //::SireMove::SupraSimPacket::typeName
@@ -133,7 +142,8 @@ void register_SupraSimPacket_class(){
             
             SupraSimPacket_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMove::SupraSimPacket::what
@@ -143,7 +153,8 @@ void register_SupraSimPacket_class(){
             
             SupraSimPacket_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         SupraSimPacket_exposer.staticmethod( "typeName" );

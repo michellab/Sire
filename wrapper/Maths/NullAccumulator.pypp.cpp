@@ -37,9 +37,9 @@ void register_NullAccumulator_class(){
 
     { //::SireMaths::NullAccumulator
         typedef bp::class_< SireMaths::NullAccumulator, bp::bases< SireMaths::Accumulator, SireBase::Property > > NullAccumulator_exposer_t;
-        NullAccumulator_exposer_t NullAccumulator_exposer = NullAccumulator_exposer_t( "NullAccumulator", bp::init< >() );
+        NullAccumulator_exposer_t NullAccumulator_exposer = NullAccumulator_exposer_t( "NullAccumulator", "This is the null accumulator that doesnt accumulate anything\n\nAuthor: Christopher Woods\n", bp::init< >("Construct an empty average") );
         bp::scope NullAccumulator_scope( NullAccumulator_exposer );
-        NullAccumulator_exposer.def( bp::init< SireMaths::NullAccumulator const & >(( bp::arg("other") )) );
+        NullAccumulator_exposer.def( bp::init< SireMaths::NullAccumulator const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMaths::NullAccumulator::accumulate
         
             typedef void ( ::SireMaths::NullAccumulator::*accumulate_function_type)( double ) ;
@@ -48,7 +48,8 @@ void register_NullAccumulator_class(){
             NullAccumulator_exposer.def( 
                 "accumulate"
                 , accumulate_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Accumulate the passed value onto the average" );
         
         }
         NullAccumulator_exposer.def( bp::self != bp::self );
@@ -61,7 +62,8 @@ void register_NullAccumulator_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         NullAccumulator_exposer.def( bp::self == bp::self );
@@ -72,7 +74,8 @@ void register_NullAccumulator_class(){
             
             NullAccumulator_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         NullAccumulator_exposer.staticmethod( "typeName" );

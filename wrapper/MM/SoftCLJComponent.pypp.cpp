@@ -30,11 +30,11 @@ void register_SoftCLJComponent_class(){
 
     { //::SireMM::SoftCLJComponent
         typedef bp::class_< SireMM::SoftCLJComponent, bp::bases< SireMM::CLJComponent, SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > SoftCLJComponent_exposer_t;
-        SoftCLJComponent_exposer_t SoftCLJComponent_exposer = SoftCLJComponent_exposer_t( "SoftCLJComponent", bp::init< >() );
+        SoftCLJComponent_exposer_t SoftCLJComponent_exposer = SoftCLJComponent_exposer_t( "SoftCLJComponent", "This represents the sum of the coulomb and LJ components\nfor a soft-core forcefield, in which multiple soft-core\nalpha values are used (and so multiple coulomb and LJ\ncomponents are available). This combined component gives\naccess to each of the individual components, and also\nto the sum of them all\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a null set of SoftCLJComponents") );
         bp::scope SoftCLJComponent_scope( SoftCLJComponent_exposer );
-        SoftCLJComponent_exposer.def( bp::init< SireFF::FFName const & >(( bp::arg("name") )) );
-        SoftCLJComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") )) );
-        SoftCLJComponent_exposer.def( bp::init< SireMM::SoftCLJComponent const & >(( bp::arg("other") )) );
+        SoftCLJComponent_exposer.def( bp::init< SireFF::FFName const & >(( bp::arg("name") ), "Construct the SoftCLJComponents for the passed name") );
+        SoftCLJComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct the SoftCLJComponents from the passed symbol") );
+        SoftCLJComponent_exposer.def( bp::init< SireMM::SoftCLJComponent const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::SoftCLJComponent::changeEnergy
         
             typedef void ( ::SireMM::SoftCLJComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::CLJEnergy const & ) const;
@@ -43,7 +43,8 @@ void register_SoftCLJComponent_class(){
             SoftCLJComponent_exposer.def( 
                 "changeEnergy"
                 , changeEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("delta") ) );
+                , ( bp::arg("ff"), bp::arg("delta") )
+                , "Change the energy in the forcefield ff of all of these components by the\nvalues held in delta" );
         
         }
         { //::SireMM::SoftCLJComponent::changeEnergy
@@ -54,7 +55,8 @@ void register_SoftCLJComponent_class(){
             SoftCLJComponent_exposer.def( 
                 "changeEnergy"
                 , changeEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("delta") ) );
+                , ( bp::arg("ff"), bp::arg("delta") )
+                , "Change the energy in the forcefield ff of all of these components by the\nvalues held in delta" );
         
         }
         { //::SireMM::SoftCLJComponent::coulomb
@@ -65,7 +67,8 @@ void register_SoftCLJComponent_class(){
             SoftCLJComponent_exposer.def( 
                 "coulomb"
                 , coulomb_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the component representing the total coulomb energy\nof all of the alpha values" );
         
         }
         { //::SireMM::SoftCLJComponent::coulomb
@@ -77,7 +80,8 @@ void register_SoftCLJComponent_class(){
                 "coulomb"
                 , coulomb_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the component representing the coulomb energy of\nthe ith alpha component\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::SoftCLJComponent::lj
@@ -88,7 +92,8 @@ void register_SoftCLJComponent_class(){
             SoftCLJComponent_exposer.def( 
                 "lj"
                 , lj_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the component representing the total LJ energy\nof all of the alpha values" );
         
         }
         { //::SireMM::SoftCLJComponent::lj
@@ -100,7 +105,8 @@ void register_SoftCLJComponent_class(){
                 "lj"
                 , lj_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the component representing the LJ energy of\nthe ith alpha component\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::SoftCLJComponent::nAlphaValues
@@ -110,7 +116,8 @@ void register_SoftCLJComponent_class(){
             
             SoftCLJComponent_exposer.def( 
                 "nAlphaValues"
-                , nAlphaValues_function_value );
+                , nAlphaValues_function_value
+                , "" );
         
         }
         { //::SireMM::SoftCLJComponent::operator=
@@ -122,7 +129,8 @@ void register_SoftCLJComponent_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMM::SoftCLJComponent::setEnergy
@@ -133,7 +141,8 @@ void register_SoftCLJComponent_class(){
             SoftCLJComponent_exposer.def( 
                 "setEnergy"
                 , setEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("value") ) );
+                , ( bp::arg("ff"), bp::arg("value") )
+                , "Set the energy in the forcefield ff of all of these components to the\nvalues held in value" );
         
         }
         { //::SireMM::SoftCLJComponent::setEnergy
@@ -144,7 +153,8 @@ void register_SoftCLJComponent_class(){
             SoftCLJComponent_exposer.def( 
                 "setEnergy"
                 , setEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("value") ) );
+                , ( bp::arg("ff"), bp::arg("value") )
+                , "Set the energy in the forcefield ff of all of these components to the\nvalues held in value" );
         
         }
         { //::SireMM::SoftCLJComponent::symbols
@@ -154,7 +164,8 @@ void register_SoftCLJComponent_class(){
             
             SoftCLJComponent_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "Return all of the symbols associated with these components" );
         
         }
         { //::SireMM::SoftCLJComponent::total
@@ -165,7 +176,8 @@ void register_SoftCLJComponent_class(){
             SoftCLJComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the component representing the total energy of\nall of the alpha values" );
         
         }
         { //::SireMM::SoftCLJComponent::total
@@ -177,7 +189,8 @@ void register_SoftCLJComponent_class(){
                 "total"
                 , total_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the component representing the total energy of\nthe ith alpha component\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::SoftCLJComponent::typeName
@@ -187,7 +200,8 @@ void register_SoftCLJComponent_class(){
             
             SoftCLJComponent_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::SoftCLJComponent::what
@@ -197,7 +211,8 @@ void register_SoftCLJComponent_class(){
             
             SoftCLJComponent_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         SoftCLJComponent_exposer.staticmethod( "nAlphaValues" );

@@ -26,10 +26,10 @@ void register_BondComponent_class(){
 
     { //::SireMM::BondComponent
         typedef bp::class_< SireMM::BondComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > BondComponent_exposer_t;
-        BondComponent_exposer_t BondComponent_exposer = BondComponent_exposer_t( "BondComponent", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() )) );
+        BondComponent_exposer_t BondComponent_exposer = BondComponent_exposer_t( "BondComponent", "This class represents a Bond component of a forcefield", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
         bp::scope BondComponent_scope( BondComponent_exposer );
-        BondComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") )) );
-        BondComponent_exposer.def( bp::init< SireMM::BondComponent const & >(( bp::arg("other") )) );
+        BondComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );
+        BondComponent_exposer.def( bp::init< SireMM::BondComponent const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::BondComponent::changeEnergy
         
             typedef void ( ::SireMM::BondComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::BondEnergy const & ) const;
@@ -38,7 +38,8 @@ void register_BondComponent_class(){
             BondComponent_exposer.def( 
                 "changeEnergy"
                 , changeEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("bondnrg") ) );
+                , ( bp::arg("ff"), bp::arg("bondnrg") )
+                , "Change the component of the energy in the forcefield ff\nby delta" );
         
         }
         { //::SireMM::BondComponent::setEnergy
@@ -49,7 +50,8 @@ void register_BondComponent_class(){
             BondComponent_exposer.def( 
                 "setEnergy"
                 , setEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("bondnrg") ) );
+                , ( bp::arg("ff"), bp::arg("bondnrg") )
+                , "Set the component of the energy in the forcefield ff\nto be equal to the passed energy" );
         
         }
         { //::SireMM::BondComponent::symbols
@@ -59,7 +61,8 @@ void register_BondComponent_class(){
             
             BondComponent_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "" );
         
         }
         { //::SireMM::BondComponent::total
@@ -70,7 +73,8 @@ void register_BondComponent_class(){
             BondComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::BondComponent::typeName
@@ -80,7 +84,8 @@ void register_BondComponent_class(){
             
             BondComponent_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::BondComponent::what
@@ -90,7 +95,8 @@ void register_BondComponent_class(){
             
             BondComponent_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         BondComponent_exposer.staticmethod( "typeName" );

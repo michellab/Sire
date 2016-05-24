@@ -27,11 +27,11 @@ void register_StringProperty_class(){
 
     { //::SireBase::StringProperty
         typedef bp::class_< SireBase::StringProperty, bp::bases< SireBase::Property > > StringProperty_exposer_t;
-        StringProperty_exposer_t StringProperty_exposer = StringProperty_exposer_t( "StringProperty", bp::init< >() );
+        StringProperty_exposer_t StringProperty_exposer = StringProperty_exposer_t( "StringProperty", "This class provides a thin Property wrapper around a QString\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope StringProperty_scope( StringProperty_exposer );
-        StringProperty_exposer.def( bp::init< QString const & >(( bp::arg("s") )) );
-        StringProperty_exposer.def( bp::init< SireBase::VariantProperty const & >(( bp::arg("other") )) );
-        StringProperty_exposer.def( bp::init< SireBase::StringProperty const & >(( bp::arg("other") )) );
+        StringProperty_exposer.def( bp::init< QString const & >(( bp::arg("s") ), "Construct from the passed string") );
+        StringProperty_exposer.def( bp::init< SireBase::VariantProperty const & >(( bp::arg("other") ), "Cast from the passed VariantProperty") );
+        StringProperty_exposer.def( bp::init< SireBase::StringProperty const & >(( bp::arg("other") ), "Copy constructor") );
         StringProperty_exposer.def( bp::self != bp::self );
         { //::SireBase::StringProperty::operator=
         
@@ -42,7 +42,8 @@ void register_StringProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         StringProperty_exposer.def( bp::self == bp::self );
@@ -53,7 +54,8 @@ void register_StringProperty_class(){
             
             StringProperty_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireBase::StringProperty::typeName
@@ -63,7 +65,8 @@ void register_StringProperty_class(){
             
             StringProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         StringProperty_exposer.staticmethod( "typeName" );

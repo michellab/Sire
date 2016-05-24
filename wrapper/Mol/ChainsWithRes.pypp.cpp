@@ -26,10 +26,10 @@ void register_ChainsWithRes_class(){
 
     { //::SireMol::ChainsWithRes
         typedef bp::class_< SireMol::ChainsWithRes, bp::bases< SireMol::ChainID, SireID::ID > > ChainsWithRes_exposer_t;
-        ChainsWithRes_exposer_t ChainsWithRes_exposer = ChainsWithRes_exposer_t( "ChainsWithRes", bp::init< >() );
+        ChainsWithRes_exposer_t ChainsWithRes_exposer = ChainsWithRes_exposer_t( "ChainsWithRes", "This ID class identifies chains that contain residues that\nmatch the passed ResID\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope ChainsWithRes_scope( ChainsWithRes_exposer );
-        ChainsWithRes_exposer.def( bp::init< SireMol::ResID const & >(( bp::arg("resid") )) );
-        ChainsWithRes_exposer.def( bp::init< SireMol::ChainsWithRes const & >(( bp::arg("other") )) );
+        ChainsWithRes_exposer.def( bp::init< SireMol::ResID const & >(( bp::arg("resid") ), "Construct from the passed residue ID") );
+        ChainsWithRes_exposer.def( bp::init< SireMol::ChainsWithRes const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::ChainsWithRes::hash
         
             typedef ::uint ( ::SireMol::ChainsWithRes::*hash_function_type)(  ) const;
@@ -37,7 +37,8 @@ void register_ChainsWithRes_class(){
             
             ChainsWithRes_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Return a hash of this identifier" );
         
         }
         { //::SireMol::ChainsWithRes::isNull
@@ -47,7 +48,8 @@ void register_ChainsWithRes_class(){
             
             ChainsWithRes_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Is this selection null?" );
         
         }
         { //::SireMol::ChainsWithRes::map
@@ -58,7 +60,8 @@ void register_ChainsWithRes_class(){
             ChainsWithRes_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "Map this ID to the list of indicies of chains that match this ID\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\n" );
         
         }
         ChainsWithRes_exposer.def( bp::self != bp::self );
@@ -71,7 +74,8 @@ void register_ChainsWithRes_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         ChainsWithRes_exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -84,7 +88,8 @@ void register_ChainsWithRes_class(){
             ChainsWithRes_exposer.def( 
                 "resID"
                 , resID_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the residue ID" );
         
         }
         { //::SireMol::ChainsWithRes::toString
@@ -94,7 +99,8 @@ void register_ChainsWithRes_class(){
             
             ChainsWithRes_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representatio of this ID" );
         
         }
         { //::SireMol::ChainsWithRes::typeName
@@ -104,7 +110,8 @@ void register_ChainsWithRes_class(){
             
             ChainsWithRes_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::ChainsWithRes::what
@@ -114,7 +121,8 @@ void register_ChainsWithRes_class(){
             
             ChainsWithRes_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ChainsWithRes_exposer.staticmethod( "typeName" );

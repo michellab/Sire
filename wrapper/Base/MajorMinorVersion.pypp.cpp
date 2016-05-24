@@ -22,11 +22,11 @@ void register_MajorMinorVersion_class(){
 
     { //::SireBase::MajorMinorVersion
         typedef bp::class_< SireBase::MajorMinorVersion > MajorMinorVersion_exposer_t;
-        MajorMinorVersion_exposer_t MajorMinorVersion_exposer = MajorMinorVersion_exposer_t( "MajorMinorVersion", bp::init< >() );
+        MajorMinorVersion_exposer_t MajorMinorVersion_exposer = MajorMinorVersion_exposer_t( "MajorMinorVersion", "This is a class that provides a version numbering scheme that\nis guaranteed to provide unique version numbers, even for\ndifferent copies of this object\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope MajorMinorVersion_scope( MajorMinorVersion_exposer );
-        MajorMinorVersion_exposer.def( bp::init< boost::shared_ptr< SireBase::detail::MajorMinorVersionData > const & >(( bp::arg("other") )) );
-        MajorMinorVersion_exposer.def( bp::init< quint64, quint64 >(( bp::arg("vmaj"), bp::arg("vmin") )) );
-        MajorMinorVersion_exposer.def( bp::init< SireBase::MajorMinorVersion const & >(( bp::arg("other") )) );
+        MajorMinorVersion_exposer.def( bp::init< boost::shared_ptr< SireBase::detail::MajorMinorVersionData > const & >(( bp::arg("other") ), "Construct from a raw data object - this should only be called by\nthe registry function") );
+        MajorMinorVersion_exposer.def( bp::init< quint64, quint64 >(( bp::arg("vmaj"), bp::arg("vmin") ), "Construct the object for a specific version") );
+        MajorMinorVersion_exposer.def( bp::init< SireBase::MajorMinorVersion const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireBase::MajorMinorVersion::incrementMajor
         
             typedef void ( ::SireBase::MajorMinorVersion::*incrementMajor_function_type)(  ) ;
@@ -34,7 +34,8 @@ void register_MajorMinorVersion_class(){
             
             MajorMinorVersion_exposer.def( 
                 "incrementMajor"
-                , incrementMajor_function_value );
+                , incrementMajor_function_value
+                , "Increment the major version number - this resets the\nminor version number to 0" );
         
         }
         { //::SireBase::MajorMinorVersion::incrementMinor
@@ -44,7 +45,8 @@ void register_MajorMinorVersion_class(){
             
             MajorMinorVersion_exposer.def( 
                 "incrementMinor"
-                , incrementMinor_function_value );
+                , incrementMinor_function_value
+                , "Increment the minor version number" );
         
         }
         { //::SireBase::MajorMinorVersion::majorVersion
@@ -54,7 +56,8 @@ void register_MajorMinorVersion_class(){
             
             MajorMinorVersion_exposer.def( 
                 "majorVersion"
-                , majorVersion_function_value );
+                , majorVersion_function_value
+                , "" );
         
         }
         { //::SireBase::MajorMinorVersion::minorVersion
@@ -64,7 +67,8 @@ void register_MajorMinorVersion_class(){
             
             MajorMinorVersion_exposer.def( 
                 "minorVersion"
-                , minorVersion_function_value );
+                , minorVersion_function_value
+                , "" );
         
         }
         MajorMinorVersion_exposer.def( bp::self != bp::self );
@@ -77,7 +81,8 @@ void register_MajorMinorVersion_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MajorMinorVersion_exposer.def( bp::self == bp::self );
@@ -88,7 +93,8 @@ void register_MajorMinorVersion_class(){
             
             MajorMinorVersion_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireBase::MajorMinorVersion::version
@@ -99,7 +105,8 @@ void register_MajorMinorVersion_class(){
             MajorMinorVersion_exposer.def( 
                 "version"
                 , version_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireBase::MajorMinorVersion::what
@@ -109,7 +116,8 @@ void register_MajorMinorVersion_class(){
             
             MajorMinorVersion_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         MajorMinorVersion_exposer.staticmethod( "typeName" );

@@ -67,11 +67,11 @@ void register_ResName_class(){
 
     { //::SireMol::ResName
         typedef bp::class_< SireMol::ResName, bp::bases< SireMol::ResID, SireID::ID, SireID::Name > > ResName_exposer_t;
-        ResName_exposer_t ResName_exposer = ResName_exposer_t( "ResName", bp::init< >() );
+        ResName_exposer_t ResName_exposer = ResName_exposer_t( "ResName", "This class holds the name of a CutGroup.\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope ResName_scope( ResName_exposer );
-        ResName_exposer.def( bp::init< QString const & >(( bp::arg("name") )) );
-        ResName_exposer.def( bp::init< QString const &, SireID::CaseSensitivity >(( bp::arg("name"), bp::arg("case_sensitivity") )) );
-        ResName_exposer.def( bp::init< SireMol::ResName const & >(( bp::arg("other") )) );
+        ResName_exposer.def( bp::init< QString const & >(( bp::arg("name") ), "") );
+        ResName_exposer.def( bp::init< QString const &, SireID::CaseSensitivity >(( bp::arg("name"), bp::arg("case_sensitivity") ), "") );
+        ResName_exposer.def( bp::init< SireMol::ResName const & >(( bp::arg("other") ), "") );
         { //::SireMol::ResName::hash
         
             typedef ::uint ( ::SireMol::ResName::*hash_function_type)(  ) const;
@@ -79,7 +79,8 @@ void register_ResName_class(){
             
             ResName_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::ResName::isNull
@@ -89,7 +90,8 @@ void register_ResName_class(){
             
             ResName_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::ResName::map
@@ -100,7 +102,8 @@ void register_ResName_class(){
             ResName_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         ResName_exposer.def( bp::self != bp::self );
@@ -113,7 +116,8 @@ void register_ResName_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         ResName_exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -125,7 +129,8 @@ void register_ResName_class(){
             
             ResName_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::ResName::typeName
@@ -135,7 +140,8 @@ void register_ResName_class(){
             
             ResName_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::ResName::what
@@ -145,7 +151,8 @@ void register_ResName_class(){
             
             ResName_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ResName_exposer.staticmethod( "typeName" );

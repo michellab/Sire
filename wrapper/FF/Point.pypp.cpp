@@ -42,7 +42,7 @@ void register_Point_class(){
 
     { //::SireFF::Point
         typedef bp::class_< SireFF::Point, bp::bases< SireBase::Property >, boost::noncopyable > Point_exposer_t;
-        Point_exposer_t Point_exposer = Point_exposer_t( "Point", bp::no_init );
+        Point_exposer_t Point_exposer = Point_exposer_t( "Point", "This is the base class of all Points. A Point is a class that\nallows a view of a molecule (or molecules) to be turned\ninto a 3D point. This 3D point can then be used within a restraint\nclass (thereby seperating out the code that implements the\nrestraint from the code that selects the parts of the molecule(s)\nbeing restrained)\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope Point_scope( Point_exposer );
         { //::SireFF::Point::addForce
         
@@ -52,7 +52,8 @@ void register_Point_class(){
             Point_exposer.def( 
                 "addForce"
                 , addForce_function_value
-                , ( bp::arg("molforces"), bp::arg("force") ) );
+                , ( bp::arg("molforces"), bp::arg("force") )
+                , "" );
         
         }
         { //::SireFF::Point::addForce
@@ -63,7 +64,8 @@ void register_Point_class(){
             Point_exposer.def( 
                 "addForce"
                 , addForce_function_value
-                , ( bp::arg("forces"), bp::arg("force") ) );
+                , ( bp::arg("forces"), bp::arg("force") )
+                , "" );
         
         }
         { //::SireFF::Point::areIntraMoleculePoints
@@ -74,7 +76,8 @@ void register_Point_class(){
             Point_exposer.def( 
                 "areIntraMoleculePoints"
                 , areIntraMoleculePoints_function_value
-                , ( bp::arg("point0"), bp::arg("point1") ) );
+                , ( bp::arg("point0"), bp::arg("point1") )
+                , "Return whether or not the points point0 and point1 are\nboth within the same molecule (so together are intra-molecule points)" );
         
         }
         { //::SireFF::Point::areIntraMoleculePoints
@@ -85,7 +88,8 @@ void register_Point_class(){
             Point_exposer.def( 
                 "areIntraMoleculePoints"
                 , areIntraMoleculePoints_function_value
-                , ( bp::arg("point0"), bp::arg("point1"), bp::arg("point2") ) );
+                , ( bp::arg("point0"), bp::arg("point1"), bp::arg("point2") )
+                , "Return whether or not the points point0, point1 and point2 are\nwithin the same molecule (so together are intra-molecule points)" );
         
         }
         { //::SireFF::Point::areIntraMoleculePoints
@@ -96,7 +100,8 @@ void register_Point_class(){
             Point_exposer.def( 
                 "areIntraMoleculePoints"
                 , areIntraMoleculePoints_function_value
-                , ( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3") ) );
+                , ( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3") )
+                , "Return whether or not the points point0, point1, point2 and point3 are\nwithin the same molecule (so together are intra-molecule points)" );
         
         }
         { //::SireFF::Point::areIntraMoleculePoints
@@ -107,7 +112,8 @@ void register_Point_class(){
             Point_exposer.def( 
                 "areIntraMoleculePoints"
                 , areIntraMoleculePoints_function_value
-                , ( bp::arg("points") ) );
+                , ( bp::arg("points") )
+                , "Return whether or not the points in points are all\nwithin the same molecule (so together are intra-molecule points)" );
         
         }
         { //::SireFF::Point::contains
@@ -118,7 +124,8 @@ void register_Point_class(){
             Point_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "" );
         
         }
         { //::SireFF::Point::contains
@@ -129,7 +136,8 @@ void register_Point_class(){
             Point_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molid") ) );
+                , ( bp::arg("molid") )
+                , "" );
         
         }
         { //::SireFF::Point::isExtraMoleculePoint
@@ -139,7 +147,8 @@ void register_Point_class(){
             
             Point_exposer.def( 
                 "isExtraMoleculePoint"
-                , isExtraMoleculePoint_function_value );
+                , isExtraMoleculePoint_function_value
+                , "" );
         
         }
         { //::SireFF::Point::isInterMoleculePoint
@@ -149,7 +158,8 @@ void register_Point_class(){
             
             Point_exposer.def( 
                 "isInterMoleculePoint"
-                , isInterMoleculePoint_function_value );
+                , isInterMoleculePoint_function_value
+                , "" );
         
         }
         { //::SireFF::Point::isIntraMoleculePoint
@@ -159,7 +169,8 @@ void register_Point_class(){
             
             Point_exposer.def( 
                 "isIntraMoleculePoint"
-                , isIntraMoleculePoint_function_value );
+                , isIntraMoleculePoint_function_value
+                , "" );
         
         }
         { //::SireFF::Point::molecules
@@ -169,7 +180,8 @@ void register_Point_class(){
             
             Point_exposer.def( 
                 "molecules"
-                , molecules_function_value );
+                , molecules_function_value
+                , "" );
         
         }
         { //::SireFF::Point::nMolecules
@@ -179,7 +191,8 @@ void register_Point_class(){
             
             Point_exposer.def( 
                 "nMolecules"
-                , nMolecules_function_value );
+                , nMolecules_function_value
+                , "" );
         
         }
         { //::SireFF::Point::null
@@ -190,7 +203,8 @@ void register_Point_class(){
             Point_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireFF::Point::operator()
@@ -201,7 +215,8 @@ void register_Point_class(){
             Point_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireFF::Point::point
@@ -212,7 +227,8 @@ void register_Point_class(){
             Point_exposer.def( 
                 "point"
                 , point_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the point in 3D space" );
         
         }
         { //::SireFF::Point::setSpace
@@ -223,7 +239,8 @@ void register_Point_class(){
             Point_exposer.def( 
                 "setSpace"
                 , setSpace_function_value
-                , ( bp::arg("space") ) );
+                , ( bp::arg("space") )
+                , "Set the 3D space in which this point is calculated\n(although note that this 3D point, like the molecules,\nexists in the infinite cartesian space)" );
         
         }
         { //::SireFF::Point::space
@@ -234,7 +251,8 @@ void register_Point_class(){
             Point_exposer.def( 
                 "space"
                 , space_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the 3D space in which this point is calculated\n(although note that this 3D point, like the molecules,\nexists in the infinite cartesian space)" );
         
         }
         { //::SireFF::Point::typeName
@@ -244,7 +262,8 @@ void register_Point_class(){
             
             Point_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireFF::Point::update
@@ -255,7 +274,8 @@ void register_Point_class(){
             Point_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("moldata") ) );
+                , ( bp::arg("moldata") )
+                , "" );
         
         }
         { //::SireFF::Point::update
@@ -266,7 +286,8 @@ void register_Point_class(){
             Point_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "" );
         
         }
         { //::SireFF::Point::update
@@ -277,7 +298,8 @@ void register_Point_class(){
             Point_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "" );
         
         }
         { //::SireFF::Point::update
@@ -288,7 +310,8 @@ void register_Point_class(){
             Point_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molgroups") ) );
+                , ( bp::arg("molgroups") )
+                , "" );
         
         }
         { //::SireFF::Point::usesMoleculesIn
@@ -299,7 +322,8 @@ void register_Point_class(){
             Point_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("forcetable") ) );
+                , ( bp::arg("forcetable") )
+                , "" );
         
         }
         { //::SireFF::Point::usesMoleculesIn
@@ -310,7 +334,8 @@ void register_Point_class(){
             Point_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "" );
         
         }
         { //::SireFF::Point::usesMoleculesIn
@@ -321,7 +346,8 @@ void register_Point_class(){
             Point_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "" );
         
         }
         { //::SireFF::Point::usesMoleculesIn
@@ -332,7 +358,8 @@ void register_Point_class(){
             Point_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("molgroups") ) );
+                , ( bp::arg("molgroups") )
+                , "" );
         
         }
         { //::SireFF::Point::wouldUpdate
@@ -343,7 +370,8 @@ void register_Point_class(){
             Point_exposer.def( 
                 "wouldUpdate"
                 , wouldUpdate_function_value
-                , ( bp::arg("moldata") ) );
+                , ( bp::arg("moldata") )
+                , "" );
         
         }
         { //::SireFF::Point::wouldUpdate
@@ -354,7 +382,8 @@ void register_Point_class(){
             Point_exposer.def( 
                 "wouldUpdate"
                 , wouldUpdate_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "" );
         
         }
         { //::SireFF::Point::wouldUpdate
@@ -365,7 +394,8 @@ void register_Point_class(){
             Point_exposer.def( 
                 "wouldUpdate"
                 , wouldUpdate_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "" );
         
         }
         { //::SireFF::Point::wouldUpdate
@@ -376,7 +406,8 @@ void register_Point_class(){
             Point_exposer.def( 
                 "wouldUpdate"
                 , wouldUpdate_function_value
-                , ( bp::arg("molgroups") ) );
+                , ( bp::arg("molgroups") )
+                , "" );
         
         }
         Point_exposer.staticmethod( "areIntraMoleculePoints" );

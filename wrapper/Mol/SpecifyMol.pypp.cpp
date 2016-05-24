@@ -35,12 +35,12 @@ void register_SpecifyMol_class(){
 
     { //::SireMol::SpecifyMol
         typedef bp::class_< SireMol::SpecifyMol, bp::bases< SireMol::MolID, SireID::ID > > SpecifyMol_exposer_t;
-        SpecifyMol_exposer_t SpecifyMol_exposer = SpecifyMol_exposer_t( "SpecifyMol", bp::init< >() );
+        SpecifyMol_exposer_t SpecifyMol_exposer = SpecifyMol_exposer_t( "SpecifyMol", "This class allow for the specification of specific\nmatching molecules\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope SpecifyMol_scope( SpecifyMol_exposer );
-        SpecifyMol_exposer.def( bp::init< SireMol::MolID const & >(( bp::arg("molid") )) );
-        SpecifyMol_exposer.def( bp::init< SireMol::MolID const &, int >(( bp::arg("molid"), bp::arg("i") )) );
-        SpecifyMol_exposer.def( bp::init< SireMol::MolID const &, int, int >(( bp::arg("molid"), bp::arg("i"), bp::arg("j") )) );
-        SpecifyMol_exposer.def( bp::init< SireMol::SpecifyMol const & >(( bp::arg("other") )) );
+        SpecifyMol_exposer.def( bp::init< SireMol::MolID const & >(( bp::arg("molid") ), "Construct to match all of the molecules that match the\nID molid") );
+        SpecifyMol_exposer.def( bp::init< SireMol::MolID const &, int >(( bp::arg("molid"), bp::arg("i") ), "Construct to match the ith molecule that matches the ID molid") );
+        SpecifyMol_exposer.def( bp::init< SireMol::MolID const &, int, int >(( bp::arg("molid"), bp::arg("i"), bp::arg("j") ), "Construct to math the range of molecules from i to j that\nmatch the ID molid") );
+        SpecifyMol_exposer.def( bp::init< SireMol::SpecifyMol const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::SpecifyMol::hash
         
             typedef ::uint ( ::SireMol::SpecifyMol::*hash_function_type)(  ) const;
@@ -48,7 +48,8 @@ void register_SpecifyMol_class(){
             
             SpecifyMol_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Hash this ID" );
         
         }
         { //::SireMol::SpecifyMol::isNull
@@ -58,7 +59,8 @@ void register_SpecifyMol_class(){
             
             SpecifyMol_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Return whether or not this ID is null" );
         
         }
         { //::SireMol::SpecifyMol::map
@@ -69,7 +71,8 @@ void register_SpecifyMol_class(){
             SpecifyMol_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Map this ID to the list of molecule numbers that match" );
         
         }
         { //::SireMol::SpecifyMol::map
@@ -80,7 +83,8 @@ void register_SpecifyMol_class(){
             SpecifyMol_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "Map this ID to the list of molecule numbers that match" );
         
         }
         { //::SireMol::SpecifyMol::map
@@ -91,7 +95,8 @@ void register_SpecifyMol_class(){
             SpecifyMol_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molgroups") ) );
+                , ( bp::arg("molgroups") )
+                , "Map this ID to the list of molecule numbers that match" );
         
         }
         SpecifyMol_exposer.def( bp::self != bp::self );
@@ -105,7 +110,8 @@ void register_SpecifyMol_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         SpecifyMol_exposer.def( bp::self == bp::self );
@@ -117,7 +123,8 @@ void register_SpecifyMol_class(){
             
             SpecifyMol_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this ID" );
         
         }
         { //::SireMol::SpecifyMol::typeName
@@ -127,7 +134,8 @@ void register_SpecifyMol_class(){
             
             SpecifyMol_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::SpecifyMol::what
@@ -137,7 +145,8 @@ void register_SpecifyMol_class(){
             
             SpecifyMol_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         SpecifyMol_exposer.staticmethod( "typeName" );

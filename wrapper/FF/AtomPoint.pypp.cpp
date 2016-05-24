@@ -44,10 +44,10 @@ void register_AtomPoint_class(){
 
     { //::SireFF::AtomPoint
         typedef bp::class_< SireFF::AtomPoint, bp::bases< SireFF::Point, SireBase::Property > > AtomPoint_exposer_t;
-        AtomPoint_exposer_t AtomPoint_exposer = AtomPoint_exposer_t( "AtomPoint", bp::init< >() );
+        AtomPoint_exposer_t AtomPoint_exposer = AtomPoint_exposer_t( "AtomPoint", "This point returns the location of an atom", bp::init< >("Constructor") );
         bp::scope AtomPoint_scope( AtomPoint_exposer );
-        AtomPoint_exposer.def( bp::init< SireMol::Atom const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom"), bp::arg("map")=SireBase::PropertyMap() )) );
-        AtomPoint_exposer.def( bp::init< SireFF::AtomPoint const & >(( bp::arg("other") )) );
+        AtomPoint_exposer.def( bp::init< SireMol::Atom const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom"), bp::arg("map")=SireBase::PropertyMap() ), "Construct for the passed atom") );
+        AtomPoint_exposer.def( bp::init< SireFF::AtomPoint const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireFF::AtomPoint::addForce
         
             typedef bool ( ::SireFF::AtomPoint::*addForce_function_type)( ::SireFF::MolForceTable &,::SireMaths::Vector const & ) const;
@@ -56,7 +56,8 @@ void register_AtomPoint_class(){
             AtomPoint_exposer.def( 
                 "addForce"
                 , addForce_function_value
-                , ( bp::arg("molforces"), bp::arg("force") ) );
+                , ( bp::arg("molforces"), bp::arg("force") )
+                , "Add the force acting on this atom to the passed table (if it is\nthe table for the molecule containing the atom" );
         
         }
         { //::SireFF::AtomPoint::addForce
@@ -67,7 +68,8 @@ void register_AtomPoint_class(){
             AtomPoint_exposer.def( 
                 "addForce"
                 , addForce_function_value
-                , ( bp::arg("forces"), bp::arg("force") ) );
+                , ( bp::arg("forces"), bp::arg("force") )
+                , "Add the force acting on this atom to the passed table (if it contains\nthe table for the molecule containing the atom" );
         
         }
         { //::SireFF::AtomPoint::atom
@@ -78,7 +80,8 @@ void register_AtomPoint_class(){
             AtomPoint_exposer.def( 
                 "atom"
                 , atom_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the actual atom" );
         
         }
         { //::SireFF::AtomPoint::contains
@@ -89,7 +92,8 @@ void register_AtomPoint_class(){
             AtomPoint_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Does this point require information from the molecule with number molnum" );
         
         }
         { //::SireFF::AtomPoint::contains
@@ -100,7 +104,8 @@ void register_AtomPoint_class(){
             AtomPoint_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molid") ) );
+                , ( bp::arg("molid") )
+                , "Does this point require information from the molecule with ID molid" );
         
         }
         { //::SireFF::AtomPoint::isExtraMoleculePoint
@@ -110,7 +115,8 @@ void register_AtomPoint_class(){
             
             AtomPoint_exposer.def( 
                 "isExtraMoleculePoint"
-                , isExtraMoleculePoint_function_value );
+                , isExtraMoleculePoint_function_value
+                , "Return whether or not this is an extramolecular point (it is independent\nof the coordinates of atoms in any molecule, i.e. it is just a point in space)" );
         
         }
         { //::SireFF::AtomPoint::isInterMoleculePoint
@@ -120,7 +126,8 @@ void register_AtomPoint_class(){
             
             AtomPoint_exposer.def( 
                 "isInterMoleculePoint"
-                , isInterMoleculePoint_function_value );
+                , isInterMoleculePoint_function_value
+                , "Return whether or not this is an intermolecular point (it depends on\ncoordinates of atoms from than one molecule)" );
         
         }
         { //::SireFF::AtomPoint::isIntraMoleculePoint
@@ -130,7 +137,8 @@ void register_AtomPoint_class(){
             
             AtomPoint_exposer.def( 
                 "isIntraMoleculePoint"
-                , isIntraMoleculePoint_function_value );
+                , isIntraMoleculePoint_function_value
+                , "Return whether this is an intramolecular point (it depends on coordinates\nof atoms in just one molecule)" );
         
         }
         { //::SireFF::AtomPoint::molecules
@@ -140,7 +148,8 @@ void register_AtomPoint_class(){
             
             AtomPoint_exposer.def( 
                 "molecules"
-                , molecules_function_value );
+                , molecules_function_value
+                , "Return the molecules needed to get this point" );
         
         }
         { //::SireFF::AtomPoint::nMolecules
@@ -150,7 +159,8 @@ void register_AtomPoint_class(){
             
             AtomPoint_exposer.def( 
                 "nMolecules"
-                , nMolecules_function_value );
+                , nMolecules_function_value
+                , "Return the number of molecules needed to get this point" );
         
         }
         AtomPoint_exposer.def( bp::self != bp::self );
@@ -163,7 +173,8 @@ void register_AtomPoint_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AtomPoint_exposer.def( bp::self == bp::self );
@@ -174,7 +185,8 @@ void register_AtomPoint_class(){
             
             AtomPoint_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation" );
         
         }
         { //::SireFF::AtomPoint::typeName
@@ -184,7 +196,8 @@ void register_AtomPoint_class(){
             
             AtomPoint_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireFF::AtomPoint::update
@@ -195,7 +208,8 @@ void register_AtomPoint_class(){
             AtomPoint_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("moldata") ) );
+                , ( bp::arg("moldata") )
+                , "Update this point, returning whether or not this changes\nthe location of this point\nThrow: SireBase::missing_property\nThrow: SireError::incompatible_error\nThrow: SireError::invalid_cast\n" );
         
         }
         { //::SireFF::AtomPoint::update
@@ -206,7 +220,8 @@ void register_AtomPoint_class(){
             AtomPoint_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Update this point, returning whether or not this changes\nthe location of this point\nThrow: SireBase::missing_property\nThrow: SireError::incompatible_error\nThrow: SireError::invalid_cast\n" );
         
         }
         { //::SireFF::AtomPoint::update
@@ -217,7 +232,8 @@ void register_AtomPoint_class(){
             AtomPoint_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "Update this point, returning whether or not this changes\nthe location of this point\nThrow: SireBase::missing_property\nThrow: SireError::incompatible_error\nThrow: SireError::invalid_cast\n" );
         
         }
         { //::SireFF::AtomPoint::update
@@ -228,7 +244,8 @@ void register_AtomPoint_class(){
             AtomPoint_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molgroups") ) );
+                , ( bp::arg("molgroups") )
+                , "Update this point, returning whether or not this changes\nthe location of this point\nThrow: SireBase::missing_property\nThrow: SireError::incompatible_error\nThrow: SireError::invalid_cast\n" );
         
         }
         { //::SireFF::AtomPoint::usesMoleculesIn
@@ -239,7 +256,8 @@ void register_AtomPoint_class(){
             AtomPoint_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("forcetable") ) );
+                , ( bp::arg("forcetable") )
+                , "Return whether or not this point uses data from any of the\nmolecules in the passed forcetable" );
         
         }
         { //::SireFF::AtomPoint::usesMoleculesIn
@@ -250,7 +268,8 @@ void register_AtomPoint_class(){
             AtomPoint_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Return whether or not this point uses data from any of the\nmolecules in molecules" );
         
         }
         { //::SireFF::AtomPoint::usesMoleculesIn
@@ -261,7 +280,8 @@ void register_AtomPoint_class(){
             AtomPoint_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "Return whether or not this point uses data from any of the\nmolecules in the group molgroup" );
         
         }
         { //::SireFF::AtomPoint::usesMoleculesIn
@@ -272,7 +292,8 @@ void register_AtomPoint_class(){
             AtomPoint_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("molgroups") ) );
+                , ( bp::arg("molgroups") )
+                , "Return whether or not this point uses data from any of the\nmolecules in the groups in molgroups" );
         
         }
         { //::SireFF::AtomPoint::wouldUpdate
@@ -283,7 +304,8 @@ void register_AtomPoint_class(){
             AtomPoint_exposer.def( 
                 "wouldUpdate"
                 , wouldUpdate_function_value
-                , ( bp::arg("moldata") ) );
+                , ( bp::arg("moldata") )
+                , "Return whether or not this changes\nthe location of this point\nThrow: SireBase::missing_property\nThrow: SireError::incompatible_error\nThrow: SireError::invalid_cast\n" );
         
         }
         { //::SireFF::AtomPoint::wouldUpdate
@@ -294,7 +316,8 @@ void register_AtomPoint_class(){
             AtomPoint_exposer.def( 
                 "wouldUpdate"
                 , wouldUpdate_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Return whether or not this changes\nthe location of this point\nThrow: SireBase::missing_property\nThrow: SireError::incompatible_error\nThrow: SireError::invalid_cast\n" );
         
         }
         { //::SireFF::AtomPoint::wouldUpdate
@@ -305,7 +328,8 @@ void register_AtomPoint_class(){
             AtomPoint_exposer.def( 
                 "wouldUpdate"
                 , wouldUpdate_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "Return whether or not this changes\nthe location of this point\nThrow: SireBase::missing_property\nThrow: SireError::incompatible_error\nThrow: SireError::invalid_cast\n" );
         
         }
         { //::SireFF::AtomPoint::wouldUpdate
@@ -316,7 +340,8 @@ void register_AtomPoint_class(){
             AtomPoint_exposer.def( 
                 "wouldUpdate"
                 , wouldUpdate_function_value
-                , ( bp::arg("molgroups") ) );
+                , ( bp::arg("molgroups") )
+                , "Return whether or not this changes\nthe location of this point\nThrow: SireBase::missing_property\nThrow: SireError::incompatible_error\nThrow: SireError::invalid_cast\n" );
         
         }
         AtomPoint_exposer.staticmethod( "typeName" );

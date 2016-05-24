@@ -39,7 +39,7 @@ void register_CoordGroupBase_class(){
 
     { //::SireVol::CoordGroupBase
         typedef bp::class_< SireVol::CoordGroupBase, boost::noncopyable > CoordGroupBase_exposer_t;
-        CoordGroupBase_exposer_t CoordGroupBase_exposer = CoordGroupBase_exposer_t( "CoordGroupBase", bp::no_init );
+        CoordGroupBase_exposer_t CoordGroupBase_exposer = CoordGroupBase_exposer_t( "CoordGroupBase", "This is the base class of all CoordGroup-like classes\n(e.g. CoordGroup and CoordGroupEditor). CoordGroup classes\nhold a group of coordinates, together with an axis-aligned\nbox that completely encloses all of those points. The\nclass is implicitly shared, and, since it is used in the\nmost performance-sensitive parts of the code, has\na slightly more complex implicit-sharing design.\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope CoordGroupBase_scope( CoordGroupBase_exposer );
         { //::SireVol::CoordGroupBase::aaBox
         
@@ -49,7 +49,8 @@ void register_CoordGroupBase_class(){
             CoordGroupBase_exposer.def( 
                 "aaBox"
                 , aaBox_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the enclosing AABox" );
         
         }
         { //::SireVol::CoordGroupBase::assertSameSize
@@ -60,7 +61,8 @@ void register_CoordGroupBase_class(){
             CoordGroupBase_exposer.def( 
                 "assertSameSize"
                 , assertSameSize_function_value
-                , ( bp::arg("coordinates") ) );
+                , ( bp::arg("coordinates") )
+                , "Assert that the array of coordinates contains the same number of\ncoordinates as are in this group\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireVol::CoordGroupBase::assertSameSize
@@ -71,7 +73,8 @@ void register_CoordGroupBase_class(){
             CoordGroupBase_exposer.def( 
                 "assertSameSize"
                 , assertSameSize_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Assert that the CoordGroup other contains the same number of\ncoordinates as are in this group\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireVol::CoordGroupBase::assertValidIndex
@@ -82,7 +85,8 @@ void register_CoordGroupBase_class(){
             CoordGroupBase_exposer.def( 
                 "assertValidIndex"
                 , assertValidIndex_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Assert that i is a valid index in this group\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireVol::CoordGroupBase::at
@@ -94,7 +98,8 @@ void register_CoordGroupBase_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the ith coordinate of this group\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireVol::CoordGroupBase::count
@@ -104,7 +109,8 @@ void register_CoordGroupBase_class(){
             
             CoordGroupBase_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of coordinates in this group" );
         
         }
         { //::SireVol::CoordGroupBase::isEmpty
@@ -114,7 +120,8 @@ void register_CoordGroupBase_class(){
             
             CoordGroupBase_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether this group is empty (has no coordinates)" );
         
         }
         { //::SireVol::CoordGroupBase::maybeDifferent
@@ -125,7 +132,8 @@ void register_CoordGroupBase_class(){
             CoordGroupBase_exposer.def( 
                 "maybeDifferent"
                 , maybeDifferent_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return whether other may be different to this group - this uses\na simple comparison of the memory addresses of the storage of\nthese two groups to see if they are definitely the same, or maybe\ndifferent" );
         
         }
         CoordGroupBase_exposer.def( bp::self != bp::self );
@@ -139,7 +147,8 @@ void register_CoordGroupBase_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireVol::CoordGroupBase::size
@@ -149,7 +158,8 @@ void register_CoordGroupBase_class(){
             
             CoordGroupBase_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "Return the number of coordinates in this group" );
         
         }
         { //::SireVol::CoordGroupBase::toString
@@ -159,7 +169,8 @@ void register_CoordGroupBase_class(){
             
             CoordGroupBase_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this CoordGroup" );
         
         }
         { //::SireVol::CoordGroupBase::toVector
@@ -169,7 +180,8 @@ void register_CoordGroupBase_class(){
             
             CoordGroupBase_exposer.def( 
                 "toVector"
-                , toVector_function_value );
+                , toVector_function_value
+                , "Return an array containing just the coordinates in this group" );
         
         }
         { //::SireVol::CoordGroupBase::typeName
@@ -179,7 +191,8 @@ void register_CoordGroupBase_class(){
             
             CoordGroupBase_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireVol::CoordGroupBase::what
@@ -189,7 +202,8 @@ void register_CoordGroupBase_class(){
             
             CoordGroupBase_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         CoordGroupBase_exposer.staticmethod( "typeName" );

@@ -55,7 +55,7 @@ void register_ChainID_class(){
 
     { //::SireMol::ChainID
         typedef bp::class_< SireMol::ChainID, bp::bases< SireID::ID >, boost::noncopyable > ChainID_exposer_t;
-        ChainID_exposer_t ChainID_exposer = ChainID_exposer_t( "ChainID", bp::no_init );
+        ChainID_exposer_t ChainID_exposer = ChainID_exposer_t( "ChainID", "This is the base class of all identifiers that are used\nto identify a chain within a molecule\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope ChainID_scope( ChainID_exposer );
         { //::SireMol::ChainID::atom
         
@@ -65,7 +65,8 @@ void register_ChainID_class(){
             ChainID_exposer.def( 
                 "atom"
                 , atom_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return a specific atom in the matching residues" );
         
         }
         { //::SireMol::ChainID::atoms
@@ -75,7 +76,8 @@ void register_ChainID_class(){
             
             ChainID_exposer.def( 
                 "atoms"
-                , atoms_function_value );
+                , atoms_function_value
+                , "Return the atoms in the matching residues" );
         
         }
         { //::SireMol::ChainID::atoms
@@ -86,7 +88,8 @@ void register_ChainID_class(){
             ChainID_exposer.def( 
                 "atoms"
                 , atoms_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "Return a range of atoms in the matching residues" );
         
         }
         { //::SireMol::ChainID::map
@@ -97,7 +100,8 @@ void register_ChainID_class(){
             ChainID_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "Map this ID back to the indicies of the chains in the molecule,\nusing the passed MoleculeInfo to do the mapping" );
         
         }
         { //::SireMol::ChainID::map
@@ -108,7 +112,8 @@ void register_ChainID_class(){
             ChainID_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Map this ChainID to the chains in the passed molecule view\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\n" );
         
         }
         ChainID_exposer.def( bp::self & bp::self );
@@ -124,7 +129,8 @@ void register_ChainID_class(){
             ChainID_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::ChainID::operator()
@@ -135,7 +141,8 @@ void register_ChainID_class(){
             ChainID_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         ChainID_exposer.def( bp::self * bp::self );
@@ -152,7 +159,8 @@ void register_ChainID_class(){
             ChainID_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         ChainID_exposer.def( bp::self | bp::self );
@@ -164,7 +172,8 @@ void register_ChainID_class(){
             ChainID_exposer.def( 
                 "residue"
                 , residue_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return a specific atom in the matching residues" );
         
         }
         { //::SireMol::ChainID::residues
@@ -174,7 +183,8 @@ void register_ChainID_class(){
             
             ChainID_exposer.def( 
                 "residues"
-                , residues_function_value );
+                , residues_function_value
+                , "Return the atoms in the matching residues" );
         
         }
         { //::SireMol::ChainID::residues
@@ -185,7 +195,8 @@ void register_ChainID_class(){
             ChainID_exposer.def( 
                 "residues"
                 , residues_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "Return a range of atoms in the matching residues" );
         
         }
         { //::SireMol::ChainID::selectAllFrom
@@ -196,7 +207,8 @@ void register_ChainID_class(){
             ChainID_exposer.def( 
                 "selectAllFrom"
                 , selectAllFrom_function_value
-                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Select all the chains from the passed view that match this ID\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_chain\n" );
         
         }
         { //::SireMol::ChainID::selectAllFrom
@@ -207,7 +219,8 @@ void register_ChainID_class(){
             ChainID_exposer.def( 
                 "selectAllFrom"
                 , selectAllFrom_function_value
-                , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return all of the chains from the molecules that match\nthis ID\nThrow: SireMol::missing_chain\n" );
         
         }
         { //::SireMol::ChainID::selectAllFrom
@@ -218,7 +231,8 @@ void register_ChainID_class(){
             ChainID_exposer.def( 
                 "selectAllFrom"
                 , selectAllFrom_function_value
-                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the chains from the molecule group molgroup that match\nthis ID\nThrow: SireMol::missing_chain\n" );
         
         }
         { //::SireMol::ChainID::selectAllFrom
@@ -229,7 +243,8 @@ void register_ChainID_class(){
             ChainID_exposer.def( 
                 "selectAllFrom"
                 , selectAllFrom_function_value
-                , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the set of chains that match this ID in the molecule groups\nset molgroups\nThrow: SireMol::missing_chain\n" );
         
         }
         { //::SireMol::ChainID::selectFrom
@@ -240,7 +255,8 @@ void register_ChainID_class(){
             ChainID_exposer.def( 
                 "selectFrom"
                 , selectFrom_function_value
-                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Select the chain from the passed view that matches this ID\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_chain\n" );
         
         }
         { //::SireMol::ChainID::selectFrom
@@ -251,7 +267,8 @@ void register_ChainID_class(){
             ChainID_exposer.def( 
                 "selectFrom"
                 , selectFrom_function_value
-                , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the chain from the molecules molecules that matches\nthis ID\nThrow: SireMol::missing_chain\nThrow: SireMol::duplicate_chain\n" );
         
         }
         { //::SireMol::ChainID::selectFrom
@@ -262,7 +279,8 @@ void register_ChainID_class(){
             ChainID_exposer.def( 
                 "selectFrom"
                 , selectFrom_function_value
-                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the chain from the molecule group molgroup that matches\nthis ID\nThrow: SireMol::missing_chain\nThrow: SireMol::duplicate_chain\n" );
         
         }
         { //::SireMol::ChainID::selectFrom
@@ -273,7 +291,8 @@ void register_ChainID_class(){
             ChainID_exposer.def( 
                 "selectFrom"
                 , selectFrom_function_value
-                , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the chain from the molecule groups molgroups that matches\nthis ID\nThrow: SireMol::missing_chain\nThrow: SireMol::duplicate_chain\n" );
         
         }
         { //::SireMol::ChainID::typeName
@@ -283,7 +302,8 @@ void register_ChainID_class(){
             
             ChainID_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         ChainID_exposer.staticmethod( "typeName" );

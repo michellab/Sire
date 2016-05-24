@@ -31,10 +31,10 @@ void register_Tan_class(){
 
     { //::SireCAS::Tan
         typedef bp::class_< SireCAS::Tan, bp::bases< SireCAS::SingleFunc, SireCAS::ExBase > > Tan_exposer_t;
-        Tan_exposer_t Tan_exposer = Tan_exposer_t( "Tan", bp::init< >() );
+        Tan_exposer_t Tan_exposer = Tan_exposer_t( "Tan", "Tangent", bp::init< >("Null constructor") );
         bp::scope Tan_scope( Tan_exposer );
-        Tan_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") )) );
-        Tan_exposer.def( bp::init< SireCAS::Tan const & >(( bp::arg("other") )) );
+        Tan_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") ), "Construct cos(expression)") );
+        Tan_exposer.def( bp::init< SireCAS::Tan const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::Tan::evaluate
         
             typedef double ( ::SireCAS::Tan::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -43,7 +43,8 @@ void register_Tan_class(){
             Tan_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::Tan::evaluate
@@ -54,7 +55,8 @@ void register_Tan_class(){
             Tan_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         Tan_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -65,7 +67,8 @@ void register_Tan_class(){
             
             Tan_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::Tan::what
@@ -75,7 +78,8 @@ void register_Tan_class(){
             
             Tan_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Tan_exposer.staticmethod( "typeName" );

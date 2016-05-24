@@ -59,13 +59,13 @@ void register_IDAndSet_ChainID__class(){
 
     { //::SireID::IDAndSet< SireMol::ChainID >
         typedef bp::class_< SireID::IDAndSet< SireMol::ChainID >, bp::bases< SireMol::ChainID, SireID::ID > > IDAndSet_ChainID__exposer_t;
-        IDAndSet_ChainID__exposer_t IDAndSet_ChainID__exposer = IDAndSet_ChainID__exposer_t( "IDAndSet_ChainID_", bp::init< >() );
+        IDAndSet_ChainID__exposer_t IDAndSet_ChainID__exposer = IDAndSet_ChainID__exposer_t( "IDAndSet_ChainID_", "", bp::init< >("") );
         bp::scope IDAndSet_ChainID__scope( IDAndSet_ChainID__exposer );
-        IDAndSet_ChainID__exposer.def( bp::init< SireMol::ChainID const & >(( bp::arg("id") )) );
-        IDAndSet_ChainID__exposer.def( bp::init< SireMol::ChainID const &, SireMol::ChainID const & >(( bp::arg("id0"), bp::arg("id1") )) );
-        IDAndSet_ChainID__exposer.def( bp::init< QList< SireMol::ChainIdentifier > const & >(( bp::arg("ids") )) );
-        IDAndSet_ChainID__exposer.def( bp::init< SireID::IDAndSet< SireMol::ChainID > const & >(( bp::arg("ids") )) );
-        IDAndSet_ChainID__exposer.def( bp::init< SireID::IDAndSet< SireMol::ChainID > const & >(( bp::arg("other") )) );
+        IDAndSet_ChainID__exposer.def( bp::init< SireMol::ChainID const & >(( bp::arg("id") ), "") );
+        IDAndSet_ChainID__exposer.def( bp::init< SireMol::ChainID const &, SireMol::ChainID const & >(( bp::arg("id0"), bp::arg("id1") ), "") );
+        IDAndSet_ChainID__exposer.def( bp::init< QList< SireMol::ChainIdentifier > const & >(( bp::arg("ids") ), "") );
+        IDAndSet_ChainID__exposer.def( bp::init< SireID::IDAndSet< SireMol::ChainID > const & >(( bp::arg("ids") ), "") );
+        IDAndSet_ChainID__exposer.def( bp::init< SireID::IDAndSet< SireMol::ChainID > const & >(( bp::arg("other") ), "") );
         { //::SireID::IDAndSet< SireMol::ChainID >::IDs
         
             typedef SireID::IDAndSet< SireMol::ChainID > exported_class_t;
@@ -75,7 +75,8 @@ void register_IDAndSet_ChainID__class(){
             IDAndSet_ChainID__exposer.def( 
                 "IDs"
                 , IDs_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireMol::ChainID >::hash
@@ -86,7 +87,8 @@ void register_IDAndSet_ChainID__class(){
             
             IDAndSet_ChainID__exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireMol::ChainID >::isNull
@@ -97,7 +99,8 @@ void register_IDAndSet_ChainID__class(){
             
             IDAndSet_ChainID__exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireMol::ChainID >::map
@@ -109,7 +112,8 @@ void register_IDAndSet_ChainID__class(){
             IDAndSet_ChainID__exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("obj") ) );
+                , ( bp::arg("obj") )
+                , "" );
         
         }
         IDAndSet_ChainID__exposer.def( bp::self != bp::other< SireID::ID >() );
@@ -125,7 +129,8 @@ void register_IDAndSet_ChainID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireMol::ChainID >::operator=
@@ -138,7 +143,8 @@ void register_IDAndSet_ChainID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         IDAndSet_ChainID__exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -152,7 +158,8 @@ void register_IDAndSet_ChainID__class(){
             
             IDAndSet_ChainID__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireMol::ChainID >::typeName
@@ -163,7 +170,8 @@ void register_IDAndSet_ChainID__class(){
             
             IDAndSet_ChainID__exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireMol::ChainID >::what
@@ -174,7 +182,8 @@ void register_IDAndSet_ChainID__class(){
             
             IDAndSet_ChainID__exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         IDAndSet_ChainID__exposer.staticmethod( "typeName" );

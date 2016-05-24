@@ -55,10 +55,10 @@ void register_ZMatrixLine_class(){
 
     { //::SireMove::ZMatrixLine
         typedef bp::class_< SireMove::ZMatrixLine > ZMatrixLine_exposer_t;
-        ZMatrixLine_exposer_t ZMatrixLine_exposer = ZMatrixLine_exposer_t( "ZMatrixLine", bp::init< >() );
+        ZMatrixLine_exposer_t ZMatrixLine_exposer = ZMatrixLine_exposer_t( "ZMatrixLine", "This class represents a single line of a zmatrix\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope ZMatrixLine_scope( ZMatrixLine_exposer );
-        ZMatrixLine_exposer.def( bp::init< SireMol::AtomIdx, SireMol::AtomIdx, SireMol::AtomIdx, SireMol::AtomIdx >(( bp::arg("atom"), bp::arg("bond"), bp::arg("angle"), bp::arg("dihedral") )) );
-        ZMatrixLine_exposer.def( bp::init< SireMove::ZMatrixLine const & >(( bp::arg("other") )) );
+        ZMatrixLine_exposer.def( bp::init< SireMol::AtomIdx, SireMol::AtomIdx, SireMol::AtomIdx, SireMol::AtomIdx >(( bp::arg("atom"), bp::arg("bond"), bp::arg("angle"), bp::arg("dihedral") ), "Construct with the specified atom indicies") );
+        ZMatrixLine_exposer.def( bp::init< SireMove::ZMatrixLine const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::ZMatrixLine::angle
         
             typedef ::SireMol::AtomIdx ( ::SireMove::ZMatrixLine::*angle_function_type)(  ) const;
@@ -66,7 +66,8 @@ void register_ZMatrixLine_class(){
             
             ZMatrixLine_exposer.def( 
                 "angle"
-                , angle_function_value );
+                , angle_function_value
+                , "Return the index of the angled atom" );
         
         }
         { //::SireMove::ZMatrixLine::angleDelta
@@ -76,7 +77,8 @@ void register_ZMatrixLine_class(){
             
             ZMatrixLine_exposer.def( 
                 "angleDelta"
-                , angleDelta_function_value );
+                , angleDelta_function_value
+                , "Return the maximum amount by which the angle should be changed" );
         
         }
         { //::SireMove::ZMatrixLine::atom
@@ -86,7 +88,8 @@ void register_ZMatrixLine_class(){
             
             ZMatrixLine_exposer.def( 
                 "atom"
-                , atom_function_value );
+                , atom_function_value
+                , "Return the index of the atom whose coordinates\nare described in this line" );
         
         }
         { //::SireMove::ZMatrixLine::bond
@@ -96,7 +99,8 @@ void register_ZMatrixLine_class(){
             
             ZMatrixLine_exposer.def( 
                 "bond"
-                , bond_function_value );
+                , bond_function_value
+                , "Return the index of the bonded atom" );
         
         }
         { //::SireMove::ZMatrixLine::bondDelta
@@ -106,7 +110,8 @@ void register_ZMatrixLine_class(){
             
             ZMatrixLine_exposer.def( 
                 "bondDelta"
-                , bondDelta_function_value );
+                , bondDelta_function_value
+                , "Return the maximum amount by which the bond should be changed" );
         
         }
         { //::SireMove::ZMatrixLine::dihedral
@@ -116,7 +121,8 @@ void register_ZMatrixLine_class(){
             
             ZMatrixLine_exposer.def( 
                 "dihedral"
-                , dihedral_function_value );
+                , dihedral_function_value
+                , "Return the index of the dihedralled atom" );
         
         }
         { //::SireMove::ZMatrixLine::dihedralDelta
@@ -126,7 +132,8 @@ void register_ZMatrixLine_class(){
             
             ZMatrixLine_exposer.def( 
                 "dihedralDelta"
-                , dihedralDelta_function_value );
+                , dihedralDelta_function_value
+                , "Return the maximum amount by which the dihedral should be changed" );
         
         }
         ZMatrixLine_exposer.def( bp::self != bp::self );
@@ -139,7 +146,8 @@ void register_ZMatrixLine_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         ZMatrixLine_exposer.def( bp::self == bp::self );
@@ -151,7 +159,8 @@ void register_ZMatrixLine_class(){
             ZMatrixLine_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMove::ZMatrixLine::setAngleDelta
@@ -162,7 +171,8 @@ void register_ZMatrixLine_class(){
             ZMatrixLine_exposer.def( 
                 "setAngleDelta"
                 , setAngleDelta_function_value
-                , ( bp::arg("delta") ) );
+                , ( bp::arg("delta") )
+                , "Set the maximum amount by which the angle should be changed" );
         
         }
         { //::SireMove::ZMatrixLine::setBondDelta
@@ -173,7 +183,8 @@ void register_ZMatrixLine_class(){
             ZMatrixLine_exposer.def( 
                 "setBondDelta"
                 , setBondDelta_function_value
-                , ( bp::arg("delta") ) );
+                , ( bp::arg("delta") )
+                , "Set the maximum amount by which the bond should be changed" );
         
         }
         { //::SireMove::ZMatrixLine::setDihedralDelta
@@ -184,7 +195,8 @@ void register_ZMatrixLine_class(){
             ZMatrixLine_exposer.def( 
                 "setDihedralDelta"
                 , setDihedralDelta_function_value
-                , ( bp::arg("delta") ) );
+                , ( bp::arg("delta") )
+                , "Set the maximum amount by which the dihedral should be changed" );
         
         }
         { //::SireMove::ZMatrixLine::toString
@@ -194,7 +206,8 @@ void register_ZMatrixLine_class(){
             
             ZMatrixLine_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation" );
         
         }
         { //::SireMove::ZMatrixLine::typeName
@@ -204,7 +217,8 @@ void register_ZMatrixLine_class(){
             
             ZMatrixLine_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMove::ZMatrixLine::what
@@ -214,7 +228,8 @@ void register_ZMatrixLine_class(){
             
             ZMatrixLine_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ZMatrixLine_exposer.staticmethod( "typeName" );

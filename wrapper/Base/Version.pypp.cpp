@@ -23,9 +23,9 @@ void register_Version_class(){
 
     { //::SireBase::Version
         typedef bp::class_< SireBase::Version > Version_exposer_t;
-        Version_exposer_t Version_exposer = Version_exposer_t( "Version", bp::init< bp::optional< quint64, quint64 > >(( bp::arg("major")=(::quint64)(0), bp::arg("minor")=(::quint64)(0) )) );
+        Version_exposer_t Version_exposer = Version_exposer_t( "Version", "This is a simple class that holds a major and minor version number", bp::init< bp::optional< quint64, quint64 > >(( bp::arg("major")=(::quint64)(0), bp::arg("minor")=(::quint64)(0) ), "Constructor") );
         bp::scope Version_scope( Version_exposer );
-        Version_exposer.def( bp::init< SireBase::Version const & >(( bp::arg("other") )) );
+        Version_exposer.def( bp::init< SireBase::Version const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireBase::Version::majorVersion
         
             typedef ::quint64 ( ::SireBase::Version::*majorVersion_function_type)(  ) const;
@@ -33,7 +33,8 @@ void register_Version_class(){
             
             Version_exposer.def( 
                 "majorVersion"
-                , majorVersion_function_value );
+                , majorVersion_function_value
+                , "" );
         
         }
         { //::SireBase::Version::minorVersion
@@ -43,7 +44,8 @@ void register_Version_class(){
             
             Version_exposer.def( 
                 "minorVersion"
-                , minorVersion_function_value );
+                , minorVersion_function_value
+                , "" );
         
         }
         Version_exposer.def( bp::self != bp::self );
@@ -56,7 +58,8 @@ void register_Version_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Version_exposer.def( bp::self == bp::self );
@@ -67,7 +70,8 @@ void register_Version_class(){
             
             Version_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this version number" );
         
         }
         { //::SireBase::Version::typeName
@@ -77,7 +81,8 @@ void register_Version_class(){
             
             Version_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireBase::Version::what
@@ -87,7 +92,8 @@ void register_Version_class(){
             
             Version_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Version_exposer.staticmethod( "typeName" );

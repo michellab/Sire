@@ -45,10 +45,10 @@ void register_AtomMatchInverter_class(){
 
     { //::SireMol::AtomMatchInverter
         typedef bp::class_< SireMol::AtomMatchInverter, bp::bases< SireMol::AtomMatcher, SireBase::Property > > AtomMatchInverter_exposer_t;
-        AtomMatchInverter_exposer_t AtomMatchInverter_exposer = AtomMatchInverter_exposer_t( "AtomMatchInverter", bp::init< >() );
+        AtomMatchInverter_exposer_t AtomMatchInverter_exposer = AtomMatchInverter_exposer_t( "AtomMatchInverter", "This is a atom matcher that inverts the match of the sub-matcher.\nThis is useful when you want to match from molecule 1 to molecule 0\nas opposed to molecule 0 to molecule 1, and but dont want to change\nthe order of the match at the calling site\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope AtomMatchInverter_scope( AtomMatchInverter_exposer );
-        AtomMatchInverter_exposer.def( bp::init< SireMol::AtomMatcher const & >(( bp::arg("matcher") )) );
-        AtomMatchInverter_exposer.def( bp::init< SireMol::AtomMatchInverter const & >(( bp::arg("other") )) );
+        AtomMatchInverter_exposer.def( bp::init< SireMol::AtomMatcher const & >(( bp::arg("matcher") ), "Constructor") );
+        AtomMatchInverter_exposer.def( bp::init< SireMol::AtomMatchInverter const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::AtomMatchInverter::isNull
         
             typedef bool ( ::SireMol::AtomMatchInverter::*isNull_function_type)(  ) const;
@@ -56,7 +56,8 @@ void register_AtomMatchInverter_class(){
             
             AtomMatchInverter_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         AtomMatchInverter_exposer.def( bp::self != bp::self );
@@ -69,7 +70,8 @@ void register_AtomMatchInverter_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AtomMatchInverter_exposer.def( bp::self == bp::self );
@@ -80,7 +82,8 @@ void register_AtomMatchInverter_class(){
             
             AtomMatchInverter_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::AtomMatchInverter::typeName
@@ -90,7 +93,8 @@ void register_AtomMatchInverter_class(){
             
             AtomMatchInverter_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::AtomMatchInverter::what
@@ -100,7 +104,8 @@ void register_AtomMatchInverter_class(){
             
             AtomMatchInverter_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         AtomMatchInverter_exposer.staticmethod( "typeName" );

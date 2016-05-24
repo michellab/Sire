@@ -29,13 +29,13 @@ void register_IDAndSet_SysID__class(){
 
     { //::SireID::IDAndSet< SireSystem::SysID >
         typedef bp::class_< SireID::IDAndSet< SireSystem::SysID >, bp::bases< SireSystem::SysID, SireID::ID > > IDAndSet_SysID__exposer_t;
-        IDAndSet_SysID__exposer_t IDAndSet_SysID__exposer = IDAndSet_SysID__exposer_t( "IDAndSet_SysID_", bp::init< >() );
+        IDAndSet_SysID__exposer_t IDAndSet_SysID__exposer = IDAndSet_SysID__exposer_t( "IDAndSet_SysID_", "", bp::init< >("") );
         bp::scope IDAndSet_SysID__scope( IDAndSet_SysID__exposer );
-        IDAndSet_SysID__exposer.def( bp::init< SireSystem::SysID const & >(( bp::arg("id") )) );
-        IDAndSet_SysID__exposer.def( bp::init< SireSystem::SysID const &, SireSystem::SysID const & >(( bp::arg("id0"), bp::arg("id1") )) );
-        IDAndSet_SysID__exposer.def( bp::init< QList< SireSystem::SysIdentifier > const & >(( bp::arg("ids") )) );
-        IDAndSet_SysID__exposer.def( bp::init< SireID::IDAndSet< SireSystem::SysID > const & >(( bp::arg("ids") )) );
-        IDAndSet_SysID__exposer.def( bp::init< SireID::IDAndSet< SireSystem::SysID > const & >(( bp::arg("other") )) );
+        IDAndSet_SysID__exposer.def( bp::init< SireSystem::SysID const & >(( bp::arg("id") ), "") );
+        IDAndSet_SysID__exposer.def( bp::init< SireSystem::SysID const &, SireSystem::SysID const & >(( bp::arg("id0"), bp::arg("id1") ), "") );
+        IDAndSet_SysID__exposer.def( bp::init< QList< SireSystem::SysIdentifier > const & >(( bp::arg("ids") ), "") );
+        IDAndSet_SysID__exposer.def( bp::init< SireID::IDAndSet< SireSystem::SysID > const & >(( bp::arg("ids") ), "") );
+        IDAndSet_SysID__exposer.def( bp::init< SireID::IDAndSet< SireSystem::SysID > const & >(( bp::arg("other") ), "") );
         { //::SireID::IDAndSet< SireSystem::SysID >::IDs
         
             typedef SireID::IDAndSet< SireSystem::SysID > exported_class_t;
@@ -45,7 +45,8 @@ void register_IDAndSet_SysID__class(){
             IDAndSet_SysID__exposer.def( 
                 "IDs"
                 , IDs_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireSystem::SysID >::hash
@@ -56,7 +57,8 @@ void register_IDAndSet_SysID__class(){
             
             IDAndSet_SysID__exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireSystem::SysID >::isNull
@@ -67,7 +69,8 @@ void register_IDAndSet_SysID__class(){
             
             IDAndSet_SysID__exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireSystem::SysID >::map
@@ -79,7 +82,8 @@ void register_IDAndSet_SysID__class(){
             IDAndSet_SysID__exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("obj") ) );
+                , ( bp::arg("obj") )
+                , "" );
         
         }
         IDAndSet_SysID__exposer.def( bp::self != bp::other< SireID::ID >() );
@@ -95,7 +99,8 @@ void register_IDAndSet_SysID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireSystem::SysID >::operator=
@@ -108,7 +113,8 @@ void register_IDAndSet_SysID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         IDAndSet_SysID__exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -122,7 +128,8 @@ void register_IDAndSet_SysID__class(){
             
             IDAndSet_SysID__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireSystem::SysID >::typeName
@@ -133,7 +140,8 @@ void register_IDAndSet_SysID__class(){
             
             IDAndSet_SysID__exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireSystem::SysID >::what
@@ -144,7 +152,8 @@ void register_IDAndSet_SysID__class(){
             
             IDAndSet_SysID__exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         IDAndSet_SysID__exposer.staticmethod( "typeName" );

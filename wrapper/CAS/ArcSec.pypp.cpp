@@ -35,10 +35,10 @@ void register_ArcSec_class(){
 
     { //::SireCAS::ArcSec
         typedef bp::class_< SireCAS::ArcSec, bp::bases< SireCAS::SingleFunc, SireCAS::ExBase > > ArcSec_exposer_t;
-        ArcSec_exposer_t ArcSec_exposer = ArcSec_exposer_t( "ArcSec", bp::init< >() );
+        ArcSec_exposer_t ArcSec_exposer = ArcSec_exposer_t( "ArcSec", "Inverse-secant", bp::init< >("Null constructor") );
         bp::scope ArcSec_scope( ArcSec_exposer );
-        ArcSec_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") )) );
-        ArcSec_exposer.def( bp::init< SireCAS::ArcSec const & >(( bp::arg("other") )) );
+        ArcSec_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") ), "Construct cos(expression)") );
+        ArcSec_exposer.def( bp::init< SireCAS::ArcSec const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::ArcSec::evaluate
         
             typedef double ( ::SireCAS::ArcSec::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -47,7 +47,8 @@ void register_ArcSec_class(){
             ArcSec_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::ArcSec::evaluate
@@ -58,7 +59,8 @@ void register_ArcSec_class(){
             ArcSec_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         ArcSec_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -69,7 +71,8 @@ void register_ArcSec_class(){
             
             ArcSec_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::ArcSec::what
@@ -79,7 +82,8 @@ void register_ArcSec_class(){
             
             ArcSec_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ArcSec_exposer.staticmethod( "typeName" );

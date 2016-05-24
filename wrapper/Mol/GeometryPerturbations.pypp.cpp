@@ -37,11 +37,11 @@ void register_GeometryPerturbations_class(){
 
     { //::SireMol::GeometryPerturbations
         typedef bp::class_< SireMol::GeometryPerturbations, bp::bases< SireMol::GeometryPerturbation, SireMol::Perturbation, SireBase::Property > > GeometryPerturbations_exposer_t;
-        GeometryPerturbations_exposer_t GeometryPerturbations_exposer = GeometryPerturbations_exposer_t( "GeometryPerturbations", bp::init< >() );
+        GeometryPerturbations_exposer_t GeometryPerturbations_exposer = GeometryPerturbations_exposer_t( "GeometryPerturbations", "This class holds a collection of geometry perturbations", bp::init< >("Constructor") );
         bp::scope GeometryPerturbations_scope( GeometryPerturbations_exposer );
-        GeometryPerturbations_exposer.def( bp::init< SireMol::GeometryPerturbation const & >(( bp::arg("perturbation") )) );
-        GeometryPerturbations_exposer.def( bp::init< QList< SireBase::PropPtr< SireMol::GeometryPerturbation > > const & >(( bp::arg("perturbations") )) );
-        GeometryPerturbations_exposer.def( bp::init< SireMol::GeometryPerturbations const & >(( bp::arg("other") )) );
+        GeometryPerturbations_exposer.def( bp::init< SireMol::GeometryPerturbation const & >(( bp::arg("perturbation") ), "Construct to hold just a single perturbation") );
+        GeometryPerturbations_exposer.def( bp::init< QList< SireBase::PropPtr< SireMol::GeometryPerturbation > > const & >(( bp::arg("perturbations") ), "Construct to hold just a single perturbation") );
+        GeometryPerturbations_exposer.def( bp::init< SireMol::GeometryPerturbations const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::GeometryPerturbations::children
         
             typedef ::QList< SireBase::PropPtr< SireMol::Perturbation > > ( ::SireMol::GeometryPerturbations::*children_function_type)(  ) const;
@@ -49,7 +49,8 @@ void register_GeometryPerturbations_class(){
             
             GeometryPerturbations_exposer.def( 
                 "children"
-                , children_function_value );
+                , children_function_value
+                , "Return the list of all child perturbations (and children of children)" );
         
         }
         GeometryPerturbations_exposer.def( bp::self != bp::self );
@@ -62,7 +63,8 @@ void register_GeometryPerturbations_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         GeometryPerturbations_exposer.def( bp::self == bp::self );
@@ -73,7 +75,8 @@ void register_GeometryPerturbations_class(){
             
             GeometryPerturbations_exposer.def( 
                 "perturbations"
-                , perturbations_function_value );
+                , perturbations_function_value
+                , "Return the geometry perturbations in this collection" );
         
         }
         { //::SireMol::GeometryPerturbations::recreate
@@ -84,7 +87,8 @@ void register_GeometryPerturbations_class(){
             GeometryPerturbations_exposer.def( 
                 "recreate"
                 , recreate_function_value
-                , ( bp::arg("mapping_function") ) );
+                , ( bp::arg("mapping_function") )
+                , "Return a re-created version of this set of perturbations where all child\nperturbations are changed to use the passed mapping function" );
         
         }
         { //::SireMol::GeometryPerturbations::recreate
@@ -95,7 +99,8 @@ void register_GeometryPerturbations_class(){
             GeometryPerturbations_exposer.def( 
                 "recreate"
                 , recreate_function_value
-                , ( bp::arg("map") ) );
+                , ( bp::arg("map") )
+                , "Return a re-created version of this set of perturbations where all child\nperturbations are changed to use the passed property map" );
         
         }
         { //::SireMol::GeometryPerturbations::recreate
@@ -106,7 +111,8 @@ void register_GeometryPerturbations_class(){
             GeometryPerturbations_exposer.def( 
                 "recreate"
                 , recreate_function_value
-                , ( bp::arg("mapping_function"), bp::arg("map") ) );
+                , ( bp::arg("mapping_function"), bp::arg("map") )
+                , "Return a re-created version of this set of perturbations where all child\nperturbations are changed to use the passed mapping function and property map" );
         
         }
         { //::SireMol::GeometryPerturbations::requiredProperties
@@ -116,7 +122,8 @@ void register_GeometryPerturbations_class(){
             
             GeometryPerturbations_exposer.def( 
                 "requiredProperties"
-                , requiredProperties_function_value );
+                , requiredProperties_function_value
+                , "Return all of the properties that are needed or affected by\nthese perturbations" );
         
         }
         { //::SireMol::GeometryPerturbations::requiredSymbols
@@ -126,7 +133,8 @@ void register_GeometryPerturbations_class(){
             
             GeometryPerturbations_exposer.def( 
                 "requiredSymbols"
-                , requiredSymbols_function_value );
+                , requiredSymbols_function_value
+                , "Return all of the symbols that need to be input to these perturbations" );
         
         }
         { //::SireMol::GeometryPerturbations::substitute
@@ -137,7 +145,8 @@ void register_GeometryPerturbations_class(){
             GeometryPerturbations_exposer.def( 
                 "substitute"
                 , substitute_function_value
-                , ( bp::arg("identities") ) );
+                , ( bp::arg("identities") )
+                , "Substitute the identities in identities in all of the mapping functions\nused by this perturbation. This is useful if, for example, you want to\nswitch from using lambda to control the perturbation to using alpha, e.g.\n" );
         
         }
         { //::SireMol::GeometryPerturbations::substitute
@@ -148,7 +157,8 @@ void register_GeometryPerturbations_class(){
             GeometryPerturbations_exposer.def( 
                 "substitute"
                 , substitute_function_value
-                , ( bp::arg("old_symbol"), bp::arg("new_symbol") ) );
+                , ( bp::arg("old_symbol"), bp::arg("new_symbol") )
+                , "" );
         
         }
         { //::SireMol::GeometryPerturbations::toString
@@ -158,7 +168,8 @@ void register_GeometryPerturbations_class(){
             
             GeometryPerturbations_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::GeometryPerturbations::typeName
@@ -168,7 +179,8 @@ void register_GeometryPerturbations_class(){
             
             GeometryPerturbations_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::GeometryPerturbations::wouldChange
@@ -179,7 +191,8 @@ void register_GeometryPerturbations_class(){
             GeometryPerturbations_exposer.def( 
                 "wouldChange"
                 , wouldChange_function_value
-                , ( bp::arg("molecule"), bp::arg("values") ) );
+                , ( bp::arg("molecule"), bp::arg("values") )
+                , "Return whether or not these perturbations with the passed values would\nchange the molecule molecule" );
         
         }
         GeometryPerturbations_exposer.staticmethod( "typeName" );

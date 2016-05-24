@@ -41,7 +41,7 @@ void register_GetPoint_class(){
 
     { //::SireMove::GetPoint
         typedef bp::class_< SireMove::GetPoint, bp::bases< SireBase::Property >, boost::noncopyable > GetPoint_exposer_t;
-        GetPoint_exposer_t GetPoint_exposer = GetPoint_exposer_t( "GetPoint", bp::no_init );
+        GetPoint_exposer_t GetPoint_exposer = GetPoint_exposer_t( "GetPoint", "This is the base class of the function objects that are\nused to return the coordinates of a point in space based\non the passed PartialMolecule. This is used, for example,\nto find the center of rotation of a set of atoms\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope GetPoint_scope( GetPoint_exposer );
         { //::SireMove::GetPoint::getPoint
         
@@ -51,7 +51,8 @@ void register_GetPoint_class(){
             GetPoint_exposer.def( 
                 "getPoint"
                 , getPoint_function_value
-                , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMove::GetPoint::null
@@ -61,7 +62,8 @@ void register_GetPoint_class(){
             
             GetPoint_exposer.def( 
                 "null"
-                , null_function_value );
+                , null_function_value
+                , "" );
         
         }
         { //::SireMove::GetPoint::operator()
@@ -72,7 +74,8 @@ void register_GetPoint_class(){
             GetPoint_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("molecule") ) );
+                , ( bp::arg("molecule") )
+                , "" );
         
         }
         { //::SireMove::GetPoint::operator()
@@ -83,7 +86,8 @@ void register_GetPoint_class(){
             GetPoint_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("molecule"), bp::arg("map") ) );
+                , ( bp::arg("molecule"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireMove::GetPoint::typeName
@@ -93,7 +97,8 @@ void register_GetPoint_class(){
             
             GetPoint_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         GetPoint_exposer.staticmethod( "null" );

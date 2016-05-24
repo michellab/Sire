@@ -48,11 +48,11 @@ void register_FFMolGroup_class(){
 
     { //::SireFF::FFMolGroup
         typedef bp::class_< SireFF::FFMolGroup, bp::bases< SireMol::MoleculeGroup, SireBase::Property > > FFMolGroup_exposer_t;
-        FFMolGroup_exposer_t FFMolGroup_exposer = FFMolGroup_exposer_t( "FFMolGroup", bp::init< >() );
+        FFMolGroup_exposer_t FFMolGroup_exposer = FFMolGroup_exposer_t( "FFMolGroup", "This class holds a molecule group that is part of a forcefield.\nThis actually holds a copy of the forcefield that contains\nthis molecule group, so that changes to this group change\nthe actual forcefield to which this group belongs. This is\nthe publicly available class that corresponds to the private\nSireFF::detail::FFMolGroupPvt class.\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor - this creates a useless FFMolGroup. You can\nonly construct a valid FFMolGroup by getting a reference to\na valid FFMolGroupPvt from a forcefield") );
         bp::scope FFMolGroup_scope( FFMolGroup_exposer );
-        FFMolGroup_exposer.def( bp::init< SireFF::detail::FFMolGroupPvt const & >(( bp::arg("ffmolgroup") )) );
-        FFMolGroup_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("other") )) );
-        FFMolGroup_exposer.def( bp::init< SireFF::FFMolGroup const & >(( bp::arg("other") )) );
+        FFMolGroup_exposer.def( bp::init< SireFF::detail::FFMolGroupPvt const & >(( bp::arg("ffmolgroup") ), "Construct from an FFMolGroupPvt - this grabs a copy of the\nforcefield that contains the FFMolGroupPvt") );
+        FFMolGroup_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("other") ), "Construct from a MoleculeGroup - you can only construct from a FFMolGroup\nor from an FFMolGroupPvt\nThrow: SireError::invalid_arg\n") );
+        FFMolGroup_exposer.def( bp::init< SireFF::FFMolGroup const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireFF::FFMolGroup::accept
         
             typedef void ( ::SireFF::FFMolGroup::*accept_function_type)(  ) ;
@@ -60,7 +60,8 @@ void register_FFMolGroup_class(){
             
             FFMolGroup_exposer.def( 
                 "accept"
-                , accept_function_value );
+                , accept_function_value
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::add
@@ -71,7 +72,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::add
@@ -82,7 +84,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molviews") ) );
+                , ( bp::arg("molviews") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::add
@@ -93,7 +96,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::add
@@ -104,7 +108,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::add
@@ -115,7 +120,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molview"), bp::arg("map") ) );
+                , ( bp::arg("molview"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::add
@@ -126,7 +132,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molviews"), bp::arg("map") ) );
+                , ( bp::arg("molviews"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::add
@@ -137,7 +144,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molecules"), bp::arg("map") ) );
+                , ( bp::arg("molecules"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::add
@@ -148,7 +156,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molgroup"), bp::arg("map") ) );
+                , ( bp::arg("molgroup"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::addIfUnique
@@ -159,7 +168,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::addIfUnique
@@ -170,7 +180,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molviews") ) );
+                , ( bp::arg("molviews") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::addIfUnique
@@ -181,7 +192,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::addIfUnique
@@ -192,7 +204,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::addIfUnique
@@ -203,7 +216,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molview"), bp::arg("map") ) );
+                , ( bp::arg("molview"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::addIfUnique
@@ -214,7 +228,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molviews"), bp::arg("map") ) );
+                , ( bp::arg("molviews"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::addIfUnique
@@ -225,7 +240,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molecules"), bp::arg("map") ) );
+                , ( bp::arg("molecules"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::addIfUnique
@@ -236,7 +252,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molgroup"), bp::arg("map") ) );
+                , ( bp::arg("molgroup"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::forceField
@@ -247,7 +264,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "forceField"
                 , forceField_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the forcefield that contains this molecule group" );
         
         }
         { //::SireFF::FFMolGroup::index
@@ -257,7 +275,8 @@ void register_FFMolGroup_class(){
             
             FFMolGroup_exposer.def( 
                 "index"
-                , index_function_value );
+                , index_function_value
+                , "Return the index of this group in the parent forcefield" );
         
         }
         { //::SireFF::FFMolGroup::needsAccepting
@@ -267,7 +286,8 @@ void register_FFMolGroup_class(){
             
             FFMolGroup_exposer.def( 
                 "needsAccepting"
-                , needsAccepting_function_value );
+                , needsAccepting_function_value
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::operator=
@@ -279,7 +299,8 @@ void register_FFMolGroup_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::operator=
@@ -291,7 +312,8 @@ void register_FFMolGroup_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::remove
@@ -302,7 +324,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::remove
@@ -313,7 +336,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molviews") ) );
+                , ( bp::arg("molviews") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::remove
@@ -324,7 +348,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::remove
@@ -335,7 +360,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::remove
@@ -346,7 +372,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::remove
@@ -357,7 +384,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molnums") ) );
+                , ( bp::arg("molnums") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::removeAll
@@ -368,7 +396,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::removeAll
@@ -379,7 +408,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
-                , ( bp::arg("molviews") ) );
+                , ( bp::arg("molviews") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::removeAll
@@ -390,7 +420,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::removeAll
@@ -401,7 +432,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::removeAll
@@ -411,7 +443,8 @@ void register_FFMolGroup_class(){
             
             FFMolGroup_exposer.def( 
                 "removeAll"
-                , removeAll_function_value );
+                , removeAll_function_value
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::setContents
@@ -422,7 +455,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::setContents
@@ -433,7 +467,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("molviews") ) );
+                , ( bp::arg("molviews") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::setContents
@@ -444,7 +479,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::setContents
@@ -455,7 +491,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::setContents
@@ -466,7 +503,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("molview"), bp::arg("map") ) );
+                , ( bp::arg("molview"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::setContents
@@ -477,7 +515,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("molviews"), bp::arg("map") ) );
+                , ( bp::arg("molviews"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::setContents
@@ -488,7 +527,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("molecules"), bp::arg("map") ) );
+                , ( bp::arg("molecules"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::setContents
@@ -499,7 +539,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("molgroup"), bp::arg("map") ) );
+                , ( bp::arg("molgroup"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::setName
@@ -510,7 +551,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "setName"
                 , setName_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "Set the name of this molecule group" );
         
         }
         { //::SireFF::FFMolGroup::typeName
@@ -520,7 +562,8 @@ void register_FFMolGroup_class(){
             
             FFMolGroup_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::update
@@ -531,7 +574,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("moldata"), bp::arg("auto_commit")=(bool)(true) ) );
+                , ( bp::arg("moldata"), bp::arg("auto_commit")=(bool)(true) )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::update
@@ -542,7 +586,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molecules"), bp::arg("auto_commit")=(bool)(true) ) );
+                , ( bp::arg("molecules"), bp::arg("auto_commit")=(bool)(true) )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::update
@@ -553,7 +598,8 @@ void register_FFMolGroup_class(){
             FFMolGroup_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molgroup"), bp::arg("auto_commit")=(bool)(true) ) );
+                , ( bp::arg("molgroup"), bp::arg("auto_commit")=(bool)(true) )
+                , "" );
         
         }
         { //::SireFF::FFMolGroup::what
@@ -563,7 +609,8 @@ void register_FFMolGroup_class(){
             
             FFMolGroup_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         FFMolGroup_exposer.staticmethod( "typeName" );

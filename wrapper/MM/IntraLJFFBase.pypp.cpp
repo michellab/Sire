@@ -28,10 +28,10 @@ void register_IntraLJFFBase_class(){
 
     { //::SireFF::Intra2BFF< SireMM::LJPotentialInterface< SireMM::IntraLJPotential > >
         typedef bp::class_< SireFF::Intra2BFF< SireMM::LJPotentialInterface< SireMM::IntraLJPotential > >, bp::bases< SireMM::LJPotentialInterface<SireMM::IntraLJPotential>, SireFF::G1FF, SireFF::FF, SireMol::MolGroupsBase, SireBase::Property > > IntraLJFFBase_exposer_t;
-        IntraLJFFBase_exposer_t IntraLJFFBase_exposer = IntraLJFFBase_exposer_t( "IntraLJFFBase", bp::init< >() );
+        IntraLJFFBase_exposer_t IntraLJFFBase_exposer = IntraLJFFBase_exposer_t( "IntraLJFFBase", "", bp::init< >("") );
         bp::scope IntraLJFFBase_scope( IntraLJFFBase_exposer );
-        IntraLJFFBase_exposer.def( bp::init< QString const & >(( bp::arg("name") )) );
-        IntraLJFFBase_exposer.def( bp::init< SireFF::Intra2BFF< SireMM::LJPotentialInterface< SireMM::IntraLJPotential > > const & >(( bp::arg("other") )) );
+        IntraLJFFBase_exposer.def( bp::init< QString const & >(( bp::arg("name") ), "") );
+        IntraLJFFBase_exposer.def( bp::init< SireFF::Intra2BFF< SireMM::LJPotentialInterface< SireMM::IntraLJPotential > > const & >(( bp::arg("other") ), "") );
         { //::SireFF::Intra2BFF< SireMM::LJPotentialInterface< SireMM::IntraLJPotential > >::components
         
             typedef SireFF::Intra2BFF< SireMM::LJPotentialInterface< SireMM::IntraLJPotential > > exported_class_t;
@@ -41,7 +41,8 @@ void register_IntraLJFFBase_class(){
             IntraLJFFBase_exposer.def( 
                 "components"
                 , components_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireFF::Intra2BFF< SireMM::LJPotentialInterface< SireMM::IntraLJPotential > >::containsProperty
@@ -53,7 +54,8 @@ void register_IntraLJFFBase_class(){
             IntraLJFFBase_exposer.def( 
                 "containsProperty"
                 , containsProperty_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "" );
         
         }
         { //::SireFF::Intra2BFF< SireMM::LJPotentialInterface< SireMM::IntraLJPotential > >::mustNowRecalculateFromScratch
@@ -64,7 +66,8 @@ void register_IntraLJFFBase_class(){
             
             IntraLJFFBase_exposer.def( 
                 "mustNowRecalculateFromScratch"
-                , mustNowRecalculateFromScratch_function_value );
+                , mustNowRecalculateFromScratch_function_value
+                , "" );
         
         }
         IntraLJFFBase_exposer.def( bp::self != bp::self );
@@ -78,7 +81,8 @@ void register_IntraLJFFBase_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         IntraLJFFBase_exposer.def( bp::self == bp::self );
@@ -91,7 +95,8 @@ void register_IntraLJFFBase_class(){
             IntraLJFFBase_exposer.def( 
                 "properties"
                 , properties_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireFF::Intra2BFF< SireMM::LJPotentialInterface< SireMM::IntraLJPotential > >::property
@@ -104,7 +109,8 @@ void register_IntraLJFFBase_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireFF::Intra2BFF< SireMM::LJPotentialInterface< SireMM::IntraLJPotential > >::setProperty
@@ -116,7 +122,8 @@ void register_IntraLJFFBase_class(){
             IntraLJFFBase_exposer.def( 
                 "setProperty"
                 , setProperty_function_value
-                , ( bp::arg("name"), bp::arg("property") ) );
+                , ( bp::arg("name"), bp::arg("property") )
+                , "" );
         
         }
         { //::SireFF::Intra2BFF< SireMM::LJPotentialInterface< SireMM::IntraLJPotential > >::typeName
@@ -127,7 +134,8 @@ void register_IntraLJFFBase_class(){
             
             IntraLJFFBase_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireFF::Intra2BFF< SireMM::LJPotentialInterface< SireMM::IntraLJPotential > >::what
@@ -138,7 +146,8 @@ void register_IntraLJFFBase_class(){
             
             IntraLJFFBase_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         IntraLJFFBase_exposer.staticmethod( "typeName" );

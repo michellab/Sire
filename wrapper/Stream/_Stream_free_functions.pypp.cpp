@@ -193,7 +193,8 @@ void register_free_functions(){
         bp::def( 
             "getDataHeader"
             , getDataHeader_function_value
-            , ( bp::arg("data") ) );
+            , ( bp::arg("data") )
+            , "" );
     
     }
 
@@ -205,7 +206,8 @@ void register_free_functions(){
         bp::def( 
             "getDataHeader"
             , getDataHeader_function_value
-            , ( bp::arg("filename") ) );
+            , ( bp::arg("filename") )
+            , "" );
     
     }
 
@@ -217,7 +219,8 @@ void register_free_functions(){
         bp::def( 
             "getLibraryVersion"
             , getLibraryVersion_function_value
-            , ( bp::arg("library") ) );
+            , ( bp::arg("library") )
+            , "" );
     
     }
 
@@ -229,7 +232,8 @@ void register_free_functions(){
         bp::def( 
             "getMinimumSupportedVersion"
             , getMinimumSupportedVersion_function_value
-            , ( bp::arg("library") ) );
+            , ( bp::arg("library") )
+            , "" );
     
     }
 

@@ -32,10 +32,10 @@ void register_WorkPacket_class(){
 
     { //::SireCluster::WorkPacket
         typedef bp::class_< SireCluster::WorkPacket > WorkPacket_exposer_t;
-        WorkPacket_exposer_t WorkPacket_exposer = WorkPacket_exposer_t( "WorkPacket", bp::init< >() );
+        WorkPacket_exposer_t WorkPacket_exposer = WorkPacket_exposer_t( "WorkPacket", "This class is the generic holder for all work packets.\n\nAuthor: Christopher Woods\n", bp::init< >("Create a null work packet") );
         bp::scope WorkPacket_scope( WorkPacket_exposer );
-        WorkPacket_exposer.def( bp::init< SireCluster::WorkPacketBase const & >(( bp::arg("work") )) );
-        WorkPacket_exposer.def( bp::init< SireCluster::WorkPacket const & >(( bp::arg("other") )) );
+        WorkPacket_exposer.def( bp::init< SireCluster::WorkPacketBase const & >(( bp::arg("work") ), "Construct from the passed work object") );
+        WorkPacket_exposer.def( bp::init< SireCluster::WorkPacket const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCluster::WorkPacket::abort
         
             typedef void ( ::SireCluster::WorkPacket::*abort_function_type)(  ) ;
@@ -43,7 +43,8 @@ void register_WorkPacket_class(){
             
             WorkPacket_exposer.def( 
                 "abort"
-                , abort_function_value );
+                , abort_function_value
+                , "Abort the work" );
         
         }
         { //::SireCluster::WorkPacket::base
@@ -54,7 +55,8 @@ void register_WorkPacket_class(){
             WorkPacket_exposer.def( 
                 "base"
                 , base_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return a reference to the underlying Worker object" );
         
         }
         { //::SireCluster::WorkPacket::hasFinished
@@ -64,7 +66,8 @@ void register_WorkPacket_class(){
             
             WorkPacket_exposer.def( 
                 "hasFinished"
-                , hasFinished_function_value );
+                , hasFinished_function_value
+                , "Return whether or not the work has finished (or is in an\nerror state, or was aborted) - essentially, is there any\nmore of this work packet to run?" );
         
         }
         { //::SireCluster::WorkPacket::isError
@@ -74,7 +77,8 @@ void register_WorkPacket_class(){
             
             WorkPacket_exposer.def( 
                 "isError"
-                , isError_function_value );
+                , isError_function_value
+                , "Return whether or not this work is in an error state" );
         
         }
         { //::SireCluster::WorkPacket::isNull
@@ -84,7 +88,8 @@ void register_WorkPacket_class(){
             
             WorkPacket_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Return whether or not this is the null (empty) work packet" );
         
         }
         { //::SireCluster::WorkPacket::operator=
@@ -96,7 +101,8 @@ void register_WorkPacket_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireCluster::WorkPacket::pack
@@ -106,7 +112,8 @@ void register_WorkPacket_class(){
             
             WorkPacket_exposer.def( 
                 "pack"
-                , pack_function_value );
+                , pack_function_value
+                , "Pack this WorkPacket into a binary array" );
         
         }
         { //::SireCluster::WorkPacket::progress
@@ -116,7 +123,8 @@ void register_WorkPacket_class(){
             
             WorkPacket_exposer.def( 
                 "progress"
-                , progress_function_value );
+                , progress_function_value
+                , "Return the current progress of the calculation (percentage)" );
         
         }
         { //::SireCluster::WorkPacket::runChunk
@@ -126,7 +134,8 @@ void register_WorkPacket_class(){
             
             WorkPacket_exposer.def( 
                 "runChunk"
-                , runChunk_function_value );
+                , runChunk_function_value
+                , "" );
         
         }
         { //::SireCluster::WorkPacket::shouldPack
@@ -136,7 +145,8 @@ void register_WorkPacket_class(){
             
             WorkPacket_exposer.def( 
                 "shouldPack"
-                , shouldPack_function_value );
+                , shouldPack_function_value
+                , "Return whether or not we should pack this WorkPacket when\nwe are storing it." );
         
         }
         { //::SireCluster::WorkPacket::throwError
@@ -146,7 +156,8 @@ void register_WorkPacket_class(){
             
             WorkPacket_exposer.def( 
                 "throwError"
-                , throwError_function_value );
+                , throwError_function_value
+                , "Throw any error associated with this WorkPacket\n(this does nothing if there is no error)" );
         
         }
         { //::SireCluster::WorkPacket::typeName
@@ -156,7 +167,8 @@ void register_WorkPacket_class(){
             
             WorkPacket_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCluster::WorkPacket::unpack
@@ -167,7 +179,8 @@ void register_WorkPacket_class(){
             WorkPacket_exposer.def( 
                 "unpack"
                 , unpack_function_value
-                , ( bp::arg("data") ) );
+                , ( bp::arg("data") )
+                , "Unpack a WorkPacket from the passed binary data. This binary\ndata MUST have been created by WorkPacket::pack()" );
         
         }
         { //::SireCluster::WorkPacket::wasAborted
@@ -177,7 +190,8 @@ void register_WorkPacket_class(){
             
             WorkPacket_exposer.def( 
                 "wasAborted"
-                , wasAborted_function_value );
+                , wasAborted_function_value
+                , "Return whether or not the work was aborted" );
         
         }
         { //::SireCluster::WorkPacket::what
@@ -187,7 +201,8 @@ void register_WorkPacket_class(){
             
             WorkPacket_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         WorkPacket_exposer.staticmethod( "typeName" );

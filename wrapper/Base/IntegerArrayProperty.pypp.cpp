@@ -37,11 +37,11 @@ void register_IntegerArrayProperty_class(){
 
     { //::SireBase::IntegerArrayProperty
         typedef bp::class_< SireBase::IntegerArrayProperty, bp::bases< SireBase::Property > > IntegerArrayProperty_exposer_t;
-        IntegerArrayProperty_exposer_t IntegerArrayProperty_exposer = IntegerArrayProperty_exposer_t( "IntegerArrayProperty", bp::init< >() );
+        IntegerArrayProperty_exposer_t IntegerArrayProperty_exposer = IntegerArrayProperty_exposer_t( "IntegerArrayProperty", "", bp::init< >("") );
         bp::scope IntegerArrayProperty_scope( IntegerArrayProperty_exposer );
-        IntegerArrayProperty_exposer.def( bp::init< QList< long long > const & >(( bp::arg("array") )) );
-        IntegerArrayProperty_exposer.def( bp::init< QVector< long long > const & >(( bp::arg("array") )) );
-        IntegerArrayProperty_exposer.def( bp::init< SireBase::IntegerArrayProperty const & >(( bp::arg("other") )) );
+        IntegerArrayProperty_exposer.def( bp::init< QList< long long > const & >(( bp::arg("array") ), "") );
+        IntegerArrayProperty_exposer.def( bp::init< QVector< long long > const & >(( bp::arg("array") ), "") );
+        IntegerArrayProperty_exposer.def( bp::init< SireBase::IntegerArrayProperty const & >(( bp::arg("other") ), "") );
         IntegerArrayProperty_exposer.def( bp::self != bp::self );
         IntegerArrayProperty_exposer.def( bp::self + bp::self );
         { //::SireBase::IntegerArrayProperty::operator=
@@ -53,7 +53,8 @@ void register_IntegerArrayProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         IntegerArrayProperty_exposer.def( bp::self == bp::self );
@@ -64,7 +65,8 @@ void register_IntegerArrayProperty_class(){
             
             IntegerArrayProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         IntegerArrayProperty_exposer.staticmethod( "typeName" );

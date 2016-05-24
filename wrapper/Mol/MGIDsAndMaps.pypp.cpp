@@ -29,24 +29,24 @@ void register_MGIDsAndMaps_class(){
 
     { //::SireMol::MGIDsAndMaps
         typedef bp::class_< SireMol::MGIDsAndMaps, bp::bases< SireBase::Property > > MGIDsAndMaps_exposer_t;
-        MGIDsAndMaps_exposer_t MGIDsAndMaps_exposer = MGIDsAndMaps_exposer_t( "MGIDsAndMaps", bp::init< >() );
+        MGIDsAndMaps_exposer_t MGIDsAndMaps_exposer = MGIDsAndMaps_exposer_t( "MGIDsAndMaps", "This class holds a set of molecule group IDs, together\nwith the property maps that should be used with the\nassociated molecule groups. This provides a store for\ninformation used to identify groups of molecule groups,\ntogether with the properties needed to manipulate those\ngroups\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope MGIDsAndMaps_scope( MGIDsAndMaps_exposer );
-        MGIDsAndMaps_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("mgroup") )) );
-        MGIDsAndMaps_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireBase::PropertyMap const & >(( bp::arg("mgroup"), bp::arg("map") )) );
-        MGIDsAndMaps_exposer.def( bp::init< boost::tuples::tuple< SireBase::PropPtr< SireMol::MoleculeGroup >, SireBase::PropertyMap, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > >(( bp::arg("group_and_map") )) );
-        MGIDsAndMaps_exposer.def( bp::init< QList< SireBase::PropPtr< SireMol::MoleculeGroup > > const & >(( bp::arg("mgroups") )) );
-        MGIDsAndMaps_exposer.def( bp::init< QList< boost::tuples::tuple< SireBase::PropPtr< SireMol::MoleculeGroup >, SireBase::PropertyMap, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > > const & >(( bp::arg("groups_and_maps") )) );
-        MGIDsAndMaps_exposer.def( bp::init< QList< SireBase::PropPtr< SireMol::MoleculeGroup > > const &, SireBase::PropertyMap const & >(( bp::arg("mgroups"), bp::arg("map") )) );
-        MGIDsAndMaps_exposer.def( bp::init< boost::tuples::tuple< QList< SireBase::PropPtr< SireMol::MoleculeGroup > >, SireBase::PropertyMap, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > const & >(( bp::arg("groups_and_maps") )) );
-        MGIDsAndMaps_exposer.def( bp::init< SireMol::MGID const & >(( bp::arg("mgid") )) );
-        MGIDsAndMaps_exposer.def( bp::init< SireMol::MGID const &, SireBase::PropertyMap const & >(( bp::arg("mgid"), bp::arg("map") )) );
-        MGIDsAndMaps_exposer.def( bp::init< boost::tuples::tuple< SireMol::MGIdentifier, SireBase::PropertyMap, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > >(( bp::arg("mgid_and_map") )) );
-        MGIDsAndMaps_exposer.def( bp::init< QList< SireMol::MGIdentifier > const & >(( bp::arg("mgids") )) );
-        MGIDsAndMaps_exposer.def( bp::init< QList< boost::tuples::tuple< SireMol::MGIdentifier, SireBase::PropertyMap, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > > const & >(( bp::arg("mgids_and_maps") )) );
-        MGIDsAndMaps_exposer.def( bp::init< QList< SireMol::MGIdentifier > const &, SireBase::PropertyMap const & >(( bp::arg("mgids"), bp::arg("map") )) );
-        MGIDsAndMaps_exposer.def( bp::init< boost::tuples::tuple< QList< SireMol::MGIdentifier >, SireBase::PropertyMap, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > const & >(( bp::arg("mgids_and_maps") )) );
-        MGIDsAndMaps_exposer.def( bp::init< QList< SireMol::MGIDsAndMaps > const & >(( bp::arg("mgids_and_maps") )) );
-        MGIDsAndMaps_exposer.def( bp::init< SireMol::MGIDsAndMaps const & >(( bp::arg("other") )) );
+        MGIDsAndMaps_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("mgroup") ), "Construct from the passed groups  maps") );
+        MGIDsAndMaps_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireBase::PropertyMap const & >(( bp::arg("mgroup"), bp::arg("map") ), "Construct from the passed groups  maps") );
+        MGIDsAndMaps_exposer.def( bp::init< boost::tuples::tuple< SireBase::PropPtr< SireMol::MoleculeGroup >, SireBase::PropertyMap, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > >(( bp::arg("group_and_map") ), "Construct from the passed groups  maps") );
+        MGIDsAndMaps_exposer.def( bp::init< QList< SireBase::PropPtr< SireMol::MoleculeGroup > > const & >(( bp::arg("mgroups") ), "Construct from the passed groups  maps") );
+        MGIDsAndMaps_exposer.def( bp::init< QList< boost::tuples::tuple< SireBase::PropPtr< SireMol::MoleculeGroup >, SireBase::PropertyMap, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > > const & >(( bp::arg("groups_and_maps") ), "Construct from the passed groups  maps") );
+        MGIDsAndMaps_exposer.def( bp::init< QList< SireBase::PropPtr< SireMol::MoleculeGroup > > const &, SireBase::PropertyMap const & >(( bp::arg("mgroups"), bp::arg("map") ), "Construct from the passed groups  maps") );
+        MGIDsAndMaps_exposer.def( bp::init< boost::tuples::tuple< QList< SireBase::PropPtr< SireMol::MoleculeGroup > >, SireBase::PropertyMap, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > const & >(( bp::arg("groups_and_maps") ), "Construct from the passed groups  maps") );
+        MGIDsAndMaps_exposer.def( bp::init< SireMol::MGID const & >(( bp::arg("mgid") ), "Construct from the passed groups  maps") );
+        MGIDsAndMaps_exposer.def( bp::init< SireMol::MGID const &, SireBase::PropertyMap const & >(( bp::arg("mgid"), bp::arg("map") ), "Construct from the passed groups  maps") );
+        MGIDsAndMaps_exposer.def( bp::init< boost::tuples::tuple< SireMol::MGIdentifier, SireBase::PropertyMap, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > >(( bp::arg("mgid_and_map") ), "Construct from the passed groups  maps") );
+        MGIDsAndMaps_exposer.def( bp::init< QList< SireMol::MGIdentifier > const & >(( bp::arg("mgids") ), "Construct from the passed groups  maps") );
+        MGIDsAndMaps_exposer.def( bp::init< QList< boost::tuples::tuple< SireMol::MGIdentifier, SireBase::PropertyMap, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > > const & >(( bp::arg("mgids_and_maps") ), "Construct from the passed groups  maps") );
+        MGIDsAndMaps_exposer.def( bp::init< QList< SireMol::MGIdentifier > const &, SireBase::PropertyMap const & >(( bp::arg("mgids"), bp::arg("map") ), "Construct from the passed groups  maps") );
+        MGIDsAndMaps_exposer.def( bp::init< boost::tuples::tuple< QList< SireMol::MGIdentifier >, SireBase::PropertyMap, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > const & >(( bp::arg("mgids_and_maps") ), "Construct from the passed groups  maps") );
+        MGIDsAndMaps_exposer.def( bp::init< QList< SireMol::MGIDsAndMaps > const & >(( bp::arg("mgids_and_maps") ), "Construct from the passed groups  maps") );
+        MGIDsAndMaps_exposer.def( bp::init< SireMol::MGIDsAndMaps const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::MGIDsAndMaps::count
         
             typedef int ( ::SireMol::MGIDsAndMaps::*count_function_type)(  ) const;
@@ -54,7 +54,8 @@ void register_MGIDsAndMaps_class(){
             
             MGIDsAndMaps_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of identifier groups in this set" );
         
         }
         { //::SireMol::MGIDsAndMaps::isEmpty
@@ -64,7 +65,8 @@ void register_MGIDsAndMaps_class(){
             
             MGIDsAndMaps_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether or not this is an empty group of groups" );
         
         }
         { //::SireMol::MGIDsAndMaps::mgIDs
@@ -75,7 +77,8 @@ void register_MGIDsAndMaps_class(){
             MGIDsAndMaps_exposer.def( 
                 "mgIDs"
                 , mgIDs_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the array of all of the IDs for this group of groups" );
         
         }
         MGIDsAndMaps_exposer.def( bp::self != bp::self );
@@ -88,7 +91,8 @@ void register_MGIDsAndMaps_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MGIDsAndMaps_exposer.def( bp::self == bp::self );
@@ -100,7 +104,8 @@ void register_MGIDsAndMaps_class(){
             MGIDsAndMaps_exposer.def( 
                 "propertyMaps"
                 , propertyMaps_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the array of the property maps to use for each group\nof IDs in this set (these are in the same order as the groups\nreturned in MGIDsAndMaps::mgIDs())" );
         
         }
         { //::SireMol::MGIDsAndMaps::toString
@@ -110,7 +115,8 @@ void register_MGIDsAndMaps_class(){
             
             MGIDsAndMaps_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this set of IDs" );
         
         }
         { //::SireMol::MGIDsAndMaps::typeName
@@ -120,7 +126,8 @@ void register_MGIDsAndMaps_class(){
             
             MGIDsAndMaps_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         MGIDsAndMaps_exposer.staticmethod( "typeName" );

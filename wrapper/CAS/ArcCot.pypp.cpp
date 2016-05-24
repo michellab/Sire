@@ -35,10 +35,10 @@ void register_ArcCot_class(){
 
     { //::SireCAS::ArcCot
         typedef bp::class_< SireCAS::ArcCot, bp::bases< SireCAS::SingleFunc, SireCAS::ExBase > > ArcCot_exposer_t;
-        ArcCot_exposer_t ArcCot_exposer = ArcCot_exposer_t( "ArcCot", bp::init< >() );
+        ArcCot_exposer_t ArcCot_exposer = ArcCot_exposer_t( "ArcCot", "Inverse-cotangent", bp::init< >("Null constructor") );
         bp::scope ArcCot_scope( ArcCot_exposer );
-        ArcCot_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") )) );
-        ArcCot_exposer.def( bp::init< SireCAS::ArcCot const & >(( bp::arg("other") )) );
+        ArcCot_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") ), "Construct cos(expression)") );
+        ArcCot_exposer.def( bp::init< SireCAS::ArcCot const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::ArcCot::evaluate
         
             typedef double ( ::SireCAS::ArcCot::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -47,7 +47,8 @@ void register_ArcCot_class(){
             ArcCot_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::ArcCot::evaluate
@@ -58,7 +59,8 @@ void register_ArcCot_class(){
             ArcCot_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         ArcCot_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -69,7 +71,8 @@ void register_ArcCot_class(){
             
             ArcCot_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::ArcCot::what
@@ -79,7 +82,8 @@ void register_ArcCot_class(){
             
             ArcCot_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ArcCot_exposer.staticmethod( "typeName" );

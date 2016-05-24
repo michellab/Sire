@@ -7,24 +7,6 @@
 
 namespace bp = boost::python;
 
-#include "SireBase/array2d.hpp"
-
-#include "SireError/errors.h"
-
-#include "SireMaths/boys.h"
-
-#include "SireStream/datastream.h"
-
-#include "SireStream/shareddatastream.h"
-
-#include "pgto.h"
-
-#include "pointcharge.h"
-
-#include "pointdipole.h"
-
-#include "pgto.h"
-
 #include "SireError/errors.h"
 
 #include "SireMaths/boys.h"
@@ -1950,6 +1932,24 @@ namespace bp = boost::python;
 #include "sgto.h"
 
 #include "sgto.h"
+
+#include "SireBase/array2d.hpp"
+
+#include "SireError/errors.h"
+
+#include "SireMaths/boys.h"
+
+#include "SireStream/datastream.h"
+
+#include "SireStream/shareddatastream.h"
+
+#include "pgto.h"
+
+#include "pointcharge.h"
+
+#include "pointdipole.h"
+
+#include "pgto.h"
 
 void register_free_functions(){
 
@@ -1961,7 +1961,8 @@ void register_free_functions(){
         bp::def( 
             "electron_integral"
             , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q") ) );
+            , ( bp::arg("P"), bp::arg("Q") )
+            , "" );
     
     }
 
@@ -1973,7 +1974,8 @@ void register_free_functions(){
         bp::def( 
             "electron_integral"
             , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q") ) );
+            , ( bp::arg("P"), bp::arg("Q") )
+            , "" );
     
     }
 
@@ -1985,7 +1987,8 @@ void register_free_functions(){
         bp::def( 
             "electron_integral"
             , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q") ) );
+            , ( bp::arg("P"), bp::arg("Q") )
+            , "" );
     
     }
 
@@ -1997,7 +2000,8 @@ void register_free_functions(){
         bp::def( 
             "electron_integral"
             , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q") ) );
+            , ( bp::arg("P"), bp::arg("Q") )
+            , "" );
     
     }
 
@@ -2009,7 +2013,8 @@ void register_free_functions(){
         bp::def( 
             "electron_integral"
             , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q") ) );
+            , ( bp::arg("P"), bp::arg("Q") )
+            , "" );
     
     }
 
@@ -2021,7 +2026,8 @@ void register_free_functions(){
         bp::def( 
             "electron_integral"
             , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q") ) );
+            , ( bp::arg("P"), bp::arg("Q") )
+            , "" );
     
     }
 
@@ -2033,7 +2039,8 @@ void register_free_functions(){
         bp::def( 
             "electron_integral"
             , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q") ) );
+            , ( bp::arg("P"), bp::arg("Q") )
+            , "" );
     
     }
 
@@ -2045,7 +2052,8 @@ void register_free_functions(){
         bp::def( 
             "electron_integral"
             , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("matrix") ) );
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("matrix") )
+            , "" );
     
     }
 
@@ -2057,7 +2065,8 @@ void register_free_functions(){
         bp::def( 
             "electron_integral"
             , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("matrix") ) );
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("matrix") )
+            , "" );
     
     }
 
@@ -2069,7 +2078,8 @@ void register_free_functions(){
         bp::def( 
             "electron_integral"
             , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q") ) );
+            , ( bp::arg("P"), bp::arg("Q") )
+            , "" );
     
     }
 
@@ -2081,7 +2091,8 @@ void register_free_functions(){
         bp::def( 
             "electron_integral"
             , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("matrix") ) );
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("matrix") )
+            , "" );
     
     }
 
@@ -2093,7 +2104,8 @@ void register_free_functions(){
         bp::def( 
             "electron_integral"
             , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") ) );
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") )
+            , "" );
     
     }
 
@@ -2105,7 +2117,8 @@ void register_free_functions(){
         bp::def( 
             "electron_integral"
             , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") ) );
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") )
+            , "" );
     
     }
 
@@ -2117,7 +2130,8 @@ void register_free_functions(){
         bp::def( 
             "electron_integral"
             , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") ) );
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") )
+            , "" );
     
     }
 
@@ -2129,7 +2143,8 @@ void register_free_functions(){
         bp::def( 
             "electron_integral"
             , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") ) );
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") )
+            , "" );
     
     }
 
@@ -2141,7 +2156,8 @@ void register_free_functions(){
         bp::def( 
             "electron_integral"
             , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") ) );
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") )
+            , "" );
     
     }
 
@@ -2153,7 +2169,8 @@ void register_free_functions(){
         bp::def( 
             "electron_integral"
             , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") ) );
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") )
+            , "" );
     
     }
 
@@ -2165,7 +2182,8 @@ void register_free_functions(){
         bp::def( 
             "electron_integral"
             , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") ) );
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") )
+            , "" );
     
     }
 
@@ -2177,7 +2195,8 @@ void register_free_functions(){
         bp::def( 
             "electron_integral"
             , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m"), bp::arg("matrix") ) );
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m"), bp::arg("matrix") )
+            , "" );
     
     }
 
@@ -2189,7 +2208,8 @@ void register_free_functions(){
         bp::def( 
             "electron_integral"
             , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m"), bp::arg("matrix") ) );
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m"), bp::arg("matrix") )
+            , "" );
     
     }
 
@@ -2201,7 +2221,8 @@ void register_free_functions(){
         bp::def( 
             "electron_integral"
             , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") ) );
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") )
+            , "" );
     
     }
 
@@ -2213,7 +2234,8 @@ void register_free_functions(){
         bp::def( 
             "electron_integral"
             , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m"), bp::arg("matrix") ) );
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m"), bp::arg("matrix") )
+            , "" );
     
     }
 
@@ -2225,7 +2247,8 @@ void register_free_functions(){
         bp::def( 
             "electron_integral"
             , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q") ) );
+            , ( bp::arg("P"), bp::arg("Q") )
+            , "" );
     
     }
 
@@ -2237,7 +2260,8 @@ void register_free_functions(){
         bp::def( 
             "electron_integral"
             , electron_integral_function_value
-            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") ) );
+            , ( bp::arg("P"), bp::arg("Q"), bp::arg("m") )
+            , "" );
     
     }
 
@@ -2249,7 +2273,8 @@ void register_free_functions(){
         bp::def( 
             "kinetic_integral"
             , kinetic_integral_function_value
-            , ( bp::arg("P") ) );
+            , ( bp::arg("P") )
+            , "" );
     
     }
 
@@ -2261,7 +2286,8 @@ void register_free_functions(){
         bp::def( 
             "kinetic_integral"
             , kinetic_integral_function_value
-            , ( bp::arg("P") ) );
+            , ( bp::arg("P") )
+            , "" );
     
     }
 
@@ -2273,7 +2299,8 @@ void register_free_functions(){
         bp::def( 
             "kinetic_integral"
             , kinetic_integral_function_value
-            , ( bp::arg("P") ) );
+            , ( bp::arg("P") )
+            , "" );
     
     }
 
@@ -2285,7 +2312,8 @@ void register_free_functions(){
         bp::def( 
             "overlap_integral"
             , overlap_integral_function_value
-            , ( bp::arg("P") ) );
+            , ( bp::arg("P") )
+            , "" );
     
     }
 
@@ -2297,7 +2325,8 @@ void register_free_functions(){
         bp::def( 
             "overlap_integral"
             , overlap_integral_function_value
-            , ( bp::arg("P") ) );
+            , ( bp::arg("P") )
+            , "" );
     
     }
 
@@ -2309,7 +2338,8 @@ void register_free_functions(){
         bp::def( 
             "overlap_integral"
             , overlap_integral_function_value
-            , ( bp::arg("P") ) );
+            , ( bp::arg("P") )
+            , "" );
     
     }
 
@@ -2321,7 +2351,8 @@ void register_free_functions(){
         bp::def( 
             "potential_integral"
             , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P") ) );
+            , ( bp::arg("C"), bp::arg("P") )
+            , "" );
     
     }
 
@@ -2333,7 +2364,8 @@ void register_free_functions(){
         bp::def( 
             "potential_integral"
             , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P") ) );
+            , ( bp::arg("C"), bp::arg("P") )
+            , "" );
     
     }
 
@@ -2345,7 +2377,8 @@ void register_free_functions(){
         bp::def( 
             "potential_integral"
             , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P") ) );
+            , ( bp::arg("C"), bp::arg("P") )
+            , "" );
     
     }
 
@@ -2357,7 +2390,8 @@ void register_free_functions(){
         bp::def( 
             "potential_integral"
             , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P") ) );
+            , ( bp::arg("C"), bp::arg("P") )
+            , "" );
     
     }
 
@@ -2369,7 +2403,8 @@ void register_free_functions(){
         bp::def( 
             "potential_integral"
             , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
+            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") )
+            , "" );
     
     }
 
@@ -2381,7 +2416,8 @@ void register_free_functions(){
         bp::def( 
             "potential_integral"
             , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
+            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") )
+            , "" );
     
     }
 
@@ -2393,7 +2429,8 @@ void register_free_functions(){
         bp::def( 
             "potential_integral"
             , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
+            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") )
+            , "" );
     
     }
 
@@ -2405,7 +2442,8 @@ void register_free_functions(){
         bp::def( 
             "potential_integral"
             , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
+            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") )
+            , "" );
     
     }
 
@@ -2417,7 +2455,8 @@ void register_free_functions(){
         bp::def( 
             "potential_integral"
             , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P") ) );
+            , ( bp::arg("C"), bp::arg("P") )
+            , "" );
     
     }
 
@@ -2429,7 +2468,8 @@ void register_free_functions(){
         bp::def( 
             "potential_integral"
             , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P") ) );
+            , ( bp::arg("C"), bp::arg("P") )
+            , "" );
     
     }
 
@@ -2441,7 +2481,8 @@ void register_free_functions(){
         bp::def( 
             "potential_integral"
             , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P") ) );
+            , ( bp::arg("C"), bp::arg("P") )
+            , "" );
     
     }
 
@@ -2453,7 +2494,8 @@ void register_free_functions(){
         bp::def( 
             "potential_integral"
             , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P") ) );
+            , ( bp::arg("C"), bp::arg("P") )
+            , "" );
     
     }
 
@@ -2465,7 +2507,8 @@ void register_free_functions(){
         bp::def( 
             "potential_integral"
             , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
+            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") )
+            , "" );
     
     }
 
@@ -2477,7 +2520,8 @@ void register_free_functions(){
         bp::def( 
             "potential_integral"
             , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
+            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") )
+            , "" );
     
     }
 
@@ -2489,7 +2533,8 @@ void register_free_functions(){
         bp::def( 
             "potential_integral"
             , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
+            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") )
+            , "" );
     
     }
 
@@ -2501,7 +2546,8 @@ void register_free_functions(){
         bp::def( 
             "potential_integral"
             , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
+            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") )
+            , "" );
     
     }
 
@@ -2513,7 +2559,8 @@ void register_free_functions(){
         bp::def( 
             "potential_integral"
             , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P") ) );
+            , ( bp::arg("C"), bp::arg("P") )
+            , "" );
     
     }
 
@@ -2525,7 +2572,8 @@ void register_free_functions(){
         bp::def( 
             "potential_integral"
             , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P") ) );
+            , ( bp::arg("C"), bp::arg("P") )
+            , "" );
     
     }
 
@@ -2537,7 +2585,8 @@ void register_free_functions(){
         bp::def( 
             "potential_integral"
             , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
+            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") )
+            , "" );
     
     }
 
@@ -2549,7 +2598,8 @@ void register_free_functions(){
         bp::def( 
             "potential_integral"
             , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
+            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") )
+            , "" );
     
     }
 
@@ -2561,7 +2611,8 @@ void register_free_functions(){
         bp::def( 
             "potential_integral"
             , potential_integral_function_value
-            , ( bp::arg("Q"), bp::arg("P") ) );
+            , ( bp::arg("Q"), bp::arg("P") )
+            , "" );
     
     }
 
@@ -2573,7 +2624,8 @@ void register_free_functions(){
         bp::def( 
             "potential_integral"
             , potential_integral_function_value
-            , ( bp::arg("Q"), bp::arg("P") ) );
+            , ( bp::arg("Q"), bp::arg("P") )
+            , "" );
     
     }
 
@@ -2585,7 +2637,8 @@ void register_free_functions(){
         bp::def( 
             "potential_integral"
             , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
+            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") )
+            , "" );
     
     }
 
@@ -2597,7 +2650,8 @@ void register_free_functions(){
         bp::def( 
             "potential_integral"
             , potential_integral_function_value
-            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") ) );
+            , ( bp::arg("C"), bp::arg("P"), bp::arg("m") )
+            , "" );
     
     }
 

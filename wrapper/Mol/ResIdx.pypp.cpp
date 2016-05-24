@@ -67,10 +67,10 @@ void register_ResIdx_class(){
 
     { //::SireMol::ResIdx
         typedef bp::class_< SireMol::ResIdx, bp::bases< SireMol::ResID, SireID::ID, SireID::IndexBase > > ResIdx_exposer_t;
-        ResIdx_exposer_t ResIdx_exposer = ResIdx_exposer_t( "ResIdx", bp::init< >() );
+        ResIdx_exposer_t ResIdx_exposer = ResIdx_exposer_t( "ResIdx", "This is an ID object that is used to index CutGroups\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope ResIdx_scope( ResIdx_exposer );
-        ResIdx_exposer.def( bp::init< quint32 >(( bp::arg("idx") )) );
-        ResIdx_exposer.def( bp::init< SireMol::ResIdx const & >(( bp::arg("other") )) );
+        ResIdx_exposer.def( bp::init< quint32 >(( bp::arg("idx") ), "") );
+        ResIdx_exposer.def( bp::init< SireMol::ResIdx const & >(( bp::arg("other") ), "") );
         { //::SireMol::ResIdx::hash
         
             typedef ::uint ( ::SireMol::ResIdx::*hash_function_type)(  ) const;
@@ -78,7 +78,8 @@ void register_ResIdx_class(){
             
             ResIdx_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::ResIdx::isNull
@@ -88,7 +89,8 @@ void register_ResIdx_class(){
             
             ResIdx_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::ResIdx::map
@@ -99,7 +101,8 @@ void register_ResIdx_class(){
             ResIdx_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::ResIdx::null
@@ -109,7 +112,8 @@ void register_ResIdx_class(){
             
             ResIdx_exposer.def( 
                 "null"
-                , null_function_value );
+                , null_function_value
+                , "" );
         
         }
         { //::SireMol::ResIdx::operator=
@@ -121,7 +125,8 @@ void register_ResIdx_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::ResIdx::toString
@@ -131,7 +136,8 @@ void register_ResIdx_class(){
             
             ResIdx_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::ResIdx::typeName
@@ -141,7 +147,8 @@ void register_ResIdx_class(){
             
             ResIdx_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::ResIdx::what
@@ -151,7 +158,8 @@ void register_ResIdx_class(){
             
             ResIdx_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ResIdx_exposer.staticmethod( "null" );

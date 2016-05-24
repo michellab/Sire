@@ -49,51 +49,41 @@ namespace bp = boost::python;
 
 #include "atomeditor.h"
 
-#include "SireBase/quickcopy.hpp"
+#include "SireStream/shareddatastream.h"
 
 #include "SireError/errors.h"
 
-#include "atomcoords.h"
+#include "SireMaths/vector.h"
 
 #include "SireVol/space.h"
 
-#include "SireMaths/vector.h"
+#include "atomcharges.h"
 
-#include "atomljs.h"
-
-#include "atombeads.h"
+#include "atomelements.h"
 
 #include "SireStream/datastream.h"
 
 #include "atompolarisabilities.h"
 
-#include "atomcharges.h"
+#include "atomforces.h"
 
-#include "atomvelocities.h"
+#include "SireBase/quickcopy.hpp"
 
 #include "atommasses.h"
 
-#include "atomforces.h"
-
-#include "atomproperty.hpp"
-
-#include "atomenergies.h"
+#include "atombeads.h"
 
 #include "SireMaths/align.h"
 
-#include "SireStream/shareddatastream.h"
+#include "atomvelocities.h"
 
-#include "atomelements.h"
+#include "atomproperty.hpp"
 
-SireMol::AtomEditorBase& set_Metadata_SireMM_AtomLJs_function1(
-                                  SireMol::AtomEditorBase &molview,
-                                   const QString &metakey, const SireMM::LJParameter &p)
-                                   { return molview.setMetadata< SireMM::LJParameter >(metakey, p); }
+#include "atomcoords.h"
 
-SireMol::AtomEditorBase& set_Metadata_SireMM_AtomLJs_function2(
-                                  SireMol::AtomEditorBase &molview,
-                                   const QString &key, const QString &metakey, const SireMM::LJParameter &p)
-                                   { return molview.setMetadata< SireMM::LJParameter >(key, metakey, p); }
+#include "atomenergies.h"
+
+#include "atomljs.h"
 
 SireMol::AtomEditorBase& set_Metadata_SireMol_AtomBeads_function1(
                                   SireMol::AtomEditorBase &molview,
@@ -225,13 +215,23 @@ SireMol::AtomEditorBase& set_Metadata_SireMol_AtomVariantProperty_function2(
                                    const QString &key, const QString &metakey, const QVariant &p)
                                    { return molview.setMetadata< QVariant >(key, metakey, p); }
 
+SireMol::AtomEditorBase& set_Metadata_SireMM_AtomLJs_function1(
+                                  SireMol::AtomEditorBase &molview,
+                                   const QString &metakey, const SireMM::LJParameter &p)
+                                   { return molview.setMetadata< SireMM::LJParameter >(metakey, p); }
+
+SireMol::AtomEditorBase& set_Metadata_SireMM_AtomLJs_function2(
+                                  SireMol::AtomEditorBase &molview,
+                                   const QString &key, const QString &metakey, const SireMM::LJParameter &p)
+                                   { return molview.setMetadata< SireMM::LJParameter >(key, metakey, p); }
+
 #include "Helpers/str.hpp"
 
 void register_AtomEditorBase_class(){
 
     { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >
         typedef bp::class_< SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >, bp::bases< SireMol::Atom, SireMol::MoleculeView, SireBase::Property >, boost::noncopyable > AtomEditorBase_exposer_t;
-        AtomEditorBase_exposer_t AtomEditorBase_exposer = AtomEditorBase_exposer_t( "AtomEditorBase", bp::no_init );
+        AtomEditorBase_exposer_t AtomEditorBase_exposer = AtomEditorBase_exposer_t( "AtomEditorBase", "", bp::no_init );
         bp::scope AtomEditorBase_scope( AtomEditorBase_exposer );
         { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::atom
         
@@ -241,7 +241,8 @@ void register_AtomEditorBase_class(){
             
             AtomEditorBase_exposer.def( 
                 "atom"
-                , atom_function_value );
+                , atom_function_value
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::atom
@@ -253,7 +254,8 @@ void register_AtomEditorBase_class(){
             AtomEditorBase_exposer.def( 
                 "atom"
                 , atom_function_value
-                , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::chain
@@ -264,7 +266,8 @@ void register_AtomEditorBase_class(){
             
             AtomEditorBase_exposer.def( 
                 "chain"
-                , chain_function_value );
+                , chain_function_value
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::chain
@@ -276,7 +279,8 @@ void register_AtomEditorBase_class(){
             AtomEditorBase_exposer.def( 
                 "chain"
                 , chain_function_value
-                , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::cutGroup
@@ -287,7 +291,8 @@ void register_AtomEditorBase_class(){
             
             AtomEditorBase_exposer.def( 
                 "cutGroup"
-                , cutGroup_function_value );
+                , cutGroup_function_value
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::cutGroup
@@ -299,7 +304,8 @@ void register_AtomEditorBase_class(){
             AtomEditorBase_exposer.def( 
                 "cutGroup"
                 , cutGroup_function_value
-                , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::molecule
@@ -310,7 +316,8 @@ void register_AtomEditorBase_class(){
             
             AtomEditorBase_exposer.def( 
                 "molecule"
-                , molecule_function_value );
+                , molecule_function_value
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::operator=
@@ -323,7 +330,8 @@ void register_AtomEditorBase_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::operator=
@@ -336,7 +344,8 @@ void register_AtomEditorBase_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::removeMetadata
@@ -349,7 +358,8 @@ void register_AtomEditorBase_class(){
                 "removeMetadata"
                 , removeMetadata_function_value
                 , ( bp::arg("metakey") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::removeMetadata
@@ -362,7 +372,8 @@ void register_AtomEditorBase_class(){
                 "removeMetadata"
                 , removeMetadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::removeProperty
@@ -375,7 +386,8 @@ void register_AtomEditorBase_class(){
                 "removeProperty"
                 , removeProperty_function_value
                 , ( bp::arg("key") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::residue
@@ -386,7 +398,8 @@ void register_AtomEditorBase_class(){
             
             AtomEditorBase_exposer.def( 
                 "residue"
-                , residue_function_value );
+                , residue_function_value
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::residue
@@ -398,7 +411,8 @@ void register_AtomEditorBase_class(){
             AtomEditorBase_exposer.def( 
                 "residue"
                 , residue_function_value
-                , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::segment
@@ -409,7 +423,8 @@ void register_AtomEditorBase_class(){
             
             AtomEditorBase_exposer.def( 
                 "segment"
-                , segment_function_value );
+                , segment_function_value
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::segment
@@ -421,7 +436,8 @@ void register_AtomEditorBase_class(){
             AtomEditorBase_exposer.def( 
                 "segment"
                 , segment_function_value
-                , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::select
@@ -433,7 +449,8 @@ void register_AtomEditorBase_class(){
             AtomEditorBase_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::select
@@ -445,7 +462,8 @@ void register_AtomEditorBase_class(){
             AtomEditorBase_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::select
@@ -457,7 +475,8 @@ void register_AtomEditorBase_class(){
             AtomEditorBase_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::select
@@ -469,7 +488,8 @@ void register_AtomEditorBase_class(){
             AtomEditorBase_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::AtomEditor, SireMol::Atom >::select
@@ -481,13 +501,10 @@ void register_AtomEditorBase_class(){
             AtomEditorBase_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
-        AtomEditorBase_exposer.def( "_set_property_SireMM_LJParameter", 
-                                           &SireMol::AtomEditorBase::setProperty< SireMM::LJParameter >, bp::return_self< >() );
-        AtomEditorBase_exposer.def( "_set_metadata_SireMM_LJParameter", &set_Metadata_SireMM_AtomLJs_function1, bp::return_self< >());
-        AtomEditorBase_exposer.def( "_set_metadata_SireMM_LJParameter", &set_Metadata_SireMM_AtomLJs_function2, bp::return_self< >());
         AtomEditorBase_exposer.def( "_set_property_SireMol_BeadNum", 
                                            &SireMol::AtomEditorBase::setProperty< SireMol::BeadNum >, bp::return_self< >() );
         AtomEditorBase_exposer.def( "_set_metadata_SireMol_BeadNum", &set_Metadata_SireMol_AtomBeads_function1, bp::return_self< >());
@@ -540,6 +557,10 @@ void register_AtomEditorBase_class(){
                                            &SireMol::AtomEditorBase::setProperty< QVariant >, bp::return_self< >() );
         AtomEditorBase_exposer.def( "_set_metadata_QVariant", &set_Metadata_SireMol_AtomVariantProperty_function1, bp::return_self< >());
         AtomEditorBase_exposer.def( "_set_metadata_QVariant", &set_Metadata_SireMol_AtomVariantProperty_function2, bp::return_self< >());
+        AtomEditorBase_exposer.def( "_set_property_SireMM_LJParameter", 
+                                           &SireMol::AtomEditorBase::setProperty< SireMM::LJParameter >, bp::return_self< >() );
+        AtomEditorBase_exposer.def( "_set_metadata_SireMM_LJParameter", &set_Metadata_SireMM_AtomLJs_function1, bp::return_self< >());
+        AtomEditorBase_exposer.def( "_set_metadata_SireMM_LJParameter", &set_Metadata_SireMM_AtomLJs_function2, bp::return_self< >());
         AtomEditorBase_exposer.def( "__str__", &__str__< ::SireMol::Editor<SireMol::AtomEditor, SireMol::Atom> > );
         AtomEditorBase_exposer.def( "__repr__", &__str__< ::SireMol::Editor<SireMol::AtomEditor, SireMol::Atom> > );
     }

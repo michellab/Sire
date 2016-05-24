@@ -25,11 +25,11 @@ void register_ResVariantProperty_class(){
 
     { //::SireMol::ResProperty< QVariant >
         typedef bp::class_< SireMol::ResProperty< QVariant >, bp::bases< SireMol::ResProp, SireMol::MolViewProperty, SireBase::Property > > ResVariantProperty_exposer_t;
-        ResVariantProperty_exposer_t ResVariantProperty_exposer = ResVariantProperty_exposer_t( "ResVariantProperty", bp::init< >() );
+        ResVariantProperty_exposer_t ResVariantProperty_exposer = ResVariantProperty_exposer_t( "ResVariantProperty", "", bp::init< >("") );
         bp::scope ResVariantProperty_scope( ResVariantProperty_exposer );
-        ResVariantProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") )) );
-        ResVariantProperty_exposer.def( bp::init< QVector< QVariant > const & >(( bp::arg("values") )) );
-        ResVariantProperty_exposer.def( bp::init< SireMol::ResProperty< QVariant > const & >(( bp::arg("other") )) );
+        ResVariantProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "") );
+        ResVariantProperty_exposer.def( bp::init< QVector< QVariant > const & >(( bp::arg("values") ), "") );
+        ResVariantProperty_exposer.def( bp::init< SireMol::ResProperty< QVariant > const & >(( bp::arg("other") ), "") );
         { //::SireMol::ResProperty< QVariant >::array
         
             typedef SireMol::ResProperty< QVariant > exported_class_t;
@@ -39,7 +39,8 @@ void register_ResVariantProperty_class(){
             ResVariantProperty_exposer.def( 
                 "array"
                 , array_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::ResProperty< QVariant >::assertCanConvert
@@ -51,7 +52,8 @@ void register_ResVariantProperty_class(){
             ResVariantProperty_exposer.def( 
                 "assertCanConvert"
                 , assertCanConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::ResProperty< QVariant >::assignFrom
@@ -63,7 +65,8 @@ void register_ResVariantProperty_class(){
             ResVariantProperty_exposer.def( 
                 "assignFrom"
                 , assignFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::ResProperty< QVariant >::at
@@ -76,7 +79,8 @@ void register_ResVariantProperty_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("residx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::ResProperty< QVariant >::canConvert
@@ -88,7 +92,8 @@ void register_ResVariantProperty_class(){
             ResVariantProperty_exposer.def( 
                 "canConvert"
                 , canConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::ResProperty< QVariant >::count
@@ -99,7 +104,8 @@ void register_ResVariantProperty_class(){
             
             ResVariantProperty_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMol::ResProperty< QVariant >::fromVariant
@@ -111,7 +117,8 @@ void register_ResVariantProperty_class(){
             ResVariantProperty_exposer.def( 
                 "fromVariant"
                 , fromVariant_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::ResProperty< QVariant >::get
@@ -124,7 +131,8 @@ void register_ResVariantProperty_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("residx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::ResProperty< QVariant >::isCompatibleWith
@@ -136,7 +144,8 @@ void register_ResVariantProperty_class(){
             ResVariantProperty_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::ResProperty< QVariant >::isEmpty
@@ -147,7 +156,8 @@ void register_ResVariantProperty_class(){
             
             ResVariantProperty_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMol::ResProperty< QVariant >::nResidues
@@ -158,7 +168,8 @@ void register_ResVariantProperty_class(){
             
             ResVariantProperty_exposer.def( 
                 "nResidues"
-                , nResidues_function_value );
+                , nResidues_function_value
+                , "" );
         
         }
         ResVariantProperty_exposer.def( bp::self != bp::self );
@@ -172,7 +183,8 @@ void register_ResVariantProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         ResVariantProperty_exposer.def( bp::self == bp::self );
@@ -186,7 +198,8 @@ void register_ResVariantProperty_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("residx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::ResProperty< QVariant >::set
@@ -199,7 +212,8 @@ void register_ResVariantProperty_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("residx"), bp::arg("value") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::ResProperty< QVariant >::size
@@ -210,7 +224,8 @@ void register_ResVariantProperty_class(){
             
             ResVariantProperty_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "" );
         
         }
         { //::SireMol::ResProperty< QVariant >::toString
@@ -221,7 +236,8 @@ void register_ResVariantProperty_class(){
             
             ResVariantProperty_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::ResProperty< QVariant >::toVariant
@@ -232,7 +248,8 @@ void register_ResVariantProperty_class(){
             
             ResVariantProperty_exposer.def( 
                 "toVariant"
-                , toVariant_function_value );
+                , toVariant_function_value
+                , "" );
         
         }
         { //::SireMol::ResProperty< QVariant >::typeName
@@ -243,7 +260,8 @@ void register_ResVariantProperty_class(){
             
             ResVariantProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         ResVariantProperty_exposer.staticmethod( "fromVariant" );

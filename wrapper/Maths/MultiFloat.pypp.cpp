@@ -9,6 +9,10 @@ namespace bp = boost::python;
 
 #include "SireError/errors.h"
 
+#include "ThirdParty/avx_mathfun.h"
+
+#include "ThirdParty/sse_mathfun.h"
+
 #include "multidouble.h"
 
 #include "multifloat.h"
@@ -37,16 +41,16 @@ void register_MultiFloat_class(){
 
     { //::SireMaths::MultiFloat
         typedef bp::class_< SireMaths::MultiFloat > MultiFloat_exposer_t;
-        MultiFloat_exposer_t MultiFloat_exposer = MultiFloat_exposer_t( "MultiFloat", bp::init< >() );
+        MultiFloat_exposer_t MultiFloat_exposer = MultiFloat_exposer_t( "MultiFloat", "This class provides a vectorised float. This represents\na single vector of floats on the compiled machine, e.g.\n4 floats if we use SSE2, 8 floats for AVX\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope MultiFloat_scope( MultiFloat_exposer );
-        MultiFloat_exposer.def( bp::init< float >(( bp::arg("value") )) );
-        MultiFloat_exposer.def( bp::init< float const *, int >(( bp::arg("array"), bp::arg("size") )) );
-        MultiFloat_exposer.def( bp::init< float const *, SireMaths::MultiInt const & >(( bp::arg("array"), bp::arg("indicies") )) );
-        MultiFloat_exposer.def( bp::init< QVector< float > const & >(( bp::arg("array") )) );
-        MultiFloat_exposer.def( bp::init< QVector< double > const & >(( bp::arg("array") )) );
-        MultiFloat_exposer.def( bp::init< SireMaths::MultiDouble const & >(( bp::arg("other") )) );
-        MultiFloat_exposer.def( bp::init< SireMaths::MultiFloat const & >(( bp::arg("other") )) );
-        MultiFloat_exposer.def( bp::init< SireMaths::MultiInt const & >(( bp::arg("other") )) );
+        MultiFloat_exposer.def( bp::init< float >(( bp::arg("value") ), "Construct from the passed array - this must be the same size as the vector") );
+        MultiFloat_exposer.def( bp::init< float const *, int >(( bp::arg("array"), bp::arg("size") ), "Construct from the passed array. If size is greater than MultiFloat::size()\nthen an error will be raised. If size is less than MultiFloat::size() then\nthis float will be padded with zeroes") );
+        MultiFloat_exposer.def( bp::init< float const *, SireMaths::MultiInt const & >(( bp::arg("array"), bp::arg("indicies") ), "Construct from the passed array, taking the values of each element\nof the vector from the index in the associated MultiInt, e.g.\nMultiFloat[i] = array[ MultiInt[i] ]\n") );
+        MultiFloat_exposer.def( bp::init< QVector< float > const & >(( bp::arg("array") ), "Construct from the passed array - this must be the same size as the vector") );
+        MultiFloat_exposer.def( bp::init< QVector< double > const & >(( bp::arg("array") ), "Construct from the passed array - this must be the same size as the vector") );
+        MultiFloat_exposer.def( bp::init< SireMaths::MultiDouble const & >(( bp::arg("other") ), "Construct from a MultiInt") );
+        MultiFloat_exposer.def( bp::init< SireMaths::MultiFloat const & >(( bp::arg("other") ), "Construct from a MultiInt") );
+        MultiFloat_exposer.def( bp::init< SireMaths::MultiInt const & >(( bp::arg("other") ), "Construct from a MultiInt") );
         { //::SireMaths::MultiFloat::abs
         
             typedef ::SireMaths::MultiFloat ( ::SireMaths::MultiFloat::*abs_function_type)(  ) const;
@@ -54,7 +58,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "abs"
-                , abs_function_value );
+                , abs_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::at
@@ -65,7 +70,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::compareEqual
@@ -76,7 +82,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "compareEqual"
                 , compareEqual_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::compareGreater
@@ -87,7 +94,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "compareGreater"
                 , compareGreater_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::compareGreaterEqual
@@ -98,7 +106,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "compareGreaterEqual"
                 , compareGreaterEqual_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::compareLess
@@ -109,7 +118,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "compareLess"
                 , compareLess_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::compareLessEqual
@@ -120,7 +130,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "compareLessEqual"
                 , compareLessEqual_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::compareNotEqual
@@ -131,7 +142,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "compareNotEqual"
                 , compareNotEqual_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::count
@@ -141,7 +153,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::doubleSum
@@ -151,7 +164,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "doubleSum"
-                , doubleSum_function_value );
+                , doubleSum_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::fromArray
@@ -162,7 +176,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "fromArray"
                 , fromArray_function_value
-                , ( bp::arg("array") ) );
+                , ( bp::arg("array") )
+                , "Create an array of MultiFloats from the passed array of doubles. This\nwill pad the end of the array with zeroes if necessary" );
         
         }
         { //::SireMaths::MultiFloat::fromArray
@@ -173,7 +188,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "fromArray"
                 , fromArray_function_value
-                , ( bp::arg("array") ) );
+                , ( bp::arg("array") )
+                , "Create an array of MultiFloats from the passed array of floats. This will\npad the end of the array with zeroes if necessary" );
         
         }
         { //::SireMaths::MultiFloat::fromArray
@@ -184,7 +200,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "fromArray"
                 , fromArray_function_value
-                , ( bp::arg("array"), bp::arg("size") ) );
+                , ( bp::arg("array"), bp::arg("size") )
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::fromArray
@@ -195,7 +212,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "fromArray"
                 , fromArray_function_value
-                , ( bp::arg("array"), bp::arg("size") ) );
+                , ( bp::arg("array"), bp::arg("size") )
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::get
@@ -206,7 +224,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "get"
                 , get_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return the ith value in the multifloat" );
         
         }
         { //::SireMaths::MultiFloat::getitem
@@ -217,7 +236,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "getitem"
                 , getitem_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::hasBinaryOne
@@ -227,7 +247,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "hasBinaryOne"
-                , hasBinaryOne_function_value );
+                , hasBinaryOne_function_value
+                , "Return whether or not at least one of the elements of this vector\nis binary one (the float is equal to 0xFFFFFFFF)" );
         
         }
         { //::SireMaths::MultiFloat::hasBinaryZero
@@ -237,7 +258,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "hasBinaryZero"
-                , hasBinaryZero_function_value );
+                , hasBinaryZero_function_value
+                , "Return whether or not at least one of the elements of this vector\nis binary zero (the float is equal to 0x00000000)" );
         
         }
         { //::SireMaths::MultiFloat::isAligned
@@ -247,7 +269,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "isAligned"
-                , isAligned_function_value );
+                , isAligned_function_value
+                , "Return whether or not this MultiFloat is correctly aligned. If it is not,\nthen any SSE operations will fail" );
         
         }
         { //::SireMaths::MultiFloat::isBinaryOne
@@ -257,7 +280,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "isBinaryOne"
-                , isBinaryOne_function_value );
+                , isBinaryOne_function_value
+                , "Return whether all of the elements of this MultiFloat are\nequal to 0xFFFFFFFF (e.g. every bit in the entire vector is 1)" );
         
         }
         { //::SireMaths::MultiFloat::isBinaryZero
@@ -267,7 +291,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "isBinaryZero"
-                , isBinaryZero_function_value );
+                , isBinaryZero_function_value
+                , "Return whether all of the elements of this MultiFloat are\nequal to 0x00000000 (e.g. every bit in the entire vector is 0)" );
         
         }
         { //::SireMaths::MultiFloat::isNotBinaryOne
@@ -277,7 +302,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "isNotBinaryOne"
-                , isNotBinaryOne_function_value );
+                , isNotBinaryOne_function_value
+                , "Return whether all of the elements of this MultiFloat are\nnot equal to 0xFFFFFFFF (e.g. at least one bit in the entire vector is 0)" );
         
         }
         { //::SireMaths::MultiFloat::isNotBinaryZero
@@ -287,7 +313,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "isNotBinaryZero"
-                , isNotBinaryZero_function_value );
+                , isNotBinaryZero_function_value
+                , "Return whether all of the elements of this MultiFloat are\nnot equal to 0x00000000 (e.g. at least one bit in the entire vector is 1)" );
         
         }
         { //::SireMaths::MultiFloat::logicalAnd
@@ -298,7 +325,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "logicalAnd"
                 , logicalAnd_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::logicalAnd
@@ -309,7 +337,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "logicalAnd"
                 , logicalAnd_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::logicalAnd
@@ -320,7 +349,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "logicalAnd"
                 , logicalAnd_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::logicalAndNot
@@ -331,7 +361,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "logicalAndNot"
                 , logicalAndNot_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::logicalAndNot
@@ -342,7 +373,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "logicalAndNot"
                 , logicalAndNot_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::logicalAndNot
@@ -353,7 +385,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "logicalAndNot"
                 , logicalAndNot_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::logicalNot
@@ -363,7 +396,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "logicalNot"
-                , logicalNot_function_value );
+                , logicalNot_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::logicalOr
@@ -374,7 +408,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "logicalOr"
                 , logicalOr_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::logicalXor
@@ -385,7 +420,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "logicalXor"
                 , logicalXor_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::max
@@ -396,7 +432,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "max"
                 , max_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::max
@@ -406,7 +443,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "max"
-                , max_function_value );
+                , max_function_value
+                , "Return the maximum value in the vector" );
         
         }
         { //::SireMaths::MultiFloat::min
@@ -417,7 +455,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "min"
                 , min_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::min
@@ -427,7 +466,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "min"
-                , min_function_value );
+                , min_function_value
+                , "Return the minimum value in the vector" );
         
         }
         { //::SireMaths::MultiFloat::multiplyAdd
@@ -439,7 +479,8 @@ void register_MultiFloat_class(){
                 "multiplyAdd"
                 , multiplyAdd_function_value
                 , ( bp::arg("val0"), bp::arg("val1") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MultiFloat_exposer.def( !bp::self );
@@ -461,7 +502,8 @@ void register_MultiFloat_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::operator=
@@ -473,7 +515,8 @@ void register_MultiFloat_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::operator=
@@ -485,7 +528,8 @@ void register_MultiFloat_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::operator=
@@ -497,7 +541,8 @@ void register_MultiFloat_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("value") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MultiFloat_exposer.def( bp::self == bp::self );
@@ -511,7 +556,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         MultiFloat_exposer.def( bp::self ^ bp::self );
@@ -524,7 +570,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "quickSet"
                 , quickSet_function_value
-                , ( bp::arg("i"), bp::arg("value") ) );
+                , ( bp::arg("i"), bp::arg("value") )
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::reciprocal
@@ -534,7 +581,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "reciprocal"
-                , reciprocal_function_value );
+                , reciprocal_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::reciprocal_approx
@@ -544,7 +592,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "reciprocal_approx"
-                , reciprocal_approx_function_value );
+                , reciprocal_approx_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::reciprocal_approx_nr
@@ -554,7 +603,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "reciprocal_approx_nr"
-                , reciprocal_approx_nr_function_value );
+                , reciprocal_approx_nr_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::rotate
@@ -564,7 +614,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "rotate"
-                , rotate_function_value );
+                , rotate_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::rsqrt
@@ -574,7 +625,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "rsqrt"
-                , rsqrt_function_value );
+                , rsqrt_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::rsqrt_approx
@@ -584,7 +636,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "rsqrt_approx"
-                , rsqrt_approx_function_value );
+                , rsqrt_approx_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::rsqrt_approx_nr
@@ -594,7 +647,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "rsqrt_approx_nr"
-                , rsqrt_approx_nr_function_value );
+                , rsqrt_approx_nr_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::set
@@ -605,7 +659,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("i"), bp::arg("value") ) );
+                , ( bp::arg("i"), bp::arg("value") )
+                , "Set the ith value of the multifloat to value" );
         
         }
         { //::SireMaths::MultiFloat::size
@@ -615,7 +670,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::sqrt
@@ -625,7 +681,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "sqrt"
-                , sqrt_function_value );
+                , sqrt_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::sqrt_approx
@@ -635,7 +692,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "sqrt_approx"
-                , sqrt_approx_function_value );
+                , sqrt_approx_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::sqrt_approx_nr
@@ -645,7 +703,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "sqrt_approx_nr"
-                , sqrt_approx_nr_function_value );
+                , sqrt_approx_nr_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::sum
@@ -655,7 +714,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "sum"
-                , sum_function_value );
+                , sum_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::swap
@@ -666,7 +726,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "swap"
                 , swap_function_value
-                , ( bp::arg("f0"), bp::arg("idx0"), bp::arg("f1"), bp::arg("idx1") ) );
+                , ( bp::arg("f0"), bp::arg("idx0"), bp::arg("f1"), bp::arg("idx1") )
+                , "Swap the values of the value at index idx0 in f0 with the value at index idx in f1" );
         
         }
         { //::SireMaths::MultiFloat::toArray
@@ -677,7 +738,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "toArray"
                 , toArray_function_value
-                , ( bp::arg("array") ) );
+                , ( bp::arg("array") )
+                , "Return the passed MultiFloat converted back into a normal array" );
         
         }
         { //::SireMaths::MultiFloat::toBinaryString
@@ -687,7 +749,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "toBinaryString"
-                , toBinaryString_function_value );
+                , toBinaryString_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::toDoubleArray
@@ -698,7 +761,8 @@ void register_MultiFloat_class(){
             MultiFloat_exposer.def( 
                 "toDoubleArray"
                 , toDoubleArray_function_value
-                , ( bp::arg("array") ) );
+                , ( bp::arg("array") )
+                , "Return the passed MultiFloat converted back into a normal array of doubles" );
         
         }
         { //::SireMaths::MultiFloat::toString
@@ -708,7 +772,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::typeName
@@ -718,7 +783,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiFloat::what
@@ -728,7 +794,8 @@ void register_MultiFloat_class(){
             
             MultiFloat_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         MultiFloat_exposer.staticmethod( "count" );

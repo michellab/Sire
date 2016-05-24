@@ -25,10 +25,10 @@ void register_AxisSet_class(){
 
     { //::SireMaths::AxisSet
         typedef bp::class_< SireMaths::AxisSet > AxisSet_exposer_t;
-        AxisSet_exposer_t AxisSet_exposer = AxisSet_exposer_t( "AxisSet", bp::init< >() );
+        AxisSet_exposer_t AxisSet_exposer = AxisSet_exposer_t( "AxisSet", "\nThis class provides a complete set of orthonormal axes that provide a\nframe of reference (origin+axes) for a coordinate system.\n\nAuthor: Christopher Woods\n", bp::init< >("Construct an empty AxisSet. This represents the standard cartesian axes, centered\non the origin") );
         bp::scope AxisSet_scope( AxisSet_exposer );
-        AxisSet_exposer.def( bp::init< SireMaths::Matrix const &, bp::optional< SireMaths::Vector > >(( bp::arg("matrx"), bp::arg("orign")=SireMaths::Vector() )) );
-        AxisSet_exposer.def( bp::init< SireMaths::AxisSet const & >(( bp::arg("other") )) );
+        AxisSet_exposer.def( bp::init< SireMaths::Matrix const &, bp::optional< SireMaths::Vector > >(( bp::arg("matrx"), bp::arg("orign")=SireMaths::Vector() ), "Construct an AxisSet using matrix matrx, and origin orign") );
+        AxisSet_exposer.def( bp::init< SireMaths::AxisSet const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMaths::AxisSet::fromFrame
         
             typedef ::SireMaths::Vector ( ::SireMaths::AxisSet::*fromFrame_function_type)( ::SireMaths::AxisSet const &,::SireMaths::Vector const & ) const;
@@ -37,7 +37,8 @@ void register_AxisSet_class(){
             AxisSet_exposer.def( 
                 "fromFrame"
                 , fromFrame_function_value
-                , ( bp::arg("frame"), bp::arg("vec") ) );
+                , ( bp::arg("frame"), bp::arg("vec") )
+                , "Convert a vector from the frame frame to this coordinate frame" );
         
         }
         { //::SireMaths::AxisSet::fromIdentity
@@ -48,7 +49,8 @@ void register_AxisSet_class(){
             AxisSet_exposer.def( 
                 "fromIdentity"
                 , fromIdentity_function_value
-                , ( bp::arg("vec") ) );
+                , ( bp::arg("vec") )
+                , "Convert a vector from the cartesian frame to this coordinate frame" );
         
         }
         { //::SireMaths::AxisSet::fromIdentity
@@ -59,7 +61,8 @@ void register_AxisSet_class(){
             AxisSet_exposer.def( 
                 "fromIdentity"
                 , fromIdentity_function_value
-                , ( bp::arg("vec") ) );
+                , ( bp::arg("vec") )
+                , "Convert the array of vectors from the cartesian frame to this coordinate frame" );
         
         }
         { //::SireMaths::AxisSet::fromIdentity
@@ -70,7 +73,8 @@ void register_AxisSet_class(){
             AxisSet_exposer.def( 
                 "fromIdentity"
                 , fromIdentity_function_value
-                , ( bp::arg("vec"), bp::arg("delta") ) );
+                , ( bp::arg("vec"), bp::arg("delta") )
+                , "Convert a vector from the cartesian frame with origin delta to this coordinate frame" );
         
         }
         { //::SireMaths::AxisSet::fromIdentity
@@ -81,7 +85,8 @@ void register_AxisSet_class(){
             AxisSet_exposer.def( 
                 "fromIdentity"
                 , fromIdentity_function_value
-                , ( bp::arg("vecs"), bp::arg("delta") ) );
+                , ( bp::arg("vecs"), bp::arg("delta") )
+                , "Convert the array of vectors from the cartesian frame offset by delta\nto this coordinate frame" );
         
         }
         { //::SireMaths::AxisSet::invMatrix
@@ -92,7 +97,8 @@ void register_AxisSet_class(){
             AxisSet_exposer.def( 
                 "invMatrix"
                 , invMatrix_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMaths::AxisSet::matrix
@@ -103,7 +109,8 @@ void register_AxisSet_class(){
             AxisSet_exposer.def( 
                 "matrix"
                 , matrix_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMaths::AxisSet::origin
@@ -114,7 +121,8 @@ void register_AxisSet_class(){
             AxisSet_exposer.def( 
                 "origin"
                 , origin_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMaths::AxisSet::toFrame
@@ -125,7 +133,8 @@ void register_AxisSet_class(){
             AxisSet_exposer.def( 
                 "toFrame"
                 , toFrame_function_value
-                , ( bp::arg("frame"), bp::arg("vec") ) );
+                , ( bp::arg("frame"), bp::arg("vec") )
+                , "Convert a vector to the frame frame from this coordinate frame" );
         
         }
         { //::SireMaths::AxisSet::toIdentity
@@ -136,7 +145,8 @@ void register_AxisSet_class(){
             AxisSet_exposer.def( 
                 "toIdentity"
                 , toIdentity_function_value
-                , ( bp::arg("vec") ) );
+                , ( bp::arg("vec") )
+                , "Convert a vector to the cartesian frame from this coordinate frame" );
         
         }
         { //::SireMaths::AxisSet::toString
@@ -146,7 +156,8 @@ void register_AxisSet_class(){
             
             AxisSet_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of the AxisSet" );
         
         }
         { //::SireMaths::AxisSet::typeName
@@ -156,7 +167,8 @@ void register_AxisSet_class(){
             
             AxisSet_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMaths::AxisSet::what
@@ -166,7 +178,8 @@ void register_AxisSet_class(){
             
             AxisSet_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         AxisSet_exposer.staticmethod( "typeName" );

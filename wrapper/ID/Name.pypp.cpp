@@ -19,7 +19,7 @@ void register_Name_class(){
 
     { //::SireID::Name
         typedef bp::class_< SireID::Name, boost::noncopyable > Name_exposer_t;
-        Name_exposer_t Name_exposer = Name_exposer_t( "Name", bp::no_init );
+        Name_exposer_t Name_exposer = Name_exposer_t( "Name", "This is the base class of all Name ID objects. A Name is used\nto provide an object with a human-readable name that can be\nused to identify the object, e.g. identifying atoms by their\nname within a residue, or identifying forcefields by their name.\n\nA name does not have to uniquely identify an object, though it\nhelps, as generally only the first object with a specified name\nis returned if there are in fact multiple objects with the same\nname.\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope Name_scope( Name_exposer );
         { //::SireID::Name::hash
         
@@ -28,7 +28,8 @@ void register_Name_class(){
             
             Name_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireID::Name::isCaseSensitive
@@ -38,7 +39,8 @@ void register_Name_class(){
             
             Name_exposer.def( 
                 "isCaseSensitive"
-                , isCaseSensitive_function_value );
+                , isCaseSensitive_function_value
+                , "" );
         
         }
         { //::SireID::Name::isEmpty
@@ -48,7 +50,8 @@ void register_Name_class(){
             
             Name_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireID::Name::isNull
@@ -58,7 +61,8 @@ void register_Name_class(){
             
             Name_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireID::Name::value
@@ -69,7 +73,8 @@ void register_Name_class(){
             Name_exposer.def( 
                 "value"
                 , value_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         Name_exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireID::Name >,

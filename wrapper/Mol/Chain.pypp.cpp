@@ -77,10 +77,10 @@ void register_Chain_class(){
 
     { //::SireMol::Chain
         typedef bp::class_< SireMol::Chain, bp::bases< SireMol::MoleculeView, SireBase::Property > > Chain_exposer_t;
-        Chain_exposer_t Chain_exposer = Chain_exposer_t( "Chain", bp::init< >() );
+        Chain_exposer_t Chain_exposer = Chain_exposer_t( "Chain", "This class represents a Chain in a Molecule.\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope Chain_scope( Chain_exposer );
-        Chain_exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::ChainID const & >(( bp::arg("moldata"), bp::arg("chainid") )) );
-        Chain_exposer.def( bp::init< SireMol::Chain const & >(( bp::arg("other") )) );
+        Chain_exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::ChainID const & >(( bp::arg("moldata"), bp::arg("chainid") ), "Construct the chain at ID chainid in the molecule whose data\nis in moldata\nThrow: SireMol::missing_chain\nThrow: SireMol::duplicate_chain\nThrow: SireError::invalid_index\n") );
+        Chain_exposer.def( bp::init< SireMol::Chain const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::Chain::assertContainsMetadata
         
             typedef void ( ::SireMol::Chain::*assertContainsMetadata_function_type)( ::SireBase::PropertyName const & ) const;
@@ -89,7 +89,8 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "assertContainsMetadata"
                 , assertContainsMetadata_function_value
-                , ( bp::arg("metakey") ) );
+                , ( bp::arg("metakey") )
+                , "Assert that this chain has an ChainProperty piece of metadata\nat metakey metakey\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::Chain::assertContainsMetadata
@@ -100,7 +101,8 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "assertContainsMetadata"
                 , assertContainsMetadata_function_value
-                , ( bp::arg("key"), bp::arg("metakey") ) );
+                , ( bp::arg("key"), bp::arg("metakey") )
+                , "Assert that the property at key key has an ChainProperty\npiece of metadata at metakey metakey\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::Chain::assertContainsProperty
@@ -111,7 +113,8 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "assertContainsProperty"
                 , assertContainsProperty_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "Assert that this chain has an ChainProperty at key key\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::Chain::atomIdxs
@@ -121,7 +124,8 @@ void register_Chain_class(){
             
             Chain_exposer.def( 
                 "atomIdxs"
-                , atomIdxs_function_value );
+                , atomIdxs_function_value
+                , "Return the indicies of the atoms in this chain, in the\norder that they appear in this chain" );
         
         }
         { //::SireMol::Chain::contains
@@ -132,7 +136,8 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("atomidx") ) );
+                , ( bp::arg("atomidx") )
+                , "Return whether or not this chain contains the atom\nat index atomidx" );
         
         }
         { //::SireMol::Chain::contains
@@ -143,7 +148,8 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "Return whether or not this chain contains all of\nthe atoms identified by the ID atomid" );
         
         }
         { //::SireMol::Chain::contains
@@ -154,7 +160,8 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("residx") ) );
+                , ( bp::arg("residx") )
+                , "Return whether or not this chain contains the\nresidue at index residx" );
         
         }
         { //::SireMol::Chain::contains
@@ -165,7 +172,8 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("resid") ) );
+                , ( bp::arg("resid") )
+                , "Return whether or not this chain contains all\nof the residues identified by the ID resid" );
         
         }
         { //::SireMol::Chain::edit
@@ -175,7 +183,8 @@ void register_Chain_class(){
             
             Chain_exposer.def( 
                 "edit"
-                , edit_function_value );
+                , edit_function_value
+                , "Return an editor that can edit this chain" );
         
         }
         { //::SireMol::Chain::evaluate
@@ -185,7 +194,8 @@ void register_Chain_class(){
             
             Chain_exposer.def( 
                 "evaluate"
-                , evaluate_function_value );
+                , evaluate_function_value
+                , "Return an evaluator that can evaluate properties\nof this chain" );
         
         }
         { //::SireMol::Chain::hasMetadata
@@ -196,7 +206,8 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "hasMetadata"
                 , hasMetadata_function_value
-                , ( bp::arg("metakey") ) );
+                , ( bp::arg("metakey") )
+                , "Return whether or not there is a ChainProperty at metakey metakey" );
         
         }
         { //::SireMol::Chain::hasMetadata
@@ -207,7 +218,8 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "hasMetadata"
                 , hasMetadata_function_value
-                , ( bp::arg("key"), bp::arg("metakey") ) );
+                , ( bp::arg("key"), bp::arg("metakey") )
+                , "Return whether the metadata at metakey metakey for the property\nat key key is a ChainProperty\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::Chain::hasProperty
@@ -218,7 +230,8 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "hasProperty"
                 , hasProperty_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "Return whether or not there is a ChainProperty at key key" );
         
         }
         { //::SireMol::Chain::index
@@ -228,7 +241,8 @@ void register_Chain_class(){
             
             Chain_exposer.def( 
                 "index"
-                , index_function_value );
+                , index_function_value
+                , "Return the index of this chain in the molecule" );
         
         }
         { //::SireMol::Chain::intersects
@@ -239,7 +253,8 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "Return whether or not this chain contains some of\nthe atoms identified by the ID atomid" );
         
         }
         { //::SireMol::Chain::intersects
@@ -250,7 +265,8 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("resid") ) );
+                , ( bp::arg("resid") )
+                , "Return whether or not this chain contains some\nof the residues identified by the ID resid" );
         
         }
         { //::SireMol::Chain::isEmpty
@@ -260,7 +276,8 @@ void register_Chain_class(){
             
             Chain_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Is this chain empty?" );
         
         }
         { //::SireMol::Chain::metadataKeys
@@ -270,7 +287,8 @@ void register_Chain_class(){
             
             Chain_exposer.def( 
                 "metadataKeys"
-                , metadataKeys_function_value );
+                , metadataKeys_function_value
+                , "Return the metakeys of all ChainProperty metadata" );
         
         }
         { //::SireMol::Chain::metadataKeys
@@ -281,7 +299,8 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "metadataKeys"
                 , metadataKeys_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "Return the metakeys of all ChainProperty metadata for\nthe property at key key\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::Chain::move
@@ -291,7 +310,8 @@ void register_Chain_class(){
             
             Chain_exposer.def( 
                 "move"
-                , move_function_value );
+                , move_function_value
+                , "Return an object that can move a copy of this chain" );
         
         }
         { //::SireMol::Chain::nAtoms
@@ -301,7 +321,8 @@ void register_Chain_class(){
             
             Chain_exposer.def( 
                 "nAtoms"
-                , nAtoms_function_value );
+                , nAtoms_function_value
+                , "Return the number of atoms in this Chain" );
         
         }
         { //::SireMol::Chain::nResidues
@@ -311,7 +332,8 @@ void register_Chain_class(){
             
             Chain_exposer.def( 
                 "nResidues"
-                , nResidues_function_value );
+                , nResidues_function_value
+                , "Return the number of residues in this chain" );
         
         }
         { //::SireMol::Chain::name
@@ -321,7 +343,8 @@ void register_Chain_class(){
             
             Chain_exposer.def( 
                 "name"
-                , name_function_value );
+                , name_function_value
+                , "Return the name of this chain" );
         
         }
         Chain_exposer.def( bp::self != bp::self );
@@ -334,7 +357,8 @@ void register_Chain_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Chain_exposer.def( bp::self == bp::self );
@@ -345,7 +369,8 @@ void register_Chain_class(){
             
             Chain_exposer.def( 
                 "propertyKeys"
-                , propertyKeys_function_value );
+                , propertyKeys_function_value
+                , "Return the keys of all ChainProperty properties" );
         
         }
         { //::SireMol::Chain::resIdxs
@@ -356,7 +381,8 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "resIdxs"
                 , resIdxs_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the list of indicies of residues that are\nin this chain, in the order they appear in this chain" );
         
         }
         { //::SireMol::Chain::selectedAll
@@ -366,7 +392,8 @@ void register_Chain_class(){
             
             Chain_exposer.def( 
                 "selectedAll"
-                , selectedAll_function_value );
+                , selectedAll_function_value
+                , "Is this chain the entire molecule?" );
         
         }
         { //::SireMol::Chain::selection
@@ -376,7 +403,8 @@ void register_Chain_class(){
             
             Chain_exposer.def( 
                 "selection"
-                , selection_function_value );
+                , selection_function_value
+                , "Return the atoms that are in this chain" );
         
         }
         { //::SireMol::Chain::selector
@@ -386,7 +414,8 @@ void register_Chain_class(){
             
             Chain_exposer.def( 
                 "selector"
-                , selector_function_value );
+                , selector_function_value
+                , "Return a selector that change the selection of chains" );
         
         }
         { //::SireMol::Chain::toString
@@ -396,7 +425,8 @@ void register_Chain_class(){
             
             Chain_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this chain" );
         
         }
         { //::SireMol::Chain::typeName
@@ -406,7 +436,8 @@ void register_Chain_class(){
             
             Chain_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::Chain::update
@@ -417,7 +448,8 @@ void register_Chain_class(){
             Chain_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("moldata") ) );
+                , ( bp::arg("moldata") )
+                , "Update this chain with the passed molecule data.\nThrow: SireError::incompatible_error\n" );
         
         }
         Chain_exposer.staticmethod( "typeName" );

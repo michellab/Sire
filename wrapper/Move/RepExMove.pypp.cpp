@@ -47,9 +47,9 @@ void register_RepExMove_class(){
 
     { //::SireMove::RepExMove
         typedef bp::class_< SireMove::RepExMove, bp::bases< SireMove::SupraMove, SireBase::Property > > RepExMove_exposer_t;
-        RepExMove_exposer_t RepExMove_exposer = RepExMove_exposer_t( "RepExMove", bp::init< >() );
+        RepExMove_exposer_t RepExMove_exposer = RepExMove_exposer_t( "RepExMove", "This class is used to perform replica exchange moves on a collection\nof Replicas. Each move involves running a block of sampling\non each of the replicas, and then performing replice exchange swaps\nand tests between pairs.\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope RepExMove_scope( RepExMove_exposer );
-        RepExMove_exposer.def( bp::init< SireMove::RepExMove const & >(( bp::arg("other") )) );
+        RepExMove_exposer.def( bp::init< SireMove::RepExMove const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::RepExMove::acceptanceRatio
         
             typedef double ( ::SireMove::RepExMove::*acceptanceRatio_function_type)(  ) const;
@@ -57,7 +57,8 @@ void register_RepExMove_class(){
             
             RepExMove_exposer.def( 
                 "acceptanceRatio"
-                , acceptanceRatio_function_value );
+                , acceptanceRatio_function_value
+                , "Return the average acceptance ratio of the replica exchange\ntests over all replicas" );
         
         }
         { //::SireMove::RepExMove::clearStatistics
@@ -67,7 +68,8 @@ void register_RepExMove_class(){
             
             RepExMove_exposer.def( 
                 "clearStatistics"
-                , clearStatistics_function_value );
+                , clearStatistics_function_value
+                , "Clear the move statistics" );
         
         }
         { //::SireMove::RepExMove::generator
@@ -78,7 +80,8 @@ void register_RepExMove_class(){
             RepExMove_exposer.def( 
                 "generator"
                 , generator_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the random number generator used for the replica exchange tests" );
         
         }
         { //::SireMove::RepExMove::move
@@ -89,7 +92,8 @@ void register_RepExMove_class(){
             RepExMove_exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats") ) );
+                , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats") )
+                , "Perform nmoves replica exchange moves (block of sampling for all\nreplicas, then replica exchange test between all pairs),\nof the system system (which must be a Replicas object), optionally\nrecording statistics if record_stats is true\nThrow: SireError::invalid_cast\n" );
         
         }
         { //::SireMove::RepExMove::nAccepted
@@ -99,7 +103,8 @@ void register_RepExMove_class(){
             
             RepExMove_exposer.def( 
                 "nAccepted"
-                , nAccepted_function_value );
+                , nAccepted_function_value
+                , "Return the total number of accepted replica exchange tests" );
         
         }
         { //::SireMove::RepExMove::nAttempted
@@ -109,7 +114,8 @@ void register_RepExMove_class(){
             
             RepExMove_exposer.def( 
                 "nAttempted"
-                , nAttempted_function_value );
+                , nAttempted_function_value
+                , "Return the total number of accepted replica exchange tests" );
         
         }
         { //::SireMove::RepExMove::nRejected
@@ -119,7 +125,8 @@ void register_RepExMove_class(){
             
             RepExMove_exposer.def( 
                 "nRejected"
-                , nRejected_function_value );
+                , nRejected_function_value
+                , "Return the total number of rejected replica exchange tests" );
         
         }
         RepExMove_exposer.def( bp::self != bp::self );
@@ -132,7 +139,8 @@ void register_RepExMove_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         RepExMove_exposer.def( bp::self == bp::self );
@@ -144,7 +152,8 @@ void register_RepExMove_class(){
             RepExMove_exposer.def( 
                 "setDisableSwaps"
                 , setDisableSwaps_function_value
-                , ( bp::arg("disable") ) );
+                , ( bp::arg("disable") )
+                , "Set disabling of swap moves" );
         
         }
         { //::SireMove::RepExMove::setGenerator
@@ -155,7 +164,8 @@ void register_RepExMove_class(){
             RepExMove_exposer.def( 
                 "setGenerator"
                 , setGenerator_function_value
-                , ( bp::arg("generator") ) );
+                , ( bp::arg("generator") )
+                , "Set the random number generator used for the replica exchange tests" );
         
         }
         { //::SireMove::RepExMove::setSwapMonitors
@@ -166,7 +176,8 @@ void register_RepExMove_class(){
             RepExMove_exposer.def( 
                 "setSwapMonitors"
                 , setSwapMonitors_function_value
-                , ( bp::arg("swap_monitors") ) );
+                , ( bp::arg("swap_monitors") )
+                , "Set whether or not to swap the system monitors when we swap the systems" );
         
         }
         { //::SireMove::RepExMove::swapMovesDisabled
@@ -176,7 +187,8 @@ void register_RepExMove_class(){
             
             RepExMove_exposer.def( 
                 "swapMovesDisabled"
-                , swapMovesDisabled_function_value );
+                , swapMovesDisabled_function_value
+                , "Return whether or not swap moves are disabled" );
         
         }
         { //::SireMove::RepExMove::toString
@@ -186,7 +198,8 @@ void register_RepExMove_class(){
             
             RepExMove_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this move" );
         
         }
         { //::SireMove::RepExMove::typeName
@@ -196,7 +209,8 @@ void register_RepExMove_class(){
             
             RepExMove_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         RepExMove_exposer.staticmethod( "typeName" );

@@ -33,7 +33,7 @@ void register_MonteCarlo_class(){
 
     { //::SireMove::MonteCarlo
         typedef bp::class_< SireMove::MonteCarlo, bp::bases< SireMove::Move, SireBase::Property >, boost::noncopyable > MonteCarlo_exposer_t;
-        MonteCarlo_exposer_t MonteCarlo_exposer = MonteCarlo_exposer_t( "MonteCarlo", bp::no_init );
+        MonteCarlo_exposer_t MonteCarlo_exposer = MonteCarlo_exposer_t( "MonteCarlo", "This is the base class of all Monte Carlo moves\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope MonteCarlo_scope( MonteCarlo_exposer );
         { //::SireMove::MonteCarlo::acceptanceRatio
         
@@ -42,7 +42,8 @@ void register_MonteCarlo_class(){
             
             MonteCarlo_exposer.def( 
                 "acceptanceRatio"
-                , acceptanceRatio_function_value );
+                , acceptanceRatio_function_value
+                , "Return the acceptance ratio (ratio of\naccepted moves to attempted moves)" );
         
         }
         { //::SireMove::MonteCarlo::clearStatistics
@@ -52,7 +53,8 @@ void register_MonteCarlo_class(){
             
             MonteCarlo_exposer.def( 
                 "clearStatistics"
-                , clearStatistics_function_value );
+                , clearStatistics_function_value
+                , "Zero the move statistics" );
         
         }
         { //::SireMove::MonteCarlo::disableOptimisedMoves
@@ -62,7 +64,8 @@ void register_MonteCarlo_class(){
             
             MonteCarlo_exposer.def( 
                 "disableOptimisedMoves"
-                , disableOptimisedMoves_function_value );
+                , disableOptimisedMoves_function_value
+                , "Turn off use of optimised MC moves. This uses slightly slower, but likely\nless buggy code, and is worth using if you suspect there are problems with\nthe optimised code" );
         
         }
         { //::SireMove::MonteCarlo::enableOptimisedMoves
@@ -72,7 +75,8 @@ void register_MonteCarlo_class(){
             
             MonteCarlo_exposer.def( 
                 "enableOptimisedMoves"
-                , enableOptimisedMoves_function_value );
+                , enableOptimisedMoves_function_value
+                , "Turn on use of optimised MC moves. This turns on newer (and potentially more buggy)\ncode that aims to speed up the memory allocation and energy calculation for\nMC moves." );
         
         }
         { //::SireMove::MonteCarlo::ensemble
@@ -82,7 +86,8 @@ void register_MonteCarlo_class(){
             
             MonteCarlo_exposer.def( 
                 "ensemble"
-                , ensemble_function_value );
+                , ensemble_function_value
+                , "Return the ensemble for this move" );
         
         }
         { //::SireMove::MonteCarlo::generator
@@ -93,7 +98,8 @@ void register_MonteCarlo_class(){
             MonteCarlo_exposer.def( 
                 "generator"
                 , generator_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the random number generator used for these moves" );
         
         }
         { //::SireMove::MonteCarlo::nAccepted
@@ -103,7 +109,8 @@ void register_MonteCarlo_class(){
             
             MonteCarlo_exposer.def( 
                 "nAccepted"
-                , nAccepted_function_value );
+                , nAccepted_function_value
+                , "Return the number of accepted moves" );
         
         }
         { //::SireMove::MonteCarlo::nAttempted
@@ -113,7 +120,8 @@ void register_MonteCarlo_class(){
             
             MonteCarlo_exposer.def( 
                 "nAttempted"
-                , nAttempted_function_value );
+                , nAttempted_function_value
+                , "Return the number of attempted moves" );
         
         }
         { //::SireMove::MonteCarlo::nMoves
@@ -123,7 +131,8 @@ void register_MonteCarlo_class(){
             
             MonteCarlo_exposer.def( 
                 "nMoves"
-                , nMoves_function_value );
+                , nMoves_function_value
+                , "Return the total number of these moves that have been performed" );
         
         }
         { //::SireMove::MonteCarlo::nRejected
@@ -133,7 +142,8 @@ void register_MonteCarlo_class(){
             
             MonteCarlo_exposer.def( 
                 "nRejected"
-                , nRejected_function_value );
+                , nRejected_function_value
+                , "Return the number of rejected moves" );
         
         }
         { //::SireMove::MonteCarlo::setGenerator
@@ -144,7 +154,8 @@ void register_MonteCarlo_class(){
             MonteCarlo_exposer.def( 
                 "setGenerator"
                 , setGenerator_function_value
-                , ( bp::arg("generator") ) );
+                , ( bp::arg("generator") )
+                , "Set the random number generator to use for these moves" );
         
         }
         { //::SireMove::MonteCarlo::setUseOptimisedMoves
@@ -155,7 +166,8 @@ void register_MonteCarlo_class(){
             MonteCarlo_exposer.def( 
                 "setUseOptimisedMoves"
                 , setUseOptimisedMoves_function_value
-                , ( bp::arg("on") ) );
+                , ( bp::arg("on") )
+                , "Switch on or off use of the optimised MC code" );
         
         }
         { //::SireMove::MonteCarlo::typeName
@@ -165,7 +177,8 @@ void register_MonteCarlo_class(){
             
             MonteCarlo_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMove::MonteCarlo::usingOptimisedMoves
@@ -175,7 +188,8 @@ void register_MonteCarlo_class(){
             
             MonteCarlo_exposer.def( 
                 "usingOptimisedMoves"
-                , usingOptimisedMoves_function_value );
+                , usingOptimisedMoves_function_value
+                , "Return whether or not the optimised MC code is being used" );
         
         }
         MonteCarlo_exposer.staticmethod( "typeName" );

@@ -35,10 +35,10 @@ void register_CGAtomID_class(){
 
     { //::SireMol::GroupAtomID< SireMol::CGID, SireMol::AtomID >
         typedef bp::class_< SireMol::GroupAtomID< SireMol::CGID, SireMol::AtomID >, bp::bases< SireMol::GroupAtomIDBase, SireMol::AtomID, SireID::ID > > CGAtomID_exposer_t;
-        CGAtomID_exposer_t CGAtomID_exposer = CGAtomID_exposer_t( "CGAtomID", bp::init< >() );
+        CGAtomID_exposer_t CGAtomID_exposer = CGAtomID_exposer_t( "CGAtomID", "", bp::init< >("") );
         bp::scope CGAtomID_scope( CGAtomID_exposer );
-        CGAtomID_exposer.def( bp::init< SireMol::CGID const &, SireMol::AtomID const & >(( bp::arg("group"), bp::arg("atom") )) );
-        CGAtomID_exposer.def( bp::init< SireMol::GroupAtomID< SireMol::CGID, SireMol::AtomID > const & >(( bp::arg("other") )) );
+        CGAtomID_exposer.def( bp::init< SireMol::CGID const &, SireMol::AtomID const & >(( bp::arg("group"), bp::arg("atom") ), "") );
+        CGAtomID_exposer.def( bp::init< SireMol::GroupAtomID< SireMol::CGID, SireMol::AtomID > const & >(( bp::arg("other") ), "") );
         { //::SireMol::GroupAtomID< SireMol::CGID, SireMol::AtomID >::hash
         
             typedef SireMol::GroupAtomID< SireMol::CGID, SireMol::AtomID > exported_class_t;
@@ -47,7 +47,8 @@ void register_CGAtomID_class(){
             
             CGAtomID_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::GroupAtomID< SireMol::CGID, SireMol::AtomID >::isNull
@@ -58,7 +59,8 @@ void register_CGAtomID_class(){
             
             CGAtomID_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::GroupAtomID< SireMol::CGID, SireMol::AtomID >::map
@@ -70,7 +72,8 @@ void register_CGAtomID_class(){
             CGAtomID_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         CGAtomID_exposer.def( bp::self != bp::self );
@@ -84,7 +87,8 @@ void register_CGAtomID_class(){
             
             CGAtomID_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::GroupAtomID< SireMol::CGID, SireMol::AtomID >::typeName
@@ -95,7 +99,8 @@ void register_CGAtomID_class(){
             
             CGAtomID_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::GroupAtomID< SireMol::CGID, SireMol::AtomID >::what
@@ -106,7 +111,8 @@ void register_CGAtomID_class(){
             
             CGAtomID_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         CGAtomID_exposer.staticmethod( "typeName" );

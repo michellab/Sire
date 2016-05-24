@@ -37,12 +37,12 @@ void register_AtomSelection_class(){
 
     { //::SireMol::AtomSelection
         typedef bp::class_< SireMol::AtomSelection, bp::bases< SireMol::MoleculeProperty, SireMol::MolViewProperty, SireBase::Property > > AtomSelection_exposer_t;
-        AtomSelection_exposer_t AtomSelection_exposer = AtomSelection_exposer_t( "AtomSelection", bp::init< >() );
+        AtomSelection_exposer_t AtomSelection_exposer = AtomSelection_exposer_t( "AtomSelection", "This class holds information about a selection of atoms in a Molecule.\nThe selection is held in the most memory-efficient manner possible,\nand takes advantage of the CutGroup-based layout of Molecule objects.\n\nThis is a const-class, which returns new AtomSelections that\nrepresent any change.\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope AtomSelection_scope( AtomSelection_exposer );
-        AtomSelection_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molecule") )) );
-        AtomSelection_exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("moldata") )) );
-        AtomSelection_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") )) );
-        AtomSelection_exposer.def( bp::init< SireMol::AtomSelection const & >(( bp::arg("other") )) );
+        AtomSelection_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molecule") ), "Construct a selection of all of the atoms in the view\nmolecule") );
+        AtomSelection_exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("moldata") ), "Construct a selection of all of the atoms in the\nmolecule whose data is in moldata") );
+        AtomSelection_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "Construct a selection of all of the atoms in the\nmolecule that is described by the info object molinfo") );
+        AtomSelection_exposer.def( bp::init< SireMol::AtomSelection const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::AtomSelection::assertCompatibleWith
         
             typedef void ( ::SireMol::AtomSelection::*assertCompatibleWith_function_type)( ::SireMol::MoleculeData const & ) const;
@@ -51,7 +51,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "assertCompatibleWith"
                 , assertCompatibleWith_function_value
-                , ( bp::arg("moldata") ) );
+                , ( bp::arg("moldata") )
+                , "Assert that this selection is compatible with the molecule whose\ndata is in moldata\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::AtomSelection::assertCompatibleWith
@@ -62,7 +63,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "assertCompatibleWith"
                 , assertCompatibleWith_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "Assert that this selection is compatible with the molecule viewed\nin molview\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::AtomSelection::assertCompatibleWith
@@ -73,7 +75,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "assertCompatibleWith"
                 , assertCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "Assert that this selection is compatible with the molecule info\nin molinfo\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::AtomSelection::assertCompatibleWith
@@ -84,7 +87,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "assertCompatibleWith"
                 , assertCompatibleWith_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Assert that this selection is compatible with other\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::AtomSelection::assertSelected
@@ -95,7 +99,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "assertSelected"
                 , assertSelected_function_value
-                , ( bp::arg("atomidx") ) );
+                , ( bp::arg("atomidx") )
+                , "Assert that this selection contains the atom at index atomidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::assertSelected
@@ -106,7 +111,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "assertSelected"
                 , assertSelected_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "Assert that this selection contains all of the atoms identified\nby the ID atomid\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::contains
@@ -117,7 +123,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("atomidx") ) );
+                , ( bp::arg("atomidx") )
+                , "Return whether the atom at index atomidx is selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::contains
@@ -128,7 +135,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("cgidx") ) );
+                , ( bp::arg("cgidx") )
+                , "Return whether all of the atoms in the CutGroup at\nindex cgidx have been selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::contains
@@ -139,7 +147,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("residx") ) );
+                , ( bp::arg("residx") )
+                , "Return whether all of the atoms in the residue at\nindex residx have been selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::contains
@@ -150,7 +159,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("chainidx") ) );
+                , ( bp::arg("chainidx") )
+                , "Return whether all of the atoms in the chain at\nindex chainidx have been selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::contains
@@ -161,7 +171,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("segidx") ) );
+                , ( bp::arg("segidx") )
+                , "Return whether all of the atoms in the segments at\nindex segidx have been selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::contains
@@ -172,7 +183,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "Return whether all of the atoms identified by\natomid have been selected\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::contains
@@ -183,7 +195,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("cgid") ) );
+                , ( bp::arg("cgid") )
+                , "Return whether all of the atoms in the CutGroup(s) identified by\ncgid have been selected\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::contains
@@ -194,7 +207,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("resid") ) );
+                , ( bp::arg("resid") )
+                , "Return whether all of the atoms in the residue(s) identified by\nresid have been selected\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::contains
@@ -205,7 +219,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("chainid") ) );
+                , ( bp::arg("chainid") )
+                , "Return whether all of the atoms in the chain(s) identified by\nchainid have been selected\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::contains
@@ -216,7 +231,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("segid") ) );
+                , ( bp::arg("segid") )
+                , "Return whether all of the atoms in the segment(s) identified by\nsegid have been selected\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::contains
@@ -227,7 +243,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("selection") ) );
+                , ( bp::arg("selection") )
+                , "Return whether all of the atoms selected in selection are\nselected in this set\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::AtomSelection::deselect
@@ -239,7 +256,8 @@ void register_AtomSelection_class(){
                 "deselect"
                 , deselect_function_value
                 , ( bp::arg("atomidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Deselect the atom at index atomidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::deselect
@@ -251,7 +269,8 @@ void register_AtomSelection_class(){
                 "deselect"
                 , deselect_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Deselect the CutGroup at index cgidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::deselect
@@ -263,7 +282,8 @@ void register_AtomSelection_class(){
                 "deselect"
                 , deselect_function_value
                 , ( bp::arg("residx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Deselect the atoms in the residue at index residx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::deselect
@@ -275,7 +295,8 @@ void register_AtomSelection_class(){
                 "deselect"
                 , deselect_function_value
                 , ( bp::arg("chainidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Deselect all of the atoms in the chain at index chainidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::deselect
@@ -287,7 +308,8 @@ void register_AtomSelection_class(){
                 "deselect"
                 , deselect_function_value
                 , ( bp::arg("segidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Deselect all of the atoms in the segment at index segidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::deselect
@@ -299,7 +321,8 @@ void register_AtomSelection_class(){
                 "deselect"
                 , deselect_function_value
                 , ( bp::arg("atomidxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Deselect all of the atoms whose indicies are in atomidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::deselect
@@ -311,7 +334,8 @@ void register_AtomSelection_class(){
                 "deselect"
                 , deselect_function_value
                 , ( bp::arg("cgidxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Deselect all of the CutGroups whose indicies are in cgidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::deselect
@@ -323,7 +347,8 @@ void register_AtomSelection_class(){
                 "deselect"
                 , deselect_function_value
                 , ( bp::arg("residxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Deselect all of the atoms that are in the residues whose\nindicies are in residxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::deselect
@@ -335,7 +360,8 @@ void register_AtomSelection_class(){
                 "deselect"
                 , deselect_function_value
                 , ( bp::arg("chainidxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Deselect the atoms that are in the chains whose indicies\nare in chainidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::deselect
@@ -347,7 +373,8 @@ void register_AtomSelection_class(){
                 "deselect"
                 , deselect_function_value
                 , ( bp::arg("segidxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Deselect all of the atoms in the segments whose indicies are\nin segidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::deselect
@@ -359,7 +386,8 @@ void register_AtomSelection_class(){
                 "deselect"
                 , deselect_function_value
                 , ( bp::arg("atomidxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Deselect all of the atoms whose indicies are in atomidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::deselect
@@ -371,7 +399,8 @@ void register_AtomSelection_class(){
                 "deselect"
                 , deselect_function_value
                 , ( bp::arg("cgidxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Deselect all of the CutGroups whose indicies are in cgidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::deselect
@@ -383,7 +412,8 @@ void register_AtomSelection_class(){
                 "deselect"
                 , deselect_function_value
                 , ( bp::arg("residxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Deselect all of the atoms that are in the residues whose\nindicies are in residxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::deselect
@@ -395,7 +425,8 @@ void register_AtomSelection_class(){
                 "deselect"
                 , deselect_function_value
                 , ( bp::arg("chainidxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Deselect the atoms that are in the chains whose indicies\nare in chainidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::deselect
@@ -407,7 +438,8 @@ void register_AtomSelection_class(){
                 "deselect"
                 , deselect_function_value
                 , ( bp::arg("segidxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Deselect all of the atoms in the segments whose indicies are\nin segidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::deselect
@@ -419,7 +451,8 @@ void register_AtomSelection_class(){
                 "deselect"
                 , deselect_function_value
                 , ( bp::arg("atomid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Deselect all of the atoms that match atomid\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::deselect
@@ -431,7 +464,8 @@ void register_AtomSelection_class(){
                 "deselect"
                 , deselect_function_value
                 , ( bp::arg("cgid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Deselect the atoms in the CutGroups that match cgid\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::deselect
@@ -443,7 +477,8 @@ void register_AtomSelection_class(){
                 "deselect"
                 , deselect_function_value
                 , ( bp::arg("resid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Deselect the atoms in the residues that match resid\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::deselect
@@ -455,7 +490,8 @@ void register_AtomSelection_class(){
                 "deselect"
                 , deselect_function_value
                 , ( bp::arg("chainid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Deselect the atoms in the chains that match chainid\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::deselect
@@ -467,7 +503,8 @@ void register_AtomSelection_class(){
                 "deselect"
                 , deselect_function_value
                 , ( bp::arg("segid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Deselect all of the atoms in the segments that match segid\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::deselect
@@ -479,7 +516,8 @@ void register_AtomSelection_class(){
                 "deselect"
                 , deselect_function_value
                 , ( bp::arg("selection") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Deselect all of the atoms in selection\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::AtomSelection::deselectAll
@@ -490,7 +528,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "deselectAll"
                 , deselectAll_function_value
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Return a selection that has none of the atoms selected" );
         
         }
         { //::SireMol::AtomSelection::info
@@ -501,7 +540,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "info"
                 , info_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the info object for the molecule whose atoms\nare being selected" );
         
         }
         { //::SireMol::AtomSelection::intersect
@@ -513,7 +553,8 @@ void register_AtomSelection_class(){
                 "intersect"
                 , intersect_function_value
                 , ( bp::arg("atomidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Intersect this selection with the index atomidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::intersect
@@ -525,7 +566,8 @@ void register_AtomSelection_class(){
                 "intersect"
                 , intersect_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Intersect this selection with the index cgidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::intersect
@@ -537,7 +579,8 @@ void register_AtomSelection_class(){
                 "intersect"
                 , intersect_function_value
                 , ( bp::arg("residx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Intersect this selection with the index residx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::intersect
@@ -549,7 +592,8 @@ void register_AtomSelection_class(){
                 "intersect"
                 , intersect_function_value
                 , ( bp::arg("chainidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Intersect this selection with the index chainidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::intersect
@@ -561,7 +605,8 @@ void register_AtomSelection_class(){
                 "intersect"
                 , intersect_function_value
                 , ( bp::arg("segidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Intersect this selection with the index segidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::intersect
@@ -573,7 +618,8 @@ void register_AtomSelection_class(){
                 "intersect"
                 , intersect_function_value
                 , ( bp::arg("atomidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Intersect this with the atoms whose indicies are in atomidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::intersect
@@ -585,7 +631,8 @@ void register_AtomSelection_class(){
                 "intersect"
                 , intersect_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Intersect this with the atoms in the CutGroups whose indicies\nare in cgidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::intersect
@@ -597,7 +644,8 @@ void register_AtomSelection_class(){
                 "intersect"
                 , intersect_function_value
                 , ( bp::arg("residx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Intersect this with the atoms in the residues whose indicies are\nin residxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::intersect
@@ -609,7 +657,8 @@ void register_AtomSelection_class(){
                 "intersect"
                 , intersect_function_value
                 , ( bp::arg("chainidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Intersect this with the atoms in the chains whose indicies are\nin chainidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::intersect
@@ -621,7 +670,8 @@ void register_AtomSelection_class(){
                 "intersect"
                 , intersect_function_value
                 , ( bp::arg("segidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Intersect this with the atoms in the segments whose indicies are\nin segidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::intersect
@@ -633,7 +683,8 @@ void register_AtomSelection_class(){
                 "intersect"
                 , intersect_function_value
                 , ( bp::arg("atomidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Intersect this with the atoms whose indicies are in atomidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::intersect
@@ -645,7 +696,8 @@ void register_AtomSelection_class(){
                 "intersect"
                 , intersect_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Intersect this with the atoms in the CutGroups whose indicies\nare in cgidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::intersect
@@ -657,7 +709,8 @@ void register_AtomSelection_class(){
                 "intersect"
                 , intersect_function_value
                 , ( bp::arg("residx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Intersect this with the atoms in the residues whose indicies are\nin residxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::intersect
@@ -669,7 +722,8 @@ void register_AtomSelection_class(){
                 "intersect"
                 , intersect_function_value
                 , ( bp::arg("chainidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Intersect this with the atoms in the chains whose indicies are\nin chainidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::intersect
@@ -681,7 +735,8 @@ void register_AtomSelection_class(){
                 "intersect"
                 , intersect_function_value
                 , ( bp::arg("segidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Intersect this with the atoms in the segments whose indicies are\nin segidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::intersect
@@ -693,7 +748,8 @@ void register_AtomSelection_class(){
                 "intersect"
                 , intersect_function_value
                 , ( bp::arg("atomid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Intersect this set with the atoms that match\nthe ID atomid\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::intersect
@@ -705,7 +761,8 @@ void register_AtomSelection_class(){
                 "intersect"
                 , intersect_function_value
                 , ( bp::arg("cgid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Intersect this set with the atoms in the\nCutGroup(s) that match the ID cgid\nThrow: SireMol::missing_cutgroup\n" );
         
         }
         { //::SireMol::AtomSelection::intersect
@@ -717,7 +774,8 @@ void register_AtomSelection_class(){
                 "intersect"
                 , intersect_function_value
                 , ( bp::arg("resid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Intersect this set with the atoms in the\nresidue(s) that match the ID resid\nThrow: SireMol::missing_residue\n" );
         
         }
         { //::SireMol::AtomSelection::intersect
@@ -729,7 +787,8 @@ void register_AtomSelection_class(){
                 "intersect"
                 , intersect_function_value
                 , ( bp::arg("chainid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Intersect this set with the atoms in the\nchain(s) that match the ID chainid\nThrow: SireMol::missing_chain\n" );
         
         }
         { //::SireMol::AtomSelection::intersect
@@ -741,7 +800,8 @@ void register_AtomSelection_class(){
                 "intersect"
                 , intersect_function_value
                 , ( bp::arg("segid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Intersect this set with the atoms in the\nsegment(s) that match the ID segid\nThrow: SireMol::missing_segment\n" );
         
         }
         { //::SireMol::AtomSelection::intersect
@@ -753,7 +813,8 @@ void register_AtomSelection_class(){
                 "intersect"
                 , intersect_function_value
                 , ( bp::arg("selection") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Intersect this selection with other\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::AtomSelection::intersects
@@ -764,7 +825,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("atomidx") ) );
+                , ( bp::arg("atomidx") )
+                , "Return whether or not this contains the atom at index atomidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::intersects
@@ -775,7 +837,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("cgidx") ) );
+                , ( bp::arg("cgidx") )
+                , "Return whether or not the CutGroup at index cgidx contains\nsome atoms that have been selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::intersects
@@ -786,7 +849,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("residx") ) );
+                , ( bp::arg("residx") )
+                , "Return whether or not the residue at index residx contains\nsome atoms that have been selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::intersects
@@ -797,7 +861,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("chainidx") ) );
+                , ( bp::arg("chainidx") )
+                , "Return whether or not the chain at index chainidx contains\nsome atoms that have been selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::intersects
@@ -808,7 +873,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("segidx") ) );
+                , ( bp::arg("segidx") )
+                , "Return whether or not the segment at index segidx contains\nsome atoms that have been selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::intersects
@@ -819,7 +885,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "Return whether or not any of the atoms identified\nby atomid have been selected\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::intersects
@@ -830,7 +897,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("cgid") ) );
+                , ( bp::arg("cgid") )
+                , "Return whether or not any of the atoms in the CutGroup(s) identified\nby cgid have been selected\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::intersects
@@ -841,7 +909,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("resid") ) );
+                , ( bp::arg("resid") )
+                , "Return whether or not any of the atoms in the residue(s) identified\nby resid have been selected\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::intersects
@@ -852,7 +921,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("chainid") ) );
+                , ( bp::arg("chainid") )
+                , "Return whether or not any of the atoms in the chain(s) identified\nby chainid have been selected\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::intersects
@@ -863,7 +933,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("segid") ) );
+                , ( bp::arg("segid") )
+                , "Return whether or not any of the atoms in the segment(s) identified\nby segid have been selected\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::intersects
@@ -874,7 +945,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("selection") ) );
+                , ( bp::arg("selection") )
+                , "Return whether any of the atoms selected in selection\nare also selected in this set\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::AtomSelection::invert
@@ -885,7 +957,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "invert"
                 , invert_function_value
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Invert this selection" );
         
         }
         { //::SireMol::AtomSelection::isCompatibleWith
@@ -896,7 +969,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "Return whether or not this selection is compatible with the molecule info\nin molinfo" );
         
         }
         { //::SireMol::AtomSelection::isEmpty
@@ -906,7 +980,8 @@ void register_AtomSelection_class(){
             
             AtomSelection_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return wheter no atoms are selected" );
         
         }
         { //::SireMol::AtomSelection::isNull
@@ -916,7 +991,8 @@ void register_AtomSelection_class(){
             
             AtomSelection_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Return whether or not this is a null selection" );
         
         }
         { //::SireMol::AtomSelection::mask
@@ -928,7 +1004,8 @@ void register_AtomSelection_class(){
                 "mask"
                 , mask_function_value
                 , ( bp::arg("atomidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Mask this selection by the\natom at index atomidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::mask
@@ -940,7 +1017,8 @@ void register_AtomSelection_class(){
                 "mask"
                 , mask_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Mask this selection by the\nCutGroup at index cgidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::mask
@@ -952,7 +1030,8 @@ void register_AtomSelection_class(){
                 "mask"
                 , mask_function_value
                 , ( bp::arg("residx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Mask this selection by the\nresidue at index residx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::mask
@@ -964,7 +1043,8 @@ void register_AtomSelection_class(){
                 "mask"
                 , mask_function_value
                 , ( bp::arg("chainidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Mask this selection by the\nchain at index chainidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::mask
@@ -976,7 +1056,8 @@ void register_AtomSelection_class(){
                 "mask"
                 , mask_function_value
                 , ( bp::arg("segidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Mask this selection by the\nsegment at index segidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::mask
@@ -988,7 +1069,8 @@ void register_AtomSelection_class(){
                 "mask"
                 , mask_function_value
                 , ( bp::arg("atomidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Mask this selection by the\nindicies are in atomidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::mask
@@ -1000,7 +1082,8 @@ void register_AtomSelection_class(){
                 "mask"
                 , mask_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Mask this selection by the\nCutGroups whose indicies are in cgidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::mask
@@ -1012,7 +1095,8 @@ void register_AtomSelection_class(){
                 "mask"
                 , mask_function_value
                 , ( bp::arg("residx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Mask this selection by the\nresidues whose indicies are in residxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::mask
@@ -1024,7 +1108,8 @@ void register_AtomSelection_class(){
                 "mask"
                 , mask_function_value
                 , ( bp::arg("chainidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Mask this selection by the\nchains whose indicies are in chainidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::mask
@@ -1036,7 +1121,8 @@ void register_AtomSelection_class(){
                 "mask"
                 , mask_function_value
                 , ( bp::arg("segidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Mask this selection by the\nsegments whose indicies are in segidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::mask
@@ -1048,7 +1134,8 @@ void register_AtomSelection_class(){
                 "mask"
                 , mask_function_value
                 , ( bp::arg("atomidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Mask this selection by the\nindicies are in atomidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::mask
@@ -1060,7 +1147,8 @@ void register_AtomSelection_class(){
                 "mask"
                 , mask_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Mask this selection by the\nCutGroups whose indicies are in cgidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::mask
@@ -1072,7 +1160,8 @@ void register_AtomSelection_class(){
                 "mask"
                 , mask_function_value
                 , ( bp::arg("residx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Mask this selection by the\nresidues whose indicies are in residxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::mask
@@ -1084,7 +1173,8 @@ void register_AtomSelection_class(){
                 "mask"
                 , mask_function_value
                 , ( bp::arg("chainidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Mask this selection by the\nchains whose indicies are in chainidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::mask
@@ -1096,7 +1186,8 @@ void register_AtomSelection_class(){
                 "mask"
                 , mask_function_value
                 , ( bp::arg("segidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Mask this selection by the\nsegments whose indicies are in segidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::mask
@@ -1108,7 +1199,8 @@ void register_AtomSelection_class(){
                 "mask"
                 , mask_function_value
                 , ( bp::arg("atomid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Mask this selection by the\natoms that match the ID atomid\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::mask
@@ -1120,7 +1212,8 @@ void register_AtomSelection_class(){
                 "mask"
                 , mask_function_value
                 , ( bp::arg("cgid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Mask this selection by the\nCutGroups that match the ID cgid\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::mask
@@ -1132,7 +1225,8 @@ void register_AtomSelection_class(){
                 "mask"
                 , mask_function_value
                 , ( bp::arg("resid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Mask this selection by the\nresidues that match the ID atomid\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::mask
@@ -1144,7 +1238,8 @@ void register_AtomSelection_class(){
                 "mask"
                 , mask_function_value
                 , ( bp::arg("chainid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Mask this selection by the\nchains that match the ID chainid\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::mask
@@ -1156,7 +1251,8 @@ void register_AtomSelection_class(){
                 "mask"
                 , mask_function_value
                 , ( bp::arg("segid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Mask this selection by the\nsegments that match the ID atomid\nThrow: SireMol::missing_segments\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::mask
@@ -1168,7 +1264,8 @@ void register_AtomSelection_class(){
                 "mask"
                 , mask_function_value
                 , ( bp::arg("selection") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Mask this selection by other\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::AtomSelection::nAtoms
@@ -1178,7 +1275,8 @@ void register_AtomSelection_class(){
             
             AtomSelection_exposer.def( 
                 "nAtoms"
-                , nAtoms_function_value );
+                , nAtoms_function_value
+                , "Return the total number of atoms in the molecule" );
         
         }
         { //::SireMol::AtomSelection::nChains
@@ -1188,7 +1286,8 @@ void register_AtomSelection_class(){
             
             AtomSelection_exposer.def( 
                 "nChains"
-                , nChains_function_value );
+                , nChains_function_value
+                , "Return the total number of chains in the molecule" );
         
         }
         { //::SireMol::AtomSelection::nCutGroups
@@ -1198,7 +1297,8 @@ void register_AtomSelection_class(){
             
             AtomSelection_exposer.def( 
                 "nCutGroups"
-                , nCutGroups_function_value );
+                , nCutGroups_function_value
+                , "Return the total number of CutGroups in the molecule" );
         
         }
         { //::SireMol::AtomSelection::nResidues
@@ -1208,7 +1308,8 @@ void register_AtomSelection_class(){
             
             AtomSelection_exposer.def( 
                 "nResidues"
-                , nResidues_function_value );
+                , nResidues_function_value
+                , "Return the total number of residues in the molecule" );
         
         }
         { //::SireMol::AtomSelection::nSegments
@@ -1218,7 +1319,8 @@ void register_AtomSelection_class(){
             
             AtomSelection_exposer.def( 
                 "nSegments"
-                , nSegments_function_value );
+                , nSegments_function_value
+                , "Return the total number of segments in this molecule" );
         
         }
         { //::SireMol::AtomSelection::nSelected
@@ -1228,7 +1330,8 @@ void register_AtomSelection_class(){
             
             AtomSelection_exposer.def( 
                 "nSelected"
-                , nSelected_function_value );
+                , nSelected_function_value
+                , "Return the number of selected atoms" );
         
         }
         { //::SireMol::AtomSelection::nSelected
@@ -1239,7 +1342,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "nSelected"
                 , nSelected_function_value
-                , ( bp::arg("cgidx") ) );
+                , ( bp::arg("cgidx") )
+                , "Return the number of atoms selected in the CutGroup at\nindex cgidx" );
         
         }
         { //::SireMol::AtomSelection::nSelected
@@ -1250,7 +1354,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "nSelected"
                 , nSelected_function_value
-                , ( bp::arg("atomidx") ) );
+                , ( bp::arg("atomidx") )
+                , "Return whether the atom at index atomidx has been selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::nSelected
@@ -1261,7 +1366,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "nSelected"
                 , nSelected_function_value
-                , ( bp::arg("residx") ) );
+                , ( bp::arg("residx") )
+                , "Return the number of atoms from the residue at index residx\nthat have been selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::nSelected
@@ -1272,7 +1378,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "nSelected"
                 , nSelected_function_value
-                , ( bp::arg("chainidx") ) );
+                , ( bp::arg("chainidx") )
+                , "Return the number of atoms from the chain at index chainidx\nthat have been selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::nSelected
@@ -1283,7 +1390,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "nSelected"
                 , nSelected_function_value
-                , ( bp::arg("segidx") ) );
+                , ( bp::arg("segidx") )
+                , "Return the number of atoms from the segment at index segidx\nthat have been selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::nSelected
@@ -1294,7 +1402,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "nSelected"
                 , nSelected_function_value
-                , ( bp::arg("cgid") ) );
+                , ( bp::arg("cgid") )
+                , "Return the number of atoms from the CutGroups identified\nby cgid that have been selected\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::nSelected
@@ -1305,7 +1414,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "nSelected"
                 , nSelected_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "Return the number of atoms that are identified by\natomid that have been selected\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::nSelected
@@ -1316,7 +1426,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "nSelected"
                 , nSelected_function_value
-                , ( bp::arg("resid") ) );
+                , ( bp::arg("resid") )
+                , "Return the number of atoms from the residues identified\nby resid that have been selected\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::nSelected
@@ -1327,7 +1438,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "nSelected"
                 , nSelected_function_value
-                , ( bp::arg("chainid") ) );
+                , ( bp::arg("chainid") )
+                , "Return the number of atoms from the chain(s) identified\nby chainid that have been selected\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::nSelected
@@ -1338,7 +1450,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "nSelected"
                 , nSelected_function_value
-                , ( bp::arg("segid") ) );
+                , ( bp::arg("segid") )
+                , "Return the number of atoms from the segment(s)\nidentified by segid that have been selected\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::nSelected
@@ -1349,7 +1462,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "nSelected"
                 , nSelected_function_value
-                , ( bp::arg("selection") ) );
+                , ( bp::arg("selection") )
+                , "Return the number of atoms from the passed selection\nthat have also been selected in this selection\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::AtomSelection::nSelectedAtoms
@@ -1359,7 +1473,8 @@ void register_AtomSelection_class(){
             
             AtomSelection_exposer.def( 
                 "nSelectedAtoms"
-                , nSelectedAtoms_function_value );
+                , nSelectedAtoms_function_value
+                , "Return the total number of selected atoms" );
         
         }
         { //::SireMol::AtomSelection::nSelectedChains
@@ -1369,7 +1484,8 @@ void register_AtomSelection_class(){
             
             AtomSelection_exposer.def( 
                 "nSelectedChains"
-                , nSelectedChains_function_value );
+                , nSelectedChains_function_value
+                , "Return the number of chains that have at least one selected atom" );
         
         }
         { //::SireMol::AtomSelection::nSelectedCutGroups
@@ -1379,7 +1495,8 @@ void register_AtomSelection_class(){
             
             AtomSelection_exposer.def( 
                 "nSelectedCutGroups"
-                , nSelectedCutGroups_function_value );
+                , nSelectedCutGroups_function_value
+                , "Return the number of CutGroups that have at least\none selected atom" );
         
         }
         { //::SireMol::AtomSelection::nSelectedResidues
@@ -1389,7 +1506,8 @@ void register_AtomSelection_class(){
             
             AtomSelection_exposer.def( 
                 "nSelectedResidues"
-                , nSelectedResidues_function_value );
+                , nSelectedResidues_function_value
+                , "Return the number of residues that contain at\nleast one selected atom" );
         
         }
         { //::SireMol::AtomSelection::nSelectedSegments
@@ -1399,7 +1517,8 @@ void register_AtomSelection_class(){
             
             AtomSelection_exposer.def( 
                 "nSelectedSegments"
-                , nSelectedSegments_function_value );
+                , nSelectedSegments_function_value
+                , "Return the number of segments that contain at\nleast one selected atom" );
         
         }
         AtomSelection_exposer.def( bp::self != bp::self );
@@ -1412,7 +1531,8 @@ void register_AtomSelection_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AtomSelection_exposer.def( bp::self == bp::self );
@@ -1425,7 +1545,8 @@ void register_AtomSelection_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("atomidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select the atom at index atomidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::select
@@ -1437,7 +1558,8 @@ void register_AtomSelection_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select the CutGroup at index cgidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::select
@@ -1449,7 +1571,8 @@ void register_AtomSelection_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("residx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select the atoms in the residue at index residx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::select
@@ -1461,7 +1584,8 @@ void register_AtomSelection_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("chainidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select all of the atoms in the chain at index chainidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::select
@@ -1473,7 +1597,8 @@ void register_AtomSelection_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("segidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select all of the atoms in the segment at index segidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::select
@@ -1485,7 +1610,8 @@ void register_AtomSelection_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("atomidxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Deselect all of the atoms whose indicies are in atomidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::select
@@ -1497,7 +1623,8 @@ void register_AtomSelection_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("cgidxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select all of the CutGroups whose indicies are in cgidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::select
@@ -1509,7 +1636,8 @@ void register_AtomSelection_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("residxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select the atoms in the residues whose indicies are in residxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::select
@@ -1521,7 +1649,8 @@ void register_AtomSelection_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("chainidxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select the atoms that are in the chains whose indicies are in chainidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::select
@@ -1533,7 +1662,8 @@ void register_AtomSelection_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("segidxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select the atoms that are in the segments whose indicies\nare in segidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::select
@@ -1545,7 +1675,8 @@ void register_AtomSelection_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("atomidxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Deselect all of the atoms whose indicies are in atomidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::select
@@ -1557,7 +1688,8 @@ void register_AtomSelection_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("cgidxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select all of the CutGroups whose indicies are in cgidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::select
@@ -1569,7 +1701,8 @@ void register_AtomSelection_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("residxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select the atoms in the residues whose indicies are in residxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::select
@@ -1581,7 +1714,8 @@ void register_AtomSelection_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("chainidxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select the atoms that are in the chains whose indicies are in chainidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::select
@@ -1593,7 +1727,8 @@ void register_AtomSelection_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("segidxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select the atoms that are in the segments whose indicies\nare in segidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::select
@@ -1605,7 +1740,8 @@ void register_AtomSelection_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("atomid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select all of the atoms that match atomid\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::select
@@ -1617,7 +1753,8 @@ void register_AtomSelection_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("cgid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select the atoms in the CutGroups that match cgid\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::select
@@ -1629,7 +1766,8 @@ void register_AtomSelection_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("resid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select the atoms in the residues that match resid\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::select
@@ -1641,7 +1779,8 @@ void register_AtomSelection_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("chainid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select the atoms in the chains that match chainid\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::select
@@ -1653,7 +1792,8 @@ void register_AtomSelection_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("segid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select all of the atoms in the segments that match segid\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::select
@@ -1665,7 +1805,8 @@ void register_AtomSelection_class(){
                 "select"
                 , select_function_value
                 , ( bp::arg("selection") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select all of the atoms in selection\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::AtomSelection::selectAll
@@ -1676,7 +1817,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selectAll"
                 , selectAll_function_value
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Return a selection that has all of the atoms selected" );
         
         }
         { //::SireMol::AtomSelection::selectNone
@@ -1687,7 +1829,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selectNone"
                 , selectNone_function_value
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Return a selection that has none of the atoms selected" );
         
         }
         { //::SireMol::AtomSelection::selectOnly
@@ -1699,7 +1842,8 @@ void register_AtomSelection_class(){
                 "selectOnly"
                 , selectOnly_function_value
                 , ( bp::arg("atomidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select only the atom at index atomidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectOnly
@@ -1711,7 +1855,8 @@ void register_AtomSelection_class(){
                 "selectOnly"
                 , selectOnly_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select only the CutGroup at index cgidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectOnly
@@ -1723,7 +1868,8 @@ void register_AtomSelection_class(){
                 "selectOnly"
                 , selectOnly_function_value
                 , ( bp::arg("residx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select only the atoms in the residue at index residx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectOnly
@@ -1735,7 +1881,8 @@ void register_AtomSelection_class(){
                 "selectOnly"
                 , selectOnly_function_value
                 , ( bp::arg("chainidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select only the atoms that are in the chain at index chainidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectOnly
@@ -1747,7 +1894,8 @@ void register_AtomSelection_class(){
                 "selectOnly"
                 , selectOnly_function_value
                 , ( bp::arg("segidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select only the atoms that are in the segment at index segidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectOnly
@@ -1759,7 +1907,8 @@ void register_AtomSelection_class(){
                 "selectOnly"
                 , selectOnly_function_value
                 , ( bp::arg("atomidxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select only the atoms whose indicies are in atomidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectOnly
@@ -1771,7 +1920,8 @@ void register_AtomSelection_class(){
                 "selectOnly"
                 , selectOnly_function_value
                 , ( bp::arg("cgidxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select only the atoms in the CutGroups whose indicies are in cgidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectOnly
@@ -1783,7 +1933,8 @@ void register_AtomSelection_class(){
                 "selectOnly"
                 , selectOnly_function_value
                 , ( bp::arg("residxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select only the atoms that in the residues whose indicies are\nin residxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectOnly
@@ -1795,7 +1946,8 @@ void register_AtomSelection_class(){
                 "selectOnly"
                 , selectOnly_function_value
                 , ( bp::arg("chainidxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select only the atoms that are in the chains whose indicies are\nin chainidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectOnly
@@ -1807,7 +1959,8 @@ void register_AtomSelection_class(){
                 "selectOnly"
                 , selectOnly_function_value
                 , ( bp::arg("segidxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select only the atoms in the segments whose indicies are\nin segidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectOnly
@@ -1819,7 +1972,8 @@ void register_AtomSelection_class(){
                 "selectOnly"
                 , selectOnly_function_value
                 , ( bp::arg("atomidxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select only the atoms whose indicies are in atomidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectOnly
@@ -1831,7 +1985,8 @@ void register_AtomSelection_class(){
                 "selectOnly"
                 , selectOnly_function_value
                 , ( bp::arg("cgidxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select only the atoms in the CutGroups whose indicies are in cgidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectOnly
@@ -1843,7 +1998,8 @@ void register_AtomSelection_class(){
                 "selectOnly"
                 , selectOnly_function_value
                 , ( bp::arg("residxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select only the atoms that in the residues whose indicies are\nin residxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectOnly
@@ -1855,7 +2011,8 @@ void register_AtomSelection_class(){
                 "selectOnly"
                 , selectOnly_function_value
                 , ( bp::arg("chainidxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select only the atoms that are in the chains whose indicies are\nin chainidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectOnly
@@ -1867,7 +2024,8 @@ void register_AtomSelection_class(){
                 "selectOnly"
                 , selectOnly_function_value
                 , ( bp::arg("segidxs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select only the atoms in the segments whose indicies are\nin segidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectOnly
@@ -1879,7 +2037,8 @@ void register_AtomSelection_class(){
                 "selectOnly"
                 , selectOnly_function_value
                 , ( bp::arg("atomid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select only that atoms that match atomid\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectOnly
@@ -1891,7 +2050,8 @@ void register_AtomSelection_class(){
                 "selectOnly"
                 , selectOnly_function_value
                 , ( bp::arg("cgid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select only the atoms that are in the CutGroups that\nmatch cgid\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectOnly
@@ -1903,7 +2063,8 @@ void register_AtomSelection_class(){
                 "selectOnly"
                 , selectOnly_function_value
                 , ( bp::arg("resid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select only the atoms in the residues that match resid\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectOnly
@@ -1915,7 +2076,8 @@ void register_AtomSelection_class(){
                 "selectOnly"
                 , selectOnly_function_value
                 , ( bp::arg("chainid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select only the atoms in the chains that match chainid\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectOnly
@@ -1927,7 +2089,8 @@ void register_AtomSelection_class(){
                 "selectOnly"
                 , selectOnly_function_value
                 , ( bp::arg("segid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select only the atoms in the segments that match segid\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectOnly
@@ -1939,7 +2102,8 @@ void register_AtomSelection_class(){
                 "selectOnly"
                 , selectOnly_function_value
                 , ( bp::arg("selection") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Select only the atoms that are selected in selection\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::AtomSelection::selected
@@ -1950,7 +2114,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selected"
                 , selected_function_value
-                , ( bp::arg("cgatomidx") ) );
+                , ( bp::arg("cgatomidx") )
+                , "Return whether or not the atom at index cgatomidx has\nbeen selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selected
@@ -1961,7 +2126,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selected"
                 , selected_function_value
-                , ( bp::arg("atomidx") ) );
+                , ( bp::arg("atomidx") )
+                , "Return whether the atom at index atomidx has been selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selected
@@ -1972,7 +2138,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selected"
                 , selected_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "Return whether any of the atom(s) identified by the ID atomid\nhave been selected\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selected
@@ -1983,7 +2150,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selected"
                 , selected_function_value
-                , ( bp::arg("cgidx") ) );
+                , ( bp::arg("cgidx") )
+                , "Return whether or not any atom in the CutGroup\nat index cgidx has been selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selected
@@ -1994,7 +2162,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selected"
                 , selected_function_value
-                , ( bp::arg("residx") ) );
+                , ( bp::arg("residx") )
+                , "Return whether or not any atoms in the residue\nat index residx has been selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selected
@@ -2005,7 +2174,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selected"
                 , selected_function_value
-                , ( bp::arg("chainidx") ) );
+                , ( bp::arg("chainidx") )
+                , "Return whether or not any atoms in the chain\nat index chainidx have been selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selected
@@ -2016,7 +2186,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selected"
                 , selected_function_value
-                , ( bp::arg("segidx") ) );
+                , ( bp::arg("segidx") )
+                , "Return whether or not any atoms in the segment at\nindex segidx have been selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selected
@@ -2027,7 +2198,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selected"
                 , selected_function_value
-                , ( bp::arg("cgid") ) );
+                , ( bp::arg("cgid") )
+                , "Return whether any atoms in the CutGroup(s) identified\nby cgid have been selected\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selected
@@ -2038,7 +2210,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selected"
                 , selected_function_value
-                , ( bp::arg("resid") ) );
+                , ( bp::arg("resid") )
+                , "Return whether any atoms in the residue(s) identified\nby resid have been selected\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selected
@@ -2049,7 +2222,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selected"
                 , selected_function_value
-                , ( bp::arg("chainid") ) );
+                , ( bp::arg("chainid") )
+                , "Return whether any atoms in the chain(s) identified\nby chainid have been selected\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selected
@@ -2060,7 +2234,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selected"
                 , selected_function_value
-                , ( bp::arg("segid") ) );
+                , ( bp::arg("segid") )
+                , "Return whether any atoms in the segment(s) identified\nby segid have been selected\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selected
@@ -2071,7 +2246,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selected"
                 , selected_function_value
-                , ( bp::arg("selection") ) );
+                , ( bp::arg("selection") )
+                , "Return whether or not any of the atoms selected in selection\nare also selected in this set\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::AtomSelection::selectedAll
@@ -2081,7 +2257,8 @@ void register_AtomSelection_class(){
             
             AtomSelection_exposer.def( 
                 "selectedAll"
-                , selectedAll_function_value );
+                , selectedAll_function_value
+                , "Return whether or not all of the atoms are selected" );
         
         }
         { //::SireMol::AtomSelection::selectedAll
@@ -2092,7 +2269,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
-                , ( bp::arg("atomidx") ) );
+                , ( bp::arg("atomidx") )
+                , "Return whether or not the atom at index atomidx is selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectedAll
@@ -2103,7 +2281,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
-                , ( bp::arg("cgidx") ) );
+                , ( bp::arg("cgidx") )
+                , "Return whether or not all of the atoms in the CutGroup\nat index cgidx have been selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectedAll
@@ -2114,7 +2293,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
-                , ( bp::arg("residx") ) );
+                , ( bp::arg("residx") )
+                , "Return whether or not all of the atoms in the residue\nat index residx have been selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectedAll
@@ -2125,7 +2305,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
-                , ( bp::arg("chainidx") ) );
+                , ( bp::arg("chainidx") )
+                , "Return whether or not all of the atoms in the chain\nat index chainidx have been selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectedAll
@@ -2136,7 +2317,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
-                , ( bp::arg("segidx") ) );
+                , ( bp::arg("segidx") )
+                , "Return whether or not all of the atoms in the segment\nat index segidx have been selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectedAll
@@ -2147,7 +2329,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "Return whether or not all of the atoms matching the\nID atomid have been selected\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectedAll
@@ -2158,7 +2341,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
-                , ( bp::arg("cgid") ) );
+                , ( bp::arg("cgid") )
+                , "Return whether or not all of the atoms in the CutGroups matching the\nID cgid have been selected\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectedAll
@@ -2169,7 +2353,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
-                , ( bp::arg("resid") ) );
+                , ( bp::arg("resid") )
+                , "Return whether or not all of the atoms in the residues matching the\nID resid have been selected\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectedAll
@@ -2180,7 +2365,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
-                , ( bp::arg("chainid") ) );
+                , ( bp::arg("chainid") )
+                , "Return whether or not all of the atoms in the chains matching the\nID atomid have been selected\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectedAll
@@ -2191,7 +2377,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
-                , ( bp::arg("segid") ) );
+                , ( bp::arg("segid") )
+                , "Return whether or not all of the atoms in the segments matching the\nID atomid have been selected\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectedAll
@@ -2202,7 +2389,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selectedAll"
                 , selectedAll_function_value
-                , ( bp::arg("selection") ) );
+                , ( bp::arg("selection") )
+                , "Return whether or not all of the atoms selected in selection\nhave also been selected in this object\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::AtomSelection::selectedAllAtoms
@@ -2212,7 +2400,8 @@ void register_AtomSelection_class(){
             
             AtomSelection_exposer.def( 
                 "selectedAllAtoms"
-                , selectedAllAtoms_function_value );
+                , selectedAllAtoms_function_value
+                , "Return whether all atoms have been selected" );
         
         }
         { //::SireMol::AtomSelection::selectedAllChains
@@ -2222,7 +2411,8 @@ void register_AtomSelection_class(){
             
             AtomSelection_exposer.def( 
                 "selectedAllChains"
-                , selectedAllChains_function_value );
+                , selectedAllChains_function_value
+                , "Return whether all chains contain at least\none selected atom" );
         
         }
         { //::SireMol::AtomSelection::selectedAllCutGroups
@@ -2232,7 +2422,8 @@ void register_AtomSelection_class(){
             
             AtomSelection_exposer.def( 
                 "selectedAllCutGroups"
-                , selectedAllCutGroups_function_value );
+                , selectedAllCutGroups_function_value
+                , "Return whether all CutGroups contain at least\none selected atom" );
         
         }
         { //::SireMol::AtomSelection::selectedAllResidues
@@ -2242,7 +2433,8 @@ void register_AtomSelection_class(){
             
             AtomSelection_exposer.def( 
                 "selectedAllResidues"
-                , selectedAllResidues_function_value );
+                , selectedAllResidues_function_value
+                , "Return whether all residues contain at least\none selected atom" );
         
         }
         { //::SireMol::AtomSelection::selectedAllSegments
@@ -2252,7 +2444,8 @@ void register_AtomSelection_class(){
             
             AtomSelection_exposer.def( 
                 "selectedAllSegments"
-                , selectedAllSegments_function_value );
+                , selectedAllSegments_function_value
+                , "Return whether all segments contain at least\none selected atom" );
         
         }
         { //::SireMol::AtomSelection::selectedAtoms
@@ -2262,7 +2455,8 @@ void register_AtomSelection_class(){
             
             AtomSelection_exposer.def( 
                 "selectedAtoms"
-                , selectedAtoms_function_value );
+                , selectedAtoms_function_value
+                , "Return the list of indicies of all of the atoms that\nhave been selected" );
         
         }
         { //::SireMol::AtomSelection::selectedAtoms
@@ -2273,7 +2467,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selectedAtoms"
                 , selectedAtoms_function_value
-                , ( bp::arg("cgid") ) );
+                , ( bp::arg("cgid") )
+                , "Return the set of indicies of the atoms in the CutGroup\nat index cgidx that are selected within this CutGroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectedChains
@@ -2283,7 +2478,8 @@ void register_AtomSelection_class(){
             
             AtomSelection_exposer.def( 
                 "selectedChains"
-                , selectedChains_function_value );
+                , selectedChains_function_value
+                , "Return the list of chains that contain at least one selected atom" );
         
         }
         { //::SireMol::AtomSelection::selectedCutGroups
@@ -2293,7 +2489,8 @@ void register_AtomSelection_class(){
             
             AtomSelection_exposer.def( 
                 "selectedCutGroups"
-                , selectedCutGroups_function_value );
+                , selectedCutGroups_function_value
+                , "Return the list of indicies of CutGroups that contain at least\none selected atom" );
         
         }
         { //::SireMol::AtomSelection::selectedNone
@@ -2303,7 +2500,8 @@ void register_AtomSelection_class(){
             
             AtomSelection_exposer.def( 
                 "selectedNone"
-                , selectedNone_function_value );
+                , selectedNone_function_value
+                , "Return whether or not no atoms have been selected" );
         
         }
         { //::SireMol::AtomSelection::selectedNone
@@ -2314,7 +2512,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selectedNone"
                 , selectedNone_function_value
-                , ( bp::arg("atomidx") ) );
+                , ( bp::arg("atomidx") )
+                , "Return whether the atom at index atomidx has not been selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectedNone
@@ -2325,7 +2524,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selectedNone"
                 , selectedNone_function_value
-                , ( bp::arg("cgidx") ) );
+                , ( bp::arg("cgidx") )
+                , "Return whether none of the atoms in the CutGroup at\nindex cgidx have been selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectedNone
@@ -2336,7 +2536,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selectedNone"
                 , selectedNone_function_value
-                , ( bp::arg("residx") ) );
+                , ( bp::arg("residx") )
+                , "Return whether none of the atoms in the residue at\nindex residx have been selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectedNone
@@ -2347,7 +2548,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selectedNone"
                 , selectedNone_function_value
-                , ( bp::arg("chainidx") ) );
+                , ( bp::arg("chainidx") )
+                , "Return whether none of the atoms in the chain at\nindex chainidx have been selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectedNone
@@ -2358,7 +2560,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selectedNone"
                 , selectedNone_function_value
-                , ( bp::arg("segidx") ) );
+                , ( bp::arg("segidx") )
+                , "Return whether none of the atoms in the segment at\nindex segidx have been selected\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectedNone
@@ -2369,7 +2572,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selectedNone"
                 , selectedNone_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "Return whether none of the atoms identified by atomid\nhave been selected\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectedNone
@@ -2380,7 +2584,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selectedNone"
                 , selectedNone_function_value
-                , ( bp::arg("cgid") ) );
+                , ( bp::arg("cgid") )
+                , "Return whether none of the atoms in the CutGroup(s)\nidentified by cgid have been selected\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectedNone
@@ -2391,7 +2596,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selectedNone"
                 , selectedNone_function_value
-                , ( bp::arg("resid") ) );
+                , ( bp::arg("resid") )
+                , "Return whether none of the atoms in the residue(s)\nidentified by resid have been selected\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectedNone
@@ -2402,7 +2608,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selectedNone"
                 , selectedNone_function_value
-                , ( bp::arg("chainid") ) );
+                , ( bp::arg("chainid") )
+                , "Return whether none of the atoms in the chain(s)\nidentified by chainid have been selected\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectedNone
@@ -2413,7 +2620,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selectedNone"
                 , selectedNone_function_value
-                , ( bp::arg("segid") ) );
+                , ( bp::arg("segid") )
+                , "Return whether none of the atoms in the segment(s)\nidentified by segid have been selected\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::selectedNone
@@ -2424,7 +2632,8 @@ void register_AtomSelection_class(){
             AtomSelection_exposer.def( 
                 "selectedNone"
                 , selectedNone_function_value
-                , ( bp::arg("selection") ) );
+                , ( bp::arg("selection") )
+                , "Return whether none of the atoms selected in selection have\nbeen selected in this set\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::AtomSelection::selectedResidues
@@ -2434,7 +2643,8 @@ void register_AtomSelection_class(){
             
             AtomSelection_exposer.def( 
                 "selectedResidues"
-                , selectedResidues_function_value );
+                , selectedResidues_function_value
+                , "Return the list of residues that contain at least one selected atom" );
         
         }
         { //::SireMol::AtomSelection::selectedSegments
@@ -2444,7 +2654,8 @@ void register_AtomSelection_class(){
             
             AtomSelection_exposer.def( 
                 "selectedSegments"
-                , selectedSegments_function_value );
+                , selectedSegments_function_value
+                , "Return the list of segments that contain at least one selected atom" );
         
         }
         { //::SireMol::AtomSelection::subtract
@@ -2456,7 +2667,8 @@ void register_AtomSelection_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("atomidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Subtract the atom at index atomidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::subtract
@@ -2468,7 +2680,8 @@ void register_AtomSelection_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Subtract the atoms in the CutGroup\nat index cgidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::subtract
@@ -2480,7 +2693,8 @@ void register_AtomSelection_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("residx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Subtract the atoms in the residue\nat index residx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::subtract
@@ -2492,7 +2706,8 @@ void register_AtomSelection_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("chainidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Subtract the atoms in the chain\nat index chainidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::subtract
@@ -2504,7 +2719,8 @@ void register_AtomSelection_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("segidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Subtract the atoms in the segment\nat index segidx have been subtracted\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::subtract
@@ -2516,7 +2732,8 @@ void register_AtomSelection_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("atomidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Subtract the atoms whose indicies\nare in atomidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::subtract
@@ -2528,7 +2745,8 @@ void register_AtomSelection_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Subtract the atoms that\nare in the CutGroups whose indicies are in cgidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::subtract
@@ -2540,7 +2758,8 @@ void register_AtomSelection_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("residx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Subtract the atoms that\nare in the residues whose indicies are in residxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::subtract
@@ -2552,7 +2771,8 @@ void register_AtomSelection_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("chainidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Subtract all of the atoms that\nare in the chains whose indicies are in chainidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::subtract
@@ -2564,7 +2784,8 @@ void register_AtomSelection_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("segidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Subtract all of the atoms that\nare in the segments whose indicies are in segidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::subtract
@@ -2576,7 +2797,8 @@ void register_AtomSelection_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("atomidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Subtract the atoms whose indicies\nare in atomidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::subtract
@@ -2588,7 +2810,8 @@ void register_AtomSelection_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Subtract the atoms that\nare in the CutGroups whose indicies are in cgidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::subtract
@@ -2600,7 +2823,8 @@ void register_AtomSelection_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("residx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Subtract the atoms that\nare in the residues whose indicies are in residxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::subtract
@@ -2612,7 +2836,8 @@ void register_AtomSelection_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("chainidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Subtract all of the atoms that\nare in the chains whose indicies are in chainidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::subtract
@@ -2624,7 +2849,8 @@ void register_AtomSelection_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("segidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Subtract all of the atoms that\nare in the segments whose indicies are in segidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::subtract
@@ -2636,7 +2862,8 @@ void register_AtomSelection_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("atomid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Subtract all of the atoms that\nmatch the ID atomid\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::subtract
@@ -2648,7 +2875,8 @@ void register_AtomSelection_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("cgid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Subtract all of the atoms that\nare in the CutGroup(s) that match the ID cgid\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::subtract
@@ -2660,7 +2888,8 @@ void register_AtomSelection_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("resid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Subtract all of the atoms that\nare in the residue(s) that match the ID resid\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::subtract
@@ -2672,7 +2901,8 @@ void register_AtomSelection_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("chainid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Subtract all of the atoms that\nare in the chain(s) that match the ID resid\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::subtract
@@ -2684,7 +2914,8 @@ void register_AtomSelection_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("segid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Subtract all of the atoms that\nare in the segment(s) that match the ID segid\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::subtract
@@ -2696,7 +2927,8 @@ void register_AtomSelection_class(){
                 "subtract"
                 , subtract_function_value
                 , ( bp::arg("selection") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Subtract all of the atoms selected\nin selection\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::AtomSelection::typeName
@@ -2706,7 +2938,8 @@ void register_AtomSelection_class(){
             
             AtomSelection_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::AtomSelection::unite
@@ -2718,7 +2951,8 @@ void register_AtomSelection_class(){
                 "unite"
                 , unite_function_value
                 , ( bp::arg("atomidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Unite this set with the atom at index atomidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::unite
@@ -2730,7 +2964,8 @@ void register_AtomSelection_class(){
                 "unite"
                 , unite_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Unite this set with the atoms in the\nCutGroup at index cgidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::unite
@@ -2742,7 +2977,8 @@ void register_AtomSelection_class(){
                 "unite"
                 , unite_function_value
                 , ( bp::arg("residx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Unite this set with the atoms in the\nresidue at index residx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::unite
@@ -2754,7 +2990,8 @@ void register_AtomSelection_class(){
                 "unite"
                 , unite_function_value
                 , ( bp::arg("chainidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Unite this set with the atoms in the\nchain at index chainidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::unite
@@ -2766,7 +3003,8 @@ void register_AtomSelection_class(){
                 "unite"
                 , unite_function_value
                 , ( bp::arg("segidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Unite this set with the atoms in the\nsegment at index segidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::unite
@@ -2778,7 +3016,8 @@ void register_AtomSelection_class(){
                 "unite"
                 , unite_function_value
                 , ( bp::arg("atomidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Unite this set with the atoms whose\nindicies are in atomidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::unite
@@ -2790,7 +3029,8 @@ void register_AtomSelection_class(){
                 "unite"
                 , unite_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Unite this set with the atoms in the\nCutGroups whose indicies are in cgidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::unite
@@ -2802,7 +3042,8 @@ void register_AtomSelection_class(){
                 "unite"
                 , unite_function_value
                 , ( bp::arg("residx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Unite this set with the atoms in the\nresidues whose indicies are in residxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::unite
@@ -2814,7 +3055,8 @@ void register_AtomSelection_class(){
                 "unite"
                 , unite_function_value
                 , ( bp::arg("chainidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Unite this set with the atoms in the\nchains whose indicies are in chainidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::unite
@@ -2826,7 +3068,8 @@ void register_AtomSelection_class(){
                 "unite"
                 , unite_function_value
                 , ( bp::arg("segidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Unite this set with the atoms in the\nsegments whose indicies are in segidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::unite
@@ -2838,7 +3081,8 @@ void register_AtomSelection_class(){
                 "unite"
                 , unite_function_value
                 , ( bp::arg("atomidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Unite this set with the atoms whose\nindicies are in atomidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::unite
@@ -2850,7 +3094,8 @@ void register_AtomSelection_class(){
                 "unite"
                 , unite_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Unite this set with the atoms in the\nCutGroups whose indicies are in cgidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::unite
@@ -2862,7 +3107,8 @@ void register_AtomSelection_class(){
                 "unite"
                 , unite_function_value
                 , ( bp::arg("residx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Unite this set with the atoms in the\nresidues whose indicies are in residxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::unite
@@ -2874,7 +3120,8 @@ void register_AtomSelection_class(){
                 "unite"
                 , unite_function_value
                 , ( bp::arg("chainidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Unite this set with the atoms in the\nchains whose indicies are in chainidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::unite
@@ -2886,7 +3133,8 @@ void register_AtomSelection_class(){
                 "unite"
                 , unite_function_value
                 , ( bp::arg("segidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Unite this set with the atoms in the\nsegments whose indicies are in segidxs\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::unite
@@ -2898,7 +3146,8 @@ void register_AtomSelection_class(){
                 "unite"
                 , unite_function_value
                 , ( bp::arg("atomid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Unite this set with the atoms identified by\natomid\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomSelection::unite
@@ -2910,7 +3159,8 @@ void register_AtomSelection_class(){
                 "unite"
                 , unite_function_value
                 , ( bp::arg("cgid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Unite this set with the atoms in the\nCutGroups identified by cgid\nThrow: SireMol::missing_cutgroup\n" );
         
         }
         { //::SireMol::AtomSelection::unite
@@ -2922,7 +3172,8 @@ void register_AtomSelection_class(){
                 "unite"
                 , unite_function_value
                 , ( bp::arg("resid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Unite this set with the atoms in the\nresidues identified by resid\nThrow: SireMol::missing_residue\n" );
         
         }
         { //::SireMol::AtomSelection::unite
@@ -2934,7 +3185,8 @@ void register_AtomSelection_class(){
                 "unite"
                 , unite_function_value
                 , ( bp::arg("chainid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Unite this set with the atoms in the\nchains identified by chainid\nThrow: SireMol::missing_chain\n" );
         
         }
         { //::SireMol::AtomSelection::unite
@@ -2946,7 +3198,8 @@ void register_AtomSelection_class(){
                 "unite"
                 , unite_function_value
                 , ( bp::arg("segid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Unite this set with the atoms in the\nsegments identified by segid\nThrow: SireMol::missing_segment\n" );
         
         }
         { //::SireMol::AtomSelection::unite
@@ -2958,7 +3211,8 @@ void register_AtomSelection_class(){
                 "unite"
                 , unite_function_value
                 , ( bp::arg("selection") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Unite this set with the atoms selected\nin selection\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::AtomSelection::unite
@@ -2970,7 +3224,8 @@ void register_AtomSelection_class(){
                 "unite"
                 , unite_function_value
                 , ( bp::arg("selections") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Unite this set with all of the passed selections\nThrow: SireError::incompatible_error\n" );
         
         }
         AtomSelection_exposer.staticmethod( "typeName" );

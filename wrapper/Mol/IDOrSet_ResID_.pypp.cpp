@@ -63,13 +63,13 @@ void register_IDOrSet_ResID__class(){
 
     { //::SireID::IDOrSet< SireMol::ResID >
         typedef bp::class_< SireID::IDOrSet< SireMol::ResID >, bp::bases< SireMol::ResID, SireID::ID > > IDOrSet_ResID__exposer_t;
-        IDOrSet_ResID__exposer_t IDOrSet_ResID__exposer = IDOrSet_ResID__exposer_t( "IDOrSet_ResID_", bp::init< >() );
+        IDOrSet_ResID__exposer_t IDOrSet_ResID__exposer = IDOrSet_ResID__exposer_t( "IDOrSet_ResID_", "", bp::init< >("") );
         bp::scope IDOrSet_ResID__scope( IDOrSet_ResID__exposer );
-        IDOrSet_ResID__exposer.def( bp::init< SireMol::ResID const & >(( bp::arg("id") )) );
-        IDOrSet_ResID__exposer.def( bp::init< SireMol::ResID const &, SireMol::ResID const & >(( bp::arg("id0"), bp::arg("id1") )) );
-        IDOrSet_ResID__exposer.def( bp::init< QList< SireMol::ResIdentifier > const & >(( bp::arg("ids") )) );
-        IDOrSet_ResID__exposer.def( bp::init< SireID::IDOrSet< SireMol::ResID > const & >(( bp::arg("ids") )) );
-        IDOrSet_ResID__exposer.def( bp::init< SireID::IDOrSet< SireMol::ResID > const & >(( bp::arg("other") )) );
+        IDOrSet_ResID__exposer.def( bp::init< SireMol::ResID const & >(( bp::arg("id") ), "") );
+        IDOrSet_ResID__exposer.def( bp::init< SireMol::ResID const &, SireMol::ResID const & >(( bp::arg("id0"), bp::arg("id1") ), "") );
+        IDOrSet_ResID__exposer.def( bp::init< QList< SireMol::ResIdentifier > const & >(( bp::arg("ids") ), "") );
+        IDOrSet_ResID__exposer.def( bp::init< SireID::IDOrSet< SireMol::ResID > const & >(( bp::arg("ids") ), "") );
+        IDOrSet_ResID__exposer.def( bp::init< SireID::IDOrSet< SireMol::ResID > const & >(( bp::arg("other") ), "") );
         { //::SireID::IDOrSet< SireMol::ResID >::IDs
         
             typedef SireID::IDOrSet< SireMol::ResID > exported_class_t;
@@ -79,7 +79,8 @@ void register_IDOrSet_ResID__class(){
             IDOrSet_ResID__exposer.def( 
                 "IDs"
                 , IDs_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireID::IDOrSet< SireMol::ResID >::hash
@@ -90,7 +91,8 @@ void register_IDOrSet_ResID__class(){
             
             IDOrSet_ResID__exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireID::IDOrSet< SireMol::ResID >::isNull
@@ -101,7 +103,8 @@ void register_IDOrSet_ResID__class(){
             
             IDOrSet_ResID__exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireID::IDOrSet< SireMol::ResID >::map
@@ -113,7 +116,8 @@ void register_IDOrSet_ResID__class(){
             IDOrSet_ResID__exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("obj") ) );
+                , ( bp::arg("obj") )
+                , "" );
         
         }
         IDOrSet_ResID__exposer.def( bp::self != bp::other< SireID::ID >() );
@@ -129,7 +133,8 @@ void register_IDOrSet_ResID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireID::IDOrSet< SireMol::ResID >::operator=
@@ -142,7 +147,8 @@ void register_IDOrSet_ResID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         IDOrSet_ResID__exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -156,7 +162,8 @@ void register_IDOrSet_ResID__class(){
             
             IDOrSet_ResID__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireID::IDOrSet< SireMol::ResID >::typeName
@@ -167,7 +174,8 @@ void register_IDOrSet_ResID__class(){
             
             IDOrSet_ResID__exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireID::IDOrSet< SireMol::ResID >::what
@@ -178,7 +186,8 @@ void register_IDOrSet_ResID__class(){
             
             IDOrSet_ResID__exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         IDOrSet_ResID__exposer.staticmethod( "typeName" );

@@ -24,7 +24,7 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
 
     { //::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >
         typedef bp::class_< SireMM::LJPotentialInterface< SireMM::IntraLJPotential >, boost::noncopyable > LJPotentialInterface_IntraLJPotential__exposer_t;
-        LJPotentialInterface_IntraLJPotential__exposer_t LJPotentialInterface_IntraLJPotential__exposer = LJPotentialInterface_IntraLJPotential__exposer_t( "LJPotentialInterface_IntraLJPotential_", bp::no_init );
+        LJPotentialInterface_IntraLJPotential__exposer_t LJPotentialInterface_IntraLJPotential__exposer = LJPotentialInterface_IntraLJPotential__exposer_t( "LJPotentialInterface_IntraLJPotential_", "", bp::no_init );
         bp::scope LJPotentialInterface_IntraLJPotential__scope( LJPotentialInterface_IntraLJPotential__exposer );
         { //::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::combiningRules
         
@@ -35,7 +35,8 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
             LJPotentialInterface_IntraLJPotential__exposer.def( 
                 "combiningRules"
                 , combiningRules_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::containsProperty
@@ -47,7 +48,8 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
             LJPotentialInterface_IntraLJPotential__exposer.def( 
                 "containsProperty"
                 , containsProperty_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "" );
         
         }
         { //::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::parameters
@@ -58,7 +60,8 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
             
             LJPotentialInterface_IntraLJPotential__exposer.def( 
                 "parameters"
-                , parameters_function_value );
+                , parameters_function_value
+                , "" );
         
         }
         { //::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::properties
@@ -70,7 +73,8 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
             LJPotentialInterface_IntraLJPotential__exposer.def( 
                 "properties"
                 , properties_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::property
@@ -83,7 +87,8 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::setCombiningRules
@@ -95,7 +100,8 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
             LJPotentialInterface_IntraLJPotential__exposer.def( 
                 "setCombiningRules"
                 , setCombiningRules_function_value
-                , ( bp::arg("combiningrules") ) );
+                , ( bp::arg("combiningrules") )
+                , "" );
         
         }
         { //::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::setProperty
@@ -107,7 +113,8 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
             LJPotentialInterface_IntraLJPotential__exposer.def( 
                 "setProperty"
                 , setProperty_function_value
-                , ( bp::arg("name"), bp::arg("value") ) );
+                , ( bp::arg("name"), bp::arg("value") )
+                , "" );
         
         }
         { //::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::setSpace
@@ -119,7 +126,8 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
             LJPotentialInterface_IntraLJPotential__exposer.def( 
                 "setSpace"
                 , setSpace_function_value
-                , ( bp::arg("new_space") ) );
+                , ( bp::arg("new_space") )
+                , "" );
         
         }
         { //::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::setSwitchingFunction
@@ -131,7 +139,8 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
             LJPotentialInterface_IntraLJPotential__exposer.def( 
                 "setSwitchingFunction"
                 , setSwitchingFunction_function_value
-                , ( bp::arg("new_switchfunc") ) );
+                , ( bp::arg("new_switchfunc") )
+                , "" );
         
         }
         { //::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::space
@@ -143,7 +152,8 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
             LJPotentialInterface_IntraLJPotential__exposer.def( 
                 "space"
                 , space_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::LJPotentialInterface< SireMM::IntraLJPotential >::switchingFunction
@@ -155,7 +165,8 @@ void register_LJPotentialInterface_IntraLJPotential__class(){
             LJPotentialInterface_IntraLJPotential__exposer.def( 
                 "switchingFunction"
                 , switchingFunction_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         LJPotentialInterface_IntraLJPotential__exposer.staticmethod( "parameters" );

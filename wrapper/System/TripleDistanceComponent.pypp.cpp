@@ -34,11 +34,11 @@ void register_TripleDistanceComponent_class(){
 
     { //::SireSystem::TripleDistanceComponent
         typedef bp::class_< SireSystem::TripleDistanceComponent, bp::bases< SireSystem::GeometryComponent, SireSystem::Constraint, SireBase::Property > > TripleDistanceComponent_exposer_t;
-        TripleDistanceComponent_exposer_t TripleDistanceComponent_exposer = TripleDistanceComponent_exposer_t( "TripleDistanceComponent", bp::init< >() );
+        TripleDistanceComponent_exposer_t TripleDistanceComponent_exposer = TripleDistanceComponent_exposer_t( "TripleDistanceComponent", "This is a constraint that constrains a symbol to equal the\nvalue of an expression that involves distances between\nthree pairs of atoms\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope TripleDistanceComponent_scope( TripleDistanceComponent_exposer );
-        TripleDistanceComponent_exposer.def( bp::init< SireCAS::Symbol const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("constrained_symbol"), bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("point4"), bp::arg("point5"), bp::arg("map")=SireBase::PropertyMap() )) );
-        TripleDistanceComponent_exposer.def( bp::init< SireCAS::Symbol const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("constrained_symbol"), bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("point4"), bp::arg("point5"), bp::arg("geometry_expression"), bp::arg("map")=SireBase::PropertyMap() )) );
-        TripleDistanceComponent_exposer.def( bp::init< SireSystem::TripleDistanceComponent const & >(( bp::arg("other") )) );
+        TripleDistanceComponent_exposer.def( bp::init< SireCAS::Symbol const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("constrained_symbol"), bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("point4"), bp::arg("point5"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to set the value of constrained_symbol equal to the\ndistance between the two points point0 and point1") );
+        TripleDistanceComponent_exposer.def( bp::init< SireCAS::Symbol const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("constrained_symbol"), bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("point4"), bp::arg("point5"), bp::arg("geometry_expression"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to set the value of constrained_symbol equal to the\nexpression based on the distance between the two points\npoint0 and point1") );
+        TripleDistanceComponent_exposer.def( bp::init< SireSystem::TripleDistanceComponent const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireSystem::TripleDistanceComponent::nPoints
         
             typedef int ( ::SireSystem::TripleDistanceComponent::*nPoints_function_type)(  ) const;
@@ -46,7 +46,8 @@ void register_TripleDistanceComponent_class(){
             
             TripleDistanceComponent_exposer.def( 
                 "nPoints"
-                , nPoints_function_value );
+                , nPoints_function_value
+                , "Return the number of points (6)" );
         
         }
         TripleDistanceComponent_exposer.def( bp::self != bp::self );
@@ -59,7 +60,8 @@ void register_TripleDistanceComponent_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         TripleDistanceComponent_exposer.def( bp::self == bp::self );
@@ -72,7 +74,8 @@ void register_TripleDistanceComponent_class(){
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the ith point\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireSystem::TripleDistanceComponent::point0
@@ -83,7 +86,8 @@ void register_TripleDistanceComponent_class(){
             TripleDistanceComponent_exposer.def( 
                 "point0"
                 , point0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the first point between which the first distance is calculated" );
         
         }
         { //::SireSystem::TripleDistanceComponent::point1
@@ -94,7 +98,8 @@ void register_TripleDistanceComponent_class(){
             TripleDistanceComponent_exposer.def( 
                 "point1"
                 , point1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the second point between which the first distance is calculated" );
         
         }
         { //::SireSystem::TripleDistanceComponent::point2
@@ -105,7 +110,8 @@ void register_TripleDistanceComponent_class(){
             TripleDistanceComponent_exposer.def( 
                 "point2"
                 , point2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the first point between which the second distance is calculated" );
         
         }
         { //::SireSystem::TripleDistanceComponent::point3
@@ -116,7 +122,8 @@ void register_TripleDistanceComponent_class(){
             TripleDistanceComponent_exposer.def( 
                 "point3"
                 , point3_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the second point between which the second distance is calculated" );
         
         }
         { //::SireSystem::TripleDistanceComponent::point4
@@ -127,7 +134,8 @@ void register_TripleDistanceComponent_class(){
             TripleDistanceComponent_exposer.def( 
                 "point4"
                 , point4_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the first point between which the third distance is calculated" );
         
         }
         { //::SireSystem::TripleDistanceComponent::point5
@@ -138,7 +146,8 @@ void register_TripleDistanceComponent_class(){
             TripleDistanceComponent_exposer.def( 
                 "point5"
                 , point5_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the second point between which the third distance is calculated" );
         
         }
         { //::SireSystem::TripleDistanceComponent::r01
@@ -149,7 +158,8 @@ void register_TripleDistanceComponent_class(){
             TripleDistanceComponent_exposer.def( 
                 "r01"
                 , r01_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol that represents the distance between the\npoints .point0() and .point1() (r01)" );
         
         }
         { //::SireSystem::TripleDistanceComponent::r23
@@ -160,7 +170,8 @@ void register_TripleDistanceComponent_class(){
             TripleDistanceComponent_exposer.def( 
                 "r23"
                 , r23_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol that represents the distance between the\npoints .point2() and .point3() (r23)" );
         
         }
         { //::SireSystem::TripleDistanceComponent::r45
@@ -171,7 +182,8 @@ void register_TripleDistanceComponent_class(){
             TripleDistanceComponent_exposer.def( 
                 "r45"
                 , r45_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol that represents the distance between the\npoints .point4() and .point5() (r45)" );
         
         }
         { //::SireSystem::TripleDistanceComponent::toString
@@ -181,7 +193,8 @@ void register_TripleDistanceComponent_class(){
             
             TripleDistanceComponent_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireSystem::TripleDistanceComponent::typeName
@@ -191,7 +204,8 @@ void register_TripleDistanceComponent_class(){
             
             TripleDistanceComponent_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         TripleDistanceComponent_exposer.staticmethod( "r01" );

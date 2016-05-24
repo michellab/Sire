@@ -50,11 +50,11 @@ void register_ZMatMove_class(){
 
     { //::SireMove::ZMatMove
         typedef bp::class_< SireMove::ZMatMove, bp::bases< SireMove::MonteCarlo, SireMove::Move, SireBase::Property > > ZMatMove_exposer_t;
-        ZMatMove_exposer_t ZMatMove_exposer = ZMatMove_exposer_t( "ZMatMove", bp::init< bp::optional< SireBase::PropertyMap const & > >(( bp::arg("map")=SireBase::PropertyMap() )) );
+        ZMatMove_exposer_t ZMatMove_exposer = ZMatMove_exposer_t( "ZMatMove", "This class implements a z-matrix based intramolecular Monte Carlo\nmove that may be applied to a random molecule (or part of a molecule)\nwithin a MoleculeGroup\n\nAuthor: Christopher Woods\n", bp::init< bp::optional< SireBase::PropertyMap const & > >(( bp::arg("map")=SireBase::PropertyMap() ), "Null constructor") );
         bp::scope ZMatMove_scope( ZMatMove_exposer );
-        ZMatMove_exposer.def( bp::init< SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )) );
-        ZMatMove_exposer.def( bp::init< SireMove::Sampler const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("sampler"), bp::arg("map")=SireBase::PropertyMap() )) );
-        ZMatMove_exposer.def( bp::init< SireMove::ZMatMove const & >(( bp::arg("other") )) );
+        ZMatMove_exposer.def( bp::init< SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ), "Construct the z-matrix move for the passed group of molecules") );
+        ZMatMove_exposer.def( bp::init< SireMove::Sampler const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("sampler"), bp::arg("map")=SireBase::PropertyMap() ), "Construct the z-matrix move that samples molecules from the\npassed sampler") );
+        ZMatMove_exposer.def( bp::init< SireMove::ZMatMove const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::ZMatMove::moleculeGroup
         
             typedef ::SireMol::MoleculeGroup const & ( ::SireMove::ZMatMove::*moleculeGroup_function_type)(  ) const;
@@ -63,7 +63,8 @@ void register_ZMatMove_class(){
             ZMatMove_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the molecule group that is sampled for this move" );
         
         }
         { //::SireMove::ZMatMove::move
@@ -74,7 +75,8 @@ void register_ZMatMove_class(){
             ZMatMove_exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , "Actually perform nmoves moves of the molecules in the\nsystem system, optionally recording simulation statistics\nif record_stats is true" );
         
         }
         ZMatMove_exposer.def( bp::self != bp::self );
@@ -87,7 +89,8 @@ void register_ZMatMove_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         ZMatMove_exposer.def( bp::self == bp::self );
@@ -99,7 +102,8 @@ void register_ZMatMove_class(){
             ZMatMove_exposer.def( 
                 "sampler"
                 , sampler_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the sampler used to sample molecules to move" );
         
         }
         { //::SireMove::ZMatMove::setGenerator
@@ -110,7 +114,8 @@ void register_ZMatMove_class(){
             ZMatMove_exposer.def( 
                 "setGenerator"
                 , setGenerator_function_value
-                , ( bp::arg("rangenerator") ) );
+                , ( bp::arg("rangenerator") )
+                , "Set the random number generator used to generate the random\nnumber used for this move" );
         
         }
         { //::SireMove::ZMatMove::setSampler
@@ -121,7 +126,8 @@ void register_ZMatMove_class(){
             ZMatMove_exposer.def( 
                 "setSampler"
                 , setSampler_function_value
-                , ( bp::arg("sampler") ) );
+                , ( bp::arg("sampler") )
+                , "Set the sampler used to sample molecules for this move" );
         
         }
         { //::SireMove::ZMatMove::setSampler
@@ -132,7 +138,8 @@ void register_ZMatMove_class(){
             ZMatMove_exposer.def( 
                 "setSampler"
                 , setSampler_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "Set the sampler so that it draws molecules uniformly from the\nmolecule group molgroup" );
         
         }
         { //::SireMove::ZMatMove::setSynchronisedAngles
@@ -143,7 +150,8 @@ void register_ZMatMove_class(){
             ZMatMove_exposer.def( 
                 "setSynchronisedAngles"
                 , setSynchronisedAngles_function_value
-                , ( bp::arg("on") ) );
+                , ( bp::arg("on") )
+                , "Set whether or not to synchronise all angle moves for all molecules" );
         
         }
         { //::SireMove::ZMatMove::setSynchronisedBonds
@@ -154,7 +162,8 @@ void register_ZMatMove_class(){
             ZMatMove_exposer.def( 
                 "setSynchronisedBonds"
                 , setSynchronisedBonds_function_value
-                , ( bp::arg("on") ) );
+                , ( bp::arg("on") )
+                , "Set whether or not to synchronise all bond moves for all molecules" );
         
         }
         { //::SireMove::ZMatMove::setSynchronisedDihedrals
@@ -165,7 +174,8 @@ void register_ZMatMove_class(){
             ZMatMove_exposer.def( 
                 "setSynchronisedDihedrals"
                 , setSynchronisedDihedrals_function_value
-                , ( bp::arg("on") ) );
+                , ( bp::arg("on") )
+                , "Set whether or not to synchronise all dihedral moves for all molecules" );
         
         }
         { //::SireMove::ZMatMove::setSynchronisedMotion
@@ -176,7 +186,8 @@ void register_ZMatMove_class(){
             ZMatMove_exposer.def( 
                 "setSynchronisedMotion"
                 , setSynchronisedMotion_function_value
-                , ( bp::arg("on") ) );
+                , ( bp::arg("on") )
+                , "Set whether or not to synchronise all motion for all molecules\nin the group" );
         
         }
         { //::SireMove::ZMatMove::setZMatrixProperty
@@ -187,7 +198,8 @@ void register_ZMatMove_class(){
             ZMatMove_exposer.def( 
                 "setZMatrixProperty"
                 , setZMatrixProperty_function_value
-                , ( bp::arg("property") ) );
+                , ( bp::arg("property") )
+                , "Set the name of the property used to find the z-matrix of each molecule" );
         
         }
         { //::SireMove::ZMatMove::synchronisedAngles
@@ -197,7 +209,8 @@ void register_ZMatMove_class(){
             
             ZMatMove_exposer.def( 
                 "synchronisedAngles"
-                , synchronisedAngles_function_value );
+                , synchronisedAngles_function_value
+                , "Return whether or not all angle moves for all molecules\nare synchronised" );
         
         }
         { //::SireMove::ZMatMove::synchronisedBonds
@@ -207,7 +220,8 @@ void register_ZMatMove_class(){
             
             ZMatMove_exposer.def( 
                 "synchronisedBonds"
-                , synchronisedBonds_function_value );
+                , synchronisedBonds_function_value
+                , "Return whether or not all bond moves for all molecules\nare synchronised" );
         
         }
         { //::SireMove::ZMatMove::synchronisedDihedrals
@@ -217,7 +231,8 @@ void register_ZMatMove_class(){
             
             ZMatMove_exposer.def( 
                 "synchronisedDihedrals"
-                , synchronisedDihedrals_function_value );
+                , synchronisedDihedrals_function_value
+                , "Return whether or not all dihedral moves for all molecules\nare synchronised" );
         
         }
         { //::SireMove::ZMatMove::synchronisedMotion
@@ -227,7 +242,8 @@ void register_ZMatMove_class(){
             
             ZMatMove_exposer.def( 
                 "synchronisedMotion"
-                , synchronisedMotion_function_value );
+                , synchronisedMotion_function_value
+                , "Return whether or not all moves for all molecules are synchronised" );
         
         }
         { //::SireMove::ZMatMove::toString
@@ -237,7 +253,8 @@ void register_ZMatMove_class(){
             
             ZMatMove_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this move" );
         
         }
         { //::SireMove::ZMatMove::typeName
@@ -247,7 +264,8 @@ void register_ZMatMove_class(){
             
             ZMatMove_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMove::ZMatMove::zmatrixProperty
@@ -258,7 +276,8 @@ void register_ZMatMove_class(){
             ZMatMove_exposer.def( 
                 "zmatrixProperty"
                 , zmatrixProperty_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the property used to find the z-matrix of each molecule" );
         
         }
         ZMatMove_exposer.staticmethod( "typeName" );

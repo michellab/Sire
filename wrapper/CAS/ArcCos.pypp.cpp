@@ -35,10 +35,10 @@ void register_ArcCos_class(){
 
     { //::SireCAS::ArcCos
         typedef bp::class_< SireCAS::ArcCos, bp::bases< SireCAS::SingleFunc, SireCAS::ExBase > > ArcCos_exposer_t;
-        ArcCos_exposer_t ArcCos_exposer = ArcCos_exposer_t( "ArcCos", bp::init< >() );
+        ArcCos_exposer_t ArcCos_exposer = ArcCos_exposer_t( "ArcCos", "Inverse-cosine", bp::init< >("Null constructor") );
         bp::scope ArcCos_scope( ArcCos_exposer );
-        ArcCos_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") )) );
-        ArcCos_exposer.def( bp::init< SireCAS::ArcCos const & >(( bp::arg("other") )) );
+        ArcCos_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") ), "Construct cos(expression)") );
+        ArcCos_exposer.def( bp::init< SireCAS::ArcCos const & >(( bp::arg("other") ), "Create cos(cos(expression))") );
         { //::SireCAS::ArcCos::evaluate
         
             typedef double ( ::SireCAS::ArcCos::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -47,7 +47,8 @@ void register_ArcCos_class(){
             ArcCos_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::ArcCos::evaluate
@@ -58,7 +59,8 @@ void register_ArcCos_class(){
             ArcCos_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         ArcCos_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -69,7 +71,8 @@ void register_ArcCos_class(){
             
             ArcCos_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::ArcCos::what
@@ -79,7 +82,8 @@ void register_ArcCos_class(){
             
             ArcCos_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ArcCos_exposer.staticmethod( "typeName" );

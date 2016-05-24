@@ -37,9 +37,9 @@ void register_Average_class(){
 
     { //::SireMaths::Average
         typedef bp::class_< SireMaths::Average, bp::bases< SireMaths::Accumulator, SireBase::Property > > Average_exposer_t;
-        Average_exposer_t Average_exposer = Average_exposer_t( "Average", bp::init< >() );
+        Average_exposer_t Average_exposer = Average_exposer_t( "Average", "This class is used to accumulate the mean average of a collection\nof values\n\nAuthor: Christopher Woods\n", bp::init< >("Construct an empty average") );
         bp::scope Average_scope( Average_exposer );
-        Average_exposer.def( bp::init< SireMaths::Average const & >(( bp::arg("other") )) );
+        Average_exposer.def( bp::init< SireMaths::Average const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMaths::Average::accumulate
         
             typedef void ( ::SireMaths::Average::*accumulate_function_type)( double ) ;
@@ -48,7 +48,8 @@ void register_Average_class(){
             Average_exposer.def( 
                 "accumulate"
                 , accumulate_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Accumulate the passed value onto the average" );
         
         }
         { //::SireMaths::Average::average
@@ -58,7 +59,8 @@ void register_Average_class(){
             
             Average_exposer.def( 
                 "average"
-                , average_function_value );
+                , average_function_value
+                , "Return the average value" );
         
         }
         { //::SireMaths::Average::clear
@@ -68,7 +70,8 @@ void register_Average_class(){
             
             Average_exposer.def( 
                 "clear"
-                , clear_function_value );
+                , clear_function_value
+                , "Completely clear the statistics in this accumulator" );
         
         }
         Average_exposer.def( bp::self != bp::self );
@@ -82,7 +85,8 @@ void register_Average_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Average_exposer.def( bp::self == bp::self );
@@ -93,7 +97,8 @@ void register_Average_class(){
             
             Average_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         Average_exposer.staticmethod( "typeName" );

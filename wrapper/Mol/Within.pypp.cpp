@@ -41,11 +41,11 @@ void register_Within_class(){
 
     { //::SireMol::Within
         typedef bp::class_< SireMol::Within, bp::bases< SireMol::AtomID, SireID::ID > > Within_exposer_t;
-        Within_exposer_t Within_exposer = Within_exposer_t( "Within", bp::init< >() );
+        Within_exposer_t Within_exposer = Within_exposer_t( "Within", "This is an atom identifier that identifies atoms\nbased on how far they are from other atoms, or\nfrom points in space\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope Within_scope( Within_exposer );
-        Within_exposer.def( bp::init< SireUnits::Dimension::Length, SireMaths::Vector const & >(( bp::arg("distance"), bp::arg("point") )) );
-        Within_exposer.def( bp::init< SireUnits::Dimension::Length, SireMol::AtomID const & >(( bp::arg("distance"), bp::arg("atomid") )) );
-        Within_exposer.def( bp::init< SireMol::Within const & >(( bp::arg("other") )) );
+        Within_exposer.def( bp::init< SireUnits::Dimension::Length, SireMaths::Vector const & >(( bp::arg("distance"), bp::arg("point") ), "Construct to match atoms within dist of point") );
+        Within_exposer.def( bp::init< SireUnits::Dimension::Length, SireMol::AtomID const & >(( bp::arg("distance"), bp::arg("atomid") ), "Construct to match atoms within dist of the atoms\nfrom the molecule that match atomid") );
+        Within_exposer.def( bp::init< SireMol::Within const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::Within::hash
         
             typedef ::uint ( ::SireMol::Within::*hash_function_type)(  ) const;
@@ -53,7 +53,8 @@ void register_Within_class(){
             
             Within_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Return a hash of this identifier" );
         
         }
         { //::SireMol::Within::isNull
@@ -63,7 +64,8 @@ void register_Within_class(){
             
             Within_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Is this selection null?" );
         
         }
         { //::SireMol::Within::map
@@ -74,7 +76,8 @@ void register_Within_class(){
             Within_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "Map this ID to the list of indicies of atoms that match this ID\nNote that this function is not valid for this ID class, as\nwe need to have access to the molecular coordinates\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::Within::map
@@ -85,7 +88,8 @@ void register_Within_class(){
             Within_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molview"), bp::arg("map") ) );
+                , ( bp::arg("molview"), bp::arg("map") )
+                , "Map this ID to the list of atomidxs of specified atoms\nin the passed molecule\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         Within_exposer.def( bp::self != bp::self );
@@ -98,7 +102,8 @@ void register_Within_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Within_exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -110,7 +115,8 @@ void register_Within_class(){
             
             Within_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representatio of this ID" );
         
         }
         { //::SireMol::Within::typeName
@@ -120,7 +126,8 @@ void register_Within_class(){
             
             Within_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::Within::what
@@ -130,7 +137,8 @@ void register_Within_class(){
             
             Within_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Within_exposer.staticmethod( "typeName" );

@@ -26,9 +26,9 @@ void register_SupraSubSystem_class(){
 
     { //::SireMove::SupraSubSystem
         typedef bp::class_< SireMove::SupraSubSystem, bp::bases< SireBase::Property > > SupraSubSystem_exposer_t;
-        SupraSubSystem_exposer_t SupraSubSystem_exposer = SupraSubSystem_exposer_t( "SupraSubSystem", bp::init< >() );
+        SupraSubSystem_exposer_t SupraSubSystem_exposer = SupraSubSystem_exposer_t( "SupraSubSystem", "This is the base class of all of the sub-systems that make up\neach SupraSystem. A SupraSystem is a collection of systems\nthat together make up a supra-ensemble (e.g. a collection of\nreplicas that make up a single replica exchange ensemble).\n\nEach SupraSubSystem consists of the SireSystem::System object\nthat contains the molecule info of the subsystem, and the\nSireMove::Moves object that contains all of the sub-moves\nthat are to be applied to the sub-system during each\nsupra-move\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope SupraSubSystem_scope( SupraSubSystem_exposer );
-        SupraSubSystem_exposer.def( bp::init< SireMove::SupraSubSystem const & >(( bp::arg("other") )) );
+        SupraSubSystem_exposer.def( bp::init< SireMove::SupraSubSystem const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::SupraSubSystem::clearAllStatistics
         
             typedef void ( ::SireMove::SupraSubSystem::*clearAllStatistics_function_type)(  ) ;
@@ -36,7 +36,8 @@ void register_SupraSubSystem_class(){
             
             SupraSubSystem_exposer.def( 
                 "clearAllStatistics"
-                , clearAllStatistics_function_value );
+                , clearAllStatistics_function_value
+                , "Completely clear all statistics from this system (this\ncalls both clearStatistics and clearSubStatistics)" );
         
         }
         { //::SireMove::SupraSubSystem::clearStatistics
@@ -46,7 +47,8 @@ void register_SupraSubSystem_class(){
             
             SupraSubSystem_exposer.def( 
                 "clearStatistics"
-                , clearStatistics_function_value );
+                , clearStatistics_function_value
+                , "Clear the SupraSubSystem level statistics (this clears the monitors\nthat are applied at the end of blocks of sub-moves)" );
         
         }
         { //::SireMove::SupraSubSystem::clearSubStatistics
@@ -56,7 +58,8 @@ void register_SupraSubSystem_class(){
             
             SupraSubSystem_exposer.def( 
                 "clearSubStatistics"
-                , clearSubStatistics_function_value );
+                , clearSubStatistics_function_value
+                , "Clear the system level statistics (this clears the monitors\nthat are applied to the sub-system as it is being acted on\nby the sub-moves)" );
         
         }
         { //::SireMove::SupraSubSystem::isPacked
@@ -66,7 +69,8 @@ void register_SupraSubSystem_class(){
             
             SupraSubSystem_exposer.def( 
                 "isPacked"
-                , isPacked_function_value );
+                , isPacked_function_value
+                , "Return whether or not the system is packed" );
         
         }
         { //::SireMove::SupraSubSystem::isPackedToDisk
@@ -76,7 +80,8 @@ void register_SupraSubSystem_class(){
             
             SupraSubSystem_exposer.def( 
                 "isPackedToDisk"
-                , isPackedToDisk_function_value );
+                , isPackedToDisk_function_value
+                , "Return whether or not this system is packed to disk" );
         
         }
         { //::SireMove::SupraSubSystem::isPackedToMemory
@@ -86,7 +91,8 @@ void register_SupraSubSystem_class(){
             
             SupraSubSystem_exposer.def( 
                 "isPackedToMemory"
-                , isPackedToMemory_function_value );
+                , isPackedToMemory_function_value
+                , "Return whether or not this system is packed to memory" );
         
         }
         { //::SireMove::SupraSubSystem::monitors
@@ -97,7 +103,8 @@ void register_SupraSubSystem_class(){
             SupraSubSystem_exposer.def( 
                 "monitors"
                 , monitors_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the monitors that are applied to this sub-system. These\nare the monitors that are applied between blocks of sub-moves.\ne.g.\nsubsys.monitors()\nsubsys.system().monitors()\n" );
         
         }
         { //::SireMove::SupraSubSystem::mustNowRecalculateFromScratch
@@ -107,7 +114,8 @@ void register_SupraSubSystem_class(){
             
             SupraSubSystem_exposer.def( 
                 "mustNowRecalculateFromScratch"
-                , mustNowRecalculateFromScratch_function_value );
+                , mustNowRecalculateFromScratch_function_value
+                , "Tell the system that the next energy to be calculated\nshould be recalculated from scratch. This is mainly\nuseful for debugging" );
         
         }
         { //::SireMove::SupraSubSystem::nSubMoves
@@ -117,7 +125,8 @@ void register_SupraSubSystem_class(){
             
             SupraSubSystem_exposer.def( 
                 "nSubMoves"
-                , nSubMoves_function_value );
+                , nSubMoves_function_value
+                , "Return the number of moves to be applied to this system" );
         
         }
         { //::SireMove::SupraSubSystem::null
@@ -128,7 +137,8 @@ void register_SupraSubSystem_class(){
             SupraSubSystem_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the global null SupraSubSystem" );
         
         }
         SupraSubSystem_exposer.def( bp::self != bp::self );
@@ -141,7 +151,8 @@ void register_SupraSubSystem_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         SupraSubSystem_exposer.def( bp::self == bp::self );
@@ -152,7 +163,8 @@ void register_SupraSubSystem_class(){
             
             SupraSubSystem_exposer.def( 
                 "pack"
-                , pack_function_value );
+                , pack_function_value
+                , "Pack the system. This does nothing if the system is already packed" );
         
         }
         { //::SireMove::SupraSubSystem::packToDisk
@@ -162,7 +174,8 @@ void register_SupraSubSystem_class(){
             
             SupraSubSystem_exposer.def( 
                 "packToDisk"
-                , packToDisk_function_value );
+                , packToDisk_function_value
+                , "Pack the system to disk. This does nothing if the system\nis already packed to disk" );
         
         }
         { //::SireMove::SupraSubSystem::packToDisk
@@ -173,7 +186,8 @@ void register_SupraSubSystem_class(){
             SupraSubSystem_exposer.def( 
                 "packToDisk"
                 , packToDisk_function_value
-                , ( bp::arg("tempdir") ) );
+                , ( bp::arg("tempdir") )
+                , "Pack the system to disk, into the directory tempdir.\nThis does nothing if the system is already packed to\ndisk (even if the system is packed into a different\ndirectory)" );
         
         }
         { //::SireMove::SupraSubSystem::packToMemory
@@ -183,7 +197,8 @@ void register_SupraSubSystem_class(){
             
             SupraSubSystem_exposer.def( 
                 "packToMemory"
-                , packToMemory_function_value );
+                , packToMemory_function_value
+                , "Pack the system to memory. This does nothing if the system\nis already packed to memory" );
         
         }
         { //::SireMove::SupraSubSystem::recordingStatistics
@@ -193,7 +208,8 @@ void register_SupraSubSystem_class(){
             
             SupraSubSystem_exposer.def( 
                 "recordingStatistics"
-                , recordingStatistics_function_value );
+                , recordingStatistics_function_value
+                , "Return whether or not we are recording statistics\nbetween blocks of sub-moves" );
         
         }
         { //::SireMove::SupraSubSystem::recordingSubStatistics
@@ -203,7 +219,8 @@ void register_SupraSubSystem_class(){
             
             SupraSubSystem_exposer.def( 
                 "recordingSubStatistics"
-                , recordingSubStatistics_function_value );
+                , recordingSubStatistics_function_value
+                , "Return whether or not we are recording statistics within\nthe sub-system" );
         
         }
         { //::SireMove::SupraSubSystem::subMove
@@ -214,7 +231,8 @@ void register_SupraSubSystem_class(){
             SupraSubSystem_exposer.def( 
                 "subMove"
                 , subMove_function_value
-                , ( bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("record_stats")=(bool)(true) )
+                , "Perform the sub-system moves on this sub-system. This performs\nthe moves in this->subMoves() on this->subSystem(), collecting\nstatistics both during the block of sub-moves, and then after\nthe block of sub-moves if recording_statistics is true,\nand if sysmon.recordingSubStatistics() and\nsysmon.recordingStatistics() are true respectively.\nThrow: SireError::invalid_state\n" );
         
         }
         { //::SireMove::SupraSubSystem::subMoves
@@ -225,7 +243,8 @@ void register_SupraSubSystem_class(){
             SupraSubSystem_exposer.def( 
                 "subMoves"
                 , subMoves_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the moves that will be applied to the sub-system\nThrow: SireError::invalid_state\n" );
         
         }
         { //::SireMove::SupraSubSystem::subSystem
@@ -236,7 +255,8 @@ void register_SupraSubSystem_class(){
             SupraSubSystem_exposer.def( 
                 "subSystem"
                 , subSystem_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the system that is part of this sub-system\nThrow: SireError::invalid_state\n" );
         
         }
         { //::SireMove::SupraSubSystem::subSystemAndMoves
@@ -247,7 +267,8 @@ void register_SupraSubSystem_class(){
             SupraSubSystem_exposer.def( 
                 "subSystemAndMoves"
                 , subSystemAndMoves_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return both the system and moves that are part of this sub-system" );
         
         }
         { //::SireMove::SupraSubSystem::typeName
@@ -257,7 +278,8 @@ void register_SupraSubSystem_class(){
             
             SupraSubSystem_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMove::SupraSubSystem::unpack
@@ -267,7 +289,8 @@ void register_SupraSubSystem_class(){
             
             SupraSubSystem_exposer.def( 
                 "unpack"
-                , unpack_function_value );
+                , unpack_function_value
+                , "Unpack the system. This does nothing if the system is already unpacked" );
         
         }
         SupraSubSystem_exposer.staticmethod( "null" );

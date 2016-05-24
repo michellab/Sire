@@ -27,13 +27,13 @@ void register_MultiInt_class(){
 
     { //::SireMaths::MultiInt
         typedef bp::class_< SireMaths::MultiInt > MultiInt_exposer_t;
-        MultiInt_exposer_t MultiInt_exposer = MultiInt_exposer_t( "MultiInt", bp::init< >() );
+        MultiInt_exposer_t MultiInt_exposer = MultiInt_exposer_t( "MultiInt", "This class provides a vectorised 32bit signed integer. This represents\na single vector of integers on the compiled machine, e.g.\n4 integers if we use SSE2, 8 integers for AVXAVX2\n(note that AVX represents it as two SSE vectors, while AVX2\nuses a single AVX vector)\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope MultiInt_scope( MultiInt_exposer );
-        MultiInt_exposer.def( bp::init< qint32 >(( bp::arg("value") )) );
-        MultiInt_exposer.def( bp::init< qint32 const *, int >(( bp::arg("array"), bp::arg("size") )) );
-        MultiInt_exposer.def( bp::init< QVector< int > const & >(( bp::arg("array") )) );
-        MultiInt_exposer.def( bp::init< SireMaths::MultiFloat const & >(( bp::arg("other") )) );
-        MultiInt_exposer.def( bp::init< SireMaths::MultiInt const & >(( bp::arg("other") )) );
+        MultiInt_exposer.def( bp::init< qint32 >(( bp::arg("value") ), "Construct from the passed array - this must be the same size as the vector") );
+        MultiInt_exposer.def( bp::init< qint32 const *, int >(( bp::arg("array"), bp::arg("size") ), "Construct from the passed array. If size is greater than MultiInt::size()\nthen an error will be raised. If size is less than MultiInt::size() then\nthis float will be padded with zeroes") );
+        MultiInt_exposer.def( bp::init< QVector< int > const & >(( bp::arg("array") ), "Construct from the passed array - this must be the same size as the vector") );
+        MultiInt_exposer.def( bp::init< SireMaths::MultiFloat const & >(( bp::arg("other") ), "Construct from a MultiFloat - this rounds down (same as standard float to int rounding)") );
+        MultiInt_exposer.def( bp::init< SireMaths::MultiInt const & >(( bp::arg("other") ), "Construct from a MultiFloat - this rounds down (same as standard float to int rounding)") );
         { //::SireMaths::MultiInt::at
         
             typedef ::qint32 ( ::SireMaths::MultiInt::*at_function_type)( int ) const;
@@ -42,7 +42,8 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return the ith value in the multifloat" );
         
         }
         { //::SireMaths::MultiInt::compareEqual
@@ -53,7 +54,8 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "compareEqual"
                 , compareEqual_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiInt::compareGreater
@@ -64,7 +66,8 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "compareGreater"
                 , compareGreater_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiInt::compareGreaterEqual
@@ -75,7 +78,8 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "compareGreaterEqual"
                 , compareGreaterEqual_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiInt::compareLess
@@ -86,7 +90,8 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "compareLess"
                 , compareLess_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiInt::compareLessEqual
@@ -97,7 +102,8 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "compareLessEqual"
                 , compareLessEqual_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiInt::compareNotEqual
@@ -108,7 +114,8 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "compareNotEqual"
                 , compareNotEqual_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiInt::count
@@ -118,7 +125,8 @@ void register_MultiInt_class(){
             
             MultiInt_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiInt::doubleSum
@@ -128,7 +136,8 @@ void register_MultiInt_class(){
             
             MultiInt_exposer.def( 
                 "doubleSum"
-                , doubleSum_function_value );
+                , doubleSum_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiInt::fromArray
@@ -139,7 +148,8 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "fromArray"
                 , fromArray_function_value
-                , ( bp::arg("array") ) );
+                , ( bp::arg("array") )
+                , "Create an array of MultiInts from the passed array of integers. This will\npad the end of the array with zeroes if necessary" );
         
         }
         { //::SireMaths::MultiInt::fromArray
@@ -150,7 +160,8 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "fromArray"
                 , fromArray_function_value
-                , ( bp::arg("array"), bp::arg("size") ) );
+                , ( bp::arg("array"), bp::arg("size") )
+                , "" );
         
         }
         { //::SireMaths::MultiInt::get
@@ -161,7 +172,8 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "get"
                 , get_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return the\nith value in the MultiInt" );
         
         }
         { //::SireMaths::MultiInt::getitem
@@ -172,7 +184,8 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "getitem"
                 , getitem_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMaths::MultiInt::hasBinaryOne
@@ -182,7 +195,8 @@ void register_MultiInt_class(){
             
             MultiInt_exposer.def( 
                 "hasBinaryOne"
-                , hasBinaryOne_function_value );
+                , hasBinaryOne_function_value
+                , "Return whether or not at least one of the elements of this vector\nis binary one (the float is equal to 0xFFFFFFFF)" );
         
         }
         { //::SireMaths::MultiInt::hasBinaryZero
@@ -192,7 +206,8 @@ void register_MultiInt_class(){
             
             MultiInt_exposer.def( 
                 "hasBinaryZero"
-                , hasBinaryZero_function_value );
+                , hasBinaryZero_function_value
+                , "Return whether or not at least one of the elements of this vector\nis binary zero (the float is equal to 0x00000000)" );
         
         }
         { //::SireMaths::MultiInt::isAligned
@@ -202,7 +217,8 @@ void register_MultiInt_class(){
             
             MultiInt_exposer.def( 
                 "isAligned"
-                , isAligned_function_value );
+                , isAligned_function_value
+                , "Return whether or not this MultiInt is correctly aligned. If it is not,\nthen any SSE operations will fail" );
         
         }
         { //::SireMaths::MultiInt::isBinaryOne
@@ -212,7 +228,8 @@ void register_MultiInt_class(){
             
             MultiInt_exposer.def( 
                 "isBinaryOne"
-                , isBinaryOne_function_value );
+                , isBinaryOne_function_value
+                , "Return whether all of the elements of this MultiInt are\nequal to 0xFFFFFFFF (e.g. every bit in the entire vector is 1)" );
         
         }
         { //::SireMaths::MultiInt::isBinaryZero
@@ -222,7 +239,8 @@ void register_MultiInt_class(){
             
             MultiInt_exposer.def( 
                 "isBinaryZero"
-                , isBinaryZero_function_value );
+                , isBinaryZero_function_value
+                , "Return whether all of the elements of this MultiInt are\nequal to 0x00000000 (e.g. every bit in the entire vector is 0)" );
         
         }
         { //::SireMaths::MultiInt::isNotBinaryOne
@@ -232,7 +250,8 @@ void register_MultiInt_class(){
             
             MultiInt_exposer.def( 
                 "isNotBinaryOne"
-                , isNotBinaryOne_function_value );
+                , isNotBinaryOne_function_value
+                , "Return whether all of the elements of this MultiInt are\nnot equal to 0xFFFFFFFF (e.g. at least one bit in the entire vector is 0)" );
         
         }
         { //::SireMaths::MultiInt::isNotBinaryZero
@@ -242,7 +261,8 @@ void register_MultiInt_class(){
             
             MultiInt_exposer.def( 
                 "isNotBinaryZero"
-                , isNotBinaryZero_function_value );
+                , isNotBinaryZero_function_value
+                , "Return whether all of the elements of this MultiInt are\nnot equal to 0x00000000 (e.g. at least one bit in the entire vector is 1)" );
         
         }
         { //::SireMaths::MultiInt::logicalAnd
@@ -253,7 +273,8 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "logicalAnd"
                 , logicalAnd_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiInt::logicalAndNot
@@ -264,7 +285,8 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "logicalAndNot"
                 , logicalAndNot_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiInt::logicalNot
@@ -274,7 +296,8 @@ void register_MultiInt_class(){
             
             MultiInt_exposer.def( 
                 "logicalNot"
-                , logicalNot_function_value );
+                , logicalNot_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiInt::logicalOr
@@ -285,7 +308,8 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "logicalOr"
                 , logicalOr_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiInt::logicalXor
@@ -296,7 +320,8 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "logicalXor"
                 , logicalXor_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiInt::max
@@ -307,7 +332,8 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "max"
                 , max_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMaths::MultiInt::min
@@ -318,7 +344,8 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "min"
                 , min_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         MultiInt_exposer.def( !bp::self );
@@ -339,7 +366,8 @@ void register_MultiInt_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMaths::MultiInt::operator=
@@ -351,7 +379,8 @@ void register_MultiInt_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("value") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMaths::MultiInt::operator=
@@ -363,7 +392,8 @@ void register_MultiInt_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MultiInt_exposer.def( bp::self == bp::self );
@@ -377,7 +407,8 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         MultiInt_exposer.def( bp::self ^ bp::self );
@@ -389,7 +420,8 @@ void register_MultiInt_class(){
             
             MultiInt_exposer.def( 
                 "reinterpretCastToFloat"
-                , reinterpretCastToFloat_function_value );
+                , reinterpretCastToFloat_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiInt::rotate
@@ -399,7 +431,8 @@ void register_MultiInt_class(){
             
             MultiInt_exposer.def( 
                 "rotate"
-                , rotate_function_value );
+                , rotate_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiInt::set
@@ -410,7 +443,8 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("i"), bp::arg("value") ) );
+                , ( bp::arg("i"), bp::arg("value") )
+                , "Set the ith value of the MultiInt to value" );
         
         }
         { //::SireMaths::MultiInt::size
@@ -420,7 +454,8 @@ void register_MultiInt_class(){
             
             MultiInt_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiInt::sum
@@ -430,7 +465,8 @@ void register_MultiInt_class(){
             
             MultiInt_exposer.def( 
                 "sum"
-                , sum_function_value );
+                , sum_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiInt::toArray
@@ -441,7 +477,8 @@ void register_MultiInt_class(){
             MultiInt_exposer.def( 
                 "toArray"
                 , toArray_function_value
-                , ( bp::arg("array") ) );
+                , ( bp::arg("array") )
+                , "Return the passed MultiInt converted back into a normal array" );
         
         }
         { //::SireMaths::MultiInt::toBinaryString
@@ -451,7 +488,8 @@ void register_MultiInt_class(){
             
             MultiInt_exposer.def( 
                 "toBinaryString"
-                , toBinaryString_function_value );
+                , toBinaryString_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiInt::toString
@@ -461,7 +499,8 @@ void register_MultiInt_class(){
             
             MultiInt_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiInt::typeName
@@ -471,7 +510,8 @@ void register_MultiInt_class(){
             
             MultiInt_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiInt::what
@@ -481,7 +521,8 @@ void register_MultiInt_class(){
             
             MultiInt_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         MultiInt_exposer.staticmethod( "count" );

@@ -37,9 +37,9 @@ void register_NoCutoff_class(){
 
     { //::SireMM::NoCutoff
         typedef bp::class_< SireMM::NoCutoff, bp::bases< SireMM::SwitchingFunction, SireBase::Property > > NoCutoff_exposer_t;
-        NoCutoff_exposer_t NoCutoff_exposer = NoCutoff_exposer_t( "NoCutoff", bp::init< >() );
+        NoCutoff_exposer_t NoCutoff_exposer = NoCutoff_exposer_t( "NoCutoff", "This class implements no cutoffs (e.g. there is no cutoff,\nand no switching function).\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope NoCutoff_scope( NoCutoff_exposer );
-        NoCutoff_exposer.def( bp::init< SireMM::NoCutoff const & >(( bp::arg("other") )) );
+        NoCutoff_exposer.def( bp::init< SireMM::NoCutoff const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::NoCutoff::dElectrostaticScaleFactor
         
             typedef double ( ::SireMM::NoCutoff::*dElectrostaticScaleFactor_function_type)( ::SireUnits::Dimension::Length ) const;
@@ -48,7 +48,8 @@ void register_NoCutoff_class(){
             NoCutoff_exposer.def( 
                 "dElectrostaticScaleFactor"
                 , dElectrostaticScaleFactor_function_value
-                , ( bp::arg("dist") ) );
+                , ( bp::arg("dist") )
+                , "Return the derivative of the electrostatic scale factor - this\nwill always be 0 as there is no cutoff" );
         
         }
         { //::SireMM::NoCutoff::dVDWScaleFactor
@@ -59,7 +60,8 @@ void register_NoCutoff_class(){
             NoCutoff_exposer.def( 
                 "dVDWScaleFactor"
                 , dVDWScaleFactor_function_value
-                , ( bp::arg("dist") ) );
+                , ( bp::arg("dist") )
+                , "Return the derivative of the VDW scale factor - this will\nalways be 0 as there is no cutoff" );
         
         }
         { //::SireMM::NoCutoff::electrostaticScaleFactor
@@ -70,7 +72,8 @@ void register_NoCutoff_class(){
             NoCutoff_exposer.def( 
                 "electrostaticScaleFactor"
                 , electrostaticScaleFactor_function_value
-                , ( bp::arg("dist") ) );
+                , ( bp::arg("dist") )
+                , "Return the scale factor for the electrostatic energies - this\nwill always be 1.0, as there are no cutoffs" );
         
         }
         NoCutoff_exposer.def( bp::self != bp::self );
@@ -83,7 +86,8 @@ void register_NoCutoff_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         NoCutoff_exposer.def( bp::self == bp::self );
@@ -94,7 +98,8 @@ void register_NoCutoff_class(){
             
             NoCutoff_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this switching function" );
         
         }
         { //::SireMM::NoCutoff::typeName
@@ -104,7 +109,8 @@ void register_NoCutoff_class(){
             
             NoCutoff_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::NoCutoff::vdwScaleFactor
@@ -115,7 +121,8 @@ void register_NoCutoff_class(){
             NoCutoff_exposer.def( 
                 "vdwScaleFactor"
                 , vdwScaleFactor_function_value
-                , ( bp::arg("dist") ) );
+                , ( bp::arg("dist") )
+                , "Return the scale factor for the vdw energies - this\nwill always be 1.0, as there are no cutoffs" );
         
         }
         NoCutoff_exposer.staticmethod( "typeName" );

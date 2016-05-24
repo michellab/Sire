@@ -51,7 +51,7 @@ void register_BondHunter_class(){
 
     { //::SireMol::BondHunter
         typedef bp::class_< SireMol::BondHunter, bp::bases< SireBase::Property >, boost::noncopyable > BondHunter_exposer_t;
-        BondHunter_exposer_t BondHunter_exposer = BondHunter_exposer_t( "BondHunter", bp::no_init );
+        BondHunter_exposer_t BondHunter_exposer = BondHunter_exposer_t( "BondHunter", "Base class of all functions used to hunt for bonds in a molecule\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope BondHunter_scope( BondHunter_exposer );
         { //::SireMol::BondHunter::null
         
@@ -61,7 +61,8 @@ void register_BondHunter_class(){
             BondHunter_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::BondHunter::operator()
@@ -72,7 +73,8 @@ void register_BondHunter_class(){
             BondHunter_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the connectivity of the molecule viewed in molview\nusing this function to hunt for all of the bonded atoms.\nThis only searches for the bonds between atoms that are\npart of this view" );
         
         }
         { //::SireMol::BondHunter::typeName
@@ -82,7 +84,8 @@ void register_BondHunter_class(){
             
             BondHunter_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         BondHunter_exposer.staticmethod( "null" );

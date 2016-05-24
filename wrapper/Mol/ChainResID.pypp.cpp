@@ -29,10 +29,10 @@ void register_ChainResID_class(){
 
     { //::SireMol::ChainResID
         typedef bp::class_< SireMol::ChainResID, bp::bases< SireMol::ResID, SireID::ID > > ChainResID_exposer_t;
-        ChainResID_exposer_t ChainResID_exposer = ChainResID_exposer_t( "ChainResID", bp::init< >() );
+        ChainResID_exposer_t ChainResID_exposer = ChainResID_exposer_t( "ChainResID", "This class holds a combination of a ChainID with a ResID\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope ChainResID_scope( ChainResID_exposer );
-        ChainResID_exposer.def( bp::init< SireMol::ChainID const &, SireMol::ResID const & >(( bp::arg("chainid"), bp::arg("resid") )) );
-        ChainResID_exposer.def( bp::init< SireMol::ChainResID const & >(( bp::arg("other") )) );
+        ChainResID_exposer.def( bp::init< SireMol::ChainID const &, SireMol::ResID const & >(( bp::arg("chainid"), bp::arg("resid") ), "") );
+        ChainResID_exposer.def( bp::init< SireMol::ChainResID const & >(( bp::arg("other") ), "") );
         { //::SireMol::ChainResID::hash
         
             typedef ::uint ( ::SireMol::ChainResID::*hash_function_type)(  ) const;
@@ -40,7 +40,8 @@ void register_ChainResID_class(){
             
             ChainResID_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::ChainResID::isNull
@@ -50,7 +51,8 @@ void register_ChainResID_class(){
             
             ChainResID_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::ChainResID::map
@@ -61,7 +63,8 @@ void register_ChainResID_class(){
             ChainResID_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         ChainResID_exposer.def( bp::self != bp::self );
@@ -74,7 +77,8 @@ void register_ChainResID_class(){
             
             ChainResID_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::ChainResID::typeName
@@ -84,7 +88,8 @@ void register_ChainResID_class(){
             
             ChainResID_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::ChainResID::what
@@ -94,7 +99,8 @@ void register_ChainResID_class(){
             
             ChainResID_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ChainResID_exposer.staticmethod( "typeName" );

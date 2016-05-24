@@ -27,9 +27,9 @@ void register_TrimString_class(){
 
     { //::SireBase::TrimString
         typedef bp::class_< SireBase::TrimString, bp::bases< SireBase::StringMangler, SireBase::Property > > TrimString_exposer_t;
-        TrimString_exposer_t TrimString_exposer = TrimString_exposer_t( "TrimString", bp::init< >() );
+        TrimString_exposer_t TrimString_exposer = TrimString_exposer_t( "TrimString", "This mangler just trims spaces away from the beginning\nand end of the string\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope TrimString_scope( TrimString_exposer );
-        TrimString_exposer.def( bp::init< SireBase::TrimString const & >(( bp::arg("other") )) );
+        TrimString_exposer.def( bp::init< SireBase::TrimString const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireBase::TrimString::mangle
         
             typedef ::QString ( ::SireBase::TrimString::*mangle_function_type)( ::QString const & ) const;
@@ -38,7 +38,8 @@ void register_TrimString_class(){
             TrimString_exposer.def( 
                 "mangle"
                 , mangle_function_value
-                , ( bp::arg("input") ) );
+                , ( bp::arg("input") )
+                , "Mangle the string - remove all initial and trailing spaces" );
         
         }
         TrimString_exposer.def( bp::self != bp::self );
@@ -51,7 +52,8 @@ void register_TrimString_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         TrimString_exposer.def( bp::self == bp::self );
@@ -62,7 +64,8 @@ void register_TrimString_class(){
             
             TrimString_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         TrimString_exposer.staticmethod( "typeName" );

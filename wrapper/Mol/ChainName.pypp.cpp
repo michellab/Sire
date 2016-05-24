@@ -63,11 +63,11 @@ void register_ChainName_class(){
 
     { //::SireMol::ChainName
         typedef bp::class_< SireMol::ChainName, bp::bases< SireMol::ChainID, SireID::ID, SireID::Name > > ChainName_exposer_t;
-        ChainName_exposer_t ChainName_exposer = ChainName_exposer_t( "ChainName", bp::init< >() );
+        ChainName_exposer_t ChainName_exposer = ChainName_exposer_t( "ChainName", "This class holds the name of an atom. This can be used\nto identify an atom within a residue.\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope ChainName_scope( ChainName_exposer );
-        ChainName_exposer.def( bp::init< QString const & >(( bp::arg("name") )) );
-        ChainName_exposer.def( bp::init< QString const &, SireID::CaseSensitivity >(( bp::arg("name"), bp::arg("case_sensitivity") )) );
-        ChainName_exposer.def( bp::init< SireMol::ChainName const & >(( bp::arg("other") )) );
+        ChainName_exposer.def( bp::init< QString const & >(( bp::arg("name") ), "") );
+        ChainName_exposer.def( bp::init< QString const &, SireID::CaseSensitivity >(( bp::arg("name"), bp::arg("case_sensitivity") ), "") );
+        ChainName_exposer.def( bp::init< SireMol::ChainName const & >(( bp::arg("other") ), "") );
         { //::SireMol::ChainName::hash
         
             typedef ::uint ( ::SireMol::ChainName::*hash_function_type)(  ) const;
@@ -75,7 +75,8 @@ void register_ChainName_class(){
             
             ChainName_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::ChainName::isNull
@@ -85,7 +86,8 @@ void register_ChainName_class(){
             
             ChainName_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::ChainName::map
@@ -96,7 +98,8 @@ void register_ChainName_class(){
             ChainName_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         ChainName_exposer.def( bp::self != bp::self );
@@ -109,7 +112,8 @@ void register_ChainName_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         ChainName_exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -121,7 +125,8 @@ void register_ChainName_class(){
             
             ChainName_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::ChainName::typeName
@@ -131,7 +136,8 @@ void register_ChainName_class(){
             
             ChainName_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::ChainName::what
@@ -141,7 +147,8 @@ void register_ChainName_class(){
             
             ChainName_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ChainName_exposer.staticmethod( "typeName" );

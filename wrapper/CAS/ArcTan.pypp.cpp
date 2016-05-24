@@ -35,10 +35,10 @@ void register_ArcTan_class(){
 
     { //::SireCAS::ArcTan
         typedef bp::class_< SireCAS::ArcTan, bp::bases< SireCAS::SingleFunc, SireCAS::ExBase > > ArcTan_exposer_t;
-        ArcTan_exposer_t ArcTan_exposer = ArcTan_exposer_t( "ArcTan", bp::init< >() );
+        ArcTan_exposer_t ArcTan_exposer = ArcTan_exposer_t( "ArcTan", "Inverse-tangent", bp::init< >("Null constructor") );
         bp::scope ArcTan_scope( ArcTan_exposer );
-        ArcTan_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") )) );
-        ArcTan_exposer.def( bp::init< SireCAS::ArcTan const & >(( bp::arg("other") )) );
+        ArcTan_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") ), "Construct cos(expression)") );
+        ArcTan_exposer.def( bp::init< SireCAS::ArcTan const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::ArcTan::evaluate
         
             typedef double ( ::SireCAS::ArcTan::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -47,7 +47,8 @@ void register_ArcTan_class(){
             ArcTan_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::ArcTan::evaluate
@@ -58,7 +59,8 @@ void register_ArcTan_class(){
             ArcTan_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         ArcTan_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -69,7 +71,8 @@ void register_ArcTan_class(){
             
             ArcTan_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::ArcTan::what
@@ -79,7 +82,8 @@ void register_ArcTan_class(){
             
             ArcTan_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ArcTan_exposer.staticmethod( "typeName" );

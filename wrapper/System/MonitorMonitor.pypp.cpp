@@ -32,10 +32,10 @@ void register_MonitorMonitor_class(){
 
     { //::SireSystem::MonitorMonitor
         typedef bp::class_< SireSystem::MonitorMonitor, bp::bases< SireSystem::SystemMonitor, SireBase::Property > > MonitorMonitor_exposer_t;
-        MonitorMonitor_exposer_t MonitorMonitor_exposer = MonitorMonitor_exposer_t( "MonitorMonitor", bp::init< >() );
+        MonitorMonitor_exposer_t MonitorMonitor_exposer = MonitorMonitor_exposer_t( "MonitorMonitor", "This is a monitor that can be used to monitor other monitors.\nIt is useful to use to save the current state of a monitor,\ne.g. snap-shotting the average during the simulation, or\nsnap-shotting the PDB. Equally, it can be used to transfer\nmonitor data between systems, or from a system to a supra-system.\n\nThe MonitorMonitor can be non-destructive (the original monitor\nis just copied), or destructive (the original monitor is copied,\nthen cleared), or annihilative (the original monitor is copied,\nthen completely removed from the system)\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope MonitorMonitor_scope( MonitorMonitor_exposer );
-        MonitorMonitor_exposer.def( bp::init< SireSystem::MonitorID const &, bp::optional< bool, bool > >(( bp::arg("id"), bp::arg("clear_original")=(bool)(false), bp::arg("remove_original")=(bool)(false) )) );
-        MonitorMonitor_exposer.def( bp::init< SireSystem::MonitorMonitor const & >(( bp::arg("other") )) );
+        MonitorMonitor_exposer.def( bp::init< SireSystem::MonitorID const &, bp::optional< bool, bool > >(( bp::arg("id"), bp::arg("clear_original")=(bool)(false), bp::arg("remove_original")=(bool)(false) ), "Construct to monitor the SystemMonitor identified by id,\noptionally clearing the original monitor if clear_original is\ntrue, and optionally removing the original monitor\nif remove_original is true") );
+        MonitorMonitor_exposer.def( bp::init< SireSystem::MonitorMonitor const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireSystem::MonitorMonitor::at
         
             typedef ::SireSystem::SystemMonitor const & ( ::SireSystem::MonitorMonitor::*at_function_type)( int ) const;
@@ -45,7 +45,8 @@ void register_MonitorMonitor_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the ith state monitored\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireSystem::MonitorMonitor::clearOriginal
@@ -55,7 +56,8 @@ void register_MonitorMonitor_class(){
             
             MonitorMonitor_exposer.def( 
                 "clearOriginal"
-                , clearOriginal_function_value );
+                , clearOriginal_function_value
+                , "Return whether or not this MonitorMonitor will clear the\noriginal monitor whenever it takes a copy" );
         
         }
         { //::SireSystem::MonitorMonitor::clearStatistics
@@ -65,7 +67,8 @@ void register_MonitorMonitor_class(){
             
             MonitorMonitor_exposer.def( 
                 "clearStatistics"
-                , clearStatistics_function_value );
+                , clearStatistics_function_value
+                , "Completely clear statistics" );
         
         }
         { //::SireSystem::MonitorMonitor::count
@@ -75,7 +78,8 @@ void register_MonitorMonitor_class(){
             
             MonitorMonitor_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of states monitored so far" );
         
         }
         { //::SireSystem::MonitorMonitor::monitor
@@ -86,7 +90,8 @@ void register_MonitorMonitor_class(){
             MonitorMonitor_exposer.def( 
                 "monitor"
                 , monitor_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "Monitor the passed system" );
         
         }
         { //::SireSystem::MonitorMonitor::nStates
@@ -96,7 +101,8 @@ void register_MonitorMonitor_class(){
             
             MonitorMonitor_exposer.def( 
                 "nStates"
-                , nStates_function_value );
+                , nStates_function_value
+                , "Return the number of states monitored so far" );
         
         }
         MonitorMonitor_exposer.def( bp::self != bp::self );
@@ -109,7 +115,8 @@ void register_MonitorMonitor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MonitorMonitor_exposer.def( bp::self == bp::self );
@@ -122,7 +129,8 @@ void register_MonitorMonitor_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireSystem::MonitorMonitor::removeOriginal
@@ -132,7 +140,8 @@ void register_MonitorMonitor_class(){
             
             MonitorMonitor_exposer.def( 
                 "removeOriginal"
-                , removeOriginal_function_value );
+                , removeOriginal_function_value
+                , "Return whether or not this MonitorMonitor will remove\nthe original monitor from the system whenever it\ntakes a copy" );
         
         }
         { //::SireSystem::MonitorMonitor::setClearOriginal
@@ -143,7 +152,8 @@ void register_MonitorMonitor_class(){
             MonitorMonitor_exposer.def( 
                 "setClearOriginal"
                 , setClearOriginal_function_value
-                , ( bp::arg("clear") ) );
+                , ( bp::arg("clear") )
+                , "Set whether or not to clear the statistics of the original\nmonitor when this monitor takes the copy" );
         
         }
         { //::SireSystem::MonitorMonitor::setRemoveOriginal
@@ -154,7 +164,8 @@ void register_MonitorMonitor_class(){
             MonitorMonitor_exposer.def( 
                 "setRemoveOriginal"
                 , setRemoveOriginal_function_value
-                , ( bp::arg("remove") ) );
+                , ( bp::arg("remove") )
+                , "Set whether or not to remove the original monitor when\nthis monitor takes a copy (effectively thus moving\nthe monitor from the system to this MonitorMonitor)" );
         
         }
         { //::SireSystem::MonitorMonitor::size
@@ -164,7 +175,8 @@ void register_MonitorMonitor_class(){
             
             MonitorMonitor_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "Return the number of states monitored so far" );
         
         }
         { //::SireSystem::MonitorMonitor::states
@@ -175,7 +187,8 @@ void register_MonitorMonitor_class(){
             MonitorMonitor_exposer.def( 
                 "states"
                 , states_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return all of the states monitored" );
         
         }
         { //::SireSystem::MonitorMonitor::typeName
@@ -185,7 +198,8 @@ void register_MonitorMonitor_class(){
             
             MonitorMonitor_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         MonitorMonitor_exposer.staticmethod( "typeName" );

@@ -39,10 +39,10 @@ void register_AmberParameters_class(){
 
     { //::SireMol::AmberParameters
         typedef bp::class_< SireMol::AmberParameters, bp::bases< SireMol::MoleculeProperty, SireMol::MolViewProperty, SireBase::Property > > AmberParameters_exposer_t;
-        AmberParameters_exposer_t AmberParameters_exposer = AmberParameters_exposer_t( "AmberParameters", bp::init< >() );
+        AmberParameters_exposer_t AmberParameters_exposer = AmberParameters_exposer_t( "AmberParameters", "This class stores AMBER bonded force field parameters for\na collection of bonds, angles and dihedrals\n\nAuthor: Julien Michel\n", bp::init< >("Null Constructor") );
         bp::scope AmberParameters_scope( AmberParameters_exposer );
-        AmberParameters_exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("molecule") )) );
-        AmberParameters_exposer.def( bp::init< SireMol::AmberParameters const & >(( bp::arg("other") )) );
+        AmberParameters_exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("molecule") ), "Constructor for the passed molecule") );
+        AmberParameters_exposer.def( bp::init< SireMol::AmberParameters const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::AmberParameters::add
         
             typedef void ( ::SireMol::AmberParameters::*add_function_type)( ::SireMol::BondID const &,double const &,double const & ) ;
@@ -51,7 +51,8 @@ void register_AmberParameters_class(){
             AmberParameters_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("bond"), bp::arg("k"), bp::arg("ro") ) );
+                , ( bp::arg("bond"), bp::arg("k"), bp::arg("ro") )
+                , "" );
         
         }
         { //::SireMol::AmberParameters::add
@@ -62,7 +63,8 @@ void register_AmberParameters_class(){
             AmberParameters_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("angle"), bp::arg("k"), bp::arg("theta0") ) );
+                , ( bp::arg("angle"), bp::arg("k"), bp::arg("theta0") )
+                , "" );
         
         }
         { //::SireMol::AmberParameters::add
@@ -73,7 +75,8 @@ void register_AmberParameters_class(){
             AmberParameters_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("dihedral"), bp::arg("v"), bp::arg("periodicity"), bp::arg("phase") ) );
+                , ( bp::arg("dihedral"), bp::arg("v"), bp::arg("periodicity"), bp::arg("phase") )
+                , "" );
         
         }
         { //::SireMol::AmberParameters::add
@@ -84,7 +87,8 @@ void register_AmberParameters_class(){
             AmberParameters_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("improper"), bp::arg("v"), bp::arg("periodicity"), bp::arg("phase") ) );
+                , ( bp::arg("improper"), bp::arg("v"), bp::arg("periodicity"), bp::arg("phase") )
+                , "" );
         
         }
         { //::SireMol::AmberParameters::add14Pair
@@ -95,7 +99,8 @@ void register_AmberParameters_class(){
             AmberParameters_exposer.def( 
                 "add14Pair"
                 , add14Pair_function_value
-                , ( bp::arg("pair"), bp::arg("cscl"), bp::arg("ljscl") ) );
+                , ( bp::arg("pair"), bp::arg("cscl"), bp::arg("ljscl") )
+                , "" );
         
         }
         { //::SireMol::AmberParameters::get14PairParams
@@ -106,7 +111,8 @@ void register_AmberParameters_class(){
             AmberParameters_exposer.def( 
                 "get14PairParams"
                 , get14PairParams_function_value
-                , ( bp::arg("pair") ) );
+                , ( bp::arg("pair") )
+                , "" );
         
         }
         { //::SireMol::AmberParameters::getAll14Pairs
@@ -116,7 +122,8 @@ void register_AmberParameters_class(){
             
             AmberParameters_exposer.def( 
                 "getAll14Pairs"
-                , getAll14Pairs_function_value );
+                , getAll14Pairs_function_value
+                , "" );
         
         }
         { //::SireMol::AmberParameters::getAllAngles
@@ -126,7 +133,8 @@ void register_AmberParameters_class(){
             
             AmberParameters_exposer.def( 
                 "getAllAngles"
-                , getAllAngles_function_value );
+                , getAllAngles_function_value
+                , "" );
         
         }
         { //::SireMol::AmberParameters::getAllBonds
@@ -136,7 +144,8 @@ void register_AmberParameters_class(){
             
             AmberParameters_exposer.def( 
                 "getAllBonds"
-                , getAllBonds_function_value );
+                , getAllBonds_function_value
+                , "" );
         
         }
         { //::SireMol::AmberParameters::getAllDihedrals
@@ -146,7 +155,8 @@ void register_AmberParameters_class(){
             
             AmberParameters_exposer.def( 
                 "getAllDihedrals"
-                , getAllDihedrals_function_value );
+                , getAllDihedrals_function_value
+                , "" );
         
         }
         { //::SireMol::AmberParameters::getAllImpropers
@@ -156,7 +166,8 @@ void register_AmberParameters_class(){
             
             AmberParameters_exposer.def( 
                 "getAllImpropers"
-                , getAllImpropers_function_value );
+                , getAllImpropers_function_value
+                , "" );
         
         }
         { //::SireMol::AmberParameters::getParams
@@ -167,7 +178,8 @@ void register_AmberParameters_class(){
             AmberParameters_exposer.def( 
                 "getParams"
                 , getParams_function_value
-                , ( bp::arg("bond") ) );
+                , ( bp::arg("bond") )
+                , "" );
         
         }
         { //::SireMol::AmberParameters::getParams
@@ -178,7 +190,8 @@ void register_AmberParameters_class(){
             AmberParameters_exposer.def( 
                 "getParams"
                 , getParams_function_value
-                , ( bp::arg("angle") ) );
+                , ( bp::arg("angle") )
+                , "" );
         
         }
         { //::SireMol::AmberParameters::getParams
@@ -189,7 +202,8 @@ void register_AmberParameters_class(){
             AmberParameters_exposer.def( 
                 "getParams"
                 , getParams_function_value
-                , ( bp::arg("dihedral") ) );
+                , ( bp::arg("dihedral") )
+                , "" );
         
         }
         { //::SireMol::AmberParameters::getParams
@@ -200,7 +214,8 @@ void register_AmberParameters_class(){
             AmberParameters_exposer.def( 
                 "getParams"
                 , getParams_function_value
-                , ( bp::arg("improper") ) );
+                , ( bp::arg("improper") )
+                , "" );
         
         }
         { //::SireMol::AmberParameters::info
@@ -211,7 +226,8 @@ void register_AmberParameters_class(){
             AmberParameters_exposer.def( 
                 "info"
                 , info_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the layout of the molecule whose flexibility is contained\nin this object" );
         
         }
         { //::SireMol::AmberParameters::isCompatibleWith
@@ -222,7 +238,8 @@ void register_AmberParameters_class(){
             AmberParameters_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "Return whether or not this flexibility is compatible with the molecule\nwhose info is in molinfo" );
         
         }
         AmberParameters_exposer.def( bp::self != bp::self );
@@ -235,7 +252,8 @@ void register_AmberParameters_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AmberParameters_exposer.def( bp::self == bp::self );
@@ -247,7 +265,8 @@ void register_AmberParameters_class(){
             AmberParameters_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("bond") ) );
+                , ( bp::arg("bond") )
+                , "" );
         
         }
         { //::SireMol::AmberParameters::remove
@@ -258,7 +277,8 @@ void register_AmberParameters_class(){
             AmberParameters_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("angle") ) );
+                , ( bp::arg("angle") )
+                , "" );
         
         }
         { //::SireMol::AmberParameters::remove
@@ -269,7 +289,8 @@ void register_AmberParameters_class(){
             AmberParameters_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("dihedral") ) );
+                , ( bp::arg("dihedral") )
+                , "" );
         
         }
         { //::SireMol::AmberParameters::remove
@@ -280,7 +301,8 @@ void register_AmberParameters_class(){
             AmberParameters_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("improper") ) );
+                , ( bp::arg("improper") )
+                , "" );
         
         }
         { //::SireMol::AmberParameters::remove14Pair
@@ -291,7 +313,8 @@ void register_AmberParameters_class(){
             AmberParameters_exposer.def( 
                 "remove14Pair"
                 , remove14Pair_function_value
-                , ( bp::arg("pair") ) );
+                , ( bp::arg("pair") )
+                , "" );
         
         }
         { //::SireMol::AmberParameters::typeName
@@ -301,7 +324,8 @@ void register_AmberParameters_class(){
             
             AmberParameters_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         AmberParameters_exposer.staticmethod( "typeName" );

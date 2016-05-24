@@ -43,14 +43,14 @@ void register_CLJBoxes_class(){
 
     { //::SireMM::CLJBoxes
         typedef bp::class_< SireMM::CLJBoxes > CLJBoxes_exposer_t;
-        CLJBoxes_exposer_t CLJBoxes_exposer = CLJBoxes_exposer_t( "CLJBoxes", bp::init< >() );
+        CLJBoxes_exposer_t CLJBoxes_exposer = CLJBoxes_exposer_t( "CLJBoxes", "The set of CLJBox boxes that contain all of the atoms in the system.\nSpace is divided into a series of cubic boxes, and atoms are divided\nbetween these so as to speed up the CLJ calculation (atoms in boxes\nthat are separated by more than the cutoff distance do not need to\nhave their interactions evaluated, and there is a natural parallelism\nbetween calculating interaction energies between pairs of boxes rather\nthan pairs of atoms)\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope CLJBoxes_scope( CLJBoxes_exposer );
-        CLJBoxes_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("box_size") )) );
-        CLJBoxes_exposer.def( bp::init< SireMM::CLJAtoms const & >(( bp::arg("atoms") )) );
-        CLJBoxes_exposer.def( bp::init< SireMM::CLJAtoms const &, SireMM::CLJAtoms const & >(( bp::arg("atoms0"), bp::arg("atoms1") )) );
-        CLJBoxes_exposer.def( bp::init< SireMM::CLJAtoms const &, SireUnits::Dimension::Length >(( bp::arg("atoms"), bp::arg("box_size") )) );
-        CLJBoxes_exposer.def( bp::init< SireMM::CLJAtoms const &, SireMM::CLJAtoms const &, SireUnits::Dimension::Length >(( bp::arg("atoms0"), bp::arg("atoms1"), bp::arg("box_size") )) );
-        CLJBoxes_exposer.def( bp::init< SireMM::CLJBoxes const & >(( bp::arg("other") )) );
+        CLJBoxes_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("box_size") ), "Construct, specifying the box length") );
+        CLJBoxes_exposer.def( bp::init< SireMM::CLJAtoms const & >(( bp::arg("atoms") ), "Box up the passed set of atoms into boxes of the default box size\n(5 angstroms)") );
+        CLJBoxes_exposer.def( bp::init< SireMM::CLJAtoms const &, SireMM::CLJAtoms const & >(( bp::arg("atoms0"), bp::arg("atoms1") ), "Box up the passed set of atoms into boxes of the default box size\n(5 angstroms)") );
+        CLJBoxes_exposer.def( bp::init< SireMM::CLJAtoms const &, SireUnits::Dimension::Length >(( bp::arg("atoms"), bp::arg("box_size") ), "Box up the passed set of atoms into boxes of specified box size") );
+        CLJBoxes_exposer.def( bp::init< SireMM::CLJAtoms const &, SireMM::CLJAtoms const &, SireUnits::Dimension::Length >(( bp::arg("atoms0"), bp::arg("atoms1"), bp::arg("box_size") ), "Box up the passed set of atoms into boxes of specified box size") );
+        CLJBoxes_exposer.def( bp::init< SireMM::CLJBoxes const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::CLJBoxes::add
         
             typedef ::QVector< SireMM::CLJBoxIndex > ( ::SireMM::CLJBoxes::*add_function_type)( ::SireMM::CLJAtoms const & ) ;
@@ -59,7 +59,8 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("atoms") ) );
+                , ( bp::arg("atoms") )
+                , "Add a set of CLJAtoms to the box, returning the indicies of each added atom" );
         
         }
         { //::SireMM::CLJBoxes::at
@@ -70,7 +71,8 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("idx") ) );
+                , ( bp::arg("idx") )
+                , "Return the atom at the specified index, or a null atom if\nnone such atom exists" );
         
         }
         { //::SireMM::CLJBoxes::atoms
@@ -80,7 +82,8 @@ void register_CLJBoxes_class(){
             
             CLJBoxes_exposer.def( 
                 "atoms"
-                , atoms_function_value );
+                , atoms_function_value
+                , "Return all of the atoms in all of the boxes (these may\nbe returned with a lot of padding)" );
         
         }
         { //::SireMM::CLJBoxes::atoms
@@ -91,7 +94,8 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "atoms"
                 , atoms_function_value
-                , ( bp::arg("atoms") ) );
+                , ( bp::arg("atoms") )
+                , "Return all of the atoms whose indicies are in idxs. The atoms are returned\nin the same order as they appear in idxs" );
         
         }
         { //::SireMM::CLJBoxes::boxAt
@@ -102,7 +106,8 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "boxAt"
                 , boxAt_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return the ith box" );
         
         }
         { //::SireMM::CLJBoxes::boxAt
@@ -113,7 +118,8 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "boxAt"
                 , boxAt_function_value
-                , ( bp::arg("index") ) );
+                , ( bp::arg("index") )
+                , "Return the box at index index" );
         
         }
         { //::SireMM::CLJBoxes::boxAt
@@ -124,7 +130,8 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "boxAt"
                 , boxAt_function_value
-                , ( bp::arg("coords") ) );
+                , ( bp::arg("coords") )
+                , "Return the box that contains the point with coordinates coords" );
         
         }
         { //::SireMM::CLJBoxes::boxDimensions
@@ -134,7 +141,8 @@ void register_CLJBoxes_class(){
             
             CLJBoxes_exposer.def( 
                 "boxDimensions"
-                , boxDimensions_function_value );
+                , boxDimensions_function_value
+                , "Return an array containing all occupied box dimensions. This is in the same order\nas the boxes returned by boxes" );
         
         }
         { //::SireMM::CLJBoxes::boxDimensionsAt
@@ -145,7 +153,8 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "boxDimensionsAt"
                 , boxDimensionsAt_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return the dimensions of the ith box" );
         
         }
         { //::SireMM::CLJBoxes::boxDimensionsAt
@@ -156,7 +165,8 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "boxDimensionsAt"
                 , boxDimensionsAt_function_value
-                , ( bp::arg("index") ) );
+                , ( bp::arg("index") )
+                , "Return the AABox that describes the boundary of the box at index index" );
         
         }
         { //::SireMM::CLJBoxes::boxDimensionsAt
@@ -167,7 +177,8 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "boxDimensionsAt"
                 , boxDimensionsAt_function_value
-                , ( bp::arg("coords") ) );
+                , ( bp::arg("coords") )
+                , "Return the dimensions of the box that contains the point with coordinates coords" );
         
         }
         { //::SireMM::CLJBoxes::boxes
@@ -177,7 +188,8 @@ void register_CLJBoxes_class(){
             
             CLJBoxes_exposer.def( 
                 "boxes"
-                , boxes_function_value );
+                , boxes_function_value
+                , "Return an array containing all occupied boxes. This is in the same order\nas the box dimensions returned by boxDimensions" );
         
         }
         { //::SireMM::CLJBoxes::get
@@ -188,7 +200,8 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "get"
                 , get_function_value
-                , ( bp::arg("atoms") ) );
+                , ( bp::arg("atoms") )
+                , "Return all of the atoms whose indicies are in idxs. The atoms are returned\nin the same order as they appear in idxs" );
         
         }
         { //::SireMM::CLJBoxes::getDistance
@@ -199,7 +212,8 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "getDistance"
                 , getDistance_function_value
-                , ( bp::arg("box0"), bp::arg("box1") ) );
+                , ( bp::arg("box0"), bp::arg("box1") )
+                , "Return the distance between the two boxes, assuming they are in an infinite cartesian space" );
         
         }
         { //::SireMM::CLJBoxes::getDistance
@@ -210,7 +224,8 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "getDistance"
                 , getDistance_function_value
-                , ( bp::arg("space"), bp::arg("box0"), bp::arg("box1") ) );
+                , ( bp::arg("space"), bp::arg("box0"), bp::arg("box1") )
+                , "Return the distance between the two boxes based on the space space" );
         
         }
         { //::SireMM::CLJBoxes::getDistance
@@ -221,7 +236,8 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "getDistance"
                 , getDistance_function_value
-                , ( bp::arg("space"), bp::arg("box0"), bp::arg("box1"), bp::arg("nx"), bp::arg("ny"), bp::arg("nz") ) );
+                , ( bp::arg("space"), bp::arg("box0"), bp::arg("box1"), bp::arg("nx"), bp::arg("ny"), bp::arg("nz") )
+                , "Return the distance between the two boxes based on the space space, assuming that\none of the boxes covers a volume of nx,ny,nz box lengths above its minimum dimensions" );
         
         }
         { //::SireMM::CLJBoxes::getDistances
@@ -232,7 +248,8 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "getDistances"
                 , getDistances_function_value
-                , ( bp::arg("space"), bp::arg("boxes") ) );
+                , ( bp::arg("space"), bp::arg("boxes") )
+                , "Return the distances between all of the occupied boxes in boxes\nbased on the space space" );
         
         }
         { //::SireMM::CLJBoxes::getDistances
@@ -243,7 +260,8 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "getDistances"
                 , getDistances_function_value
-                , ( bp::arg("space"), bp::arg("boxes"), bp::arg("cutoff") ) );
+                , ( bp::arg("space"), bp::arg("boxes"), bp::arg("cutoff") )
+                , "Return the distances between all of the occupied boxes in boxes\nbased on the space space, only returning boxes that are separated\nby distances of less than cutoff" );
         
         }
         { //::SireMM::CLJBoxes::getDistances
@@ -254,7 +272,8 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "getDistances"
                 , getDistances_function_value
-                , ( bp::arg("space"), bp::arg("boxes0"), bp::arg("boxes1") ) );
+                , ( bp::arg("space"), bp::arg("boxes0"), bp::arg("boxes1") )
+                , "Return the distances between all pairs of occupied boxes between the boxes in\nboxes0 and the boxes in boxes1" );
         
         }
         { //::SireMM::CLJBoxes::getDistances
@@ -265,7 +284,8 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "getDistances"
                 , getDistances_function_value
-                , ( bp::arg("space"), bp::arg("boxes0"), bp::arg("boxes1"), bp::arg("cutoff") ) );
+                , ( bp::arg("space"), bp::arg("boxes0"), bp::arg("boxes1"), bp::arg("cutoff") )
+                , "Return the distances between all pairs of occupied boxes between the boxes in\nboxes0 and the boxes in boxes1" );
         
         }
         { //::SireMM::CLJBoxes::getDistances
@@ -276,7 +296,8 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "getDistances"
                 , getDistances_function_value
-                , ( bp::arg("space"), bp::arg("atoms0"), bp::arg("boxes1") ) );
+                , ( bp::arg("space"), bp::arg("atoms0"), bp::arg("boxes1") )
+                , "Return the distances between all the passed atoms and all of the occupied\nboxes in boxes1, returning a set of CLJBoxDistance objects where box0() is 0" );
         
         }
         { //::SireMM::CLJBoxes::getDistances
@@ -287,7 +308,8 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "getDistances"
                 , getDistances_function_value
-                , ( bp::arg("space"), bp::arg("atoms0"), bp::arg("boxes1"), bp::arg("cutoff") ) );
+                , ( bp::arg("space"), bp::arg("atoms0"), bp::arg("boxes1"), bp::arg("cutoff") )
+                , "Return the distances between all the passed atoms and all of the occupied\nboxes in boxes1, returning a set of CLJBoxDistance objects where box0() is 0" );
         
         }
         { //::SireMM::CLJBoxes::getitem
@@ -298,7 +320,8 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "getitem"
                 , getitem_function_value
-                , ( bp::arg("idx") ) );
+                , ( bp::arg("idx") )
+                , "Return the atom at the specified index, or a null atom if\nnone such atom exists" );
         
         }
         { //::SireMM::CLJBoxes::isEmpty
@@ -308,7 +331,8 @@ void register_CLJBoxes_class(){
             
             CLJBoxes_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMM::CLJBoxes::length
@@ -318,7 +342,8 @@ void register_CLJBoxes_class(){
             
             CLJBoxes_exposer.def( 
                 "length"
-                , length_function_value );
+                , length_function_value
+                , "Return the length of each side of each box" );
         
         }
         { //::SireMM::CLJBoxes::nAtoms
@@ -328,7 +353,8 @@ void register_CLJBoxes_class(){
             
             CLJBoxes_exposer.def( 
                 "nAtoms"
-                , nAtoms_function_value );
+                , nAtoms_function_value
+                , "Return the number of atoms in the boxes" );
         
         }
         { //::SireMM::CLJBoxes::nOccupiedBoxes
@@ -338,7 +364,8 @@ void register_CLJBoxes_class(){
             
             CLJBoxes_exposer.def( 
                 "nOccupiedBoxes"
-                , nOccupiedBoxes_function_value );
+                , nOccupiedBoxes_function_value
+                , "Return the number of occupied boxes" );
         
         }
         { //::SireMM::CLJBoxes::occupiedBoxIndicies
@@ -348,7 +375,8 @@ void register_CLJBoxes_class(){
             
             CLJBoxes_exposer.def( 
                 "occupiedBoxIndicies"
-                , occupiedBoxIndicies_function_value );
+                , occupiedBoxIndicies_function_value
+                , "Return the indicies of all occupied boxes" );
         
         }
         { //::SireMM::CLJBoxes::occupiedBoxes
@@ -359,7 +387,8 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "occupiedBoxes"
                 , occupiedBoxes_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         CLJBoxes_exposer.def( bp::self != bp::self );
@@ -373,7 +402,8 @@ void register_CLJBoxes_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CLJBoxes_exposer.def( bp::self == bp::self );
@@ -385,7 +415,8 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("idx") ) );
+                , ( bp::arg("idx") )
+                , "" );
         
         }
         { //::SireMM::CLJBoxes::remove
@@ -396,7 +427,8 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("atoms") ) );
+                , ( bp::arg("atoms") )
+                , "Remove the atoms at the specified indicies. This does a rapid remove, i.e.\nit just turns the specified atoms into dummies (which may be overwritten by\nsubsequent add operations). If you want to completely remove the atoms then\nuse remove followed by squeeze. This will turn the atoms into dummies and will\nthen remove all dummy atoms from the boxes" );
         
         }
         { //::SireMM::CLJBoxes::squeeze
@@ -406,7 +438,8 @@ void register_CLJBoxes_class(){
             
             CLJBoxes_exposer.def( 
                 "squeeze"
-                , squeeze_function_value );
+                , squeeze_function_value
+                , "Return a copy of the boxes where all of the CLJAtoms objects have been squeezed,\nand all empty boxes have been removed" );
         
         }
         { //::SireMM::CLJBoxes::take
@@ -417,7 +450,8 @@ void register_CLJBoxes_class(){
             CLJBoxes_exposer.def( 
                 "take"
                 , take_function_value
-                , ( bp::arg("atoms") ) );
+                , ( bp::arg("atoms") )
+                , "Remove the atoms at the specified indicies, returning the atoms that are\nremoved. This does a rapid remove, i.e. it just turns the specified atoms into\ndummies (which may be overwritten by subsequent add operations). If you want\nto completely remove the atoms, use take followed by squeeze" );
         
         }
         { //::SireMM::CLJBoxes::toString
@@ -427,7 +461,8 @@ void register_CLJBoxes_class(){
             
             CLJBoxes_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMM::CLJBoxes::typeName
@@ -437,7 +472,8 @@ void register_CLJBoxes_class(){
             
             CLJBoxes_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::CLJBoxes::what
@@ -447,7 +483,8 @@ void register_CLJBoxes_class(){
             
             CLJBoxes_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         CLJBoxes_exposer.staticmethod( "getDistances" );

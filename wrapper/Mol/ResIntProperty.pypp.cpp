@@ -25,11 +25,11 @@ void register_ResIntProperty_class(){
 
     { //::SireMol::ResProperty< long long >
         typedef bp::class_< SireMol::ResProperty< long long >, bp::bases< SireMol::ResProp, SireMol::MolViewProperty, SireBase::Property > > ResIntProperty_exposer_t;
-        ResIntProperty_exposer_t ResIntProperty_exposer = ResIntProperty_exposer_t( "ResIntProperty", bp::init< >() );
+        ResIntProperty_exposer_t ResIntProperty_exposer = ResIntProperty_exposer_t( "ResIntProperty", "", bp::init< >("") );
         bp::scope ResIntProperty_scope( ResIntProperty_exposer );
-        ResIntProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") )) );
-        ResIntProperty_exposer.def( bp::init< QVector< long long > const & >(( bp::arg("values") )) );
-        ResIntProperty_exposer.def( bp::init< SireMol::ResProperty< long long > const & >(( bp::arg("other") )) );
+        ResIntProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "") );
+        ResIntProperty_exposer.def( bp::init< QVector< long long > const & >(( bp::arg("values") ), "") );
+        ResIntProperty_exposer.def( bp::init< SireMol::ResProperty< long long > const & >(( bp::arg("other") ), "") );
         { //::SireMol::ResProperty< long long >::array
         
             typedef SireMol::ResProperty< long long > exported_class_t;
@@ -39,7 +39,8 @@ void register_ResIntProperty_class(){
             ResIntProperty_exposer.def( 
                 "array"
                 , array_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::ResProperty< long long >::assertCanConvert
@@ -51,7 +52,8 @@ void register_ResIntProperty_class(){
             ResIntProperty_exposer.def( 
                 "assertCanConvert"
                 , assertCanConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::ResProperty< long long >::assignFrom
@@ -63,7 +65,8 @@ void register_ResIntProperty_class(){
             ResIntProperty_exposer.def( 
                 "assignFrom"
                 , assignFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::ResProperty< long long >::at
@@ -76,7 +79,8 @@ void register_ResIntProperty_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("residx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::ResProperty< long long >::canConvert
@@ -88,7 +92,8 @@ void register_ResIntProperty_class(){
             ResIntProperty_exposer.def( 
                 "canConvert"
                 , canConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::ResProperty< long long >::count
@@ -99,7 +104,8 @@ void register_ResIntProperty_class(){
             
             ResIntProperty_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMol::ResProperty< long long >::fromVariant
@@ -111,7 +117,8 @@ void register_ResIntProperty_class(){
             ResIntProperty_exposer.def( 
                 "fromVariant"
                 , fromVariant_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::ResProperty< long long >::get
@@ -124,7 +131,8 @@ void register_ResIntProperty_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("residx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::ResProperty< long long >::isCompatibleWith
@@ -136,7 +144,8 @@ void register_ResIntProperty_class(){
             ResIntProperty_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::ResProperty< long long >::isEmpty
@@ -147,7 +156,8 @@ void register_ResIntProperty_class(){
             
             ResIntProperty_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMol::ResProperty< long long >::nResidues
@@ -158,7 +168,8 @@ void register_ResIntProperty_class(){
             
             ResIntProperty_exposer.def( 
                 "nResidues"
-                , nResidues_function_value );
+                , nResidues_function_value
+                , "" );
         
         }
         ResIntProperty_exposer.def( bp::self != bp::self );
@@ -172,7 +183,8 @@ void register_ResIntProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         ResIntProperty_exposer.def( bp::self == bp::self );
@@ -186,7 +198,8 @@ void register_ResIntProperty_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("residx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::ResProperty< long long >::set
@@ -199,7 +212,8 @@ void register_ResIntProperty_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("residx"), bp::arg("value") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::ResProperty< long long >::size
@@ -210,7 +224,8 @@ void register_ResIntProperty_class(){
             
             ResIntProperty_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "" );
         
         }
         { //::SireMol::ResProperty< long long >::toString
@@ -221,7 +236,8 @@ void register_ResIntProperty_class(){
             
             ResIntProperty_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::ResProperty< long long >::toVariant
@@ -232,7 +248,8 @@ void register_ResIntProperty_class(){
             
             ResIntProperty_exposer.def( 
                 "toVariant"
-                , toVariant_function_value );
+                , toVariant_function_value
+                , "" );
         
         }
         { //::SireMol::ResProperty< long long >::typeName
@@ -243,7 +260,8 @@ void register_ResIntProperty_class(){
             
             ResIntProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         ResIntProperty_exposer.staticmethod( "fromVariant" );

@@ -26,10 +26,10 @@ void register_ResWithAtoms_class(){
 
     { //::SireMol::ResWithAtoms
         typedef bp::class_< SireMol::ResWithAtoms, bp::bases< SireMol::ResID, SireID::ID > > ResWithAtoms_exposer_t;
-        ResWithAtoms_exposer_t ResWithAtoms_exposer = ResWithAtoms_exposer_t( "ResWithAtoms", bp::init< >() );
+        ResWithAtoms_exposer_t ResWithAtoms_exposer = ResWithAtoms_exposer_t( "ResWithAtoms", "This ID class identifies residues that contain atoms that\nmatch the passed AtomID\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope ResWithAtoms_scope( ResWithAtoms_exposer );
-        ResWithAtoms_exposer.def( bp::init< SireMol::AtomID const & >(( bp::arg("atomid") )) );
-        ResWithAtoms_exposer.def( bp::init< SireMol::ResWithAtoms const & >(( bp::arg("other") )) );
+        ResWithAtoms_exposer.def( bp::init< SireMol::AtomID const & >(( bp::arg("atomid") ), "Construct from the passed AtomID") );
+        ResWithAtoms_exposer.def( bp::init< SireMol::ResWithAtoms const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::ResWithAtoms::atomID
         
             typedef ::SireMol::AtomID const & ( ::SireMol::ResWithAtoms::*atomID_function_type)(  ) const;
@@ -38,7 +38,8 @@ void register_ResWithAtoms_class(){
             ResWithAtoms_exposer.def( 
                 "atomID"
                 , atomID_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the atom ID" );
         
         }
         { //::SireMol::ResWithAtoms::hash
@@ -48,7 +49,8 @@ void register_ResWithAtoms_class(){
             
             ResWithAtoms_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Return a hash of this identifier" );
         
         }
         { //::SireMol::ResWithAtoms::isNull
@@ -58,7 +60,8 @@ void register_ResWithAtoms_class(){
             
             ResWithAtoms_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Is this selection null?" );
         
         }
         { //::SireMol::ResWithAtoms::map
@@ -69,7 +72,8 @@ void register_ResWithAtoms_class(){
             ResWithAtoms_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "Map this ID to the list of indicies of residues that match this ID\nThrow: SireMol::missing_atom\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
         
         }
         ResWithAtoms_exposer.def( bp::self != bp::self );
@@ -82,7 +86,8 @@ void register_ResWithAtoms_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         ResWithAtoms_exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -94,7 +99,8 @@ void register_ResWithAtoms_class(){
             
             ResWithAtoms_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representatio of this ID" );
         
         }
         { //::SireMol::ResWithAtoms::typeName
@@ -104,7 +110,8 @@ void register_ResWithAtoms_class(){
             
             ResWithAtoms_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::ResWithAtoms::what
@@ -114,7 +121,8 @@ void register_ResWithAtoms_class(){
             
             ResWithAtoms_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ResWithAtoms_exposer.staticmethod( "typeName" );

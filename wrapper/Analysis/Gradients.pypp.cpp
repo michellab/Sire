@@ -35,13 +35,13 @@ void register_Gradients_class(){
 
     { //::SireAnalysis::Gradients
         typedef bp::class_< SireAnalysis::Gradients, bp::bases< SireBase::Property > > Gradients_exposer_t;
-        Gradients_exposer_t Gradients_exposer = Gradients_exposer_t( "Gradients", bp::init< >() );
+        Gradients_exposer_t Gradients_exposer = Gradients_exposer_t( "Gradients", "This class contains the free energy gradients from a TI simulation\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope Gradients_scope( Gradients_exposer );
-        Gradients_exposer.def( bp::init< QMap< double, SireMaths::AverageAndStddev > const & >(( bp::arg("gradients") )) );
-        Gradients_exposer.def( bp::init< QMap< double, SireMaths::FreeEnergyAverage > const & >(( bp::arg("gradients") )) );
-        Gradients_exposer.def( bp::init< QMap< double, SireMaths::FreeEnergyAverage > const &, double >(( bp::arg("gradients"), bp::arg("delta_lambda") )) );
-        Gradients_exposer.def( bp::init< QMap< double, SireMaths::FreeEnergyAverage > const &, QMap< double, SireMaths::FreeEnergyAverage > const &, double >(( bp::arg("forwards"), bp::arg("backwards"), bp::arg("delta_lambda") )) );
-        Gradients_exposer.def( bp::init< SireAnalysis::Gradients const & >(( bp::arg("other") )) );
+        Gradients_exposer.def( bp::init< QMap< double, SireMaths::AverageAndStddev > const & >(( bp::arg("gradients") ), "Construct from the passed analytic TI gradients") );
+        Gradients_exposer.def( bp::init< QMap< double, SireMaths::FreeEnergyAverage > const & >(( bp::arg("gradients") ), "Construct from the passed full finite difference TI gradients") );
+        Gradients_exposer.def( bp::init< QMap< double, SireMaths::FreeEnergyAverage > const &, double >(( bp::arg("gradients"), bp::arg("delta_lambda") ), "Construct from the passed finite difference TI gradients, using the passed\nvalue of delta lambda") );
+        Gradients_exposer.def( bp::init< QMap< double, SireMaths::FreeEnergyAverage > const &, QMap< double, SireMaths::FreeEnergyAverage > const &, double >(( bp::arg("forwards"), bp::arg("backwards"), bp::arg("delta_lambda") ), "Construct from the passed finite difference TI forwards and backwards\ngradients, using the passed value of delta lambda. Note that the\nforwards gradients should be the zwanzig free energies from\nlambda->lambda+delta_lambda, while the backwards gradients should\nbe the zwanzig free energies from lambda-delta_lambda->lambda") );
+        Gradients_exposer.def( bp::init< SireAnalysis::Gradients const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireAnalysis::Gradients::analyticData
         
             typedef ::QMap< double, SireMaths::AverageAndStddev > ( ::SireAnalysis::Gradients::*analyticData_function_type)(  ) const;
@@ -49,7 +49,8 @@ void register_Gradients_class(){
             
             Gradients_exposer.def( 
                 "analyticData"
-                , analyticData_function_value );
+                , analyticData_function_value
+                , "Return the raw data for the analytic gradients" );
         
         }
         { //::SireAnalysis::Gradients::backwards
@@ -60,7 +61,8 @@ void register_Gradients_class(){
             Gradients_exposer.def( 
                 "backwards"
                 , backwards_function_value
-                , ( bp::arg("lam") ) );
+                , ( bp::arg("lam") )
+                , "Return the backwards gradient for the passed lambda value" );
         
         }
         { //::SireAnalysis::Gradients::backwardsData
@@ -70,7 +72,8 @@ void register_Gradients_class(){
             
             Gradients_exposer.def( 
                 "backwardsData"
-                , backwardsData_function_value );
+                , backwardsData_function_value
+                , "Return the raw data for the backwards free energy gradients" );
         
         }
         { //::SireAnalysis::Gradients::backwardsValues
@@ -80,7 +83,8 @@ void register_Gradients_class(){
             
             Gradients_exposer.def( 
                 "backwardsValues"
-                , backwardsValues_function_value );
+                , backwardsValues_function_value
+                , "Return the values of the backwards gradients as data points. This returns the\naverage backwards gradient for each lambda value, together with the\nstandard error at the 90% confidence level" );
         
         }
         { //::SireAnalysis::Gradients::deltaLambda
@@ -90,7 +94,8 @@ void register_Gradients_class(){
             
             Gradients_exposer.def( 
                 "deltaLambda"
-                , deltaLambda_function_value );
+                , deltaLambda_function_value
+                , "Return the value of delta lambda. This will be zero if these are\npure TI gradients" );
         
         }
         { //::SireAnalysis::Gradients::forwards
@@ -101,7 +106,8 @@ void register_Gradients_class(){
             Gradients_exposer.def( 
                 "forwards"
                 , forwards_function_value
-                , ( bp::arg("lam") ) );
+                , ( bp::arg("lam") )
+                , "Return the forwards gradient for the passed lambda value" );
         
         }
         { //::SireAnalysis::Gradients::forwardsData
@@ -111,7 +117,8 @@ void register_Gradients_class(){
             
             Gradients_exposer.def( 
                 "forwardsData"
-                , forwardsData_function_value );
+                , forwardsData_function_value
+                , "Return the raw data for the forwards free energy gradients" );
         
         }
         { //::SireAnalysis::Gradients::forwardsValues
@@ -121,7 +128,8 @@ void register_Gradients_class(){
             
             Gradients_exposer.def( 
                 "forwardsValues"
-                , forwardsValues_function_value );
+                , forwardsValues_function_value
+                , "Return the values of the forwards gradients as data points. This returns the\naverage forwards gradient for each lambda value, together with the\nstandard error at the 90% confidence level" );
         
         }
         { //::SireAnalysis::Gradients::gradient
@@ -132,7 +140,8 @@ void register_Gradients_class(){
             Gradients_exposer.def( 
                 "gradient"
                 , gradient_function_value
-                , ( bp::arg("lam") ) );
+                , ( bp::arg("lam") )
+                , "Return the gradient at the passed lambda value. This is the\naverage of the forwards and backwards gradient if finite difference\nis used" );
         
         }
         { //::SireAnalysis::Gradients::integrate
@@ -142,7 +151,8 @@ void register_Gradients_class(){
             
             Gradients_exposer.def( 
                 "integrate"
-                , integrate_function_value );
+                , integrate_function_value
+                , "Integrate these gradients between 0 and 1 using a polynomial of\norder ngradients-2 and return them as a potential of mean force (PMF)" );
         
         }
         { //::SireAnalysis::Gradients::integrate
@@ -153,7 +163,8 @@ void register_Gradients_class(){
             Gradients_exposer.def( 
                 "integrate"
                 , integrate_function_value
-                , ( bp::arg("order") ) );
+                , ( bp::arg("order") )
+                , "Integrate these gradients between 0 and 1 using a polynomial\nof passed order and return them as a potential of mean force (PMF)" );
         
         }
         { //::SireAnalysis::Gradients::integrate
@@ -164,7 +175,8 @@ void register_Gradients_class(){
             Gradients_exposer.def( 
                 "integrate"
                 , integrate_function_value
-                , ( bp::arg("range_min"), bp::arg("range_max") ) );
+                , ( bp::arg("range_min"), bp::arg("range_max") )
+                , "Integrate these gradients between range_min to range_max using\na polynomial of order 10 and return them as a potential of mean force (PMF)" );
         
         }
         { //::SireAnalysis::Gradients::integrate
@@ -175,7 +187,8 @@ void register_Gradients_class(){
             Gradients_exposer.def( 
                 "integrate"
                 , integrate_function_value
-                , ( bp::arg("range_min"), bp::arg("range_max"), bp::arg("order") ) );
+                , ( bp::arg("range_min"), bp::arg("range_max"), bp::arg("order") )
+                , "Integrate these gradients between range_min to range_max using\na polynomial of passed order and return them as a potential of mean force (PMF)" );
         
         }
         { //::SireAnalysis::Gradients::isEmpty
@@ -185,7 +198,8 @@ void register_Gradients_class(){
             
             Gradients_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether or not this is empty" );
         
         }
         { //::SireAnalysis::Gradients::keys
@@ -195,7 +209,8 @@ void register_Gradients_class(){
             
             Gradients_exposer.def( 
                 "keys"
-                , keys_function_value );
+                , keys_function_value
+                , "Return the (sorted) list of all lambda values" );
         
         }
         { //::SireAnalysis::Gradients::lambdaValues
@@ -205,7 +220,8 @@ void register_Gradients_class(){
             
             Gradients_exposer.def( 
                 "lambdaValues"
-                , lambdaValues_function_value );
+                , lambdaValues_function_value
+                , "Return the (sorted) list of the lambda values" );
         
         }
         { //::SireAnalysis::Gradients::merge
@@ -216,7 +232,8 @@ void register_Gradients_class(){
             Gradients_exposer.def( 
                 "merge"
                 , merge_function_value
-                , ( bp::arg("gradients") ) );
+                , ( bp::arg("gradients") )
+                , "Merge together the passed list of Gradients into a single object.\nNote that all of the passed gradients must be compatible, e.g.\nhave the same temperature and delta lambda values" );
         
         }
         { //::SireAnalysis::Gradients::nLambdaValues
@@ -226,7 +243,8 @@ void register_Gradients_class(){
             
             Gradients_exposer.def( 
                 "nLambdaValues"
-                , nLambdaValues_function_value );
+                , nLambdaValues_function_value
+                , "Return the total number of lambda values" );
         
         }
         { //::SireAnalysis::Gradients::nSamples
@@ -236,7 +254,8 @@ void register_Gradients_class(){
             
             Gradients_exposer.def( 
                 "nSamples"
-                , nSamples_function_value );
+                , nSamples_function_value
+                , "Return the total number of samples used to calculate these gradients" );
         
         }
         Gradients_exposer.def( bp::self != bp::self );
@@ -250,7 +269,8 @@ void register_Gradients_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Gradients_exposer.def( bp::self == bp::self );
@@ -262,7 +282,8 @@ void register_Gradients_class(){
             Gradients_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("lam") ) );
+                , ( bp::arg("lam") )
+                , "" );
         
         }
         { //::SireAnalysis::Gradients::temperature
@@ -272,7 +293,8 @@ void register_Gradients_class(){
             
             Gradients_exposer.def( 
                 "temperature"
-                , temperature_function_value );
+                , temperature_function_value
+                , "Return the temperature at which the gradients were collected" );
         
         }
         { //::SireAnalysis::Gradients::toString
@@ -282,7 +304,8 @@ void register_Gradients_class(){
             
             Gradients_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireAnalysis::Gradients::typeName
@@ -292,7 +315,8 @@ void register_Gradients_class(){
             
             Gradients_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireAnalysis::Gradients::values
@@ -302,7 +326,8 @@ void register_Gradients_class(){
             
             Gradients_exposer.def( 
                 "values"
-                , values_function_value );
+                , values_function_value
+                , "Return the values of the gradients as data points. This returns the\naverage of the forwards and backwards gradients, with errors calculated\nbased on both the difference between the forwards and backwards values,\nand the 90% confidence level of the average of gradients" );
         
         }
         { //::SireAnalysis::Gradients::what
@@ -312,7 +337,8 @@ void register_Gradients_class(){
             
             Gradients_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Gradients_exposer.staticmethod( "merge" );

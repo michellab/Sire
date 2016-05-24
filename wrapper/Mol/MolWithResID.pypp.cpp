@@ -36,13 +36,13 @@ void register_MolWithResID_class(){
 
     { //::SireMol::MolWithResID
         typedef bp::class_< SireMol::MolWithResID, bp::bases< SireMol::MolID, SireID::ID > > MolWithResID_exposer_t;
-        MolWithResID_exposer_t MolWithResID_exposer = MolWithResID_exposer_t( "MolWithResID", bp::init< >() );
+        MolWithResID_exposer_t MolWithResID_exposer = MolWithResID_exposer_t( "MolWithResID", "This class is used to identify a molecule according to\nwhether or not it contains a residue with matching\nresidue ID\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope MolWithResID_scope( MolWithResID_exposer );
-        MolWithResID_exposer.def( bp::init< QString const & >(( bp::arg("resname") )) );
-        MolWithResID_exposer.def( bp::init< int >(( bp::arg("resnum") )) );
-        MolWithResID_exposer.def( bp::init< SireMol::ResID const & >(( bp::arg("resid") )) );
-        MolWithResID_exposer.def( bp::init< QString const &, SireID::CaseSensitivity >(( bp::arg("resname"), bp::arg("case_sensitivity") )) );
-        MolWithResID_exposer.def( bp::init< SireMol::MolWithResID const & >(( bp::arg("other") )) );
+        MolWithResID_exposer.def( bp::init< QString const & >(( bp::arg("resname") ), "Construct to match any molecule that contains the residue with name resname") );
+        MolWithResID_exposer.def( bp::init< int >(( bp::arg("resnum") ), "Construct to match any molecule that contains the residue with number resnum") );
+        MolWithResID_exposer.def( bp::init< SireMol::ResID const & >(( bp::arg("resid") ), "Construct to match any molecule that contains the residue that matches ID resid") );
+        MolWithResID_exposer.def( bp::init< QString const &, SireID::CaseSensitivity >(( bp::arg("resname"), bp::arg("case_sensitivity") ), "Construct to match any molecule that contains the residue with name resname.\n(allowing you to specify whether the name match should be case sensitive or not)") );
+        MolWithResID_exposer.def( bp::init< SireMol::MolWithResID const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::MolWithResID::hash
         
             typedef ::uint ( ::SireMol::MolWithResID::*hash_function_type)(  ) const;
@@ -50,7 +50,8 @@ void register_MolWithResID_class(){
             
             MolWithResID_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::MolWithResID::isNull
@@ -60,7 +61,8 @@ void register_MolWithResID_class(){
             
             MolWithResID_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::MolWithResID::map
@@ -71,7 +73,8 @@ void register_MolWithResID_class(){
             MolWithResID_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "" );
         
         }
         { //::SireMol::MolWithResID::map
@@ -82,7 +85,8 @@ void register_MolWithResID_class(){
             MolWithResID_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "" );
         
         }
         { //::SireMol::MolWithResID::map
@@ -93,7 +97,8 @@ void register_MolWithResID_class(){
             MolWithResID_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molgroups") ) );
+                , ( bp::arg("molgroups") )
+                , "" );
         
         }
         MolWithResID_exposer.def( bp::self != bp::self );
@@ -106,7 +111,8 @@ void register_MolWithResID_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MolWithResID_exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -119,7 +125,8 @@ void register_MolWithResID_class(){
             MolWithResID_exposer.def( 
                 "resID"
                 , resID_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the residue ID that is used to find the residue (and thus the molecule)" );
         
         }
         { //::SireMol::MolWithResID::toString
@@ -129,7 +136,8 @@ void register_MolWithResID_class(){
             
             MolWithResID_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::MolWithResID::typeName
@@ -139,7 +147,8 @@ void register_MolWithResID_class(){
             
             MolWithResID_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::MolWithResID::what
@@ -149,7 +158,8 @@ void register_MolWithResID_class(){
             
             MolWithResID_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         MolWithResID_exposer.staticmethod( "typeName" );

@@ -23,13 +23,13 @@ void register_AtomLJs_class(){
 
     { //::SireMol::AtomProperty< SireMM::LJParameter >
         typedef bp::class_< SireMol::AtomProperty< SireMM::LJParameter >, bp::bases< SireMol::AtomProp, SireMol::MolViewProperty, SireBase::Property > > AtomLJs_exposer_t;
-        AtomLJs_exposer_t AtomLJs_exposer = AtomLJs_exposer_t( "AtomLJs", bp::init< >() );
+        AtomLJs_exposer_t AtomLJs_exposer = AtomLJs_exposer_t( "AtomLJs", "", bp::init< >("") );
         bp::scope AtomLJs_scope( AtomLJs_exposer );
-        AtomLJs_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") )) );
-        AtomLJs_exposer.def( bp::init< SireMol::MoleculeInfoData const &, SireMM::LJParameter const & >(( bp::arg("molinfo"), bp::arg("default_value") )) );
-        AtomLJs_exposer.def( bp::init< SireMM::LJParameter const & >(( bp::arg("value") )) );
-        AtomLJs_exposer.def( bp::init< SireBase::PackedArray2D< SireMM::LJParameter > const & >(( bp::arg("values") )) );
-        AtomLJs_exposer.def( bp::init< SireMol::AtomProperty< SireMM::LJParameter > const & >(( bp::arg("other") )) );
+        AtomLJs_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "") );
+        AtomLJs_exposer.def( bp::init< SireMol::MoleculeInfoData const &, SireMM::LJParameter const & >(( bp::arg("molinfo"), bp::arg("default_value") ), "") );
+        AtomLJs_exposer.def( bp::init< SireMM::LJParameter const & >(( bp::arg("value") ), "") );
+        AtomLJs_exposer.def( bp::init< SireBase::PackedArray2D< SireMM::LJParameter > const & >(( bp::arg("values") ), "") );
+        AtomLJs_exposer.def( bp::init< SireMol::AtomProperty< SireMM::LJParameter > const & >(( bp::arg("other") ), "") );
         { //::SireMol::AtomProperty< SireMM::LJParameter >::array
         
             typedef SireMol::AtomProperty< SireMM::LJParameter > exported_class_t;
@@ -39,7 +39,8 @@ void register_AtomLJs_class(){
             AtomLJs_exposer.def( 
                 "array"
                 , array_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::assertCanConvert
@@ -51,7 +52,8 @@ void register_AtomLJs_class(){
             AtomLJs_exposer.def( 
                 "assertCanConvert"
                 , assertCanConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::assignFrom
@@ -63,7 +65,8 @@ void register_AtomLJs_class(){
             AtomLJs_exposer.def( 
                 "assignFrom"
                 , assignFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::at
@@ -76,7 +79,8 @@ void register_AtomLJs_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::at
@@ -89,7 +93,8 @@ void register_AtomLJs_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::canConvert
@@ -101,7 +106,8 @@ void register_AtomLJs_class(){
             AtomLJs_exposer.def( 
                 "canConvert"
                 , canConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::copyFrom
@@ -113,7 +119,8 @@ void register_AtomLJs_class(){
             AtomLJs_exposer.def( 
                 "copyFrom"
                 , copyFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::copyFrom
@@ -125,7 +132,8 @@ void register_AtomLJs_class(){
             AtomLJs_exposer.def( 
                 "copyFrom"
                 , copyFrom_function_value
-                , ( bp::arg("values"), bp::arg("selection") ) );
+                , ( bp::arg("values"), bp::arg("selection") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::count
@@ -136,7 +144,8 @@ void register_AtomLJs_class(){
             
             AtomLJs_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::divide
@@ -148,7 +157,8 @@ void register_AtomLJs_class(){
             AtomLJs_exposer.def( 
                 "divide"
                 , divide_function_value
-                , ( bp::arg("beads") ) );
+                , ( bp::arg("beads") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::divideByResidue
@@ -160,7 +170,8 @@ void register_AtomLJs_class(){
             AtomLJs_exposer.def( 
                 "divideByResidue"
                 , divideByResidue_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::fromVariant
@@ -172,7 +183,8 @@ void register_AtomLJs_class(){
             AtomLJs_exposer.def( 
                 "fromVariant"
                 , fromVariant_function_value
-                , ( bp::arg("variant") ) );
+                , ( bp::arg("variant") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::get
@@ -185,7 +197,8 @@ void register_AtomLJs_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::get
@@ -198,7 +211,8 @@ void register_AtomLJs_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::isCompatibleWith
@@ -210,7 +224,8 @@ void register_AtomLJs_class(){
             AtomLJs_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::isEmpty
@@ -221,7 +236,8 @@ void register_AtomLJs_class(){
             
             AtomLJs_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::matchToSelection
@@ -233,7 +249,8 @@ void register_AtomLJs_class(){
             AtomLJs_exposer.def( 
                 "matchToSelection"
                 , matchToSelection_function_value
-                , ( bp::arg("selection") ) );
+                , ( bp::arg("selection") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::merge
@@ -245,7 +262,8 @@ void register_AtomLJs_class(){
             AtomLJs_exposer.def( 
                 "merge"
                 , merge_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::nAtoms
@@ -256,7 +274,8 @@ void register_AtomLJs_class(){
             
             AtomLJs_exposer.def( 
                 "nAtoms"
-                , nAtoms_function_value );
+                , nAtoms_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::nAtoms
@@ -268,7 +287,8 @@ void register_AtomLJs_class(){
             AtomLJs_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
-                , ( bp::arg("cgidx") ) );
+                , ( bp::arg("cgidx") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::nCutGroups
@@ -279,7 +299,8 @@ void register_AtomLJs_class(){
             
             AtomLJs_exposer.def( 
                 "nCutGroups"
-                , nCutGroups_function_value );
+                , nCutGroups_function_value
+                , "" );
         
         }
         AtomLJs_exposer.def( bp::self != bp::self );
@@ -293,7 +314,8 @@ void register_AtomLJs_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AtomLJs_exposer.def( bp::self == bp::self );
@@ -307,7 +329,8 @@ void register_AtomLJs_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::operator[]
@@ -320,7 +343,8 @@ void register_AtomLJs_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::set
@@ -333,7 +357,8 @@ void register_AtomLJs_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("cgatomidx"), bp::arg("value") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::set
@@ -346,7 +371,8 @@ void register_AtomLJs_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("cgidx"), bp::arg("values") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::size
@@ -357,7 +383,8 @@ void register_AtomLJs_class(){
             
             AtomLJs_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::toString
@@ -368,7 +395,8 @@ void register_AtomLJs_class(){
             
             AtomLJs_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::toVariant
@@ -379,7 +407,8 @@ void register_AtomLJs_class(){
             
             AtomLJs_exposer.def( 
                 "toVariant"
-                , toVariant_function_value );
+                , toVariant_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::toVector
@@ -390,7 +419,8 @@ void register_AtomLJs_class(){
             
             AtomLJs_exposer.def( 
                 "toVector"
-                , toVector_function_value );
+                , toVector_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::toVector
@@ -402,7 +432,8 @@ void register_AtomLJs_class(){
             AtomLJs_exposer.def( 
                 "toVector"
                 , toVector_function_value
-                , ( bp::arg("selection") ) );
+                , ( bp::arg("selection") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMM::LJParameter >::typeName
@@ -413,7 +444,8 @@ void register_AtomLJs_class(){
             
             AtomLJs_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         AtomLJs_exposer.staticmethod( "fromVariant" );

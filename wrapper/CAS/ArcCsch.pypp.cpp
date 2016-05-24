@@ -39,10 +39,10 @@ void register_ArcCsch_class(){
 
     { //::SireCAS::ArcCsch
         typedef bp::class_< SireCAS::ArcCsch, bp::bases< SireCAS::SingleFunc, SireCAS::ExBase > > ArcCsch_exposer_t;
-        ArcCsch_exposer_t ArcCsch_exposer = ArcCsch_exposer_t( "ArcCsch", bp::init< >() );
+        ArcCsch_exposer_t ArcCsch_exposer = ArcCsch_exposer_t( "ArcCsch", "Inverse-hyperbolic-cosecant", bp::init< >("Null constructor") );
         bp::scope ArcCsch_scope( ArcCsch_exposer );
-        ArcCsch_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") )) );
-        ArcCsch_exposer.def( bp::init< SireCAS::ArcCsch const & >(( bp::arg("other") )) );
+        ArcCsch_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") ), "Construct cos(expression)") );
+        ArcCsch_exposer.def( bp::init< SireCAS::ArcCsch const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::ArcCsch::evaluate
         
             typedef double ( ::SireCAS::ArcCsch::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -51,7 +51,8 @@ void register_ArcCsch_class(){
             ArcCsch_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::ArcCsch::evaluate
@@ -62,7 +63,8 @@ void register_ArcCsch_class(){
             ArcCsch_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         ArcCsch_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -73,7 +75,8 @@ void register_ArcCsch_class(){
             
             ArcCsch_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::ArcCsch::what
@@ -83,7 +86,8 @@ void register_ArcCsch_class(){
             
             ArcCsch_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ArcCsch_exposer.staticmethod( "typeName" );

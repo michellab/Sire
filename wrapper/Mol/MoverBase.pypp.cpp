@@ -59,9 +59,9 @@ void register_MoverBase_class(){
 
     { //::SireMol::MoverBase
         typedef bp::class_< SireMol::MoverBase > MoverBase_exposer_t;
-        MoverBase_exposer_t MoverBase_exposer = MoverBase_exposer_t( "MoverBase", bp::init< >() );
+        MoverBase_exposer_t MoverBase_exposer = MoverBase_exposer_t( "MoverBase", "This class provides the template-independent part\nof Mover<T>. This class is not designed to be used\non its own\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope MoverBase_scope( MoverBase_exposer );
-        MoverBase_exposer.def( bp::init< SireMol::MoverBase const & >(( bp::arg("other") )) );
+        MoverBase_exposer.def( bp::init< SireMol::MoverBase const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::MoverBase::operator=
         
             typedef ::SireMol::MoverBase & ( ::SireMol::MoverBase::*assign_function_type)( ::SireMol::MoverBase const & ) ;
@@ -71,7 +71,8 @@ void register_MoverBase_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MoverBase_exposer.def( "__copy__", &__copy__);

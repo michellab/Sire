@@ -37,9 +37,9 @@ void register_NullConstraint_class(){
 
     { //::SireSystem::NullConstraint
         typedef bp::class_< SireSystem::NullConstraint, bp::bases< SireSystem::Constraint, SireBase::Property > > NullConstraint_exposer_t;
-        NullConstraint_exposer_t NullConstraint_exposer = NullConstraint_exposer_t( "NullConstraint", bp::init< >() );
+        NullConstraint_exposer_t NullConstraint_exposer = NullConstraint_exposer_t( "NullConstraint", "The null constraint", bp::init< >("Null constructor") );
         bp::scope NullConstraint_scope( NullConstraint_exposer );
-        NullConstraint_exposer.def( bp::init< SireSystem::NullConstraint const & >(( bp::arg("other") )) );
+        NullConstraint_exposer.def( bp::init< SireSystem::NullConstraint const & >(( bp::arg("other") ), "Copy constructor") );
         NullConstraint_exposer.def( bp::self != bp::self );
         { //::SireSystem::NullConstraint::operator=
         
@@ -50,7 +50,8 @@ void register_NullConstraint_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         NullConstraint_exposer.def( bp::self == bp::self );
@@ -61,7 +62,8 @@ void register_NullConstraint_class(){
             
             NullConstraint_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation" );
         
         }
         { //::SireSystem::NullConstraint::typeName
@@ -71,7 +73,8 @@ void register_NullConstraint_class(){
             
             NullConstraint_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         NullConstraint_exposer.staticmethod( "typeName" );

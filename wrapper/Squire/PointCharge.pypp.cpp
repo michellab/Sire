@@ -25,11 +25,11 @@ void register_PointCharge_class(){
 
     { //::Squire::PointCharge
         typedef bp::class_< Squire::PointCharge > PointCharge_exposer_t;
-        PointCharge_exposer_t PointCharge_exposer = PointCharge_exposer_t( "PointCharge", bp::init< >() );
+        PointCharge_exposer_t PointCharge_exposer = PointCharge_exposer_t( "PointCharge", "This class holds a single point charge. This class is designed\nfor speed, and is used within the integral program (the charge\nis held in internal units, and the point is mapped into the\ncorrect space for the QM program)\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope PointCharge_scope( PointCharge_exposer );
-        PointCharge_exposer.def( bp::init< SireMaths::Vector const &, SireUnits::Dimension::Charge const & >(( bp::arg("coords"), bp::arg("charge") )) );
-        PointCharge_exposer.def( bp::init< SireUnits::Dimension::Charge const &, SireMaths::Vector const & >(( bp::arg("charge"), bp::arg("coords") )) );
-        PointCharge_exposer.def( bp::init< Squire::PointCharge const & >(( bp::arg("other") )) );
+        PointCharge_exposer.def( bp::init< SireMaths::Vector const &, SireUnits::Dimension::Charge const & >(( bp::arg("coords"), bp::arg("charge") ), "Construct a point charge at the specified location with the\nspecified charge") );
+        PointCharge_exposer.def( bp::init< SireUnits::Dimension::Charge const &, SireMaths::Vector const & >(( bp::arg("charge"), bp::arg("coords") ), "Construct a point charge at the specified location with the\nspecified charge") );
+        PointCharge_exposer.def( bp::init< Squire::PointCharge const & >(( bp::arg("other") ), "Copy constructor") );
         { //::Squire::PointCharge::center
         
             typedef ::SireMaths::Vector const & ( ::Squire::PointCharge::*center_function_type)(  ) const;
@@ -38,7 +38,8 @@ void register_PointCharge_class(){
             PointCharge_exposer.def( 
                 "center"
                 , center_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the location of this point charge" );
         
         }
         { //::Squire::PointCharge::charge
@@ -48,7 +49,8 @@ void register_PointCharge_class(){
             
             PointCharge_exposer.def( 
                 "charge"
-                , charge_function_value );
+                , charge_function_value
+                , "Return the magnitude of this point charge (in internal units)" );
         
         }
         PointCharge_exposer.def( bp::self != bp::self );
@@ -61,7 +63,8 @@ void register_PointCharge_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         PointCharge_exposer.def( bp::self == bp::self );
@@ -72,7 +75,8 @@ void register_PointCharge_class(){
             
             PointCharge_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         PointCharge_exposer.staticmethod( "typeName" );

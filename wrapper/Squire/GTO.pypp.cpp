@@ -32,7 +32,7 @@ void register_GTO_class(){
 
     { //::Squire::GTO
         typedef bp::class_< Squire::GTO, bp::bases< Squire::OrbitalShell, Squire::Orbital, SireBase::Property >, boost::noncopyable > GTO_exposer_t;
-        GTO_exposer_t GTO_exposer = GTO_exposer_t( "GTO", bp::no_init );
+        GTO_exposer_t GTO_exposer = GTO_exposer_t( "GTO", "This is the base class of all single Gaussian Type Orbital shells (GTOs)\n(S_GTO (l==0), P_GTO (l==1), D_GTO (l==2), FPlus_GTO (l>=3))\n\nThese orbitals are not used directly - rather they are combined into\nshell-pair orbitals, e.g. SS_GTO, SP_GTO etc. Integral functions then\nuse these shell-pair orbital objects. The shell pair classes are;\n\nSS_GTO\nPP_GTO, PS_GTO\nDD_GTO, DP_GTO, DS_GTO\nFPlusFPlus_GTO, FPlusD_GTO, FPlusP_GTO, FPlusS_GTO\n\nAn orbital shell contains all of the orbitals for a particular shell\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope GTO_scope( GTO_exposer );
         { //::Squire::GTO::alpha
         
@@ -41,7 +41,8 @@ void register_GTO_class(){
             
             GTO_exposer.def( 
                 "alpha"
-                , alpha_function_value );
+                , alpha_function_value
+                , "Return the value of alpha (the exponent) for this gaussian" );
         
         }
         { //::Squire::GTO::beta
@@ -51,7 +52,8 @@ void register_GTO_class(){
             
             GTO_exposer.def( 
                 "beta"
-                , beta_function_value );
+                , beta_function_value
+                , "Convenient synonym for alpha() - so you can write\na.alpha()  b.beta() and have it mean what you expect" );
         
         }
         { //::Squire::GTO::isNull
@@ -61,7 +63,8 @@ void register_GTO_class(){
             
             GTO_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Return whether or not this orbital shell is null - it is null\nif the scale or exponent are 0" );
         
         }
         { //::Squire::GTO::multiply
@@ -72,7 +75,8 @@ void register_GTO_class(){
             GTO_exposer.def( 
                 "multiply"
                 , multiply_function_value
-                , ( bp::arg("coefficient") ) );
+                , ( bp::arg("coefficient") )
+                , "Return this orbital shell multiplied by coefficient" );
         
         }
         { //::Squire::GTO::null
@@ -83,7 +87,8 @@ void register_GTO_class(){
             GTO_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::Squire::GTO::scale
@@ -93,7 +98,8 @@ void register_GTO_class(){
             
             GTO_exposer.def( 
                 "scale"
-                , scale_function_value );
+                , scale_function_value
+                , "Return the unnormalised scaling factor for this gaussian" );
         
         }
         { //::Squire::GTO::typeName
@@ -103,7 +109,8 @@ void register_GTO_class(){
             
             GTO_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         GTO_exposer.staticmethod( "null" );

@@ -52,10 +52,10 @@ void register_SameMoves_class(){
 
     { //::SireMove::SameMoves
         typedef bp::class_< SireMove::SameMoves, bp::bases< SireMove::Moves, SireBase::Property > > SameMoves_exposer_t;
-        SameMoves_exposer_t SameMoves_exposer = SameMoves_exposer_t( "SameMoves", bp::init< >() );
+        SameMoves_exposer_t SameMoves_exposer = SameMoves_exposer_t( "SameMoves", "This is a Moves class that just applies the same move over and\nover again\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope SameMoves_scope( SameMoves_exposer );
-        SameMoves_exposer.def( bp::init< SireMove::Move const & >(( bp::arg("move") )) );
-        SameMoves_exposer.def( bp::init< SireMove::SameMoves const & >(( bp::arg("other") )) );
+        SameMoves_exposer.def( bp::init< SireMove::Move const & >(( bp::arg("move") ), "Construct to run the move move multiple times") );
+        SameMoves_exposer.def( bp::init< SireMove::SameMoves const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::SameMoves::clearStatistics
         
             typedef void ( ::SireMove::SameMoves::*clearStatistics_function_type)(  ) ;
@@ -63,7 +63,8 @@ void register_SameMoves_class(){
             
             SameMoves_exposer.def( 
                 "clearStatistics"
-                , clearStatistics_function_value );
+                , clearStatistics_function_value
+                , "Clear the move statistics" );
         
         }
         { //::SireMove::SameMoves::energyComponent
@@ -74,7 +75,8 @@ void register_SameMoves_class(){
             SameMoves_exposer.def( 
                 "energyComponent"
                 , energyComponent_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the energy component used to calculate the system energy" );
         
         }
         { //::SireMove::SameMoves::move
@@ -85,7 +87,8 @@ void register_SameMoves_class(){
             SameMoves_exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("system"), bp::arg("nmoves")=(int)(1), bp::arg("record_stats")=(bool)(false) ) );
+                , ( bp::arg("system"), bp::arg("nmoves")=(int)(1), bp::arg("record_stats")=(bool)(false) )
+                , "Apply the move nmoves times to the system system, returning\nthe result" );
         
         }
         { //::SireMove::SameMoves::moves
@@ -95,7 +98,8 @@ void register_SameMoves_class(){
             
             SameMoves_exposer.def( 
                 "moves"
-                , moves_function_value );
+                , moves_function_value
+                , "Return the moves used by this object" );
         
         }
         SameMoves_exposer.def( bp::self != bp::self );
@@ -108,7 +112,8 @@ void register_SameMoves_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         SameMoves_exposer.def( bp::self == bp::self );
@@ -120,7 +125,8 @@ void register_SameMoves_class(){
             SameMoves_exposer.def( 
                 "setEnergyComponent"
                 , setEnergyComponent_function_value
-                , ( bp::arg("component") ) );
+                , ( bp::arg("component") )
+                , "Set the energy component of all of the moves to component" );
         
         }
         { //::SireMove::SameMoves::setGenerator
@@ -131,7 +137,8 @@ void register_SameMoves_class(){
             SameMoves_exposer.def( 
                 "setGenerator"
                 , setGenerator_function_value
-                , ( bp::arg("rangenerator") ) );
+                , ( bp::arg("rangenerator") )
+                , "Set the random number generator used at all points in all of the moves" );
         
         }
         { //::SireMove::SameMoves::setSpaceProperty
@@ -142,7 +149,8 @@ void register_SameMoves_class(){
             SameMoves_exposer.def( 
                 "setSpaceProperty"
                 , setSpaceProperty_function_value
-                , ( bp::arg("spaceproperty") ) );
+                , ( bp::arg("spaceproperty") )
+                , "Set the name of the property that all of the moves will use to\nfind the simulation space (simulation box) to spaceproperty" );
         
         }
         { //::SireMove::SameMoves::spaceProperty
@@ -153,7 +161,8 @@ void register_SameMoves_class(){
             SameMoves_exposer.def( 
                 "spaceProperty"
                 , spaceProperty_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the space property used to calculate the system volume" );
         
         }
         { //::SireMove::SameMoves::toString
@@ -163,7 +172,8 @@ void register_SameMoves_class(){
             
             SameMoves_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of these moves" );
         
         }
         { //::SireMove::SameMoves::typeName
@@ -173,7 +183,8 @@ void register_SameMoves_class(){
             
             SameMoves_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         SameMoves_exposer.staticmethod( "typeName" );

@@ -41,11 +41,11 @@ void register_TwoAtomFunctions_class(){
 
     { //::SireMM::TwoAtomFunctions
         typedef bp::class_< SireMM::TwoAtomFunctions, bp::bases< SireMM::AtomFunctions, SireMol::MoleculeProperty, SireMol::MolViewProperty, SireBase::Property > > TwoAtomFunctions_exposer_t;
-        TwoAtomFunctions_exposer_t TwoAtomFunctions_exposer = TwoAtomFunctions_exposer_t( "TwoAtomFunctions", bp::init< >() );
+        TwoAtomFunctions_exposer_t TwoAtomFunctions_exposer = TwoAtomFunctions_exposer_t( "TwoAtomFunctions", "This class holds the set of TwoAtomFunction potentials that\nact between the atoms in a molecule\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope TwoAtomFunctions_scope( TwoAtomFunctions_exposer );
-        TwoAtomFunctions_exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("moldata") )) );
-        TwoAtomFunctions_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") )) );
-        TwoAtomFunctions_exposer.def( bp::init< SireMM::TwoAtomFunctions const & >(( bp::arg("other") )) );
+        TwoAtomFunctions_exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("moldata") ), "Construct the container to hold the set of two-atom functions\nfor the molecule whose data is in moldata") );
+        TwoAtomFunctions_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "Construct the container to hold the set of two-atom functions\nfor the molecule whose layout is in molinfo") );
+        TwoAtomFunctions_exposer.def( bp::init< SireMM::TwoAtomFunctions const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::TwoAtomFunctions::clear
         
             typedef void ( ::SireMM::TwoAtomFunctions::*clear_function_type)( ::SireMol::AtomIdx ) ;
@@ -54,7 +54,8 @@ void register_TwoAtomFunctions_class(){
             TwoAtomFunctions_exposer.def( 
                 "clear"
                 , clear_function_value
-                , ( bp::arg("atom") ) );
+                , ( bp::arg("atom") )
+                , "Clear all functions that involve the atom atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::TwoAtomFunctions::clear
@@ -65,7 +66,8 @@ void register_TwoAtomFunctions_class(){
             TwoAtomFunctions_exposer.def( 
                 "clear"
                 , clear_function_value
-                , ( bp::arg("atom") ) );
+                , ( bp::arg("atom") )
+                , "Clear any function that acts on the atoms identified by atom\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::TwoAtomFunctions::clear
@@ -76,7 +78,8 @@ void register_TwoAtomFunctions_class(){
             TwoAtomFunctions_exposer.def( 
                 "clear"
                 , clear_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1") )
+                , "Clear any function that acts between the atoms atom0 and atom1\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::TwoAtomFunctions::clear
@@ -87,7 +90,8 @@ void register_TwoAtomFunctions_class(){
             TwoAtomFunctions_exposer.def( 
                 "clear"
                 , clear_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1") )
+                , "Clear any function that acts between the atoms atom0 and atom1\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::TwoAtomFunctions::clear
@@ -98,7 +102,8 @@ void register_TwoAtomFunctions_class(){
             TwoAtomFunctions_exposer.def( 
                 "clear"
                 , clear_function_value
-                , ( bp::arg("bondid") ) );
+                , ( bp::arg("bondid") )
+                , "Clear the potential that acts over the bond identified by bondid\nNote that this removes both 1-2 and 2-1\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::TwoAtomFunctions::clear
@@ -108,7 +113,8 @@ void register_TwoAtomFunctions_class(){
             
             TwoAtomFunctions_exposer.def( 
                 "clear"
-                , clear_function_value );
+                , clear_function_value
+                , "Completely clear all of the functions from this set" );
         
         }
         { //::SireMM::TwoAtomFunctions::force
@@ -119,7 +125,8 @@ void register_TwoAtomFunctions_class(){
             TwoAtomFunctions_exposer.def( 
                 "force"
                 , force_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("symbol") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("symbol") )
+                , "Return the force (derivative of the potential with respect to symbol)\nbetween the atoms atom0 and atom1\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::TwoAtomFunctions::force
@@ -130,7 +137,8 @@ void register_TwoAtomFunctions_class(){
             TwoAtomFunctions_exposer.def( 
                 "force"
                 , force_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("symbol") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("symbol") )
+                , "Return the force (derivative of the potential with respect to symbol)\nbetween the atoms atom0 and atom1\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::TwoAtomFunctions::force
@@ -141,7 +149,8 @@ void register_TwoAtomFunctions_class(){
             TwoAtomFunctions_exposer.def( 
                 "force"
                 , force_function_value
-                , ( bp::arg("bondid"), bp::arg("symbol") ) );
+                , ( bp::arg("bondid"), bp::arg("symbol") )
+                , "Return the force (derivative of the potential with respect to symbol)\non the bond identified by bondid\nThis searches first for the function 1-2, and if that is not\nfound then it returns the function for 2-1\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::TwoAtomFunctions::forces
@@ -152,7 +161,8 @@ void register_TwoAtomFunctions_class(){
             TwoAtomFunctions_exposer.def( 
                 "forces"
                 , forces_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return the force functions acting between the identified\npairs of atoms, for the given symbol" );
         
         }
         { //::SireMM::TwoAtomFunctions::includeOnly
@@ -163,7 +173,8 @@ void register_TwoAtomFunctions_class(){
             TwoAtomFunctions_exposer.def( 
                 "includeOnly"
                 , includeOnly_function_value
-                , ( bp::arg("selection"), bp::arg("isstrict")=(bool)(true) ) );
+                , ( bp::arg("selection"), bp::arg("isstrict")=(bool)(true) )
+                , "Return the set of functions where only functions that involve the\natoms in selected_atoms are included. If isstrict is true, then\nonly include functions where all of the atoms are in selected_atoms,\nwhile if isstrict is false, include functions where at least one\natom is in selected_atoms" );
         
         }
         { //::SireMM::TwoAtomFunctions::isEmpty
@@ -173,7 +184,8 @@ void register_TwoAtomFunctions_class(){
             
             TwoAtomFunctions_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether or not this is empty (has no potentials for any internals)" );
         
         }
         { //::SireMM::TwoAtomFunctions::nFunctions
@@ -183,7 +195,8 @@ void register_TwoAtomFunctions_class(){
             
             TwoAtomFunctions_exposer.def( 
                 "nFunctions"
-                , nFunctions_function_value );
+                , nFunctions_function_value
+                , "This returns the total number of functions in this set" );
         
         }
         TwoAtomFunctions_exposer.def( bp::self != bp::self );
@@ -196,7 +209,8 @@ void register_TwoAtomFunctions_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         TwoAtomFunctions_exposer.def( bp::self == bp::self );
@@ -208,7 +222,8 @@ void register_TwoAtomFunctions_class(){
             TwoAtomFunctions_exposer.def( 
                 "potential"
                 , potential_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1") )
+                , "Return the function acting between the atoms atom0 and atom1.\nThis returns an empty expression if there is no expression between\nthese atoms\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_atom\n" );
         
         }
         { //::SireMM::TwoAtomFunctions::potential
@@ -219,7 +234,8 @@ void register_TwoAtomFunctions_class(){
             TwoAtomFunctions_exposer.def( 
                 "potential"
                 , potential_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1") )
+                , "Return the function acting between the atoms atom0 and atom1.\nThis returns an empty expression if there is no expression between\nthese atoms\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::TwoAtomFunctions::potential
@@ -230,7 +246,8 @@ void register_TwoAtomFunctions_class(){
             TwoAtomFunctions_exposer.def( 
                 "potential"
                 , potential_function_value
-                , ( bp::arg("bondid") ) );
+                , ( bp::arg("bondid") )
+                , "Return the function acting on the bond identified by bondid.\nThis returns an empty expression if there is no expression on\nthis bond\nThis searches first for the function 1-2, and if that is not\nfound then it returns the function for 2-1\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::TwoAtomFunctions::potentials
@@ -240,7 +257,8 @@ void register_TwoAtomFunctions_class(){
             
             TwoAtomFunctions_exposer.def( 
                 "potentials"
-                , potentials_function_value );
+                , potentials_function_value
+                , "Return the potential energy functions acting between the identified\npairs of atoms" );
         
         }
         { //::SireMM::TwoAtomFunctions::set
@@ -251,7 +269,8 @@ void register_TwoAtomFunctions_class(){
             TwoAtomFunctions_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("expression") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("expression") )
+                , "Set the potential energy function used by atoms atom0 and atom1\nto be equal to expression - this replaces any existing expression\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_atom\n" );
         
         }
         { //::SireMM::TwoAtomFunctions::set
@@ -262,7 +281,8 @@ void register_TwoAtomFunctions_class(){
             TwoAtomFunctions_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("expression") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("expression") )
+                , "Set the potential energy function used by atoms atom0 and atom1\nto be equal to expression - this replaces any existing expression\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::TwoAtomFunctions::set
@@ -273,7 +293,8 @@ void register_TwoAtomFunctions_class(){
             TwoAtomFunctions_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("bondid"), bp::arg("expression") ) );
+                , ( bp::arg("bondid"), bp::arg("expression") )
+                , "Set the potential energy function used for the bond identified by bondid\nto be equal to expression - this replaces any existing expression\nNote that this replaces both 1-2 and 2-1\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::TwoAtomFunctions::substitute
@@ -284,7 +305,8 @@ void register_TwoAtomFunctions_class(){
             TwoAtomFunctions_exposer.def( 
                 "substitute"
                 , substitute_function_value
-                , ( bp::arg("identities") ) );
+                , ( bp::arg("identities") )
+                , "Perform the substitutions contained in identities in all of\nthe expressions in this set. This could be useful if you have\ndefined these expressions with respect to a lambda parameter,\nand now want to set that value of lambda" );
         
         }
         { //::SireMM::TwoAtomFunctions::toString
@@ -294,7 +316,8 @@ void register_TwoAtomFunctions_class(){
             
             TwoAtomFunctions_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation" );
         
         }
         { //::SireMM::TwoAtomFunctions::typeName
@@ -304,7 +327,8 @@ void register_TwoAtomFunctions_class(){
             
             TwoAtomFunctions_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         TwoAtomFunctions_exposer.staticmethod( "typeName" );

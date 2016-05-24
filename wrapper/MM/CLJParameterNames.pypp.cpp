@@ -47,7 +47,7 @@ void register_CLJParameterNames_class(){
 
     { //::SireMM::CLJParameterNames
         typedef bp::class_< SireMM::CLJParameterNames, bp::bases< SireMM::LJParameterName, SireMM::ChargeParameterName > > CLJParameterNames_exposer_t;
-        CLJParameterNames_exposer_t CLJParameterNames_exposer = CLJParameterNames_exposer_t( "CLJParameterNames", bp::init< >() );
+        CLJParameterNames_exposer_t CLJParameterNames_exposer = CLJParameterNames_exposer_t( "CLJParameterNames", "This class provides the default name of the properties\nthat contain the charge and LJ parameters", bp::init< >("") );
         bp::scope CLJParameterNames_scope( CLJParameterNames_exposer );
         CLJParameterNames_exposer.def( "__copy__", &__copy__);
         CLJParameterNames_exposer.def( "__deepcopy__", &__copy__);

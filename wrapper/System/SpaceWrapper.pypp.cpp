@@ -38,10 +38,10 @@ void register_SpaceWrapper_class(){
 
     { //::SireSystem::SpaceWrapper
         typedef bp::class_< SireSystem::SpaceWrapper, bp::bases< SireSystem::MoleculeConstraint, SireSystem::Constraint, SireBase::Property > > SpaceWrapper_exposer_t;
-        SpaceWrapper_exposer_t SpaceWrapper_exposer = SpaceWrapper_exposer_t( "SpaceWrapper", bp::init< >() );
+        SpaceWrapper_exposer_t SpaceWrapper_exposer = SpaceWrapper_exposer_t( "SpaceWrapper", "This is a molecule constraint that constrains\na group of molecules to lie within the same\nperiodic box as a specified point - the molecules\nare wrapped into the box (i.e. they are moved into\nthe opposite side of the box that they leave)\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope SpaceWrapper_scope( SpaceWrapper_exposer );
-        SpaceWrapper_exposer.def( bp::init< SireFF::PointRef const &, SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("point"), bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )) );
-        SpaceWrapper_exposer.def( bp::init< SireSystem::SpaceWrapper const & >(( bp::arg("other") )) );
+        SpaceWrapper_exposer.def( bp::init< SireFF::PointRef const &, SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("point"), bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to wrap all of the molecules in the group molgroup\ninto the same periodic box as the point point using the\nsupplied property map to find the space and coordinate properties") );
+        SpaceWrapper_exposer.def( bp::init< SireSystem::SpaceWrapper const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireSystem::SpaceWrapper::moleculeGroup
         
             typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::SpaceWrapper::*moleculeGroup_function_type)(  ) const;
@@ -50,7 +50,8 @@ void register_SpaceWrapper_class(){
             SpaceWrapper_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the molecule group containing the molecules being wrapped" );
         
         }
         SpaceWrapper_exposer.def( bp::self != bp::self );
@@ -63,7 +64,8 @@ void register_SpaceWrapper_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         SpaceWrapper_exposer.def( bp::self == bp::self );
@@ -75,7 +77,8 @@ void register_SpaceWrapper_class(){
             SpaceWrapper_exposer.def( 
                 "point"
                 , point_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the point that defines the center of the periodic box\n(the molecules will be wrapped so that they are in the same\nbox as this point)" );
         
         }
         { //::SireSystem::SpaceWrapper::propertyMap
@@ -86,7 +89,8 @@ void register_SpaceWrapper_class(){
             SpaceWrapper_exposer.def( 
                 "propertyMap"
                 , propertyMap_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the property map used to find the coordinates and\nspace properties" );
         
         }
         { //::SireSystem::SpaceWrapper::typeName
@@ -96,7 +100,8 @@ void register_SpaceWrapper_class(){
             
             SpaceWrapper_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         SpaceWrapper_exposer.staticmethod( "typeName" );

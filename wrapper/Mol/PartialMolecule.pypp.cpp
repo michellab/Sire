@@ -54,11 +54,11 @@ void register_PartialMolecule_class(){
 
     { //::SireMol::PartialMolecule
         typedef bp::class_< SireMol::PartialMolecule, bp::bases< SireMol::MoleculeView, SireBase::Property > > PartialMolecule_exposer_t;
-        PartialMolecule_exposer_t PartialMolecule_exposer = PartialMolecule_exposer_t( "PartialMolecule", bp::init< >() );
+        PartialMolecule_exposer_t PartialMolecule_exposer = PartialMolecule_exposer_t( "PartialMolecule", "This class provides a view to an arbitrary part of a molecule\n(which can range from just a single atom all the way through to\nthe entire molecule). As such, this class can be used to\nrepresent Molecule, Residue and Atom, as well as everything\nin between\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope PartialMolecule_scope( PartialMolecule_exposer );
-        PartialMolecule_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molecule") )) );
-        PartialMolecule_exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::AtomSelection const & >(( bp::arg("moldata"), bp::arg("atoms") )) );
-        PartialMolecule_exposer.def( bp::init< SireMol::PartialMolecule const & >(( bp::arg("other") )) );
+        PartialMolecule_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molecule") ), "Construct from the passed view") );
+        PartialMolecule_exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::AtomSelection const & >(( bp::arg("moldata"), bp::arg("atoms") ), "Construct from the selected atoms of the passed molecule whose\ndata is in moldata") );
+        PartialMolecule_exposer.def( bp::init< SireMol::PartialMolecule const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::PartialMolecule::evaluate
         
             typedef ::SireMol::Evaluator ( ::SireMol::PartialMolecule::*evaluate_function_type)(  ) const;
@@ -66,7 +66,8 @@ void register_PartialMolecule_class(){
             
             PartialMolecule_exposer.def( 
                 "evaluate"
-                , evaluate_function_value );
+                , evaluate_function_value
+                , "Return an evaluator that can evaluate properties\nover all of the atoms in this view" );
         
         }
         { //::SireMol::PartialMolecule::extract
@@ -76,7 +77,8 @@ void register_PartialMolecule_class(){
             
             PartialMolecule_exposer.def( 
                 "extract"
-                , extract_function_value );
+                , extract_function_value
+                , "Extract a copy of this PartialMolecule which contains only the currently\nselected atoms. This allows the used to pull out parts of a larger molecule,\ne.g. if they want to have only selected residues in a protein and do not\nwant to have to store or manipulate the larger protein molecule" );
         
         }
         { //::SireMol::PartialMolecule::hasMetadata
@@ -87,7 +89,8 @@ void register_PartialMolecule_class(){
             PartialMolecule_exposer.def( 
                 "hasMetadata"
                 , hasMetadata_function_value
-                , ( bp::arg("metakey") ) );
+                , ( bp::arg("metakey") )
+                , "Return whether or not this molecule has some metadata\nat the metakey metakey" );
         
         }
         { //::SireMol::PartialMolecule::hasMetadata
@@ -98,7 +101,8 @@ void register_PartialMolecule_class(){
             PartialMolecule_exposer.def( 
                 "hasMetadata"
                 , hasMetadata_function_value
-                , ( bp::arg("key"), bp::arg("metakey") ) );
+                , ( bp::arg("key"), bp::arg("metakey") )
+                , "Return whether or not the property at key key has\nsome metadata at metakey metakey\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::PartialMolecule::hasProperty
@@ -109,7 +113,8 @@ void register_PartialMolecule_class(){
             PartialMolecule_exposer.def( 
                 "hasProperty"
                 , hasProperty_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "Return whether or not this molecule has a property at key key" );
         
         }
         { //::SireMol::PartialMolecule::isEmpty
@@ -119,7 +124,8 @@ void register_PartialMolecule_class(){
             
             PartialMolecule_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether or not this is empty" );
         
         }
         { //::SireMol::PartialMolecule::metadata
@@ -131,7 +137,8 @@ void register_PartialMolecule_class(){
                 "metadata"
                 , metadata_function_value
                 , ( bp::arg("metakey") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the metadata at metakey metakey. Note that this returns the\nmetadata for the molecule - no attempt is made to mask this\nmetadata to match the current selection\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::PartialMolecule::metadata
@@ -143,7 +150,8 @@ void register_PartialMolecule_class(){
                 "metadata"
                 , metadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the metadata at the metakey metakey for the property\nat key key. Note that this returns the\nmetadata for the molecule - no attempt is made to mask this\nmetadata to match the current selection\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::PartialMolecule::metadataKeys
@@ -153,7 +161,8 @@ void register_PartialMolecule_class(){
             
             PartialMolecule_exposer.def( 
                 "metadataKeys"
-                , metadataKeys_function_value );
+                , metadataKeys_function_value
+                , "Return the keys of all of the metadata contained directly by\nthis molecule" );
         
         }
         { //::SireMol::PartialMolecule::metadataKeys
@@ -164,7 +173,8 @@ void register_PartialMolecule_class(){
             PartialMolecule_exposer.def( 
                 "metadataKeys"
                 , metadataKeys_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "Return the keys of all metadata for the property at key key\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::PartialMolecule::move
@@ -174,7 +184,8 @@ void register_PartialMolecule_class(){
             
             PartialMolecule_exposer.def( 
                 "move"
-                , move_function_value );
+                , move_function_value
+                , "Return a mover that can move all of the atoms in this view" );
         
         }
         { //::SireMol::PartialMolecule::nAtoms
@@ -184,7 +195,8 @@ void register_PartialMolecule_class(){
             
             PartialMolecule_exposer.def( 
                 "nAtoms"
-                , nAtoms_function_value );
+                , nAtoms_function_value
+                , "Return the number of atoms in this view" );
         
         }
         { //::SireMol::PartialMolecule::nChains
@@ -194,7 +206,8 @@ void register_PartialMolecule_class(){
             
             PartialMolecule_exposer.def( 
                 "nChains"
-                , nChains_function_value );
+                , nChains_function_value
+                , "Return the number of chains in this view" );
         
         }
         { //::SireMol::PartialMolecule::nCutGroups
@@ -204,7 +217,8 @@ void register_PartialMolecule_class(){
             
             PartialMolecule_exposer.def( 
                 "nCutGroups"
-                , nCutGroups_function_value );
+                , nCutGroups_function_value
+                , "Return the number of CutGroups in this view" );
         
         }
         { //::SireMol::PartialMolecule::nResidues
@@ -214,7 +228,8 @@ void register_PartialMolecule_class(){
             
             PartialMolecule_exposer.def( 
                 "nResidues"
-                , nResidues_function_value );
+                , nResidues_function_value
+                , "Return the number of residues in this view" );
         
         }
         { //::SireMol::PartialMolecule::nSegments
@@ -224,7 +239,8 @@ void register_PartialMolecule_class(){
             
             PartialMolecule_exposer.def( 
                 "nSegments"
-                , nSegments_function_value );
+                , nSegments_function_value
+                , "Return the number of segments in this view" );
         
         }
         { //::SireMol::PartialMolecule::name
@@ -235,7 +251,8 @@ void register_PartialMolecule_class(){
             PartialMolecule_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the name of this molecule" );
         
         }
         { //::SireMol::PartialMolecule::number
@@ -245,7 +262,8 @@ void register_PartialMolecule_class(){
             
             PartialMolecule_exposer.def( 
                 "number"
-                , number_function_value );
+                , number_function_value
+                , "Return the identifying number of this molecule" );
         
         }
         PartialMolecule_exposer.def( bp::self != bp::self );
@@ -258,7 +276,8 @@ void register_PartialMolecule_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::PartialMolecule::operator=
@@ -270,7 +289,8 @@ void register_PartialMolecule_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         PartialMolecule_exposer.def( bp::self == bp::self );
@@ -283,7 +303,8 @@ void register_PartialMolecule_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the property at key key. Note that this returns the\nproperty for the molecule - no attempt is made to mask this\nproperty to match the current selection\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::PartialMolecule::propertyKeys
@@ -293,7 +314,8 @@ void register_PartialMolecule_class(){
             
             PartialMolecule_exposer.def( 
                 "propertyKeys"
-                , propertyKeys_function_value );
+                , propertyKeys_function_value
+                , "Return the keys of all of the properties contained in this molecule" );
         
         }
         { //::SireMol::PartialMolecule::selectedAll
@@ -303,7 +325,8 @@ void register_PartialMolecule_class(){
             
             PartialMolecule_exposer.def( 
                 "selectedAll"
-                , selectedAll_function_value );
+                , selectedAll_function_value
+                , "Return whether or not this contains the entire molecule" );
         
         }
         { //::SireMol::PartialMolecule::selection
@@ -313,7 +336,8 @@ void register_PartialMolecule_class(){
             
             PartialMolecule_exposer.def( 
                 "selection"
-                , selection_function_value );
+                , selection_function_value
+                , "Return the atoms that are part of this view" );
         
         }
         { //::SireMol::PartialMolecule::toString
@@ -323,7 +347,8 @@ void register_PartialMolecule_class(){
             
             PartialMolecule_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this molecule" );
         
         }
         { //::SireMol::PartialMolecule::typeName
@@ -333,7 +358,8 @@ void register_PartialMolecule_class(){
             
             PartialMolecule_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::PartialMolecule::version
@@ -343,7 +369,8 @@ void register_PartialMolecule_class(){
             
             PartialMolecule_exposer.def( 
                 "version"
-                , version_function_value );
+                , version_function_value
+                , "Return the version number of this molecule - all molecules\nwith the same ID number and version number must be identical" );
         
         }
         { //::SireMol::PartialMolecule::version
@@ -354,7 +381,8 @@ void register_PartialMolecule_class(){
             PartialMolecule_exposer.def( 
                 "version"
                 , version_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "Return the version number of the property at key key.\nAll molecules with the same ID number and same property version\nnumber must have the same value of this property\n(although this says nothing about any metadata associated\nwith this property)\nThrow: SireBase::missing_property\n" );
         
         }
         PartialMolecule_exposer.staticmethod( "typeName" );

@@ -24,11 +24,11 @@ void register_LJComponent_class(){
 
     { //::SireMM::LJComponent
         typedef bp::class_< SireMM::LJComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > LJComponent_exposer_t;
-        LJComponent_exposer_t LJComponent_exposer = LJComponent_exposer_t( "LJComponent", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() )) );
+        LJComponent_exposer_t LJComponent_exposer = LJComponent_exposer_t( "LJComponent", "This class represents a LJ component of a forcefield", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
         bp::scope LJComponent_scope( LJComponent_exposer );
-        LJComponent_exposer.def( bp::init< SireFF::FFName const &, QString const & >(( bp::arg("ffname"), bp::arg("suffix") )) );
-        LJComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") )) );
-        LJComponent_exposer.def( bp::init< SireMM::LJComponent const & >(( bp::arg("other") )) );
+        LJComponent_exposer.def( bp::init< SireFF::FFName const &, QString const & >(( bp::arg("ffname"), bp::arg("suffix") ), "Construct using the name of the forcefield, and the passed suffix") );
+        LJComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );
+        LJComponent_exposer.def( bp::init< SireMM::LJComponent const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::LJComponent::changeEnergy
         
             typedef void ( ::SireMM::LJComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::LJEnergy const & ) const;
@@ -37,7 +37,8 @@ void register_LJComponent_class(){
             LJComponent_exposer.def( 
                 "changeEnergy"
                 , changeEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("ljnrg") ) );
+                , ( bp::arg("ff"), bp::arg("ljnrg") )
+                , "Change the LJ component of the energy in the forcefield ff\nby delta" );
         
         }
         { //::SireMM::LJComponent::setEnergy
@@ -48,7 +49,8 @@ void register_LJComponent_class(){
             LJComponent_exposer.def( 
                 "setEnergy"
                 , setEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("ljnrg") ) );
+                , ( bp::arg("ff"), bp::arg("ljnrg") )
+                , "Set the LJ component of the energy in the forcefield ff\nto equal to the passed LJEnergy" );
         
         }
         { //::SireMM::LJComponent::symbols
@@ -58,7 +60,8 @@ void register_LJComponent_class(){
             
             LJComponent_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "" );
         
         }
         { //::SireMM::LJComponent::total
@@ -69,7 +72,8 @@ void register_LJComponent_class(){
             LJComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::LJComponent::typeName
@@ -79,7 +83,8 @@ void register_LJComponent_class(){
             
             LJComponent_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::LJComponent::what
@@ -89,7 +94,8 @@ void register_LJComponent_class(){
             
             LJComponent_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         LJComponent_exposer.staticmethod( "typeName" );

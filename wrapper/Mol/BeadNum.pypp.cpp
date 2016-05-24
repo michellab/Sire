@@ -31,10 +31,10 @@ void register_BeadNum_class(){
 
     { //::SireMol::BeadNum
         typedef bp::class_< SireMol::BeadNum, bp::bases< SireMol::BeadID, SireID::ID, SireID::Number > > BeadNum_exposer_t;
-        BeadNum_exposer_t BeadNum_exposer = BeadNum_exposer_t( "BeadNum", bp::init< >() );
+        BeadNum_exposer_t BeadNum_exposer = BeadNum_exposer_t( "BeadNum", "This ID number is used to identify a Bead by the user-supplied\nnumber\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope BeadNum_scope( BeadNum_exposer );
-        BeadNum_exposer.def( bp::init< quint32 >(( bp::arg("num") )) );
-        BeadNum_exposer.def( bp::init< SireMol::BeadNum const & >(( bp::arg("other") )) );
+        BeadNum_exposer.def( bp::init< quint32 >(( bp::arg("num") ), "") );
+        BeadNum_exposer.def( bp::init< SireMol::BeadNum const & >(( bp::arg("other") ), "") );
         { //::SireMol::BeadNum::hash
         
             typedef ::uint ( ::SireMol::BeadNum::*hash_function_type)(  ) const;
@@ -42,7 +42,8 @@ void register_BeadNum_class(){
             
             BeadNum_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::BeadNum::isNull
@@ -52,7 +53,8 @@ void register_BeadNum_class(){
             
             BeadNum_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         BeadNum_exposer.def( bp::self != bp::self );
@@ -67,7 +69,8 @@ void register_BeadNum_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         BeadNum_exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -81,7 +84,8 @@ void register_BeadNum_class(){
             
             BeadNum_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::BeadNum::typeName
@@ -91,7 +95,8 @@ void register_BeadNum_class(){
             
             BeadNum_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::BeadNum::what
@@ -101,7 +106,8 @@ void register_BeadNum_class(){
             
             BeadNum_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         BeadNum_exposer.staticmethod( "typeName" );

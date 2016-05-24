@@ -35,12 +35,12 @@ void register_Quaternion_class(){
 
     { //::SireMaths::Quaternion
         typedef bp::class_< SireMaths::Quaternion > Quaternion_exposer_t;
-        Quaternion_exposer_t Quaternion_exposer = Quaternion_exposer_t( "Quaternion", bp::init< >() );
+        Quaternion_exposer_t Quaternion_exposer = Quaternion_exposer_t( "Quaternion", "\nThis is a quaternion class that is used to handle 3D rotations and SLERP.\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a null (identity) quaternion") );
         bp::scope Quaternion_scope( Quaternion_exposer );
-        Quaternion_exposer.def( bp::init< SireMaths::Quaternion const & >(( bp::arg("p1") )) );
-        Quaternion_exposer.def( bp::init< SireUnits::Dimension::Angle, SireMaths::Vector const & >(( bp::arg("angle"), bp::arg("axis") )) );
-        Quaternion_exposer.def( bp::init< SireMaths::Matrix const & >(( bp::arg("m") )) );
-        Quaternion_exposer.def( bp::init< double, double, double, double >(( bp::arg("x"), bp::arg("y"), bp::arg("z"), bp::arg("w") )) );
+        Quaternion_exposer.def( bp::init< SireMaths::Quaternion const & >(( bp::arg("p1") ), "Copy constructor") );
+        Quaternion_exposer.def( bp::init< SireUnits::Dimension::Angle, SireMaths::Vector const & >(( bp::arg("angle"), bp::arg("axis") ), "Construct a quaternion which represents a rotation of angle around axis") );
+        Quaternion_exposer.def( bp::init< SireMaths::Matrix const & >(( bp::arg("m") ), "Construct from a Matrix") );
+        Quaternion_exposer.def( bp::init< double, double, double, double >(( bp::arg("x"), bp::arg("y"), bp::arg("z"), bp::arg("w") ), "Construct a quaternion from x,y,z,w - this normalises the values, so could be slow") );
         { //::SireMaths::Quaternion::conjugate
         
             typedef ::SireMaths::Quaternion ( ::SireMaths::Quaternion::*conjugate_function_type)(  ) const;
@@ -48,7 +48,8 @@ void register_Quaternion_class(){
             
             Quaternion_exposer.def( 
                 "conjugate"
-                , conjugate_function_value );
+                , conjugate_function_value
+                , "Return the conjugate of the quaternion" );
         
         }
         { //::SireMaths::Quaternion::dot
@@ -59,7 +60,8 @@ void register_Quaternion_class(){
             Quaternion_exposer.def( 
                 "dot"
                 , dot_function_value
-                , ( bp::arg("q") ) );
+                , ( bp::arg("q") )
+                , "Return the dot product of this with another quaternion" );
         
         }
         { //::SireMaths::Quaternion::fromMatrix
@@ -70,7 +72,8 @@ void register_Quaternion_class(){
             Quaternion_exposer.def( 
                 "fromMatrix"
                 , fromMatrix_function_value
-                , ( bp::arg("m") ) );
+                , ( bp::arg("m") )
+                , "Get from a matrix" );
         
         }
         { //::SireMaths::Quaternion::fromString
@@ -81,7 +84,8 @@ void register_Quaternion_class(){
             Quaternion_exposer.def( 
                 "fromString"
                 , fromString_function_value
-                , ( bp::arg("str") ) );
+                , ( bp::arg("str") )
+                , "Construct a Vector from the QString representation returned by toString()" );
         
         }
         { //::SireMaths::Quaternion::identity
@@ -91,7 +95,8 @@ void register_Quaternion_class(){
             
             Quaternion_exposer.def( 
                 "identity"
-                , identity_function_value );
+                , identity_function_value
+                , "Return a quaternion that represents the identity matrix" );
         
         }
         { //::SireMaths::Quaternion::inverse
@@ -101,7 +106,8 @@ void register_Quaternion_class(){
             
             Quaternion_exposer.def( 
                 "inverse"
-                , inverse_function_value );
+                , inverse_function_value
+                , "Return the inverse of the quaternion\n- since the length=1 this is the same as the conjugate" );
         
         }
         { //::SireMaths::Quaternion::isIdentity
@@ -111,7 +117,8 @@ void register_Quaternion_class(){
             
             Quaternion_exposer.def( 
                 "isIdentity"
-                , isIdentity_function_value );
+                , isIdentity_function_value
+                , "" );
         
         }
         Quaternion_exposer.def( bp::self != bp::self );
@@ -124,7 +131,8 @@ void register_Quaternion_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("p") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Quaternion_exposer.def( bp::self == bp::self );
@@ -136,7 +144,8 @@ void register_Quaternion_class(){
             Quaternion_exposer.def( 
                 "pow"
                 , pow_function_value
-                , ( bp::arg("n") ) );
+                , ( bp::arg("n") )
+                , "Return this quaternion raised to the power n" );
         
         }
         { //::SireMaths::Quaternion::renormalise
@@ -146,7 +155,8 @@ void register_Quaternion_class(){
             
             Quaternion_exposer.def( 
                 "renormalise"
-                , renormalise_function_value );
+                , renormalise_function_value
+                , "Renormalise the quaternion" );
         
         }
         { //::SireMaths::Quaternion::rotate
@@ -157,7 +167,8 @@ void register_Quaternion_class(){
             Quaternion_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("p") ) );
+                , ( bp::arg("p") )
+                , "Use this quaternion to rotate p" );
         
         }
         { //::SireMaths::Quaternion::rotate
@@ -168,7 +179,8 @@ void register_Quaternion_class(){
             Quaternion_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("points") ) );
+                , ( bp::arg("points") )
+                , "Use the quaternion to rotate all of the points in p" );
         
         }
         { //::SireMaths::Quaternion::slerp
@@ -179,7 +191,8 @@ void register_Quaternion_class(){
             Quaternion_exposer.def( 
                 "slerp"
                 , slerp_function_value
-                , ( bp::arg("q"), bp::arg("lambda") ) );
+                , ( bp::arg("q"), bp::arg("lambda") )
+                , "Return the spherical linear interpolation (slerp) of this quaternion\nwith another for 0<=lambda<=1, with this quaternion returned\nat lambda=0 and the other returned at lambda=1" );
         
         }
         { //::SireMaths::Quaternion::toMatrix
@@ -189,7 +202,8 @@ void register_Quaternion_class(){
             
             Quaternion_exposer.def( 
                 "toMatrix"
-                , toMatrix_function_value );
+                , toMatrix_function_value
+                , "Convert into a matrix" );
         
         }
         { //::SireMaths::Quaternion::toString
@@ -199,7 +213,8 @@ void register_Quaternion_class(){
             
             Quaternion_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this Quaternion" );
         
         }
         { //::SireMaths::Quaternion::typeName
@@ -209,7 +224,8 @@ void register_Quaternion_class(){
             
             Quaternion_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMaths::Quaternion::w
@@ -219,7 +235,8 @@ void register_Quaternion_class(){
             
             Quaternion_exposer.def( 
                 "w"
-                , w_function_value );
+                , w_function_value
+                , "" );
         
         }
         { //::SireMaths::Quaternion::what
@@ -229,7 +246,8 @@ void register_Quaternion_class(){
             
             Quaternion_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         { //::SireMaths::Quaternion::x
@@ -239,7 +257,8 @@ void register_Quaternion_class(){
             
             Quaternion_exposer.def( 
                 "x"
-                , x_function_value );
+                , x_function_value
+                , "" );
         
         }
         { //::SireMaths::Quaternion::y
@@ -249,7 +268,8 @@ void register_Quaternion_class(){
             
             Quaternion_exposer.def( 
                 "y"
-                , y_function_value );
+                , y_function_value
+                , "" );
         
         }
         { //::SireMaths::Quaternion::z
@@ -259,7 +279,8 @@ void register_Quaternion_class(){
             
             Quaternion_exposer.def( 
                 "z"
-                , z_function_value );
+                , z_function_value
+                , "" );
         
         }
         Quaternion_exposer.staticmethod( "fromString" );

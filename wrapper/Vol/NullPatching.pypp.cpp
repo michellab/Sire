@@ -31,10 +31,10 @@ void register_NullPatching_class(){
 
     { //::SireVol::NullPatching
         typedef bp::class_< SireVol::NullPatching, bp::bases< SireVol::Patching, SireBase::Property > > NullPatching_exposer_t;
-        NullPatching_exposer_t NullPatching_exposer = NullPatching_exposer_t( "NullPatching", bp::init< >() );
+        NullPatching_exposer_t NullPatching_exposer = NullPatching_exposer_t( "NullPatching", "Null patching", bp::init< >("Constructor") );
         bp::scope NullPatching_scope( NullPatching_exposer );
-        NullPatching_exposer.def( bp::init< SireVol::Space const & >(( bp::arg("space") )) );
-        NullPatching_exposer.def( bp::init< SireVol::NullPatching const & >(( bp::arg("other") )) );
+        NullPatching_exposer.def( bp::init< SireVol::Space const & >(( bp::arg("space") ), "Construct with the passed space") );
+        NullPatching_exposer.def( bp::init< SireVol::NullPatching const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireVol::NullPatching::nPatches
         
             typedef int ( ::SireVol::NullPatching::*nPatches_function_type)(  ) const;
@@ -42,7 +42,8 @@ void register_NullPatching_class(){
             
             NullPatching_exposer.def( 
                 "nPatches"
-                , nPatches_function_value );
+                , nPatches_function_value
+                , "Return the number of patches" );
         
         }
         NullPatching_exposer.def( bp::self != bp::self );
@@ -55,7 +56,8 @@ void register_NullPatching_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         NullPatching_exposer.def( bp::self == bp::self );
@@ -67,7 +69,8 @@ void register_NullPatching_class(){
             NullPatching_exposer.def( 
                 "patchIndex"
                 , patchIndex_function_value
-                , ( bp::arg("point") ) );
+                , ( bp::arg("point") )
+                , "Return the patch index of the passed point" );
         
         }
         { //::SireVol::NullPatching::patchIndexAndCenter
@@ -78,7 +81,8 @@ void register_NullPatching_class(){
             NullPatching_exposer.def( 
                 "patchIndexAndCenter"
                 , patchIndexAndCenter_function_value
-                , ( bp::arg("point") ) );
+                , ( bp::arg("point") )
+                , "Return the patch index and the center of the patch" );
         
         }
         { //::SireVol::NullPatching::repatch
@@ -89,7 +93,8 @@ void register_NullPatching_class(){
             NullPatching_exposer.def( 
                 "repatch"
                 , repatch_function_value
-                , ( bp::arg("new_space") ) );
+                , ( bp::arg("new_space") )
+                , "Repatch this patching for the passed space" );
         
         }
         { //::SireVol::NullPatching::typeName
@@ -99,7 +104,8 @@ void register_NullPatching_class(){
             
             NullPatching_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         NullPatching_exposer.staticmethod( "typeName" );

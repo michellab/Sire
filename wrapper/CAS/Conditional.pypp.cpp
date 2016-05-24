@@ -44,10 +44,10 @@ void register_Conditional_class(){
 
     { //::SireCAS::Conditional
         typedef bp::class_< SireCAS::Conditional, bp::bases< SireCAS::ExBase > > Conditional_exposer_t;
-        Conditional_exposer_t Conditional_exposer = Conditional_exposer_t( "Conditional", bp::init< >() );
+        Conditional_exposer_t Conditional_exposer = Conditional_exposer_t( "Conditional", "This is a conditional expression. If the condition is true,\nthen true_expression is evaluated, else if the condition\nis false then false_expression is evaluate\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope Conditional_scope( Conditional_exposer );
-        Conditional_exposer.def( bp::init< SireCAS::Condition const &, SireCAS::Expression const &, SireCAS::Expression const & >(( bp::arg("condition"), bp::arg("true_expression"), bp::arg("false_expression") )) );
-        Conditional_exposer.def( bp::init< SireCAS::Conditional const & >(( bp::arg("other") )) );
+        Conditional_exposer.def( bp::init< SireCAS::Condition const &, SireCAS::Expression const &, SireCAS::Expression const & >(( bp::arg("condition"), bp::arg("true_expression"), bp::arg("false_expression") ), "Construct a conditional where if condition is true, then\ntrue_expression is evaluated, while if condition is false,\nthen false_expression is evaluated") );
+        Conditional_exposer.def( bp::init< SireCAS::Conditional const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::Conditional::children
         
             typedef ::SireCAS::Expressions ( ::SireCAS::Conditional::*children_function_type)(  ) const;
@@ -55,7 +55,8 @@ void register_Conditional_class(){
             
             Conditional_exposer.def( 
                 "children"
-                , children_function_value );
+                , children_function_value
+                , "Return the children of this expression" );
         
         }
         { //::SireCAS::Conditional::condition
@@ -66,7 +67,8 @@ void register_Conditional_class(){
             Conditional_exposer.def( 
                 "condition"
                 , condition_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the condition" );
         
         }
         { //::SireCAS::Conditional::conjugate
@@ -76,7 +78,8 @@ void register_Conditional_class(){
             
             Conditional_exposer.def( 
                 "conjugate"
-                , conjugate_function_value );
+                , conjugate_function_value
+                , "Return the complex conjugate of this expression" );
         
         }
         { //::SireCAS::Conditional::differentiate
@@ -87,7 +90,8 @@ void register_Conditional_class(){
             Conditional_exposer.def( 
                 "differentiate"
                 , differentiate_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return the differential of this expression" );
         
         }
         { //::SireCAS::Conditional::evaluate
@@ -98,7 +102,8 @@ void register_Conditional_class(){
             Conditional_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this expression for the passed values" );
         
         }
         { //::SireCAS::Conditional::evaluate
@@ -109,7 +114,8 @@ void register_Conditional_class(){
             Conditional_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this expresion for the passed values" );
         
         }
         { //::SireCAS::Conditional::expand
@@ -120,7 +126,8 @@ void register_Conditional_class(){
             Conditional_exposer.def( 
                 "expand"
                 , expand_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Expand this expression in terms of symbol" );
         
         }
         { //::SireCAS::Conditional::falseExpression
@@ -131,7 +138,8 @@ void register_Conditional_class(){
             Conditional_exposer.def( 
                 "falseExpression"
                 , falseExpression_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the expression to be evaluated if the condition is false" );
         
         }
         { //::SireCAS::Conditional::functions
@@ -141,7 +149,8 @@ void register_Conditional_class(){
             
             Conditional_exposer.def( 
                 "functions"
-                , functions_function_value );
+                , functions_function_value
+                , "Return the functions used in this expression" );
         
         }
         { //::SireCAS::Conditional::hash
@@ -151,7 +160,8 @@ void register_Conditional_class(){
             
             Conditional_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Hash this conditional" );
         
         }
         { //::SireCAS::Conditional::integrate
@@ -162,7 +172,8 @@ void register_Conditional_class(){
             Conditional_exposer.def( 
                 "integrate"
                 , integrate_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return the integral of this expression" );
         
         }
         { //::SireCAS::Conditional::isComplex
@@ -172,7 +183,8 @@ void register_Conditional_class(){
             
             Conditional_exposer.def( 
                 "isComplex"
-                , isComplex_function_value );
+                , isComplex_function_value
+                , "Is this a complex expression?" );
         
         }
         { //::SireCAS::Conditional::isCompound
@@ -182,7 +194,8 @@ void register_Conditional_class(){
             
             Conditional_exposer.def( 
                 "isCompound"
-                , isCompound_function_value );
+                , isCompound_function_value
+                , "Is this a compound expression?" );
         
         }
         { //::SireCAS::Conditional::isConstant
@@ -192,7 +205,8 @@ void register_Conditional_class(){
             
             Conditional_exposer.def( 
                 "isConstant"
-                , isConstant_function_value );
+                , isConstant_function_value
+                , "Return whether or not this is constant" );
         
         }
         { //::SireCAS::Conditional::isFunction
@@ -203,7 +217,8 @@ void register_Conditional_class(){
             Conditional_exposer.def( 
                 "isFunction"
                 , isFunction_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "Return whether or not this is a function of symbol" );
         
         }
         { //::SireCAS::Conditional::isNull
@@ -213,7 +228,8 @@ void register_Conditional_class(){
             
             Conditional_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Return whether or not this is null" );
         
         }
         { //::SireCAS::Conditional::operator=
@@ -225,7 +241,8 @@ void register_Conditional_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Conditional_exposer.def( bp::self == bp::self );
@@ -238,7 +255,8 @@ void register_Conditional_class(){
             Conditional_exposer.def( 
                 "series"
                 , series_function_value
-                , ( bp::arg("symbol"), bp::arg("n") ) );
+                , ( bp::arg("symbol"), bp::arg("n") )
+                , "Return the series expansion of this product with respect to symbol, to order n" );
         
         }
         { //::SireCAS::Conditional::simplify
@@ -249,7 +267,8 @@ void register_Conditional_class(){
             Conditional_exposer.def( 
                 "simplify"
                 , simplify_function_value
-                , ( bp::arg("options")=(int)(0) ) );
+                , ( bp::arg("options")=(int)(0) )
+                , "Try to simplify this condition" );
         
         }
         { //::SireCAS::Conditional::substitute
@@ -260,7 +279,8 @@ void register_Conditional_class(){
             Conditional_exposer.def( 
                 "substitute"
                 , substitute_function_value
-                , ( bp::arg("identities") ) );
+                , ( bp::arg("identities") )
+                , "Substitute identities into this expression" );
         
         }
         { //::SireCAS::Conditional::symbols
@@ -270,7 +290,8 @@ void register_Conditional_class(){
             
             Conditional_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "Return the symbols used in this expression" );
         
         }
         { //::SireCAS::Conditional::toString
@@ -280,7 +301,8 @@ void register_Conditional_class(){
             
             Conditional_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this conditional" );
         
         }
         { //::SireCAS::Conditional::trueExpression
@@ -291,7 +313,8 @@ void register_Conditional_class(){
             Conditional_exposer.def( 
                 "trueExpression"
                 , trueExpression_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the expression to be evaluated if the condition is true" );
         
         }
         { //::SireCAS::Conditional::typeName
@@ -301,7 +324,8 @@ void register_Conditional_class(){
             
             Conditional_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::Conditional::what
@@ -311,7 +335,8 @@ void register_Conditional_class(){
             
             Conditional_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Conditional_exposer.staticmethod( "typeName" );

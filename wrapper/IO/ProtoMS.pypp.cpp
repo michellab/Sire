@@ -99,12 +99,12 @@ void register_ProtoMS_class(){
 
     { //::SireIO::ProtoMS
         typedef bp::class_< SireIO::ProtoMS > ProtoMS_exposer_t;
-        ProtoMS_exposer_t ProtoMS_exposer = ProtoMS_exposer_t( "ProtoMS", bp::init< >() );
+        ProtoMS_exposer_t ProtoMS_exposer = ProtoMS_exposer_t( "ProtoMS", "This class is used to read in ProtoMS parameter files and\nparameterise passed molecules.\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope ProtoMS_scope( ProtoMS_exposer );
         bp::scope().attr("PROTEIN") = (int)SireIO::ProtoMS::PROTEIN;
         bp::scope().attr("SOLUTE") = (int)SireIO::ProtoMS::SOLUTE;
         bp::scope().attr("SOLVENT") = (int)SireIO::ProtoMS::SOLVENT;
-        ProtoMS_exposer.def( bp::init< QString const & >(( bp::arg("protoms") )) );
+        ProtoMS_exposer.def( bp::init< QString const & >(( bp::arg("protoms") ), "Constructor, specifying the location of ProtoMS") );
         { //::SireIO::ProtoMS::addParameterFile
         
             typedef void ( ::SireIO::ProtoMS::*addParameterFile_function_type)( ::QString const & ) ;
@@ -113,7 +113,8 @@ void register_ProtoMS_class(){
             ProtoMS_exposer.def( 
                 "addParameterFile"
                 , addParameterFile_function_value
-                , ( bp::arg("paramfile") ) );
+                , ( bp::arg("paramfile") )
+                , "Add a parameter file to the list of files which will be used\nto parameterise the molecules" );
         
         }
         { //::SireIO::ProtoMS::parameterFiles
@@ -123,7 +124,8 @@ void register_ProtoMS_class(){
             
             ProtoMS_exposer.def( 
                 "parameterFiles"
-                , parameterFiles_function_value );
+                , parameterFiles_function_value
+                , "Return the list of parameter files which will be used to\nparameterise the molecules, in the order that they will\nbe read" );
         
         }
         { //::SireIO::ProtoMS::parameterisationCommandFile
@@ -134,7 +136,8 @@ void register_ProtoMS_class(){
             ProtoMS_exposer.def( 
                 "parameterisationCommandFile"
                 , parameterisationCommandFile_function_value
-                , ( bp::arg("molecule"), bp::arg("type") ) );
+                , ( bp::arg("molecule"), bp::arg("type") )
+                , "Return the command file used to run ProtoMS on the passed molecule as the passed type" );
         
         }
         { //::SireIO::ProtoMS::parameterise
@@ -145,7 +148,8 @@ void register_ProtoMS_class(){
             ProtoMS_exposer.def( 
                 "parameterise"
                 , parameterise_function_value
-                , ( bp::arg("molecule"), bp::arg("type"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecule"), bp::arg("type"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Parameterise the molecules molecules as type type of\nmolecules (PROTEIN, SOLUTE or SOLVENT)" );
         
         }
         { //::SireIO::ProtoMS::parameterise
@@ -156,7 +160,8 @@ void register_ProtoMS_class(){
             ProtoMS_exposer.def( 
                 "parameterise"
                 , parameterise_function_value
-                , ( bp::arg("molecules"), bp::arg("type"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecules"), bp::arg("type"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Parameterise the molecules molecules as type type of\nmolecules (PROTEIN, SOLUTE or SOLVENT)" );
         
         }
         { //::SireIO::ProtoMS::parameters
@@ -167,7 +172,8 @@ void register_ProtoMS_class(){
             ProtoMS_exposer.def( 
                 "parameters"
                 , parameters_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireIO::ProtoMS::setExecutable
@@ -178,7 +184,8 @@ void register_ProtoMS_class(){
             ProtoMS_exposer.def( 
                 "setExecutable"
                 , setExecutable_function_value
-                , ( bp::arg("protoms") ) );
+                , ( bp::arg("protoms") )
+                , "Set the path to the ProtoMS executable that will be used\nto parameterise the molecules" );
         
         }
         { //::SireIO::ProtoMS::typeName
@@ -188,7 +195,8 @@ void register_ProtoMS_class(){
             
             ProtoMS_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireIO::ProtoMS::what
@@ -198,7 +206,8 @@ void register_ProtoMS_class(){
             
             ProtoMS_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ProtoMS_exposer.staticmethod( "parameters" );

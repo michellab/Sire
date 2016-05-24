@@ -60,11 +60,11 @@ void register_Molecules_class(){
 
     { //::SireMol::Molecules
         typedef bp::class_< SireMol::Molecules, bp::bases< SireBase::Property > > Molecules_exposer_t;
-        Molecules_exposer_t Molecules_exposer = Molecules_exposer_t( "Molecules", bp::init< >() );
+        Molecules_exposer_t Molecules_exposer = Molecules_exposer_t( "Molecules", "This class provides a container for lots of molecules. This\nforms a general purpose molecule container, which is used as the argument\nto functions which expect to be passed lots of molecules or parts\nof molecules. This class holds the Molecules using the\nViewsOfMol class, thereby allowing multiple arbitrary views of each\nmolecule to be held.\n\nAuthor: Christopher Woods\n", bp::init< >("Construct an empty set of molecules") );
         bp::scope Molecules_scope( Molecules_exposer );
-        Molecules_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molecule") )) );
-        Molecules_exposer.def( bp::init< SireMol::ViewsOfMol const & >(( bp::arg("molviews") )) );
-        Molecules_exposer.def( bp::init< SireMol::Molecules const & >(( bp::arg("other") )) );
+        Molecules_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molecule") ), "Construct a set that contains only the passed view\nof a molecule") );
+        Molecules_exposer.def( bp::init< SireMol::ViewsOfMol const & >(( bp::arg("molviews") ), "Construct a set that contains the passed views\nof a molecule") );
+        Molecules_exposer.def( bp::init< SireMol::Molecules const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::Molecules::add
         
             typedef void ( ::SireMol::Molecules::*add_function_type)( ::SireMol::MoleculeView const & ) ;
@@ -73,7 +73,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "Add the view view to this set of molecules - this\nadds this view even if it already exists in this set" );
         
         }
         { //::SireMol::Molecules::add
@@ -84,7 +85,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molviews") ) );
+                , ( bp::arg("molviews") )
+                , "Add the views in molviews to this set. This adds\nall of the views, even if they are already present\nin this set." );
         
         }
         { //::SireMol::Molecules::add
@@ -95,7 +97,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Add all of the molecules in molecules to this set.\nThis adds all of the molecules, even if they already\nexist in this set" );
         
         }
         { //::SireMol::Molecules::addIfUnique
@@ -106,7 +109,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "Add the view view to this set of molecules - this\nadds this view only if it doesnt already exist in\nthis set - this returns whether or not the view\nwas added" );
         
         }
         { //::SireMol::Molecules::addIfUnique
@@ -117,7 +121,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molviews") ) );
+                , ( bp::arg("molviews") )
+                , "Add the views in molviews to this set. This only\nadds the views that dont already exist in this set,\nand returns the views that have been added" );
         
         }
         { //::SireMol::Molecules::addIfUnique
@@ -128,7 +133,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Add all of the views of the molecules in molecules to\nthis set, only if they dont already exist in this set.\nThis returns the views that were added to this set." );
         
         }
         { //::SireMol::Molecules::assertContains
@@ -139,7 +145,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "assertContains"
                 , assertContains_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Assert that this set contains any of the atoms of\nthe molecule with number molnum\nThrow: SireMol::missing_molecule\n" );
         
         }
         { //::SireMol::Molecules::at
@@ -151,7 +158,8 @@ void register_Molecules_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("molnum") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the view(s) of the molecule that has number molnum\nThrow: SireMol::missing_molecule\n" );
         
         }
         { //::SireMol::Molecules::at
@@ -162,7 +170,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("viewidx") ) );
+                , ( bp::arg("viewidx") )
+                , "Return the view of the molecule identified by molviewidx\nThrow: SireMol::missing_molecule\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::Molecules::at
@@ -173,7 +182,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("molnum"), bp::arg("idx") ) );
+                , ( bp::arg("molnum"), bp::arg("idx") )
+                , "Return the view at index viewidx of the molecule with number\nmolnum from this set\nThrow: SireMol::missing_molecule\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::Molecules::back
@@ -184,7 +194,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "back"
                 , back_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "STL compatible version of Molecules::last()" );
         
         }
         { //::SireMol::Molecules::clear
@@ -194,7 +205,8 @@ void register_Molecules_class(){
             
             Molecules_exposer.def( 
                 "clear"
-                , clear_function_value );
+                , clear_function_value
+                , "Completely clear this set of all views of all molecules" );
         
         }
         { //::SireMol::Molecules::contains
@@ -205,7 +217,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Return whether or not this set contains any view\nof the molecule at number molnum" );
         
         }
         { //::SireMol::Molecules::contains
@@ -216,7 +229,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "Return whether or not this set contains the view molview\n- note that this means that it actually contains this\nspecific view" );
         
         }
         { //::SireMol::Molecules::contains
@@ -227,7 +241,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molviews") ) );
+                , ( bp::arg("molviews") )
+                , "Return whether or not this set contains all of the views\nin molviews - note that this means that it actually\ncontains each specific view" );
         
         }
         { //::SireMol::Molecules::contains
@@ -238,7 +253,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Return whether or not this set contains all of the views\nof all of the molecules in molecules" );
         
         }
         { //::SireMol::Molecules::count
@@ -248,7 +264,8 @@ void register_Molecules_class(){
             
             Molecules_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of molecules in this set" );
         
         }
         { //::SireMol::Molecules::first
@@ -259,7 +276,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "first"
                 , first_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return a reference to the first molecule in this set.\nThis throws an exception if this set is empty.\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::Molecules::front
@@ -270,7 +288,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "front"
                 , front_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "STL compatible version of Molecules::first()" );
         
         }
         { //::SireMol::Molecules::intersects
@@ -281,7 +300,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "Return whether or not this set intersects with the view molview\n- this returns true if any of the atoms in molview are\nalso present in any of the views of that molecule in this set" );
         
         }
         { //::SireMol::Molecules::intersects
@@ -292,7 +312,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return whether or not this set intersects with molecules -\nthis returns true if any of the atoms in any of the views\nof any of the molecules in molecules are also present in any\nof the views of any of the molecules in this set" );
         
         }
         { //::SireMol::Molecules::isEmpty
@@ -302,7 +323,8 @@ void register_Molecules_class(){
             
             Molecules_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether this set is empty" );
         
         }
         { //::SireMol::Molecules::last
@@ -313,7 +335,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "last"
                 , last_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return a reference to the last molecule in this set.\nThis throws an exception if this set is empty.\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::Molecules::molNums
@@ -323,7 +346,8 @@ void register_Molecules_class(){
             
             Molecules_exposer.def( 
                 "molNums"
-                , molNums_function_value );
+                , molNums_function_value
+                , "Return the numbers of all of the molecules in this set" );
         
         }
         { //::SireMol::Molecules::molecule
@@ -335,7 +359,8 @@ void register_Molecules_class(){
                 "molecule"
                 , molecule_function_value
                 , ( bp::arg("molnum") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the molecule at number molnum\nThrow: SireMol::missing_molecule\n" );
         
         }
         { //::SireMol::Molecules::nMolecules
@@ -345,7 +370,8 @@ void register_Molecules_class(){
             
             Molecules_exposer.def( 
                 "nMolecules"
-                , nMolecules_function_value );
+                , nMolecules_function_value
+                , "Return the number of molecules in this set" );
         
         }
         { //::SireMol::Molecules::nViews
@@ -355,7 +381,8 @@ void register_Molecules_class(){
             
             Molecules_exposer.def( 
                 "nViews"
-                , nViews_function_value );
+                , nViews_function_value
+                , "Return the total number of views in this set" );
         
         }
         { //::SireMol::Molecules::nViews
@@ -366,7 +393,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "nViews"
                 , nViews_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Return the number of views of the molecule with number molnum\nThrow: SireMol::missing_molecule\n" );
         
         }
         Molecules_exposer.def( bp::self != bp::self );
@@ -381,7 +409,8 @@ void register_Molecules_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Molecules_exposer.def( bp::self == bp::self );
@@ -394,7 +423,8 @@ void register_Molecules_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("molnum") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMol::Molecules::operator[]
@@ -405,7 +435,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("viewidx") ) );
+                , ( bp::arg("viewidx") )
+                , "" );
         
         }
         { //::SireMol::Molecules::remove
@@ -416,7 +447,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "Remove the view molview from this set. This only\nremoves the first copy of this view from this set\n(if multiple copies are present), and returns\nwhether or not a view was removed" );
         
         }
         { //::SireMol::Molecules::remove
@@ -427,7 +459,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molviews") ) );
+                , ( bp::arg("molviews") )
+                , "Remove all of the views in molviews from this set. This\nonly removes the first copy of the view if multiple copies\nexist, and returns the views that were successfully removed." );
         
         }
         { //::SireMol::Molecules::remove
@@ -438,7 +471,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Remove all of the views of all of the molecules in molecules.\nThis only removes the first copy of any views that appear\nmultiple times in this set. This returns all of the views that\nwere successfully removed" );
         
         }
         { //::SireMol::Molecules::remove
@@ -449,7 +483,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Remove all views of the molecule with number molnum. This\nreturns the views of the molecule in this set, if it exists,\nor an empty set of views if it doesnt exist." );
         
         }
         { //::SireMol::Molecules::removeAll
@@ -460,7 +495,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "Remove all copies of the view view from this set.\nThis returns whether any views were removed" );
         
         }
         { //::SireMol::Molecules::removeAll
@@ -471,7 +507,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
-                , ( bp::arg("molviews") ) );
+                , ( bp::arg("molviews") )
+                , "Remove all of the views in molviews from this set. This\nremoves all copies of the views if multiple copies exist,\nand returns the views that were successfully removed." );
         
         }
         { //::SireMol::Molecules::removeAll
@@ -482,7 +519,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Remove all of the views of all of the molecules in molecules.\nThis removes all copies of any views that appear\nmultiple times in this set. This returns all of the views that\nwere successfully removed" );
         
         }
         { //::SireMol::Molecules::removeAll
@@ -492,7 +530,8 @@ void register_Molecules_class(){
             
             Molecules_exposer.def( 
                 "removeAll"
-                , removeAll_function_value );
+                , removeAll_function_value
+                , "Remove all views of all molecules from this set. This returns\nwhether or not this changes this set" );
         
         }
         { //::SireMol::Molecules::removeDuplicates
@@ -502,7 +541,8 @@ void register_Molecules_class(){
             
             Molecules_exposer.def( 
                 "removeDuplicates"
-                , removeDuplicates_function_value );
+                , removeDuplicates_function_value
+                , "This removes all duplicated views from this set. This returns\nwhether or not this changes the set (whether or not there\nwere any duplicates)" );
         
         }
         { //::SireMol::Molecules::reserve
@@ -513,7 +553,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "reserve"
                 , reserve_function_value
-                , ( bp::arg("nmolecules") ) );
+                , ( bp::arg("nmolecules") )
+                , "Reserve enough space for nmolecules molecules. This\nwill reserve the memory so that reallocations are minimised" );
         
         }
         { //::SireMol::Molecules::toString
@@ -523,7 +564,8 @@ void register_Molecules_class(){
             
             Molecules_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this set of molecules" );
         
         }
         { //::SireMol::Molecules::typeName
@@ -533,7 +575,8 @@ void register_Molecules_class(){
             
             Molecules_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::Molecules::unite
@@ -544,7 +587,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "unite"
                 , unite_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "Synonym for Molecules::addIfUnique(molview)" );
         
         }
         { //::SireMol::Molecules::unite
@@ -555,7 +599,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "unite"
                 , unite_function_value
-                , ( bp::arg("molviews") ) );
+                , ( bp::arg("molviews") )
+                , "Synonym for Molecules::addIfUnique(molviews)" );
         
         }
         { //::SireMol::Molecules::unite
@@ -566,7 +611,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "unite"
                 , unite_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Synonym for Molecules::addIfUnique(molecules)" );
         
         }
         { //::SireMol::Molecules::uniteViews
@@ -576,7 +622,8 @@ void register_Molecules_class(){
             
             Molecules_exposer.def( 
                 "uniteViews"
-                , uniteViews_function_value );
+                , uniteViews_function_value
+                , "Unite all of the views in this set so that each molecule has\nonly a single view that is the union of all of its views.\nReturn whether or not this changes the set." );
         
         }
         { //::SireMol::Molecules::update
@@ -587,7 +634,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("moldata") ) );
+                , ( bp::arg("moldata") )
+                , "Update the views of the molecule whose data is in moldata\nin this set so that it is at the same version as moldata.\nThis does nothing if this molecule is not in this set.\nThis returns whether or not the molecule was updated" );
         
         }
         { //::SireMol::Molecules::update
@@ -598,7 +646,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "Update the views of the molecule viewed by molview\nin this set so that they have the same molecule version\nas molview. This returns whether or not the molecule\nwas updated." );
         
         }
         { //::SireMol::Molecules::update
@@ -609,7 +658,8 @@ void register_Molecules_class(){
             Molecules_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Update the views in this set so that they have the\nsame molecule versions as the molecules in molecules.\nThis returns the molecules that have been updated." );
         
         }
         { //::SireMol::Molecules::what
@@ -619,7 +669,8 @@ void register_Molecules_class(){
             
             Molecules_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Molecules_exposer.staticmethod( "typeName" );

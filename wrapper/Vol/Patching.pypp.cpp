@@ -30,7 +30,7 @@ void register_Patching_class(){
 
     { //::SireVol::Patching
         typedef bp::class_< SireVol::Patching, bp::bases< SireBase::Property >, boost::noncopyable > Patching_exposer_t;
-        Patching_exposer_t Patching_exposer = Patching_exposer_t( "Patching", bp::no_init );
+        Patching_exposer_t Patching_exposer = Patching_exposer_t( "Patching", "This is the base class of all Patching classes. Patching\nrepresents a scheme for decomposing a space into a set\nof regions (domain decomposition) that contain neighbouring\nCoordGroups - this allows inter-CoordGroup calculations to\nbe accelerated as cutoff tests can be applied to the patches\nto eliminate tests of the contained CoordGroups.\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope Patching_scope( Patching_exposer );
         { //::SireVol::Patching::nPatches
         
@@ -39,7 +39,8 @@ void register_Patching_class(){
             
             Patching_exposer.def( 
                 "nPatches"
-                , nPatches_function_value );
+                , nPatches_function_value
+                , "" );
         
         }
         { //::SireVol::Patching::null
@@ -49,7 +50,8 @@ void register_Patching_class(){
             
             Patching_exposer.def( 
                 "null"
-                , null_function_value );
+                , null_function_value
+                , "Retunr the null patching object" );
         
         }
         { //::SireVol::Patching::patchIndex
@@ -60,7 +62,8 @@ void register_Patching_class(){
             Patching_exposer.def( 
                 "patchIndex"
                 , patchIndex_function_value
-                , ( bp::arg("point") ) );
+                , ( bp::arg("point") )
+                , "" );
         
         }
         { //::SireVol::Patching::patchIndexAndCenter
@@ -71,7 +74,8 @@ void register_Patching_class(){
             Patching_exposer.def( 
                 "patchIndexAndCenter"
                 , patchIndexAndCenter_function_value
-                , ( bp::arg("point") ) );
+                , ( bp::arg("point") )
+                , "" );
         
         }
         { //::SireVol::Patching::rebalance
@@ -82,7 +86,8 @@ void register_Patching_class(){
             Patching_exposer.def( 
                 "rebalance"
                 , rebalance_function_value
-                , ( bp::arg("space"), bp::arg("patchcoords") ) );
+                , ( bp::arg("space"), bp::arg("patchcoords") )
+                , "Rebalance the patching so that the patches for the passed space contain\nroughly equal numbers of CoordGroups" );
         
         }
         { //::SireVol::Patching::repatch
@@ -93,7 +98,8 @@ void register_Patching_class(){
             Patching_exposer.def( 
                 "repatch"
                 , repatch_function_value
-                , ( bp::arg("new_space") ) );
+                , ( bp::arg("new_space") )
+                , "" );
         
         }
         { //::SireVol::Patching::space
@@ -104,7 +110,8 @@ void register_Patching_class(){
             Patching_exposer.def( 
                 "space"
                 , space_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the space used to create this patching scheme" );
         
         }
         { //::SireVol::Patching::typeName
@@ -114,7 +121,8 @@ void register_Patching_class(){
             
             Patching_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         Patching_exposer.staticmethod( "null" );

@@ -37,11 +37,11 @@ void register_StringArrayProperty_class(){
 
     { //::SireBase::StringArrayProperty
         typedef bp::class_< SireBase::StringArrayProperty, bp::bases< SireBase::Property > > StringArrayProperty_exposer_t;
-        StringArrayProperty_exposer_t StringArrayProperty_exposer = StringArrayProperty_exposer_t( "StringArrayProperty", bp::init< >() );
+        StringArrayProperty_exposer_t StringArrayProperty_exposer = StringArrayProperty_exposer_t( "StringArrayProperty", "", bp::init< >("") );
         bp::scope StringArrayProperty_scope( StringArrayProperty_exposer );
-        StringArrayProperty_exposer.def( bp::init< QList< QString > const & >(( bp::arg("array") )) );
-        StringArrayProperty_exposer.def( bp::init< QVector< QString > const & >(( bp::arg("array") )) );
-        StringArrayProperty_exposer.def( bp::init< SireBase::StringArrayProperty const & >(( bp::arg("other") )) );
+        StringArrayProperty_exposer.def( bp::init< QList< QString > const & >(( bp::arg("array") ), "") );
+        StringArrayProperty_exposer.def( bp::init< QVector< QString > const & >(( bp::arg("array") ), "") );
+        StringArrayProperty_exposer.def( bp::init< SireBase::StringArrayProperty const & >(( bp::arg("other") ), "") );
         StringArrayProperty_exposer.def( bp::self != bp::self );
         StringArrayProperty_exposer.def( bp::self + bp::self );
         { //::SireBase::StringArrayProperty::operator=
@@ -53,7 +53,8 @@ void register_StringArrayProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         StringArrayProperty_exposer.def( bp::self == bp::self );
@@ -64,7 +65,8 @@ void register_StringArrayProperty_class(){
             
             StringArrayProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         StringArrayProperty_exposer.staticmethod( "typeName" );

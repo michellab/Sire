@@ -42,11 +42,11 @@ void register_Factor_class(){
 
     { //::SireCAS::Factor
         typedef bp::class_< SireCAS::Factor > Factor_exposer_t;
-        Factor_exposer_t Factor_exposer = Factor_exposer_t( "Factor", bp::init< >() );
+        Factor_exposer_t Factor_exposer = Factor_exposer_t( "Factor", "This is a small class that can hold the factor and power of a symbol\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope Factor_scope( Factor_exposer );
-        Factor_exposer.def( bp::init< SireCAS::Symbol const &, double, double >(( bp::arg("symbol"), bp::arg("factor"), bp::arg("power") )) );
-        Factor_exposer.def( bp::init< SireCAS::Symbol const &, SireCAS::Expression const &, SireCAS::Expression const & >(( bp::arg("symbol"), bp::arg("factor"), bp::arg("power") )) );
-        Factor_exposer.def( bp::init< SireCAS::Factor const & >(( bp::arg("other") )) );
+        Factor_exposer.def( bp::init< SireCAS::Symbol const &, double, double >(( bp::arg("symbol"), bp::arg("factor"), bp::arg("power") ), "") );
+        Factor_exposer.def( bp::init< SireCAS::Symbol const &, SireCAS::Expression const &, SireCAS::Expression const & >(( bp::arg("symbol"), bp::arg("factor"), bp::arg("power") ), "") );
+        Factor_exposer.def( bp::init< SireCAS::Factor const & >(( bp::arg("other") ), "") );
         { //::SireCAS::Factor::factor
         
             typedef ::SireCAS::Expression const & ( ::SireCAS::Factor::*factor_function_type)(  ) const;
@@ -55,7 +55,8 @@ void register_Factor_class(){
             Factor_exposer.def( 
                 "factor"
                 , factor_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         Factor_exposer.def( bp::self != bp::self );
@@ -68,7 +69,8 @@ void register_Factor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Factor_exposer.def( bp::self == bp::self );
@@ -80,7 +82,8 @@ void register_Factor_class(){
             Factor_exposer.def( 
                 "power"
                 , power_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireCAS::Factor::symbol
@@ -91,7 +94,8 @@ void register_Factor_class(){
             Factor_exposer.def( 
                 "symbol"
                 , symbol_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireCAS::Factor::toString
@@ -101,7 +105,8 @@ void register_Factor_class(){
             
             Factor_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         Factor_exposer.def( "__copy__", &__copy__);

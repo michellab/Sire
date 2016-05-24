@@ -26,7 +26,7 @@ void register_SymbolExpression_class(){
 
     { //::SireCAS::SymbolExpression
         typedef bp::class_< SireCAS::SymbolExpression > SymbolExpression_exposer_t;
-        SymbolExpression_exposer_t SymbolExpression_exposer = SymbolExpression_exposer_t( "SymbolExpression", bp::init< SireCAS::ExpressionBase const &, SireCAS::Expression const & >(( bp::arg("symbol"), bp::arg("expression") )) );
+        SymbolExpression_exposer_t SymbolExpression_exposer = SymbolExpression_exposer_t( "SymbolExpression", "Small class that holds a SymbolID number and an associated expression", bp::init< SireCAS::ExpressionBase const &, SireCAS::Expression const & >(( bp::arg("symbol"), bp::arg("expression") ), "") );
         bp::scope SymbolExpression_scope( SymbolExpression_exposer );
         { //::SireCAS::SymbolExpression::expression
         
@@ -36,7 +36,8 @@ void register_SymbolExpression_class(){
             SymbolExpression_exposer.def( 
                 "expression"
                 , expression_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireCAS::SymbolExpression::function
@@ -47,7 +48,8 @@ void register_SymbolExpression_class(){
             SymbolExpression_exposer.def( 
                 "function"
                 , function_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol as a function - this is only safe\nif isFunction() returns true" );
         
         }
         { //::SireCAS::SymbolExpression::isFunction
@@ -57,7 +59,8 @@ void register_SymbolExpression_class(){
             
             SymbolExpression_exposer.def( 
                 "isFunction"
-                , isFunction_function_value );
+                , isFunction_function_value
+                , "Return whether or not this is a function" );
         
         }
         { //::SireCAS::SymbolExpression::symbol
@@ -68,7 +71,8 @@ void register_SymbolExpression_class(){
             SymbolExpression_exposer.def( 
                 "symbol"
                 , symbol_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol" );
         
         }
         SymbolExpression_exposer.def( "__copy__", &__copy__);

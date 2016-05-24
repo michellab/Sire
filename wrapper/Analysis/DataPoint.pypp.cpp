@@ -33,12 +33,12 @@ void register_DataPoint_class(){
 
     { //::SireAnalysis::DataPoint
         typedef bp::class_< SireAnalysis::DataPoint > DataPoint_exposer_t;
-        DataPoint_exposer_t DataPoint_exposer = DataPoint_exposer_t( "DataPoint", bp::init< >() );
+        DataPoint_exposer_t DataPoint_exposer = DataPoint_exposer_t( "DataPoint", "This class represents a single datapoint on an x,y graph. The point\nhas associated errors (small and large) on both the x and y axes\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor. This constructs the point (0,0) with no error") );
         bp::scope DataPoint_scope( DataPoint_exposer );
-        DataPoint_exposer.def( bp::init< double, double >(( bp::arg("x"), bp::arg("y") )) );
-        DataPoint_exposer.def( bp::init< double, double, double, double >(( bp::arg("x"), bp::arg("y"), bp::arg("xerror"), bp::arg("yerror") )) );
-        DataPoint_exposer.def( bp::init< double, double, double, double, double, double >(( bp::arg("x"), bp::arg("y"), bp::arg("xminerror"), bp::arg("yminerror"), bp::arg("xmaxerror"), bp::arg("ymaxerror") )) );
-        DataPoint_exposer.def( bp::init< SireAnalysis::DataPoint const & >(( bp::arg("other") )) );
+        DataPoint_exposer.def( bp::init< double, double >(( bp::arg("x"), bp::arg("y") ), "Construct the point (x,y) with no error") );
+        DataPoint_exposer.def( bp::init< double, double, double, double >(( bp::arg("x"), bp::arg("y"), bp::arg("xerror"), bp::arg("yerror") ), "Construct the point (x,y) with error (xerror,yerror)") );
+        DataPoint_exposer.def( bp::init< double, double, double, double, double, double >(( bp::arg("x"), bp::arg("y"), bp::arg("xminerror"), bp::arg("yminerror"), bp::arg("xmaxerror"), bp::arg("ymaxerror") ), "Construct the point (x,y) with a minimum error of (xminerror,yminerror)\nand a maximum error of (xmaxerror,ymaxerror). This is for situations where\nthere may be multiple different error measures on a point and you want\nto store the range of errors (based on a range of error estimates)") );
+        DataPoint_exposer.def( bp::init< SireAnalysis::DataPoint const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireAnalysis::DataPoint::equalWithinError
         
             typedef bool ( ::SireAnalysis::DataPoint::*equalWithinError_function_type)( ::SireAnalysis::DataPoint const & ) const;
@@ -47,7 +47,8 @@ void register_DataPoint_class(){
             DataPoint_exposer.def( 
                 "equalWithinError"
                 , equalWithinError_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return whether or not this data point is equal to the other, within\nthe error range of the two points" );
         
         }
         { //::SireAnalysis::DataPoint::equalWithinMaxError
@@ -58,7 +59,8 @@ void register_DataPoint_class(){
             DataPoint_exposer.def( 
                 "equalWithinMaxError"
                 , equalWithinMaxError_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return whether or not this data point in equal to the other, within\nthe maximum error range of the two points" );
         
         }
         { //::SireAnalysis::DataPoint::equalWithinMinError
@@ -69,7 +71,8 @@ void register_DataPoint_class(){
             DataPoint_exposer.def( 
                 "equalWithinMinError"
                 , equalWithinMinError_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return whether or not this data point in equal to the other, within\nthe minimum error range of the two points" );
         
         }
         { //::SireAnalysis::DataPoint::hasError
@@ -79,7 +82,8 @@ void register_DataPoint_class(){
             
             DataPoint_exposer.def( 
                 "hasError"
-                , hasError_function_value );
+                , hasError_function_value
+                , "Return whether or not this data point has any error" );
         
         }
         { //::SireAnalysis::DataPoint::hasErrorRange
@@ -89,7 +93,8 @@ void register_DataPoint_class(){
             
             DataPoint_exposer.def( 
                 "hasErrorRange"
-                , hasErrorRange_function_value );
+                , hasErrorRange_function_value
+                , "Return whether or not this data point has an error range" );
         
         }
         { //::SireAnalysis::DataPoint::hasXError
@@ -99,7 +104,8 @@ void register_DataPoint_class(){
             
             DataPoint_exposer.def( 
                 "hasXError"
-                , hasXError_function_value );
+                , hasXError_function_value
+                , "Return whether or not there is any error in the x value" );
         
         }
         { //::SireAnalysis::DataPoint::hasXErrorRange
@@ -109,7 +115,8 @@ void register_DataPoint_class(){
             
             DataPoint_exposer.def( 
                 "hasXErrorRange"
-                , hasXErrorRange_function_value );
+                , hasXErrorRange_function_value
+                , "Return whether or not there is an error range on the x value" );
         
         }
         { //::SireAnalysis::DataPoint::hasYError
@@ -119,7 +126,8 @@ void register_DataPoint_class(){
             
             DataPoint_exposer.def( 
                 "hasYError"
-                , hasYError_function_value );
+                , hasYError_function_value
+                , "Return whether or not there is any error in the y value" );
         
         }
         { //::SireAnalysis::DataPoint::hasYErrorRange
@@ -129,7 +137,8 @@ void register_DataPoint_class(){
             
             DataPoint_exposer.def( 
                 "hasYErrorRange"
-                , hasYErrorRange_function_value );
+                , hasYErrorRange_function_value
+                , "Return whether or not there is an error range on the x value" );
         
         }
         DataPoint_exposer.def( bp::self != bp::self );
@@ -142,7 +151,8 @@ void register_DataPoint_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         DataPoint_exposer.def( bp::self == bp::self );
@@ -153,7 +163,8 @@ void register_DataPoint_class(){
             
             DataPoint_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireAnalysis::DataPoint::typeName
@@ -163,7 +174,8 @@ void register_DataPoint_class(){
             
             DataPoint_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireAnalysis::DataPoint::what
@@ -173,7 +185,8 @@ void register_DataPoint_class(){
             
             DataPoint_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         { //::SireAnalysis::DataPoint::x
@@ -183,7 +196,8 @@ void register_DataPoint_class(){
             
             DataPoint_exposer.def( 
                 "x"
-                , x_function_value );
+                , x_function_value
+                , "Return the x value of the point" );
         
         }
         { //::SireAnalysis::DataPoint::xError
@@ -193,7 +207,8 @@ void register_DataPoint_class(){
             
             DataPoint_exposer.def( 
                 "xError"
-                , xError_function_value );
+                , xError_function_value
+                , "Return the error on the x value. This is the average\nof the minimum and maximum error" );
         
         }
         { //::SireAnalysis::DataPoint::xMaxError
@@ -203,7 +218,8 @@ void register_DataPoint_class(){
             
             DataPoint_exposer.def( 
                 "xMaxError"
-                , xMaxError_function_value );
+                , xMaxError_function_value
+                , "Return the maximum size of the error on the x value" );
         
         }
         { //::SireAnalysis::DataPoint::xMinError
@@ -213,7 +229,8 @@ void register_DataPoint_class(){
             
             DataPoint_exposer.def( 
                 "xMinError"
-                , xMinError_function_value );
+                , xMinError_function_value
+                , "Return the minimum size of the error on the x value" );
         
         }
         { //::SireAnalysis::DataPoint::y
@@ -223,7 +240,8 @@ void register_DataPoint_class(){
             
             DataPoint_exposer.def( 
                 "y"
-                , y_function_value );
+                , y_function_value
+                , "Return the y value of the point" );
         
         }
         { //::SireAnalysis::DataPoint::yError
@@ -233,7 +251,8 @@ void register_DataPoint_class(){
             
             DataPoint_exposer.def( 
                 "yError"
-                , yError_function_value );
+                , yError_function_value
+                , "Return the error on the y value. This is the average\nof the minimum and maximum error" );
         
         }
         { //::SireAnalysis::DataPoint::yMaxError
@@ -243,7 +262,8 @@ void register_DataPoint_class(){
             
             DataPoint_exposer.def( 
                 "yMaxError"
-                , yMaxError_function_value );
+                , yMaxError_function_value
+                , "Return the maximum size of the error on the y value" );
         
         }
         { //::SireAnalysis::DataPoint::yMinError
@@ -253,7 +273,8 @@ void register_DataPoint_class(){
             
             DataPoint_exposer.def( 
                 "yMinError"
-                , yMinError_function_value );
+                , yMinError_function_value
+                , "Return the minimum size of the error on the y value" );
         
         }
         DataPoint_exposer.staticmethod( "typeName" );

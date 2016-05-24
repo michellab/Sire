@@ -25,12 +25,12 @@ void register_LJProbe_class(){
 
     { //::SireMM::LJProbe
         typedef bp::class_< SireMM::LJProbe, bp::bases< SireFF::Probe, SireBase::Property > > LJProbe_exposer_t;
-        LJProbe_exposer_t LJProbe_exposer = LJProbe_exposer_t( "LJProbe", bp::init< >() );
+        LJProbe_exposer_t LJProbe_exposer = LJProbe_exposer_t( "LJProbe", "This is a probe charge that can be used to probe the\nLJ field or potential in a forcefield", bp::init< >("Constructor - this makes a probe that is the equivalent\nof an OPLS united atom methane molecule") );
         bp::scope LJProbe_scope( LJProbe_exposer );
-        LJProbe_exposer.def( bp::init< SireMM::LJParameter const & >(( bp::arg("ljparam") )) );
-        LJProbe_exposer.def( bp::init< SireMM::CLJProbe const & >(( bp::arg("cljprobe") )) );
-        LJProbe_exposer.def( bp::init< SireFF::Probe const & >(( bp::arg("probe") )) );
-        LJProbe_exposer.def( bp::init< SireMM::LJProbe const & >(( bp::arg("other") )) );
+        LJProbe_exposer.def( bp::init< SireMM::LJParameter const & >(( bp::arg("ljparam") ), "Construct a probe with parameters in ljparam") );
+        LJProbe_exposer.def( bp::init< SireMM::CLJProbe const & >(( bp::arg("cljprobe") ), "Construct to take the LJ probe from the passed CLJProbe") );
+        LJProbe_exposer.def( bp::init< SireFF::Probe const & >(( bp::arg("probe") ), "Construct from the passed probe") );
+        LJProbe_exposer.def( bp::init< SireMM::LJProbe const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::LJProbe::lj
         
             typedef ::SireMM::LJParameter const & ( ::SireMM::LJProbe::*lj_function_type)(  ) const;
@@ -39,7 +39,8 @@ void register_LJProbe_class(){
             LJProbe_exposer.def( 
                 "lj"
                 , lj_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         LJProbe_exposer.def( bp::self != bp::self );
@@ -52,7 +53,8 @@ void register_LJProbe_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         LJProbe_exposer.def( bp::self == bp::self );
@@ -63,7 +65,8 @@ void register_LJProbe_class(){
             
             LJProbe_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         LJProbe_exposer.staticmethod( "typeName" );

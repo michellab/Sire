@@ -31,7 +31,7 @@ void register_Property_class(){
 
     { //::SireBase::Property
         typedef bp::class_< SireBase::Property, boost::noncopyable > Property_exposer_t;
-        Property_exposer_t Property_exposer = Property_exposer_t( "Property", bp::no_init );
+        Property_exposer_t Property_exposer = Property_exposer_t( "Property", "This is the base class of all properties that may be attached to a\nmolecule. Properties are used to assign extra information to a molecule,\nwhich may then be carried by the molecule throughout its passage\nthrough the simulation. Examples of properties may include the file\nfrom which the molecule was read, the charge parameters on the atoms,\nthe PDB code etc.\n\nProperties form a polymorphic hierarchy which are implicitly shared\nvia SireBase::SharedPolyPointer smart pointers.\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope Property_scope( Property_exposer );
         { //::SireBase::Property::copy
         
@@ -41,7 +41,8 @@ void register_Property_class(){
             Property_exposer.def( 
                 "copy"
                 , copy_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireBase::Property::equals
@@ -52,7 +53,8 @@ void register_Property_class(){
             Property_exposer.def( 
                 "equals"
                 , equals_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireBase::Property::load
@@ -63,7 +65,8 @@ void register_Property_class(){
             Property_exposer.def( 
                 "load"
                 , load_function_value
-                , ( bp::arg("ds") ) );
+                , ( bp::arg("ds") )
+                , "" );
         
         }
         { //::SireBase::Property::null
@@ -74,7 +77,8 @@ void register_Property_class(){
             Property_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the global null property" );
         
         }
         { //::SireBase::Property::save
@@ -85,7 +89,8 @@ void register_Property_class(){
             Property_exposer.def( 
                 "save"
                 , save_function_value
-                , ( bp::arg("ds") ) );
+                , ( bp::arg("ds") )
+                , "" );
         
         }
         { //::SireBase::Property::toString
@@ -95,7 +100,8 @@ void register_Property_class(){
             
             Property_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Default toString() function for properties - it would\nhelp if all properties output something more sensible" );
         
         }
         { //::SireBase::Property::typeName
@@ -105,7 +111,8 @@ void register_Property_class(){
             
             Property_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireBase::Property::what
@@ -115,7 +122,8 @@ void register_Property_class(){
             
             Property_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Property_exposer.staticmethod( "null" );

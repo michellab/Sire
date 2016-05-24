@@ -153,6 +153,124 @@ match_seg_property = r"SIRE_EXPOSE_SEGMENT_PROPERTY\(\s*\n*\s*\(?([<>,\s\w\d:]+)
 match_bead_property = r"SIRE_EXPOSE_BEAD_PROPERTY\(\s*\n*\s*\(?([<>,\s\w\d:]+)\)?\s*\n*\s*,\s*\n*\s*\(?([<>,\s\w\d:]+)\)?\s*\n*\s*\)"
 match_metatype = r"Q_DECLARE_METATYPE\(\s*\n*\s*\(?([<>.\s\w\d:]+)\)?\s*\n*\s*\)"
 
+db = {}
+
+def add_doc(function, docs, db):
+    # now try to extract the function signature
+    # - first, remove any derived bases from constructor lines
+    function = function.split(" : ")[0]
+
+    match = re.search(r"([\d_\w]+)::([\d_\w]+)\((.*)\)", function)
+
+    if match:
+        cls = match.groups()[0].lstrip().rstrip()
+        nam = match.groups()[1].lstrip().rstrip()
+        targs = match.groups()[2].split(",")
+
+        args = []
+
+        i = 0
+        while i < len(targs):
+            arg = targs[i].lstrip().rstrip()
+
+            if arg.find("<") != -1:
+                nopen = arg.count("<") - arg.count(">")
+
+                #template - see if there are multiple template arguments
+                while nopen > 0 and (i+1) < len(targs):
+                    next_arg = targs[i+1].lstrip().rstrip()
+                    arg += ", " + next_arg
+                    i += 1
+                    nopen += next_arg.count("<") - next_arg.count(">")
+
+            if len(arg) > 0:
+                args.append(arg)
+
+            i += 1
+
+        if not cls in db:
+            db[cls] = {}
+
+        if not nam in db[cls]:
+            db[cls][nam] = {}
+
+        nargs = len(args)
+
+        if not nargs in db[cls][nam]:
+            db[cls][nam][nargs] = []
+
+        db[cls][nam][nargs].append( (args, docs) )
+
+def extract_docs(filename, db):
+    read_from = open(filename, "r")
+
+    # concat to one line
+    file_str = ''
+    for line in read_from.readlines():
+        file_str += line
+
+    # break off all code
+    file_str = re.sub('{', '\n{', file_str)
+
+    # remove '//' comments
+    file_str = re.sub('//.*', '', file_str)
+
+    # split on '\n'
+    file_as_list = file_str.splitlines(True)
+
+    # strip everything
+    for index in range(len(file_as_list)):
+        file_as_list[index] = file_as_list[index].strip()
+
+    doc = ""
+    function = ""
+    mode = 0   # 0 is nothing, 1 is comment, 2 is function
+
+    # add in newlines where appropriate
+    for line in file_as_list:
+        line = line.lstrip().rstrip()
+
+        added = False
+
+        if line.startswith('/*'):
+            mode = 1
+            doc = line
+            added = True
+
+        elif line.startswith('{'):
+            #print("code... (%s)" % mode)
+            if mode == 2:
+                # hopefully we have seen a function
+                add_doc(function,doc,db)
+                doc = ""
+                function = ""
+
+            mode = 0
+
+        if line.endswith('*/'):
+            # end of comment - look for a function
+            mode = 2
+            if not added:
+                doc += "\n" + line
+                added = True
+            #print("completed comment\n%s" % doc)
+
+        elif line.endswith(';') or line.endswith('}'):
+            #print("line... (%s)" % mode)
+            mode = 0
+
+        else:
+            if not added:
+                if mode == 1:
+                    doc += "\n" + line
+                elif mode == 2:
+                    if len(function) == 0:
+                        function = line
+                    else:
+                        function += " " + line
+
+                    #print("Function | %s" % function)
+
 def scanFiles(dir, module_dir, atom_properties, cg_properties,
                                res_properties, chain_properties, seg_properties,
                                bead_properties):
@@ -173,6 +291,17 @@ def scanFiles(dir, module_dir, atom_properties, cg_properties,
 
     #the list of classes that have been registered with QMetaType
     meta_classes = []
+
+    #database of all documentation
+    doc_db = {}
+
+    #read through each .cpp file, looking for documentation
+    for file in cpp_files:
+        try:
+            extract_docs("%s/%s" % (dir,file), doc_db)
+        except Exception as e:
+            print("Problem parsing %s | %s" % (file,e))
+            pass
 
     #read each file, looking for SIRE_EXPOSE_FUNCTION or SIRE_EXPOSE_CLASS
     for file in h_files + hpp_files:
@@ -304,6 +433,11 @@ def scanFiles(dir, module_dir, atom_properties, cg_properties,
     #used by other scripts
     FILE = open("%s/active_headers.data" % module_dir,"wb")
     pickle.dump(active_files, FILE)
+    FILE.close()
+
+    #now write out the documentation data so it can be used by other scripts
+    FILE = open("%s/docs.data" % module_dir,"wb")
+    pickle.dump(doc_db, FILE)
     FILE.close()
 
     return exposed_classes

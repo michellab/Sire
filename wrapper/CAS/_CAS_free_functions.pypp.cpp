@@ -833,7 +833,8 @@ void register_free_functions(){
         bp::def( 
             "cbrt"
             , cbrt_function_value
-            , ( bp::arg("arg0") ) );
+            , ( bp::arg("arg0") )
+            , "" );
     
     }
 
@@ -845,7 +846,8 @@ void register_free_functions(){
         bp::def( 
             "cbrt"
             , cbrt_function_value
-            , ( bp::arg("ex0") ) );
+            , ( bp::arg("ex0") )
+            , "" );
     
     }
 
@@ -857,7 +859,8 @@ void register_free_functions(){
         bp::def( 
             "pow"
             , pow_function_value
-            , ( bp::arg("arg0"), bp::arg("arg1") ) );
+            , ( bp::arg("arg0"), bp::arg("arg1") )
+            , "" );
     
     }
 
@@ -869,7 +872,8 @@ void register_free_functions(){
         bp::def( 
             "pow"
             , pow_function_value
-            , ( bp::arg("ex0"), bp::arg("n") ) );
+            , ( bp::arg("ex0"), bp::arg("n") )
+            , "" );
     
     }
 
@@ -881,7 +885,8 @@ void register_free_functions(){
         bp::def( 
             "pow"
             , pow_function_value
-            , ( bp::arg("ex0"), bp::arg("n") ) );
+            , ( bp::arg("ex0"), bp::arg("n") )
+            , "" );
     
     }
 
@@ -893,7 +898,8 @@ void register_free_functions(){
         bp::def( 
             "pow"
             , pow_function_value
-            , ( bp::arg("ex0"), bp::arg("n") ) );
+            , ( bp::arg("ex0"), bp::arg("n") )
+            , "" );
     
     }
 
@@ -905,7 +911,8 @@ void register_free_functions(){
         bp::def( 
             "pow"
             , pow_function_value
-            , ( bp::arg("ex0"), bp::arg("n") ) );
+            , ( bp::arg("ex0"), bp::arg("n") )
+            , "" );
     
     }
 
@@ -917,7 +924,8 @@ void register_free_functions(){
         bp::def( 
             "pow"
             , pow_function_value
-            , ( bp::arg("ex0"), bp::arg("n") ) );
+            , ( bp::arg("ex0"), bp::arg("n") )
+            , "" );
     
     }
 
@@ -929,7 +937,8 @@ void register_free_functions(){
         bp::def( 
             "pow"
             , pow_function_value
-            , ( bp::arg("base"), bp::arg("n") ) );
+            , ( bp::arg("base"), bp::arg("n") )
+            , "" );
     
     }
 
@@ -941,7 +950,8 @@ void register_free_functions(){
         bp::def( 
             "pow"
             , pow_function_value
-            , ( bp::arg("base"), bp::arg("n") ) );
+            , ( bp::arg("base"), bp::arg("n") )
+            , "" );
     
     }
 
@@ -953,7 +963,8 @@ void register_free_functions(){
         bp::def( 
             "pow"
             , pow_function_value
-            , ( bp::arg("base"), bp::arg("n") ) );
+            , ( bp::arg("base"), bp::arg("n") )
+            , "" );
     
     }
 
@@ -965,7 +976,8 @@ void register_free_functions(){
         bp::def( 
             "pow"
             , pow_function_value
-            , ( bp::arg("base"), bp::arg("n") ) );
+            , ( bp::arg("base"), bp::arg("n") )
+            , "" );
     
     }
 
@@ -977,7 +989,8 @@ void register_free_functions(){
         bp::def( 
             "pow"
             , pow_function_value
-            , ( bp::arg("base"), bp::arg("n") ) );
+            , ( bp::arg("base"), bp::arg("n") )
+            , "" );
     
     }
 
@@ -989,7 +1002,8 @@ void register_free_functions(){
         bp::def( 
             "pow"
             , pow_function_value
-            , ( bp::arg("base"), bp::arg("n") ) );
+            , ( bp::arg("base"), bp::arg("n") )
+            , "" );
     
     }
 
@@ -1001,7 +1015,8 @@ void register_free_functions(){
         bp::def( 
             "sqrt"
             , sqrt_function_value
-            , ( bp::arg("arg0") ) );
+            , ( bp::arg("arg0") )
+            , "" );
     
     }
 
@@ -1013,7 +1028,8 @@ void register_free_functions(){
         bp::def( 
             "sqrt"
             , sqrt_function_value
-            , ( bp::arg("ex0") ) );
+            , ( bp::arg("ex0") )
+            , "" );
     
     }
 

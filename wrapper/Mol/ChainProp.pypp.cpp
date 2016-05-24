@@ -19,7 +19,7 @@ void register_ChainProp_class(){
 
     { //::SireMol::ChainProp
         typedef bp::class_< SireMol::ChainProp, bp::bases< SireMol::MolViewProperty, SireBase::Property >, boost::noncopyable > ChainProp_exposer_t;
-        ChainProp_exposer_t ChainProp_exposer = ChainProp_exposer_t( "ChainProp", bp::no_init );
+        ChainProp_exposer_t ChainProp_exposer = ChainProp_exposer_t( "ChainProp", "Small class used to provide a common base for all ChainProperty types", bp::no_init );
         bp::scope ChainProp_scope( ChainProp_exposer );
         { //::SireMol::ChainProp::assertCanConvert
         
@@ -29,7 +29,8 @@ void register_ChainProp_class(){
             ChainProp_exposer.def( 
                 "assertCanConvert"
                 , assertCanConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::ChainProp::assignFrom
@@ -40,7 +41,8 @@ void register_ChainProp_class(){
             ChainProp_exposer.def( 
                 "assignFrom"
                 , assignFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::ChainProp::canConvert
@@ -51,7 +53,8 @@ void register_ChainProp_class(){
             ChainProp_exposer.def( 
                 "canConvert"
                 , canConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::ChainProp::toVariant
@@ -61,7 +64,8 @@ void register_ChainProp_class(){
             
             ChainProp_exposer.def( 
                 "toVariant"
-                , toVariant_function_value );
+                , toVariant_function_value
+                , "" );
         
         }
         ChainProp_exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireMol::ChainProp >,

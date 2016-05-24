@@ -43,10 +43,10 @@ void register_LessThan_class(){
 
     { //::SireCAS::LessThan
         typedef bp::class_< SireCAS::LessThan, bp::bases< SireCAS::Condition, SireCAS::ExBase > > LessThan_exposer_t;
-        LessThan_exposer_t LessThan_exposer = LessThan_exposer_t( "LessThan", bp::init< >() );
+        LessThan_exposer_t LessThan_exposer = LessThan_exposer_t( "LessThan", "This is a conditional function that returns whether or\nnot the first expression is less than the second\nexpression\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope LessThan_scope( LessThan_exposer );
-        LessThan_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Expression const & >(( bp::arg("left_hand_side"), bp::arg("right_hand_side") )) );
-        LessThan_exposer.def( bp::init< SireCAS::LessThan const & >(( bp::arg("other") )) );
+        LessThan_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Expression const & >(( bp::arg("left_hand_side"), bp::arg("right_hand_side") ), "Construct to compare left_hand_side with right_hand_side") );
+        LessThan_exposer.def( bp::init< SireCAS::LessThan const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::LessThan::alwaysFalse
         
             typedef bool ( ::SireCAS::LessThan::*alwaysFalse_function_type)(  ) const;
@@ -54,7 +54,8 @@ void register_LessThan_class(){
             
             LessThan_exposer.def( 
                 "alwaysFalse"
-                , alwaysFalse_function_value );
+                , alwaysFalse_function_value
+                , "Return whether or not we can be absolutely sure that this\ncondition will always be false. Note that this doesnt try\ntoo hard, so some things that are always false may not\nbe reported here as being always false, e.g. x + 1 < x" );
         
         }
         { //::SireCAS::LessThan::alwaysTrue
@@ -64,7 +65,8 @@ void register_LessThan_class(){
             
             LessThan_exposer.def( 
                 "alwaysTrue"
-                , alwaysTrue_function_value );
+                , alwaysTrue_function_value
+                , "Return whether or not we can be absolutely sure that this\ncondition will always be true. Note that this doesnt try\ntoo hard, so some things that are always true may not\nbe reported here as being always true, e.g. x < x + 1" );
         
         }
         { //::SireCAS::LessThan::operator=
@@ -76,7 +78,8 @@ void register_LessThan_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         LessThan_exposer.def( bp::self == bp::self );
@@ -88,7 +91,8 @@ void register_LessThan_class(){
             
             LessThan_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::LessThan::what
@@ -98,7 +102,8 @@ void register_LessThan_class(){
             
             LessThan_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         LessThan_exposer.staticmethod( "typeName" );

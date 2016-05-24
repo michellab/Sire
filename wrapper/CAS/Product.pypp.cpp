@@ -51,11 +51,11 @@ void register_Product_class(){
 
     { //::SireCAS::Product
         typedef bp::class_< SireCAS::Product, bp::bases< SireCAS::ExBase > > Product_exposer_t;
-        Product_exposer_t Product_exposer = Product_exposer_t( "Product", bp::init< >() );
+        Product_exposer_t Product_exposer = Product_exposer_t( "Product", "\nThis class holds a collection of expressions that are to be multiplied (or divided)\n\nAuthor: Christopher Woods\n", bp::init< >("Construct an empty, zero Product") );
         bp::scope Product_scope( Product_exposer );
-        Product_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Expression const & >(( bp::arg("ex0"), bp::arg("ex1") )) );
-        Product_exposer.def( bp::init< SireCAS::Expressions const & >(( bp::arg("expressions") )) );
-        Product_exposer.def( bp::init< SireCAS::Product const & >(( bp::arg("other") )) );
+        Product_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Expression const & >(( bp::arg("ex0"), bp::arg("ex1") ), "Construct the product of two expressions") );
+        Product_exposer.def( bp::init< SireCAS::Expressions const & >(( bp::arg("expressions") ), "Construct the product of all of the expressions in expressions") );
+        Product_exposer.def( bp::init< SireCAS::Product const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::Product::children
         
             typedef ::SireCAS::Expressions ( ::SireCAS::Product::*children_function_type)(  ) const;
@@ -63,7 +63,8 @@ void register_Product_class(){
             
             Product_exposer.def( 
                 "children"
-                , children_function_value );
+                , children_function_value
+                , "Return the child expressions of this product" );
         
         }
         { //::SireCAS::Product::conjugate
@@ -73,7 +74,8 @@ void register_Product_class(){
             
             Product_exposer.def( 
                 "conjugate"
-                , conjugate_function_value );
+                , conjugate_function_value
+                , "Return the complex conjugate of this product" );
         
         }
         { //::SireCAS::Product::denominator
@@ -83,7 +85,8 @@ void register_Product_class(){
             
             Product_exposer.def( 
                 "denominator"
-                , denominator_function_value );
+                , denominator_function_value
+                , "Return the Product of expressions on the denominator of this Product" );
         
         }
         { //::SireCAS::Product::differentiate
@@ -94,7 +97,8 @@ void register_Product_class(){
             Product_exposer.def( 
                 "differentiate"
                 , differentiate_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return the differential of this product..." );
         
         }
         { //::SireCAS::Product::evaluate
@@ -105,7 +109,8 @@ void register_Product_class(){
             Product_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this product" );
         
         }
         { //::SireCAS::Product::evaluate
@@ -116,7 +121,8 @@ void register_Product_class(){
             Product_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this product" );
         
         }
         { //::SireCAS::Product::expand
@@ -127,7 +133,8 @@ void register_Product_class(){
             Product_exposer.def( 
                 "expand"
                 , expand_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "" );
         
         }
         { //::SireCAS::Product::functions
@@ -137,7 +144,8 @@ void register_Product_class(){
             
             Product_exposer.def( 
                 "functions"
-                , functions_function_value );
+                , functions_function_value
+                , "Return all of the functions used in this product" );
         
         }
         { //::SireCAS::Product::hash
@@ -147,7 +155,8 @@ void register_Product_class(){
             
             Product_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Return a hash for this product" );
         
         }
         { //::SireCAS::Product::integrate
@@ -158,7 +167,8 @@ void register_Product_class(){
             Product_exposer.def( 
                 "integrate"
                 , integrate_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Need to write integral of a product..." );
         
         }
         { //::SireCAS::Product::isComplex
@@ -168,7 +178,8 @@ void register_Product_class(){
             
             Product_exposer.def( 
                 "isComplex"
-                , isComplex_function_value );
+                , isComplex_function_value
+                , "Return whether or not this Product contains any complex terms" );
         
         }
         { //::SireCAS::Product::isCompound
@@ -178,7 +189,8 @@ void register_Product_class(){
             
             Product_exposer.def( 
                 "isCompound"
-                , isCompound_function_value );
+                , isCompound_function_value
+                , "Return whether or not this is compound (requires brackets when printing)" );
         
         }
         { //::SireCAS::Product::isConstant
@@ -188,7 +200,8 @@ void register_Product_class(){
             
             Product_exposer.def( 
                 "isConstant"
-                , isConstant_function_value );
+                , isConstant_function_value
+                , "Return whether this is a constant" );
         
         }
         { //::SireCAS::Product::isFunction
@@ -199,7 +212,8 @@ void register_Product_class(){
             Product_exposer.def( 
                 "isFunction"
                 , isFunction_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "Return whether or not this is a function of symbol" );
         
         }
         { //::SireCAS::Product::numerator
@@ -209,7 +223,8 @@ void register_Product_class(){
             
             Product_exposer.def( 
                 "numerator"
-                , numerator_function_value );
+                , numerator_function_value
+                , "Return the Product of expressions on the numerator of this Product" );
         
         }
         Product_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -220,7 +235,8 @@ void register_Product_class(){
             
             Product_exposer.def( 
                 "reduce"
-                , reduce_function_value );
+                , reduce_function_value
+                , "Reduce a Product down to a simple form. This will not attempt to collapse\ncommon factors - if you want to do this then call the collapse function." );
         
         }
         { //::SireCAS::Product::series
@@ -231,7 +247,8 @@ void register_Product_class(){
             Product_exposer.def( 
                 "series"
                 , series_function_value
-                , ( bp::arg("symbol"), bp::arg("n") ) );
+                , ( bp::arg("symbol"), bp::arg("n") )
+                , "Return the series expansion of this product with respect to symbol, to order n" );
         
         }
         { //::SireCAS::Product::simplify
@@ -242,7 +259,8 @@ void register_Product_class(){
             Product_exposer.def( 
                 "simplify"
                 , simplify_function_value
-                , ( bp::arg("options")=(int)(0) ) );
+                , ( bp::arg("options")=(int)(0) )
+                , "Try to simplify this product" );
         
         }
         { //::SireCAS::Product::substitute
@@ -253,7 +271,8 @@ void register_Product_class(){
             Product_exposer.def( 
                 "substitute"
                 , substitute_function_value
-                , ( bp::arg("identities") ) );
+                , ( bp::arg("identities") )
+                , "Return the product with the identities in identities substituted in" );
         
         }
         { //::SireCAS::Product::symbols
@@ -263,7 +282,8 @@ void register_Product_class(){
             
             Product_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "Return all of the symbols used in this product" );
         
         }
         { //::SireCAS::Product::toOpenMMString
@@ -273,7 +293,8 @@ void register_Product_class(){
             
             Product_exposer.def( 
                 "toOpenMMString"
-                , toOpenMMString_function_value );
+                , toOpenMMString_function_value
+                , "Return a string representation of this Product in the OpenMM syntax" );
         
         }
         { //::SireCAS::Product::toString
@@ -283,7 +304,8 @@ void register_Product_class(){
             
             Product_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this Product" );
         
         }
         { //::SireCAS::Product::typeName
@@ -293,7 +315,8 @@ void register_Product_class(){
             
             Product_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::Product::what
@@ -303,7 +326,8 @@ void register_Product_class(){
             
             Product_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Product_exposer.staticmethod( "typeName" );

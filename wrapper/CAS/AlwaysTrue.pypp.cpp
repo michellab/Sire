@@ -43,9 +43,9 @@ void register_AlwaysTrue_class(){
 
     { //::SireCAS::AlwaysTrue
         typedef bp::class_< SireCAS::AlwaysTrue, bp::bases< SireCAS::Condition, SireCAS::ExBase > > AlwaysTrue_exposer_t;
-        AlwaysTrue_exposer_t AlwaysTrue_exposer = AlwaysTrue_exposer_t( "AlwaysTrue", bp::init< >() );
+        AlwaysTrue_exposer_t AlwaysTrue_exposer = AlwaysTrue_exposer_t( "AlwaysTrue", "This is an overloaded conditional that is always true", bp::init< >("Constructor") );
         bp::scope AlwaysTrue_scope( AlwaysTrue_exposer );
-        AlwaysTrue_exposer.def( bp::init< SireCAS::AlwaysTrue const & >(( bp::arg("other") )) );
+        AlwaysTrue_exposer.def( bp::init< SireCAS::AlwaysTrue const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::AlwaysTrue::alwaysFalse
         
             typedef bool ( ::SireCAS::AlwaysTrue::*alwaysFalse_function_type)(  ) const;
@@ -53,7 +53,8 @@ void register_AlwaysTrue_class(){
             
             AlwaysTrue_exposer.def( 
                 "alwaysFalse"
-                , alwaysFalse_function_value );
+                , alwaysFalse_function_value
+                , "AlwaysTrue is never false" );
         
         }
         { //::SireCAS::AlwaysTrue::alwaysTrue
@@ -63,7 +64,8 @@ void register_AlwaysTrue_class(){
             
             AlwaysTrue_exposer.def( 
                 "alwaysTrue"
-                , alwaysTrue_function_value );
+                , alwaysTrue_function_value
+                , "AlwaysTrue is always true" );
         
         }
         { //::SireCAS::AlwaysTrue::children
@@ -73,7 +75,8 @@ void register_AlwaysTrue_class(){
             
             AlwaysTrue_exposer.def( 
                 "children"
-                , children_function_value );
+                , children_function_value
+                , "The truth has no children" );
         
         }
         { //::SireCAS::AlwaysTrue::evaluate
@@ -84,7 +87,8 @@ void register_AlwaysTrue_class(){
             AlwaysTrue_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Truth is always true" );
         
         }
         { //::SireCAS::AlwaysTrue::evaluate
@@ -95,7 +99,8 @@ void register_AlwaysTrue_class(){
             AlwaysTrue_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Truth is always true" );
         
         }
         { //::SireCAS::AlwaysTrue::evaluateCondition
@@ -106,7 +111,8 @@ void register_AlwaysTrue_class(){
             AlwaysTrue_exposer.def( 
                 "evaluateCondition"
                 , evaluateCondition_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Truth is always true" );
         
         }
         { //::SireCAS::AlwaysTrue::evaluateCondition
@@ -117,7 +123,8 @@ void register_AlwaysTrue_class(){
             AlwaysTrue_exposer.def( 
                 "evaluateCondition"
                 , evaluateCondition_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Truth is always true" );
         
         }
         { //::SireCAS::AlwaysTrue::expand
@@ -128,7 +135,8 @@ void register_AlwaysTrue_class(){
             AlwaysTrue_exposer.def( 
                 "expand"
                 , expand_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "The truth cannot be expanded" );
         
         }
         { //::SireCAS::AlwaysTrue::functions
@@ -138,7 +146,8 @@ void register_AlwaysTrue_class(){
             
             AlwaysTrue_exposer.def( 
                 "functions"
-                , functions_function_value );
+                , functions_function_value
+                , "There are no functions in truth" );
         
         }
         { //::SireCAS::AlwaysTrue::hash
@@ -148,7 +157,8 @@ void register_AlwaysTrue_class(){
             
             AlwaysTrue_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Hash truth" );
         
         }
         { //::SireCAS::AlwaysTrue::isComplex
@@ -158,7 +168,8 @@ void register_AlwaysTrue_class(){
             
             AlwaysTrue_exposer.def( 
                 "isComplex"
-                , isComplex_function_value );
+                , isComplex_function_value
+                , "Truth is never complex" );
         
         }
         { //::SireCAS::AlwaysTrue::isCompound
@@ -168,7 +179,8 @@ void register_AlwaysTrue_class(){
             
             AlwaysTrue_exposer.def( 
                 "isCompound"
-                , isCompound_function_value );
+                , isCompound_function_value
+                , "Truth is always simple" );
         
         }
         { //::SireCAS::AlwaysTrue::isConstant
@@ -178,7 +190,8 @@ void register_AlwaysTrue_class(){
             
             AlwaysTrue_exposer.def( 
                 "isConstant"
-                , isConstant_function_value );
+                , isConstant_function_value
+                , "Truth is always constant" );
         
         }
         { //::SireCAS::AlwaysTrue::isFunction
@@ -189,7 +202,8 @@ void register_AlwaysTrue_class(){
             AlwaysTrue_exposer.def( 
                 "isFunction"
                 , isFunction_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "This is not a function of anything" );
         
         }
         { //::SireCAS::AlwaysTrue::isNull
@@ -199,7 +213,8 @@ void register_AlwaysTrue_class(){
             
             AlwaysTrue_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Truth is never empty" );
         
         }
         { //::SireCAS::AlwaysTrue::operator=
@@ -211,7 +226,8 @@ void register_AlwaysTrue_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AlwaysTrue_exposer.def( bp::self == bp::self );
@@ -224,7 +240,8 @@ void register_AlwaysTrue_class(){
             AlwaysTrue_exposer.def( 
                 "simplify"
                 , simplify_function_value
-                , ( bp::arg("options") ) );
+                , ( bp::arg("options") )
+                , "This cannot be further simplified" );
         
         }
         { //::SireCAS::AlwaysTrue::substitute
@@ -235,7 +252,8 @@ void register_AlwaysTrue_class(){
             AlwaysTrue_exposer.def( 
                 "substitute"
                 , substitute_function_value
-                , ( bp::arg("identities") ) );
+                , ( bp::arg("identities") )
+                , "There is no substituting the truth" );
         
         }
         { //::SireCAS::AlwaysTrue::symbols
@@ -245,7 +263,8 @@ void register_AlwaysTrue_class(){
             
             AlwaysTrue_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "There are no symbols in truth" );
         
         }
         { //::SireCAS::AlwaysTrue::toString
@@ -255,7 +274,8 @@ void register_AlwaysTrue_class(){
             
             AlwaysTrue_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of truth" );
         
         }
         { //::SireCAS::AlwaysTrue::typeName
@@ -265,7 +285,8 @@ void register_AlwaysTrue_class(){
             
             AlwaysTrue_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::AlwaysTrue::what
@@ -275,7 +296,8 @@ void register_AlwaysTrue_class(){
             
             AlwaysTrue_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         AlwaysTrue_exposer.staticmethod( "typeName" );

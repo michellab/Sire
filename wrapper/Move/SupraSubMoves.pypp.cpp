@@ -30,7 +30,7 @@ void register_SupraSubMoves_class(){
 
     { //::SireMove::SupraSubMoves
         typedef bp::class_< SireMove::SupraSubMoves, bp::bases< SireBase::Property >, boost::noncopyable > SupraSubMoves_exposer_t;
-        SupraSubMoves_exposer_t SupraSubMoves_exposer = SupraSubMoves_exposer_t( "SupraSubMoves", bp::no_init );
+        SupraSubMoves_exposer_t SupraSubMoves_exposer = SupraSubMoves_exposer_t( "SupraSubMoves", "This is the base class of holders of collections of SupraSubMove objects\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope SupraSubMoves_scope( SupraSubMoves_exposer );
         { //::SireMove::SupraSubMoves::clearStatistics
         
@@ -39,7 +39,8 @@ void register_SupraSubMoves_class(){
             
             SupraSubMoves_exposer.def( 
                 "clearStatistics"
-                , clearStatistics_function_value );
+                , clearStatistics_function_value
+                , "" );
         
         }
         { //::SireMove::SupraSubMoves::count
@@ -49,7 +50,8 @@ void register_SupraSubMoves_class(){
             
             SupraSubMoves_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of types of SupraSubMove objects in this set" );
         
         }
         { //::SireMove::SupraSubMoves::move
@@ -60,7 +62,8 @@ void register_SupraSubMoves_class(){
             SupraSubMoves_exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("system"), bp::arg("nsubmoves"), bp::arg("nsubmoves_per_block"), bp::arg("record_substats") ) );
+                , ( bp::arg("system"), bp::arg("nsubmoves"), bp::arg("nsubmoves_per_block"), bp::arg("record_substats") )
+                , "" );
         
         }
         { //::SireMove::SupraSubMoves::nSubMoveTypes
@@ -70,7 +73,8 @@ void register_SupraSubMoves_class(){
             
             SupraSubMoves_exposer.def( 
                 "nSubMoveTypes"
-                , nSubMoveTypes_function_value );
+                , nSubMoveTypes_function_value
+                , "Return the number of types of SupraSubMove objects in this set" );
         
         }
         { //::SireMove::SupraSubMoves::null
@@ -81,7 +85,8 @@ void register_SupraSubMoves_class(){
             SupraSubMoves_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the global null SupraSubMoves object" );
         
         }
         { //::SireMove::SupraSubMoves::operator[]
@@ -93,7 +98,8 @@ void register_SupraSubMoves_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMove::SupraSubMoves::size
@@ -103,7 +109,8 @@ void register_SupraSubMoves_class(){
             
             SupraSubMoves_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "Return the number of types of SupraSubMove objects in this set" );
         
         }
         { //::SireMove::SupraSubMoves::subMoves
@@ -113,7 +120,8 @@ void register_SupraSubMoves_class(){
             
             SupraSubMoves_exposer.def( 
                 "subMoves"
-                , subMoves_function_value );
+                , subMoves_function_value
+                , "" );
         
         }
         { //::SireMove::SupraSubMoves::toString
@@ -123,7 +131,8 @@ void register_SupraSubMoves_class(){
             
             SupraSubMoves_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMove::SupraSubMoves::typeName
@@ -133,7 +142,8 @@ void register_SupraSubMoves_class(){
             
             SupraSubMoves_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         SupraSubMoves_exposer.staticmethod( "null" );

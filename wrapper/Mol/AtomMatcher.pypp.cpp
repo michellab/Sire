@@ -43,7 +43,7 @@ void register_AtomMatcher_class(){
 
     { //::SireMol::AtomMatcher
         typedef bp::class_< SireMol::AtomMatcher, bp::bases< SireBase::Property >, boost::noncopyable > AtomMatcher_exposer_t;
-        AtomMatcher_exposer_t AtomMatcher_exposer = AtomMatcher_exposer_t( "AtomMatcher", bp::no_init );
+        AtomMatcher_exposer_t AtomMatcher_exposer = AtomMatcher_exposer_t( "AtomMatcher", "Virtual base class of all of the functions used to match\natoms in one molecule layout with atoms in another layout\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope AtomMatcher_scope( AtomMatcher_exposer );
         { //::SireMol::AtomMatcher::add
         
@@ -53,7 +53,8 @@ void register_AtomMatcher_class(){
             AtomMatcher_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return the matcher that matches using this matcher, and then other (in that order)" );
         
         }
         { //::SireMol::AtomMatcher::changesOrder
@@ -64,7 +65,8 @@ void register_AtomMatcher_class(){
             AtomMatcher_exposer.def( 
                 "changesOrder"
                 , changesOrder_function_value
-                , ( bp::arg("molinfo0"), bp::arg("molinfo1") ) );
+                , ( bp::arg("molinfo0"), bp::arg("molinfo1") )
+                , "Return whether or not this match changes the order of number of atoms" );
         
         }
         { //::SireMol::AtomMatcher::changesOrder
@@ -75,7 +77,8 @@ void register_AtomMatcher_class(){
             AtomMatcher_exposer.def( 
                 "changesOrder"
                 , changesOrder_function_value
-                , ( bp::arg("molview0"), bp::arg("molview1") ) );
+                , ( bp::arg("molview0"), bp::arg("molview1") )
+                , "Return whether or not this match changes the order of number of atoms" );
         
         }
         { //::SireMol::AtomMatcher::changesOrder
@@ -86,7 +89,8 @@ void register_AtomMatcher_class(){
             AtomMatcher_exposer.def( 
                 "changesOrder"
                 , changesOrder_function_value
-                , ( bp::arg("molview0"), bp::arg("map0"), bp::arg("molview1"), bp::arg("map1") ) );
+                , ( bp::arg("molview0"), bp::arg("map0"), bp::arg("molview1"), bp::arg("map1") )
+                , "Return whether or not this match changes the order or number of viewed atoms" );
         
         }
         { //::SireMol::AtomMatcher::changesOrder
@@ -97,7 +101,8 @@ void register_AtomMatcher_class(){
             AtomMatcher_exposer.def( 
                 "changesOrder"
                 , changesOrder_function_value
-                , ( bp::arg("molview0"), bp::arg("molview1"), bp::arg("map") ) );
+                , ( bp::arg("molview0"), bp::arg("molview1"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireMol::AtomMatcher::isNull
@@ -107,7 +112,8 @@ void register_AtomMatcher_class(){
             
             AtomMatcher_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Return whether or not this matcher is null (cannot be used for matching)" );
         
         }
         { //::SireMol::AtomMatcher::match
@@ -118,7 +124,8 @@ void register_AtomMatcher_class(){
             AtomMatcher_exposer.def( 
                 "match"
                 , match_function_value
-                , ( bp::arg("molinfo0"), bp::arg("molinfo1") ) );
+                , ( bp::arg("molinfo0"), bp::arg("molinfo1") )
+                , "Match atoms based only on the data in the MoleculeInfoData of the molecules." );
         
         }
         { //::SireMol::AtomMatcher::match
@@ -129,7 +136,8 @@ void register_AtomMatcher_class(){
             AtomMatcher_exposer.def( 
                 "match"
                 , match_function_value
-                , ( bp::arg("molview0"), bp::arg("map0"), bp::arg("molview1"), bp::arg("map1") ) );
+                , ( bp::arg("molview0"), bp::arg("map0"), bp::arg("molview1"), bp::arg("map1") )
+                , "" );
         
         }
         { //::SireMol::AtomMatcher::match
@@ -140,7 +148,8 @@ void register_AtomMatcher_class(){
             AtomMatcher_exposer.def( 
                 "match"
                 , match_function_value
-                , ( bp::arg("molview0"), bp::arg("molview1") ) );
+                , ( bp::arg("molview0"), bp::arg("molview1") )
+                , "Match atoms based only on the data in the MoleculeInfoData of the molecules." );
         
         }
         { //::SireMol::AtomMatcher::match
@@ -151,7 +160,8 @@ void register_AtomMatcher_class(){
             AtomMatcher_exposer.def( 
                 "match"
                 , match_function_value
-                , ( bp::arg("molview0"), bp::arg("molview1"), bp::arg("map") ) );
+                , ( bp::arg("molview0"), bp::arg("molview1"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireMol::AtomMatcher::null
@@ -162,7 +172,8 @@ void register_AtomMatcher_class(){
             AtomMatcher_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         AtomMatcher_exposer.def( bp::self + bp::self );
@@ -173,7 +184,8 @@ void register_AtomMatcher_class(){
             
             AtomMatcher_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         AtomMatcher_exposer.staticmethod( "null" );

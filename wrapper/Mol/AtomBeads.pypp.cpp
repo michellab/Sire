@@ -26,13 +26,13 @@ void register_AtomBeads_class(){
 
     { //::SireMol::AtomProperty< SireMol::BeadNum >
         typedef bp::class_< SireMol::AtomProperty< SireMol::BeadNum >, bp::bases< SireMol::AtomProp, SireMol::MolViewProperty, SireBase::Property > > AtomBeads_exposer_t;
-        AtomBeads_exposer_t AtomBeads_exposer = AtomBeads_exposer_t( "AtomBeads", bp::init< >() );
+        AtomBeads_exposer_t AtomBeads_exposer = AtomBeads_exposer_t( "AtomBeads", "", bp::init< >("") );
         bp::scope AtomBeads_scope( AtomBeads_exposer );
-        AtomBeads_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") )) );
-        AtomBeads_exposer.def( bp::init< SireMol::MoleculeInfoData const &, SireMol::BeadNum const & >(( bp::arg("molinfo"), bp::arg("default_value") )) );
-        AtomBeads_exposer.def( bp::init< SireMol::BeadNum const & >(( bp::arg("value") )) );
-        AtomBeads_exposer.def( bp::init< SireBase::PackedArray2D< SireMol::BeadNum > const & >(( bp::arg("values") )) );
-        AtomBeads_exposer.def( bp::init< SireMol::AtomProperty< SireMol::BeadNum > const & >(( bp::arg("other") )) );
+        AtomBeads_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "") );
+        AtomBeads_exposer.def( bp::init< SireMol::MoleculeInfoData const &, SireMol::BeadNum const & >(( bp::arg("molinfo"), bp::arg("default_value") ), "") );
+        AtomBeads_exposer.def( bp::init< SireMol::BeadNum const & >(( bp::arg("value") ), "") );
+        AtomBeads_exposer.def( bp::init< SireBase::PackedArray2D< SireMol::BeadNum > const & >(( bp::arg("values") ), "") );
+        AtomBeads_exposer.def( bp::init< SireMol::AtomProperty< SireMol::BeadNum > const & >(( bp::arg("other") ), "") );
         { //::SireMol::AtomProperty< SireMol::BeadNum >::array
         
             typedef SireMol::AtomProperty< SireMol::BeadNum > exported_class_t;
@@ -42,7 +42,8 @@ void register_AtomBeads_class(){
             AtomBeads_exposer.def( 
                 "array"
                 , array_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::assertCanConvert
@@ -54,7 +55,8 @@ void register_AtomBeads_class(){
             AtomBeads_exposer.def( 
                 "assertCanConvert"
                 , assertCanConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::assignFrom
@@ -66,7 +68,8 @@ void register_AtomBeads_class(){
             AtomBeads_exposer.def( 
                 "assignFrom"
                 , assignFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::at
@@ -79,7 +82,8 @@ void register_AtomBeads_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::at
@@ -92,7 +96,8 @@ void register_AtomBeads_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::canConvert
@@ -104,7 +109,8 @@ void register_AtomBeads_class(){
             AtomBeads_exposer.def( 
                 "canConvert"
                 , canConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::copyFrom
@@ -116,7 +122,8 @@ void register_AtomBeads_class(){
             AtomBeads_exposer.def( 
                 "copyFrom"
                 , copyFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::copyFrom
@@ -128,7 +135,8 @@ void register_AtomBeads_class(){
             AtomBeads_exposer.def( 
                 "copyFrom"
                 , copyFrom_function_value
-                , ( bp::arg("values"), bp::arg("selection") ) );
+                , ( bp::arg("values"), bp::arg("selection") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::count
@@ -139,7 +147,8 @@ void register_AtomBeads_class(){
             
             AtomBeads_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::divide
@@ -151,7 +160,8 @@ void register_AtomBeads_class(){
             AtomBeads_exposer.def( 
                 "divide"
                 , divide_function_value
-                , ( bp::arg("beads") ) );
+                , ( bp::arg("beads") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::divideByResidue
@@ -163,7 +173,8 @@ void register_AtomBeads_class(){
             AtomBeads_exposer.def( 
                 "divideByResidue"
                 , divideByResidue_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::fromVariant
@@ -175,7 +186,8 @@ void register_AtomBeads_class(){
             AtomBeads_exposer.def( 
                 "fromVariant"
                 , fromVariant_function_value
-                , ( bp::arg("variant") ) );
+                , ( bp::arg("variant") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::get
@@ -188,7 +200,8 @@ void register_AtomBeads_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::get
@@ -201,7 +214,8 @@ void register_AtomBeads_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::isCompatibleWith
@@ -213,7 +227,8 @@ void register_AtomBeads_class(){
             AtomBeads_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::isEmpty
@@ -224,7 +239,8 @@ void register_AtomBeads_class(){
             
             AtomBeads_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::matchToSelection
@@ -236,7 +252,8 @@ void register_AtomBeads_class(){
             AtomBeads_exposer.def( 
                 "matchToSelection"
                 , matchToSelection_function_value
-                , ( bp::arg("selection") ) );
+                , ( bp::arg("selection") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::merge
@@ -248,7 +265,8 @@ void register_AtomBeads_class(){
             AtomBeads_exposer.def( 
                 "merge"
                 , merge_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::nAtoms
@@ -259,7 +277,8 @@ void register_AtomBeads_class(){
             
             AtomBeads_exposer.def( 
                 "nAtoms"
-                , nAtoms_function_value );
+                , nAtoms_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::nAtoms
@@ -271,7 +290,8 @@ void register_AtomBeads_class(){
             AtomBeads_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
-                , ( bp::arg("cgidx") ) );
+                , ( bp::arg("cgidx") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::nCutGroups
@@ -282,7 +302,8 @@ void register_AtomBeads_class(){
             
             AtomBeads_exposer.def( 
                 "nCutGroups"
-                , nCutGroups_function_value );
+                , nCutGroups_function_value
+                , "" );
         
         }
         AtomBeads_exposer.def( bp::self != bp::self );
@@ -296,7 +317,8 @@ void register_AtomBeads_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AtomBeads_exposer.def( bp::self == bp::self );
@@ -310,7 +332,8 @@ void register_AtomBeads_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::operator[]
@@ -323,7 +346,8 @@ void register_AtomBeads_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::set
@@ -336,7 +360,8 @@ void register_AtomBeads_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("cgatomidx"), bp::arg("value") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::set
@@ -349,7 +374,8 @@ void register_AtomBeads_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("cgidx"), bp::arg("values") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::size
@@ -360,7 +386,8 @@ void register_AtomBeads_class(){
             
             AtomBeads_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::toString
@@ -371,7 +398,8 @@ void register_AtomBeads_class(){
             
             AtomBeads_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::toVariant
@@ -382,7 +410,8 @@ void register_AtomBeads_class(){
             
             AtomBeads_exposer.def( 
                 "toVariant"
-                , toVariant_function_value );
+                , toVariant_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::toVector
@@ -393,7 +422,8 @@ void register_AtomBeads_class(){
             
             AtomBeads_exposer.def( 
                 "toVector"
-                , toVector_function_value );
+                , toVector_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::toVector
@@ -405,7 +435,8 @@ void register_AtomBeads_class(){
             AtomBeads_exposer.def( 
                 "toVector"
                 , toVector_function_value
-                , ( bp::arg("selection") ) );
+                , ( bp::arg("selection") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::BeadNum >::typeName
@@ -416,7 +447,8 @@ void register_AtomBeads_class(){
             
             AtomBeads_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         AtomBeads_exposer.staticmethod( "fromVariant" );

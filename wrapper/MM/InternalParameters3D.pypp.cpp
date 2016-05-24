@@ -41,10 +41,10 @@ void register_InternalParameters3D_class(){
 
     { //::SireMM::InternalParameters3D
         typedef bp::class_< SireMM::InternalParameters3D, bp::bases< SireMM::InternalParameters > > InternalParameters3D_exposer_t;
-        InternalParameters3D_exposer_t InternalParameters3D_exposer = InternalParameters3D_exposer_t( "InternalParameters3D", bp::init< >() );
+        InternalParameters3D_exposer_t InternalParameters3D_exposer = InternalParameters3D_exposer_t( "InternalParameters3D", "This class holds intramolecular bonding parameters for 3D molecules\n(so it also contains the 3D coordinates of the molecule)\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope InternalParameters3D_scope( InternalParameters3D_exposer );
-        InternalParameters3D_exposer.def( bp::init< SireMol::PartialMolecule const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, bool >(( bp::arg("molecule"), bp::arg("coords_property"), bp::arg("bond_params"), bp::arg("angle_params"), bp::arg("dihedral_params"), bp::arg("improper_params"), bp::arg("ub_params"), bp::arg("ss_params"), bp::arg("sb_params"), bp::arg("bb_params"), bp::arg("sbt_params"), bp::arg("isstrict") )) );
-        InternalParameters3D_exposer.def( bp::init< SireMM::InternalParameters3D const & >(( bp::arg("other") )) );
+        InternalParameters3D_exposer.def( bp::init< SireMol::PartialMolecule const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, bool >(( bp::arg("molecule"), bp::arg("coords_property"), bp::arg("bond_params"), bp::arg("angle_params"), bp::arg("dihedral_params"), bp::arg("improper_params"), bp::arg("ub_params"), bp::arg("ss_params"), bp::arg("sb_params"), bp::arg("bb_params"), bp::arg("sbt_params"), bp::arg("isstrict") ), "Construct, creating the parameters from the passed molecule\nusing the supplied property names\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n") );
+        InternalParameters3D_exposer.def( bp::init< SireMM::InternalParameters3D const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::InternalParameters3D::addChangedGroups
         
             typedef void ( ::SireMM::InternalParameters3D::*addChangedGroups_function_type)( ::SireMM::InternalParameters3D const &,::QSet< unsigned int > & ) const;
@@ -53,7 +53,8 @@ void register_InternalParameters3D_class(){
             InternalParameters3D_exposer.def( 
                 "addChangedGroups"
                 , addChangedGroups_function_value
-                , ( bp::arg("other"), bp::arg("changed_groups") ) );
+                , ( bp::arg("other"), bp::arg("changed_groups") )
+                , "Add the changed groups that are different in other compared to this\nto changed_groups" );
         
         }
         { //::SireMM::InternalParameters3D::applyMask
@@ -64,7 +65,8 @@ void register_InternalParameters3D_class(){
             InternalParameters3D_exposer.def( 
                 "applyMask"
                 , applyMask_function_value
-                , ( bp::arg("cgidxs") ) );
+                , ( bp::arg("cgidxs") )
+                , "Mask these parameters so that only the parameters for the CutGroups\nwhose indicies are in cgidxs are contained." );
         
         }
         { //::SireMM::InternalParameters3D::atomicCoordinates
@@ -75,7 +77,8 @@ void register_InternalParameters3D_class(){
             InternalParameters3D_exposer.def( 
                 "atomicCoordinates"
                 , atomicCoordinates_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the coordinates" );
         
         }
         { //::SireMM::InternalParameters3D::changedAllGroups
@@ -86,7 +89,8 @@ void register_InternalParameters3D_class(){
             InternalParameters3D_exposer.def( 
                 "changedAllGroups"
                 , changedAllGroups_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return whether or not all of the CutGroup have changed compared to other" );
         
         }
         { //::SireMM::InternalParameters3D::getChangedGroups
@@ -97,7 +101,8 @@ void register_InternalParameters3D_class(){
             InternalParameters3D_exposer.def( 
                 "getChangedGroups"
                 , getChangedGroups_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return the indicies of the CutGroups that have changed in other compared\nto this set of parameters" );
         
         }
         { //::SireMM::InternalParameters3D::nCutGroups
@@ -107,7 +112,8 @@ void register_InternalParameters3D_class(){
             
             InternalParameters3D_exposer.def( 
                 "nCutGroups"
-                , nCutGroups_function_value );
+                , nCutGroups_function_value
+                , "Return the number of CutGroups in the molecule whose parameters are\ncontained in this object" );
         
         }
         InternalParameters3D_exposer.def( bp::self != bp::self );
@@ -120,7 +126,8 @@ void register_InternalParameters3D_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         InternalParameters3D_exposer.def( bp::self == bp::self );
@@ -132,7 +139,8 @@ void register_InternalParameters3D_class(){
             InternalParameters3D_exposer.def( 
                 "setAtomicCoordinates"
                 , setAtomicCoordinates_function_value
-                , ( bp::arg("coords") ) );
+                , ( bp::arg("coords") )
+                , "Set the coordinates used by these parameters" );
         
         }
         { //::SireMM::InternalParameters3D::typeName
@@ -142,7 +150,8 @@ void register_InternalParameters3D_class(){
             
             InternalParameters3D_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::InternalParameters3D::what
@@ -152,7 +161,8 @@ void register_InternalParameters3D_class(){
             
             InternalParameters3D_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         InternalParameters3D_exposer.staticmethod( "typeName" );

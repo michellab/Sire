@@ -37,7 +37,7 @@ void register_InternalPerturbation_class(){
 
     { //::SireMM::InternalPerturbation
         typedef bp::class_< SireMM::InternalPerturbation, bp::bases< SireMol::Perturbation, SireBase::Property >, boost::noncopyable > InternalPerturbation_exposer_t;
-        InternalPerturbation_exposer_t InternalPerturbation_exposer = InternalPerturbation_exposer_t( "InternalPerturbation", bp::no_init );
+        InternalPerturbation_exposer_t InternalPerturbation_exposer = InternalPerturbation_exposer_t( "InternalPerturbation", "This is the base class of all internal perturbations - these\nare perturbations that change the internal potential of a\nmolecule (e.g. the bond, angle and dihedral parameters)\n\nInternal perturbation work by applying the mapping function\nto the identities in initialForm() and finalForm() and then\nsubstituting these identities into baseExpression(), e.g.\n\ninitialForm() :=>  k = k_{initial},  r0 = r0_{initial}\nfinalForm()   :=>  k = k_{final},    r0 = r0_{final}\n\nbaseExpression() :=>  k  (r - r0)2\n\nmappingFunction() :=>  (1-lam)initial + lamfinal\n\nThis will result in the the perturbing function being\n\nperturbFunction() :=> [ (1-lam)k_{initial} + lamk_{final} ]\n(r - [(1-lam)r0_{initial} + lamr0_{final}])2\n\nequally, if\n\ninitialForm() :=> f = 3  cos(5 phi)\nfinalForm()   :=> f = 5  cos(8 phi)\n\nbaseExpression() :=>  f\n\nmappingFunction() :=> (1-lam)initial + lamfinal\n\nThis will result in\n\nperturbFunction() :=> (1-lam)(3  cos(5 phi)) + lam  (5  cos(8 phi))\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope InternalPerturbation_scope( InternalPerturbation_exposer );
         { //::SireMM::InternalPerturbation::baseExpression
         
@@ -47,7 +47,8 @@ void register_InternalPerturbation_class(){
             InternalPerturbation_exposer.def( 
                 "baseExpression"
                 , baseExpression_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the base expression - this is the expression into which\nthe mapped identites are substituted" );
         
         }
         { //::SireMM::InternalPerturbation::finalForms
@@ -58,7 +59,8 @@ void register_InternalPerturbation_class(){
             InternalPerturbation_exposer.def( 
                 "finalForms"
                 , finalForms_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the final forms - these are the identities that\nare substituted into the base expression at the final state" );
         
         }
         { //::SireMM::InternalPerturbation::initialForms
@@ -69,7 +71,8 @@ void register_InternalPerturbation_class(){
             InternalPerturbation_exposer.def( 
                 "initialForms"
                 , initialForms_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the initial forms - these are the identities that\nare substituted into the base expression at the initial state" );
         
         }
         { //::SireMM::InternalPerturbation::perturbExpression
@@ -80,7 +83,8 @@ void register_InternalPerturbation_class(){
             InternalPerturbation_exposer.def( 
                 "perturbExpression"
                 , perturbExpression_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the perturbed expression - this is the expression that\nis used to calculate the energy" );
         
         }
         { //::SireMM::InternalPerturbation::recreate
@@ -91,7 +95,8 @@ void register_InternalPerturbation_class(){
             InternalPerturbation_exposer.def( 
                 "recreate"
                 , recreate_function_value
-                , ( bp::arg("expression") ) );
+                , ( bp::arg("expression") )
+                , "" );
         
         }
         { //::SireMM::InternalPerturbation::recreate
@@ -102,7 +107,8 @@ void register_InternalPerturbation_class(){
             InternalPerturbation_exposer.def( 
                 "recreate"
                 , recreate_function_value
-                , ( bp::arg("expression"), bp::arg("map") ) );
+                , ( bp::arg("expression"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireMM::InternalPerturbation::substitute
@@ -113,7 +119,8 @@ void register_InternalPerturbation_class(){
             InternalPerturbation_exposer.def( 
                 "substitute"
                 , substitute_function_value
-                , ( bp::arg("identities") ) );
+                , ( bp::arg("identities") )
+                , "" );
         
         }
         { //::SireMM::InternalPerturbation::typeName
@@ -123,7 +130,8 @@ void register_InternalPerturbation_class(){
             
             InternalPerturbation_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         InternalPerturbation_exposer.staticmethod( "typeName" );

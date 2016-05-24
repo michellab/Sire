@@ -46,10 +46,10 @@ void register_QMFF_class(){
 
     { //::Squire::QMFF
         typedef bp::class_< Squire::QMFF, bp::bases< SireFF::FF3D, SireFF::G1FF, SireFF::FF, SireMol::MolGroupsBase, SireBase::Property > > QMFF_exposer_t;
-        QMFF_exposer_t QMFF_exposer = QMFF_exposer_t( "QMFF", bp::init< >() );
+        QMFF_exposer_t QMFF_exposer = QMFF_exposer_t( "QMFF", "This is a forcefield that uses an external Quantum Chemical program\nto calculate the quantum mechanics energy and  or force on the\ncontained molecules.\n\nAuthor: Christopher Woods\n", bp::init< >("Construct an empty, unnamed QM forcefield") );
         bp::scope QMFF_scope( QMFF_exposer );
-        QMFF_exposer.def( bp::init< QString const & >(( bp::arg("name") )) );
-        QMFF_exposer.def( bp::init< Squire::QMFF const & >(( bp::arg("other") )) );
+        QMFF_exposer.def( bp::init< QString const & >(( bp::arg("name") ), "Construct an empty QM forcefield called name") );
+        QMFF_exposer.def( bp::init< Squire::QMFF const & >(( bp::arg("other") ), "Copy constructor") );
         { //::Squire::QMFF::components
         
             typedef ::Squire::QMPotential::Components const & ( ::Squire::QMFF::*components_function_type)(  ) const;
@@ -58,7 +58,8 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "components"
                 , components_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the energy components available to this forcefield" );
         
         }
         { //::Squire::QMFF::containsProperty
@@ -69,7 +70,8 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "containsProperty"
                 , containsProperty_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "Return whether or not this forcefield contains a property\ncalled name" );
         
         }
         { //::Squire::QMFF::energy
@@ -80,7 +82,8 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "energy"
                 , energy_function_value
-                , ( bp::arg("energytable"), bp::arg("scale_energy")=1 ) );
+                , ( bp::arg("energytable"), bp::arg("scale_energy")=1 )
+                , "" );
         
         }
         { //::Squire::QMFF::energy
@@ -91,7 +94,8 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "energy"
                 , energy_function_value
-                , ( bp::arg("energytable"), bp::arg("symbol"), bp::arg("scale_energy")=1 ) );
+                , ( bp::arg("energytable"), bp::arg("symbol"), bp::arg("scale_energy")=1 )
+                , "" );
         
         }
         { //::Squire::QMFF::energyCommandFile
@@ -101,7 +105,8 @@ void register_QMFF_class(){
             
             QMFF_exposer.def( 
                 "energyCommandFile"
-                , energyCommandFile_function_value );
+                , energyCommandFile_function_value
+                , "Return the command file that would be used to calculate the energy\nof the molecules in this forcefield" );
         
         }
         { //::Squire::QMFF::field
@@ -112,7 +117,8 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "field"
                 , field_function_value
-                , ( bp::arg("fieldtable"), bp::arg("scale_field")=1 ) );
+                , ( bp::arg("fieldtable"), bp::arg("scale_field")=1 )
+                , "Calculate the field from this forcefield in the passed fieldtable" );
         
         }
         { //::Squire::QMFF::field
@@ -123,7 +129,8 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "field"
                 , field_function_value
-                , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("scale_field")=1 ) );
+                , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("scale_field")=1 )
+                , "Calculate the field from this forcefield in the passed fieldtable" );
         
         }
         { //::Squire::QMFF::field
@@ -134,7 +141,8 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "field"
                 , field_function_value
-                , ( bp::arg("fieldtable"), bp::arg("probe"), bp::arg("scale_field")=1 ) );
+                , ( bp::arg("fieldtable"), bp::arg("probe"), bp::arg("scale_field")=1 )
+                , "Calculate the field from this forcefield in the passed fieldtable" );
         
         }
         { //::Squire::QMFF::field
@@ -145,7 +153,8 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "field"
                 , field_function_value
-                , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_field")=1 ) );
+                , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_field")=1 )
+                , "Calculate the field from this forcefield in the passed fieldtable" );
         
         }
         { //::Squire::QMFF::fieldCommandFile
@@ -156,7 +165,8 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "fieldCommandFile"
                 , fieldCommandFile_function_value
-                , ( bp::arg("fieldtable") ) );
+                , ( bp::arg("fieldtable") )
+                , "Return the command file that would be used to calculate the fields\nof the molecules in this forcefield" );
         
         }
         { //::Squire::QMFF::fieldCommandFile
@@ -167,7 +177,8 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "fieldCommandFile"
                 , fieldCommandFile_function_value
-                , ( bp::arg("fieldtable"), bp::arg("probe") ) );
+                , ( bp::arg("fieldtable"), bp::arg("probe") )
+                , "Return the command file that would be used to calculate the fields\nof the molecules in this forcefield" );
         
         }
         { //::Squire::QMFF::force
@@ -178,7 +189,8 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "force"
                 , force_function_value
-                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 ) );
+                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
+                , "Calculate the QM forces on the molecules in this forcefield\nand add the results to the forces for the molecules contained\nin the table forcetable - this scales the forces by\nthe optional scale_force" );
         
         }
         { //::Squire::QMFF::force
@@ -189,7 +201,8 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "force"
                 , force_function_value
-                , ( bp::arg("forcetable"), bp::arg("symbol"), bp::arg("scale_force")=1 ) );
+                , ( bp::arg("forcetable"), bp::arg("symbol"), bp::arg("scale_force")=1 )
+                , "Calculate the QM forces on the molecules in this forcefield\nand add the results to the forces for the molecules contained\nin the table forcetable - this scales the forces by\nthe optional scale_force" );
         
         }
         { //::Squire::QMFF::forceCommandFile
@@ -200,7 +213,8 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "forceCommandFile"
                 , forceCommandFile_function_value
-                , ( bp::arg("forcetable") ) );
+                , ( bp::arg("forcetable") )
+                , "Return the command file that would be used to calculate the forces\non the molecules in this forcefield" );
         
         }
         { //::Squire::QMFF::mustNowRecalculateFromScratch
@@ -210,7 +224,8 @@ void register_QMFF_class(){
             
             QMFF_exposer.def( 
                 "mustNowRecalculateFromScratch"
-                , mustNowRecalculateFromScratch_function_value );
+                , mustNowRecalculateFromScratch_function_value
+                , "Trigger a complete recalculation of the QM energy" );
         
         }
         QMFF_exposer.def( bp::self != bp::self );
@@ -223,7 +238,8 @@ void register_QMFF_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         QMFF_exposer.def( bp::self == bp::self );
@@ -234,7 +250,8 @@ void register_QMFF_class(){
             
             QMFF_exposer.def( 
                 "parameters"
-                , parameters_function_value );
+                , parameters_function_value
+                , "" );
         
         }
         { //::Squire::QMFF::potential
@@ -245,7 +262,8 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "potential"
                 , potential_function_value
-                , ( bp::arg("potentialtable"), bp::arg("scale_potential")=1 ) );
+                , ( bp::arg("potentialtable"), bp::arg("scale_potential")=1 )
+                , "Calculate the potential from this forcefield in the passed potentialtable" );
         
         }
         { //::Squire::QMFF::potential
@@ -256,7 +274,8 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "potential"
                 , potential_function_value
-                , ( bp::arg("potentialtable"), bp::arg("component"), bp::arg("scale_potential")=1 ) );
+                , ( bp::arg("potentialtable"), bp::arg("component"), bp::arg("scale_potential")=1 )
+                , "Calculate the potential from this forcefield in the passed potentialtable" );
         
         }
         { //::Squire::QMFF::potential
@@ -267,7 +286,8 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "potential"
                 , potential_function_value
-                , ( bp::arg("potentialtable"), bp::arg("probe"), bp::arg("scale_potential")=1 ) );
+                , ( bp::arg("potentialtable"), bp::arg("probe"), bp::arg("scale_potential")=1 )
+                , "Calculate the potential from this forcefield in the passed potentialtable" );
         
         }
         { //::Squire::QMFF::potential
@@ -278,7 +298,8 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "potential"
                 , potential_function_value
-                , ( bp::arg("potentialtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_potential")=1 ) );
+                , ( bp::arg("potentialtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_potential")=1 )
+                , "Calculate the potential from this forcefield in the passed potentialtable" );
         
         }
         { //::Squire::QMFF::potentialCommandFile
@@ -289,7 +310,8 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "potentialCommandFile"
                 , potentialCommandFile_function_value
-                , ( bp::arg("pottable") ) );
+                , ( bp::arg("pottable") )
+                , "Return the command file that would be used to calculate the potential\nof the molecules in this forcefield" );
         
         }
         { //::Squire::QMFF::potentialCommandFile
@@ -300,7 +322,8 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "potentialCommandFile"
                 , potentialCommandFile_function_value
-                , ( bp::arg("pottable"), bp::arg("probe") ) );
+                , ( bp::arg("pottable"), bp::arg("probe") )
+                , "Return the command file that would be used to calculate the potential\nof the molecules in this forcefield" );
         
         }
         { //::Squire::QMFF::properties
@@ -311,7 +334,8 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "properties"
                 , properties_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the properties available in this forcefield (and their values)" );
         
         }
         { //::Squire::QMFF::property
@@ -323,7 +347,8 @@ void register_QMFF_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the value of the property with name name\nThrow: SireBase::missing_property\n" );
         
         }
         { //::Squire::QMFF::quantumProgram
@@ -334,7 +359,8 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "quantumProgram"
                 , quantumProgram_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the QM program that will be used to calculate the\nenergies and forces on the molecules" );
         
         }
         { //::Squire::QMFF::setProperty
@@ -345,7 +371,8 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "setProperty"
                 , setProperty_function_value
-                , ( bp::arg("name"), bp::arg("property") ) );
+                , ( bp::arg("name"), bp::arg("property") )
+                , "Set the property name to the value value\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::Squire::QMFF::setQuantumProgram
@@ -356,7 +383,8 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "setQuantumProgram"
                 , setQuantumProgram_function_value
-                , ( bp::arg("qmprog") ) );
+                , ( bp::arg("qmprog") )
+                , "Set the QM program that will be used to calculate the\nenergies and forces" );
         
         }
         { //::Squire::QMFF::setSpace
@@ -367,7 +395,8 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "setSpace"
                 , setSpace_function_value
-                , ( bp::arg("space") ) );
+                , ( bp::arg("space") )
+                , "Set the space within which the QM molecules exist" );
         
         }
         { //::Squire::QMFF::setZeroEnergy
@@ -378,7 +407,8 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "setZeroEnergy"
                 , setZeroEnergy_function_value
-                , ( bp::arg("zero_energy") ) );
+                , ( bp::arg("zero_energy") )
+                , "Set the absolute value of the energy which is considered\nas zero (on the relative energy scale used by this potential).\nA relative scale is used so that the QM energy can be shifted\nso that it is comparable to an MM energy" );
         
         }
         { //::Squire::QMFF::space
@@ -389,7 +419,8 @@ void register_QMFF_class(){
             QMFF_exposer.def( 
                 "space"
                 , space_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the space within which the QM molecules exist" );
         
         }
         { //::Squire::QMFF::typeName
@@ -399,7 +430,8 @@ void register_QMFF_class(){
             
             QMFF_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::Squire::QMFF::what
@@ -409,7 +441,8 @@ void register_QMFF_class(){
             
             QMFF_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         { //::Squire::QMFF::zeroEnergy
@@ -419,7 +452,8 @@ void register_QMFF_class(){
             
             QMFF_exposer.def( 
                 "zeroEnergy"
-                , zeroEnergy_function_value );
+                , zeroEnergy_function_value
+                , "Return the absolute value of the energy which is considered\nas zero (on the relative energy scale used by this potential).\nA relative scale is used so that the QM energy can be shifted\nso that it is comparable to an MM energy" );
         
         }
         QMFF_exposer.staticmethod( "typeName" );

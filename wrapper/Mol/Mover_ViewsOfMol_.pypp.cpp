@@ -97,11 +97,11 @@ void register_Mover_ViewsOfMol__class(){
 
     { //::SireMol::Mover< SireMol::ViewsOfMol >
         typedef bp::class_< SireMol::Mover< SireMol::ViewsOfMol >, bp::bases< SireMol::MoverBase, SireMol::ViewsOfMol, SireMol::MoleculeView, SireBase::Property > > Mover_ViewsOfMol__exposer_t;
-        Mover_ViewsOfMol__exposer_t Mover_ViewsOfMol__exposer = Mover_ViewsOfMol__exposer_t( "Mover_ViewsOfMol_", bp::init< >() );
+        Mover_ViewsOfMol__exposer_t Mover_ViewsOfMol__exposer = Mover_ViewsOfMol__exposer_t( "Mover_ViewsOfMol_", "", bp::init< >("") );
         bp::scope Mover_ViewsOfMol__scope( Mover_ViewsOfMol__exposer );
-        Mover_ViewsOfMol__exposer.def( bp::init< SireMol::ViewsOfMol const & >(( bp::arg("view") )) );
-        Mover_ViewsOfMol__exposer.def( bp::init< SireMol::ViewsOfMol const &, SireMol::AtomSelection const & >(( bp::arg("view"), bp::arg("movable_atoms") )) );
-        Mover_ViewsOfMol__exposer.def( bp::init< SireMol::Mover< SireMol::ViewsOfMol > const & >(( bp::arg("other") )) );
+        Mover_ViewsOfMol__exposer.def( bp::init< SireMol::ViewsOfMol const & >(( bp::arg("view") ), "") );
+        Mover_ViewsOfMol__exposer.def( bp::init< SireMol::ViewsOfMol const &, SireMol::AtomSelection const & >(( bp::arg("view"), bp::arg("movable_atoms") ), "") );
+        Mover_ViewsOfMol__exposer.def( bp::init< SireMol::Mover< SireMol::ViewsOfMol > const & >(( bp::arg("other") ), "") );
         { //::SireMol::Mover< SireMol::ViewsOfMol >::align
         
             typedef SireMol::Mover< SireMol::ViewsOfMol > exported_class_t;
@@ -112,7 +112,8 @@ void register_Mover_ViewsOfMol__class(){
                 "align"
                 , align_function_value
                 , ( bp::arg("other"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::align
@@ -125,7 +126,8 @@ void register_Mover_ViewsOfMol__class(){
                 "align"
                 , align_function_value
                 , ( bp::arg("other"), bp::arg("map0"), bp::arg("map1") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::align
@@ -138,7 +140,8 @@ void register_Mover_ViewsOfMol__class(){
                 "align"
                 , align_function_value
                 , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::align
@@ -151,7 +154,8 @@ void register_Mover_ViewsOfMol__class(){
                 "align"
                 , align_function_value
                 , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map0"), bp::arg("map1") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::alignTo
@@ -164,7 +168,8 @@ void register_Mover_ViewsOfMol__class(){
                 "alignTo"
                 , alignTo_function_value
                 , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::alignTo
@@ -177,7 +182,8 @@ void register_Mover_ViewsOfMol__class(){
                 "alignTo"
                 , alignTo_function_value
                 , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map0"), bp::arg("map1") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::alignTo
@@ -190,7 +196,8 @@ void register_Mover_ViewsOfMol__class(){
                 "alignTo"
                 , alignTo_function_value
                 , ( bp::arg("other"), bp::arg("aligning_atoms"), bp::arg("matcher"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::alignTo
@@ -203,7 +210,8 @@ void register_Mover_ViewsOfMol__class(){
                 "alignTo"
                 , alignTo_function_value
                 , ( bp::arg("other"), bp::arg("aligning_atoms"), bp::arg("matcher"), bp::arg("map0"), bp::arg("map1") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::change
@@ -216,7 +224,8 @@ void register_Mover_ViewsOfMol__class(){
                 "change"
                 , change_function_value
                 , ( bp::arg("bond"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::change
@@ -229,7 +238,8 @@ void register_Mover_ViewsOfMol__class(){
                 "change"
                 , change_function_value
                 , ( bp::arg("angle"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::change
@@ -242,7 +252,8 @@ void register_Mover_ViewsOfMol__class(){
                 "change"
                 , change_function_value
                 , ( bp::arg("dihedral"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::change
@@ -255,7 +266,8 @@ void register_Mover_ViewsOfMol__class(){
                 "change"
                 , change_function_value
                 , ( bp::arg("bond"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::change
@@ -268,7 +280,8 @@ void register_Mover_ViewsOfMol__class(){
                 "change"
                 , change_function_value
                 , ( bp::arg("improper"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::changeFrame
@@ -281,7 +294,8 @@ void register_Mover_ViewsOfMol__class(){
                 "changeFrame"
                 , changeFrame_function_value
                 , ( bp::arg("from_frame"), bp::arg("to_frame"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::commit
@@ -292,7 +306,8 @@ void register_Mover_ViewsOfMol__class(){
             
             Mover_ViewsOfMol__exposer.def( 
                 "commit"
-                , commit_function_value );
+                , commit_function_value
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::mapInto
@@ -305,7 +320,8 @@ void register_Mover_ViewsOfMol__class(){
                 "mapInto"
                 , mapInto_function_value
                 , ( bp::arg("axes"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::operator=
@@ -318,7 +334,8 @@ void register_Mover_ViewsOfMol__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::operator=
@@ -331,7 +348,8 @@ void register_Mover_ViewsOfMol__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::rotate
@@ -344,7 +362,8 @@ void register_Mover_ViewsOfMol__class(){
                 "rotate"
                 , rotate_function_value
                 , ( bp::arg("quat"), bp::arg("point"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::rotate
@@ -357,7 +376,8 @@ void register_Mover_ViewsOfMol__class(){
                 "rotate"
                 , rotate_function_value
                 , ( bp::arg("rotmat"), bp::arg("point"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::set
@@ -370,7 +390,8 @@ void register_Mover_ViewsOfMol__class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("bond"), bp::arg("value"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::set
@@ -383,7 +404,8 @@ void register_Mover_ViewsOfMol__class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("angle"), bp::arg("value"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::set
@@ -396,7 +418,8 @@ void register_Mover_ViewsOfMol__class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("dihedral"), bp::arg("value"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::set
@@ -409,7 +432,8 @@ void register_Mover_ViewsOfMol__class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("improper"), bp::arg("value"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::setAll
@@ -422,7 +446,8 @@ void register_Mover_ViewsOfMol__class(){
                 "setAll"
                 , setAll_function_value
                 , ( bp::arg("dihedral"), bp::arg("value"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::toString
@@ -433,7 +458,8 @@ void register_Mover_ViewsOfMol__class(){
             
             Mover_ViewsOfMol__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::transform
@@ -446,7 +472,8 @@ void register_Mover_ViewsOfMol__class(){
                 "transform"
                 , transform_function_value
                 , ( bp::arg("transform"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::translate
@@ -459,7 +486,8 @@ void register_Mover_ViewsOfMol__class(){
                 "translate"
                 , translate_function_value
                 , ( bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::ViewsOfMol >::typeName
@@ -470,7 +498,8 @@ void register_Mover_ViewsOfMol__class(){
             
             Mover_ViewsOfMol__exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         Mover_ViewsOfMol__exposer.staticmethod( "typeName" );

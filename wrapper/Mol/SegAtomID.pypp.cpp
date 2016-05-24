@@ -35,10 +35,10 @@ void register_SegAtomID_class(){
 
     { //::SireMol::GroupAtomID< SireMol::SegID, SireMol::AtomID >
         typedef bp::class_< SireMol::GroupAtomID< SireMol::SegID, SireMol::AtomID >, bp::bases< SireMol::GroupAtomIDBase, SireMol::AtomID, SireID::ID > > SegAtomID_exposer_t;
-        SegAtomID_exposer_t SegAtomID_exposer = SegAtomID_exposer_t( "SegAtomID", bp::init< >() );
+        SegAtomID_exposer_t SegAtomID_exposer = SegAtomID_exposer_t( "SegAtomID", "", bp::init< >("") );
         bp::scope SegAtomID_scope( SegAtomID_exposer );
-        SegAtomID_exposer.def( bp::init< SireMol::SegID const &, SireMol::AtomID const & >(( bp::arg("group"), bp::arg("atom") )) );
-        SegAtomID_exposer.def( bp::init< SireMol::GroupAtomID< SireMol::SegID, SireMol::AtomID > const & >(( bp::arg("other") )) );
+        SegAtomID_exposer.def( bp::init< SireMol::SegID const &, SireMol::AtomID const & >(( bp::arg("group"), bp::arg("atom") ), "") );
+        SegAtomID_exposer.def( bp::init< SireMol::GroupAtomID< SireMol::SegID, SireMol::AtomID > const & >(( bp::arg("other") ), "") );
         { //::SireMol::GroupAtomID< SireMol::SegID, SireMol::AtomID >::hash
         
             typedef SireMol::GroupAtomID< SireMol::SegID, SireMol::AtomID > exported_class_t;
@@ -47,7 +47,8 @@ void register_SegAtomID_class(){
             
             SegAtomID_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::GroupAtomID< SireMol::SegID, SireMol::AtomID >::isNull
@@ -58,7 +59,8 @@ void register_SegAtomID_class(){
             
             SegAtomID_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::GroupAtomID< SireMol::SegID, SireMol::AtomID >::map
@@ -70,7 +72,8 @@ void register_SegAtomID_class(){
             SegAtomID_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         SegAtomID_exposer.def( bp::self != bp::self );
@@ -84,7 +87,8 @@ void register_SegAtomID_class(){
             
             SegAtomID_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::GroupAtomID< SireMol::SegID, SireMol::AtomID >::typeName
@@ -95,7 +99,8 @@ void register_SegAtomID_class(){
             
             SegAtomID_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::GroupAtomID< SireMol::SegID, SireMol::AtomID >::what
@@ -106,7 +111,8 @@ void register_SegAtomID_class(){
             
             SegAtomID_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         SegAtomID_exposer.staticmethod( "typeName" );

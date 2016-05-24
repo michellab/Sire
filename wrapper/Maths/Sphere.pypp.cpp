@@ -31,11 +31,11 @@ void register_Sphere_class(){
 
     { //::SireMaths::Sphere
         typedef bp::class_< SireMaths::Sphere > Sphere_exposer_t;
-        Sphere_exposer_t Sphere_exposer = Sphere_exposer_t( "Sphere", bp::init< >() );
+        Sphere_exposer_t Sphere_exposer = Sphere_exposer_t( "Sphere", "\nThis class is a mathematical representation of a sphere.\n\nAuthor: Christopher Woods\n", bp::init< >("Create a default sphere, centered on the origin with zero radius") );
         bp::scope Sphere_scope( Sphere_exposer );
-        Sphere_exposer.def( bp::init< double const & >(( bp::arg("radius") )) );
-        Sphere_exposer.def( bp::init< SireMaths::Vector const &, double const & >(( bp::arg("position"), bp::arg("radius") )) );
-        Sphere_exposer.def( bp::init< SireMaths::Sphere const & >(( bp::arg("other") )) );
+        Sphere_exposer.def( bp::init< double const & >(( bp::arg("radius") ), "Create a sphere with radius radius, centered on the origin") );
+        Sphere_exposer.def( bp::init< SireMaths::Vector const &, double const & >(( bp::arg("position"), bp::arg("radius") ), "Create a sphere centered at position and with radius radius") );
+        Sphere_exposer.def( bp::init< SireMaths::Sphere const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMaths::Sphere::center
         
             typedef ::SireMaths::Vector const & ( ::SireMaths::Sphere::*center_function_type)(  ) const;
@@ -44,7 +44,8 @@ void register_Sphere_class(){
             Sphere_exposer.def( 
                 "center"
                 , center_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMaths::Sphere::combinedVolume
@@ -55,7 +56,8 @@ void register_Sphere_class(){
             Sphere_exposer.def( 
                 "combinedVolume"
                 , combinedVolume_function_value
-                , ( bp::arg("spheres") ) );
+                , ( bp::arg("spheres") )
+                , "Return the combined volume of the passed array of spheres. This calculates the volume\nanalytically using the inclusionexclusion principle only up to third order\n" );
         
         }
         { //::SireMaths::Sphere::combinedVolumeMC
@@ -66,7 +68,8 @@ void register_Sphere_class(){
             Sphere_exposer.def( 
                 "combinedVolumeMC"
                 , combinedVolumeMC_function_value
-                , ( bp::arg("spheres"), bp::arg("nsamples")=(::qint64)(-1) ) );
+                , ( bp::arg("spheres"), bp::arg("nsamples")=(::qint64)(-1) )
+                , "Return an approximation of the combined volume of the set of passed spheres using\nMonte Carlo sampling. If nsamples is greater than zero, then the set number of\nsamples will be used. Otherwise, enough samples will be used to converge the volume\nto within a good approximation" );
         
         }
         { //::SireMaths::Sphere::contains
@@ -77,7 +80,8 @@ void register_Sphere_class(){
             Sphere_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("point") ) );
+                , ( bp::arg("point") )
+                , "Return whether or not this sphere contains the point point\n(returns true even if the point is just on the surface of the sphere)" );
         
         }
         { //::SireMaths::Sphere::contains
@@ -88,7 +92,8 @@ void register_Sphere_class(){
             Sphere_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return whether or not this sphere contains other" );
         
         }
         { //::SireMaths::Sphere::intersectionVolume
@@ -99,7 +104,8 @@ void register_Sphere_class(){
             Sphere_exposer.def( 
                 "intersectionVolume"
                 , intersectionVolume_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return the volume of space formed at the intersection of this sphere with other" );
         
         }
         { //::SireMaths::Sphere::intersectionVolume
@@ -110,7 +116,8 @@ void register_Sphere_class(){
             Sphere_exposer.def( 
                 "intersectionVolume"
                 , intersectionVolume_function_value
-                , ( bp::arg("other0"), bp::arg("other1") ) );
+                , ( bp::arg("other0"), bp::arg("other1") )
+                , "Return the volume of intersection of this sphere with the two other spheres.\nThis returns the volume of space covered by all three spheres." );
         
         }
         { //::SireMaths::Sphere::intersects
@@ -121,7 +128,8 @@ void register_Sphere_class(){
             Sphere_exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return whether or not this sphere intersects with other" );
         
         }
         Sphere_exposer.def( bp::self != bp::self );
@@ -134,7 +142,8 @@ void register_Sphere_class(){
             Sphere_exposer.def( 
                 "position"
                 , position_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMaths::Sphere::radius
@@ -144,7 +153,8 @@ void register_Sphere_class(){
             
             Sphere_exposer.def( 
                 "radius"
-                , radius_function_value );
+                , radius_function_value
+                , "" );
         
         }
         { //::SireMaths::Sphere::setCenter
@@ -155,7 +165,8 @@ void register_Sphere_class(){
             Sphere_exposer.def( 
                 "setCenter"
                 , setCenter_function_value
-                , ( bp::arg("center") ) );
+                , ( bp::arg("center") )
+                , "Set the position of the center of this sphere" );
         
         }
         { //::SireMaths::Sphere::setPosition
@@ -166,7 +177,8 @@ void register_Sphere_class(){
             Sphere_exposer.def( 
                 "setPosition"
                 , setPosition_function_value
-                , ( bp::arg("position") ) );
+                , ( bp::arg("position") )
+                , "Set the position of the center of this sphere" );
         
         }
         { //::SireMaths::Sphere::setRadius
@@ -177,7 +189,8 @@ void register_Sphere_class(){
             Sphere_exposer.def( 
                 "setRadius"
                 , setRadius_function_value
-                , ( bp::arg("radius") ) );
+                , ( bp::arg("radius") )
+                , "Set the radius of this sphere" );
         
         }
         { //::SireMaths::Sphere::surfaceArea
@@ -187,7 +200,8 @@ void register_Sphere_class(){
             
             Sphere_exposer.def( 
                 "surfaceArea"
-                , surfaceArea_function_value );
+                , surfaceArea_function_value
+                , "Return the surface area of this sphere" );
         
         }
         { //::SireMaths::Sphere::toString
@@ -197,7 +211,8 @@ void register_Sphere_class(){
             
             Sphere_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMaths::Sphere::translate
@@ -208,7 +223,8 @@ void register_Sphere_class(){
             Sphere_exposer.def( 
                 "translate"
                 , translate_function_value
-                , ( bp::arg("delta") ) );
+                , ( bp::arg("delta") )
+                , "Return a copy of this sphere translated by delta" );
         
         }
         { //::SireMaths::Sphere::typeName
@@ -218,7 +234,8 @@ void register_Sphere_class(){
             
             Sphere_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMaths::Sphere::volume
@@ -228,7 +245,8 @@ void register_Sphere_class(){
             
             Sphere_exposer.def( 
                 "volume"
-                , volume_function_value );
+                , volume_function_value
+                , "Return the volume of this sphere" );
         
         }
         { //::SireMaths::Sphere::what
@@ -238,7 +256,8 @@ void register_Sphere_class(){
             
             Sphere_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Sphere_exposer.staticmethod( "combinedVolume" );

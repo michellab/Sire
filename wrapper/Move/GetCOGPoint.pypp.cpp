@@ -44,12 +44,12 @@ void register_GetCOGPoint_class(){
 
     { //::SireMove::GetCOGPoint
         typedef bp::class_< SireMove::GetCOGPoint, bp::bases< SireMove::GetPoint, SireBase::Property > > GetCOGPoint_exposer_t;
-        GetCOGPoint_exposer_t GetCOGPoint_exposer = GetCOGPoint_exposer_t( "GetCOGPoint", bp::init< >() );
+        GetCOGPoint_exposer_t GetCOGPoint_exposer = GetCOGPoint_exposer_t( "GetCOGPoint", "This function returns the center of geometry (COG) of the\natoms in the passed view of the molecule\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope GetCOGPoint_scope( GetCOGPoint_exposer );
-        GetCOGPoint_exposer.def( bp::init< SireMol::AtomID const & >(( bp::arg("atomid") )) );
-        GetCOGPoint_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const & >(( bp::arg("atomid0"), bp::arg("atomid1") )) );
-        GetCOGPoint_exposer.def( bp::init< QList< SireMol::AtomIdentifier > const & >(( bp::arg("atomids") )) );
-        GetCOGPoint_exposer.def( bp::init< SireMove::GetCOGPoint const & >(( bp::arg("other") )) );
+        GetCOGPoint_exposer.def( bp::init< SireMol::AtomID const & >(( bp::arg("atomid") ), "Construct to get the COG of the atoms in the molecule that match\nthe passed AtomID") );
+        GetCOGPoint_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const & >(( bp::arg("atomid0"), bp::arg("atomid1") ), "Construct to get the COG of the atoms in the molecule that\nmatch either of the two passed AtomIDs") );
+        GetCOGPoint_exposer.def( bp::init< QList< SireMol::AtomIdentifier > const & >(( bp::arg("atomids") ), "Construct to get the COG of the atoms in the molecule that\nmatch any of the passed AtomIDs") );
+        GetCOGPoint_exposer.def( bp::init< SireMove::GetCOGPoint const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::GetCOGPoint::atomID
         
             typedef ::SireMol::AtomID const & ( ::SireMove::GetCOGPoint::*atomID_function_type)(  ) const;
@@ -58,7 +58,8 @@ void register_GetCOGPoint_class(){
             GetCOGPoint_exposer.def( 
                 "atomID"
                 , atomID_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the AtomID(s) used to limit the search for the point" );
         
         }
         { //::SireMove::GetCOGPoint::getPoint
@@ -69,7 +70,8 @@ void register_GetCOGPoint_class(){
             GetCOGPoint_exposer.def( 
                 "getPoint"
                 , getPoint_function_value
-                , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         GetCOGPoint_exposer.def( bp::self != bp::self );
@@ -82,7 +84,8 @@ void register_GetCOGPoint_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         GetCOGPoint_exposer.def( bp::self == bp::self );
@@ -93,7 +96,8 @@ void register_GetCOGPoint_class(){
             
             GetCOGPoint_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         GetCOGPoint_exposer.staticmethod( "typeName" );

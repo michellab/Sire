@@ -40,13 +40,13 @@ void register_ThreeAtomPerturbation_class(){
 
     { //::SireMM::ThreeAtomPerturbation
         typedef bp::class_< SireMM::ThreeAtomPerturbation, bp::bases< SireMM::InternalPerturbation, SireMol::Perturbation, SireBase::Property > > ThreeAtomPerturbation_exposer_t;
-        ThreeAtomPerturbation_exposer_t ThreeAtomPerturbation_exposer = ThreeAtomPerturbation_exposer_t( "ThreeAtomPerturbation", bp::init< >() );
+        ThreeAtomPerturbation_exposer_t ThreeAtomPerturbation_exposer = ThreeAtomPerturbation_exposer_t( "ThreeAtomPerturbation", "This class represents a perturbation that maps the three-atom potential\nfunction using a perturbation function\n\nFor example, the perturbation function for an angle could be;\n\nE_{theta,lambda} = [ (1-lambda) k_b + lambda k_f ]\n[ ((1-lambda) theta0_b + lambda theta0_f) - theta ]^2\n\nThe perturbation will insert the value of lambda into this\nexpression and set the molecules angle function to the resulting\nexpression, e.g at lambda=0\n\nE_{theta,0} = k_b  (theta0_b - theta)^2\n\nand at lambda=1\n\nE_{theta,1} = k_f  (theta0_f - theta)^2\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope ThreeAtomPerturbation_scope( ThreeAtomPerturbation_exposer );
-        ThreeAtomPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireCAS::Expression const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("initial_form"), bp::arg("final_form"), bp::arg("map")=SireBase::PropertyMap() )) );
-        ThreeAtomPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireCAS::Expression const &, SireCAS::Expression const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("initial_form"), bp::arg("final_form"), bp::arg("mapping_function"), bp::arg("map")=SireBase::PropertyMap() )) );
-        ThreeAtomPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireCAS::Expression const &, SireCAS::Identities const &, SireCAS::Identities const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("base_expression"), bp::arg("initial_forms"), bp::arg("final_forms"), bp::arg("map")=SireBase::PropertyMap() )) );
-        ThreeAtomPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireCAS::Expression const &, SireCAS::Identities const &, SireCAS::Identities const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("base_expression"), bp::arg("initial_forms"), bp::arg("final_forms"), bp::arg("mapping_function"), bp::arg("map")=SireBase::PropertyMap() )) );
-        ThreeAtomPerturbation_exposer.def( bp::init< SireMM::ThreeAtomPerturbation const & >(( bp::arg("other") )) );
+        ThreeAtomPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireCAS::Expression const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("initial_form"), bp::arg("final_form"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perturb the function between the atoms atom0, atom1 and atom2\nto use initial_form at the initial state and final_form at the\nfinal state, where the functions are mapped between these two states\nusing the default mapping function") );
+        ThreeAtomPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireCAS::Expression const &, SireCAS::Expression const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("initial_form"), bp::arg("final_form"), bp::arg("mapping_function"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perturb the function between the atoms atom0, atom1 and atom2\nto use initial_form at the initial state and final_form at the\nfinal state, where the functions are mapped between these two states\nusing mapping_function") );
+        ThreeAtomPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireCAS::Expression const &, SireCAS::Identities const &, SireCAS::Identities const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("base_expression"), bp::arg("initial_forms"), bp::arg("final_forms"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perturb the function between the atoms atom0, atom1 and atom2\nto use base_expression populated with the identities in initial_forms\nat the initial state, and populated with the identities in final_forms\nat the final state, where the identities are mapped between the initial\nand final states using the default mapping function") );
+        ThreeAtomPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireCAS::Expression const &, SireCAS::Identities const &, SireCAS::Identities const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("base_expression"), bp::arg("initial_forms"), bp::arg("final_forms"), bp::arg("mapping_function"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perturb the function between the atoms atom0, atom1 and atom2\nto use base_expression populated with the identities in initial_forms\nat the initial state, and populated with the identities in final_forms\nat the final state, where the identities are mapped between the initial\nand final states using mapping_function") );
+        ThreeAtomPerturbation_exposer.def( bp::init< SireMM::ThreeAtomPerturbation const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::ThreeAtomPerturbation::atom0
         
             typedef ::SireMol::AtomID const & ( ::SireMM::ThreeAtomPerturbation::*atom0_function_type)(  ) const;
@@ -55,7 +55,8 @@ void register_ThreeAtomPerturbation_class(){
             ThreeAtomPerturbation_exposer.def( 
                 "atom0"
                 , atom0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the first of the three atoms whose potential is being changed" );
         
         }
         { //::SireMM::ThreeAtomPerturbation::atom1
@@ -66,7 +67,8 @@ void register_ThreeAtomPerturbation_class(){
             ThreeAtomPerturbation_exposer.def( 
                 "atom1"
                 , atom1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the second of the three atoms whose potential is being changed" );
         
         }
         { //::SireMM::ThreeAtomPerturbation::atom2
@@ -77,7 +79,8 @@ void register_ThreeAtomPerturbation_class(){
             ThreeAtomPerturbation_exposer.def( 
                 "atom2"
                 , atom2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the third of the three atoms whose potential is being changed" );
         
         }
         ThreeAtomPerturbation_exposer.def( bp::self != bp::self );
@@ -90,7 +93,8 @@ void register_ThreeAtomPerturbation_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         ThreeAtomPerturbation_exposer.def( bp::self == bp::self );
@@ -101,7 +105,8 @@ void register_ThreeAtomPerturbation_class(){
             
             ThreeAtomPerturbation_exposer.def( 
                 "requiredProperties"
-                , requiredProperties_function_value );
+                , requiredProperties_function_value
+                , "Return the properties required or changed by this perturbation" );
         
         }
         { //::SireMM::ThreeAtomPerturbation::toString
@@ -111,7 +116,8 @@ void register_ThreeAtomPerturbation_class(){
             
             ThreeAtomPerturbation_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this perturbation" );
         
         }
         { //::SireMM::ThreeAtomPerturbation::typeName
@@ -121,7 +127,8 @@ void register_ThreeAtomPerturbation_class(){
             
             ThreeAtomPerturbation_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::ThreeAtomPerturbation::wouldChange
@@ -132,7 +139,8 @@ void register_ThreeAtomPerturbation_class(){
             ThreeAtomPerturbation_exposer.def( 
                 "wouldChange"
                 , wouldChange_function_value
-                , ( bp::arg("molecule"), bp::arg("values") ) );
+                , ( bp::arg("molecule"), bp::arg("values") )
+                , "Return whether or not this perturbation with the passed values would\nchange the molecule molecule" );
         
         }
         ThreeAtomPerturbation_exposer.staticmethod( "typeName" );

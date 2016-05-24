@@ -45,7 +45,7 @@ void register_TinkerParameters_class(){
 
     { //::SireIO::TinkerParameters
         typedef bp::class_< SireIO::TinkerParameters, bp::bases< SireIO::IOParametersBase > > TinkerParameters_exposer_t;
-        TinkerParameters_exposer_t TinkerParameters_exposer = TinkerParameters_exposer_t( "TinkerParameters", bp::init< >() );
+        TinkerParameters_exposer_t TinkerParameters_exposer = TinkerParameters_exposer_t( "TinkerParameters", "This class holds all of the sources and default values of the\nproperties and parameters used by the Tinker readerwriter\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope TinkerParameters_scope( TinkerParameters_exposer );
         TinkerParameters_exposer.def( "__copy__", &__copy__);
         TinkerParameters_exposer.def( "__deepcopy__", &__copy__);

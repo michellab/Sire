@@ -26,13 +26,13 @@ void register_AtomVelocities_class(){
 
     { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >
         typedef bp::class_< SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >, bp::bases< SireMol::AtomProp, SireMol::MolViewProperty, SireBase::Property > > AtomVelocities_exposer_t;
-        AtomVelocities_exposer_t AtomVelocities_exposer = AtomVelocities_exposer_t( "AtomVelocities", bp::init< >() );
+        AtomVelocities_exposer_t AtomVelocities_exposer = AtomVelocities_exposer_t( "AtomVelocities", "", bp::init< >("") );
         bp::scope AtomVelocities_scope( AtomVelocities_exposer );
-        AtomVelocities_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") )) );
-        AtomVelocities_exposer.def( bp::init< SireMol::MoleculeInfoData const &, SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > > const & >(( bp::arg("molinfo"), bp::arg("default_value") )) );
-        AtomVelocities_exposer.def( bp::init< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > > const & >(( bp::arg("value") )) );
-        AtomVelocities_exposer.def( bp::init< SireBase::PackedArray2D< SireMaths::Vector3D< SireUnits::Dimension::Velocity > > const & >(( bp::arg("values") )) );
-        AtomVelocities_exposer.def( bp::init< SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > > const & >(( bp::arg("other") )) );
+        AtomVelocities_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "") );
+        AtomVelocities_exposer.def( bp::init< SireMol::MoleculeInfoData const &, SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > > const & >(( bp::arg("molinfo"), bp::arg("default_value") ), "") );
+        AtomVelocities_exposer.def( bp::init< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > > const & >(( bp::arg("value") ), "") );
+        AtomVelocities_exposer.def( bp::init< SireBase::PackedArray2D< SireMaths::Vector3D< SireUnits::Dimension::Velocity > > const & >(( bp::arg("values") ), "") );
+        AtomVelocities_exposer.def( bp::init< SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > > const & >(( bp::arg("other") ), "") );
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::array
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > > exported_class_t;
@@ -42,7 +42,8 @@ void register_AtomVelocities_class(){
             AtomVelocities_exposer.def( 
                 "array"
                 , array_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::assertCanConvert
@@ -54,7 +55,8 @@ void register_AtomVelocities_class(){
             AtomVelocities_exposer.def( 
                 "assertCanConvert"
                 , assertCanConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::assignFrom
@@ -66,7 +68,8 @@ void register_AtomVelocities_class(){
             AtomVelocities_exposer.def( 
                 "assignFrom"
                 , assignFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::at
@@ -79,7 +82,8 @@ void register_AtomVelocities_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::at
@@ -92,7 +96,8 @@ void register_AtomVelocities_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::canConvert
@@ -104,7 +109,8 @@ void register_AtomVelocities_class(){
             AtomVelocities_exposer.def( 
                 "canConvert"
                 , canConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::copyFrom
@@ -116,7 +122,8 @@ void register_AtomVelocities_class(){
             AtomVelocities_exposer.def( 
                 "copyFrom"
                 , copyFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::copyFrom
@@ -128,7 +135,8 @@ void register_AtomVelocities_class(){
             AtomVelocities_exposer.def( 
                 "copyFrom"
                 , copyFrom_function_value
-                , ( bp::arg("values"), bp::arg("selection") ) );
+                , ( bp::arg("values"), bp::arg("selection") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::count
@@ -139,7 +147,8 @@ void register_AtomVelocities_class(){
             
             AtomVelocities_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::divide
@@ -151,7 +160,8 @@ void register_AtomVelocities_class(){
             AtomVelocities_exposer.def( 
                 "divide"
                 , divide_function_value
-                , ( bp::arg("beads") ) );
+                , ( bp::arg("beads") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::divideByResidue
@@ -163,7 +173,8 @@ void register_AtomVelocities_class(){
             AtomVelocities_exposer.def( 
                 "divideByResidue"
                 , divideByResidue_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::fromVariant
@@ -175,7 +186,8 @@ void register_AtomVelocities_class(){
             AtomVelocities_exposer.def( 
                 "fromVariant"
                 , fromVariant_function_value
-                , ( bp::arg("variant") ) );
+                , ( bp::arg("variant") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::get
@@ -188,7 +200,8 @@ void register_AtomVelocities_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::get
@@ -201,7 +214,8 @@ void register_AtomVelocities_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::isCompatibleWith
@@ -213,7 +227,8 @@ void register_AtomVelocities_class(){
             AtomVelocities_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::isEmpty
@@ -224,7 +239,8 @@ void register_AtomVelocities_class(){
             
             AtomVelocities_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::matchToSelection
@@ -236,7 +252,8 @@ void register_AtomVelocities_class(){
             AtomVelocities_exposer.def( 
                 "matchToSelection"
                 , matchToSelection_function_value
-                , ( bp::arg("selection") ) );
+                , ( bp::arg("selection") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::merge
@@ -248,7 +265,8 @@ void register_AtomVelocities_class(){
             AtomVelocities_exposer.def( 
                 "merge"
                 , merge_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::nAtoms
@@ -259,7 +277,8 @@ void register_AtomVelocities_class(){
             
             AtomVelocities_exposer.def( 
                 "nAtoms"
-                , nAtoms_function_value );
+                , nAtoms_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::nAtoms
@@ -271,7 +290,8 @@ void register_AtomVelocities_class(){
             AtomVelocities_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
-                , ( bp::arg("cgidx") ) );
+                , ( bp::arg("cgidx") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::nCutGroups
@@ -282,7 +302,8 @@ void register_AtomVelocities_class(){
             
             AtomVelocities_exposer.def( 
                 "nCutGroups"
-                , nCutGroups_function_value );
+                , nCutGroups_function_value
+                , "" );
         
         }
         AtomVelocities_exposer.def( bp::self != bp::self );
@@ -296,7 +317,8 @@ void register_AtomVelocities_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AtomVelocities_exposer.def( bp::self == bp::self );
@@ -310,7 +332,8 @@ void register_AtomVelocities_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::operator[]
@@ -323,7 +346,8 @@ void register_AtomVelocities_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::set
@@ -336,7 +360,8 @@ void register_AtomVelocities_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("cgatomidx"), bp::arg("value") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::set
@@ -349,7 +374,8 @@ void register_AtomVelocities_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("cgidx"), bp::arg("values") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::size
@@ -360,7 +386,8 @@ void register_AtomVelocities_class(){
             
             AtomVelocities_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::toString
@@ -371,7 +398,8 @@ void register_AtomVelocities_class(){
             
             AtomVelocities_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::toVariant
@@ -382,7 +410,8 @@ void register_AtomVelocities_class(){
             
             AtomVelocities_exposer.def( 
                 "toVariant"
-                , toVariant_function_value );
+                , toVariant_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::toVector
@@ -393,7 +422,8 @@ void register_AtomVelocities_class(){
             
             AtomVelocities_exposer.def( 
                 "toVector"
-                , toVector_function_value );
+                , toVector_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::toVector
@@ -405,7 +435,8 @@ void register_AtomVelocities_class(){
             AtomVelocities_exposer.def( 
                 "toVector"
                 , toVector_function_value
-                , ( bp::arg("selection") ) );
+                , ( bp::arg("selection") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Velocity > >::typeName
@@ -416,7 +447,8 @@ void register_AtomVelocities_class(){
             
             AtomVelocities_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         AtomVelocities_exposer.staticmethod( "fromVariant" );

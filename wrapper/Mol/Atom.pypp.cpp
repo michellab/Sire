@@ -46,48 +46,41 @@ namespace bp = boost::python;
 
 #include "atom.h"
 
-#include "SireBase/quickcopy.hpp"
+#include "SireStream/shareddatastream.h"
 
 #include "SireError/errors.h"
 
-#include "atomcoords.h"
+#include "SireMaths/vector.h"
 
 #include "SireVol/space.h"
 
-#include "SireMaths/vector.h"
+#include "atomcharges.h"
 
-#include "atomljs.h"
-
-#include "atombeads.h"
+#include "atomelements.h"
 
 #include "SireStream/datastream.h"
 
 #include "atompolarisabilities.h"
 
-#include "atomcharges.h"
+#include "atomforces.h"
 
-#include "atomvelocities.h"
+#include "SireBase/quickcopy.hpp"
 
 #include "atommasses.h"
 
-#include "atomforces.h"
-
-#include "atomproperty.hpp"
-
-#include "atomenergies.h"
+#include "atombeads.h"
 
 #include "SireMaths/align.h"
 
-#include "SireStream/shareddatastream.h"
+#include "atomvelocities.h"
 
-#include "atomelements.h"
+#include "atomproperty.hpp"
 
-const SireMM::LJParameter& get_Metadata_SireMM_AtomLJs_function1(const SireMol::Atom &atom,
-                                   const QString &metakey){ return atom.metadata< SireMM::LJParameter >(metakey); }
+#include "atomcoords.h"
 
-const SireMM::LJParameter& get_Metadata_SireMM_AtomLJs_function2(const SireMol::Atom &atom,
-                                   const QString &key, const QString &metakey){
-                                        return atom.metadata< SireMM::LJParameter >(key, metakey); }
+#include "atomenergies.h"
+
+#include "atomljs.h"
 
 const SireMol::BeadNum& get_Metadata_SireMol_AtomBeads_function1(const SireMol::Atom &atom,
                                    const QString &metakey){ return atom.metadata< SireMol::BeadNum >(metakey); }
@@ -180,6 +173,13 @@ const QVariant& get_Metadata_SireMol_AtomVariantProperty_function2(const SireMol
                                    const QString &key, const QString &metakey){
                                         return atom.metadata< QVariant >(key, metakey); }
 
+const SireMM::LJParameter& get_Metadata_SireMM_AtomLJs_function1(const SireMol::Atom &atom,
+                                   const QString &metakey){ return atom.metadata< SireMM::LJParameter >(metakey); }
+
+const SireMM::LJParameter& get_Metadata_SireMM_AtomLJs_function2(const SireMol::Atom &atom,
+                                   const QString &key, const QString &metakey){
+                                        return atom.metadata< SireMM::LJParameter >(key, metakey); }
+
 SireMol::Atom __copy__(const SireMol::Atom &other){ return SireMol::Atom(other); }
 
 #include "Qt/qdatastream.hpp"
@@ -190,11 +190,11 @@ void register_Atom_class(){
 
     { //::SireMol::Atom
         typedef bp::class_< SireMol::Atom, bp::bases< SireMol::MoleculeView, SireBase::Property > > Atom_exposer_t;
-        Atom_exposer_t Atom_exposer = Atom_exposer_t( "Atom", bp::init< >() );
+        Atom_exposer_t Atom_exposer = Atom_exposer_t( "Atom", "This is a single-atom view into a molecule.\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope Atom_scope( Atom_exposer );
-        Atom_exposer.def( bp::init< SireMol::MoleculeView const &, SireMol::AtomID const & >(( bp::arg("molview"), bp::arg("atomid") )) );
-        Atom_exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::AtomID const & >(( bp::arg("moldata"), bp::arg("atomid") )) );
-        Atom_exposer.def( bp::init< SireMol::Atom const & >(( bp::arg("other") )) );
+        Atom_exposer.def( bp::init< SireMol::MoleculeView const &, SireMol::AtomID const & >(( bp::arg("molview"), bp::arg("atomid") ), "Construct the atom that that is identified by ID atomid\nin the view molview - this atom must be within this view\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n") );
+        Atom_exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::AtomID const & >(( bp::arg("moldata"), bp::arg("atomid") ), "Construct the atom that is identified by ID atomid\nin the molecule whose data is in moldata\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n") );
+        Atom_exposer.def( bp::init< SireMol::Atom const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::Atom::assertContains
         
             typedef void ( ::SireMol::Atom::*assertContains_function_type)( ::SireMol::AtomIdx ) const;
@@ -203,7 +203,8 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "assertContains"
                 , assertContains_function_value
-                , ( bp::arg("atomidx") ) );
+                , ( bp::arg("atomidx") )
+                , "Assert that this atom is the atom at index atomidx\nThrow: SireMol::missing_atom\n" );
         
         }
         { //::SireMol::Atom::assertContainsMetadata
@@ -214,7 +215,8 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "assertContainsMetadata"
                 , assertContainsMetadata_function_value
-                , ( bp::arg("metakey") ) );
+                , ( bp::arg("metakey") )
+                , "Assert that this atom has an AtomProperty piece of metadata\nat metakey metakey\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::Atom::assertContainsMetadata
@@ -225,7 +227,8 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "assertContainsMetadata"
                 , assertContainsMetadata_function_value
-                , ( bp::arg("key"), bp::arg("metakey") ) );
+                , ( bp::arg("key"), bp::arg("metakey") )
+                , "Assert that the property at key key has an AtomProperty\npiece of metadata at metakey metakey\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::Atom::assertContainsProperty
@@ -236,7 +239,8 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "assertContainsProperty"
                 , assertContainsProperty_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "Assert that this atom has an AtomProperty at key key\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::Atom::cgAtomIdx
@@ -247,7 +251,8 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "cgAtomIdx"
                 , cgAtomIdx_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the CGAtomIdx of this atom" );
         
         }
         { //::SireMol::Atom::chain
@@ -257,7 +262,8 @@ void register_Atom_class(){
             
             Atom_exposer.def( 
                 "chain"
-                , chain_function_value );
+                , chain_function_value
+                , "Return the chain this atom is in\nThrow: SireMol::missing_chain\n" );
         
         }
         { //::SireMol::Atom::cutGroup
@@ -267,7 +273,8 @@ void register_Atom_class(){
             
             Atom_exposer.def( 
                 "cutGroup"
-                , cutGroup_function_value );
+                , cutGroup_function_value
+                , "Return the CutGroup this atom is in" );
         
         }
         { //::SireMol::Atom::edit
@@ -277,7 +284,8 @@ void register_Atom_class(){
             
             Atom_exposer.def( 
                 "edit"
-                , edit_function_value );
+                , edit_function_value
+                , "Return an editor that can be used to edit this atom" );
         
         }
         { //::SireMol::Atom::evaluate
@@ -287,7 +295,8 @@ void register_Atom_class(){
             
             Atom_exposer.def( 
                 "evaluate"
-                , evaluate_function_value );
+                , evaluate_function_value
+                , "Return an evaluator that can be used to evaluate properties\nof this atom" );
         
         }
         { //::SireMol::Atom::hasMetadata
@@ -298,7 +307,8 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "hasMetadata"
                 , hasMetadata_function_value
-                , ( bp::arg("metakey") ) );
+                , ( bp::arg("metakey") )
+                , "Return whether or not there is an AtomProperty at metakey metakey" );
         
         }
         { //::SireMol::Atom::hasMetadata
@@ -309,7 +319,8 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "hasMetadata"
                 , hasMetadata_function_value
-                , ( bp::arg("key"), bp::arg("metakey") ) );
+                , ( bp::arg("key"), bp::arg("metakey") )
+                , "Return whether the metadata at metakey metakey for the property\nat key key is an AtomProperty\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::Atom::hasProperty
@@ -320,7 +331,8 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "hasProperty"
                 , hasProperty_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "Return whether or not there is an AtomProperty at key key" );
         
         }
         { //::SireMol::Atom::index
@@ -330,7 +342,8 @@ void register_Atom_class(){
             
             Atom_exposer.def( 
                 "index"
-                , index_function_value );
+                , index_function_value
+                , "Return the index number of this atom in the molecule" );
         
         }
         { //::SireMol::Atom::isEmpty
@@ -340,7 +353,8 @@ void register_Atom_class(){
             
             Atom_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Is this atom empty?" );
         
         }
         { //::SireMol::Atom::isWithinChain
@@ -350,7 +364,8 @@ void register_Atom_class(){
             
             Atom_exposer.def( 
                 "isWithinChain"
-                , isWithinChain_function_value );
+                , isWithinChain_function_value
+                , "Return whether or not this atom is part of a chain" );
         
         }
         { //::SireMol::Atom::isWithinResidue
@@ -360,7 +375,8 @@ void register_Atom_class(){
             
             Atom_exposer.def( 
                 "isWithinResidue"
-                , isWithinResidue_function_value );
+                , isWithinResidue_function_value
+                , "Return whether or not this atom is part of a residue" );
         
         }
         { //::SireMol::Atom::isWithinSegment
@@ -370,7 +386,8 @@ void register_Atom_class(){
             
             Atom_exposer.def( 
                 "isWithinSegment"
-                , isWithinSegment_function_value );
+                , isWithinSegment_function_value
+                , "Return whether or not this atom is part of a segment" );
         
         }
         { //::SireMol::Atom::metadataKeys
@@ -380,7 +397,8 @@ void register_Atom_class(){
             
             Atom_exposer.def( 
                 "metadataKeys"
-                , metadataKeys_function_value );
+                , metadataKeys_function_value
+                , "Return the metakeys of all AtomProperty metadata" );
         
         }
         { //::SireMol::Atom::metadataKeys
@@ -391,7 +409,8 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "metadataKeys"
                 , metadataKeys_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "Return the metakeys of all AtomProperty metadata for\nthe property at key key\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::Atom::molecule
@@ -401,7 +420,8 @@ void register_Atom_class(){
             
             Atom_exposer.def( 
                 "molecule"
-                , molecule_function_value );
+                , molecule_function_value
+                , "Return the molecule that contains this atom" );
         
         }
         { //::SireMol::Atom::move
@@ -411,7 +431,8 @@ void register_Atom_class(){
             
             Atom_exposer.def( 
                 "move"
-                , move_function_value );
+                , move_function_value
+                , "Return a Mover that can be used to move this atom" );
         
         }
         { //::SireMol::Atom::name
@@ -421,7 +442,8 @@ void register_Atom_class(){
             
             Atom_exposer.def( 
                 "name"
-                , name_function_value );
+                , name_function_value
+                , "Return the name of the atom" );
         
         }
         { //::SireMol::Atom::number
@@ -431,7 +453,8 @@ void register_Atom_class(){
             
             Atom_exposer.def( 
                 "number"
-                , number_function_value );
+                , number_function_value
+                , "Return the number of the atom" );
         
         }
         Atom_exposer.def( bp::self != bp::self );
@@ -444,7 +467,8 @@ void register_Atom_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Atom_exposer.def( bp::self == bp::self );
@@ -455,7 +479,8 @@ void register_Atom_class(){
             
             Atom_exposer.def( 
                 "propertyKeys"
-                , propertyKeys_function_value );
+                , propertyKeys_function_value
+                , "Return the keys of all AtomProperty properties" );
         
         }
         { //::SireMol::Atom::residue
@@ -465,7 +490,8 @@ void register_Atom_class(){
             
             Atom_exposer.def( 
                 "residue"
-                , residue_function_value );
+                , residue_function_value
+                , "Return the residue that this atom is in\nThrow: SireMol::missing_residue\n" );
         
         }
         { //::SireMol::Atom::segment
@@ -475,7 +501,8 @@ void register_Atom_class(){
             
             Atom_exposer.def( 
                 "segment"
-                , segment_function_value );
+                , segment_function_value
+                , "Return the segment this atom is in\nThrow: SireMol::missing_segment\n" );
         
         }
         { //::SireMol::Atom::selectedAll
@@ -485,7 +512,8 @@ void register_Atom_class(){
             
             Atom_exposer.def( 
                 "selectedAll"
-                , selectedAll_function_value );
+                , selectedAll_function_value
+                , "Is this atom a view of the whole (1 atom) molecule?" );
         
         }
         { //::SireMol::Atom::selection
@@ -495,7 +523,8 @@ void register_Atom_class(){
             
             Atom_exposer.def( 
                 "selection"
-                , selection_function_value );
+                , selection_function_value
+                , "Return the selected atom" );
         
         }
         { //::SireMol::Atom::selector
@@ -505,7 +534,8 @@ void register_Atom_class(){
             
             Atom_exposer.def( 
                 "selector"
-                , selector_function_value );
+                , selector_function_value
+                , "Return a selector that can change the atom selection" );
         
         }
         { //::SireMol::Atom::toString
@@ -515,7 +545,8 @@ void register_Atom_class(){
             
             Atom_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this atom" );
         
         }
         { //::SireMol::Atom::typeName
@@ -525,7 +556,8 @@ void register_Atom_class(){
             
             Atom_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::Atom::update
@@ -536,13 +568,11 @@ void register_Atom_class(){
             Atom_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Update this atom with the passed molecule data.\nThrow: SireError::incompatible_error\n" );
         
         }
         Atom_exposer.staticmethod( "typeName" );
-        Atom_exposer.def( "_get_property_SireMM_AtomLJs", &SireMol::Atom::property< SireMM::LJParameter >, bp::return_value_policy<bp::copy_const_reference>());
-        Atom_exposer.def( "_get_metadata_SireMM_AtomLJs", get_Metadata_SireMM_AtomLJs_function1, bp::return_value_policy<bp::copy_const_reference>());
-        Atom_exposer.def( "_get_metadata_SireMM_AtomLJs", &get_Metadata_SireMM_AtomLJs_function2, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "_get_property_SireMol_AtomBeads", &SireMol::Atom::property< SireMol::BeadNum >, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "_get_metadata_SireMol_AtomBeads", get_Metadata_SireMol_AtomBeads_function1, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "_get_metadata_SireMol_AtomBeads", &get_Metadata_SireMol_AtomBeads_function2, bp::return_value_policy<bp::copy_const_reference>());
@@ -582,6 +612,9 @@ void register_Atom_class(){
         Atom_exposer.def( "_get_property_SireMol_AtomVariantProperty", &SireMol::Atom::property< QVariant >, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "_get_metadata_SireMol_AtomVariantProperty", get_Metadata_SireMol_AtomVariantProperty_function1, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "_get_metadata_SireMol_AtomVariantProperty", &get_Metadata_SireMol_AtomVariantProperty_function2, bp::return_value_policy<bp::copy_const_reference>());
+        Atom_exposer.def( "_get_property_SireMM_AtomLJs", &SireMol::Atom::property< SireMM::LJParameter >, bp::return_value_policy<bp::copy_const_reference>());
+        Atom_exposer.def( "_get_metadata_SireMM_AtomLJs", get_Metadata_SireMM_AtomLJs_function1, bp::return_value_policy<bp::copy_const_reference>());
+        Atom_exposer.def( "_get_metadata_SireMM_AtomLJs", &get_Metadata_SireMM_AtomLJs_function2, bp::return_value_policy<bp::copy_const_reference>());
         Atom_exposer.def( "__copy__", &__copy__);
         Atom_exposer.def( "__deepcopy__", &__copy__);
         Atom_exposer.def( "clone", &__copy__);

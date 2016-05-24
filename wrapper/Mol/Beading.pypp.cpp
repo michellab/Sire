@@ -41,7 +41,7 @@ void register_Beading_class(){
 
     { //::SireMol::Beading
         typedef bp::class_< SireMol::Beading, bp::bases< SireMol::MolViewProperty, SireBase::Property >, boost::noncopyable > Beading_exposer_t;
-        Beading_exposer_t Beading_exposer = Beading_exposer_t( "Beading", bp::no_init );
+        Beading_exposer_t Beading_exposer = Beading_exposer_t( "Beading", "This is the virtual base class of the all beading properties.\nThese are used to divide a molecule into beads, and are the\nkey classes used by the SireMol::Bead and SireMol::Beads\nmolecule views\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope Beading_scope( Beading_exposer );
         { //::SireMol::Beading::isCompatibleWith
         
@@ -51,7 +51,8 @@ void register_Beading_class(){
             Beading_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::Beading::null
@@ -61,7 +62,8 @@ void register_Beading_class(){
             
             Beading_exposer.def( 
                 "null"
-                , null_function_value );
+                , null_function_value
+                , "" );
         
         }
         { //::SireMol::Beading::typeName
@@ -71,7 +73,8 @@ void register_Beading_class(){
             
             Beading_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         Beading_exposer.staticmethod( "null" );

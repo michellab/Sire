@@ -27,9 +27,9 @@ void register_NullSupraMove_class(){
 
     { //::SireMove::NullSupraMove
         typedef bp::class_< SireMove::NullSupraMove, bp::bases< SireMove::SupraMove, SireBase::Property > > NullSupraMove_exposer_t;
-        NullSupraMove_exposer_t NullSupraMove_exposer = NullSupraMove_exposer_t( "NullSupraMove", bp::init< >() );
+        NullSupraMove_exposer_t NullSupraMove_exposer = NullSupraMove_exposer_t( "NullSupraMove", "This is a null supra move, which does nothing\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope NullSupraMove_scope( NullSupraMove_exposer );
-        NullSupraMove_exposer.def( bp::init< SireMove::NullSupraMove const & >(( bp::arg("other") )) );
+        NullSupraMove_exposer.def( bp::init< SireMove::NullSupraMove const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::NullSupraMove::move
         
             typedef void ( ::SireMove::NullSupraMove::*move_function_type)( ::SireMove::SupraSystem &,int,bool ) ;
@@ -38,7 +38,8 @@ void register_NullSupraMove_class(){
             NullSupraMove_exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , "Perform the null move - this does nothing" );
         
         }
         NullSupraMove_exposer.def( bp::self != bp::self );
@@ -51,7 +52,8 @@ void register_NullSupraMove_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         NullSupraMove_exposer.def( bp::self == bp::self );
@@ -62,7 +64,8 @@ void register_NullSupraMove_class(){
             
             NullSupraMove_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this move" );
         
         }
         { //::SireMove::NullSupraMove::typeName
@@ -72,7 +75,8 @@ void register_NullSupraMove_class(){
             
             NullSupraMove_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         NullSupraMove_exposer.staticmethod( "typeName" );

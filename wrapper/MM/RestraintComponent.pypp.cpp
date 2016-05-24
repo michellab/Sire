@@ -24,11 +24,11 @@ void register_RestraintComponent_class(){
 
     { //::SireMM::RestraintComponent
         typedef bp::class_< SireMM::RestraintComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > RestraintComponent_exposer_t;
-        RestraintComponent_exposer_t RestraintComponent_exposer = RestraintComponent_exposer_t( "RestraintComponent", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() )) );
+        RestraintComponent_exposer_t RestraintComponent_exposer = RestraintComponent_exposer_t( "RestraintComponent", "This class represents a restraint component of a forcefield", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("ffname")=SireFF::FFName() ), "Constructor") );
         bp::scope RestraintComponent_scope( RestraintComponent_exposer );
-        RestraintComponent_exposer.def( bp::init< SireFF::FFName const &, QString const & >(( bp::arg("ffname"), bp::arg("suffix") )) );
-        RestraintComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") )) );
-        RestraintComponent_exposer.def( bp::init< SireMM::RestraintComponent const & >(( bp::arg("other") )) );
+        RestraintComponent_exposer.def( bp::init< SireFF::FFName const &, QString const & >(( bp::arg("ffname"), bp::arg("suffix") ), "Construct using the passed forcefield name and suffix") );
+        RestraintComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );
+        RestraintComponent_exposer.def( bp::init< SireMM::RestraintComponent const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::RestraintComponent::changeEnergy
         
             typedef void ( ::SireMM::RestraintComponent::*changeEnergy_function_type)( ::SireFF::FF &,::SireMM::RestraintEnergy const & ) const;
@@ -37,7 +37,8 @@ void register_RestraintComponent_class(){
             RestraintComponent_exposer.def( 
                 "changeEnergy"
                 , changeEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("nrg") ) );
+                , ( bp::arg("ff"), bp::arg("nrg") )
+                , "Change the restraint component of the energy in the forcefield ff\nby delta" );
         
         }
         { //::SireMM::RestraintComponent::setEnergy
@@ -48,7 +49,8 @@ void register_RestraintComponent_class(){
             RestraintComponent_exposer.def( 
                 "setEnergy"
                 , setEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("nrg") ) );
+                , ( bp::arg("ff"), bp::arg("nrg") )
+                , "Set the restraint component of the energy in the forcefield ff\nto equal to the passed RestraintEnergy" );
         
         }
         { //::SireMM::RestraintComponent::symbols
@@ -58,7 +60,8 @@ void register_RestraintComponent_class(){
             
             RestraintComponent_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "" );
         
         }
         { //::SireMM::RestraintComponent::total
@@ -69,7 +72,8 @@ void register_RestraintComponent_class(){
             RestraintComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::RestraintComponent::typeName
@@ -79,7 +83,8 @@ void register_RestraintComponent_class(){
             
             RestraintComponent_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::RestraintComponent::what
@@ -89,7 +94,8 @@ void register_RestraintComponent_class(){
             
             RestraintComponent_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         RestraintComponent_exposer.staticmethod( "typeName" );

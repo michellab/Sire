@@ -25,11 +25,11 @@ void register_CGFloatProperty_class(){
 
     { //::SireMol::CGProperty< double >
         typedef bp::class_< SireMol::CGProperty< double >, bp::bases< SireMol::CGProp, SireMol::MolViewProperty, SireBase::Property > > CGFloatProperty_exposer_t;
-        CGFloatProperty_exposer_t CGFloatProperty_exposer = CGFloatProperty_exposer_t( "CGFloatProperty", bp::init< >() );
+        CGFloatProperty_exposer_t CGFloatProperty_exposer = CGFloatProperty_exposer_t( "CGFloatProperty", "", bp::init< >("") );
         bp::scope CGFloatProperty_scope( CGFloatProperty_exposer );
-        CGFloatProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") )) );
-        CGFloatProperty_exposer.def( bp::init< QVector< double > const & >(( bp::arg("values") )) );
-        CGFloatProperty_exposer.def( bp::init< SireMol::CGProperty< double > const & >(( bp::arg("other") )) );
+        CGFloatProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "") );
+        CGFloatProperty_exposer.def( bp::init< QVector< double > const & >(( bp::arg("values") ), "") );
+        CGFloatProperty_exposer.def( bp::init< SireMol::CGProperty< double > const & >(( bp::arg("other") ), "") );
         { //::SireMol::CGProperty< double >::array
         
             typedef SireMol::CGProperty< double > exported_class_t;
@@ -39,7 +39,8 @@ void register_CGFloatProperty_class(){
             CGFloatProperty_exposer.def( 
                 "array"
                 , array_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::CGProperty< double >::assertCanConvert
@@ -51,7 +52,8 @@ void register_CGFloatProperty_class(){
             CGFloatProperty_exposer.def( 
                 "assertCanConvert"
                 , assertCanConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::CGProperty< double >::assignFrom
@@ -63,7 +65,8 @@ void register_CGFloatProperty_class(){
             CGFloatProperty_exposer.def( 
                 "assignFrom"
                 , assignFrom_function_value
-                , ( bp::arg("variant") ) );
+                , ( bp::arg("variant") )
+                , "" );
         
         }
         { //::SireMol::CGProperty< double >::at
@@ -76,7 +79,8 @@ void register_CGFloatProperty_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::CGProperty< double >::canConvert
@@ -88,7 +92,8 @@ void register_CGFloatProperty_class(){
             CGFloatProperty_exposer.def( 
                 "canConvert"
                 , canConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::CGProperty< double >::count
@@ -99,7 +104,8 @@ void register_CGFloatProperty_class(){
             
             CGFloatProperty_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMol::CGProperty< double >::fromVariant
@@ -111,7 +117,8 @@ void register_CGFloatProperty_class(){
             CGFloatProperty_exposer.def( 
                 "fromVariant"
                 , fromVariant_function_value
-                , ( bp::arg("variant") ) );
+                , ( bp::arg("variant") )
+                , "" );
         
         }
         { //::SireMol::CGProperty< double >::get
@@ -124,7 +131,8 @@ void register_CGFloatProperty_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::CGProperty< double >::isCompatibleWith
@@ -136,7 +144,8 @@ void register_CGFloatProperty_class(){
             CGFloatProperty_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::CGProperty< double >::isEmpty
@@ -147,7 +156,8 @@ void register_CGFloatProperty_class(){
             
             CGFloatProperty_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMol::CGProperty< double >::nCutGroups
@@ -158,7 +168,8 @@ void register_CGFloatProperty_class(){
             
             CGFloatProperty_exposer.def( 
                 "nCutGroups"
-                , nCutGroups_function_value );
+                , nCutGroups_function_value
+                , "" );
         
         }
         CGFloatProperty_exposer.def( bp::self != bp::self );
@@ -172,7 +183,8 @@ void register_CGFloatProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CGFloatProperty_exposer.def( bp::self == bp::self );
@@ -186,7 +198,8 @@ void register_CGFloatProperty_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::CGProperty< double >::set
@@ -199,7 +212,8 @@ void register_CGFloatProperty_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("cgidx"), bp::arg("value") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::CGProperty< double >::size
@@ -210,7 +224,8 @@ void register_CGFloatProperty_class(){
             
             CGFloatProperty_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "" );
         
         }
         { //::SireMol::CGProperty< double >::toString
@@ -221,7 +236,8 @@ void register_CGFloatProperty_class(){
             
             CGFloatProperty_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::CGProperty< double >::toVariant
@@ -232,7 +248,8 @@ void register_CGFloatProperty_class(){
             
             CGFloatProperty_exposer.def( 
                 "toVariant"
-                , toVariant_function_value );
+                , toVariant_function_value
+                , "" );
         
         }
         { //::SireMol::CGProperty< double >::typeName
@@ -243,7 +260,8 @@ void register_CGFloatProperty_class(){
             
             CGFloatProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         CGFloatProperty_exposer.staticmethod( "fromVariant" );

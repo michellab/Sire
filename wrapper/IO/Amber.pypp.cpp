@@ -91,9 +91,9 @@ void register_Amber_class(){
 
     { //::SireIO::Amber
         typedef bp::class_< SireIO::Amber > Amber_exposer_t;
-        Amber_exposer_t Amber_exposer = Amber_exposer_t( "Amber", bp::init< >() );
+        Amber_exposer_t Amber_exposer = Amber_exposer_t( "Amber", "This class is used to read in an AMBER top file and crd file\n\nAuthor: Julien Michel\n", bp::init< >("Constructor") );
         bp::scope Amber_scope( Amber_exposer );
-        Amber_exposer.def( bp::init< SireIO::Amber const & >(( bp::arg("other") )) );
+        Amber_exposer.def( bp::init< SireIO::Amber const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireIO::Amber::coulomb14Factor
         
             typedef double ( ::SireIO::Amber::*coulomb14Factor_function_type)(  ) const;
@@ -101,7 +101,8 @@ void register_Amber_class(){
             
             Amber_exposer.def( 
                 "coulomb14Factor"
-                , coulomb14Factor_function_value );
+                , coulomb14Factor_function_value
+                , "" );
         
         }
         { //::SireIO::Amber::lj14Factor
@@ -111,7 +112,8 @@ void register_Amber_class(){
             
             Amber_exposer.def( 
                 "lj14Factor"
-                , lj14Factor_function_value );
+                , lj14Factor_function_value
+                , "" );
         
         }
         Amber_exposer.def( bp::self != bp::self );
@@ -124,7 +126,8 @@ void register_Amber_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Amber_exposer.def( bp::self == bp::self );
@@ -136,7 +139,8 @@ void register_Amber_class(){
             Amber_exposer.def( 
                 "readCrdTop"
                 , readCrdTop_function_value
-                , ( bp::arg("crdfile"), bp::arg("topfile"), bp::arg("flag_cutting")="perresidue" ) );
+                , ( bp::arg("crdfile"), bp::arg("topfile"), bp::arg("flag_cutting")="perresidue" )
+                , "Reads the contents of a topfile and associated crdfile and returns a molecule group" );
         
         }
         { //::SireIO::Amber::set14Factors
@@ -147,7 +151,8 @@ void register_Amber_class(){
             Amber_exposer.def( 
                 "set14Factors"
                 , set14Factors_function_value
-                , ( bp::arg("coul_14"), bp::arg("lj_14") ) );
+                , ( bp::arg("coul_14"), bp::arg("lj_14") )
+                , "" );
         
         }
         { //::SireIO::Amber::typeName
@@ -157,7 +162,8 @@ void register_Amber_class(){
             
             Amber_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireIO::Amber::what
@@ -167,7 +173,8 @@ void register_Amber_class(){
             
             Amber_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Amber_exposer.staticmethod( "typeName" );

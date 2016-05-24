@@ -25,11 +25,11 @@ void register_ResStringProperty_class(){
 
     { //::SireMol::ResProperty< QString >
         typedef bp::class_< SireMol::ResProperty< QString >, bp::bases< SireMol::ResProp, SireMol::MolViewProperty, SireBase::Property > > ResStringProperty_exposer_t;
-        ResStringProperty_exposer_t ResStringProperty_exposer = ResStringProperty_exposer_t( "ResStringProperty", bp::init< >() );
+        ResStringProperty_exposer_t ResStringProperty_exposer = ResStringProperty_exposer_t( "ResStringProperty", "", bp::init< >("") );
         bp::scope ResStringProperty_scope( ResStringProperty_exposer );
-        ResStringProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") )) );
-        ResStringProperty_exposer.def( bp::init< QVector< QString > const & >(( bp::arg("values") )) );
-        ResStringProperty_exposer.def( bp::init< SireMol::ResProperty< QString > const & >(( bp::arg("other") )) );
+        ResStringProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "") );
+        ResStringProperty_exposer.def( bp::init< QVector< QString > const & >(( bp::arg("values") ), "") );
+        ResStringProperty_exposer.def( bp::init< SireMol::ResProperty< QString > const & >(( bp::arg("other") ), "") );
         { //::SireMol::ResProperty< QString >::array
         
             typedef SireMol::ResProperty< QString > exported_class_t;
@@ -39,7 +39,8 @@ void register_ResStringProperty_class(){
             ResStringProperty_exposer.def( 
                 "array"
                 , array_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::ResProperty< QString >::assertCanConvert
@@ -51,7 +52,8 @@ void register_ResStringProperty_class(){
             ResStringProperty_exposer.def( 
                 "assertCanConvert"
                 , assertCanConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::ResProperty< QString >::assignFrom
@@ -63,7 +65,8 @@ void register_ResStringProperty_class(){
             ResStringProperty_exposer.def( 
                 "assignFrom"
                 , assignFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::ResProperty< QString >::at
@@ -76,7 +79,8 @@ void register_ResStringProperty_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("residx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::ResProperty< QString >::canConvert
@@ -88,7 +92,8 @@ void register_ResStringProperty_class(){
             ResStringProperty_exposer.def( 
                 "canConvert"
                 , canConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::ResProperty< QString >::count
@@ -99,7 +104,8 @@ void register_ResStringProperty_class(){
             
             ResStringProperty_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMol::ResProperty< QString >::fromVariant
@@ -111,7 +117,8 @@ void register_ResStringProperty_class(){
             ResStringProperty_exposer.def( 
                 "fromVariant"
                 , fromVariant_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::ResProperty< QString >::get
@@ -124,7 +131,8 @@ void register_ResStringProperty_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("residx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::ResProperty< QString >::isCompatibleWith
@@ -136,7 +144,8 @@ void register_ResStringProperty_class(){
             ResStringProperty_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::ResProperty< QString >::isEmpty
@@ -147,7 +156,8 @@ void register_ResStringProperty_class(){
             
             ResStringProperty_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMol::ResProperty< QString >::nResidues
@@ -158,7 +168,8 @@ void register_ResStringProperty_class(){
             
             ResStringProperty_exposer.def( 
                 "nResidues"
-                , nResidues_function_value );
+                , nResidues_function_value
+                , "" );
         
         }
         ResStringProperty_exposer.def( bp::self != bp::self );
@@ -172,7 +183,8 @@ void register_ResStringProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         ResStringProperty_exposer.def( bp::self == bp::self );
@@ -186,7 +198,8 @@ void register_ResStringProperty_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("residx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::ResProperty< QString >::set
@@ -199,7 +212,8 @@ void register_ResStringProperty_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("residx"), bp::arg("value") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::ResProperty< QString >::size
@@ -210,7 +224,8 @@ void register_ResStringProperty_class(){
             
             ResStringProperty_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "" );
         
         }
         { //::SireMol::ResProperty< QString >::toString
@@ -221,7 +236,8 @@ void register_ResStringProperty_class(){
             
             ResStringProperty_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::ResProperty< QString >::toVariant
@@ -232,7 +248,8 @@ void register_ResStringProperty_class(){
             
             ResStringProperty_exposer.def( 
                 "toVariant"
-                , toVariant_function_value );
+                , toVariant_function_value
+                , "" );
         
         }
         { //::SireMol::ResProperty< QString >::typeName
@@ -243,7 +260,8 @@ void register_ResStringProperty_class(){
             
             ResStringProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         ResStringProperty_exposer.staticmethod( "fromVariant" );

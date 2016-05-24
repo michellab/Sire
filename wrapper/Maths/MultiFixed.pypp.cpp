@@ -31,13 +31,13 @@ void register_MultiFixed_class(){
 
     { //::SireMaths::MultiFixed
         typedef bp::class_< SireMaths::MultiFixed > MultiFixed_exposer_t;
-        MultiFixed_exposer_t MultiFixed_exposer = MultiFixed_exposer_t( "MultiFixed", bp::init< >() );
+        MultiFixed_exposer_t MultiFixed_exposer = MultiFixed_exposer_t( "MultiFixed", "This class provides a vector of fixed point numbers which\nis built to complement MultiFloat. The number of fixed point\nnumbers in the vector is equal to the number of floats in MultiFloat.\n\nNote that this is a 64bit balanced fixed point representation,\ni.e. 32bits of precision are available both before and after\nthe decimal point (so about 9 significant figures on both sides,\nnote that the minus sign takes one of the bits before the decimal point).\n\nNote also that there are no functions that let you retrieve\nindividual fixed point numbers from this vector. Fixed point\nnumbers will automatically be converted tofrom doubles when\nreturned to the user.\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor - all of the elements are set to zero") );
         bp::scope MultiFixed_scope( MultiFixed_exposer );
-        MultiFixed_exposer.def( bp::init< double >(( bp::arg("value") )) );
-        MultiFixed_exposer.def( bp::init< double const *, int >(( bp::arg("array"), bp::arg("size") )) );
-        MultiFixed_exposer.def( bp::init< QVector< double > const & >(( bp::arg("array") )) );
-        MultiFixed_exposer.def( bp::init< SireMaths::MultiFloat const & >(( bp::arg("value") )) );
-        MultiFixed_exposer.def( bp::init< SireMaths::MultiFixed const & >(( bp::arg("other") )) );
+        MultiFixed_exposer.def( bp::init< double >(( bp::arg("value") ), "Construct such that all elements are equal to value") );
+        MultiFixed_exposer.def( bp::init< double const *, int >(( bp::arg("array"), bp::arg("size") ), "Construct from the passed array. If size is greater than MultiFixed::size()\nthen an error will be raised. If size is less than MultiFixed::size() then\nthis vector will be padded with zeroes") );
+        MultiFixed_exposer.def( bp::init< QVector< double > const & >(( bp::arg("array") ), "Construct from the passed array. If size is greater than MultiFixed::size()\nthen an error will be raised. If size is less than MultiFixed::size() then\nthis vector will be padded with zeroes") );
+        MultiFixed_exposer.def( bp::init< SireMaths::MultiFloat const & >(( bp::arg("value") ), "Construct from the passed MultiFloat") );
+        MultiFixed_exposer.def( bp::init< SireMaths::MultiFixed const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMaths::MultiFixed::compareEqual
         
             typedef ::SireMaths::MultiFixed ( ::SireMaths::MultiFixed::*compareEqual_function_type)( ::SireMaths::MultiFixed const & ) const;
@@ -46,7 +46,8 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "compareEqual"
                 , compareEqual_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Compare each element of the two vectors. Return 0x00000000000000000 if\nthe element is not equal, 0x1111111111111111 if they are" );
         
         }
         { //::SireMaths::MultiFixed::compareGreater
@@ -57,7 +58,8 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "compareGreater"
                 , compareGreater_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Compare each element for greater" );
         
         }
         { //::SireMaths::MultiFixed::compareGreaterEqual
@@ -68,7 +70,8 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "compareGreaterEqual"
                 , compareGreaterEqual_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Compare each element for greater or equal" );
         
         }
         { //::SireMaths::MultiFixed::compareLess
@@ -79,7 +82,8 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "compareLess"
                 , compareLess_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Compare each element for less" );
         
         }
         { //::SireMaths::MultiFixed::compareLessEqual
@@ -90,7 +94,8 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "compareLessEqual"
                 , compareLessEqual_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Compare each element for less or equal" );
         
         }
         { //::SireMaths::MultiFixed::compareNotEqual
@@ -101,7 +106,8 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "compareNotEqual"
                 , compareNotEqual_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Compare each element for inequality" );
         
         }
         { //::SireMaths::MultiFixed::count
@@ -111,7 +117,8 @@ void register_MultiFixed_class(){
             
             MultiFixed_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of elements in the vector" );
         
         }
         { //::SireMaths::MultiFixed::fromArray
@@ -122,7 +129,8 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "fromArray"
                 , fromArray_function_value
-                , ( bp::arg("array") ) );
+                , ( bp::arg("array") )
+                , "Convert the passed array of doubles to an array of MultiFixed values.\nNote that the array may be returned padded with zeroes" );
         
         }
         { //::SireMaths::MultiFixed::get
@@ -133,7 +141,8 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "get"
                 , get_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return the value of the ith element of the vector" );
         
         }
         { //::SireMaths::MultiFixed::logicalAnd
@@ -144,7 +153,8 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "logicalAnd"
                 , logicalAnd_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Logical bitwise and operator" );
         
         }
         { //::SireMaths::MultiFixed::logicalAndNot
@@ -155,7 +165,8 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "logicalAndNot"
                 , logicalAndNot_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Logical bitwise and not" );
         
         }
         { //::SireMaths::MultiFixed::logicalNot
@@ -165,7 +176,8 @@ void register_MultiFixed_class(){
             
             MultiFixed_exposer.def( 
                 "logicalNot"
-                , logicalNot_function_value );
+                , logicalNot_function_value
+                , "Logical bitwise not operator" );
         
         }
         { //::SireMaths::MultiFixed::logicalOr
@@ -176,7 +188,8 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "logicalOr"
                 , logicalOr_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Logical bitwise or" );
         
         }
         { //::SireMaths::MultiFixed::logicalXor
@@ -187,7 +200,8 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "logicalXor"
                 , logicalXor_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Logical bitwise xor" );
         
         }
         { //::SireMaths::MultiFixed::max
@@ -198,7 +212,8 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "max"
                 , max_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return the max of this vector with other" );
         
         }
         { //::SireMaths::MultiFixed::min
@@ -209,7 +224,8 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "min"
                 , min_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return the min of this vector with other" );
         
         }
         { //::SireMaths::MultiFixed::multiplyAdd
@@ -221,7 +237,8 @@ void register_MultiFixed_class(){
                 "multiplyAdd"
                 , multiplyAdd_function_value
                 , ( bp::arg("val0"), bp::arg("val1") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Multiply val0 and val1 and add it onto this vector" );
         
         }
         MultiFixed_exposer.def( !bp::self );
@@ -243,7 +260,8 @@ void register_MultiFixed_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MultiFixed_exposer.def( bp::self == bp::self );
@@ -257,7 +275,8 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         MultiFixed_exposer.def( bp::self ^ bp::self );
@@ -269,7 +288,8 @@ void register_MultiFixed_class(){
             
             MultiFixed_exposer.def( 
                 "reciprocal"
-                , reciprocal_function_value );
+                , reciprocal_function_value
+                , "Return the reciprocal of this number" );
         
         }
         { //::SireMaths::MultiFixed::rotate
@@ -279,7 +299,8 @@ void register_MultiFixed_class(){
             
             MultiFixed_exposer.def( 
                 "rotate"
-                , rotate_function_value );
+                , rotate_function_value
+                , "Rotate this vector in the same direction as MultiFloat::rotate()" );
         
         }
         { //::SireMaths::MultiFixed::rsqrt
@@ -289,7 +310,8 @@ void register_MultiFixed_class(){
             
             MultiFixed_exposer.def( 
                 "rsqrt"
-                , rsqrt_function_value );
+                , rsqrt_function_value
+                , "Return the reciprocal square root of this number" );
         
         }
         { //::SireMaths::MultiFixed::set
@@ -300,7 +322,8 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("i"), bp::arg("value") ) );
+                , ( bp::arg("i"), bp::arg("value") )
+                , "Set the ith element of this vector to value" );
         
         }
         { //::SireMaths::MultiFixed::size
@@ -310,7 +333,8 @@ void register_MultiFixed_class(){
             
             MultiFixed_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "Return the number of elements in the vector" );
         
         }
         { //::SireMaths::MultiFixed::sqrt
@@ -320,7 +344,8 @@ void register_MultiFixed_class(){
             
             MultiFixed_exposer.def( 
                 "sqrt"
-                , sqrt_function_value );
+                , sqrt_function_value
+                , "Return the square root of this number" );
         
         }
         { //::SireMaths::MultiFixed::sum
@@ -330,7 +355,8 @@ void register_MultiFixed_class(){
             
             MultiFixed_exposer.def( 
                 "sum"
-                , sum_function_value );
+                , sum_function_value
+                , "Return the sum of all of the elements of this vector" );
         
         }
         { //::SireMaths::MultiFixed::toArray
@@ -341,7 +367,8 @@ void register_MultiFixed_class(){
             MultiFixed_exposer.def( 
                 "toArray"
                 , toArray_function_value
-                , ( bp::arg("array") ) );
+                , ( bp::arg("array") )
+                , "Return convert the passed MultiFixed array back into an array of doubles" );
         
         }
         { //::SireMaths::MultiFixed::toBinaryString
@@ -351,7 +378,8 @@ void register_MultiFixed_class(){
             
             MultiFixed_exposer.def( 
                 "toBinaryString"
-                , toBinaryString_function_value );
+                , toBinaryString_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiFixed::toString
@@ -361,7 +389,8 @@ void register_MultiFixed_class(){
             
             MultiFixed_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiFixed::typeName
@@ -371,7 +400,8 @@ void register_MultiFixed_class(){
             
             MultiFixed_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiFixed::what
@@ -381,7 +411,8 @@ void register_MultiFixed_class(){
             
             MultiFixed_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         MultiFixed_exposer.staticmethod( "count" );

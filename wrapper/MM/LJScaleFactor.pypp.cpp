@@ -23,9 +23,9 @@ void register_LJScaleFactor_class(){
 
     { //::SireMM::LJScaleFactor
         typedef bp::class_< SireMM::LJScaleFactor > LJScaleFactor_exposer_t;
-        LJScaleFactor_exposer_t LJScaleFactor_exposer = LJScaleFactor_exposer_t( "LJScaleFactor", bp::init< bp::optional< double > >(( bp::arg("scl")=0 )) );
+        LJScaleFactor_exposer_t LJScaleFactor_exposer = LJScaleFactor_exposer_t( "LJScaleFactor", "This is the interatomic scale factor for the LJ\nparameters for the intramolecular energy", bp::init< bp::optional< double > >(( bp::arg("scl")=0 ), "Construct with the LJ scale factor equal to scl") );
         bp::scope LJScaleFactor_scope( LJScaleFactor_exposer );
-        LJScaleFactor_exposer.def( bp::init< SireMM::LJScaleFactor const & >(( bp::arg("other") )) );
+        LJScaleFactor_exposer.def( bp::init< SireMM::LJScaleFactor const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::LJScaleFactor::lj
         
             typedef double ( ::SireMM::LJScaleFactor::*lj_function_type)(  ) const;
@@ -33,7 +33,8 @@ void register_LJScaleFactor_class(){
             
             LJScaleFactor_exposer.def( 
                 "lj"
-                , lj_function_value );
+                , lj_function_value
+                , "Return the LJ parameter scaling factor" );
         
         }
         LJScaleFactor_exposer.def( bp::self != bp::self );
@@ -46,7 +47,8 @@ void register_LJScaleFactor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         LJScaleFactor_exposer.def( bp::self == bp::self );
@@ -57,7 +59,8 @@ void register_LJScaleFactor_class(){
             
             LJScaleFactor_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::LJScaleFactor::what
@@ -67,7 +70,8 @@ void register_LJScaleFactor_class(){
             
             LJScaleFactor_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         LJScaleFactor_exposer.staticmethod( "typeName" );

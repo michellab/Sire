@@ -27,7 +27,7 @@ void register_TempDir_class(){
 
     { //::SireBase::TempDir
         typedef bp::class_< SireBase::TempDir, boost::noncopyable > TempDir_exposer_t;
-        TempDir_exposer_t TempDir_exposer = TempDir_exposer_t( "TempDir" );
+        TempDir_exposer_t TempDir_exposer = TempDir_exposer_t( "TempDir", "This class provides a temporary directory that is created in the\nconstructor, and deleted in the destructor.\n\nAuthor: Christopher Woods\n" );
         bp::scope TempDir_scope( TempDir_exposer );
         { //::SireBase::TempDir::doNotDelete
         
@@ -36,7 +36,8 @@ void register_TempDir_class(){
             
             TempDir_exposer.def( 
                 "doNotDelete"
-                , doNotDelete_function_value );
+                , doNotDelete_function_value
+                , "Tell the TempDir not to delete the directory when this object\nis deleted - this can be used when you are debugging to prevent\nthe directory from disappearing" );
         
         }
         { //::SireBase::TempDir::path
@@ -46,7 +47,8 @@ void register_TempDir_class(){
             
             TempDir_exposer.def( 
                 "path"
-                , path_function_value );
+                , path_function_value
+                , "This returns the complete path to the temporary directory" );
         
         }
         { //::SireBase::TempDir::toString
@@ -56,7 +58,8 @@ void register_TempDir_class(){
             
             TempDir_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this TempDir" );
         
         }
         { //::SireBase::TempDir::typeName
@@ -66,7 +69,8 @@ void register_TempDir_class(){
             
             TempDir_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireBase::TempDir::what
@@ -76,7 +80,8 @@ void register_TempDir_class(){
             
             TempDir_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         TempDir_exposer.staticmethod( "typeName" );

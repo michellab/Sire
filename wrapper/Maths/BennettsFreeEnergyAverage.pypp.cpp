@@ -33,15 +33,15 @@ void register_BennettsFreeEnergyAverage_class(){
 
     { //::SireMaths::BennettsFreeEnergyAverage
         typedef bp::class_< SireMaths::BennettsFreeEnergyAverage, bp::bases< SireMaths::FreeEnergyAverage, SireMaths::ExpAverage, SireMaths::Accumulator, SireBase::Property > > BennettsFreeEnergyAverage_exposer_t;
-        BennettsFreeEnergyAverage_exposer_t BennettsFreeEnergyAverage_exposer = BennettsFreeEnergyAverage_exposer_t( "BennettsFreeEnergyAverage", bp::init< >() );
+        BennettsFreeEnergyAverage_exposer_t BennettsFreeEnergyAverage_exposer = BennettsFreeEnergyAverage_exposer_t( "BennettsFreeEnergyAverage", "This class is used to accumulate the free energy average, using\nboth FEP and Bennetts acceptance ratio method. Bennetts method\ncalculates a free energy difference between A and B using\nsimulations at both ensembles A and B. The forwards average\n< f( beta(U_B-U_A) )>_A divided by the backwards average\n< f( beta(U_A-U_B) )>_B is equal to exp(-beta deltaG).\n\nIn this case, we dont use the C energy offset value, as this\nis optimally equal to deltaG, which we dont know, and also because\nin windowed calculations, abs(deltaG) is < 5 kcal mol-1.\n\nAlso note that we use the function f(x) = 1  (1 + exp(x)) as\nthis is also supposed to be the most efficient.\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope BennettsFreeEnergyAverage_scope( BennettsFreeEnergyAverage_exposer );
-        BennettsFreeEnergyAverage_exposer.def( bp::init< bool >(( bp::arg("forwards_free_energy") )) );
-        BennettsFreeEnergyAverage_exposer.def( bp::init< SireUnits::Dimension::Temperature const &, bp::optional< bool > >(( bp::arg("temperature"), bp::arg("forwards_free_energy")=(bool)(true) )) );
-        BennettsFreeEnergyAverage_exposer.def( bp::init< SireUnits::Dimension::MolarEnergy const &, SireUnits::Dimension::Temperature const &, bp::optional< bool > >(( bp::arg("constant"), bp::arg("temperature"), bp::arg("forwards_free_energy")=(bool)(true) )) );
-        BennettsFreeEnergyAverage_exposer.def( bp::init< SireUnits::Dimension::MolarEnergy const &, bp::optional< bool > >(( bp::arg("constant"), bp::arg("forwards_free_energy")=(bool)(true) )) );
-        BennettsFreeEnergyAverage_exposer.def( bp::init< SireUnits::Dimension::Temperature const &, SireUnits::Dimension::MolarEnergy const &, bp::optional< bool > >(( bp::arg("temperature"), bp::arg("binwidth"), bp::arg("forwards_free_energy")=(bool)(true) )) );
-        BennettsFreeEnergyAverage_exposer.def( bp::init< SireUnits::Dimension::MolarEnergy const &, SireUnits::Dimension::Temperature const &, SireUnits::Dimension::MolarEnergy const &, bp::optional< bool > >(( bp::arg("constant"), bp::arg("temperature"), bp::arg("binwidth"), bp::arg("forwards_free_energy")=(bool)(true) )) );
-        BennettsFreeEnergyAverage_exposer.def( bp::init< SireMaths::BennettsFreeEnergyAverage const & >(( bp::arg("other") )) );
+        BennettsFreeEnergyAverage_exposer.def( bp::init< bool >(( bp::arg("forwards_free_energy") ), "Constructor, specifying whether or not this is a forwards free energy") );
+        BennettsFreeEnergyAverage_exposer.def( bp::init< SireUnits::Dimension::Temperature const &, bp::optional< bool > >(( bp::arg("temperature"), bp::arg("forwards_free_energy")=(bool)(true) ), "Construct the average at the specified temperature") );
+        BennettsFreeEnergyAverage_exposer.def( bp::init< SireUnits::Dimension::MolarEnergy const &, SireUnits::Dimension::Temperature const &, bp::optional< bool > >(( bp::arg("constant"), bp::arg("temperature"), bp::arg("forwards_free_energy")=(bool)(true) ), "Construct, specifying the value of any constant offset for the ratio (C value)\nand the temperature") );
+        BennettsFreeEnergyAverage_exposer.def( bp::init< SireUnits::Dimension::MolarEnergy const &, bp::optional< bool > >(( bp::arg("constant"), bp::arg("forwards_free_energy")=(bool)(true) ), "Construct, specifying the constant offset for the ratio (C value)") );
+        BennettsFreeEnergyAverage_exposer.def( bp::init< SireUnits::Dimension::Temperature const &, SireUnits::Dimension::MolarEnergy const &, bp::optional< bool > >(( bp::arg("temperature"), bp::arg("binwidth"), bp::arg("forwards_free_energy")=(bool)(true) ), "Construct at the specified temperature, using a histogram of the specified bin width") );
+        BennettsFreeEnergyAverage_exposer.def( bp::init< SireUnits::Dimension::MolarEnergy const &, SireUnits::Dimension::Temperature const &, SireUnits::Dimension::MolarEnergy const &, bp::optional< bool > >(( bp::arg("constant"), bp::arg("temperature"), bp::arg("binwidth"), bp::arg("forwards_free_energy")=(bool)(true) ), "Construct at the specified temperature, using the specificed constant (C value),\nusing a histogram of the specified bin width") );
+        BennettsFreeEnergyAverage_exposer.def( bp::init< SireMaths::BennettsFreeEnergyAverage const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMaths::BennettsFreeEnergyAverage::accumulate
         
             typedef void ( ::SireMaths::BennettsFreeEnergyAverage::*accumulate_function_type)( double ) ;
@@ -50,7 +50,8 @@ void register_BennettsFreeEnergyAverage_class(){
             BennettsFreeEnergyAverage_exposer.def( 
                 "accumulate"
                 , accumulate_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Accumulate the passed value onto the average" );
         
         }
         { //::SireMaths::BennettsFreeEnergyAverage::bennettsRatio
@@ -60,7 +61,8 @@ void register_BennettsFreeEnergyAverage_class(){
             
             BennettsFreeEnergyAverage_exposer.def( 
                 "bennettsRatio"
-                , bennettsRatio_function_value );
+                , bennettsRatio_function_value
+                , "Return the Bennetts ratio. This is the ensemble average\nof 1 \n{1 + exp( beta dE - C ) } if this is a backwards ratio" );
         
         }
         { //::SireMaths::BennettsFreeEnergyAverage::bennettsStandardError
@@ -71,7 +73,8 @@ void register_BennettsFreeEnergyAverage_class(){
             BennettsFreeEnergyAverage_exposer.def( 
                 "bennettsStandardError"
                 , bennettsStandardError_function_value
-                , ( bp::arg("level") ) );
+                , ( bp::arg("level") )
+                , "Return the standard error on the Bennetts ratio to the passed confidence level" );
         
         }
         { //::SireMaths::BennettsFreeEnergyAverage::clear
@@ -81,7 +84,8 @@ void register_BennettsFreeEnergyAverage_class(){
             
             BennettsFreeEnergyAverage_exposer.def( 
                 "clear"
-                , clear_function_value );
+                , clear_function_value
+                , "Clear this accumulator" );
         
         }
         { //::SireMaths::BennettsFreeEnergyAverage::constant
@@ -91,7 +95,8 @@ void register_BennettsFreeEnergyAverage_class(){
             
             BennettsFreeEnergyAverage_exposer.def( 
                 "constant"
-                , constant_function_value );
+                , constant_function_value
+                , "Return the value of the constant offset to the energy used in the Bennetts average" );
         
         }
         { //::SireMaths::BennettsFreeEnergyAverage::isBackwardsRatio
@@ -101,7 +106,8 @@ void register_BennettsFreeEnergyAverage_class(){
             
             BennettsFreeEnergyAverage_exposer.def( 
                 "isBackwardsRatio"
-                , isBackwardsRatio_function_value );
+                , isBackwardsRatio_function_value
+                , "Return whether or not this is a backwards ratio (the denominator in the expression)" );
         
         }
         { //::SireMaths::BennettsFreeEnergyAverage::isForwardsRatio
@@ -111,7 +117,8 @@ void register_BennettsFreeEnergyAverage_class(){
             
             BennettsFreeEnergyAverage_exposer.def( 
                 "isForwardsRatio"
-                , isForwardsRatio_function_value );
+                , isForwardsRatio_function_value
+                , "Return whether or not this is a forwards ratio (the numerator in the expression)" );
         
         }
         BennettsFreeEnergyAverage_exposer.def( bp::self != bp::self );
@@ -125,7 +132,8 @@ void register_BennettsFreeEnergyAverage_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         BennettsFreeEnergyAverage_exposer.def( bp::self == bp::self );
@@ -136,7 +144,8 @@ void register_BennettsFreeEnergyAverage_class(){
             
             BennettsFreeEnergyAverage_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMaths::BennettsFreeEnergyAverage::typeName
@@ -146,7 +155,8 @@ void register_BennettsFreeEnergyAverage_class(){
             
             BennettsFreeEnergyAverage_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         BennettsFreeEnergyAverage_exposer.staticmethod( "typeName" );

@@ -31,7 +31,7 @@ void register_Grid_class(){
 
     { //::SireVol::Grid
         typedef bp::class_< SireVol::Grid, bp::bases< SireBase::Property >, boost::noncopyable > Grid_exposer_t;
-        Grid_exposer_t Grid_exposer = Grid_exposer_t( "Grid", bp::no_init );
+        Grid_exposer_t Grid_exposer = Grid_exposer_t( "Grid", "This is the base class of all grids. A grid is a set of points\nin space which are laid out in some manner (e.g. regularly spaced,\nor randomly distributed).\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope Grid_scope( Grid_exposer );
         { //::SireVol::Grid::aaBox
         
@@ -41,7 +41,8 @@ void register_Grid_class(){
             Grid_exposer.def( 
                 "aaBox"
                 , aaBox_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireVol::Grid::center
@@ -51,7 +52,8 @@ void register_Grid_class(){
             
             Grid_exposer.def( 
                 "center"
-                , center_function_value );
+                , center_function_value
+                , "Return the center of the grid" );
         
         }
         { //::SireVol::Grid::count
@@ -61,7 +63,8 @@ void register_Grid_class(){
             
             Grid_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of points in the grid" );
         
         }
         { //::SireVol::Grid::hasWeights
@@ -71,7 +74,8 @@ void register_Grid_class(){
             
             Grid_exposer.def( 
                 "hasWeights"
-                , hasWeights_function_value );
+                , hasWeights_function_value
+                , "Return whether or not the grid points have weights\n(i.e. they are not equally weighted)" );
         
         }
         { //::SireVol::Grid::isEmpty
@@ -81,7 +85,8 @@ void register_Grid_class(){
             
             Grid_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether this grid is empty" );
         
         }
         { //::SireVol::Grid::maxCoords
@@ -91,7 +96,8 @@ void register_Grid_class(){
             
             Grid_exposer.def( 
                 "maxCoords"
-                , maxCoords_function_value );
+                , maxCoords_function_value
+                , "Return the maximum coordinates of the grid" );
         
         }
         { //::SireVol::Grid::minCoords
@@ -101,7 +107,8 @@ void register_Grid_class(){
             
             Grid_exposer.def( 
                 "minCoords"
-                , minCoords_function_value );
+                , minCoords_function_value
+                , "Return the minimum coordinates of the grid" );
         
         }
         { //::SireVol::Grid::nPoints
@@ -111,7 +118,8 @@ void register_Grid_class(){
             
             Grid_exposer.def( 
                 "nPoints"
-                , nPoints_function_value );
+                , nPoints_function_value
+                , "Return the number of points in the grid" );
         
         }
         { //::SireVol::Grid::null
@@ -122,7 +130,8 @@ void register_Grid_class(){
             Grid_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireVol::Grid::points
@@ -133,7 +142,8 @@ void register_Grid_class(){
             Grid_exposer.def( 
                 "points"
                 , points_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the array of grid points" );
         
         }
         { //::SireVol::Grid::recenter
@@ -144,7 +154,8 @@ void register_Grid_class(){
             Grid_exposer.def( 
                 "recenter"
                 , recenter_function_value
-                , ( bp::arg("center") ) );
+                , ( bp::arg("center") )
+                , "" );
         
         }
         { //::SireVol::Grid::rotate
@@ -155,7 +166,8 @@ void register_Grid_class(){
             Grid_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("rotmat"), bp::arg("center")=SireMaths::Vector(0) ) );
+                , ( bp::arg("rotmat"), bp::arg("center")=SireMaths::Vector(0) )
+                , "" );
         
         }
         { //::SireVol::Grid::rotate
@@ -166,7 +178,8 @@ void register_Grid_class(){
             Grid_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("quat"), bp::arg("center")=SireMaths::Vector(0) ) );
+                , ( bp::arg("quat"), bp::arg("center")=SireMaths::Vector(0) )
+                , "" );
         
         }
         { //::SireVol::Grid::scale
@@ -177,7 +190,8 @@ void register_Grid_class(){
             Grid_exposer.def( 
                 "scale"
                 , scale_function_value
-                , ( bp::arg("scalefactor") ) );
+                , ( bp::arg("scalefactor") )
+                , "" );
         
         }
         { //::SireVol::Grid::translate
@@ -188,7 +202,8 @@ void register_Grid_class(){
             Grid_exposer.def( 
                 "translate"
                 , translate_function_value
-                , ( bp::arg("delta") ) );
+                , ( bp::arg("delta") )
+                , "" );
         
         }
         { //::SireVol::Grid::typeName
@@ -198,7 +213,8 @@ void register_Grid_class(){
             
             Grid_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireVol::Grid::weights
@@ -209,7 +225,8 @@ void register_Grid_class(){
             Grid_exposer.def( 
                 "weights"
                 , weights_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the array of grid weights - this will be empty\nif all of the points are equally weighted" );
         
         }
         Grid_exposer.staticmethod( "null" );

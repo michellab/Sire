@@ -51,9 +51,9 @@ void register_VelocityVerlet_class(){
 
     { //::SireMove::VelocityVerlet
         typedef bp::class_< SireMove::VelocityVerlet, bp::bases< SireMove::Integrator, SireBase::Property > > VelocityVerlet_exposer_t;
-        VelocityVerlet_exposer_t VelocityVerlet_exposer = VelocityVerlet_exposer_t( "VelocityVerlet", bp::init< bp::optional< bool > >(( bp::arg("frequent_save_velocities")=(bool)(false) )) );
+        VelocityVerlet_exposer_t VelocityVerlet_exposer = VelocityVerlet_exposer_t( "VelocityVerlet", "This class implements an atomistic velocity verlet dynamics integrator\n\nAuthor: Christopher Woods\n", bp::init< bp::optional< bool > >(( bp::arg("frequent_save_velocities")=(bool)(false) ), "Constructor") );
         bp::scope VelocityVerlet_scope( VelocityVerlet_exposer );
-        VelocityVerlet_exposer.def( bp::init< SireMove::VelocityVerlet const & >(( bp::arg("other") )) );
+        VelocityVerlet_exposer.def( bp::init< SireMove::VelocityVerlet const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::VelocityVerlet::createWorkspace
         
             typedef ::SireMove::IntegratorWorkspacePtr ( ::SireMove::VelocityVerlet::*createWorkspace_function_type)( ::SireBase::PropertyMap const & ) const;
@@ -62,7 +62,8 @@ void register_VelocityVerlet_class(){
             VelocityVerlet_exposer.def( 
                 "createWorkspace"
                 , createWorkspace_function_value
-                , ( bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("map")=SireBase::PropertyMap() )
+                , "Create an empty workspace" );
         
         }
         { //::SireMove::VelocityVerlet::createWorkspace
@@ -73,7 +74,8 @@ void register_VelocityVerlet_class(){
             VelocityVerlet_exposer.def( 
                 "createWorkspace"
                 , createWorkspace_function_value
-                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Create a workspace for this integrator for the molecule group molgroup" );
         
         }
         { //::SireMove::VelocityVerlet::ensemble
@@ -83,7 +85,8 @@ void register_VelocityVerlet_class(){
             
             VelocityVerlet_exposer.def( 
                 "ensemble"
-                , ensemble_function_value );
+                , ensemble_function_value
+                , "Return the ensemble of this integrator" );
         
         }
         { //::SireMove::VelocityVerlet::integrate
@@ -94,7 +97,8 @@ void register_VelocityVerlet_class(){
             VelocityVerlet_exposer.def( 
                 "integrate"
                 , integrate_function_value
-                , ( bp::arg("workspace"), bp::arg("nrg_component"), bp::arg("timestep"), bp::arg("nmoves"), bp::arg("record_stats") ) );
+                , ( bp::arg("workspace"), bp::arg("nrg_component"), bp::arg("timestep"), bp::arg("nmoves"), bp::arg("record_stats") )
+                , "Integrate the coordinates of the atoms in the molecules in molgroup\nusing the forces in forcetable, using the optionally supplied\nproperty map to find the necessary molecular properties\nThrow: SireMol::missing_molecule\nThrow: SireBase::missing_property\nThrow: SireError:invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMove::VelocityVerlet::isTimeReversible
@@ -104,7 +108,8 @@ void register_VelocityVerlet_class(){
             
             VelocityVerlet_exposer.def( 
                 "isTimeReversible"
-                , isTimeReversible_function_value );
+                , isTimeReversible_function_value
+                , "Return whether or not this integrator is time-reversible" );
         
         }
         VelocityVerlet_exposer.def( bp::self != bp::self );
@@ -117,7 +122,8 @@ void register_VelocityVerlet_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         VelocityVerlet_exposer.def( bp::self == bp::self );
@@ -128,7 +134,8 @@ void register_VelocityVerlet_class(){
             
             VelocityVerlet_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this integrator" );
         
         }
         { //::SireMove::VelocityVerlet::typeName
@@ -138,7 +145,8 @@ void register_VelocityVerlet_class(){
             
             VelocityVerlet_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         VelocityVerlet_exposer.staticmethod( "typeName" );

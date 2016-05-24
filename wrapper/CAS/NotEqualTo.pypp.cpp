@@ -43,10 +43,10 @@ void register_NotEqualTo_class(){
 
     { //::SireCAS::NotEqualTo
         typedef bp::class_< SireCAS::NotEqualTo, bp::bases< SireCAS::Condition, SireCAS::ExBase > > NotEqualTo_exposer_t;
-        NotEqualTo_exposer_t NotEqualTo_exposer = NotEqualTo_exposer_t( "NotEqualTo", bp::init< >() );
+        NotEqualTo_exposer_t NotEqualTo_exposer = NotEqualTo_exposer_t( "NotEqualTo", "This is a conditional function that returns whether or\nnot the first expression is not equal to the second\nexpression\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope NotEqualTo_scope( NotEqualTo_exposer );
-        NotEqualTo_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Expression const & >(( bp::arg("left_hand_side"), bp::arg("right_hand_side") )) );
-        NotEqualTo_exposer.def( bp::init< SireCAS::NotEqualTo const & >(( bp::arg("other") )) );
+        NotEqualTo_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Expression const & >(( bp::arg("left_hand_side"), bp::arg("right_hand_side") ), "Construct to compare left_hand_side with right_hand_side") );
+        NotEqualTo_exposer.def( bp::init< SireCAS::NotEqualTo const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::NotEqualTo::alwaysFalse
         
             typedef bool ( ::SireCAS::NotEqualTo::*alwaysFalse_function_type)(  ) const;
@@ -54,7 +54,8 @@ void register_NotEqualTo_class(){
             
             NotEqualTo_exposer.def( 
                 "alwaysFalse"
-                , alwaysFalse_function_value );
+                , alwaysFalse_function_value
+                , "Return whether or not we can be absolutely sure that this\ncondition will always be false. Note that this doesnt try\ntoo hard, so some things that are always false may not\nbe reported here as being always false, e.g. x > x + 1" );
         
         }
         { //::SireCAS::NotEqualTo::alwaysTrue
@@ -64,7 +65,8 @@ void register_NotEqualTo_class(){
             
             NotEqualTo_exposer.def( 
                 "alwaysTrue"
-                , alwaysTrue_function_value );
+                , alwaysTrue_function_value
+                , "Return whether or not we can be absolutely sure that this\ncondition will always be true. Note that this doesnt try\ntoo hard, so some things that are always true may not\nbe reported here as being always true, e.g. x + 1 > x" );
         
         }
         { //::SireCAS::NotEqualTo::operator=
@@ -76,7 +78,8 @@ void register_NotEqualTo_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         NotEqualTo_exposer.def( bp::self == bp::self );
@@ -88,7 +91,8 @@ void register_NotEqualTo_class(){
             
             NotEqualTo_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::NotEqualTo::what
@@ -98,7 +102,8 @@ void register_NotEqualTo_class(){
             
             NotEqualTo_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         NotEqualTo_exposer.staticmethod( "typeName" );

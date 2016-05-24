@@ -42,11 +42,11 @@ void register_CLJ14Group_class(){
 
     { //::SireMM::CLJ14Group
         typedef bp::class_< SireMM::CLJ14Group > CLJ14Group_exposer_t;
-        CLJ14Group_exposer_t CLJ14Group_exposer = CLJ14Group_exposer_t( "CLJ14Group", bp::init< >() );
+        CLJ14Group_exposer_t CLJ14Group_exposer = CLJ14Group_exposer_t( "CLJ14Group", "This class holds all of the information needed to calculate\nthe 14-nonbonded energy for a molecule\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope CLJ14Group_scope( CLJ14Group_exposer );
-        CLJ14Group_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )) );
-        CLJ14Group_exposer.def( bp::init< SireMol::MoleculeView const &, SireMM::CLJFunction::COMBINING_RULES, bool, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("combining_rules"), bp::arg("is_strict"), bp::arg("map")=SireBase::PropertyMap() )) );
-        CLJ14Group_exposer.def( bp::init< SireMM::CLJ14Group const & >(( bp::arg("other") )) );
+        CLJ14Group_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to calculate the 14-energy of the passed molecule") );
+        CLJ14Group_exposer.def( bp::init< SireMol::MoleculeView const &, SireMM::CLJFunction::COMBINING_RULES, bool, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molecule"), bp::arg("combining_rules"), bp::arg("is_strict"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to calculate the 14-energy of the passed molecule using the\nsupplied combining rules and strict mode") );
+        CLJ14Group_exposer.def( bp::init< SireMM::CLJ14Group const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::CLJ14Group::add
         
             typedef void ( ::SireMM::CLJ14Group::*add_function_type)( ::SireMol::MoleculeView const & ) ;
@@ -55,7 +55,8 @@ void register_CLJ14Group_class(){
             CLJ14Group_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("new_molecule") ) );
+                , ( bp::arg("new_molecule") )
+                , "Add the passed molecule to this group" );
         
         }
         { //::SireMM::CLJ14Group::add
@@ -66,7 +67,8 @@ void register_CLJ14Group_class(){
             CLJ14Group_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("new_selection") ) );
+                , ( bp::arg("new_selection") )
+                , "Add the passed selection onto this group" );
         
         }
         { //::SireMM::CLJ14Group::combiningRules
@@ -76,7 +78,8 @@ void register_CLJ14Group_class(){
             
             CLJ14Group_exposer.def( 
                 "combiningRules"
-                , combiningRules_function_value );
+                , combiningRules_function_value
+                , "Return the type of combining rules in place" );
         
         }
         { //::SireMM::CLJ14Group::energy
@@ -86,7 +89,8 @@ void register_CLJ14Group_class(){
             
             CLJ14Group_exposer.def( 
                 "energy"
-                , energy_function_value );
+                , energy_function_value
+                , "Calculate and return the coulomb and LJ 14 energy" );
         
         }
         { //::SireMM::CLJ14Group::isNull
@@ -96,7 +100,8 @@ void register_CLJ14Group_class(){
             
             CLJ14Group_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMM::CLJ14Group::isStrict
@@ -106,7 +111,8 @@ void register_CLJ14Group_class(){
             
             CLJ14Group_exposer.def( 
                 "isStrict"
-                , isStrict_function_value );
+                , isStrict_function_value
+                , "Return whether or not strict mode is on" );
         
         }
         { //::SireMM::CLJ14Group::molecule
@@ -117,7 +123,8 @@ void register_CLJ14Group_class(){
             CLJ14Group_exposer.def( 
                 "molecule"
                 , molecule_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the molecule that is in this group" );
         
         }
         { //::SireMM::CLJ14Group::mustNowRecalculateFromScratch
@@ -127,7 +134,8 @@ void register_CLJ14Group_class(){
             
             CLJ14Group_exposer.def( 
                 "mustNowRecalculateFromScratch"
-                , mustNowRecalculateFromScratch_function_value );
+                , mustNowRecalculateFromScratch_function_value
+                , "Set the flag to say that we must recalculate everything\nfrom scratch" );
         
         }
         { //::SireMM::CLJ14Group::mustReallyRecalculateFromScratch
@@ -137,7 +145,8 @@ void register_CLJ14Group_class(){
             
             CLJ14Group_exposer.def( 
                 "mustReallyRecalculateFromScratch"
-                , mustReallyRecalculateFromScratch_function_value );
+                , mustReallyRecalculateFromScratch_function_value
+                , "Set the flag to ensure that the energy is really completely\nrecalculated from scratch" );
         
         }
         CLJ14Group_exposer.def( bp::self != bp::self );
@@ -150,7 +159,8 @@ void register_CLJ14Group_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CLJ14Group_exposer.def( bp::self == bp::self );
@@ -161,7 +171,8 @@ void register_CLJ14Group_class(){
             
             CLJ14Group_exposer.def( 
                 "propertyMap"
-                , propertyMap_function_value );
+                , propertyMap_function_value
+                , "Return the property map used to find the properties needed to\ncalculate the 14 energy (coordinates, charge, LJ\nand intrascale)" );
         
         }
         { //::SireMM::CLJ14Group::recalculatingFromScratch
@@ -171,7 +182,8 @@ void register_CLJ14Group_class(){
             
             CLJ14Group_exposer.def( 
                 "recalculatingFromScratch"
-                , recalculatingFromScratch_function_value );
+                , recalculatingFromScratch_function_value
+                , "Return whether or not we are recalculating things from scratch" );
         
         }
         { //::SireMM::CLJ14Group::remove
@@ -182,7 +194,8 @@ void register_CLJ14Group_class(){
             CLJ14Group_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("new_selection") ) );
+                , ( bp::arg("new_selection") )
+                , "Remove the passed selection from the group" );
         
         }
         { //::SireMM::CLJ14Group::remove
@@ -193,7 +206,8 @@ void register_CLJ14Group_class(){
             CLJ14Group_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("new_molecule") ) );
+                , ( bp::arg("new_molecule") )
+                , "Remove the passed molecule from this group" );
         
         }
         { //::SireMM::CLJ14Group::setArithmeticCombiningRules
@@ -204,7 +218,8 @@ void register_CLJ14Group_class(){
             CLJ14Group_exposer.def( 
                 "setArithmeticCombiningRules"
                 , setArithmeticCombiningRules_function_value
-                , ( bp::arg("on") ) );
+                , ( bp::arg("on") )
+                , "Switch on or off the use of arithmetic combining rules" );
         
         }
         { //::SireMM::CLJ14Group::setCombiningRules
@@ -215,7 +230,8 @@ void register_CLJ14Group_class(){
             CLJ14Group_exposer.def( 
                 "setCombiningRules"
                 , setCombiningRules_function_value
-                , ( bp::arg("rules") ) );
+                , ( bp::arg("rules") )
+                , "Set the combining rules to rules" );
         
         }
         { //::SireMM::CLJ14Group::setGeometricCombiningRules
@@ -226,7 +242,8 @@ void register_CLJ14Group_class(){
             CLJ14Group_exposer.def( 
                 "setGeometricCombiningRules"
                 , setGeometricCombiningRules_function_value
-                , ( bp::arg("on") ) );
+                , ( bp::arg("on") )
+                , "Switch on or off the use og geometric combining rules" );
         
         }
         { //::SireMM::CLJ14Group::setStrict
@@ -237,7 +254,8 @@ void register_CLJ14Group_class(){
             CLJ14Group_exposer.def( 
                 "setStrict"
                 , setStrict_function_value
-                , ( bp::arg("isstrict") ) );
+                , ( bp::arg("isstrict") )
+                , "Set whether or not strict mode is on. If strict mode is on,\nthen this means that the 1-4 energy is calculated only if both of the\natoms are selected. If strict mode is off, then the 1-4 energy\nis calculated when at least one of the atoms is selected." );
         
         }
         { //::SireMM::CLJ14Group::toString
@@ -247,7 +265,8 @@ void register_CLJ14Group_class(){
             
             CLJ14Group_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMM::CLJ14Group::typeName
@@ -257,7 +276,8 @@ void register_CLJ14Group_class(){
             
             CLJ14Group_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::CLJ14Group::update
@@ -268,7 +288,8 @@ void register_CLJ14Group_class(){
             CLJ14Group_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("new_molecule") ) );
+                , ( bp::arg("new_molecule") )
+                , "Update the contained molecule to the newest version" );
         
         }
         { //::SireMM::CLJ14Group::updateSelection
@@ -279,7 +300,8 @@ void register_CLJ14Group_class(){
             CLJ14Group_exposer.def( 
                 "updateSelection"
                 , updateSelection_function_value
-                , ( bp::arg("selection") ) );
+                , ( bp::arg("selection") )
+                , "Update the selection to the new passed value" );
         
         }
         { //::SireMM::CLJ14Group::usingArithmeticCombiningRules
@@ -289,7 +311,8 @@ void register_CLJ14Group_class(){
             
             CLJ14Group_exposer.def( 
                 "usingArithmeticCombiningRules"
-                , usingArithmeticCombiningRules_function_value );
+                , usingArithmeticCombiningRules_function_value
+                , "Return whether or not arithmetic combining rules are used" );
         
         }
         { //::SireMM::CLJ14Group::usingGeometricCombiningRules
@@ -299,7 +322,8 @@ void register_CLJ14Group_class(){
             
             CLJ14Group_exposer.def( 
                 "usingGeometricCombiningRules"
-                , usingGeometricCombiningRules_function_value );
+                , usingGeometricCombiningRules_function_value
+                , "Return whether or not geometric combining rules are used" );
         
         }
         { //::SireMM::CLJ14Group::what
@@ -309,7 +333,8 @@ void register_CLJ14Group_class(){
             
             CLJ14Group_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         { //::SireMM::CLJ14Group::wouldChangeProperties
@@ -320,7 +345,8 @@ void register_CLJ14Group_class(){
             CLJ14Group_exposer.def( 
                 "wouldChangeProperties"
                 , wouldChangeProperties_function_value
-                , ( bp::arg("map") ) );
+                , ( bp::arg("map") )
+                , "Return whether or not the passed property map would change properties that\nare used by this calculation" );
         
         }
         CLJ14Group_exposer.staticmethod( "typeName" );

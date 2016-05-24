@@ -43,11 +43,11 @@ void register_Sum_class(){
 
     { //::SireCAS::Sum
         typedef bp::class_< SireCAS::Sum, bp::bases< SireCAS::ExBase > > Sum_exposer_t;
-        Sum_exposer_t Sum_exposer = Sum_exposer_t( "Sum", bp::init< >() );
+        Sum_exposer_t Sum_exposer = Sum_exposer_t( "Sum", "\nThis class holds a collection of expressions that are to be added (or subtracted) from one another\n\nAuthor: Christopher Woods\n", bp::init< >("Construct an empty (zero) sum") );
         bp::scope Sum_scope( Sum_exposer );
-        Sum_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Expression const & >(( bp::arg("ex0"), bp::arg("ex1") )) );
-        Sum_exposer.def( bp::init< SireCAS::Expressions const & >(( bp::arg("expressions") )) );
-        Sum_exposer.def( bp::init< SireCAS::Sum const & >(( bp::arg("other") )) );
+        Sum_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Expression const & >(( bp::arg("ex0"), bp::arg("ex1") ), "Construct the sum of two expressions") );
+        Sum_exposer.def( bp::init< SireCAS::Expressions const & >(( bp::arg("expressions") ), "Construct the sum of the expressions in expressions") );
+        Sum_exposer.def( bp::init< SireCAS::Sum const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::Sum::children
         
             typedef ::SireCAS::Expressions ( ::SireCAS::Sum::*children_function_type)(  ) const;
@@ -55,7 +55,8 @@ void register_Sum_class(){
             
             Sum_exposer.def( 
                 "children"
-                , children_function_value );
+                , children_function_value
+                , "Return all of the child expressions in this Sum" );
         
         }
         { //::SireCAS::Sum::conjugate
@@ -65,7 +66,8 @@ void register_Sum_class(){
             
             Sum_exposer.def( 
                 "conjugate"
-                , conjugate_function_value );
+                , conjugate_function_value
+                , "Return the conjugate of this sum" );
         
         }
         { //::SireCAS::Sum::differentiate
@@ -76,7 +78,8 @@ void register_Sum_class(){
             Sum_exposer.def( 
                 "differentiate"
                 , differentiate_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return the differential of this Sum with respect to symbol." );
         
         }
         { //::SireCAS::Sum::evaluate
@@ -87,7 +90,8 @@ void register_Sum_class(){
             Sum_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate the Sum for the values values. Any missing values are assumed to be\nequal to zero." );
         
         }
         { //::SireCAS::Sum::evaluate
@@ -98,7 +102,8 @@ void register_Sum_class(){
             Sum_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate the Sum for the values values. Any missing values are assumed to be\nequal to zero." );
         
         }
         { //::SireCAS::Sum::expand
@@ -109,7 +114,8 @@ void register_Sum_class(){
             Sum_exposer.def( 
                 "expand"
                 , expand_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "" );
         
         }
         { //::SireCAS::Sum::functions
@@ -119,7 +125,8 @@ void register_Sum_class(){
             
             Sum_exposer.def( 
                 "functions"
-                , functions_function_value );
+                , functions_function_value
+                , "Return all of the functions involved in this sum (and all expressions in this sum)" );
         
         }
         { //::SireCAS::Sum::hash
@@ -129,7 +136,8 @@ void register_Sum_class(){
             
             Sum_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Return a hash for the Sum" );
         
         }
         { //::SireCAS::Sum::integrate
@@ -140,7 +148,8 @@ void register_Sum_class(){
             Sum_exposer.def( 
                 "integrate"
                 , integrate_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return the integral of this Sum with respect to symbol. The integral of\na sum is the sum of the integrals" );
         
         }
         { //::SireCAS::Sum::isComplex
@@ -150,7 +159,8 @@ void register_Sum_class(){
             
             Sum_exposer.def( 
                 "isComplex"
-                , isComplex_function_value );
+                , isComplex_function_value
+                , "Return whether or not this function contains any complex parts" );
         
         }
         { //::SireCAS::Sum::isCompound
@@ -160,7 +170,8 @@ void register_Sum_class(){
             
             Sum_exposer.def( 
                 "isCompound"
-                , isCompound_function_value );
+                , isCompound_function_value
+                , "Return whether or not this is compound (needs brakets when printed)" );
         
         }
         { //::SireCAS::Sum::isConstant
@@ -170,7 +181,8 @@ void register_Sum_class(){
             
             Sum_exposer.def( 
                 "isConstant"
-                , isConstant_function_value );
+                , isConstant_function_value
+                , "Return whether or not this is constant" );
         
         }
         { //::SireCAS::Sum::isFunction
@@ -181,7 +193,8 @@ void register_Sum_class(){
             Sum_exposer.def( 
                 "isFunction"
                 , isFunction_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "Return whether or not this is a function of symbol" );
         
         }
         Sum_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -192,7 +205,8 @@ void register_Sum_class(){
             
             Sum_exposer.def( 
                 "reduce"
-                , reduce_function_value );
+                , reduce_function_value
+                , "Reduce a Sum down to a simple form. This replaces the Sum with a single expression\nor a constant if this is no longer a Sum. It does not collapse together common\nfactors - use collapse() if you want to do this" );
         
         }
         { //::SireCAS::Sum::series
@@ -203,7 +217,8 @@ void register_Sum_class(){
             Sum_exposer.def( 
                 "series"
                 , series_function_value
-                , ( bp::arg("symbol"), bp::arg("n") ) );
+                , ( bp::arg("symbol"), bp::arg("n") )
+                , "Return a series expansion of this sum about symbol to order n" );
         
         }
         { //::SireCAS::Sum::simplify
@@ -214,7 +229,8 @@ void register_Sum_class(){
             Sum_exposer.def( 
                 "simplify"
                 , simplify_function_value
-                , ( bp::arg("options")=(int)(0) ) );
+                , ( bp::arg("options")=(int)(0) )
+                , "Simplify this sum" );
         
         }
         { //::SireCAS::Sum::substitute
@@ -225,7 +241,8 @@ void register_Sum_class(){
             Sum_exposer.def( 
                 "substitute"
                 , substitute_function_value
-                , ( bp::arg("identities") ) );
+                , ( bp::arg("identities") )
+                , "Return an expression that is this expression with identities substituted in" );
         
         }
         { //::SireCAS::Sum::symbols
@@ -235,7 +252,8 @@ void register_Sum_class(){
             
             Sum_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "Return all of the symbols involved in this sum (and all expressions in this sum)" );
         
         }
         { //::SireCAS::Sum::toOpenMMString
@@ -245,7 +263,8 @@ void register_Sum_class(){
             
             Sum_exposer.def( 
                 "toOpenMMString"
-                , toOpenMMString_function_value );
+                , toOpenMMString_function_value
+                , "Return a string representation of the sum" );
         
         }
         { //::SireCAS::Sum::toString
@@ -255,7 +274,8 @@ void register_Sum_class(){
             
             Sum_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of the sum" );
         
         }
         { //::SireCAS::Sum::typeName
@@ -265,7 +285,8 @@ void register_Sum_class(){
             
             Sum_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::Sum::what
@@ -275,7 +296,8 @@ void register_Sum_class(){
             
             Sum_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Sum_exposer.staticmethod( "typeName" );

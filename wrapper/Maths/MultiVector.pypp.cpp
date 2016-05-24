@@ -12,7 +12,6 @@ namespace bp = boost::python;
 #include "SireID/index.h"
 
 #include "multivector.h"
-#include "multiquaternion.h"
 
 #include <QDebug>
 
@@ -28,13 +27,13 @@ void register_MultiVector_class(){
 
     { //::SireMaths::MultiVector
         typedef bp::class_< SireMaths::MultiVector > MultiVector_exposer_t;
-        MultiVector_exposer_t MultiVector_exposer = MultiVector_exposer_t( "MultiVector", bp::init< >() );
+        MultiVector_exposer_t MultiVector_exposer = MultiVector_exposer_t( "MultiVector", "\nThis is a vectorised version of Vector, e.g. x, y, and z\nare held as MultiDouble objects, meaning that this is a\npacked vector of vectors\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope MultiVector_scope( MultiVector_exposer );
-        MultiVector_exposer.def( bp::init< SireMaths::MultiDouble const & >(( bp::arg("value") )) );
-        MultiVector_exposer.def( bp::init< SireMaths::MultiDouble const &, SireMaths::MultiDouble const &, SireMaths::MultiDouble const & >(( bp::arg("x"), bp::arg("y"), bp::arg("z") )) );
-        MultiVector_exposer.def( bp::init< SireMaths::Vector const *, int >(( bp::arg("array"), bp::arg("size") )) );
-        MultiVector_exposer.def( bp::init< QVector< SireMaths::Vector > const & >(( bp::arg("array") )) );
-        MultiVector_exposer.def( bp::init< SireMaths::MultiVector const & >(( bp::arg("other") )) );
+        MultiVector_exposer.def( bp::init< SireMaths::MultiDouble const & >(( bp::arg("value") ), "Copy constructor") );
+        MultiVector_exposer.def( bp::init< SireMaths::MultiDouble const &, SireMaths::MultiDouble const &, SireMaths::MultiDouble const & >(( bp::arg("x"), bp::arg("y"), bp::arg("z") ), "") );
+        MultiVector_exposer.def( bp::init< SireMaths::Vector const *, int >(( bp::arg("array"), bp::arg("size") ), "Construct from an array of Vectors. This array cannot be greater\nthan MultiDouble::size()") );
+        MultiVector_exposer.def( bp::init< QVector< SireMaths::Vector > const & >(( bp::arg("array") ), "Construct from an array of Vectors. This array cannot be greater\nthan MultiDouble::size()") );
+        MultiVector_exposer.def( bp::init< SireMaths::MultiVector const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMaths::MultiVector::angle
         
             typedef ::SireMaths::MultiDouble ( *angle_function_type )( ::SireMaths::MultiVector const &,::SireMaths::MultiVector const & );
@@ -43,7 +42,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "angle"
                 , angle_function_value
-                , ( bp::arg("v0"), bp::arg("v1") ) );
+                , ( bp::arg("v0"), bp::arg("v1") )
+                , "Return the angle between vectors v0 and v1 - this is the smallest\nangle, and will always lie between 0 and 180 degrees" );
         
         }
         { //::SireMaths::MultiVector::angle
@@ -54,7 +54,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "angle"
                 , angle_function_value
-                , ( bp::arg("v0"), bp::arg("v1"), bp::arg("v2") ) );
+                , ( bp::arg("v0"), bp::arg("v1"), bp::arg("v2") )
+                , "Return the angle between v0-v1-v2 (treating the vectors as points in space)" );
         
         }
         { //::SireMaths::MultiVector::at
@@ -65,7 +66,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Access the ith vector in the MultiVector" );
         
         }
         { //::SireMaths::MultiVector::b
@@ -75,7 +77,8 @@ void register_MultiVector_class(){
             
             MultiVector_exposer.def( 
                 "b"
-                , b_function_value );
+                , b_function_value
+                , "Return the components via rgb (limited between 0 and 1)" );
         
         }
         { //::SireMaths::MultiVector::bearing
@@ -85,7 +88,8 @@ void register_MultiVector_class(){
             
             MultiVector_exposer.def( 
                 "bearing"
-                , bearing_function_value );
+                , bearing_function_value
+                , "Return the bearing of this vector against (0,1,0) (north) on the xy plane" );
         
         }
         { //::SireMaths::MultiVector::bearingXY
@@ -96,7 +100,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "bearingXY"
                 , bearingXY_function_value
-                , ( bp::arg("v") ) );
+                , ( bp::arg("v") )
+                , "Return the bearing of this vector against v on the xy plane" );
         
         }
         { //::SireMaths::MultiVector::bearingXZ
@@ -107,7 +112,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "bearingXZ"
                 , bearingXZ_function_value
-                , ( bp::arg("v") ) );
+                , ( bp::arg("v") )
+                , "Return the bearing of this vector against v on the xz plane" );
         
         }
         { //::SireMaths::MultiVector::bearingYZ
@@ -118,7 +124,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "bearingYZ"
                 , bearingYZ_function_value
-                , ( bp::arg("v") ) );
+                , ( bp::arg("v") )
+                , "Return the bearing of this vector against v on the yz plane" );
         
         }
         { //::SireMaths::MultiVector::count
@@ -128,7 +135,8 @@ void register_MultiVector_class(){
             
             MultiVector_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of vectors in this MultiVector" );
         
         }
         { //::SireMaths::MultiVector::cross
@@ -139,7 +147,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "cross"
                 , cross_function_value
-                , ( bp::arg("v0"), bp::arg("v1") ) );
+                , ( bp::arg("v0"), bp::arg("v1") )
+                , "Return the cross product of v0 and v1" );
         
         }
         { //::SireMaths::MultiVector::dihedral
@@ -150,7 +159,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "dihedral"
                 , dihedral_function_value
-                , ( bp::arg("v0"), bp::arg("v1"), bp::arg("v2"), bp::arg("v3") ) );
+                , ( bp::arg("v0"), bp::arg("v1"), bp::arg("v2"), bp::arg("v3") )
+                , "Return the dihedral angle between v0-v1-v2-v3 (treating the vectors as points)" );
         
         }
         { //::SireMaths::MultiVector::direction
@@ -160,7 +170,8 @@ void register_MultiVector_class(){
             
             MultiVector_exposer.def( 
                 "direction"
-                , direction_function_value );
+                , direction_function_value
+                , "Return the unit vector pointing in the direction of this vector" );
         
         }
         { //::SireMaths::MultiVector::distance
@@ -171,7 +182,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "distance"
                 , distance_function_value
-                , ( bp::arg("v1"), bp::arg("v2") ) );
+                , ( bp::arg("v1"), bp::arg("v2") )
+                , "Return the distance between two vectors" );
         
         }
         { //::SireMaths::MultiVector::distance2
@@ -182,7 +194,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "distance2"
                 , distance2_function_value
-                , ( bp::arg("v1"), bp::arg("v2") ) );
+                , ( bp::arg("v1"), bp::arg("v2") )
+                , "Return the distance squared between two vectors" );
         
         }
         { //::SireMaths::MultiVector::dot
@@ -193,7 +206,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "dot"
                 , dot_function_value
-                , ( bp::arg("v0"), bp::arg("v1") ) );
+                , ( bp::arg("v0"), bp::arg("v1") )
+                , "Return the dot product of v0 and v1" );
         
         }
         { //::SireMaths::MultiVector::fromArray
@@ -204,7 +218,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "fromArray"
                 , fromArray_function_value
-                , ( bp::arg("array"), bp::arg("size") ) );
+                , ( bp::arg("array"), bp::arg("size") )
+                , "Convert the passed array of vectors into an array of MultiVectors" );
         
         }
         { //::SireMaths::MultiVector::fromArray
@@ -215,7 +230,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "fromArray"
                 , fromArray_function_value
-                , ( bp::arg("array") ) );
+                , ( bp::arg("array") )
+                , "Convert the passed array of vectors into an array of MultiVectors" );
         
         }
         { //::SireMaths::MultiVector::g
@@ -225,7 +241,8 @@ void register_MultiVector_class(){
             
             MultiVector_exposer.def( 
                 "g"
-                , g_function_value );
+                , g_function_value
+                , "Return the components via rgb (limited between 0 and 1)" );
         
         }
         { //::SireMaths::MultiVector::generate
@@ -236,7 +253,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "generate"
                 , generate_function_value
-                , ( bp::arg("dst"), bp::arg("v1"), bp::arg("ang"), bp::arg("v2"), bp::arg("dih"), bp::arg("v3") ) );
+                , ( bp::arg("dst"), bp::arg("v1"), bp::arg("ang"), bp::arg("v2"), bp::arg("dih"), bp::arg("v3") )
+                , "Generate a vector, v0, that has distance dst v0-v1, angle ang v0-v1-v2,\nand dihedral dih v0-v1-v2-v3" );
         
         }
         { //::SireMaths::MultiVector::getitem
@@ -247,7 +265,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "getitem"
                 , getitem_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Access the ith vector in the MultiVector" );
         
         }
         { //::SireMaths::MultiVector::invDistance
@@ -258,7 +277,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "invDistance"
                 , invDistance_function_value
-                , ( bp::arg("v1"), bp::arg("v2") ) );
+                , ( bp::arg("v1"), bp::arg("v2") )
+                , "Return the 1  distance between two vectors" );
         
         }
         { //::SireMaths::MultiVector::invDistance2
@@ -269,7 +289,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "invDistance2"
                 , invDistance2_function_value
-                , ( bp::arg("v1"), bp::arg("v2") ) );
+                , ( bp::arg("v1"), bp::arg("v2") )
+                , "Return 1  distance2 between two vectors" );
         
         }
         { //::SireMaths::MultiVector::invLength
@@ -279,7 +300,8 @@ void register_MultiVector_class(){
             
             MultiVector_exposer.def( 
                 "invLength"
-                , invLength_function_value );
+                , invLength_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiVector::invLength2
@@ -289,7 +311,8 @@ void register_MultiVector_class(){
             
             MultiVector_exposer.def( 
                 "invLength2"
-                , invLength2_function_value );
+                , invLength2_function_value
+                , "Return the inverse length squared" );
         
         }
         { //::SireMaths::MultiVector::length
@@ -299,7 +322,8 @@ void register_MultiVector_class(){
             
             MultiVector_exposer.def( 
                 "length"
-                , length_function_value );
+                , length_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiVector::length2
@@ -309,7 +333,8 @@ void register_MultiVector_class(){
             
             MultiVector_exposer.def( 
                 "length2"
-                , length2_function_value );
+                , length2_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiVector::magnitude
@@ -319,7 +344,8 @@ void register_MultiVector_class(){
             
             MultiVector_exposer.def( 
                 "magnitude"
-                , magnitude_function_value );
+                , magnitude_function_value
+                , "Return the length of this vector" );
         
         }
         { //::SireMaths::MultiVector::manhattanLength
@@ -329,7 +355,8 @@ void register_MultiVector_class(){
             
             MultiVector_exposer.def( 
                 "manhattanLength"
-                , manhattanLength_function_value );
+                , manhattanLength_function_value
+                , "Return the manhattan length of the vector" );
         
         }
         { //::SireMaths::MultiVector::max
@@ -340,7 +367,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "max"
                 , max_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return a vector that has the maximum xyz components out of this\nand other" );
         
         }
         { //::SireMaths::MultiVector::min
@@ -351,7 +379,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "min"
                 , min_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return a vector that has the minimum components" );
         
         }
         { //::SireMaths::MultiVector::normalise
@@ -361,7 +390,8 @@ void register_MultiVector_class(){
             
             MultiVector_exposer.def( 
                 "normalise"
-                , normalise_function_value );
+                , normalise_function_value
+                , "Return a normalised form of the vector" );
         
         }
         MultiVector_exposer.def( bp::self != bp::self );
@@ -375,7 +405,8 @@ void register_MultiVector_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MultiVector_exposer.def( bp::self == bp::self );
@@ -387,7 +418,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMaths::MultiVector::quickSet
@@ -398,7 +430,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "quickSet"
                 , quickSet_function_value
-                , ( bp::arg("i"), bp::arg("val") ) );
+                , ( bp::arg("i"), bp::arg("val") )
+                , "Quickly set the values of the vector, without checking the index is valid" );
         
         }
         { //::SireMaths::MultiVector::r
@@ -408,7 +441,8 @@ void register_MultiVector_class(){
             
             MultiVector_exposer.def( 
                 "r"
-                , r_function_value );
+                , r_function_value
+                , "Return the components via rgb (limited between 0 and 1)" );
         
         }
         { //::SireMaths::MultiVector::set
@@ -419,7 +453,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("x"), bp::arg("y"), bp::arg("z") ) );
+                , ( bp::arg("x"), bp::arg("y"), bp::arg("z") )
+                , "Set individual values of the vector" );
         
         }
         { //::SireMaths::MultiVector::set
@@ -430,7 +465,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("i"), bp::arg("val") ) );
+                , ( bp::arg("i"), bp::arg("val") )
+                , "Set individual values of the vector" );
         
         }
         { //::SireMaths::MultiVector::setB
@@ -441,7 +477,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "setB"
                 , setB_function_value
-                , ( bp::arg("val") ) );
+                , ( bp::arg("val") )
+                , "Set individual values of the vector" );
         
         }
         { //::SireMaths::MultiVector::setG
@@ -452,7 +489,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "setG"
                 , setG_function_value
-                , ( bp::arg("val") ) );
+                , ( bp::arg("val") )
+                , "Set individual values of the vector" );
         
         }
         { //::SireMaths::MultiVector::setMax
@@ -463,7 +501,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "setMax"
                 , setMax_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Set this Vector so that it has the maximum xyz components out of\nthis and other (e.g. this->x = max(this->x(),other.x() etc.)" );
         
         }
         { //::SireMaths::MultiVector::setMin
@@ -474,7 +513,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "setMin"
                 , setMin_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Set this Vector so that it has the minimum xyz components" );
         
         }
         { //::SireMaths::MultiVector::setR
@@ -485,7 +525,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "setR"
                 , setR_function_value
-                , ( bp::arg("val") ) );
+                , ( bp::arg("val") )
+                , "Set individual values of the vector" );
         
         }
         { //::SireMaths::MultiVector::setX
@@ -496,7 +537,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "setX"
                 , setX_function_value
-                , ( bp::arg("val") ) );
+                , ( bp::arg("val") )
+                , "Set individual values of the vector" );
         
         }
         { //::SireMaths::MultiVector::setY
@@ -507,7 +549,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "setY"
                 , setY_function_value
-                , ( bp::arg("val") ) );
+                , ( bp::arg("val") )
+                , "Set individual values of the vector" );
         
         }
         { //::SireMaths::MultiVector::setZ
@@ -518,7 +561,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "setZ"
                 , setZ_function_value
-                , ( bp::arg("val") ) );
+                , ( bp::arg("val") )
+                , "Set individual values of the vector" );
         
         }
         { //::SireMaths::MultiVector::size
@@ -528,7 +572,8 @@ void register_MultiVector_class(){
             
             MultiVector_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "Return the number of vectors in this MultiVector" );
         
         }
         { //::SireMaths::MultiVector::swap
@@ -539,7 +584,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "swap"
                 , swap_function_value
-                , ( bp::arg("v0"), bp::arg("idx0"), bp::arg("v1"), bp::arg("idx1") ) );
+                , ( bp::arg("v0"), bp::arg("idx0"), bp::arg("v1"), bp::arg("idx1") )
+                , "Swap the values of the value at index idx0 in f0 with the value at index idx in f1" );
         
         }
         { //::SireMaths::MultiVector::toString
@@ -549,7 +595,8 @@ void register_MultiVector_class(){
             
             MultiVector_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a QString representation of the vector" );
         
         }
         { //::SireMaths::MultiVector::typeName
@@ -559,7 +606,8 @@ void register_MultiVector_class(){
             
             MultiVector_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiVector::what
@@ -569,7 +617,8 @@ void register_MultiVector_class(){
             
             MultiVector_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         { //::SireMaths::MultiVector::x
@@ -580,7 +629,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "x"
                 , x_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMaths::MultiVector::y
@@ -591,7 +641,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "y"
                 , y_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMaths::MultiVector::z
@@ -602,7 +653,8 @@ void register_MultiVector_class(){
             MultiVector_exposer.def( 
                 "z"
                 , z_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         MultiVector_exposer.staticmethod( "angle" );
@@ -623,6 +675,7 @@ void register_MultiVector_class(){
         MultiVector_exposer.def( bp::self * bp::other< SireMaths::MultiQuaternion >() );
         MultiVector_exposer.def( bp::self + bp::self );
         MultiVector_exposer.def( bp::self - bp::self );
+        MultiVector_exposer.def( bp::self / bp::self );
         MultiVector_exposer.def( bp::self / bp::other< SireMaths::MultiDouble >() );
         MultiVector_exposer.def( "__copy__", &__copy__);
         MultiVector_exposer.def( "__deepcopy__", &__copy__);

@@ -38,11 +38,11 @@ void register_DihedralComponent_class(){
 
     { //::SireSystem::DihedralComponent
         typedef bp::class_< SireSystem::DihedralComponent, bp::bases< SireSystem::GeometryComponent, SireSystem::Constraint, SireBase::Property > > DihedralComponent_exposer_t;
-        DihedralComponent_exposer_t DihedralComponent_exposer = DihedralComponent_exposer_t( "DihedralComponent", bp::init< >() );
+        DihedralComponent_exposer_t DihedralComponent_exposer = DihedralComponent_exposer_t( "DihedralComponent", "This is a constraint that constrains a symbol to equal the\nvalue of an expression that involves a dihedral between four\npoints or atoms\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope DihedralComponent_scope( DihedralComponent_exposer );
-        DihedralComponent_exposer.def( bp::init< SireCAS::Symbol const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("constrained_symbol"), bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("map")=SireBase::PropertyMap() )) );
-        DihedralComponent_exposer.def( bp::init< SireCAS::Symbol const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("constrained_symbol"), bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("geometry_expression"), bp::arg("map")=SireBase::PropertyMap() )) );
-        DihedralComponent_exposer.def( bp::init< SireSystem::DihedralComponent const & >(( bp::arg("other") )) );
+        DihedralComponent_exposer.def( bp::init< SireCAS::Symbol const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("constrained_symbol"), bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to set the value of constrained_symbol equal to the\ndihedral between the four points point0, point1, point2 and point2") );
+        DihedralComponent_exposer.def( bp::init< SireCAS::Symbol const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("constrained_symbol"), bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("geometry_expression"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to set the value of constrained_symbol equal to the\nexpression based on the dihedral, angles and distances within the four points\npoint0, point1, point2 and point3") );
+        DihedralComponent_exposer.def( bp::init< SireSystem::DihedralComponent const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireSystem::DihedralComponent::nPoints
         
             typedef int ( ::SireSystem::DihedralComponent::*nPoints_function_type)(  ) const;
@@ -50,7 +50,8 @@ void register_DihedralComponent_class(){
             
             DihedralComponent_exposer.def( 
                 "nPoints"
-                , nPoints_function_value );
+                , nPoints_function_value
+                , "Return the number of points (4)" );
         
         }
         DihedralComponent_exposer.def( bp::self != bp::self );
@@ -63,7 +64,8 @@ void register_DihedralComponent_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         DihedralComponent_exposer.def( bp::self == bp::self );
@@ -75,7 +77,8 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "phi"
                 , phi_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol that represents the dihedral angle" );
         
         }
         { //::SireSystem::DihedralComponent::point
@@ -87,7 +90,8 @@ void register_DihedralComponent_class(){
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the ith point\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireSystem::DihedralComponent::point0
@@ -98,7 +102,8 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "point0"
                 , point0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the first point between which the dihedral is calculated" );
         
         }
         { //::SireSystem::DihedralComponent::point1
@@ -109,7 +114,8 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "point1"
                 , point1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the second point between which the dihedral is calculated" );
         
         }
         { //::SireSystem::DihedralComponent::point2
@@ -120,7 +126,8 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "point2"
                 , point2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the third point between which the dihedral is calculated" );
         
         }
         { //::SireSystem::DihedralComponent::point3
@@ -131,7 +138,8 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "point3"
                 , point3_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the fourth point between which the dihedral is calculated" );
         
         }
         { //::SireSystem::DihedralComponent::r01
@@ -142,7 +150,8 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "r01"
                 , r01_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol that represents the 0-1 distance" );
         
         }
         { //::SireSystem::DihedralComponent::r03
@@ -153,7 +162,8 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "r03"
                 , r03_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol that represents the 0-3 distance" );
         
         }
         { //::SireSystem::DihedralComponent::r12
@@ -164,7 +174,8 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "r12"
                 , r12_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol that represents the 1-2 distance" );
         
         }
         { //::SireSystem::DihedralComponent::r23
@@ -175,7 +186,8 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "r23"
                 , r23_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol that represents the 2-3 distance" );
         
         }
         { //::SireSystem::DihedralComponent::theta012
@@ -186,7 +198,8 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "theta012"
                 , theta012_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol that represents the angle between\npoints 0, 1 and 2" );
         
         }
         { //::SireSystem::DihedralComponent::theta123
@@ -197,7 +210,8 @@ void register_DihedralComponent_class(){
             DihedralComponent_exposer.def( 
                 "theta123"
                 , theta123_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol that represents the angle between\npoints 1, 2 and 3" );
         
         }
         { //::SireSystem::DihedralComponent::toString
@@ -207,7 +221,8 @@ void register_DihedralComponent_class(){
             
             DihedralComponent_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireSystem::DihedralComponent::typeName
@@ -217,7 +232,8 @@ void register_DihedralComponent_class(){
             
             DihedralComponent_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         DihedralComponent_exposer.staticmethod( "phi" );

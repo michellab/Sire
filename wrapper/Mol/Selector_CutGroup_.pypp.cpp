@@ -47,14 +47,14 @@ void register_Selector_CutGroup__class(){
 
     { //::SireMol::Selector< SireMol::CutGroup >
         typedef bp::class_< SireMol::Selector< SireMol::CutGroup >, bp::bases< SireMol::MoleculeView, SireBase::Property > > Selector_CutGroup__exposer_t;
-        Selector_CutGroup__exposer_t Selector_CutGroup__exposer = Selector_CutGroup__exposer_t( "Selector_CutGroup_", bp::init< >() );
+        Selector_CutGroup__exposer_t Selector_CutGroup__exposer = Selector_CutGroup__exposer_t( "Selector_CutGroup_", "", bp::init< >("") );
         bp::scope Selector_CutGroup__scope( Selector_CutGroup__exposer );
-        Selector_CutGroup__exposer.def( bp::init< SireMol::CutGroup const & >(( bp::arg("view") )) );
-        Selector_CutGroup__exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("moldata") )) );
-        Selector_CutGroup__exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::AtomSelection const & >(( bp::arg("moldata"), bp::arg("selected_atoms") )) );
-        Selector_CutGroup__exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::CutGroup::ID const & >(( bp::arg("moldata"), bp::arg("viewid") )) );
-        Selector_CutGroup__exposer.def( bp::init< SireMol::MoleculeData const &, QList< SireMol::CGIdx > const & >(( bp::arg("moldata"), bp::arg("idxs") )) );
-        Selector_CutGroup__exposer.def( bp::init< SireMol::Selector< SireMol::CutGroup > const & >(( bp::arg("other") )) );
+        Selector_CutGroup__exposer.def( bp::init< SireMol::CutGroup const & >(( bp::arg("view") ), "") );
+        Selector_CutGroup__exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("moldata") ), "") );
+        Selector_CutGroup__exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::AtomSelection const & >(( bp::arg("moldata"), bp::arg("selected_atoms") ), "") );
+        Selector_CutGroup__exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::CutGroup::ID const & >(( bp::arg("moldata"), bp::arg("viewid") ), "") );
+        Selector_CutGroup__exposer.def( bp::init< SireMol::MoleculeData const &, QList< SireMol::CGIdx > const & >(( bp::arg("moldata"), bp::arg("idxs") ), "") );
+        Selector_CutGroup__exposer.def( bp::init< SireMol::Selector< SireMol::CutGroup > const & >(( bp::arg("other") ), "") );
         { //::SireMol::Selector< SireMol::CutGroup >::add
         
             typedef SireMol::Selector< SireMol::CutGroup > exported_class_t;
@@ -64,7 +64,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::add
@@ -76,7 +77,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("view") ) );
+                , ( bp::arg("view") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::add
@@ -88,7 +90,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("id") ) );
+                , ( bp::arg("id") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::at
@@ -100,7 +103,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::at
@@ -112,7 +116,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::contains
@@ -124,7 +129,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::contains
@@ -136,7 +142,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("view") ) );
+                , ( bp::arg("view") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::contains
@@ -148,7 +155,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("id") ) );
+                , ( bp::arg("id") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::count
@@ -159,7 +167,8 @@ void register_Selector_CutGroup__class(){
             
             Selector_CutGroup__exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::evaluate
@@ -170,7 +179,8 @@ void register_Selector_CutGroup__class(){
             
             Selector_CutGroup__exposer.def( 
                 "evaluate"
-                , evaluate_function_value );
+                , evaluate_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::evaluate
@@ -182,7 +192,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::evaluate
@@ -194,7 +205,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::hasMetadata
@@ -206,7 +218,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "hasMetadata"
                 , hasMetadata_function_value
-                , ( bp::arg("metakey") ) );
+                , ( bp::arg("metakey") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::hasMetadata
@@ -218,7 +231,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "hasMetadata"
                 , hasMetadata_function_value
-                , ( bp::arg("key"), bp::arg("metakey") ) );
+                , ( bp::arg("key"), bp::arg("metakey") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::hasProperty
@@ -230,7 +244,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "hasProperty"
                 , hasProperty_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::index
@@ -242,7 +257,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "index"
                 , index_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::intersection
@@ -254,7 +270,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "intersection"
                 , intersection_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::intersection
@@ -266,7 +283,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "intersection"
                 , intersection_function_value
-                , ( bp::arg("view") ) );
+                , ( bp::arg("view") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::intersection
@@ -278,7 +296,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "intersection"
                 , intersection_function_value
-                , ( bp::arg("id") ) );
+                , ( bp::arg("id") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::intersects
@@ -290,7 +309,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::intersects
@@ -302,7 +322,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("view") ) );
+                , ( bp::arg("view") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::intersects
@@ -314,7 +335,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("id") ) );
+                , ( bp::arg("id") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::invert
@@ -325,7 +347,8 @@ void register_Selector_CutGroup__class(){
             
             Selector_CutGroup__exposer.def( 
                 "invert"
-                , invert_function_value );
+                , invert_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::isEmpty
@@ -336,7 +359,8 @@ void register_Selector_CutGroup__class(){
             
             Selector_CutGroup__exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::metadataKeys
@@ -347,7 +371,8 @@ void register_Selector_CutGroup__class(){
             
             Selector_CutGroup__exposer.def( 
                 "metadataKeys"
-                , metadataKeys_function_value );
+                , metadataKeys_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::metadataKeys
@@ -359,7 +384,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "metadataKeys"
                 , metadataKeys_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::move
@@ -370,7 +396,8 @@ void register_Selector_CutGroup__class(){
             
             Selector_CutGroup__exposer.def( 
                 "move"
-                , move_function_value );
+                , move_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::move
@@ -382,7 +409,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::move
@@ -394,7 +422,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         Selector_CutGroup__exposer.def( bp::self != bp::self );
@@ -407,7 +436,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::operator()
@@ -419,7 +449,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         Selector_CutGroup__exposer.def( bp::self + bp::self );
@@ -438,7 +469,8 @@ void register_Selector_CutGroup__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::operator=
@@ -451,7 +483,8 @@ void register_Selector_CutGroup__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("view") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Selector_CutGroup__exposer.def( bp::self == bp::self );
@@ -464,7 +497,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::propertyKeys
@@ -475,7 +509,8 @@ void register_Selector_CutGroup__class(){
             
             Selector_CutGroup__exposer.def( 
                 "propertyKeys"
-                , propertyKeys_function_value );
+                , propertyKeys_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::selectedAll
@@ -486,7 +521,8 @@ void register_Selector_CutGroup__class(){
             
             Selector_CutGroup__exposer.def( 
                 "selectedAll"
-                , selectedAll_function_value );
+                , selectedAll_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::selection
@@ -497,7 +533,8 @@ void register_Selector_CutGroup__class(){
             
             Selector_CutGroup__exposer.def( 
                 "selection"
-                , selection_function_value );
+                , selection_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::selection
@@ -509,7 +546,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "selection"
                 , selection_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::selection
@@ -521,7 +559,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "selection"
                 , selection_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::selector
@@ -532,7 +571,8 @@ void register_Selector_CutGroup__class(){
             
             Selector_CutGroup__exposer.def( 
                 "selector"
-                , selector_function_value );
+                , selector_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::selector
@@ -544,7 +584,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "selector"
                 , selector_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::selector
@@ -556,7 +597,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "selector"
                 , selector_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::subtract
@@ -568,7 +610,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::subtract
@@ -580,7 +623,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("view") ) );
+                , ( bp::arg("view") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::subtract
@@ -592,7 +636,8 @@ void register_Selector_CutGroup__class(){
             Selector_CutGroup__exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("id") ) );
+                , ( bp::arg("id") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::toString
@@ -603,7 +648,8 @@ void register_Selector_CutGroup__class(){
             
             Selector_CutGroup__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::CutGroup >::typeName
@@ -614,7 +660,8 @@ void register_Selector_CutGroup__class(){
             
             Selector_CutGroup__exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         Selector_CutGroup__exposer.staticmethod( "typeName" );

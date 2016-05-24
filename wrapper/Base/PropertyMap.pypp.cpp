@@ -27,11 +27,11 @@ void register_PropertyMap_class(){
 
     { //::SireBase::PropertyMap
         typedef bp::class_< SireBase::PropertyMap > PropertyMap_exposer_t;
-        PropertyMap_exposer_t PropertyMap_exposer = PropertyMap_exposer_t( "PropertyMap", bp::init< >() );
+        PropertyMap_exposer_t PropertyMap_exposer = PropertyMap_exposer_t( "PropertyMap", "This is the class that holds the collection of user-supplied\noptional properties and their locations to functions.\n\nThis class allows the following code to be written;\n\ncljff.add( mol, Property::set(charges,chgs) +\nProperty::set(ljs,ljparams) );\n\nThe PropertyMapPropertyName classes provide a kwargs\nlike interface for the C++ classes - indeed the python\nwrappers should allow code to be written like;\n\ncljff.add( mol, {charges : chgs, ljs : ljparams} )\n\nor\n\ncljff.add( mol, charges=charges, ljs=ljparams )\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope PropertyMap_scope( PropertyMap_exposer );
-        PropertyMap_exposer.def( bp::init< QString const &, SireBase::PropertyName const & >(( bp::arg("property"), bp::arg("propname") )) );
-        PropertyMap_exposer.def( bp::init< QHash< QString, SireBase::PropertyName > const & >(( bp::arg("propnames") )) );
-        PropertyMap_exposer.def( bp::init< SireBase::PropertyMap const & >(( bp::arg("other") )) );
+        PropertyMap_exposer.def( bp::init< QString const &, SireBase::PropertyName const & >(( bp::arg("property"), bp::arg("propname") ), "Construct a map that holds just a single PropertyName") );
+        PropertyMap_exposer.def( bp::init< QHash< QString, SireBase::PropertyName > const & >(( bp::arg("propnames") ), "Construct a map that holds lots of PropertyNames") );
+        PropertyMap_exposer.def( bp::init< SireBase::PropertyMap const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireBase::PropertyMap::isDefault
         
             typedef bool ( ::SireBase::PropertyMap::*isDefault_function_type)(  ) const;
@@ -39,7 +39,8 @@ void register_PropertyMap_class(){
             
             PropertyMap_exposer.def( 
                 "isDefault"
-                , isDefault_function_value );
+                , isDefault_function_value
+                , "Return whether or not this map is default - if it is,\nthen it doesnt specify any properties" );
         
         }
         PropertyMap_exposer.def( bp::self != bp::self );
@@ -53,7 +54,8 @@ void register_PropertyMap_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         PropertyMap_exposer.def( bp::self == bp::self );
@@ -65,7 +67,8 @@ void register_PropertyMap_class(){
             PropertyMap_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "" );
         
         }
         { //::SireBase::PropertyMap::operator[]
@@ -76,7 +79,8 @@ void register_PropertyMap_class(){
             PropertyMap_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "" );
         
         }
         { //::SireBase::PropertyMap::operator[]
@@ -87,7 +91,8 @@ void register_PropertyMap_class(){
             PropertyMap_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "" );
         
         }
         { //::SireBase::PropertyMap::set
@@ -98,7 +103,8 @@ void register_PropertyMap_class(){
             PropertyMap_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("name"), bp::arg("source") ) );
+                , ( bp::arg("name"), bp::arg("source") )
+                , "Set the property called name to have the source or value\nin source. This replaces any existing source or value\nfor any existing property of this name in this map" );
         
         }
         { //::SireBase::PropertyMap::specified
@@ -109,7 +115,8 @@ void register_PropertyMap_class(){
             PropertyMap_exposer.def( 
                 "specified"
                 , specified_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "Return whether or not this map specifies the source or value\nof the property called name" );
         
         }
         { //::SireBase::PropertyMap::specified
@@ -120,7 +127,8 @@ void register_PropertyMap_class(){
             PropertyMap_exposer.def( 
                 "specified"
                 , specified_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "Return whether or not this map specifies the source or value\nof the property called name" );
         
         }
         { //::SireBase::PropertyMap::specified
@@ -131,7 +139,8 @@ void register_PropertyMap_class(){
             PropertyMap_exposer.def( 
                 "specified"
                 , specified_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "Return whether or not this map specifies the source or value\nof the property called name" );
         
         }
         { //::SireBase::PropertyMap::toString
@@ -141,7 +150,8 @@ void register_PropertyMap_class(){
             
             PropertyMap_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this PropertyMap" );
         
         }
         { //::SireBase::PropertyMap::typeName
@@ -151,7 +161,8 @@ void register_PropertyMap_class(){
             
             PropertyMap_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireBase::PropertyMap::what
@@ -161,7 +172,8 @@ void register_PropertyMap_class(){
             
             PropertyMap_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         PropertyMap_exposer.staticmethod( "typeName" );

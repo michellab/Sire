@@ -25,9 +25,9 @@ void register_NullProbe_class(){
 
     { //::SireFF::NullProbe
         typedef bp::class_< SireFF::NullProbe, bp::bases< SireFF::Probe, SireBase::Property > > NullProbe_exposer_t;
-        NullProbe_exposer_t NullProbe_exposer = NullProbe_exposer_t( "NullProbe", bp::init< >() );
+        NullProbe_exposer_t NullProbe_exposer = NullProbe_exposer_t( "NullProbe", "This is a null Probe", bp::init< >("Constructor") );
         bp::scope NullProbe_scope( NullProbe_exposer );
-        NullProbe_exposer.def( bp::init< SireFF::NullProbe const & >(( bp::arg("other") )) );
+        NullProbe_exposer.def( bp::init< SireFF::NullProbe const & >(( bp::arg("other") ), "Copy constructor") );
         NullProbe_exposer.def( bp::self != bp::self );
         { //::SireFF::NullProbe::operator=
         
@@ -38,7 +38,8 @@ void register_NullProbe_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         NullProbe_exposer.def( bp::self == bp::self );
@@ -49,7 +50,8 @@ void register_NullProbe_class(){
             
             NullProbe_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         NullProbe_exposer.staticmethod( "typeName" );

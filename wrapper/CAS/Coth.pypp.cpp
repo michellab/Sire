@@ -33,10 +33,10 @@ void register_Coth_class(){
 
     { //::SireCAS::Coth
         typedef bp::class_< SireCAS::Coth, bp::bases< SireCAS::SingleFunc, SireCAS::ExBase > > Coth_exposer_t;
-        Coth_exposer_t Coth_exposer = Coth_exposer_t( "Coth", bp::init< >() );
+        Coth_exposer_t Coth_exposer = Coth_exposer_t( "Coth", "Hyperbolic cotangent", bp::init< >("Null constructor") );
         bp::scope Coth_scope( Coth_exposer );
-        Coth_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") )) );
-        Coth_exposer.def( bp::init< SireCAS::Coth const & >(( bp::arg("other") )) );
+        Coth_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") ), "Construct cos(expression)") );
+        Coth_exposer.def( bp::init< SireCAS::Coth const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::Coth::evaluate
         
             typedef double ( ::SireCAS::Coth::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -45,7 +45,8 @@ void register_Coth_class(){
             Coth_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::Coth::evaluate
@@ -56,7 +57,8 @@ void register_Coth_class(){
             Coth_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         Coth_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -67,7 +69,8 @@ void register_Coth_class(){
             
             Coth_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::Coth::what
@@ -77,7 +80,8 @@ void register_Coth_class(){
             
             Coth_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Coth_exposer.staticmethod( "typeName" );

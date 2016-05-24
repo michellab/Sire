@@ -25,22 +25,22 @@ void register_ComplexValues_class(){
 
     { //::SireCAS::ComplexValues
         typedef bp::class_< SireCAS::ComplexValues > ComplexValues_exposer_t;
-        ComplexValues_exposer_t ComplexValues_exposer = ComplexValues_exposer_t( "ComplexValues", bp::init< >() );
+        ComplexValues_exposer_t ComplexValues_exposer = ComplexValues_exposer_t( "ComplexValues", "\nThis class holds a set of Symbols and their associated complex values.\nThis is used when numerically evaluating an equation using complex maths.\n\nAuthor: Christopher Woods\n", bp::init< >("Construct an empty set of values") );
         bp::scope ComplexValues_scope( ComplexValues_exposer );
-        ComplexValues_exposer.def( bp::init< QList< SireCAS::SymbolComplex > const & >(( bp::arg("values") )) );
-        ComplexValues_exposer.def( bp::init< QHash< SireCAS::Symbol, SireMaths::Complex > const & >(( bp::arg("values") )) );
-        ComplexValues_exposer.def( bp::init< SireCAS::SymbolComplex const & >(( bp::arg("symval0") )) );
-        ComplexValues_exposer.def( bp::init< SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const & >(( bp::arg("symval0"), bp::arg("symval1") )) );
-        ComplexValues_exposer.def( bp::init< SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2") )) );
-        ComplexValues_exposer.def( bp::init< SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3") )) );
-        ComplexValues_exposer.def( bp::init< SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4") )) );
-        ComplexValues_exposer.def( bp::init< SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5") )) );
-        ComplexValues_exposer.def( bp::init< SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6") )) );
-        ComplexValues_exposer.def( bp::init< SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7") )) );
-        ComplexValues_exposer.def( bp::init< SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7"), bp::arg("symval8") )) );
-        ComplexValues_exposer.def( bp::init< SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7"), bp::arg("symval8"), bp::arg("symval9") )) );
-        ComplexValues_exposer.def( bp::init< SireCAS::Values const & >(( bp::arg("other") )) );
-        ComplexValues_exposer.def( bp::init< SireCAS::ComplexValues const & >(( bp::arg("other") )) );
+        ComplexValues_exposer.def( bp::init< QList< SireCAS::SymbolComplex > const & >(( bp::arg("values") ), "Construct from a list of values") );
+        ComplexValues_exposer.def( bp::init< QHash< SireCAS::Symbol, SireMaths::Complex > const & >(( bp::arg("values") ), "Construct from a hash of values indexed by symbol") );
+        ComplexValues_exposer.def( bp::init< SireCAS::SymbolComplex const & >(( bp::arg("symval0") ), "Construct from the passed values") );
+        ComplexValues_exposer.def( bp::init< SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const & >(( bp::arg("symval0"), bp::arg("symval1") ), "Construct from the passed values") );
+        ComplexValues_exposer.def( bp::init< SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2") ), "Construct from the passed values") );
+        ComplexValues_exposer.def( bp::init< SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3") ), "Construct from the passed values") );
+        ComplexValues_exposer.def( bp::init< SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4") ), "Construct from the passed values") );
+        ComplexValues_exposer.def( bp::init< SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5") ), "Construct from the passed values") );
+        ComplexValues_exposer.def( bp::init< SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6") ), "Construct from the passed values") );
+        ComplexValues_exposer.def( bp::init< SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7") ), "Construct from the passed values") );
+        ComplexValues_exposer.def( bp::init< SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7"), bp::arg("symval8") ), "Construct from the passed values") );
+        ComplexValues_exposer.def( bp::init< SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const &, SireCAS::SymbolComplex const & >(( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7"), bp::arg("symval8"), bp::arg("symval9") ), "Construct from the passed values") );
+        ComplexValues_exposer.def( bp::init< SireCAS::Values const & >(( bp::arg("other") ), "Construct from Values") );
+        ComplexValues_exposer.def( bp::init< SireCAS::ComplexValues const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::ComplexValues::add
         
             typedef void ( ::SireCAS::ComplexValues::*add_function_type)( ::SireCAS::SymbolComplex const & ) ;
@@ -49,7 +49,8 @@ void register_ComplexValues_class(){
             ComplexValues_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symval0") ) );
+                , ( bp::arg("symval0") )
+                , "" );
         
         }
         { //::SireCAS::ComplexValues::add
@@ -60,7 +61,8 @@ void register_ComplexValues_class(){
             ComplexValues_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symval0"), bp::arg("symval1") ) );
+                , ( bp::arg("symval0"), bp::arg("symval1") )
+                , "Add the passed values" );
         
         }
         { //::SireCAS::ComplexValues::add
@@ -71,7 +73,8 @@ void register_ComplexValues_class(){
             ComplexValues_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2") ) );
+                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2") )
+                , "Add the passed values" );
         
         }
         { //::SireCAS::ComplexValues::add
@@ -82,7 +85,8 @@ void register_ComplexValues_class(){
             ComplexValues_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3") ) );
+                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3") )
+                , "Add the passed values" );
         
         }
         { //::SireCAS::ComplexValues::add
@@ -93,7 +97,8 @@ void register_ComplexValues_class(){
             ComplexValues_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4") ) );
+                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4") )
+                , "Add the passed values" );
         
         }
         { //::SireCAS::ComplexValues::add
@@ -104,7 +109,8 @@ void register_ComplexValues_class(){
             ComplexValues_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5") ) );
+                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5") )
+                , "Add the passed values" );
         
         }
         { //::SireCAS::ComplexValues::add
@@ -115,7 +121,8 @@ void register_ComplexValues_class(){
             ComplexValues_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6") ) );
+                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6") )
+                , "Add the passed values" );
         
         }
         { //::SireCAS::ComplexValues::add
@@ -126,7 +133,8 @@ void register_ComplexValues_class(){
             ComplexValues_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7") ) );
+                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7") )
+                , "Add the passed values" );
         
         }
         { //::SireCAS::ComplexValues::add
@@ -137,7 +145,8 @@ void register_ComplexValues_class(){
             ComplexValues_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7"), bp::arg("symval8") ) );
+                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7"), bp::arg("symval8") )
+                , "Add the passed values" );
         
         }
         { //::SireCAS::ComplexValues::add
@@ -148,7 +157,8 @@ void register_ComplexValues_class(){
             ComplexValues_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7"), bp::arg("symval8"), bp::arg("symval9") ) );
+                , ( bp::arg("symval0"), bp::arg("symval1"), bp::arg("symval2"), bp::arg("symval3"), bp::arg("symval4"), bp::arg("symval5"), bp::arg("symval6"), bp::arg("symval7"), bp::arg("symval8"), bp::arg("symval9") )
+                , "Add the passed values" );
         
         }
         { //::SireCAS::ComplexValues::set
@@ -159,7 +169,8 @@ void register_ComplexValues_class(){
             ComplexValues_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("symbol"), bp::arg("value") ) );
+                , ( bp::arg("symbol"), bp::arg("value") )
+                , "" );
         
         }
         { //::SireCAS::ComplexValues::typeName
@@ -169,7 +180,8 @@ void register_ComplexValues_class(){
             
             ComplexValues_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::ComplexValues::value
@@ -180,7 +192,8 @@ void register_ComplexValues_class(){
             ComplexValues_exposer.def( 
                 "value"
                 , value_function_value
-                , ( bp::arg("sym") ) );
+                , ( bp::arg("sym") )
+                , "Return the value of the Symbol with ID id, or 0.0 if there is no such symbol" );
         
         }
         { //::SireCAS::ComplexValues::values
@@ -191,7 +204,8 @@ void register_ComplexValues_class(){
             ComplexValues_exposer.def( 
                 "values"
                 , values_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireCAS::ComplexValues::what
@@ -201,7 +215,8 @@ void register_ComplexValues_class(){
             
             ComplexValues_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ComplexValues_exposer.staticmethod( "typeName" );

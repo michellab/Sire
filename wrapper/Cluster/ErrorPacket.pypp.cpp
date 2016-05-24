@@ -31,10 +31,10 @@ void register_ErrorPacket_class(){
 
     { //::SireCluster::ErrorPacket
         typedef bp::class_< SireCluster::ErrorPacket, bp::bases< SireCluster::WorkPacketBase > > ErrorPacket_exposer_t;
-        ErrorPacket_exposer_t ErrorPacket_exposer = ErrorPacket_exposer_t( "ErrorPacket", bp::init< >() );
+        ErrorPacket_exposer_t ErrorPacket_exposer = ErrorPacket_exposer_t( "ErrorPacket", "This is a packet that contains an error. This is returned\nif something went wrong while running a WorkPacket\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope ErrorPacket_scope( ErrorPacket_exposer );
-        ErrorPacket_exposer.def( bp::init< SireError::exception const & >(( bp::arg("e") )) );
-        ErrorPacket_exposer.def( bp::init< SireCluster::ErrorPacket const & >(( bp::arg("other") )) );
+        ErrorPacket_exposer.def( bp::init< SireError::exception const & >(( bp::arg("e") ), "Construct an ErrorPacket for the error e") );
+        ErrorPacket_exposer.def( bp::init< SireCluster::ErrorPacket const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCluster::ErrorPacket::approximatePacketSize
         
             typedef int ( ::SireCluster::ErrorPacket::*approximatePacketSize_function_type)(  ) const;
@@ -42,7 +42,8 @@ void register_ErrorPacket_class(){
             
             ErrorPacket_exposer.def( 
                 "approximatePacketSize"
-                , approximatePacketSize_function_value );
+                , approximatePacketSize_function_value
+                , "Return the approximate maximum size (in bytes) of the WorkPacket. This\ndoesnt have to exact (or indeed accurate) - it is used\nto help the WorkPacket::pack() function reserve enough\nspace when serialising this packet to a binary array.\nThe only penalty of getting this wrong is that youll\neither allocate too much space, or be reallocating while\nthe packet is being written" );
         
         }
         { //::SireCluster::ErrorPacket::hasFinished
@@ -52,7 +53,8 @@ void register_ErrorPacket_class(){
             
             ErrorPacket_exposer.def( 
                 "hasFinished"
-                , hasFinished_function_value );
+                , hasFinished_function_value
+                , "Return whether or not the work has finished" );
         
         }
         { //::SireCluster::ErrorPacket::isError
@@ -62,7 +64,8 @@ void register_ErrorPacket_class(){
             
             ErrorPacket_exposer.def( 
                 "isError"
-                , isError_function_value );
+                , isError_function_value
+                , "Return whether or not this is an error" );
         
         }
         { //::SireCluster::ErrorPacket::operator=
@@ -74,7 +77,8 @@ void register_ErrorPacket_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireCluster::ErrorPacket::throwError
@@ -84,7 +88,8 @@ void register_ErrorPacket_class(){
             
             ErrorPacket_exposer.def( 
                 "throwError"
-                , throwError_function_value );
+                , throwError_function_value
+                , "Throw the error associated with this packet" );
         
         }
         { //::SireCluster::ErrorPacket::typeName
@@ -94,7 +99,8 @@ void register_ErrorPacket_class(){
             
             ErrorPacket_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCluster::ErrorPacket::what
@@ -104,7 +110,8 @@ void register_ErrorPacket_class(){
             
             ErrorPacket_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ErrorPacket_exposer.staticmethod( "typeName" );

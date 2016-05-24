@@ -25,9 +25,9 @@ void register_Index_class(){
 
     { //::SireID::Index
         typedef bp::class_< SireID::Index, bp::bases< SireID::IndexBase > > Index_exposer_t;
-        Index_exposer_t Index_exposer = Index_exposer_t( "Index", bp::init< bp::optional< qint32 > >(( bp::arg("idx")=(::qint32)(SireID::IndexBase::null()) )) );
+        Index_exposer_t Index_exposer = Index_exposer_t( "Index", "", bp::init< bp::optional< qint32 > >(( bp::arg("idx")=(::qint32)(SireID::IndexBase::null()) ), "") );
         bp::scope Index_scope( Index_exposer );
-        Index_exposer.def( bp::init< SireID::Index const & >(( bp::arg("other") )) );
+        Index_exposer.def( bp::init< SireID::Index const & >(( bp::arg("other") ), "") );
         { //::SireID::Index::null
         
             typedef ::SireID::Index ( *null_function_type )(  );
@@ -35,7 +35,8 @@ void register_Index_class(){
             
             Index_exposer.def( 
                 "null"
-                , null_function_value );
+                , null_function_value
+                , "" );
         
         }
         { //::SireID::Index::toString
@@ -45,7 +46,8 @@ void register_Index_class(){
             
             Index_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireID::Index::typeName
@@ -55,7 +57,8 @@ void register_Index_class(){
             
             Index_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         Index_exposer.staticmethod( "null" );

@@ -74,10 +74,10 @@ void register_Segment_class(){
 
     { //::SireMol::Segment
         typedef bp::class_< SireMol::Segment, bp::bases< SireMol::MoleculeView, SireBase::Property > > Segment_exposer_t;
-        Segment_exposer_t Segment_exposer = Segment_exposer_t( "Segment", bp::init< >() );
+        Segment_exposer_t Segment_exposer = Segment_exposer_t( "Segment", "This is a view of a single segment within a molecule\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope Segment_scope( Segment_exposer );
-        Segment_exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::SegID const & >(( bp::arg("data"), bp::arg("segid") )) );
-        Segment_exposer.def( bp::init< SireMol::Segment const & >(( bp::arg("other") )) );
+        Segment_exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::SegID const & >(( bp::arg("data"), bp::arg("segid") ), "Construct the Segment at ID cgid in the molecule whose data\nis in moldata\nThrow: SireMol::missing_Segment\nThrow: SireMol::duplicate_Segment\nThrow: SireError::invalid_index\n") );
+        Segment_exposer.def( bp::init< SireMol::Segment const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::Segment::assertContainsMetadata
         
             typedef void ( ::SireMol::Segment::*assertContainsMetadata_function_type)( ::SireBase::PropertyName const & ) const;
@@ -86,7 +86,8 @@ void register_Segment_class(){
             Segment_exposer.def( 
                 "assertContainsMetadata"
                 , assertContainsMetadata_function_value
-                , ( bp::arg("metakey") ) );
+                , ( bp::arg("metakey") )
+                , "Assert that this segment has an SegProperty piece of metadata\nat metakey metakey\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::Segment::assertContainsMetadata
@@ -97,7 +98,8 @@ void register_Segment_class(){
             Segment_exposer.def( 
                 "assertContainsMetadata"
                 , assertContainsMetadata_function_value
-                , ( bp::arg("key"), bp::arg("metakey") ) );
+                , ( bp::arg("key"), bp::arg("metakey") )
+                , "Assert that the property at key key has an SegProperty\npiece of metadata at metakey metakey\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::Segment::assertContainsProperty
@@ -108,7 +110,8 @@ void register_Segment_class(){
             Segment_exposer.def( 
                 "assertContainsProperty"
                 , assertContainsProperty_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "Assert that this segment has an SegProperty at key key\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::Segment::atomIdxs
@@ -119,7 +122,8 @@ void register_Segment_class(){
             Segment_exposer.def( 
                 "atomIdxs"
                 , atomIdxs_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the indicies of the atoms in this segment, in the\norder that they appear in this segment" );
         
         }
         { //::SireMol::Segment::contains
@@ -130,7 +134,8 @@ void register_Segment_class(){
             Segment_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("atomidx") ) );
+                , ( bp::arg("atomidx") )
+                , "Return whether or not this segment contains the atom\nat index atomidx" );
         
         }
         { //::SireMol::Segment::contains
@@ -141,7 +146,8 @@ void register_Segment_class(){
             Segment_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "Return whether or not this segment contains all of\nthe atoms identified by the ID atomid" );
         
         }
         { //::SireMol::Segment::edit
@@ -151,7 +157,8 @@ void register_Segment_class(){
             
             Segment_exposer.def( 
                 "edit"
-                , edit_function_value );
+                , edit_function_value
+                , "Return an editor that can edit this Segment" );
         
         }
         { //::SireMol::Segment::evaluate
@@ -161,7 +168,8 @@ void register_Segment_class(){
             
             Segment_exposer.def( 
                 "evaluate"
-                , evaluate_function_value );
+                , evaluate_function_value
+                , "Return an evaluator that can evaluate properties\nof this Segment" );
         
         }
         { //::SireMol::Segment::hasMetadata
@@ -172,7 +180,8 @@ void register_Segment_class(){
             Segment_exposer.def( 
                 "hasMetadata"
                 , hasMetadata_function_value
-                , ( bp::arg("metakey") ) );
+                , ( bp::arg("metakey") )
+                , "Return whether or not there is a SegProperty at metakey metakey" );
         
         }
         { //::SireMol::Segment::hasMetadata
@@ -183,7 +192,8 @@ void register_Segment_class(){
             Segment_exposer.def( 
                 "hasMetadata"
                 , hasMetadata_function_value
-                , ( bp::arg("key"), bp::arg("metakey") ) );
+                , ( bp::arg("key"), bp::arg("metakey") )
+                , "Return whether the metadata at metakey metakey for the property\nat key key is a SegProperty\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::Segment::hasProperty
@@ -194,7 +204,8 @@ void register_Segment_class(){
             Segment_exposer.def( 
                 "hasProperty"
                 , hasProperty_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "Return whether or not there is a SegProperty at key key" );
         
         }
         { //::SireMol::Segment::index
@@ -204,7 +215,8 @@ void register_Segment_class(){
             
             Segment_exposer.def( 
                 "index"
-                , index_function_value );
+                , index_function_value
+                , "Return the index of this Segment in the molecule" );
         
         }
         { //::SireMol::Segment::intersects
@@ -215,7 +227,8 @@ void register_Segment_class(){
             Segment_exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "Return whether or not this segment contains some of\nthe atoms identified by the ID atomid" );
         
         }
         { //::SireMol::Segment::isEmpty
@@ -225,7 +238,8 @@ void register_Segment_class(){
             
             Segment_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether or not this segment is empty" );
         
         }
         { //::SireMol::Segment::metadataKeys
@@ -235,7 +249,8 @@ void register_Segment_class(){
             
             Segment_exposer.def( 
                 "metadataKeys"
-                , metadataKeys_function_value );
+                , metadataKeys_function_value
+                , "Return the metakeys of all SegProperty metadata" );
         
         }
         { //::SireMol::Segment::metadataKeys
@@ -246,7 +261,8 @@ void register_Segment_class(){
             Segment_exposer.def( 
                 "metadataKeys"
                 , metadataKeys_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "Return the metakeys of all SegProperty metadata for\nthe property at key key\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::Segment::move
@@ -256,7 +272,8 @@ void register_Segment_class(){
             
             Segment_exposer.def( 
                 "move"
-                , move_function_value );
+                , move_function_value
+                , "Return an object that can move a copy of this Segment" );
         
         }
         { //::SireMol::Segment::nAtoms
@@ -266,7 +283,8 @@ void register_Segment_class(){
             
             Segment_exposer.def( 
                 "nAtoms"
-                , nAtoms_function_value );
+                , nAtoms_function_value
+                , "Return the number of atoms in this Segment" );
         
         }
         { //::SireMol::Segment::name
@@ -277,7 +295,8 @@ void register_Segment_class(){
             Segment_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the name of this Segment" );
         
         }
         Segment_exposer.def( bp::self != bp::self );
@@ -290,7 +309,8 @@ void register_Segment_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Segment_exposer.def( bp::self == bp::self );
@@ -301,7 +321,8 @@ void register_Segment_class(){
             
             Segment_exposer.def( 
                 "propertyKeys"
-                , propertyKeys_function_value );
+                , propertyKeys_function_value
+                , "Return the keys of all SegProperty properties" );
         
         }
         { //::SireMol::Segment::selectedAll
@@ -311,7 +332,8 @@ void register_Segment_class(){
             
             Segment_exposer.def( 
                 "selectedAll"
-                , selectedAll_function_value );
+                , selectedAll_function_value
+                , "Return whether or not this segment contains the entire molecule" );
         
         }
         { //::SireMol::Segment::selection
@@ -321,7 +343,8 @@ void register_Segment_class(){
             
             Segment_exposer.def( 
                 "selection"
-                , selection_function_value );
+                , selection_function_value
+                , "Return the atoms that are in this Segment" );
         
         }
         { //::SireMol::Segment::selector
@@ -331,7 +354,8 @@ void register_Segment_class(){
             
             Segment_exposer.def( 
                 "selector"
-                , selector_function_value );
+                , selector_function_value
+                , "Return a selector that can be used to change the selection\nof segments from the molecule" );
         
         }
         { //::SireMol::Segment::toString
@@ -341,7 +365,8 @@ void register_Segment_class(){
             
             Segment_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this segment" );
         
         }
         { //::SireMol::Segment::typeName
@@ -351,7 +376,8 @@ void register_Segment_class(){
             
             Segment_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::Segment::update
@@ -362,7 +388,8 @@ void register_Segment_class(){
             Segment_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("moldata") ) );
+                , ( bp::arg("moldata") )
+                , "Update this segment with the passed molecule data.\nThrow: SireError::incompatible_error\n" );
         
         }
         Segment_exposer.staticmethod( "typeName" );

@@ -29,12 +29,12 @@ void register_CLJGroup_class(){
 
     { //::SireMM::CLJGroup
         typedef bp::class_< SireMM::CLJGroup > CLJGroup_exposer_t;
-        CLJGroup_exposer_t CLJGroup_exposer = CLJGroup_exposer_t( "CLJGroup", bp::init< >() );
+        CLJGroup_exposer_t CLJGroup_exposer = CLJGroup_exposer_t( "CLJGroup", "This class holds and manages a group of molecules that have been\nadded to a CLJBoxes object.\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope CLJGroup_scope( CLJGroup_exposer );
-        CLJGroup_exposer.def( bp::init< SireMM::CLJAtoms::ID_SOURCE >(( bp::arg("id_source") )) );
-        CLJGroup_exposer.def( bp::init< SireMM::CLJExtractor::EXTRACT_SOURCE >(( bp::arg("extract_source") )) );
-        CLJGroup_exposer.def( bp::init< SireMM::CLJAtoms::ID_SOURCE, SireMM::CLJExtractor::EXTRACT_SOURCE >(( bp::arg("id_source"), bp::arg("extract_source") )) );
-        CLJGroup_exposer.def( bp::init< SireMM::CLJGroup const & >(( bp::arg("other") )) );
+        CLJGroup_exposer.def( bp::init< SireMM::CLJAtoms::ID_SOURCE >(( bp::arg("id_source") ), "Construct, suppling the name of the molecule group and the source of the\nCLJAtoms ID_SOURCE property (e.g. USE_MOLNUM for intermolecular forcefields or\nUSE_ATOMNUM for intramolecular forcefields)") );
+        CLJGroup_exposer.def( bp::init< SireMM::CLJExtractor::EXTRACT_SOURCE >(( bp::arg("extract_source") ), "Construct specifying how the atoms will be extracted from the molecule") );
+        CLJGroup_exposer.def( bp::init< SireMM::CLJAtoms::ID_SOURCE, SireMM::CLJExtractor::EXTRACT_SOURCE >(( bp::arg("id_source"), bp::arg("extract_source") ), "Construct, suppling the name of the molecule group and the source of the\nCLJAtoms ID_SOURCE property (e.g. USE_MOLNUM for intermolecular forcefields or\nUSE_ATOMNUM for intramolecular forcefields), and also specifying if we are going\nto split molecules by cutgroup, residue or molecule, (normally best to\nextract by cutgroup unless you know that all molecules are going to be small)") );
+        CLJGroup_exposer.def( bp::init< SireMM::CLJGroup const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::CLJGroup::accept
         
             typedef void ( ::SireMM::CLJGroup::*accept_function_type)(  ) ;
@@ -42,7 +42,8 @@ void register_CLJGroup_class(){
             
             CLJGroup_exposer.def( 
                 "accept"
-                , accept_function_value );
+                , accept_function_value
+                , "Accept all of the changes in the group. This will ensure that\nall deltas have been removed and all of the atoms are correctly\nadded to the CLJBoxes boxes" );
         
         }
         { //::SireMM::CLJGroup::add
@@ -53,7 +54,8 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Add the passed molecule to this group" );
         
         }
         { //::SireMM::CLJGroup::add
@@ -64,7 +66,8 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Add all of the passed molecules to this group" );
         
         }
         { //::SireMM::CLJGroup::add
@@ -75,7 +78,8 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Add all of the passed molecules to this group" );
         
         }
         { //::SireMM::CLJGroup::boxLength
@@ -85,7 +89,8 @@ void register_CLJGroup_class(){
             
             CLJGroup_exposer.def( 
                 "boxLength"
-                , boxLength_function_value );
+                , boxLength_function_value
+                , "Return the size of the box used by CLJBoxes to partition space" );
         
         }
         { //::SireMM::CLJGroup::changedAtoms
@@ -95,7 +100,8 @@ void register_CLJGroup_class(){
             
             CLJGroup_exposer.def( 
                 "changedAtoms"
-                , changedAtoms_function_value );
+                , changedAtoms_function_value
+                , "Return the set of all atoms that have changed since the last\ntime accept() was called. This will return an empty set if\nthe workspace was told to mustRecalculateFromScratch()" );
         
         }
         { //::SireMM::CLJGroup::changedMolecules
@@ -105,7 +111,8 @@ void register_CLJGroup_class(){
             
             CLJGroup_exposer.def( 
                 "changedMolecules"
-                , changedMolecules_function_value );
+                , changedMolecules_function_value
+                , "Return all of the molecules that have changed since the last time\nthis CLJGroup was accepted" );
         
         }
         { //::SireMM::CLJGroup::cljBoxes
@@ -116,7 +123,8 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "cljBoxes"
                 , cljBoxes_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::CLJGroup::isEmpty
@@ -126,7 +134,8 @@ void register_CLJGroup_class(){
             
             CLJGroup_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMM::CLJGroup::isSingleIDChange
@@ -136,7 +145,8 @@ void register_CLJGroup_class(){
             
             CLJGroup_exposer.def( 
                 "isSingleIDChange"
-                , isSingleIDChange_function_value );
+                , isSingleIDChange_function_value
+                , "Return whether or not the changes since the last time accept()\nwas called all change parts of a molecule that all have the same\nID. If they do, then we only need to use changedAtoms() in the\ndelta energy calculation as the changed atoms dont interact with\neach other. Otherwise, we need mergeChanges() to get the changedAtoms\ntogether with oldAtoms and newAtoms, so that we can calculate the\nchange in energy within changedAtoms() itself as well" );
         
         }
         { //::SireMM::CLJGroup::mapForMolecule
@@ -147,7 +157,8 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "mapForMolecule"
                 , mapForMolecule_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Return the property map used for the molecule with number molnum" );
         
         }
         { //::SireMM::CLJGroup::mergeChanges
@@ -157,7 +168,8 @@ void register_CLJGroup_class(){
             
             CLJGroup_exposer.def( 
                 "mergeChanges"
-                , mergeChanges_function_value );
+                , mergeChanges_function_value
+                , "Return a tuple of (changedAtoms(),oldAtoms(),newAtoms()). This is\nneeded if more than a single ID group has changed and thus we\nneed to calculate the change in interaction within changedAtoms" );
         
         }
         { //::SireMM::CLJGroup::molecules
@@ -167,7 +179,8 @@ void register_CLJGroup_class(){
             
             CLJGroup_exposer.def( 
                 "molecules"
-                , molecules_function_value );
+                , molecules_function_value
+                , "Return the current version of all of the molecules in this group" );
         
         }
         { //::SireMM::CLJGroup::mustReallyRecalculateFromScratch
@@ -177,7 +190,8 @@ void register_CLJGroup_class(){
             
             CLJGroup_exposer.def( 
                 "mustReallyRecalculateFromScratch"
-                , mustReallyRecalculateFromScratch_function_value );
+                , mustReallyRecalculateFromScratch_function_value
+                , "Tell the group that calculations will be made completely from scratch,\nand to also re-extract all of the molecules" );
         
         }
         { //::SireMM::CLJGroup::mustRecalculateFromScratch
@@ -187,7 +201,8 @@ void register_CLJGroup_class(){
             
             CLJGroup_exposer.def( 
                 "mustRecalculateFromScratch"
-                , mustRecalculateFromScratch_function_value );
+                , mustRecalculateFromScratch_function_value
+                , "Tell the group that calculations will be made completely from scratch,\nso there is no need to maintain a delta" );
         
         }
         { //::SireMM::CLJGroup::nChangedMolecules
@@ -197,7 +212,8 @@ void register_CLJGroup_class(){
             
             CLJGroup_exposer.def( 
                 "nChangedMolecules"
-                , nChangedMolecules_function_value );
+                , nChangedMolecules_function_value
+                , "Return the number of molecules that have changed since the\nlast time this CLJGroup was accepted" );
         
         }
         { //::SireMM::CLJGroup::needsAccepting
@@ -207,7 +223,8 @@ void register_CLJGroup_class(){
             
             CLJGroup_exposer.def( 
                 "needsAccepting"
-                , needsAccepting_function_value );
+                , needsAccepting_function_value
+                , "Return whether or not this group needs to be accepted" );
         
         }
         { //::SireMM::CLJGroup::newAtoms
@@ -217,7 +234,8 @@ void register_CLJGroup_class(){
             
             CLJGroup_exposer.def( 
                 "newAtoms"
-                , newAtoms_function_value );
+                , newAtoms_function_value
+                , "Return the set of all of the new atoms that have changed\nsince the last time accept() was called. This, plus the\nnegative of oldAtoms() will equal changedAtoms()" );
         
         }
         { //::SireMM::CLJGroup::oldAtoms
@@ -227,7 +245,8 @@ void register_CLJGroup_class(){
             
             CLJGroup_exposer.def( 
                 "oldAtoms"
-                , oldAtoms_function_value );
+                , oldAtoms_function_value
+                , "Return the set of all of the old atoms that have changed\nsince the last time accept() was called. The negative\nof this plus newAtoms() will equal changedAtoms()" );
         
         }
         CLJGroup_exposer.def( bp::self != bp::self );
@@ -240,7 +259,8 @@ void register_CLJGroup_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CLJGroup_exposer.def( bp::self == bp::self );
@@ -251,7 +271,8 @@ void register_CLJGroup_class(){
             
             CLJGroup_exposer.def( 
                 "recalculatingFromScratch"
-                , recalculatingFromScratch_function_value );
+                , recalculatingFromScratch_function_value
+                , "" );
         
         }
         { //::SireMM::CLJGroup::remove
@@ -262,7 +283,8 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "Remove the molecule view molview" );
         
         }
         { //::SireMM::CLJGroup::remove
@@ -273,7 +295,8 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Remove all of the molecules in molecules from this group" );
         
         }
         { //::SireMM::CLJGroup::remove
@@ -284,7 +307,8 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Remove all of the molecules in molecules from this group" );
         
         }
         { //::SireMM::CLJGroup::remove
@@ -295,7 +319,8 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Remove the molecule with number molnum from this group" );
         
         }
         { //::SireMM::CLJGroup::removeAll
@@ -305,7 +330,8 @@ void register_CLJGroup_class(){
             
             CLJGroup_exposer.def( 
                 "removeAll"
-                , removeAll_function_value );
+                , removeAll_function_value
+                , "Remove all molecules from this group" );
         
         }
         { //::SireMM::CLJGroup::setBoxLength
@@ -316,7 +342,8 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "setBoxLength"
                 , setBoxLength_function_value
-                , ( bp::arg("box_length") ) );
+                , ( bp::arg("box_length") )
+                , "Set the size of the box used by CLJBoxes to partition space" );
         
         }
         { //::SireMM::CLJGroup::toString
@@ -326,7 +353,8 @@ void register_CLJGroup_class(){
             
             CLJGroup_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMM::CLJGroup::typeName
@@ -336,7 +364,8 @@ void register_CLJGroup_class(){
             
             CLJGroup_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::CLJGroup::update
@@ -347,7 +376,8 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "Update the molecule in this group to match the version of the molecule molview" );
         
         }
         { //::SireMM::CLJGroup::update
@@ -358,7 +388,8 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Update all of the molecules in this group that are in molecules to match\nthe version held in molecules" );
         
         }
         { //::SireMM::CLJGroup::update
@@ -369,7 +400,8 @@ void register_CLJGroup_class(){
             CLJGroup_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Update all of the molecules in this group that are in molecules to match\nthe version held in molecules" );
         
         }
         { //::SireMM::CLJGroup::updatedConnectedGroup
@@ -379,7 +411,8 @@ void register_CLJGroup_class(){
             
             CLJGroup_exposer.def( 
                 "updatedConnectedGroup"
-                , updatedConnectedGroup_function_value );
+                , updatedConnectedGroup_function_value
+                , "Tell this CLJGroup that atoms in a connected group have been\nupdated. This tells the CLJGroup to remove some of the caching\nthat is used to improve performance, as this caching could cause\nenergy errors when using deltas generated from other CLJGroups" );
         
         }
         { //::SireMM::CLJGroup::what
@@ -389,7 +422,8 @@ void register_CLJGroup_class(){
             
             CLJGroup_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         CLJGroup_exposer.staticmethod( "typeName" );

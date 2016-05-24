@@ -35,9 +35,9 @@ void register_Promise_class(){
 
     { //::SireCluster::Promise
         typedef bp::class_< SireCluster::Promise > Promise_exposer_t;
-        Promise_exposer_t Promise_exposer = Promise_exposer_t( "Promise", bp::init< >() );
+        Promise_exposer_t Promise_exposer = Promise_exposer_t( "Promise", "This class provides a handle to the (future) result of\na piece of work that is being conducted on a node\nin the cluster\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a null promise") );
         bp::scope Promise_scope( Promise_exposer );
-        Promise_exposer.def( bp::init< SireCluster::Promise const & >(( bp::arg("other") )) );
+        Promise_exposer.def( bp::init< SireCluster::Promise const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCluster::Promise::abort
         
             typedef void ( ::SireCluster::Promise::*abort_function_type)(  ) ;
@@ -45,7 +45,8 @@ void register_Promise_class(){
             
             Promise_exposer.def( 
                 "abort"
-                , abort_function_value );
+                , abort_function_value
+                , "Abort this job" );
         
         }
         { //::SireCluster::Promise::input
@@ -55,7 +56,8 @@ void register_Promise_class(){
             
             Promise_exposer.def( 
                 "input"
-                , input_function_value );
+                , input_function_value
+                , "Return the WorkPacket in the state it was in at the\nstart of the job. You can use this to restart jobs that\nfailed in error, or were aborted, or if you just want\nto try to run the job again" );
         
         }
         { //::SireCluster::Promise::interimResult
@@ -65,7 +67,8 @@ void register_Promise_class(){
             
             Promise_exposer.def( 
                 "interimResult"
-                , interimResult_function_value );
+                , interimResult_function_value
+                , "Return an interim result of the calculation" );
         
         }
         { //::SireCluster::Promise::isError
@@ -75,7 +78,8 @@ void register_Promise_class(){
             
             Promise_exposer.def( 
                 "isError"
-                , isError_function_value );
+                , isError_function_value
+                , "Return whether or not the result is an error.\nThis blocks until the result is available" );
         
         }
         { //::SireCluster::Promise::isNull
@@ -85,7 +89,8 @@ void register_Promise_class(){
             
             Promise_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Return whether or not this promise is null" );
         
         }
         { //::SireCluster::Promise::isRunning
@@ -95,7 +100,8 @@ void register_Promise_class(){
             
             Promise_exposer.def( 
                 "isRunning"
-                , isRunning_function_value );
+                , isRunning_function_value
+                , "Return whether or not the calculation is still in progress" );
         
         }
         Promise_exposer.def( bp::self != bp::self );
@@ -108,7 +114,8 @@ void register_Promise_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Promise_exposer.def( bp::self == bp::self );
@@ -119,7 +126,8 @@ void register_Promise_class(){
             
             Promise_exposer.def( 
                 "progress"
-                , progress_function_value );
+                , progress_function_value
+                , "Return the progress of the calculation" );
         
         }
         { //::SireCluster::Promise::result
@@ -129,7 +137,8 @@ void register_Promise_class(){
             
             Promise_exposer.def( 
                 "result"
-                , result_function_value );
+                , result_function_value
+                , "Return the result of the work - this blocks until\nthe work has completed" );
         
         }
         { //::SireCluster::Promise::stop
@@ -139,7 +148,8 @@ void register_Promise_class(){
             
             Promise_exposer.def( 
                 "stop"
-                , stop_function_value );
+                , stop_function_value
+                , "Stop this job" );
         
         }
         { //::SireCluster::Promise::throwError
@@ -149,7 +159,8 @@ void register_Promise_class(){
             
             Promise_exposer.def( 
                 "throwError"
-                , throwError_function_value );
+                , throwError_function_value
+                , "Throw any errors associated with this promise - does\nnothing if there is no error" );
         
         }
         { //::SireCluster::Promise::wait
@@ -159,7 +170,8 @@ void register_Promise_class(){
             
             Promise_exposer.def( 
                 "wait"
-                , wait_function_value );
+                , wait_function_value
+                , "Wait for the job to have completed" );
         
         }
         { //::SireCluster::Promise::wait
@@ -170,7 +182,8 @@ void register_Promise_class(){
             Promise_exposer.def( 
                 "wait"
                 , wait_function_value
-                , ( bp::arg("timeout") ) );
+                , ( bp::arg("timeout") )
+                , "Wait until the job has completed, or until timeout milliseconds\nhas passed. This returns whether or not the job has finished" );
         
         }
         { //::SireCluster::Promise::wasAborted
@@ -180,7 +193,8 @@ void register_Promise_class(){
             
             Promise_exposer.def( 
                 "wasAborted"
-                , wasAborted_function_value );
+                , wasAborted_function_value
+                , "Return whether or not the job was aborted.\nIf it was, then you can rerun the job using\nthe initial state of the WorkPacket stored in\nthis Promise. This blocks until a result is available" );
         
         }
         { //::SireCluster::Promise::wasStopped
@@ -190,7 +204,8 @@ void register_Promise_class(){
             
             Promise_exposer.def( 
                 "wasStopped"
-                , wasStopped_function_value );
+                , wasStopped_function_value
+                , "Return whether or not the job was stopped.\nThis blocks until a result is available" );
         
         }
         Promise_exposer.def( "__copy__", &__copy__);

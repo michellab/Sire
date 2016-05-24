@@ -23,12 +23,12 @@ void register_CoulombNBPairs_class(){
 
     { //::SireMM::CoulombNBPairs
         typedef bp::class_< SireMM::CoulombNBPairs, bp::bases< SireMM::AtomPairs<SireMM::CoulombScaleFactor>, SireMol::MoleculeProperty, SireMol::MolViewProperty, SireBase::Property > > CoulombNBPairs_exposer_t;
-        CoulombNBPairs_exposer_t CoulombNBPairs_exposer = CoulombNBPairs_exposer_t( "CoulombNBPairs", bp::init< >() );
+        CoulombNBPairs_exposer_t CoulombNBPairs_exposer = CoulombNBPairs_exposer_t( "CoulombNBPairs", "This class holds all of the non-bonded scale factors that are used\nto scale the intramolecular atom-atom coulomb\ninteractions between pairs of atoms, e.g. for most MM forcefields,\nthe scale factors for 1-1, 1-2 and 1-3 pairs are zero, the\n1-4 pairs are scaled by a coulomb factor (e.g. 0.5 for OPLS)\nand the 1-5 and above pairs are not scaled (i.e. the factors equal 1)\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope CoulombNBPairs_scope( CoulombNBPairs_exposer );
-        CoulombNBPairs_exposer.def( bp::init< SireMol::MoleculeInfoData const &, bp::optional< SireMM::CoulombScaleFactor const & > >(( bp::arg("molinfo"), bp::arg("default_scale")=SireMM::CoulombScaleFactor(1) )) );
-        CoulombNBPairs_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireMM::CoulombScaleFactor const & > >(( bp::arg("molview"), bp::arg("default_scale")=SireMM::CoulombScaleFactor(1) )) );
-        CoulombNBPairs_exposer.def( bp::init< SireMM::CLJNBPairs const & >(( bp::arg("cljpairs") )) );
-        CoulombNBPairs_exposer.def( bp::init< SireMM::CoulombNBPairs const & >(( bp::arg("other") )) );
+        CoulombNBPairs_exposer.def( bp::init< SireMol::MoleculeInfoData const &, bp::optional< SireMM::CoulombScaleFactor const & > >(( bp::arg("molinfo"), bp::arg("default_scale")=SireMM::CoulombScaleFactor(1) ), "Construct, using default_scale for all of the atom-atom\ninteractions in the molecule molinfo") );
+        CoulombNBPairs_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireMM::CoulombScaleFactor const & > >(( bp::arg("molview"), bp::arg("default_scale")=SireMM::CoulombScaleFactor(1) ), "Construct for the molecule viewed in molview") );
+        CoulombNBPairs_exposer.def( bp::init< SireMM::CLJNBPairs const & >(( bp::arg("cljpairs") ), "Construct from the coulomb scaling factors in cljpairs") );
+        CoulombNBPairs_exposer.def( bp::init< SireMM::CoulombNBPairs const & >(( bp::arg("other") ), "Copy constructor") );
         CoulombNBPairs_exposer.def( bp::self != bp::self );
         { //::SireMM::CoulombNBPairs::operator=
         
@@ -39,7 +39,8 @@ void register_CoulombNBPairs_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMM::CoulombNBPairs::operator=
@@ -51,7 +52,8 @@ void register_CoulombNBPairs_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("cljpairs") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CoulombNBPairs_exposer.def( bp::self == bp::self );
@@ -62,7 +64,8 @@ void register_CoulombNBPairs_class(){
             
             CoulombNBPairs_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         CoulombNBPairs_exposer.staticmethod( "typeName" );

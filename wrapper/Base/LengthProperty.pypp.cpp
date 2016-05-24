@@ -27,11 +27,11 @@ void register_LengthProperty_class(){
 
     { //::SireBase::LengthProperty
         typedef bp::class_< SireBase::LengthProperty, bp::bases< SireBase::Property > > LengthProperty_exposer_t;
-        LengthProperty_exposer_t LengthProperty_exposer = LengthProperty_exposer_t( "LengthProperty", bp::init< >() );
+        LengthProperty_exposer_t LengthProperty_exposer = LengthProperty_exposer_t( "LengthProperty", "This class provides a thin Property wrapper around lengths\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor - this constructs the integer 0") );
         bp::scope LengthProperty_scope( LengthProperty_exposer );
-        LengthProperty_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("value") )) );
-        LengthProperty_exposer.def( bp::init< SireBase::VariantProperty const & >(( bp::arg("other") )) );
-        LengthProperty_exposer.def( bp::init< SireBase::LengthProperty const & >(( bp::arg("other") )) );
+        LengthProperty_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("value") ), "Construct from the passed length") );
+        LengthProperty_exposer.def( bp::init< SireBase::VariantProperty const & >(( bp::arg("other") ), "Construct from a VariantProperty") );
+        LengthProperty_exposer.def( bp::init< SireBase::LengthProperty const & >(( bp::arg("other") ), "Copy constructor") );
         LengthProperty_exposer.def( bp::self != bp::self );
         { //::SireBase::LengthProperty::operator=
         
@@ -42,7 +42,8 @@ void register_LengthProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         LengthProperty_exposer.def( bp::self == bp::self );
@@ -53,7 +54,8 @@ void register_LengthProperty_class(){
             
             LengthProperty_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireBase::LengthProperty::typeName
@@ -63,7 +65,8 @@ void register_LengthProperty_class(){
             
             LengthProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireBase::LengthProperty::value
@@ -73,7 +76,8 @@ void register_LengthProperty_class(){
             
             LengthProperty_exposer.def( 
                 "value"
-                , value_function_value );
+                , value_function_value
+                , "Return this number cast as a double" );
         
         }
         LengthProperty_exposer.staticmethod( "typeName" );

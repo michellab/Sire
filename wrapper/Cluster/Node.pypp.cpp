@@ -35,9 +35,9 @@ void register_Node_class(){
 
     { //::SireCluster::Node
         typedef bp::class_< SireCluster::Node > Node_exposer_t;
-        Node_exposer_t Node_exposer = Node_exposer_t( "Node", bp::init< >() );
+        Node_exposer_t Node_exposer = Node_exposer_t( "Node", "This is a Node in a cluster. A Node is a resource that can\nbe used to run WorkPackets. A Node is always part of a\nNodes scheduler object, that coordinates the WorkPackets\nthat are assigned to the nodes. Alternatively, you can\ngrab a node manually from the Nodes object and you can\nassign WorkPackets to it yourself\n\nEssentially, a Node is a means of directing WorkPackets\nto Frontends, so that they can be communicated on to\nBackends that perform the actual work.\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope Node_scope( Node_exposer );
-        Node_exposer.def( bp::init< SireCluster::Node const & >(( bp::arg("other") )) );
+        Node_exposer.def( bp::init< SireCluster::Node const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCluster::Node::UID
         
             typedef ::QUuid ( ::SireCluster::Node::*UID_function_type)(  ) ;
@@ -45,7 +45,8 @@ void register_Node_class(){
             
             Node_exposer.def( 
                 "UID"
-                , UID_function_value );
+                , UID_function_value
+                , "Return the unique ID of the Node" );
         
         }
         { //::SireCluster::Node::abortJob
@@ -55,7 +56,8 @@ void register_Node_class(){
             
             Node_exposer.def( 
                 "abortJob"
-                , abortJob_function_value );
+                , abortJob_function_value
+                , "Abort any running job on this node - this does not block" );
         
         }
         { //::SireCluster::Node::forceRelease
@@ -65,7 +67,8 @@ void register_Node_class(){
             
             Node_exposer.def( 
                 "forceRelease"
-                , forceRelease_function_value );
+                , forceRelease_function_value
+                , "Force the release of this node. This aborts any running\njobs on this node and returns it to the Nodes home, or\nback to the Cluster pool if this is homeless. This will\nrelease the node even if there are other references to it,\nwho may be querying or waiting for it. This is not thread-safe,\nbut may be necessary if you have lost a reference and\nyou need to send this node back" );
         
         }
         { //::SireCluster::Node::isHomeless
@@ -75,7 +78,8 @@ void register_Node_class(){
             
             Node_exposer.def( 
                 "isHomeless"
-                , isHomeless_function_value );
+                , isHomeless_function_value
+                , "Return whether or not this Node object is homeless\n(is not part of any Nodes set). A homeless node can\nfinish any job that has started, but it is not allowed\nto start any more jobs" );
         
         }
         { //::SireCluster::Node::isLocal
@@ -85,7 +89,8 @@ void register_Node_class(){
             
             Node_exposer.def( 
                 "isLocal"
-                , isLocal_function_value );
+                , isLocal_function_value
+                , "Return whether or not this node is local to this process" );
         
         }
         { //::SireCluster::Node::isNull
@@ -95,7 +100,8 @@ void register_Node_class(){
             
             Node_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Return whether or not this node is null" );
         
         }
         { //::SireCluster::Node::nodes
@@ -105,7 +111,8 @@ void register_Node_class(){
             
             Node_exposer.def( 
                 "nodes"
-                , nodes_function_value );
+                , nodes_function_value
+                , "Return the nodes object that this node belongs to. In some rare\ncircumstances this node may be homeless, in which case\nan empty set of nodes will be returned" );
         
         }
         Node_exposer.def( bp::self != bp::self );
@@ -118,7 +125,8 @@ void register_Node_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Node_exposer.def( bp::self == bp::self );
@@ -129,7 +137,8 @@ void register_Node_class(){
             
             Node_exposer.def( 
                 "progress"
-                , progress_function_value );
+                , progress_function_value
+                , "Return the progress of the Node on the current WorkPacket" );
         
         }
         { //::SireCluster::Node::release
@@ -139,7 +148,8 @@ void register_Node_class(){
             
             Node_exposer.def( 
                 "release"
-                , release_function_value );
+                , release_function_value
+                , "Release this node - this returns the node to its parent\nNodes object, or back to the Cluster pool if this node\nis homeless. Note that this will only return the node if this\nis the only reference to this node. This returns whether\nor not this node was returned" );
         
         }
         { //::SireCluster::Node::startJob
@@ -150,7 +160,8 @@ void register_Node_class(){
             Node_exposer.def( 
                 "startJob"
                 , startJob_function_value
-                , ( bp::arg("workpacket") ) );
+                , ( bp::arg("workpacket") )
+                , "Start the job in the WorkPacket workpacket on this node\nand return a Promise that will contain the calculated\nresult. This will autodelete the node.\nThis is useful if this is the only workpacket\nthat you want to run on the node, as this will allow\nthe node to automatically be returned to the free-queue\nonce if has finished.\nThrow: SireError::unavailable_resource\n" );
         
         }
         { //::SireCluster::Node::startJob
@@ -161,7 +172,8 @@ void register_Node_class(){
             Node_exposer.def( 
                 "startJob"
                 , startJob_function_value
-                , ( bp::arg("workpacket"), bp::arg("autodelete") ) );
+                , ( bp::arg("workpacket"), bp::arg("autodelete") )
+                , "Start the job in the WorkPacket workpacket on this node\nand return a Promise that will contain the calculated\nresult. This will autodelete the node if autodelete\nis true. This is useful if this is the only workpacket\nthat you want to run on the node, as this will allow\nthe node to automatically be returned to the free-queue\nonce if has finished.\nThrow: SireError::unavailable_resource\n" );
         
         }
         { //::SireCluster::Node::stopJob
@@ -171,7 +183,8 @@ void register_Node_class(){
             
             Node_exposer.def( 
                 "stopJob"
-                , stopJob_function_value );
+                , stopJob_function_value
+                , "Stop any running job on this node - this does not block" );
         
         }
         { //::SireCluster::Node::toString
@@ -181,7 +194,8 @@ void register_Node_class(){
             
             Node_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this node" );
         
         }
         { //::SireCluster::Node::wait
@@ -191,7 +205,8 @@ void register_Node_class(){
             
             Node_exposer.def( 
                 "wait"
-                , wait_function_value );
+                , wait_function_value
+                , "Wait for the Node to stop work" );
         
         }
         { //::SireCluster::Node::wait
@@ -202,7 +217,8 @@ void register_Node_class(){
             Node_exposer.def( 
                 "wait"
                 , wait_function_value
-                , ( bp::arg("timeout") ) );
+                , ( bp::arg("timeout") )
+                , "Wait for the Node to stop work (or until timeout milliseconds\nhave passed) - this returns whether or not the Node has stopped\nwork" );
         
         }
         Node_exposer.def( "__copy__", &__copy__);

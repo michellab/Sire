@@ -21,7 +21,7 @@ void register_AtomPairs_CLJScaleFactor__class(){
 
     { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >
         typedef bp::class_< SireMM::AtomPairs< SireMM::CLJScaleFactor >, bp::bases< SireMol::MoleculeProperty, SireMol::MolViewProperty, SireBase::Property >, boost::noncopyable > AtomPairs_CLJScaleFactor__exposer_t;
-        AtomPairs_CLJScaleFactor__exposer_t AtomPairs_CLJScaleFactor__exposer = AtomPairs_CLJScaleFactor__exposer_t( "AtomPairs_CLJScaleFactor_", bp::no_init );
+        AtomPairs_CLJScaleFactor__exposer_t AtomPairs_CLJScaleFactor__exposer = AtomPairs_CLJScaleFactor__exposer_t( "AtomPairs_CLJScaleFactor_", "", bp::no_init );
         bp::scope AtomPairs_CLJScaleFactor__scope( AtomPairs_CLJScaleFactor__exposer );
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::get
         
@@ -33,7 +33,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("atm0") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::get
@@ -46,7 +47,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("atm0"), bp::arg("atm1") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::get
@@ -59,7 +61,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgid0") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::get
@@ -72,7 +75,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgid0"), bp::arg("cgid1") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::get
@@ -85,7 +89,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("atm0") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::get
@@ -98,7 +103,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("atm0"), bp::arg("atm1") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::get
@@ -111,7 +117,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgid0") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::get
@@ -124,7 +131,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgid0"), bp::arg("cgid1") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::info
@@ -136,7 +144,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
             AtomPairs_CLJScaleFactor__exposer.def( 
                 "info"
                 , info_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::isCompatibleWith
@@ -148,7 +157,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
             AtomPairs_CLJScaleFactor__exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::isEmpty
@@ -159,7 +169,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
             
             AtomPairs_CLJScaleFactor__exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::nAtoms
@@ -170,7 +181,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
             
             AtomPairs_CLJScaleFactor__exposer.def( 
                 "nAtoms"
-                , nAtoms_function_value );
+                , nAtoms_function_value
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::nGroups
@@ -181,7 +193,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
             
             AtomPairs_CLJScaleFactor__exposer.def( 
                 "nGroups"
-                , nGroups_function_value );
+                , nGroups_function_value
+                , "" );
         
         }
         AtomPairs_CLJScaleFactor__exposer.def( bp::self != bp::self );
@@ -195,7 +208,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
                 "__call__"
                 , __call___function_value
                 , ( bp::arg("atm0") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::operator()
@@ -208,7 +222,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
                 "__call__"
                 , __call___function_value
                 , ( bp::arg("atm0"), bp::arg("atm1") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::operator()
@@ -221,7 +236,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
                 "__call__"
                 , __call___function_value
                 , ( bp::arg("cgid0") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::operator()
@@ -234,7 +250,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
                 "__call__"
                 , __call___function_value
                 , ( bp::arg("cgid0"), bp::arg("cgid1") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::operator()
@@ -247,7 +264,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
                 "__call__"
                 , __call___function_value
                 , ( bp::arg("atm0") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::operator()
@@ -260,7 +278,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
                 "__call__"
                 , __call___function_value
                 , ( bp::arg("atm0"), bp::arg("atm1") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::operator()
@@ -273,7 +292,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
                 "__call__"
                 , __call___function_value
                 , ( bp::arg("cgid0") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::operator()
@@ -286,7 +306,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
                 "__call__"
                 , __call___function_value
                 , ( bp::arg("cgid0"), bp::arg("cgid1") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::operator=
@@ -299,7 +320,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AtomPairs_CLJScaleFactor__exposer.def( bp::self == bp::self );
@@ -312,7 +334,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
             AtomPairs_CLJScaleFactor__exposer.def( 
                 "reserve"
                 , reserve_function_value
-                , ( bp::arg("dim_x"), bp::arg("dim_y") ) );
+                , ( bp::arg("dim_x"), bp::arg("dim_y") )
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::set
@@ -324,7 +347,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
             AtomPairs_CLJScaleFactor__exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("atm0"), bp::arg("value") ) );
+                , ( bp::arg("atm0"), bp::arg("value") )
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::set
@@ -336,7 +360,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
             AtomPairs_CLJScaleFactor__exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("atm0"), bp::arg("atm1"), bp::arg("value") ) );
+                , ( bp::arg("atm0"), bp::arg("atm1"), bp::arg("value") )
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::set
@@ -348,7 +373,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
             AtomPairs_CLJScaleFactor__exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("atm0"), bp::arg("value") ) );
+                , ( bp::arg("atm0"), bp::arg("value") )
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::set
@@ -360,7 +386,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
             AtomPairs_CLJScaleFactor__exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("atm0"), bp::arg("atm1"), bp::arg("value") ) );
+                , ( bp::arg("atm0"), bp::arg("atm1"), bp::arg("value") )
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::setAll
@@ -372,7 +399,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
             AtomPairs_CLJScaleFactor__exposer.def( 
                 "setAll"
                 , setAll_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::setAll
@@ -384,7 +412,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
             AtomPairs_CLJScaleFactor__exposer.def( 
                 "setAll"
                 , setAll_function_value
-                , ( bp::arg("cgid0"), bp::arg("value") ) );
+                , ( bp::arg("cgid0"), bp::arg("value") )
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::setAll
@@ -396,7 +425,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
             AtomPairs_CLJScaleFactor__exposer.def( 
                 "setAll"
                 , setAll_function_value
-                , ( bp::arg("cgid0"), bp::arg("cgid1"), bp::arg("value") ) );
+                , ( bp::arg("cgid0"), bp::arg("cgid1"), bp::arg("value") )
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::setAll
@@ -408,7 +438,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
             AtomPairs_CLJScaleFactor__exposer.def( 
                 "setAll"
                 , setAll_function_value
-                , ( bp::arg("cgid0"), bp::arg("value") ) );
+                , ( bp::arg("cgid0"), bp::arg("value") )
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::setAll
@@ -420,7 +451,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
             AtomPairs_CLJScaleFactor__exposer.def( 
                 "setAll"
                 , setAll_function_value
-                , ( bp::arg("cgid0"), bp::arg("cgid1"), bp::arg("value") ) );
+                , ( bp::arg("cgid0"), bp::arg("cgid1"), bp::arg("value") )
+                , "" );
         
         }
         { //::SireMM::AtomPairs< SireMM::CLJScaleFactor >::squeeze
@@ -431,7 +463,8 @@ void register_AtomPairs_CLJScaleFactor__class(){
             
             AtomPairs_CLJScaleFactor__exposer.def( 
                 "squeeze"
-                , squeeze_function_value );
+                , squeeze_function_value
+                , "" );
         
         }
         AtomPairs_CLJScaleFactor__exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireMM::AtomPairs<SireMM::CLJScaleFactor> >,

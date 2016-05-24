@@ -44,12 +44,12 @@ void register_GetCOMPoint_class(){
 
     { //::SireMove::GetCOMPoint
         typedef bp::class_< SireMove::GetCOMPoint, bp::bases< SireMove::GetPoint, SireBase::Property > > GetCOMPoint_exposer_t;
-        GetCOMPoint_exposer_t GetCOMPoint_exposer = GetCOMPoint_exposer_t( "GetCOMPoint", bp::init< >() );
+        GetCOMPoint_exposer_t GetCOMPoint_exposer = GetCOMPoint_exposer_t( "GetCOMPoint", "This function returns the center of mass (COG) of the\natoms in the passed view of the molecule\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope GetCOMPoint_scope( GetCOMPoint_exposer );
-        GetCOMPoint_exposer.def( bp::init< SireMol::AtomID const & >(( bp::arg("atomid") )) );
-        GetCOMPoint_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const & >(( bp::arg("atomid0"), bp::arg("atomid1") )) );
-        GetCOMPoint_exposer.def( bp::init< QList< SireMol::AtomIdentifier > const & >(( bp::arg("atomids") )) );
-        GetCOMPoint_exposer.def( bp::init< SireMove::GetCOMPoint const & >(( bp::arg("other") )) );
+        GetCOMPoint_exposer.def( bp::init< SireMol::AtomID const & >(( bp::arg("atomid") ), "Construct to get the COM of the atoms in the molecule that match\nthe passed AtomID") );
+        GetCOMPoint_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const & >(( bp::arg("atomid0"), bp::arg("atomid1") ), "Construct to get the COM of the atoms in the molecule that\nmatch either of the two passed AtomIDs") );
+        GetCOMPoint_exposer.def( bp::init< QList< SireMol::AtomIdentifier > const & >(( bp::arg("atomids") ), "Construct to get the COM of the atoms in the molecule that\nmatch any of the passed AtomIDs") );
+        GetCOMPoint_exposer.def( bp::init< SireMove::GetCOMPoint const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::GetCOMPoint::atomID
         
             typedef ::SireMol::AtomID const & ( ::SireMove::GetCOMPoint::*atomID_function_type)(  ) const;
@@ -58,7 +58,8 @@ void register_GetCOMPoint_class(){
             GetCOMPoint_exposer.def( 
                 "atomID"
                 , atomID_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the AtomID(s) used to limit the search for the point" );
         
         }
         { //::SireMove::GetCOMPoint::getPoint
@@ -69,7 +70,8 @@ void register_GetCOMPoint_class(){
             GetCOMPoint_exposer.def( 
                 "getPoint"
                 , getPoint_function_value
-                , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         GetCOMPoint_exposer.def( bp::self != bp::self );
@@ -82,7 +84,8 @@ void register_GetCOMPoint_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         GetCOMPoint_exposer.def( bp::self == bp::self );
@@ -93,7 +96,8 @@ void register_GetCOMPoint_class(){
             
             GetCOMPoint_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         GetCOMPoint_exposer.staticmethod( "typeName" );

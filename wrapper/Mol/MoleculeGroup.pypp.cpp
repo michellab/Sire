@@ -66,14 +66,14 @@ void register_MoleculeGroup_class(){
 
     { //::SireMol::MoleculeGroup
         typedef bp::class_< SireMol::MoleculeGroup, bp::bases< SireBase::Property > > MoleculeGroup_exposer_t;
-        MoleculeGroup_exposer_t MoleculeGroup_exposer = MoleculeGroup_exposer_t( "MoleculeGroup", bp::init< >() );
+        MoleculeGroup_exposer_t MoleculeGroup_exposer = MoleculeGroup_exposer_t( "MoleculeGroup", "This is the virtual base class of all MoleculeGroup type\nobjects. Molecule groups are groups of molecules that also\nprovide full indexing, versioning and identification support.\n\nMolecule group form the foundation of forcefields (which use\ngroups to hold the molecules), Systems (again, use groups\nto hold the molecules) and Moves (use groups to select which\nmolecules should be moved).\n\nMolecule groups provide the common interface for indexing,\nsearching and managing groups of molecules.\n\nAuthor: Christopher Woods\n", bp::init< >("Default constructor") );
         bp::scope MoleculeGroup_scope( MoleculeGroup_exposer );
-        MoleculeGroup_exposer.def( bp::init< SireMol::Molecules const & >(( bp::arg("molecules") )) );
-        MoleculeGroup_exposer.def( bp::init< QString const & >(( bp::arg("name") )) );
-        MoleculeGroup_exposer.def( bp::init< QString const &, SireMol::MoleculeView const & >(( bp::arg("name"), bp::arg("molview") )) );
-        MoleculeGroup_exposer.def( bp::init< QString const &, SireMol::Molecules const & >(( bp::arg("name"), bp::arg("molecules") )) );
-        MoleculeGroup_exposer.def( bp::init< QString const &, SireMol::MoleculeGroup const & >(( bp::arg("name"), bp::arg("other") )) );
-        MoleculeGroup_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("other") )) );
+        MoleculeGroup_exposer.def( bp::init< SireMol::Molecules const & >(( bp::arg("molecules") ), "Construct a group that holds the passed molecules") );
+        MoleculeGroup_exposer.def( bp::init< QString const & >(( bp::arg("name") ), "Construct an empty, but named, group") );
+        MoleculeGroup_exposer.def( bp::init< QString const &, SireMol::MoleculeView const & >(( bp::arg("name"), bp::arg("molview") ), "Construct a named group that contains the passed molecule") );
+        MoleculeGroup_exposer.def( bp::init< QString const &, SireMol::Molecules const & >(( bp::arg("name"), bp::arg("molecules") ), "Construct a named group that contains the passed molecules") );
+        MoleculeGroup_exposer.def( bp::init< QString const &, SireMol::MoleculeGroup const & >(( bp::arg("name"), bp::arg("other") ), "Construct a named group that contains the same molecules as other") );
+        MoleculeGroup_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::MoleculeGroup::accept
         
             typedef void ( ::SireMol::MoleculeGroup::*accept_function_type)(  ) ;
@@ -81,7 +81,8 @@ void register_MoleculeGroup_class(){
             
             MoleculeGroup_exposer.def( 
                 "accept"
-                , accept_function_value );
+                , accept_function_value
+                , "Tell the molecule group that the last move was accepted. This tells the\ngroup to make permanent any temporary changes that were used a workspace\nto avoid memory allocation during a move" );
         
         }
         { //::SireMol::MoleculeGroup::add
@@ -92,7 +93,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "Add the view of the molecule in molview to this group.\nThis adds the view as a duplicate if it already exists\nin this group" );
         
         }
         { //::SireMol::MoleculeGroup::add
@@ -103,7 +105,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molviews") ) );
+                , ( bp::arg("molviews") )
+                , "Add the views of the molecule in molviews to this group.\nThis adds the views as duplicates if they already exist\nin this group" );
         
         }
         { //::SireMol::MoleculeGroup::add
@@ -114,7 +117,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Add all of the molecules in molecules to this group.\nThis duplicates any molecules that already exist in this\ngroup." );
         
         }
         { //::SireMol::MoleculeGroup::add
@@ -125,7 +129,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("MoleculeGroup") ) );
+                , ( bp::arg("MoleculeGroup") )
+                , "Add the molecules in MoleculeGroup to this set. This adds the\nmolecules and views in the same order as they appear in\nMoleculeGroup, adding them as duplicates if they already\nexist in this set. Note that the version of the molecule\nwill be taken from this set." );
         
         }
         { //::SireMol::MoleculeGroup::addIfUnique
@@ -136,7 +141,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "Add the view of the molecule in molview to this group.\nThis only adds the view if it does not already exist in\nthis group, and returns whether or not the view was added" );
         
         }
         { //::SireMol::MoleculeGroup::addIfUnique
@@ -147,7 +153,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molviews") ) );
+                , ( bp::arg("molviews") )
+                , "Add the views of the molecule molviews to this group,\nadding the views only if they dont already exist in this\ngroup. This returns the views that were added successfully\nto this group." );
         
         }
         { //::SireMol::MoleculeGroup::addIfUnique
@@ -158,7 +165,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Add the views of the molecules in molecules to this group. This\nonly adds views that dont already exist in this group. This\nreturns all of the views that were successfully added." );
         
         }
         { //::SireMol::MoleculeGroup::addIfUnique
@@ -169,7 +177,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("MoleculeGroup") ) );
+                , ( bp::arg("MoleculeGroup") )
+                , "Add the viewsmolecules in MoleculeGroup to this group, but\nonly if they dont already exist in this group. This has\nthe same action as MoleculeGroup::addIfUnique(molecules), but\nit ensures that the added views are in the same order as\nin MoleculeGroup. This is costly, so if you dont care\nabout the added order, then use\nMoleculeGroup::addIfUnique(MoleculeGroup.molecules()) instead.\nThis returns the added views.\n" );
         
         }
         { //::SireMol::MoleculeGroup::assertContains
@@ -180,7 +189,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "assertContains"
                 , assertContains_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Assert that this group contains a view of any part of the\nmolecule with number molnum\nThrow: SireMol::missing_molecule\n" );
         
         }
         { //::SireMol::MoleculeGroup::assertContains
@@ -191,7 +201,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "assertContains"
                 , assertContains_function_value
-                , ( bp::arg("molname") ) );
+                , ( bp::arg("molname") )
+                , "Assert that this group contains a molecule called molname\nThrow: SireMol::missing_molecule\n" );
         
         }
         { //::SireMol::MoleculeGroup::at
@@ -203,7 +214,8 @@ void register_MoleculeGroup_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("molnum") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the views of the molecule with number molnum from this group.\nThrow: SireMol::missing_molecule\n" );
         
         }
         { //::SireMol::MoleculeGroup::at
@@ -215,7 +227,8 @@ void register_MoleculeGroup_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("molidx") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the views of the molecule at index molidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeGroup::at
@@ -227,7 +240,8 @@ void register_MoleculeGroup_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("molname") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the views of the molecule called molname\nThrow: SireMol::missing_molecule\nThrow: SireMol::duplicate_molecule\nThrow: SireMol::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeGroup::at
@@ -239,7 +253,8 @@ void register_MoleculeGroup_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("molid") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the views of the molecule that is identified by molid\nThrow: SireMol::missing_molecule\nThrow: SireMol::duplicate_molecule\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeGroup::at
@@ -250,7 +265,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("viewidx") ) );
+                , ( bp::arg("viewidx") )
+                , "Return the view of hte molecule at viewidx\nThrow: SireMol::missing_molecule\nThrow: SireMol::duplicate_molecule\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeGroup::at
@@ -261,7 +277,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("viewidx") ) );
+                , ( bp::arg("viewidx") )
+                , "Return the view of hte molecule at viewidx\nThrow: SireMol::missing_molecule\nThrow: SireMol::duplicate_molecule\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeGroup::at
@@ -272,7 +289,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("molnum"), bp::arg("viewidx") ) );
+                , ( bp::arg("molnum"), bp::arg("viewidx") )
+                , "Return the specified view of the specified molecule in this group.\nThrow: SireMol::missing_molecule\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeGroup::at
@@ -283,7 +301,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("molid"), bp::arg("viewidx") ) );
+                , ( bp::arg("molid"), bp::arg("viewidx") )
+                , "Return the specified view of the molecule identified by\nthe ID molid\nThrow: SireMol::missing_molecule\nThrow: SireMol::duplicate_molecule\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeGroup::back
@@ -294,7 +313,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "back"
                 , back_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return a reference to the last molecule in the group\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeGroup::contains
@@ -305,7 +325,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Return whether or not this group contains any views of the\nmolecule with number molnum" );
         
         }
         { //::SireMol::MoleculeGroup::contains
@@ -316,7 +337,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molidx") ) );
+                , ( bp::arg("molidx") )
+                , "Return whether or not this group contains a molecule at index molidx" );
         
         }
         { //::SireMol::MoleculeGroup::contains
@@ -327,7 +349,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molname") ) );
+                , ( bp::arg("molname") )
+                , "Return whether or not this group contains any molecules called molname" );
         
         }
         { //::SireMol::MoleculeGroup::contains
@@ -338,7 +361,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molid") ) );
+                , ( bp::arg("molid") )
+                , "Return whether or not this group contains any molecules that\nmatch the ID molid" );
         
         }
         { //::SireMol::MoleculeGroup::contains
@@ -349,7 +373,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "Return whether or not this group contains any version of\nthe view of the molecule in molview" );
         
         }
         { //::SireMol::MoleculeGroup::contains
@@ -360,7 +385,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molviews") ) );
+                , ( bp::arg("molviews") )
+                , "Return whether or not this group contains all of the views\nof any version of the molecule in molviews" );
         
         }
         { //::SireMol::MoleculeGroup::contains
@@ -371,7 +397,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Return whether or not this group contains all of the\nviews of any version of all of the molecules contained\nin molecules" );
         
         }
         { //::SireMol::MoleculeGroup::contains
@@ -382,7 +409,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("MoleculeGroup") ) );
+                , ( bp::arg("MoleculeGroup") )
+                , "Return whether or not this group contains all of the\nviews of any version of all of the molecules contained\nin the group other" );
         
         }
         { //::SireMol::MoleculeGroup::first
@@ -393,7 +421,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "first"
                 , first_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return a reference to the first molecule in the group\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeGroup::front
@@ -404,7 +433,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "front"
                 , front_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return a reference to the first molecule in the group\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeGroup::getMoleculeNumber
@@ -415,7 +445,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "getMoleculeNumber"
                 , getMoleculeNumber_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Obvious function used to shortcut the getMoleculeNumber(const MolID&)\nfunction\nThrow: SireMol::missing_molecule\n" );
         
         }
         { //::SireMol::MoleculeGroup::getMoleculeNumber
@@ -426,7 +457,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "getMoleculeNumber"
                 , getMoleculeNumber_function_value
-                , ( bp::arg("molidx") ) );
+                , ( bp::arg("molidx") )
+                , "Return the number of the molecule at index molidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeGroup::getMoleculeNumber
@@ -437,7 +469,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "getMoleculeNumber"
                 , getMoleculeNumber_function_value
-                , ( bp::arg("molname") ) );
+                , ( bp::arg("molname") )
+                , "Return the number of the molecule with name molname\nThrow: SireMol::missing_molecule\nThrow: SireMol::duplicate_molecule\n" );
         
         }
         { //::SireMol::MoleculeGroup::getMoleculeNumber
@@ -448,7 +481,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "getMoleculeNumber"
                 , getMoleculeNumber_function_value
-                , ( bp::arg("molid") ) );
+                , ( bp::arg("molid") )
+                , "Return the number of the molecule that matches the ID molid\nThrow: SireMol::missing_molecule\nThrow: SireMol::duplicate_molecule\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeGroup::getMoleculeVersion
@@ -459,7 +493,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "getMoleculeVersion"
                 , getMoleculeVersion_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Return the version number of the molecule with number molnum\nThrow: SireMol::missing_molecule\n" );
         
         }
         { //::SireMol::MoleculeGroup::getMoleculeVersion
@@ -470,7 +505,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "getMoleculeVersion"
                 , getMoleculeVersion_function_value
-                , ( bp::arg("molid") ) );
+                , ( bp::arg("molid") )
+                , "Return the version number of the molecule with ID molid\nThrow: SireMol::missing_molecule\nThrow: SireMol::duplicate_molecule\n" );
         
         }
         { //::SireMol::MoleculeGroup::indexOf
@@ -481,7 +517,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "indexOf"
                 , indexOf_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "Return the index of the view of the molecule viewed in molview. This\nis the index of this specific view, so you use this index with the\nMoleculeGroup::viewAt(int i) function. This returns -1 if this\nview is not in this group" );
         
         }
         { //::SireMol::MoleculeGroup::indexOf
@@ -492,7 +529,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "indexOf"
                 , indexOf_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Return the index of the molecule with number molnum. This is the index\nof the molecule itself, so you use this index with the MoleculeGroup::at(int i)\nfunction. This returns -1 if this molecule isnt in this group.\n" );
         
         }
         { //::SireMol::MoleculeGroup::intersects
@@ -503,7 +541,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "Return whether or not this group contains any version\nof any of the atoms of the molecule in molview" );
         
         }
         { //::SireMol::MoleculeGroup::intersects
@@ -514,7 +553,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return whether or not this group contains any version\nof any of the atoms in any of the molecules in molecules" );
         
         }
         { //::SireMol::MoleculeGroup::intersects
@@ -525,7 +565,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("MoleculeGroup") ) );
+                , ( bp::arg("MoleculeGroup") )
+                , "Return whether or not this group contains any version\nof any of the atoms in any of the molecules contained in\nthe group other" );
         
         }
         { //::SireMol::MoleculeGroup::isEmpty
@@ -535,7 +576,8 @@ void register_MoleculeGroup_class(){
             
             MoleculeGroup_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether or not this group is empty" );
         
         }
         { //::SireMol::MoleculeGroup::last
@@ -546,7 +588,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "last"
                 , last_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return a reference to the last molecule in the group\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeGroup::majorVersion
@@ -556,7 +599,8 @@ void register_MoleculeGroup_class(){
             
             MoleculeGroup_exposer.def( 
                 "majorVersion"
-                , majorVersion_function_value );
+                , majorVersion_function_value
+                , "Return the major version number of this group. This number\nchanges whenever views are added or removed from this group,\nor when the name of this group changes" );
         
         }
         { //::SireMol::MoleculeGroup::map
@@ -567,7 +611,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Obvious overload that shortcuts the map(const MolID&) function\nThrow: SireMol::missing_molecule\n" );
         
         }
         { //::SireMol::MoleculeGroup::map
@@ -578,7 +623,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molidx") ) );
+                , ( bp::arg("molidx") )
+                , "Return the number of the molecule at index molidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeGroup::map
@@ -589,7 +635,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molname") ) );
+                , ( bp::arg("molname") )
+                , "Return the numbers of the molecules that are called molname\nThrow: SireMol::missing_molecule\n" );
         
         }
         { //::SireMol::MoleculeGroup::map
@@ -600,7 +647,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molid") ) );
+                , ( bp::arg("molid") )
+                , "Return the numbers of the molecules that match the ID molid\nThrow: SireMol::missing_molecule\nThrow: SireMol::duplicate_molecule\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeGroup::minorVersion
@@ -610,7 +658,8 @@ void register_MoleculeGroup_class(){
             
             MoleculeGroup_exposer.def( 
                 "minorVersion"
-                , minorVersion_function_value );
+                , minorVersion_function_value
+                , "Return the minor version number of this group. This number\nchanges whenever any of the versions of molecules in this group\nare changed. This number is reset to zero whenever the major\nversion number of this group is changed." );
         
         }
         { //::SireMol::MoleculeGroup::molNames
@@ -620,7 +669,8 @@ void register_MoleculeGroup_class(){
             
             MoleculeGroup_exposer.def( 
                 "molNames"
-                , molNames_function_value );
+                , molNames_function_value
+                , "Return the set of all names of the molecules in this group" );
         
         }
         { //::SireMol::MoleculeGroup::molNumAt
@@ -631,7 +681,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "molNumAt"
                 , molNumAt_function_value
-                , ( bp::arg("idx") ) );
+                , ( bp::arg("idx") )
+                , "Return the number of the ith molecule in this group\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeGroup::molNums
@@ -642,7 +693,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "molNums"
                 , molNums_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the numbers of all molecules present in this group,\nin the order that the molecules appear in this group" );
         
         }
         { //::SireMol::MoleculeGroup::molViewIndexAt
@@ -654,7 +706,8 @@ void register_MoleculeGroup_class(){
                 "molViewIndexAt"
                 , molViewIndexAt_function_value
                 , ( bp::arg("idx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the MolNumIndex index of the ith view in this group\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeGroup::molViewIndicies
@@ -665,7 +718,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "molViewIndicies"
                 , molViewIndicies_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the numbers and view indicies of all views in this group,\nin the order that the views appear in this group" );
         
         }
         { //::SireMol::MoleculeGroup::molecule
@@ -677,7 +731,8 @@ void register_MoleculeGroup_class(){
                 "molecule"
                 , molecule_function_value
                 , ( bp::arg("molnum") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the views of the molecule with number molnum from\nthis group\nThrow: SireMol::missing_molecule\n" );
         
         }
         { //::SireMol::MoleculeGroup::molecule
@@ -689,7 +744,8 @@ void register_MoleculeGroup_class(){
                 "molecule"
                 , molecule_function_value
                 , ( bp::arg("molidx") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the views of the molecule at index molidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeGroup::molecule
@@ -701,7 +757,8 @@ void register_MoleculeGroup_class(){
                 "molecule"
                 , molecule_function_value
                 , ( bp::arg("molname") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the views of the molecule with name molname\nThrow: SireMol::missing_molecule\nThrow: SireMol::duplicate_molecule\n" );
         
         }
         { //::SireMol::MoleculeGroup::molecule
@@ -713,7 +770,8 @@ void register_MoleculeGroup_class(){
                 "molecule"
                 , molecule_function_value
                 , ( bp::arg("molid") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the views of the molecule that matches the ID molid\nThrow: SireMol::missing_molecule\nThrow: SireMol::duplicate_molecule\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeGroup::moleculeAt
@@ -725,7 +783,8 @@ void register_MoleculeGroup_class(){
                 "moleculeAt"
                 , moleculeAt_function_value
                 , ( bp::arg("idx") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the views of the molecule at index idx in this group.\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeGroup::molecules
@@ -736,7 +795,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "molecules"
                 , molecules_function_value
-                , ( bp::arg("molid") ) );
+                , ( bp::arg("molid") )
+                , "Return all of the molecules that match the ID molid\nThrow: SireMol::missing_molecule\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeGroup::molecules
@@ -747,7 +807,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "molecules"
                 , molecules_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return all views of all of the molecules in this group" );
         
         }
         { //::SireMol::MoleculeGroup::nMolecules
@@ -757,7 +818,8 @@ void register_MoleculeGroup_class(){
             
             MoleculeGroup_exposer.def( 
                 "nMolecules"
-                , nMolecules_function_value );
+                , nMolecules_function_value
+                , "Return the number of molecules in this group" );
         
         }
         { //::SireMol::MoleculeGroup::nViews
@@ -767,7 +829,8 @@ void register_MoleculeGroup_class(){
             
             MoleculeGroup_exposer.def( 
                 "nViews"
-                , nViews_function_value );
+                , nViews_function_value
+                , "Return the number of views of molecules in this group -\nthis must always be greater or equal to the number of\nmolecules" );
         
         }
         { //::SireMol::MoleculeGroup::nViews
@@ -778,7 +841,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "nViews"
                 , nViews_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Return the number of views of the molecule with number molnum\nthat are present in this group.\nThrow: SireMol::missing_molecule\n" );
         
         }
         { //::SireMol::MoleculeGroup::nViews
@@ -789,7 +853,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "nViews"
                 , nViews_function_value
-                , ( bp::arg("molid") ) );
+                , ( bp::arg("molid") )
+                , "Return the number of views of the molecule(s) that match\nthe ID molid\nThrow: SireMol::missing_molecule\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeGroup::nViews
@@ -800,7 +865,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "nViews"
                 , nViews_function_value
-                , ( bp::arg("idx") ) );
+                , ( bp::arg("idx") )
+                , "Return the number of views of the molecule at index idx\nin this group" );
         
         }
         { //::SireMol::MoleculeGroup::name
@@ -811,7 +877,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the name of this group" );
         
         }
         { //::SireMol::MoleculeGroup::needsAccepting
@@ -821,7 +888,8 @@ void register_MoleculeGroup_class(){
             
             MoleculeGroup_exposer.def( 
                 "needsAccepting"
-                , needsAccepting_function_value );
+                , needsAccepting_function_value
+                , "Return whether or not this molecule group has a temporary workspace that needs accepting" );
         
         }
         { //::SireMol::MoleculeGroup::null
@@ -832,7 +900,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMol::MoleculeGroup::number
@@ -842,7 +911,8 @@ void register_MoleculeGroup_class(){
             
             MoleculeGroup_exposer.def( 
                 "number"
-                , number_function_value );
+                , number_function_value
+                , "Return the ID number of this group" );
         
         }
         MoleculeGroup_exposer.def( bp::self != bp::self );
@@ -855,7 +925,8 @@ void register_MoleculeGroup_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MoleculeGroup_exposer.def( bp::self == bp::self );
@@ -868,7 +939,8 @@ void register_MoleculeGroup_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("molnum") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMol::MoleculeGroup::operator[]
@@ -880,7 +952,8 @@ void register_MoleculeGroup_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("molidx") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMol::MoleculeGroup::operator[]
@@ -892,7 +965,8 @@ void register_MoleculeGroup_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("molname") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMol::MoleculeGroup::operator[]
@@ -904,7 +978,8 @@ void register_MoleculeGroup_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("molid") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMol::MoleculeGroup::operator[]
@@ -915,7 +990,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("viewidx") ) );
+                , ( bp::arg("viewidx") )
+                , "" );
         
         }
         { //::SireMol::MoleculeGroup::operator[]
@@ -926,7 +1002,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("viewidx") ) );
+                , ( bp::arg("viewidx") )
+                , "" );
         
         }
         { //::SireMol::MoleculeGroup::remove
@@ -937,7 +1014,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "Remove the view of the molecule in molview from this set.\nThis only removes the first such view from the set, and\nreturns whether or not any view was removed" );
         
         }
         { //::SireMol::MoleculeGroup::remove
@@ -948,7 +1026,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molviews") ) );
+                , ( bp::arg("molviews") )
+                , "Remove all of the views of the molecule in molviews from this\nset. This only removes the first such view of any duplicates\nfrom this set, and returns the views that were removed" );
         
         }
         { //::SireMol::MoleculeGroup::remove
@@ -959,7 +1038,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Remove all of the molecules listed in molecules from this set.\nThis only removes the first of any duplicated views in this set.\nThis returns the viewsmolecules that were successfully removed." );
         
         }
         { //::SireMol::MoleculeGroup::remove
@@ -970,7 +1050,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("MoleculeGroup") ) );
+                , ( bp::arg("MoleculeGroup") )
+                , "Remove all of the molecules from the group MoleculeGroup from this set.\nThis only removes the first of any duplicated views in this set.\nThis returns the viewsmolecules that were sucessfully removed." );
         
         }
         { //::SireMol::MoleculeGroup::remove
@@ -981,7 +1062,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Completely remove all views of the molecule with number molnum\nfrom this group. This returns the views that were removed" );
         
         }
         { //::SireMol::MoleculeGroup::remove
@@ -992,7 +1074,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molnums") ) );
+                , ( bp::arg("molnums") )
+                , "Remove all views of the molecules whose numbers are in molnums.\nThis returns the views that were removed." );
         
         }
         { //::SireMol::MoleculeGroup::removeAll
@@ -1003,7 +1086,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "Remove all copies of the view of the molecule in molview from this\ngroup. This removes all copies if this view is duplicated in this\ngroup, and returns whether or not any views were removed." );
         
         }
         { //::SireMol::MoleculeGroup::removeAll
@@ -1014,7 +1098,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
-                , ( bp::arg("molviews") ) );
+                , ( bp::arg("molviews") )
+                , "Remove all copies of all of the views of the molecule in molviews.\nThis removes all copies of any duplicated views in this group,\nand returns the views that were successfully removed." );
         
         }
         { //::SireMol::MoleculeGroup::removeAll
@@ -1025,7 +1110,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Remove all copies of all of the views of the molecules in molecules.\nThis removes all copies of any duplicated views in this group.\nThis returns the moleculesviews that were removed." );
         
         }
         { //::SireMol::MoleculeGroup::removeAll
@@ -1036,7 +1122,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
-                , ( bp::arg("MoleculeGroup") ) );
+                , ( bp::arg("MoleculeGroup") )
+                , "Remove all copies of all of the views of the molecules in the\ngroup MoleculeGroup. This removes all copies of any duplicated\nviews in this group. This returns the moleculesviews that\nwere removed\n" );
         
         }
         { //::SireMol::MoleculeGroup::removeAll
@@ -1046,7 +1133,8 @@ void register_MoleculeGroup_class(){
             
             MoleculeGroup_exposer.def( 
                 "removeAll"
-                , removeAll_function_value );
+                , removeAll_function_value
+                , "Remove all of the molecules from this group" );
         
         }
         { //::SireMol::MoleculeGroup::setContents
@@ -1057,7 +1145,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "Set the contents of this group so that it only contains the\nview molview. This clears any existing contents of this group" );
         
         }
         { //::SireMol::MoleculeGroup::setContents
@@ -1068,7 +1157,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("molviews") ) );
+                , ( bp::arg("molviews") )
+                , "Set the contents of this group so that it only contains the\nviews of the molecule in molviews. This clears any existing\ncontents of this group." );
         
         }
         { //::SireMol::MoleculeGroup::setContents
@@ -1079,7 +1169,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Set the contents of this group to molecules. This clears\nany existing contents of this group." );
         
         }
         { //::SireMol::MoleculeGroup::setContents
@@ -1090,7 +1181,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("MoleculeGroup") ) );
+                , ( bp::arg("MoleculeGroup") )
+                , "Set the contents of this group so that it equals that\nof the group MoleculeGroup. This sets the contents and\nalso preserves the same order of moleculesviews as\nin MoleculeGroup\n" );
         
         }
         { //::SireMol::MoleculeGroup::setName
@@ -1101,7 +1193,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "setName"
                 , setName_function_value
-                , ( bp::arg("new_name") ) );
+                , ( bp::arg("new_name") )
+                , "Change the name of this group" );
         
         }
         { //::SireMol::MoleculeGroup::setNewNumber
@@ -1111,7 +1204,8 @@ void register_MoleculeGroup_class(){
             
             MoleculeGroup_exposer.def( 
                 "setNewNumber"
-                , setNewNumber_function_value );
+                , setNewNumber_function_value
+                , "Give this group a new, unique number" );
         
         }
         { //::SireMol::MoleculeGroup::setNumber
@@ -1122,7 +1216,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "setNumber"
                 , setNumber_function_value
-                , ( bp::arg("new_number") ) );
+                , ( bp::arg("new_number") )
+                , "Change the number of this group" );
         
         }
         { //::SireMol::MoleculeGroup::toString
@@ -1132,7 +1227,8 @@ void register_MoleculeGroup_class(){
             
             MoleculeGroup_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this MoleculeGroup" );
         
         }
         { //::SireMol::MoleculeGroup::typeName
@@ -1142,7 +1238,8 @@ void register_MoleculeGroup_class(){
             
             MoleculeGroup_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::MoleculeGroup::unite
@@ -1153,7 +1250,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "unite"
                 , unite_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "Synonym for MoleculeGroup::addIfUnique(molview)" );
         
         }
         { //::SireMol::MoleculeGroup::unite
@@ -1164,7 +1262,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "unite"
                 , unite_function_value
-                , ( bp::arg("molviews") ) );
+                , ( bp::arg("molviews") )
+                , "Synonym for MoleculeGroup::addIfUnique(molviews)" );
         
         }
         { //::SireMol::MoleculeGroup::unite
@@ -1175,7 +1274,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "unite"
                 , unite_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Synonym for MoleculeGroup::addIfUnique(molecules)" );
         
         }
         { //::SireMol::MoleculeGroup::unite
@@ -1186,7 +1286,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "unite"
                 , unite_function_value
-                , ( bp::arg("MoleculeGroup") ) );
+                , ( bp::arg("MoleculeGroup") )
+                , "Synonym for MoleculeGroup::addIfUnique(MoleculeGroup). The\nfunction MoleculeGroup::addIfUnique(MoleculeGroup.molecules()) is\nquicker if you dont care about the order in which\nthe views are added." );
         
         }
         { //::SireMol::MoleculeGroup::update
@@ -1197,7 +1298,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("moldata"), bp::arg("auto_commit")=(bool)(true) ) );
+                , ( bp::arg("moldata"), bp::arg("auto_commit")=(bool)(true) )
+                , "Update this group so that the molecule in this group whose\ndata is in moldata is also at the same version as moldata.\nThis does nothing if there is no such molecule in this\ngroup, or if it is already at this version, and this returns\nwhether or not this changes the group." );
         
         }
         { //::SireMol::MoleculeGroup::update
@@ -1208,7 +1310,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molview"), bp::arg("auto_commit")=(bool)(true) ) );
+                , ( bp::arg("molview"), bp::arg("auto_commit")=(bool)(true) )
+                , "Update this group so that the molecule in this group that\nis also viewed in molview is updated to the same\nversion as molview.\nThis does nothing if there is no such molecule in this\ngroup, or if it is already at this version, and this returns\nwhether or not this changes the group." );
         
         }
         { //::SireMol::MoleculeGroup::update
@@ -1219,7 +1322,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molecules"), bp::arg("auto_commit")=(bool)(true) ) );
+                , ( bp::arg("molecules"), bp::arg("auto_commit")=(bool)(true) )
+                , "Update this group so that the contained molecules have the\nsame versions as the molecules in molecules. This does\nnothing if none of these molecules are in this group, or\nif they are already at the same versions. This returns\nthe list of molecules that were changed by this update." );
         
         }
         { //::SireMol::MoleculeGroup::update
@@ -1230,7 +1334,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("MoleculeGroup"), bp::arg("auto_commit")=(bool)(true) ) );
+                , ( bp::arg("MoleculeGroup"), bp::arg("auto_commit")=(bool)(true) )
+                , "Update this group so that it has the same version of molecules\nas those in MoleculeGroup. This does nothing if this group\ndoesnt contain any of the molecules in MoleculeGroup, or\nif it already has the molecules at the same version. This\nreturns the list of molecules that were changed by this\nupdate\n" );
         
         }
         { //::SireMol::MoleculeGroup::version
@@ -1241,7 +1346,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "version"
                 , version_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the version number of this group" );
         
         }
         { //::SireMol::MoleculeGroup::viewAt
@@ -1252,7 +1358,8 @@ void register_MoleculeGroup_class(){
             MoleculeGroup_exposer.def( 
                 "viewAt"
                 , viewAt_function_value
-                , ( bp::arg("idx") ) );
+                , ( bp::arg("idx") )
+                , "Return the view of the molecule at index idx in this group.\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeGroup::what
@@ -1262,7 +1369,8 @@ void register_MoleculeGroup_class(){
             
             MoleculeGroup_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         MoleculeGroup_exposer.staticmethod( "null" );

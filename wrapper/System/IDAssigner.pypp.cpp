@@ -60,13 +60,13 @@ void register_IDAssigner_class(){
 
     { //::SireSystem::IDAssigner
         typedef bp::class_< SireSystem::IDAssigner, bp::bases< SireBase::Property > > IDAssigner_exposer_t;
-        IDAssigner_exposer_t IDAssigner_exposer = IDAssigner_exposer_t( "IDAssigner", bp::init< >() );
+        IDAssigner_exposer_t IDAssigner_exposer = IDAssigner_exposer_t( "IDAssigner", "This class uses the machinery of the identity point to\npick out molecules that are associated with identity points.\nThis is useful if you want to monitor a property or energy,\nbut dont actually want to change the coordinates of atoms\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope IDAssigner_scope( IDAssigner_exposer );
-        IDAssigner_exposer.def( bp::init< SireFF::PointRef const &, SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("point"), bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )) );
-        IDAssigner_exposer.def( bp::init< QVector< SireBase::PropPtr< SireFF::Point > > const &, SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("points"), bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )) );
-        IDAssigner_exposer.def( bp::init< SireFF::PointRef const &, SireMol::MoleculeGroup const &, SireVol::Space const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("point"), bp::arg("molgroup"), bp::arg("space"), bp::arg("map")=SireBase::PropertyMap() )) );
-        IDAssigner_exposer.def( bp::init< QVector< SireBase::PropPtr< SireFF::Point > > const &, SireMol::MoleculeGroup const &, SireVol::Space const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("points"), bp::arg("molgroup"), bp::arg("space"), bp::arg("map")=SireBase::PropertyMap() )) );
-        IDAssigner_exposer.def( bp::init< SireSystem::IDAssigner const & >(( bp::arg("other") )) );
+        IDAssigner_exposer.def( bp::init< SireFF::PointRef const &, SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("point"), bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ), "Constructor") );
+        IDAssigner_exposer.def( bp::init< QVector< SireBase::PropPtr< SireFF::Point > > const &, SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("points"), bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to find the identity of the molecules from\nmolgroup that match the points in points -\nthis creates a list of n molecules, where the ith molecule\nis matched to the ith point") );
+        IDAssigner_exposer.def( bp::init< SireFF::PointRef const &, SireMol::MoleculeGroup const &, SireVol::Space const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("point"), bp::arg("molgroup"), bp::arg("space"), bp::arg("map")=SireBase::PropertyMap() ), "Constructor") );
+        IDAssigner_exposer.def( bp::init< QVector< SireBase::PropPtr< SireFF::Point > > const &, SireMol::MoleculeGroup const &, SireVol::Space const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("points"), bp::arg("molgroup"), bp::arg("space"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to find the identity of the molecules from\nmolgroup that match the points in points -\nthis creates a list of n molecules, where the ith molecule\nis matched to the ith point") );
+        IDAssigner_exposer.def( bp::init< SireSystem::IDAssigner const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireSystem::IDAssigner::identifiedMolecules
         
             typedef ::QVector< SireMol::PartialMolecule > ( ::SireSystem::IDAssigner::*identifiedMolecules_function_type)(  ) const;
@@ -74,7 +74,8 @@ void register_IDAssigner_class(){
             
             IDAssigner_exposer.def( 
                 "identifiedMolecules"
-                , identifiedMolecules_function_value );
+                , identifiedMolecules_function_value
+                , "Returns the list of identified molecules from the system,\nwhich are returned in the same order as the list of identity points\n" );
         
         }
         { //::SireSystem::IDAssigner::moleculeGroup
@@ -85,7 +86,8 @@ void register_IDAssigner_class(){
             IDAssigner_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the molecule group operated on by this constraint" );
         
         }
         { //::SireSystem::IDAssigner::nPoints
@@ -95,7 +97,8 @@ void register_IDAssigner_class(){
             
             IDAssigner_exposer.def( 
                 "nPoints"
-                , nPoints_function_value );
+                , nPoints_function_value
+                , "Return the number of identity points (and thus the number of\nidentified molecules)" );
         
         }
         IDAssigner_exposer.def( bp::self != bp::self );
@@ -108,7 +111,8 @@ void register_IDAssigner_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         IDAssigner_exposer.def( bp::self == bp::self );
@@ -119,7 +123,8 @@ void register_IDAssigner_class(){
             
             IDAssigner_exposer.def( 
                 "points"
-                , points_function_value );
+                , points_function_value
+                , "Return the points used to identify the molecules" );
         
         }
         { //::SireSystem::IDAssigner::propertyMap
@@ -130,7 +135,8 @@ void register_IDAssigner_class(){
             IDAssigner_exposer.def( 
                 "propertyMap"
                 , propertyMap_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the property map used to find the properties required\nby this constraint" );
         
         }
         { //::SireSystem::IDAssigner::space
@@ -141,7 +147,8 @@ void register_IDAssigner_class(){
             IDAssigner_exposer.def( 
                 "space"
                 , space_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the space used to calculate distances between the molecules\nand the identity points" );
         
         }
         { //::SireSystem::IDAssigner::toString
@@ -151,7 +158,8 @@ void register_IDAssigner_class(){
             
             IDAssigner_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this assigner" );
         
         }
         { //::SireSystem::IDAssigner::typeName
@@ -161,7 +169,8 @@ void register_IDAssigner_class(){
             
             IDAssigner_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireSystem::IDAssigner::update
@@ -172,7 +181,8 @@ void register_IDAssigner_class(){
             IDAssigner_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "Update the assigner with the passed system." );
         
         }
         { //::SireSystem::IDAssigner::what
@@ -182,7 +192,8 @@ void register_IDAssigner_class(){
             
             IDAssigner_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         IDAssigner_exposer.staticmethod( "typeName" );

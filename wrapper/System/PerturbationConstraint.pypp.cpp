@@ -44,10 +44,10 @@ void register_PerturbationConstraint_class(){
 
     { //::SireSystem::PerturbationConstraint
         typedef bp::class_< SireSystem::PerturbationConstraint, bp::bases< SireSystem::MoleculeConstraint, SireSystem::Constraint, SireBase::Property > > PerturbationConstraint_exposer_t;
-        PerturbationConstraint_exposer_t PerturbationConstraint_exposer = PerturbationConstraint_exposer_t( "PerturbationConstraint", bp::init< >() );
+        PerturbationConstraint_exposer_t PerturbationConstraint_exposer = PerturbationConstraint_exposer_t( "PerturbationConstraint", "This constraint is used to constrain part or parts of a z-matrix\nto particular values - this is useful during single-topology\nfree energy simulations\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope PerturbationConstraint_scope( PerturbationConstraint_exposer );
-        PerturbationConstraint_exposer.def( bp::init< SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )) );
-        PerturbationConstraint_exposer.def( bp::init< SireSystem::PerturbationConstraint const & >(( bp::arg("other") )) );
+        PerturbationConstraint_exposer.def( bp::init< SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ), "Construct specifying the molecule group and perturbation property") );
+        PerturbationConstraint_exposer.def( bp::init< SireSystem::PerturbationConstraint const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireSystem::PerturbationConstraint::moleculeGroup
         
             typedef ::SireMol::MoleculeGroup const & ( ::SireSystem::PerturbationConstraint::*moleculeGroup_function_type)(  ) const;
@@ -56,7 +56,8 @@ void register_PerturbationConstraint_class(){
             PerturbationConstraint_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the molecule group that is acted on by this constraint" );
         
         }
         PerturbationConstraint_exposer.def( bp::self != bp::self );
@@ -69,7 +70,8 @@ void register_PerturbationConstraint_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         PerturbationConstraint_exposer.def( bp::self == bp::self );
@@ -80,7 +82,8 @@ void register_PerturbationConstraint_class(){
             
             PerturbationConstraint_exposer.def( 
                 "perturbationProperty"
-                , perturbationProperty_function_value );
+                , perturbationProperty_function_value
+                , "Return the property used to find the perturbations to apply\nto the molecules in this constraint" );
         
         }
         { //::SireSystem::PerturbationConstraint::toString
@@ -90,7 +93,8 @@ void register_PerturbationConstraint_class(){
             
             PerturbationConstraint_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this constraint" );
         
         }
         { //::SireSystem::PerturbationConstraint::typeName
@@ -100,7 +104,8 @@ void register_PerturbationConstraint_class(){
             
             PerturbationConstraint_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         PerturbationConstraint_exposer.staticmethod( "typeName" );

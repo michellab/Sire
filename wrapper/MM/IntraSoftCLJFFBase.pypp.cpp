@@ -28,10 +28,10 @@ void register_IntraSoftCLJFFBase_class(){
 
     { //::SireFF::Intra2BFF< SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > >
         typedef bp::class_< SireFF::Intra2BFF< SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > >, bp::bases< SireMM::SoftCLJPotentialInterface<SireMM::IntraSoftCLJPotential>, SireMM::CLJPotentialInterface<SireMM::IntraSoftCLJPotential>, SireFF::G1FF, SireFF::FF, SireMol::MolGroupsBase, SireBase::Property > > IntraSoftCLJFFBase_exposer_t;
-        IntraSoftCLJFFBase_exposer_t IntraSoftCLJFFBase_exposer = IntraSoftCLJFFBase_exposer_t( "IntraSoftCLJFFBase", bp::init< >() );
+        IntraSoftCLJFFBase_exposer_t IntraSoftCLJFFBase_exposer = IntraSoftCLJFFBase_exposer_t( "IntraSoftCLJFFBase", "", bp::init< >("") );
         bp::scope IntraSoftCLJFFBase_scope( IntraSoftCLJFFBase_exposer );
-        IntraSoftCLJFFBase_exposer.def( bp::init< QString const & >(( bp::arg("name") )) );
-        IntraSoftCLJFFBase_exposer.def( bp::init< SireFF::Intra2BFF< SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > > const & >(( bp::arg("other") )) );
+        IntraSoftCLJFFBase_exposer.def( bp::init< QString const & >(( bp::arg("name") ), "") );
+        IntraSoftCLJFFBase_exposer.def( bp::init< SireFF::Intra2BFF< SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > > const & >(( bp::arg("other") ), "") );
         { //::SireFF::Intra2BFF< SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > >::components
         
             typedef SireFF::Intra2BFF< SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > > exported_class_t;
@@ -41,7 +41,8 @@ void register_IntraSoftCLJFFBase_class(){
             IntraSoftCLJFFBase_exposer.def( 
                 "components"
                 , components_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireFF::Intra2BFF< SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > >::containsProperty
@@ -53,7 +54,8 @@ void register_IntraSoftCLJFFBase_class(){
             IntraSoftCLJFFBase_exposer.def( 
                 "containsProperty"
                 , containsProperty_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "" );
         
         }
         { //::SireFF::Intra2BFF< SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > >::mustNowRecalculateFromScratch
@@ -64,7 +66,8 @@ void register_IntraSoftCLJFFBase_class(){
             
             IntraSoftCLJFFBase_exposer.def( 
                 "mustNowRecalculateFromScratch"
-                , mustNowRecalculateFromScratch_function_value );
+                , mustNowRecalculateFromScratch_function_value
+                , "" );
         
         }
         IntraSoftCLJFFBase_exposer.def( bp::self != bp::self );
@@ -78,7 +81,8 @@ void register_IntraSoftCLJFFBase_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         IntraSoftCLJFFBase_exposer.def( bp::self == bp::self );
@@ -91,7 +95,8 @@ void register_IntraSoftCLJFFBase_class(){
             IntraSoftCLJFFBase_exposer.def( 
                 "properties"
                 , properties_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireFF::Intra2BFF< SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > >::property
@@ -104,7 +109,8 @@ void register_IntraSoftCLJFFBase_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireFF::Intra2BFF< SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > >::setProperty
@@ -116,7 +122,8 @@ void register_IntraSoftCLJFFBase_class(){
             IntraSoftCLJFFBase_exposer.def( 
                 "setProperty"
                 , setProperty_function_value
-                , ( bp::arg("name"), bp::arg("property") ) );
+                , ( bp::arg("name"), bp::arg("property") )
+                , "" );
         
         }
         { //::SireFF::Intra2BFF< SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > >::typeName
@@ -127,7 +134,8 @@ void register_IntraSoftCLJFFBase_class(){
             
             IntraSoftCLJFFBase_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireFF::Intra2BFF< SireMM::SoftCLJPotentialInterface< SireMM::IntraSoftCLJPotential > >::what
@@ -138,7 +146,8 @@ void register_IntraSoftCLJFFBase_class(){
             
             IntraSoftCLJFFBase_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         IntraSoftCLJFFBase_exposer.staticmethod( "typeName" );

@@ -34,11 +34,11 @@ void register_SpecifiedGroupsDeleter_class(){
 
     { //::SireMove::SpecifiedGroupsDeleter
         typedef bp::class_< SireMove::SpecifiedGroupsDeleter, bp::bases< SireMove::MolDeleter, SireBase::Property > > SpecifiedGroupsDeleter_exposer_t;
-        SpecifiedGroupsDeleter_exposer_t SpecifiedGroupsDeleter_exposer = SpecifiedGroupsDeleter_exposer_t( "SpecifiedGroupsDeleter", bp::init< >() );
+        SpecifiedGroupsDeleter_exposer_t SpecifiedGroupsDeleter_exposer = SpecifiedGroupsDeleter_exposer_t( "SpecifiedGroupsDeleter", "This is a molecule deleter that selects a molecule at random\nfrom a specified molecule group (using the contained sampler)\nand then deletes that molecule from a specific set of\nmolecule groups in the system\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope SpecifiedGroupsDeleter_scope( SpecifiedGroupsDeleter_exposer );
-        SpecifiedGroupsDeleter_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireMol::MGID const & >(( bp::arg("molgroup"), bp::arg("mgid") )) );
-        SpecifiedGroupsDeleter_exposer.def( bp::init< SireMove::Sampler const &, SireMol::MGID const & >(( bp::arg("sampler"), bp::arg("mgid") )) );
-        SpecifiedGroupsDeleter_exposer.def( bp::init< SireMove::SpecifiedGroupsDeleter const & >(( bp::arg("other") )) );
+        SpecifiedGroupsDeleter_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireMol::MGID const & >(( bp::arg("molgroup"), bp::arg("mgid") ), "Construct a deleter that deletes molecules selected at random from the\nmolecule group molgroup from the molecule groups that are identified\nby the ID in mgid") );
+        SpecifiedGroupsDeleter_exposer.def( bp::init< SireMove::Sampler const &, SireMol::MGID const & >(( bp::arg("sampler"), bp::arg("mgid") ), "Construct a deleter that deletes molecules selected at random using the\npassed sampler from the molecule groups that are identified by the\nID in mgid") );
+        SpecifiedGroupsDeleter_exposer.def( bp::init< SireMove::SpecifiedGroupsDeleter const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::SpecifiedGroupsDeleter::deleteFrom
         
             typedef ::boost::tuples::tuple< SireMol::Molecule, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > ( ::SireMove::SpecifiedGroupsDeleter::*deleteFrom_function_type)( ::SireSystem::System & ) ;
@@ -47,7 +47,8 @@ void register_SpecifiedGroupsDeleter_class(){
             SpecifiedGroupsDeleter_exposer.def( 
                 "deleteFrom"
                 , deleteFrom_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "Delete a molecule from the system. This returns the molecule that\nwas deleted, and the probability with which it was sampled\n(normalised so that a probability of 1 is returned if the molecule\nwas picked purely randomly). This deleter deletes the molecule\nfrom the entire system. This returns an empty molecule if\nthe molecule was not contained in the system and nothing\nwas deleted" );
         
         }
         { //::SireMove::SpecifiedGroupsDeleter::generator
@@ -58,7 +59,8 @@ void register_SpecifiedGroupsDeleter_class(){
             SpecifiedGroupsDeleter_exposer.def( 
                 "generator"
                 , generator_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the random number generator used by the sampler to randomly\nselect molecules to be deleted" );
         
         }
         { //::SireMove::SpecifiedGroupsDeleter::group
@@ -69,7 +71,8 @@ void register_SpecifiedGroupsDeleter_class(){
             SpecifiedGroupsDeleter_exposer.def( 
                 "group"
                 , group_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the molecule group from which molecules are randomly\nselected to be deleted" );
         
         }
         SpecifiedGroupsDeleter_exposer.def( bp::self != bp::self );
@@ -82,7 +85,8 @@ void register_SpecifiedGroupsDeleter_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         SpecifiedGroupsDeleter_exposer.def( bp::self == bp::self );
@@ -94,7 +98,8 @@ void register_SpecifiedGroupsDeleter_class(){
             SpecifiedGroupsDeleter_exposer.def( 
                 "sampler"
                 , sampler_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the sampler used to randomly select molecules to be deleted" );
         
         }
         { //::SireMove::SpecifiedGroupsDeleter::setGenerator
@@ -105,7 +110,8 @@ void register_SpecifiedGroupsDeleter_class(){
             SpecifiedGroupsDeleter_exposer.def( 
                 "setGenerator"
                 , setGenerator_function_value
-                , ( bp::arg("generator") ) );
+                , ( bp::arg("generator") )
+                , "Set the random number generator used by the sampler to randomly\nselect molecules to be deleted" );
         
         }
         { //::SireMove::SpecifiedGroupsDeleter::setGroup
@@ -116,7 +122,8 @@ void register_SpecifiedGroupsDeleter_class(){
             SpecifiedGroupsDeleter_exposer.def( 
                 "setGroup"
                 , setGroup_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "Set the molecule group from which molecules are selected randomly" );
         
         }
         { //::SireMove::SpecifiedGroupsDeleter::setSampler
@@ -127,7 +134,8 @@ void register_SpecifiedGroupsDeleter_class(){
             SpecifiedGroupsDeleter_exposer.def( 
                 "setSampler"
                 , setSampler_function_value
-                , ( bp::arg("sampler") ) );
+                , ( bp::arg("sampler") )
+                , "Set the sampler used to randomly select molecules to be deleted" );
         
         }
         { //::SireMove::SpecifiedGroupsDeleter::setSampler
@@ -138,7 +146,8 @@ void register_SpecifiedGroupsDeleter_class(){
             SpecifiedGroupsDeleter_exposer.def( 
                 "setSampler"
                 , setSampler_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "Set the sampler to one that selects molecules uniformly from the\npassed molecule group" );
         
         }
         { //::SireMove::SpecifiedGroupsDeleter::setSpecifiedGroups
@@ -149,7 +158,8 @@ void register_SpecifiedGroupsDeleter_class(){
             SpecifiedGroupsDeleter_exposer.def( 
                 "setSpecifiedGroups"
                 , setSpecifiedGroups_function_value
-                , ( bp::arg("mgid") ) );
+                , ( bp::arg("mgid") )
+                , "Set the ID of the groups from which molecules are actually deleted" );
         
         }
         { //::SireMove::SpecifiedGroupsDeleter::specifiedGroups
@@ -160,7 +170,8 @@ void register_SpecifiedGroupsDeleter_class(){
             SpecifiedGroupsDeleter_exposer.def( 
                 "specifiedGroups"
                 , specifiedGroups_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the ID of the groups from which molecules are actually deleted" );
         
         }
         { //::SireMove::SpecifiedGroupsDeleter::typeName
@@ -170,7 +181,8 @@ void register_SpecifiedGroupsDeleter_class(){
             
             SpecifiedGroupsDeleter_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         SpecifiedGroupsDeleter_exposer.staticmethod( "typeName" );

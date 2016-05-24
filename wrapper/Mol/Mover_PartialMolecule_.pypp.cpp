@@ -95,11 +95,11 @@ void register_Mover_PartialMolecule__class(){
 
     { //::SireMol::Mover< SireMol::PartialMolecule >
         typedef bp::class_< SireMol::Mover< SireMol::PartialMolecule >, bp::bases< SireMol::MoverBase, SireMol::PartialMolecule, SireMol::MoleculeView, SireBase::Property > > Mover_PartialMolecule__exposer_t;
-        Mover_PartialMolecule__exposer_t Mover_PartialMolecule__exposer = Mover_PartialMolecule__exposer_t( "Mover_PartialMolecule_", bp::init< >() );
+        Mover_PartialMolecule__exposer_t Mover_PartialMolecule__exposer = Mover_PartialMolecule__exposer_t( "Mover_PartialMolecule_", "", bp::init< >("") );
         bp::scope Mover_PartialMolecule__scope( Mover_PartialMolecule__exposer );
-        Mover_PartialMolecule__exposer.def( bp::init< SireMol::PartialMolecule const & >(( bp::arg("view") )) );
-        Mover_PartialMolecule__exposer.def( bp::init< SireMol::PartialMolecule const &, SireMol::AtomSelection const & >(( bp::arg("view"), bp::arg("movable_atoms") )) );
-        Mover_PartialMolecule__exposer.def( bp::init< SireMol::Mover< SireMol::PartialMolecule > const & >(( bp::arg("other") )) );
+        Mover_PartialMolecule__exposer.def( bp::init< SireMol::PartialMolecule const & >(( bp::arg("view") ), "") );
+        Mover_PartialMolecule__exposer.def( bp::init< SireMol::PartialMolecule const &, SireMol::AtomSelection const & >(( bp::arg("view"), bp::arg("movable_atoms") ), "") );
+        Mover_PartialMolecule__exposer.def( bp::init< SireMol::Mover< SireMol::PartialMolecule > const & >(( bp::arg("other") ), "") );
         { //::SireMol::Mover< SireMol::PartialMolecule >::align
         
             typedef SireMol::Mover< SireMol::PartialMolecule > exported_class_t;
@@ -110,7 +110,8 @@ void register_Mover_PartialMolecule__class(){
                 "align"
                 , align_function_value
                 , ( bp::arg("other"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::align
@@ -123,7 +124,8 @@ void register_Mover_PartialMolecule__class(){
                 "align"
                 , align_function_value
                 , ( bp::arg("other"), bp::arg("map0"), bp::arg("map1") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::align
@@ -136,7 +138,8 @@ void register_Mover_PartialMolecule__class(){
                 "align"
                 , align_function_value
                 , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::align
@@ -149,7 +152,8 @@ void register_Mover_PartialMolecule__class(){
                 "align"
                 , align_function_value
                 , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map0"), bp::arg("map1") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::alignTo
@@ -162,7 +166,8 @@ void register_Mover_PartialMolecule__class(){
                 "alignTo"
                 , alignTo_function_value
                 , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::alignTo
@@ -175,7 +180,8 @@ void register_Mover_PartialMolecule__class(){
                 "alignTo"
                 , alignTo_function_value
                 , ( bp::arg("other"), bp::arg("matcher"), bp::arg("map0"), bp::arg("map1") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::alignTo
@@ -188,7 +194,8 @@ void register_Mover_PartialMolecule__class(){
                 "alignTo"
                 , alignTo_function_value
                 , ( bp::arg("other"), bp::arg("aligning_atoms"), bp::arg("matcher"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::alignTo
@@ -201,7 +208,8 @@ void register_Mover_PartialMolecule__class(){
                 "alignTo"
                 , alignTo_function_value
                 , ( bp::arg("other"), bp::arg("aligning_atoms"), bp::arg("matcher"), bp::arg("map0"), bp::arg("map1") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::change
@@ -214,7 +222,8 @@ void register_Mover_PartialMolecule__class(){
                 "change"
                 , change_function_value
                 , ( bp::arg("bond"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::change
@@ -227,7 +236,8 @@ void register_Mover_PartialMolecule__class(){
                 "change"
                 , change_function_value
                 , ( bp::arg("angle"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::change
@@ -240,7 +250,8 @@ void register_Mover_PartialMolecule__class(){
                 "change"
                 , change_function_value
                 , ( bp::arg("dihedral"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::change
@@ -253,7 +264,8 @@ void register_Mover_PartialMolecule__class(){
                 "change"
                 , change_function_value
                 , ( bp::arg("bond"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::change
@@ -266,7 +278,8 @@ void register_Mover_PartialMolecule__class(){
                 "change"
                 , change_function_value
                 , ( bp::arg("improper"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::changeFrame
@@ -279,7 +292,8 @@ void register_Mover_PartialMolecule__class(){
                 "changeFrame"
                 , changeFrame_function_value
                 , ( bp::arg("from_frame"), bp::arg("to_frame"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::commit
@@ -290,7 +304,8 @@ void register_Mover_PartialMolecule__class(){
             
             Mover_PartialMolecule__exposer.def( 
                 "commit"
-                , commit_function_value );
+                , commit_function_value
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::mapInto
@@ -303,7 +318,8 @@ void register_Mover_PartialMolecule__class(){
                 "mapInto"
                 , mapInto_function_value
                 , ( bp::arg("axes"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::operator=
@@ -316,7 +332,8 @@ void register_Mover_PartialMolecule__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::operator=
@@ -329,7 +346,8 @@ void register_Mover_PartialMolecule__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::rotate
@@ -342,7 +360,8 @@ void register_Mover_PartialMolecule__class(){
                 "rotate"
                 , rotate_function_value
                 , ( bp::arg("quat"), bp::arg("point"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::rotate
@@ -355,7 +374,8 @@ void register_Mover_PartialMolecule__class(){
                 "rotate"
                 , rotate_function_value
                 , ( bp::arg("rotmat"), bp::arg("point"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::set
@@ -368,7 +388,8 @@ void register_Mover_PartialMolecule__class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("bond"), bp::arg("value"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::set
@@ -381,7 +402,8 @@ void register_Mover_PartialMolecule__class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("angle"), bp::arg("value"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::set
@@ -394,7 +416,8 @@ void register_Mover_PartialMolecule__class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("dihedral"), bp::arg("value"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::set
@@ -407,7 +430,8 @@ void register_Mover_PartialMolecule__class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("improper"), bp::arg("value"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::setAll
@@ -420,7 +444,8 @@ void register_Mover_PartialMolecule__class(){
                 "setAll"
                 , setAll_function_value
                 , ( bp::arg("dihedral"), bp::arg("value"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::toString
@@ -431,7 +456,8 @@ void register_Mover_PartialMolecule__class(){
             
             Mover_PartialMolecule__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::transform
@@ -444,7 +470,8 @@ void register_Mover_PartialMolecule__class(){
                 "transform"
                 , transform_function_value
                 , ( bp::arg("transform"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::translate
@@ -457,7 +484,8 @@ void register_Mover_PartialMolecule__class(){
                 "translate"
                 , translate_function_value
                 , ( bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Mover< SireMol::PartialMolecule >::typeName
@@ -468,7 +496,8 @@ void register_Mover_PartialMolecule__class(){
             
             Mover_PartialMolecule__exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         Mover_PartialMolecule__exposer.staticmethod( "typeName" );

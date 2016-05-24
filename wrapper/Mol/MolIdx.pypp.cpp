@@ -35,10 +35,10 @@ void register_MolIdx_class(){
 
     { //::SireMol::MolIdx
         typedef bp::class_< SireMol::MolIdx, bp::bases< SireMol::MolID, SireID::ID, SireID::IndexBase > > MolIdx_exposer_t;
-        MolIdx_exposer_t MolIdx_exposer = MolIdx_exposer_t( "MolIdx", bp::init< >() );
+        MolIdx_exposer_t MolIdx_exposer = MolIdx_exposer_t( "MolIdx", "This is an ID object that is used to index molecules (e.g. index\nin a list or array, or in a MoleculeGroup).\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope MolIdx_scope( MolIdx_exposer );
-        MolIdx_exposer.def( bp::init< qint32 >(( bp::arg("idx") )) );
-        MolIdx_exposer.def( bp::init< SireMol::MolIdx const & >(( bp::arg("other") )) );
+        MolIdx_exposer.def( bp::init< qint32 >(( bp::arg("idx") ), "") );
+        MolIdx_exposer.def( bp::init< SireMol::MolIdx const & >(( bp::arg("other") ), "") );
         { //::SireMol::MolIdx::hash
         
             typedef ::uint ( ::SireMol::MolIdx::*hash_function_type)(  ) const;
@@ -46,7 +46,8 @@ void register_MolIdx_class(){
             
             MolIdx_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::MolIdx::isNull
@@ -56,7 +57,8 @@ void register_MolIdx_class(){
             
             MolIdx_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::MolIdx::map
@@ -67,7 +69,8 @@ void register_MolIdx_class(){
             MolIdx_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "" );
         
         }
         { //::SireMol::MolIdx::map
@@ -78,7 +81,8 @@ void register_MolIdx_class(){
             MolIdx_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "" );
         
         }
         { //::SireMol::MolIdx::map
@@ -89,7 +93,8 @@ void register_MolIdx_class(){
             MolIdx_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molgroups") ) );
+                , ( bp::arg("molgroups") )
+                , "" );
         
         }
         { //::SireMol::MolIdx::null
@@ -99,7 +104,8 @@ void register_MolIdx_class(){
             
             MolIdx_exposer.def( 
                 "null"
-                , null_function_value );
+                , null_function_value
+                , "" );
         
         }
         { //::SireMol::MolIdx::operator=
@@ -111,7 +117,8 @@ void register_MolIdx_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::MolIdx::toString
@@ -121,7 +128,8 @@ void register_MolIdx_class(){
             
             MolIdx_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::MolIdx::typeName
@@ -131,7 +139,8 @@ void register_MolIdx_class(){
             
             MolIdx_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::MolIdx::what
@@ -141,7 +150,8 @@ void register_MolIdx_class(){
             
             MolIdx_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         MolIdx_exposer.staticmethod( "null" );

@@ -81,10 +81,10 @@ void register_OpenMMFrEnergyDT_class(){
 
     { //::SireMove::OpenMMFrEnergyDT
         typedef bp::class_< SireMove::OpenMMFrEnergyDT, bp::bases< SireMove::Integrator, SireBase::Property > > OpenMMFrEnergyDT_exposer_t;
-        OpenMMFrEnergyDT_exposer_t OpenMMFrEnergyDT_exposer = OpenMMFrEnergyDT_exposer_t( "OpenMMFrEnergyDT", bp::init< bp::optional< bool > >(( bp::arg("frequent_save_velocities")=(bool)(false) )) );
+        OpenMMFrEnergyDT_exposer_t OpenMMFrEnergyDT_exposer = OpenMMFrEnergyDT_exposer_t( "OpenMMFrEnergyDT", "This class implements a free energy methods Using OpenMM.\n\nAuthor: Julien Michel and Gaetano Calabro\n", bp::init< bp::optional< bool > >(( bp::arg("frequent_save_velocities")=(bool)(false) ), "Constructor") );
         bp::scope OpenMMFrEnergyDT_scope( OpenMMFrEnergyDT_exposer );
-        OpenMMFrEnergyDT_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireMol::MoleculeGroup const &, bp::optional< bool > >(( bp::arg("molecule_group"), bp::arg("solute_group"), bp::arg("frequent_save_velocities")=(bool)(false) )) );
-        OpenMMFrEnergyDT_exposer.def( bp::init< SireMove::OpenMMFrEnergyDT const & >(( bp::arg("other") )) );
+        OpenMMFrEnergyDT_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireMol::MoleculeGroup const &, bp::optional< bool > >(( bp::arg("molecule_group"), bp::arg("solute_group"), bp::arg("frequent_save_velocities")=(bool)(false) ), "Constructor using the passed molecule groups") );
+        OpenMMFrEnergyDT_exposer.def( bp::init< SireMove::OpenMMFrEnergyDT const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::OpenMMFrEnergyDT::createWorkspace
         
             typedef ::SireMove::IntegratorWorkspacePtr ( ::SireMove::OpenMMFrEnergyDT::*createWorkspace_function_type)( ::SireBase::PropertyMap const & ) const;
@@ -93,7 +93,8 @@ void register_OpenMMFrEnergyDT_class(){
             OpenMMFrEnergyDT_exposer.def( 
                 "createWorkspace"
                 , createWorkspace_function_value
-                , ( bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("map")=SireBase::PropertyMap() )
+                , "Create an empty workspace" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::createWorkspace
@@ -104,7 +105,8 @@ void register_OpenMMFrEnergyDT_class(){
             OpenMMFrEnergyDT_exposer.def( 
                 "createWorkspace"
                 , createWorkspace_function_value
-                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Create a workspace for this integrator for the molecule group molgroup" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::ensemble
@@ -114,7 +116,8 @@ void register_OpenMMFrEnergyDT_class(){
             
             OpenMMFrEnergyDT_exposer.def( 
                 "ensemble"
-                , ensemble_function_value );
+                , ensemble_function_value
+                , "Return the ensemble of this integrator" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::getAlchemical_value
@@ -124,7 +127,8 @@ void register_OpenMMFrEnergyDT_class(){
             
             OpenMMFrEnergyDT_exposer.def( 
                 "getAlchemical_value"
-                , getAlchemical_value_function_value );
+                , getAlchemical_value_function_value
+                , "" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::getAndersen
@@ -134,7 +138,8 @@ void register_OpenMMFrEnergyDT_class(){
             
             OpenMMFrEnergyDT_exposer.def( 
                 "getAndersen"
-                , getAndersen_function_value );
+                , getAndersen_function_value
+                , "" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::getAndersen_frequency
@@ -144,7 +149,8 @@ void register_OpenMMFrEnergyDT_class(){
             
             OpenMMFrEnergyDT_exposer.def( 
                 "getAndersen_frequency"
-                , getAndersen_frequency_function_value );
+                , getAndersen_frequency_function_value
+                , "" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::getBufferCoords
@@ -154,7 +160,8 @@ void register_OpenMMFrEnergyDT_class(){
             
             OpenMMFrEnergyDT_exposer.def( 
                 "getBufferCoords"
-                , getBufferCoords_function_value );
+                , getBufferCoords_function_value
+                , "" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::getCMMremoval_frequency
@@ -164,7 +171,8 @@ void register_OpenMMFrEnergyDT_class(){
             
             OpenMMFrEnergyDT_exposer.def( 
                 "getCMMremoval_frequency"
-                , getCMMremoval_frequency_function_value );
+                , getCMMremoval_frequency_function_value
+                , "" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::getConstraintType
@@ -174,7 +182,8 @@ void register_OpenMMFrEnergyDT_class(){
             
             OpenMMFrEnergyDT_exposer.def( 
                 "getConstraintType"
-                , getConstraintType_function_value );
+                , getConstraintType_function_value
+                , "" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::getCoulomb_power
@@ -184,7 +193,8 @@ void register_OpenMMFrEnergyDT_class(){
             
             OpenMMFrEnergyDT_exposer.def( 
                 "getCoulomb_power"
-                , getCoulomb_power_function_value );
+                , getCoulomb_power_function_value
+                , "" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::getCutoffType
@@ -194,7 +204,8 @@ void register_OpenMMFrEnergyDT_class(){
             
             OpenMMFrEnergyDT_exposer.def( 
                 "getCutoffType"
-                , getCutoffType_function_value );
+                , getCutoffType_function_value
+                , "" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::getCutoff_distance
@@ -204,7 +215,8 @@ void register_OpenMMFrEnergyDT_class(){
             
             OpenMMFrEnergyDT_exposer.def( 
                 "getCutoff_distance"
-                , getCutoff_distance_function_value );
+                , getCutoff_distance_function_value
+                , "" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::getDeltaAlchemical
@@ -214,7 +226,8 @@ void register_OpenMMFrEnergyDT_class(){
             
             OpenMMFrEnergyDT_exposer.def( 
                 "getDeltaAlchemical"
-                , getDeltaAlchemical_function_value );
+                , getDeltaAlchemical_function_value
+                , "" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::getDeviceIndex
@@ -224,7 +237,8 @@ void register_OpenMMFrEnergyDT_class(){
             
             OpenMMFrEnergyDT_exposer.def( 
                 "getDeviceIndex"
-                , getDeviceIndex_function_value );
+                , getDeviceIndex_function_value
+                , "" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::getEnergyFrequency
@@ -234,7 +248,8 @@ void register_OpenMMFrEnergyDT_class(){
             
             OpenMMFrEnergyDT_exposer.def( 
                 "getEnergyFrequency"
-                , getEnergyFrequency_function_value );
+                , getEnergyFrequency_function_value
+                , "Get the frequency of buffering coordinates" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::getField_dielectric
@@ -244,7 +259,8 @@ void register_OpenMMFrEnergyDT_class(){
             
             OpenMMFrEnergyDT_exposer.def( 
                 "getField_dielectric"
-                , getField_dielectric_function_value );
+                , getField_dielectric_function_value
+                , "" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::getGradients
@@ -254,7 +270,8 @@ void register_OpenMMFrEnergyDT_class(){
             
             OpenMMFrEnergyDT_exposer.def( 
                 "getGradients"
-                , getGradients_function_value );
+                , getGradients_function_value
+                , "" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::getMCBarostat
@@ -264,7 +281,8 @@ void register_OpenMMFrEnergyDT_class(){
             
             OpenMMFrEnergyDT_exposer.def( 
                 "getMCBarostat"
-                , getMCBarostat_function_value );
+                , getMCBarostat_function_value
+                , "" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::getMCBarostat_frequency
@@ -274,7 +292,8 @@ void register_OpenMMFrEnergyDT_class(){
             
             OpenMMFrEnergyDT_exposer.def( 
                 "getMCBarostat_frequency"
-                , getMCBarostat_frequency_function_value );
+                , getMCBarostat_frequency_function_value
+                , "" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::getPlatform
@@ -284,7 +303,8 @@ void register_OpenMMFrEnergyDT_class(){
             
             OpenMMFrEnergyDT_exposer.def( 
                 "getPlatform"
-                , getPlatform_function_value );
+                , getPlatform_function_value
+                , "" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::getPressure
@@ -294,7 +314,8 @@ void register_OpenMMFrEnergyDT_class(){
             
             OpenMMFrEnergyDT_exposer.def( 
                 "getPressure"
-                , getPressure_function_value );
+                , getPressure_function_value
+                , "" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::getRestraint
@@ -304,7 +325,8 @@ void register_OpenMMFrEnergyDT_class(){
             
             OpenMMFrEnergyDT_exposer.def( 
                 "getRestraint"
-                , getRestraint_function_value );
+                , getRestraint_function_value
+                , "" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::getShift_delta
@@ -314,7 +336,8 @@ void register_OpenMMFrEnergyDT_class(){
             
             OpenMMFrEnergyDT_exposer.def( 
                 "getShift_delta"
-                , getShift_delta_function_value );
+                , getShift_delta_function_value
+                , "" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::getTemperature
@@ -324,7 +347,8 @@ void register_OpenMMFrEnergyDT_class(){
             
             OpenMMFrEnergyDT_exposer.def( 
                 "getTemperature"
-                , getTemperature_function_value );
+                , getTemperature_function_value
+                , "" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::initialise
@@ -334,7 +358,8 @@ void register_OpenMMFrEnergyDT_class(){
             
             OpenMMFrEnergyDT_exposer.def( 
                 "initialise"
-                , initialise_function_value );
+                , initialise_function_value
+                , "" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::integrate
@@ -345,7 +370,8 @@ void register_OpenMMFrEnergyDT_class(){
             OpenMMFrEnergyDT_exposer.def( 
                 "integrate"
                 , integrate_function_value
-                , ( bp::arg("workspace"), bp::arg("nrg_component"), bp::arg("timestep"), bp::arg("nmoves"), bp::arg("record_stats") ) );
+                , ( bp::arg("workspace"), bp::arg("nrg_component"), bp::arg("timestep"), bp::arg("nmoves"), bp::arg("record_stats") )
+                , "" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::isTimeReversible
@@ -355,7 +381,8 @@ void register_OpenMMFrEnergyDT_class(){
             
             OpenMMFrEnergyDT_exposer.def( 
                 "isTimeReversible"
-                , isTimeReversible_function_value );
+                , isTimeReversible_function_value
+                , "Return whether or not this integrator is time-reversible" );
         
         }
         OpenMMFrEnergyDT_exposer.def( bp::self != bp::self );
@@ -368,7 +395,8 @@ void register_OpenMMFrEnergyDT_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         OpenMMFrEnergyDT_exposer.def( bp::self == bp::self );
@@ -380,7 +408,8 @@ void register_OpenMMFrEnergyDT_class(){
             OpenMMFrEnergyDT_exposer.def( 
                 "setAlchemical_value"
                 , setAlchemical_value_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "Set the alchemical value used to calculate the free energy change via TI method" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::setAndersen
@@ -391,7 +420,8 @@ void register_OpenMMFrEnergyDT_class(){
             OpenMMFrEnergyDT_exposer.def( 
                 "setAndersen"
                 , setAndersen_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "Set Andersen thermostat" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::setAndersen_frequency
@@ -402,7 +432,8 @@ void register_OpenMMFrEnergyDT_class(){
             OpenMMFrEnergyDT_exposer.def( 
                 "setAndersen_frequency"
                 , setAndersen_frequency_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "Set the Andersen Thermostat frequency collision" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::setBufferCoords
@@ -413,7 +444,8 @@ void register_OpenMMFrEnergyDT_class(){
             OpenMMFrEnergyDT_exposer.def( 
                 "setBufferCoords"
                 , setBufferCoords_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "Set the flag to buffer coordinate during the free energy calculation" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::setCMMremoval_frequency
@@ -424,7 +456,8 @@ void register_OpenMMFrEnergyDT_class(){
             OpenMMFrEnergyDT_exposer.def( 
                 "setCMMremoval_frequency"
                 , setCMMremoval_frequency_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "Set the Center of Mass motion removal frequency" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::setConstraintType
@@ -435,7 +468,8 @@ void register_OpenMMFrEnergyDT_class(){
             OpenMMFrEnergyDT_exposer.def( 
                 "setConstraintType"
                 , setConstraintType_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "Set the Constraint type: none, hbonds, allbonds, hangles" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::setCoulomb_power
@@ -446,7 +480,8 @@ void register_OpenMMFrEnergyDT_class(){
             OpenMMFrEnergyDT_exposer.def( 
                 "setCoulomb_power"
                 , setCoulomb_power_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "Set the coulomb power used in the soft core potential" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::setCutoffType
@@ -457,7 +492,8 @@ void register_OpenMMFrEnergyDT_class(){
             OpenMMFrEnergyDT_exposer.def( 
                 "setCutoffType"
                 , setCutoffType_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "Set the cufott type: nocutoff, cutoffnonperiodic, cutoffperiodic" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::setCutoff_distance
@@ -468,7 +504,8 @@ void register_OpenMMFrEnergyDT_class(){
             OpenMMFrEnergyDT_exposer.def( 
                 "setCutoff_distance"
                 , setCutoff_distance_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "Set the cutoff distance in A" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::setDeltatAlchemical
@@ -479,7 +516,8 @@ void register_OpenMMFrEnergyDT_class(){
             OpenMMFrEnergyDT_exposer.def( 
                 "setDeltatAlchemical"
                 , setDeltatAlchemical_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "Set the delta alchemical used in the FEP method" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::setDeviceIndex
@@ -490,7 +528,8 @@ void register_OpenMMFrEnergyDT_class(){
             OpenMMFrEnergyDT_exposer.def( 
                 "setDeviceIndex"
                 , setDeviceIndex_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "Set the OpenMM Platform: CUDA, OpenCL, CPU" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::setEnergyFrequency
@@ -501,7 +540,8 @@ void register_OpenMMFrEnergyDT_class(){
             OpenMMFrEnergyDT_exposer.def( 
                 "setEnergyFrequency"
                 , setEnergyFrequency_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "Set the Center of Mass motion removal frequency" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::setField_dielectric
@@ -512,7 +552,8 @@ void register_OpenMMFrEnergyDT_class(){
             OpenMMFrEnergyDT_exposer.def( 
                 "setField_dielectric"
                 , setField_dielectric_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "Set the dielectric constant" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::setMCBarostat
@@ -523,7 +564,8 @@ void register_OpenMMFrEnergyDT_class(){
             OpenMMFrEnergyDT_exposer.def( 
                 "setMCBarostat"
                 , setMCBarostat_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "Set Monte Carlo Barostat onoff" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::setMCBarostat_frequency
@@ -534,7 +576,8 @@ void register_OpenMMFrEnergyDT_class(){
             OpenMMFrEnergyDT_exposer.def( 
                 "setMCBarostat_frequency"
                 , setMCBarostat_frequency_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "Set the Monte Carlo Barostat frequency in time speps" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::setPlatform
@@ -545,7 +588,8 @@ void register_OpenMMFrEnergyDT_class(){
             OpenMMFrEnergyDT_exposer.def( 
                 "setPlatform"
                 , setPlatform_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "Set the OpenMM Platform: CUDA, OpenCL, CPU" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::setPressure
@@ -556,7 +600,8 @@ void register_OpenMMFrEnergyDT_class(){
             OpenMMFrEnergyDT_exposer.def( 
                 "setPressure"
                 , setPressure_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "Set the Pressure" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::setRestraint
@@ -567,7 +612,8 @@ void register_OpenMMFrEnergyDT_class(){
             OpenMMFrEnergyDT_exposer.def( 
                 "setRestraint"
                 , setRestraint_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "Set the Retraint mode" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::setShift_delta
@@ -578,7 +624,8 @@ void register_OpenMMFrEnergyDT_class(){
             OpenMMFrEnergyDT_exposer.def( 
                 "setShift_delta"
                 , setShift_delta_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "Set the shift used in the soft core potential" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::setTemperature
@@ -589,7 +636,8 @@ void register_OpenMMFrEnergyDT_class(){
             OpenMMFrEnergyDT_exposer.def( 
                 "setTemperature"
                 , setTemperature_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "Set the Temperature" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::toString
@@ -599,7 +647,8 @@ void register_OpenMMFrEnergyDT_class(){
             
             OpenMMFrEnergyDT_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this integrator" );
         
         }
         { //::SireMove::OpenMMFrEnergyDT::typeName
@@ -609,7 +658,8 @@ void register_OpenMMFrEnergyDT_class(){
             
             OpenMMFrEnergyDT_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         OpenMMFrEnergyDT_exposer.staticmethod( "typeName" );

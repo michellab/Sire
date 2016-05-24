@@ -355,7 +355,8 @@ void register_free_functions(){
         bp::def( 
             "Gamma"
             , Gamma_function_value
-            , ( bp::arg("alpha") ) );
+            , ( bp::arg("alpha") )
+            , "" );
     
     }
 
@@ -367,7 +368,8 @@ void register_free_functions(){
         bp::def( 
             "Gamma"
             , Gamma_function_value
-            , ( bp::arg("alpha"), bp::arg("x") ) );
+            , ( bp::arg("alpha"), bp::arg("x") )
+            , "" );
     
     }
 
@@ -379,7 +381,8 @@ void register_free_functions(){
         bp::def( 
             "align"
             , align_function_value
-            , ( bp::arg("p"), bp::arg("q"), bp::arg("fit")=(bool)(true) ) );
+            , ( bp::arg("p"), bp::arg("q"), bp::arg("fit")=(bool)(true) )
+            , "" );
     
     }
 
@@ -391,7 +394,8 @@ void register_free_functions(){
         bp::def( 
             "boys"
             , boys_function_value
-            , ( bp::arg("m"), bp::arg("x") ) );
+            , ( bp::arg("m"), bp::arg("x") )
+            , "" );
     
     }
 
@@ -403,7 +407,8 @@ void register_free_functions(){
         bp::def( 
             "boys"
             , boys_function_value
-            , ( bp::arg("m"), bp::arg("x") ) );
+            , ( bp::arg("m"), bp::arg("x") )
+            , "" );
     
     }
 
@@ -415,7 +420,8 @@ void register_free_functions(){
         bp::def( 
             "brute_force_linear_assignment"
             , brute_force_linear_assignment_function_value
-            , ( bp::arg("costs") ) );
+            , ( bp::arg("costs") )
+            , "" );
     
     }
 
@@ -427,7 +433,8 @@ void register_free_functions(){
         bp::def( 
             "calculate_total_cost"
             , calculate_total_cost_function_value
-            , ( bp::arg("costs"), bp::arg("rows_to_columns") ) );
+            , ( bp::arg("costs"), bp::arg("rows_to_columns") )
+            , "" );
     
     }
 
@@ -439,7 +446,8 @@ void register_free_functions(){
         bp::def( 
             "gamma"
             , gamma_function_value
-            , ( bp::arg("alpha") ) );
+            , ( bp::arg("alpha") )
+            , "" );
     
     }
 
@@ -451,7 +459,8 @@ void register_free_functions(){
         bp::def( 
             "gamma"
             , gamma_function_value
-            , ( bp::arg("alpha"), bp::arg("x") ) );
+            , ( bp::arg("alpha"), bp::arg("x") )
+            , "" );
     
     }
 
@@ -463,7 +472,8 @@ void register_free_functions(){
         bp::def( 
             "gamma"
             , gamma_function_value
-            , ( bp::arg("arg0") ) );
+            , ( bp::arg("arg0") )
+            , "Legacy BSD API: please use C99 tgamma( ) instead." );
     
     }
 
@@ -475,7 +485,8 @@ void register_free_functions(){
         bp::def( 
             "getAlignment"
             , getAlignment_function_value
-            , ( bp::arg("p"), bp::arg("q"), bp::arg("fit")=(bool)(true) ) );
+            , ( bp::arg("p"), bp::arg("q"), bp::arg("fit")=(bool)(true) )
+            , "" );
     
     }
 
@@ -487,7 +498,8 @@ void register_free_functions(){
         bp::def( 
             "getCentroid"
             , getCentroid_function_value
-            , ( bp::arg("p"), bp::arg("n")=(int)(-1) ) );
+            , ( bp::arg("p"), bp::arg("n")=(int)(-1) )
+            , "" );
     
     }
 
@@ -499,7 +511,8 @@ void register_free_functions(){
         bp::def( 
             "getRMSD"
             , getRMSD_function_value
-            , ( bp::arg("p"), bp::arg("q"), bp::arg("n")=(int)(-1) ) );
+            , ( bp::arg("p"), bp::arg("q"), bp::arg("n")=(int)(-1) )
+            , "" );
     
     }
 
@@ -511,7 +524,8 @@ void register_free_functions(){
         bp::def( 
             "get_lowest_total_cost"
             , get_lowest_total_cost_function_value
-            , ( bp::arg("costs") ) );
+            , ( bp::arg("costs") )
+            , "" );
     
     }
 
@@ -523,7 +537,8 @@ void register_free_functions(){
         bp::def( 
             "incomplete_gamma_higher"
             , incomplete_gamma_higher_function_value
-            , ( bp::arg("alpha"), bp::arg("x") ) );
+            , ( bp::arg("alpha"), bp::arg("x") )
+            , "" );
     
     }
 
@@ -535,7 +550,8 @@ void register_free_functions(){
         bp::def( 
             "incomplete_gamma_lower"
             , incomplete_gamma_lower_function_value
-            , ( bp::arg("alpha"), bp::arg("x") ) );
+            , ( bp::arg("alpha"), bp::arg("x") )
+            , "" );
     
     }
 
@@ -547,7 +563,8 @@ void register_free_functions(){
         bp::def( 
             "kabasch"
             , kabasch_function_value
-            , ( bp::arg("p"), bp::arg("q") ) );
+            , ( bp::arg("p"), bp::arg("q") )
+            , "" );
     
     }
 
@@ -559,7 +576,8 @@ void register_free_functions(){
         bp::def( 
             "kabaschFit"
             , kabaschFit_function_value
-            , ( bp::arg("p"), bp::arg("q") ) );
+            , ( bp::arg("p"), bp::arg("q") )
+            , "" );
     
     }
 
@@ -571,7 +589,8 @@ void register_free_functions(){
         bp::def( 
             "multi_boys"
             , multi_boys_function_value
-            , ( bp::arg("x"), bp::arg("n") ) );
+            , ( bp::arg("x"), bp::arg("n") )
+            , "" );
     
     }
 
@@ -583,7 +602,8 @@ void register_free_functions(){
         bp::def( 
             "multi_boys"
             , multi_boys_function_value
-            , ( bp::arg("x"), bp::arg("n"), bp::arg("start") ) );
+            , ( bp::arg("x"), bp::arg("n"), bp::arg("start") )
+            , "" );
     
     }
 
@@ -595,7 +615,8 @@ void register_free_functions(){
         bp::def( 
             "rotate"
             , rotate_function_value
-            , ( bp::arg("input"), bp::arg("rotmat"), bp::arg("point") ) );
+            , ( bp::arg("input"), bp::arg("rotmat"), bp::arg("point") )
+            , "Function that rotates the input vector input by the rotation\nmatrix rotmat about the point point. The output is returned." );
     
     }
 
@@ -607,7 +628,8 @@ void register_free_functions(){
         bp::def( 
             "solve_linear_assignment"
             , solve_linear_assignment_function_value
-            , ( bp::arg("costs"), bp::arg("check_result")=(bool)(false) ) );
+            , ( bp::arg("costs"), bp::arg("check_result")=(bool)(false) )
+            , "" );
     
     }
 
@@ -619,7 +641,8 @@ void register_free_functions(){
         bp::def( 
             "wrap"
             , wrap_function_value
-            , ( bp::arg("vector") ) );
+            , ( bp::arg("vector") )
+            , "" );
     
     }
 
@@ -631,7 +654,8 @@ void register_free_functions(){
         bp::def( 
             "wrap"
             , wrap_function_value
-            , ( bp::arg("vector") ) );
+            , ( bp::arg("vector") )
+            , "" );
     
     }
 
@@ -643,7 +667,8 @@ void register_free_functions(){
         bp::def( 
             "wrap"
             , wrap_function_value
-            , ( bp::arg("vector") ) );
+            , ( bp::arg("vector") )
+            , "" );
     
     }
 

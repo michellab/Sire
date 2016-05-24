@@ -281,7 +281,8 @@ void register_free_functions(){
         bp::def( 
             "getAlignment"
             , getAlignment_function_value
-            , ( bp::arg("view0"), bp::arg("view1"), bp::arg("fit")=(bool)(true) ) );
+            , ( bp::arg("view0"), bp::arg("view1"), bp::arg("fit")=(bool)(true) )
+            , "" );
     
     }
 
@@ -293,7 +294,8 @@ void register_free_functions(){
         bp::def( 
             "getAlignment"
             , getAlignment_function_value
-            , ( bp::arg("view0"), bp::arg("view1"), bp::arg("map"), bp::arg("fit")=(bool)(true) ) );
+            , ( bp::arg("view0"), bp::arg("view1"), bp::arg("map"), bp::arg("fit")=(bool)(true) )
+            , "" );
     
     }
 
@@ -305,7 +307,8 @@ void register_free_functions(){
         bp::def( 
             "getAlignment"
             , getAlignment_function_value
-            , ( bp::arg("view0"), bp::arg("map0"), bp::arg("view1"), bp::arg("map1"), bp::arg("fit")=(bool)(true) ) );
+            , ( bp::arg("view0"), bp::arg("map0"), bp::arg("view1"), bp::arg("map1"), bp::arg("fit")=(bool)(true) )
+            , "" );
     
     }
 
@@ -317,7 +320,8 @@ void register_free_functions(){
         bp::def( 
             "getAlignment"
             , getAlignment_function_value
-            , ( bp::arg("view0"), bp::arg("view1"), bp::arg("matcher"), bp::arg("fit")=(bool)(true) ) );
+            , ( bp::arg("view0"), bp::arg("view1"), bp::arg("matcher"), bp::arg("fit")=(bool)(true) )
+            , "" );
     
     }
 
@@ -329,7 +333,8 @@ void register_free_functions(){
         bp::def( 
             "getAlignment"
             , getAlignment_function_value
-            , ( bp::arg("view0"), bp::arg("view1"), bp::arg("matcher"), bp::arg("map"), bp::arg("fit")=(bool)(true) ) );
+            , ( bp::arg("view0"), bp::arg("view1"), bp::arg("matcher"), bp::arg("map"), bp::arg("fit")=(bool)(true) )
+            , "" );
     
     }
 
@@ -341,7 +346,8 @@ void register_free_functions(){
         bp::def( 
             "getAlignment"
             , getAlignment_function_value
-            , ( bp::arg("view0"), bp::arg("map0"), bp::arg("view1"), bp::arg("map1"), bp::arg("matcher"), bp::arg("fit")=(bool)(true) ) );
+            , ( bp::arg("view0"), bp::arg("map0"), bp::arg("view1"), bp::arg("map1"), bp::arg("matcher"), bp::arg("fit")=(bool)(true) )
+            , "" );
     
     }
 

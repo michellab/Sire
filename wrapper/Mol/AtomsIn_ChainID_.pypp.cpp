@@ -59,12 +59,12 @@ void register_AtomsIn_ChainID__class(){
 
     { //::SireMol::AtomsIn< SireMol::ChainID >
         typedef bp::class_< SireMol::AtomsIn< SireMol::ChainID >, bp::bases< SireMol::AtomID, SireID::ID > > AtomsIn_ChainID__exposer_t;
-        AtomsIn_ChainID__exposer_t AtomsIn_ChainID__exposer = AtomsIn_ChainID__exposer_t( "AtomsIn_ChainID_", bp::init< >() );
+        AtomsIn_ChainID__exposer_t AtomsIn_ChainID__exposer = AtomsIn_ChainID__exposer_t( "AtomsIn_ChainID_", "", bp::init< >("") );
         bp::scope AtomsIn_ChainID__scope( AtomsIn_ChainID__exposer );
-        AtomsIn_ChainID__exposer.def( bp::init< SireMol::ChainID const & >(( bp::arg("id") )) );
-        AtomsIn_ChainID__exposer.def( bp::init< SireMol::ChainID const &, qint32 >(( bp::arg("id"), bp::arg("i") )) );
-        AtomsIn_ChainID__exposer.def( bp::init< SireMol::ChainID const &, qint32, qint32 >(( bp::arg("id"), bp::arg("i"), bp::arg("j") )) );
-        AtomsIn_ChainID__exposer.def( bp::init< SireMol::AtomsIn< SireMol::ChainID > const & >(( bp::arg("other") )) );
+        AtomsIn_ChainID__exposer.def( bp::init< SireMol::ChainID const & >(( bp::arg("id") ), "") );
+        AtomsIn_ChainID__exposer.def( bp::init< SireMol::ChainID const &, qint32 >(( bp::arg("id"), bp::arg("i") ), "") );
+        AtomsIn_ChainID__exposer.def( bp::init< SireMol::ChainID const &, qint32, qint32 >(( bp::arg("id"), bp::arg("i"), bp::arg("j") ), "") );
+        AtomsIn_ChainID__exposer.def( bp::init< SireMol::AtomsIn< SireMol::ChainID > const & >(( bp::arg("other") ), "") );
         { //::SireMol::AtomsIn< SireMol::ChainID >::hash
         
             typedef SireMol::AtomsIn< SireMol::ChainID > exported_class_t;
@@ -73,7 +73,8 @@ void register_AtomsIn_ChainID__class(){
             
             AtomsIn_ChainID__exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::AtomsIn< SireMol::ChainID >::isNull
@@ -84,7 +85,8 @@ void register_AtomsIn_ChainID__class(){
             
             AtomsIn_ChainID__exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::AtomsIn< SireMol::ChainID >::map
@@ -96,7 +98,8 @@ void register_AtomsIn_ChainID__class(){
             AtomsIn_ChainID__exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         AtomsIn_ChainID__exposer.def( bp::self != bp::self );
@@ -111,7 +114,8 @@ void register_AtomsIn_ChainID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AtomsIn_ChainID__exposer.def( bp::self == bp::self );
@@ -124,7 +128,8 @@ void register_AtomsIn_ChainID__class(){
             
             AtomsIn_ChainID__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::AtomsIn< SireMol::ChainID >::typeName
@@ -135,7 +140,8 @@ void register_AtomsIn_ChainID__class(){
             
             AtomsIn_ChainID__exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::AtomsIn< SireMol::ChainID >::what
@@ -146,7 +152,8 @@ void register_AtomsIn_ChainID__class(){
             
             AtomsIn_ChainID__exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         AtomsIn_ChainID__exposer.staticmethod( "typeName" );

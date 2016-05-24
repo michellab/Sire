@@ -26,13 +26,13 @@ void register_AtomForces_class(){
 
     { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >
         typedef bp::class_< SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >, bp::bases< SireMol::AtomProp, SireMol::MolViewProperty, SireBase::Property > > AtomForces_exposer_t;
-        AtomForces_exposer_t AtomForces_exposer = AtomForces_exposer_t( "AtomForces", bp::init< >() );
+        AtomForces_exposer_t AtomForces_exposer = AtomForces_exposer_t( "AtomForces", "", bp::init< >("") );
         bp::scope AtomForces_scope( AtomForces_exposer );
-        AtomForces_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") )) );
-        AtomForces_exposer.def( bp::init< SireMol::MoleculeInfoData const &, SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > const & >(( bp::arg("molinfo"), bp::arg("default_value") )) );
-        AtomForces_exposer.def( bp::init< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > const & >(( bp::arg("value") )) );
-        AtomForces_exposer.def( bp::init< SireBase::PackedArray2D< SireMaths::Vector3D< SireUnits::Dimension::Force > > const & >(( bp::arg("values") )) );
-        AtomForces_exposer.def( bp::init< SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > > const & >(( bp::arg("other") )) );
+        AtomForces_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "") );
+        AtomForces_exposer.def( bp::init< SireMol::MoleculeInfoData const &, SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > const & >(( bp::arg("molinfo"), bp::arg("default_value") ), "") );
+        AtomForces_exposer.def( bp::init< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 1, 1, -2, 0, 0, 0, 0 > > const & >(( bp::arg("value") ), "") );
+        AtomForces_exposer.def( bp::init< SireBase::PackedArray2D< SireMaths::Vector3D< SireUnits::Dimension::Force > > const & >(( bp::arg("values") ), "") );
+        AtomForces_exposer.def( bp::init< SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > > const & >(( bp::arg("other") ), "") );
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::array
         
             typedef SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > > exported_class_t;
@@ -42,7 +42,8 @@ void register_AtomForces_class(){
             AtomForces_exposer.def( 
                 "array"
                 , array_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::assertCanConvert
@@ -54,7 +55,8 @@ void register_AtomForces_class(){
             AtomForces_exposer.def( 
                 "assertCanConvert"
                 , assertCanConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::assignFrom
@@ -66,7 +68,8 @@ void register_AtomForces_class(){
             AtomForces_exposer.def( 
                 "assignFrom"
                 , assignFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::at
@@ -79,7 +82,8 @@ void register_AtomForces_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::at
@@ -92,7 +96,8 @@ void register_AtomForces_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::canConvert
@@ -104,7 +109,8 @@ void register_AtomForces_class(){
             AtomForces_exposer.def( 
                 "canConvert"
                 , canConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::copyFrom
@@ -116,7 +122,8 @@ void register_AtomForces_class(){
             AtomForces_exposer.def( 
                 "copyFrom"
                 , copyFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::copyFrom
@@ -128,7 +135,8 @@ void register_AtomForces_class(){
             AtomForces_exposer.def( 
                 "copyFrom"
                 , copyFrom_function_value
-                , ( bp::arg("values"), bp::arg("selection") ) );
+                , ( bp::arg("values"), bp::arg("selection") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::count
@@ -139,7 +147,8 @@ void register_AtomForces_class(){
             
             AtomForces_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::divide
@@ -151,7 +160,8 @@ void register_AtomForces_class(){
             AtomForces_exposer.def( 
                 "divide"
                 , divide_function_value
-                , ( bp::arg("beads") ) );
+                , ( bp::arg("beads") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::divideByResidue
@@ -163,7 +173,8 @@ void register_AtomForces_class(){
             AtomForces_exposer.def( 
                 "divideByResidue"
                 , divideByResidue_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::fromVariant
@@ -175,7 +186,8 @@ void register_AtomForces_class(){
             AtomForces_exposer.def( 
                 "fromVariant"
                 , fromVariant_function_value
-                , ( bp::arg("variant") ) );
+                , ( bp::arg("variant") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::get
@@ -188,7 +200,8 @@ void register_AtomForces_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::get
@@ -201,7 +214,8 @@ void register_AtomForces_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::isCompatibleWith
@@ -213,7 +227,8 @@ void register_AtomForces_class(){
             AtomForces_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::isEmpty
@@ -224,7 +239,8 @@ void register_AtomForces_class(){
             
             AtomForces_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::matchToSelection
@@ -236,7 +252,8 @@ void register_AtomForces_class(){
             AtomForces_exposer.def( 
                 "matchToSelection"
                 , matchToSelection_function_value
-                , ( bp::arg("selection") ) );
+                , ( bp::arg("selection") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::merge
@@ -248,7 +265,8 @@ void register_AtomForces_class(){
             AtomForces_exposer.def( 
                 "merge"
                 , merge_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::nAtoms
@@ -259,7 +277,8 @@ void register_AtomForces_class(){
             
             AtomForces_exposer.def( 
                 "nAtoms"
-                , nAtoms_function_value );
+                , nAtoms_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::nAtoms
@@ -271,7 +290,8 @@ void register_AtomForces_class(){
             AtomForces_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
-                , ( bp::arg("cgidx") ) );
+                , ( bp::arg("cgidx") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::nCutGroups
@@ -282,7 +302,8 @@ void register_AtomForces_class(){
             
             AtomForces_exposer.def( 
                 "nCutGroups"
-                , nCutGroups_function_value );
+                , nCutGroups_function_value
+                , "" );
         
         }
         AtomForces_exposer.def( bp::self != bp::self );
@@ -296,7 +317,8 @@ void register_AtomForces_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AtomForces_exposer.def( bp::self == bp::self );
@@ -310,7 +332,8 @@ void register_AtomForces_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::operator[]
@@ -323,7 +346,8 @@ void register_AtomForces_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::set
@@ -336,7 +360,8 @@ void register_AtomForces_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("cgatomidx"), bp::arg("value") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::set
@@ -349,7 +374,8 @@ void register_AtomForces_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("cgidx"), bp::arg("values") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::size
@@ -360,7 +386,8 @@ void register_AtomForces_class(){
             
             AtomForces_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::toString
@@ -371,7 +398,8 @@ void register_AtomForces_class(){
             
             AtomForces_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::toVariant
@@ -382,7 +410,8 @@ void register_AtomForces_class(){
             
             AtomForces_exposer.def( 
                 "toVariant"
-                , toVariant_function_value );
+                , toVariant_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::toVector
@@ -393,7 +422,8 @@ void register_AtomForces_class(){
             
             AtomForces_exposer.def( 
                 "toVector"
-                , toVector_function_value );
+                , toVector_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::toVector
@@ -405,7 +435,8 @@ void register_AtomForces_class(){
             AtomForces_exposer.def( 
                 "toVector"
                 , toVector_function_value
-                , ( bp::arg("selection") ) );
+                , ( bp::arg("selection") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMaths::Vector3D< SireUnits::Dimension::Force > >::typeName
@@ -416,7 +447,8 @@ void register_AtomForces_class(){
             
             AtomForces_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         AtomForces_exposer.staticmethod( "fromVariant" );

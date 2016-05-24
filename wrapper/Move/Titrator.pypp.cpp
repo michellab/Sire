@@ -49,10 +49,10 @@ void register_Titrator_class(){
 
     { //::SireMove::Titrator
         typedef bp::class_< SireMove::Titrator, bp::bases< SireBase::Property > > Titrator_exposer_t;
-        Titrator_exposer_t Titrator_exposer = Titrator_exposer_t( "Titrator", bp::init< >() );
+        Titrator_exposer_t Titrator_exposer = Titrator_exposer_t( "Titrator", "This property is used by the TitrationMove to maintain a list\nof which molecules can be titrated, and the list of titration\nstates of each molecule.\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope Titrator_scope( Titrator_exposer );
-        Titrator_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("group") )) );
-        Titrator_exposer.def( bp::init< SireMove::Titrator const & >(( bp::arg("other") )) );
+        Titrator_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("group") ), "Construct to titrate the molecules in the passed molecule group") );
+        Titrator_exposer.def( bp::init< SireMove::Titrator const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::Titrator::applyTo
         
             typedef double ( ::SireMove::Titrator::*applyTo_function_type)( ::SireSystem::System & ) ;
@@ -61,7 +61,8 @@ void register_Titrator_class(){
             Titrator_exposer.def( 
                 "applyTo"
                 , applyTo_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "Apply the set of charges to the passed system" );
         
         }
         { //::SireMove::Titrator::getCharge
@@ -72,7 +73,8 @@ void register_Titrator_class(){
             Titrator_exposer.def( 
                 "getCharge"
                 , getCharge_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return the charge of the ith molecule" );
         
         }
         { //::SireMove::Titrator::getIonIndex
@@ -83,7 +85,8 @@ void register_Titrator_class(){
             Titrator_exposer.def( 
                 "getIonIndex"
                 , getIonIndex_function_value
-                , ( bp::arg("ion_index") ) );
+                , ( bp::arg("ion_index") )
+                , "Return the index of the molecule at ion_index ion_index" );
         
         }
         { //::SireMove::Titrator::getNegativeIonIndex
@@ -94,7 +97,8 @@ void register_Titrator_class(){
             Titrator_exposer.def( 
                 "getNegativeIonIndex"
                 , getNegativeIonIndex_function_value
-                , ( bp::arg("ion_index") ) );
+                , ( bp::arg("ion_index") )
+                , "Return the index of the molecule at negative ion_index ion_index" );
         
         }
         { //::SireMove::Titrator::getNeutralIndex
@@ -105,7 +109,8 @@ void register_Titrator_class(){
             Titrator_exposer.def( 
                 "getNeutralIndex"
                 , getNeutralIndex_function_value
-                , ( bp::arg("neutral_index") ) );
+                , ( bp::arg("neutral_index") )
+                , "Return the index of the molecule at neutral ion_index" );
         
         }
         { //::SireMove::Titrator::getPositiveIonIndex
@@ -116,7 +121,8 @@ void register_Titrator_class(){
             Titrator_exposer.def( 
                 "getPositiveIonIndex"
                 , getPositiveIonIndex_function_value
-                , ( bp::arg("ion_index") ) );
+                , ( bp::arg("ion_index") )
+                , "Return the index of the molecule at positive ion_index ion_index" );
         
         }
         { //::SireMove::Titrator::nIons
@@ -126,7 +132,8 @@ void register_Titrator_class(){
             
             Titrator_exposer.def( 
                 "nIons"
-                , nIons_function_value );
+                , nIons_function_value
+                , "Return the number of ions" );
         
         }
         { //::SireMove::Titrator::nNegativeIons
@@ -136,7 +143,8 @@ void register_Titrator_class(){
             
             Titrator_exposer.def( 
                 "nNegativeIons"
-                , nNegativeIons_function_value );
+                , nNegativeIons_function_value
+                , "Return the number of negative ions" );
         
         }
         { //::SireMove::Titrator::nNeutrals
@@ -146,7 +154,8 @@ void register_Titrator_class(){
             
             Titrator_exposer.def( 
                 "nNeutrals"
-                , nNeutrals_function_value );
+                , nNeutrals_function_value
+                , "Return the number of neutral molecules" );
         
         }
         { //::SireMove::Titrator::nPositiveIons
@@ -156,7 +165,8 @@ void register_Titrator_class(){
             
             Titrator_exposer.def( 
                 "nPositiveIons"
-                , nPositiveIons_function_value );
+                , nPositiveIons_function_value
+                , "Return the number of positive ions" );
         
         }
         Titrator_exposer.def( bp::self != bp::self );
@@ -169,7 +179,8 @@ void register_Titrator_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Titrator_exposer.def( bp::self == bp::self );
@@ -181,7 +192,8 @@ void register_Titrator_class(){
             Titrator_exposer.def( 
                 "randomiseCharge"
                 , randomiseCharge_function_value
-                , ( bp::arg("ncharges") ) );
+                , ( bp::arg("ncharges") )
+                , "Randomise all of the charges - this ensures that there are 2ncharges charges\nin the system (ncharges positive, and ncharges negative, with the rest neutral)" );
         
         }
         { //::SireMove::Titrator::randomiseCharge
@@ -192,7 +204,8 @@ void register_Titrator_class(){
             Titrator_exposer.def( 
                 "randomiseCharge"
                 , randomiseCharge_function_value
-                , ( bp::arg("npositive"), bp::arg("nnegative") ) );
+                , ( bp::arg("npositive"), bp::arg("nnegative") )
+                , "Randomise all of the charges, ensuring there are npositive positive charges\nand nnegative negative charges" );
         
         }
         { //::SireMove::Titrator::setMoleculeGroup
@@ -203,7 +216,8 @@ void register_Titrator_class(){
             Titrator_exposer.def( 
                 "setMoleculeGroup"
                 , setMoleculeGroup_function_value
-                , ( bp::arg("group") ) );
+                , ( bp::arg("group") )
+                , "Set the molecule group containing the molecules whose charge\nstate will be changed" );
         
         }
         { //::SireMove::Titrator::setNegativeTemplate
@@ -214,7 +228,8 @@ void register_Titrator_class(){
             Titrator_exposer.def( 
                 "setNegativeTemplate"
                 , setNegativeTemplate_function_value
-                , ( bp::arg("negative_ion"), bp::arg("properties"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("negative_ion"), bp::arg("properties"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Set the template for the negative ion state. The collection of properties\nlisted in properties are copied from negative_ion (once mapped by\nmap) to the molecule to put it into the negative_ion state" );
         
         }
         { //::SireMove::Titrator::setNegativeTemplate
@@ -225,7 +240,8 @@ void register_Titrator_class(){
             Titrator_exposer.def( 
                 "setNegativeTemplate"
                 , setNegativeTemplate_function_value
-                , ( bp::arg("negative_ion"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("negative_ion"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Set the template for the negative ion state, where all properties except\nmap[coordinates] will be copied to the molecule" );
         
         }
         { //::SireMove::Titrator::setNeutralTemplate
@@ -236,7 +252,8 @@ void register_Titrator_class(){
             Titrator_exposer.def( 
                 "setNeutralTemplate"
                 , setNeutralTemplate_function_value
-                , ( bp::arg("neutral_mol"), bp::arg("properties"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("neutral_mol"), bp::arg("properties"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Set the template for the neutral state. The collection of properties\nlisted in properties are copied from neutral_mol (once mapped by\nmap) to the molecule to put it into the neutral state" );
         
         }
         { //::SireMove::Titrator::setNeutralTemplate
@@ -247,7 +264,8 @@ void register_Titrator_class(){
             Titrator_exposer.def( 
                 "setNeutralTemplate"
                 , setNeutralTemplate_function_value
-                , ( bp::arg("neutral_mol"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("neutral_mol"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Set the template for the neutral state, where all properties except\nmap[coordinates] will be copied to the molecule" );
         
         }
         { //::SireMove::Titrator::setPositiveTemplate
@@ -258,7 +276,8 @@ void register_Titrator_class(){
             Titrator_exposer.def( 
                 "setPositiveTemplate"
                 , setPositiveTemplate_function_value
-                , ( bp::arg("positive_ion"), bp::arg("properties"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("positive_ion"), bp::arg("properties"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Set the template for the positive ion state. The collection of properties\nlisted in properties are copied from positive_ion (once mapped by\nmap) to the molecule to put it into the positive_ion state" );
         
         }
         { //::SireMove::Titrator::setPositiveTemplate
@@ -269,7 +288,8 @@ void register_Titrator_class(){
             Titrator_exposer.def( 
                 "setPositiveTemplate"
                 , setPositiveTemplate_function_value
-                , ( bp::arg("positive_ion"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("positive_ion"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Set the template for the positive ion state, where all properties except\nmap[coordinates] will be copied to the molecule" );
         
         }
         { //::SireMove::Titrator::swapCharge
@@ -280,7 +300,8 @@ void register_Titrator_class(){
             Titrator_exposer.def( 
                 "swapCharge"
                 , swapCharge_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "Swap the charge of the ith and jth molecules" );
         
         }
         { //::SireMove::Titrator::typeName
@@ -290,7 +311,8 @@ void register_Titrator_class(){
             
             Titrator_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMove::Titrator::what
@@ -300,7 +322,8 @@ void register_Titrator_class(){
             
             Titrator_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Titrator_exposer.staticmethod( "typeName" );

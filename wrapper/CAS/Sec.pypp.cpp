@@ -31,10 +31,10 @@ void register_Sec_class(){
 
     { //::SireCAS::Sec
         typedef bp::class_< SireCAS::Sec, bp::bases< SireCAS::SingleFunc, SireCAS::ExBase > > Sec_exposer_t;
-        Sec_exposer_t Sec_exposer = Sec_exposer_t( "Sec", bp::init< >() );
+        Sec_exposer_t Sec_exposer = Sec_exposer_t( "Sec", "Secant", bp::init< >("Null constructor") );
         bp::scope Sec_scope( Sec_exposer );
-        Sec_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") )) );
-        Sec_exposer.def( bp::init< SireCAS::Sec const & >(( bp::arg("other") )) );
+        Sec_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") ), "Construct cos(expression)") );
+        Sec_exposer.def( bp::init< SireCAS::Sec const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::Sec::evaluate
         
             typedef double ( ::SireCAS::Sec::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -43,7 +43,8 @@ void register_Sec_class(){
             Sec_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::Sec::evaluate
@@ -54,7 +55,8 @@ void register_Sec_class(){
             Sec_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         Sec_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -65,7 +67,8 @@ void register_Sec_class(){
             
             Sec_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::Sec::what
@@ -75,7 +78,8 @@ void register_Sec_class(){
             
             Sec_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Sec_exposer.staticmethod( "typeName" );

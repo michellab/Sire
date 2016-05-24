@@ -31,9 +31,9 @@ void register_AbortPacket_class(){
 
     { //::SireCluster::AbortPacket
         typedef bp::class_< SireCluster::AbortPacket, bp::bases< SireCluster::WorkPacketBase > > AbortPacket_exposer_t;
-        AbortPacket_exposer_t AbortPacket_exposer = AbortPacket_exposer_t( "AbortPacket", bp::init< >() );
+        AbortPacket_exposer_t AbortPacket_exposer = AbortPacket_exposer_t( "AbortPacket", "This is a packet that is sent if the job was aborted.\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope AbortPacket_scope( AbortPacket_exposer );
-        AbortPacket_exposer.def( bp::init< SireCluster::AbortPacket const & >(( bp::arg("other") )) );
+        AbortPacket_exposer.def( bp::init< SireCluster::AbortPacket const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCluster::AbortPacket::hasFinished
         
             typedef bool ( ::SireCluster::AbortPacket::*hasFinished_function_type)(  ) const;
@@ -41,7 +41,8 @@ void register_AbortPacket_class(){
             
             AbortPacket_exposer.def( 
                 "hasFinished"
-                , hasFinished_function_value );
+                , hasFinished_function_value
+                , "Return whether or not the work has finished" );
         
         }
         { //::SireCluster::AbortPacket::operator=
@@ -53,7 +54,8 @@ void register_AbortPacket_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireCluster::AbortPacket::typeName
@@ -63,7 +65,8 @@ void register_AbortPacket_class(){
             
             AbortPacket_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCluster::AbortPacket::wasAborted
@@ -73,7 +76,8 @@ void register_AbortPacket_class(){
             
             AbortPacket_exposer.def( 
                 "wasAborted"
-                , wasAborted_function_value );
+                , wasAborted_function_value
+                , "Return whether or not this was aborted (it obviously was)" );
         
         }
         { //::SireCluster::AbortPacket::what
@@ -83,7 +87,8 @@ void register_AbortPacket_class(){
             
             AbortPacket_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         AbortPacket_exposer.staticmethod( "typeName" );

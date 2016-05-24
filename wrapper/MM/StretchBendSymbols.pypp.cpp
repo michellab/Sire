@@ -40,7 +40,7 @@ void register_StretchBendSymbols_class(){
 
     { //::SireMM::StretchBendSymbols
         typedef bp::class_< SireMM::StretchBendSymbols, bp::bases< SireMM::InternalSymbolsBase > > StretchBendSymbols_exposer_t;
-        StretchBendSymbols_exposer_t StretchBendSymbols_exposer = StretchBendSymbols_exposer_t( "StretchBendSymbols", bp::init< >() );
+        StretchBendSymbols_exposer_t StretchBendSymbols_exposer = StretchBendSymbols_exposer_t( "StretchBendSymbols", "This class holds the symbols required for the stretch-bend parameters.\nThese are a function of the angle of atoms 0-1-2 (theta) and\nthe distances between each pair of atoms (r01, r21 and r12)", bp::init< >("") );
         bp::scope StretchBendSymbols_scope( StretchBendSymbols_exposer );
         { //::SireMM::StretchBendSymbols::r01
         
@@ -50,7 +50,8 @@ void register_StretchBendSymbols_class(){
             StretchBendSymbols_exposer.def( 
                 "r01"
                 , r01_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol representing the bond length, r_\n{01}" );
         
         }
         { //::SireMM::StretchBendSymbols::r12
@@ -61,7 +62,8 @@ void register_StretchBendSymbols_class(){
             StretchBendSymbols_exposer.def( 
                 "r12"
                 , r12_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol representing the bond length r_\n{12}" );
         
         }
         { //::SireMM::StretchBendSymbols::r21
@@ -72,7 +74,8 @@ void register_StretchBendSymbols_class(){
             StretchBendSymbols_exposer.def( 
                 "r21"
                 , r21_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol representing the bond length, r_\n{21}" );
         
         }
         { //::SireMM::StretchBendSymbols::theta
@@ -83,7 +86,8 @@ void register_StretchBendSymbols_class(){
             StretchBendSymbols_exposer.def( 
                 "theta"
                 , theta_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol representing the angle, theta" );
         
         }
         StretchBendSymbols_exposer.def( "__copy__", &__copy__);

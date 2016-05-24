@@ -31,13 +31,13 @@ void register_IDAndSet_FFID__class(){
 
     { //::SireID::IDAndSet< SireFF::FFID >
         typedef bp::class_< SireID::IDAndSet< SireFF::FFID >, bp::bases< SireFF::FFID, SireID::ID > > IDAndSet_FFID__exposer_t;
-        IDAndSet_FFID__exposer_t IDAndSet_FFID__exposer = IDAndSet_FFID__exposer_t( "IDAndSet_FFID_", bp::init< >() );
+        IDAndSet_FFID__exposer_t IDAndSet_FFID__exposer = IDAndSet_FFID__exposer_t( "IDAndSet_FFID_", "", bp::init< >("") );
         bp::scope IDAndSet_FFID__scope( IDAndSet_FFID__exposer );
-        IDAndSet_FFID__exposer.def( bp::init< SireFF::FFID const & >(( bp::arg("id") )) );
-        IDAndSet_FFID__exposer.def( bp::init< SireFF::FFID const &, SireFF::FFID const & >(( bp::arg("id0"), bp::arg("id1") )) );
-        IDAndSet_FFID__exposer.def( bp::init< QList< SireFF::FFIdentifier > const & >(( bp::arg("ids") )) );
-        IDAndSet_FFID__exposer.def( bp::init< SireID::IDAndSet< SireFF::FFID > const & >(( bp::arg("ids") )) );
-        IDAndSet_FFID__exposer.def( bp::init< SireID::IDAndSet< SireFF::FFID > const & >(( bp::arg("other") )) );
+        IDAndSet_FFID__exposer.def( bp::init< SireFF::FFID const & >(( bp::arg("id") ), "") );
+        IDAndSet_FFID__exposer.def( bp::init< SireFF::FFID const &, SireFF::FFID const & >(( bp::arg("id0"), bp::arg("id1") ), "") );
+        IDAndSet_FFID__exposer.def( bp::init< QList< SireFF::FFIdentifier > const & >(( bp::arg("ids") ), "") );
+        IDAndSet_FFID__exposer.def( bp::init< SireID::IDAndSet< SireFF::FFID > const & >(( bp::arg("ids") ), "") );
+        IDAndSet_FFID__exposer.def( bp::init< SireID::IDAndSet< SireFF::FFID > const & >(( bp::arg("other") ), "") );
         { //::SireID::IDAndSet< SireFF::FFID >::IDs
         
             typedef SireID::IDAndSet< SireFF::FFID > exported_class_t;
@@ -47,7 +47,8 @@ void register_IDAndSet_FFID__class(){
             IDAndSet_FFID__exposer.def( 
                 "IDs"
                 , IDs_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireFF::FFID >::hash
@@ -58,7 +59,8 @@ void register_IDAndSet_FFID__class(){
             
             IDAndSet_FFID__exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireFF::FFID >::isNull
@@ -69,7 +71,8 @@ void register_IDAndSet_FFID__class(){
             
             IDAndSet_FFID__exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireFF::FFID >::map
@@ -81,7 +84,8 @@ void register_IDAndSet_FFID__class(){
             IDAndSet_FFID__exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("obj") ) );
+                , ( bp::arg("obj") )
+                , "" );
         
         }
         IDAndSet_FFID__exposer.def( bp::self != bp::other< SireID::ID >() );
@@ -97,7 +101,8 @@ void register_IDAndSet_FFID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireFF::FFID >::operator=
@@ -110,7 +115,8 @@ void register_IDAndSet_FFID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         IDAndSet_FFID__exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -124,7 +130,8 @@ void register_IDAndSet_FFID__class(){
             
             IDAndSet_FFID__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireFF::FFID >::typeName
@@ -135,7 +142,8 @@ void register_IDAndSet_FFID__class(){
             
             IDAndSet_FFID__exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireFF::FFID >::what
@@ -146,7 +154,8 @@ void register_IDAndSet_FFID__class(){
             
             IDAndSet_FFID__exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         IDAndSet_FFID__exposer.staticmethod( "typeName" );

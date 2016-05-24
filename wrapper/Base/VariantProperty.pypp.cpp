@@ -33,11 +33,11 @@ void register_VariantProperty_class(){
 
     { //::SireBase::VariantProperty
         typedef bp::class_< SireBase::VariantProperty, bp::bases< SireBase::Property > > VariantProperty_exposer_t;
-        VariantProperty_exposer_t VariantProperty_exposer = VariantProperty_exposer_t( "VariantProperty", bp::init< >() );
+        VariantProperty_exposer_t VariantProperty_exposer = VariantProperty_exposer_t( "VariantProperty", "This is a simple property that holds any value as a QVariant. This\nis designed to be used for metadata that doesnt need any tight\nchecking (e.g. the author of the molecule file, the source of\nthe coordinates, the header lines etc.)\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope VariantProperty_scope( VariantProperty_exposer );
-        VariantProperty_exposer.def( bp::init< QVariant const & >(( bp::arg("value") )) );
-        VariantProperty_exposer.def( bp::init< SireBase::Property const & >(( bp::arg("other") )) );
-        VariantProperty_exposer.def( bp::init< SireBase::VariantProperty const & >(( bp::arg("other") )) );
+        VariantProperty_exposer.def( bp::init< QVariant const & >(( bp::arg("value") ), "Construct a property equal to value") );
+        VariantProperty_exposer.def( bp::init< SireBase::Property const & >(( bp::arg("other") ), "Copy constructor") );
+        VariantProperty_exposer.def( bp::init< SireBase::VariantProperty const & >(( bp::arg("other") ), "Copy constructor") );
         VariantProperty_exposer.def( bp::self != bp::self );
         { //::SireBase::VariantProperty::operator=
         
@@ -48,7 +48,8 @@ void register_VariantProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("value") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireBase::VariantProperty::operator=
@@ -60,7 +61,8 @@ void register_VariantProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         VariantProperty_exposer.def( bp::self == bp::self );
@@ -71,7 +73,8 @@ void register_VariantProperty_class(){
             
             VariantProperty_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "String operator" );
         
         }
         { //::SireBase::VariantProperty::typeName
@@ -81,7 +84,8 @@ void register_VariantProperty_class(){
             
             VariantProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         VariantProperty_exposer.staticmethod( "typeName" );

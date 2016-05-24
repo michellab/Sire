@@ -45,13 +45,13 @@ void register_AtomVariantProperty_class(){
 
     { //::SireMol::AtomProperty< QVariant >
         typedef bp::class_< SireMol::AtomProperty< QVariant >, bp::bases< SireMol::AtomProp, SireMol::MolViewProperty, SireBase::Property > > AtomVariantProperty_exposer_t;
-        AtomVariantProperty_exposer_t AtomVariantProperty_exposer = AtomVariantProperty_exposer_t( "AtomVariantProperty", bp::init< >() );
+        AtomVariantProperty_exposer_t AtomVariantProperty_exposer = AtomVariantProperty_exposer_t( "AtomVariantProperty", "", bp::init< >("") );
         bp::scope AtomVariantProperty_scope( AtomVariantProperty_exposer );
-        AtomVariantProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") )) );
-        AtomVariantProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const &, QVariant const & >(( bp::arg("molinfo"), bp::arg("default_value") )) );
-        AtomVariantProperty_exposer.def( bp::init< QVariant const & >(( bp::arg("value") )) );
-        AtomVariantProperty_exposer.def( bp::init< SireBase::PackedArray2D< QVariant > const & >(( bp::arg("values") )) );
-        AtomVariantProperty_exposer.def( bp::init< SireMol::AtomProperty< QVariant > const & >(( bp::arg("other") )) );
+        AtomVariantProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "") );
+        AtomVariantProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const &, QVariant const & >(( bp::arg("molinfo"), bp::arg("default_value") ), "") );
+        AtomVariantProperty_exposer.def( bp::init< QVariant const & >(( bp::arg("value") ), "") );
+        AtomVariantProperty_exposer.def( bp::init< SireBase::PackedArray2D< QVariant > const & >(( bp::arg("values") ), "") );
+        AtomVariantProperty_exposer.def( bp::init< SireMol::AtomProperty< QVariant > const & >(( bp::arg("other") ), "") );
         { //::SireMol::AtomProperty< QVariant >::array
         
             typedef SireMol::AtomProperty< QVariant > exported_class_t;
@@ -61,7 +61,8 @@ void register_AtomVariantProperty_class(){
             AtomVariantProperty_exposer.def( 
                 "array"
                 , array_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::assertCanConvert
@@ -73,7 +74,8 @@ void register_AtomVariantProperty_class(){
             AtomVariantProperty_exposer.def( 
                 "assertCanConvert"
                 , assertCanConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::assignFrom
@@ -85,7 +87,8 @@ void register_AtomVariantProperty_class(){
             AtomVariantProperty_exposer.def( 
                 "assignFrom"
                 , assignFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::at
@@ -98,7 +101,8 @@ void register_AtomVariantProperty_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::at
@@ -111,7 +115,8 @@ void register_AtomVariantProperty_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::canConvert
@@ -123,7 +128,8 @@ void register_AtomVariantProperty_class(){
             AtomVariantProperty_exposer.def( 
                 "canConvert"
                 , canConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::copyFrom
@@ -135,7 +141,8 @@ void register_AtomVariantProperty_class(){
             AtomVariantProperty_exposer.def( 
                 "copyFrom"
                 , copyFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::copyFrom
@@ -147,7 +154,8 @@ void register_AtomVariantProperty_class(){
             AtomVariantProperty_exposer.def( 
                 "copyFrom"
                 , copyFrom_function_value
-                , ( bp::arg("values"), bp::arg("selection") ) );
+                , ( bp::arg("values"), bp::arg("selection") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::count
@@ -158,7 +166,8 @@ void register_AtomVariantProperty_class(){
             
             AtomVariantProperty_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::divide
@@ -170,7 +179,8 @@ void register_AtomVariantProperty_class(){
             AtomVariantProperty_exposer.def( 
                 "divide"
                 , divide_function_value
-                , ( bp::arg("beads") ) );
+                , ( bp::arg("beads") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::divideByResidue
@@ -182,7 +192,8 @@ void register_AtomVariantProperty_class(){
             AtomVariantProperty_exposer.def( 
                 "divideByResidue"
                 , divideByResidue_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::fromVariant
@@ -194,7 +205,8 @@ void register_AtomVariantProperty_class(){
             AtomVariantProperty_exposer.def( 
                 "fromVariant"
                 , fromVariant_function_value
-                , ( bp::arg("variant") ) );
+                , ( bp::arg("variant") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::get
@@ -207,7 +219,8 @@ void register_AtomVariantProperty_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::get
@@ -220,7 +233,8 @@ void register_AtomVariantProperty_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::isCompatibleWith
@@ -232,7 +246,8 @@ void register_AtomVariantProperty_class(){
             AtomVariantProperty_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::isEmpty
@@ -243,7 +258,8 @@ void register_AtomVariantProperty_class(){
             
             AtomVariantProperty_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::matchToSelection
@@ -255,7 +271,8 @@ void register_AtomVariantProperty_class(){
             AtomVariantProperty_exposer.def( 
                 "matchToSelection"
                 , matchToSelection_function_value
-                , ( bp::arg("selection") ) );
+                , ( bp::arg("selection") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::merge
@@ -267,7 +284,8 @@ void register_AtomVariantProperty_class(){
             AtomVariantProperty_exposer.def( 
                 "merge"
                 , merge_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::nAtoms
@@ -278,7 +296,8 @@ void register_AtomVariantProperty_class(){
             
             AtomVariantProperty_exposer.def( 
                 "nAtoms"
-                , nAtoms_function_value );
+                , nAtoms_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::nAtoms
@@ -290,7 +309,8 @@ void register_AtomVariantProperty_class(){
             AtomVariantProperty_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
-                , ( bp::arg("cgidx") ) );
+                , ( bp::arg("cgidx") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::nCutGroups
@@ -301,7 +321,8 @@ void register_AtomVariantProperty_class(){
             
             AtomVariantProperty_exposer.def( 
                 "nCutGroups"
-                , nCutGroups_function_value );
+                , nCutGroups_function_value
+                , "" );
         
         }
         AtomVariantProperty_exposer.def( bp::self != bp::self );
@@ -315,7 +336,8 @@ void register_AtomVariantProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AtomVariantProperty_exposer.def( bp::self == bp::self );
@@ -329,7 +351,8 @@ void register_AtomVariantProperty_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::operator[]
@@ -342,7 +365,8 @@ void register_AtomVariantProperty_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::set
@@ -355,7 +379,8 @@ void register_AtomVariantProperty_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("cgatomidx"), bp::arg("value") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::set
@@ -368,7 +393,8 @@ void register_AtomVariantProperty_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("cgidx"), bp::arg("values") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::size
@@ -379,7 +405,8 @@ void register_AtomVariantProperty_class(){
             
             AtomVariantProperty_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::toString
@@ -390,7 +417,8 @@ void register_AtomVariantProperty_class(){
             
             AtomVariantProperty_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::toVariant
@@ -401,7 +429,8 @@ void register_AtomVariantProperty_class(){
             
             AtomVariantProperty_exposer.def( 
                 "toVariant"
-                , toVariant_function_value );
+                , toVariant_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::toVector
@@ -412,7 +441,8 @@ void register_AtomVariantProperty_class(){
             
             AtomVariantProperty_exposer.def( 
                 "toVector"
-                , toVector_function_value );
+                , toVector_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::toVector
@@ -424,7 +454,8 @@ void register_AtomVariantProperty_class(){
             AtomVariantProperty_exposer.def( 
                 "toVector"
                 , toVector_function_value
-                , ( bp::arg("selection") ) );
+                , ( bp::arg("selection") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< QVariant >::typeName
@@ -435,7 +466,8 @@ void register_AtomVariantProperty_class(){
             
             AtomVariantProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         AtomVariantProperty_exposer.staticmethod( "fromVariant" );

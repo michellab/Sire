@@ -39,7 +39,7 @@ void register_InternalSymbols_class(){
 
     { //::SireMM::InternalSymbols
         typedef bp::class_< SireMM::InternalSymbols, bp::bases< SireMM::InternalSymbolsBase > > InternalSymbols_exposer_t;
-        InternalSymbols_exposer_t InternalSymbols_exposer = InternalSymbols_exposer_t( "InternalSymbols", bp::init< >() );
+        InternalSymbols_exposer_t InternalSymbols_exposer = InternalSymbols_exposer_t( "InternalSymbols", "This class holds all of the symbols used by all of the\ninternal parameters", bp::init< >("") );
         bp::scope InternalSymbols_scope( InternalSymbols_exposer );
         { //::SireMM::InternalSymbols::angle
         
@@ -49,7 +49,8 @@ void register_InternalSymbols_class(){
             InternalSymbols_exposer.def( 
                 "angle"
                 , angle_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return all of the symbols used in the angle parameters" );
         
         }
         { //::SireMM::InternalSymbols::bendBend
@@ -60,7 +61,8 @@ void register_InternalSymbols_class(){
             InternalSymbols_exposer.def( 
                 "bendBend"
                 , bendBend_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return all of the symbols used in the bend-bend parameters" );
         
         }
         { //::SireMM::InternalSymbols::bond
@@ -71,7 +73,8 @@ void register_InternalSymbols_class(){
             InternalSymbols_exposer.def( 
                 "bond"
                 , bond_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return all of the symbols used in the bond parameters" );
         
         }
         { //::SireMM::InternalSymbols::dihedral
@@ -82,7 +85,8 @@ void register_InternalSymbols_class(){
             InternalSymbols_exposer.def( 
                 "dihedral"
                 , dihedral_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return all of the symbols used in the dihedral parameters" );
         
         }
         { //::SireMM::InternalSymbols::improper
@@ -93,7 +97,8 @@ void register_InternalSymbols_class(){
             InternalSymbols_exposer.def( 
                 "improper"
                 , improper_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return all of the symbols used in the improper parameters" );
         
         }
         { //::SireMM::InternalSymbols::stretchBend
@@ -104,7 +109,8 @@ void register_InternalSymbols_class(){
             InternalSymbols_exposer.def( 
                 "stretchBend"
                 , stretchBend_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return all of the symbols used in the stretch-bend parameters" );
         
         }
         { //::SireMM::InternalSymbols::stretchBendTorsion
@@ -115,7 +121,8 @@ void register_InternalSymbols_class(){
             InternalSymbols_exposer.def( 
                 "stretchBendTorsion"
                 , stretchBendTorsion_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return all of the symbols used in the stretch-bend-torsion parameters" );
         
         }
         { //::SireMM::InternalSymbols::stretchStretch
@@ -126,7 +133,8 @@ void register_InternalSymbols_class(){
             InternalSymbols_exposer.def( 
                 "stretchStretch"
                 , stretchStretch_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return all of the symbols used in the stretch-stretch parameters" );
         
         }
         { //::SireMM::InternalSymbols::ureyBradley
@@ -137,7 +145,8 @@ void register_InternalSymbols_class(){
             InternalSymbols_exposer.def( 
                 "ureyBradley"
                 , ureyBradley_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return all of the symbols used in the Urey-Bradley parameters" );
         
         }
         InternalSymbols_exposer.def( "__copy__", &__copy__);

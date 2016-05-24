@@ -29,15 +29,15 @@ void register_AABox_class(){
 
     { //::SireVol::AABox
         typedef bp::class_< SireVol::AABox > AABox_exposer_t;
-        AABox_exposer_t AABox_exposer = AABox_exposer_t( "AABox", bp::init< >() );
+        AABox_exposer_t AABox_exposer = AABox_exposer_t( "AABox", "\nAn AABox is an axis-aligned bounding box that is the smallest box that is aligned with the three cartesian axes that completely encases a CoordGroup. It is trivial to obtain the bounding sphere from the AABox. The AABox is used by the distance calculators to quickly determine whether two CoordGroups are within the cutoff radius, and to obtain all CoordGroups that are within particular regions of space.\n\nAuthor: Christopher Woods\n", bp::init< >("Construct an empty AABox") );
         bp::scope AABox_scope( AABox_exposer );
-        AABox_exposer.def( bp::init< SireMaths::Vector const & >(( bp::arg("point") )) );
-        AABox_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const & >(( bp::arg("cent"), bp::arg("extents") )) );
-        AABox_exposer.def( bp::init< QVector< SireMaths::Vector > const & >(( bp::arg("coordinates") )) );
-        AABox_exposer.def( bp::init< SireMaths::Vector const *, int >(( bp::arg("coords"), bp::arg("ncoords") )) );
-        AABox_exposer.def( bp::init< SireVol::CoordGroupBase const & >(( bp::arg("coordgroup") )) );
-        AABox_exposer.def( bp::init< SireVol::CoordGroupArray const & >(( bp::arg("cgarray") )) );
-        AABox_exposer.def( bp::init< SireVol::CoordGroupArrayArray const & >(( bp::arg("cgarrays") )) );
+        AABox_exposer.def( bp::init< SireMaths::Vector const & >(( bp::arg("point") ), "Construct an AABox that completely encloses the point point") );
+        AABox_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const & >(( bp::arg("cent"), bp::arg("extents") ), "Construct an AABox with center at cent, and half-extents extents") );
+        AABox_exposer.def( bp::init< QVector< SireMaths::Vector > const & >(( bp::arg("coordinates") ), "Construct an AABox that completely encases the points  in coordinates") );
+        AABox_exposer.def( bp::init< SireMaths::Vector const *, int >(( bp::arg("coords"), bp::arg("ncoords") ), "Construct an AABox that completely encases the points in coords") );
+        AABox_exposer.def( bp::init< SireVol::CoordGroupBase const & >(( bp::arg("coordgroup") ), "Construct an AABox that completely encases the CoordGroup coordgroup") );
+        AABox_exposer.def( bp::init< SireVol::CoordGroupArray const & >(( bp::arg("cgarray") ), "Construct an AABox that completely encases all of the points in all of the\nCoordGroups in cgarray") );
+        AABox_exposer.def( bp::init< SireVol::CoordGroupArrayArray const & >(( bp::arg("cgarrays") ), "Construct an AABox that completely encases all of the points in all of the\nCoordGroups in all of the arrays in cgarrays") );
         { //::SireVol::AABox::add
         
             typedef void ( ::SireVol::AABox::*add_function_type)( ::SireVol::AABox const & ) ;
@@ -46,7 +46,8 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Add another AABox to this one - this forms the union of both of the\nboxes." );
         
         }
         { //::SireVol::AABox::add
@@ -57,7 +58,8 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("point") ) );
+                , ( bp::arg("point") )
+                , "Add a point to this box" );
         
         }
         { //::SireVol::AABox::add
@@ -68,7 +70,8 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("points") ) );
+                , ( bp::arg("points") )
+                , "Add lots of points to this box" );
         
         }
         { //::SireVol::AABox::boundingSphere
@@ -78,7 +81,8 @@ void register_AABox_class(){
             
             AABox_exposer.def( 
                 "boundingSphere"
-                , boundingSphere_function_value );
+                , boundingSphere_function_value
+                , "Return the sphere that just contains this AABox" );
         
         }
         { //::SireVol::AABox::center
@@ -89,7 +93,8 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "center"
                 , center_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireVol::AABox::contains
@@ -100,7 +105,8 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return whether or not this box contains other" );
         
         }
         { //::SireVol::AABox::contains
@@ -111,7 +117,8 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("point") ) );
+                , ( bp::arg("point") )
+                , "Return whether or not this box contains the point point" );
         
         }
         { //::SireVol::AABox::from
@@ -122,7 +129,8 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "from"
                 , from_function_value
-                , ( bp::arg("point") ) );
+                , ( bp::arg("point") )
+                , "Return an AABox constructed to contain the coordinates of point" );
         
         }
         { //::SireVol::AABox::from
@@ -133,7 +141,8 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "from"
                 , from_function_value
-                , ( bp::arg("coordgroup") ) );
+                , ( bp::arg("coordgroup") )
+                , "Return an AABox constructed to contain the coordinates in coordinates" );
         
         }
         { //::SireVol::AABox::from
@@ -144,7 +153,8 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "from"
                 , from_function_value
-                , ( bp::arg("cgarray") ) );
+                , ( bp::arg("cgarray") )
+                , "Return an AABox constructed to contain all of the CoordGroups in cgarray" );
         
         }
         { //::SireVol::AABox::from
@@ -155,7 +165,8 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "from"
                 , from_function_value
-                , ( bp::arg("cgarrays") ) );
+                , ( bp::arg("cgarrays") )
+                , "Return an AABox constructed to contain all of the CoordGroups in the\narrays in cgarrays" );
         
         }
         { //::SireVol::AABox::from
@@ -166,7 +177,8 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "from"
                 , from_function_value
-                , ( bp::arg("coords") ) );
+                , ( bp::arg("coords") )
+                , "Return an AABox constructed to contain the coordinates in coordinates" );
         
         }
         { //::SireVol::AABox::from
@@ -177,7 +189,8 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "from"
                 , from_function_value
-                , ( bp::arg("mincoords"), bp::arg("maxcoords") ) );
+                , ( bp::arg("mincoords"), bp::arg("maxcoords") )
+                , "Construct a new AABox from the passed minimum and maximum coordinates" );
         
         }
         { //::SireVol::AABox::halfExtents
@@ -188,7 +201,8 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "halfExtents"
                 , halfExtents_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireVol::AABox::intersects
@@ -199,7 +213,8 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return whether this box intersects with box" );
         
         }
         { //::SireVol::AABox::isEmpty
@@ -209,7 +224,8 @@ void register_AABox_class(){
             
             AABox_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return if the AABox is empty" );
         
         }
         { //::SireVol::AABox::isNull
@@ -219,7 +235,8 @@ void register_AABox_class(){
             
             AABox_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Return if the AABox is null" );
         
         }
         { //::SireVol::AABox::maxCoords
@@ -229,7 +246,8 @@ void register_AABox_class(){
             
             AABox_exposer.def( 
                 "maxCoords"
-                , maxCoords_function_value );
+                , maxCoords_function_value
+                , "" );
         
         }
         { //::SireVol::AABox::minCoords
@@ -239,7 +257,8 @@ void register_AABox_class(){
             
             AABox_exposer.def( 
                 "minCoords"
-                , minCoords_function_value );
+                , minCoords_function_value
+                , "" );
         
         }
         AABox_exposer.def( bp::self != bp::self );
@@ -255,7 +274,8 @@ void register_AABox_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         AABox_exposer.def( bp::self == bp::self );
@@ -266,7 +286,8 @@ void register_AABox_class(){
             
             AABox_exposer.def( 
                 "radius"
-                , radius_function_value );
+                , radius_function_value
+                , "" );
         
         }
         { //::SireVol::AABox::recalculate
@@ -277,7 +298,8 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "recalculate"
                 , recalculate_function_value
-                , ( bp::arg("coordgroup") ) );
+                , ( bp::arg("coordgroup") )
+                , "Recalculate the AABox so that it completely encloses the CoordGroup coordgroup" );
         
         }
         { //::SireVol::AABox::recalculate
@@ -288,7 +310,8 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "recalculate"
                 , recalculate_function_value
-                , ( bp::arg("cgarray") ) );
+                , ( bp::arg("cgarray") )
+                , "Recalculate the AABox so that it completely encloses the CoordGroups\nin the array cgarray" );
         
         }
         { //::SireVol::AABox::recalculate
@@ -299,7 +322,8 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "recalculate"
                 , recalculate_function_value
-                , ( bp::arg("cgarrays") ) );
+                , ( bp::arg("cgarrays") )
+                , "Recalculate the AABox so that it completely encloses the CoordGroups\nin the arrays cgarrays" );
         
         }
         { //::SireVol::AABox::recalculate
@@ -310,7 +334,8 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "recalculate"
                 , recalculate_function_value
-                , ( bp::arg("coordinates") ) );
+                , ( bp::arg("coordinates") )
+                , "Recalculate the AABox so that it completely encloses the coordinates" );
         
         }
         { //::SireVol::AABox::toString
@@ -320,7 +345,8 @@ void register_AABox_class(){
             
             AABox_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this AABox" );
         
         }
         { //::SireVol::AABox::translate
@@ -331,7 +357,8 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "translate"
                 , translate_function_value
-                , ( bp::arg("delta") ) );
+                , ( bp::arg("delta") )
+                , "Translate this AABox by delta" );
         
         }
         { //::SireVol::AABox::typeName
@@ -341,7 +368,8 @@ void register_AABox_class(){
             
             AABox_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireVol::AABox::what
@@ -351,7 +379,8 @@ void register_AABox_class(){
             
             AABox_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         { //::SireVol::AABox::withinDistance
@@ -362,7 +391,8 @@ void register_AABox_class(){
             AABox_exposer.def( 
                 "withinDistance"
                 , withinDistance_function_value
-                , ( bp::arg("dist"), bp::arg("box") ) );
+                , ( bp::arg("dist"), bp::arg("box") )
+                , "Return whether or not this box is within dist of box box.\n(using infinite cartesian axes)" );
         
         }
         AABox_exposer.staticmethod( "from" );

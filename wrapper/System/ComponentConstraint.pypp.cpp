@@ -38,10 +38,10 @@ void register_ComponentConstraint_class(){
 
     { //::SireSystem::ComponentConstraint
         typedef bp::class_< SireSystem::ComponentConstraint, bp::bases< SireSystem::Constraint, SireBase::Property > > ComponentConstraint_exposer_t;
-        ComponentConstraint_exposer_t ComponentConstraint_exposer = ComponentConstraint_exposer_t( "ComponentConstraint", bp::init< >() );
+        ComponentConstraint_exposer_t ComponentConstraint_exposer = ComponentConstraint_exposer_t( "ComponentConstraint", "This constraint is used to constrain the value of a\ncomponent of the system to a specific value, or the result\nof an expression based on other components in the system.\n\nYou can use this constraint, for example, to constrain\nthe value of lambda_forwards to equal Min( 1, lambda+delta_lambda )\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope ComponentConstraint_scope( ComponentConstraint_exposer );
-        ComponentConstraint_exposer.def( bp::init< SireCAS::Symbol const &, SireCAS::Expression const & >(( bp::arg("component"), bp::arg("expression") )) );
-        ComponentConstraint_exposer.def( bp::init< SireSystem::ComponentConstraint const & >(( bp::arg("other") )) );
+        ComponentConstraint_exposer.def( bp::init< SireCAS::Symbol const &, SireCAS::Expression const & >(( bp::arg("component"), bp::arg("expression") ), "Construct to constrain the component with symbol component\nto have the value resulting from the expression expression") );
+        ComponentConstraint_exposer.def( bp::init< SireSystem::ComponentConstraint const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireSystem::ComponentConstraint::component
         
             typedef ::SireCAS::Symbol const & ( ::SireSystem::ComponentConstraint::*component_function_type)(  ) const;
@@ -50,7 +50,8 @@ void register_ComponentConstraint_class(){
             ComponentConstraint_exposer.def( 
                 "component"
                 , component_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol representing the component being constrained" );
         
         }
         { //::SireSystem::ComponentConstraint::expression
@@ -61,7 +62,8 @@ void register_ComponentConstraint_class(){
             ComponentConstraint_exposer.def( 
                 "expression"
                 , expression_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the expression used to evaluate the constraint" );
         
         }
         ComponentConstraint_exposer.def( bp::self != bp::self );
@@ -74,7 +76,8 @@ void register_ComponentConstraint_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         ComponentConstraint_exposer.def( bp::self == bp::self );
@@ -85,7 +88,8 @@ void register_ComponentConstraint_class(){
             
             ComponentConstraint_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of the constraint" );
         
         }
         { //::SireSystem::ComponentConstraint::typeName
@@ -95,7 +99,8 @@ void register_ComponentConstraint_class(){
             
             ComponentConstraint_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         ComponentConstraint_exposer.staticmethod( "typeName" );

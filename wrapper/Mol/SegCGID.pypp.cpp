@@ -23,10 +23,10 @@ void register_SegCGID_class(){
 
     { //::SireMol::GroupGroupID< SireMol::SegID, SireMol::CGID >
         typedef bp::class_< SireMol::GroupGroupID< SireMol::SegID, SireMol::CGID >, bp::bases< SireMol::GroupAtomIDBase, SireMol::AtomID, SireID::ID > > SegCGID_exposer_t;
-        SegCGID_exposer_t SegCGID_exposer = SegCGID_exposer_t( "SegCGID", bp::init< >() );
+        SegCGID_exposer_t SegCGID_exposer = SegCGID_exposer_t( "SegCGID", "", bp::init< >("") );
         bp::scope SegCGID_scope( SegCGID_exposer );
-        SegCGID_exposer.def( bp::init< SireMol::SegID const &, SireMol::CGID const & >(( bp::arg("group0"), bp::arg("group1") )) );
-        SegCGID_exposer.def( bp::init< SireMol::GroupGroupID< SireMol::SegID, SireMol::CGID > const & >(( bp::arg("other") )) );
+        SegCGID_exposer.def( bp::init< SireMol::SegID const &, SireMol::CGID const & >(( bp::arg("group0"), bp::arg("group1") ), "") );
+        SegCGID_exposer.def( bp::init< SireMol::GroupGroupID< SireMol::SegID, SireMol::CGID > const & >(( bp::arg("other") ), "") );
         { //::SireMol::GroupGroupID< SireMol::SegID, SireMol::CGID >::hash
         
             typedef SireMol::GroupGroupID< SireMol::SegID, SireMol::CGID > exported_class_t;
@@ -35,7 +35,8 @@ void register_SegCGID_class(){
             
             SegCGID_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::GroupGroupID< SireMol::SegID, SireMol::CGID >::isNull
@@ -46,7 +47,8 @@ void register_SegCGID_class(){
             
             SegCGID_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::GroupGroupID< SireMol::SegID, SireMol::CGID >::map
@@ -58,7 +60,8 @@ void register_SegCGID_class(){
             SegCGID_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         SegCGID_exposer.def( bp::self != bp::self );
@@ -72,7 +75,8 @@ void register_SegCGID_class(){
             
             SegCGID_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::GroupGroupID< SireMol::SegID, SireMol::CGID >::typeName
@@ -83,7 +87,8 @@ void register_SegCGID_class(){
             
             SegCGID_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::GroupGroupID< SireMol::SegID, SireMol::CGID >::what
@@ -94,7 +99,8 @@ void register_SegCGID_class(){
             
             SegCGID_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         SegCGID_exposer.staticmethod( "typeName" );

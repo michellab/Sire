@@ -27,10 +27,10 @@ void register_BeadEditor_class(){
 
     { //::SireMol::BeadEditor
         typedef bp::class_< SireMol::BeadEditor, bp::bases< SireMol::Editor<SireMol::BeadEditor, SireMol::Bead>, SireMol::Bead, SireMol::MoleculeView, SireBase::Property > > BeadEditor_exposer_t;
-        BeadEditor_exposer_t BeadEditor_exposer = BeadEditor_exposer_t( "BeadEditor", bp::init< >() );
+        BeadEditor_exposer_t BeadEditor_exposer = BeadEditor_exposer_t( "BeadEditor", "This is an editor for a single bead in a molecule\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope BeadEditor_scope( BeadEditor_exposer );
-        BeadEditor_exposer.def( bp::init< SireMol::Bead const & >(( bp::arg("bead") )) );
-        BeadEditor_exposer.def( bp::init< SireMol::BeadEditor const & >(( bp::arg("other") )) );
+        BeadEditor_exposer.def( bp::init< SireMol::Bead const & >(( bp::arg("bead") ), "Constructor an editor for the passed bead") );
+        BeadEditor_exposer.def( bp::init< SireMol::BeadEditor const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::BeadEditor::commit
         
             typedef ::SireMol::Bead ( ::SireMol::BeadEditor::*commit_function_type)(  ) const;
@@ -38,7 +38,8 @@ void register_BeadEditor_class(){
             
             BeadEditor_exposer.def( 
                 "commit"
-                , commit_function_value );
+                , commit_function_value
+                , "Commit the changes" );
         
         }
         { //::SireMol::BeadEditor::operator=
@@ -50,7 +51,8 @@ void register_BeadEditor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("bead") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::BeadEditor::operator=
@@ -62,7 +64,8 @@ void register_BeadEditor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::BeadEditor::toString
@@ -72,7 +75,8 @@ void register_BeadEditor_class(){
             
             BeadEditor_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this editor" );
         
         }
         { //::SireMol::BeadEditor::typeName
@@ -82,7 +86,8 @@ void register_BeadEditor_class(){
             
             BeadEditor_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         BeadEditor_exposer.staticmethod( "typeName" );

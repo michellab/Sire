@@ -43,14 +43,14 @@ void register_Selector_Segment__class(){
 
     { //::SireMol::Selector< SireMol::Segment >
         typedef bp::class_< SireMol::Selector< SireMol::Segment >, bp::bases< SireMol::MoleculeView, SireBase::Property > > Selector_Segment__exposer_t;
-        Selector_Segment__exposer_t Selector_Segment__exposer = Selector_Segment__exposer_t( "Selector_Segment_", bp::init< >() );
+        Selector_Segment__exposer_t Selector_Segment__exposer = Selector_Segment__exposer_t( "Selector_Segment_", "", bp::init< >("") );
         bp::scope Selector_Segment__scope( Selector_Segment__exposer );
-        Selector_Segment__exposer.def( bp::init< SireMol::Segment const & >(( bp::arg("view") )) );
-        Selector_Segment__exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("moldata") )) );
-        Selector_Segment__exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::AtomSelection const & >(( bp::arg("moldata"), bp::arg("selected_atoms") )) );
-        Selector_Segment__exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::Segment::ID const & >(( bp::arg("moldata"), bp::arg("viewid") )) );
-        Selector_Segment__exposer.def( bp::init< SireMol::MoleculeData const &, QList< SireMol::SegIdx > const & >(( bp::arg("moldata"), bp::arg("idxs") )) );
-        Selector_Segment__exposer.def( bp::init< SireMol::Selector< SireMol::Segment > const & >(( bp::arg("other") )) );
+        Selector_Segment__exposer.def( bp::init< SireMol::Segment const & >(( bp::arg("view") ), "") );
+        Selector_Segment__exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("moldata") ), "") );
+        Selector_Segment__exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::AtomSelection const & >(( bp::arg("moldata"), bp::arg("selected_atoms") ), "") );
+        Selector_Segment__exposer.def( bp::init< SireMol::MoleculeData const &, SireMol::Segment::ID const & >(( bp::arg("moldata"), bp::arg("viewid") ), "") );
+        Selector_Segment__exposer.def( bp::init< SireMol::MoleculeData const &, QList< SireMol::SegIdx > const & >(( bp::arg("moldata"), bp::arg("idxs") ), "") );
+        Selector_Segment__exposer.def( bp::init< SireMol::Selector< SireMol::Segment > const & >(( bp::arg("other") ), "") );
         { //::SireMol::Selector< SireMol::Segment >::add
         
             typedef SireMol::Selector< SireMol::Segment > exported_class_t;
@@ -60,7 +60,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::add
@@ -72,7 +73,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("view") ) );
+                , ( bp::arg("view") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::add
@@ -84,7 +86,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("id") ) );
+                , ( bp::arg("id") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::at
@@ -96,7 +99,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::at
@@ -108,7 +112,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::contains
@@ -120,7 +125,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::contains
@@ -132,7 +138,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("view") ) );
+                , ( bp::arg("view") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::contains
@@ -144,7 +151,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("id") ) );
+                , ( bp::arg("id") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::count
@@ -155,7 +163,8 @@ void register_Selector_Segment__class(){
             
             Selector_Segment__exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::evaluate
@@ -166,7 +175,8 @@ void register_Selector_Segment__class(){
             
             Selector_Segment__exposer.def( 
                 "evaluate"
-                , evaluate_function_value );
+                , evaluate_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::evaluate
@@ -178,7 +188,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::evaluate
@@ -190,7 +201,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::hasMetadata
@@ -202,7 +214,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "hasMetadata"
                 , hasMetadata_function_value
-                , ( bp::arg("metakey") ) );
+                , ( bp::arg("metakey") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::hasMetadata
@@ -214,7 +227,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "hasMetadata"
                 , hasMetadata_function_value
-                , ( bp::arg("key"), bp::arg("metakey") ) );
+                , ( bp::arg("key"), bp::arg("metakey") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::hasProperty
@@ -226,7 +240,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "hasProperty"
                 , hasProperty_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::index
@@ -238,7 +253,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "index"
                 , index_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::intersection
@@ -250,7 +266,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "intersection"
                 , intersection_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::intersection
@@ -262,7 +279,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "intersection"
                 , intersection_function_value
-                , ( bp::arg("view") ) );
+                , ( bp::arg("view") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::intersection
@@ -274,7 +292,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "intersection"
                 , intersection_function_value
-                , ( bp::arg("id") ) );
+                , ( bp::arg("id") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::intersects
@@ -286,7 +305,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::intersects
@@ -298,7 +318,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("view") ) );
+                , ( bp::arg("view") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::intersects
@@ -310,7 +331,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("id") ) );
+                , ( bp::arg("id") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::invert
@@ -321,7 +343,8 @@ void register_Selector_Segment__class(){
             
             Selector_Segment__exposer.def( 
                 "invert"
-                , invert_function_value );
+                , invert_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::isEmpty
@@ -332,7 +355,8 @@ void register_Selector_Segment__class(){
             
             Selector_Segment__exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::metadataKeys
@@ -343,7 +367,8 @@ void register_Selector_Segment__class(){
             
             Selector_Segment__exposer.def( 
                 "metadataKeys"
-                , metadataKeys_function_value );
+                , metadataKeys_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::metadataKeys
@@ -355,7 +380,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "metadataKeys"
                 , metadataKeys_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::move
@@ -366,7 +392,8 @@ void register_Selector_Segment__class(){
             
             Selector_Segment__exposer.def( 
                 "move"
-                , move_function_value );
+                , move_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::move
@@ -378,7 +405,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::move
@@ -390,7 +418,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         Selector_Segment__exposer.def( bp::self != bp::self );
@@ -403,7 +432,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::operator()
@@ -415,7 +445,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         Selector_Segment__exposer.def( bp::self + bp::self );
@@ -434,7 +465,8 @@ void register_Selector_Segment__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::operator=
@@ -447,7 +479,8 @@ void register_Selector_Segment__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("view") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Selector_Segment__exposer.def( bp::self == bp::self );
@@ -460,7 +493,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::propertyKeys
@@ -471,7 +505,8 @@ void register_Selector_Segment__class(){
             
             Selector_Segment__exposer.def( 
                 "propertyKeys"
-                , propertyKeys_function_value );
+                , propertyKeys_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::selectedAll
@@ -482,7 +517,8 @@ void register_Selector_Segment__class(){
             
             Selector_Segment__exposer.def( 
                 "selectedAll"
-                , selectedAll_function_value );
+                , selectedAll_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::selection
@@ -493,7 +529,8 @@ void register_Selector_Segment__class(){
             
             Selector_Segment__exposer.def( 
                 "selection"
-                , selection_function_value );
+                , selection_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::selection
@@ -505,7 +542,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "selection"
                 , selection_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::selection
@@ -517,7 +555,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "selection"
                 , selection_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::selector
@@ -528,7 +567,8 @@ void register_Selector_Segment__class(){
             
             Selector_Segment__exposer.def( 
                 "selector"
-                , selector_function_value );
+                , selector_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::selector
@@ -540,7 +580,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "selector"
                 , selector_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::selector
@@ -552,7 +593,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "selector"
                 , selector_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::subtract
@@ -564,7 +606,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::subtract
@@ -576,7 +619,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("view") ) );
+                , ( bp::arg("view") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::subtract
@@ -588,7 +632,8 @@ void register_Selector_Segment__class(){
             Selector_Segment__exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("id") ) );
+                , ( bp::arg("id") )
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::toString
@@ -599,7 +644,8 @@ void register_Selector_Segment__class(){
             
             Selector_Segment__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::Selector< SireMol::Segment >::typeName
@@ -610,7 +656,8 @@ void register_Selector_Segment__class(){
             
             Selector_Segment__exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         Selector_Segment__exposer.staticmethod( "typeName" );

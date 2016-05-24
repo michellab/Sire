@@ -31,10 +31,10 @@ void register_BeadIdx_class(){
 
     { //::SireMol::BeadIdx
         typedef bp::class_< SireMol::BeadIdx, bp::bases< SireMol::BeadID, SireID::ID, SireID::IndexBase > > BeadIdx_exposer_t;
-        BeadIdx_exposer_t BeadIdx_exposer = BeadIdx_exposer_t( "BeadIdx", bp::init< >() );
+        BeadIdx_exposer_t BeadIdx_exposer = BeadIdx_exposer_t( "BeadIdx", "This is an ID object that is used to index CutGroups\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope BeadIdx_scope( BeadIdx_exposer );
-        BeadIdx_exposer.def( bp::init< qint32 >(( bp::arg("idx") )) );
-        BeadIdx_exposer.def( bp::init< SireMol::BeadIdx const & >(( bp::arg("other") )) );
+        BeadIdx_exposer.def( bp::init< qint32 >(( bp::arg("idx") ), "") );
+        BeadIdx_exposer.def( bp::init< SireMol::BeadIdx const & >(( bp::arg("other") ), "") );
         { //::SireMol::BeadIdx::hash
         
             typedef ::uint ( ::SireMol::BeadIdx::*hash_function_type)(  ) const;
@@ -42,7 +42,8 @@ void register_BeadIdx_class(){
             
             BeadIdx_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::BeadIdx::isNull
@@ -52,7 +53,8 @@ void register_BeadIdx_class(){
             
             BeadIdx_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::BeadIdx::null
@@ -62,7 +64,8 @@ void register_BeadIdx_class(){
             
             BeadIdx_exposer.def( 
                 "null"
-                , null_function_value );
+                , null_function_value
+                , "" );
         
         }
         { //::SireMol::BeadIdx::operator=
@@ -74,7 +77,8 @@ void register_BeadIdx_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::BeadIdx::toString
@@ -84,7 +88,8 @@ void register_BeadIdx_class(){
             
             BeadIdx_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::BeadIdx::typeName
@@ -94,7 +99,8 @@ void register_BeadIdx_class(){
             
             BeadIdx_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::BeadIdx::what
@@ -104,7 +110,8 @@ void register_BeadIdx_class(){
             
             BeadIdx_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         BeadIdx_exposer.staticmethod( "null" );

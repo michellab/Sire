@@ -33,10 +33,10 @@ void register_PP_GTOs_class(){
 
     { //::Squire::PP_GTOs
         typedef bp::class_< Squire::PP_GTOs > PP_GTOs_exposer_t;
-        PP_GTOs_exposer_t PP_GTOs_exposer = PP_GTOs_exposer_t( "PP_GTOs", bp::init< >() );
+        PP_GTOs_exposer_t PP_GTOs_exposer = PP_GTOs_exposer_t( "PP_GTOs", "This class is used to calculate integrals involving PP orbital pairs", bp::init< >("Constructor") );
         bp::scope PP_GTOs_scope( PP_GTOs_exposer );
-        PP_GTOs_exposer.def( bp::init< QVector< Squire::P_GTO > const &, QVector< SireMaths::Vector > const & >(( bp::arg("p_gtos"), bp::arg("p_centers") )) );
-        PP_GTOs_exposer.def( bp::init< Squire::PP_GTOs const & >(( bp::arg("other") )) );
+        PP_GTOs_exposer.def( bp::init< QVector< Squire::P_GTO > const &, QVector< SireMaths::Vector > const & >(( bp::arg("p_gtos"), bp::arg("p_centers") ), "Construct for the set of p orbitals p_gtos located at centers\np_centers") );
+        PP_GTOs_exposer.def( bp::init< Squire::PP_GTOs const & >(( bp::arg("other") ), "Copy constructor") );
         { //::Squire::PP_GTOs::kinetic_integral
         
             typedef ::SireMaths::TrigMatrix ( ::Squire::PP_GTOs::*kinetic_integral_function_type)(  ) const;
@@ -44,7 +44,8 @@ void register_PP_GTOs_class(){
             
             PP_GTOs_exposer.def( 
                 "kinetic_integral"
-                , kinetic_integral_function_value );
+                , kinetic_integral_function_value
+                , "Return the kinetic energy integrals for each pair of orbitals" );
         
         }
         PP_GTOs_exposer.def( bp::self != bp::self );
@@ -57,7 +58,8 @@ void register_PP_GTOs_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         PP_GTOs_exposer.def( bp::self == bp::self );
@@ -68,7 +70,8 @@ void register_PP_GTOs_class(){
             
             PP_GTOs_exposer.def( 
                 "overlap_integral"
-                , overlap_integral_function_value );
+                , overlap_integral_function_value
+                , "Return the overlap integrals for each pair of orbitals" );
         
         }
         { //::Squire::PP_GTOs::potential_integral
@@ -79,7 +82,8 @@ void register_PP_GTOs_class(){
             PP_GTOs_exposer.def( 
                 "potential_integral"
                 , potential_integral_function_value
-                , ( bp::arg("C") ) );
+                , ( bp::arg("C") )
+                , "Return the potential energy integral for each pair of orbitals\ninteracting with the point charges in C" );
         
         }
         { //::Squire::PP_GTOs::potential_integral
@@ -90,7 +94,8 @@ void register_PP_GTOs_class(){
             PP_GTOs_exposer.def( 
                 "potential_integral"
                 , potential_integral_function_value
-                , ( bp::arg("C"), bp::arg("m") ) );
+                , ( bp::arg("C"), bp::arg("m") )
+                , "Return the mth auxillary potential energy integral for each pair of orbitals\ninteracting with the point charges in C" );
         
         }
         PP_GTOs_exposer.def( "__copy__", &__copy__);
