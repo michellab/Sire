@@ -123,7 +123,7 @@ if __name__ == "__main__":
         sys.exit(-1)
 
     # Now the compilation has finished, install corelib
-    status = os.system("make -j %s install/strip" % NCORES)
+    status = os.system("make -j %s install" % NCORES)
 
     if status != 0:
         print("SOMETHING WENT WRONG WHEN INSTALLING CORELIB!")
@@ -170,7 +170,7 @@ if __name__ == "__main__":
         sys.exit(-1)
 
     # Now the compilation has finished, install wrapper
-    status = os.system("make -j %s install/strip" % NCORES)
+    status = os.system("make -j %s install" % NCORES)
 
     if status != 0:
         print("SOMETHING WENT WRONG WHEN INSTALLING WRAPPER!")
