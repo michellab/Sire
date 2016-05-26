@@ -141,19 +141,11 @@ water_s3file = Parameter("water s3file", "waterbox.s3",
 outdir = Parameter("output directory", "output",
                    """Name of the directory in which to place all of the output files.""")
 
-restart_file1 = Parameter("restart file 1", "lsrc_restart1.s3",
-                          """Name of the restart file to use to save progress during the stage 1 calculation of 
-                             the relative binding free energy of ligand 0 to ligand 1.""")
+restart_file = Parameter("restart file", "lsrc_restart.s3",
+                         """Name of the restart file to use to save progress during the calculation of 
+                            the relative binding free energy of ligand 0 to ligand 1.""")
 
-restart_file2 = Parameter("restart file 2", "lsrc_restart2.s3",
-                           """Name of the restart file to use to save progress during the stage 2 calculation of 
-                              the relative binding free energy of ligand 1 to ligand 0.""")
-
-restart_file3 = Parameter("restart file 3", "lsrc_restart3.s3",
-                          """Name of the restart file to use to save progress during the stage 3 calculation of 
-                             the swap of ligand 0 and ligand 1 in the bound complex.""")
-
-nmoves = Parameter("nmoves", 500, """Number of RETI moves to perform during the simulation.""")
+nmoves = Parameter("nmoves", 1000, """Number of RETI moves to perform during the simulation.""")
 
 nequilmoves = Parameter("nequilmoves", 50000,
                         """Number of equilibration moves to perform before setting up the free energy simulation.""")
@@ -169,14 +161,6 @@ use_single_topology = Parameter("single topology", False,
 
 use_dual_topology = Parameter("dual topology", True,
                               """Whether or not to use dual topology to morph from ligand 0 to ligand 1.""")
-
-mirror_stages = Parameter("mirror stages", False,
-                     """Whether or not to mirror the stages, i.e. make stage 2 into a
-                        mirror of stage 1. This will mean that stage 2 will be ligand 1
-                        bound to the protein in its conformation for ligand 0, swapped
-                        to ligand 0 bound to the protein in its conformation for ligand 0.
-                        This result should be exactly equal and opposite to the stage 
-                        1 result.""")
 
 save_pdb = Parameter("save pdb", True,
                      """Whether or not to write a PDB of the system after each iteration.""")
@@ -373,9 +357,9 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
     mols = Molecules()
     mols.add(ligand_mol0)
     mols.add(ligand_mol1)
-    print("\nPLEASE CHECK: Writing alignment of ligands for %s to the file %s.pdb." % (stage,stage))
+    print("\nPLEASE CHECK: Writing alignment of ligands to the file aligned_ligands.pdb.")
     print("PLEASE CHECK: View this file in a PDB viewer to check that the ligands are aligned.\n")
-    PDB().write(mols, "%s.pdb" % stage )
+    PDB().write(mols, "aligned_ligands.pdb")
 
     # create a molecule group for the ligand
     ligand_group0 = MoleculeGroup("ligand0")
@@ -1338,9 +1322,9 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
 def mergeLSRC(sys0, ligand0_mol, sys1, ligand1_mol, watersys):
     
     if watersys:
-        print("Merging the two ligand complexes with the water system to create the stage 1 and stage 2 systems...")
+        print("Merging the two ligand complexes with the water system to create the ligandswap system...")
     else:
-        print("Merging the two ligand complexes with a vacuum box to create the stage 1 and stage 2 systems...")
+        print("Merging the two ligand complexes with a vacuum box to create the ligandswap system...")
 
     print("\nFirst, mapping the atoms from the first ligand to the atoms of the second...")
     mapping = AtomMCSMatcher(1*second).match(ligand0_mol, PropertyMap(), ligand1_mol, PropertyMap())
@@ -1353,8 +1337,7 @@ def mergeLSRC(sys0, ligand0_mol, sys1, ligand1_mol, watersys):
     lines.sort()
     print("Mapping:\n%s\n" % "\n".join(lines))
 
-    stage1 = System("LSRC stage 1 ( A => B )")
-    stage2 = System("LSRC stage 2 ( A <= B )")
+    lsrc_sys = System("LSRC stage 1 ( A => B )")
 
     if sys0.containsProperty("reflection center"):
         if not sys1.containsProperty("reflection center"):
@@ -1392,44 +1375,25 @@ def mergeLSRC(sys0, ligand0_mol, sys1, ligand1_mol, watersys):
 
             sys.exit(-1)
 
-        stage1.setProperty("reflection center", AtomCoords(CoordGroup(1,reflection_center0)))
-        stage1.setProperty("reflection sphere radius", VariantProperty(reflection_radius0))
-
-        stage2.setProperty("reflection center", AtomCoords(CoordGroup(1,reflection_center0)))
-        stage2.setProperty("reflection sphere radius", VariantProperty(reflection_radius0))
+        lsrc_sys.setProperty("reflection center", AtomCoords(CoordGroup(1,reflection_center0)))
+        lsrc_sys.setProperty("reflection sphere radius", VariantProperty(reflection_radius0))
 
     elif sys1.containsProperty("reflection center"):
         print("Lack of reflection sphere in sys0 when it exists in sys1!")
         sys.exit(-1)
 
     if sys0.containsProperty("average solute translation delta"):
-        stage1.setProperty("average solute translation delta", \
-                           sys0.property("average solute translation delta"))
-        stage2.setProperty("average solute translation delta", \
-                           sys0.property("average solute translation delta"))
+        lsrc_sys.setProperty("average solute translation delta", \
+                             sys0.property("average solute translation delta"))
 
     if sys0.containsProperty("average solute rotation delta"):
-        stage1.setProperty("average solute rotation delta", \
-                           sys0.property("average solute rotation delta"))
-        stage2.setProperty("average solute rotation delta", \
-                           sys0.property("average solute rotation delta"))
+        lsrc_sys.setProperty("average solute rotation delta", \
+                             sys0.property("average solute rotation delta"))
 
-    # first create stage 1
-    (stage1,moves1) = createStage(stage1, sys0, ligand0_mol, ligand1_mol, watersys, AtomResultMatcher(mapping), "stage1")
+    # create the merged system
+    (lsrc_sys,lsrc_moves) = createStage(lsrc_sys, sys0, ligand0_mol, ligand1_mol, watersys, AtomResultMatcher(mapping), "lsrc")
 
-    # now create stage 2
-    if mirror_stages.val:
-        # Update the coordinates of ligand 1 so that they are aligned to the 
-        # bound copy of ligand 0
-        ligand1_mol = stage1[ligand1_mol.number()].molecule()
-        Sire.Stream.save( (ligand0_mol,ligand1_mol), "ligands.s3")
-        (stage2,moves2) = createStage(stage2, sys0, ligand1_mol, ligand0_mol, 
-                                      watersys, AtomResultMatcher(mapping,True), "stage2")
-    else:
-        (stage2,moves2) = createStage(stage2, sys1, ligand1_mol, ligand0_mol, 
-                                      watersys, AtomResultMatcher(mapping,True), "stage2")
-
-    return (stage1, moves1, stage2, moves2)
+    return (lsrc_sys, lsrc_moves)
 
 
 def loadWater():
@@ -1543,66 +1507,28 @@ def makeRETI(system, moves):
     return (replicas, replica_moves)
 
 
-def loadSystem0():
-    """This function loads the ligand 0 system"""
-    return loadSystem(topfile0.val, crdfile0.val, s3file0.val, ligand_name0.val)
-
-
-def loadSystem1():
-    """This function loads the ligand 1 system"""
-    return loadSystem(topfile1.val, crdfile1.val, s3file1.val, ligand_name1.val)
-
-
-def loadStage1And2():
-    """This is a high level function that loads the stage 1 and 2 systems that calculates the 
+def loadInput():
+    """This is a high level function that loads the LSRC system that calculates the 
        relative binding free energy of swapping bound ligand 0 with free ligand 1"""
 
-    have_stage1 = False
-    have_stage2 = False
+    have_sys = False
 
-    if os.path.exists(restart_file1.val):
-        (lsrc_system1,lsrc_moves1) = Sire.Stream.load(restart_file1.val)
-        have_stage1 = True
+    if os.path.exists(restart_file.val):
+        (lsrc_system,lsrc_moves) = Sire.Stream.load(restart_file.val)
+        have_sys = True
 
-    if os.path.exists(restart_file2.val):
-        (lsrc_system2,lsrc_moves2) = Sire.Stream.load(restart_file2.val)
-        have_stage2 = True
-
-    if not (have_stage1 or have_stage2):
-        # need to load both systems
-        (sys0, ligand0_mol) = loadSystem0()
-        (sys1, ligand1_mol) = loadSystem1()
+    if not have_sys:
+        # need to load the system
+        (sys0, ligand0_mol) = loadSystem(topfile0.val, crdfile0.val, s3file0.val, ligand_name0.val)
+        (sys1, ligand1_mol) = loadSystem(topfile1.val, crdfile1.val, s3file1.val, ligand_name1.val)
         watersys = loadWater()
 
-        (lsrc_system1,lsrc_moves1,lsrc_system2,lsrc_moves2) = mergeLSRC(sys0,ligand0_mol, sys1,ligand1_mol, watersys)
+        (lsrc_system,lsrc_moves) = mergeLSRC(sys0,ligand0_mol, sys1,ligand1_mol, watersys)
+        (lsrc_system,lsrc_moves) = makeRETI(lsrc_system, lsrc_moves)
 
-        (lsrc_system1,lsrc_moves1) = makeRETI(lsrc_system1, lsrc_moves1)
-        (lsrc_system2,lsrc_moves2) = makeRETI(lsrc_system2, lsrc_moves2)
-
-        Sire.Stream.save( (lsrc_system1,lsrc_moves1), restart_file1.val )
-        Sire.Stream.save( (lsrc_system2,lsrc_moves2), restart_file2.val )
-
-    return (lsrc_system1,lsrc_moves1,lsrc_system2,lsrc_moves2)
-
-
-def loadStage3():
-    """This is a high level function that runs the stage 3 calculation that calculates the
-       relative free energy of swapping bound ligand 0 with bound ligand 1"""
-
-    print("\nRUNNING STAGE 3\nSwapping bound ligand 0 with bound ligand 1\n")
-
-    if os.path.exists(restart_file1.val):
-        (lsrc_system,lsrc_moves) = Sire.Stream.load(restart_file3.val)
-    else:
-        (sys0, ligand0_mol) = loadSystem0()
-        (sys1, ligand1_mol) = loadSystem1()
-
-        (lsrc_system,lsrc_moves) = mergeLSRCBound(sys0,ligand0_mol, sys1,ligand1_mol)
-        Sire.Stream.save( (lsrc_system,lsrc_moves), restart_file3.val)
+        Sire.Stream.save( (lsrc_system,lsrc_moves), restart_file.val )
 
     return (lsrc_system,lsrc_moves)
-
-    return
 
 
 def printEnergies(nrgs, FILE):
@@ -1632,131 +1558,9 @@ def printFreeEnergy(key1, key2, key3, total, bound, free, FILE):
                             free.integrate().values()[-1].y()), file=FILE)
 
 
-def analyseLSRC3(dirname, replicas, iteration, bennetts_freenrgs, fep_freenrgs, ti_freenrgs, bound0_freenrgs, bound1_freenrgs,
-                 res0_freenrgs, res1_freenrgs, bound0_water_freenrgs, bound1_water_freenrgs):
-    """This function is used to perform all analysis of iteration 'it' of the passed stage 3 LSRC system"""
-
-    # read the value of delta_lambda from the first system
-    system = replicas[0].subSystem()
-    delta_lambda = system.constant(Symbol("delta_lambda"))
-
-    logfile = "%s/results_%0004d.log" % (dirname, iteration)
-
-    FILE = open(logfile, "w")
-
-    print("===========================", file=FILE)
-    print(" Results for iteration %d" % iteration, file=FILE)
-    print("===========================", file=FILE)
-
-    print("\ndelta_lambda == %f" % delta_lambda, file=FILE)
-    print("temperature == %f K\n" % replicas[0].subMoves().temperature().to(kelvin), file=FILE) 
-
-    nreplicas = replicas.nReplicas()
-
-    # extract all of the monitors from the replicas
-    lambda_values = []
-
-    dg_f = {}
-    dg_b = {}
-
-    dg_next = {}
-    dg_prev = {}
-
-    dg_bound0_f = {}
-    dg_bound0_b = {}
-    
-    dg_bound1_f = {}
-    dg_bound1_b = {}
-
-    dg_residue0 = {}
-    dg_residue1 = {}
-    dg_boundwater0 = {}
-    dg_boundwater1 = {}
-
-    write_pdbs = (save_pdb.val) and (iteration % pdb_frequency.val == 0)
-
-    if write_pdbs:
-        print("Saving PDBs of the system at iteration %d..." % iteration)
-
-    for i in range(0, nreplicas):
-        replica = replicas[i]
-        monitors = replica.monitors()
-        lamval = replica.lambdaValue()
-        lambda_values.append(lamval)
-
-        if write_pdbs:
-            if save_all_pdbs.val or (i == 0) or (i == nreplicas-1):
-                # Save a PDB of the final configuration for the bound and free legs for each lambda value
-                system = replica.subSystem()
-                bound0_leg = system[MGName("bound0_leg")]
-                bound1_leg = system[MGName("bound1_leg")]
-
-                PDB().write(bound0_leg, "%s/bound0_mobile_%000006d_%.5f.pdb" % (dirname, iteration, lamval))
-                PDB().write(bound1_leg, "%s/bound1_mobile_%000006d_%.5f.pdb" % (dirname, iteration, lamval))
-
-        dg_f[lamval] = monitors[MonitorName("delta_g^{F}")][-1].accumulator()
-        dg_b[lamval] = monitors[MonitorName("delta_g^{B}")][-1].accumulator()
-        dg_next[lamval] = monitors[MonitorName("delta_g^{next}")][-1].accumulator()
-        dg_prev[lamval] = monitors[MonitorName("delta_g^{prev}")][-1].accumulator()
-        dg_bound0_f[lamval] = monitors[MonitorName("delta_bound0_g^{F}")][-1].accumulator()
-        dg_bound0_b[lamval] = monitors[MonitorName("delta_bound0_g^{B}")][-1].accumulator()
-        dg_bound1_f[lamval] = monitors[MonitorName("delta_bound1_g^{F}")][-1].accumulator()
-        dg_bound1_b[lamval] = monitors[MonitorName("delta_bound1_g^{B}")][-1].accumulator()
-
-        dg_residue0[lamval] = monitors[MonitorName("residue0_nrgmon")][-1]
-        dg_residue1[lamval] = monitors[MonitorName("residue1_nrgmon")][-1]
-
-        dg_boundwater0[lamval] = monitors[MonitorName("boundwater0_nrgmon")][-1]
-        dg_boundwater1[lamval] = monitors[MonitorName("boundwater1_nrgmon")][-1]
-
-    windows = copy.deepcopy(lambda_values)
-    windows.sort()
-
-    if windows[-1] != 1:
-        windows.append(1)
-
-    if windows[0] != 0:
-        windows.insert(0,0)
-
-    bennetts_freenrgs.set( iteration, windows, dg_next, dg_prev )
-    fep_freenrgs.set( iteration, windows, dg_next, dg_prev )
-    ti_freenrgs.set( iteration, dg_f, dg_b, delta_lambda )
-
-    bound0_freenrgs.set( iteration, dg_bound0_f, dg_bound0_b, delta_lambda )
-    bound1_freenrgs.set( iteration, dg_bound1_f, dg_bound1_b, delta_lambda )
-
-    print("\nRELATIVE FREE ENERGY\n", file=FILE)
-    printFreeEnergy("TOTAL", "BOUND_0", "BOUND_1",
-                    ti_freenrgs[iteration], bound0_freenrgs[iteration], bound1_freenrgs[iteration], FILE)
-
-    res0_freenrgs.set( iteration, dg_residue0 )
-    res1_freenrgs.set( iteration, dg_residue1 )
-    bound0_water_freenrgs.set( iteration, dg_boundwater0 )
-    bound1_water_freenrgs.set( iteration, dg_boundwater1 )
-
-    print("\nRESIDUE 0 FREE ENERGY COMPONENTS\n", file=FILE)
-    printComponents(res0_freenrgs[iteration], FILE)
-
-    print("\nRESIDUE 1 FREE ENERGY COMPONENTS\n", file=FILE)
-    printComponents(res1_freenrgs[iteration], FILE)
-
-    print("\nPROTEIN BOX 0 WATER FREE ENERGY COMPONENTS\n", file=FILE)
-    printComponents(bound0_water_freenrgs[iteration], FILE)
-
-    print("\nPROTEIN BOX 1 WATER FREE ENERGY COMPONENTS\n", file=FILE)
-    printComponents(bound1_water_freenrgs[iteration], FILE)
-
-    print("\n=============", file=FILE)
-    print("Relative free energy for iteration %d equals %s" % (iteration, \
-                        ti_freenrgs[iteration].integrate().values()[-1].y()), file=FILE)
-    print("==============", file=FILE)
-
-    FILE.close()
-
-
 def analyseLSRC(dirname, replicas, iteration, bennetts_freenrgs, fep_freenrgs, ti_freenrgs, bound_freenrgs, free_freenrgs,
                 res_freenrgs, bound_water_freenrgs, free_water_freenrgs):
-    """This function is used to perform all analysis of iteration 'it' of the passed stage 1 or stage 2 LSRC system"""
+    """This function is used to perform all analysis of iteration 'it' of the passed LSRC system"""
 
     # read the value of delta_lambda from the first system
     system = replicas[0].subSystem()
@@ -1886,185 +1690,103 @@ def mustMakeDir(dirname):
 def run():
     """This is a very high level function that does everything to run a LSRC simulation"""
 
-    (lsrc1_system,lsrc1_moves,lsrc2_system,lsrc2_moves) = loadStage1And2()
-    #(lsrc3_system,lsrc3_moves) = loadStage3()
+    (lsrc_system,lsrc_moves) = loadInput()
 
-    n1 = lsrc1_moves.nMoves()
-    n2 = lsrc2_moves.nMoves()
-    #n3 = lsrc3_moves.nMoves()
+    nmax = lsrc_moves.nMoves()
 
-    nmax = max(n1,n2)
-    nmin = min(n1,n2)
+    print("Number of iterations to perform: %d. Number of iterations completed: %d." % (nmoves.val, nmax))
 
-    print("Number of iterations to perform: %d. Number of iterations completed: %d, %d." % (nmoves.val, n1, n2))
-
-    if nmax >= nmoves.val and nmin == nmax:
+    if nmax >= nmoves.val:
         print("All iterations complete. Simulation complete.")
         sys.exit(0)
 
     # make sure all of the output directories exist
     mustMakeDir(outdir.val)
-    mustMakeDir("%s/stage1" % outdir.val)
-    mustMakeDir("%s/stage2" % outdir.val)
 
     # See if we have any existing free energy statistics files...
     t = QTime()
     t.start()
-    freenrgs_file1 = "%s/stage1/freenrgs.s3" % outdir.val
+    freenrgs_file = "%s/freenrgs.s3" % outdir.val
 
-    if not os.path.exists(freenrgs_file1):
-        bennetts_freenrgs1 = Bennetts()
-        fep_freenrgs1 = FEP()
-        ti_freenrgs1 = TI()
+    if not os.path.exists(freenrgs_file):
+        bennetts_freenrgs = Bennetts()
+        fep_freenrgs = FEP()
+        ti_freenrgs = TI()
     else:
-        [bennetts_freenrgs1, fep_freenrgs1, ti_freenrgs1] = Sire.Stream.load(freenrgs_file1)
+        [bennetts_freenrgs, fep_freenrgs, ti_freenrgs] = Sire.Stream.load(freenrgs_file)
 
-    freenrg_parts_file1 = "%s/stage1/freenrg_parts.s3" % outdir.val
+    freenrg_parts_file = "%s/freenrg_parts.s3" % outdir.val
 
-    if not os.path.exists(freenrg_parts_file1):
-        bound_freenrgs1 = TI()
-        free_freenrgs1 = TI()
+    if not os.path.exists(freenrg_parts_file):
+        bound_freenrgs = TI()
+        free_freenrgs = TI()
     else:
-        [bound_freenrgs1, free_freenrgs1] = Sire.Stream.load(freenrg_parts_file1)
+        [bound_freenrgs, free_freenrgs] = Sire.Stream.load(freenrg_parts_file)
 
-    freenrg_components_file1 = "%s/stage1/freenrg_components.s3" % outdir.val
+    freenrg_components_file = "%s/freenrg_components.s3" % outdir.val
 
-    if not os.path.exists(freenrg_components_file1):
-        res_freenrgs1 = TIComponents()
-        bound_water_freenrgs1 = TIComponents()
-        free_water_freenrgs1 = TIComponents()
+    if not os.path.exists(freenrg_components_file):
+        res_freenrgs = TIComponents()
+        bound_water_freenrgs = TIComponents()
+        free_water_freenrgs = TIComponents()
     else:
-        [res_freenrgs1, bound_water_freenrgs1, free_water_freenrgs1] = Sire.Stream.load(freenrg_components_file1)
-
-    freenrgs_file2 = "%s/stage2/freenrgs.s3" % outdir.val
-
-    if not os.path.exists(freenrgs_file2):
-        bennetts_freenrgs2 = Bennetts()
-        fep_freenrgs2 = FEP()
-        ti_freenrgs2 = TI()
-    else:
-        [bennetts_freenrgs2, fep_freenrgs2, ti_freenrgs2] = Sire.Stream.load(freenrgs_file2)
-
-    freenrg_parts_file2 = "%s/stage2/freenrg_parts.s3" % outdir.val
-
-    if not os.path.exists(freenrg_parts_file2):
-        bound_freenrgs2 = TI()
-        free_freenrgs2 = TI()
-    else:
-        [bound_freenrgs2, free_freenrgs2] = Sire.Stream.load(freenrg_parts_file2)
-
-    freenrg_components_file2 = "%s/stage2/freenrg_components.s3" % outdir.val
-
-    if not os.path.exists(freenrg_components_file2):
-        res_freenrgs2 = TIComponents()
-        bound_water_freenrgs2 = TIComponents()
-        free_water_freenrgs2 = TIComponents()
-    else:
-        [res_freenrgs2, bound_water_freenrgs2, free_water_freenrgs2] = Sire.Stream.load(freenrg_components_file2)
+        [res_freenrgs, bound_water_freenrgs, free_water_freenrgs] = Sire.Stream.load(freenrg_components_file)
 
     print("Initialising / loading the free energy files took %d ms" % t.elapsed())
 
-    while (nmin != nmax) or (nmax < nmoves.val):
+    while nmax < nmoves.val:
         t.start()
-        sim1 = SupraSim()
-        sim2 = SupraSim()
+        sim = SupraSim()
 
-        if nmin != nmax:
-            print("Catching up some of the stages: %d vs. %d" % (n1,n2))
-
-            if n1 < nmax:
-                sim1 = SupraSim.run( lsrc1_system, lsrc1_moves, 1, True )
-
-            if n2 < nmax:
-                sim2 = SupraSim.run( lsrc2_system, lsrc2_moves, 1, True )
-
-        else:
-            print("Performing iteration %d..." % (nmax+1))
-            sim1 = SupraSim.run( lsrc1_system, lsrc1_moves, 1, True )
-            sim2 = SupraSim.run( lsrc2_system, lsrc2_moves, 1, True )
-
-        sim1.wait()
-        sim2.wait()
+        print("Performing iteration %d..." % (nmax+1))
+        sim = SupraSim.run( lsrc_system, lsrc_moves, 1, True )
+        sim.wait()
 
         ms = t.elapsed()
         print("...iteration complete. Took %d ms" % ms)
 
-        if nmin != nmax:
-            if n1 < nmax:
-                lsrc1_system = sim1.system()
-                lsrc1_moves = sim1.moves()
-
-            if n2 < nmax:
-                lsrc2_system = sim2.system()
-                lsrc2_moves = sim2.moves()
-
-        else:
-            lsrc1_system = sim1.system()
-            lsrc1_moves = sim1.moves()
-            lsrc2_system = sim2.system()
-            lsrc2_moves = sim2.moves()
+        lsrc_system = sim.system()
+        lsrc_moves = sim.moves()
    
-        n1 = lsrc1_moves.nMoves()
-        n2 = lsrc2_moves.nMoves()
-
-        nmax = max(n1,n2)
-        nmin = min(n1,n2)
+        nmax = lsrc_moves.nMoves()
         
-        if nmin == nmax:
-            # we have successfully completed one iteration of each system
-            iteration = nmax
+        # we have successfully completed one iteration of each system
+        iteration = nmax
 
-            # perform analysis
+        # perform analysis
+        t.start()
+        print("Analysing iteration %d..." % iteration)
+        analyseLSRC(outdir.val,
+                    lsrc_system, iteration, bennetts_freenrgs, fep_freenrgs, ti_freenrgs, bound_freenrgs, free_freenrgs,
+                    res_freenrgs, bound_water_freenrgs, free_water_freenrgs)
+
+        lsrc_system.clearAllStatistics()
+
+        print("...analysis complete (took %d ms)" % t.elapsed())
+
+        # write a restart file for all of the free energies and component - this simplifies post-run analysis
+        if iteration % restart_frequency.val == 0 or iteration == nmoves.val:
             t.start()
-            print("Analysing iteration %d..." % iteration)
-            analyseLSRC("%s/stage1" % outdir.val,
-                        lsrc1_system, iteration, bennetts_freenrgs1, fep_freenrgs1, ti_freenrgs1, bound_freenrgs1, free_freenrgs1,
-                        res_freenrgs1, bound_water_freenrgs1, free_water_freenrgs1)
+            print("Saving the free energy analysis files from iteration %d..." % iteration)
+            tryBackup(freenrgs_file)
+            tryBackup(freenrg_components_file)
+            tryBackup(freenrg_parts_file)
 
-            lsrc1_system.clearAllStatistics()
+            Sire.Stream.save( [bennetts_freenrgs, fep_freenrgs, ti_freenrgs], freenrgs_file )
+            Sire.Stream.save( [bound_freenrgs, free_freenrgs], freenrg_parts_file )
+            Sire.Stream.save( [res_freenrgs, bound_water_freenrgs, free_water_freenrgs], freenrg_components_file )
 
-            analyseLSRC("%s/stage2" % outdir.val,
-                        lsrc2_system, iteration, bennetts_freenrgs2, fep_freenrgs2, ti_freenrgs2, bound_freenrgs2, free_freenrgs2,
-                        res_freenrgs2, bound_water_freenrgs2, free_water_freenrgs2)
-
-            lsrc2_system.clearAllStatistics()
-
-            print("...analysis complete (took %d ms)" % t.elapsed())
-
-            # write a restart file for all of the free energies and component - this simplifies post-run analysis
-            if iteration % restart_frequency.val == 0 or iteration == nmoves.val:
-                t.start()
-                print("Saving the free energy analysis files from iteration %d..." % iteration)
-                tryBackup(freenrgs_file1)
-                tryBackup(freenrg_components_file1)
-                tryBackup(freenrg_parts_file1)
-                tryBackup(freenrgs_file2)
-                tryBackup(freenrg_components_file2)
-                tryBackup(freenrg_parts_file2)
-
-                Sire.Stream.save( [bennetts_freenrgs1, fep_freenrgs1, ti_freenrgs1], freenrgs_file1 )
-                Sire.Stream.save( [bound_freenrgs1, free_freenrgs1], freenrg_parts_file1 )
-                Sire.Stream.save( [res_freenrgs1, bound_water_freenrgs1, free_water_freenrgs1], freenrg_components_file1 )
-
-                Sire.Stream.save( [bennetts_freenrgs2, fep_freenrgs2, ti_freenrgs2], freenrgs_file2 )
-                Sire.Stream.save( [bound_freenrgs2, free_freenrgs2], freenrg_parts_file2 )
-                Sire.Stream.save( [res_freenrgs2, bound_water_freenrgs2, free_water_freenrgs2], freenrg_components_file2 )
-          
-                print("...save complete (took %d ms)" % t.elapsed())
+            print("...save complete (took %d ms)" % t.elapsed())
 
             # write a restart file every N moves in case of crash or run out of time
-            if iteration % restart_frequency.val == 0 or iteration == nmoves.val:
-                t.start()
-                print("Saving the restart file from iteration %d..." % iteration)
+            t.start()
+            print("Saving the restart file from iteration %d..." % iteration)
 
-                # save the old file to a backup
-                tryBackup(restart_file1.val)
-                tryBackup(restart_file2.val)
+            # save the old file to a backup
+            tryBackup(restart_file.val)
+            Sire.Stream.save( (lsrc_system, lsrc_moves), restart_file.val )
 
-                Sire.Stream.save( (lsrc1_system, lsrc1_moves), restart_file1.val )
-                Sire.Stream.save( (lsrc1_system, lsrc2_moves), restart_file2.val )
-
-                print("...save complete (took %d ms)" % t.elapsed())
+            print("...save complete (took %d ms)" % t.elapsed())
 
 
     print("All iterations complete.")

@@ -217,12 +217,32 @@ def _uploadUsageData():
             # don't send data twice
             return
 
-        import os as _os
-    
-        if "SIRE_DONT_PHONEHOME" in _os.environ:
-           # respect user wish to not phone home
-           return
+        import time as _time
+        # wait a couple of seconds before uploading. This 
+        # stops annoying uploads when people print help
+        _time.sleep(2)
 
+        import os as _os
+
+        if "SIRE_DONT_PHONEHOME" in _os.environ:
+            # respect user wish to not phone home
+            if not "SIRE_SILENT_PHONEHOME" in _os.environ:
+                print("\n=======================================================")
+                print("Respecting your privacy - not sending usage statistics.")
+                print("Please see http://siremol.org/analytics for more information.")
+                print("=======================================================\n")
+                return
+        else:
+            if not "SIRE_SILENT_PHONEHOME" in _os.environ:
+                print("\n=============================================================")
+                print("Sending anonymous Sire usage statistic to http://siremol.org.")
+                print("For more information, see http://siremol.org/analytics")
+                print("To disable, set the environment variable 'SIRE_DONT_PHONEHOME' to 1")
+                print("To see the information sent, set the environment variable ")
+                print("SIRE_VERBOSE_PHONEHOME equal to 1. To silence this message, set")
+                print("the environment variable SIRE_SILENT_PHONEHOME to 1.")
+                print("=============================================================\n")
+    
         from Sire.Base import CPUID as _CPUID
 
         id = _CPUID()
@@ -271,8 +291,13 @@ def _uploadUsageData():
         headers = {"Content-type": "application/x-www-form-urlencoded", 
                    "Accept": "text/plain"}
 
-        #print(_parse.urlencode({'data' : _json.dumps(data)}))
-        #print(headers)
+        if "SIRE_VERBOSE_PHONEHOME" in _os.environ:
+            print("Information sent to http://siremol.org is...")
+            keys = list(data.keys())
+            keys.sort()
+            for key in keys:
+                print(" -- %s == %s" % (key,data[key]))
+            print("\n")
 
         sent_usage_data = data
 

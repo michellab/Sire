@@ -161,6 +161,9 @@ nequilmoves = Parameter("nequilmoves", 50000,
 
 nmoves = Parameter("nmoves", 1000, """Number of RETI moves to perform during the simulation.""")
 
+move_backbone = Parameter("move backbone", True, 
+                          """Whether or not to move the protein backbone.""")
+
 coul_power = Parameter("coulomb power", 0,
                        """The soft-core coulomb power parameter""")
 
@@ -414,7 +417,7 @@ def createWSRCMoves(system):
         sc_moves = ZMatMove(mobile_sidechains)
         moves.add( sc_moves, mobile_sidechains.nViews() )
 
-    if mobile_backbones.nViews() > 0:
+    if mobile_backbones.nViews() > 0 and move_backbone.val:
         bb_moves = RigidBodyMC(mobile_backbones)
         bb_moves.setCenterOfRotation( GetCOGPoint( AtomName("CA", CaseInsensitive),
                                                    AtomName("N", CaseInsensitive) ) )
