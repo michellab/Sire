@@ -30,6 +30,10 @@ wsrc_tools_dir = "%s/Tools/WSRC" % Sire.Config.share_directory
 # ALL OF THE GLOBAL USER-AVAILABLE LSRC PARAMETERS #
 ####################################################
 
+mcs_timeout = Parameter("match timeout", 5*second,
+                        """The maximum amount of time to give the maximum common substructure
+                           algorithm to find a match between the two ligands.""")
+
 cutoff_method = Parameter("cutoff method", "shift electrostatics",
                           """Method used to apply the non-bonded electrostatic cutoff.""")
 
@@ -1327,7 +1331,18 @@ def mergeLSRC(sys0, ligand0_mol, sys1, ligand1_mol, watersys):
         print("Merging the two ligand complexes with a vacuum box to create the ligandswap system...")
 
     print("\nFirst, mapping the atoms from the first ligand to the atoms of the second...")
-    mapping = AtomMCSMatcher(1*second).match(ligand0_mol, PropertyMap(), ligand1_mol, PropertyMap())
+    mapping = AtomMCSMatcher(mcs_timeout.val).match(ligand0_mol, PropertyMap(), 
+                                                    ligand1_mol, PropertyMap())
+
+    # try the reverse mapping, as sometimes it finds a better result
+    #rmapping = AtomMCSMatcher(mcs_timeout.val).match(ligand1_mol, PropertyMap(),
+    #                                                 ligand0_mol, PropertyMap())
+
+    #if len(rmapping) > len(mapping):
+    #    print("Reverse map did better than the forward map. Using the reverse map as a key...")
+    #    mapping = AtomMCSMatcher( AtomResultMatcher(rmapping,True), mcs_timeout.val ) \
+    #               .match(ligand0_mol, PropertyMap(),
+    #                      ligand1_mol, PropertyMap())
 
     lines = []
     for key in mapping.keys():

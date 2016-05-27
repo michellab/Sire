@@ -234,14 +234,14 @@ def _uploadUsageData():
                 return
         else:
             if not "SIRE_SILENT_PHONEHOME" in _os.environ:
-                print("\n=============================================================")
-                print("Sending anonymous Sire usage statistic to http://siremol.org.")
+                print("\n==============================================================")
+                print("Sending anonymous Sire usage statistics to http://siremol.org.")
                 print("For more information, see http://siremol.org/analytics")
                 print("To disable, set the environment variable 'SIRE_DONT_PHONEHOME' to 1")
                 print("To see the information sent, set the environment variable ")
                 print("SIRE_VERBOSE_PHONEHOME equal to 1. To silence this message, set")
                 print("the environment variable SIRE_SILENT_PHONEHOME to 1.")
-                print("=============================================================\n")
+                print("==============================================================\n")
     
         from Sire.Base import CPUID as _CPUID
 
