@@ -187,6 +187,18 @@ import Sire.Config
 
 __version__ = Sire.Config.__version__
 
+def _versionString():
+    """Return a nicely formatted string that describes the current Sire version"""
+    import Sire.Base
+
+    return """Sire %s [%s|%s, %s]""" % \
+              (Sire.Base.getReleaseVersion(), 
+               Sire.Base.getRepositoryBranch(),
+               Sire.Config.sire_repository_version[0:7],
+               ["unclean", "clean"][Sire.Base.getRepositoryVersionIsClean()])    
+
+Sire.Config.versionString = _versionString
+
 sent_usage_data = None
 
 def _getOSInfo():
