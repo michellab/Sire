@@ -69,6 +69,10 @@ def restore_root(filename, root):
 
 def scanDir(root_dir, top_root_dir):
     for file in os.listdir(root_dir):
+        if file.find("restore_file.py") != -1:
+            # don't restore path into this file!
+            continue
+
         fullfile = "%s/%s" % (root_dir,file)
 
         if os.path.isdir(fullfile):
