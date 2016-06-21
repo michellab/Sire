@@ -64,6 +64,8 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include <tbb/tbb.h>
+
 #include <QDebug>
 #include <QTime>
 
@@ -1242,17 +1244,16 @@ MolarEnergy FFSymbolExpression::energy(QVector<FFPtr> &forcefields,
                                        const QHash<Symbol,FFSymbolPtr> &ffsymbols,
                                        double scale_energy) const
 {
-    //loop over each component of the expression
-    MolarEnergy nrg(0);
-
     if (scale_energy == 0)
-        return nrg;
+        return MolarEnergy(0);
     
     int ncomponents = components.count();
     const Component *components_array = components.constData();
     
     Values values;
-
+    
+    //first, make sure that values is pre-populated with any known
+    //values for symbols
     for (int i=0; i<ncomponents; ++i)
     {
         const Component &component = components_array[i];
@@ -1270,12 +1271,27 @@ MolarEnergy FFSymbolExpression::energy(QVector<FFPtr> &forcefields,
                 values.set( symbol, ffsymbols[symbol]->value(ffsymbols) );
             }
         }
-        
-        nrg += ffsymbols[component.symbol()]->energy(forcefields, ffsymbols,
-                                 scale_energy * component.scalingFactor(values));
     }
 
-    return nrg;
+    QVector<double> nrgs(ncomponents,0);
+    double *nrgs_data = nrgs.data();
+
+    //loop over each component of the expression
+    tbb::parallel_for(0, ncomponents, 1, [&](int i)
+    {
+        const Component &component = components_array[i];
+    
+        nrgs_data[i] = ffsymbols[component.symbol()]->energy(forcefields, ffsymbols,
+                                 scale_energy * component.scalingFactor(values));
+    });
+
+    double nrg = 0;
+    for (int i=0; i<ncomponents; ++i)
+    {
+        nrg += nrgs_data[i];
+    }
+
+    return MolarEnergy(nrg);
 }
 
 void FFSymbolExpression::energy(EnergyTable &energytable,
@@ -1531,18 +1547,31 @@ MolarEnergy FFTotalExpression::energy(QVector<FFPtr> &forcefields,
                                       const QHash<Symbol,FFSymbolPtr> &ffsymbols,
                                       double scale_energy) const
 {
-    MolarEnergy nrg(0);
-    
     int nffields = forcefields.count();
+    
+    if (nffields <= 0)
+    {
+        return MolarEnergy(0);
+    }
     
     FFPtr *ffields_array = forcefields.data();
     
+    QVector<double> nrgs( nffields, 0 );
+    double *nrgs_data = nrgs.data();
+    
+    tbb::parallel_for(0, nffields, 1, [=](int i)
+    {
+        nrgs_data[i] = ffields_array[i].edit().energy();
+    });
+
+    double nrg = 0;
+    
     for (int i=0; i<nffields; ++i)
     {
-        nrg += ffields_array[i].edit().energy();
+        nrgs += nrgs_data[i];
     }
     
-    return nrg * scale_energy;
+    return MolarEnergy(nrg * scale_energy);
 }
 
 void FFTotalExpression::energy(EnergyTable &energytable,
@@ -5147,7 +5176,7 @@ bool ForceFields::removeAll(const Molecules &molecules, const MGID &mgid)
 */
 bool ForceFields::removeAll(const MoleculeGroup &molgroup, const MGID &mgid)
 {
-    return this->removeAll(molgroup, mgid);
+    return this->removeAll(molgroup.molecules(), mgid);
 }
 
 /** Remove all views of the molecule with number 'molnum' from the molecule

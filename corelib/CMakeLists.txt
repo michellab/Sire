@@ -30,6 +30,12 @@ if(COMMAND CMAKE_POLICY)
   if (POLICY CMP0048)
     cmake_policy(SET CMP0048 OLD)  # want to manage versions myself!
   endif()
+  if (POLICY CMP0028)
+    cmake_policy(SET CMP0028 OLD)  # Qt has colons in names, which new cmake hates
+  endif()
+  if (POLICY CMP0045)
+    cmake_policy(SET CMP0045 OLD)  # Allow non-existant targets with -NOTFOUND
+  endif()
 endif()
 
 # Get rid of install messages (too verbose!)
@@ -373,9 +379,9 @@ include (CheckCXXCompilerFlag)
 
 CHECK_CXX_COMPILER_FLAG( "-stdlib=libc++" SIRE_HAS_CPP_LIB )
 
-if (SIRE_HAS_CPP_LIB)
-  include(CheckCXXSourceRuns)
+include(CheckCXXSourceRuns)
 
+if (SIRE_HAS_CPP_LIB)
   message(STATUS "Checking that we can link to libc++")
   set(CMAKE_OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
   set(CMAKE_REQUIRED_FLAGS "-stdlib=libc++")
