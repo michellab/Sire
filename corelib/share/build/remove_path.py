@@ -16,7 +16,7 @@ try:
 except:
     remove_dir = root_dir
 
-print("Scanning through %s" % (root_dir))
+print("Scanning through %s to remove %s" % (root_dir,remove_dir))
 
 def is_binary(filename):
     """
@@ -69,6 +69,10 @@ def remove_root(filename, root):
 
 def scanDir(root_dir, top_root_dir):
     for file in os.listdir(root_dir):
+        if file.find("restore_path.py") != -1:
+            # don't do anything to restore_path.py
+            continue
+
         fullfile = "%s/%s" % (root_dir,file)
 
         if os.path.isdir(fullfile):
