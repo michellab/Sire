@@ -317,9 +317,14 @@ public:
     
     ~FFSymbolFF();
     
-    const char* what() const
+    static const char* typeName()
     {
         return "SireFF::FFSymbolFF";
+    }
+
+    const char* what() const
+    {
+        return FFSymbolFF::typeName();
     }
 
     bool isConstant() const { return false; }
@@ -383,9 +388,14 @@ public:
     
     ~FFSymbolExpression();
     
-    const char* what() const
+    static const char* typeName()
     {
         return "SireFF::FFSymbolExpression";
+    }
+    
+    const char* what() const
+    {
+        return FFSymbolExpression::typeName();
     }
     
     void load(QDataStream &ds);
@@ -397,7 +407,8 @@ public:
     
     const Expression& expression() const;
     
-    void expandInTermsOf(const QSet<Symbol> &ffsymbols);
+    void expandInTermsOf(const QSet<Symbol> &ffsymbols,
+                         const QHash<Symbol,FFSymbolPtr> &ffmap);
     
     double value(const QHash<Symbol,FFSymbolPtr> &ffsymbols) const;
     
@@ -440,12 +451,14 @@ private:
     {
     public:
         Component();
-        Component(const Expression &scale_factor, const Symbol &component);
+        Component(const Expression &scale_factor, const Symbol &component,
+                  int ffidx=-1);
         
         Component(const Component &other);
         
         ~Component();
         
+        int ffIdx() const;
         int nDependents() const;
         const QVector<Symbol>& dependents() const;
         
@@ -463,6 +476,9 @@ private:
         
         /** The expression for the scaling factor */
         Expression sclfac;
+        
+        /** The index of the forcefield for this component */
+        int ffidx;
     };
 
     /** The forcefield expression */
@@ -470,6 +486,9 @@ private:
     
     /** All of the components of this expression */
     QVector<Component> components;
+    
+    /** All of the components sorted by FFIdx */
+    QVector< QVector<Component> > sorted_components;
 };
 
 /** This is an FFSymbol that represents just a simple total of the energy
@@ -484,9 +503,14 @@ public:
     
     ~FFTotalExpression();
     
-    const char* what() const
+    static const char* typeName()
     {
         return "SireFF::FFTotalExpression";
+    }
+    
+    const char* what() const
+    {
+        return FFTotalExpression::typeName();
     }
     
     void load(QDataStream &ds);
@@ -1074,8 +1098,8 @@ FFSymbolExpression::Component::Component()
 {}
 
 FFSymbolExpression::Component::Component(const Expression &scale_factor, 
-                                         const Symbol &component)
-                   : s(component), sclfac(scale_factor)
+                                         const Symbol &component, int idx)
+                   : s(component), sclfac(scale_factor), ffidx(idx)
 {
     Symbols dependents = scale_factor.symbols();
     
@@ -1094,11 +1118,16 @@ FFSymbolExpression::Component::Component(const Expression &scale_factor,
 }
 
 FFSymbolExpression::Component::Component(const Component &other)
-                   : s(other.s), deps(other.deps), sclfac(other.sclfac)
+                   : s(other.s), deps(other.deps), sclfac(other.sclfac), ffidx(other.ffidx)
 {}
 
 FFSymbolExpression::Component::~Component()
 {}
+
+int FFSymbolExpression::Component::ffIdx() const
+{
+    return ffidx;
+}
 
 int FFSymbolExpression::Component::nDependents() const
 {
@@ -1135,7 +1164,7 @@ FFSymbolExpression::FFSymbolExpression(const Symbol &symbol,
 
 FFSymbolExpression::FFSymbolExpression(const FFSymbolExpression &other)
                    : FFSymbol(other), ffexpression(other.ffexpression),
-                     components(other.components)
+                     components(other.components), sorted_components(other.sorted_components)
 {}
 
 FFSymbolExpression::~FFSymbolExpression()
@@ -1161,10 +1190,12 @@ const Expression& FFSymbolExpression::expression() const
     return ffexpression;
 }
 
-void FFSymbolExpression::expandInTermsOf(const QSet<Symbol> &ffsymbols)
+void FFSymbolExpression::expandInTermsOf(const QSet<Symbol> &ffsymbols,
+                                         const QHash<Symbol,FFSymbolPtr> &ffmap)
 {
     //get all of the symbols in which to expand this expression
     components.clear();
+    sorted_components.clear();
     
     QSet<Symbol> symbols = ffexpression.symbols();
     symbols.intersect(ffsymbols);
@@ -1197,31 +1228,65 @@ void FFSymbolExpression::expandInTermsOf(const QSet<Symbol> &ffsymbols)
                         "dimensionally correct.")
                             .arg(symbol.toString(), fac_symbol.toString()), CODELOC );
             }
+            
+            //now find out which forcefield (if any) this symbol needs to evaluate
+            //the energy
+            int ffidx = -1;
+            
+            if (ffmap.contains(symbol))
+            {
+                const FFSymbolPtr &ffptr = ffmap[symbol];
                 
-            components.append( Component(factor.factor(), symbol) );
+                if (ffptr->isA<FFSymbolFF>())
+                {
+                    const FFSymbolFF &ffsymff = ffptr->asA<FFSymbolFF>();
+                    
+                    ffidx = ffsymff.ffIdx();
+                }
+            }
+            
+            Component component = Component(factor.factor(), symbol, ffidx);
+            
+            components.append(component);
             remainder = (remainder - (symbol * factor.factor())).simplify();
+
+            //if this is a forcefield component, then add this to the sorted
+            //list, so that we can collect all symbols that belong to the same forcefield
+            if (ffidx != -1)
+            {
+                bool found = false;
+            
+                for (int i=0; i<sorted_components.count(); ++i)
+                {
+                    if (sorted_components[i][0].ffIdx() == ffidx)
+                    {
+                        sorted_components[i].append(component);
+                        found = true;
+                        break;
+                    }
+                }
+                
+                if (not found)
+                {
+                    sorted_components.append( QVector<Component>() );
+                    sorted_components.last().append(component);
+                }
+            }
         }
     }
-    
-    remainder = remainder.simplify();
-    
-    if (not remainder.isZero())
-    {
-      /* JM Jan 2013. Output disabled as some Nautilus scripts trigger this condition (but are valid) */
-      bool debug = 0 ;
 
-      if (debug)
-	{
-        qDebug() << QObject::tr(
-                "You may have a forcefield expression that contains a free "
-                "term (%1) that is not dependent on a forcefield component. "
-                "This is because each term must have dimensions of energy, and "
-                "the addition of a constant dimensionless value is not "
-                "dimensionally correct. Please check that the remainder is zero.")
-                    .arg(remainder.toString());
-	}        
-        remainder = 0;
+    components.squeeze();
+
+    for (int i=0; i<sorted_components.count(); ++i)
+    {
+        sorted_components[i].squeeze();
     }
+    
+    sorted_components.squeeze();
+
+    //normally this should be zero, but there are some good cases (e.g. Nautilus)
+    //when you want dimensionless constants to be added to the energy
+    remainder = remainder.simplify();
 }
 
 Expression FFSymbolExpression::toExpression() const
@@ -1250,15 +1315,28 @@ MolarEnergy FFSymbolExpression::energy(QVector<FFPtr> &forcefields,
     int ncomponents = components.count();
     const Component *components_array = components.constData();
     
-    Values values;
+    //The energy expression takes the form;
+    // E = Sum{i=1,n} ( {scale expression}_i * {forcefield energy component}_i )
     
-    //first, make sure that values is pre-populated with any known
-    //values for symbols
+    // where {scale_expression}_i is a constant expression that acts to scale (multiply)
+    // the energy of the ith forcefield energy component, {forcefield energy component}_i
+    
+    // First, we have to calculate all of the values of the {scale expression}s,
+    // knowing that these are constants and do not contain any forcefield energy
+    // components (i.e. they are just values like 'lambda' or 'alpha')
+    
+    // we do this by putting all of the values into the below 'values' map
+    // (this maps symbol to numeric value)
+    Values values;
+
+    // loop over all i=1,n components of the energy expression
     for (int i=0; i<ncomponents; ++i)
     {
+        //this is the ith component
         const Component &component = components_array[i];
         
-        //evaluate all of the dependent symbols...
+        //evaluate all of the dependent symbols for the scaling constant
+        //for the energy in this ith component
         int ndeps = component.nDependents();
         const Symbol *deps_array = component.dependents().constData();
         
@@ -1268,25 +1346,45 @@ MolarEnergy FFSymbolExpression::energy(QVector<FFPtr> &forcefields,
 
             if (not values.contains(symbol))
             {
+                //all of the FFSymbols should be constants, so will raise
+                //an exception here if they require a forcefield evaluation
                 values.set( symbol, ffsymbols[symbol]->value(ffsymbols) );
             }
         }
     }
 
-    QVector<double> nrgs(ncomponents,0);
+    //now that we have all of the scaling factors, we need to loop over
+    //all dependent forcefields of this expression and will evaluate their
+    //energies. To do this, we have to find all of the sub-forcefields,
+    //as we must loop over forcefields, not components (else we risk
+    //a race condition where the same forcefield is queried simultaneously
+    //from two different threads)
+    const int nforcefields = sorted_components.count();
+    const QVector<Component> *sorted_components_array = sorted_components.constData();
+    
+    QVector<double> nrgs(nforcefields,0);
     double *nrgs_data = nrgs.data();
 
-    //loop over each component of the expression
-    tbb::parallel_for(0, ncomponents, 1, [&](int i)
+    //loop over each forcefield in the expression
+    tbb::parallel_for(0, nforcefields, 1, [&](int i)
     {
-        const Component &component = components_array[i];
+        const QVector<Component> &ffcomponents = sorted_components_array[i];
+
+        double nrg = 0;
+        
+        for (int j=0; j<ffcomponents.count(); ++j)
+        {
+            const Component &component = ffcomponents.constData()[j];
     
-        nrgs_data[i] = ffsymbols[component.symbol()]->energy(forcefields, ffsymbols,
+            nrg += ffsymbols[component.symbol()]->energy(forcefields, ffsymbols,
                                  scale_energy * component.scalingFactor(values));
+        }
+        
+        nrgs_data[i] = nrg;
     });
 
     double nrg = 0;
-    for (int i=0; i<ncomponents; ++i)
+    for (int i=0; i<nforcefields; ++i)
     {
         nrg += nrgs_data[i];
     }
@@ -1568,7 +1666,7 @@ MolarEnergy FFTotalExpression::energy(QVector<FFPtr> &forcefields,
     
     for (int i=0; i<nffields; ++i)
     {
-        nrgs += nrgs_data[i];
+        nrg += nrgs_data[i];
     }
     
     return MolarEnergy(nrg * scale_energy);
@@ -1955,7 +2053,8 @@ void ForceFields::rebuildIndex()
     {
         if (it.value()->isA<FFSymbolExpression>())
         {
-            it.value()->asA<FFSymbolExpression>().expandInTermsOf(all_ff_symbols);
+            it.value()->asA<FFSymbolExpression>().expandInTermsOf(all_ff_symbols,
+                                                                  new_symbols);
         }
     }
     
