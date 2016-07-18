@@ -20,7 +20,11 @@ if __name__ == "__main__":
     # run a background process that prints to the screen so that people know that we are still alive...
     result = pool.apply_async(print_progress)
 
-    conda_base = os.path.abspath( "%s/.." % os.path.dirname(sys.executable))
+    conda_base = os.path.abspath( os.path.dirname(sys.executable) )
+
+    if conda_base.endswith("bin"):
+        conda_base = os.path.abspath( "%s/.." % os.path.dirname(sys.executable))
+
     install_script = sys.argv[0]
     build_dir = os.path.abspath( os.path.dirname(install_script) )
 
@@ -34,14 +38,23 @@ if __name__ == "__main__":
 
     print("Number of cores used for compilation = %d" % NCORES)
 
-    if not os.path.exists("%s/bin/conda" % conda_base):
-        print("Cannot find a 'conda' binary in directory '%s/bin'. "
+    python_exe = None
+    conda_exe = None
+
+    if os.path.exists("%s/bin/conda" % conda_base):
+        python_exe = "%s/bin/python" % conda_base
+        conda_exe = "%s/bin/conda" % conda_base
+    elif os.path.exists("%s\python.exe" % conda_base):
+        python_exe = "%s/python.exe" % conda_base
+        conda_exe = "%s/Scripts/conda.exe" % conda_base
+    else:
+        print("Cannot find a 'conda' binary in directory '%s'. "
               "Are you running this script using the python executable "
               "from a valid miniconda or anaconda installation?" % conda_base) 
         sys.exit(-1)
 
-    print("Continuing the Sire install using %s/bin/python %s" \
-              % (conda_base,sys.argv[0]))
+    print("Continuing the Sire install using %s %s" \
+              % (python_exe,sys.argv[0]))
 
     # now go through all of the python modules that need to be available
     # into this conda installation, and make sure they have been installed
@@ -51,24 +64,24 @@ if __name__ == "__main__":
         import pip
         print("pip is already installed...")
     except:
-        print("Installing pip using '%s/bin/conda install pip'" % conda_base)
-        os.system("%s/bin/conda install --yes pip" % conda_base)
+        print("Installing pip using '%s install pip'" % conda_exe)
+        os.system("%s install --yes pip" % conda_exe)
 
     # ipython
     try:
         import IPython
         print("ipython is already installed...")
     except:
-        print("Installing ipython using '%s/bin/conda install ipython'" % conda_base)
-        os.system("%s/bin/conda install --yes ipython" % conda_base)
+        print("Installing ipython using %s install ipython" % conda_exe)
+        os.system("%s install --yes ipython" % conda_exe)
 
     # nose
     try:
         import nose
         print("nose is already installed...")
     except:
-        print("Installing nose using '%s/bin/conda install nose'" % conda_base)
-        os.system("%s/bin/conda install --yes nose" % conda_base)
+        print("Installing nose using '%s install nose'" % conda_exe)
+        os.system("%s install --yes nose" % conda_exe)
 
     # openmm
     try:
@@ -76,8 +89,8 @@ if __name__ == "__main__":
         print("openmm is already installed...")
     except:
         print("Installing openmm from the omnia repository...")
-        os.system("%s/bin/conda config --add channels http://conda.binstar.org/omnia" % conda_base)
-        os.system("%s/bin/conda install --yes openmm" % conda_base)
+        os.system("%s config --add channels http://conda.binstar.org/omnia" % conda_exe)
+        os.system("%s install --yes openmm" % conda_exe)
 
     # Now that the miniconda distribution is ok, the next step
     # is to use cmake to build the corelib and wrapper in the build/corelib

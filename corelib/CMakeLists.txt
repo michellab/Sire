@@ -109,11 +109,11 @@ else()
             "Install directory for Anaconda/Miniconda (python3)" )
 
     # Make sure that there is a python3 executable in the bin directory
-    if ( NOT EXISTS "${ANACONDA_BASE}/bin/python3" )
-      message( FATAL_ERROR "Cannot find ${ANACONDA_BASE}/bin/python3. "
-                           "Please set the full path to the Anaconda or Miniconda "
-                           "installation directory." )
-    endif()
+    #if ( NOT EXISTS "${ANACONDA_BASE}/bin/python3" )
+    #  message( FATAL_ERROR "Cannot find ${ANACONDA_BASE}/bin/python3. "
+    #                       "Please set the full path to the Anaconda or Miniconda "
+    #                       "installation directory." )
+    #endif()
 
     set( SIRE_INSTALL_PREFIX "${ANACONDA_BASE}/pkgs/sire-${SIRE_VERSION}" CACHE PATH
             "Install directory for Sire within the Anaconda/Miniconda distribution" )

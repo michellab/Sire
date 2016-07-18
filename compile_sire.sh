@@ -64,6 +64,12 @@ if [ -e "${INSTALL_DIR}/bin/python" ]; then
     echo "** ${INSTALL_DIR}/bin/python build/build_sire.py **"
     ${INSTALL_DIR}/bin/python build/build_sire.py
     exit 0
+elif [ -e "${INSTALL_DIR}/python.exe" ]; then
+    # the windows miniconda distribution already exists.
+    # We can jump straight to the python install script
+    echo "** Running the python install script... **"
+    ${INSTALL_DIR}/python build/build_sire.py
+    exit 0
 fi
 
 # Now work out if we are 32bit or 64bit...
@@ -141,7 +147,7 @@ else
 
         # Now unpack miniconda and install it into the requested directory
         echo "Running the miniconda installation. Make sure you install miniconda just for yourself."
-        echo "Also, ensure that you install miniconda into the directory 'C:\cygwin/${INSTALL_DIR}'"
+        echo "Also, ensure that you install miniconda into the directory 'C:\cygwin${INSTALL_DIR}'"
         echo "Also note that you should't select the option to 'add anaconda to the PATH' or to"
         echo "register anaconda as the default python"
         ./build/miniconda.exe
