@@ -192,19 +192,12 @@ save_sire_variable( "SIRE_USER_CPPFLAGS" "${SIRE_USER_CPPFLAGS}" )
 
 # Name of executable install dir
 set (SIRE_BIN "bin")
+
 # Shared library install dir
 set (SIRE_LIBS "lib")
+
 # Where to install all bundled components
 set (SIRE_BUNDLED_DIR "bundled" )
-
-#if (ANACONDA_BUILD)
-#  # For an anaconda build, we copy all of the bundled
-#  # libraries into the anaconda lib directory
-#  set (SIRE_BUNDLED_LIBS "${ANACONDA_BASE}/lib")
-#else()
-#  set (SIRE_BUNDLED_LIBS "${SIRE_BUNDLED_DIR}/lib")
-#endif()
-
 set (SIRE_BUNDLED_LIBS "${SIRE_BUNDLED_DIR}/lib")
 
 # Static library install dir
@@ -327,7 +320,7 @@ endif()
 option( SIRE_DISABLE_MPI "Turn off MPI compilation and linking" ON )
 
 # Add an option to say whether or not to use OpenMM
-option( SIRE_USE_OPENMM "Set whether or not to compile in support for OpenMM" ON )
+option( SIRE_USE_OPENMM "Set whether or not to compile in support for OpenMM" OFF )
 save_sire_variable( "SIRE_USE_OPENMM" "${SIRE_USE_OPENMM}" )
 
 #############
@@ -746,11 +739,96 @@ elseif( ${CMAKE_CXX_COMPILER} MATCHES "icpc" )
     set ( SIRE_SHARE_LINK_FLAGS "-shared" )
     set ( SIRE_STATIC_LINK_FLAGS "-static" )
 
+elseif( SIRE_CXX_COMPILER_ID MATCHES "MSVC" )
+    message( STATUS "Detected and using Microsoft Visual Studio C and C++ compilers" )
+    set( SIRE_COMPILER "CL" )
+
+    # get the compiler version (via gcc -dumpversion)
+    # (I'll assume that we are using the same version
+    # of compiler for C and C++...)
+    message( STATUS "Version ${CMAKE_CXX_COMPILER_VERSION}")
+
+    # These two regexps are copied from the Chicken CMake
+    # files (which provide a very useful cmake tutorial - thanks :-)
+    SET( VERSION_BUILD_REGEX "^([0-9]+)[.]([0-9]+).*$" )
+    STRING( REGEX REPLACE ${VERSION_BUILD_REGEX} "\\1"
+            MSVC_MAJOR_VERSION ${CMAKE_CXX_COMPILER_VERSION} )
+    STRING( REGEX REPLACE ${VERSION_BUILD_REGEX} "\\2"
+            MSVC_MINOR_VERSION ${CMAKE_CXX_COMPILER_VERSION} )
+
+    message( STATUS "Using Visual C++ version "
+                    "${MSVC_MAJOR_VERSION}.${MSVC_MINOR_VERSION}" )
+
+    set ( SIRE_SMALL_FLAGS  "/Os" )
+    set ( SIRE_WARNALL_FLAGS  "/Wall" )
+    set ( SIRE_DEBUG_FLAGS   "/Zi" )
+
+    set ( SIRE_RELEASE_FLAGS "/Ox /Oy" )
+
+    set ( SIRE_OPENMP_FLAGS "" )
+    set ( SIRE_PLATFORM_FLAGS "" )
+    set ( SIRE_STATIC_LINK_FLAGS "" )
+
+    CHECK_CXX_COMPILER_FLAG( "/arch:SSE2" HAVE_SSE_FLAG )
+    CHECK_CXX_COMPILER_FLAG( "/arch:AVX" HAVE_AVX_FLAG )
+
+    set( SIRE_SKIP_AVX 1 )
+
+    if ( NOT SIRE_DISABLE_AVX)
+
+      if ( HAVE_IMMINTRIN_H AND HAVE_AVX_FLAG )
+
+        # we have immintrin.h so we can compile AVX - check if we can run it
+        INCLUDE(CheckCSourceRuns)
+        set(CMAKE_OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
+        set(CMAKE_REQUIRED_FLAGS "/arch:AVX")
+        check_c_source_runs("
+           #include <immintrin.h>
+           int main()
+           {
+              __m256i a = _mm256_setzero_si256();
+              return 0;
+           }"
+           CAN_RUN_AVX_PROGRAM)
+        set(CMAKE_REQUIRED_FLAGS ${CMAKE_OLD_REQUIRED_FLAGS})
+
+        if (CAN_RUN_AVX_PROGRAM)
+          message( STATUS "Compiling with AVX enabled. Resulting binary will only work on newer Intel CPUs" )
+
+          set( SIRE_SKIP_AVX 0 )
+
+          CHECK_CXX_COMPILER_FLAG( "/arch:AVX2" HAVE_AVX2_FLAG )
+
+          if ( SIRE_ENABLE_AVX2 AND HAVE_AVX2_FLAG )
+            message( STATUS "Compiling with AVX2 enabled. Resulting binary will only work on really new Intel CPUs" )
+            set( SIRE_VECTOR_FLAGS "/arch:AVX2 -DSIRE_USE_AVX -DSIRE_USE_AVX2" )
+          else()
+            set ( SIRE_VECTOR_FLAGS "/arch:AVX2 -DSIRE_USE_AVX" )
+          endif()
+        endif()
+      endif()
+
+      if ( SIRE_SKIP_AVX )
+        if ( HAVE_EMMINTRIN_H AND HAVE_SSE_FLAG )
+          # we have emmintrin.h so we have SSE
+          message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
+
+        elseif (NOT SIRE_DISABLE_SSE)
+          # we have emmintrin.h so we have SSE
+          message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
+          set ( SIRE_VECTOR_FLAGS "/arch:SSE2 -DSIRE_USE_SSE" )
+        endif()
+      endif()
+    endif()
+
+    set ( SIRE_VISIBILITY_FLAGS "-DSIRE_VISIBILITY_AVAILABLE" )
+
 else()
     message( STATUS "CMAKE_SYSTEM_NAME == ${CMAKE_SYSTEM_NAME}" )
     message( STATUS "CMAKE_C_COMPILER == ${CMAKE_C_COMPILER}" )
     message( STATUS "CMAKE_CXX_COMPILER == ${CMAKE_CXX_COMPILER}" )
     message( STATUS "CMAKE_CXX_COMPILER_ID = ${CMAKE_CXX_COMPILER_ID}" )
+    message( STATUS "SIRE_CXX_COMPILER_ID = ${SIRE_CXX_COMPILER_ID}" )
     message( FATAL_ERROR "Could not detect compiler type - cannot set compiler options." )
 endif()
 

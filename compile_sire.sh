@@ -120,7 +120,14 @@ elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
 elif [ "$(expr substr $(uname -s) 1 9)" == "CYGWIN_NT" ]; then
     # This is running on windows under cygwin
     echo "Running an install under cygwin on windows"
-    PLATFORM="Cygwin"
+    PLATFORM="Windows"
+    SUBPLATFORM="Cygwin"
+    MINICONDA="https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Windows-${BIT_TYPE}.exe"
+elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ]; then
+    # This is running on windows under cygwin
+    echo "Running an install under MSYS2 on windows"
+    PLATFORM="Windows"
+    SUBPLATFORM="MSYS2"
     MINICONDA="https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Windows-${BIT_TYPE}.exe"
 else
     # Cannot identify the platform. Tell the user to download
@@ -136,7 +143,7 @@ fi
 if [ -e ${INSTALL_DIR} ]; then
     echo "Install directory already exists. Assuming that miniconda is already installed here."
 else
-    if [ ${PLATFORM} == "Cygwin" ]; then
+    if [ ${PLATFORM} == "Windows" ]; then
         # Download miniconda.exe if it is not already in build/downloads
         if [ ! -e "build/miniconda.exe" ]; then
             echo "** Downloading miniconda from ${MINICONDA}... **"
@@ -147,7 +154,7 @@ else
 
         # Now unpack miniconda and install it into the requested directory
         echo "Running the miniconda installation. Make sure you install miniconda just for yourself."
-        echo "Also, ensure that you install miniconda into the directory 'C:\cygwin${INSTALL_DIR}'"
+        echo "Also, ensure that you install miniconda into the directory 'C:\msys2\${INSTALL_DIR}'"
         echo "Also note that you should't select the option to 'add anaconda to the PATH' or to"
         echo "register anaconda as the default python"
         ./build/miniconda.exe
