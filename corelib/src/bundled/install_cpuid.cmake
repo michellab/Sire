@@ -8,6 +8,10 @@
 unset(CPUID_LIBRARY CACHE)
 find_library( CPUID_LIBRARY "cpuid" PATHS ${BUNDLE_STAGEDIR}/lib NO_DEFAULT_PATH )
 
+if ( MSYS )
+  set( CMAKE_MAKE_PROGRAM "mingw32-make" )
+endif()
+
 if ( CPUID_LIBRARY )
   message( STATUS "Have already compiled a bundled version of libcpuid")
 else()
@@ -22,8 +26,8 @@ else()
       message( STATUS "Unzipping ${CPUID_ZIPFILE} to ${CPUID_BUILD_DIR}" )
       execute_process(
           COMMAND ${CMAKE_COMMAND} -E tar xzf ${CPUID_ZIPFILE}
-          WORKING_DIRECTORY ${BUNDLE_BUILDDIR}
-          OUTPUT_QUIET ERROR_QUIET
+          WORKING_DIRECTORY ${BUNDLE_BUILDDIR} 
+#          OUTPUT_QUIET ERROR_QUIET
       )
     endif()
 
@@ -36,12 +40,17 @@ else()
       list( APPEND CPUID_OPTIONS "CFLAGS=-DHAVE_STDINT_H" )
     endif()
 
-    message( STATUS "${CPUID_OPTIONS}" )
+    message( STATUS "${CPUID_BUILD_DIR}/configure | ${CPUID_OPTIONS}" )
 
     message( STATUS "Patience... Configuring libcpuid..." )
-    execute_process( COMMAND ${CPUID_BUILD_DIR}/configure ${CPUID_OPTIONS}
-                     WORKING_DIRECTORY ${CPUID_BUILD_DIR}
-                     OUTPUT_QUIET ERROR_QUIET )
+    if (MSYS)
+      execute_process( COMMAND C:/msys64/usr/bin/sh.exe configure ${CPUID_OPTIONS}
+                       WORKING_DIRECTORY ${CPUID_BUILD_DIR} )
+    else()
+      execute_process( COMMAND ${CPUID_BUILD_DIR}/configure ${CPUID_OPTIONS}
+                       WORKING_DIRECTORY ${CPUID_BUILD_DIR}
+                       OUTPUT_QUIET ERROR_QUIET )
+    endif()
 
     message( STATUS "Patience... Compiling libcpuid..." )
     execute_process( COMMAND ${CMAKE_MAKE_PROGRAM} -k -j ${NCORES}

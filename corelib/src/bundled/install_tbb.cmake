@@ -5,8 +5,15 @@
 
 unset(TBB_LIBRARY CACHE)
 unset(TBB_MALLOC_LIBRARY CACHE)
-find_library( TBB_LIBRARY "tbb" PATHS "${BUNDLE_STAGEDIR}/lib" NO_DEFAULT_PATH )
-find_library( TBB_MALLOC_LIBRARY "tbbmalloc" PATHS "${BUNDLE_STAGEDIR}/lib" NO_DEFAULT_PATH )
+
+if ( MSYS )
+  message( STATUS "Looking for MSYS version of TBB..." )
+  find_library( TBB_LIBRARY "tbb" PATHS "/msys64/lib" )
+  find_library( TBB_MALLOC_LIBRARY "tbbmalloc" PATHS "/msys64/lib" )
+else()
+  find_library( TBB_LIBRARY "tbb" PATHS "${BUNDLE_STAGEDIR}/lib" NO_DEFAULT_PATH )
+  find_library( TBB_MALLOC_LIBRARY "tbbmalloc" PATHS "${BUNDLE_STAGEDIR}/lib" NO_DEFAULT_PATH )
+endif()
 
 if ( TBB_LIBRARY AND TBB_MALLOC_LIBRARY )
   message( STATUS "Have already compiled a bundled version of TBB" )

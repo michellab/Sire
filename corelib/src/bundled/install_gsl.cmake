@@ -7,8 +7,15 @@
 # then we don't need to do anything
 unset(GSL_LIBRARY CACHE)
 unset(GSL_CBLAS_LIBRARY CACHE)
-find_library( GSL_LIBRARY "gsl" PATHS ${BUNDLE_STAGEDIR}/lib NO_DEFAULT_PATH )
-find_library( GSL_CBLAS_LIBRARY "gslcblas" PATHS ${BUNDLE_STAGEDIR}/lib NO_DEFAULT_PATH )
+
+if ( MSYS )
+  message( STATUS "Looking for MSYS version of GSL..." )
+  find_library( GSL_LIBRARY "gsl" PATHS "/msys64/lib" )
+  find_library( GSL_CBLAS_LIBRARY "gslcblas" PATHS "/msys64/lib" )
+else()
+  find_library( GSL_LIBRARY "gsl" PATHS ${BUNDLE_STAGEDIR}/lib NO_DEFAULT_PATH )
+  find_library( GSL_CBLAS_LIBRARY "gslcblas" PATHS ${BUNDLE_STAGEDIR}/lib NO_DEFAULT_PATH )
+endif()
 
 if ( GSL_LIBRARY AND GSL_CBLAS_LIBRARY )
   message( STATUS "Have already compiled a bundled version of GSL")

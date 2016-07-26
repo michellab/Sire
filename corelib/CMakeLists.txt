@@ -36,6 +36,9 @@ if(COMMAND CMAKE_POLICY)
   if (POLICY CMP0045)
     cmake_policy(SET CMP0045 OLD)  # Allow non-existant targets with -NOTFOUND
   endif()
+  if (POLICY CMP0020)
+    cmake_policy(SET CMP0020 NEW)  # Automatically link to qtmain on windows
+  endif()
 endif()
 
 # Get rid of install messages (too verbose!)
@@ -109,11 +112,11 @@ else()
             "Install directory for Anaconda/Miniconda (python3)" )
 
     # Make sure that there is a python3 executable in the bin directory
-    #if ( NOT EXISTS "${ANACONDA_BASE}/bin/python3" )
-    #  message( FATAL_ERROR "Cannot find ${ANACONDA_BASE}/bin/python3. "
-    #                       "Please set the full path to the Anaconda or Miniconda "
-    #                       "installation directory." )
-    #endif()
+    if ( NOT EXISTS "${ANACONDA_BASE}/bin/python3" )
+      message( FATAL_ERROR "Cannot find ${ANACONDA_BASE}/bin/python3. "
+                           "Please set the full path to the Anaconda or Miniconda "
+                           "installation directory." )
+    endif()
 
     set( SIRE_INSTALL_PREFIX "${ANACONDA_BASE}/pkgs/sire-${SIRE_VERSION}" CACHE PATH
             "Install directory for Sire within the Anaconda/Miniconda distribution" )
@@ -727,6 +730,7 @@ elseif ( ${SIRE_CXX_COMPILER_ID} MATCHES "CLANG" )
 elseif( ${CMAKE_CXX_COMPILER} MATCHES "icpc" )
 
     message( STATUS "Detected the Intel C++ and C compilers" )
+    message( FATAL_ERROR "Intel compiler is not supported yet..." )
     set( SIRE_COMPILER ICPC )
 
     set ( SIRE_SMALL_FLAGS  "-Os" )
@@ -742,6 +746,7 @@ elseif( ${CMAKE_CXX_COMPILER} MATCHES "icpc" )
 elseif( SIRE_CXX_COMPILER_ID MATCHES "MSVC" )
     message( STATUS "Detected and using Microsoft Visual Studio C and C++ compilers" )
     set( SIRE_COMPILER "CL" )
+    message( FATAL_ERROR "Visual Studio compilers are not supported yet..." )
 
     # get the compiler version (via gcc -dumpversion)
     # (I'll assume that we are using the same version
