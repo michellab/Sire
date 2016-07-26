@@ -48,7 +48,17 @@ using namespace SireMaths;
         #define AVX_MATHFUNC_BROKEN_EXP 1
     #endif
 
-    #include "ThirdParty/avx_mathfun.h" // CONDITIONAL_INCLUDE
+    #ifdef Q_OS_WIN
+      //don't use AVX math functions yet on windows
+      #define AVX_MATHFUNC_BROKEN_INTO 1
+      #define AVX_MATHFUNC_BROKEN_LOG 1
+      #define AVX_MATHFUNC_BROKEN_EXP 1
+      #undef HAVE_AVX_MATHFUN
+    #else
+      #include "ThirdParty/avx_mathfun.h" // CONDITIONAL_INCLUDE
+      #define HAVE_AVX_MATHFUN 1
+    #endif  
+
     static inline bool isAligned32(const void *pointer)
     {
         return (quintptr)pointer % size_t(32) == 0;
@@ -66,12 +76,32 @@ using namespace SireMaths;
     {
         MultiFloat SIREMATHS_EXPORT cos(const MultiFloat &val)
         {
-            return MultiFloat( cos256_ps(val.v.x) );
+            #ifdef HAVE_AVX_MATHFUN
+              return MultiFloat( cos256_ps(val.v.x) );
+            #else
+              MultiFloat ret;
+              for (int i=0; i<MultiFloat::count(); ++i)
+              {
+                  ret.quickSet(i, std::cos(val.at(i)));
+              }
+
+              return ret;
+            #endif
         }
         
         MultiFloat SIREMATHS_EXPORT sin(const MultiFloat &val)
         {
-            return MultiFloat( sin256_ps(val.v.x) );
+            #ifdef HAVE_AVX_MATHFUNC
+              return MultiFloat( sin256_ps(val.v.x) );
+            #else
+              MultiFloat ret;
+              for (int i=0; i<MultiFloat::count(); ++i)
+              {
+                  ret.quickSet(i, std::sin(val.at(i)));
+              }
+
+              return ret;
+            #endif
         }
         
         MultiFloat SIREMATHS_EXPORT exp(const MultiFloat &val)
@@ -106,7 +136,16 @@ using namespace SireMaths;
         
         void SIREMATHS_EXPORT sincos(const MultiFloat &val, MultiFloat &sval, MultiFloat &cval)
         {
-            sincos256_ps(val.v.x, &(sval.v.x), &(cval.v.x));
+            #ifdef HAVE_AVX_MATHFUN
+              sincos256_ps(val.v.x, &(sval.v.x), &(cval.v.x));
+            #else
+              MultiFloat sret, cret;
+              for (int i=0; i<MultiFloat::count(); ++i)
+              {
+                  sret.quickSet(i, std::sin(val.at(i)));
+                  cret.quickSet(i, std::cos(val.at(i)));
+              }
+            #endif        
         }
     }
 

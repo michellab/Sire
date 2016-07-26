@@ -169,7 +169,7 @@ namespace SireBase
             setInstallDir( stripDir(SIRE_BIN_DIR,f.canonicalPath()) );
             return install_dir;
         #else
-            throw SireError::unavailable_code( QObject::tr(
+            throw SireError::incomplete_code( QObject::tr(
                     "Ask the Sire developers to write the \"getInstallDir\" function "
                     "for your platform. Sorry that it has yet to be written."), CODELOC );
             return QString::null;

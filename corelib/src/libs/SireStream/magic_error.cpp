@@ -34,6 +34,9 @@
 
 #include "SireError/errors.h"
 
+#include <QStringList>
+#include <QDataStream>
+
 using namespace SireStream;
 using namespace SireError;
 

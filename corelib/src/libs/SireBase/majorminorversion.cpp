@@ -26,6 +26,7 @@
   *
 \*********************************************/
 
+#include <QDataStream>
 #include "majorminorversion.h"
 
 #include "SireStream/datastream.h"

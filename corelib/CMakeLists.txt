@@ -583,7 +583,7 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
     endif()
 
     # Now gcc 5 specific options
-    if ( GCC_MAJOR_VERSION GREATER 5 )
+    if ( GCC_MAJOR_VERSION GREATER 4 )
       # OpenMM with conda uses the old C++ binary API!
       # Tell GCC 5 to respect the old API
       set( SIRE_PLATFORM_FLAGS "${SIRE_PLATFORM_FLAGS} -D_GLIBCXX_USE_CXX11_ABI=0" )
@@ -615,7 +615,13 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
     if(APPLE)
         set ( SIRE_SHARE_LINK_FLAGS "${SIRE_SHARE_LINK_FLAGS} -Wl" )
     else(UNIX)
-        set ( SIRE_SHARE_LINK_FLAGS "${SIRE_SHARE_LINK_FLAGS} -rdynamic -Wl,--no-undefined" )
+        CHECK_CXX_COMPILER_FLAG( "-rdynamic" HAVE_RDYNAMIC_FLAG )
+
+        if (HAVE_RDYNAMIC_FLAG)
+          set ( SIRE_SHARE_LINK_FLAGS "${SIRE_SHARE_LINK_FLAGS} -rdynamic -Wl,--no-undefined" )
+        else()
+          set ( SIRE_SHARE_LINK_FLAGS "${SIRE_SHARE_LINK_FLAGS} -Wl,--no-undefined" )
+        endif()
     endif()
 
 elseif ( ${SIRE_CXX_COMPILER_ID} MATCHES "CLANG" )

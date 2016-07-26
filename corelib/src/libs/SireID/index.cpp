@@ -32,6 +32,8 @@
 
 #include "SireStream/datastream.h"
 
+#include <QDataStream>
+
 using namespace SireID;
 using namespace SireStream;
 
