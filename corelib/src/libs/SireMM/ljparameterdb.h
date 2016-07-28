@@ -118,7 +118,7 @@ private:
     friend class ::SireMM::detail::LJDBIOLockData;
     static void finishedIO();
 
-    class LJParameterDBData
+    class SIREMM_EXPORT LJParameterDBData
     {
     public:
         LJParameterDBData();

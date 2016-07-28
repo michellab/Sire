@@ -34,6 +34,7 @@
 
 #include "regress.h"
 
+#include <QObject>
 #include "SireMaths/errors.h"
 
 /*
