@@ -49,7 +49,7 @@
    #include <windows.h>    // CONDITIONAL_INCLUDE
 #else
    #ifdef Q_OS_UNIX
-       #incude <unistd.h>  // CONDITIONAL_INCLUDE
+       #include <unistd.h>  // CONDITIONAL_INCLUDE
    #endif
 #endif
 
