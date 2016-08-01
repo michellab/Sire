@@ -3,7 +3,21 @@
 ### in the Sire bundle
 ###
 
-if (ANACONDA_BUILD)
+if (MSYS)
+  # use the python that comes with msys
+  unset(PYTHON_LIBRARY CACHE)
+
+  find_package( PythonLibs 3.3  )
+
+  if ( PYTHON_LIBRARIES )
+    message( STATUS "Python paths ${PYTHON_LIBRARIES} | ${PYTHON_INCLUDE_DIR}" )
+  else()
+    message( FATAL_ERROR "Cannot find the msys installation of Python!" )
+  endif()
+
+  set( SIRE_FOUND_PYTHON TRUE )
+
+elseif (ANACONDA_BUILD)
   # we will just use the python that comes with anaconda
   set (PYTHON_EXECUTABLE "${ANACONDA_BASE}/bin/python3" )
   find_package( PythonInterp REQUIRED )
@@ -136,7 +150,15 @@ else()
   endif()
 endif()
 
-if ( ANACONDA_BUILD )
+if ( MSYS )
+  set( PYTHON_LIBRARIES "${PYTHON_LIBRARY}" )
+  set( PYTHON_SITE_DIR "${SIRE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION}/site-packages" )
+  set( PYTHON_MODULE_EXTENSION ".dll" )
+
+  message( STATUS "Using msys python in ${PYTHON_LIBRARIES} | ${PYTHON_INCLUDE_DIR}" )
+  message( STATUS "Python modules will be installed to ${PYTHON_SITE_DIR}" )
+
+elseif ( ANACONDA_BUILD )
   set( PYTHON_LIBRARIES "${PYTHON_LIBRARY}" )
   set( PYTHON_INCLUDE_DIR "${ANACONDA_BASE}/include/python${PYTHON_VERSION}${PYTHON_ABIFLAGS}")
   set( PYTHON_SITE_DIR "../../lib/python${PYTHON_VERSION}/site-packages" )

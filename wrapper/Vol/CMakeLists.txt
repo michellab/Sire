@@ -57,7 +57,9 @@ set( INSTALLDIR ${SIRE_PYTHON}/Sire/Vol )
 
 install( TARGETS Vol
          LIBRARY DESTINATION ${INSTALLDIR}
-       )
+         ARCHIVE DESTINATION ${INSTALLDIR}
+         RUNTIME DESTINATION ${INSTALLDIR}
+        )
 
 install( FILES __init__.py
          DESTINATION ${INSTALLDIR} 

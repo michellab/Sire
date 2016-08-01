@@ -32,6 +32,15 @@ if(COMMAND CMAKE_POLICY)
   if (POLICY CMP0048)
     cmake_policy(SET CMP0048 OLD)  # want to manage versions myself!
   endif()
+  if (POLICY CMP0028)
+    cmake_policy(SET CMP0028 OLD)  # Qt has colons in names, which new cmake hates
+  endif()
+  if (POLICY CMP0045)
+    cmake_policy(SET CMP0045 OLD)  # Allow non-existant targets with -NOTFOUND
+  endif()
+  if (POLICY CMP0020)
+    cmake_policy(SET CMP0020 NEW)  # Automatically link to qtmain on windows
+  endif()
 endif()
 
 # Get rid of install messages (too verbose!)
@@ -265,7 +274,11 @@ option( SIRE_BUNDLE_PYTHON "Whether Sire should use its bundled copy of Python 3
 option( SIRE_BUNDLE_BOOST_PYTHON "Whether Sire should use its bundled copy of boost::python" ON )
 
 if ( SIRE_PYTHON_ENABLE_BUNDLING )
-  message( STATUS "Sire Python will be compiled to use its own copy of bundled libraries." )
+  if (MSYS)
+    message( STATUS "Building a bundled msys Sire (using msys python)" )
+  else()
+    message( STATUS "Sire Python will be compiled to use its own copy of bundled libraries." )
+  endif()
 
   set( BUNDLE_BUILDDIR "${CMAKE_BINARY_DIR}/build_bundled" )
 

@@ -54,7 +54,9 @@ set( INSTALLDIR ${SIRE_PYTHON}/Sire/ID )
 
 install( TARGETS ID
          LIBRARY DESTINATION ${INSTALLDIR}
-       )
+         ARCHIVE DESTINATION ${INSTALLDIR}
+         RUNTIME DESTINATION ${INSTALLDIR}
+        )
 
 install( FILES __init__.py
          DESTINATION ${INSTALLDIR} 

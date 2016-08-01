@@ -45,8 +45,6 @@ namespace bp = boost::python;
 
 #include <memory>
 
-#include <sys/utsname.h>
-
 #include <unistd.h>
 
 #include "streamdata.hpp"
@@ -89,10 +87,6 @@ namespace bp = boost::python;
 
 #include <memory>
 
-#include <sys/utsname.h>
-
-#include <unistd.h>
-
 #include "streamdata.hpp"
 
 #include "SireError/errors.h"
@@ -133,10 +127,6 @@ namespace bp = boost::python;
 
 #include <memory>
 
-#include <sys/utsname.h>
-
-#include <unistd.h>
-
 #include "streamdata.hpp"
 
 #include "SireError/errors.h"
@@ -176,10 +166,6 @@ namespace bp = boost::python;
 #include <cstdlib>
 
 #include <memory>
-
-#include <sys/utsname.h>
-
-#include <unistd.h>
 
 #include "streamdata.hpp"
 

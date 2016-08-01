@@ -10,7 +10,7 @@
 #include "SireError/errors.h"
 #include "SireError/printerror.h"
 
-#include "SireBase/process.h"
+#include "SireBase/sire_process.h"
 #include "SireBase/getinstalldir.h"
 #include "SireBase/cpuid.h"
 

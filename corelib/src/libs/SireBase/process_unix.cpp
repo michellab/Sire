@@ -36,13 +36,13 @@
 
 #include "SireError/errors.h"
 
-#include <unistd.h>
-#include <signal.h>
-#include <errno.h>
-#include <string.h>
+#include <unistd.h>  // CONDITIONAL_INCLUDE
+#include <signal.h>  // CONDITIONAL_INCLUDE
+#include <errno.h>   // CONDITIONAL_INCLUDE
+#include <string.h>  // CONDITIONAL_INCLUDE
 
-#include <sys/types.h>
-#include <sys/wait.h>
+#include <sys/types.h>  // CONDITIONAL_INCLUDE
+#include <sys/wait.h>   // CONDITIONAL_INCLUDE
 
 #include <QDebug>
 

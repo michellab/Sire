@@ -1189,6 +1189,7 @@ void register_QByteArray_class(){
                 , bp::return_self< >() );
         
         }
+        #ifndef Q_OS_WIN
         { //::QByteArray::simplified
         
             typedef ::QByteArray ( ::QByteArray::*simplified_function_type )(  ) const;
@@ -1199,6 +1200,7 @@ void register_QByteArray_class(){
                 , simplified_function_value );
         
         }
+        #endif
         { //::QByteArray::size
         
             typedef int ( ::QByteArray::*size_function_type )(  ) const;
@@ -1349,6 +1351,7 @@ void register_QByteArray_class(){
                 , ( bp::arg("ok")=bp::object(), bp::arg("base")=(int)(10) ) );
         
         }
+        #ifndef Q_OS_WIN
         { //::QByteArray::toLower
         
             typedef ::QByteArray ( ::QByteArray::*toLower_function_type )(  ) const;
@@ -1359,6 +1362,7 @@ void register_QByteArray_class(){
                 , toLower_function_value );
         
         }
+        #endif
         { //::QByteArray::toPercentEncoding
         
             typedef ::QByteArray ( ::QByteArray::*toPercentEncoding_function_type )( ::QByteArray const &,::QByteArray const &,char ) const;
@@ -1425,6 +1429,7 @@ void register_QByteArray_class(){
                 , ( bp::arg("ok")=bp::object(), bp::arg("base")=(int)(10) ) );
         
         }
+        #ifndef Q_OS_WIN
         { //::QByteArray::toUpper
         
             typedef ::QByteArray ( ::QByteArray::*toUpper_function_type )(  ) const;
@@ -1435,6 +1440,8 @@ void register_QByteArray_class(){
                 , toUpper_function_value );
         
         }
+        #endif
+        #ifndef Q_OS_WIN
         { //::QByteArray::trimmed
         
             typedef ::QByteArray ( ::QByteArray::*trimmed_function_type )(  ) const;
@@ -1445,6 +1452,7 @@ void register_QByteArray_class(){
                 , trimmed_function_value );
         
         }
+        #endif
         { //::QByteArray::truncate
         
             typedef void ( ::QByteArray::*truncate_function_type )( int ) ;

@@ -9,7 +9,7 @@ namespace bp = boost::python;
 
 #include "SireBase/findexe.h"
 
-#include "SireBase/process.h"
+#include "SireBase/sire_process.h"
 
 #include "SireBase/tempdir.h"
 

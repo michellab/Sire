@@ -53,6 +53,7 @@ set( INSTALLDIR ${SIRE_PYTHON}/Sire/Qt )
 
 install( TARGETS Qt
          LIBRARY DESTINATION ${INSTALLDIR}
+         ARCHIVE DESTINATION ${INSTALLDIR}
        )
 
 install( FILES __init__.py

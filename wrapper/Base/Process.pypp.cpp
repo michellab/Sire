@@ -9,7 +9,7 @@ namespace bp = boost::python;
 
 #include "SireError/errors.h"
 
-#include "process.h"
+#include "sire_process.h"
 
 #include <QDebug>
 
@@ -23,19 +23,7 @@ namespace bp = boost::python;
 
 #include <boost/weak_ptr.hpp>
 
-#include <errno.h>
-
-#include <signal.h>
-
-#include <string.h>
-
-#include <sys/types.h>
-
-#include <sys/wait.h>
-
-#include <unistd.h>
-
-#include "process.h"
+#include "sire_process.h"
 
 SireBase::Process __copy__(const SireBase::Process &other){ return SireBase::Process(other); }
 

@@ -244,11 +244,13 @@ BOOST_PYTHON_MODULE(_Move){
 
     register_NullVolumeChanger_class();
 
+    #ifdef SIRE_USE_OPENMM
     register_OpenMMFrEnergyDT_class();
 
     register_OpenMMFrEnergyST_class();
 
     register_OpenMMMDIntegrator_class();
+    #endif
 
     register_Sampler_class();
 

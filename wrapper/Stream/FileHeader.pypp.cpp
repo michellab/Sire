@@ -45,10 +45,6 @@ namespace bp = boost::python;
 
 #include <memory>
 
-#include <sys/utsname.h>
-
-#include <unistd.h>
-
 #include "streamdata.hpp"
 
 SireStream::FileHeader __copy__(const SireStream::FileHeader &other){ return SireStream::FileHeader(other); }

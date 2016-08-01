@@ -41,8 +41,8 @@
 #include <boost/config.hpp>
 
 #ifdef Q_OS_UNIX
-    #include <unistd.h>
-    #include <sys/utsname.h>
+    #include <unistd.h>        // CONDITIONAL_INCLUDE
+    #include <sys/utsname.h>   // CONDITIONAL_INCLUDE
 #endif
     
 #include "streamdata.hpp"

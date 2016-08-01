@@ -56,7 +56,9 @@ set( INSTALLDIR ${SIRE_PYTHON}/Sire/MM )
 
 install( TARGETS MM
          LIBRARY DESTINATION ${INSTALLDIR}
-       )
+         ARCHIVE DESTINATION ${INSTALLDIR}
+         RUNTIME DESTINATION ${INSTALLDIR}
+        )
 
 install( FILES __init__.py
          DESTINATION ${INSTALLDIR} 
