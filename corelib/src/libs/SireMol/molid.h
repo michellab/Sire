@@ -123,7 +123,7 @@ using SireMol::MoleculeGroup;
 using SireMol::MolGroupsBase;
 
 template<>
-class IDAndSet<MolID> : public MolID
+class SIREMOL_EXPORT IDAndSet<MolID> : public MolID
 {
 
 friend QDataStream& ::operator<<<>(QDataStream&, const IDAndSet<MolID>&);
@@ -183,7 +183,7 @@ private:
 };
 
 template<>
-class IDOrSet<MolID> : public MolID
+class SIREMOL_EXPORT IDOrSet<MolID> : public MolID
 {
 
 friend QDataStream& ::operator<<<>(QDataStream&, const IDOrSet<MolID>&);
@@ -240,7 +240,7 @@ private:
     QSet<MolIdentifier> ids;
 };
 
-}
+} // end of namespace SireID
 
 Q_DECLARE_METATYPE( SireID::IDAndSet<SireMol::MolID> )
 Q_DECLARE_METATYPE( SireID::IDOrSet<SireMol::MolID> )

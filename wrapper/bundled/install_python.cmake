@@ -153,7 +153,7 @@ endif()
 if ( MSYS )
   set( PYTHON_LIBRARIES "${PYTHON_LIBRARY}" )
   set( PYTHON_SITE_DIR "${SIRE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION}/site-packages" )
-  set( PYTHON_MODULE_EXTENSION ".dll" )
+  set( PYTHON_MODULE_EXTENSION ".pyd" )
 
   message( STATUS "Using msys python in ${PYTHON_LIBRARIES} | ${PYTHON_INCLUDE_DIR}" )
   message( STATUS "Python modules will be installed to ${PYTHON_SITE_DIR}" )
