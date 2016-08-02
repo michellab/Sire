@@ -277,6 +277,9 @@ def _uploadUsageData():
         elif _pf.system().startswith("Linux"):
             ld = _pf.linux_distribution()
             data["OS"] = "%s (%s %s)" % (ld[0],ld[1],ld[2])
+        elif _pf.system().startswith("Windows"):
+            ld = _pf.win32_ver()
+            data["OS"] = "%s (%s %s)" % (ld[0],ld[1],ld[2])
         else:
             data["OS"] = "unknown"
 
