@@ -5,7 +5,12 @@
 
 unset(BOOST_PYTHON_LIBRARY CACHE)
 
-if ( MSYS )
+if ( ANACONDA_BUILD )
+  find_library( BOOST_PYTHON_LIBRARY
+                NAMES boost_python
+                PATHS ${BUNDLE_STAGEDIR}/lib NO_DEFAULT_PATH )
+
+elseif ( MSYS )
   message( STATUS "Looking for MSYS version of boost::python..." )
   set (BOOST_ALL_DYN_LINK "YES")
   find_package( Boost 1.31 COMPONENTS python3 REQUIRED )
@@ -39,7 +44,11 @@ else()
   endif()
 
   message( STATUS "Patience... Configuring boost::python" )
-  list( APPEND COMPILE_OPTIONS "-DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}" )
+  if (MSYS)
+    list( APPEND COMPILE_OPTIONS "-G" )
+    list( APPEND COMPILE_OPTIONS "MSYS Makefiles" )
+  endif()
+
   list( APPEND COMPILE_OPTIONS "-DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}" )
   list( APPEND COMPILE_OPTIONS "-DPYTHON_LIBRARIES=${PYTHON_LIBRARIES}" )
   list( APPEND COMPILE_OPTIONS "-DPYTHON_INCLUDE_DIR=${PYTHON_INCLUDE_DIR}" )

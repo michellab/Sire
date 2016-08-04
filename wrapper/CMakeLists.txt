@@ -75,8 +75,9 @@ if ( ANACONDA_BUILD )
           "Install directory for Anaconda/Miniconda (python3)" )
 
   # Make sure that there is a python3 executable in the bin directory
-  if ( NOT EXISTS "${ANACONDA_BASE}/bin/python3" )
-    message( FATAL_ERROR "Cannot find ${ANACONDA_BASE}/bin/python3. "
+  if ( NOT EXISTS "${ANACONDA_BASE}/bin/python3" AND
+       NOT EXISTS "${ANACONDA_BASE}/python.exe"  )
+    message( FATAL_ERROR "Cannot find ${ANACONDA_BASE}/bin/python3 or ${ANACONDA_BASE}/python.exe. "
                          "Please set the full path to the Anaconda or Miniconda "
                          "installation directory." )
   endif()
@@ -99,7 +100,8 @@ if (EXISTS "${SIRE_COMP_CMAKE}")
 else()
   if (ANACONDA_BUILD)
     message( FATAL_ERROR "You don't appear to have built corelib into this"
-               "Anaconda/Miniconda directory. Please build corelib first." )
+               "Anaconda/Miniconda directory. Please build corelib first."
+               "(there should be a file called ${SIRE_COMP_CMAKE})" )
   else()
     message( STATUS "You need to provide the full path to sire.app and check that it contains the file ${SIRE_COMP_CMAKE}" )
     message( FATAL_ERROR "Do this by running 'cmake -DSIRE_APP=/path/to/sire.app /path/to/python/source'" )
