@@ -71,4 +71,11 @@ PATH=C:\msys64\home\chzcjw\sire.app\bin;C:\msys64\home\chzcjw\sire.app\lib;C:\ms
 set PYTHONHOME=C:\msys64\mingw64
 set PYTHONPATH=C:\msys64\mingw64\lib\python3.5;C:\msys64\home\chzcjw\sire.app\lib\python\site-packages
 
+## Running tests
 
+Install nose.
+
+Then run
+
+cd \path\to\test_directory
+\path\to\sire.app\bin\sire_python -m nose
