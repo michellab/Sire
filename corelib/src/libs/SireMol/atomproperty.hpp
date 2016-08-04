@@ -523,7 +523,7 @@ QString AtomProperty<T>::toString() const
 {
     return QString("AtomProperty<%1>( %2 )")
                 .arg( QMetaType::typeName( qMetaTypeId<T>() ) )
-                .arg( Sire::toString(this->array().toQVectorVector()) );
+                .arg( Sire::toString(this->toVector()) );
 }
 
 /** Return a raw pointer to the array of arrays */
@@ -649,7 +649,14 @@ template<class T>
 SIRE_OUTOFLINE_TEMPLATE
 QVector<T> AtomProperty<T>::toVector() const
 {
-    return props.toQVector();
+    if (this->nAtoms() == 0)
+        return QVector<T>();
+        
+    QVector<T> ret( this->nAtoms() );
+    
+    quickCopy<T>(ret.data(), props.constValueData(), this->nAtoms());
+    
+    return ret;
 }
 
 /** Convert the properties of the atoms selected in 'selection' to an 
