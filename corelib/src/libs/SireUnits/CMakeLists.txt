@@ -24,6 +24,7 @@ set ( SIREUNITS_SOURCES
 
       angle.cpp
       convert.cpp            
+      dimensions.cpp
     
       ${SIREUNITS_HEADERS}
     )

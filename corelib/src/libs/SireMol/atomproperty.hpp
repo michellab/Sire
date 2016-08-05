@@ -654,7 +654,7 @@ QVector<T> AtomProperty<T>::toVector() const
         
     QVector<T> ret( this->nAtoms() );
     
-    quickCopy<T>(ret.data(), props.constValueData(), this->nAtoms());
+    SireBase::quickCopy<T>(ret.data(), props.constValueData(), this->nAtoms());
     
     return ret;
 }
