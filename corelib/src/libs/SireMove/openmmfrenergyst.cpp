@@ -128,10 +128,10 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const OpenMMFrEnergyST 
         << velver.energy_frequency
         << velver.device_index << velver.precision << velver.Alchemical_value
         << velver.coulomb_power << velver.shift_delta << velver.delta_alchemical
-        << velver.alchemical_array 
-        << velver.Integrator_type 
+        << velver.alchemical_array
+        << velver.Integrator_type
         << velver.friction << velver.integration_tol
-        << velver.timeskip << velver.reinitialise_context 
+        << velver.timeskip << velver.reinitialise_context
         << static_cast<const Integrator&> (velver);
     // Free OpenMM pointers??
 
@@ -157,9 +157,9 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, OpenMMFrEnergyST &velve
             >> velver.buffer_frequency >> velver.energy_frequency
             >> velver.device_index >> velver.precision >> velver.Alchemical_value
             >> velver.coulomb_power >> velver.shift_delta >> velver.delta_alchemical
-            >> velver.alchemical_array 
+            >> velver.alchemical_array
             >> velver.Integrator_type >> velver.friction >> velver.integration_tol
-            >> velver.timeskip >> velver.reinitialise_context 
+            >> velver.timeskip >> velver.reinitialise_context
             >> static_cast<Integrator&> (velver);
 
         // Maybe....need to reinitialise from molgroup because openmm system was not serialised...
@@ -187,7 +187,7 @@ Andersen_flag(false), Andersen_frequency(90.0), MCBarostat_flag(false),
 MCBarostat_frequency(25), ConstraintType("none"),
 Pressure(1.0 * bar), Temperature(300.0 * kelvin), platform_type("Reference"), Restraint_flag(false),
 CMMremoval_frequency(0), buffer_frequency(0), energy_frequency(100), device_index("0"), precision("single"), Alchemical_value(0.5), coulomb_power(0),
-shift_delta(2.0), delta_alchemical(0.001), alchemical_array(), 
+shift_delta(2.0), delta_alchemical(0.001), alchemical_array(),
     finite_diff_gradients(), pot_energies(), perturbed_energies(), reduced_perturbed_energies(),
     forward_Metropolis(), backward_Metropolis(),
 Integrator_type("leapfrogverlet"), friction(1.0 / picosecond), integration_tol(0.001), timeskip(0.0 * picosecond),
@@ -1649,10 +1649,10 @@ void OpenMMFrEnergyST::initialise()
                         solute_bond_perturbation_params[2] = rstart * OpenMM::NmPerAngstrom;
                         solute_bond_perturbation_params[3] = rend * OpenMM::NmPerAngstrom;
 
-
                         if (flag_constraint == NONE)
                         {
                             solute_bond_perturbation->addBond(idx0, idx1, solute_bond_perturbation_params);
+
                         }
 
                         else if (flag_constraint == ALLBONDS || flag_constraint == HANGLES)
@@ -2064,6 +2064,8 @@ void OpenMMFrEnergyST::initialise()
         {
 
             BondID bond_ff = bonds_ff[j];
+
+
             QList<double> bond_params = amber_params.getParams(bond_ff);
             double k = bond_params[0];
             double r0 = bond_params[1];
@@ -2077,7 +2079,7 @@ void OpenMMFrEnergyST::initialise()
                 if (bond_pert_list.indexOf(bond_ff) != -1 || bond_pert_swap_list.indexOf(bond_ff) != -1)
                 {//Solute molecule. Check if the current solute bond is in the perturbed bond list
                     // JM July 13 --> Note, we should still have the ability to constrain the bond to its r(lambda) equilibrium distance
-                    if (Debug)
+                    if (true)
                         qDebug() << "Found Perturbed Bond\n";
                     continue;
                 }
@@ -2095,11 +2097,25 @@ void OpenMMFrEnergyST::initialise()
 
             if (flag_constraint == NONE)
             {
+              if (Debug)
+              {
+              qDebug() << molecule.residue().name().value() ;
+              }
 
+              ResName resname = molecule.residue().name();
+
+              if(resname==ResName("WAT") || resname==ResName("CYC"))
+              {
+                system_openmm->addConstraint(idx0,idx1,r0*OpenMM::NmPerAngstrom);
+                //qDebug() << resname;
+              }
+              else
+              {
                 bondStretch_openmm->addBond(idx0, idx1, r0 * OpenMM::NmPerAngstrom, k * 2.0 * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
 
-                //cout << "\nBOND ADDED TO "<< atom0.toStdString() << " AND " << atom1.toStdString() << "\n";
+              }
             }
+
             else if (flag_constraint == ALLBONDS || flag_constraint == HANGLES)
             {
                 system_openmm->addConstraint(idx0, idx1, r0 * OpenMM::NmPerAngstrom);
@@ -2618,7 +2634,7 @@ void OpenMMFrEnergyST::initialise()
     {
         bondStretch_openmm->setForceGroup(1);
         system_openmm->addForce(bondStretch_openmm);
-        if (Debug)
+        if (true)
             qDebug() << "Added Internal Bond energy term";
     }
 
@@ -2944,6 +2960,7 @@ void OpenMMFrEnergyST::destroyContext()
     }
 }
 
+
 MolarEnergy OpenMMFrEnergyST::getPotentialEnergy(const System &system)
 {
     cout << "Energy function, does this ever get called?" << endl;
@@ -2958,10 +2975,12 @@ MolarEnergy OpenMMFrEnergyST::getPotentialEnergy(const System &system)
 
     MolarEnergy nrg = state_openmm.getPotentialEnergy() * kJ_per_mol;
 
+
     this->destroyContext();
 
     return nrg;
 }
+
 
 /**
  * <Runs an energy Minimization on the current system.>
@@ -3216,6 +3235,9 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
 
     const double beta = 1.0 / (0.0083144621 * convertTo(Temperature.value(), kelvin)); //mol/kJ
 
+    OpenMM::State state_openmm; //OpenMM State
+
+
     int infoMask = 0;
 
     infoMask = OpenMM::State::Positions;
@@ -3223,7 +3245,7 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
     infoMask = infoMask + OpenMM::State::Energy;
     //infoMask = infoMask + OpenMM::State::Parameters;
 
-    OpenMM::State state_openmm; //OpenMM State
+
 
 
     int sample_count = 1;
@@ -3284,10 +3306,16 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
         //*********************MD STEPS****************************
         (openmm_context->getIntegrator()).step(energy_frequency);
         state_openmm = openmm_context->getState(infoMask, false, 0x01);
+        //double kinetic_energy = state_openmm.getKineticEnergy() ;
+        //if (true)
+        //{
+        //  printf("Kinetic energy %.5f \n", kinetic_energy) ;
+        //}
         double p_energy_lambda = state_openmm.getPotentialEnergy();
-        if (Debug)
+
+        if (true)
         {
-            printf("Lambda = %f Potential energy = %.5f kcal/mol\n", Alchemical_value, p_energy_lambda * OpenMM::KcalPerKJ);
+            printf("Lambda = %f Potential energy = %.5f kcal/mol\n", Alchemical_value,  p_energy_lambda * OpenMM::KcalPerKJ);
             //exit(-1);
         }
         IsFiniteNumber = (p_energy_lambda <= DBL_MAX && p_energy_lambda >= -DBL_MAX);
@@ -3298,7 +3326,7 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
             exit(-1);
         }
         pot_energies.append(p_energy_lambda * OpenMM::KcalPerKJ);
-        
+
         if (perturbed_energies[0])
         {
             openmm_context->setParameter("SPOnOff", 1.0); //Solvent-Solvent and Protein Protein Non Bonded OFF
@@ -3336,18 +3364,23 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
         //Computing the potential energies and gradients
         p_energy_lambda = state_openmm.getPotentialEnergy();
 
+        if (Debug)
+        {
+            printf("Lambda = %f Potential energy = %.5f kcal/mol\n", Alchemical_value, p_energy_lambda * OpenMM::KcalPerKJ);
+            //exit(-1);
+        }
 
         //Let's calculate the gradients
         double m_forward, m_backward;
-        boost::tuples::tie(actual_gradient, m_forward, m_backward) = calculateGradient(incr_plus, 
+        boost::tuples::tie(actual_gradient, m_forward, m_backward) = calculateGradient(incr_plus,
                              incr_minus, p_energy_lambda, beta);
-        
+
         if (alchemical_array.size()>1)
         {
             //Let's calculate the biased energies
             reduced_perturbed_energies.append(computeReducedPerturbedEnergies(beta));
         }
-        
+
         //Now we append all the calculated information to the useful accumulation arrays
         finite_diff_gradients.append(actual_gradient * beta);
         forward_Metropolis.append(m_forward);
@@ -3457,6 +3490,8 @@ double OpenMMFrEnergyST::getPotentialEnergyAtLambda(double lambda)
     OpenMM::State state_openmm = openmm_context->getState(infoMask);
     state_openmm = openmm_context->getState(infoMask, false, 0x01);
     curr_potential_energy = state_openmm.getPotentialEnergy();
+
+
     return curr_potential_energy;
 }
 
@@ -3551,8 +3586,8 @@ void OpenMMFrEnergyST::emptyContainers()
     reduced_perturbed_energies.clear();
 }
 
-void OpenMMFrEnergyST::updateBoxDimensions(OpenMM::State &state_openmm, 
-                                             QVector< Vector> &buffered_dimensions, 
+void OpenMMFrEnergyST::updateBoxDimensions(OpenMM::State &state_openmm,
+                                             QVector< Vector> &buffered_dimensions,
                                              bool Debug, AtomicVelocityWorkspace &ws)
 {
     OpenMM::Vec3 a;
