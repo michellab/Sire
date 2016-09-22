@@ -1084,8 +1084,6 @@ int FreeEnergyMonitor::nSamples() const
 /** Accumulate energies from the passed system */
 void FreeEnergyMonitor::monitor(System &system)
 {
-    qDebug() << CODELOC;
-
     FreeEnergyMonitor old_state(*this);
 
     try
@@ -1158,7 +1156,7 @@ void FreeEnergyMonitor::monitor(System &system)
         QVector< QVector<Vector> > ref_coords(nref);
         QVector< QVector<Charge> > ref_chgs(nref);
         QVector< QVector<LJParameter> > ref_ljs(nref);
-        
+
         QVector<Vector> a_coords = cljatoms_a.coordinates();
         QVector<Charge> a_chgs = cljatoms_a.charges();
         QVector<LJParameter> a_ljs = cljatoms_a.ljParameters();
@@ -1172,81 +1170,8 @@ void FreeEnergyMonitor::monitor(System &system)
             ref_coords[i] = refcljatoms[i].coordinates();
             ref_chgs[i] = refcljatoms[i].charges();
             ref_ljs[i] = refcljatoms[i].ljParameters();
+        }
         
-            /*const PartialMolecule &mol0 = refviews.constData()[i];
-            
-            if (mol0.selectedAll())
-            {
-                ref_coords[i] = mol0.property(coords_prop)
-                                    .asA<AtomCoords>()
-                                    .toVector();
-            
-                ref_chgs[i] = mol0.property(charge_prop)
-                                  .asA<AtomCharges>()
-                                  .toVector();
-                                                  
-                ref_ljs[i] = mol0.property(lj_prop)
-                                 .asA<AtomLJs>()
-                                 .toVector();
-            }
-            else
-            {
-                const AtomSelection selected_atoms = mol0.selection();
-
-                ref_coords[i] = mol0.property(coords_prop)
-                                    .asA<AtomCoords>()
-                                    .toVector(selected_atoms);
-            
-                ref_chgs[i] = mol0.property(charge_prop)
-                                  .asA<AtomCharges>()
-                                  .toVector(selected_atoms);
-                                                  
-                ref_ljs[i] = mol0.property(lj_prop)
-                                 .asA<AtomLJs>()
-                                 .toVector(selected_atoms);
-            }*/
-        }
-
-        /*for (int i=0; i<n_a; ++i)
-        {
-            const PartialMolecule &mol = views_a.constData()[i];
-            
-            if (mol.selectedAll())
-            {
-                a_coords += mol.property(coords_prop).asA<AtomCoords>().toVector();
-                a_chgs += mol.property(charge_prop).asA<AtomCharges>().toVector();
-                a_ljs += mol.property(lj_prop).asA<AtomLJs>().toVector();
-            }
-            else
-            {
-                const AtomSelection selected_atoms = mol.selection();
-
-                a_coords += mol.property(coords_prop).asA<AtomCoords>().toVector(selected_atoms);
-                a_chgs += mol.property(charge_prop).asA<AtomCharges>().toVector(selected_atoms);
-                a_ljs += mol.property(lj_prop).asA<AtomLJs>().toVector(selected_atoms);
-            }
-        }
-
-        for (int i=0; i<n_b; ++i)
-        {
-            const PartialMolecule &mol = views_b.constData()[i];
-            
-            if (mol.selectedAll())
-            {
-                b_coords += mol.property(coords_prop).asA<AtomCoords>().toVector();
-                b_chgs += mol.property(charge_prop).asA<AtomCharges>().toVector();
-                b_ljs += mol.property(lj_prop).asA<AtomLJs>().toVector();
-            }
-            else
-            {
-                const AtomSelection selected_atoms = mol.selection();
-
-                b_coords += mol.property(coords_prop).asA<AtomCoords>().toVector(selected_atoms);
-                b_chgs += mol.property(charge_prop).asA<AtomCharges>().toVector(selected_atoms);
-                b_ljs += mol.property(lj_prop).asA<AtomLJs>().toVector(selected_atoms);
-            }
-        }*/
-    
         if (this->usesSoftCore())
         {
             //calculate the energy difference for each view against group_a and group_b
@@ -1266,13 +1191,6 @@ void FreeEnergyMonitor::monitor(System &system)
                 total_nrgs[i].accumulate(delta_cljnrg.first + delta_cljnrg.second);
                 coul_nrgs[i].accumulate(delta_cljnrg.first);
                 lj_nrgs[i].accumulate(delta_cljnrg.second);
-                
-                pair<double,double> delta_cljnrg2 = getSoftCLJEnergy(
-                            refcljatoms[i], cljatoms_a, cljatoms_b,
-                            lamval, delta_lambda, shift_delta, coulomb_power);
-                
-                qDebug() << "\nOLD:" << delta_cljnrg.first << delta_cljnrg.second;
-                qDebug() << "NEW:" << delta_cljnrg2.first << delta_cljnrg2.second;
             }
         }
         else

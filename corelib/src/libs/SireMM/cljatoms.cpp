@@ -2011,29 +2011,90 @@ QVector<Vector> CLJAtoms::coordinates() const
     if (this->isEmpty())
         return QVector<Vector>();
 
-    QVector<Vector> coords( _x.count() * MultiFloat::count() );
-    Vector *c = coords.data();
-    
-    int idx = 0;
+    QVector<Vector> coords;
+    coords.reserve( _x.count() * MultiFloat::count() );
     
     for (int i=0; i<_x.count(); ++i)
     {
         const MultiFloat &xf = _x[i];
         const MultiFloat &yf = _y[i];
         const MultiFloat &zf = _z[i];
-        
-        for (int j=0; j<MultiFloat::count(); ++j)
+
+        if (i < (_x.count() -1))
         {
-            c[idx] = Vector(xf[j], yf[j], zf[j]);
-            ++idx;
+            for (int j=0; j<MultiFloat::count(); ++j)
+            {
+                coords.append( Vector(xf[j], yf[j], zf[j]) );
+            }
+        }
+        else
+        {
+            //make sure we don't add any padded atoms
+            int npadding = 0;
+            
+            for (int j=MultiFloat::count()-1; j>=0; --j)
+            {
+                if (_id[i][j] == 0)
+                {
+                    npadding += 1;
+                }
+            }
+            
+            for (int j=0; j<MultiFloat::count()-npadding; ++j)
+            {
+                coords.append( Vector(xf[j], yf[j], zf[j]) );
+            }
         }
     }
     
     return coords;
 }
 
-/** Return the charges on all of the atoms */
+/** Return the charges of all of the atoms */
 QVector<Charge> CLJAtoms::charges() const
+{
+    if (this->isEmpty())
+        return QVector<Charge>();
+
+    QVector<Charge> chgs;
+    chgs.reserve( _x.count() * MultiFloat::count() );
+    
+    for (int i=0; i<_x.count(); ++i)
+    {
+        const MultiFloat &qf = _q[i];
+
+        if (i < (_x.count() - 1))
+        {
+            for (int j=0; j<MultiFloat::count(); ++j)
+            {
+                chgs.append( Charge( qf[j] / std::sqrt(SireUnits::one_over_four_pi_eps0) ) );
+            }
+        }
+        else
+        {
+            //make sure we don't add any padded atoms
+            int npadding = 0;
+            
+            for (int j=MultiFloat::count()-1; j>=0; --j)
+            {
+                if (_id[i][j] == 0)
+                {
+                    npadding += 1;
+                }
+            }
+            
+            for (int j=0; j<MultiFloat::count()-npadding; ++j)
+            {
+                chgs.append( Charge( qf[j] / std::sqrt(SireUnits::one_over_four_pi_eps0) ) );
+            }
+        }
+    }
+    
+    return chgs;
+}
+
+/** Return the charges on all of the atoms */
+/*QVector<Charge> CLJAtoms::charges() const
 {
     if (this->isEmpty())
         return QVector<Charge>();
@@ -2055,10 +2116,62 @@ QVector<Charge> CLJAtoms::charges() const
     }
     
     return chgs;
+}*/
+
+/** Return the charges of all of the atoms */
+QVector<LJParameter> CLJAtoms::ljParameters() const
+{
+    if (this->isEmpty())
+        return QVector<LJParameter>();
+
+    QVector<LJParameter> ljs;
+    ljs.reserve( _x.count() * MultiFloat::count() );
+    
+    for (int i=0; i<_x.count(); ++i)
+    {
+        const MultiFloat &sigf = _sig[i];
+        const MultiFloat &epsf = _eps[i];
+
+        if (i < (_x.count() - 1))
+        {
+            for (int j=0; j<MultiFloat::count(); ++j)
+            {
+                double sig = sigf[j] * sigf[j];
+                double eps = epsf[j] * epsf[j];
+
+                ljs.append( LJParameter(SireUnits::Dimension::Length(sig),
+                                        SireUnits::Dimension::MolarEnergy(eps / 4.0) ) );
+            }
+        }
+        else
+        {
+            //make sure we don't add any padded atoms
+            int npadding = 0;
+            
+            for (int j=MultiFloat::count()-1; j>=0; --j)
+            {
+                if (_id[i][j] == 0)
+                {
+                    npadding += 1;
+                }
+            }
+            
+            for (int j=0; j<MultiFloat::count()-npadding; ++j)
+            {
+                double sig = sigf[j] * sigf[j];
+                double eps = epsf[j] * epsf[j];
+
+                ljs.append( LJParameter(SireUnits::Dimension::Length(sig),
+                                        SireUnits::Dimension::MolarEnergy(eps / 4.0) ) );
+            }
+        }
+    }
+    
+    return ljs;
 }
 
 /** Return the LJ parameters on all of the atoms */
-QVector<LJParameter> CLJAtoms::ljParameters() const
+/*QVector<LJParameter> CLJAtoms::ljParameters() const
 {
     if (this->isEmpty())
         return QVector<LJParameter>();
@@ -2085,7 +2198,7 @@ QVector<LJParameter> CLJAtoms::ljParameters() const
     }
     
     return ljs;
-}
+}*/
 
 /** Return the IDs of all of the atoms */
 QVector<qint32> CLJAtoms::IDs() const
