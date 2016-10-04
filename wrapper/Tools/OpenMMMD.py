@@ -1330,12 +1330,14 @@ def run():
             print ("Energy before the minimisation: " + str(system.energy()))
             print ('Tolerance for minimisation: ' + str(minimise_tol.val))
             print ('Maximum number of minimisation iterations: ' + str(minimise_max_iter.val))
+        integrator.setConstraintType("none")
         system = integrator.minimiseEnergy(system, minimise_tol.val, minimise_max_iter.val)
         system.mustNowRecalculateFromScratch()
         if verbose.val:
             print ("Energy after the minimization: " + str(system.energy()))
             print ("Energy minimization done.")
-        print("###===========================================================###\n")
+        integrator.setConstraintType(constraint.val)
+        print("###===========================================================###\n", flush=True)
 
     if equilibrate.val:
         print("###======================Equilibration========================###")
@@ -1349,7 +1351,7 @@ def run():
         if verbose.val:
             print ("Energy after the equilibration: " + str(system.energy()))
             print ('Equilibration done.\n')
-        print("###===========================================================###\n")
+        print("###===========================================================###\n", flush=True)
 
     simtime=nmoves.val*ncycles.val*timestep.val
     print("###=======================somd run============================###")
@@ -1358,7 +1360,7 @@ def run():
 
     s1 = timer.elapsed() / 1000.
     for i in range(cycle_start, cycle_end):
-        print("\nCycle = ", i )
+        print("\nCycle = ", i, flush=True )
         system = moves.move(system, nmoves.val, True)
 
         if (save_coords.val):
