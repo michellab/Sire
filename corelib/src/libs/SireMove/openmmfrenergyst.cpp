@@ -361,7 +361,7 @@ QString OpenMMFrEnergyST::toString() const
 void OpenMMFrEnergyST::initialise()
 {
 
-    bool Debug;
+    bool Debug=false;
     if (Debug)
     {
         qDebug() << "Initialising OpenMMFrEnergyST";
@@ -420,7 +420,7 @@ void OpenMMFrEnergyST::initialise()
     if (Debug)
         qDebug() << "\nCutoffType = " << CutoffType << "\n";
 
-    bool flag_solutenoconstraints = false; 
+    bool flag_noperturbedconstraints = false; 
     if (ConstraintType == "none")
         flag_constraint = NONE;
     else if (ConstraintType == "hbonds")
@@ -429,23 +429,13 @@ void OpenMMFrEnergyST::initialise()
         flag_constraint = ALLBONDS;
     else if (ConstraintType == "hangles")
         flag_constraint = HANGLES;
-    else if (ConstraintType == "hbonds-notsolute")
+    else if (ConstraintType == "hbonds-notperturbed")
       {
         flag_constraint = HBONDS;
-	flag_solutenoconstraints = true;
-      }
-    else if (ConstraintType == "allbonds-notsolute")
-      {
-	flag_constraint = ALLBONDS;
-	flag_solutenoconstraints = true;
-      }
-    else if (ConstraintType == "hangles-notsolute")
-      {
-	flag_constraint = HANGLES;
-	flag_solutenoconstraints = true;
+	flag_noperturbedconstraints = true;
       }
     else
-        throw SireError::program_bug(QObject::tr("The Constraints method has not been specified. Possible choises: none, hbonds, allbonds, hangles, hbonds-notsolute, allbonds-notsolute, hangles-notsolute"), CODELOC);
+        throw SireError::program_bug(QObject::tr("The Constraints method has not been specified. Possible choises: none, hbonds, allbonds, hangles, hbonds-notperturbed"), CODELOC);
 
     if (Debug)
         qDebug() << "\nConstraint Type = " << ConstraintType << "\n";
@@ -1098,7 +1088,8 @@ void OpenMMFrEnergyST::initialise()
         for (int j = 0; j < nats_mol; ++j)
         {
 
-            system_openmm->addParticle(m[j]);
+	    /*JM 10/16 should make sure that perturbed atoms have mass of heaviest end-state */
+	    system_openmm->addParticle(m[j]);
 
             Atom at = molatoms.at(j);
             AtomNum atnum = at.number();
@@ -1666,12 +1657,13 @@ void OpenMMFrEnergyST::initialise()
                         solute_bond_perturbation_params[3] = rend * OpenMM::NmPerAngstrom;
 
 			/* JM 10/16 Also apply this if 'no solute constraints' flag is on*/
-                        if (flag_constraint == NONE or flag_solutenoconstraints == true)
+                        if (flag_constraint == NONE)
                         {
                             solute_bond_perturbation->addBond(idx0, idx1, solute_bond_perturbation_params);
                         }
                         else if (flag_constraint == ALLBONDS || flag_constraint == HANGLES)
                         {
+			  /* JM 10/16 ALLBONDS and HANGLES may be unwise with current free energy implementation !*/
                             double pert_eq_distance = solute_bond_perturbation_params[3] * Alchemical_value + (1.0 - Alchemical_value) * solute_bond_perturbation_params[2];
                             system_openmm->addConstraint(idx0, idx1, pert_eq_distance);
                             bond_pert_eq_list.insert(BondID(two.atom0(), two.atom1()), pert_eq_distance * OpenMM::AngstromsPerNm);
@@ -1682,6 +1674,51 @@ void OpenMMFrEnergyST::initialise()
                                 qDebug() << "Perturbation bond equilibrium distance = " << pert_eq_distance << " Nm";
                             }
                         }
+			/* JM 10/16 */
+			/*  Here add code to constraint hbonds only if initial and final parameters are unperturbed*/
+			/*  check also what is the mass of the atoms in that case */
+			else if (flag_constraint == HBONDS and flag_noperturbedconstraints)
+			{
+			  const SireMol::Atom atom0 = molecule.select(two.atom0());
+			  //double m0 = atom0.property("mass").value();
+			  double m0 = system_openmm->getParticleMass(idx0);
+			  const SireMol::Atom atom1 = molecule.select(two.atom1());
+			  //double m1 = atom1.property("mass").value();
+			  double m1 = system_openmm->getParticleMass(idx1);
+			  double deltar = abs(rend-rstart);
+			  double deltak = abs(bend-bstart);
+			  // only constraint if m0 < 1.1 g.mol-1 or m1 < 1.1 g.mol-1
+			  // AND the initial and final parameters differ
+			  double Hmass = 1.1;
+			  if (Debug)
+			    {
+			      qDebug() << " m0 " << m0 << " m1 " << m1 << "\n";
+			      qDebug() << " deltar " << deltar << " " << " deltak " << deltak;
+			    }
+			  /* Only constraint perturbed bonds that involve one hydrogen  */
+			  /* if the params do not change*/
+			  double small = 0.0001;
+			  if ( (m0 < Hmass or m1 < Hmass) and ( deltar < small and deltak < small) )
+			    {
+
+			      double pert_eq_distance = solute_bond_perturbation_params[3] * Alchemical_value + (1.0 - Alchemical_value) * solute_bond_perturbation_params[2];
+			      system_openmm->addConstraint(idx0, idx1, pert_eq_distance);
+			      if (Debug)
+                                {
+				  qDebug() << "perturbed bond constrained %s-" << atom0.name().toString()
+					   << "-%s" << atom1.name().toString() << "\n";
+				}
+			    }
+			  else
+			    {
+			      if (Debug)
+				{
+				  qDebug() << "perturbed bond flexible %s-" << atom0.name().toString()
+					   << "-%s" << atom1.name().toString() << "\n"; 
+				}
+			      solute_bond_perturbation->addBond(idx0, idx1, solute_bond_perturbation_params);
+			    }
+			}
                         else if (flag_constraint == HBONDS)
                         {
                             const SireMol::Atom atom0 = molecule.select(two.atom0());
