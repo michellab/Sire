@@ -747,7 +747,7 @@ increase from the heavy atom the hydrogen is bonded to.
         # Sanity check (g_per_mol)
         if total_delta.value() > 0.001:
             print ("WARNING ! The mass repartitioning algorithm is not conserving atomic masses for",
-                   "molecule %s (total delta is %s). Report bug to a Sire developer." % molnum,total_delta )
+                   "molecule %s (total delta is %s). Report bug to a Sire developer." % (molnum,total_delta.value()) )
             sys.exit(-1)
 
         # Now that have worked out mass changes per molecule, update molecule
@@ -760,7 +760,7 @@ increase from the heavy atom the hydrogen is bonded to.
             if (newmass.value() < 0.0):
                 print ("""WARNING ! The mass of atom %s is less than zero after hydrogen mass repartitioning.
                         This should not happen ! Decrease hydrogen mass repartitioning factor in your cfg file
-                        and try again.""")
+                        and try again.""" % atidx)
                 sys.exit(-1)
 
             mol = mol.edit().atom(atidx).setProperty("mass", newmass ).molecule()

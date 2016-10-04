@@ -420,6 +420,7 @@ void OpenMMFrEnergyST::initialise()
     if (Debug)
         qDebug() << "\nCutoffType = " << CutoffType << "\n";
 
+    bool flag_solutenoconstraints = false; 
     if (ConstraintType == "none")
         flag_constraint = NONE;
     else if (ConstraintType == "hbonds")
@@ -428,8 +429,23 @@ void OpenMMFrEnergyST::initialise()
         flag_constraint = ALLBONDS;
     else if (ConstraintType == "hangles")
         flag_constraint = HANGLES;
+    else if (ConstraintType == "hbonds-notsolute")
+      {
+        flag_constraint = HBONDS;
+	flag_solutenoconstraints = true;
+      }
+    else if (ConstraintType == "allbonds-notsolute")
+      {
+	flag_constraint = ALLBONDS;
+	flag_solutenoconstraints = true;
+      }
+    else if (ConstraintType == "hangles-notsolute")
+      {
+	flag_constraint = HANGLES;
+	flag_solutenoconstraints = true;
+      }
     else
-        throw SireError::program_bug(QObject::tr("The Constraints method has not been specified. Possible choises: none, hbonds, allbonds, hangles"), CODELOC);
+        throw SireError::program_bug(QObject::tr("The Constraints method has not been specified. Possible choises: none, hbonds, allbonds, hangles, hbonds-notsolute, allbonds-notsolute, hangles-notsolute"), CODELOC);
 
     if (Debug)
         qDebug() << "\nConstraint Type = " << ConstraintType << "\n";
@@ -1649,12 +1665,11 @@ void OpenMMFrEnergyST::initialise()
                         solute_bond_perturbation_params[2] = rstart * OpenMM::NmPerAngstrom;
                         solute_bond_perturbation_params[3] = rend * OpenMM::NmPerAngstrom;
 
-
-                        if (flag_constraint == NONE)
+			/* JM 10/16 Also apply this if 'no solute constraints' flag is on*/
+                        if (flag_constraint == NONE or flag_solutenoconstraints == true)
                         {
                             solute_bond_perturbation->addBond(idx0, idx1, solute_bond_perturbation_params);
                         }
-
                         else if (flag_constraint == ALLBONDS || flag_constraint == HANGLES)
                         {
                             double pert_eq_distance = solute_bond_perturbation_params[3] * Alchemical_value + (1.0 - Alchemical_value) * solute_bond_perturbation_params[2];
@@ -1667,7 +1682,6 @@ void OpenMMFrEnergyST::initialise()
                                 qDebug() << "Perturbation bond equilibrium distance = " << pert_eq_distance << " Nm";
                             }
                         }
-
                         else if (flag_constraint == HBONDS)
                         {
                             const SireMol::Atom atom0 = molecule.select(two.atom0());
