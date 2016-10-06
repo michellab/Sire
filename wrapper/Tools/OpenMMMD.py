@@ -1491,13 +1491,15 @@ def runFreeNrg():
     if minimise.val:
         print("###=======================Minimisation========================###")
         print('Running minimisation.')
-        if verbose.val:
+        #if verbose.val:
+        if True:
             print ("Energy before the minimisation: " + str(system.energy()))
             print ('Tolerance for minimisation: ' + str(minimise_tol.val))
             print ('Maximum number of minimisation iterations: ' + str(minimise_max_iter.val))
         system = integrator.minimiseEnergy(system, minimise_tol.val, minimise_max_iter.val)
         system.mustNowRecalculateFromScratch()
-        if verbose.val:
+        #if verbose.val:
+        if True:
             print ("Energy after the minimization: " + str(system.energy()))
             print ("Energy minimization done.")
         print("###===========================================================###\n")
@@ -1528,8 +1530,8 @@ def runFreeNrg():
         else:
             softcore_lambda = True
 
-    grads = {}
-    grads[lambda_val.val] = AverageAndStddev()
+    #grads = {}
+    #grads[lambda_val.val] = AverageAndStddev()
     s1 = timer.elapsed() / 1000.
     for i in range(cycle_start, cycle_end):
         print("\nCycle = ", i, "\n")
@@ -1552,8 +1554,8 @@ def runFreeNrg():
 
         mean_gradient = np.average(gradients)
         outgradients.write("%5d %20.10f\n" % (i, mean_gradient))
-        for gradient in gradients:
-            grads[lambda_val.val].accumulate(gradients[i-1])
+        #for gradient in gradients:
+        #    grads[lambda_val.val].accumulate(gradients[i-1])
     s2 = timer.elapsed() / 1000.
     outfile.close()
     print("Simulation took %d s " % ( s2 - s1))
