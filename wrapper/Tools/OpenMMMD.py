@@ -198,7 +198,6 @@ simfile = Parameter("outdata_file", "simfile.dat", """Filename that records all 
 
 verbose = Parameter("verbose", False, """Print debug output""")
 
-
 ####################################################################################################
 #
 #   Helper functions

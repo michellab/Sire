@@ -2131,6 +2131,7 @@ void OpenMMFrEnergyST::initialise()
                 }
             }
 
+
             //Select the atom type
             QString atom0 = molecule.atom(AtomIdx(idx0)).toString();
             QString atom1 = molecule.atom(AtomIdx(idx1)).toString();
