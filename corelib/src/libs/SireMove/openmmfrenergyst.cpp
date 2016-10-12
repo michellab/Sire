@@ -430,10 +430,10 @@ void OpenMMFrEnergyST::initialise()
     else if (ConstraintType == "hangles")
         flag_constraint = HANGLES;
     else if (ConstraintType == "hbonds-notperturbed")
-      {
+    {
         flag_constraint = HBONDS;
         flag_noperturbedconstraints = true;
-      }
+    }
     else
         throw SireError::program_bug(QObject::tr("The Constraints method has not been specified. Possible choises: none, hbonds, allbonds, hangles, hbonds-notperturbed"), CODELOC);
 
@@ -834,7 +834,6 @@ void OpenMMFrEnergyST::initialise()
             if (flag_cutoff == CUTOFFNONPERIODIC)
             {
                 custom_force_field->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
-
             }
             else
             {
@@ -1072,7 +1071,7 @@ void OpenMMFrEnergyST::initialise()
 
     for (int i = 0; i < nmols; ++i)
     {
-
+        
         const int nats_mol = ws.nAtoms(i);
 
         const double *m = ws.massArray(i);
@@ -1678,44 +1677,44 @@ void OpenMMFrEnergyST::initialise()
                         /*  check also what is the mass of the atoms in that case */
                         else if (flag_constraint == HBONDS and flag_noperturbedconstraints)
                         {
-                          const SireMol::Atom atom0 = molecule.select(two.atom0());
-                          //double m0 = atom0.property("mass").value();
-                          double m0 = system_openmm->getParticleMass(idx0);
-                          const SireMol::Atom atom1 = molecule.select(two.atom1());
-                          //double m1 = atom1.property("mass").value();
-                          double m1 = system_openmm->getParticleMass(idx1);
-                          double deltar = abs(rend-rstart);
-                          double deltak = abs(bend-bstart);
-                          // only constraint if m0 < 1.1 g.mol-1 or m1 < 1.1 g.mol-1
-                          // AND the initial and final parameters differ
-                          double Hmass = 1.1;
-                          if (Debug)
-                          {
-                              qDebug() << " m0 " << m0 << " m1 " << m1 << "\n";
-                              qDebug() << " deltar " << deltar << " " << " deltak " << deltak;
-                          }
-                          /* Only constraint perturbed bonds that involve one hydrogen  */
-                          /* if the params do not change*/
-                          double small = 0.0001;
-                          if ( (m0 < Hmass or m1 < Hmass) and ( deltar < small and deltak < small) )
-                          {
-                              double pert_eq_distance = solute_bond_perturbation_params[3] * Alchemical_value + (1.0 - Alchemical_value) * solute_bond_perturbation_params[2];
-                              system_openmm->addConstraint(idx0, idx1, pert_eq_distance);
-                              if (Debug)
-                              {
-                                  qDebug() << "perturbed bond constrained %s-" << atom0.name().toString()
+                            const SireMol::Atom atom0 = molecule.select(two.atom0());
+                            //double m0 = atom0.property("mass").value();
+                            double m0 = system_openmm->getParticleMass(idx0);
+                            const SireMol::Atom atom1 = molecule.select(two.atom1());
+                            //double m1 = atom1.property("mass").value();
+                            double m1 = system_openmm->getParticleMass(idx1);
+                            double deltar = abs(rend-rstart);
+                            double deltak = abs(bend-bstart);
+                            // only constraint if m0 < 1.1 g.mol-1 or m1 < 1.1 g.mol-1
+                            // AND the initial and final parameters differ
+                            double Hmass = 1.1;
+                            if (Debug)
+                            { 
+                                qDebug() << " m0 " << m0 << " m1 " << m1 << "\n";
+                                qDebug() << " deltar " << deltar << " " << " deltak " << deltak;
+                            }
+                            /* Only constraint perturbed bonds that involve one hydrogen  */
+                            /* if the params do not change*/
+                            double small = 0.0001;
+                            if ( (m0 < Hmass or m1 < Hmass) and ( deltar < small and deltak < small) )
+                            {
+                                double pert_eq_distance = solute_bond_perturbation_params[3] * Alchemical_value + (1.0 - Alchemical_value) * solute_bond_perturbation_params[2];
+                                system_openmm->addConstraint(idx0, idx1, pert_eq_distance);
+                                if (Debug)
+                                {
+                                    qDebug() << "perturbed bond constrained %s-" << atom0.name().toString()
                                            << "-%s" << atom1.name().toString() << "\n";
-                              }
-                          }
-                          else
-                          {
-                              if (Debug)
-                              {
+                                }
+                            }
+                            else
+                            {
+                                if (Debug)
+                                {
                                   qDebug() << "perturbed bond flexible %s-" << atom0.name().toString()
                                            << "-%s" << atom1.name().toString() << "\n"; 
-                              }
-                              solute_bond_perturbation->addBond(idx0, idx1, solute_bond_perturbation_params);
-                          }
+                                }
+                                solute_bond_perturbation->addBond(idx0, idx1, solute_bond_perturbation_params);
+                            }
                         }
                         else if (flag_constraint == HBONDS)
                         {
