@@ -128,10 +128,10 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const OpenMMFrEnergyST 
         << velver.energy_frequency
         << velver.device_index << velver.precision << velver.Alchemical_value
         << velver.coulomb_power << velver.shift_delta << velver.delta_alchemical
-        << velver.alchemical_array 
-        << velver.Integrator_type 
+        << velver.alchemical_array
+        << velver.Integrator_type
         << velver.friction << velver.integration_tol
-        << velver.timeskip << velver.reinitialise_context 
+        << velver.timeskip << velver.reinitialise_context
         << static_cast<const Integrator&> (velver);
     // Free OpenMM pointers??
 
@@ -157,9 +157,9 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, OpenMMFrEnergyST &velve
             >> velver.buffer_frequency >> velver.energy_frequency
             >> velver.device_index >> velver.precision >> velver.Alchemical_value
             >> velver.coulomb_power >> velver.shift_delta >> velver.delta_alchemical
-            >> velver.alchemical_array 
+            >> velver.alchemical_array
             >> velver.Integrator_type >> velver.friction >> velver.integration_tol
-            >> velver.timeskip >> velver.reinitialise_context 
+            >> velver.timeskip >> velver.reinitialise_context
             >> static_cast<Integrator&> (velver);
 
         // Maybe....need to reinitialise from molgroup because openmm system was not serialised...
@@ -187,7 +187,7 @@ Andersen_flag(false), Andersen_frequency(90.0), MCBarostat_flag(false),
 MCBarostat_frequency(25), ConstraintType("none"),
 Pressure(1.0 * bar), Temperature(300.0 * kelvin), platform_type("Reference"), Restraint_flag(false),
 CMMremoval_frequency(0), buffer_frequency(0), energy_frequency(100), device_index("0"), precision("single"), Alchemical_value(0.5), coulomb_power(0),
-shift_delta(2.0), delta_alchemical(0.001), alchemical_array(), 
+shift_delta(2.0), delta_alchemical(0.001), alchemical_array(),
     finite_diff_gradients(), pot_energies(), perturbed_energies(), reduced_perturbed_energies(),
     forward_Metropolis(), backward_Metropolis(),
 Integrator_type("leapfrogverlet"), friction(1.0 / picosecond), integration_tol(0.001), timeskip(0.0 * picosecond),
@@ -361,7 +361,7 @@ QString OpenMMFrEnergyST::toString() const
 void OpenMMFrEnergyST::initialise()
 {
 
-    bool Debug;
+    bool Debug=false;
     if (Debug)
     {
         qDebug() << "Initialising OpenMMFrEnergyST";
@@ -420,6 +420,7 @@ void OpenMMFrEnergyST::initialise()
     if (Debug)
         qDebug() << "\nCutoffType = " << CutoffType << "\n";
 
+    bool flag_noperturbedconstraints = false;
     if (ConstraintType == "none")
         flag_constraint = NONE;
     else if (ConstraintType == "hbonds")
@@ -428,8 +429,13 @@ void OpenMMFrEnergyST::initialise()
         flag_constraint = ALLBONDS;
     else if (ConstraintType == "hangles")
         flag_constraint = HANGLES;
+    else if (ConstraintType == "hbonds-notperturbed")
+      {
+        flag_constraint = HBONDS;
+        flag_noperturbedconstraints = true;
+      }
     else
-        throw SireError::program_bug(QObject::tr("The Constraints method has not been specified. Possible choises: none, hbonds, allbonds, hangles"), CODELOC);
+        throw SireError::program_bug(QObject::tr("The Constraints method has not been specified. Possible choises: none, hbonds, allbonds, hangles, hbonds-notperturbed"), CODELOC);
 
     if (Debug)
         qDebug() << "\nConstraint Type = " << ConstraintType << "\n";
@@ -1081,7 +1087,7 @@ void OpenMMFrEnergyST::initialise()
 
         for (int j = 0; j < nats_mol; ++j)
         {
-
+            /*JM 10/16 should make sure that perturbed atoms have mass of heaviest end-state */
             system_openmm->addParticle(m[j]);
 
             Atom at = molatoms.at(j);
@@ -1649,14 +1655,14 @@ void OpenMMFrEnergyST::initialise()
                         solute_bond_perturbation_params[2] = rstart * OpenMM::NmPerAngstrom;
                         solute_bond_perturbation_params[3] = rend * OpenMM::NmPerAngstrom;
 
-
+                        /* JM 10/16 Also apply this if 'no solute constraints' flag is on*/
                         if (flag_constraint == NONE)
                         {
                             solute_bond_perturbation->addBond(idx0, idx1, solute_bond_perturbation_params);
                         }
-
                         else if (flag_constraint == ALLBONDS || flag_constraint == HANGLES)
                         {
+                            /* JM 10/16 ALLBONDS and HANGLES may be unwise with current free energy implementation !*/
                             double pert_eq_distance = solute_bond_perturbation_params[3] * Alchemical_value + (1.0 - Alchemical_value) * solute_bond_perturbation_params[2];
                             system_openmm->addConstraint(idx0, idx1, pert_eq_distance);
                             bond_pert_eq_list.insert(BondID(two.atom0(), two.atom1()), pert_eq_distance * OpenMM::AngstromsPerNm);
@@ -1667,7 +1673,50 @@ void OpenMMFrEnergyST::initialise()
                                 qDebug() << "Perturbation bond equilibrium distance = " << pert_eq_distance << " Nm";
                             }
                         }
-
+                        /* JM 10/16 */
+                        /*  Here add code to constraint hbonds only if initial and final parameters are unperturbed*/
+                        /*  check also what is the mass of the atoms in that case */
+                        else if (flag_constraint == HBONDS and flag_noperturbedconstraints)
+                        {
+                          const SireMol::Atom atom0 = molecule.select(two.atom0());
+                          //double m0 = atom0.property("mass").value();
+                          double m0 = system_openmm->getParticleMass(idx0);
+                          const SireMol::Atom atom1 = molecule.select(two.atom1());
+                          //double m1 = atom1.property("mass").value();
+                          double m1 = system_openmm->getParticleMass(idx1);
+                          double deltar = abs(rend-rstart);
+                          double deltak = abs(bend-bstart);
+                          // only constraint if m0 < 1.1 g.mol-1 or m1 < 1.1 g.mol-1
+                          // AND the initial and final parameters differ
+                          double Hmass = 1.1;
+                          if (Debug)
+                          {
+                              qDebug() << " m0 " << m0 << " m1 " << m1 << "\n";
+                              qDebug() << " deltar " << deltar << " " << " deltak " << deltak;
+                          }
+                          /* Only constraint perturbed bonds that involve one hydrogen  */
+                          /* if the params do not change*/
+                          double small = 0.0001;
+                          if ( (m0 < Hmass or m1 < Hmass) and ( deltar < small and deltak < small) )
+                          {
+                              double pert_eq_distance = solute_bond_perturbation_params[3] * Alchemical_value + (1.0 - Alchemical_value) * solute_bond_perturbation_params[2];
+                              system_openmm->addConstraint(idx0, idx1, pert_eq_distance);
+                              if (Debug)
+                              {
+                                  qDebug() << "perturbed bond constrained %s-" << atom0.name().toString()
+                                           << "-%s" << atom1.name().toString() << "\n";
+                              }
+                          }
+                          else
+                          {
+                              if (Debug)
+                              {
+                                  qDebug() << "perturbed bond flexible %s-" << atom0.name().toString()
+                                           << "-%s" << atom1.name().toString() << "\n"; 
+                              }
+                              solute_bond_perturbation->addBond(idx0, idx1, solute_bond_perturbation_params);
+                          }
+                        }
                         else if (flag_constraint == HBONDS)
                         {
                             const SireMol::Atom atom0 = molecule.select(two.atom0());
@@ -1681,7 +1730,6 @@ void OpenMMFrEnergyST::initialise()
                             if (initial_type_atom0.startsWith("h", Qt::CaseInsensitive) || final_type_atom0.startsWith("h", Qt::CaseInsensitive) ||
                                 initial_type_atom1.startsWith("h", Qt::CaseInsensitive) || final_type_atom1.startsWith("h", Qt::CaseInsensitive))
                             {
-
                                 double pert_eq_distance = solute_bond_perturbation_params[3] * Alchemical_value + (1.0 - Alchemical_value) * solute_bond_perturbation_params[2];
                                 system_openmm->addConstraint(idx0, idx1, pert_eq_distance);
 
@@ -2082,6 +2130,7 @@ void OpenMMFrEnergyST::initialise()
                     continue;
                 }
             }
+
 
             //Select the atom type
             QString atom0 = molecule.atom(AtomIdx(idx0)).toString();
@@ -3341,13 +3390,13 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
         double m_forward, m_backward;
         boost::tuples::tie(actual_gradient, m_forward, m_backward) = calculateGradient(incr_plus, 
                              incr_minus, p_energy_lambda, beta);
-        
+
         if (alchemical_array.size()>1)
         {
             //Let's calculate the biased energies
             reduced_perturbed_energies.append(computeReducedPerturbedEnergies(beta));
         }
-        
+
         //Now we append all the calculated information to the useful accumulation arrays
         finite_diff_gradients.append(actual_gradient * beta);
         forward_Metropolis.append(m_forward);

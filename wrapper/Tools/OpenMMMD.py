@@ -198,7 +198,6 @@ simfile = Parameter("outdata_file", "simfile.dat", """Filename that records all 
 
 verbose = Parameter("verbose", False, """Print debug output""")
 
-
 ####################################################################################################
 #
 #   Helper functions
@@ -747,7 +746,7 @@ increase from the heavy atom the hydrogen is bonded to.
         # Sanity check (g_per_mol)
         if total_delta.value() > 0.001:
             print ("WARNING ! The mass repartitioning algorithm is not conserving atomic masses for",
-                   "molecule %s (total delta is %s). Report bug to a Sire developer." % molnum,total_delta )
+                   "molecule %s (total delta is %s). Report bug to a Sire developer." % (molnum,total_delta.value()) )
             sys.exit(-1)
 
         # Now that have worked out mass changes per molecule, update molecule
@@ -760,7 +759,7 @@ increase from the heavy atom the hydrogen is bonded to.
             if (newmass.value() < 0.0):
                 print ("""WARNING ! The mass of atom %s is less than zero after hydrogen mass repartitioning.
                         This should not happen ! Decrease hydrogen mass repartitioning factor in your cfg file
-                        and try again.""")
+                        and try again.""" % atidx)
                 sys.exit(-1)
 
             mol = mol.edit().atom(atidx).setProperty("mass", newmass ).molecule()
@@ -1330,12 +1329,14 @@ def run():
             print ("Energy before the minimisation: " + str(system.energy()))
             print ('Tolerance for minimisation: ' + str(minimise_tol.val))
             print ('Maximum number of minimisation iterations: ' + str(minimise_max_iter.val))
+        integrator.setConstraintType("none")
         system = integrator.minimiseEnergy(system, minimise_tol.val, minimise_max_iter.val)
         system.mustNowRecalculateFromScratch()
         if verbose.val:
             print ("Energy after the minimization: " + str(system.energy()))
             print ("Energy minimization done.")
-        print("###===========================================================###\n")
+        integrator.setConstraintType(constraint.val)
+        print("###===========================================================###\n", flush=True)
 
     if equilibrate.val:
         print("###======================Equilibration========================###")
@@ -1349,7 +1350,7 @@ def run():
         if verbose.val:
             print ("Energy after the equilibration: " + str(system.energy()))
             print ('Equilibration done.\n')
-        print("###===========================================================###\n")
+        print("###===========================================================###\n", flush=True)
 
     simtime=nmoves.val*ncycles.val*timestep.val
     print("###=======================somd run============================###")
@@ -1358,7 +1359,7 @@ def run():
 
     s1 = timer.elapsed() / 1000.
     for i in range(cycle_start, cycle_end):
-        print("\nCycle = ", i )
+        print("\nCycle = ", i, flush=True )
         system = moves.move(system, nmoves.val, True)
 
         if (save_coords.val):
@@ -1489,13 +1490,15 @@ def runFreeNrg():
     if minimise.val:
         print("###=======================Minimisation========================###")
         print('Running minimisation.')
-        if verbose.val:
+        #if verbose.val:
+        if True:
             print ("Energy before the minimisation: " + str(system.energy()))
             print ('Tolerance for minimisation: ' + str(minimise_tol.val))
             print ('Maximum number of minimisation iterations: ' + str(minimise_max_iter.val))
         system = integrator.minimiseEnergy(system, minimise_tol.val, minimise_max_iter.val)
         system.mustNowRecalculateFromScratch()
-        if verbose.val:
+        #if verbose.val:
+        if True:
             print ("Energy after the minimization: " + str(system.energy()))
             print ("Energy minimization done.")
         print("###===========================================================###\n")
@@ -1547,11 +1550,11 @@ def runFreeNrg():
         fmt =" ".join(["%8d"] + ["%25.8e"] + ["%25.8e"] + ["%25.8e"] + ["%25.8e"] + ["%25.15e"]*(len(lambda_array.val)))
         np.savetxt(outfile, outdata, fmt=fmt)
 
-
         mean_gradient = np.average(gradients)
         outgradients.write("%5d %20.10f\n" % (i, mean_gradient))
         for gradient in gradients:
-            grads[lambda_val.val].accumulate(gradients[i-1])
+            #grads[lambda_val.val].accumulate(gradients[i-1])
+            grads[lambda_val.val].accumulate(gradient)
     s2 = timer.elapsed() / 1000.
     outfile.close()
     print("Simulation took %d s " % ( s2 - s1))
