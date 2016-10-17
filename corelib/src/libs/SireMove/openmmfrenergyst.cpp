@@ -1,4 +1,4 @@
-/********************************************\
+/********************************************   \
  *
  *  Sire - Molecular Simulation Framework
  *
@@ -421,6 +421,7 @@ void OpenMMFrEnergyST::initialise()
         qDebug() << "\nCutoffType = " << CutoffType << "\n";
 
     bool flag_noperturbedconstraints = false;
+    bool flag_constraint_water = false;
     if (ConstraintType == "none")
         flag_constraint = NONE;
     else if (ConstraintType == "hbonds")
@@ -434,8 +435,14 @@ void OpenMMFrEnergyST::initialise()
         flag_constraint = HBONDS;
         flag_noperturbedconstraints = true;
       }
+    else if (ConstraintType == "none-notwater")
+      {
+        flag_constraint = NONE;
+        flag_constraint_water = true;
+      }
     else
-        throw SireError::program_bug(QObject::tr("The Constraints method has not been specified. Possible choises: none, hbonds, allbonds, hangles, hbonds-notperturbed"), CODELOC);
+        throw SireError::program_bug(QObject::tr("The Constraints method has not been specified."
+        "Possible choises: none, hbonds, allbonds, hangles, hbonds-notperturbed, none-notwater"), CODELOC);
 
     if (Debug)
         qDebug() << "\nConstraint Type = " << ConstraintType << "\n";
@@ -1087,7 +1094,7 @@ void OpenMMFrEnergyST::initialise()
 
         for (int j = 0; j < nats_mol; ++j)
         {
-            /*JM 10/16 should make sure that perturbed atoms have mass of heaviest end-state */
+            /*JM 10/16 make sure that perturbed atoms have mass of heaviest end-state */
             system_openmm->addParticle(m[j]);
 
             Atom at = molatoms.at(j);
@@ -1618,6 +1625,10 @@ void OpenMMFrEnergyST::initialise()
         QList< ImproperID > improper_pert_swap_list;
 
 
+        double HMASS = 1.10;/* g per mol-1*/
+        double HEAVYH=12.0;/* g per mol-1*/
+        double SMALL = 0.0001;
+
         if (solute.contains(molecule))
         {
             Perturbations pert_params = molecule.property("perturbations").asA<Perturbations>();
@@ -1688,7 +1699,6 @@ void OpenMMFrEnergyST::initialise()
                           double deltak = abs(bend-bstart);
                           // only constraint if m0 < 1.1 g.mol-1 or m1 < 1.1 g.mol-1
                           // AND the initial and final parameters differ
-                          double Hmass = 1.1;
                           if (Debug)
                           {
                               qDebug() << " m0 " << m0 << " m1 " << m1 << "\n";
@@ -1696,8 +1706,7 @@ void OpenMMFrEnergyST::initialise()
                           }
                           /* Only constraint perturbed bonds that involve one hydrogen  */
                           /* if the params do not change*/
-                          double small = 0.0001;
-                          if ( (m0 < Hmass or m1 < Hmass) and ( deltar < small and deltak < small) )
+                          if ( (m0 < HMASS or m1 < HMASS) and ( deltar < SMALL and deltak < SMALL) )
                           {
                               double pert_eq_distance = solute_bond_perturbation_params[3] * Alchemical_value + (1.0 - Alchemical_value) * solute_bond_perturbation_params[2];
                               system_openmm->addConstraint(idx0, idx1, pert_eq_distance);
@@ -1709,6 +1718,25 @@ void OpenMMFrEnergyST::initialise()
                           }
                           else
                           {
+                              /* if one of the atom is a hydrogen increase mass to 12 g/mol-1 */
+                              if (m0 < HMASS)
+                              {
+                                  system_openmm->setParticleMass(idx0, HEAVYH);
+                                  if (Debug)
+                                  {
+                                      qDebug() << " increased mass of atom %s " << atom0.name().toString()
+                                               << " to " << HEAVYH;
+                                  }
+                              }
+                              if (m1 < HMASS)
+                              {
+                                  system_openmm->setParticleMass(idx1, HEAVYH);
+                                  if (Debug)
+                                  {
+                                      qDebug() << " increased mass of atom %s " << atom1.name().toString()
+                                               << " to " << HEAVYH;
+                                  }
+                              }
                               if (Debug)
                               {
                                   qDebug() << "perturbed bond flexible %s-" << atom0.name().toString()
@@ -2105,7 +2133,7 @@ void OpenMMFrEnergyST::initialise()
         AmberParameters amber_params = molecule.property("amberparameters").asA<AmberParameters>();
         QList<BondID> bonds_ff = amber_params.getAllBonds();
         QVector<BondID> bonds = bonds_ff.toVector();
-
+        ResName molfirstresname = molecule.residues()[0].name();
         //BOND
 
         for (int j = 0; j < bonds_ff.length(); j++)
@@ -2144,7 +2172,10 @@ void OpenMMFrEnergyST::initialise()
 
             if (flag_constraint == NONE)
             {
-
+                //JM 10/16 If constraint water flag is on and if molecule is a water molecule then apply constraint
+              if (flag_constraint_water and molfirstresname == ResName("WAT"))
+                system_openmm->addConstraint(idx0, idx1, r0 * OpenMM::NmPerAngstrom);
+               else
                 bondStretch_openmm->addBond(idx0, idx1, r0 * OpenMM::NmPerAngstrom, k * 2.0 * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
 
                 //cout << "\nBOND ADDED TO "<< atom0.toStdString() << " AND " << atom1.toStdString() << "\n";
