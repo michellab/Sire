@@ -1705,10 +1705,10 @@ void OpenMMFrEnergyST::initialise()
                               qDebug() << " deltar " << deltar << " " << " deltak " << deltak;
                           }
                           /* bonds that do not change parameters are constrained*/
-			  double pert_eq_distance = solute_bond_perturbation_params[3] * Alchemical_value + (1.0 - Alchemical_value) * solute_bond_perturbation_params[2];
+                          double pert_eq_distance = solute_bond_perturbation_params[3] * Alchemical_value + (1.0 - Alchemical_value) * solute_bond_perturbation_params[2];
                           if (deltar < SMALL and deltak < SMALL)
                           {
-			      system_openmm->addConstraint(idx0, idx1, pert_eq_distance);
+                              system_openmm->addConstraint(idx0, idx1, pert_eq_distance);
                               if (Debug)
                               {
                                   qDebug() << "perturbed bond but no parameter changes so constrained " << atom0.name().toString()
@@ -1716,26 +1716,26 @@ void OpenMMFrEnergyST::initialise()
                               }
                           }
                           /* bonds that change parameters and have one of the atoms with a mass < HMASS are constrained*/
-			  else if (m0 < HMASS or m1 < HMASS)
-			  {
-			      system_openmm->addConstraint(idx0, idx1, pert_eq_distance);
+                          else if (m0 < HMASS or m1 < HMASS)
+                          {
+                              system_openmm->addConstraint(idx0, idx1, pert_eq_distance);
                               if (Debug)
                               {
-				  qDebug() << "perturbed bond parameter changes but involving " 
-					   << " light mass so constrained " << atom0.name().toString()
-					   << "- " << atom1.name().toString() << "\n";
+                                  qDebug() << "perturbed bond parameter changes but involving " 
+                                           << " light mass so constrained " << atom0.name().toString()
+                                           << "- " << atom1.name().toString() << "\n";
                               }
-			  }
+                          }
                           /* other bonds are flexible */
-			  else
-			  {
+                          else
+                          {
                               solute_bond_perturbation->addBond(idx0, idx1, solute_bond_perturbation_params);
                                if (Debug)
                                {
                                    qDebug() << "perturbed bond flexible " << atom0.name().toString()
                                             << "- " << atom1.name().toString() << "\n"; 
                                }
-			  }
+                          }
                           /* Only constraint perturbed bonds that involve one hydrogen  */
                           /* if the params do not change*/
                           //if ( (m0 < HMASS or m1 < HMASS) and ( deltar < SMALL and deltak < SMALL) )
