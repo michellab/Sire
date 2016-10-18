@@ -361,7 +361,7 @@ QString OpenMMFrEnergyST::toString() const
 void OpenMMFrEnergyST::initialise()
 {
 
-    bool Debug=false;
+    bool Debug = false;
     if (Debug)
     {
         qDebug() << "Initialising OpenMMFrEnergyST";
@@ -1626,7 +1626,7 @@ void OpenMMFrEnergyST::initialise()
 
 
         double HMASS = 1.10;/* g per mol-1*/
-        double HEAVYH=12.0;/* g per mol-1*/
+        //double HEAVYH=12.0;/* g per mol-1*/
         double SMALL = 0.0001;
 
         if (solute.contains(molecule))
@@ -1704,46 +1704,78 @@ void OpenMMFrEnergyST::initialise()
                               qDebug() << " m0 " << m0 << " m1 " << m1 << "\n";
                               qDebug() << " deltar " << deltar << " " << " deltak " << deltak;
                           }
+                          /* bonds that do not change parameters are constrained*/
+			  double pert_eq_distance = solute_bond_perturbation_params[3] * Alchemical_value + (1.0 - Alchemical_value) * solute_bond_perturbation_params[2];
+                          if (deltar < SMALL and deltak < SMALL)
+                          {
+			      system_openmm->addConstraint(idx0, idx1, pert_eq_distance);
+                              if (Debug)
+                              {
+                                  qDebug() << "perturbed bond but no parameter changes so constrained " << atom0.name().toString()
+                                           << "-" << atom1.name().toString() << "\n";
+                              }
+                          }
+                          /* bonds that change parameters and have one of the atoms with a mass < HMASS are constrained*/
+			  else if (m0 < HMASS or m1 < HMASS)
+			  {
+			      system_openmm->addConstraint(idx0, idx1, pert_eq_distance);
+                              if (Debug)
+                              {
+				  qDebug() << "perturbed bond parameter changes but involving " 
+					   << " light mass so constrained " << atom0.name().toString()
+					   << "- " << atom1.name().toString() << "\n";
+                              }
+			  }
+                          /* other bonds are flexible */
+			  else
+			  {
+                              solute_bond_perturbation->addBond(idx0, idx1, solute_bond_perturbation_params);
+                               if (Debug)
+                               {
+                                   qDebug() << "perturbed bond flexible " << atom0.name().toString()
+                                            << "- " << atom1.name().toString() << "\n"; 
+                               }
+			  }
                           /* Only constraint perturbed bonds that involve one hydrogen  */
                           /* if the params do not change*/
-                          if ( (m0 < HMASS or m1 < HMASS) and ( deltar < SMALL and deltak < SMALL) )
-                          {
-                              double pert_eq_distance = solute_bond_perturbation_params[3] * Alchemical_value + (1.0 - Alchemical_value) * solute_bond_perturbation_params[2];
-                              system_openmm->addConstraint(idx0, idx1, pert_eq_distance);
-                              if (Debug)
-                              {
-                                  qDebug() << "perturbed bond constrained %s-" << atom0.name().toString()
-                                           << "-%s" << atom1.name().toString() << "\n";
-                              }
-                          }
-                          else
-                          {
-                              /* if one of the atom is a hydrogen increase mass to 12 g/mol-1 */
-                              if (m0 < HMASS)
-                              {
-                                  system_openmm->setParticleMass(idx0, HEAVYH);
-                                  if (Debug)
-                                  {
-                                      qDebug() << " increased mass of atom %s " << atom0.name().toString()
-                                               << " to " << HEAVYH;
-                                  }
-                              }
-                              if (m1 < HMASS)
-                              {
-                                  system_openmm->setParticleMass(idx1, HEAVYH);
-                                  if (Debug)
-                                  {
-                                      qDebug() << " increased mass of atom %s " << atom1.name().toString()
-                                               << " to " << HEAVYH;
-                                  }
-                              }
-                              if (Debug)
-                              {
-                                  qDebug() << "perturbed bond flexible %s-" << atom0.name().toString()
-                                           << "-%s" << atom1.name().toString() << "\n"; 
-                              }
-                              solute_bond_perturbation->addBond(idx0, idx1, solute_bond_perturbation_params);
-                          }
+                          //if ( (m0 < HMASS or m1 < HMASS) and ( deltar < SMALL and deltak < SMALL) )
+                          // {
+                          //     double pert_eq_distance = solute_bond_perturbation_params[3] * Alchemical_value + (1.0 - Alchemical_value) * solute_bond_perturbation_params[2];
+                          //     system_openmm->addConstraint(idx0, idx1, pert_eq_distance);
+                          //     if (Debug)
+                          //     {
+                          //         qDebug() << "perturbed bond constrained %s-" << atom0.name().toString()
+                          //                  << "-%s" << atom1.name().toString() << "\n";
+                          //     }
+                          // }
+                          // else
+                          // {
+                          //     /* if one of the atom is a hydrogen increase mass to 12 g/mol-1 */
+                          //     if (m0 < HMASS)
+                          //     {
+                          //         system_openmm->setParticleMass(idx0, HEAVYH);
+                          //         if (Debug)
+                          //         {
+                          //             qDebug() << " increased mass of atom %s " << atom0.name().toString()
+                          //                      << " to " << HEAVYH;
+                          //         }
+                          //     }
+                          //     if (m1 < HMASS)
+                          //     {
+                          //         system_openmm->setParticleMass(idx1, HEAVYH);
+                          //         if (Debug)
+                          //         {
+                          //             qDebug() << " increased mass of atom %s " << atom1.name().toString()
+                          //                      << " to " << HEAVYH;
+                          //         }
+                          //     }
+                          //     if (Debug)
+                          //     {
+                          //         qDebug() << "perturbed bond flexible %s-" << atom0.name().toString()
+                          //                  << "-%s" << atom1.name().toString() << "\n"; 
+                          //     }
+                          //     solute_bond_perturbation->addBond(idx0, idx1, solute_bond_perturbation_params);
+                          // }
                         }
                         else if (flag_constraint == HBONDS)
                         {
