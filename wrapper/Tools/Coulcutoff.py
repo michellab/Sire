@@ -1196,7 +1196,7 @@ def SummationCorrection2(solutes, solvent, solute_ref, space, rho_solvent_model,
                     (3/(2*eps_solvent_model+1)))
             #print (sol_charge,nsolv,nrg)
             nrg_tot += nrg
-            print("Average molecules: %d" %nsolv)    
+            print("Average molecules: %d" %nsolv)
     # JM 04/16 This code only deals with a single solute == solute_ref
         break
 
@@ -1310,7 +1310,6 @@ def runLambda():
         PDB().write(solutes, "solutes-%s.pdb" % current_frame )
         #print (solutes.molecules().first().molecule().property("coordinates").toVector()[0])
         NPCoulPots(solutes, solute_ref)
-        '''
         # ???Should we center solutes to the center of the box???
         # Compute free energy corrections
         # ############################################
@@ -1424,7 +1423,6 @@ def runLambda():
         #import pdb; pdb.set_trace()
         # ############################################
         # Compute psum
-        '''
         print ("Psum correction... ")
         #DG_PSUM = SummationCorrection(solutes, solvent, solute_ref,\
         #                              space, model_rho.val.value(),\
@@ -1448,7 +1446,6 @@ def runLambda():
     # Now compute average POL term and uncertainty
     # Note that POL and DIR are correlated, so should evaluate sum of these terms
     # for bootstrap
-    '''
     nvals = len(DG_pols)
     DG_POL_avg = 0.0 * kcal_per_mol
     dev_POL = 0.0
@@ -1468,7 +1465,6 @@ def runLambda():
     DG_DIR_avg /= nvals
     dev_DIR = (dev_DIR / nvals) - (DG_DIR_avg.value())**2
     dev_DIR = math.sqrt(dev_DIR)
-    '''
     # Now do the same for PSUM
     nvals = len(DG_psums)
     DG_PSUM_avg = 0.0 * kcal_per_mol
@@ -1479,7 +1475,6 @@ def runLambda():
     DG_PSUM_avg /= nvals
     dev_PSUM = (dev_PSUM / nvals) - (DG_PSUM_avg.value())**2
     dev_PSUM = math.sqrt(dev_PSUM)
-    '''
     # Now do the same for excluded
     nvals = len(DG_excluded)
     DG_EXC_avg = 0.0 * kcal_per_mol
@@ -1514,10 +1509,7 @@ def runLambda():
     dev_FUNC = deltaG_bootstrap.std()
     print ("DG_POL = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (DG_POL_avg.value(), dev_POL))
     print ("DG_DIR = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (DG_DIR_avg.value(), dev_DIR))
-    '''
     print ("DG_PSUM = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (DG_PSUM_avg.value(), dev_PSUM))
-    '''
     print ("DG_COR = %8.5f +/- %8.5f kcal/mol ( 1 sigma, nsamples %s) " % (DG_ALL_avg.value(),dev_ALL,len(DG_pols)))
     print ("DG_EXC = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (DG_EXC_avg.value(), dev_EXC))
     print ("DG_FUNC = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (DG_FUNC.value(), dev_FUNC))
-    '''
