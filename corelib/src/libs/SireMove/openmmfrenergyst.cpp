@@ -361,7 +361,7 @@ QString OpenMMFrEnergyST::toString() const
 void OpenMMFrEnergyST::initialise()
 {
 
-    bool Debug=false;
+    bool Debug;
     if (Debug)
     {
         qDebug() << "Initialising OpenMMFrEnergyST";
@@ -420,7 +420,6 @@ void OpenMMFrEnergyST::initialise()
     if (Debug)
         qDebug() << "\nCutoffType = " << CutoffType << "\n";
 
-    bool flag_noperturbedconstraints = false;
     if (ConstraintType == "none")
         flag_constraint = NONE;
     else if (ConstraintType == "hbonds")
@@ -429,13 +428,8 @@ void OpenMMFrEnergyST::initialise()
         flag_constraint = ALLBONDS;
     else if (ConstraintType == "hangles")
         flag_constraint = HANGLES;
-    else if (ConstraintType == "hbonds-notperturbed")
-    {
-        flag_constraint = HBONDS;
-        flag_noperturbedconstraints = true;
-    }
     else
-        throw SireError::program_bug(QObject::tr("The Constraints method has not been specified. Possible choises: none, hbonds, allbonds, hangles, hbonds-notperturbed"), CODELOC);
+        throw SireError::program_bug(QObject::tr("The Constraints method has not been specified. Possible choises: none, hbonds, allbonds, hangles"), CODELOC);
 
     if (Debug)
         qDebug() << "\nConstraint Type = " << ConstraintType << "\n";
@@ -834,6 +828,7 @@ void OpenMMFrEnergyST::initialise()
             if (flag_cutoff == CUTOFFNONPERIODIC)
             {
                 custom_force_field->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
+
             }
             else
             {
@@ -1071,7 +1066,7 @@ void OpenMMFrEnergyST::initialise()
 
     for (int i = 0; i < nmols; ++i)
     {
-        
+
         const int nats_mol = ws.nAtoms(i);
 
         const double *m = ws.massArray(i);
@@ -1086,7 +1081,7 @@ void OpenMMFrEnergyST::initialise()
 
         for (int j = 0; j < nats_mol; ++j)
         {
-            /*JM 10/16 should make sure that perturbed atoms have mass of heaviest end-state */
+
             system_openmm->addParticle(m[j]);
 
             Atom at = molatoms.at(j);
@@ -1654,14 +1649,14 @@ void OpenMMFrEnergyST::initialise()
                         solute_bond_perturbation_params[2] = rstart * OpenMM::NmPerAngstrom;
                         solute_bond_perturbation_params[3] = rend * OpenMM::NmPerAngstrom;
 
-                        /* JM 10/16 Also apply this if 'no solute constraints' flag is on*/
                         if (flag_constraint == NONE)
                         {
                             solute_bond_perturbation->addBond(idx0, idx1, solute_bond_perturbation_params);
+
                         }
+
                         else if (flag_constraint == ALLBONDS || flag_constraint == HANGLES)
                         {
-                            /* JM 10/16 ALLBONDS and HANGLES may be unwise with current free energy implementation !*/
                             double pert_eq_distance = solute_bond_perturbation_params[3] * Alchemical_value + (1.0 - Alchemical_value) * solute_bond_perturbation_params[2];
                             system_openmm->addConstraint(idx0, idx1, pert_eq_distance);
                             bond_pert_eq_list.insert(BondID(two.atom0(), two.atom1()), pert_eq_distance * OpenMM::AngstromsPerNm);
@@ -1672,50 +1667,7 @@ void OpenMMFrEnergyST::initialise()
                                 qDebug() << "Perturbation bond equilibrium distance = " << pert_eq_distance << " Nm";
                             }
                         }
-                        /* JM 10/16 */
-                        /*  Here add code to constraint hbonds only if initial and final parameters are unperturbed*/
-                        /*  check also what is the mass of the atoms in that case */
-                        else if (flag_constraint == HBONDS and flag_noperturbedconstraints)
-                        {
-                            const SireMol::Atom atom0 = molecule.select(two.atom0());
-                            //double m0 = atom0.property("mass").value();
-                            double m0 = system_openmm->getParticleMass(idx0);
-                            const SireMol::Atom atom1 = molecule.select(two.atom1());
-                            //double m1 = atom1.property("mass").value();
-                            double m1 = system_openmm->getParticleMass(idx1);
-                            double deltar = abs(rend-rstart);
-                            double deltak = abs(bend-bstart);
-                            // only constraint if m0 < 1.1 g.mol-1 or m1 < 1.1 g.mol-1
-                            // AND the initial and final parameters differ
-                            double Hmass = 1.1;
-                            if (Debug)
-                            { 
-                                qDebug() << " m0 " << m0 << " m1 " << m1 << "\n";
-                                qDebug() << " deltar " << deltar << " " << " deltak " << deltak;
-                            }
-                            /* Only constraint perturbed bonds that involve one hydrogen  */
-                            /* if the params do not change*/
-                            double small = 0.0001;
-                            if ( (m0 < Hmass or m1 < Hmass) and ( deltar < small and deltak < small) )
-                            {
-                                double pert_eq_distance = solute_bond_perturbation_params[3] * Alchemical_value + (1.0 - Alchemical_value) * solute_bond_perturbation_params[2];
-                                system_openmm->addConstraint(idx0, idx1, pert_eq_distance);
-                                if (Debug)
-                                {
-                                    qDebug() << "perturbed bond constrained %s-" << atom0.name().toString()
-                                           << "-%s" << atom1.name().toString() << "\n";
-                                }
-                            }
-                            else
-                            {
-                                if (Debug)
-                                {
-                                  qDebug() << "perturbed bond flexible %s-" << atom0.name().toString()
-                                           << "-%s" << atom1.name().toString() << "\n"; 
-                                }
-                                solute_bond_perturbation->addBond(idx0, idx1, solute_bond_perturbation_params);
-                            }
-                        }
+
                         else if (flag_constraint == HBONDS)
                         {
                             const SireMol::Atom atom0 = molecule.select(two.atom0());
@@ -1729,6 +1681,7 @@ void OpenMMFrEnergyST::initialise()
                             if (initial_type_atom0.startsWith("h", Qt::CaseInsensitive) || final_type_atom0.startsWith("h", Qt::CaseInsensitive) ||
                                 initial_type_atom1.startsWith("h", Qt::CaseInsensitive) || final_type_atom1.startsWith("h", Qt::CaseInsensitive))
                             {
+
                                 double pert_eq_distance = solute_bond_perturbation_params[3] * Alchemical_value + (1.0 - Alchemical_value) * solute_bond_perturbation_params[2];
                                 system_openmm->addConstraint(idx0, idx1, pert_eq_distance);
 
@@ -2111,6 +2064,8 @@ void OpenMMFrEnergyST::initialise()
         {
 
             BondID bond_ff = bonds_ff[j];
+
+
             QList<double> bond_params = amber_params.getParams(bond_ff);
             double k = bond_params[0];
             double r0 = bond_params[1];
@@ -2124,12 +2079,11 @@ void OpenMMFrEnergyST::initialise()
                 if (bond_pert_list.indexOf(bond_ff) != -1 || bond_pert_swap_list.indexOf(bond_ff) != -1)
                 {//Solute molecule. Check if the current solute bond is in the perturbed bond list
                     // JM July 13 --> Note, we should still have the ability to constrain the bond to its r(lambda) equilibrium distance
-                    if (Debug)
+                    if (true)
                         qDebug() << "Found Perturbed Bond\n";
                     continue;
                 }
             }
-
 
             //Select the atom type
             QString atom0 = molecule.atom(AtomIdx(idx0)).toString();
@@ -2143,11 +2097,25 @@ void OpenMMFrEnergyST::initialise()
 
             if (flag_constraint == NONE)
             {
+              if (Debug)
+              {
+              qDebug() << molecule.residue().name().value() ;
+              }
 
+              ResName resname = molecule.residue().name();
+
+              if(resname==ResName("WAT") || resname==ResName("CYC"))
+              {
+                system_openmm->addConstraint(idx0,idx1,r0*OpenMM::NmPerAngstrom);
+                //qDebug() << resname;
+              }
+              else
+              {
                 bondStretch_openmm->addBond(idx0, idx1, r0 * OpenMM::NmPerAngstrom, k * 2.0 * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
 
-                //cout << "\nBOND ADDED TO "<< atom0.toStdString() << " AND " << atom1.toStdString() << "\n";
+              }
             }
+
             else if (flag_constraint == ALLBONDS || flag_constraint == HANGLES)
             {
                 system_openmm->addConstraint(idx0, idx1, r0 * OpenMM::NmPerAngstrom);
@@ -2666,7 +2634,7 @@ void OpenMMFrEnergyST::initialise()
     {
         bondStretch_openmm->setForceGroup(1);
         system_openmm->addForce(bondStretch_openmm);
-        if (Debug)
+        if (true)
             qDebug() << "Added Internal Bond energy term";
     }
 
@@ -2992,6 +2960,7 @@ void OpenMMFrEnergyST::destroyContext()
     }
 }
 
+
 MolarEnergy OpenMMFrEnergyST::getPotentialEnergy(const System &system)
 {
     cout << "Energy function, does this ever get called?" << endl;
@@ -3006,10 +2975,12 @@ MolarEnergy OpenMMFrEnergyST::getPotentialEnergy(const System &system)
 
     MolarEnergy nrg = state_openmm.getPotentialEnergy() * kJ_per_mol;
 
+
     this->destroyContext();
 
     return nrg;
 }
+
 
 /**
  * <Runs an energy Minimization on the current system.>
@@ -3264,6 +3235,9 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
 
     const double beta = 1.0 / (0.0083144621 * convertTo(Temperature.value(), kelvin)); //mol/kJ
 
+    OpenMM::State state_openmm; //OpenMM State
+
+
     int infoMask = 0;
 
     infoMask = OpenMM::State::Positions;
@@ -3271,7 +3245,7 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
     infoMask = infoMask + OpenMM::State::Energy;
     //infoMask = infoMask + OpenMM::State::Parameters;
 
-    OpenMM::State state_openmm; //OpenMM State
+
 
 
     int sample_count = 1;
@@ -3332,10 +3306,16 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
         //*********************MD STEPS****************************
         (openmm_context->getIntegrator()).step(energy_frequency);
         state_openmm = openmm_context->getState(infoMask, false, 0x01);
+        //double kinetic_energy = state_openmm.getKineticEnergy() ;
+        //if (true)
+        //{
+        //  printf("Kinetic energy %.5f \n", kinetic_energy) ;
+        //}
         double p_energy_lambda = state_openmm.getPotentialEnergy();
-        if (Debug)
+
+        if (true)
         {
-            printf("Lambda = %f Potential energy = %.5f kcal/mol\n", Alchemical_value, p_energy_lambda * OpenMM::KcalPerKJ);
+            printf("Lambda = %f Potential energy = %.5f kcal/mol\n", Alchemical_value,  p_energy_lambda * OpenMM::KcalPerKJ);
             //exit(-1);
         }
         IsFiniteNumber = (p_energy_lambda <= DBL_MAX && p_energy_lambda >= -DBL_MAX);
@@ -3346,7 +3326,7 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
             exit(-1);
         }
         pot_energies.append(p_energy_lambda * OpenMM::KcalPerKJ);
-        
+
         if (perturbed_energies[0])
         {
             openmm_context->setParameter("SPOnOff", 1.0); //Solvent-Solvent and Protein Protein Non Bonded OFF
@@ -3384,10 +3364,15 @@ void OpenMMFrEnergyST::integrate(IntegratorWorkspace &workspace,
         //Computing the potential energies and gradients
         p_energy_lambda = state_openmm.getPotentialEnergy();
 
+        if (Debug)
+        {
+            printf("Lambda = %f Potential energy = %.5f kcal/mol\n", Alchemical_value, p_energy_lambda * OpenMM::KcalPerKJ);
+            //exit(-1);
+        }
 
         //Let's calculate the gradients
         double m_forward, m_backward;
-        boost::tuples::tie(actual_gradient, m_forward, m_backward) = calculateGradient(incr_plus, 
+        boost::tuples::tie(actual_gradient, m_forward, m_backward) = calculateGradient(incr_plus,
                              incr_minus, p_energy_lambda, beta);
 
         if (alchemical_array.size()>1)
@@ -3505,6 +3490,8 @@ double OpenMMFrEnergyST::getPotentialEnergyAtLambda(double lambda)
     OpenMM::State state_openmm = openmm_context->getState(infoMask);
     state_openmm = openmm_context->getState(infoMask, false, 0x01);
     curr_potential_energy = state_openmm.getPotentialEnergy();
+
+
     return curr_potential_energy;
 }
 
@@ -3599,8 +3586,8 @@ void OpenMMFrEnergyST::emptyContainers()
     reduced_perturbed_energies.clear();
 }
 
-void OpenMMFrEnergyST::updateBoxDimensions(OpenMM::State &state_openmm, 
-                                             QVector< Vector> &buffered_dimensions, 
+void OpenMMFrEnergyST::updateBoxDimensions(OpenMM::State &state_openmm,
+                                             QVector< Vector> &buffered_dimensions,
                                              bool Debug, AtomicVelocityWorkspace &ws)
 {
     OpenMM::Vec3 a;
