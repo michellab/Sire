@@ -71,6 +71,11 @@ else()
     else()
       set( CPUID_LIBRARY "${BUNDLE_STAGEDIR}/lib/libcpuid.so" )
     endif()
+
+    if (NOT EXISTS "${CPUID_LIBRARY}")
+      message( FATAL_ERROR "Cannot find CPUID library ${CPUID_LIBRARY}. Error with compile?")
+    endif()
+
   endif()
 endif()
 

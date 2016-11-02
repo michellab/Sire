@@ -66,6 +66,11 @@ else()
       set( GSL_LIBRARY "${BUNDLE_STAGEDIR}/lib/libgsl.so" )
       set( GSL_CBLAS_LIBRARY "${BUNDLE_STAGEDIR}/lib/libgslcblas.so" )
     endif()
+
+    if (NOT EXISTS "${GSL_LIBRARY}")
+      message( FATAL_ERROR "Cannot find GSL library ${GSL_LIBRARY}. Problem with compile?" )
+    endif()
+
   endif()
 endif()
 
