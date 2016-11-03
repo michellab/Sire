@@ -338,6 +338,12 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
                 }
             }
 
+            // Now save the current centre of geometry, so that we can
+            // ensure that this doesn't change as a result of this move
+            // (we can't have an internal move cause rigid body translation
+            //  of the molecule)
+            Vector old_center = oldmol.molecule().evaluate().centerOfGeometry(map);
+
             // Now actually move the selected dofs
             Mover<Molecule> mol_mover = oldmol.molecule().move();
 
@@ -351,7 +357,7 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
                 bond_delta = Length( this->generator().rand(-bond_delta_value, 
                                                              bond_delta_value) );
 
-                mol_mover.change(bond, bond_delta);
+                mol_mover.change(bond, bond_delta, map);
             }
 
             // and the angles
@@ -364,7 +370,7 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
                 angle_delta = Angle( this->generator().rand(-angle_delta_value,
                                                              angle_delta_value) );	      
 
-                mol_mover.change(angle, angle_delta);
+                mol_mover.change(angle, angle_delta, map);
             }
 	  
             // and the torsions
@@ -387,19 +393,29 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
                 if (this->generator().randBool())
                 {                                 
                     //move only this specific dihedral
-                    mol_mover.change(dihedral, dihedral_delta);
+                    mol_mover.change(dihedral, dihedral_delta, map);
                 }
                 else
                 {
                     BondID centralbond;
                     centralbond = BondID(dihedral.atom1(), dihedral.atom2());
-                    mol_mover.change(centralbond, dihedral_delta);
+                    mol_mover.change(centralbond, dihedral_delta, map);
                 }
 
             }
 
-            //update the system with the new coordinates
             Molecule newmol = mol_mover.commit();
+
+            //evaluate the new center of geometry, and translate the molecule
+            //to correct for any motion
+            Vector new_center = newmol.evaluate().centerOfGeometry(map);
+            
+            if (old_center != new_center)
+            {
+                newmol = newmol.move().translate( old_center-new_center, map ).commit();
+            }
+
+            //update the system with the new coordinates
             system.update(newmol);
 
             //get the new bias on this molecule
