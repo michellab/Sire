@@ -978,39 +978,6 @@ def SummationCorrection2(solutes, solvent, solute_ref, space, rho_solvent_model,
     DF_PSUM = nrg_tot * kJ_per_mol
     return DF_PSUM
 
-def concave(points,alpha_x=150,alpha_y=250):
-    points = [(i[0],i[1]) if type(i) == list else i for i in points]
-    de = Delaunay(points)
-    dec = []
-    a = alpha_x
-    b = alpha_y
-    for i in de.simplices:
-        tmp = []
-        j = [points[c] for c in i]
-        if abs(j[0][1] - j[1][1])>a or abs(j[1][1]-j[2][1])>a or abs(j[0][1]-j[2][1])>a or abs(j[0][0]-j[1][0])>b or abs(j[1][0]-j[2][0])>b or abs(j[0][0]-j[2][0])>b:
-            continue
-        for c in i:
-            tmp.append(points[c])
-        dec.append(tmp)
-    G = nx.Graph()
-    for i in dec:
-        #print (i[0])
-        G.add_edge(i[0], i[1])
-        G.add_edge(i[0], i[2])
-        G.add_edge(i[1], i[2])
-    ret = []
-    for graph in nx.connected_component_subgraphs(G):
-        ch = ConvexHull(graph.nodes())
-        tmp = []
-        for i in ch.simplices:
-            tmp.append(graph.nodes()[i[0]])
-            tmp.append(graph.nodes()[i[1]])
-        ret.append(tmp)
-    return ret
-    #return [graph.nodes() for graph in nx.connected_component_subgraphs(G)] - all points inside the shape
-#concave(points)
-
-
 def genNeutAtmosphere(solutes, solute_ref):
     # Compute net charge of all solutes excluding solute_ref
     sol_mols = solutes.molecules()
@@ -1054,6 +1021,9 @@ def genNeutAtmosphere(solutes, solute_ref):
     max_coord[1] = max_coord[1] + 5.0 # Space for extra points
     max_coord[2] = max_coord[2] + 5.0 # Space for extra points
     netcharge = int(netcharge)
+    if (netcharge == 0):
+        # No couter ions atmosphere needed
+        return None
     # Embedd solutes into a 3D grid with a 0.5 Angstrom spacing
     step = 1.0
     nx = int( (max_coord[0] - min_coord[0])/step) + 1
