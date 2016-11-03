@@ -1053,8 +1053,8 @@ def genNeutAtmosphere(solutes, solute_ref):
     for atom_coord in sol_coords:
         c += 1
         print ("Doing atom %s ..." % c)
-        if c == 100:
-            break
+        #if c == 100:
+        #    break
         rad2 = atom_coord[1]
         radion = math.sqrt(rad2)+ionrad
         radion2 = radion**2
