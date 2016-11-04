@@ -1007,7 +1007,7 @@ def genNeutAtmosphere(solutes, solute_ref):
                 min_coord[1] = coords.y()
             if coords.z() < min_coord[2]:
                 min_coord[2] = coords.z()
-            sol_coords.append( [[coords.x(), coords.y(), coords.z()], radius**2])
+            sol_coords.append( [[coords.x(), coords.y(), coords.z()], radius])
             if (mol.name() == mol_solref.name() ):
                 continue
             else:
@@ -1045,9 +1045,9 @@ def genNeutAtmosphere(solutes, solute_ref):
     # Disable grid points that are within VDW radius of a solute atom
     # Disable grid points that are more than VDW + cutoff_plus OR cutoff_minus of 
     # all solute atoms
-    if netcharge < 0:
+    if netcharge < 0:# Use ionic radius of Sodium
         ionrad = 1.4
-    elif netcharge > 0:
+    elif netcharge > 0:# Use ionic radius of Chloride
         ionrad = 2.3
     c = 0
     for atom_coord in sol_coords:
@@ -1055,19 +1055,22 @@ def genNeutAtmosphere(solutes, solute_ref):
         print ("Doing atom %s ..." % c)
         #if c == 100:
         #    break
-        rad2 = atom_coord[1]
-        radion = math.sqrt(rad2)+ionrad
-        radion2 = radion**2
+        # if distance less than radmin assume steric clash
+        radmin = atom_coord[1]+0.5*ionrad
+        # if distance greater than radmax assume no contact
+        radmax = atom_coord[1]+1.5*ionrad
+        radmin2 = radmin**2
+        radmax2 = radmax**2
         for point in grid:
             if (point[1] == 0):
                 continue
             d2 = (point[0][0]-atom_coord[0][0])**2 +\
                  (point[0][1]-atom_coord[0][1])**2 +\
                  (point[0][2]-atom_coord[0][2])**2
-            if d2 < rad2:
+            if d2 < radmin2:
                 point[1] = 0
                 continue
-            if d2 < radion2:
+            if d2 < radmax2:
                 point[2] = 1
             #print (d2,atom_coord,point)
             #import pdb; pdb.set_trace()
