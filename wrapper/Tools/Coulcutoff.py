@@ -48,7 +48,7 @@ PoissonNPSolverBin = Parameter("PoissonNPSolverBin","/home/julien/local/APBS-1.4
 solvent_residues = ["WAT","ZBK","ZBT","CYC"]
 ion_residues = ["Cl-"]#,"Na+"]  IMPORTANT RE-INSERT THE NA+
 DIME = 97
-
+DIME_APBS = 257
 
 def setupIntraCoulFF(system, space, cut_type="nocutoff", cutoff= 999* angstrom, dielectric=1.0):
 
@@ -326,7 +326,7 @@ def PoissonPBC2(binary, solutes, space, cutoff, dielectric, framenum, solute_ref
     dielec = dielectric
     cut = cutoff/10.0
 
-    iterations=20# CHANGE ME BACK TO 200 !
+    iterations=200# CHANGE ME BACK TO 200 !
 
     infilepart1 = """GRID
 %s %s %s
@@ -621,11 +621,13 @@ elec name reference
 end
 
 quit
-    """ % (DIME, DIME, DIME,
-           space_x/DIME, space_y/DIME, space_z/DIME,
+    """ % (DIME_APBS, DIME_APBS, DIME_APBS,
+           #space_x/DIME, space_y/DIME, space_z/DIME,
+           0.25, 0.25, 0.25,
            space_x/2.0, space_y/2.0, space_z/2.0, dielectric,
-           DIME, DIME, DIME,
-           space_x/DIME, space_y/DIME, space_z/DIME,
+           DIME_APBS, DIME_APBS, DIME_APBS,
+           #space_x/DIME, space_y/DIME, space_z/DIME,
+           0.25, 0.25, 0.25,
            space_x/2.0, space_y/2.0, space_z/2.0)
 
     wstream = open("apbs.in","w")
@@ -720,6 +722,107 @@ def NPCoulPots(solutes, solute_ref):
     nrg *= 0.5
     print (nrg)
     #sys.exit(-1)
+
+def DirectSummation2(solutes, space, cutoff, dielectric, framenum, solute_ref,neutatm=None):
+    # But really, shouldn't I just compute the intermolecular ligand energy +
+    # the intramolecular ligand energy ?
+    Udir_cb_intra = 0.0
+    Udir_pbc_intra = 0.0
+    # Initialise reaction-field parameters
+    krf = ( 1 / cutoff**3 ) * ( dielectric - 1.0 ) / ( 2 * dielectric + 1.0 )
+    crf = (1 / cutoff ) * (3 * dielectric / ( 2 * dielectric + 1.0 ) )
+
+    # Select atoms for summation
+    mol_solref = solute_ref.molecules().first().molecule()
+    sol_mols = solutes.molecules()
+    molnums = sol_mols.molNums()
+    coords = []
+    charges = []
+    for molnum in molnums:
+        mol = sol_mols.molecule(molnum).molecule()
+        if (mol.name() == mol_solref.name()):
+            atoms = mol.atoms()
+            for atom in atoms:
+                coord = atom.property("coordinates")
+                charge = atom.property("charge").value()
+                coords.append(coord)
+                charges.append(charge)
+    # Intramolecular passs
+    natoms = len(coords)
+    for i in range(0,natoms):
+        ri = coords[i]
+        qi = charges[i]
+        for j in range(i+1,natoms):
+            rj = coords[j]
+            qj = charges[j]
+            # Compute Coulombic energy
+            rij2_np = (rj[0]-ri[0])**2+(rj[1]-ri[1])**2+(rj[2]-ri[2])**2
+            rij_np = math.sqrt(rij2_np)
+            coul_nrg = one_over_four_pi_eps0 * ( (qi*qj) /rij_np )
+            # Compute Barker-Watts reaction field energy
+            rij_pbc = space.calcDist(ri,rj)
+            if rij_pbc > cutoff:
+                rf_nrg = 0.0
+            else:
+                rf_nrg =  qi*qj*one_over_four_pi_eps0 * ( 1/rij_pbc +\
+                                                          krf*rij_pbc**2 - crf )
+            Udir_cb_intra += coul_nrg
+            Udir_pbc_intra += rf_nrg
+    # Now pick intergroup
+    coords_inter = []
+    charges_inter = []
+    sol_mols = solutes.molecules()
+    molnums = sol_mols.molNums()
+    for molnum in molnums:
+        mol = sol_mols.molecule(molnum).molecule()
+        if (mol.name() == mol_solref.name()):
+            continue
+        atoms = mol.atoms()
+        for atom in atoms:
+            coord = atom.property("coordinates")
+            charge = atom.property("charge").value()
+            coords_inter.append(coord)
+            charges_inter.append(charge)
+    if neutatm is not None:
+        for ion in neutatm:
+            coord = Vector(ion[0])
+            charge = ion[1]
+            coords_inter.append(coord)
+            charges_inter.append(charge)
+    # Intermolecular passs
+    Udir_cb_inter = 0.0
+    Udir_pbc_inter = 0.0
+    natoms = len(coords)
+    for i in range(0,natoms):
+        ri = coords[i]
+        qi = charges[i]
+        njatoms = len(coords_inter)
+        for j in range(0,njatoms):
+            rj = coords_inter[j]
+            qj = charges_inter[j]
+            # Compute Coulombic energy
+            rij2_np = (rj[0]-ri[0])**2+(rj[1]-ri[1])**2+(rj[2]-ri[2])**2
+            rij_np = math.sqrt(rij2_np)
+            coul_nrg = one_over_four_pi_eps0 * ( (qi*qj) /rij_np )
+            # Compute Barker-Watts reaction field energy
+            rij_pbc = space.calcDist(ri,rj)
+            if rij_pbc > cutoff:
+                rf_nrg = 0.0
+            else:
+                rf_nrg =  qi*qj*one_over_four_pi_eps0 * ( 1/rij_pbc +\
+                                                          krf*rij_pbc**2 - crf )
+            Udir_cb_inter += coul_nrg
+            Udir_pbc_inter += rf_nrg
+    Udir_cb = Udir_cb_intra + Udir_cb_inter
+    Udir_pbc = Udir_pbc_intra + Udir_pbc_inter
+    print ("Udir_cb %s Udir_cb_intra %s Udir_cb_inter %s " % (Udir_cb, Udir_cb_intra, Udir_cb_inter))
+    print ("Udir_pbc %s Udir_pbc_intra %s Udir_pbc_inter %s " % (Udir_pbc, Udir_pbc_intra, Udir_pbc_inter))
+    
+    Udir_cb = Udir_cb * kcal_per_mol
+    Udir_pbc = Udir_pbc * kcal_per_mol
+
+    return Udir_cb, Udir_pbc
+
 
 def DirectSummation(solutes, space,
                     cutoff, dielectric,
@@ -1024,7 +1127,7 @@ def genNeutAtmosphere(solutes, solute_ref):
     if (netcharge == 0):
         # No couter ions atmosphere needed
         return None
-    # Embedd solutes into a 3D grid with a 0.5 Angstrom spacing
+    # Embedd solutes into a 3D grid with a step spacing in Angstrom 
     step = 1.0
     nx = int( (max_coord[0] - min_coord[0])/step) + 1
     ny = int( (max_coord[1] - min_coord[1])/step) + 1
@@ -1183,7 +1286,8 @@ def runLambda():
     neutatmosphere = True
 
     print ("#FrameNum DG_CH[P+L,L]^CB,NBC DG_CH[P,L]^CB,NBC UDIR[P+L]^CB,NBC UDIR[P]^CB,NBC"\
-           "DG_CH[P+L,L]^BA,PBC DG_CH[P,L]^BA,PBC UDIR[P+L]^BA,PBC UDIR[P]^BA,PBC, DG_PSUM")
+           "DG_CH[P+L,L]^BA,PBC DG_CH[P,L]^BA,PBC UDIR[P+L]^BA,PBC UDIR[P]^BA,PBC, DG_PSUM"\
+           "Delta_UDIR^CB,NBC,Delta_UDIR^BA,PBC")
 
     while (current_frame <= end_frame):
         print ("#Processing frame %s " % current_frame)
@@ -1206,6 +1310,10 @@ def runLambda():
                 stream.close()
         #import pdb; pdb.set_trace()
         PDB().write(solutes, "solutes-%s.pdb" % current_frame )
+        #Udir_cb2, Udir_pbc2 = DirectSummation2(solutes, system.property("space"),
+        #                                       cutoff_dist.val.value(), model_eps.val,
+        #                                       current_frame, solute_ref, neutatm=neutatm)
+        #import pdb; pdb.set_trace()
         #print (solutes.molecules().first().molecule().property("coordinates").toVector()[0])
         #NPCoulPots(solutes, solute_ref)
         # ???Should we center solutes to the center of the box???
@@ -1274,10 +1382,15 @@ def runLambda():
                                                   cutoff_dist.val.value(), model_eps.val,
                                                   current_frame, solute_ref, zerorefcharges=False,
                                                   neutatm=neutatm)
+
         Udir_cb_h, Udir_pbc_h = DirectSummation(solutes, system.property("space"),
                                                 cutoff_dist.val.value(), model_eps.val,
                                                 current_frame, solute_ref, zerorefcharges=True,
                                                 neutatm=neutatm)
+
+        Udir_cb2, Udir_pbc2 = DirectSummation2(solutes, system.property("space"),
+                                               cutoff_dist.val.value(), model_eps.val,
+                                               current_frame, solute_ref, neutatm=neutatm)
         #delta_dir_nrgs.append(delta_dir_nrg)
         #DG_PB = (DG_CB_NP_HG + DG_CB_NP_H + Udir_cb_hg - Udir_cb_h) - \
         #         (DG_BA_PBC_HG + DG_BA_PBC_H + Udir_pbc_hg - Udir_pbc_h)
@@ -1330,10 +1443,10 @@ def runLambda():
         #delta_func_nrg = (system_solute_cb.energy() - system_solute_rf.energy())
         #delta_func_nrgs.append(delta_func_nrg)
         #import pdb; pdb.set_trace()
-        print ("%8d %12.5f %12.5f %12.5f %12.5f %12.5f %12.5f %12.5f %12.5f %12.5f %12.5f %12.5f" % \
+        print ("%8d %12.5f %12.5f %12.5f %12.5f %12.5f %12.5f %12.5f %12.5f %12.5f %12.5f %12.5f %12.5f %12.5f" % \
                (current_frame,DG_CB_NP_HG.value(),DG_CB_NP_H.value(), Udir_cb_hg.value(), Udir_cb_h.value(),\
                 DG_BA_PBC_HG.value(),DG_BA_PBC_H.value(),Udir_pbc_hg.value(),Udir_pbc_h.value(),
-                Udirinter_cb.value(),Udirinter_rf.value(),DG_PSUM.value()))
+                Udirinter_cb.value(),Udirinter_rf.value(),DG_PSUM.value(),Udir_cb2.value(),Udir_pbc2.value()))
         current_frame += step_frame
         mdtraj_trajfile.seek(current_frame)#step_frame, whence=1)
     # Now compute average POL term and uncertainty
