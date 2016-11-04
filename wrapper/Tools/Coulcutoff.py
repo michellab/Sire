@@ -1128,7 +1128,7 @@ def genNeutAtmosphere(solutes, solute_ref):
         # No couter ions atmosphere needed
         return None
     # Embedd solutes into a 3D grid with a step spacing in Angstrom 
-    step = 1.0
+    step = 1.5
     nx = int( (max_coord[0] - min_coord[0])/step) + 1
     ny = int( (max_coord[1] - min_coord[1])/step) + 1
     nz = int( (max_coord[2] - min_coord[2])/step) + 1
