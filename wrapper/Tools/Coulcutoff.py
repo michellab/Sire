@@ -1374,19 +1374,19 @@ def runLambda():
         Udirinter_rf = system_solute_host_rf.energy()
         # Direct summation code
         print ("#Direct Summation")
-        #Udir_cb_hg = 0.0 * kcal_per_mol
-        #Udir_pbc_hg = 0.0 * kcal_per_mol
-        #Udir_cb_h = 0.0 * kcal_per_mol
-        #Udir_pbc_h = 0.0 * kcal_per_mol
-        Udir_cb_hg, Udir_pbc_hg = DirectSummation(solutes, system.property("space"),
-                                                  cutoff_dist.val.value(), model_eps.val,
-                                                  current_frame, solute_ref, zerorefcharges=False,
-                                                  neutatm=neutatm)
+        Udir_cb_hg = 0.0 * kcal_per_mol
+        Udir_pbc_hg = 0.0 * kcal_per_mol
+        Udir_cb_h = 0.0 * kcal_per_mol
+        Udir_pbc_h = 0.0 * kcal_per_mol
+        #Udir_cb_hg, Udir_pbc_hg = DirectSummation(solutes, system.property("space"),
+        #                                          cutoff_dist.val.value(), model_eps.val,
+        #                                          current_frame, solute_ref, zerorefcharges=False,
+        #                                          neutatm=neutatm)
 
-        Udir_cb_h, Udir_pbc_h = DirectSummation(solutes, system.property("space"),
-                                                cutoff_dist.val.value(), model_eps.val,
-                                                current_frame, solute_ref, zerorefcharges=True,
-                                                neutatm=neutatm)
+        #Udir_cb_h, Udir_pbc_h = DirectSummation(solutes, system.property("space"),
+        #                                        cutoff_dist.val.value(), model_eps.val,
+        #                                        current_frame, solute_ref, zerorefcharges=True,
+        #                                        neutatm=neutatm)
 
         Udir_cb2, Udir_pbc2 = DirectSummation2(solutes, system.property("space"),
                                                cutoff_dist.val.value(), model_eps.val,
