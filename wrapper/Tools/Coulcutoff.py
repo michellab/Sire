@@ -1197,12 +1197,13 @@ def runLambda():
         neutatm = None
         if (neutatmosphere):
             neutatm = genNeutAtmosphere(solutes, solute_ref)
-            stream = open("ions.xyz","w")
-            stream.write("%s\n \n" % len(neutatm))
-            for ion in neutatm:
-                line = "ION %12.5f %12.5f %12.5f\n" % (ion[0][0],ion[0][1],ion[0][2])
-                stream.write(line)
-            stream.close()
+            if neutatm is not None:
+                stream = open("ions.xyz","w")
+                stream.write("%s\n \n" % len(neutatm))
+                for ion in neutatm:
+                    line = "ION %12.5f %12.5f %12.5f\n" % (ion[0][0],ion[0][1],ion[0][2])
+                    stream.write(line)
+                stream.close()
         #import pdb; pdb.set_trace()
         PDB().write(solutes, "solutes-%s.pdb" % current_frame )
         #print (solutes.molecules().first().molecule().property("coordinates").toVector()[0])
