@@ -251,8 +251,6 @@ char* PackedArray2D_ArrayDataBase::memory()
     return PackedArray2DMemoryBase::getRoot( (char*)this, this_array );
 }
 
-#include "SireUnits/dimensions.h"
-
 /// fully instantiate key PackedArray2D classes
 namespace SireBase
 {
@@ -260,6 +258,4 @@ namespace SireBase
     template class PackedArray2D<qint64>;
     template class PackedArray2D<double>;
     template class PackedArray2D<QVariant>;
-    
-    template class PackedArray2D< SireUnits::Dimension::Charge >;
 }
