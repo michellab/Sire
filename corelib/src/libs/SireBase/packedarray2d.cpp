@@ -250,3 +250,12 @@ char* PackedArray2D_ArrayDataBase::memory()
 {
     return PackedArray2DMemoryBase::getRoot( (char*)this, this_array );
 }
+
+/// fully instantiate key PackedArray2D classes
+namespace SireBase
+{
+    template class PackedArray2D<QString>;
+    template class PackedArray2D<qint64>;
+    template class PackedArray2D<double>;
+    template class PackedArray2D<QVariant>;
+}

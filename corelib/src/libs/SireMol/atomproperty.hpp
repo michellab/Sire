@@ -652,19 +652,11 @@ QVector<T> AtomProperty<T>::toVector() const
     if (this->nAtoms() == 0)
         return QVector<T>();
     
-    try
-    {
-        QVector<T> ret( this->nAtoms() );
+    QVector<T> ret( this->nAtoms() );
     
-        SireBase::quickCopy<T>(ret.data(), props.constValueData(), this->nAtoms());
+    SireBase::quickCopy<T>(ret.data(), props.constValueData(), this->nAtoms());
 
-        return ret;
-    }
-    catch(...)
-    {
-        qDebug() << "AN ERROR OCCURRED!";
-        return QVector<T>();
-    }
+    return ret;
 }
 
 /** Convert the properties of the atoms selected in 'selection' to an 
