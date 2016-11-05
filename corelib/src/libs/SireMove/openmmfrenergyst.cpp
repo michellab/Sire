@@ -431,15 +431,15 @@ void OpenMMFrEnergyST::initialise()
     else if (ConstraintType == "hangles")
         flag_constraint = HANGLES;
     else if (ConstraintType == "hbonds-notperturbed")
-      {
+    {
         flag_constraint = HBONDS;
         flag_noperturbedconstraints = true;
-      }
+    }
     else if (ConstraintType == "none-notwater")
-      {
+    {
         flag_constraint = NONE;
         flag_constraint_water = true;
-      }
+    }
     else
         throw SireError::program_bug(QObject::tr("The Constraints method has not been specified."
         "Possible choises: none, hbonds, allbonds, hangles, hbonds-notperturbed, none-notwater"), CODELOC);
@@ -841,7 +841,6 @@ void OpenMMFrEnergyST::initialise()
             if (flag_cutoff == CUTOFFNONPERIODIC)
             {
                 custom_force_field->setNonbondedMethod(OpenMM::CustomNonbondedForce::CutoffNonPeriodic);
-
             }
             else
             {
@@ -1079,7 +1078,7 @@ void OpenMMFrEnergyST::initialise()
 
     for (int i = 0; i < nmols; ++i)
     {
-
+        
         const int nats_mol = ws.nAtoms(i);
 
         const double *m = ws.massArray(i);
@@ -1736,46 +1735,6 @@ void OpenMMFrEnergyST::initialise()
                                             << "- " << atom1.name().toString() << "\n"; 
                                }
                           }
-                          /* Only constraint perturbed bonds that involve one hydrogen  */
-                          /* if the params do not change*/
-                          //if ( (m0 < HMASS or m1 < HMASS) and ( deltar < SMALL and deltak < SMALL) )
-                          // {
-                          //     double pert_eq_distance = solute_bond_perturbation_params[3] * Alchemical_value + (1.0 - Alchemical_value) * solute_bond_perturbation_params[2];
-                          //     system_openmm->addConstraint(idx0, idx1, pert_eq_distance);
-                          //     if (Debug)
-                          //     {
-                          //         qDebug() << "perturbed bond constrained %s-" << atom0.name().toString()
-                          //                  << "-%s" << atom1.name().toString() << "\n";
-                          //     }
-                          // }
-                          // else
-                          // {
-                          //     /* if one of the atom is a hydrogen increase mass to 12 g/mol-1 */
-                          //     if (m0 < HMASS)
-                          //     {
-                          //         system_openmm->setParticleMass(idx0, HEAVYH);
-                          //         if (Debug)
-                          //         {
-                          //             qDebug() << " increased mass of atom %s " << atom0.name().toString()
-                          //                      << " to " << HEAVYH;
-                          //         }
-                          //     }
-                          //     if (m1 < HMASS)
-                          //     {
-                          //         system_openmm->setParticleMass(idx1, HEAVYH);
-                          //         if (Debug)
-                          //         {
-                          //             qDebug() << " increased mass of atom %s " << atom1.name().toString()
-                          //                      << " to " << HEAVYH;
-                          //         }
-                          //     }
-                          //     if (Debug)
-                          //     {
-                          //         qDebug() << "perturbed bond flexible %s-" << atom0.name().toString()
-                          //                  << "-%s" << atom1.name().toString() << "\n"; 
-                          //     }
-                          //     solute_bond_perturbation->addBond(idx0, idx1, solute_bond_perturbation_params);
-                          // }
                         }
                         else if (flag_constraint == HBONDS)
                         {
