@@ -9,14 +9,17 @@
 set ( SCRIPTS
         __init__.py
         AmberLoader.py
+        Coulcutoff.py
         DCDFile.py
         FDTISingleBound.py
         FDTISingleFree.py
+        LJcutoff.py
         LSRC.py
         Nautilus.py 
         QuantumToMM.py
         OpenMMMD.py
         Plot.py
+        StandardState.py
         WaterChanger.py
         WaterView.py
         WSRC.py
