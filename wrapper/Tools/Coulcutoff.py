@@ -48,7 +48,7 @@ PoissonNPSolverBin = Parameter("PoissonNPSolverBin","/home/julien/local/APBS-1.4
 solvent_residues = ["WAT","ZBK","ZBT","CYC"]
 ion_residues = []#["Cl-"]#,"Na+"]  #IMPORTANT RE-INSERT THE NA+
 DIME = 97
-DIME_APBS = 257
+DIME_APBS = 193
 
 def setupIntraCoulFF(system, space, cut_type="nocutoff", cutoff= 999* angstrom, dielectric=1.0):
 
@@ -623,11 +623,11 @@ end
 quit
     """ % (DIME_APBS, DIME_APBS, DIME_APBS,
            #space_x/DIME, space_y/DIME, space_z/DIME,
-           0.25, 0.25, 0.25,
+           0.50, 0.50, 0.50,
            space_x/2.0, space_y/2.0, space_z/2.0, dielectric,
            DIME_APBS, DIME_APBS, DIME_APBS,
            #space_x/DIME, space_y/DIME, space_z/DIME,
-           0.25, 0.25, 0.25,
+           0.50, 0.50, 0.50,
            space_x/2.0, space_y/2.0, space_z/2.0)
 
     wstream = open("apbs.in","w")
@@ -1449,7 +1449,7 @@ def runLambda():
         print ("%8d %12.5f %12.5f %12.5f %12.5f %12.5f %12.5f %12.5f %12.5f" % \
                (current_frame,DG_CB_NP_HG.value(),DG_CB_NP_H.value(),Udir_cb2.value(),\
                 DG_BA_PBC_HG.value(),DG_BA_PBC_H.value(),Udir_pbc2.value(),
-                DG_PSUM.value(),DG_COR.value()))
+                DG_PSUM.value(),DG_COR.value()), flush=True)
         current_frame += step_frame
         mdtraj_trajfile.seek(current_frame)#step_frame, whence=1)
     # Now compute average POL term and uncertainty
@@ -1516,7 +1516,7 @@ def runLambda():
     #    dG = getFreeEnergy(resampled_nrgs)
     #    deltaG_bootstrap[x] = dG.value()
     #dev_FUNC = deltaG_bootstrap.std()
-    print ("DG_COR = %8.5f +/- %8.5f kcal/mol (1 sigma, nsamples %s) " % (DG_COR_avg.value(), dev_COR,len(DG_CORs)))
+    print ("DG_COR = %8.5f +/- %8.5f kcal/mol (nsamples %s, sigma %8.5f kcal/mol) " % (DG_COR_avg.value(), dev_COR/math.sqrt(len(DG_CORs)),len(DG_CORs),dev_COR))
     #print ("DG_DIR = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (DG_DIR_avg.value(), dev_DIR))
     #print ("DG_PSUM = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (DG_PSUM_avg.value(), dev_PSUM))
     #print ("DG_COR = %8.5f +/- %8.5f kcal/mol ( 1 sigma, nsamples %s) " % (DG_ALL_avg.value(),dev_ALL,len(DG_pols)))
