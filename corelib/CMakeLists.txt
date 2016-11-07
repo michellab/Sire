@@ -505,7 +505,12 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
     set ( SIRE_WARNALL_FLAGS  "-Wall" )
     set ( SIRE_DEBUG_FLAGS   "-g" )
 
-    set ( SIRE_RELEASE_FLAGS "-O3 -ffast-math" )
+    # GCC >= 5 crashes when using -O3
+    if ( GCC_MAJOR_VERSION LESS 5 )
+      set ( SIRE_RELEASE_FLAGS "-O3 -ffast-math" )
+    else()
+      set ( SIRE_RELEASE_FLAGS "-O2 -ffast-math" )
+    endif()
 
     # -fomit-frame-pointer breaks backtrace on an apple
     set ( SIRE_RELEASE_FLAGS "${SIRE_RELEASE_FLAGS} -fomit-frame-pointer" )
