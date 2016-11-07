@@ -1444,7 +1444,7 @@ void GridFF2::calculateEnergy(const CoordGroup &coords0,
                 k_0 < 0 or k_0 >= int(dimz-1))
             {
                 qDebug() << "POINT" << c0.toString() << "LIES OUTSIDE OF "
-                         << "THE GRID?" << gridbox.toString();
+                         << "THE GRID (GridFF2)?" << gridbox.toString() ;
             }
             else
             {
