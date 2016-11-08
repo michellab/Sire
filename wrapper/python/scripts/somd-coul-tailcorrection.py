@@ -64,10 +64,10 @@ parser.add_argument('-r', '--traj_file', nargs="?",
 parser.add_argument('-s', '--step', nargs="?",
                     help="The number of frames to skip between two snapshot evaluations.")
 
-parser.add_argument('--ne','--neutralising_atmosphere',action="store_true",
+parser.add_argument('--neutralising_atmosphere',action="store_true",
                     help="Neutralize host atmosphere.")
 
-parser.add_argument('--ai','--add_ions_PB',action="store_true",
+parser.add_argument('--add_ions_PB',action="store_true",
                     help="Add explicit ions to PB calculation")
 
 sys.stdout.write("\n")
