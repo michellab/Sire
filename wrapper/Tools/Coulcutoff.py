@@ -40,10 +40,10 @@ trajfile = Parameter("trajfile", "traj000000001.dcd",
 stepframe = Parameter("step_frame",1,
     """The number of frames to step to between two succcessive evaluations.""")
 
-neutralize = Parameter("neutralisingatmosphere",False,
+neutralising_atmosphere = Parameter("neutralising_atmosphere",False,
     """Add a charged atmosphere around the host to neutralize its total charge""")
 
-add_ions = Parameter("add_ions",False,
+add_ions_PB = Parameter("add_ions_PB",False,
     """Add explicit ions to the current frame for Poisson Boltzmann calculation""")
 
 #### Hardcoded parameters (may need revision)
@@ -1215,7 +1215,7 @@ def runLambda():
 
     #Here we create immediately the ion list:
     #if exp_ions.val is False the list is empty and so ions will be added explicitly
-    if not add_ions.val :
+    if not add_ions_PB.val :
         ion_residues = ["Cl-","Na+"]
         print("Ions are  NOT included in the calculation")
     else:
@@ -1307,7 +1307,7 @@ def runLambda():
 
     #Take the boolean value if we have to neutralize te atmosphere
 
-    neutatmosphere = neutralisingatmosphere.val
+    neutatmosphere = neutralising_atmosphere.val
     if not neutatmosphere:
         print("Host charges are NOT neutralized")
     else:

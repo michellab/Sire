@@ -64,10 +64,10 @@ parser.add_argument('-r', '--traj_file', nargs="?",
 parser.add_argument('-s', '--step', nargs="?",
                     help="The number of frames to skip between two snapshot evaluations.")
 
-parser.add_argument('-ne','--neutralisingatmosphere',action="store_true",
+parser.add_argument('--ne','--neutralising_atmosphere',action="store_true",
                     help="Neutralize host atmosphere.")
 
-parser.add_argument('-ai','--add_ions',action="store_true",
+parser.add_argument('--ai','--add_ions_PB',action="store_true",
                     help="Add explicit ions to PB calculation")
 
 sys.stdout.write("\n")
@@ -156,11 +156,11 @@ if args.step:
     step_frame = int(args.step)
     params["step_frame"] = step_frame
 
-if args.neutralize:
-    params["neutralisingatmosphere"]=True
+if args.neutralising_atmosphere:
+    params["neutralising_atmosphere"]=True
 
-if args.add_ions:
-    params["add_ions"]=True
+if args.add_ions_PB:
+    params["add_ions_PB"]=True
 
 if not (os.path.exists(coord_file) and os.path.exists(top_file) \
         and os.path.exists(morph_file) and os.path.exists(traj_file)):
