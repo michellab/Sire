@@ -40,13 +40,14 @@ trajfile = Parameter("trajfile", "traj000000001.dcd",
 stepframe = Parameter("step_frame",1,
     """The number of frames to step to between two succcessive evaluations.""")
 
-PoissonPBCSolverBin = Parameter("PoissonPBCSolverBin","/home/julien/local/bin/pb_generalT","""Path to the PBC Poisson solver.r""")
+neutralize = Parameter("neutralize",False,
+    """Add a charged atmosphere around the host to neutralize its total charge""")
 
-PoissonNPSolverBin = Parameter("PoissonNPSolverBin","/home/julien/local/APBS-1.4.1-binary/bin/apbs","""Path to the NP Poisson solver.""")
+add_ions = Parameter("add_ions",False,
+    """Add explicit ions to the current frame for Poisson Boltzmann calculation""")
 
 #### Hardcoded parameters (may need revision)
 solvent_residues = ["WAT","ZBK","ZBT","CYC"]
-ion_residues = []#["Cl-"]#,"Na+"]  #IMPORTANT RE-INSERT THE NA+
 DIME = 97
 DIME_APBS = 193
 
@@ -151,7 +152,7 @@ def setupIntraCoulFF(system, space, cut_type="nocutoff", cutoff= 999* angstrom, 
 
     return system
 
-def setupInterCoulFF(system, space, cut_type="nocutoff", cutoff= 999* angstrom, dielectric=1.0):
+def setupInterCoulFF(system, space, ion_residues,cut_type="nocutoff", cutoff= 999* angstrom, dielectric=1.0):
 
     solute = system[MGName("solute_ref")]
     other_solutes = system[MGName("molecules")]
@@ -249,7 +250,7 @@ def updateSystemfromTraj(system, frame_xyz, cell_lengths, cell_angles):
 
     return system
 
-def SplitSoluteSolvent(system):
+def SplitSoluteSolvent(system,ion_residues):
     molecules = system.molecules()
     mol_numbers = molecules.molNums()
     solutes = MoleculeGroup("solutes")
@@ -265,7 +266,7 @@ def SplitSoluteSolvent(system):
         #    print ("Mutating wat %s" % res0.number().value())
         #    mol = mol.atom(AtomName("O")).edit().setProperty("charge",+1 * mod_electron).molecule().commit()
         #    mol = mol.atom(AtomName("H1")).edit().setProperty("charge",+0 * mod_electron).molecule().commit()
-        #    mol = mol.atom(AtomName("H2")).edit().setProperty("charge",+0 * mod_electron).molecule().commit()            
+        #    mol = mol.atom(AtomName("H2")).edit().setProperty("charge",+0 * mod_electron).molecule().commit()
         #    solutes.add(mol)
         #    continue
         if res0.name().value() in solvent_residues:
@@ -817,7 +818,7 @@ def DirectSummation2(solutes, space, cutoff, dielectric, framenum, solute_ref,ne
     Udir_pbc = Udir_pbc_intra + Udir_pbc_inter
     print ("# Udir_cb %s Udir_cb_intra %s Udir_cb_inter %s " % (Udir_cb, Udir_cb_intra, Udir_cb_inter))
     print ("# Udir_pbc %s Udir_pbc_intra %s Udir_pbc_inter %s " % (Udir_pbc, Udir_pbc_intra, Udir_pbc_inter))
-    
+
     Udir_cb = Udir_cb * kcal_per_mol
     Udir_pbc = Udir_pbc * kcal_per_mol
 
@@ -1127,7 +1128,7 @@ def genNeutAtmosphere(solutes, solute_ref):
     if (netcharge == 0):
         # No couter ions atmosphere needed
         return None
-    # Embedd solutes into a 3D grid with a step spacing in Angstrom 
+    # Embedd solutes into a 3D grid with a step spacing in Angstrom
     step = 1.5
     nx = int( (max_coord[0] - min_coord[0])/step) + 1
     ny = int( (max_coord[1] - min_coord[1])/step) + 1
@@ -1146,7 +1147,7 @@ def genNeutAtmosphere(solutes, solute_ref):
     # Compute the concave hull of solutes?
     # Disable grid points that are inside the hull
     # Disable grid points that are within VDW radius of a solute atom
-    # Disable grid points that are more than VDW + cutoff_plus OR cutoff_minus of 
+    # Disable grid points that are more than VDW + cutoff_plus OR cutoff_minus of
     # all solute atoms
     if netcharge < 0:# Use ionic radius of Sodium
         ionrad = 1.4
@@ -1212,6 +1213,21 @@ def runLambda():
         (molecules, space) = amber.readCrdTop(crdfile.val, topfile.val)
         Sire.Stream.save((molecules, space), s3file.val)
 
+    #Here we create immediately the ion list:
+    #if exp_ions.val is False the list is empty and so ions will be added explicitly
+    if not add_ions.val :
+        ion_residues = ["Cl-","Na+"]
+        print("Ions are  NOT included in the calculation")
+    else:
+        ion_residues=[]
+        print("Ions are included in the calculation")
+    #Here we detect from the bash where the PoissonPBC and PoissonNP are:
+    PoissonPBCSolverBin=os.environ["PBGENERAL"]
+    #where export PBGENERAL=/home/X/local/bin/pb_generalT
+    PoissonNPSolverBin = os.environ["APBS"]
+    #Sanity check
+    print("Poisson PBC solver located at: %s" % PoissonPBCSolverBin)
+    print("Poisson NP  solver located at: %s" % PoissonNPSolverBin)
     # What to do with this...
     system = createSystemFreeEnergy(molecules)
     lam = Symbol("lambda")
@@ -1251,7 +1267,7 @@ def runLambda():
     #system_solute_host_rf.add(system[MGName("solute_ref")])
     #system_solute_host_rf.add(system[MGName("solute_ref")])
 
-    #system_solute_host_rf = setupInterCoulFF(system_solute_host_rf, space, \
+    #system_solute_host_rf = setupInterCoulFF(system_solute_host_rf, space,ion_residues, \
     #                                         cut_type=cutoff_type.val,
     #                                         cutoff=cutoff_dist.val,
     #                                         dielectric=model_eps.val)
@@ -1260,7 +1276,7 @@ def runLambda():
     #system_solute_host_cb.add(system[MGName("molecules")])
     #system_solute_host_cb.add(system[MGName("solute_ref")])
     #
-    #system_solute_host_cb = setupInterCoulFF(system_solute_host_cb, Cartesian(),\
+    #system_solute_host_cb = setupInterCoulFF(system_solute_host_cb, Cartesian(),ion_residues\
     #                                         cut_type="nocutoff")#,cutoff=22*angstrom)#cutoff=cutoff_dist.val)
 
     #import pdb; pdb.set_trace()
@@ -1284,11 +1300,19 @@ def runLambda():
     mdtraj_trajfile.seek(start_frame)
     current_frame = start_frame
 
-    neutatmosphere = False
 
     print ("#FrameNum, DG_CH[P+L,L]^CB,NBC, DG_CH[P,L]^CB,NBC, Delta_UDIR^CB,NBC,"\
            "DG_CH[P+L,L]^BA,PBC, DG_CH[P,L]^BA,PBC, Delta_UDIR^BA, DG_PSUM, "\
            "DG_COR")
+
+    #Take the boolean value if we have to neutralize te atmosphere
+
+    neutatmosphere = neutralize.val
+    if not neutatmosphere:
+        print("Host charges are NOT neutralized")
+    else:
+        print("Host charges will be neutralized")
+
 
     while (current_frame <= end_frame):
         print ("#Processing frame %s " % current_frame)
@@ -1296,9 +1320,10 @@ def runLambda():
         system = updateSystemfromTraj(system, frames_xyz, cell_lengths, cell_angles)
         #import pdb; pdb.set_trace()
         # Now filter out solvent molecules
-        solutes, solvent, ions = SplitSoluteSolvent(system)
+        solutes, solvent, ions = SplitSoluteSolvent(system,ion_residues)
         solutes, solvent = centerAll(solutes, solvent, system.property("space"))
         # Now generate neutralising atmosphere
+
         neutatm = None
         if (neutatmosphere):
             neutatm = genNeutAtmosphere(solutes, solute_ref)
@@ -1327,7 +1352,7 @@ def runLambda():
         DG_CB_NP_HG = 0.0 * kcal_per_mol
         # First calculation - using all charges
         # JM 04/16 MODIFY TO GET ATOMIC POTENTIALS
-        DG_CB_NP_HG = PoissonNP2(PoissonNPSolverBin.val, solutes, bulk_eps.val,\
+        DG_CB_NP_HG = PoissonNP2(PoissonNPSolverBin, solutes, bulk_eps.val,\
                                 current_frame, system.property("space"),\
                                  solute_ref, zerorefcharges=False,
                                  neutatm=neutatm)
@@ -1336,14 +1361,14 @@ def runLambda():
             DG_CB_NP_HG = 0.0 * kcal_per_mol
         # Second calculation - setting charges of solute_ref to 0
         #DG_CB_NP_H = 0.0 * kcal_per_mol
-        DG_CB_NP_H = PoissonNP2(PoissonNPSolverBin.val, solutes, bulk_eps.val,\
+        DG_CB_NP_H = PoissonNP2(PoissonNPSolverBin, solutes, bulk_eps.val,\
                                current_frame, system.property("space"),\
                                 solute_ref, zerorefcharges=True,
                                 neutatm=neutatm)
         #import pdb; pdb.set_trace()
         if math.isnan(DG_CB_NP_H.value()):
             DG_CB_NP_H = 0.0 * kcal_per_mol
-        
+
         # Use PH' solver to compute DF^{BA}_{PBC}
         # First calculation - using all charges
         print ("#Poisson PBC calculation... ")
@@ -1352,7 +1377,7 @@ def runLambda():
         #                          system.property("space"),cutoff_dist.val.value(),\
         #                          model_eps.val,
         #                          current_frame,solute_ref, zerorefcharges=False)
-        DG_BA_PBC_HG = PoissonPBC2(PoissonPBCSolverBin.val ,solutes, \
+        DG_BA_PBC_HG = PoissonPBC2(PoissonPBCSolverBin ,solutes, \
                                    system.property("space"),cutoff_dist.val.value(),\
                                    model_eps.val,
                                    current_frame,solute_ref, zerorefcharges=False,
@@ -1363,7 +1388,7 @@ def runLambda():
         #                          system.property("space"),cutoff_dist.val.value(),\
         #                          model_eps.val,
         #                          current_frame,solute_ref, zerorefcharges=True)
-        DG_BA_PBC_H = PoissonPBC2(PoissonPBCSolverBin.val ,solutes, \
+        DG_BA_PBC_H = PoissonPBC2(PoissonPBCSolverBin ,solutes, \
                                   system.property("space"),cutoff_dist.val.value(),\
                                   model_eps.val,
                                   current_frame,solute_ref, zerorefcharges=True,
@@ -1516,7 +1541,7 @@ def runLambda():
     #    dG = getFreeEnergy(resampled_nrgs)
     #    deltaG_bootstrap[x] = dG.value()
     #dev_FUNC = deltaG_bootstrap.std()
-    print ("DG_COR = %8.5f +/- %8.5f kcal/mol (nsamples %s, sigma %8.5f kcal/mol) " % (DG_COR_avg.value(), dev_COR/math.sqrt(len(DG_CORs)),len(DG_CORs),dev_COR))
+    print ("DG_COR = %8.5f +/- %8.5f kcal/mol (1 sigma, nsamples %s) " % (DG_COR_avg.value(), dev_COR,len(DG_CORs)))
     #print ("DG_DIR = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (DG_DIR_avg.value(), dev_DIR))
     #print ("DG_PSUM = %8.5f +/- %8.5f kcal/mol (1 sigma) " % (DG_PSUM_avg.value(), dev_PSUM))
     #print ("DG_COR = %8.5f +/- %8.5f kcal/mol ( 1 sigma, nsamples %s) " % (DG_ALL_avg.value(),dev_ALL,len(DG_pols)))

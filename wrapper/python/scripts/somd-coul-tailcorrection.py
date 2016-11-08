@@ -1,7 +1,7 @@
 description="""
-somd-coul-tailcorrection is a trajectory post-processing app that computes a correction 
-to computed free energy changes. This app evaluates the free energy change to switch 
-from an atom-based barker-watts reaction field cutoff in periodic boundary conditions to 
+somd-coul-tailcorrection is a trajectory post-processing app that computes a correction
+to computed free energy changes. This app evaluates the free energy change to switch
+from an atom-based barker-watts reaction field cutoff in periodic boundary conditions to
 a coulombic description in a non periodic dielectric medium.
 """
 from Sire.Tools import Coulcutoff
@@ -21,7 +21,7 @@ parser = argparse.ArgumentParser(
                                         "http://siremol.org",
                                  prog="somd-coul-tailcorrection")
 
-parser.add_argument('-C', '--config', nargs="?", 
+parser.add_argument('-C', '--config', nargs="?",
                     help='Supply an optional CONFIG file to control the calculation.')
 
 parser.add_argument('-H', '--help-config', action="store_true",
@@ -46,7 +46,7 @@ parser.add_argument('-m', '--morph_file', nargs="?",
                     help="The morph file describing the single topology "
                          "calculation to be performed.")
 
-parser.add_argument('-l', '--lambda_val', nargs="?", 
+parser.add_argument('-l', '--lambda_val', nargs="?",
                     help="The lambda value at which you want to run the simulation.")
 
 parser.add_argument('-b', '--model_rho', nargs="?",
@@ -63,6 +63,12 @@ parser.add_argument('-r', '--traj_file', nargs="?",
 
 parser.add_argument('-s', '--step', nargs="?",
                     help="The number of frames to skip between two snapshot evaluations.")
+
+parser.add_argument('-n','--neutralize',action="store_true",
+                    help="Neutralize host atmosphere.")
+
+parser.add_argument('-i','--add_ions',action="store_true",
+                    help="Add explicit ions to PB calculation")
 
 sys.stdout.write("\n")
 args = parser.parse_args()
@@ -149,6 +155,12 @@ else:
 if args.step:
     step_frame = int(args.step)
     params["step_frame"] = step_frame
+
+if args.neutralize:
+    params["neutralize"]=True
+
+if args.add_ions:
+    params["add_ions"]=True
 
 if not (os.path.exists(coord_file) and os.path.exists(top_file) \
         and os.path.exists(morph_file) and os.path.exists(traj_file)):
