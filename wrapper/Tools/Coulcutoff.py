@@ -40,7 +40,7 @@ trajfile = Parameter("trajfile", "traj000000001.dcd",
 stepframe = Parameter("step_frame",1,
     """The number of frames to step to between two succcessive evaluations.""")
 
-neutralize = Parameter("neutralize",False,
+neutralize = Parameter("neutralisingatmosphere",False,
     """Add a charged atmosphere around the host to neutralize its total charge""")
 
 add_ions = Parameter("add_ions",False,
@@ -1307,7 +1307,7 @@ def runLambda():
 
     #Take the boolean value if we have to neutralize te atmosphere
 
-    neutatmosphere = neutralize.val
+    neutatmosphere = neutralisingatmosphere.val
     if not neutatmosphere:
         print("Host charges are NOT neutralized")
     else:
