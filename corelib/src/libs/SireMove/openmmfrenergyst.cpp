@@ -2164,12 +2164,12 @@ void OpenMMFrEnergyST::initialise()
             if (flag_constraint == NONE)
             {
                 //JM 10/16 If constraint water flag is on and if molecule is a water molecule then apply constraint
-              if (flag_constraint_water and molfirstresname == ResName("WAT"))
-                system_openmm->addConstraint(idx0, idx1, r0 * OpenMM::NmPerAngstrom);
-               else
-                bondStretch_openmm->addBond(idx0, idx1, r0 * OpenMM::NmPerAngstrom, k * 2.0 * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
+                if (flag_constraint_water and molfirstresname == ResName("WAT"))
+                    system_openmm->addConstraint(idx0, idx1, r0 * OpenMM::NmPerAngstrom);
+                else
+                    bondStretch_openmm->addBond(idx0, idx1, r0 * OpenMM::NmPerAngstrom, k * 2.0 * OpenMM::KJPerKcal * OpenMM::AngstromsPerNm * OpenMM::AngstromsPerNm);
 
-                //cout << "\nBOND ADDED TO "<< atom0.toStdString() << " AND " << atom1.toStdString() << "\n";
+              //cout << "\nBOND ADDED TO "<< atom0.toStdString() << " AND " << atom1.toStdString() << "\n";
             }
             else if (flag_constraint == ALLBONDS || flag_constraint == HANGLES)
             {
