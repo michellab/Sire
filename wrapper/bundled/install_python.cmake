@@ -40,13 +40,22 @@ elseif (MSYS)
   # use the python that comes with msys
   unset(PYTHON_LIBRARY CACHE)
 
+
+  if ( PYTHON_EXECUTABLE )
+    message( STATUS "Found Python executable ${PYTHON_EXECUTABLE}" )
+  else()
+    message( FATAL_ERROR "Where is the python executable?" )
+  endif()
+
   find_package( PythonLibs 3.3  )
 
   if ( PYTHON_LIBRARIES )
-    message( STATUS "Python paths ${PYTHON_LIBRARIES} | ${PYTHON_INCLUDE_DIR}" )
+    message( STATUS "Python paths ${PYTHON_LIBRARIES} | ${PYTHON_INCLUDE_DIR} | ${PYTHON_VERSION}" )
   else()
     message( FATAL_ERROR "Cannot find the msys installation of Python!" )
   endif()
+
+  find_package( PythonInterp 3.3 )
 
   set( SIRE_FOUND_PYTHON TRUE )
 
@@ -197,7 +206,15 @@ if ( ANACONDA_BUILD )
 
 elseif ( MSYS )
   set( PYTHON_LIBRARIES "${PYTHON_LIBRARY}" )
-  set( PYTHON_SITE_DIR "${SIRE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION}/site-packages" )
+
+  # call python to tell it the site-packages directory itself
+  execute_process(
+     COMMAND "${PYTHON_EXECUTABLE}" -c "from distutils import sysconfig as sc
+print(sc.get_python_lib(prefix='', plat_specific=True))"
+     OUTPUT_VARIABLE PYTHON_SITE
+     OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+  set( PYTHON_SITE_DIR "${SIRE_INSTALL_PREFIX}/${PYTHON_SITE}" )
   set( PYTHON_MODULE_EXTENSION ".pyd" )
 
   message( STATUS "Using msys python in ${PYTHON_LIBRARIES} | ${PYTHON_INCLUDE_DIR}" )

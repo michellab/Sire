@@ -84,6 +84,18 @@ if ( ANACONDA_BUILD )
 
   set( SIRE_APP "${ANACONDA_BASE}/pkgs/sire-${SIRE_VERSION}" CACHE PATH
           "Install directory for Sire within the Anaconda/Miniconda distribution" )
+elseif( WIN32 OR WIN64 )
+  # This should be MSYS2/MINGW64, so use the location of cmake to find the location
+  # of the Sire installation
+  message(STATUS "Compiling on windows using MSYS2/MINGW64...")
+  set( MINGW_BASE "C:/msys64/mingw64" CACHE PATH "MSYS MINGW64 root directory" )
+  get_filename_component(MINGW_CMAKE_BIN ${CMAKE_COMMAND} DIRECTORY)
+  get_filename_component(MINGW_CMAKE_ROOT ${MINGW_CMAKE_BIN} DIRECTORY)
+  message(STATUS "Using cmake ${CMAKE_COMMAND} from MING64 base ${MINGW_CMAKE_ROOT}")
+
+  set( MINGW_BASE "${MINGW_CMAKE_ROOT}")
+  set( SIRE_APP "${MINGW_BASE}" )
+
 else()
   # Option to set the install directory of Sire
   set( SIRE_APP "$ENV{HOME}/sire.app" CACHE PATH
