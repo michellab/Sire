@@ -123,6 +123,30 @@ else()
 
     set(CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
              "Prefix prepended to install directories" FORCE )
+
+  elseif( WIN32 OR WIN64 )  # need this instead of MSYS as don't know we are MSYS yet...
+
+    message(STATUS "Compiling on windows using MSYS2/MINGW64...")
+    set( MINGW_BASE "C:/msys64/mingw64" CACHE PATH "MSYS MINGW64 root directory" )
+    get_filename_component(MINGW_CMAKE_BIN ${CMAKE_COMMAND} DIRECTORY)
+    get_filename_component(MINGW_CMAKE_ROOT ${MINGW_CMAKE_BIN} DIRECTORY)
+    message(STATUS "Using cmake ${CMAKE_COMMAND} from MING64 base ${MINGW_CMAKE_ROOT}")
+
+    set( MINGW_BASE "${MINGW_CMAKE_ROOT}")
+    set( MINGW_PYTHON "${MINGW_BASE}/bin/python3.exe" )
+
+    if ( NOT EXISTS "${MINGW_PYTHON}" )
+      message(STATUS "Cannot find mingw python3 executable, ${MINGW_PYTHON}")
+      message(STATUS "Can only install Sire into a MINGW installation with a valid python3.exe.")
+      message(STATUS "This is normally in the file C:/msys64/mingw64/bin/python3.exe.")
+      message(STATUS "Please install MSYS2/MINGW64 with the MINGW python3 package.")
+      message(STATUS "Set MINGW_BASE in cmake to point to your MSYS2/MINGW64 installation directory.")
+      message(FATAL_ERROR "Cannot compile until mingw python3 is installed...")
+    endif()
+
+    set( SIRE_INSTALL_PREFIX "${MINGW_BASE}" )
+    set( CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
+           "Prefix prepended to install directories" FORCE )
   else()
     # Option to set the install directory of Sire
     set( SIRE_INSTALL_PREFIX "$ENV{HOME}/sire.app" CACHE PATH
@@ -897,22 +921,28 @@ else()
     message( STATUS "Sire will be compiled to use its own copy of bundled libraries." )
 
     set( BUNDLE_BUILDDIR "${CMAKE_BINARY_DIR}/build_bundled" )
-    set( BUNDLE_STAGEDIR "${CMAKE_INSTALL_PREFIX}/${SIRE_BUNDLED_DIR}" )
 
-    if (NOT EXISTS "${BUNDLE_BUILDDIR}")
-      file(MAKE_DIRECTORY ${BUNDLE_BUILDDIR})
-    endif()
+    if ( MSYS )
+      message( STATUS "No bundling - using libraries provided by MSYS2/MINGW64...")
+      set( BUNDLE_STAGEDIR "${CMAKE_INSTALL_PREFIX}" )
+    else()
+      set( BUNDLE_STAGEDIR "${CMAKE_INSTALL_PREFIX}/${SIRE_BUNDLED_DIR}" )
 
-    if (NOT EXISTS "${BUNDLE_STAGEDIR}")
-      file(MAKE_DIRECTORY ${BUNDLE_STAGEDIR})
-    endif()
+      if (NOT EXISTS "${BUNDLE_BUILDDIR}")
+        file(MAKE_DIRECTORY ${BUNDLE_BUILDDIR})
+      endif()
+
+      if (NOT EXISTS "${BUNDLE_STAGEDIR}")
+        file(MAKE_DIRECTORY ${BUNDLE_STAGEDIR})
+      endif()
     
-    if (NOT EXISTS "${BUNDLE_STAGEDIR}/lib")
-      file(MAKE_DIRECTORY ${BUNDLE_STAGEDIR}/lib)
-    endif()
+      if (NOT EXISTS "${BUNDLE_STAGEDIR}/lib")
+        file(MAKE_DIRECTORY ${BUNDLE_STAGEDIR}/lib)
+      endif()
           
-    if (NOT EXISTS "${BUNDLE_STAGEDIR}/include")
-      file(MAKE_DIRECTORY ${BUNDLE_STAGEDIR}/include)
+      if (NOT EXISTS "${BUNDLE_STAGEDIR}/include")
+        file(MAKE_DIRECTORY ${BUNDLE_STAGEDIR}/include)
+      endif()
     endif()
 
     if ( ${SIRE_BUNDLE_TBB} )
@@ -941,12 +971,14 @@ else()
       include( "src/bundled/install_qt5.cmake" )
     endif()
 
-    if ( NOT ${BUNDLE_STAGEDIR} STREQUAL "${CMAKE_INSTALL_PREFIX}/${SIRE_BUNDLED_DIR}" )
-      # All of the bundled objects are built into the directory ${CMAKE_BINARY_DIR}/bundled
-      # This directory must be installed into the sire.app/ directory
-      install( DIRECTORY ${BUNDLE_STAGEDIR} 
-               DESTINATION ${CMAKE_INSTALL_PREFIX}
-               USE_SOURCE_PERMISSIONS )
+    if ( NOT MSYS )
+      if ( NOT ${BUNDLE_STAGEDIR} STREQUAL "${CMAKE_INSTALL_PREFIX}/${SIRE_BUNDLED_DIR}" )
+        # All of the bundled objects are built into the directory ${CMAKE_BINARY_DIR}/bundled
+        # This directory must be installed into the sire.app/ directory
+        install( DIRECTORY ${BUNDLE_STAGEDIR} 
+                 DESTINATION ${CMAKE_INSTALL_PREFIX}
+                 USE_SOURCE_PERMISSIONS )
+      endif()
     endif()
   endif()
 endif()
