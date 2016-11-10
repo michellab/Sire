@@ -41,10 +41,16 @@ stepframe = Parameter("step_frame",1,
     """The number of frames to step to between two succcessive evaluations.""")
 
 neutralising_atmosphere = Parameter("neutralising_atmosphere",False,
-    """Add a charged atmosphere around the host to neutralize its total charge""")
+    """Add a charged atmosphere around the host to neutralize its total charge.""")
 
 add_ions_PB = Parameter("add_ions_PB",False,
-    """Add explicit ions to the current frame for Poisson Boltzmann calculation""")
+    """Add explicit ions to the current frame for Poisson Boltzmann calculation.""")
+
+PoissonNPSolverBin= Parameter('PoissonNPSolverBin',"/home/steboss/local/apbs/bin/apbs",
+    """Path to the binary of the Poisson Boltzmann Non Periodic Condition solver.""")
+
+PoissonPBCSolverBin= Parameter('PoissonPBCSolverBin',"/home/steboss/local/bin/pb_generalT",
+    """Path to the binary of the Poisson Boltzmann Periodic Boundary Condition solver.""")
 
 #### Hardcoded parameters (may need revision)
 solvent_residues = ["WAT","ZBK","ZBT","CYC"]
@@ -1221,13 +1227,7 @@ def runLambda():
     else:
         ion_residues=[]
         print("Ions are included in the calculation")
-    #Here we detect from the bash where the PoissonPBC and PoissonNP are:
-    PoissonPBCSolverBin=os.environ["PBGENERAL"]
-    #where export PBGENERAL=/home/X/local/bin/pb_generalT
-    PoissonNPSolverBin = os.environ["APBS"]
-    #Sanity check
-    print("Poisson PBC solver located at: %s" % PoissonPBCSolverBin)
-    print("Poisson NP  solver located at: %s" % PoissonNPSolverBin)
+
     # What to do with this...
     system = createSystemFreeEnergy(molecules)
     lam = Symbol("lambda")
@@ -1352,7 +1352,7 @@ def runLambda():
         DG_CB_NP_HG = 0.0 * kcal_per_mol
         # First calculation - using all charges
         # JM 04/16 MODIFY TO GET ATOMIC POTENTIALS
-        DG_CB_NP_HG = PoissonNP2(PoissonNPSolverBin, solutes, bulk_eps.val,\
+        DG_CB_NP_HG = PoissonNP2(PoissonNPSolverBin.val, solutes, bulk_eps.val,\
                                 current_frame, system.property("space"),\
                                  solute_ref, zerorefcharges=False,
                                  neutatm=neutatm)
@@ -1361,7 +1361,7 @@ def runLambda():
             DG_CB_NP_HG = 0.0 * kcal_per_mol
         # Second calculation - setting charges of solute_ref to 0
         #DG_CB_NP_H = 0.0 * kcal_per_mol
-        DG_CB_NP_H = PoissonNP2(PoissonNPSolverBin, solutes, bulk_eps.val,\
+        DG_CB_NP_H = PoissonNP2(PoissonNPSolverBin.val, solutes, bulk_eps.val,\
                                current_frame, system.property("space"),\
                                 solute_ref, zerorefcharges=True,
                                 neutatm=neutatm)
@@ -1377,7 +1377,7 @@ def runLambda():
         #                          system.property("space"),cutoff_dist.val.value(),\
         #                          model_eps.val,
         #                          current_frame,solute_ref, zerorefcharges=False)
-        DG_BA_PBC_HG = PoissonPBC2(PoissonPBCSolverBin ,solutes, \
+        DG_BA_PBC_HG = PoissonPBC2(PoissonPBCSolverBin.val ,solutes, \
                                    system.property("space"),cutoff_dist.val.value(),\
                                    model_eps.val,
                                    current_frame,solute_ref, zerorefcharges=False,
@@ -1388,7 +1388,7 @@ def runLambda():
         #                          system.property("space"),cutoff_dist.val.value(),\
         #                          model_eps.val,
         #                          current_frame,solute_ref, zerorefcharges=True)
-        DG_BA_PBC_H = PoissonPBC2(PoissonPBCSolverBin ,solutes, \
+        DG_BA_PBC_H = PoissonPBC2(PoissonPBCSolverBin.val ,solutes, \
                                   system.property("space"),cutoff_dist.val.value(),\
                                   model_eps.val,
                                   current_frame,solute_ref, zerorefcharges=True,

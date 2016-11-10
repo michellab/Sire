@@ -70,6 +70,14 @@ parser.add_argument('--neutralising_atmosphere',action="store_true",
 parser.add_argument('--add_ions_PB',action="store_true",
                     help="Add explicit ions to PB calculation")
 
+parser.add_argument('--PoissonPBCSolverBin', nargs="?",
+                    help="Path to the binary of the Poisson Boltzmann Periodic Boundary "
+                         "Condition solver")
+
+parser.add_argument('--PoissonNPSolverBin',nargs="?",
+                    help="Path to the binary of the Poisson Boltzmann Non Periodic"
+                         "Condition solver")
+
 sys.stdout.write("\n")
 args = parser.parse_args()
 
@@ -99,6 +107,7 @@ params = {}
 if args.config:
     print("Loading configuration information from file %s" % args.config)
     params = readParams(args.config)
+
 
 if args.coordinate_file:
     coord_file = args.coordinate_file
@@ -158,14 +167,40 @@ if args.step:
 
 if args.neutralising_atmosphere:
     params["neutralising_atmosphere"]=True
+elif "neutralising atmosphere" in params:
+    neutralising_atmosphere = parmas["neutralising_atmosphere"]
 
 if args.add_ions_PB:
     params["add_ions_PB"]=True
+elif "add_ions_PB" in params;
+    add_ions_PB = params["add_ions_PB"]
+
+if args.PoissonPBCSolverBin:
+    PoissonPBCSolverBin = args.PoissonPBCSolverBin
+    params["PoissonPBCSolverBin"] = PoissonPBCSolverBin
+elif "PoissonPBCSolverBin" in params:
+    PoissonPBCSolverBin = params["PoissonPBCSolverBin"]
+else:
+    PoissonPBCSolverBin = "/home/steboss/local/bin/pb_generalT"
+    params["PoissonPBCSolverBin"]=PoissonPBCSolverBin
+
+if args.PoissonNPSolverBin:
+    PoissonNPSolverBin = args.PoissonNPSolverBin
+    params["PoissonNPSolverBin"] = PoissonNPSolverBin
+elif "PoissonNPSolverBin" in params:
+    PoissonNPSolverBin = params["PoissonNPSolverBin"]
+else:
+    PoissonNPSolverBin ="/home/steboss/local/apbs/bin/apbs"
+    params["PoissonNPSolverBin"] = PoissonNPSolverBin
+
+
 
 if not (os.path.exists(coord_file) and os.path.exists(top_file) \
-        and os.path.exists(morph_file) and os.path.exists(traj_file)):
+        and os.path.exists(morph_file) and os.path.exists(traj_file)\
+        and os.path.exists(PoissonPBCSolverBin) and os.path.exists(PoissonNPSolverBin)):
     parser.print_help()
-    print("\nPlease supply the name of an existing topology, coordinate, morph and trajectory file.")
+    print("\nPlease supply the name of an existing topology, coordinate, morph, trajectory file,"
+          "PoissonPBC Solver binary path, PoissonNP Solver binary path")
     if not os.path.exists(coord_file):
         print("(cannot find coordinate file %s)" % coord_file)
     if not os.path.exists(top_file):
@@ -174,6 +209,10 @@ if not (os.path.exists(coord_file) and os.path.exists(top_file) \
         print("(cannot find morph file %s)" % morph_file)
     if not os.path.exists(traj_file):
         print("(cannot find traj file %s)" % traj_file)
+    if not os.path.exists(PoissonPBCSolverBin):
+        print("(cannot find Poisson PBC Solver Binary %s)" % PoissonPBCSolverBin)
+    if not os.path.exists(PoissonNPSolverBin):
+        print("(cannot find Poisson NP Solver Binary %s)" % PoissonNPSolverBin)
     sys.exit(-1)
 
 print("\nRunning a somd-coul-tailcorrection calculation using files %s, %s, %s and %s." % (top_file, coord_file, morph_file, traj_file))
