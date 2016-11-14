@@ -988,12 +988,19 @@ QDataStream SIREBASE_EXPORT &operator<<(QDataStream &ds,
 
     //first the number of objects
     ds << count;
-    
+
     //then the objects themselves
-    for (quint32 i=0; i<count; ++i)
+    for (typename SireBase::ChunkedVector<T,N>::const_iterator it = vec.constBegin();
+         it != vec.constEnd();
+         ++it)
     {
-        ds << vec[i];
+        ds << *it;
     }
+    
+    //for (quint32 i=0; i<count; ++i)
+    //{
+    //    ds << vec[i];
+    //}
 
     return ds;
 }
