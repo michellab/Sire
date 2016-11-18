@@ -1231,6 +1231,25 @@ def getAllData(integrator, steps):
             exit(-1)
     return outdata
 
+def generateDistanceRestraintsDict(system):
+    r"""
+    Parameters
+    ----------
+    system : Sire.system
+        contains Sire system
+    Updates the contents of the Paramete distance_restraints_dict
+    
+    """    
+    # Step 1) Assume ligand is first solute
+    # Find atom nearest to COG
+    # Step 2) Find nearest 'CA' heavy atom in other solutes (skip water  & ions)
+    # Step 3) Compute position of 'mirror' CA. Find nearest CA atom to that point
+    # Step 4) Setup restraint parameters
+
+    import pdb; pdb.set_trace()
+
+    return 
+
 ######## MAIN SCRIPTS  #############
 
 @resolveParameters
@@ -1272,8 +1291,16 @@ def run():
         if use_restraints.val:
             system = setupRestraints(system)
 
+        sys.exit(-1)
+
         if use_distance_restraints.val:
+            print (len(distance_restraints_dict.val))
+            if len(distance_restraints_dict.val) == 0:
+                print ("Distance restraints have been activated, but none have been specified. Will autogenerate.")
+                generateDistanceRestraintsDict(system)
             system = setupDistanceRestraints(system)
+
+        import pdb; pdb.set_trace()
 
         if hydrogen_mass_repartitioning_factor.val is not None:
             system = repartitionMasses(system, hmassfactor=hydrogen_mass_repartitioning_factor.val)
