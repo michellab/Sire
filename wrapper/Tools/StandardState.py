@@ -1,12 +1,12 @@
-#
-# Evaluates the free energy cost to remove a set of distance
-# restraints under standard state conditions
+#Script to calculate the Standard state correction
+#It works also for different values of Req and D
+
 
 import os,sys, random
-from mathh import *
+import math
+import numpy
 from Sire.Tools.OpenMMMD import *
 from Sire.Tools import Parameter, resolveParameters
-
 # Python dependencies
 
 try:
@@ -42,31 +42,84 @@ verbose = Parameter("verbose", False, """Print debug output""")
 
 
 def averageCoordinates(restr_dict):
-
+    r"""This function computes the average x,y and z coordinates for host atoms
+    Parameters
+    ----------
+    restr_dict : dictionary
+                 restr_dict[lig_idx,host_idx] = ([req,D,K],[x0,y0,z0],[x1,y1,z1]...)
+                 where x0 is the x coordinate at frame 0 and so on
+    Returns
+    ----------
+    restr_dict : dictionary
+                 restr_dict[lig_idx,host_idx] = ([req,D,K],[avgx,avgy,avgz])
+                 where avgx,avgy and avgz are the average coordinates
+    """
+    #restr_dict[idx]=([req,K,D],[coords])
     #Calculation of the mean coordinate for every atoms
-    for idx in restr_dict.keys():
-        values = restr_dict[idx]
-        #Moltiplication by 10 since mdtraj use nm
-        x_average  = (sum(val[0] for val in values)/len(values))*10
-        y_average  = (sum(val[1] for val in values)/len(values))*10
-        z_average  = (sum(val[2] for val in values)/len(values))*10
+    counter = 0
+    x_avg = 0
+    y_avg = 0
+    z_avg = 0
+    for pairs in restr_dict:
+        coords = restr_dict[pairs][1:] #here the list of all the coords
+        for val in coords:
+            if counter == 0 :
+                x_avg = val[0]
+                y_avg = val[1]
+                z_avg = val[2]
+                counter+=1
+
+            else:
+                x_avg = x_avg + (val[0] - x_avg)/counter
+                y_avg = y_avg + (val[1] - y_avg)/counter
+                z_avg = z_avg + (val[2] - z_avg)/counter
+
         #Substitution of values
-        restr_dict[idx]=(x_average,y_average,z_average)
+        restr_dict[pairs][1:]=[[x_avg,y_avg,z_avg]]
+
     return restr_dict
 
 def defineIntegrationDomain(restr_dict):
+    r"""Definition of the integration domain starting from host coordiantes
+    Parameters
+    ----------
+    restr_dict : dictionary
+                 restr_dict[lig_idx,host_idx] = ([req,D,K],[avgx,avgy,avgz])
+                 where avgx,avgy and avgz are the average coordinates
+    Returns
+    ----------
+    space : 3D array
+            space = [(-x,-y,-z)(x,y,z)]
+            where -x,-y and -z are the min values of the space and x,y and z the
+            max values of the space
+    """
+    counter = 0
+    for pairs in restr_dict:
+        coords = restr_dict[pairs][1:]
+        for val in coords:
+            if counter==0:
+                max_x = val[0]
+                min_x = val[0]
+                max_y = val[1]
+                min_y = val[1]
+                max_z = val[2]
+                min_z = val[2]
+                counter+=1
+            else:
+                if val[0]> max_x:
+                    max_x = val[0]
+                if val[0]<min_x:
+                    min_x = val[0]
+                if val[1]> max_y:
+                    max_y = val[1]
+                if val[1]< min_y :
+                    min_y = val[1]
+                if val[2]>max_z:
+                    max_z = val[2]
+                if val[2]<min_z :
+                    min_z = val[2]
 
-    #Find the max x,y,z:
-    coord = list(restr_dict.values())
-    max_x = max(coordx[0] for coordx in coord)
-    max_y = max(coordy[1] for coordy in coord)
-    max_z = max(coordz[2] for coordz in coord)
-
-    min_x = min(coordx[0] for coordx in coord)
-    min_y = min(coordy[1] for coordy in coord)
-    min_z = min(coordz[2] for coordz in coord)
-
-    #Creation of the greatest domain plus a buffer
+    #print(max_x,max_y,max_z,min_x,min_y,min_z)
     max_x += buff.val
     max_y += buff.val
     max_z += buff.val
@@ -76,6 +129,7 @@ def defineIntegrationDomain(restr_dict):
     #Adding a buffer region
     space = [(min_x,min_y, min_z), (max_x,max_y,max_z)]
     return space
+
 
 @resolveParameters
 def run():
@@ -101,76 +155,76 @@ def run():
     ROT = 8 * pi**2
     Ztrans = 0.0
     Uavg = 0
-    #Check if the configuration file contains distance restraints, otherwise stop
+    #open the simfile and extract the reestraint dictionary
     sim = open(simfile.val,"r")
     for line in sim.readlines():
         if "dictionary" in line:
-            restraint_dictionary = line
-            print("Found restraint dictionary %s" % restraint_dictionary)
+            sim_dictionary = line
+            print("Found restraint dictionary: %s" % sim_dictionary)
         else:
-            print("No restraint dictionary found")
-            sys.exit[-1]
+            continue
 
+    #Sanity Check
+    #if the dictionary was not found in the simfile exit from the script
+    if line==None:
+        print("Error! Impossible to find dictionary restraint in sim.cfg")
+        sys.exit(-1)
 
     #ast automatically transform a string into a dictionary
-    rest_dict=ast.literal_eval(restraint_dictionary.strip("distance restraint dictionary="))
-    #Dictionary of restrained atoms
-    restrained_atoms={}
-    for key in rest_dict.keys():
-        for atom_idx in key:
-            if atom_idx in restrained_atoms.keys():
-                continue
-            else:
-                restrained_atoms[atom_idx] = []
+    sim_dictionary=ast.literal_eval(sim_dictionary.strip("distance restraint dictionary="))
+    #now create a dictionary in this way:
+    #dict[pairs] = {[Req,D,K] [coords] [coords]...}
+    restr_dict = {}
+    #create a list of host indexes to be used with mdtraj for alignment
+    hosts = []
+    for pairs in sim_dictionary:
+        req = sim_dictionary[pairs][0]
+        K   = sim_dictionary[pairs][1]
+        D   = sim_dictionary[pairs][2]
+        restr_dict[pairs]=[[req,K,D]]
+        idx = max(pairs)
+        hosts.append(idx)
 
-    #FIXME: for the moment  K,req,D must be equal for all the restrained atoms
-    req = list(rest_dict.values())[0][0]
-    K=list(rest_dict.values())[0][1]
-    D = list(rest_dict.values())[0][2]
-
-    #FIXME:supposing ligand_idx < atoms_idx, remove the ligand
-    ligand_idx = min(restrained_atoms.keys())
-    del restrained_atoms[ligand_idx]
-    print("Restrained atoms are:")
-    print(list(restrained_atoms.keys()))
-
+    #load the trajectory
     start_frame = 1
     end_frame = 1000000000
     step_frame = stepframe.val
     #Check the extension of the topology file
-    #.top does not work with mdtraj
     if ".top" in topfile.val:
         shutil.copy(topfile.val,"SYSTEM.prmtop")
+        #top doesn't work with mdtraj
         top_file = "SYSTEM.prmtop"
     else:
         top_file = topfile.val
+
     print("Loading trajectory and topology files")
+    #
     mdtraj_trajfile = mdtraj.load(trajfile.val,top=top_file)
     nframes = len(mdtraj_trajfile)
     if end_frame > (nframes - 1):
         end_frame = nframes - 1
-
     current_frame = start_frame
 
     #Aligning everything along the first frame
     print("Aligning frames along first frame of trajectory")
-
-    aligned_traj = mdtraj_trajfile.superpose(mdtraj_trajfile,0, atom_indices=list(restrained_atoms.keys()))
+    aligned_traj = mdtraj_trajfile.superpose(mdtraj_trajfile,0, atom_indices=hosts)
 
     print("Processing frames")
     while (current_frame <= end_frame):
-
-        for idx in restrained_atoms.keys():
-
-            restrained_atoms[idx].append(aligned_traj.xyz[current_frame,idx,:].tolist())
+        #now for each lig:host pairs append the host coordinates
+        for pairs in restr_dict:
+            host_idx = max(pairs)
+            restr_dict[pairs].append(aligned_traj.xyz[current_frame,host_idx,:].tolist())
 
         current_frame += step_frame
 
-
+    #now restr_dict has:
+    #restr_dict[lig,host]=[ [req,K,D], [coords],[coords],...]
     print("Calculating average coordinates for restrained atoms")
-    restrained_atoms = averageCoordinates(restrained_atoms)
-    space = defineIntegrationDomain(restrained_atoms)
-
+    restr_dict = averageCoordinates(restr_dict)
+    #now the restr_dict is:
+    #restr_dict[pairs]=[[req,K,D],[avgx,avgy,avgz]]
+    space = defineIntegrationDomain(restr_dict)
     if verbose.val:
         print("Integration space")
         print(space)
@@ -181,10 +235,7 @@ def run():
     Nz = int ( round ( ( space[1][0] - space[0][0] ) / delta ) )
     #Constants
     print("Number of elements to be evaluated %d" %(Nx*Ny*Nz))
-    #Integration
-    #print(restrained_atoms)
-    upper_bound=(req+D)**2
-    lower_bound = max(req-D,0)**2
+    print("Evaluation...")
     for i in range(0,Nx):
         for j in range(0,Ny):
             for k in range(0,Nz):
@@ -192,25 +243,41 @@ def run():
                 y = space[0][1] + delta*j + delta_over_two
                 z = space[0][2] + delta*k + delta_over_two
 
+                counter= 0
+                for pairs in restr_dict:
+                    #restr_dict[pairs]=[[req,K,D],[coords]]
+                    x_dict = float(restr_dict[pairs][1][0])
+                    y_dict = float(restr_dict[pairs][1][1])
+                    z_dict = float(restr_dict[pairs][1][2])
 
-                for idx in range(0,len(restrained_atoms)):
-                    values_x = list(restrained_atoms.values())[idx][0]
-                    values_y = list(restrained_atoms.values())[idx][1]
-                    values_z = list(restrained_atoms.values())[idx][2]
-                    #is the point within the spheres of restraint?
-                    d = (x-values_x)**2 + (y-values_y)**2 + (z-values_z)**2
-                    if d <= upper_bound and d >= lower_bound:
-                        # Checked all the atoms:
-                        if idx == len(restrained_atoms) - 1:
+                    distance = ((x-x_dict)**2 + (y-y_dict)**2 + (z-z_dict)**2)
+
+                    upper_bound = restr_dict[pairs][0][1]+ restr_dict[pairs][0][2]
+                    intmd_bound = restr_dict[pairs][0][1]
+                    lower_bound = restr_dict[pairs][0][1]- restr_dict[pairs][0][2]
+
+                    if distance < upper_bound and distance > intmd_bound:
+                        if counter == len(restr_dict)-1:
                             U = 0.0
                         else:
-                            idx+=1
+                            counter+=1
+
+                    elif distance < intmd_bound and distance > lower_bound:
+                        if counter== len(restr_dict)-1:
+                            U = 0.0
+                        else:
+                            counter+=1
                     else:
-                        d = sqrt(x**2+y**2+z**2)
-                        U = K*(d-D)**2
+
+                        dist = (math.sqrt(distance))
+                        K = (restr_dict[pairs][0][1])
+                        D = (restr_dict[pairs][0][2])
+                        U =(K*(dist-D)**2)
+
+
                         break
 
-                Boltz = exp(-beta*U)*deltavol
+                Boltz = math.exp(-beta*U)*deltavol
                 Ztrans += (Boltz)
                 Uavg += U*Boltz*ROT
     #Calculation of Ztot, Uavg, S, Frestraint:
@@ -218,9 +285,13 @@ def run():
     Uavg /= (Ztot)
 
     Zideal = 1661.*ROT
-    Delta_F = -kbT*log(Ztot/Zideal)
-    minTDelta_S = -T*(kb*log(Ztot/Zideal)+Uavg/T)
+    Delta_F = -kbT*math.log(Ztot/Zideal)
+    minTDelta_S = -T*(kb*math.log(Ztot/Zideal)+Uavg/T)
 
 
     print ("Ztrans  = %8.5f Angstrom^3" % Ztrans)
     print ("Free energy Cost of removing the restraint = %8.5f kcal/mol" % -Delta_F)
+
+    #tidy up the folder by removing prmtop
+    cmd = "rm SYSTEM.prmtop"
+    os.system(cmd)
