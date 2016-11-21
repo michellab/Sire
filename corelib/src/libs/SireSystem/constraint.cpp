@@ -30,6 +30,8 @@
 #include "system.h"
 #include "delta.h"
 
+#include "SireBase/numberproperty.h"
+
 #include "SireMaths/maths.h"
 
 #include "SireSystem/errors.h"
@@ -650,6 +652,19 @@ void PropertyConstraint::setSystem(const System &system)
                 constrained_val = var.convertTo<double>();
             }
         }
+        else if (constrained_value.read().isA<NumberProperty>())
+        {
+            has_constrained_value = true;
+            constrained_val = constrained_value.read().asA<NumberProperty>().value();
+        }
+        else
+        {
+            throw SireError::invalid_cast( QObject::tr(
+                    "Cannot convert the constrained property %1 ( equals %2 ) into a number. "
+                    "This is needed to constrain it to a numeric value to satisfy %3")
+                        .arg(propname).arg(constrained_value.read().toString())
+                        .arg(this->toString()), CODELOC );
+        }
     }
     
     component_vals = system.constants(syms);
@@ -657,7 +672,7 @@ void PropertyConstraint::setSystem(const System &system)
     target_value = eqn(component_vals);
 
     Constraint::setSatisfied(system, has_constrained_value and 
-                                            (constrained_val == target_value));
+                                     SireMaths::areEqual(constrained_val, target_value));
 }
 
 /** Fully apply this constraint on the passed delta - this returns
@@ -690,6 +705,7 @@ bool PropertyConstraint::deltaApply(Delta &delta, quint32 last_subversion)
     bool changed_prop = delta.sinceChanged(propname, last_subversion);
     bool changed_syms = delta.sinceChanged(syms, last_subversion);
     bool changed_target = false;
+    bool use_number_property= false;
 
     if (changed_prop or changed_syms)
     {
@@ -757,12 +773,30 @@ bool PropertyConstraint::deltaApply(Delta &delta, quint32 last_subversion)
                             return false;
                     }
                 }
-            }
+                else if (constrained_value.read().isA<NumberProperty>())
+                {
+                    use_number_property = true;
                 
-            if (ffidxs.isEmpty())
-                return delta.update(propname, VariantProperty(target_value));
+                    if (target_value == constrained_value.read().asA<NumberProperty>().value())
+                        //no need to make any changes
+                        return false;
+                }
+            }
+            
+            if (use_number_property)
+            {
+                if (ffidxs.isEmpty())
+                    return delta.update(propname, NumberProperty(target_value));
+                else
+                    return delta.update(propname, ffidxs, NumberProperty(target_value));
+            }
             else
-                return delta.update(propname, ffidxs, VariantProperty(target_value));
+            {
+                if (ffidxs.isEmpty())
+                    return delta.update(propname, VariantProperty(target_value));
+                else
+                    return delta.update(propname, ffidxs, VariantProperty(target_value));
+            }
         }
     }
     else if (not this->isSatisfied(delta.deltaSystem()))
@@ -943,7 +977,7 @@ void ComponentConstraint::setSystem(const System &system)
     target_value = eqn(component_vals);
     
     Constraint::setSatisfied(system, has_constrained_value and
-                                     (target_value == constrained_value));
+                                     SireMaths::areEqual(target_value, constrained_value));
 }
 
 /** Fully apply this constraint on the passed delta - this returns
@@ -1313,7 +1347,7 @@ void WindowedComponent::setSystem(const System &system)
         target_value = ::getNextWindow(component_val, window_values, step_size);
     
     Constraint::setSatisfied( system, has_constrained_value and
-                                      (constrained_value == target_value) );
+                                      SireMaths::areEqual(constrained_value,target_value) );
 }
 
 /** Fully apply this constraint on the passed delta - this returns

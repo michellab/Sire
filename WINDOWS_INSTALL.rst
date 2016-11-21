@@ -121,6 +121,9 @@ using the sire_python executable. For example
 ** At the moment, this is failing because my MSYS python can't find the _struct
    module. This will need to be fixed... **
 
+** FIX IS TO COPY SIRE_PYTHON AND ALL LIBRARIES INTO MSYS/BIN. NEED TO 
+   INSTALL SIRE WITHIN MSYS!!! **
+
 ## Running tests - still not fully working
 
 Install nose. (quite difficult as python easy_install breaks with error

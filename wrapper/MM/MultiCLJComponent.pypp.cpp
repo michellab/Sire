@@ -91,6 +91,18 @@ void register_MultiCLJComponent_class(){
                 , "Return the number of CLJComponents  number of keys" );
         
         }
+        { //::SireMM::MultiCLJComponent::hasKey
+        
+            typedef bool ( ::SireMM::MultiCLJComponent::*hasKey_function_type)( ::QString ) const;
+            hasKey_function_type hasKey_function_value( &::SireMM::MultiCLJComponent::hasKey );
+            
+            MultiCLJComponent_exposer.def( 
+                "hasKey"
+                , hasKey_function_value
+                , ( bp::arg("key") )
+                , "" );
+        
+        }
         { //::SireMM::MultiCLJComponent::indexOf
         
             typedef int ( ::SireMM::MultiCLJComponent::*indexOf_function_type)( ::QString ) const;

@@ -2035,6 +2035,22 @@ Properties CLJSoftFunction::properties() const
     return props;
 }
 
+static double get_number(const Property &value)
+{
+    if (value.isA<NumberProperty>())
+    {
+        return value.asA<NumberProperty>().toDouble();
+    }
+    else if (value.isA<VariantProperty>())
+    {
+        return value.asA<VariantProperty>().toDouble();
+    }
+    else
+        throw SireError::invalid_cast( QObject::tr(
+                "Cannot extract a number from the passed property %1")
+                    .arg(value.toString()), CODELOC );
+}
+
 /** Set the property with name 'name' to value 'value' */
 CLJFunctionPtr CLJSoftFunction::setProperty(const QString &name, const Property &value) const
 {
@@ -2043,17 +2059,17 @@ CLJFunctionPtr CLJSoftFunction::setProperty(const QString &name, const Property 
     if (name == "alpha")
     {
         ret.edit().asA<CLJSoftFunction>()
-                  .setAlpha( value.asA<NumberProperty>().toDouble() );
+                  .setAlpha( get_number(value) );
     }
     else if (name == "shiftDelta")
     {
         ret.edit().asA<CLJSoftFunction>()
-                  .setShiftDelta( value.asA<NumberProperty>().toDouble() );
+                  .setShiftDelta( get_number(value) );
     }
     else if (name == "coulombPower")
     {
         ret.edit().asA<CLJSoftFunction>()
-                  .setCoulombPower( value.asA<NumberProperty>().toDouble() );
+                  .setCoulombPower( get_number(value) );
     }
     else
     {
@@ -2311,17 +2327,17 @@ CLJFunctionPtr CLJSoftIntraFunction::setProperty(const QString &name, const Prop
     if (name == "alpha")
     {
         ret.edit().asA<CLJSoftIntraFunction>()
-                  .setAlpha( value.asA<NumberProperty>().toDouble() );
+                  .setAlpha( get_number(value) );
     }
     else if (name == "shiftDelta")
     {
         ret.edit().asA<CLJSoftIntraFunction>()
-                  .setShiftDelta( value.asA<NumberProperty>().toDouble() );
+                  .setShiftDelta( get_number(value) );
     }
     else if (name == "coulombPower")
     {
         ret.edit().asA<CLJSoftIntraFunction>()
-                  .setCoulombPower( value.asA<NumberProperty>().toDouble() );
+                  .setCoulombPower( get_number(value) );
     }
     else
     {
