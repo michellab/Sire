@@ -1663,9 +1663,9 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
         if len(broken_keys) > 0:
             print("ERROR - PROGRAM BUG : SOME OF THE FORCEFIELDS ARE LEAKING ENERGY")
             for key in broken_keys:
-                print("%s : %s versus %s" % (key, broken_keys[key][0], broken_keys[key][1]))
+                print("%s : %s versus %s" % (key, broken_nrgs[key][0], broken_nrgs[key][1]))
             print("ERROR: Please send 'broken_system.s3' in for debugging, along with everything printed above!")
-            Sire.Stream.save(system, "broken_system.s3")
+            Sire.Stream.save( (system,moves), "broken_system.s3")
             sys.exit(-1)
 
     return (system, moves)
