@@ -903,7 +903,8 @@ double Molpro::calculateEnergy(const QString &cmdfile, int ntries) const
 {
     //create a temporary directory in which to run Molpro
     QString tmppath = env_variables.value("TMPDIR");
-    
+    TMPDIR=/home/$USER/tmp
+ 
     if (tmppath.isEmpty())
         tmppath = QDir::temp().absolutePath();
 
