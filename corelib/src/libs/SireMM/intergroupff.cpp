@@ -1179,7 +1179,6 @@ void InterGroupFF::recalculateEnergy()
                     tuple<double,double> grid_deltas = d.constData()->fixed_atoms[i]
                                                                 .calculate(changed_atoms);
                 
-                    //only add on grid energies for the default CLJ function
                     delta_nrgs.get<0>()[i] += grid_deltas.get<0>();
                     delta_nrgs.get<1>()[i] += grid_deltas.get<1>();
                 }
@@ -1232,14 +1231,14 @@ void InterGroupFF::recalculateEnergy()
                 {
                     CLJCalculator calc(d.constData()->repro_sum);
                     delta_nrgs = calc.calculate(d.constData()->cljfuncs,
-                                                changed_atoms, cljgroup[1].cljBoxes());
+                                                changed_atoms, cljgroup[0].cljBoxes());
                 }
                 else
                 {
                     delta_nrgs = CLJFunction::multiCalculate(d.constData()->cljfuncs,
-                                                changed_atoms, cljgroup[1].cljBoxes());
+                                                changed_atoms, cljgroup[0].cljBoxes());
                 }
-            
+
                 d.constData()->cljcomps.changeEnergy(*this,
                                         MultiCLJEnergy(delta_nrgs.get<0>(), delta_nrgs.get<1>()));
             }

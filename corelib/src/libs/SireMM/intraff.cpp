@@ -213,7 +213,7 @@ namespace SireMM
                         
                         cljfuncs = newfuncs;
                         cty = new_cty;
-                        mustNowRecalculateFromScratch();
+                        mustReallyRecalculateFromScratch();
                     }
                 }
             }

@@ -211,7 +211,8 @@ CLJAtoms CLJDelta::changedAtoms() const
         CLJAtom old_atom = old_atoms.at(i);
         CLJAtom new_atom = new_atoms.at(i);
         
-        if (old_atom != new_atom)
+        #warning HERE IS THE PROBLEM
+        if (true) //old_atom != new_atom)
         {
             if (not old_atom.isDummy())
                 changed_atoms.append( old_atom.negate() );
@@ -453,7 +454,8 @@ tuple<CLJAtoms,CLJAtoms,CLJAtoms> CLJDelta::merge(const CLJDelta *deltas, int n)
                 CLJAtom old_atom = old_atoms.at(i);
                 CLJAtom new_atom = new_atoms.at(i);
                 
-                if (old_atom != new_atom)
+                #warning HERE IS THE PROBLEM
+                if (true) // old_atom != new_atom)
                 {
                     if (not old_atom.isDummy())
                     {

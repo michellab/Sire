@@ -54,8 +54,8 @@ grid_buffer = Parameter("grid buffer", 2*angstrom,
 
 disable_grid = Parameter("disable grid", False, """Whether or not to disable use of the grid""")
 
-use_oldff = Parameter("use old forcefields", False, """For debugging, use the old forcefields rather than the 
-                                                       new forcefields""")
+use_oldff = Parameter("use old forcefields", True, """For debugging, use the old forcefields rather than the 
+                                                      new forcefields""")
 
 temperature = Parameter("temperature", 25*celsius, """Simulation temperature""")
 random_seed = Parameter("random seed", None, """Random number seed. Set this if you

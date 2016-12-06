@@ -2093,31 +2093,6 @@ QVector<Charge> CLJAtoms::charges() const
     return chgs;
 }
 
-/** Return the charges on all of the atoms */
-/*QVector<Charge> CLJAtoms::charges() const
-{
-    if (this->isEmpty())
-        return QVector<Charge>();
-
-    QVector<Charge> chgs( _x.count() * MultiFloat::count() );
-    Charge *c = chgs.data();
-    
-    int idx = 0;
-    
-    for (int i=0; i<_x.count(); ++i)
-    {
-        const MultiFloat &qf = _q[i];
-        
-        for (int j=0; j<MultiFloat::count(); ++j)
-        {
-            c[idx] = Charge( qf[j] / std::sqrt(SireUnits::one_over_four_pi_eps0) );
-            ++idx;
-        }
-    }
-    
-    return chgs;
-}*/
-
 /** Return the charges of all of the atoms */
 QVector<LJParameter> CLJAtoms::ljParameters() const
 {
@@ -2169,36 +2144,6 @@ QVector<LJParameter> CLJAtoms::ljParameters() const
     
     return ljs;
 }
-
-/** Return the LJ parameters on all of the atoms */
-/*QVector<LJParameter> CLJAtoms::ljParameters() const
-{
-    if (this->isEmpty())
-        return QVector<LJParameter>();
-
-    QVector<LJParameter> ljs( _x.count() * MultiFloat::count() );
-    LJParameter *lj = ljs.data();
-    
-    int idx = 0;
-    
-    for (int i=0; i<_x.count(); ++i)
-    {
-        const MultiFloat &sigf = _sig[i];
-        const MultiFloat &epsf = _eps[i];
-        
-        for (int j=0; j<MultiFloat::count(); ++j)
-        {
-            double sig = sigf[j] * sigf[j];
-            double eps = epsf[j] * epsf[j];
-            
-            lj[idx] = LJParameter(SireUnits::Dimension::Length(sig),
-                                  SireUnits::Dimension::MolarEnergy(eps / 4.0));
-            ++idx;
-        }
-    }
-    
-    return ljs;
-}*/
 
 /** Return the IDs of all of the atoms */
 QVector<qint32> CLJAtoms::IDs() const
