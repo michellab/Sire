@@ -5,6 +5,7 @@ set ( PYPP_SOURCES
        Dynamics.pypp.cpp
        Ensemble.pypp.cpp
        Flexibility.pypp.cpp
+       GetCentroidPoint.pypp.cpp
        GetCOGPoint.pypp.cpp
        GetCOMPoint.pypp.cpp
        GetPoint.pypp.cpp

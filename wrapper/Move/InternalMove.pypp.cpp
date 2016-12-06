@@ -8,6 +8,8 @@
 
 namespace bp = boost::python;
 
+#include "SireMaths/vectorproperty.h"
+
 #include "SireMol/angleid.h"
 
 #include "SireMol/atomidx.h"
@@ -65,6 +67,18 @@ void register_InternalMove_class(){
         InternalMove_exposer.def( bp::init< SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ), "Construct the mover move for the passed group of molecules") );
         InternalMove_exposer.def( bp::init< SireMove::Sampler const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("sampler"), bp::arg("map")=SireBase::PropertyMap() ), "Construct the mover move that samples molecules from the\npassed sampler") );
         InternalMove_exposer.def( bp::init< SireMove::InternalMove const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireMove::InternalMove::centerOfMolecule
+        
+            typedef ::SireMove::GetPoint const & ( ::SireMove::InternalMove::*centerOfMolecule_function_type)(  ) const;
+            centerOfMolecule_function_type centerOfMolecule_function_value( &::SireMove::InternalMove::centerOfMolecule );
+            
+            InternalMove_exposer.def( 
+                "centerOfMolecule"
+                , centerOfMolecule_function_value
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the function used to find the center of the molecule" );
+        
+        }
         { //::SireMove::InternalMove::flexibilityProperty
         
             typedef ::SireBase::PropertyName const & ( ::SireMove::InternalMove::*flexibilityProperty_function_type)(  ) const;
@@ -126,6 +140,18 @@ void register_InternalMove_class(){
                 , sampler_function_value
                 , bp::return_value_policy<bp::clone_const_reference>()
                 , "Return the sampler used to sample molecules to move" );
+        
+        }
+        { //::SireMove::InternalMove::setCenterOfMolecule
+        
+            typedef void ( ::SireMove::InternalMove::*setCenterOfMolecule_function_type)( ::SireMove::GetPoint const & ) ;
+            setCenterOfMolecule_function_type setCenterOfMolecule_function_value( &::SireMove::InternalMove::setCenterOfMolecule );
+            
+            InternalMove_exposer.def( 
+                "setCenterOfMolecule"
+                , setCenterOfMolecule_function_value
+                , ( bp::arg("center_function") )
+                , "Set the function used to find the center of the molecule" );
         
         }
         { //::SireMove::InternalMove::setFlexibilityProperty

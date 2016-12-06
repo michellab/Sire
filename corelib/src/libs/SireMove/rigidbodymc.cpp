@@ -104,7 +104,7 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, RigidBodyMC &rbmc)
 
     rbmc = RigidBodyMC();
 
-    rbmc.center_function = GetCOGPoint();
+    rbmc.center_function = GetCOMPoint();
     rbmc.reflect_points.clear();
     rbmc.sync_trans = false;
     rbmc.sync_rot = false;
@@ -248,7 +248,7 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, RigidBodyMC &rbmc)
 /** Null constructor */
 RigidBodyMC::RigidBodyMC(const PropertyMap &map) 
             : ConcreteProperty<RigidBodyMC,MonteCarlo>(map),
-              center_function( GetCOGPoint() ),
+              center_function( GetCOMPoint() ),
               adel( 0.15 * angstrom ), rdel( 15 * degrees ),
               reflect_radius(0), reflect_moves(false),
               sync_trans(false), sync_rot(false), common_center(false)
@@ -259,7 +259,7 @@ RigidBodyMC::RigidBodyMC(const PropertyMap &map)
 /** Construct a move that moves molecules returned by the sampler 'sampler' */
 RigidBodyMC::RigidBodyMC(const Sampler &sampler, const PropertyMap &map)
             : ConcreteProperty<RigidBodyMC,MonteCarlo>(map),
-              smplr(sampler), center_function( GetCOGPoint() ),
+              smplr(sampler), center_function( GetCOMPoint() ),
               adel( 0.15 * angstrom ),
               rdel( 15 * degrees ), 
               reflect_radius(0), reflect_moves(false),
@@ -276,7 +276,7 @@ RigidBodyMC::RigidBodyMC(const MoleculeGroup &molgroup,
                          const PropertyMap &map)
             : ConcreteProperty<RigidBodyMC,MonteCarlo>(map), 
               smplr( UniformSampler(molgroup) ),
-              center_function( GetCOGPoint() ),
+              center_function( GetCOMPoint() ),
               adel( 0.15 * angstrom ), rdel( 15 * degrees ),
               reflect_radius(0), reflect_moves(false),
               sync_trans(false), sync_rot(false), common_center(false)
@@ -1843,99 +1843,37 @@ void RigidBodyMC::move(System &system, int nmoves, bool record_stats)
     if (nmoves <= 0)
         return;
 
-    QElapsedTimer t, t2;
-    
-    qint64 old_ns = 0;
-    qint64 copy_ns = 0;
-    qint64 nrg_ns = 0;
-    qint64 move_ns = 0;
-    qint64 test_ns = 0;
-    qint64 reject_ns = 0;
-    qint64 accept_ns = 0;
-
     const PropertyMap &map = Move::propertyMap();
-    
-    if (nmoves > 1)
-        t2.start();
     
     for (int i=0; i<nmoves; ++i)
     {
         //get the old total energy of the system
-        if (nmoves > 1)
-            if (nmoves > 1)
-                t.start();
-            
-
         double old_nrg = system.energy( this->energyComponent() );
 
-        if (nmoves > 1)
-
-        //save the old system
-        if (nmoves > 1)
-            t.start();
-        
         System old_system = system;
-
-        if (nmoves > 1)
-            copy_ns += t.nsecsElapsed();
 
         double old_bias = 1;
         double new_bias = 1;
 
-        if (nmoves > 1)
-            t.start();
-
         this->performMove(system, old_bias, new_bias, map);
 
-        if (nmoves > 1)
-
-            if (nmoves > 1)
-                move_ns += t.nsecsElapsed();
-
         //calculate the energy of the system
-        if (nmoves > 1)
-            if (nmoves > 1)
-                t.start();
-
-
         double new_nrg = system.energy( this->energyComponent() );
-
-        if (nmoves > 1)
 
         //accept or reject the move based on the change of energy
         //and the biasing factors
-        if (nmoves > 1)
-            t.start();
-
         const bool accept_move = this->test(new_nrg, old_nrg, new_bias, old_bias);
         
-        if (nmoves > 1)
-
-            if (nmoves > 1)
-                test_ns += t.nsecsElapsed();
-
         if (accept_move)
         {
             //the move has been rejected. Destroy the old state and accept the move
-            if (nmoves > 1)
-                t.start();
-            
             old_system = System();
             system.accept();
-            
-            if (nmoves > 1)
-                accept_ns += t.nsecsElapsed();
         }
         else
         {
             //the move has been rejected - reset the state
-            if (nmoves > 1)
-                t.start();
-            
             system = old_system;
-            
-            if (nmoves > 1)
-                reject_ns += t.nsecsElapsed();
         }
 
         if (record_stats)
@@ -1943,17 +1881,6 @@ void RigidBodyMC::move(System &system, int nmoves, bool record_stats)
             system.collectStats();
         }
     }
-    
-    qint64 ns = t2.nsecsElapsed();
-    
-    /*if (nmoves > 1)
-    {
-        qDebug() << "Timing for" << nmoves << "(" << (0.000001*ns) << ")";
-        qDebug() << "OLD:" << (0.000001*old_ns) << "COPY:" << (0.000001*copy_ns)
-                 << "MOVE:" << (0.000001*move_ns) << "ENERGY:" << (0.000001*nrg_ns)
-                 << "TEST:" << (0.000001*test_ns) << "ACCEPT:" << (0.000001*accept_ns)
-                 << "REJECT:" << (0.000001*reject_ns);
-    }*/
 }
 
 const char* RigidBodyMC::typeName()

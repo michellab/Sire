@@ -21,6 +21,8 @@
 
 #include "GetCOMPoint.pypp.hpp"
 
+#include "GetCentroidPoint.pypp.hpp"
+
 #include "GetPoint.pypp.hpp"
 
 #include "HMCGenerator.pypp.hpp"
@@ -194,6 +196,8 @@ BOOST_PYTHON_MODULE(_Move){
 
     register_GetCOMPoint_class();
 
+    register_GetCentroidPoint_class();
+
     register_VelocityGenerator_class();
 
     register_HMCVelGen_class();
@@ -245,11 +249,13 @@ BOOST_PYTHON_MODULE(_Move){
     register_NullVolumeChanger_class();
 
     #ifdef SIRE_USE_OPENMM
+
     register_OpenMMFrEnergyDT_class();
 
     register_OpenMMFrEnergyST_class();
 
     register_OpenMMMDIntegrator_class();
+
     #endif
 
     register_Sampler_class();
