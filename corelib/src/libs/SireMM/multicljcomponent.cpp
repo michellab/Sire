@@ -41,11 +41,10 @@ using namespace SireStream;
 
 namespace SireMM
 {
-
-    static QRegExp key_regexp("\\[(.*)\\]$");
-
     boost::tuple<QString,QString> getSubscriptedProperty(QString name)
     {
+        QRegExp key_regexp("\\[(.*)\\]$");
+ 
         int idx = key_regexp.indexIn(name);
         if (idx != -1)
         {
