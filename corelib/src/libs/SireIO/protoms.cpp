@@ -70,7 +70,7 @@
 
 #include "SireBase/tempdir.h"
 #include "SireBase/findexe.h"
-#include "SireBase/process.h"
+#include "SireBase/sire_process.h"
 
 #include "SireMove/errors.h"
 #include "SireMol/errors.h"

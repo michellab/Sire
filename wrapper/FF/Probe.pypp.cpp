@@ -24,7 +24,7 @@ void register_Probe_class(){
 
     { //::SireFF::Probe
         typedef bp::class_< SireFF::Probe, bp::bases< SireBase::Property >, boost::noncopyable > Probe_exposer_t;
-        Probe_exposer_t Probe_exposer = Probe_exposer_t( "Probe", bp::no_init );
+        Probe_exposer_t Probe_exposer = Probe_exposer_t( "Probe", "This is the base class of all Probes - a Probe is an object\nthat is used to probe the potential or field at a point in\nspace caused by a ForceField. For example, a Probe could\nbe a point unit charge, or a united atom methane point etc.\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope Probe_scope( Probe_exposer );
         { //::SireFF::Probe::null
         
@@ -34,7 +34,8 @@ void register_Probe_class(){
             Probe_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireFF::Probe::typeName
@@ -44,7 +45,8 @@ void register_Probe_class(){
             
             Probe_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         Probe_exposer.staticmethod( "null" );

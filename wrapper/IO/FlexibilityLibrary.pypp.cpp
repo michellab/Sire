@@ -57,10 +57,10 @@ void register_FlexibilityLibrary_class(){
 
     { //::SireIO::FlexibilityLibrary
         typedef bp::class_< SireIO::FlexibilityLibrary, bp::bases< SireBase::Property > > FlexibilityLibrary_exposer_t;
-        FlexibilityLibrary_exposer_t FlexibilityLibrary_exposer = FlexibilityLibrary_exposer_t( "FlexibilityLibrary", bp::init< >() );
+        FlexibilityLibrary_exposer_t FlexibilityLibrary_exposer = FlexibilityLibrary_exposer_t( "FlexibilityLibrary", "", bp::init< >("Default constructor") );
         bp::scope FlexibilityLibrary_scope( FlexibilityLibrary_exposer );
-        FlexibilityLibrary_exposer.def( bp::init< QString const & >(( bp::arg("file") )) );
-        FlexibilityLibrary_exposer.def( bp::init< SireIO::FlexibilityLibrary const & >(( bp::arg("other") )) );
+        FlexibilityLibrary_exposer.def( bp::init< QString const & >(( bp::arg("file") ), "Construct, loading the library from the passed file") );
+        FlexibilityLibrary_exposer.def( bp::init< SireIO::FlexibilityLibrary const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireIO::FlexibilityLibrary::add
         
             typedef void ( ::SireIO::FlexibilityLibrary::*add_function_type)( ::SireIO::FlexibilityLibrary const & ) ;
@@ -69,7 +69,8 @@ void register_FlexibilityLibrary_class(){
             FlexibilityLibrary_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Add the templates in other into this library" );
         
         }
         { //::SireIO::FlexibilityLibrary::getFlexibility
@@ -80,7 +81,8 @@ void register_FlexibilityLibrary_class(){
             FlexibilityLibrary_exposer.def( 
                 "getFlexibility"
                 , getFlexibility_function_value
-                , ( bp::arg("molecule") ) );
+                , ( bp::arg("molecule") )
+                , "Generate the Flexibility property for the atoms in the passed molecule view" );
         
         }
         { //::SireIO::FlexibilityLibrary::getTemplate
@@ -92,7 +94,8 @@ void register_FlexibilityLibrary_class(){
                 "getTemplate"
                 , getTemplate_function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the template for the specified key\nThrow: SireError::invalid_key\n" );
         
         }
         { //::SireIO::FlexibilityLibrary::loadTemplates
@@ -103,7 +106,8 @@ void register_FlexibilityLibrary_class(){
             FlexibilityLibrary_exposer.def( 
                 "loadTemplates"
                 , loadTemplates_function_value
-                , ( bp::arg("file") ) );
+                , ( bp::arg("file") )
+                , "" );
         
         }
         FlexibilityLibrary_exposer.def( bp::self != bp::self );
@@ -117,7 +121,8 @@ void register_FlexibilityLibrary_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         FlexibilityLibrary_exposer.def( bp::self == bp::self );
@@ -129,7 +134,8 @@ void register_FlexibilityLibrary_class(){
             FlexibilityLibrary_exposer.def( 
                 "setTemplate"
                 , setTemplate_function_value
-                , ( bp::arg("key"), bp::arg("tmplate") ) );
+                , ( bp::arg("key"), bp::arg("tmplate") )
+                , "Set the template associated with the passed key" );
         
         }
         { //::SireIO::FlexibilityLibrary::typeName
@@ -139,7 +145,8 @@ void register_FlexibilityLibrary_class(){
             
             FlexibilityLibrary_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         FlexibilityLibrary_exposer.staticmethod( "typeName" );

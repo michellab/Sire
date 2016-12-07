@@ -51,7 +51,7 @@ void register_CovalentBondHunterParameters_class(){
 
     { //::SireMol::CovalentBondHunterParameters
         typedef bp::class_< SireMol::CovalentBondHunterParameters > CovalentBondHunterParameters_exposer_t;
-        CovalentBondHunterParameters_exposer_t CovalentBondHunterParameters_exposer = CovalentBondHunterParameters_exposer_t( "CovalentBondHunterParameters", bp::init< >() );
+        CovalentBondHunterParameters_exposer_t CovalentBondHunterParameters_exposer = CovalentBondHunterParameters_exposer_t( "CovalentBondHunterParameters", "", bp::init< >("") );
         bp::scope CovalentBondHunterParameters_scope( CovalentBondHunterParameters_exposer );
         { //::SireMol::CovalentBondHunterParameters::coordinates
         
@@ -61,7 +61,8 @@ void register_CovalentBondHunterParameters_class(){
             CovalentBondHunterParameters_exposer.def( 
                 "coordinates"
                 , coordinates_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::CovalentBondHunterParameters::element
@@ -72,7 +73,8 @@ void register_CovalentBondHunterParameters_class(){
             CovalentBondHunterParameters_exposer.def( 
                 "element"
                 , element_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         CovalentBondHunterParameters_exposer.staticmethod( "coordinates" );

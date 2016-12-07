@@ -19,10 +19,10 @@ void register_SymbolComplex_class(){
 
     { //::SireCAS::SymbolComplex
         typedef bp::class_< SireCAS::SymbolComplex > SymbolComplex_exposer_t;
-        SymbolComplex_exposer_t SymbolComplex_exposer = SymbolComplex_exposer_t( "SymbolComplex", bp::init< SireCAS::SymbolID, SireMaths::Complex const & >(( bp::arg("id"), bp::arg("val") )) );
+        SymbolComplex_exposer_t SymbolComplex_exposer = SymbolComplex_exposer_t( "SymbolComplex", "Small class that holds a SymbolID number and an associated complex value", bp::init< SireCAS::SymbolID, SireMaths::Complex const & >(( bp::arg("id"), bp::arg("val") ), "") );
         bp::scope SymbolComplex_scope( SymbolComplex_exposer );
-        SymbolComplex_exposer.def( bp::init< SireCAS::SymbolID, double >(( bp::arg("id"), bp::arg("val") )) );
-        SymbolComplex_exposer.def( bp::init< SireCAS::SymbolValue const & >(( bp::arg("val") )) );
+        SymbolComplex_exposer.def( bp::init< SireCAS::SymbolID, double >(( bp::arg("id"), bp::arg("val") ), "") );
+        SymbolComplex_exposer.def( bp::init< SireCAS::SymbolValue const & >(( bp::arg("val") ), "") );
         { //::SireCAS::SymbolComplex::ID
         
             typedef ::SireCAS::SymbolID ( ::SireCAS::SymbolComplex::*ID_function_type)(  ) const;
@@ -30,7 +30,8 @@ void register_SymbolComplex_class(){
             
             SymbolComplex_exposer.def( 
                 "ID"
-                , ID_function_value );
+                , ID_function_value
+                , "" );
         
         }
         { //::SireCAS::SymbolComplex::value
@@ -41,7 +42,8 @@ void register_SymbolComplex_class(){
             SymbolComplex_exposer.def( 
                 "value"
                 , value_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         SymbolComplex_exposer.def( "__copy__", &__copy__);

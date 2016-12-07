@@ -40,11 +40,11 @@ void register_MolResNum_class(){
 
     { //::SireMol::MolResNum
         typedef bp::class_< SireMol::MolResNum, bp::bases< SireMol::ResID, SireID::ID > > MolResNum_exposer_t;
-        MolResNum_exposer_t MolResNum_exposer = MolResNum_exposer_t( "MolResNum", bp::init< >() );
+        MolResNum_exposer_t MolResNum_exposer = MolResNum_exposer_t( "MolResNum", "This class represents an ID that is used to identify\na specific residue using both the residue and\nmolecule number\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a MolResNum that matches everything") );
         bp::scope MolResNum_scope( MolResNum_exposer );
-        MolResNum_exposer.def( bp::init< SireMol::MolNum const &, SireMol::ResNum const & >(( bp::arg("molnum"), bp::arg("resnum") )) );
-        MolResNum_exposer.def( bp::init< SireMol::ResNum const &, SireMol::MolNum const & >(( bp::arg("resnum"), bp::arg("molnum") )) );
-        MolResNum_exposer.def( bp::init< SireMol::MolResNum const & >(( bp::arg("other") )) );
+        MolResNum_exposer.def( bp::init< SireMol::MolNum const &, SireMol::ResNum const & >(( bp::arg("molnum"), bp::arg("resnum") ), "Construct a MolResNum that matches the residue resnum in the molecule molnum") );
+        MolResNum_exposer.def( bp::init< SireMol::ResNum const &, SireMol::MolNum const & >(( bp::arg("resnum"), bp::arg("molnum") ), "Construct a MolResNum that matches the residue resnum in the molecule molnum") );
+        MolResNum_exposer.def( bp::init< SireMol::MolResNum const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::MolResNum::hash
         
             typedef ::uint ( ::SireMol::MolResNum::*hash_function_type)(  ) const;
@@ -52,7 +52,8 @@ void register_MolResNum_class(){
             
             MolResNum_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Return a hash of this ID" );
         
         }
         { //::SireMol::MolResNum::isNull
@@ -62,7 +63,8 @@ void register_MolResNum_class(){
             
             MolResNum_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Return whether or not this is null" );
         
         }
         { //::SireMol::MolResNum::map
@@ -73,7 +75,8 @@ void register_MolResNum_class(){
             MolResNum_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "Map this ID to the indicies of the matching residues\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MolResNum::molNum
@@ -84,7 +87,8 @@ void register_MolResNum_class(){
             MolResNum_exposer.def( 
                 "molNum"
                 , molNum_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the MolNum part of this match" );
         
         }
         MolResNum_exposer.def( bp::self != bp::self );
@@ -97,7 +101,8 @@ void register_MolResNum_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MolResNum_exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -110,7 +115,8 @@ void register_MolResNum_class(){
             MolResNum_exposer.def( 
                 "resNum"
                 , resNum_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the ResNum part of this match" );
         
         }
         { //::SireMol::MolResNum::selectAllFrom
@@ -121,7 +127,8 @@ void register_MolResNum_class(){
             MolResNum_exposer.def( 
                 "selectAllFrom"
                 , selectAllFrom_function_value
-                , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::MolResNum::selectAllFrom
@@ -132,7 +139,8 @@ void register_MolResNum_class(){
             MolResNum_exposer.def( 
                 "selectAllFrom"
                 , selectAllFrom_function_value
-                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::MolResNum::selectAllFrom
@@ -143,7 +151,8 @@ void register_MolResNum_class(){
             MolResNum_exposer.def( 
                 "selectAllFrom"
                 , selectAllFrom_function_value
-                , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::MolResNum::toString
@@ -153,7 +162,8 @@ void register_MolResNum_class(){
             
             MolResNum_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this ID" );
         
         }
         { //::SireMol::MolResNum::typeName
@@ -163,7 +173,8 @@ void register_MolResNum_class(){
             
             MolResNum_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::MolResNum::what
@@ -173,7 +184,8 @@ void register_MolResNum_class(){
             
             MolResNum_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         MolResNum_exposer.staticmethod( "typeName" );

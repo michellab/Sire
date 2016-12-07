@@ -39,9 +39,9 @@ void register_AbsFromMass_class(){
 
     { //::SireMol::AbsFromMass
         typedef bp::class_< SireMol::AbsFromMass, bp::bases< SireMol::WeightFunction, SireBase::Property > > AbsFromMass_exposer_t;
-        AbsFromMass_exposer_t AbsFromMass_exposer = AbsFromMass_exposer_t( "AbsFromMass", bp::init< >() );
+        AbsFromMass_exposer_t AbsFromMass_exposer = AbsFromMass_exposer_t( "AbsFromMass", "This class calculates the weight by assigning all of the weight to\nthe group with the most mass\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope AbsFromMass_scope( AbsFromMass_exposer );
-        AbsFromMass_exposer.def( bp::init< SireMol::AbsFromMass const & >(( bp::arg("other") )) );
+        AbsFromMass_exposer.def( bp::init< SireMol::AbsFromMass const & >(( bp::arg("other") ), "") );
         AbsFromMass_exposer.def( bp::self != bp::self );
         { //::SireMol::AbsFromMass::operator()
         
@@ -51,7 +51,8 @@ void register_AbsFromMass_class(){
             AbsFromMass_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("moldata"), bp::arg("group0"), bp::arg("group1"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("moldata"), bp::arg("group0"), bp::arg("group1"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::AbsFromMass::operator()
@@ -62,7 +63,8 @@ void register_AbsFromMass_class(){
             AbsFromMass_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("view0"), bp::arg("map0"), bp::arg("view1"), bp::arg("map1") ) );
+                , ( bp::arg("view0"), bp::arg("map0"), bp::arg("view1"), bp::arg("map1") )
+                , "" );
         
         }
         { //::SireMol::AbsFromMass::operator=
@@ -74,7 +76,8 @@ void register_AbsFromMass_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("arg0") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AbsFromMass_exposer.def( bp::self == bp::self );
@@ -85,7 +88,8 @@ void register_AbsFromMass_class(){
             
             AbsFromMass_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         AbsFromMass_exposer.staticmethod( "typeName" );

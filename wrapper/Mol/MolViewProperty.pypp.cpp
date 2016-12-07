@@ -27,7 +27,7 @@ void register_MolViewProperty_class(){
 
     { //::SireMol::MolViewProperty
         typedef bp::class_< SireMol::MolViewProperty, bp::bases< SireBase::Property >, boost::noncopyable > MolViewProperty_exposer_t;
-        MolViewProperty_exposer_t MolViewProperty_exposer = MolViewProperty_exposer_t( "MolViewProperty", bp::no_init );
+        MolViewProperty_exposer_t MolViewProperty_exposer = MolViewProperty_exposer_t( "MolViewProperty", "This is the base class of all properties that are specifically\nattached to views of a molecule (e.g. AtomProperty, ResProperty,\nSegProperty etc.)\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope MolViewProperty_scope( MolViewProperty_exposer );
         { //::SireMol::MolViewProperty::assertCompatibleWith
         
@@ -37,7 +37,8 @@ void register_MolViewProperty_class(){
             MolViewProperty_exposer.def( 
                 "assertCompatibleWith"
                 , assertCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "Assert that this property is compatible with the MoleculeInfoData info\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::MolViewProperty::isCompatibleWith
@@ -48,7 +49,8 @@ void register_MolViewProperty_class(){
             MolViewProperty_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::MolViewProperty::makeCompatibleWith
@@ -59,7 +61,8 @@ void register_MolViewProperty_class(){
             MolViewProperty_exposer.def( 
                 "makeCompatibleWith"
                 , makeCompatibleWith_function_value
-                , ( bp::arg("molinfo"), bp::arg("atommatcher") ) );
+                , ( bp::arg("molinfo"), bp::arg("atommatcher") )
+                , "Do everything possible to make this property compatible with the\nMoleculeInfoData layout in info - otherwise raise an error\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::MolViewProperty::makeCompatibleWith
@@ -70,7 +73,8 @@ void register_MolViewProperty_class(){
             MolViewProperty_exposer.def( 
                 "makeCompatibleWith"
                 , makeCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "Do everything possible to make this property compatible with the molecule\nviewed in mol - otherwise raise an error\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::MolViewProperty::makeCompatibleWith
@@ -81,7 +85,8 @@ void register_MolViewProperty_class(){
             MolViewProperty_exposer.def( 
                 "makeCompatibleWith"
                 , makeCompatibleWith_function_value
-                , ( bp::arg("mol") ) );
+                , ( bp::arg("mol") )
+                , "Do everything possible to make this property compatible with the molecule\nviewed in mol - otherwise raise an error\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::MolViewProperty::makeCompatibleWith
@@ -92,7 +97,8 @@ void register_MolViewProperty_class(){
             MolViewProperty_exposer.def( 
                 "makeCompatibleWith"
                 , makeCompatibleWith_function_value
-                , ( bp::arg("mol"), bp::arg("atommatcher") ) );
+                , ( bp::arg("mol"), bp::arg("atommatcher") )
+                , "Do everything possible to make this property compatible with the\nMoleculeInfoData layout in info - otherwise raise an error\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::MolViewProperty::typeName
@@ -102,7 +108,8 @@ void register_MolViewProperty_class(){
             
             MolViewProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         MolViewProperty_exposer.staticmethod( "typeName" );

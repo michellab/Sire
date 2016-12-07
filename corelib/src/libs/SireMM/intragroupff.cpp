@@ -485,7 +485,28 @@ const CLJIntraFunction& IntraGroupFF::cljFunction() const
 /** Set the CLJFunction with key 'key' equal to 'cljfunc' */
 void IntraGroupFF::setCLJFunction(QString key, const CLJIntraFunction &cljfunc)
 {
-    if (key == "default")
+    if (key == "all")
+    {
+        for (int i=0; i<d->cljfuncs.count(); ++i)
+        {
+            d->cljfuncs[i] = cljfunc;
+        }
+
+        if (not moldata.isEmpty())
+        {
+            for (MolData::iterator it = moldata.begin();
+                 it != moldata.end();
+                 ++it)
+            {
+                it.value()->setCLJFunctions(d->cljfuncs);
+            }
+        }
+        
+        rebuildProps();
+        
+        this->mustNowRecalculateFromScratch();
+    }
+    else if (key == "default")
     {
         this->setCLJFunction(cljfunc);
     }
@@ -669,19 +690,22 @@ void IntraGroupFF::rebuildProps()
     //properties
     d->props = d.constData()->cljfuncs.at(0).read().properties();
     
-    for (int i=1; i<d.constData()->cljfuncs.count(); ++i)
+    for (QString key : d.constData()->cljcomps.keys())
     {
-        Properties p = d.constData()->cljfuncs.at(i).read().properties();
+        const int idx = d.constData()->cljcomps.indexOf(key);
+    
+        d->props.setProperty( QString("cljFunction[%1]").arg(key),
+                              d.constData()->cljfuncs.at(idx) );
+    
+        Properties p = d.constData()->cljfuncs.at(idx).read().properties();
         
-        foreach (QString key, p.propertyKeys())
+        foreach (QString propkey, p.propertyKeys())
         {
-            if (not d->props.hasProperty(key))
-            {
-                d->props.setProperty(key, p.property(key));
-            }
+            d->props.setProperty( QString("%1[%2]").arg(propkey).arg(key),
+                                  p.property(propkey) );
         }
     }
-    
+
     d->props.setProperty("cljFunction", this->cljFunction());
     d->props.setProperty("parallelCalculation", BooleanProperty(d->parallel_calc));
     d->props.setProperty("reproducibleCalculation", BooleanProperty(d->repro_sum));
@@ -730,55 +754,141 @@ bool IntraGroupFF::setProperty(const QString &name, const Property &property)
     }
     else
     {
-        bool found_property = false;
-        bool changed_property = false;
-    
-        for (int i=0; i<d.constData()->cljfuncs.count(); ++i)
+        //see if the property is in the default CLJFunction
+        if (cljFunction().containsProperty(name))
         {
-            PropertyPtr old_prop;
-            bool this_func_has_property = false;
-
-            try
-            {
-                PropertyPtr old_prop = d.constData()->cljfuncs.at(i).read().property(name);
-                found_property = true;
-                this_func_has_property = true;
-            }
-            catch(...)
-            {}
+            CLJFunctionPtr newfunc = cljFunction().setProperty(name, property);
             
-            if (this_func_has_property and not property.equals(old_prop.read()))
+            if ( not cljFunction().equals( newfunc.read() ) )
             {
-                //need to set the property
-                CLJFunctionPtr new_func = d->cljfuncs[i].read().setProperty(name, property);
-                d->cljfuncs[i] = new_func;
-                changed_property = true;
+                this->setCLJFunction(newfunc.read().asA<CLJIntraFunction>());
+                return true;
             }
+            else
+                return false;
         }
 
-        if (changed_property)
+        //ok, it doesn't. Now look to see if the property has an index, meaning
+        //that it may belong to one of the extra CLJ functions
+        auto subscr = getSubscriptedProperty(name);
+        QString cljname = subscr.get<0>();
+        QString cljkey = subscr.get<1>();
+    
+        if (cljname == "cljFunction")
         {
-            if (not moldata.isEmpty())
+            if (cljkey == "all")
             {
-                for (MolData::iterator it = moldata.begin();
-                     it != moldata.end();
-                     ++it)
+                this->setCLJFunction("all", property.asA<CLJIntraFunction>());
+            }
+            else if (not cljFunction(cljkey).equals(property))
+            {
+                this->setCLJFunction(cljkey, property.asA<CLJIntraFunction>());
+                return true;
+            }
+            else
+                return false;
+        }
+        else if (cljkey.length() > 0)
+        {
+            bool found_property = false;
+            bool changed_property = false;
+
+            if (cljkey == "all")
+            {
+                //set this property in all cljfunctions (if possible)
+                for (int i=0; i<d.constData()->cljfuncs.count(); ++i)
                 {
-                    it.value()->setCLJFunctions(d->cljfuncs);
+                    PropertyPtr old_prop;
+                    bool this_func_has_property = false;
+
+                    try
+                    {
+                        PropertyPtr old_prop = d.constData()->cljfuncs.at(i)
+                                                                      .read().property(cljname);
+                        found_property = true;
+                        this_func_has_property = true;
+                    }
+                    catch(...)
+                    {}
+            
+                    if (this_func_has_property and not property.equals(old_prop.read()))
+                    {
+                        //need to set the property
+                        CLJFunctionPtr new_func = d->cljfuncs[i].read()
+                                                                .setProperty(cljname, property);
+                        d->cljfuncs[i] = new_func;
+                        changed_property = true;
+                    }
                 }
             }
+            else if (cljkey == "default")
+            {
+                //set this property in the default cljfunction
+                if (cljFunction().containsProperty(cljname))
+                {
+                    found_property = true;
+                
+                    CLJFunctionPtr newfunc = cljFunction().setProperty(cljname, property);
+            
+                    if ( not cljFunction().equals( newfunc.read() ) )
+                    {
+                        this->setCLJFunction(newfunc.read().asA<CLJIntraFunction>());
+                        return true;
+                    }
+                    else
+                        return false;
+                }
+            }
+            else
+            {
+                if (d.constData()->cljcomps.hasKey(cljkey))
+                {
+                    found_property = true;
+
+                    if (cljFunction(cljkey).containsProperty(cljname))
+                    {
+                        CLJFunctionPtr newfunc = cljFunction(cljkey).setProperty(cljname, property);
+                        
+                        if ( not cljFunction(cljkey).equals( newfunc.read() ) )
+                        {
+                            this->setCLJFunction(cljkey, newfunc.read().asA<CLJIntraFunction>());
+                            return true;
+                        }
+                        else
+                            return false;
+                    }
+                }
+            }
+
+            if (changed_property)
+            {
+                if (not moldata.isEmpty())
+                {
+                    for (MolData::iterator it = moldata.begin();
+                         it != moldata.end();
+                         ++it)
+                    {
+                        it.value()->setCLJFunctions(d->cljfuncs);
+                    }
+                }
         
-            this->rebuildProps();
-            this->mustNowRecalculateFromScratch();
-            return true;
+                this->rebuildProps();
+                this->mustNowRecalculateFromScratch();
+                return true;
+            }
+            else if (not found_property)
+            {
+                throw SireBase::missing_property( QObject::tr(
+                        "No property at the key '%1' in this forcefield. Available "
+                        "properties are %2.").arg(name).arg(Sire::toString(this->propertyKeys())),
+                            CODELOC );
+            }
         }
-        else if (not found_property)
-        {
+        else
             throw SireBase::missing_property( QObject::tr(
                     "No property at the key '%1' in this forcefield. Available "
                     "properties are %2.").arg(name).arg(Sire::toString(this->propertyKeys())),
                         CODELOC );
-        }
         
         return false;
     }

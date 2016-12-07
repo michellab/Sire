@@ -226,7 +226,20 @@ const CLJFunction& InterGroupFF::cljFunction() const
 /** Set the CLJFunction with key 'key' equal to 'cljfunc' */
 void InterGroupFF::setCLJFunction(QString key, const CLJFunction &cljfunc)
 {
-    if (key == "default")
+    if (key == "all")
+    {
+        //this sets all CLJ functions equal to 'cljfunc'
+        for (int i=0; i < d->cljfuncs.count(); ++i)
+        {
+            d->cljfuncs[i] = cljfunc;
+            d->fixed_atoms[i].setCLJFunction(cljfunc);
+        }
+        
+        rebuildProps();
+        
+        this->mustNowRecalculateFromScratch();
+    }
+    else if (key == "default")
     {
         this->setCLJFunction(cljfunc);
     }
@@ -396,16 +409,19 @@ void InterGroupFF::rebuildProps()
     //properties
     d->props = d.constData()->cljfuncs.at(0).read().properties();
     
-    for (int i=1; i<d.constData()->cljfuncs.count(); ++i)
+    for (QString key : d.constData()->cljcomps.keys())
     {
-        Properties p = d.constData()->cljfuncs.at(i).read().properties();
+        const int idx = d.constData()->cljcomps.indexOf(key);
+    
+        d->props.setProperty( QString("cljFunction[%1]").arg(key),
+                              d.constData()->cljfuncs.at(idx) );
+    
+        Properties p = d.constData()->cljfuncs.at(idx).read().properties();
         
-        foreach (QString key, p.propertyKeys())
+        foreach (QString propkey, p.propertyKeys())
         {
-            if (not d->props.hasProperty(key))
-            {
-                d->props.setProperty(key, p.property(key));
-            }
+            d->props.setProperty( QString("%1[%2]").arg(propkey).arg(key),
+                                  p.property(propkey) );
         }
     }
     
@@ -544,47 +560,133 @@ bool InterGroupFF::setProperty(const QString &name, const Property &property)
     }
     else
     {
-        bool found_property = false;
-        bool changed_property = false;
-    
-        for (int i=0; i<d.constData()->cljfuncs.count(); ++i)
+        //see if the property is in the default CLJFunction
+        if (cljFunction().containsProperty(name))
         {
-            PropertyPtr old_prop;
-            bool this_func_has_property = false;
-
-            try
-            {
-                PropertyPtr old_prop = d.constData()->cljfuncs.at(i).read().property(name);
-                found_property = true;
-                this_func_has_property = true;
-            }
-            catch(...)
-            {}
+            CLJFunctionPtr newfunc = cljFunction().setProperty(name, property);
             
-            if (this_func_has_property and not property.equals(old_prop.read()))
+            if ( not cljFunction().equals( newfunc.read() ) )
             {
-                //need to set the property
-                CLJFunctionPtr new_func = d->cljfuncs[i].read().setProperty(name, property);
-                d->cljfuncs[i] = new_func;
-                d->fixed_atoms[i].setCLJFunction(new_func.read());
-                changed_property = true;
+                this->setCLJFunction(newfunc);
+                return true;
             }
+            else
+                return false;
         }
 
-        if (changed_property)
+        //ok, it doesn't. Now look to see if the property has an index, meaning
+        //that it may belong to one of the extra CLJ functions
+        auto subscr = getSubscriptedProperty(name);
+        QString cljname = subscr.get<0>();
+        QString cljkey = subscr.get<1>();
+    
+        if (cljname == "cljFunction")
         {
-            this->rebuildProps();
-            this->mustNowRecalculateFromScratch();
-            return true;
+            if (cljkey == "all")
+            {
+                this->setCLJFunction("all", property.asA<CLJFunction>());
+            }
+            else if (not cljFunction(cljkey).equals(property))
+            {
+                this->setCLJFunction(cljkey, property.asA<CLJFunction>());
+                return true;
+            }
+            else
+                return false;
         }
-        else if (not found_property)
+        else if (cljkey.length() > 0)
         {
+            bool found_property = false;
+            bool changed_property = false;
+
+            if (cljkey == "all")
+            {
+                //set this property in all cljfunctions (if possible)
+                for (int i=0; i<d.constData()->cljfuncs.count(); ++i)
+                {
+                    PropertyPtr old_prop;
+                    bool this_func_has_property = false;
+
+                    try
+                    {
+                        PropertyPtr old_prop = d.constData()->cljfuncs.at(i)
+                                                                      .read().property(cljname);
+                        found_property = true;
+                        this_func_has_property = true;
+                    }
+                    catch(...)
+                    {}
+            
+                    if (this_func_has_property and not property.equals(old_prop.read()))
+                    {
+                        //need to set the property
+                        CLJFunctionPtr new_func = d->cljfuncs[i].read()
+                                                                .setProperty(cljname, property);
+                        d->cljfuncs[i] = new_func;
+                        d->fixed_atoms[i].setCLJFunction(new_func.read());
+                        changed_property = true;
+                    }
+                }
+            }
+            else if (cljkey == "default")
+            {
+                //set this property in the default cljfunction
+                if (cljFunction().containsProperty(cljname))
+                {
+                    found_property = true;
+                
+                    CLJFunctionPtr newfunc = cljFunction().setProperty(cljname, property);
+            
+                    if ( not cljFunction().equals( newfunc.read() ) )
+                    {
+                        this->setCLJFunction(newfunc);
+                        return true;
+                    }
+                    else
+                        return false;
+                }
+            }
+            else
+            {
+                if (d.constData()->cljcomps.hasKey(cljkey))
+                {
+                    found_property = true;
+
+                    if (cljFunction(cljkey).containsProperty(cljname))
+                    {
+                        CLJFunctionPtr newfunc = cljFunction(cljkey).setProperty(cljname, property);
+                        
+                        if ( not cljFunction(cljkey).equals( newfunc.read() ) )
+                        {
+                            this->setCLJFunction(cljkey, newfunc);
+                            return true;
+                        }
+                        else
+                            return false;
+                    }
+                }
+            }
+
+            if (changed_property)
+            {
+                this->rebuildProps();
+                this->mustNowRecalculateFromScratch();
+                return true;
+            }
+            else if (not found_property)
+            {
+                throw SireBase::missing_property( QObject::tr(
+                        "No property at the key '%1' in this forcefield. Available "
+                        "properties are %2.").arg(name).arg(Sire::toString(this->propertyKeys())),
+                            CODELOC );
+            }
+        }
+        else
             throw SireBase::missing_property( QObject::tr(
                     "No property at the key '%1' in this forcefield. Available "
                     "properties are %2.").arg(name).arg(Sire::toString(this->propertyKeys())),
                         CODELOC );
-        }
-        
+
         return false;
     }
 }
@@ -685,11 +787,6 @@ void InterGroupFF::setUseGrid(bool on)
         {
             this->mustNowRecalculateFromScratch();
             d->props.setProperty("useGrid", BooleanProperty(on));
-        }
-        else
-        {
-            qDebug() << "Switching on the grid failed as none of the CLJFunctions "
-                        "in this forcefield support use of a grid.";
         }
     }
 }
@@ -1082,7 +1179,6 @@ void InterGroupFF::recalculateEnergy()
                     tuple<double,double> grid_deltas = d.constData()->fixed_atoms[i]
                                                                 .calculate(changed_atoms);
                 
-                    //only add on grid energies for the default CLJ function
                     delta_nrgs.get<0>()[i] += grid_deltas.get<0>();
                     delta_nrgs.get<1>()[i] += grid_deltas.get<1>();
                 }
@@ -1135,14 +1231,14 @@ void InterGroupFF::recalculateEnergy()
                 {
                     CLJCalculator calc(d.constData()->repro_sum);
                     delta_nrgs = calc.calculate(d.constData()->cljfuncs,
-                                                changed_atoms, cljgroup[1].cljBoxes());
+                                                changed_atoms, cljgroup[0].cljBoxes());
                 }
                 else
                 {
                     delta_nrgs = CLJFunction::multiCalculate(d.constData()->cljfuncs,
-                                                changed_atoms, cljgroup[1].cljBoxes());
+                                                changed_atoms, cljgroup[0].cljBoxes());
                 }
-            
+
                 d.constData()->cljcomps.changeEnergy(*this,
                                         MultiCLJEnergy(delta_nrgs.get<0>(), delta_nrgs.get<1>()));
             }

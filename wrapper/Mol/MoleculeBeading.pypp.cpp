@@ -43,9 +43,9 @@ void register_MoleculeBeading_class(){
 
     { //::SireMol::MoleculeBeading
         typedef bp::class_< SireMol::MoleculeBeading, bp::bases< SireMol::Beading, SireMol::MolViewProperty, SireBase::Property > > MoleculeBeading_exposer_t;
-        MoleculeBeading_exposer_t MoleculeBeading_exposer = MoleculeBeading_exposer_t( "MoleculeBeading", bp::init< >() );
+        MoleculeBeading_exposer_t MoleculeBeading_exposer = MoleculeBeading_exposer_t( "MoleculeBeading", "MoleculeBeading is used to create a single bead that contains\nall of the atoms of the molecule. This is typically used for\nsmall molecules, such as small solvents, where multiple beads\nper molecule would not be sensible\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope MoleculeBeading_scope( MoleculeBeading_exposer );
-        MoleculeBeading_exposer.def( bp::init< SireMol::MoleculeBeading const & >(( bp::arg("other") )) );
+        MoleculeBeading_exposer.def( bp::init< SireMol::MoleculeBeading const & >(( bp::arg("other") ), "Copy constructor") );
         MoleculeBeading_exposer.def( bp::self != bp::self );
         { //::SireMol::MoleculeBeading::operator=
         
@@ -56,7 +56,8 @@ void register_MoleculeBeading_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MoleculeBeading_exposer.def( bp::self == bp::self );
@@ -67,7 +68,8 @@ void register_MoleculeBeading_class(){
             
             MoleculeBeading_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         MoleculeBeading_exposer.staticmethod( "typeName" );

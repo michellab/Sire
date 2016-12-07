@@ -25,7 +25,7 @@ void register_SupraMove_class(){
 
     { //::SireMove::SupraMove
         typedef bp::class_< SireMove::SupraMove, bp::bases< SireBase::Property >, boost::noncopyable > SupraMove_exposer_t;
-        SupraMove_exposer_t SupraMove_exposer = SupraMove_exposer_t( "SupraMove", bp::no_init );
+        SupraMove_exposer_t SupraMove_exposer = SupraMove_exposer_t( "SupraMove", "This is the base class of all supra-system moves (supra-moves).\nA supra-move is a move that is applied to a supra-system\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope SupraMove_scope( SupraMove_exposer );
         { //::SireMove::SupraMove::clearStatistics
         
@@ -34,7 +34,8 @@ void register_SupraMove_class(){
             
             SupraMove_exposer.def( 
                 "clearStatistics"
-                , clearStatistics_function_value );
+                , clearStatistics_function_value
+                , "Clear all move statistics" );
         
         }
         { //::SireMove::SupraMove::move
@@ -45,7 +46,8 @@ void register_SupraMove_class(){
             SupraMove_exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , "" );
         
         }
         { //::SireMove::SupraMove::nMoves
@@ -55,7 +57,8 @@ void register_SupraMove_class(){
             
             SupraMove_exposer.def( 
                 "nMoves"
-                , nMoves_function_value );
+                , nMoves_function_value
+                , "Return the total number of supra-moves performed using this object" );
         
         }
         { //::SireMove::SupraMove::null
@@ -66,7 +69,8 @@ void register_SupraMove_class(){
             SupraMove_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the global null move" );
         
         }
         { //::SireMove::SupraMove::toString
@@ -76,7 +80,8 @@ void register_SupraMove_class(){
             
             SupraMove_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMove::SupraMove::typeName
@@ -86,7 +91,8 @@ void register_SupraMove_class(){
             
             SupraMove_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         SupraMove_exposer.staticmethod( "null" );

@@ -27,11 +27,11 @@ void register_LJParameter_class(){
 
     { //::SireMM::LJParameter
         typedef bp::class_< SireMM::LJParameter > LJParameter_exposer_t;
-        LJParameter_exposer_t LJParameter_exposer = LJParameter_exposer_t( "LJParameter", bp::init< >() );
+        LJParameter_exposer_t LJParameter_exposer = LJParameter_exposer_t( "LJParameter", "\nAn LJParameter holds Lennard Jones parameters (sigma and epsilon)\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a dummy LJ parameter") );
         bp::scope LJParameter_scope( LJParameter_exposer );
-        LJParameter_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::MolarEnergy >(( bp::arg("sigma"), bp::arg("epsilon") )) );
-        LJParameter_exposer.def( bp::init< SireMM::LJPair const & >(( bp::arg("ljpair") )) );
-        LJParameter_exposer.def( bp::init< SireMM::LJParameter const & >(( bp::arg("param") )) );
+        LJParameter_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::MolarEnergy >(( bp::arg("sigma"), bp::arg("epsilon") ), "Construct a LJParameter that has the specified sigma and epsilon") );
+        LJParameter_exposer.def( bp::init< SireMM::LJPair const & >(( bp::arg("ljpair") ), "Construct from an LJPair") );
+        LJParameter_exposer.def( bp::init< SireMM::LJParameter const & >(( bp::arg("param") ), "Copy constructor") );
         { //::SireMM::LJParameter::A
         
             typedef double ( ::SireMM::LJParameter::*A_function_type)(  ) const;
@@ -39,7 +39,8 @@ void register_LJParameter_class(){
             
             LJParameter_exposer.def( 
                 "A"
-                , A_function_value );
+                , A_function_value
+                , "Return the LJ A parameter" );
         
         }
         { //::SireMM::LJParameter::B
@@ -49,7 +50,8 @@ void register_LJParameter_class(){
             
             LJParameter_exposer.def( 
                 "B"
-                , B_function_value );
+                , B_function_value
+                , "Return the LJ B parameter" );
         
         }
         { //::SireMM::LJParameter::dummy
@@ -59,7 +61,8 @@ void register_LJParameter_class(){
             
             LJParameter_exposer.def( 
                 "dummy"
-                , dummy_function_value );
+                , dummy_function_value
+                , "Return a dummy CLJParameter" );
         
         }
         { //::SireMM::LJParameter::epsilon
@@ -69,7 +72,8 @@ void register_LJParameter_class(){
             
             LJParameter_exposer.def( 
                 "epsilon"
-                , epsilon_function_value );
+                , epsilon_function_value
+                , "" );
         
         }
         { //::SireMM::LJParameter::fromAAndB
@@ -80,7 +84,8 @@ void register_LJParameter_class(){
             LJParameter_exposer.def( 
                 "fromAAndB"
                 , fromAAndB_function_value
-                , ( bp::arg("a"), bp::arg("b") ) );
+                , ( bp::arg("a"), bp::arg("b") )
+                , "Return a LJ parameter that corresponds to the passed LJ parameters A and B,\nE(r) = A r-12  - B r-6\n" );
         
         }
         { //::SireMM::LJParameter::fromRMinAndEpsilon
@@ -91,7 +96,8 @@ void register_LJParameter_class(){
             LJParameter_exposer.def( 
                 "fromRMinAndEpsilon"
                 , fromRMinAndEpsilon_function_value
-                , ( bp::arg("rmin"), bp::arg("epsilon") ) );
+                , ( bp::arg("rmin"), bp::arg("epsilon") )
+                , "Return a LJ parameter that corresponds to the curve that has a minimum at\nrmin, and a well-depth of epsilon.\nE(r) = 4 epilson [ (sigmar)^12 - (sigmar)^6 ], where\nrmin = 2^(16) sigma\n" );
         
         }
         { //::SireMM::LJParameter::fromSigmaAndEpsilon
@@ -102,7 +108,8 @@ void register_LJParameter_class(){
             LJParameter_exposer.def( 
                 "fromSigmaAndEpsilon"
                 , fromSigmaAndEpsilon_function_value
-                , ( bp::arg("sigma"), bp::arg("epsilon") ) );
+                , ( bp::arg("sigma"), bp::arg("epsilon") )
+                , "Return a LJ parameter that corresponds to the passed values of sigma and epsilon,\nE(r) = 4 epsilon [ (sigmar)^12 - (sigmar)^6 ]\n" );
         
         }
         { //::SireMM::LJParameter::isDummy
@@ -112,7 +119,8 @@ void register_LJParameter_class(){
             
             LJParameter_exposer.def( 
                 "isDummy"
-                , isDummy_function_value );
+                , isDummy_function_value
+                , "" );
         
         }
         LJParameter_exposer.def( bp::self != bp::self );
@@ -124,7 +132,8 @@ void register_LJParameter_class(){
             
             LJParameter_exposer.def( 
                 "rmin"
-                , rmin_function_value );
+                , rmin_function_value
+                , "Return the LJ rmin parameter - this is the location of the minimum.\nrmin = 2^(16)  sigma\n" );
         
         }
         { //::SireMM::LJParameter::sigma
@@ -134,7 +143,8 @@ void register_LJParameter_class(){
             
             LJParameter_exposer.def( 
                 "sigma"
-                , sigma_function_value );
+                , sigma_function_value
+                , "" );
         
         }
         { //::SireMM::LJParameter::sqrtEpsilon
@@ -144,7 +154,8 @@ void register_LJParameter_class(){
             
             LJParameter_exposer.def( 
                 "sqrtEpsilon"
-                , sqrtEpsilon_function_value );
+                , sqrtEpsilon_function_value
+                , "" );
         
         }
         { //::SireMM::LJParameter::sqrtSigma
@@ -154,7 +165,8 @@ void register_LJParameter_class(){
             
             LJParameter_exposer.def( 
                 "sqrtSigma"
-                , sqrtSigma_function_value );
+                , sqrtSigma_function_value
+                , "" );
         
         }
         { //::SireMM::LJParameter::toString
@@ -164,7 +176,8 @@ void register_LJParameter_class(){
             
             LJParameter_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of the CLJ parameter" );
         
         }
         { //::SireMM::LJParameter::typeName
@@ -174,7 +187,8 @@ void register_LJParameter_class(){
             
             LJParameter_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::LJParameter::what
@@ -184,7 +198,8 @@ void register_LJParameter_class(){
             
             LJParameter_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         { //::SireMM::LJParameter::zeroLJ
@@ -194,7 +209,8 @@ void register_LJParameter_class(){
             
             LJParameter_exposer.def( 
                 "zeroLJ"
-                , zeroLJ_function_value );
+                , zeroLJ_function_value
+                , "" );
         
         }
         LJParameter_exposer.staticmethod( "dummy" );

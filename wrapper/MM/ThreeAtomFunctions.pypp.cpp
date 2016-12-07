@@ -39,11 +39,11 @@ void register_ThreeAtomFunctions_class(){
 
     { //::SireMM::ThreeAtomFunctions
         typedef bp::class_< SireMM::ThreeAtomFunctions, bp::bases< SireMM::AtomFunctions, SireMol::MoleculeProperty, SireMol::MolViewProperty, SireBase::Property > > ThreeAtomFunctions_exposer_t;
-        ThreeAtomFunctions_exposer_t ThreeAtomFunctions_exposer = ThreeAtomFunctions_exposer_t( "ThreeAtomFunctions", bp::init< >() );
+        ThreeAtomFunctions_exposer_t ThreeAtomFunctions_exposer = ThreeAtomFunctions_exposer_t( "ThreeAtomFunctions", "This class holds the set of ThreeAtomFunction potentials that\nact between the atoms in a molecule\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope ThreeAtomFunctions_scope( ThreeAtomFunctions_exposer );
-        ThreeAtomFunctions_exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("moldata") )) );
-        ThreeAtomFunctions_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") )) );
-        ThreeAtomFunctions_exposer.def( bp::init< SireMM::ThreeAtomFunctions const & >(( bp::arg("other") )) );
+        ThreeAtomFunctions_exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("moldata") ), "Construct the container to hold the set of three-atom functions\nfor the molecule whose data is in moldata") );
+        ThreeAtomFunctions_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "Construct the container to hold the set of three-atom functions\nfor the molecule whose layout information is in molinfo") );
+        ThreeAtomFunctions_exposer.def( bp::init< SireMM::ThreeAtomFunctions const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::ThreeAtomFunctions::clear
         
             typedef void ( ::SireMM::ThreeAtomFunctions::*clear_function_type)( ::SireMol::AtomIdx ) ;
@@ -52,7 +52,8 @@ void register_ThreeAtomFunctions_class(){
             ThreeAtomFunctions_exposer.def( 
                 "clear"
                 , clear_function_value
-                , ( bp::arg("atom") ) );
+                , ( bp::arg("atom") )
+                , "Clear all functions that involve the atom atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::ThreeAtomFunctions::clear
@@ -63,7 +64,8 @@ void register_ThreeAtomFunctions_class(){
             ThreeAtomFunctions_exposer.def( 
                 "clear"
                 , clear_function_value
-                , ( bp::arg("atom") ) );
+                , ( bp::arg("atom") )
+                , "Clear any function that acts on the atoms identified by atom\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::ThreeAtomFunctions::clear
@@ -74,7 +76,8 @@ void register_ThreeAtomFunctions_class(){
             ThreeAtomFunctions_exposer.def( 
                 "clear"
                 , clear_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") )
+                , "Clear any function that acts between the atoms atom0 to atom2\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::ThreeAtomFunctions::clear
@@ -85,7 +88,8 @@ void register_ThreeAtomFunctions_class(){
             ThreeAtomFunctions_exposer.def( 
                 "clear"
                 , clear_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") )
+                , "Clear any function that acts between the atoms atom0 to atom2\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::ThreeAtomFunctions::clear
@@ -96,7 +100,8 @@ void register_ThreeAtomFunctions_class(){
             ThreeAtomFunctions_exposer.def( 
                 "clear"
                 , clear_function_value
-                , ( bp::arg("angleid") ) );
+                , ( bp::arg("angleid") )
+                , "Clear the potential that acts over the angle identified by angleid\nThis clears both 1-2-3 and 3-2-1\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::ThreeAtomFunctions::clear
@@ -106,7 +111,8 @@ void register_ThreeAtomFunctions_class(){
             
             ThreeAtomFunctions_exposer.def( 
                 "clear"
-                , clear_function_value );
+                , clear_function_value
+                , "Completely clear all of the functions from this set" );
         
         }
         { //::SireMM::ThreeAtomFunctions::force
@@ -117,7 +123,8 @@ void register_ThreeAtomFunctions_class(){
             ThreeAtomFunctions_exposer.def( 
                 "force"
                 , force_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("symbol") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("symbol") )
+                , "Return the force (derivative of the potential with respect to symbol)\nbetween the atoms atom0 to atom2\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::ThreeAtomFunctions::force
@@ -128,7 +135,8 @@ void register_ThreeAtomFunctions_class(){
             ThreeAtomFunctions_exposer.def( 
                 "force"
                 , force_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("symbol") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("symbol") )
+                , "Return the force (derivative of the potential with respect to symbol)\nbetween the atoms atom0 to atom2\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::ThreeAtomFunctions::force
@@ -139,7 +147,8 @@ void register_ThreeAtomFunctions_class(){
             ThreeAtomFunctions_exposer.def( 
                 "force"
                 , force_function_value
-                , ( bp::arg("angleid"), bp::arg("symbol") ) );
+                , ( bp::arg("angleid"), bp::arg("symbol") )
+                , "Return the force (derivative of the potential with respect to symbol)\non the angle identified by angleid\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::ThreeAtomFunctions::forces
@@ -150,7 +159,8 @@ void register_ThreeAtomFunctions_class(){
             ThreeAtomFunctions_exposer.def( 
                 "forces"
                 , forces_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return the force functions acting between the identified\ntriples of atoms, for the given symbol" );
         
         }
         { //::SireMM::ThreeAtomFunctions::includeOnly
@@ -161,7 +171,8 @@ void register_ThreeAtomFunctions_class(){
             ThreeAtomFunctions_exposer.def( 
                 "includeOnly"
                 , includeOnly_function_value
-                , ( bp::arg("selected_atoms"), bp::arg("isstrict")=(bool)(true) ) );
+                , ( bp::arg("selected_atoms"), bp::arg("isstrict")=(bool)(true) )
+                , "Return the set of functions where only functions that involve the\natoms in selected_atoms are included. If isstrict is true, then\nonly include functions where all of the atoms are in selected_atoms,\nwhile if isstrict is false, include functions where at least one\natom is in selected_atoms" );
         
         }
         { //::SireMM::ThreeAtomFunctions::isEmpty
@@ -171,7 +182,8 @@ void register_ThreeAtomFunctions_class(){
             
             ThreeAtomFunctions_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether or not this is empty (has no potentials for any internals)" );
         
         }
         { //::SireMM::ThreeAtomFunctions::nFunctions
@@ -181,7 +193,8 @@ void register_ThreeAtomFunctions_class(){
             
             ThreeAtomFunctions_exposer.def( 
                 "nFunctions"
-                , nFunctions_function_value );
+                , nFunctions_function_value
+                , "Return the number of functions in this set" );
         
         }
         ThreeAtomFunctions_exposer.def( bp::self != bp::self );
@@ -194,7 +207,8 @@ void register_ThreeAtomFunctions_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         ThreeAtomFunctions_exposer.def( bp::self == bp::self );
@@ -206,7 +220,8 @@ void register_ThreeAtomFunctions_class(){
             ThreeAtomFunctions_exposer.def( 
                 "potential"
                 , potential_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") )
+                , "Return the function acting between the atoms atom0 to atom2.\nThis returns an empty expression if there is no expression between\nthese atoms\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_atom\n" );
         
         }
         { //::SireMM::ThreeAtomFunctions::potential
@@ -217,7 +232,8 @@ void register_ThreeAtomFunctions_class(){
             ThreeAtomFunctions_exposer.def( 
                 "potential"
                 , potential_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") )
+                , "Return the function acting between the atoms atom0 to atom2.\nThis returns an empty expression if there is no expression between\nthese atoms\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::ThreeAtomFunctions::potential
@@ -228,7 +244,8 @@ void register_ThreeAtomFunctions_class(){
             ThreeAtomFunctions_exposer.def( 
                 "potential"
                 , potential_function_value
-                , ( bp::arg("angleid") ) );
+                , ( bp::arg("angleid") )
+                , "Return the function acting on the angle identified by angleid.\nThis returns an empty expression if there is no expression on\nthis angle\nThis search first for the function for 1-2-3, but if that\nis not found, then it returns the function for 3-2-1\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::ThreeAtomFunctions::potentials
@@ -238,7 +255,8 @@ void register_ThreeAtomFunctions_class(){
             
             ThreeAtomFunctions_exposer.def( 
                 "potentials"
-                , potentials_function_value );
+                , potentials_function_value
+                , "Return the potential energy functions acting between the identified\ntriples of atoms" );
         
         }
         { //::SireMM::ThreeAtomFunctions::set
@@ -249,7 +267,8 @@ void register_ThreeAtomFunctions_class(){
             ThreeAtomFunctions_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("expression") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("expression") )
+                , "Set the potential energy function used by atoms atom0, atom1 and atom2\nto be equal to expression - this replaces any existing expression\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_atom\n" );
         
         }
         { //::SireMM::ThreeAtomFunctions::set
@@ -260,7 +279,8 @@ void register_ThreeAtomFunctions_class(){
             ThreeAtomFunctions_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("expression") ) );
+                , ( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("expression") )
+                , "Set the potential energy function used by atoms atom0 to atom2\nto be equal to expression - this replaces any existing expression\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::ThreeAtomFunctions::set
@@ -271,7 +291,8 @@ void register_ThreeAtomFunctions_class(){
             ThreeAtomFunctions_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("angleid"), bp::arg("expression") ) );
+                , ( bp::arg("angleid"), bp::arg("expression") )
+                , "Set the potential energy function used for the angle identified by angleid\nto be equal to expression - this replaces any existing expression\nThis replaces both 1-2-3 and 3-2-1\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMM::ThreeAtomFunctions::substitute
@@ -282,7 +303,8 @@ void register_ThreeAtomFunctions_class(){
             ThreeAtomFunctions_exposer.def( 
                 "substitute"
                 , substitute_function_value
-                , ( bp::arg("identities") ) );
+                , ( bp::arg("identities") )
+                , "Perform the substitutions contained in identities in all of\nthe expressions in this set. This could be useful if you have\ndefined these expressions with respect to a lambda parameter,\nand now want to set that value of lambda" );
         
         }
         { //::SireMM::ThreeAtomFunctions::toString
@@ -292,7 +314,8 @@ void register_ThreeAtomFunctions_class(){
             
             ThreeAtomFunctions_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation" );
         
         }
         { //::SireMM::ThreeAtomFunctions::typeName
@@ -302,7 +325,8 @@ void register_ThreeAtomFunctions_class(){
             
             ThreeAtomFunctions_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         ThreeAtomFunctions_exposer.staticmethod( "typeName" );

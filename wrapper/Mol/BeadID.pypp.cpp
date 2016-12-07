@@ -23,7 +23,7 @@ void register_BeadID_class(){
 
     { //::SireMol::BeadID
         typedef bp::class_< SireMol::BeadID, bp::bases< SireID::ID >, boost::noncopyable > BeadID_exposer_t;
-        BeadID_exposer_t BeadID_exposer = BeadID_exposer_t( "BeadID", bp::no_init );
+        BeadID_exposer_t BeadID_exposer = BeadID_exposer_t( "BeadID", "This is the base class of all identifiers that are used\nto identify a Bead\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope BeadID_scope( BeadID_exposer );
         { //::SireMol::BeadID::typeName
         
@@ -32,7 +32,8 @@ void register_BeadID_class(){
             
             BeadID_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         BeadID_exposer.staticmethod( "typeName" );

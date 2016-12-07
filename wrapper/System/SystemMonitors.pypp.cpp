@@ -38,9 +38,9 @@ void register_SystemMonitors_class(){
 
     { //::SireSystem::SystemMonitors
         typedef bp::class_< SireSystem::SystemMonitors > SystemMonitors_exposer_t;
-        SystemMonitors_exposer_t SystemMonitors_exposer = SystemMonitors_exposer_t( "SystemMonitors", bp::init< >() );
+        SystemMonitors_exposer_t SystemMonitors_exposer = SystemMonitors_exposer_t( "SystemMonitors", "This class holds a set of SystemMonitor objects, and controls\nwhen those monitors are evaluated on a system\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope SystemMonitors_scope( SystemMonitors_exposer );
-        SystemMonitors_exposer.def( bp::init< SireSystem::SystemMonitors const & >(( bp::arg("other") )) );
+        SystemMonitors_exposer.def( bp::init< SireSystem::SystemMonitors const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireSystem::SystemMonitors::add
         
             typedef void ( ::SireSystem::SystemMonitors::*add_function_type)( ::QString const &,::SireSystem::SystemMonitor const &,int ) ;
@@ -49,7 +49,8 @@ void register_SystemMonitors_class(){
             SystemMonitors_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("name"), bp::arg("monitor"), bp::arg("frequency")=(int)(1) ) );
+                , ( bp::arg("name"), bp::arg("monitor"), bp::arg("frequency")=(int)(1) )
+                , "Add a system monitor monitor, identified by the name name, which\nwill be updated every frequency steps.\nThrow: SireSystem::duplicate_monitor\n" );
         
         }
         { //::SireSystem::SystemMonitors::add
@@ -60,7 +61,8 @@ void register_SystemMonitors_class(){
             SystemMonitors_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Add the monitors from other to this set\nThrow: SireSystem::duplicate_monitor\n" );
         
         }
         { //::SireSystem::SystemMonitors::add
@@ -71,7 +73,8 @@ void register_SystemMonitors_class(){
             SystemMonitors_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("other"), bp::arg("frequency") ) );
+                , ( bp::arg("other"), bp::arg("frequency") )
+                , "Add all of the monitors in other to this set, adding them\nwith the frequency frequency\nThrow: SireSystem::duplicate_monitor\n" );
         
         }
         { //::SireSystem::SystemMonitors::at
@@ -83,7 +86,8 @@ void register_SystemMonitors_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("monid") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the monitor at ID monid\nThrow: SireSystem::missing_monitor\nThrow: SireSystem::duplicate_monitor\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireSystem::SystemMonitors::clearStatistics
@@ -93,7 +97,8 @@ void register_SystemMonitors_class(){
             
             SystemMonitors_exposer.def( 
                 "clearStatistics"
-                , clearStatistics_function_value );
+                , clearStatistics_function_value
+                , "Completely clear any statistics held in these monitors" );
         
         }
         { //::SireSystem::SystemMonitors::clearStatistics
@@ -104,7 +109,8 @@ void register_SystemMonitors_class(){
             SystemMonitors_exposer.def( 
                 "clearStatistics"
                 , clearStatistics_function_value
-                , ( bp::arg("monid") ) );
+                , ( bp::arg("monid") )
+                , "Completely clear the statistics held by the monitors that\nmatch the ID monid - this does nothing if there are no\nmonitors that match this ID" );
         
         }
         { //::SireSystem::SystemMonitors::count
@@ -114,7 +120,8 @@ void register_SystemMonitors_class(){
             
             SystemMonitors_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of monitors in this set" );
         
         }
         { //::SireSystem::SystemMonitors::getFrequency
@@ -125,7 +132,8 @@ void register_SystemMonitors_class(){
             SystemMonitors_exposer.def( 
                 "getFrequency"
                 , getFrequency_function_value
-                , ( bp::arg("monid") ) );
+                , ( bp::arg("monid") )
+                , "Return the frequency of the monitor with ID monid\nThrow: SireSystem::duplicate_monitor\nThrow: SireSystem::missing_monitor\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireSystem::SystemMonitors::isEmpty
@@ -135,7 +143,8 @@ void register_SystemMonitors_class(){
             
             SystemMonitors_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether or not this is empty (contains no monitors)" );
         
         }
         { //::SireSystem::SystemMonitors::list
@@ -145,7 +154,8 @@ void register_SystemMonitors_class(){
             
             SystemMonitors_exposer.def( 
                 "list"
-                , list_function_value );
+                , list_function_value
+                , "Return the list of all monitors in this set, in the order they\nappear in this set" );
         
         }
         { //::SireSystem::SystemMonitors::map
@@ -156,7 +166,8 @@ void register_SystemMonitors_class(){
             SystemMonitors_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("monname") ) );
+                , ( bp::arg("monname") )
+                , "Simple shortcut function\nThrow: SireSystem::missing_monitor\n" );
         
         }
         { //::SireSystem::SystemMonitors::map
@@ -167,7 +178,8 @@ void register_SystemMonitors_class(){
             SystemMonitors_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("monidx") ) );
+                , ( bp::arg("monidx") )
+                , "Return the name of the monitor at index monidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireSystem::SystemMonitors::map
@@ -178,7 +190,8 @@ void register_SystemMonitors_class(){
             SystemMonitors_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("monid") ) );
+                , ( bp::arg("monid") )
+                , "Return the names of the monitors that match the ID monid\nThrow: SireSystem::missing_monitor\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireSystem::SystemMonitors::monitor
@@ -190,7 +203,8 @@ void register_SystemMonitors_class(){
                 "monitor"
                 , monitor_function_value
                 , ( bp::arg("monid") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the monitor at ID monid\nThrow: SireSystem::missing_monitor\nThrow: SireSystem::duplicate_monitor\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireSystem::SystemMonitors::monitor
@@ -201,7 +215,8 @@ void register_SystemMonitors_class(){
             SystemMonitors_exposer.def( 
                 "monitor"
                 , monitor_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "Update the monitors by monitoring the system system" );
         
         }
         { //::SireSystem::SystemMonitors::monitorName
@@ -212,7 +227,8 @@ void register_SystemMonitors_class(){
             SystemMonitors_exposer.def( 
                 "monitorName"
                 , monitorName_function_value
-                , ( bp::arg("monid") ) );
+                , ( bp::arg("monid") )
+                , "Return the name of the monitor at ID monid\nThrow: SireSystem::missing_monitor\nThrow: SireSystem::duplicate_monitor\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireSystem::SystemMonitors::monitorNames
@@ -222,7 +238,8 @@ void register_SystemMonitors_class(){
             
             SystemMonitors_exposer.def( 
                 "monitorNames"
-                , monitorNames_function_value );
+                , monitorNames_function_value
+                , "Return the list of all monitor names" );
         
         }
         { //::SireSystem::SystemMonitors::monitors
@@ -233,7 +250,8 @@ void register_SystemMonitors_class(){
             SystemMonitors_exposer.def( 
                 "monitors"
                 , monitors_function_value
-                , ( bp::arg("monid") ) );
+                , ( bp::arg("monid") )
+                , "Return all of the monitors that match the ID monid\nThrow: SireSystem::missing_monitor\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireSystem::SystemMonitors::monitors
@@ -243,7 +261,8 @@ void register_SystemMonitors_class(){
             
             SystemMonitors_exposer.def( 
                 "monitors"
-                , monitors_function_value );
+                , monitors_function_value
+                , "Return the list of all monitors in this set, in the order they\nappear in this set" );
         
         }
         { //::SireSystem::SystemMonitors::nMonitors
@@ -253,7 +272,8 @@ void register_SystemMonitors_class(){
             
             SystemMonitors_exposer.def( 
                 "nMonitors"
-                , nMonitors_function_value );
+                , nMonitors_function_value
+                , "Return the number of monitors in this set" );
         
         }
         { //::SireSystem::SystemMonitors::names
@@ -263,7 +283,8 @@ void register_SystemMonitors_class(){
             
             SystemMonitors_exposer.def( 
                 "names"
-                , names_function_value );
+                , names_function_value
+                , "Return the list of all monitor names" );
         
         }
         SystemMonitors_exposer.def( bp::self != bp::self );
@@ -276,7 +297,8 @@ void register_SystemMonitors_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         SystemMonitors_exposer.def( bp::self == bp::self );
@@ -289,7 +311,8 @@ void register_SystemMonitors_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("monid") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireSystem::SystemMonitors::remove
@@ -300,7 +323,8 @@ void register_SystemMonitors_class(){
             SystemMonitors_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("monid") ) );
+                , ( bp::arg("monid") )
+                , "Remove all of the monitors that match the ID monid\nThrow: SireSystem::missing_monitor\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireSystem::SystemMonitors::removeAll
@@ -310,7 +334,8 @@ void register_SystemMonitors_class(){
             
             SystemMonitors_exposer.def( 
                 "removeAll"
-                , removeAll_function_value );
+                , removeAll_function_value
+                , "Remove all of the monitors from this set" );
         
         }
         { //::SireSystem::SystemMonitors::setAllFrequency
@@ -321,7 +346,8 @@ void register_SystemMonitors_class(){
             SystemMonitors_exposer.def( 
                 "setAllFrequency"
                 , setAllFrequency_function_value
-                , ( bp::arg("frequency") ) );
+                , ( bp::arg("frequency") )
+                , "Set the frequency of all of the monitors to frequency" );
         
         }
         { //::SireSystem::SystemMonitors::setFrequency
@@ -332,7 +358,8 @@ void register_SystemMonitors_class(){
             SystemMonitors_exposer.def( 
                 "setFrequency"
                 , setFrequency_function_value
-                , ( bp::arg("monid"), bp::arg("frequency") ) );
+                , ( bp::arg("monid"), bp::arg("frequency") )
+                , "Set the frequency of all monitors that match the ID monid so that\nthey are updated every frequency steps\nThrow: SireSystem::missing_monitor\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireSystem::SystemMonitors::size
@@ -342,7 +369,8 @@ void register_SystemMonitors_class(){
             
             SystemMonitors_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "Return the number of monitors in this set" );
         
         }
         { //::SireSystem::SystemMonitors::typeName
@@ -352,7 +380,8 @@ void register_SystemMonitors_class(){
             
             SystemMonitors_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireSystem::SystemMonitors::what
@@ -362,7 +391,8 @@ void register_SystemMonitors_class(){
             
             SystemMonitors_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         SystemMonitors_exposer.staticmethod( "typeName" );

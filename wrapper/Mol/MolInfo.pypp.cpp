@@ -21,7 +21,7 @@ void register_MolInfo_class(){
 
     { //::SireMol::MolInfo
         typedef bp::class_< SireMol::MolInfo, boost::noncopyable > MolInfo_exposer_t;
-        MolInfo_exposer_t MolInfo_exposer = MolInfo_exposer_t( "MolInfo", bp::no_init );
+        MolInfo_exposer_t MolInfo_exposer = MolInfo_exposer_t( "MolInfo", "This is the pure virtual interface to the metadata object\nthat can be used to track part of a molecule back to its\nsource based on an ID, e.g. being able to find the index\nof an atom based on its name and the name of residue\nthat contains it.\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope MolInfo_scope( MolInfo_exposer );
         { //::SireMol::MolInfo::assertCompatibleWith
         
@@ -31,7 +31,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "assertCompatibleWith"
                 , assertCompatibleWith_function_value
-                , ( bp::arg("selected_atoms") ) );
+                , ( bp::arg("selected_atoms") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::assertSingleAtom
@@ -42,7 +43,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "assertSingleAtom"
                 , assertSingleAtom_function_value
-                , ( bp::arg("atomidxs") ) );
+                , ( bp::arg("atomidxs") )
+                , "Assert that there is the index for just one atom\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\n" );
         
         }
         { //::SireMol::MolInfo::assertSingleChain
@@ -53,7 +55,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "assertSingleChain"
                 , assertSingleChain_function_value
-                , ( bp::arg("chainidxs") ) );
+                , ( bp::arg("chainidxs") )
+                , "Assert that there is the index for just one chain\nThrow: SireMol::missing_chain\nThrow: SireMol::duplicate_chain\n" );
         
         }
         { //::SireMol::MolInfo::assertSingleCutGroup
@@ -64,7 +67,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "assertSingleCutGroup"
                 , assertSingleCutGroup_function_value
-                , ( bp::arg("cgidxs") ) );
+                , ( bp::arg("cgidxs") )
+                , "Assert that there is the index for just one CutGroup\nThrow: SireMol::missing_cutgroup\nThrow: SireMol::duplicate_cutgroup\n" );
         
         }
         { //::SireMol::MolInfo::assertSingleResidue
@@ -75,7 +79,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "assertSingleResidue"
                 , assertSingleResidue_function_value
-                , ( bp::arg("residxs") ) );
+                , ( bp::arg("residxs") )
+                , "Assert that there is the index for just one residue\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\n" );
         
         }
         { //::SireMol::MolInfo::assertSingleSegment
@@ -86,7 +91,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "assertSingleSegment"
                 , assertSingleSegment_function_value
-                , ( bp::arg("segidxs") ) );
+                , ( bp::arg("segidxs") )
+                , "Assert that there is the index for just one segment\nThrow: SireMol::missing_segment\nThrow: SireMol::duplicate_segment\n" );
         
         }
         { //::SireMol::MolInfo::atomIdx
@@ -97,7 +103,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "atomIdx"
                 , atomIdx_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::cgIdx
@@ -108,7 +115,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "cgIdx"
                 , cgIdx_function_value
-                , ( bp::arg("cgid") ) );
+                , ( bp::arg("cgid") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::chainIdx
@@ -119,7 +127,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "chainIdx"
                 , chainIdx_function_value
-                , ( bp::arg("chainid") ) );
+                , ( bp::arg("chainid") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::getAtom
@@ -130,7 +139,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "getAtom"
                 , getAtom_function_value
-                , ( bp::arg("cgidx"), bp::arg("i") ) );
+                , ( bp::arg("cgidx"), bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::getAtom
@@ -141,7 +151,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "getAtom"
                 , getAtom_function_value
-                , ( bp::arg("residx"), bp::arg("i") ) );
+                , ( bp::arg("residx"), bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::getAtom
@@ -152,7 +163,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "getAtom"
                 , getAtom_function_value
-                , ( bp::arg("chainidx"), bp::arg("i") ) );
+                , ( bp::arg("chainidx"), bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::getAtom
@@ -163,7 +175,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "getAtom"
                 , getAtom_function_value
-                , ( bp::arg("segidx"), bp::arg("i") ) );
+                , ( bp::arg("segidx"), bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::getAtoms
@@ -173,7 +186,8 @@ void register_MolInfo_class(){
             
             MolInfo_exposer.def( 
                 "getAtoms"
-                , getAtoms_function_value );
+                , getAtoms_function_value
+                , "" );
         
         }
         { //::SireMol::MolInfo::getAtomsIn
@@ -184,7 +198,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "getAtomsIn"
                 , getAtomsIn_function_value
-                , ( bp::arg("resid") ) );
+                , ( bp::arg("resid") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::getAtomsIn
@@ -195,7 +210,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "getAtomsIn"
                 , getAtomsIn_function_value
-                , ( bp::arg("cgid") ) );
+                , ( bp::arg("cgid") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::getAtomsIn
@@ -206,7 +222,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "getAtomsIn"
                 , getAtomsIn_function_value
-                , ( bp::arg("chainid") ) );
+                , ( bp::arg("chainid") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::getAtomsIn
@@ -217,7 +234,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "getAtomsIn"
                 , getAtomsIn_function_value
-                , ( bp::arg("segid") ) );
+                , ( bp::arg("segid") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::getChains
@@ -227,7 +245,8 @@ void register_MolInfo_class(){
             
             MolInfo_exposer.def( 
                 "getChains"
-                , getChains_function_value );
+                , getChains_function_value
+                , "" );
         
         }
         { //::SireMol::MolInfo::getCutGroups
@@ -237,7 +256,8 @@ void register_MolInfo_class(){
             
             MolInfo_exposer.def( 
                 "getCutGroups"
-                , getCutGroups_function_value );
+                , getCutGroups_function_value
+                , "" );
         
         }
         { //::SireMol::MolInfo::getResidue
@@ -248,7 +268,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "getResidue"
                 , getResidue_function_value
-                , ( bp::arg("chainidx"), bp::arg("i") ) );
+                , ( bp::arg("chainidx"), bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::getResidues
@@ -258,7 +279,8 @@ void register_MolInfo_class(){
             
             MolInfo_exposer.def( 
                 "getResidues"
-                , getResidues_function_value );
+                , getResidues_function_value
+                , "" );
         
         }
         { //::SireMol::MolInfo::getResiduesIn
@@ -269,7 +291,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "getResiduesIn"
                 , getResiduesIn_function_value
-                , ( bp::arg("chainid") ) );
+                , ( bp::arg("chainid") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::getSegments
@@ -279,7 +302,20 @@ void register_MolInfo_class(){
             
             MolInfo_exposer.def( 
                 "getSegments"
-                , getSegments_function_value );
+                , getSegments_function_value
+                , "" );
+        
+        }
+        { //::SireMol::MolInfo::intersection
+        
+            typedef ::QList< SireMol::AtomIdx > ( *intersection_function_type )( ::QList< SireMol::AtomIdx > const &,::QList< SireMol::AtomIdx > const & );
+            intersection_function_type intersection_function_value( &::SireMol::MolInfo::intersection );
+            
+            MolInfo_exposer.def( 
+                "intersection"
+                , intersection_function_value
+                , ( bp::arg("list0"), bp::arg("list1") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::map
@@ -290,7 +326,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::map
@@ -301,7 +338,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("num") ) );
+                , ( bp::arg("num") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::map
@@ -312,7 +350,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("idx") ) );
+                , ( bp::arg("idx") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::map
@@ -323,7 +362,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::map
@@ -334,7 +374,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::map
@@ -345,7 +386,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("num") ) );
+                , ( bp::arg("num") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::map
@@ -356,7 +398,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("idx") ) );
+                , ( bp::arg("idx") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::map
@@ -367,7 +410,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("resid") ) );
+                , ( bp::arg("resid") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::map
@@ -378,7 +422,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::map
@@ -389,7 +434,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("idx") ) );
+                , ( bp::arg("idx") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::map
@@ -400,7 +446,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("cgid") ) );
+                , ( bp::arg("cgid") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::map
@@ -411,7 +458,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::map
@@ -422,7 +470,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("idx") ) );
+                , ( bp::arg("idx") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::map
@@ -433,7 +482,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("chainid") ) );
+                , ( bp::arg("chainid") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::map
@@ -444,7 +494,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::map
@@ -455,7 +506,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("idx") ) );
+                , ( bp::arg("idx") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::map
@@ -466,7 +518,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("segid") ) );
+                , ( bp::arg("segid") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::parentChain
@@ -477,7 +530,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "parentChain"
                 , parentChain_function_value
-                , ( bp::arg("residx") ) );
+                , ( bp::arg("residx") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::parentChain
@@ -488,7 +542,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "parentChain"
                 , parentChain_function_value
-                , ( bp::arg("resid") ) );
+                , ( bp::arg("resid") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::parentChain
@@ -499,7 +554,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "parentChain"
                 , parentChain_function_value
-                , ( bp::arg("atomidx") ) );
+                , ( bp::arg("atomidx") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::parentChain
@@ -510,7 +566,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "parentChain"
                 , parentChain_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::parentCutGroup
@@ -521,7 +578,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "parentCutGroup"
                 , parentCutGroup_function_value
-                , ( bp::arg("atomidx") ) );
+                , ( bp::arg("atomidx") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::parentCutGroup
@@ -532,7 +590,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "parentCutGroup"
                 , parentCutGroup_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::parentResidue
@@ -543,7 +602,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "parentResidue"
                 , parentResidue_function_value
-                , ( bp::arg("atomidx") ) );
+                , ( bp::arg("atomidx") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::parentResidue
@@ -554,7 +614,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "parentResidue"
                 , parentResidue_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::parentSegment
@@ -565,7 +626,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "parentSegment"
                 , parentSegment_function_value
-                , ( bp::arg("atomidx") ) );
+                , ( bp::arg("atomidx") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::parentSegment
@@ -576,7 +638,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "parentSegment"
                 , parentSegment_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::resIdx
@@ -587,7 +650,8 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "resIdx"
                 , resIdx_function_value
-                , ( bp::arg("resid") ) );
+                , ( bp::arg("resid") )
+                , "" );
         
         }
         { //::SireMol::MolInfo::segIdx
@@ -598,9 +662,11 @@ void register_MolInfo_class(){
             MolInfo_exposer.def( 
                 "segIdx"
                 , segIdx_function_value
-                , ( bp::arg("segid") ) );
+                , ( bp::arg("segid") )
+                , "" );
         
         }
+        MolInfo_exposer.staticmethod( "intersection" );
         MolInfo_exposer.def( "__str__", &pvt_get_name);
         MolInfo_exposer.def( "__repr__", &pvt_get_name);
     }

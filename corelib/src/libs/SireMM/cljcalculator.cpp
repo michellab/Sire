@@ -141,6 +141,8 @@ namespace SireMM
             {
                 const CLJBoxDistance* ptr = dists + range.begin();
                 const CLJBoxPtr* const b = boxes->constData();
+
+                //qDebug() << "range" << (int(range.end())-int(range.begin()));
             
                 for (int i = range.begin(); i != range.end(); ++i)
                 {

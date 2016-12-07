@@ -43,10 +43,10 @@ void register_Power_class(){
 
     { //::SireCAS::Power
         typedef bp::class_< SireCAS::Power, bp::bases< SireCAS::PowerFunction, SireCAS::ExBase > > Power_exposer_t;
-        Power_exposer_t Power_exposer = Power_exposer_t( "Power", bp::init< >() );
+        Power_exposer_t Power_exposer = Power_exposer_t( "Power", "\nThis class represents an expression raised to a generic power (e.g. x^y). This is also the route to raising expressions to real-number powers, and the base of the implementation of the exp() and invlog_10() functions.\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a null power") );
         bp::scope Power_scope( Power_exposer );
-        Power_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Expression const & >(( bp::arg("base"), bp::arg("power") )) );
-        Power_exposer.def( bp::init< SireCAS::Power const & >(( bp::arg("other") )) );
+        Power_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Expression const & >(( bp::arg("base"), bp::arg("power") ), "Construct a power that represents core^power") );
+        Power_exposer.def( bp::init< SireCAS::Power const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::Power::core
         
             typedef ::SireCAS::Expression ( ::SireCAS::Power::*core_function_type)(  ) const;
@@ -54,7 +54,8 @@ void register_Power_class(){
             
             Power_exposer.def( 
                 "core"
-                , core_function_value );
+                , core_function_value
+                , "" );
         
         }
         { //::SireCAS::Power::evaluate
@@ -65,7 +66,8 @@ void register_Power_class(){
             Power_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this power - this could be dodgy for negative bases with\nnon-integer powers" );
         
         }
         { //::SireCAS::Power::evaluate
@@ -76,7 +78,8 @@ void register_Power_class(){
             Power_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this power - this could be dodgy for negative bases with\nnon-integer powers" );
         
         }
         { //::SireCAS::Power::hash
@@ -86,7 +89,8 @@ void register_Power_class(){
             
             Power_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Return a hash for this power" );
         
         }
         { //::SireCAS::Power::isCompound
@@ -96,7 +100,8 @@ void register_Power_class(){
             
             Power_exposer.def( 
                 "isCompound"
-                , isCompound_function_value );
+                , isCompound_function_value
+                , "" );
         
         }
         Power_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -107,7 +112,8 @@ void register_Power_class(){
             
             Power_exposer.def( 
                 "power"
-                , power_function_value );
+                , power_function_value
+                , "" );
         
         }
         { //::SireCAS::Power::typeName
@@ -117,7 +123,8 @@ void register_Power_class(){
             
             Power_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::Power::what
@@ -127,7 +134,8 @@ void register_Power_class(){
             
             Power_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Power_exposer.staticmethod( "typeName" );

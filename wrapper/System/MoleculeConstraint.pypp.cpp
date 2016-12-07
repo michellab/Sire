@@ -33,7 +33,7 @@ void register_MoleculeConstraint_class(){
 
     { //::SireSystem::MoleculeConstraint
         typedef bp::class_< SireSystem::MoleculeConstraint, bp::bases< SireSystem::Constraint, SireBase::Property >, boost::noncopyable > MoleculeConstraint_exposer_t;
-        MoleculeConstraint_exposer_t MoleculeConstraint_exposer = MoleculeConstraint_exposer_t( "MoleculeConstraint", bp::no_init );
+        MoleculeConstraint_exposer_t MoleculeConstraint_exposer = MoleculeConstraint_exposer_t( "MoleculeConstraint", "This is the base class of all Molecule constraints. These\nare constraints that affect molecules in a system. A molecule\nconstraint works by being updated by a system and returning\nthe molecules that must then be changed to maintain the\nconstraint\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope MoleculeConstraint_scope( MoleculeConstraint_exposer );
         { //::SireSystem::MoleculeConstraint::typeName
         
@@ -42,7 +42,8 @@ void register_MoleculeConstraint_class(){
             
             MoleculeConstraint_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         MoleculeConstraint_exposer.staticmethod( "typeName" );

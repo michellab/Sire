@@ -46,16 +46,16 @@ void register_AtomMCSMatcher_class(){
 
     { //::SireMol::AtomMCSMatcher
         typedef bp::class_< SireMol::AtomMCSMatcher, bp::bases< SireMol::AtomMatcher, SireBase::Property > > AtomMCSMatcher_exposer_t;
-        AtomMCSMatcher_exposer_t AtomMCSMatcher_exposer = AtomMCSMatcher_exposer_t( "AtomMCSMatcher", bp::init< >() );
+        AtomMCSMatcher_exposer_t AtomMCSMatcher_exposer = AtomMCSMatcher_exposer_t( "AtomMCSMatcher", "This is an atom matcher that matches using the maximum common substructure\nof the two molecules\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope AtomMCSMatcher_scope( AtomMCSMatcher_exposer );
-        AtomMCSMatcher_exposer.def( bp::init< SireUnits::Dimension::Time const & >(( bp::arg("timeout") )) );
-        AtomMCSMatcher_exposer.def( bp::init< SireMol::AtomMatcher const & >(( bp::arg("prematcher") )) );
-        AtomMCSMatcher_exposer.def( bp::init< SireMol::AtomMatcher const &, SireUnits::Dimension::Time const & >(( bp::arg("prematcher"), bp::arg("timeout") )) );
-        AtomMCSMatcher_exposer.def( bp::init< bool >(( bp::arg("match_light_atoms") )) );
-        AtomMCSMatcher_exposer.def( bp::init< SireUnits::Dimension::Time const &, bool >(( bp::arg("timeout"), bp::arg("match_light_atoms") )) );
-        AtomMCSMatcher_exposer.def( bp::init< SireMol::AtomMatcher const &, bool >(( bp::arg("prematcher"), bp::arg("match_light_atoms") )) );
-        AtomMCSMatcher_exposer.def( bp::init< SireMol::AtomMatcher const &, SireUnits::Dimension::Time const &, bool >(( bp::arg("prematcher"), bp::arg("timeout"), bp::arg("match_light_atoms") )) );
-        AtomMCSMatcher_exposer.def( bp::init< SireMol::AtomMCSMatcher const & >(( bp::arg("other") )) );
+        AtomMCSMatcher_exposer.def( bp::init< SireUnits::Dimension::Time const & >(( bp::arg("timeout") ), "Construct specifying the timeout for the MCS match") );
+        AtomMCSMatcher_exposer.def( bp::init< SireMol::AtomMatcher const & >(( bp::arg("prematcher") ), "Construct specifying the prematcher for the MCS match") );
+        AtomMCSMatcher_exposer.def( bp::init< SireMol::AtomMatcher const &, SireUnits::Dimension::Time const & >(( bp::arg("prematcher"), bp::arg("timeout") ), "Construct specifying the timeout and prematcher for the MCS match") );
+        AtomMCSMatcher_exposer.def( bp::init< bool >(( bp::arg("match_light_atoms") ), "Constructor, specifying whether or not to match light atoms") );
+        AtomMCSMatcher_exposer.def( bp::init< SireUnits::Dimension::Time const &, bool >(( bp::arg("timeout"), bp::arg("match_light_atoms") ), "Construct specifying the timeout for the MCS match, and specifying whether or not\nto match light atoms") );
+        AtomMCSMatcher_exposer.def( bp::init< SireMol::AtomMatcher const &, bool >(( bp::arg("prematcher"), bp::arg("match_light_atoms") ), "Construct specifying the prematcher for the MCS match,\nand specifying whether or not to match light atoms\n") );
+        AtomMCSMatcher_exposer.def( bp::init< SireMol::AtomMatcher const &, SireUnits::Dimension::Time const &, bool >(( bp::arg("prematcher"), bp::arg("timeout"), bp::arg("match_light_atoms") ), "Construct specifying the timeout and prematcher for the MCS match,\nand specifying whether or not to match light atoms\n") );
+        AtomMCSMatcher_exposer.def( bp::init< SireMol::AtomMCSMatcher const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::AtomMCSMatcher::matchingLightAtoms
         
             typedef bool ( ::SireMol::AtomMCSMatcher::*matchingLightAtoms_function_type)(  ) const;
@@ -63,7 +63,8 @@ void register_AtomMCSMatcher_class(){
             
             AtomMCSMatcher_exposer.def( 
                 "matchingLightAtoms"
-                , matchingLightAtoms_function_value );
+                , matchingLightAtoms_function_value
+                , "Return whether or not this will include light atoms (e.g. hydrogen)\nwhen searching for the maximum common substructure" );
         
         }
         AtomMCSMatcher_exposer.def( bp::self != bp::self );
@@ -76,7 +77,8 @@ void register_AtomMCSMatcher_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AtomMCSMatcher_exposer.def( bp::self == bp::self );
@@ -88,7 +90,8 @@ void register_AtomMCSMatcher_class(){
             AtomMCSMatcher_exposer.def( 
                 "preMatcher"
                 , preMatcher_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the prematcher (if any) that is used to pre-match atoms\nbefore the MCS match" );
         
         }
         { //::SireMol::AtomMCSMatcher::timeout
@@ -98,7 +101,8 @@ void register_AtomMCSMatcher_class(){
             
             AtomMCSMatcher_exposer.def( 
                 "timeout"
-                , timeout_function_value );
+                , timeout_function_value
+                , "Return the timeout before the MCS match is abandoned" );
         
         }
         { //::SireMol::AtomMCSMatcher::toString
@@ -108,7 +112,8 @@ void register_AtomMCSMatcher_class(){
             
             AtomMCSMatcher_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::AtomMCSMatcher::typeName
@@ -118,7 +123,8 @@ void register_AtomMCSMatcher_class(){
             
             AtomMCSMatcher_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::AtomMCSMatcher::what
@@ -128,7 +134,8 @@ void register_AtomMCSMatcher_class(){
             
             AtomMCSMatcher_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         AtomMCSMatcher_exposer.staticmethod( "typeName" );

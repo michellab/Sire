@@ -39,7 +39,7 @@ void register_MGID_class(){
 
     { //::SireMol::MGID
         typedef bp::class_< SireMol::MGID, bp::bases< SireID::ID >, boost::noncopyable > MGID_exposer_t;
-        MGID_exposer_t MGID_exposer = MGID_exposer_t( "MGID", bp::no_init );
+        MGID_exposer_t MGID_exposer = MGID_exposer_t( "MGID", "This is the base class of all identifiers that are used\nto identify a MoleculeGroup\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope MGID_scope( MGID_exposer );
         { //::SireMol::MGID::map
         
@@ -49,7 +49,8 @@ void register_MGID_class(){
             MGID_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molgroups") ) );
+                , ( bp::arg("molgroups") )
+                , "" );
         
         }
         MGID_exposer.def( bp::self & bp::self );
@@ -61,7 +62,8 @@ void register_MGID_class(){
             MGID_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::MGID::operator()
@@ -72,7 +74,8 @@ void register_MGID_class(){
             MGID_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         MGID_exposer.def( bp::self * bp::self );
@@ -85,7 +88,8 @@ void register_MGID_class(){
             MGID_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         MGID_exposer.def( bp::self | bp::self );
@@ -96,7 +100,8 @@ void register_MGID_class(){
             
             MGID_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         MGID_exposer.staticmethod( "typeName" );

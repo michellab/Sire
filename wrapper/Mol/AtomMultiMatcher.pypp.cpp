@@ -45,11 +45,11 @@ void register_AtomMultiMatcher_class(){
 
     { //::SireMol::AtomMultiMatcher
         typedef bp::class_< SireMol::AtomMultiMatcher, bp::bases< SireMol::AtomMatcher, SireBase::Property > > AtomMultiMatcher_exposer_t;
-        AtomMultiMatcher_exposer_t AtomMultiMatcher_exposer = AtomMultiMatcher_exposer_t( "AtomMultiMatcher", bp::init< >() );
+        AtomMultiMatcher_exposer_t AtomMultiMatcher_exposer = AtomMultiMatcher_exposer_t( "AtomMultiMatcher", "This is an atom matcher combines several sub-AtomMatchers together\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope AtomMultiMatcher_scope( AtomMultiMatcher_exposer );
-        AtomMultiMatcher_exposer.def( bp::init< SireMol::AtomMatcher const & >(( bp::arg("matcher") )) );
-        AtomMultiMatcher_exposer.def( bp::init< SireMol::AtomMatcher const &, SireMol::AtomMatcher const & >(( bp::arg("m0"), bp::arg("m1") )) );
-        AtomMultiMatcher_exposer.def( bp::init< SireMol::AtomMultiMatcher const & >(( bp::arg("other") )) );
+        AtomMultiMatcher_exposer.def( bp::init< SireMol::AtomMatcher const & >(( bp::arg("matcher") ), "Construct from a single match") );
+        AtomMultiMatcher_exposer.def( bp::init< SireMol::AtomMatcher const &, SireMol::AtomMatcher const & >(( bp::arg("m0"), bp::arg("m1") ), "Construct from a pair of matches") );
+        AtomMultiMatcher_exposer.def( bp::init< SireMol::AtomMultiMatcher const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::AtomMultiMatcher::isNull
         
             typedef bool ( ::SireMol::AtomMultiMatcher::*isNull_function_type)(  ) const;
@@ -57,7 +57,8 @@ void register_AtomMultiMatcher_class(){
             
             AtomMultiMatcher_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Return whether or not this matcher is null (cannot be used for matching)" );
         
         }
         AtomMultiMatcher_exposer.def( bp::self != bp::self );
@@ -70,7 +71,8 @@ void register_AtomMultiMatcher_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AtomMultiMatcher_exposer.def( bp::self == bp::self );
@@ -81,7 +83,8 @@ void register_AtomMultiMatcher_class(){
             
             AtomMultiMatcher_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::AtomMultiMatcher::typeName
@@ -91,7 +94,8 @@ void register_AtomMultiMatcher_class(){
             
             AtomMultiMatcher_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::AtomMultiMatcher::what
@@ -101,7 +105,8 @@ void register_AtomMultiMatcher_class(){
             
             AtomMultiMatcher_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         AtomMultiMatcher_exposer.staticmethod( "typeName" );

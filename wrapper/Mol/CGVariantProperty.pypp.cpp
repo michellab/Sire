@@ -25,11 +25,11 @@ void register_CGVariantProperty_class(){
 
     { //::SireMol::CGProperty< QVariant >
         typedef bp::class_< SireMol::CGProperty< QVariant >, bp::bases< SireMol::CGProp, SireMol::MolViewProperty, SireBase::Property > > CGVariantProperty_exposer_t;
-        CGVariantProperty_exposer_t CGVariantProperty_exposer = CGVariantProperty_exposer_t( "CGVariantProperty", bp::init< >() );
+        CGVariantProperty_exposer_t CGVariantProperty_exposer = CGVariantProperty_exposer_t( "CGVariantProperty", "", bp::init< >("") );
         bp::scope CGVariantProperty_scope( CGVariantProperty_exposer );
-        CGVariantProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") )) );
-        CGVariantProperty_exposer.def( bp::init< QVector< QVariant > const & >(( bp::arg("values") )) );
-        CGVariantProperty_exposer.def( bp::init< SireMol::CGProperty< QVariant > const & >(( bp::arg("other") )) );
+        CGVariantProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "") );
+        CGVariantProperty_exposer.def( bp::init< QVector< QVariant > const & >(( bp::arg("values") ), "") );
+        CGVariantProperty_exposer.def( bp::init< SireMol::CGProperty< QVariant > const & >(( bp::arg("other") ), "") );
         { //::SireMol::CGProperty< QVariant >::array
         
             typedef SireMol::CGProperty< QVariant > exported_class_t;
@@ -39,7 +39,8 @@ void register_CGVariantProperty_class(){
             CGVariantProperty_exposer.def( 
                 "array"
                 , array_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::CGProperty< QVariant >::assertCanConvert
@@ -51,7 +52,8 @@ void register_CGVariantProperty_class(){
             CGVariantProperty_exposer.def( 
                 "assertCanConvert"
                 , assertCanConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::CGProperty< QVariant >::assignFrom
@@ -63,7 +65,8 @@ void register_CGVariantProperty_class(){
             CGVariantProperty_exposer.def( 
                 "assignFrom"
                 , assignFrom_function_value
-                , ( bp::arg("variant") ) );
+                , ( bp::arg("variant") )
+                , "" );
         
         }
         { //::SireMol::CGProperty< QVariant >::at
@@ -76,7 +79,8 @@ void register_CGVariantProperty_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::CGProperty< QVariant >::canConvert
@@ -88,7 +92,8 @@ void register_CGVariantProperty_class(){
             CGVariantProperty_exposer.def( 
                 "canConvert"
                 , canConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::CGProperty< QVariant >::count
@@ -99,7 +104,8 @@ void register_CGVariantProperty_class(){
             
             CGVariantProperty_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMol::CGProperty< QVariant >::fromVariant
@@ -111,7 +117,8 @@ void register_CGVariantProperty_class(){
             CGVariantProperty_exposer.def( 
                 "fromVariant"
                 , fromVariant_function_value
-                , ( bp::arg("variant") ) );
+                , ( bp::arg("variant") )
+                , "" );
         
         }
         { //::SireMol::CGProperty< QVariant >::get
@@ -124,7 +131,8 @@ void register_CGVariantProperty_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::CGProperty< QVariant >::isCompatibleWith
@@ -136,7 +144,8 @@ void register_CGVariantProperty_class(){
             CGVariantProperty_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::CGProperty< QVariant >::isEmpty
@@ -147,7 +156,8 @@ void register_CGVariantProperty_class(){
             
             CGVariantProperty_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMol::CGProperty< QVariant >::nCutGroups
@@ -158,7 +168,8 @@ void register_CGVariantProperty_class(){
             
             CGVariantProperty_exposer.def( 
                 "nCutGroups"
-                , nCutGroups_function_value );
+                , nCutGroups_function_value
+                , "" );
         
         }
         CGVariantProperty_exposer.def( bp::self != bp::self );
@@ -172,7 +183,8 @@ void register_CGVariantProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CGVariantProperty_exposer.def( bp::self == bp::self );
@@ -186,7 +198,8 @@ void register_CGVariantProperty_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::CGProperty< QVariant >::set
@@ -199,7 +212,8 @@ void register_CGVariantProperty_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("cgidx"), bp::arg("value") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::CGProperty< QVariant >::size
@@ -210,7 +224,8 @@ void register_CGVariantProperty_class(){
             
             CGVariantProperty_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "" );
         
         }
         { //::SireMol::CGProperty< QVariant >::toString
@@ -221,7 +236,8 @@ void register_CGVariantProperty_class(){
             
             CGVariantProperty_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::CGProperty< QVariant >::toVariant
@@ -232,7 +248,8 @@ void register_CGVariantProperty_class(){
             
             CGVariantProperty_exposer.def( 
                 "toVariant"
-                , toVariant_function_value );
+                , toVariant_function_value
+                , "" );
         
         }
         { //::SireMol::CGProperty< QVariant >::typeName
@@ -243,7 +260,8 @@ void register_CGVariantProperty_class(){
             
             CGVariantProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         CGVariantProperty_exposer.staticmethod( "fromVariant" );

@@ -48,11 +48,11 @@ void register_Molecule_class(){
 
     { //::SireMol::Molecule
         typedef bp::class_< SireMol::Molecule, bp::bases< SireMol::MoleculeView, SireBase::Property > > Molecule_exposer_t;
-        Molecule_exposer_t Molecule_exposer = Molecule_exposer_t( "Molecule", bp::init< >() );
+        Molecule_exposer_t Molecule_exposer = Molecule_exposer_t( "Molecule", "A Molecule represents a complete molecule.\n\nMost of the manipulation of a molecule is handled by the orer classes,\ne.g. Mover, Selector, Editer, Evaluator.\n\nThese classes provide additional member functions, thereby allowing me\nto keep the API of Molecule small.\n\nExamples of use include;\n\nmol = mol.move().translate( Vector(1,2,3) )\npoint = mol.evaluate().center()\nmass = mol.evaluate().mass()\n\nmol = mol.edit().rename( ResNum(43)[0], ALA ).commit()\n\nEqually, we can quickly select well-defined subgroups within the\nmolecule, e.g. atom(s), residue(e), chain(s), CutGroup(s) and\nsegment(s), via the select functions, e.g.\n\nala49 = mol.select( ResName(ala) + ResNum(49) );\n\nor if there is more than one residue designate ALA:49\n\nala49_0 = mol.select( (ResName(ala)+ResNum(49))[0] );\n\nor to get all of these residues, do\n\nall_ala49 = mol.selectAll( ResName(ala) + ResNum(49) );\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope Molecule_scope( Molecule_exposer );
-        Molecule_exposer.def( bp::init< QString const & >(( bp::arg("molname") )) );
-        Molecule_exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("moldata") )) );
-        Molecule_exposer.def( bp::init< SireMol::Molecule const & >(( bp::arg("other") )) );
+        Molecule_exposer.def( bp::init< QString const & >(( bp::arg("molname") ), "Construct a new Molecule, called molname") );
+        Molecule_exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("moldata") ), "Construct from the passed MoleculeData") );
+        Molecule_exposer.def( bp::init< SireMol::Molecule const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::Molecule::assertContainsMetadata
         
             typedef void ( ::SireMol::Molecule::*assertContainsMetadata_function_type)( ::SireBase::PropertyName const & ) const;
@@ -61,7 +61,8 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "assertContainsMetadata"
                 , assertContainsMetadata_function_value
-                , ( bp::arg("metakey") ) );
+                , ( bp::arg("metakey") )
+                , "Assert that this molecule contains some metadata at metakey metakey\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::Molecule::assertContainsMetadata
@@ -72,7 +73,8 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "assertContainsMetadata"
                 , assertContainsMetadata_function_value
-                , ( bp::arg("key"), bp::arg("metakey") ) );
+                , ( bp::arg("key"), bp::arg("metakey") )
+                , "Assert that this molecule contains some metadata at metakey metakey\nassociated with the property at key key\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::Molecule::assertContainsProperty
@@ -83,7 +85,8 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "assertContainsProperty"
                 , assertContainsProperty_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "Assert that this molecule contains a property at key key\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::Molecule::edit
@@ -93,7 +96,8 @@ void register_Molecule_class(){
             
             Molecule_exposer.def( 
                 "edit"
-                , edit_function_value );
+                , edit_function_value
+                , "Return an Editor that can edit any part of this molecule" );
         
         }
         { //::SireMol::Molecule::evaluate
@@ -103,7 +107,8 @@ void register_Molecule_class(){
             
             Molecule_exposer.def( 
                 "evaluate"
-                , evaluate_function_value );
+                , evaluate_function_value
+                , "Return an Evaluator that evaluates values using\nall of the atoms in this molecule" );
         
         }
         { //::SireMol::Molecule::hasMetadata
@@ -114,7 +119,8 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "hasMetadata"
                 , hasMetadata_function_value
-                , ( bp::arg("metakey") ) );
+                , ( bp::arg("metakey") )
+                , "Return whether or not this molecule posseses metadata with\nmetakey metakey" );
         
         }
         { //::SireMol::Molecule::hasMetadata
@@ -125,7 +131,8 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "hasMetadata"
                 , hasMetadata_function_value
-                , ( bp::arg("key"), bp::arg("metakey") ) );
+                , ( bp::arg("key"), bp::arg("metakey") )
+                , "Return whether or not the property of this molecule at\nkey key has metadata at metakey metakey\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::Molecule::hasProperty
@@ -136,7 +143,8 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "hasProperty"
                 , hasProperty_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "Return whether or not this molecule posseses a property at key key" );
         
         }
         { //::SireMol::Molecule::isEmpty
@@ -146,7 +154,8 @@ void register_Molecule_class(){
             
             Molecule_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether or not this is empty" );
         
         }
         { //::SireMol::Molecule::metadata
@@ -158,7 +167,8 @@ void register_Molecule_class(){
                 "metadata"
                 , metadata_function_value
                 , ( bp::arg("metakey") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the metadata for the metakey metakey\nThrow: SireMol::missing_property\n" );
         
         }
         { //::SireMol::Molecule::metadata
@@ -170,7 +180,8 @@ void register_Molecule_class(){
                 "metadata"
                 , metadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the metadata for the metakey metakey for\nthe property at key key\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::Molecule::metadataKeys
@@ -180,7 +191,8 @@ void register_Molecule_class(){
             
             Molecule_exposer.def( 
                 "metadataKeys"
-                , metadataKeys_function_value );
+                , metadataKeys_function_value
+                , "Return the metakeys of all the metadata in this molecule" );
         
         }
         { //::SireMol::Molecule::metadataKeys
@@ -191,7 +203,8 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "metadataKeys"
                 , metadataKeys_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "Return the metakeys for all of the metadata for the property\nat key key\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::Molecule::move
@@ -201,7 +214,8 @@ void register_Molecule_class(){
             
             Molecule_exposer.def( 
                 "move"
-                , move_function_value );
+                , move_function_value
+                , "Return a Mover that moves all of the atoms in\nthis molecule" );
         
         }
         { //::SireMol::Molecule::nAtoms
@@ -211,7 +225,8 @@ void register_Molecule_class(){
             
             Molecule_exposer.def( 
                 "nAtoms"
-                , nAtoms_function_value );
+                , nAtoms_function_value
+                , "Return the number of atoms in this molecule" );
         
         }
         { //::SireMol::Molecule::nChains
@@ -221,7 +236,8 @@ void register_Molecule_class(){
             
             Molecule_exposer.def( 
                 "nChains"
-                , nChains_function_value );
+                , nChains_function_value
+                , "Return the number of chains in this molecule" );
         
         }
         { //::SireMol::Molecule::nCutGroups
@@ -231,7 +247,8 @@ void register_Molecule_class(){
             
             Molecule_exposer.def( 
                 "nCutGroups"
-                , nCutGroups_function_value );
+                , nCutGroups_function_value
+                , "Return the number of CutGroups in this molecule" );
         
         }
         { //::SireMol::Molecule::nResidues
@@ -241,7 +258,8 @@ void register_Molecule_class(){
             
             Molecule_exposer.def( 
                 "nResidues"
-                , nResidues_function_value );
+                , nResidues_function_value
+                , "Return the number of residues in this molecule" );
         
         }
         { //::SireMol::Molecule::nSegments
@@ -251,7 +269,8 @@ void register_Molecule_class(){
             
             Molecule_exposer.def( 
                 "nSegments"
-                , nSegments_function_value );
+                , nSegments_function_value
+                , "Return the number of segments in this molecule" );
         
         }
         { //::SireMol::Molecule::name
@@ -262,7 +281,8 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the name of this molecule" );
         
         }
         { //::SireMol::Molecule::number
@@ -272,7 +292,8 @@ void register_Molecule_class(){
             
             Molecule_exposer.def( 
                 "number"
-                , number_function_value );
+                , number_function_value
+                , "Return the number of this molecule - this is used\nto identify the molecule" );
         
         }
         Molecule_exposer.def( bp::self != bp::self );
@@ -285,7 +306,8 @@ void register_Molecule_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Molecule_exposer.def( bp::self == bp::self );
@@ -297,7 +319,8 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "properties"
                 , properties_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return all of the properties of this molecule" );
         
         }
         { //::SireMol::Molecule::property
@@ -309,7 +332,8 @@ void register_Molecule_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the property associated with the key key\nThrow: SireMol::missing_property\n" );
         
         }
         { //::SireMol::Molecule::propertyKeys
@@ -319,7 +343,8 @@ void register_Molecule_class(){
             
             Molecule_exposer.def( 
                 "propertyKeys"
-                , propertyKeys_function_value );
+                , propertyKeys_function_value
+                , "Return the keys of all of the properties in this molecule" );
         
         }
         { //::SireMol::Molecule::selectedAll
@@ -329,7 +354,8 @@ void register_Molecule_class(){
             
             Molecule_exposer.def( 
                 "selectedAll"
-                , selectedAll_function_value );
+                , selectedAll_function_value
+                , "Return whether or not this is a complete molecule" );
         
         }
         { //::SireMol::Molecule::selection
@@ -339,7 +365,8 @@ void register_Molecule_class(){
             
             Molecule_exposer.def( 
                 "selection"
-                , selection_function_value );
+                , selection_function_value
+                , "Return which atoms are selected in this view" );
         
         }
         { //::SireMol::Molecule::toString
@@ -349,7 +376,8 @@ void register_Molecule_class(){
             
             Molecule_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this molecule" );
         
         }
         { //::SireMol::Molecule::typeName
@@ -359,7 +387,8 @@ void register_Molecule_class(){
             
             Molecule_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::Molecule::update
@@ -370,7 +399,8 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("moldata") ) );
+                , ( bp::arg("moldata") )
+                , "Update this molecule with the passed molecule data.\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::Molecule::version
@@ -380,7 +410,8 @@ void register_Molecule_class(){
             
             Molecule_exposer.def( 
                 "version"
-                , version_function_value );
+                , version_function_value
+                , "Return the version number of this molecule - all molecules\nwith the same ID number and version number must be identical" );
         
         }
         { //::SireMol::Molecule::version
@@ -391,7 +422,8 @@ void register_Molecule_class(){
             Molecule_exposer.def( 
                 "version"
                 , version_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "Return the version number of the property at key key.\nAll molecules with the same ID number and same property version\nnumber must have the same value of this property\n(although this says nothing about any metadata associated\nwith this property)\nThrow: SireBase::missing_property\n" );
         
         }
         Molecule_exposer.staticmethod( "typeName" );

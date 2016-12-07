@@ -29,21 +29,21 @@ void register_Identities_class(){
 
     { //::SireCAS::Identities
         typedef bp::class_< SireCAS::Identities > Identities_exposer_t;
-        Identities_exposer_t Identities_exposer = Identities_exposer_t( "Identities", bp::init< >() );
+        Identities_exposer_t Identities_exposer = Identities_exposer_t( "Identities", "This class holds a collection of identities.\nThese are symbols, and the expressions that they are equal to,\ne.g. x == y.squared() + sin(z). These identities can then be\nsubstituted into expressions, with all instances of the variable\nbeing replaced by the equivalent expression.\n\nAuthor: Christopher Woods\n", bp::init< >("Construct an empty set of identities") );
         bp::scope Identities_scope( Identities_exposer );
-        Identities_exposer.def( bp::init< QList< SireCAS::SymbolExpression > const & >(( bp::arg("expressions") )) );
-        Identities_exposer.def( bp::init< QHash< SireCAS::Symbol, SireCAS::Expression > const & >(( bp::arg("expressions") )) );
-        Identities_exposer.def( bp::init< SireCAS::SymbolExpression const & >(( bp::arg("symex0") )) );
-        Identities_exposer.def( bp::init< SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const & >(( bp::arg("symex0"), bp::arg("symex1") )) );
-        Identities_exposer.def( bp::init< SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const & >(( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2") )) );
-        Identities_exposer.def( bp::init< SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const & >(( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3") )) );
-        Identities_exposer.def( bp::init< SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const & >(( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4") )) );
-        Identities_exposer.def( bp::init< SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const & >(( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4"), bp::arg("symex5") )) );
-        Identities_exposer.def( bp::init< SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const & >(( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4"), bp::arg("symex5"), bp::arg("symex6") )) );
-        Identities_exposer.def( bp::init< SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const & >(( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4"), bp::arg("symex5"), bp::arg("symex6"), bp::arg("symex7") )) );
-        Identities_exposer.def( bp::init< SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const & >(( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4"), bp::arg("symex5"), bp::arg("symex6"), bp::arg("symex7"), bp::arg("symex8") )) );
-        Identities_exposer.def( bp::init< SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const & >(( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4"), bp::arg("symex5"), bp::arg("symex6"), bp::arg("symex7"), bp::arg("symex8"), bp::arg("symex9") )) );
-        Identities_exposer.def( bp::init< SireCAS::Identities const & >(( bp::arg("other") )) );
+        Identities_exposer.def( bp::init< QList< SireCAS::SymbolExpression > const & >(( bp::arg("expressions") ), "Construct from a list of passed expressions") );
+        Identities_exposer.def( bp::init< QHash< SireCAS::Symbol, SireCAS::Expression > const & >(( bp::arg("expressions") ), "Construct with a hash of expressions indexed by symbol") );
+        Identities_exposer.def( bp::init< SireCAS::SymbolExpression const & >(( bp::arg("symex0") ), "Construct with the passed expressions") );
+        Identities_exposer.def( bp::init< SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const & >(( bp::arg("symex0"), bp::arg("symex1") ), "Construct from the passed values") );
+        Identities_exposer.def( bp::init< SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const & >(( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2") ), "Construct from the passed values") );
+        Identities_exposer.def( bp::init< SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const & >(( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3") ), "Construct from the passed values") );
+        Identities_exposer.def( bp::init< SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const & >(( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4") ), "Construct from the passed values") );
+        Identities_exposer.def( bp::init< SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const & >(( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4"), bp::arg("symex5") ), "Construct from the passed values") );
+        Identities_exposer.def( bp::init< SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const & >(( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4"), bp::arg("symex5"), bp::arg("symex6") ), "Construct from the passed values") );
+        Identities_exposer.def( bp::init< SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const & >(( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4"), bp::arg("symex5"), bp::arg("symex6"), bp::arg("symex7") ), "Construct from the passed values") );
+        Identities_exposer.def( bp::init< SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const & >(( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4"), bp::arg("symex5"), bp::arg("symex6"), bp::arg("symex7"), bp::arg("symex8") ), "Construct from the passed values") );
+        Identities_exposer.def( bp::init< SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const &, SireCAS::SymbolExpression const & >(( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4"), bp::arg("symex5"), bp::arg("symex6"), bp::arg("symex7"), bp::arg("symex8"), bp::arg("symex9") ), "Construct from the passed values") );
+        Identities_exposer.def( bp::init< SireCAS::Identities const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::Identities::add
         
             typedef void ( ::SireCAS::Identities::*add_function_type)( ::SireCAS::SymbolExpression const & ) ;
@@ -52,7 +52,8 @@ void register_Identities_class(){
             Identities_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symex0") ) );
+                , ( bp::arg("symex0") )
+                , "" );
         
         }
         { //::SireCAS::Identities::add
@@ -63,7 +64,8 @@ void register_Identities_class(){
             Identities_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symex0"), bp::arg("symex1") ) );
+                , ( bp::arg("symex0"), bp::arg("symex1") )
+                , "Add the passed expressions" );
         
         }
         { //::SireCAS::Identities::add
@@ -74,7 +76,8 @@ void register_Identities_class(){
             Identities_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2") ) );
+                , ( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2") )
+                , "Add the passed expressions" );
         
         }
         { //::SireCAS::Identities::add
@@ -85,7 +88,8 @@ void register_Identities_class(){
             Identities_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3") ) );
+                , ( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3") )
+                , "Add the passed expressions" );
         
         }
         { //::SireCAS::Identities::add
@@ -96,7 +100,8 @@ void register_Identities_class(){
             Identities_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4") ) );
+                , ( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4") )
+                , "Add the passed expressions" );
         
         }
         { //::SireCAS::Identities::add
@@ -107,7 +112,8 @@ void register_Identities_class(){
             Identities_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4"), bp::arg("symex5") ) );
+                , ( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4"), bp::arg("symex5") )
+                , "Add the passed expressions" );
         
         }
         { //::SireCAS::Identities::add
@@ -118,7 +124,8 @@ void register_Identities_class(){
             Identities_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4"), bp::arg("symex5"), bp::arg("symex6") ) );
+                , ( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4"), bp::arg("symex5"), bp::arg("symex6") )
+                , "Add the passed expressions" );
         
         }
         { //::SireCAS::Identities::add
@@ -129,7 +136,8 @@ void register_Identities_class(){
             Identities_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4"), bp::arg("symex5"), bp::arg("symex6"), bp::arg("symex7") ) );
+                , ( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4"), bp::arg("symex5"), bp::arg("symex6"), bp::arg("symex7") )
+                , "Add the passed expressions" );
         
         }
         { //::SireCAS::Identities::add
@@ -140,7 +148,8 @@ void register_Identities_class(){
             Identities_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4"), bp::arg("symex5"), bp::arg("symex6"), bp::arg("symex7"), bp::arg("symex8") ) );
+                , ( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4"), bp::arg("symex5"), bp::arg("symex6"), bp::arg("symex7"), bp::arg("symex8") )
+                , "Add the passed expressions" );
         
         }
         { //::SireCAS::Identities::add
@@ -151,7 +160,8 @@ void register_Identities_class(){
             Identities_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4"), bp::arg("symex5"), bp::arg("symex6"), bp::arg("symex7"), bp::arg("symex8"), bp::arg("symex9") ) );
+                , ( bp::arg("symex0"), bp::arg("symex1"), bp::arg("symex2"), bp::arg("symex3"), bp::arg("symex4"), bp::arg("symex5"), bp::arg("symex6"), bp::arg("symex7"), bp::arg("symex8"), bp::arg("symex9") )
+                , "Add the passed expressions" );
         
         }
         { //::SireCAS::Identities::contains
@@ -162,7 +172,8 @@ void register_Identities_class(){
             Identities_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("sym") ) );
+                , ( bp::arg("sym") )
+                , "Return whether or not this set of identities contains an identity for\nthe symbol symbol" );
         
         }
         { //::SireCAS::Identities::contains
@@ -173,7 +184,8 @@ void register_Identities_class(){
             Identities_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("func") ) );
+                , ( bp::arg("func") )
+                , "Return whether or not this set of identities contains an identity for\nthe function func (or one of its relations)" );
         
         }
         { //::SireCAS::Identities::expression
@@ -184,7 +196,8 @@ void register_Identities_class(){
             Identities_exposer.def( 
                 "expression"
                 , expression_function_value
-                , ( bp::arg("sym") ) );
+                , ( bp::arg("sym") )
+                , "Return the associated expression for symbol, or an expression containing\nthis symbol if there is no such expression" );
         
         }
         { //::SireCAS::Identities::function
@@ -195,7 +208,8 @@ void register_Identities_class(){
             Identities_exposer.def( 
                 "function"
                 , function_function_value
-                , ( bp::arg("func") ) );
+                , ( bp::arg("func") )
+                , "Return the actual form of the function func stored in this set of\nidentities, or the null function if it is not present here" );
         
         }
         Identities_exposer.def( bp::self != bp::self );
@@ -208,7 +222,8 @@ void register_Identities_class(){
             Identities_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("sym") ) );
+                , ( bp::arg("sym") )
+                , "" );
         
         }
         { //::SireCAS::Identities::set
@@ -219,7 +234,8 @@ void register_Identities_class(){
             Identities_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("symbol"), bp::arg("expression") ) );
+                , ( bp::arg("symbol"), bp::arg("expression") )
+                , "Set the Symbol symbol equal to expression" );
         
         }
         { //::SireCAS::Identities::symbols
@@ -229,7 +245,8 @@ void register_Identities_class(){
             
             Identities_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "Return a list of the symbols that are present in this set" );
         
         }
         { //::SireCAS::Identities::toString
@@ -239,7 +256,8 @@ void register_Identities_class(){
             
             Identities_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireCAS::Identities::typeName
@@ -249,7 +267,8 @@ void register_Identities_class(){
             
             Identities_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::Identities::what
@@ -259,7 +278,8 @@ void register_Identities_class(){
             
             Identities_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Identities_exposer.staticmethod( "typeName" );

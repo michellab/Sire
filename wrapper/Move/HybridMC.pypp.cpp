@@ -38,17 +38,17 @@ void register_HybridMC_class(){
 
     { //::SireMove::HybridMC
         typedef bp::class_< SireMove::HybridMC, bp::bases< SireMove::MonteCarlo, SireMove::Move, SireBase::Property > > HybridMC_exposer_t;
-        HybridMC_exposer_t HybridMC_exposer = HybridMC_exposer_t( "HybridMC", bp::init< bp::optional< SireBase::PropertyMap const & > >(( bp::arg("map")=SireBase::PropertyMap() )) );
+        HybridMC_exposer_t HybridMC_exposer = HybridMC_exposer_t( "HybridMC", "This class implements a hybrid Monte Carlo move. This is a\nMonte Carlo move that uses a symplectic, time-reversible\nNVE integrator to run some molecular dynamics. The block\nof MD is accepted according to a Metropolis MC test\non the change in total energy (kinetic+potential).\n\nAuthor: Christopher Woods\n", bp::init< bp::optional< SireBase::PropertyMap const & > >(( bp::arg("map")=SireBase::PropertyMap() ), "Empty constructor") );
         bp::scope HybridMC_scope( HybridMC_exposer );
-        HybridMC_exposer.def( bp::init< SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )) );
-        HybridMC_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireMove::Integrator const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("integrator"), bp::arg("map")=SireBase::PropertyMap() )) );
-        HybridMC_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireUnits::Dimension::Time, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("timestep"), bp::arg("map")=SireBase::PropertyMap() )) );
-        HybridMC_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireMove::Integrator const &, SireUnits::Dimension::Time, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("integrator"), bp::arg("timestep"), bp::arg("map")=SireBase::PropertyMap() )) );
-        HybridMC_exposer.def( bp::init< SireMol::MoleculeGroup const &, int, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("nsteps"), bp::arg("map")=SireBase::PropertyMap() )) );
-        HybridMC_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireMove::Integrator const &, int, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("integrator"), bp::arg("nsteps"), bp::arg("map")=SireBase::PropertyMap() )) );
-        HybridMC_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireUnits::Dimension::Time, int, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("timestep"), bp::arg("nsteps"), bp::arg("map")=SireBase::PropertyMap() )) );
-        HybridMC_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireMove::Integrator const &, SireUnits::Dimension::Time, int, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("integrator"), bp::arg("timestep"), bp::arg("nsteps"), bp::arg("map")=SireBase::PropertyMap() )) );
-        HybridMC_exposer.def( bp::init< SireMove::HybridMC const & >(( bp::arg("other") )) );
+        HybridMC_exposer.def( bp::init< SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perform hybrid MC moves on the passed molecule group") );
+        HybridMC_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireMove::Integrator const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("integrator"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perform hybrid MC moves on the passed molecule group\nusing the passed integrator") );
+        HybridMC_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireUnits::Dimension::Time, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("timestep"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perform hybrid MC moves on the passed molecule group\nwith a timestep of timestep") );
+        HybridMC_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireMove::Integrator const &, SireUnits::Dimension::Time, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("integrator"), bp::arg("timestep"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perform hybrid MC moves on the passed molecule group\nusing the passed integrator and a timestep of timestep") );
+        HybridMC_exposer.def( bp::init< SireMol::MoleculeGroup const &, int, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("nsteps"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perform hybrid MC moves on the passed molecule group,\nrunning nmoves MD moves per MC move") );
+        HybridMC_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireMove::Integrator const &, int, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("integrator"), bp::arg("nsteps"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perform hybrid MC moves on the passed molecule group,\nusing the passed integrator, running nmoves MD moves per MC move") );
+        HybridMC_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireUnits::Dimension::Time, int, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("timestep"), bp::arg("nsteps"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perform hybrid MC moves on the passed molecule group,\nwith a timestep of timestep, running nmoves MD moves per MC move") );
+        HybridMC_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireMove::Integrator const &, SireUnits::Dimension::Time, int, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("integrator"), bp::arg("timestep"), bp::arg("nsteps"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perform hybrid MC moves on the passed molecule group,\nusing the passed integrator, with a timestep of timestep,\nrunning nmoves MD moves per MC move") );
+        HybridMC_exposer.def( bp::init< SireMove::HybridMC const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::HybridMC::moleculeGroup
         
             typedef ::SireMol::MoleculeGroup const & ( ::SireMove::HybridMC::*moleculeGroup_function_type)(  ) const;
@@ -57,7 +57,8 @@ void register_HybridMC_class(){
             HybridMC_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the molecule group that is moved by this move" );
         
         }
         { //::SireMove::HybridMC::move
@@ -68,7 +69,8 @@ void register_HybridMC_class(){
             HybridMC_exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , "Perform nmoves hybrid MC moves on the passed system, recording\nstatistics is record_stats is true" );
         
         }
         { //::SireMove::HybridMC::nDynamicsSteps
@@ -78,7 +80,8 @@ void register_HybridMC_class(){
             
             HybridMC_exposer.def( 
                 "nDynamicsSteps"
-                , nDynamicsSteps_function_value );
+                , nDynamicsSteps_function_value
+                , "Return the number of MD steps to perform per hybrid MC move" );
         
         }
         HybridMC_exposer.def( bp::self != bp::self );
@@ -91,7 +94,8 @@ void register_HybridMC_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         HybridMC_exposer.def( bp::self == bp::self );
@@ -103,7 +107,8 @@ void register_HybridMC_class(){
             HybridMC_exposer.def( 
                 "setCoordinatesProperty"
                 , setCoordinatesProperty_function_value
-                , ( bp::arg("coords_property") ) );
+                , ( bp::arg("coords_property") )
+                , "Set the location of the coordinates that are affected by this move" );
         
         }
         { //::SireMove::HybridMC::setGenerator
@@ -114,7 +119,8 @@ void register_HybridMC_class(){
             HybridMC_exposer.def( 
                 "setGenerator"
                 , setGenerator_function_value
-                , ( bp::arg("rangenerator") ) );
+                , ( bp::arg("rangenerator") )
+                , "Set the random number generator that is used by this move" );
         
         }
         { //::SireMove::HybridMC::setNDynamicsSteps
@@ -125,7 +131,8 @@ void register_HybridMC_class(){
             HybridMC_exposer.def( 
                 "setNDynamicsSteps"
                 , setNDynamicsSteps_function_value
-                , ( bp::arg("nsteps") ) );
+                , ( bp::arg("nsteps") )
+                , "Set the number of MD steps to perform per hybrid MC move" );
         
         }
         { //::SireMove::HybridMC::setSpaceProperty
@@ -136,7 +143,8 @@ void register_HybridMC_class(){
             HybridMC_exposer.def( 
                 "setSpaceProperty"
                 , setSpaceProperty_function_value
-                , ( bp::arg("space_property") ) );
+                , ( bp::arg("space_property") )
+                , "Set the location of the space property used by this move" );
         
         }
         { //::SireMove::HybridMC::setTimeStep
@@ -147,7 +155,8 @@ void register_HybridMC_class(){
             HybridMC_exposer.def( 
                 "setTimeStep"
                 , setTimeStep_function_value
-                , ( bp::arg("timestep") ) );
+                , ( bp::arg("timestep") )
+                , "Set the timestep of the dynamics part of the move" );
         
         }
         { //::SireMove::HybridMC::setVelocityGenerator
@@ -158,7 +167,8 @@ void register_HybridMC_class(){
             HybridMC_exposer.def( 
                 "setVelocityGenerator"
                 , setVelocityGenerator_function_value
-                , ( bp::arg("generator") ) );
+                , ( bp::arg("generator") )
+                , "Set the velocity generator used to generate velocities that\nare compatible with the Hybrid MC move" );
         
         }
         { //::SireMove::HybridMC::timeStep
@@ -168,7 +178,8 @@ void register_HybridMC_class(){
             
             HybridMC_exposer.def( 
                 "timeStep"
-                , timeStep_function_value );
+                , timeStep_function_value
+                , "Return the timestep of the dynamics part of the move" );
         
         }
         { //::SireMove::HybridMC::toString
@@ -178,7 +189,8 @@ void register_HybridMC_class(){
             
             HybridMC_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMove::HybridMC::typeName
@@ -188,7 +200,8 @@ void register_HybridMC_class(){
             
             HybridMC_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMove::HybridMC::velocityGenerator
@@ -199,7 +212,8 @@ void register_HybridMC_class(){
             HybridMC_exposer.def( 
                 "velocityGenerator"
                 , velocityGenerator_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the velocity generator used to generate the velocities\nthat are used by the hybrid MC move" );
         
         }
         HybridMC_exposer.staticmethod( "typeName" );

@@ -42,16 +42,16 @@ void register_CLJGrid_class(){
 
     { //::SireMM::CLJGrid
         typedef bp::class_< SireMM::CLJGrid > CLJGrid_exposer_t;
-        CLJGrid_exposer_t CLJGrid_exposer = CLJGrid_exposer_t( "CLJGrid", bp::init< >() );
+        CLJGrid_exposer_t CLJGrid_exposer = CLJGrid_exposer_t( "CLJGrid", "This class holds a 3D grid of the coulomb potential\nat points in space created by a set of atoms, and calculates\nthe coulomb and LJ energies of atoms with that grid\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope CLJGrid_scope( CLJGrid_exposer );
-        CLJGrid_exposer.def( bp::init< SireVol::AABox const & >(( bp::arg("grid_dimensions") )) );
-        CLJGrid_exposer.def( bp::init< SireVol::AABox const &, SireUnits::Dimension::Length >(( bp::arg("grid_dimensions"), bp::arg("grid_spacing") )) );
-        CLJGrid_exposer.def( bp::init< SireVol::GridInfo const & >(( bp::arg("grid") )) );
-        CLJGrid_exposer.def( bp::init< SireMM::CLJFunction const & >(( bp::arg("cljfunc") )) );
-        CLJGrid_exposer.def( bp::init< SireMM::CLJFunction const &, SireVol::AABox const & >(( bp::arg("cljfunc"), bp::arg("grid_dimensions") )) );
-        CLJGrid_exposer.def( bp::init< SireMM::CLJFunction const &, SireVol::AABox const &, SireUnits::Dimension::Length >(( bp::arg("cljfunc"), bp::arg("grid_dimensions"), bp::arg("grid_spacing") )) );
-        CLJGrid_exposer.def( bp::init< SireMM::CLJFunction const &, SireVol::GridInfo const & >(( bp::arg("cljfunc"), bp::arg("grid") )) );
-        CLJGrid_exposer.def( bp::init< SireMM::CLJGrid const & >(( bp::arg("other") )) );
+        CLJGrid_exposer.def( bp::init< SireVol::AABox const & >(( bp::arg("grid_dimensions") ), "Construct, specifying the dimensions of the grid") );
+        CLJGrid_exposer.def( bp::init< SireVol::AABox const &, SireUnits::Dimension::Length >(( bp::arg("grid_dimensions"), bp::arg("grid_spacing") ), "Construct, specifying the dimensions and spacing for the grid") );
+        CLJGrid_exposer.def( bp::init< SireVol::GridInfo const & >(( bp::arg("grid") ), "Construct, specifying the grid") );
+        CLJGrid_exposer.def( bp::init< SireMM::CLJFunction const & >(( bp::arg("cljfunc") ), "Construct, specifying the function to use to calculate the energy") );
+        CLJGrid_exposer.def( bp::init< SireMM::CLJFunction const &, SireVol::AABox const & >(( bp::arg("cljfunc"), bp::arg("grid_dimensions") ), "Construct, specifying the function to use to calculate the energy and\nthe grid dimensions") );
+        CLJGrid_exposer.def( bp::init< SireMM::CLJFunction const &, SireVol::AABox const &, SireUnits::Dimension::Length >(( bp::arg("cljfunc"), bp::arg("grid_dimensions"), bp::arg("grid_spacing") ), "Construct, specifying the function to use to calculate the energy and\nthe grid dimensions and grid spacing") );
+        CLJGrid_exposer.def( bp::init< SireMM::CLJFunction const &, SireVol::GridInfo const & >(( bp::arg("cljfunc"), bp::arg("grid") ), "Construct, specifying the grid and the energy function") );
+        CLJGrid_exposer.def( bp::init< SireMM::CLJGrid const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::CLJGrid::addFixedAtoms
         
             typedef void ( ::SireMM::CLJGrid::*addFixedAtoms_function_type)( ::SireMM::CLJAtoms const & ) ;
@@ -60,7 +60,8 @@ void register_CLJGrid_class(){
             CLJGrid_exposer.def( 
                 "addFixedAtoms"
                 , addFixedAtoms_function_value
-                , ( bp::arg("atoms") ) );
+                , ( bp::arg("atoms") )
+                , "Add the passed atoms onto the set of fixed atoms" );
         
         }
         { //::SireMM::CLJGrid::calculate
@@ -71,7 +72,8 @@ void register_CLJGrid_class(){
             CLJGrid_exposer.def( 
                 "calculate"
                 , calculate_function_value
-                , ( bp::arg("atoms") ) );
+                , ( bp::arg("atoms") )
+                , "Return the coulomb and LJ energies of the passed atoms with the fixed\natoms added to this grid" );
         
         }
         { //::SireMM::CLJGrid::calculate
@@ -82,7 +84,8 @@ void register_CLJGrid_class(){
             CLJGrid_exposer.def( 
                 "calculate"
                 , calculate_function_value
-                , ( bp::arg("atoms") ) );
+                , ( bp::arg("atoms") )
+                , "Return the coulomb and LJ energies of the passed atoms with the fixed\natoms added to this grid" );
         
         }
         { //::SireMM::CLJGrid::cljFunction
@@ -93,7 +96,8 @@ void register_CLJGrid_class(){
             CLJGrid_exposer.def( 
                 "cljFunction"
                 , cljFunction_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the function used to calculate the coulomb and LJ energy" );
         
         }
         { //::SireMM::CLJGrid::coulomb
@@ -104,7 +108,8 @@ void register_CLJGrid_class(){
             CLJGrid_exposer.def( 
                 "coulomb"
                 , coulomb_function_value
-                , ( bp::arg("atoms") ) );
+                , ( bp::arg("atoms") )
+                , "Return the coulomb energy of the passed atoms interacting with\nthe fixed atoms on this grid" );
         
         }
         { //::SireMM::CLJGrid::coulomb
@@ -115,7 +120,8 @@ void register_CLJGrid_class(){
             CLJGrid_exposer.def( 
                 "coulomb"
                 , coulomb_function_value
-                , ( bp::arg("atoms") ) );
+                , ( bp::arg("atoms") )
+                , "Return the coulomb energy of the passed atoms interacting with\nthe fixed atoms on this grid" );
         
         }
         { //::SireMM::CLJGrid::disableGrid
@@ -125,7 +131,8 @@ void register_CLJGrid_class(){
             
             CLJGrid_exposer.def( 
                 "disableGrid"
-                , disableGrid_function_value );
+                , disableGrid_function_value
+                , "Disable use of the grid" );
         
         }
         { //::SireMM::CLJGrid::disableParallelCalculation
@@ -135,7 +142,8 @@ void register_CLJGrid_class(){
             
             CLJGrid_exposer.def( 
                 "disableParallelCalculation"
-                , disableParallelCalculation_function_value );
+                , disableParallelCalculation_function_value
+                , "Disable use of the parallel algorithm for calculating energies" );
         
         }
         { //::SireMM::CLJGrid::disableReproducibleCalculation
@@ -145,7 +153,8 @@ void register_CLJGrid_class(){
             
             CLJGrid_exposer.def( 
                 "disableReproducibleCalculation"
-                , disableReproducibleCalculation_function_value );
+                , disableReproducibleCalculation_function_value
+                , "Turn off an energy summing algorithm that guarantees the same energy\nregardless of whether a single core or multicore calculation is being\nperformed (i.e. rounding errors in both cases will not be identical)" );
         
         }
         { //::SireMM::CLJGrid::enableGrid
@@ -155,7 +164,8 @@ void register_CLJGrid_class(){
             
             CLJGrid_exposer.def( 
                 "enableGrid"
-                , enableGrid_function_value );
+                , enableGrid_function_value
+                , "Enable used of the grid - note that the grid may\nstill be disabled if the CLJFunction is not compatible with\nuse of a grid" );
         
         }
         { //::SireMM::CLJGrid::enableParallelCalculation
@@ -165,7 +175,8 @@ void register_CLJGrid_class(){
             
             CLJGrid_exposer.def( 
                 "enableParallelCalculation"
-                , enableParallelCalculation_function_value );
+                , enableParallelCalculation_function_value
+                , "Enable use of a parallel multicore algorithm to calculate energies" );
         
         }
         { //::SireMM::CLJGrid::enableReproducibleCalculation
@@ -175,7 +186,8 @@ void register_CLJGrid_class(){
             
             CLJGrid_exposer.def( 
                 "enableReproducibleCalculation"
-                , enableReproducibleCalculation_function_value );
+                , enableReproducibleCalculation_function_value
+                , "Turn on an energy summing algorithm that guarantees the same energy\nregardless of whether a single core or multicore calculation is being\nperformed (i.e. rounding errors in both cases will be identical)" );
         
         }
         { //::SireMM::CLJGrid::fixedAtoms
@@ -185,7 +197,8 @@ void register_CLJGrid_class(){
             
             CLJGrid_exposer.def( 
                 "fixedAtoms"
-                , fixedAtoms_function_value );
+                , fixedAtoms_function_value
+                , "Return all of the fixed atoms" );
         
         }
         { //::SireMM::CLJGrid::functionSupportsGrid
@@ -195,7 +208,8 @@ void register_CLJGrid_class(){
             
             CLJGrid_exposer.def( 
                 "functionSupportsGrid"
-                , functionSupportsGrid_function_value );
+                , functionSupportsGrid_function_value
+                , "Return whether or not the CLJFunction supports use of the grid.\nTo support a grid, the function must intrinsically support the grid,\nand the coulomb cutoff must be much greater than the LJ cutoff" );
         
         }
         { //::SireMM::CLJGrid::grid
@@ -205,7 +219,8 @@ void register_CLJGrid_class(){
             
             CLJGrid_exposer.def( 
                 "grid"
-                , grid_function_value );
+                , grid_function_value
+                , "Return the grid" );
         
         }
         { //::SireMM::CLJGrid::gridBuffer
@@ -215,7 +230,8 @@ void register_CLJGrid_class(){
             
             CLJGrid_exposer.def( 
                 "gridBuffer"
-                , gridBuffer_function_value );
+                , gridBuffer_function_value
+                , "Return the grid buffer" );
         
         }
         { //::SireMM::CLJGrid::gridDimensions
@@ -225,7 +241,8 @@ void register_CLJGrid_class(){
             
             CLJGrid_exposer.def( 
                 "gridDimensions"
-                , gridDimensions_function_value );
+                , gridDimensions_function_value
+                , "Return the dimensions of the grid" );
         
         }
         { //::SireMM::CLJGrid::gridSpacing
@@ -235,7 +252,8 @@ void register_CLJGrid_class(){
             
             CLJGrid_exposer.def( 
                 "gridSpacing"
-                , gridSpacing_function_value );
+                , gridSpacing_function_value
+                , "Return the grid spacing" );
         
         }
         { //::SireMM::CLJGrid::idOfFixedAtom
@@ -245,7 +263,8 @@ void register_CLJGrid_class(){
             
             CLJGrid_exposer.def( 
                 "idOfFixedAtom"
-                , idOfFixedAtom_function_value );
+                , idOfFixedAtom_function_value
+                , "Return the ID number of a fixed atom. All fixed atoms are given this ID, so that\nyou can mask out interactions with them. This is a negative number and unlikely\nto be used by any other part of the code" );
         
         }
         { //::SireMM::CLJGrid::isEmpty
@@ -255,7 +274,8 @@ void register_CLJGrid_class(){
             
             CLJGrid_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMM::CLJGrid::lj
@@ -266,7 +286,8 @@ void register_CLJGrid_class(){
             CLJGrid_exposer.def( 
                 "lj"
                 , lj_function_value
-                , ( bp::arg("atoms") ) );
+                , ( bp::arg("atoms") )
+                , "Return the LJ energy of the passed atoms interacting with\nthe fixed atoms on this grid" );
         
         }
         { //::SireMM::CLJGrid::lj
@@ -277,7 +298,8 @@ void register_CLJGrid_class(){
             CLJGrid_exposer.def( 
                 "lj"
                 , lj_function_value
-                , ( bp::arg("atoms") ) );
+                , ( bp::arg("atoms") )
+                , "Return the LJ energy of the passed atoms interacting with\nthe fixed atoms on this grid" );
         
         }
         { //::SireMM::CLJGrid::nFixedAtoms
@@ -287,7 +309,8 @@ void register_CLJGrid_class(){
             
             CLJGrid_exposer.def( 
                 "nFixedAtoms"
-                , nFixedAtoms_function_value );
+                , nFixedAtoms_function_value
+                , "Return the number of fixed atoms" );
         
         }
         CLJGrid_exposer.def( bp::self != bp::self );
@@ -300,7 +323,8 @@ void register_CLJGrid_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CLJGrid_exposer.def( bp::self == bp::self );
@@ -312,7 +336,8 @@ void register_CLJGrid_class(){
             CLJGrid_exposer.def( 
                 "setCLJFunction"
                 , setCLJFunction_function_value
-                , ( bp::arg("function") ) );
+                , ( bp::arg("function") )
+                , "Set the function used to calculate the coulomb and LJ energy" );
         
         }
         { //::SireMM::CLJGrid::setFixedAtoms
@@ -323,7 +348,8 @@ void register_CLJGrid_class(){
             CLJGrid_exposer.def( 
                 "setFixedAtoms"
                 , setFixedAtoms_function_value
-                , ( bp::arg("atoms") ) );
+                , ( bp::arg("atoms") )
+                , "Set the fixed atoms equal to the passed atoms" );
         
         }
         { //::SireMM::CLJGrid::setFixedAtoms
@@ -334,7 +360,8 @@ void register_CLJGrid_class(){
             CLJGrid_exposer.def( 
                 "setFixedAtoms"
                 , setFixedAtoms_function_value
-                , ( bp::arg("atoms") ) );
+                , ( bp::arg("atoms") )
+                , "Set the fixed atoms equal to the passed atoms" );
         
         }
         { //::SireMM::CLJGrid::setGrid
@@ -345,7 +372,8 @@ void register_CLJGrid_class(){
             CLJGrid_exposer.def( 
                 "setGrid"
                 , setGrid_function_value
-                , ( bp::arg("grid") ) );
+                , ( bp::arg("grid") )
+                , "Set the grid to be used for the optimised calculation" );
         
         }
         { //::SireMM::CLJGrid::setGridBuffer
@@ -356,7 +384,8 @@ void register_CLJGrid_class(){
             CLJGrid_exposer.def( 
                 "setGridBuffer"
                 , setGridBuffer_function_value
-                , ( bp::arg("grid_buffer") ) );
+                , ( bp::arg("grid_buffer") )
+                , "Set the grid buffer" );
         
         }
         { //::SireMM::CLJGrid::setGridDimensions
@@ -367,7 +396,8 @@ void register_CLJGrid_class(){
             CLJGrid_exposer.def( 
                 "setGridDimensions"
                 , setGridDimensions_function_value
-                , ( bp::arg("grid_dimensions") ) );
+                , ( bp::arg("grid_dimensions") )
+                , "Set the dimensions of the grid" );
         
         }
         { //::SireMM::CLJGrid::setGridDimensions
@@ -378,7 +408,8 @@ void register_CLJGrid_class(){
             CLJGrid_exposer.def( 
                 "setGridDimensions"
                 , setGridDimensions_function_value
-                , ( bp::arg("atoms") ) );
+                , ( bp::arg("atoms") )
+                , "Set the dimensions of the grid so that it encompasses all of the atoms in atoms\n(plus a gridBuffer() buffer around all atoms)" );
         
         }
         { //::SireMM::CLJGrid::setGridDimensions
@@ -389,7 +420,8 @@ void register_CLJGrid_class(){
             CLJGrid_exposer.def( 
                 "setGridDimensions"
                 , setGridDimensions_function_value
-                , ( bp::arg("atoms"), bp::arg("grid_spacing") ) );
+                , ( bp::arg("atoms"), bp::arg("grid_spacing") )
+                , "Set the dimensions of the grid so that it encompasses all of the atoms in atoms\n(plus a gridBuffer() buffer around all atoms) using a grid with spacing grid_spacing" );
         
         }
         { //::SireMM::CLJGrid::setGridDimensions
@@ -400,7 +432,8 @@ void register_CLJGrid_class(){
             CLJGrid_exposer.def( 
                 "setGridDimensions"
                 , setGridDimensions_function_value
-                , ( bp::arg("atoms"), bp::arg("grid_spacing"), bp::arg("buffer") ) );
+                , ( bp::arg("atoms"), bp::arg("grid_spacing"), bp::arg("buffer") )
+                , "Set the dimensions of the grid so that it encompasses all of the atoms in atoms\n(with a buffer of buffer around all atoms) using a grid with spacing grid_spacing" );
         
         }
         { //::SireMM::CLJGrid::setGridSpacing
@@ -411,7 +444,8 @@ void register_CLJGrid_class(){
             CLJGrid_exposer.def( 
                 "setGridSpacing"
                 , setGridSpacing_function_value
-                , ( bp::arg("grid_spacing") ) );
+                , ( bp::arg("grid_spacing") )
+                , "Set the grid spacing" );
         
         }
         { //::SireMM::CLJGrid::setUseGrid
@@ -422,7 +456,8 @@ void register_CLJGrid_class(){
             CLJGrid_exposer.def( 
                 "setUseGrid"
                 , setUseGrid_function_value
-                , ( bp::arg("on") ) );
+                , ( bp::arg("on") )
+                , "Switch on or off the use of a grid - note that the grid may\nstill be disabled if the CLJFunction is not compatible with\nuse of a grid" );
         
         }
         { //::SireMM::CLJGrid::setUseParallelCalculation
@@ -433,7 +468,8 @@ void register_CLJGrid_class(){
             CLJGrid_exposer.def( 
                 "setUseParallelCalculation"
                 , setUseParallelCalculation_function_value
-                , ( bp::arg("on") ) );
+                , ( bp::arg("on") )
+                , "Switch on or off use of a parallel multicore algorithm for calculating\nenergies" );
         
         }
         { //::SireMM::CLJGrid::setUseReproducibleCalculation
@@ -444,7 +480,8 @@ void register_CLJGrid_class(){
             CLJGrid_exposer.def( 
                 "setUseReproducibleCalculation"
                 , setUseReproducibleCalculation_function_value
-                , ( bp::arg("on") ) );
+                , ( bp::arg("on") )
+                , "Switch on or off use of an energy summing algorithm that guarantees the\nsame energy regardless of whether a single core or multicore calculation\nis being performed" );
         
         }
         { //::SireMM::CLJGrid::toString
@@ -454,7 +491,8 @@ void register_CLJGrid_class(){
             
             CLJGrid_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMM::CLJGrid::total
@@ -465,7 +503,8 @@ void register_CLJGrid_class(){
             CLJGrid_exposer.def( 
                 "total"
                 , total_function_value
-                , ( bp::arg("atoms"), bp::arg("cnrg"), bp::arg("ljnrg") ) );
+                , ( bp::arg("atoms"), bp::arg("cnrg"), bp::arg("ljnrg") )
+                , "Calculate the total energy of interaction between the passed atoms and\nall of the atoms added to the grid" );
         
         }
         { //::SireMM::CLJGrid::total
@@ -476,7 +515,8 @@ void register_CLJGrid_class(){
             CLJGrid_exposer.def( 
                 "total"
                 , total_function_value
-                , ( bp::arg("atoms"), bp::arg("cnrg"), bp::arg("ljnrg") ) );
+                , ( bp::arg("atoms"), bp::arg("cnrg"), bp::arg("ljnrg") )
+                , "Calculate the total energy of interaction between the passed atoms and\nall of the atoms added to the grid" );
         
         }
         { //::SireMM::CLJGrid::typeName
@@ -486,7 +526,8 @@ void register_CLJGrid_class(){
             
             CLJGrid_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::CLJGrid::usesGrid
@@ -496,7 +537,8 @@ void register_CLJGrid_class(){
             
             CLJGrid_exposer.def( 
                 "usesGrid"
-                , usesGrid_function_value );
+                , usesGrid_function_value
+                , "Return whether or not the grid will be used in the calculation" );
         
         }
         { //::SireMM::CLJGrid::usesParallelCalculation
@@ -506,7 +548,8 @@ void register_CLJGrid_class(){
             
             CLJGrid_exposer.def( 
                 "usesParallelCalculation"
-                , usesParallelCalculation_function_value );
+                , usesParallelCalculation_function_value
+                , "Return whether or not a parallel algorithm is being used\nto calculate grid energies" );
         
         }
         { //::SireMM::CLJGrid::usesReproducibleCalculation
@@ -516,7 +559,8 @@ void register_CLJGrid_class(){
             
             CLJGrid_exposer.def( 
                 "usesReproducibleCalculation"
-                , usesReproducibleCalculation_function_value );
+                , usesReproducibleCalculation_function_value
+                , "Return whether or not a reproducible energy summing algorithm is being\nused to accumulate the energies" );
         
         }
         { //::SireMM::CLJGrid::what
@@ -526,7 +570,8 @@ void register_CLJGrid_class(){
             
             CLJGrid_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         CLJGrid_exposer.staticmethod( "idOfFixedAtom" );

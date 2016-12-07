@@ -139,8 +139,8 @@ public:
     explicit PhysUnit(const TempBase &temperature) : Unit(temperature)
     {
         //this must be a Temperature!
-        BOOST_STATIC_ASSERT( t == 1 and M == 0 and L == 0 and 
-                             T == 0 and C == 0 and Q == 0 and A == 0);
+        //BOOST_STATIC_ASSERT( t == 1 and M == 0 and L == 0 and 
+        //                     T == 0 and C == 0 and Q == 0 and A == 0);
     }
 
     PhysUnit(const PhysUnit<M,L,T,C,t,Q,A> &other)
@@ -493,35 +493,6 @@ Q_DECLARE_METATYPE( SireUnits::Dimension::Pressure );
 Q_DECLARE_METATYPE( SireUnits::Dimension::Capacitance );
 Q_DECLARE_METATYPE( SireUnits::Dimension::Current );
 Q_DECLARE_METATYPE( SireUnits::Dimension::Potential );
-
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::Dimensionless, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::Mass, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::MolarMass, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::Length, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::Time, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::Charge, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::MolarCharge, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::Temperature, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::Quantity, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::Angle, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::Area, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::Volume, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::MolarVolume, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::Velocity, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::AngularVelocity, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::Acceleration, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::AngularAcceleration, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::Energy, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::MolarEnergy, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::Power, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::MolarPower, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::Density, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::MolarDensity, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::Force, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::Pressure, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::Capacitance, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::Current, Q_MOVABLE_TYPE );
-Q_DECLARE_TYPEINFO( SireUnits::Dimension::Potential, Q_MOVABLE_TYPE );
 
 SIRE_EXPOSE_CLASS( SireUnits::Dimension::Unit )
 

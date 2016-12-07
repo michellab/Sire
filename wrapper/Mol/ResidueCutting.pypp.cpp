@@ -45,9 +45,9 @@ void register_ResidueCutting_class(){
 
     { //::SireMol::ResidueCutting
         typedef bp::class_< SireMol::ResidueCutting, bp::bases< SireMol::CuttingFunction, SireBase::Property > > ResidueCutting_exposer_t;
-        ResidueCutting_exposer_t ResidueCutting_exposer = ResidueCutting_exposer_t( "ResidueCutting", bp::init< >() );
+        ResidueCutting_exposer_t ResidueCutting_exposer = ResidueCutting_exposer_t( "ResidueCutting", "This is a cutting function that divides up a molecule into\nCutGroups based on residue - each residue is placed into\na different CutGroup\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope ResidueCutting_scope( ResidueCutting_exposer );
-        ResidueCutting_exposer.def( bp::init< SireMol::ResidueCutting const & >(( bp::arg("other") )) );
+        ResidueCutting_exposer.def( bp::init< SireMol::ResidueCutting const & >(( bp::arg("other") ), "Copy constructor") );
         ResidueCutting_exposer.def( bp::self != bp::self );
         { //::SireMol::ResidueCutting::operator()
         
@@ -57,7 +57,8 @@ void register_ResidueCutting_class(){
             ResidueCutting_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("moleditor") ) );
+                , ( bp::arg("moleditor") )
+                , "" );
         
         }
         { //::SireMol::ResidueCutting::operator=
@@ -69,7 +70,8 @@ void register_ResidueCutting_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         ResidueCutting_exposer.def( bp::self == bp::self );
@@ -80,7 +82,8 @@ void register_ResidueCutting_class(){
             
             ResidueCutting_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         ResidueCutting_exposer.staticmethod( "typeName" );

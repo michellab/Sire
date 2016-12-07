@@ -19,7 +19,7 @@ void register_CGProp_class(){
 
     { //::SireMol::CGProp
         typedef bp::class_< SireMol::CGProp, bp::bases< SireMol::MolViewProperty, SireBase::Property >, boost::noncopyable > CGProp_exposer_t;
-        CGProp_exposer_t CGProp_exposer = CGProp_exposer_t( "CGProp", bp::no_init );
+        CGProp_exposer_t CGProp_exposer = CGProp_exposer_t( "CGProp", "Small class used to provide a common base for all CGProperty types", bp::no_init );
         bp::scope CGProp_scope( CGProp_exposer );
         { //::SireMol::CGProp::assertCanConvert
         
@@ -29,7 +29,8 @@ void register_CGProp_class(){
             CGProp_exposer.def( 
                 "assertCanConvert"
                 , assertCanConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::CGProp::assignFrom
@@ -40,7 +41,8 @@ void register_CGProp_class(){
             CGProp_exposer.def( 
                 "assignFrom"
                 , assignFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::CGProp::canConvert
@@ -51,7 +53,8 @@ void register_CGProp_class(){
             CGProp_exposer.def( 
                 "canConvert"
                 , canConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::CGProp::toVariant
@@ -61,7 +64,8 @@ void register_CGProp_class(){
             
             CGProp_exposer.def( 
                 "toVariant"
-                , toVariant_function_value );
+                , toVariant_function_value
+                , "" );
         
         }
         CGProp_exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireMol::CGProp >,

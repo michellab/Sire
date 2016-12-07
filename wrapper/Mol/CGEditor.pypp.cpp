@@ -53,10 +53,10 @@ void register_CGEditor_class(){
 
     { //::SireMol::CGEditor
         typedef bp::class_< SireMol::CGEditor, bp::bases< SireMol::Editor<SireMol::CGEditor, SireMol::CutGroup>, SireMol::CutGroup, SireMol::MoleculeView, SireBase::Property > > CGEditor_exposer_t;
-        CGEditor_exposer_t CGEditor_exposer = CGEditor_exposer_t( "CGEditor", bp::init< >() );
+        CGEditor_exposer_t CGEditor_exposer = CGEditor_exposer_t( "CGEditor", "This class is used to edit the non-structural parts of a CutGroup\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope CGEditor_scope( CGEditor_exposer );
-        CGEditor_exposer.def( bp::init< SireMol::CutGroup const & >(( bp::arg("cutgroup") )) );
-        CGEditor_exposer.def( bp::init< SireMol::CGEditor const & >(( bp::arg("other") )) );
+        CGEditor_exposer.def( bp::init< SireMol::CutGroup const & >(( bp::arg("cutgroup") ), "Construct to edit a copy of the CutGroup cutgroup") );
+        CGEditor_exposer.def( bp::init< SireMol::CGEditor const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::CGEditor::add
         
             typedef ::SireMol::AtomStructureEditor ( ::SireMol::CGEditor::*add_function_type)( ::SireMol::AtomName const & ) const;
@@ -65,7 +65,8 @@ void register_CGEditor_class(){
             CGEditor_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("atomname") ) );
+                , ( bp::arg("atomname") )
+                , "Add an atom called atomname to this CutGroup and return\nan editor for that atom" );
         
         }
         { //::SireMol::CGEditor::add
@@ -76,7 +77,8 @@ void register_CGEditor_class(){
             CGEditor_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("atomnum") ) );
+                , ( bp::arg("atomnum") )
+                , "Add an atom with number atomnum to this CutGroup and return\nan editor for that atom" );
         
         }
         { //::SireMol::CGEditor::commit
@@ -86,7 +88,8 @@ void register_CGEditor_class(){
             
             CGEditor_exposer.def( 
                 "commit"
-                , commit_function_value );
+                , commit_function_value
+                , "Commit the changes made by this editor and return the\nupdated CutGroup" );
         
         }
         { //::SireMol::CGEditor::operator=
@@ -98,7 +101,8 @@ void register_CGEditor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("cutgroup") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::CGEditor::operator=
@@ -110,7 +114,8 @@ void register_CGEditor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::CGEditor::reindex
@@ -121,7 +126,8 @@ void register_CGEditor_class(){
             CGEditor_exposer.def( 
                 "reindex"
                 , reindex_function_value
-                , ( bp::arg("index") ) );
+                , ( bp::arg("index") )
+                , "Move this CutGroup to index newidx - this will move it\nto the start or end if this index is out of range" );
         
         }
         { //::SireMol::CGEditor::remove
@@ -131,7 +137,8 @@ void register_CGEditor_class(){
             
             CGEditor_exposer.def( 
                 "remove"
-                , remove_function_value );
+                , remove_function_value
+                , "Complete remove this CutGroup, and return an editor\nfor the molecule that contained it" );
         
         }
         { //::SireMol::CGEditor::remove
@@ -142,7 +149,8 @@ void register_CGEditor_class(){
             CGEditor_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "Completely remove all atoms that match the ID atomid from\nthis CutGroup\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::CGEditor::remove
@@ -153,7 +161,8 @@ void register_CGEditor_class(){
             CGEditor_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Remove the ith atom from this CutGroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::CGEditor::rename
@@ -165,7 +174,8 @@ void register_CGEditor_class(){
                 "rename"
                 , rename_function_value
                 , ( bp::arg("name") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Rename this CutGroup to newname" );
         
         }
         { //::SireMol::CGEditor::toString
@@ -175,7 +185,8 @@ void register_CGEditor_class(){
             
             CGEditor_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this editor" );
         
         }
         { //::SireMol::CGEditor::transfer
@@ -186,7 +197,8 @@ void register_CGEditor_class(){
             CGEditor_exposer.def( 
                 "transfer"
                 , transfer_function_value
-                , ( bp::arg("atomid"), bp::arg("cgid") ) );
+                , ( bp::arg("atomid"), bp::arg("cgid") )
+                , "Transfer all atoms that match the ID atomid in this CutGroup\nto the CutGroup that matches the ID cgid\nThrow: SireMol::missing_atom\nThrow: SireMol::missing_cutgroup\nThrow: SireMol::duplicate_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::CGEditor::transfer
@@ -197,7 +209,8 @@ void register_CGEditor_class(){
             CGEditor_exposer.def( 
                 "transfer"
                 , transfer_function_value
-                , ( bp::arg("i"), bp::arg("cgid") ) );
+                , ( bp::arg("i"), bp::arg("cgid") )
+                , "Transfer the ith atom of this CutGroup into the CutGroup identified\nby the ID cgid\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::CGEditor::transferAll
@@ -208,7 +221,8 @@ void register_CGEditor_class(){
             CGEditor_exposer.def( 
                 "transferAll"
                 , transferAll_function_value
-                , ( bp::arg("cgid") ) );
+                , ( bp::arg("cgid") )
+                , "Completely transfer all of the atoms in this CutGroup to\nthe CutGroup that matches the ID cgid\nThrow: SireMol::missing_cutgroup\nThrow: SireMol::duplicate_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::CGEditor::typeName
@@ -218,7 +232,8 @@ void register_CGEditor_class(){
             
             CGEditor_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         CGEditor_exposer.staticmethod( "typeName" );

@@ -7,7 +7,7 @@
 ################################
 
 set (S_VERSION_MAJOR "2016")
-set (S_VERSION_MINOR "1")
+set (S_VERSION_MINOR "2")
 set (S_VERSION_PATCH "0")             
 
 set (SIRE_VERSION "${S_VERSION_MAJOR}.${S_VERSION_MINOR}.${S_VERSION_PATCH}")
@@ -22,6 +22,27 @@ cmake_policy(VERSION 2.8)
 
 # use loose loop syntax in CMakeLists files
 set( CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE )
+
+if(COMMAND CMAKE_POLICY)
+  if (POLICY CMP0042)
+    cmake_policy(SET CMP0042 OLD)  # managing OS X @rpath manually
+  endif()
+  if (POLICY CMP0048)
+    cmake_policy(SET CMP0048 OLD)  # want to manage versions myself!
+  endif()
+  if (POLICY CMP0028)
+    cmake_policy(SET CMP0028 OLD)  # Qt has colons in names, which new cmake hates
+  endif()
+  if (POLICY CMP0045)
+    cmake_policy(SET CMP0045 OLD)  # Allow non-existant targets with -NOTFOUND
+  endif()
+  if (POLICY CMP0020)
+    cmake_policy(SET CMP0020 NEW)  # Automatically link to qtmain on windows
+  endif()
+endif()
+
+# Get rid of install messages (too verbose!)
+set( CMAKE_INSTALL_MESSAGE "NEVER" )
 
 # Option used to control the number of cores for the compile
 set ( BUILD_NCORES "0" 
@@ -102,6 +123,30 @@ else()
 
     set(CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
              "Prefix prepended to install directories" FORCE )
+
+  elseif( WIN32 OR WIN64 )  # need this instead of MSYS as don't know we are MSYS yet...
+
+    message(STATUS "Compiling on windows using MSYS2/MINGW64...")
+    set( MINGW_BASE "C:/msys64/mingw64" CACHE PATH "MSYS MINGW64 root directory" )
+    get_filename_component(MINGW_CMAKE_BIN ${CMAKE_COMMAND} DIRECTORY)
+    get_filename_component(MINGW_CMAKE_ROOT ${MINGW_CMAKE_BIN} DIRECTORY)
+    message(STATUS "Using cmake ${CMAKE_COMMAND} from MING64 base ${MINGW_CMAKE_ROOT}")
+
+    set( MINGW_BASE "${MINGW_CMAKE_ROOT}")
+    set( MINGW_PYTHON "${MINGW_BASE}/bin/python3.exe" )
+
+    if ( NOT EXISTS "${MINGW_PYTHON}" )
+      message(STATUS "Cannot find mingw python3 executable, ${MINGW_PYTHON}")
+      message(STATUS "Can only install Sire into a MINGW installation with a valid python3.exe.")
+      message(STATUS "This is normally in the file C:/msys64/mingw64/bin/python3.exe.")
+      message(STATUS "Please install MSYS2/MINGW64 with the MINGW python3 package.")
+      message(STATUS "Set MINGW_BASE in cmake to point to your MSYS2/MINGW64 installation directory.")
+      message(FATAL_ERROR "Cannot compile until mingw python3 is installed...")
+    endif()
+
+    set( SIRE_INSTALL_PREFIX "${MINGW_BASE}" )
+    set( CMAKE_INSTALL_PREFIX "${SIRE_INSTALL_PREFIX}" CACHE INTERNAL
+           "Prefix prepended to install directories" FORCE )
   else()
     # Option to set the install directory of Sire
     set( SIRE_INSTALL_PREFIX "$ENV{HOME}/sire.app" CACHE PATH
@@ -174,19 +219,12 @@ save_sire_variable( "SIRE_USER_CPPFLAGS" "${SIRE_USER_CPPFLAGS}" )
 
 # Name of executable install dir
 set (SIRE_BIN "bin")
+
 # Shared library install dir
 set (SIRE_LIBS "lib")
+
 # Where to install all bundled components
 set (SIRE_BUNDLED_DIR "bundled" )
-
-#if (ANACONDA_BUILD)
-#  # For an anaconda build, we copy all of the bundled
-#  # libraries into the anaconda lib directory
-#  set (SIRE_BUNDLED_LIBS "${ANACONDA_BASE}/lib")
-#else()
-#  set (SIRE_BUNDLED_LIBS "${SIRE_BUNDLED_DIR}/lib")
-#endif()
-
 set (SIRE_BUNDLED_LIBS "${SIRE_BUNDLED_DIR}/lib")
 
 # Static library install dir
@@ -309,7 +347,7 @@ endif()
 option( SIRE_DISABLE_MPI "Turn off MPI compilation and linking" ON )
 
 # Add an option to say whether or not to use OpenMM
-option( SIRE_USE_OPENMM "Set whether or not to compile in support for OpenMM" ON )
+option( SIRE_USE_OPENMM "Set whether or not to compile in support for OpenMM" OFF )
 save_sire_variable( "SIRE_USE_OPENMM" "${SIRE_USE_OPENMM}" )
 
 #############
@@ -360,37 +398,93 @@ set( SIRE_EXE_LINK_FLAGS "" CACHE INTERNAL "Flags needed to link executables" )
 include (CheckCXXCompilerFlag)
 
 CHECK_CXX_COMPILER_FLAG( "-stdlib=libc++" SIRE_HAS_CPP_LIB )
-CHECK_CXX_COMPILER_FLAG( "-std=c++11" SIRE_HAS_CPP_11 )
 
-save_sire_variable( "SIRE_HAS_CPP_LIB" "${SIRE_HAS_CPP_LIB}" )
-save_sire_variable( "SIRE_HAS_CPP_11" "${SIRE_HAS_CPP_11}" )
+include(CheckCXXSourceRuns)
 
 if (SIRE_HAS_CPP_LIB)
-  message(STATUS "Using libc++ in place of libstdc++")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
-  set(SIRE_CXX11_FLAGS "${SIRE_CXX11_FLAGS} -stdlib=libc++")
+  message(STATUS "Checking that we can link to libc++")
+  set(CMAKE_OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
+  set(CMAKE_REQUIRED_FLAGS "-stdlib=libc++")
+  check_cxx_source_runs("
+           #include <cstdlib>
+           #include <iostream>
+           int main()
+           {
+              std::cout << std::atof('3.0') << std::endl;
+              return 0;
+           }" CAN_USE_LIBCPP)
+  set(CMAKE_REQUIRED_FLAGS ${CMAKE_OLD_REQUIRED_FLAGS})
+
+  if (CAN_USE_LIBCPP)
+    message(STATUS "libc++ is available and can be used")
+  else()
+    message(STATUS "libc++ is not available. Using the normal alternative.")
+    set( SIRE_HAS_CPP_LIB 0 )
+  endif()
+endif()
+
+CHECK_CXX_COMPILER_FLAG( "-std=c++11" SIRE_HAS_CPP_11 )
+CHECK_CXX_COMPILER_FLAG( "-std=c++1y" SIRE_HAS_CPP_1Y )
+CHECK_CXX_COMPILER_FLAG( "-std=c++14" SIRE_HAS_CPP_14 )
+
+save_sire_variable( "SIRE_HAS_CPP_LIB" "${SIRE_HAS_CPP_LIB}" )
+
+save_sire_variable( "SIRE_HAS_CPP_11" "${SIRE_HAS_CPP_11}" )
+save_sire_variable( "SIRE_HAS_CPP_1Y" "${SIRE_HAS_CPP_1Y}" )
+save_sire_variable( "SIRE_HAS_CPP_14" "${SIRE_HAS_CPP_14}" )
+
+option( SIRE_SKIP_LIBC++ "Force Sire to ignore libc++ (e.g. in case of broken clang on linux" OFF )
+
+if (SIRE_SKIP_LIBC++)
+  if (SIRE_HAS_CPP_LIB)
+    message(STATUS "Deliberately ignoring the presence of libstdc++")
+  endif()
+else()
+  if (SIRE_HAS_CPP_LIB)
+    message(STATUS "Using libc++ in place of libstdc++")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+  endif()
 endif()
 
 set(NEED_UNDEF_STRICT_ANSI FALSE)
 
-if (SIRE_HAS_CPP_11)
-  message(STATUS "Compiler supports C++ 2011")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-  set(SIRE_CXX11_FLAGS "${SIRE_CXX11_FLAGS} -DSIRE_HAS_CPP_11 -std=c++11")
+if (SIRE_HAS_CPP_14)
+  message(STATUS "Compiler supports C++ 2014")
+  set(SIRE_CXX_NG_FLAGS "-std=c++14 -DSIRE_HAS_CPP_14 -DSIRE_HAS_CPP_1Y -DSIRE_HAS_CPP_11")
 
   if (NEED_UNDEF_STRICT_ANSI)
     message( STATUS "Undefining __STRICT_ANSI__ because of compile problems")
-    set(SIRE_CXX11_FLAGS "${SIRE_CXX11_FLAGS} -U__STRICT_ANSI__")
+    set(SIRE_CXX_NG_FLAGS "${SIRE_CXX_NG_FLAGS} -U__STRICT_ANSI__")
   endif()
+elseif (SIRE_HAS_CPP_1Y)
+  message(STATUS "Compiler supports C++ 201Y (pre-2014)")
+  set(SIRE_CXX_NG_FLAGS "-std=c++1y -DSIRE_HAS_CPP_1Y -DSIRE_HAS_CPP_11")
+
+  if (NEED_UNDEF_STRICT_ANSI)
+    message( STATUS "Undefining __STRICT_ANSI__ because of compile problems")
+    set(SIRE_CXX_NG_FLAGS "${SIRE_CXX_NG_FLAGS} -U__STRICT_ANSI__")
+  endif()
+elseif (SIRE_HAS_CPP_11)
+  message(STATUS "Compiler supports C++ 2011")
+  set(SIRE_CXX_NG_FLAGS "-std=c++11 -DSIRE_HAS_CPP_11")
+
+  if (NEED_UNDEF_STRICT_ANSI)
+    message( STATUS "Undefining __STRICT_ANSI__ because of compile problems")
+    set(SIRE_CXX_NG_FLAGS "${SIRE_CXX_NG_FLAGS} -U__STRICT_ANSI__")
+  endif()
+else()
+  message( FATAL_ERROR "Cannot compile Sire as we now require a modern C++ "
+                       "compiler that supports at least C++ 2011 (-std=c++11)")
 endif()
 
-save_sire_variable( "SIRE_CXX11_FLAGS" "${SIRE_CXX11_FLAGS}" )
+save_sire_variable( "SIRE_CXX_NG_FLAGS" "${SIRE_CXX_NG_FLAGS}" )
 
-# Find which C++ 2011 features are supported
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${SIRE_CXX_NG_FLAGS}")
+
+# Find which C++ 2011/Y/4 features are supported
 include (CheckCXX11Features)
 
 message( STATUS "C++11 supported features: ${CXX11_FEATURE_LIST}" )
-
 set( SIRE_COMPILER "UNKNOWN" )
 
 if (NOT ${CMAKE_C_COMPILER_ID} STREQUAL ${CMAKE_CXX_COMPILER_ID})
@@ -425,10 +519,9 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
     message( STATUS "Using GCC version "
                     "${GCC_MAJOR_VERSION}.${GCC_MINOR_VERSION}" )
 
-    # First, we need at least GCC 3.0, as I don't think that
-    # GCC 2.x can handle the template code that I use
-    if ( GCC_MAJOR_VERSION LESS 3 )
-       message( FATAL_ERROR "Sire requires GCC >= 3.0. Please upgrade "
+    # First, we need at least GCC 4.0, as we need C++ 11 support
+    if ( GCC_MAJOR_VERSION LESS 4 )
+       message( FATAL_ERROR "Sire requires GCC >= 4.0. Please upgrade "
                       "your version of GCC." )
     endif()
 
@@ -436,7 +529,12 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
     set ( SIRE_WARNALL_FLAGS  "-Wall" )
     set ( SIRE_DEBUG_FLAGS   "-g" )
 
-    set ( SIRE_RELEASE_FLAGS "-O3 -ffast-math" )
+    # GCC >= 5 crashes when using -O3
+    if ( GCC_MAJOR_VERSION LESS 5 )
+      set ( SIRE_RELEASE_FLAGS "-O3 -ffast-math" )
+    else()
+      set ( SIRE_RELEASE_FLAGS "-O2 -ffast-math" )
+    endif()
 
     # -fomit-frame-pointer breaks backtrace on an apple
     set ( SIRE_RELEASE_FLAGS "${SIRE_RELEASE_FLAGS} -fomit-frame-pointer" )
@@ -456,6 +554,7 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
 
         # we have immintrin.h so we can compile AVX - check if we can run it
         INCLUDE(CheckCSourceRuns)
+        set(CMAKE_OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
         set(CMAKE_REQUIRED_FLAGS "-mavx")
         check_c_source_runs("
            #include <immintrin.h>
@@ -465,6 +564,7 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
               return 0;
            }"
            CAN_RUN_AVX_PROGRAM)
+        set(CMAKE_REQUIRED_FLAGS ${CMAKE_OLD_REQUIRED_FLAGS})
 
         if (CAN_RUN_AVX_PROGRAM)
           message( STATUS "Compiling with AVX enabled. Resulting binary will only work on newer Intel CPUs" )
@@ -511,6 +611,13 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
       endif()
     endif()
 
+    # Now gcc 5 specific options
+    if ( GCC_MAJOR_VERSION GREATER 4 )
+      # OpenMM with conda uses the old C++ binary API!
+      # Tell GCC 5 to respect the old API
+      set( SIRE_PLATFORM_FLAGS "${SIRE_PLATFORM_FLAGS} -D_GLIBCXX_USE_CXX11_ABI=0" )
+    endif()
+
     # Now gcc 4 specific options
     if ( GCC_MAJOR_VERSION GREATER 3 )
       # remove warnings about strict aliasing
@@ -537,7 +644,13 @@ if ( ${SIRE_CXX_COMPILER_ID} MATCHES "GNU" )
     if(APPLE)
         set ( SIRE_SHARE_LINK_FLAGS "${SIRE_SHARE_LINK_FLAGS} -Wl" )
     else(UNIX)
-        set ( SIRE_SHARE_LINK_FLAGS "${SIRE_SHARE_LINK_FLAGS} -rdynamic -Wl,--no-undefined" )
+        CHECK_CXX_COMPILER_FLAG( "-rdynamic" HAVE_RDYNAMIC_FLAG )
+
+        if (HAVE_RDYNAMIC_FLAG)
+          set ( SIRE_SHARE_LINK_FLAGS "${SIRE_SHARE_LINK_FLAGS} -rdynamic -Wl,--no-undefined" )
+        else()
+          set ( SIRE_SHARE_LINK_FLAGS "${SIRE_SHARE_LINK_FLAGS} -Wl,--no-undefined" )
+        endif()
     endif()
 
 elseif ( ${SIRE_CXX_COMPILER_ID} MATCHES "CLANG" )
@@ -549,7 +662,27 @@ elseif ( ${SIRE_CXX_COMPILER_ID} MATCHES "CLANG" )
     set ( SIRE_WARNALL_FLAGS  "-Wall" )
     set ( SIRE_DEBUG_FLAGS   "-g" )
 
-    set ( SIRE_RELEASE_FLAGS "-O3 -ffast-math" )
+    # an old incompatibility between clang and gcc means that some 
+    # distributions will fail if use -ffast-math
+    set(CMAKE_OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
+    set(CMAKE_REQUIRED_FLAGS "-O3 -ffast-math")
+    CHECK_CXX_SOURCE_RUNS("
+           #include <cmath>
+           #include <iostream>
+           int main()
+           {
+              std::cout << std::sin(0.0) << std::endl;
+              return 0;
+           }"
+           CAN_USE_FFAST_MATH)
+    set(CMAKE_REQUIRED_FLAGS ${CMAKE_OLD_REQUIRED_FLAGS})    
+
+    if (CAN_USE_FFAST_MATH)
+      set ( SIRE_RELEASE_FLAGS "-O3 -ffast-math" )
+    else()
+      message("Disabling -ffast-math as incompatible clang and gcc")
+      set ( SIRE_RELEASE_FLAGS "-O3" )
+    endif()
 
     # -fomit-frame-pointer breaks backtrace on an apple
     set ( SIRE_RELEASE_FLAGS "${SIRE_RELEASE_FLAGS} -fomit-frame-pointer" )
@@ -567,6 +700,7 @@ elseif ( ${SIRE_CXX_COMPILER_ID} MATCHES "CLANG" )
       if ( HAVE_IMMINTRIN_H AND HAVE_AVX_FLAG )
         # we have immintrin.h so we can compile AVX - check if we can run it
         INCLUDE(CheckCSourceRuns)
+        set(CMAKE_OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
         set(CMAKE_REQUIRED_FLAGS "-mavx")
         CHECK_C_SOURCE_RUNS("
            #include <immintrin.h>
@@ -576,6 +710,7 @@ elseif ( ${SIRE_CXX_COMPILER_ID} MATCHES "CLANG" )
               return 0;
            }"
            CAN_RUN_AVX_PROGRAM)
+        set(CMAKE_REQUIRED_FLAGS ${CMAKE_OLD_REQUIRED_FLAGS})
 
         if (CAN_RUN_AVX_PROGRAM)        
           message( STATUS "Compiling with AVX enabled. Resulting binary will only work on newer Intel CPUs" )
@@ -627,39 +762,10 @@ elseif ( ${SIRE_CXX_COMPILER_ID} MATCHES "CLANG" )
         set ( SIRE_SHARE_LINK_FLAGS "${SIRE_SHARE_LINK_FLAGS} -rdynamic -Wl,--no-undefined" )
     endif()
 
-elseif ( ${CMAKE_CXX_COMPILER} MATCHES "xlC" )
-   
-    message( STATUS "Detected the xlc and xlC C and C++ compilers" ) 
-    set( SIRE_COMPILER "XLC" )
-
-    set ( SIRE_SMALL_FLAGS  "-qcompact" )
-    set ( SIRE_WARNALL_FLAGS  "-qwarn64 -qflag=w:w" )
-    set ( SIRE_RELEASE_FLAGS "-O3 -qstrict" )
-    set ( SIRE_DEBUG_FLAGS   "-g" )
-    set ( SIRE_VISIBILITY_FLAGS "-DSIRE_NO_VISIBILITY_AVAILABLE" )
-    set ( SIRE_PLATFORM_FLAGS "-qrtti=all -qthreaded" )
-
-    set ( SIRE_SHARE_LINK_FLAGS "-qmkshrobj" )
-
-    # Turn off Fortran code because this produces weird link errors!
-    message( STATUS "Disabling Fortran code as this leads to link errors!" )
-    message( STATUS "This will disable sire_blas, sire_lapack and sire_linpack" )
-    set ( SIRE_DISABLE_FORTRAN ON )
-
-    # This is a hack to automatically turn on MPI support on HPCx
-    if ( NOT SIRE_DISABLE_MPI )
-      if ( NOT SIRE_USE_MPI )
-        set( SIRE_USE_MPI ON )
-        set( MPI_INCLUDE_PATH "/usr/lpp/ppe.poe/include;/opt/rsct/lapi/include" )
-        set( MPI_LIBRARY "-L/usr/lpp/ppe.poe/lib -L/usr/lpp/ppe.poe/lib/ip -lmpi_r -lvtd_r -llapi_r -binitfini:poe_remote_main" )
-        set( MPI_EXTRA_LIBRARY "-L/usr/lpp/ppe.poe/lib/threads -lpthreads" )
-        set( MPI_DEFINITIONS "-D_MPI_CPP_BINDINGS" )
-      endif()
-    endif()
-
 elseif( ${CMAKE_CXX_COMPILER} MATCHES "icpc" )
 
     message( STATUS "Detected the Intel C++ and C compilers" )
+    message( FATAL_ERROR "Intel compiler is not supported yet..." )
     set( SIRE_COMPILER ICPC )
 
     set ( SIRE_SMALL_FLAGS  "-Os" )
@@ -672,11 +778,97 @@ elseif( ${CMAKE_CXX_COMPILER} MATCHES "icpc" )
     set ( SIRE_SHARE_LINK_FLAGS "-shared" )
     set ( SIRE_STATIC_LINK_FLAGS "-static" )
 
+elseif( SIRE_CXX_COMPILER_ID MATCHES "MSVC" )
+    message( STATUS "Detected and using Microsoft Visual Studio C and C++ compilers" )
+    set( SIRE_COMPILER "CL" )
+    message( FATAL_ERROR "Visual Studio compilers are not supported yet..." )
+
+    # get the compiler version (via gcc -dumpversion)
+    # (I'll assume that we are using the same version
+    # of compiler for C and C++...)
+    message( STATUS "Version ${CMAKE_CXX_COMPILER_VERSION}")
+
+    # These two regexps are copied from the Chicken CMake
+    # files (which provide a very useful cmake tutorial - thanks :-)
+    SET( VERSION_BUILD_REGEX "^([0-9]+)[.]([0-9]+).*$" )
+    STRING( REGEX REPLACE ${VERSION_BUILD_REGEX} "\\1"
+            MSVC_MAJOR_VERSION ${CMAKE_CXX_COMPILER_VERSION} )
+    STRING( REGEX REPLACE ${VERSION_BUILD_REGEX} "\\2"
+            MSVC_MINOR_VERSION ${CMAKE_CXX_COMPILER_VERSION} )
+
+    message( STATUS "Using Visual C++ version "
+                    "${MSVC_MAJOR_VERSION}.${MSVC_MINOR_VERSION}" )
+
+    set ( SIRE_SMALL_FLAGS  "/Os" )
+    set ( SIRE_WARNALL_FLAGS  "/Wall" )
+    set ( SIRE_DEBUG_FLAGS   "/Zi" )
+
+    set ( SIRE_RELEASE_FLAGS "/Ox /Oy" )
+
+    set ( SIRE_OPENMP_FLAGS "" )
+    set ( SIRE_PLATFORM_FLAGS "" )
+    set ( SIRE_STATIC_LINK_FLAGS "" )
+
+    CHECK_CXX_COMPILER_FLAG( "/arch:SSE2" HAVE_SSE_FLAG )
+    CHECK_CXX_COMPILER_FLAG( "/arch:AVX" HAVE_AVX_FLAG )
+
+    set( SIRE_SKIP_AVX 1 )
+
+    if ( NOT SIRE_DISABLE_AVX)
+
+      if ( HAVE_IMMINTRIN_H AND HAVE_AVX_FLAG )
+
+        # we have immintrin.h so we can compile AVX - check if we can run it
+        INCLUDE(CheckCSourceRuns)
+        set(CMAKE_OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
+        set(CMAKE_REQUIRED_FLAGS "/arch:AVX")
+        check_c_source_runs("
+           #include <immintrin.h>
+           int main()
+           {
+              __m256i a = _mm256_setzero_si256();
+              return 0;
+           }"
+           CAN_RUN_AVX_PROGRAM)
+        set(CMAKE_REQUIRED_FLAGS ${CMAKE_OLD_REQUIRED_FLAGS})
+
+        if (CAN_RUN_AVX_PROGRAM)
+          message( STATUS "Compiling with AVX enabled. Resulting binary will only work on newer Intel CPUs" )
+
+          set( SIRE_SKIP_AVX 0 )
+
+          CHECK_CXX_COMPILER_FLAG( "/arch:AVX2" HAVE_AVX2_FLAG )
+
+          if ( SIRE_ENABLE_AVX2 AND HAVE_AVX2_FLAG )
+            message( STATUS "Compiling with AVX2 enabled. Resulting binary will only work on really new Intel CPUs" )
+            set( SIRE_VECTOR_FLAGS "/arch:AVX2 -DSIRE_USE_AVX -DSIRE_USE_AVX2" )
+          else()
+            set ( SIRE_VECTOR_FLAGS "/arch:AVX2 -DSIRE_USE_AVX" )
+          endif()
+        endif()
+      endif()
+
+      if ( SIRE_SKIP_AVX )
+        if ( HAVE_EMMINTRIN_H AND HAVE_SSE_FLAG )
+          # we have emmintrin.h so we have SSE
+          message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
+
+        elseif (NOT SIRE_DISABLE_SSE)
+          # we have emmintrin.h so we have SSE
+          message( STATUS "Compiling with SSE2 enabled. Resulting binary will not work on really old Intel CPUs" )
+          set ( SIRE_VECTOR_FLAGS "/arch:SSE2 -DSIRE_USE_SSE" )
+        endif()
+      endif()
+    endif()
+
+    set ( SIRE_VISIBILITY_FLAGS "-DSIRE_VISIBILITY_AVAILABLE" )
+
 else()
     message( STATUS "CMAKE_SYSTEM_NAME == ${CMAKE_SYSTEM_NAME}" )
     message( STATUS "CMAKE_C_COMPILER == ${CMAKE_C_COMPILER}" )
     message( STATUS "CMAKE_CXX_COMPILER == ${CMAKE_CXX_COMPILER}" )
     message( STATUS "CMAKE_CXX_COMPILER_ID = ${CMAKE_CXX_COMPILER_ID}" )
+    message( STATUS "SIRE_CXX_COMPILER_ID = ${SIRE_CXX_COMPILER_ID}" )
     message( FATAL_ERROR "Could not detect compiler type - cannot set compiler options." )
 endif()
 
@@ -729,22 +921,28 @@ else()
     message( STATUS "Sire will be compiled to use its own copy of bundled libraries." )
 
     set( BUNDLE_BUILDDIR "${CMAKE_BINARY_DIR}/build_bundled" )
-    set( BUNDLE_STAGEDIR "${CMAKE_INSTALL_PREFIX}/${SIRE_BUNDLED_DIR}" )
 
-    if (NOT EXISTS "${BUNDLE_BUILDDIR}")
-      file(MAKE_DIRECTORY ${BUNDLE_BUILDDIR})
-    endif()
+    if ( MSYS )
+      message( STATUS "No bundling - using libraries provided by MSYS2/MINGW64...")
+      set( BUNDLE_STAGEDIR "${CMAKE_INSTALL_PREFIX}" )
+    else()
+      set( BUNDLE_STAGEDIR "${CMAKE_INSTALL_PREFIX}/${SIRE_BUNDLED_DIR}" )
 
-    if (NOT EXISTS "${BUNDLE_STAGEDIR}")
-      file(MAKE_DIRECTORY ${BUNDLE_STAGEDIR})
-    endif()
+      if (NOT EXISTS "${BUNDLE_BUILDDIR}")
+        file(MAKE_DIRECTORY ${BUNDLE_BUILDDIR})
+      endif()
+
+      if (NOT EXISTS "${BUNDLE_STAGEDIR}")
+        file(MAKE_DIRECTORY ${BUNDLE_STAGEDIR})
+      endif()
     
-    if (NOT EXISTS "${BUNDLE_STAGEDIR}/lib")
-      file(MAKE_DIRECTORY ${BUNDLE_STAGEDIR}/lib)
-    endif()
+      if (NOT EXISTS "${BUNDLE_STAGEDIR}/lib")
+        file(MAKE_DIRECTORY ${BUNDLE_STAGEDIR}/lib)
+      endif()
           
-    if (NOT EXISTS "${BUNDLE_STAGEDIR}/include")
-      file(MAKE_DIRECTORY ${BUNDLE_STAGEDIR}/include)
+      if (NOT EXISTS "${BUNDLE_STAGEDIR}/include")
+        file(MAKE_DIRECTORY ${BUNDLE_STAGEDIR}/include)
+      endif()
     endif()
 
     if ( ${SIRE_BUNDLE_TBB} )
@@ -773,12 +971,14 @@ else()
       include( "src/bundled/install_qt5.cmake" )
     endif()
 
-    if ( NOT ${BUNDLE_STAGEDIR} STREQUAL "${CMAKE_INSTALL_PREFIX}/${SIRE_BUNDLED_DIR}" )
-      # All of the bundled objects are built into the directory ${CMAKE_BINARY_DIR}/bundled
-      # This directory must be installed into the sire.app/ directory
-      install( DIRECTORY ${BUNDLE_STAGEDIR} 
-               DESTINATION ${CMAKE_INSTALL_PREFIX}
-               USE_SOURCE_PERMISSIONS )
+    if ( NOT MSYS )
+      if ( NOT ${BUNDLE_STAGEDIR} STREQUAL "${CMAKE_INSTALL_PREFIX}/${SIRE_BUNDLED_DIR}" )
+        # All of the bundled objects are built into the directory ${CMAKE_BINARY_DIR}/bundled
+        # This directory must be installed into the sire.app/ directory
+        install( DIRECTORY ${BUNDLE_STAGEDIR} 
+                 DESTINATION ${CMAKE_INSTALL_PREFIX}
+                 USE_SOURCE_PERMISSIONS )
+      endif()
     endif()
   endif()
 endif()
@@ -913,7 +1113,7 @@ message( STATUS  "CMAKE_C_COMPILER       == ${CMAKE_C_COMPILER}" )
 message( STATUS  "CMAKE_CXX_COMPILER     == ${CMAKE_CXX_COMPILER}" )
 message( STATUS  "CMAKE_Fortran_COMPILER == ${CMAKE_Fortran_COMPILER}" )
 
-message ( STATUS "SIRE_CXX11_FLAGS       == ${SIRE_CXX11_FLAGS}" )
+message ( STATUS "SIRE_CXX_NG_FLAGS       == ${SIRE_CXX_NG_FLAGS}" )
 message ( STATUS "SIRE_SMALL_FLAGS       == ${SIRE_SMALL_FLAGS}" )
 message ( STATUS "SIRE_WARNALL_FLAGS     == ${SIRE_WARNALL_FLAGS}" )
 message ( STATUS "SIRE_DEBUG_FLAGS       == ${SIRE_DEBUG_FLAGS}" )
@@ -938,13 +1138,13 @@ if ( SIRE_VECTORISE )
 endif()
 
 set( SIRE_C_FLAGS_RELEASE "${SIRE_COMPILE_FLAGS} ${SIRE_RELEASE_FLAGS} ${SIRE_USER_CFLAGS}" )
-set( SIRE_CXX_FLAGS_RELEASE "${SIRE_COMPILE_FLAGS} ${SIRE_CXX11_FLAGS} ${SIRE_RELEASE_FLAGS}  ${SIRE_USER_CPPFLAGS}" )
+set( SIRE_CXX_FLAGS_RELEASE "${SIRE_COMPILE_FLAGS} ${SIRE_CXX_NG_FLAGS} ${SIRE_RELEASE_FLAGS}  ${SIRE_USER_CPPFLAGS}" )
 
 set( SIRE_C_FLAGS_DEBUG "${SIRE_COMPILE_FLAGS} ${SIRE_DEBUG_FLAGS} ${SIRE_USER_CFLAGS}" )
-set( SIRE_CXX_FLAGS_DEBUG "${SIRE_COMPILE_FLAGS} ${SIRE_CXX11_FLAGS} ${SIRE_DEBUG_FLAGS} ${SIRE_USER_CPPFLAGS}" )
+set( SIRE_CXX_FLAGS_DEBUG "${SIRE_COMPILE_FLAGS} ${SIRE_CXX_NG_FLAGS} ${SIRE_DEBUG_FLAGS} ${SIRE_USER_CPPFLAGS}" )
 
 set( SIRE_C_FLAGS_SMALL "${SIRE_COMPILE_FLAGS} ${SIRE_SMALL_FLAGS} ${SIRE_USER_CFLAGS}" )
-set( SIRE_CXX_FLAGS_SMALL "${SIRE_COMPILE_FLAGS} ${SIRE_CXX11_FLAGS} ${SIRE_SMALL_FLAGS} ${SIRE_USER_CPPFLAGS}" )
+set( SIRE_CXX_FLAGS_SMALL "${SIRE_COMPILE_FLAGS} ${SIRE_CXX_NG_FLAGS} ${SIRE_SMALL_FLAGS} ${SIRE_USER_CPPFLAGS}" )
 
 # Copy the Sire compile flags to CMake
 set( CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} ${SIRE_C_FLAGS_RELEASE}" )

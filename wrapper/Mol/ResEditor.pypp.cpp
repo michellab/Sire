@@ -51,10 +51,10 @@ void register_ResEditor_class(){
 
     { //::SireMol::ResEditor
         typedef bp::class_< SireMol::ResEditor, bp::bases< SireMol::Editor<SireMol::ResEditor, SireMol::Residue>, SireMol::Residue, SireMol::MoleculeView, SireBase::Property > > ResEditor_exposer_t;
-        ResEditor_exposer_t ResEditor_exposer = ResEditor_exposer_t( "ResEditor", bp::init< >() );
+        ResEditor_exposer_t ResEditor_exposer = ResEditor_exposer_t( "ResEditor", "This class is used to edit the non-structural parts of a residue\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope ResEditor_scope( ResEditor_exposer );
-        ResEditor_exposer.def( bp::init< SireMol::Residue const & >(( bp::arg("residue") )) );
-        ResEditor_exposer.def( bp::init< SireMol::ResEditor const & >(( bp::arg("other") )) );
+        ResEditor_exposer.def( bp::init< SireMol::Residue const & >(( bp::arg("residue") ), "Construct an editor that edits a copy of the residue residue") );
+        ResEditor_exposer.def( bp::init< SireMol::ResEditor const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::ResEditor::add
         
             typedef ::SireMol::AtomStructureEditor ( ::SireMol::ResEditor::*add_function_type)( ::SireMol::AtomName const & ) const;
@@ -63,7 +63,8 @@ void register_ResEditor_class(){
             ResEditor_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("atomname") ) );
+                , ( bp::arg("atomname") )
+                , "Add a new atom called name to this residue - this returns\nan editor that can be used to further edit this atom" );
         
         }
         { //::SireMol::ResEditor::add
@@ -74,7 +75,8 @@ void register_ResEditor_class(){
             ResEditor_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("atomnum") ) );
+                , ( bp::arg("atomnum") )
+                , "Add a new atom with the number number to this residue - this\nreturns an editor that can be used to further edit this atom" );
         
         }
         { //::SireMol::ResEditor::commit
@@ -84,7 +86,8 @@ void register_ResEditor_class(){
             
             ResEditor_exposer.def( 
                 "commit"
-                , commit_function_value );
+                , commit_function_value
+                , "Commit the changes made by this editor and return the updated Residue" );
         
         }
         { //::SireMol::ResEditor::operator=
@@ -96,7 +99,8 @@ void register_ResEditor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("residue") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::ResEditor::operator=
@@ -108,7 +112,8 @@ void register_ResEditor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::ResEditor::reindex
@@ -119,7 +124,8 @@ void register_ResEditor_class(){
             ResEditor_exposer.def( 
                 "reindex"
                 , reindex_function_value
-                , ( bp::arg("index") ) );
+                , ( bp::arg("index") )
+                , "Change the index of this residue to newidx. If this\nis larger than the number of residues in the molecule\nthen this residue is moved to the end" );
         
         }
         { //::SireMol::ResEditor::remove
@@ -129,7 +135,8 @@ void register_ResEditor_class(){
             
             ResEditor_exposer.def( 
                 "remove"
-                , remove_function_value );
+                , remove_function_value
+                , "Completely remove this residue from the molecule - this returns\na MolStructureEditor that can be used to further edit the molecule" );
         
         }
         { //::SireMol::ResEditor::remove
@@ -140,7 +147,8 @@ void register_ResEditor_class(){
             ResEditor_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "Remove all atoms with ID atomid from this residue\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ResEditor::remove
@@ -151,7 +159,8 @@ void register_ResEditor_class(){
             ResEditor_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Remove the ith atom from this residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ResEditor::rename
@@ -163,7 +172,8 @@ void register_ResEditor_class(){
                 "rename"
                 , rename_function_value
                 , ( bp::arg("name") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Rename this residue to newname" );
         
         }
         { //::SireMol::ResEditor::renumber
@@ -175,7 +185,8 @@ void register_ResEditor_class(){
                 "renumber"
                 , renumber_function_value
                 , ( bp::arg("number") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Renumber this residue to newnum" );
         
         }
         { //::SireMol::ResEditor::reparent
@@ -186,7 +197,8 @@ void register_ResEditor_class(){
             ResEditor_exposer.def( 
                 "reparent"
                 , reparent_function_value
-                , ( bp::arg("chainid") ) );
+                , ( bp::arg("chainid") )
+                , "Move this residue into the chain with ID chainid\nThrow: SireMol::missing_chain\nThrow: SireMol::duplicate_chain\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ResEditor::toString
@@ -196,7 +208,8 @@ void register_ResEditor_class(){
             
             ResEditor_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this editor" );
         
         }
         { //::SireMol::ResEditor::transfer
@@ -207,7 +220,8 @@ void register_ResEditor_class(){
             ResEditor_exposer.def( 
                 "transfer"
                 , transfer_function_value
-                , ( bp::arg("atomid"), bp::arg("resid") ) );
+                , ( bp::arg("atomid"), bp::arg("resid") )
+                , "Transfer all atoms that match the ID atomid into the residue that\nmatches the ID resid\nThrow: SireMol::missing_atom\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ResEditor::transfer
@@ -218,7 +232,8 @@ void register_ResEditor_class(){
             ResEditor_exposer.def( 
                 "transfer"
                 , transfer_function_value
-                , ( bp::arg("i"), bp::arg("resid") ) );
+                , ( bp::arg("i"), bp::arg("resid") )
+                , "Transfer the ith atom from this residue into the residue that\nmatches the ID resid\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ResEditor::transferAll
@@ -229,7 +244,8 @@ void register_ResEditor_class(){
             ResEditor_exposer.def( 
                 "transferAll"
                 , transferAll_function_value
-                , ( bp::arg("resid") ) );
+                , ( bp::arg("resid") )
+                , "Transfer all atoms from this residue into the residue with ID resid\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ResEditor::typeName
@@ -239,7 +255,8 @@ void register_ResEditor_class(){
             
             ResEditor_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         ResEditor_exposer.staticmethod( "typeName" );

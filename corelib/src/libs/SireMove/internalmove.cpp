@@ -42,6 +42,8 @@
 #include "SireMol/angleid.h"
 #include "SireMol/dihedralid.h"
 
+#include "SireMaths/vectorproperty.h"
+
 #include "SireUnits/dimensions.h"
 #include "SireUnits/units.h"
 #include "SireUnits/temperature.h"
@@ -56,6 +58,7 @@
 using namespace SireMove;
 using namespace SireMol;
 using namespace SireSystem;
+using namespace SireMaths;
 using namespace SireUnits;
 using namespace SireUnits::Dimension;
 using namespace SireStream;
@@ -65,11 +68,12 @@ static const RegisterMetaType<InternalMove> r_internalmove;
 /** Serialise to a binary datastream */
 QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const InternalMove &internalmove)
 {
-    writeHeader(ds, r_internalmove, 1);
+    writeHeader(ds, r_internalmove, 2);
     
     SharedDataStream sds(ds);
     
-    sds << internalmove.smplr 
+    sds << internalmove.smplr
+        << internalmove.center_function
         << internalmove.flexibility_property
         << static_cast<const MonteCarlo&>(internalmove);
     
@@ -81,9 +85,20 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, InternalMove &internalm
 {
     VersionID v = readHeader(ds, r_internalmove);
 
-    if (v == 1)
+    if (v == 2)
     {
         SharedDataStream sds(ds);
+    
+        sds >> internalmove.smplr
+            >> internalmove.center_function
+            >> internalmove.flexibility_property
+            >> static_cast<MonteCarlo&>(internalmove);
+    }
+    else if (v == 1)
+    {
+        SharedDataStream sds(ds);
+    
+        internalmove.center_function = GetCOMPoint();
     
         sds >> internalmove.smplr 
             >> internalmove.flexibility_property
@@ -101,6 +116,7 @@ InternalMove::InternalMove(const PropertyMap &map)
 {
     flexibility_property = map["flexibility"];
     MonteCarlo::setEnsemble( Ensemble::NVT(25*celsius) );
+    center_function = GetCOMPoint();
 }
 
 /** Construct the mover move for the passed group of molecules */
@@ -111,6 +127,7 @@ InternalMove::InternalMove(const MoleculeGroup &molgroup, const PropertyMap &map
     flexibility_property = map["flexibility"];
     MonteCarlo::setEnsemble( Ensemble::NVT(25*celsius) );
     smplr.edit().setGenerator( this->generator() );
+    center_function = GetCOMPoint();
 }
 
 /** Construct the mover move that samples molecules from the
@@ -122,12 +139,13 @@ InternalMove::InternalMove(const Sampler &sampler, const PropertyMap &map)
     flexibility_property = map["flexibility"];
     MonteCarlo::setEnsemble( Ensemble::NVT(25*celsius) );
     smplr.edit().setGenerator( this->generator() );
+    center_function = GetCOMPoint();
 }
 
 /** Copy constructor */
 InternalMove::InternalMove(const InternalMove &other)
              : ConcreteProperty<InternalMove,MonteCarlo>(other),
-               smplr(other.smplr),
+               smplr(other.smplr), center_function(other.center_function),
                flexibility_property(other.flexibility_property)
 {}
 
@@ -142,6 +160,7 @@ InternalMove& InternalMove::operator=(const InternalMove &other)
     {
         MonteCarlo::operator=(other);
         smplr = other.smplr;
+        center_function = other.center_function;
         flexibility_property = other.flexibility_property;
     }
     
@@ -152,6 +171,7 @@ InternalMove& InternalMove::operator=(const InternalMove &other)
 bool InternalMove::operator==(const InternalMove &other) const
 {
     return MonteCarlo::operator==(other) and smplr == other.smplr and
+           center_function == other.center_function and
            flexibility_property == other.flexibility_property;
 }
 
@@ -208,6 +228,18 @@ void InternalMove::setFlexibilityProperty(const PropertyName &property)
     Move::setProperty("flexibility", flexibility_property);
 }
 
+/** Set the function used to find the center of the molecule */
+void InternalMove::setCenterOfMolecule(const GetPoint &cf)
+{
+    center_function = cf;
+}
+
+/** Return the function used to find the center of the molecule */
+const GetPoint& InternalMove::centerOfMolecule() const
+{
+    return center_function.read();
+}
+
 /** Set the random number generator used to generate the random
     number used for this move */
 void InternalMove::setGenerator(const RanGenerator &rangenerator)
@@ -236,9 +268,9 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
 
     try
     {
-        PropertyMap map;
-        map.set("coordinates", this->coordinatesProperty());
-    
+        const PropertyMap &map = Move::propertyMap();
+        const PropertyName &center_property = map["center"];
+
         for (int i=0; i<nmoves; ++i)
         {
             double old_nrg = system.energy( this->energyComponent() );
@@ -278,7 +310,6 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
             int nbonds = flex_bonds.count();
             int nangles = flex_angs.count();
             int ndihedrals = flex_dihs.count();
-            //int ndofs = nbonds + nangles + ndihedrals ;
 
             // Select bonds
             if ( nbonds == 0  || maxbondvar < 0  || maxbondvar >= nbonds )
@@ -299,6 +330,7 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
                     }
                 }
             }
+            
             // Select angles
             if ( nangles == 0  || maxanglevar < 0  || maxanglevar >= nangles )
             {
@@ -318,8 +350,9 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
                     }
                 }
             }
+            
             // Select dihedrals
-            if (    ndihedrals == 0  || maxdihedralvar < 0  || maxdihedralvar >= ndihedrals )
+            if ( ndihedrals == 0  || maxdihedralvar < 0  || maxdihedralvar >= ndihedrals )
             {
                 moved_dihedrals = flex_dihs;
             }
@@ -338,6 +371,24 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
                 }
             }
 
+            // Now save the current centre of the molecule, so that we can
+            // ensure that this doesn't change as a result of this move
+            // (we can't have an internal move cause rigid body translation
+            //  of the molecule)
+            const bool has_center_property = (oldmol.selectedAll() and
+                                              oldmol.hasProperty(center_property));
+    
+            Vector old_center;
+            
+            if (has_center_property)
+            {
+                old_center = oldmol.property(center_property).asA<VectorProperty>();
+            }
+            else
+            {
+                old_center = center_function.read()(oldmol,map);
+            }
+
             // Now actually move the selected dofs
             Mover<Molecule> mol_mover = oldmol.molecule().move();
 
@@ -351,7 +402,7 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
                 bond_delta = Length( this->generator().rand(-bond_delta_value, 
                                                              bond_delta_value) );
 
-                mol_mover.change(bond, bond_delta);
+                mol_mover.change(bond, bond_delta, map);
             }
 
             // and the angles
@@ -364,7 +415,7 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
                 angle_delta = Angle( this->generator().rand(-angle_delta_value,
                                                              angle_delta_value) );	      
 
-                mol_mover.change(angle, angle_delta);
+                mol_mover.change(angle, angle_delta, map);
             }
 	  
             // and the torsions
@@ -372,34 +423,46 @@ void InternalMove::move(System &system, int nmoves, bool record_stats)
             
             foreach (const DihedralID &dihedral, moved_dihedrals)
             {
-                // We rotate by picking the central bond of the dihedral to 
-                // handle concerted motions
-                //BondID centralbond;
-                //centralbond = BondID(dihedral.atom1(), dihedral.atom2());
-                
-                //const Angle angle_delta_value = flex.angle_deltas[dihedral];
                 double angle_delta_value = flex.delta(dihedral);
                 dihedral_delta =  Angle( this->generator().rand(-angle_delta_value,
                                                                  angle_delta_value) );
-                //mol_mover.change(centralbond, dihedral_delta);
 
                 // 50% chance to either rotate around central bond or to just change that dihedral
                 if (this->generator().randBool())
                 {                                 
                     //move only this specific dihedral
-                    mol_mover.change(dihedral, dihedral_delta);
+                    mol_mover.change(dihedral, dihedral_delta, map);
                 }
                 else
                 {
                     BondID centralbond;
                     centralbond = BondID(dihedral.atom1(), dihedral.atom2());
-                    mol_mover.change(centralbond, dihedral_delta);
+                    mol_mover.change(centralbond, dihedral_delta, map);
                 }
 
             }
 
-            //update the system with the new coordinates
             Molecule newmol = mol_mover.commit();
+
+            //evaluate the new center of geometry, and translate the molecule
+            //to correct for any motion
+            Vector new_center;
+            
+            if (has_center_property)
+            {
+                new_center = newmol.property(center_property).asA<VectorProperty>();
+            }
+            else
+            {
+                new_center = center_function.read()(newmol,map);
+            }
+            
+            if (old_center != new_center)
+            {
+                newmol = newmol.move().translate( old_center-new_center, map ).commit();
+            }
+
+            //update the system with the new coordinates
             system.update(newmol);
 
             //get the new bias on this molecule

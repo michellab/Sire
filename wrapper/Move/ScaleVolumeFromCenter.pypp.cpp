@@ -42,13 +42,13 @@ void register_ScaleVolumeFromCenter_class(){
 
     { //::SireMove::ScaleVolumeFromCenter
         typedef bp::class_< SireMove::ScaleVolumeFromCenter, bp::bases< SireMove::VolumeChanger, SireBase::Property > > ScaleVolumeFromCenter_exposer_t;
-        ScaleVolumeFromCenter_exposer_t ScaleVolumeFromCenter_exposer = ScaleVolumeFromCenter_exposer_t( "ScaleVolumeFromCenter", bp::init< >() );
+        ScaleVolumeFromCenter_exposer_t ScaleVolumeFromCenter_exposer = ScaleVolumeFromCenter_exposer_t( "ScaleVolumeFromCenter", "This is a volume changer that works by scaling the molecules\nfrom a user-supplied center point, scaling those molecules closest\nto the center point the least, and those furthest from the\npoint the most\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope ScaleVolumeFromCenter_scope( ScaleVolumeFromCenter_exposer );
-        ScaleVolumeFromCenter_exposer.def( bp::init< SireMol::MGID const & >(( bp::arg("mgid") )) );
-        ScaleVolumeFromCenter_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("molgroup") )) );
-        ScaleVolumeFromCenter_exposer.def( bp::init< SireMol::MGID const &, SireFF::PointRef const & >(( bp::arg("mgid"), bp::arg("point") )) );
-        ScaleVolumeFromCenter_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireFF::PointRef const & >(( bp::arg("molgroup"), bp::arg("point") )) );
-        ScaleVolumeFromCenter_exposer.def( bp::init< SireMove::ScaleVolumeFromCenter const & >(( bp::arg("other") )) );
+        ScaleVolumeFromCenter_exposer.def( bp::init< SireMol::MGID const & >(( bp::arg("mgid") ), "Construct to scale the molecules in the group(s) with ID mgid,\nscaling the molecules from the origin (0,0,0)") );
+        ScaleVolumeFromCenter_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("molgroup") ), "Construct to scale the molecules in the group molgroup,\nscaling the molecules from the origin (0,0,0)") );
+        ScaleVolumeFromCenter_exposer.def( bp::init< SireMol::MGID const &, SireFF::PointRef const & >(( bp::arg("mgid"), bp::arg("point") ), "Construct to scale the molecules in the groups with ID mgid,\nscaling the molecules from the point point") );
+        ScaleVolumeFromCenter_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireFF::PointRef const & >(( bp::arg("molgroup"), bp::arg("point") ), "Construct to scale the molecules in the group molgroup,\nscaling the molecules from the point point") );
+        ScaleVolumeFromCenter_exposer.def( bp::init< SireMove::ScaleVolumeFromCenter const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::ScaleVolumeFromCenter::center
         
             typedef ::SireFF::Point const & ( ::SireMove::ScaleVolumeFromCenter::*center_function_type)(  ) const;
@@ -57,7 +57,8 @@ void register_ScaleVolumeFromCenter_class(){
             ScaleVolumeFromCenter_exposer.def( 
                 "center"
                 , center_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the center point from which the molecules are scaled" );
         
         }
         ScaleVolumeFromCenter_exposer.def( bp::self != bp::self );
@@ -70,7 +71,8 @@ void register_ScaleVolumeFromCenter_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         ScaleVolumeFromCenter_exposer.def( bp::self == bp::self );
@@ -82,7 +84,8 @@ void register_ScaleVolumeFromCenter_class(){
             ScaleVolumeFromCenter_exposer.def( 
                 "setCenter"
                 , setCenter_function_value
-                , ( bp::arg("center") ) );
+                , ( bp::arg("center") )
+                , "Set the center point from which the molecules will be scaled" );
         
         }
         { //::SireMove::ScaleVolumeFromCenter::setVolume
@@ -93,7 +96,8 @@ void register_ScaleVolumeFromCenter_class(){
             ScaleVolumeFromCenter_exposer.def( 
                 "setVolume"
                 , setVolume_function_value
-                , ( bp::arg("system"), bp::arg("volume"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("system"), bp::arg("volume"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Set the volume of the system system to volume, using the\noptionally supplied property map to find the names of the\nproperties needed to change the system volume.\nThis returns the number of molecules involved in the volume change\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireVol::incompatible_space\nThrow: SireError::invalid_cast\nThrow: SireError::invalid_state\nThrow: SireError::unsupported\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMove::ScaleVolumeFromCenter::typeName
@@ -103,7 +107,8 @@ void register_ScaleVolumeFromCenter_class(){
             
             ScaleVolumeFromCenter_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         ScaleVolumeFromCenter_exposer.staticmethod( "typeName" );

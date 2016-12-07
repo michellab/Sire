@@ -559,6 +559,21 @@ void CLJExtractor::updateSelection(const AtomSelection &new_selection,
     }
 }
 
+namespace detail
+{
+    template<class C, class T>
+    bool contains(const C &container, const T &value)
+    {
+        for (int i=0; i<container.count(); ++i)
+        {
+            if (container[i] == value)
+                return true;
+        }
+        
+        return false;
+    }
+}
+
 /** Update the molecule, calculating the change in CLJAtoms as a CLJDelta that is
     added to the passed CLJWorkspace. Any atoms that have changed are removed
     from the passed CLJBoxes */
@@ -656,7 +671,9 @@ void CLJExtractor::update(const MoleculeView &new_molecule,
                             if (oldc[j] != newc[j])
                             {
                                 //the charge on this atom has changed
-                                changed_cgroups.append(i);
+                                if (not ::detail::contains(changed_cgroups,i))
+                                    changed_cgroups.append(i);
+
                                 break;
                             }
                         }
@@ -681,7 +698,9 @@ void CLJExtractor::update(const MoleculeView &new_molecule,
                             if (oldlj[j] != newlj[j])
                             {
                                 //the LJ parameter of this atom has changed
-                                changed_cgroups.append(i);
+                                if (not ::detail::contains(changed_cgroups,i))
+                                    changed_cgroups.append(i);
+
                                 break;
                             }
                         }

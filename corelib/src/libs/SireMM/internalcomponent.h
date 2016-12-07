@@ -863,7 +863,7 @@ public:
     InternalEnergy(double bondnrg=0, double anglenrg=0, double dihedralnrg=0, 
                    double impropernrg=0, double ubnrg=0,
                    double ssnrg=0, double sbnrg=0, double bbnrg=0, double sbtnrg=0,
-                   double cnrg14=0, double ljnrg14=0);
+                   Intra14Energy intra14nrg=Intra14Energy(0,0));
     
     InternalEnergy(const InternalEnergy &other);
     

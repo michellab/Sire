@@ -39,9 +39,9 @@ void register_RecordValues_class(){
 
     { //::SireMaths::RecordValues
         typedef bp::class_< SireMaths::RecordValues, bp::bases< SireMaths::Accumulator, SireBase::Property > > RecordValues_exposer_t;
-        RecordValues_exposer_t RecordValues_exposer = RecordValues_exposer_t( "RecordValues", bp::init< >() );
+        RecordValues_exposer_t RecordValues_exposer = RecordValues_exposer_t( "RecordValues", "This class is used to collect a record of all of the values.\nThis allows you to extract the values and calculate whatever\nstatistical property you wish in post-production\n\nAuthor: Christopher Woods\n", bp::init< >("Construct an empty average") );
         bp::scope RecordValues_scope( RecordValues_exposer );
-        RecordValues_exposer.def( bp::init< SireMaths::RecordValues const & >(( bp::arg("other") )) );
+        RecordValues_exposer.def( bp::init< SireMaths::RecordValues const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMaths::RecordValues::accumulate
         
             typedef void ( ::SireMaths::RecordValues::*accumulate_function_type)( double ) ;
@@ -50,7 +50,8 @@ void register_RecordValues_class(){
             RecordValues_exposer.def( 
                 "accumulate"
                 , accumulate_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Accumulate the passed value onto the average" );
         
         }
         { //::SireMaths::RecordValues::clear
@@ -60,7 +61,8 @@ void register_RecordValues_class(){
             
             RecordValues_exposer.def( 
                 "clear"
-                , clear_function_value );
+                , clear_function_value
+                , "Completely clear the statistics in this accumulator" );
         
         }
         { //::SireMaths::RecordValues::count
@@ -70,7 +72,8 @@ void register_RecordValues_class(){
             
             RecordValues_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of recorded values" );
         
         }
         { //::SireMaths::RecordValues::max
@@ -80,7 +83,8 @@ void register_RecordValues_class(){
             
             RecordValues_exposer.def( 
                 "max"
-                , max_function_value );
+                , max_function_value
+                , "Return the maximum value" );
         
         }
         { //::SireMaths::RecordValues::maximum
@@ -90,7 +94,8 @@ void register_RecordValues_class(){
             
             RecordValues_exposer.def( 
                 "maximum"
-                , maximum_function_value );
+                , maximum_function_value
+                , "Return the maximum value" );
         
         }
         { //::SireMaths::RecordValues::mean
@@ -100,7 +105,8 @@ void register_RecordValues_class(){
             
             RecordValues_exposer.def( 
                 "mean"
-                , mean_function_value );
+                , mean_function_value
+                , "Return the mean value" );
         
         }
         { //::SireMaths::RecordValues::meanOfSquares
@@ -110,7 +116,8 @@ void register_RecordValues_class(){
             
             RecordValues_exposer.def( 
                 "meanOfSquares"
-                , meanOfSquares_function_value );
+                , meanOfSquares_function_value
+                , "Return the mean of the square values" );
         
         }
         { //::SireMaths::RecordValues::median
@@ -120,7 +127,8 @@ void register_RecordValues_class(){
             
             RecordValues_exposer.def( 
                 "median"
-                , median_function_value );
+                , median_function_value
+                , "Return the median value" );
         
         }
         { //::SireMaths::RecordValues::min
@@ -130,7 +138,8 @@ void register_RecordValues_class(){
             
             RecordValues_exposer.def( 
                 "min"
-                , min_function_value );
+                , min_function_value
+                , "Return the minimum value" );
         
         }
         { //::SireMaths::RecordValues::minimum
@@ -140,7 +149,8 @@ void register_RecordValues_class(){
             
             RecordValues_exposer.def( 
                 "minimum"
-                , minimum_function_value );
+                , minimum_function_value
+                , "Return the minimum value" );
         
         }
         { //::SireMaths::RecordValues::nValues
@@ -150,7 +160,8 @@ void register_RecordValues_class(){
             
             RecordValues_exposer.def( 
                 "nValues"
-                , nValues_function_value );
+                , nValues_function_value
+                , "Return the number of recorded values" );
         
         }
         RecordValues_exposer.def( bp::self != bp::self );
@@ -163,7 +174,8 @@ void register_RecordValues_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         RecordValues_exposer.def( bp::self == bp::self );
@@ -174,7 +186,8 @@ void register_RecordValues_class(){
             
             RecordValues_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "Return the number of recorded values" );
         
         }
         { //::SireMaths::RecordValues::standardDeviation
@@ -184,7 +197,8 @@ void register_RecordValues_class(){
             
             RecordValues_exposer.def( 
                 "standardDeviation"
-                , standardDeviation_function_value );
+                , standardDeviation_function_value
+                , "Return the standard deviation of the values" );
         
         }
         { //::SireMaths::RecordValues::stddev
@@ -194,7 +208,8 @@ void register_RecordValues_class(){
             
             RecordValues_exposer.def( 
                 "stddev"
-                , stddev_function_value );
+                , stddev_function_value
+                , "Return the standard deviation of the values" );
         
         }
         { //::SireMaths::RecordValues::sum
@@ -204,7 +219,8 @@ void register_RecordValues_class(){
             
             RecordValues_exposer.def( 
                 "sum"
-                , sum_function_value );
+                , sum_function_value
+                , "Return the sum of all of the values" );
         
         }
         { //::SireMaths::RecordValues::sum2
@@ -214,7 +230,8 @@ void register_RecordValues_class(){
             
             RecordValues_exposer.def( 
                 "sum2"
-                , sum2_function_value );
+                , sum2_function_value
+                , "Return the sum of the square of all of the values" );
         
         }
         { //::SireMaths::RecordValues::typeName
@@ -224,7 +241,8 @@ void register_RecordValues_class(){
             
             RecordValues_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMaths::RecordValues::values
@@ -234,7 +252,8 @@ void register_RecordValues_class(){
             
             RecordValues_exposer.def( 
                 "values"
-                , values_function_value );
+                , values_function_value
+                , "Return the array of all accumulated values" );
         
         }
         RecordValues_exposer.staticmethod( "typeName" );

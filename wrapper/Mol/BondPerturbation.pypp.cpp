@@ -38,13 +38,13 @@ void register_BondPerturbation_class(){
 
     { //::SireMol::BondPerturbation
         typedef bp::class_< SireMol::BondPerturbation, bp::bases< SireMol::GeometryPerturbation, SireMol::Perturbation, SireBase::Property > > BondPerturbation_exposer_t;
-        BondPerturbation_exposer_t BondPerturbation_exposer = BondPerturbation_exposer_t( "BondPerturbation", bp::init< >() );
+        BondPerturbation_exposer_t BondPerturbation_exposer = BondPerturbation_exposer_t( "BondPerturbation", "This perturbation moves a bond between two lengths.\n\nThis uses the anchors property to anchor parts\nof the molecule, the weight function property\nto weight the motion of the parts of the molecule,\nand the coordinates property to get the coordinates\nto move\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope BondPerturbation_scope( BondPerturbation_exposer );
-        BondPerturbation_exposer.def( bp::init< SireMol::BondID const &, SireUnits::Dimension::Length const &, SireUnits::Dimension::Length const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("bond"), bp::arg("start"), bp::arg("end"), bp::arg("map")=SireBase::PropertyMap() )) );
-        BondPerturbation_exposer.def( bp::init< SireMol::BondID const &, SireUnits::Dimension::Length const &, SireUnits::Dimension::Length const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("bond"), bp::arg("start"), bp::arg("end"), bp::arg("mapping_function"), bp::arg("map")=SireBase::PropertyMap() )) );
-        BondPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireUnits::Dimension::Length const &, SireUnits::Dimension::Length const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("start"), bp::arg("end"), bp::arg("map")=SireBase::PropertyMap() )) );
-        BondPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireUnits::Dimension::Length const &, SireUnits::Dimension::Length const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("start"), bp::arg("end"), bp::arg("mapping_function"), bp::arg("map")=SireBase::PropertyMap() )) );
-        BondPerturbation_exposer.def( bp::init< SireMol::BondPerturbation const & >(( bp::arg("other") )) );
+        BondPerturbation_exposer.def( bp::init< SireMol::BondID const &, SireUnits::Dimension::Length const &, SireUnits::Dimension::Length const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("bond"), bp::arg("start"), bp::arg("end"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perturb the bond bond from start to end") );
+        BondPerturbation_exposer.def( bp::init< SireMol::BondID const &, SireUnits::Dimension::Length const &, SireUnits::Dimension::Length const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("bond"), bp::arg("start"), bp::arg("end"), bp::arg("mapping_function"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perturb the bond bond from start to end\nusing the passed mapping function") );
+        BondPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireUnits::Dimension::Length const &, SireUnits::Dimension::Length const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("start"), bp::arg("end"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perturb the bond between atoms atom0 and atom1\nfrom start to end") );
+        BondPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireUnits::Dimension::Length const &, SireUnits::Dimension::Length const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("start"), bp::arg("end"), bp::arg("mapping_function"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perturb the bond between atoms atom0 and atom1\nfrom start to end using the passed mapping function") );
+        BondPerturbation_exposer.def( bp::init< SireMol::BondPerturbation const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::BondPerturbation::bond
         
             typedef ::SireMol::BondID const & ( ::SireMol::BondPerturbation::*bond_function_type)(  ) const;
@@ -53,7 +53,8 @@ void register_BondPerturbation_class(){
             BondPerturbation_exposer.def( 
                 "bond"
                 , bond_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the ID that identifies that bond that will be perturbed" );
         
         }
         { //::SireMol::BondPerturbation::end
@@ -64,7 +65,8 @@ void register_BondPerturbation_class(){
             BondPerturbation_exposer.def( 
                 "end"
                 , end_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the end length of the bond" );
         
         }
         BondPerturbation_exposer.def( bp::self != bp::self );
@@ -77,7 +79,8 @@ void register_BondPerturbation_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         BondPerturbation_exposer.def( bp::self == bp::self );
@@ -89,7 +92,8 @@ void register_BondPerturbation_class(){
             BondPerturbation_exposer.def( 
                 "start"
                 , start_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the start length of the bond" );
         
         }
         { //::SireMol::BondPerturbation::toString
@@ -99,7 +103,8 @@ void register_BondPerturbation_class(){
             
             BondPerturbation_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::BondPerturbation::typeName
@@ -109,7 +114,8 @@ void register_BondPerturbation_class(){
             
             BondPerturbation_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::BondPerturbation::wouldChange
@@ -120,7 +126,8 @@ void register_BondPerturbation_class(){
             BondPerturbation_exposer.def( 
                 "wouldChange"
                 , wouldChange_function_value
-                , ( bp::arg("molecule"), bp::arg("values") ) );
+                , ( bp::arg("molecule"), bp::arg("values") )
+                , "Return whether or not this perturbation with the passed values would\nchange the molecule molecule" );
         
         }
         BondPerturbation_exposer.staticmethod( "typeName" );

@@ -25,13 +25,13 @@ void register_SimPacket_class(){
 
     { //::SireMove::SimPacket
         typedef bp::class_< SireMove::SimPacket, bp::bases< SireCluster::WorkPacketBase > > SimPacket_exposer_t;
-        SimPacket_exposer_t SimPacket_exposer = SimPacket_exposer_t( "SimPacket", bp::init< >() );
+        SimPacket_exposer_t SimPacket_exposer = SimPacket_exposer_t( "SimPacket", "This is a WorkPacket that is used to run part of a\nsimulation\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope SimPacket_scope( SimPacket_exposer );
-        SimPacket_exposer.def( bp::init< SireSystem::System const &, SireMove::Moves const &, int, bp::optional< bool > >(( bp::arg("system"), bp::arg("moves"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )) );
-        SimPacket_exposer.def( bp::init< SireSystem::System const &, SireMove::Moves const &, int, int, bp::optional< bool > >(( bp::arg("system"), bp::arg("moves"), bp::arg("nmoves"), bp::arg("nmoves_per_chunk"), bp::arg("record_stats")=(bool)(true) )) );
-        SimPacket_exposer.def( bp::init< SireMove::SimStore const &, int, bp::optional< bool > >(( bp::arg("simstore"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )) );
-        SimPacket_exposer.def( bp::init< SireMove::SimStore const &, int, int, bp::optional< bool > >(( bp::arg("simstore"), bp::arg("nmoves"), bp::arg("nmoves_per_chunk"), bp::arg("record_stats")=(bool)(true) )) );
-        SimPacket_exposer.def( bp::init< SireMove::SimPacket const & >(( bp::arg("other") )) );
+        SimPacket_exposer.def( bp::init< SireSystem::System const &, SireMove::Moves const &, int, bp::optional< bool > >(( bp::arg("system"), bp::arg("moves"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) ), "Construct a workpacket that runs nmoves of the Moves moves on the\npassed System system, optionally recording simulation statistics\nif record_stats is true") );
+        SimPacket_exposer.def( bp::init< SireSystem::System const &, SireMove::Moves const &, int, int, bp::optional< bool > >(( bp::arg("system"), bp::arg("moves"), bp::arg("nmoves"), bp::arg("nmoves_per_chunk"), bp::arg("record_stats")=(bool)(true) ), "Construct a workpacket that runs nmoves of the Moves moves on the\npassed System system, optionally recording simulation statistics\nif record_stats is true, and running nmoves_per_chunk moves\nfor each chunk") );
+        SimPacket_exposer.def( bp::init< SireMove::SimStore const &, int, bp::optional< bool > >(( bp::arg("simstore"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) ), "Construct a workpacket that runs nmoves of the Moves on the\nSystem, both contained in simstore, optionally recording simulation statistics\nif record_stats is true") );
+        SimPacket_exposer.def( bp::init< SireMove::SimStore const &, int, int, bp::optional< bool > >(( bp::arg("simstore"), bp::arg("nmoves"), bp::arg("nmoves_per_chunk"), bp::arg("record_stats")=(bool)(true) ), "Construct a workpacket that runs nmoves of the Moves  on the\nSystem, both contained in simstore, optionally recording simulation statistics\nif record_stats is true, and running nmoves_per_chunk moves\nfor each chunk") );
+        SimPacket_exposer.def( bp::init< SireMove::SimPacket const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::SimPacket::approximatePacketSize
         
             typedef int ( ::SireMove::SimPacket::*approximatePacketSize_function_type)(  ) const;
@@ -39,7 +39,8 @@ void register_SimPacket_class(){
             
             SimPacket_exposer.def( 
                 "approximatePacketSize"
-                , approximatePacketSize_function_value );
+                , approximatePacketSize_function_value
+                , "Because it takes too long to calculate the size of this\npacket, we say that it will be 32 MB - this is enough for\nmost cases" );
         
         }
         { //::SireMove::SimPacket::hasFinished
@@ -49,7 +50,8 @@ void register_SimPacket_class(){
             
             SimPacket_exposer.def( 
                 "hasFinished"
-                , hasFinished_function_value );
+                , hasFinished_function_value
+                , "Return whether or not this simulation has finished" );
         
         }
         { //::SireMove::SimPacket::moves
@@ -59,7 +61,8 @@ void register_SimPacket_class(){
             
             SimPacket_exposer.def( 
                 "moves"
-                , moves_function_value );
+                , moves_function_value
+                , "Return the moves being applied to the system" );
         
         }
         { //::SireMove::SimPacket::nCompleted
@@ -69,7 +72,8 @@ void register_SimPacket_class(){
             
             SimPacket_exposer.def( 
                 "nCompleted"
-                , nCompleted_function_value );
+                , nCompleted_function_value
+                , "Return the number of moves already run on the system" );
         
         }
         { //::SireMove::SimPacket::nMoves
@@ -79,7 +83,8 @@ void register_SimPacket_class(){
             
             SimPacket_exposer.def( 
                 "nMoves"
-                , nMoves_function_value );
+                , nMoves_function_value
+                , "Return the number of moves being applied to the system" );
         
         }
         { //::SireMove::SimPacket::nMovesPerChunk
@@ -89,7 +94,8 @@ void register_SimPacket_class(){
             
             SimPacket_exposer.def( 
                 "nMovesPerChunk"
-                , nMovesPerChunk_function_value );
+                , nMovesPerChunk_function_value
+                , "Return the number of moves to apply for each chunk" );
         
         }
         SimPacket_exposer.def( bp::self != bp::self );
@@ -102,7 +108,8 @@ void register_SimPacket_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         SimPacket_exposer.def( bp::self == bp::self );
@@ -113,7 +120,8 @@ void register_SimPacket_class(){
             
             SimPacket_exposer.def( 
                 "recordingStatistics"
-                , recordingStatistics_function_value );
+                , recordingStatistics_function_value
+                , "Return whether or not simulation statistics will be recorded\nduring the moves" );
         
         }
         { //::SireMove::SimPacket::shouldPack
@@ -123,7 +131,8 @@ void register_SimPacket_class(){
             
             SimPacket_exposer.def( 
                 "shouldPack"
-                , shouldPack_function_value );
+                , shouldPack_function_value
+                , "Only compress this workpacket if the SimStore is not already packed" );
         
         }
         { //::SireMove::SimPacket::system
@@ -133,7 +142,8 @@ void register_SimPacket_class(){
             
             SimPacket_exposer.def( 
                 "system"
-                , system_function_value );
+                , system_function_value
+                , "Return the system being simulated" );
         
         }
         { //::SireMove::SimPacket::systemAndMoves
@@ -143,7 +153,8 @@ void register_SimPacket_class(){
             
             SimPacket_exposer.def( 
                 "systemAndMoves"
-                , systemAndMoves_function_value );
+                , systemAndMoves_function_value
+                , "Return both the system and moves together" );
         
         }
         { //::SireMove::SimPacket::typeName
@@ -153,7 +164,8 @@ void register_SimPacket_class(){
             
             SimPacket_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMove::SimPacket::what
@@ -163,7 +175,8 @@ void register_SimPacket_class(){
             
             SimPacket_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         SimPacket_exposer.staticmethod( "typeName" );

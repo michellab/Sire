@@ -28,13 +28,13 @@ void register_PropertyName_class(){
 
     { //::SireBase::PropertyName
         typedef bp::class_< SireBase::PropertyName > PropertyName_exposer_t;
-        PropertyName_exposer_t PropertyName_exposer = PropertyName_exposer_t( "PropertyName", bp::init< >() );
+        PropertyName_exposer_t PropertyName_exposer = PropertyName_exposer_t( "PropertyName", "This class is used to store the registered name of the\nproperty (used as the offial name of the property\nby the code in the program, e.g. coordinates is the\nofficial name of the coordinates property, charges\nis the official name of the charges), the name for\nthe property assigned by the user (so the user can\nsay that the charges property is actually in the\nproperty called my charges) and an overridden\nvalue for the property that is used instead of\nthe value found in the object being queried\n(so the user can say to use a specific value of\na property)\n\nThis class is not used directly by the code, but\nis instead used as part of the Property::set( ) function,\nso that the user can write;\n\ncljff.add( mol, Property::set(charges,chgs) +\nProperty::set(ljs,ljparams) );\n\nThe PropertyMapPropertyName classes provide a kwargs\nlike interface for the C++ classes - indeed the python\nwrappers should allow code to be written like;\n\ncljff.add( mol, {charges : chgs, ljs : ljparams} )\n\nor\n\ncljff.add( mol, charges==charges, ljs==ljparams )\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope PropertyName_scope( PropertyName_exposer );
-        PropertyName_exposer.def( bp::init< char const * >(( bp::arg("source") )) );
-        PropertyName_exposer.def( bp::init< QString const & >(( bp::arg("source") )) );
-        PropertyName_exposer.def( bp::init< QString const &, SireBase::Property const & >(( bp::arg("source"), bp::arg("default_value") )) );
-        PropertyName_exposer.def( bp::init< SireBase::Property const & >(( bp::arg("value") )) );
-        PropertyName_exposer.def( bp::init< SireBase::PropertyName const & >(( bp::arg("other") )) );
+        PropertyName_exposer.def( bp::init< char const * >(( bp::arg("source") ), "Construct a PropertyName that searches for the\nproperty using the source source") );
+        PropertyName_exposer.def( bp::init< QString const & >(( bp::arg("source") ), "Construct a PropertyName that searches for the\nproperty using the source source") );
+        PropertyName_exposer.def( bp::init< QString const &, SireBase::Property const & >(( bp::arg("source"), bp::arg("default_value") ), "Construct a PropertyName that searches for the property\nusing the source source, but only if that source is\nspecifically provided - otherwise the supplied default\nvalue of the property is used instead") );
+        PropertyName_exposer.def( bp::init< SireBase::Property const & >(( bp::arg("value") ), "Construct a PropertyName that uses the supplied\nvalue, rather than searching for the property") );
+        PropertyName_exposer.def( bp::init< SireBase::PropertyName const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireBase::PropertyName::hasDefaultValue
         
             typedef bool ( ::SireBase::PropertyName::*hasDefaultValue_function_type)(  ) const;
@@ -42,7 +42,8 @@ void register_PropertyName_class(){
             
             PropertyName_exposer.def( 
                 "hasDefaultValue"
-                , hasDefaultValue_function_value );
+                , hasDefaultValue_function_value
+                , "Return whether or not this has a default value" );
         
         }
         { //::SireBase::PropertyName::hasSource
@@ -52,7 +53,8 @@ void register_PropertyName_class(){
             
             PropertyName_exposer.def( 
                 "hasSource"
-                , hasSource_function_value );
+                , hasSource_function_value
+                , "Return whether or not the source has been set" );
         
         }
         { //::SireBase::PropertyName::hasValue
@@ -62,7 +64,8 @@ void register_PropertyName_class(){
             
             PropertyName_exposer.def( 
                 "hasValue"
-                , hasValue_function_value );
+                , hasValue_function_value
+                , "Return whether or not the value has been set" );
         
         }
         { //::SireBase::PropertyName::isNull
@@ -72,7 +75,8 @@ void register_PropertyName_class(){
             
             PropertyName_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Return whether this property is null" );
         
         }
         { //::SireBase::PropertyName::none
@@ -82,7 +86,8 @@ void register_PropertyName_class(){
             
             PropertyName_exposer.def( 
                 "none"
-                , none_function_value );
+                , none_function_value
+                , "Return a PropertyName that says that this property is not set" );
         
         }
         PropertyName_exposer.def( bp::self != bp::self );
@@ -95,7 +100,8 @@ void register_PropertyName_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         PropertyName_exposer.def( bp::self == bp::self );
@@ -107,7 +113,8 @@ void register_PropertyName_class(){
             PropertyName_exposer.def( 
                 "source"
                 , source_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the source of the property - this is only valid\nif .hasSource() is true" );
         
         }
         { //::SireBase::PropertyName::toString
@@ -117,7 +124,8 @@ void register_PropertyName_class(){
             
             PropertyName_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this propertyname" );
         
         }
         { //::SireBase::PropertyName::typeName
@@ -127,7 +135,8 @@ void register_PropertyName_class(){
             
             PropertyName_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireBase::PropertyName::value
@@ -138,7 +147,8 @@ void register_PropertyName_class(){
             PropertyName_exposer.def( 
                 "value"
                 , value_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the value of the property - this is only valid\nif .hasValue() is true" );
         
         }
         { //::SireBase::PropertyName::what
@@ -148,7 +158,8 @@ void register_PropertyName_class(){
             
             PropertyName_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         PropertyName_exposer.staticmethod( "none" );

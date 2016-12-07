@@ -58,13 +58,13 @@ void register_IdentityConstraint_class(){
 
     { //::SireSystem::IdentityConstraint
         typedef bp::class_< SireSystem::IdentityConstraint, bp::bases< SireSystem::MoleculeConstraint, SireSystem::Constraint, SireBase::Property > > IdentityConstraint_exposer_t;
-        IdentityConstraint_exposer_t IdentityConstraint_exposer = IdentityConstraint_exposer_t( "IdentityConstraint", bp::init< >() );
+        IdentityConstraint_exposer_t IdentityConstraint_exposer = IdentityConstraint_exposer_t( "IdentityConstraint", "An identity constraint provides a method of constraining\nthe identity of molecules based on where they are located.\n\nFor example, it can be useful to be able to identify a\nwater in a binding pocket. However, in a normal simulation,\nwe dont identify waters by location, but by their index\n(e.g. this is the first water, this is the second etc.).\n\nThis means that the identity of the water in the binding\npocket can change, e.g. it can start with the fifth water\nin the pocket, but during the simulation the fifth water\nmay diffuse out of the pocket, and the twentieth water\nwould diffuse in its place. The identity of the water\nin the binding pocket will thus have changed from the\nfifth water to the twentieth water.\n\nAn identity constraint works by constantly monitoring\nthe locations of the waters, and so it can detect when\nthe fifth water is displaced by the twentieth water. When\nit detects that this has occured, the constraint swaps\nthe coordinates of the fifth and twentieth waters,\nthereby ensuring that the fifth water stays in the pocket.\nThis doesnt affect the energy or the statistics of the\nsystem, as waters are indistinguishable (there are N\nequivalent configurations of N waters - we only see them\nas N different configurations as we identify each water,\nwhen really they are indistinguishable).\n\nThe idea of constraining the identity of molecules\nwas first presented by M. Tyka, R. Sessions and A. Clarke in\n\nAbsolute Free-Energy Calculations of Liquids Using\na Harmonic Reference State\n\nJ. Chem. Phys. B,  2007, 111, 9571-9580\n\ndoi:10.1021jp072357w\n\nThey used the method to constrain the identity of all\nmolecules, so that harmonic restraints can be applied\nto them all.\n\nThis identity constraint is more general, and allows\nthe identification of a subset of molecules to be\nconstrained (e.g. just the waters in a binding pocket).\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope IdentityConstraint_scope( IdentityConstraint_exposer );
-        IdentityConstraint_exposer.def( bp::init< SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )) );
-        IdentityConstraint_exposer.def( bp::init< SireFF::PointRef const &, SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("point"), bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )) );
-        IdentityConstraint_exposer.def( bp::init< QList< SireBase::PropPtr< SireFF::Point > > const &, SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("points"), bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )) );
-        IdentityConstraint_exposer.def( bp::init< QVector< SireBase::PropPtr< SireFF::Point > > const &, SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("points"), bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )) );
-        IdentityConstraint_exposer.def( bp::init< SireSystem::IdentityConstraint const & >(( bp::arg("other") )) );
+        IdentityConstraint_exposer.def( bp::init< SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ), "Construct the constraint that constrains the identities of all\nof the molecules in the passed molecule group. This uses the current\nlocations of the molecules to apply the constraint. The (optionally\nsupplied) property map is used to find the properties required\nof this constraint") );
+        IdentityConstraint_exposer.def( bp::init< SireFF::PointRef const &, SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("point"), bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ), "Construct the constraint that constrains the identity of a single\nmolecule in the passed molecule group - this sets the identity\nof the first molecule to be that of the one closest to the\npassed point. The (optionally supplied) property map is used to\nfind the properties required of this constraint") );
+        IdentityConstraint_exposer.def( bp::init< QList< SireBase::PropPtr< SireFF::Point > > const &, SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("points"), bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ), "Construct the constraint that constrains the identities of the\npoints.count() molecules from the passed molecule group so that\nthe first molecule is identified by the first point, the second\nmolecule is identified by the second point, and the nth molecule\nis identified by the nth point. The (optionally supplied) property\nmap is used to find the properties required of this constraint") );
+        IdentityConstraint_exposer.def( bp::init< QVector< SireBase::PropPtr< SireFF::Point > > const &, SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("points"), bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ), "Construct the constraint that constrains the identities of the\npoints.count() molecules from the passed molecule group so that\nthe first molecule is identified by the first point, the second\nmolecule is identified by the second point, and the nth molecule\nis identified by the nth point. The (optionally supplied) property\nmap is used to find the properties required of this constraint") );
+        IdentityConstraint_exposer.def( bp::init< SireSystem::IdentityConstraint const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireSystem::IdentityConstraint::constrain
         
             typedef ::SireMol::MolGroupPtr ( *constrain_function_type )( ::SireMol::MoleculeGroup const &,::SireFF::PointRef const &,::SireBase::PropertyMap const & );
@@ -73,7 +73,8 @@ void register_IdentityConstraint_class(){
             IdentityConstraint_exposer.def( 
                 "constrain"
                 , constrain_function_value
-                , ( bp::arg("molgroup"), bp::arg("point"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molgroup"), bp::arg("point"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Static function used to constrain the identities of the molecules\nin molgroup against the point point. This makes the first molecule\nin the group have the identity that matches this point" );
         
         }
         { //::SireSystem::IdentityConstraint::constrain
@@ -84,7 +85,8 @@ void register_IdentityConstraint_class(){
             IdentityConstraint_exposer.def( 
                 "constrain"
                 , constrain_function_value
-                , ( bp::arg("molgroup"), bp::arg("points"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molgroup"), bp::arg("points"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Static function used to constrain the identities of the molecules\nin molgroup against the identity points in points - the\nfirst npoints molecules in the group are constrained in order\nagainst the points" );
         
         }
         { //::SireSystem::IdentityConstraint::constrain
@@ -95,7 +97,8 @@ void register_IdentityConstraint_class(){
             IdentityConstraint_exposer.def( 
                 "constrain"
                 , constrain_function_value
-                , ( bp::arg("molgroup"), bp::arg("points"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molgroup"), bp::arg("points"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Static function used to constrain the identities of the molecules\nin molgroup against the identity points in points - the\nfirst npoints molecules in the group are constrained in order\nagainst the points" );
         
         }
         { //::SireSystem::IdentityConstraint::moleculeGroup
@@ -106,7 +109,8 @@ void register_IdentityConstraint_class(){
             IdentityConstraint_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the molecule group acted on by this constraint" );
         
         }
         IdentityConstraint_exposer.def( bp::self != bp::self );
@@ -119,7 +123,8 @@ void register_IdentityConstraint_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         IdentityConstraint_exposer.def( bp::self == bp::self );
@@ -130,7 +135,8 @@ void register_IdentityConstraint_class(){
             
             IdentityConstraint_exposer.def( 
                 "points"
-                , points_function_value );
+                , points_function_value
+                , "Return the points used to identify the molecules" );
         
         }
         { //::SireSystem::IdentityConstraint::propertyMap
@@ -141,7 +147,8 @@ void register_IdentityConstraint_class(){
             IdentityConstraint_exposer.def( 
                 "propertyMap"
                 , propertyMap_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the property map used to find the properties used\nby this constraint" );
         
         }
         { //::SireSystem::IdentityConstraint::toString
@@ -151,7 +158,8 @@ void register_IdentityConstraint_class(){
             
             IdentityConstraint_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this constraint" );
         
         }
         { //::SireSystem::IdentityConstraint::typeName
@@ -161,7 +169,8 @@ void register_IdentityConstraint_class(){
             
             IdentityConstraint_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireSystem::IdentityConstraint::useFewPointsAlgorithm
@@ -171,7 +180,8 @@ void register_IdentityConstraint_class(){
             
             IdentityConstraint_exposer.def( 
                 "useFewPointsAlgorithm"
-                , useFewPointsAlgorithm_function_value );
+                , useFewPointsAlgorithm_function_value
+                , "Function used for debugging that switches this object over\nto using the few points algorithm to apply the constraint" );
         
         }
         { //::SireSystem::IdentityConstraint::useManyPointsAlgorithm
@@ -181,7 +191,8 @@ void register_IdentityConstraint_class(){
             
             IdentityConstraint_exposer.def( 
                 "useManyPointsAlgorithm"
-                , useManyPointsAlgorithm_function_value );
+                , useManyPointsAlgorithm_function_value
+                , "Function used for debugging that switches this object over\nto using the many points algorithm to apply the constraint" );
         
         }
         { //::SireSystem::IdentityConstraint::useSinglePointAlgorithm
@@ -191,7 +202,8 @@ void register_IdentityConstraint_class(){
             
             IdentityConstraint_exposer.def( 
                 "useSinglePointAlgorithm"
-                , useSinglePointAlgorithm_function_value );
+                , useSinglePointAlgorithm_function_value
+                , "Function used for debugging that switches this object over\nto using the single point algorithm to apply the constraint\nThrow: SireError::invalid_state\n" );
         
         }
         IdentityConstraint_exposer.staticmethod( "constrain" );

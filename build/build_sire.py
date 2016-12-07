@@ -4,174 +4,204 @@
 
 import sys
 import os
+import time
 
-conda_base = os.path.abspath( "%s/.." % os.path.dirname(sys.executable))
-install_script = sys.argv[0]
-build_dir = os.path.abspath( os.path.dirname(install_script) )
+from multiprocessing import Pool
 
-# Get the number of cores to use for any compiling - if this is 0, then 
-# we use all of the cores
-if "NCORES" in os.environ:
-    NCORES = int(os.environ["NCORES"])
-else:
-    import multiprocessing
-    NCORES = multiprocessing.cpu_count()
+def print_progress():
+    while True:
+        print("Build is in progress...")
+        time.sleep(300)
 
-print("Number of cores used for compilation = %d" % NCORES)
+if __name__ == "__main__":
 
-if not os.path.exists("%s/bin/conda" % conda_base):
-    print("Cannot find a 'conda' binary in directory '%s/bin'. "
-          "Are you running this script using the python executable "
-          "from a valid miniconda or anaconda installation?" % conda_base) 
-    sys.exit(-1)
+    pool = Pool()
 
-print("Continuing the Sire install using %s/bin/python %s" \
-          % (conda_base,sys.argv[0]))
+    # run a background process that prints to the screen so that people know that we are still alive...
+    result = pool.apply_async(print_progress)
 
-# now go through all of the python modules that need to be available
-# into this conda installation, and make sure they have been installed
+    conda_base = os.path.abspath( os.path.dirname(sys.executable) )
 
-# first, pip
-try:
-    import pip
-    print("pip is already installed...")
-except:
-    print("Installing pip using '%s/bin/conda install pip'" % conda_base)
-    os.system("%s/bin/conda install --yes pip" % conda_base)
+    if conda_base.endswith("bin"):
+        conda_base = os.path.abspath( "%s/.." % os.path.dirname(sys.executable))
 
-# ipython
-try:
-    import IPython
-    print("ipython is already installed...")
-except:
-    print("Installing ipython using '%s/bin/conda install ipython'" % conda_base)
-    os.system("%s/bin/conda install --yes ipython" % conda_base)
+    install_script = sys.argv[0]
+    build_dir = os.path.abspath( os.path.dirname(install_script) )
 
-# nose
-try:
-    import nose
-    print("nose is already installed...")
-except:
-    print("Installing nose using '%s/bin/conda install nose'" % conda_base)
-    os.system("%s/bin/conda install --yes nose" % conda_base)
+    # Get the number of cores to use for any compiling - if this is 0, then 
+    # we use all of the cores
+    if "NCORES" in os.environ:
+        NCORES = int(os.environ["NCORES"])
+    else:
+        import multiprocessing
+        NCORES = multiprocessing.cpu_count()
 
-# openmm
-try:
-    import simtk.openmm
-    print("openmm is already installed...")
-except:
-    print("Installing openmm from the omnia repository...")
-    os.system("%s/bin/conda config --add channels http://conda.binstar.org/omnia" % conda_base)
-    os.system("%s/bin/conda install --yes openmm" % conda_base)
+    print("Number of cores used for compilation = %d" % NCORES)
 
-# Now that the miniconda distribution is ok, the next step
-# is to use cmake to build the corelib and wrapper in the build/corelib
-# and build/wrapper directories
+    python_exe = None
+    conda_exe = None
 
-# change into the build/corelib directory
-OLDPWD = os.path.abspath(os.curdir)
-
-coredir = "%s/corelib" % build_dir
-
-if not os.path.exists(coredir):
-    os.makedirs(coredir)
-
-if not os.path.isdir(coredir):
-    print("SOMETHING IS WRONG. %s is not a directory?" % coredir)
-    sys.exit(-1)
-
-os.chdir(coredir)
-
-if os.path.exists("CMakeCache.txt"):
-    # we have run cmake in this directory before. Run it again.
-    status = os.system("cmake .")
-else:
-    # this is the first time we are running cmake
-    sourcedir = os.path.abspath("../../corelib")
-
-    if not os.path.exists("%s/CMakeLists.txt" % sourcedir):
-        print("SOMETHING IS WRONG. There is no file %s/CMakeLists.txt" % coredir)
+    if os.path.exists("%s/bin/conda" % conda_base):
+        python_exe = "%s/bin/python" % conda_base
+        conda_exe = "%s/bin/conda" % conda_base
+    elif os.path.exists("%s\python.exe" % conda_base):
+        python_exe = "%s/python.exe" % conda_base
+        conda_exe = "%s/Scripts/conda.exe" % conda_base
+    else:
+        print("Cannot find a 'conda' binary in directory '%s'. "
+              "Are you running this script using the python executable "
+              "from a valid miniconda or anaconda installation?" % conda_base) 
         sys.exit(-1)
 
-    status = os.system("cmake -D ANACONDA_BUILD=ON -D ANACONDA_BASE=%s -D BUILD_NCORES=%s %s" \
-                     % (conda_base,NCORES,sourcedir) )
+    print("Continuing the Sire install using %s %s" \
+              % (python_exe,sys.argv[0]))
 
-if status != 0:
-    print("SOMETHING WENT WRONG WHEN USING CMAKE ON CORELIB!")
-    sys.exit(-1)
+    # now go through all of the python modules that need to be available
+    # into this conda installation, and make sure they have been installed
 
-# Now that cmake has run, we can compile corelib
-status = os.system("make -j %s" % NCORES)
+    # first, pip
+    try:
+        import pip
+        print("pip is already installed...")
+    except:
+        print("Installing pip using '%s install pip'" % conda_exe)
+        os.system("%s install --yes pip" % conda_exe)
 
-if status != 0:
-    print("SOMETHING WENT WRONG WHEN COMPILING CORELIB!")
-    sys.exit(-1)
+    # ipython
+    try:
+        import IPython
+        print("ipython is already installed...")
+    except:
+        print("Installing ipython using %s install ipython" % conda_exe)
+        os.system("%s install --yes ipython" % conda_exe)
 
-# Now the compilation has finished, install corelib
-status = os.system("make -j %s install/strip" % NCORES)
+    # nose
+    try:
+        import nose
+        print("nose is already installed...")
+    except:
+        print("Installing nose using '%s install nose'" % conda_exe)
+        os.system("%s install --yes nose" % conda_exe)
 
-if status != 0:
-    print("SOMETHING WENT WRONG WHEN INSTALLING CORELIB!")
-    sys.exit(-1)
+    # openmm
+    try:
+        import simtk.openmm
+        print("openmm is already installed...")
+    except:
+        print("Installing openmm from the omnia repository...")
+        os.system("%s config --add channels http://conda.binstar.org/omnia" % conda_exe)
+        os.system("%s install --yes openmm" % conda_exe)
 
-# Ok, that is all complete. Next we must work on the
-# python wrappers
-os.chdir(OLDPWD)
+    # Now that the miniconda distribution is ok, the next step
+    # is to use cmake to build the corelib and wrapper in the build/corelib
+    # and build/wrapper directories
 
-wrapperdir = "%s/wrapper" % build_dir
-    
-if not os.path.exists(wrapperdir):
-    os.makedirs(wrapperdir)
+    # change into the build/corelib directory
+    OLDPWD = os.path.abspath(os.curdir)
 
-if not os.path.isdir(wrapperdir):
-    print("SOMETHING IS WRONG. %s is not a directory?" % wrapperdir)
-    sys.exit(-1)
+    coredir = "%s/corelib" % build_dir
 
-os.chdir(wrapperdir)
+    if not os.path.exists(coredir):
+        os.makedirs(coredir)
 
-if os.path.exists("CMakeCache.txt"):
-    # we have run cmake in this directory before. Run it again.
-    status = os.system("cmake .")
-else:
-    # this is the first time we are running cmake
-    sourcedir = os.path.abspath("../../wrapper")   
-
-    if not os.path.exists("%s/CMakeLists.txt" % sourcedir):
-        print("SOMETHING IS WRONG. There is no file %s/CMakeLists.txt" % wrapperdir)
+    if not os.path.isdir(coredir):
+        print("SOMETHING IS WRONG. %s is not a directory?" % coredir)
         sys.exit(-1)
+
+    os.chdir(coredir)
+
+    if os.path.exists("CMakeCache.txt"):
+        # we have run cmake in this directory before. Run it again.
+        status = os.system("cmake .")
+    else:
+        # this is the first time we are running cmake
+        sourcedir = os.path.abspath("../../corelib")
+
+        if not os.path.exists("%s/CMakeLists.txt" % sourcedir):
+            print("SOMETHING IS WRONG. There is no file %s/CMakeLists.txt" % coredir)
+            sys.exit(-1)
+
+        status = os.system("cmake -D ANACONDA_BUILD=ON -D ANACONDA_BASE=%s -D BUILD_NCORES=%s %s" \
+                         % (conda_base,NCORES,sourcedir) )
+
+    if status != 0:
+        print("SOMETHING WENT WRONG WHEN USING CMAKE ON CORELIB!")
+        sys.exit(-1)
+
+    # Now that cmake has run, we can compile corelib
+    status = os.system("make -j %s" % NCORES)
+
+    if status != 0:
+        print("SOMETHING WENT WRONG WHEN COMPILING CORELIB!")
+        sys.exit(-1)
+
+    # Now the compilation has finished, install corelib
+    status = os.system("make -j %s install" % NCORES)
+
+    if status != 0:
+        print("SOMETHING WENT WRONG WHEN INSTALLING CORELIB!")
+        sys.exit(-1)
+
+    # Ok, that is all complete. Next we must work on the
+    # python wrappers
+    os.chdir(OLDPWD)
+
+    wrapperdir = "%s/wrapper" % build_dir
     
-    status = os.system("cmake -D ANACONDA_BUILD=ON -D ANACONDA_BASE=%s -D BUILD_NCORES=%s %s" \
-                     % (conda_base,NCORES,sourcedir) )
+    if not os.path.exists(wrapperdir):
+        os.makedirs(wrapperdir)
 
-if status != 0: 
-    print("SOMETHING WENT WRONG WHEN USING CMAKE ON WRAPPER!")
-    sys.exit(-1)
+    if not os.path.isdir(wrapperdir):
+        print("SOMETHING IS WRONG. %s is not a directory?" % wrapperdir)
+        sys.exit(-1)
 
-# Now that cmake has run, we can compile wrapper
-status = os.system("make -j %s" % NCORES)
+    os.chdir(wrapperdir)
 
-if status != 0:
-    print("SOMETHING WENT WRONG WHEN COMPILING WRAPPER!")
-    sys.exit(-1)
+    if os.path.exists("CMakeCache.txt"):
+        # we have run cmake in this directory before. Run it again.
+        status = os.system("cmake .")
+    else:
+        # this is the first time we are running cmake
+        sourcedir = os.path.abspath("../../wrapper")   
 
-# Now the compilation has finished, install wrapper
-status = os.system("make -j %s install/strip" % NCORES)
+        if not os.path.exists("%s/CMakeLists.txt" % sourcedir):
+            print("SOMETHING IS WRONG. There is no file %s/CMakeLists.txt" % wrapperdir)
+            sys.exit(-1)
+    
+        status = os.system("cmake -D ANACONDA_BUILD=ON -D ANACONDA_BASE=%s -D BUILD_NCORES=%s %s" \
+                         % (conda_base,NCORES,sourcedir) )
 
-if status != 0:
-    print("SOMETHING WENT WRONG WHEN INSTALLING WRAPPER!")
-    sys.exit(-1)
+    if status != 0: 
+        print("SOMETHING WENT WRONG WHEN USING CMAKE ON WRAPPER!")
+        sys.exit(-1)
 
-# Now that everything has been installed, we should be able 
-# to import Sire
-try:
-    import Sire.CAS
-    x = Sire.CAS.Symbol("x")
-    f = x**2 + 5*x - 10
-    g = f.differentiate(x)
-except Exception as e:
-    print("Something went wrong when trying to test the Sire installation.")
-    print(e)
-    print("Please check things manually yourself...")
+    # Now that cmake has run, we can compile wrapper
+    status = os.system("make -j %s" % NCORES)
 
-print("\n\n=================================")
-print("Congratulations. Everything has installed :-)")
+    if status != 0:
+        print("SOMETHING WENT WRONG WHEN COMPILING WRAPPER!")
+        sys.exit(-1)
+
+    # Now the compilation has finished, install wrapper
+    status = os.system("make -j %s install" % NCORES)
+
+    if status != 0:
+        print("SOMETHING WENT WRONG WHEN INSTALLING WRAPPER!")
+        sys.exit(-1)
+
+    # Now that everything has been installed, we should be able 
+    # to import Sire
+    try:
+        import Sire.CAS
+        x = Sire.CAS.Symbol("x")
+        f = x**2 + 5*x - 10
+        g = f.differentiate(x)
+    except Exception as e:
+        print("Something went wrong when trying to test the Sire installation.")
+        print(e)
+        print("Please check things manually yourself...")
+
+    print("\n\n=================================")
+    print("Congratulations. Everything has installed :-)")
+
+    sys.exit(0)

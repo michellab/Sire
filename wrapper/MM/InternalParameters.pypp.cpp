@@ -41,10 +41,10 @@ void register_InternalParameters_class(){
 
     { //::SireMM::InternalParameters
         typedef bp::class_< SireMM::InternalParameters > InternalParameters_exposer_t;
-        InternalParameters_exposer_t InternalParameters_exposer = InternalParameters_exposer_t( "InternalParameters", bp::init< >() );
+        InternalParameters_exposer_t InternalParameters_exposer = InternalParameters_exposer_t( "InternalParameters", "This class holds the internal parameters for a molecule\n(bond, angle, dihedral, improper, Urey-Bradley,\nstretch-stretch, stretch-bend, bend-bend, stretch-bend-torsion)\n\nThe parameters are held in groups, that correspond to the\nset of CutGroups that contain the atoms, e.g.\n\ngroup 0 contains all of the parameters that act on\ninternals that act only within CutGroup 0\n\ngroup 0,1 contains all of the parameters that act only\nbetween atoms in groups 0 and 1\n\ngroup 0,1,2 contains all of the parameters that act only\nbetween atoms in groups 0, 1 and 2\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope InternalParameters_scope( InternalParameters_exposer );
-        InternalParameters_exposer.def( bp::init< SireMol::PartialMolecule const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, bool >(( bp::arg("molecule"), bp::arg("bond_params"), bp::arg("angle_params"), bp::arg("dihedral_params"), bp::arg("improper_params"), bp::arg("ub_params"), bp::arg("ss_params"), bp::arg("sb_params"), bp::arg("bb_params"), bp::arg("sbt_params"), bp::arg("isstrict") )) );
-        InternalParameters_exposer.def( bp::init< SireMM::InternalParameters const & >(( bp::arg("other") )) );
+        InternalParameters_exposer.def( bp::init< SireMol::PartialMolecule const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, SireBase::PropertyName const &, bool >(( bp::arg("molecule"), bp::arg("bond_params"), bp::arg("angle_params"), bp::arg("dihedral_params"), bp::arg("improper_params"), bp::arg("ub_params"), bp::arg("ss_params"), bp::arg("sb_params"), bp::arg("bb_params"), bp::arg("sbt_params"), bp::arg("isstrict") ), "Construct the parameters from the specified properties of\nthe molecule molecule. If isstrict is true, then this\nincludes only internals that are wholely contained within\nthe selected atoms of the molecule. Otherwise, this contains\ninternals from which at least one atom is in the selected\natoms of the molecule") );
+        InternalParameters_exposer.def( bp::init< SireMM::InternalParameters const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::InternalParameters::addChangedGroups
         
             typedef void ( ::SireMM::InternalParameters::*addChangedGroups_function_type)( ::SireMM::InternalParameters const &,::QSet< unsigned int > & ) const;
@@ -53,7 +53,8 @@ void register_InternalParameters_class(){
             InternalParameters_exposer.def( 
                 "addChangedGroups"
                 , addChangedGroups_function_value
-                , ( bp::arg("other"), bp::arg("changed_groups") ) );
+                , ( bp::arg("other"), bp::arg("changed_groups") )
+                , "Add the indicies of CutGroups that have changed on to changed_groups" );
         
         }
         { //::SireMM::InternalParameters::applyMask
@@ -64,7 +65,8 @@ void register_InternalParameters_class(){
             InternalParameters_exposer.def( 
                 "applyMask"
                 , applyMask_function_value
-                , ( bp::arg("cgidxs") ) );
+                , ( bp::arg("cgidxs") )
+                , "Mask this set so that only the parameters for the specified CutGroups are\nincluded in the returned group." );
         
         }
         { //::SireMM::InternalParameters::changedAllGroups
@@ -75,7 +77,8 @@ void register_InternalParameters_class(){
             InternalParameters_exposer.def( 
                 "changedAllGroups"
                 , changedAllGroups_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return whether all of the parameters for all CutGroups have changed\ncompared to other" );
         
         }
         { //::SireMM::InternalParameters::getChangedGroups
@@ -86,7 +89,8 @@ void register_InternalParameters_class(){
             InternalParameters_exposer.def( 
                 "getChangedGroups"
                 , getChangedGroups_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return the CGIdxs of the CutGroups that have changed from this group\ncompared to the paramters held in other" );
         
         }
         { //::SireMM::InternalParameters::groupParameters
@@ -97,7 +101,8 @@ void register_InternalParameters_class(){
             InternalParameters_exposer.def( 
                 "groupParameters"
                 , groupParameters_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the array of all of the internal parameters" );
         
         }
         { //::SireMM::InternalParameters::groupParameters
@@ -108,7 +113,8 @@ void register_InternalParameters_class(){
             InternalParameters_exposer.def( 
                 "groupParameters"
                 , groupParameters_function_value
-                , ( bp::arg("cgidx") ) );
+                , ( bp::arg("cgidx") )
+                , "Return the array of all of the parameters that involve the CutGroup with index\ncgidx. This returns an empty array if there are no parameters for this CutGroup" );
         
         }
         { //::SireMM::InternalParameters::groupParameters
@@ -119,7 +125,8 @@ void register_InternalParameters_class(){
             InternalParameters_exposer.def( 
                 "groupParameters"
                 , groupParameters_function_value
-                , ( bp::arg("cgidxs") ) );
+                , ( bp::arg("cgidxs") )
+                , "Return all of the parameters that involve any of the CutGroups whose\nindicies are in cgidxs" );
         
         }
         { //::SireMM::InternalParameters::hasAngleParameters
@@ -129,7 +136,8 @@ void register_InternalParameters_class(){
             
             InternalParameters_exposer.def( 
                 "hasAngleParameters"
-                , hasAngleParameters_function_value );
+                , hasAngleParameters_function_value
+                , "" );
         
         }
         { //::SireMM::InternalParameters::hasBendBendParameters
@@ -139,7 +147,8 @@ void register_InternalParameters_class(){
             
             InternalParameters_exposer.def( 
                 "hasBendBendParameters"
-                , hasBendBendParameters_function_value );
+                , hasBendBendParameters_function_value
+                , "" );
         
         }
         { //::SireMM::InternalParameters::hasBondParameters
@@ -149,7 +158,8 @@ void register_InternalParameters_class(){
             
             InternalParameters_exposer.def( 
                 "hasBondParameters"
-                , hasBondParameters_function_value );
+                , hasBondParameters_function_value
+                , "" );
         
         }
         { //::SireMM::InternalParameters::hasCrossTerms
@@ -159,7 +169,8 @@ void register_InternalParameters_class(){
             
             InternalParameters_exposer.def( 
                 "hasCrossTerms"
-                , hasCrossTerms_function_value );
+                , hasCrossTerms_function_value
+                , "" );
         
         }
         { //::SireMM::InternalParameters::hasDihedralParameters
@@ -169,7 +180,8 @@ void register_InternalParameters_class(){
             
             InternalParameters_exposer.def( 
                 "hasDihedralParameters"
-                , hasDihedralParameters_function_value );
+                , hasDihedralParameters_function_value
+                , "" );
         
         }
         { //::SireMM::InternalParameters::hasImproperParameters
@@ -179,7 +191,8 @@ void register_InternalParameters_class(){
             
             InternalParameters_exposer.def( 
                 "hasImproperParameters"
-                , hasImproperParameters_function_value );
+                , hasImproperParameters_function_value
+                , "" );
         
         }
         { //::SireMM::InternalParameters::hasNonPhysicalParameters
@@ -189,7 +202,8 @@ void register_InternalParameters_class(){
             
             InternalParameters_exposer.def( 
                 "hasNonPhysicalParameters"
-                , hasNonPhysicalParameters_function_value );
+                , hasNonPhysicalParameters_function_value
+                , "" );
         
         }
         { //::SireMM::InternalParameters::hasPhysicalParameters
@@ -199,7 +213,8 @@ void register_InternalParameters_class(){
             
             InternalParameters_exposer.def( 
                 "hasPhysicalParameters"
-                , hasPhysicalParameters_function_value );
+                , hasPhysicalParameters_function_value
+                , "" );
         
         }
         { //::SireMM::InternalParameters::hasStretchBendParameters
@@ -209,7 +224,8 @@ void register_InternalParameters_class(){
             
             InternalParameters_exposer.def( 
                 "hasStretchBendParameters"
-                , hasStretchBendParameters_function_value );
+                , hasStretchBendParameters_function_value
+                , "" );
         
         }
         { //::SireMM::InternalParameters::hasStretchBendTorsionParameters
@@ -219,7 +235,8 @@ void register_InternalParameters_class(){
             
             InternalParameters_exposer.def( 
                 "hasStretchBendTorsionParameters"
-                , hasStretchBendTorsionParameters_function_value );
+                , hasStretchBendTorsionParameters_function_value
+                , "" );
         
         }
         { //::SireMM::InternalParameters::hasStretchStretchParameters
@@ -229,7 +246,8 @@ void register_InternalParameters_class(){
             
             InternalParameters_exposer.def( 
                 "hasStretchStretchParameters"
-                , hasStretchStretchParameters_function_value );
+                , hasStretchStretchParameters_function_value
+                , "" );
         
         }
         { //::SireMM::InternalParameters::hasUreyBradleyParameters
@@ -239,7 +257,8 @@ void register_InternalParameters_class(){
             
             InternalParameters_exposer.def( 
                 "hasUreyBradleyParameters"
-                , hasUreyBradleyParameters_function_value );
+                , hasUreyBradleyParameters_function_value
+                , "" );
         
         }
         { //::SireMM::InternalParameters::isEmpty
@@ -249,7 +268,8 @@ void register_InternalParameters_class(){
             
             InternalParameters_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         InternalParameters_exposer.def( bp::self != bp::self );
@@ -262,7 +282,8 @@ void register_InternalParameters_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         InternalParameters_exposer.def( bp::self == bp::self );
@@ -274,7 +295,8 @@ void register_InternalParameters_class(){
             InternalParameters_exposer.def( 
                 "symbols"
                 , symbols_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the symbols used by the internal functions" );
         
         }
         { //::SireMM::InternalParameters::typeName
@@ -284,7 +306,8 @@ void register_InternalParameters_class(){
             
             InternalParameters_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::InternalParameters::what
@@ -294,7 +317,8 @@ void register_InternalParameters_class(){
             
             InternalParameters_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         InternalParameters_exposer.staticmethod( "typeName" );

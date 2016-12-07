@@ -43,18 +43,18 @@ void register_CLJSoftIntraRFFunction_class(){
 
     { //::SireMM::CLJSoftIntraRFFunction
         typedef bp::class_< SireMM::CLJSoftIntraRFFunction, bp::bases< SireMM::CLJSoftIntraFunction, SireMM::CLJIntraFunction, SireMM::CLJCutoffFunction, SireMM::CLJFunction, SireBase::Property > > CLJSoftIntraRFFunction_exposer_t;
-        CLJSoftIntraRFFunction_exposer_t CLJSoftIntraRFFunction_exposer = CLJSoftIntraRFFunction_exposer_t( "CLJSoftIntraRFFunction", bp::init< >() );
+        CLJSoftIntraRFFunction_exposer_t CLJSoftIntraRFFunction_exposer = CLJSoftIntraRFFunction_exposer_t( "CLJSoftIntraRFFunction", "This CLJFunction calculates the intramolecular coulomb and LJ energy of the passed\nCLJAtoms using a reaction field cutoff, and provides a soft-core\npotential that can soften molecules that are involved in free energy calculations\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope CLJSoftIntraRFFunction_scope( CLJSoftIntraRFFunction_exposer );
-        CLJSoftIntraRFFunction_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("cutoff") )) );
-        CLJSoftIntraRFFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("coul_cutoff"), bp::arg("lj_cutoff") )) );
-        CLJSoftIntraRFFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length >(( bp::arg("space"), bp::arg("cutoff") )) );
-        CLJSoftIntraRFFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("space"), bp::arg("coul_cutoff"), bp::arg("lj_cutoff") )) );
-        CLJSoftIntraRFFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("cutoff"), bp::arg("combining_rules") )) );
-        CLJSoftIntraRFFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("coul_cutoff"), bp::arg("lj_cutoff"), bp::arg("combining_rules") )) );
-        CLJSoftIntraRFFunction_exposer.def( bp::init< SireVol::Space const &, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("space"), bp::arg("combining_rules") )) );
-        CLJSoftIntraRFFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("space"), bp::arg("cutoff"), bp::arg("combining_rules") )) );
-        CLJSoftIntraRFFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length, SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("space"), bp::arg("coul_cutoff"), bp::arg("lj_cutoff"), bp::arg("combining_rules") )) );
-        CLJSoftIntraRFFunction_exposer.def( bp::init< SireMM::CLJSoftIntraRFFunction const & >(( bp::arg("other") )) );
+        CLJSoftIntraRFFunction_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("cutoff") ), "Copy constructor") );
+        CLJSoftIntraRFFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("coul_cutoff"), bp::arg("lj_cutoff") ), "") );
+        CLJSoftIntraRFFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length >(( bp::arg("space"), bp::arg("cutoff") ), "") );
+        CLJSoftIntraRFFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("space"), bp::arg("coul_cutoff"), bp::arg("lj_cutoff") ), "") );
+        CLJSoftIntraRFFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("cutoff"), bp::arg("combining_rules") ), "") );
+        CLJSoftIntraRFFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("coul_cutoff"), bp::arg("lj_cutoff"), bp::arg("combining_rules") ), "") );
+        CLJSoftIntraRFFunction_exposer.def( bp::init< SireVol::Space const &, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("space"), bp::arg("combining_rules") ), "") );
+        CLJSoftIntraRFFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("space"), bp::arg("cutoff"), bp::arg("combining_rules") ), "") );
+        CLJSoftIntraRFFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length, SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("space"), bp::arg("coul_cutoff"), bp::arg("lj_cutoff"), bp::arg("combining_rules") ), "") );
+        CLJSoftIntraRFFunction_exposer.def( bp::init< SireMM::CLJSoftIntraRFFunction const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::CLJSoftIntraRFFunction::containsProperty
         
             typedef bool ( ::SireMM::CLJSoftIntraRFFunction::*containsProperty_function_type)( ::QString const & ) const;
@@ -63,7 +63,8 @@ void register_CLJSoftIntraRFFunction_class(){
             CLJSoftIntraRFFunction_exposer.def( 
                 "containsProperty"
                 , containsProperty_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "Return whether or not this function contains a property called name" );
         
         }
         { //::SireMM::CLJSoftIntraRFFunction::defaultRFFunction
@@ -73,7 +74,8 @@ void register_CLJSoftIntraRFFunction_class(){
             
             CLJSoftIntraRFFunction_exposer.def( 
                 "defaultRFFunction"
-                , defaultRFFunction_function_value );
+                , defaultRFFunction_function_value
+                , "" );
         
         }
         { //::SireMM::CLJSoftIntraRFFunction::dielectric
@@ -83,7 +85,8 @@ void register_CLJSoftIntraRFFunction_class(){
             
             CLJSoftIntraRFFunction_exposer.def( 
                 "dielectric"
-                , dielectric_function_value );
+                , dielectric_function_value
+                , "Return the value of the dielectric constant" );
         
         }
         CLJSoftIntraRFFunction_exposer.def( bp::self != bp::self );
@@ -96,7 +99,8 @@ void register_CLJSoftIntraRFFunction_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CLJSoftIntraRFFunction_exposer.def( bp::self == bp::self );
@@ -107,7 +111,8 @@ void register_CLJSoftIntraRFFunction_class(){
             
             CLJSoftIntraRFFunction_exposer.def( 
                 "properties"
-                , properties_function_value );
+                , properties_function_value
+                , "Return the properties of this function" );
         
         }
         { //::SireMM::CLJSoftIntraRFFunction::property
@@ -118,7 +123,8 @@ void register_CLJSoftIntraRFFunction_class(){
             CLJSoftIntraRFFunction_exposer.def( 
                 "property"
                 , property_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "Return the value of the property with name name" );
         
         }
         { //::SireMM::CLJSoftIntraRFFunction::setDielectric
@@ -129,7 +135,8 @@ void register_CLJSoftIntraRFFunction_class(){
             CLJSoftIntraRFFunction_exposer.def( 
                 "setDielectric"
                 , setDielectric_function_value
-                , ( bp::arg("dielectric") ) );
+                , ( bp::arg("dielectric") )
+                , "Set the dielectric constant to dielectric" );
         
         }
         { //::SireMM::CLJSoftIntraRFFunction::setProperty
@@ -140,7 +147,8 @@ void register_CLJSoftIntraRFFunction_class(){
             CLJSoftIntraRFFunction_exposer.def( 
                 "setProperty"
                 , setProperty_function_value
-                , ( bp::arg("name"), bp::arg("value") ) );
+                , ( bp::arg("name"), bp::arg("value") )
+                , "Return a copy of this function where the property name has been set to the\nvalue value" );
         
         }
         { //::SireMM::CLJSoftIntraRFFunction::typeName
@@ -150,7 +158,8 @@ void register_CLJSoftIntraRFFunction_class(){
             
             CLJSoftIntraRFFunction_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::CLJSoftIntraRFFunction::what
@@ -160,7 +169,8 @@ void register_CLJSoftIntraRFFunction_class(){
             
             CLJSoftIntraRFFunction_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         CLJSoftIntraRFFunction_exposer.staticmethod( "defaultRFFunction" );

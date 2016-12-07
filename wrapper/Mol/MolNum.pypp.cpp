@@ -35,10 +35,10 @@ void register_MolNum_class(){
 
     { //::SireMol::MolNum
         typedef bp::class_< SireMol::MolNum, bp::bases< SireMol::MolID, SireID::ID, SireID::Number > > MolNum_exposer_t;
-        MolNum_exposer_t MolNum_exposer = MolNum_exposer_t( "MolNum", bp::init< >() );
+        MolNum_exposer_t MolNum_exposer = MolNum_exposer_t( "MolNum", "This ID number is used to identify a Molecule by\na unique, program-supplied ID number\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope MolNum_scope( MolNum_exposer );
-        MolNum_exposer.def( bp::init< quint32 >(( bp::arg("num") )) );
-        MolNum_exposer.def( bp::init< SireMol::MolNum const & >(( bp::arg("other") )) );
+        MolNum_exposer.def( bp::init< quint32 >(( bp::arg("num") ), "") );
+        MolNum_exposer.def( bp::init< SireMol::MolNum const & >(( bp::arg("other") ), "") );
         { //::SireMol::MolNum::getUniqueNumber
         
             typedef ::SireMol::MolNum ( *getUniqueNumber_function_type )(  );
@@ -46,7 +46,8 @@ void register_MolNum_class(){
             
             MolNum_exposer.def( 
                 "getUniqueNumber"
-                , getUniqueNumber_function_value );
+                , getUniqueNumber_function_value
+                , "" );
         
         }
         { //::SireMol::MolNum::hash
@@ -56,7 +57,8 @@ void register_MolNum_class(){
             
             MolNum_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::MolNum::isNull
@@ -66,7 +68,8 @@ void register_MolNum_class(){
             
             MolNum_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::MolNum::map
@@ -77,7 +80,8 @@ void register_MolNum_class(){
             MolNum_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "" );
         
         }
         { //::SireMol::MolNum::map
@@ -88,7 +92,8 @@ void register_MolNum_class(){
             MolNum_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "" );
         
         }
         { //::SireMol::MolNum::map
@@ -99,7 +104,8 @@ void register_MolNum_class(){
             MolNum_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("arg0") ) );
+                , ( bp::arg("arg0") )
+                , "" );
         
         }
         MolNum_exposer.def( bp::self != bp::self );
@@ -114,7 +120,8 @@ void register_MolNum_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MolNum_exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -128,7 +135,8 @@ void register_MolNum_class(){
             
             MolNum_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::MolNum::typeName
@@ -138,7 +146,8 @@ void register_MolNum_class(){
             
             MolNum_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::MolNum::what
@@ -148,7 +157,8 @@ void register_MolNum_class(){
             
             MolNum_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         MolNum_exposer.staticmethod( "getUniqueNumber" );

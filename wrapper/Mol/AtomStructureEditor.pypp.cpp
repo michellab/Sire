@@ -60,11 +60,11 @@ void register_AtomStructureEditor_class(){
 
     { //::SireMol::AtomStructureEditor
         typedef bp::class_< SireMol::AtomStructureEditor > AtomStructureEditor_exposer_t;
-        AtomStructureEditor_exposer_t AtomStructureEditor_exposer = AtomStructureEditor_exposer_t( "AtomStructureEditor", bp::init< >() );
+        AtomStructureEditor_exposer_t AtomStructureEditor_exposer = AtomStructureEditor_exposer_t( "AtomStructureEditor", "This class is used to edit an atoms relationship to\nother parts of the molecule (e.g. which CutGroup it\nis in, or which Residue it is in)\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope AtomStructureEditor_scope( AtomStructureEditor_exposer );
-        AtomStructureEditor_exposer.def( bp::init< SireMol::Atom const & >(( bp::arg("atom") )) );
-        AtomStructureEditor_exposer.def( bp::init< SireMol::StructureEditor const &, SireMol::AtomIdx >(( bp::arg("data"), bp::arg("atomidx") )) );
-        AtomStructureEditor_exposer.def( bp::init< SireMol::AtomStructureEditor const & >(( bp::arg("other") )) );
+        AtomStructureEditor_exposer.def( bp::init< SireMol::Atom const & >(( bp::arg("atom") ), "Construct from an Atom") );
+        AtomStructureEditor_exposer.def( bp::init< SireMol::StructureEditor const &, SireMol::AtomIdx >(( bp::arg("data"), bp::arg("atomidx") ), "Construct for the atom at index idx in the molecule whose data\nis being edited in moldata\nThrow: SireError::invalid_index\n") );
+        AtomStructureEditor_exposer.def( bp::init< SireMol::AtomStructureEditor const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::AtomStructureEditor::chain
         
             typedef ::SireMol::ChainStructureEditor ( ::SireMol::AtomStructureEditor::*chain_function_type)(  ) ;
@@ -72,7 +72,8 @@ void register_AtomStructureEditor_class(){
             
             AtomStructureEditor_exposer.def( 
                 "chain"
-                , chain_function_value );
+                , chain_function_value
+                , "Return the editor for the chain that contains this atom" );
         
         }
         { //::SireMol::AtomStructureEditor::commit
@@ -82,7 +83,8 @@ void register_AtomStructureEditor_class(){
             
             AtomStructureEditor_exposer.def( 
                 "commit"
-                , commit_function_value );
+                , commit_function_value
+                , "Commit all of the changes, returning the uneditable Atom" );
         
         }
         { //::SireMol::AtomStructureEditor::cutGroup
@@ -92,7 +94,8 @@ void register_AtomStructureEditor_class(){
             
             AtomStructureEditor_exposer.def( 
                 "cutGroup"
-                , cutGroup_function_value );
+                , cutGroup_function_value
+                , "Return the editor for the CutGrop that contains this atom" );
         
         }
         { //::SireMol::AtomStructureEditor::index
@@ -102,7 +105,8 @@ void register_AtomStructureEditor_class(){
             
             AtomStructureEditor_exposer.def( 
                 "index"
-                , index_function_value );
+                , index_function_value
+                , "Return the index number of this atom in the molecule" );
         
         }
         { //::SireMol::AtomStructureEditor::molecule
@@ -112,7 +116,8 @@ void register_AtomStructureEditor_class(){
             
             AtomStructureEditor_exposer.def( 
                 "molecule"
-                , molecule_function_value );
+                , molecule_function_value
+                , "Return the editor for the molecule that contains this atom" );
         
         }
         { //::SireMol::AtomStructureEditor::name
@@ -123,7 +128,8 @@ void register_AtomStructureEditor_class(){
             AtomStructureEditor_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the name of this atom" );
         
         }
         { //::SireMol::AtomStructureEditor::number
@@ -133,7 +139,8 @@ void register_AtomStructureEditor_class(){
             
             AtomStructureEditor_exposer.def( 
                 "number"
-                , number_function_value );
+                , number_function_value
+                , "Return the number of this atom" );
         
         }
         { //::SireMol::AtomStructureEditor::operator=
@@ -145,7 +152,8 @@ void register_AtomStructureEditor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("atom") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::AtomStructureEditor::operator=
@@ -157,7 +165,8 @@ void register_AtomStructureEditor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::AtomStructureEditor::reindex
@@ -169,7 +178,8 @@ void register_AtomStructureEditor_class(){
                 "reindex"
                 , reindex_function_value
                 , ( bp::arg("idx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Reindex this atom to newidx - this will move the atom to\nthe end if newidx is greater than the number of atoms\nin the molecule" );
         
         }
         { //::SireMol::AtomStructureEditor::remove
@@ -179,7 +189,8 @@ void register_AtomStructureEditor_class(){
             
             AtomStructureEditor_exposer.def( 
                 "remove"
-                , remove_function_value );
+                , remove_function_value
+                , "Completely remove this atom from the molecule and return\na MolStructureEditor that can be used to continue editing\nthe molecule" );
         
         }
         { //::SireMol::AtomStructureEditor::rename
@@ -191,7 +202,8 @@ void register_AtomStructureEditor_class(){
                 "rename"
                 , rename_function_value
                 , ( bp::arg("name") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Rename this atom to newname" );
         
         }
         { //::SireMol::AtomStructureEditor::renumber
@@ -203,7 +215,8 @@ void register_AtomStructureEditor_class(){
                 "renumber"
                 , renumber_function_value
                 , ( bp::arg("number") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Renumber this atom to newnum" );
         
         }
         { //::SireMol::AtomStructureEditor::reparent
@@ -215,7 +228,8 @@ void register_AtomStructureEditor_class(){
                 "reparent"
                 , reparent_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Reparent this atom so that it is now in the CutGroup at index cgidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomStructureEditor::reparent
@@ -227,7 +241,8 @@ void register_AtomStructureEditor_class(){
                 "reparent"
                 , reparent_function_value
                 , ( bp::arg("cgid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Reparent this atom so that it is now in the CutGroup identified\nby ID cgid\nThrow: SireMol::missing_cutgroup\nThrow: SireMol::duplicate_cutgroup\nThrow: SireMol::invalid_index\n" );
         
         }
         { //::SireMol::AtomStructureEditor::reparent
@@ -239,7 +254,8 @@ void register_AtomStructureEditor_class(){
                 "reparent"
                 , reparent_function_value
                 , ( bp::arg("residx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Reparent this atom so that it is now in the residue at index residx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomStructureEditor::reparent
@@ -251,7 +267,8 @@ void register_AtomStructureEditor_class(){
                 "reparent"
                 , reparent_function_value
                 , ( bp::arg("resid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Reparent this atom so that it is now in the residue identified\nby ID resid\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\nThrow: SireMol::invalid_index\n" );
         
         }
         { //::SireMol::AtomStructureEditor::reparent
@@ -263,7 +280,8 @@ void register_AtomStructureEditor_class(){
                 "reparent"
                 , reparent_function_value
                 , ( bp::arg("segidx") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Reparent this atom so that it is now in the segment at index segidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::AtomStructureEditor::reparent
@@ -275,7 +293,8 @@ void register_AtomStructureEditor_class(){
                 "reparent"
                 , reparent_function_value
                 , ( bp::arg("segid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Reparent this atom so that it is now in the segment identified\nby ID segid\nThrow: SireMol::missing_segment\nThrow: SireMol::duplicate_segment\nThrow: SireMol::invalid_index\n" );
         
         }
         { //::SireMol::AtomStructureEditor::residue
@@ -285,7 +304,8 @@ void register_AtomStructureEditor_class(){
             
             AtomStructureEditor_exposer.def( 
                 "residue"
-                , residue_function_value );
+                , residue_function_value
+                , "Return the editor for the residue that contains this atom" );
         
         }
         { //::SireMol::AtomStructureEditor::segment
@@ -295,7 +315,8 @@ void register_AtomStructureEditor_class(){
             
             AtomStructureEditor_exposer.def( 
                 "segment"
-                , segment_function_value );
+                , segment_function_value
+                , "Return the editor for the segment that contain this atom" );
         
         }
         { //::SireMol::AtomStructureEditor::selectedAll
@@ -305,7 +326,8 @@ void register_AtomStructureEditor_class(){
             
             AtomStructureEditor_exposer.def( 
                 "selectedAll"
-                , selectedAll_function_value );
+                , selectedAll_function_value
+                , "Return whether or not this contains the whole molecule" );
         
         }
         { //::SireMol::AtomStructureEditor::toString
@@ -315,7 +337,8 @@ void register_AtomStructureEditor_class(){
             
             AtomStructureEditor_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this editor" );
         
         }
         { //::SireMol::AtomStructureEditor::typeName
@@ -325,7 +348,8 @@ void register_AtomStructureEditor_class(){
             
             AtomStructureEditor_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::AtomStructureEditor::what
@@ -335,7 +359,8 @@ void register_AtomStructureEditor_class(){
             
             AtomStructureEditor_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         AtomStructureEditor_exposer.staticmethod( "typeName" );

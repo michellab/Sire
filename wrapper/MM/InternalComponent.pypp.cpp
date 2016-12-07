@@ -26,10 +26,10 @@ void register_InternalComponent_class(){
 
     { //::SireMM::InternalComponent
         typedef bp::class_< SireMM::InternalComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > InternalComponent_exposer_t;
-        InternalComponent_exposer_t InternalComponent_exposer = InternalComponent_exposer_t( "InternalComponent", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("name")=SireFF::FFName() )) );
+        InternalComponent_exposer_t InternalComponent_exposer = InternalComponent_exposer_t( "InternalComponent", "This class represents the sum of the internal MM energy\ncomponents (bond, angle, dihedral, Urey-Bradley)", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("name")=SireFF::FFName() ), "Constructor") );
         bp::scope InternalComponent_scope( InternalComponent_exposer );
-        InternalComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") )) );
-        InternalComponent_exposer.def( bp::init< SireMM::InternalComponent const & >(( bp::arg("other") )) );
+        InternalComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("symbol") ), "Construct from a symbol\nThrow: SireError::incompatible_error\n") );
+        InternalComponent_exposer.def( bp::init< SireMM::InternalComponent const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::InternalComponent::angle
         
             typedef ::SireMM::AngleComponent const & ( ::SireMM::InternalComponent::*angle_function_type)(  ) const;
@@ -38,7 +38,8 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "angle"
                 , angle_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::InternalComponent::bendBend
@@ -49,7 +50,8 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "bendBend"
                 , bendBend_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::InternalComponent::bond
@@ -60,7 +62,8 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "bond"
                 , bond_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::InternalComponent::changeEnergy
@@ -71,7 +74,8 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "changeEnergy"
                 , changeEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("nrg") ) );
+                , ( bp::arg("ff"), bp::arg("nrg") )
+                , "Change the internal components of the forcefield ff by delta" );
         
         }
         { //::SireMM::InternalComponent::dihedral
@@ -82,7 +86,8 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "dihedral"
                 , dihedral_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::InternalComponent::improper
@@ -93,7 +98,8 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "improper"
                 , improper_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::InternalComponent::intra14
@@ -104,7 +110,8 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "intra14"
                 , intra14_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::InternalComponent::intra14Coulomb
@@ -115,7 +122,8 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "intra14Coulomb"
                 , intra14Coulomb_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::InternalComponent::intra14LJ
@@ -126,7 +134,8 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "intra14LJ"
                 , intra14LJ_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::InternalComponent::setEnergy
@@ -137,7 +146,8 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "setEnergy"
                 , setEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("nrg") ) );
+                , ( bp::arg("ff"), bp::arg("nrg") )
+                , "Set the internal components of the forcefield ff to the passed values" );
         
         }
         { //::SireMM::InternalComponent::stretchBend
@@ -148,7 +158,8 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "stretchBend"
                 , stretchBend_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::InternalComponent::stretchBendTorsion
@@ -159,7 +170,8 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "stretchBendTorsion"
                 , stretchBendTorsion_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::InternalComponent::stretchStretch
@@ -170,7 +182,8 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "stretchStretch"
                 , stretchStretch_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::InternalComponent::symbols
@@ -180,7 +193,8 @@ void register_InternalComponent_class(){
             
             InternalComponent_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "Return all of the components in this set" );
         
         }
         { //::SireMM::InternalComponent::total
@@ -191,7 +205,8 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::InternalComponent::typeName
@@ -201,7 +216,8 @@ void register_InternalComponent_class(){
             
             InternalComponent_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::InternalComponent::ureyBradley
@@ -212,7 +228,8 @@ void register_InternalComponent_class(){
             InternalComponent_exposer.def( 
                 "ureyBradley"
                 , ureyBradley_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::InternalComponent::what
@@ -222,7 +239,8 @@ void register_InternalComponent_class(){
             
             InternalComponent_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         InternalComponent_exposer.staticmethod( "typeName" );

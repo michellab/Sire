@@ -36,6 +36,9 @@
 #include "SireMM/ljpair.h"
 #include "SireMol/mgname.h"
 
+#include "SireMM/cljatoms.h"
+#include "SireMM/cljshiftfunction.h"
+
 #include "SireUnits/units.h"
 
 #include "SireError/errors.h"
@@ -612,6 +615,83 @@ inline pair<double,double> getCLJEnergy(
 }
 
 inline pair<double,double> getSoftCLJEnergy(
+                const CLJAtoms &refatoms,
+                const CLJAtoms &atoms_a, const CLJAtoms &atoms_b,
+                double lamval, double delta_lambda, double shift_delta, int coulomb_power)
+{
+    if (lamval < 0)
+        lamval = 0;
+    
+    if (lamval+delta_lambda > 1)
+        lamval = 1 - delta_lambda;
+    
+    bool arithmetic_combining_rules = true;
+
+    const double alpha_a = lamval;
+    const double alpha_a_f = lamval + delta_lambda;
+    double one_minus_alpha_a_to_n = 1;
+    double one_minus_alpha_a_to_n_f = 1;
+    const double delta_a = shift_delta * alpha_a;
+    const double delta_a_f = shift_delta * alpha_a_f;
+
+    const double alpha_b = 1 - lamval;
+    const double alpha_b_f = 1 - lamval - delta_lambda;
+    double one_minus_alpha_b_to_n = 1;
+    double one_minus_alpha_b_to_n_f = 1;
+    const double delta_b = shift_delta * alpha_b;
+    const double delta_b_f = shift_delta * alpha_b_f;
+
+    if (coulomb_power != 0)
+    {
+        one_minus_alpha_a_to_n = SireMaths::pow(1 - alpha_a, coulomb_power);
+        one_minus_alpha_a_to_n_f = SireMaths::pow(1 - alpha_a_f, coulomb_power);
+        one_minus_alpha_b_to_n = SireMaths::pow(1 - alpha_b, coulomb_power);
+        one_minus_alpha_b_to_n_f = SireMaths::pow(1 - alpha_b_f, coulomb_power);
+    }
+
+    CLJSoftShiftFunction cljfunc_a, cljfunc_a_f;
+    
+    cljfunc_a.setShiftDelta(delta_a);
+    cljfunc_a_f.setShiftDelta(delta_a_f);
+    cljfunc_a.setCoulombPower(coulomb_power);
+    cljfunc_a_f.setCoulombPower(coulomb_power);
+    cljfunc_a.setArithmeticCombiningRules(arithmetic_combining_rules);
+    cljfunc_a_f.setArithmeticCombiningRules(arithmetic_combining_rules);
+    
+    CLJSoftShiftFunction cljfunc_b, cljfunc_b_f;
+    
+    cljfunc_b.setShiftDelta(delta_b);
+    cljfunc_b_f.setShiftDelta(delta_b_f);
+    cljfunc_b.setCoulombPower(coulomb_power);
+    cljfunc_b_f.setCoulombPower(coulomb_power);
+    cljfunc_b.setArithmeticCombiningRules(arithmetic_combining_rules);
+    cljfunc_b_f.setArithmeticCombiningRules(arithmetic_combining_rules);
+    
+    double cnrg_a(0), cnrg_a_f(0), cnrg_b(0), cnrg_b_f(0);
+    double ljnrg_a(0), ljnrg_a_f(0), ljnrg_b(0), ljnrg_b_f(0);
+    
+    cljfunc_a.total(refatoms, atoms_a, cnrg_a, ljnrg_a);
+    cljfunc_a_f.total(refatoms, atoms_a, cnrg_a_f, ljnrg_a_f);
+    cljfunc_b.total(refatoms, atoms_b, cnrg_b, ljnrg_b);
+    cljfunc_b_f.total(refatoms, atoms_b, cnrg_b_f, ljnrg_b_f);
+    
+    cnrg_a *= (1 - lamval) * one_minus_alpha_a_to_n;
+    ljnrg_a *= (1 - lamval) * one_minus_alpha_a_to_n;
+    
+    cnrg_a_f *= (1 - lamval - delta_lambda) * one_minus_alpha_a_to_n_f;
+    ljnrg_a_f *= (1 - lamval - delta_lambda) * one_minus_alpha_a_to_n_f;
+    
+    cnrg_b *= (lamval) * one_minus_alpha_b_to_n;
+    ljnrg_b *= (lamval) * one_minus_alpha_b_to_n;
+    
+    cnrg_b_f *= (lamval+delta_lambda) * one_minus_alpha_b_to_n_f;
+    ljnrg_b_f *= (lamval+delta_lambda) * one_minus_alpha_b_to_n_f;
+    
+    return pair<double,double>(cnrg_a_f+cnrg_b_f-cnrg_a-cnrg_b,
+                               ljnrg_a_f+ljnrg_b_f-ljnrg_a-ljnrg_b);
+}
+
+inline pair<double,double> getSoftCLJEnergy(
                 const QVector<Vector> &coords, const QVector<Charge> &chgs,
                 const QVector<LJParameter> &ljs,
                 const QVector<Vector> &coords_a, const QVector<Charge> &chgs_a,
@@ -1030,6 +1110,19 @@ void FreeEnergyMonitor::monitor(System &system)
         QVector<PartialMolecule> views_a = group_a.views();
         QVector<PartialMolecule> views_b = group_b.views();
 
+        if (group_a.isAssigner() or group_b.isAssigner())
+            throw SireError::unsupported( QObject::tr(
+                    "This is not supported"), CODELOC );
+
+        QVector<CLJAtoms> refcljatoms;
+        CLJAtoms cljatoms_a(group_a.group());
+        CLJAtoms cljatoms_b(group_b.group());
+        
+        for (const PartialMolecule &view : refviews)
+        {
+            refcljatoms.append( CLJAtoms(view) );
+        }
+
         // extract the charge, LJ and coordinates of all of the views
         const PropertyName charge_prop("charge");
         const PropertyName lj_prop("LJ");
@@ -1063,91 +1156,22 @@ void FreeEnergyMonitor::monitor(System &system)
         QVector< QVector<Vector> > ref_coords(nref);
         QVector< QVector<Charge> > ref_chgs(nref);
         QVector< QVector<LJParameter> > ref_ljs(nref);
-        
-        QVector<Vector> a_coords;
-        QVector<Charge> a_chgs;
-        QVector<LJParameter> a_ljs;
 
-        QVector<Vector> b_coords;
-        QVector<Charge> b_chgs;
-        QVector<LJParameter> b_ljs;
+        QVector<Vector> a_coords = cljatoms_a.coordinates();
+        QVector<Charge> a_chgs = cljatoms_a.charges();
+        QVector<LJParameter> a_ljs = cljatoms_a.ljParameters();
+
+        QVector<Vector> b_coords = cljatoms_b.coordinates();
+        QVector<Charge> b_chgs = cljatoms_b.charges();
+        QVector<LJParameter> b_ljs = cljatoms_b.ljParameters();
 
         for (int i=0; i<nref; ++i)
         {
-            const PartialMolecule &mol0 = refviews.constData()[i];
-            
-            if (mol0.selectedAll())
-            {
-                ref_coords[i] = mol0.property(coords_prop)
-                                    .asA<AtomCoords>()
-                                    .toVector();
-            
-                ref_chgs[i] = mol0.property(charge_prop)
-                                  .asA<AtomCharges>()
-                                  .toVector();
-                                                  
-                ref_ljs[i] = mol0.property(lj_prop)
-                                 .asA<AtomLJs>()
-                                 .toVector();
-            }
-            else
-            {
-                const AtomSelection selected_atoms = mol0.selection();
-
-                ref_coords[i] = mol0.property(coords_prop)
-                                    .asA<AtomCoords>()
-                                    .toVector(selected_atoms);
-            
-                ref_chgs[i] = mol0.property(charge_prop)
-                                  .asA<AtomCharges>()
-                                  .toVector(selected_atoms);
-                                                  
-                ref_ljs[i] = mol0.property(lj_prop)
-                                 .asA<AtomLJs>()
-                                 .toVector(selected_atoms);
-            }
+            ref_coords[i] = refcljatoms[i].coordinates();
+            ref_chgs[i] = refcljatoms[i].charges();
+            ref_ljs[i] = refcljatoms[i].ljParameters();
         }
-
-        for (int i=0; i<n_a; ++i)
-        {
-            const PartialMolecule &mol = views_a.constData()[i];
-            
-            if (mol.selectedAll())
-            {
-                a_coords += mol.property(coords_prop).asA<AtomCoords>().toVector();
-                a_chgs += mol.property(charge_prop).asA<AtomCharges>().toVector();
-                a_ljs += mol.property(lj_prop).asA<AtomLJs>().toVector();
-            }
-            else
-            {
-                const AtomSelection selected_atoms = mol.selection();
-
-                a_coords += mol.property(coords_prop).asA<AtomCoords>().toVector(selected_atoms);
-                a_chgs += mol.property(charge_prop).asA<AtomCharges>().toVector(selected_atoms);
-                a_ljs += mol.property(lj_prop).asA<AtomLJs>().toVector(selected_atoms);
-            }
-        }
-
-        for (int i=0; i<n_b; ++i)
-        {
-            const PartialMolecule &mol = views_b.constData()[i];
-            
-            if (mol.selectedAll())
-            {
-                b_coords += mol.property(coords_prop).asA<AtomCoords>().toVector();
-                b_chgs += mol.property(charge_prop).asA<AtomCharges>().toVector();
-                b_ljs += mol.property(lj_prop).asA<AtomLJs>().toVector();
-            }
-            else
-            {
-                const AtomSelection selected_atoms = mol.selection();
-
-                b_coords += mol.property(coords_prop).asA<AtomCoords>().toVector(selected_atoms);
-                b_chgs += mol.property(charge_prop).asA<AtomCharges>().toVector(selected_atoms);
-                b_ljs += mol.property(lj_prop).asA<AtomLJs>().toVector(selected_atoms);
-            }
-        }
-    
+        
         if (this->usesSoftCore())
         {
             //calculate the energy difference for each view against group_a and group_b

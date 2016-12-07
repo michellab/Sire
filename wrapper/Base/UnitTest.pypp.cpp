@@ -25,9 +25,9 @@ void register_UnitTest_class(){
 
     { //::SireBase::UnitTest
         typedef bp::class_< SireBase::UnitTest > UnitTest_exposer_t;
-        UnitTest_exposer_t UnitTest_exposer = UnitTest_exposer_t( "UnitTest", bp::init< >() );
+        UnitTest_exposer_t UnitTest_exposer = UnitTest_exposer_t( "UnitTest", "This class is used to register a unit test\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope UnitTest_scope( UnitTest_exposer );
-        UnitTest_exposer.def( bp::init< SireBase::UnitTest const & >(( bp::arg("other") )) );
+        UnitTest_exposer.def( bp::init< SireBase::UnitTest const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireBase::UnitTest::errorString
         
             typedef ::QString ( ::SireBase::UnitTest::*errorString_function_type)(  ) ;
@@ -35,7 +35,8 @@ void register_UnitTest_class(){
             
             UnitTest_exposer.def( 
                 "errorString"
-                , errorString_function_value );
+                , errorString_function_value
+                , "Return the error string" );
         
         }
         { //::SireBase::UnitTest::name
@@ -45,7 +46,8 @@ void register_UnitTest_class(){
             
             UnitTest_exposer.def( 
                 "name"
-                , name_function_value );
+                , name_function_value
+                , "Return the name of the test" );
         
         }
         { //::SireBase::UnitTest::run
@@ -56,7 +58,8 @@ void register_UnitTest_class(){
             UnitTest_exposer.def( 
                 "run"
                 , run_function_value
-                , ( bp::arg("nrepeats")=(int)(1), bp::arg("verbose")=(bool)(false) ) );
+                , ( bp::arg("nrepeats")=(int)(1), bp::arg("verbose")=(bool)(false) )
+                , "Run this test a total of nrepeats times, printing out information\nif verbose is true" );
         
         }
         { //::SireBase::UnitTest::runAll
@@ -67,7 +70,8 @@ void register_UnitTest_class(){
             UnitTest_exposer.def( 
                 "runAll"
                 , runAll_function_value
-                , ( bp::arg("verbose")=(bool)(false) ) );
+                , ( bp::arg("verbose")=(bool)(false) )
+                , "Run all of the tests one after another, printing out the results to the\nscreen and returning the number of tests that failed" );
         
         }
         { //::SireBase::UnitTest::runTime
@@ -77,7 +81,8 @@ void register_UnitTest_class(){
             
             UnitTest_exposer.def( 
                 "runTime"
-                , runTime_function_value );
+                , runTime_function_value
+                , "Return the time taken to run the test, in nanoseconds" );
         
         }
         { //::SireBase::UnitTest::tests
@@ -87,7 +92,8 @@ void register_UnitTest_class(){
             
             UnitTest_exposer.def( 
                 "tests"
-                , tests_function_value );
+                , tests_function_value
+                , "Return all of the tests that have been registered" );
         
         }
         { //::SireBase::UnitTest::wasError
@@ -97,7 +103,8 @@ void register_UnitTest_class(){
             
             UnitTest_exposer.def( 
                 "wasError"
-                , wasError_function_value );
+                , wasError_function_value
+                , "Return whether or not the test was an error" );
         
         }
         { //::SireBase::UnitTest::wasSuccessful
@@ -107,7 +114,8 @@ void register_UnitTest_class(){
             
             UnitTest_exposer.def( 
                 "wasSuccessful"
-                , wasSuccessful_function_value );
+                , wasSuccessful_function_value
+                , "Return whether or not the test was successful" );
         
         }
         UnitTest_exposer.staticmethod( "runAll" );

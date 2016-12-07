@@ -425,7 +425,8 @@ void register_free_functions(){
         bp::def( 
             "findExe"
             , findExe_function_value
-            , ( bp::arg("exe") ) );
+            , ( bp::arg("exe") )
+            , "Return the fileinfo for the executable called exe. This\nsearches the system path until it finds the first occurance\nof this executable." );
     
     }
 
@@ -436,7 +437,8 @@ void register_free_functions(){
         
         bp::def( 
             "getBinDir"
-            , getBinDir_function_value );
+            , getBinDir_function_value
+            , "" );
     
     }
 
@@ -447,7 +449,8 @@ void register_free_functions(){
         
         bp::def( 
             "getBundledLibDir"
-            , getBundledLibDir_function_value );
+            , getBundledLibDir_function_value
+            , "" );
     
     }
 
@@ -458,7 +461,8 @@ void register_free_functions(){
         
         bp::def( 
             "getInstallDir"
-            , getInstallDir_function_value );
+            , getInstallDir_function_value
+            , "" );
     
     }
 
@@ -469,7 +473,8 @@ void register_free_functions(){
         
         bp::def( 
             "getLibDir"
-            , getLibDir_function_value );
+            , getLibDir_function_value
+            , "" );
     
     }
 
@@ -480,7 +485,8 @@ void register_free_functions(){
         
         bp::def( 
             "getReleaseVersion"
-            , getReleaseVersion_function_value );
+            , getReleaseVersion_function_value
+            , "" );
     
     }
 
@@ -491,7 +497,8 @@ void register_free_functions(){
         
         bp::def( 
             "getRepositoryBranch"
-            , getRepositoryBranch_function_value );
+            , getRepositoryBranch_function_value
+            , "" );
     
     }
 
@@ -502,7 +509,8 @@ void register_free_functions(){
         
         bp::def( 
             "getRepositoryURL"
-            , getRepositoryURL_function_value );
+            , getRepositoryURL_function_value
+            , "" );
     
     }
 
@@ -513,7 +521,8 @@ void register_free_functions(){
         
         bp::def( 
             "getRepositoryVersion"
-            , getRepositoryVersion_function_value );
+            , getRepositoryVersion_function_value
+            , "" );
     
     }
 
@@ -524,7 +533,8 @@ void register_free_functions(){
         
         bp::def( 
             "getRepositoryVersionIsClean"
-            , getRepositoryVersionIsClean_function_value );
+            , getRepositoryVersionIsClean_function_value
+            , "" );
     
     }
 
@@ -535,7 +545,8 @@ void register_free_functions(){
         
         bp::def( 
             "getShareDir"
-            , getShareDir_function_value );
+            , getShareDir_function_value
+            , "" );
     
     }
 
@@ -547,7 +558,8 @@ void register_free_functions(){
         bp::def( 
             "getSireDir"
             , getSireDir_function_value
-            , ( bp::arg("path"), bp::arg("assert_exists")=(bool)(true) ) );
+            , ( bp::arg("path"), bp::arg("assert_exists")=(bool)(true) )
+            , "" );
     
     }
 
@@ -559,7 +571,8 @@ void register_free_functions(){
         bp::def( 
             "increment"
             , increment_function_value
-            , ( bp::arg("name") ) );
+            , ( bp::arg("name") )
+            , "" );
     
     }
 
@@ -571,127 +584,8 @@ void register_free_functions(){
         bp::def( 
             "setInstallDir"
             , setInstallDir_function_value
-            , ( bp::arg("dir") ) );
-    
-    }
-
-    { //::SireBase::wrap
-    
-        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::QVector< QString > const & );
-        wrap_function_type wrap_function_value( &::SireBase::wrap );
-        
-        bp::def( 
-            "wrap"
-            , wrap_function_value
-            , ( bp::arg("values") ) );
-    
-    }
-
-    { //::SireBase::wrap
-    
-        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::QList< QString > const & );
-        wrap_function_type wrap_function_value( &::SireBase::wrap );
-        
-        bp::def( 
-            "wrap"
-            , wrap_function_value
-            , ( bp::arg("values") ) );
-    
-    }
-
-    { //::SireBase::wrap
-    
-        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::QVector< double > const & );
-        wrap_function_type wrap_function_value( &::SireBase::wrap );
-        
-        bp::def( 
-            "wrap"
-            , wrap_function_value
-            , ( bp::arg("values") ) );
-    
-    }
-
-    { //::SireBase::wrap
-    
-        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::QVector< int > const & );
-        wrap_function_type wrap_function_value( &::SireBase::wrap );
-        
-        bp::def( 
-            "wrap"
-            , wrap_function_value
-            , ( bp::arg("values") ) );
-    
-    }
-
-    { //::SireBase::wrap
-    
-        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::QList< double > const & );
-        wrap_function_type wrap_function_value( &::SireBase::wrap );
-        
-        bp::def( 
-            "wrap"
-            , wrap_function_value
-            , ( bp::arg("values") ) );
-    
-    }
-
-    { //::SireBase::wrap
-    
-        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::QList< int > const & );
-        wrap_function_type wrap_function_value( &::SireBase::wrap );
-        
-        bp::def( 
-            "wrap"
-            , wrap_function_value
-            , ( bp::arg("values") ) );
-    
-    }
-
-    { //::SireBase::wrap
-    
-        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( int );
-        wrap_function_type wrap_function_value( &::SireBase::wrap );
-        
-        bp::def( 
-            "wrap"
-            , wrap_function_value
-            , ( bp::arg("value") ) );
-    
-    }
-
-    { //::SireBase::wrap
-    
-        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( double );
-        wrap_function_type wrap_function_value( &::SireBase::wrap );
-        
-        bp::def( 
-            "wrap"
-            , wrap_function_value
-            , ( bp::arg("value") ) );
-    
-    }
-
-    { //::SireBase::wrap
-    
-        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::QString const & );
-        wrap_function_type wrap_function_value( &::SireBase::wrap );
-        
-        bp::def( 
-            "wrap"
-            , wrap_function_value
-            , ( bp::arg("value") ) );
-    
-    }
-
-    { //::SireBase::wrap
-    
-        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::QList< SireBase::PropPtr< SireBase::Property > > const & );
-        wrap_function_type wrap_function_value( &::SireBase::wrap );
-        
-        bp::def( 
-            "wrap"
-            , wrap_function_value
-            , ( bp::arg("value") ) );
+            , ( bp::arg("dir") )
+            , "" );
     
     }
 
@@ -703,7 +597,138 @@ void register_free_functions(){
         bp::def( 
             "wrap"
             , wrap_function_value
-            , ( bp::arg("value") ) );
+            , ( bp::arg("value") )
+            , "" );
+    
+    }
+
+    { //::SireBase::wrap
+    
+        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::QList< SireBase::PropPtr< SireBase::Property > > const & );
+        wrap_function_type wrap_function_value( &::SireBase::wrap );
+        
+        bp::def( 
+            "wrap"
+            , wrap_function_value
+            , ( bp::arg("value") )
+            , "" );
+    
+    }
+
+    { //::SireBase::wrap
+    
+        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::QString const & );
+        wrap_function_type wrap_function_value( &::SireBase::wrap );
+        
+        bp::def( 
+            "wrap"
+            , wrap_function_value
+            , ( bp::arg("value") )
+            , "" );
+    
+    }
+
+    { //::SireBase::wrap
+    
+        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( double );
+        wrap_function_type wrap_function_value( &::SireBase::wrap );
+        
+        bp::def( 
+            "wrap"
+            , wrap_function_value
+            , ( bp::arg("value") )
+            , "" );
+    
+    }
+
+    { //::SireBase::wrap
+    
+        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( int );
+        wrap_function_type wrap_function_value( &::SireBase::wrap );
+        
+        bp::def( 
+            "wrap"
+            , wrap_function_value
+            , ( bp::arg("value") )
+            , "" );
+    
+    }
+
+    { //::SireBase::wrap
+    
+        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::QList< int > const & );
+        wrap_function_type wrap_function_value( &::SireBase::wrap );
+        
+        bp::def( 
+            "wrap"
+            , wrap_function_value
+            , ( bp::arg("values") )
+            , "" );
+    
+    }
+
+    { //::SireBase::wrap
+    
+        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::QList< double > const & );
+        wrap_function_type wrap_function_value( &::SireBase::wrap );
+        
+        bp::def( 
+            "wrap"
+            , wrap_function_value
+            , ( bp::arg("values") )
+            , "" );
+    
+    }
+
+    { //::SireBase::wrap
+    
+        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::QVector< int > const & );
+        wrap_function_type wrap_function_value( &::SireBase::wrap );
+        
+        bp::def( 
+            "wrap"
+            , wrap_function_value
+            , ( bp::arg("values") )
+            , "" );
+    
+    }
+
+    { //::SireBase::wrap
+    
+        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::QVector< double > const & );
+        wrap_function_type wrap_function_value( &::SireBase::wrap );
+        
+        bp::def( 
+            "wrap"
+            , wrap_function_value
+            , ( bp::arg("values") )
+            , "" );
+    
+    }
+
+    { //::SireBase::wrap
+    
+        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::QList< QString > const & );
+        wrap_function_type wrap_function_value( &::SireBase::wrap );
+        
+        bp::def( 
+            "wrap"
+            , wrap_function_value
+            , ( bp::arg("values") )
+            , "" );
+    
+    }
+
+    { //::SireBase::wrap
+    
+        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::QVector< QString > const & );
+        wrap_function_type wrap_function_value( &::SireBase::wrap );
+        
+        bp::def( 
+            "wrap"
+            , wrap_function_value
+            , ( bp::arg("values") )
+            , "" );
     
     }
 

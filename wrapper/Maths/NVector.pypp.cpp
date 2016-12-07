@@ -35,13 +35,13 @@ void register_NVector_class(){
 
     { //::SireMaths::NVector
         typedef bp::class_< SireMaths::NVector > NVector_exposer_t;
-        NVector_exposer_t NVector_exposer = NVector_exposer_t( "NVector", bp::init< >() );
+        NVector_exposer_t NVector_exposer = NVector_exposer_t( "NVector", "This is a dense, double column Vector\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope NVector_scope( NVector_exposer );
-        NVector_exposer.def( bp::init< int >(( bp::arg("nrows") )) );
-        NVector_exposer.def( bp::init< int, double >(( bp::arg("nrows"), bp::arg("initial_value") )) );
-        NVector_exposer.def( bp::init< SireMaths::Vector const & >(( bp::arg("vector") )) );
-        NVector_exposer.def( bp::init< QVector< double > const & >(( bp::arg("vector") )) );
-        NVector_exposer.def( bp::init< SireMaths::NVector const & >(( bp::arg("vector") )) );
+        NVector_exposer.def( bp::init< int >(( bp::arg("nrows") ), "Construct a column vector with nrows rows - the values\nof the rows are not initialised") );
+        NVector_exposer.def( bp::init< int, double >(( bp::arg("nrows"), bp::arg("initial_value") ), "Construct a column vector with nrows rows, all\ninitialised to the value initial_value") );
+        NVector_exposer.def( bp::init< SireMaths::Vector const & >(( bp::arg("vector") ), "Construct from the passed 3-vector") );
+        NVector_exposer.def( bp::init< QVector< double > const & >(( bp::arg("vector") ), "Construct from the passed vector") );
+        NVector_exposer.def( bp::init< SireMaths::NVector const & >(( bp::arg("vector") ), "Construct from the passed 3-vector") );
         { //::SireMaths::NVector::assertNColumns
         
             typedef void ( ::SireMaths::NVector::*assertNColumns_function_type)( int ) const;
@@ -50,7 +50,8 @@ void register_NVector_class(){
             NVector_exposer.def( 
                 "assertNColumns"
                 , assertNColumns_function_value
-                , ( bp::arg("ncolumns") ) );
+                , ( bp::arg("ncolumns") )
+                , "Assert that this column vector has ncolumns columns - note\nthat this is a column vector, so only has 1 column\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMaths::NVector::assertNRows
@@ -61,7 +62,8 @@ void register_NVector_class(){
             NVector_exposer.def( 
                 "assertNRows"
                 , assertNRows_function_value
-                , ( bp::arg("nrows") ) );
+                , ( bp::arg("nrows") )
+                , "Assert that this column vector has nrows rows\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMaths::NVector::assertValidIndex
@@ -72,7 +74,8 @@ void register_NVector_class(){
             NVector_exposer.def( 
                 "assertValidIndex"
                 , assertValidIndex_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Assert that the index i is valid\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMaths::NVector::assertValidIndex
@@ -83,7 +86,8 @@ void register_NVector_class(){
             NVector_exposer.def( 
                 "assertValidIndex"
                 , assertValidIndex_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "Assert that the index [i,j] is valid\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMaths::NVector::count
@@ -93,7 +97,8 @@ void register_NVector_class(){
             
             NVector_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of values in this vector" );
         
         }
         { //::SireMaths::NVector::cross
@@ -104,7 +109,8 @@ void register_NVector_class(){
             NVector_exposer.def( 
                 "cross"
                 , cross_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return the cross product of this vector with other\nThrow: SireError::incompatible_error\nThrow: SireMaths::domain_error\n" );
         
         }
         { //::SireMaths::NVector::dot
@@ -115,7 +121,8 @@ void register_NVector_class(){
             NVector_exposer.def( 
                 "dot"
                 , dot_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return the dot product of this vector with other\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMaths::NVector::isZero
@@ -125,7 +132,8 @@ void register_NVector_class(){
             
             NVector_exposer.def( 
                 "isZero"
-                , isZero_function_value );
+                , isZero_function_value
+                , "Return whether or not this is a zero vector" );
         
         }
         { //::SireMaths::NVector::length
@@ -135,7 +143,8 @@ void register_NVector_class(){
             
             NVector_exposer.def( 
                 "length"
-                , length_function_value );
+                , length_function_value
+                , "Return the length of this vector" );
         
         }
         { //::SireMaths::NVector::length2
@@ -145,7 +154,8 @@ void register_NVector_class(){
             
             NVector_exposer.def( 
                 "length2"
-                , length2_function_value );
+                , length2_function_value
+                , "Return the length squared of this vector" );
         
         }
         { //::SireMaths::NVector::nColumns
@@ -155,7 +165,8 @@ void register_NVector_class(){
             
             NVector_exposer.def( 
                 "nColumns"
-                , nColumns_function_value );
+                , nColumns_function_value
+                , "Return the number of columns in this column vector (0 or 1)" );
         
         }
         { //::SireMaths::NVector::nRows
@@ -165,7 +176,8 @@ void register_NVector_class(){
             
             NVector_exposer.def( 
                 "nRows"
-                , nRows_function_value );
+                , nRows_function_value
+                , "Return the number of rows in this column vector" );
         
         }
         { //::SireMaths::NVector::normalise
@@ -175,7 +187,8 @@ void register_NVector_class(){
             
             NVector_exposer.def( 
                 "normalise"
-                , normalise_function_value );
+                , normalise_function_value
+                , "Normalise this vector\nThrow: SireMaths::domain_error\n" );
         
         }
         NVector_exposer.def( bp::self != bp::self );
@@ -188,7 +201,8 @@ void register_NVector_class(){
                 "__call__"
                 , __call___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMaths::NVector::operator()
@@ -200,7 +214,8 @@ void register_NVector_class(){
                 "__call__"
                 , __call___function_value
                 , ( bp::arg("i"), bp::arg("j") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         NVector_exposer.def( bp::self * bp::other< double >() );
@@ -217,7 +232,8 @@ void register_NVector_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         NVector_exposer.def( bp::self == bp::self );
@@ -230,7 +246,8 @@ void register_NVector_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_non_const_reference >() );
+                , bp::return_value_policy< bp::copy_non_const_reference >()
+                , "" );
         
         }
         { //::SireMaths::NVector::operator[]
@@ -242,7 +259,8 @@ void register_NVector_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMaths::NVector::set
@@ -253,7 +271,8 @@ void register_NVector_class(){
             NVector_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("i"), bp::arg("value") ) );
+                , ( bp::arg("i"), bp::arg("value") )
+                , "Set the value at [i,0] to value\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMaths::NVector::set
@@ -264,7 +283,8 @@ void register_NVector_class(){
             NVector_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("i"), bp::arg("j"), bp::arg("value") ) );
+                , ( bp::arg("i"), bp::arg("j"), bp::arg("value") )
+                , "Set the value at [i,j] to value\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMaths::NVector::setAll
@@ -275,7 +295,8 @@ void register_NVector_class(){
             NVector_exposer.def( 
                 "setAll"
                 , setAll_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Set all values in this vector to value" );
         
         }
         { //::SireMaths::NVector::size
@@ -285,7 +306,8 @@ void register_NVector_class(){
             
             NVector_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "Return the number of values in this vector" );
         
         }
         { //::SireMaths::NVector::sum
@@ -295,7 +317,8 @@ void register_NVector_class(){
             
             NVector_exposer.def( 
                 "sum"
-                , sum_function_value );
+                , sum_function_value
+                , "Return the sum of the elements of this vector" );
         
         }
         { //::SireMaths::NVector::toString
@@ -305,7 +328,8 @@ void register_NVector_class(){
             
             NVector_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this vector" );
         
         }
         { //::SireMaths::NVector::transpose
@@ -315,7 +339,8 @@ void register_NVector_class(){
             
             NVector_exposer.def( 
                 "transpose"
-                , transpose_function_value );
+                , transpose_function_value
+                , "Return the transpose of this column vector (a row vector, which\nis implemented in this code as a NMatrix)" );
         
         }
         { //::SireMaths::NVector::typeName
@@ -325,7 +350,8 @@ void register_NVector_class(){
             
             NVector_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMaths::NVector::what
@@ -335,7 +361,8 @@ void register_NVector_class(){
             
             NVector_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         NVector_exposer.staticmethod( "typeName" );

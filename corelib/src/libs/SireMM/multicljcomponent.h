@@ -53,6 +53,8 @@ namespace SireMM
 
 class MultiCLJEnergy;
 
+boost::tuple<QString,QString> getSubscriptedProperty(QString name);
+
 /** This class is used to hold the symbols for CLJ forcefields
     that allow multiple CLJ functions to be indexed by key
     
@@ -103,6 +105,8 @@ public:
     int add(QString key);
     int remove(QString key);
     void removeAll();
+
+    bool hasKey(QString key) const;
 
     int indexOf(QString key) const;
 

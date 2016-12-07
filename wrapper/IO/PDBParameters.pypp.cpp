@@ -89,7 +89,7 @@ void register_PDBParameters_class(){
 
     { //::SireIO::PDBParameters
         typedef bp::class_< SireIO::PDBParameters, bp::bases< SireIO::IOParametersBase > > PDBParameters_exposer_t;
-        PDBParameters_exposer_t PDBParameters_exposer = PDBParameters_exposer_t( "PDBParameters", bp::init< >() );
+        PDBParameters_exposer_t PDBParameters_exposer = PDBParameters_exposer_t( "PDBParameters", "This class holds all of the sources and default values of the\nproperties and parameters used by the PDB readerwriter\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope PDBParameters_scope( PDBParameters_exposer );
         { //::SireIO::PDBParameters::alternatives
         
@@ -99,7 +99,8 @@ void register_PDBParameters_class(){
             PDBParameters_exposer.def( 
                 "alternatives"
                 , alternatives_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property that will contain all of the\nalternative atom positions as read from the PDB file\n\ndefault == alternative\n" );
         
         }
         { //::SireIO::PDBParameters::animationFrameSelector
@@ -110,7 +111,8 @@ void register_PDBParameters_class(){
             PDBParameters_exposer.def( 
                 "animationFrameSelector"
                 , animationFrameSelector_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "The function used to select or skip animation frames from each molecule\n\nsource  == animation-frame-selector\ndefault == PropertyBase::none\n" );
         
         }
         { //::SireIO::PDBParameters::animationFrames
@@ -121,7 +123,8 @@ void register_PDBParameters_class(){
             PDBParameters_exposer.def( 
                 "animationFrames"
                 , animationFrames_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property that will contain all of\nthe animation frames of the molecule (if there are any)\n\ndefault == animation-frames\n" );
         
         }
         { //::SireIO::PDBParameters::atomNameMangler
@@ -132,7 +135,8 @@ void register_PDBParameters_class(){
             PDBParameters_exposer.def( 
                 "atomNameMangler"
                 , atomNameMangler_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "The function used to process atom names. Must be a StringMangler()\n\nsource  == atom-name-mangler\ndefault == TrimString()\n" );
         
         }
         { //::SireIO::PDBParameters::bFactor
@@ -143,7 +147,8 @@ void register_PDBParameters_class(){
             PDBParameters_exposer.def( 
                 "bFactor"
                 , bFactor_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property that will contain all of the\n(temperature) b-factors\n\ndefault == b-factor\n" );
         
         }
         { //::SireIO::PDBParameters::chainNameMangler
@@ -154,7 +159,8 @@ void register_PDBParameters_class(){
             PDBParameters_exposer.def( 
                 "chainNameMangler"
                 , chainNameMangler_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "The function used to process chain names. Must be a StringMangler()\n\nsource  == chain-name-mangler\ndefault == TrimString()\n" );
         
         }
         { //::SireIO::PDBParameters::formalCharge
@@ -165,7 +171,8 @@ void register_PDBParameters_class(){
             PDBParameters_exposer.def( 
                 "formalCharge"
                 , formalCharge_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property that will contain all of the\nformal charges of the atoms as read from the PDB file\n\ndefault == formal-charge\n" );
         
         }
         { //::SireIO::PDBParameters::iCode
@@ -176,7 +183,8 @@ void register_PDBParameters_class(){
             PDBParameters_exposer.def( 
                 "iCode"
                 , iCode_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property that will contain all of the\nresidue insertion codes\n\ndefault == icode\n" );
         
         }
         { //::SireIO::PDBParameters::pdbAtomName
@@ -187,7 +195,8 @@ void register_PDBParameters_class(){
             PDBParameters_exposer.def( 
                 "pdbAtomName"
                 , pdbAtomName_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property that will contain all of the\nnames of the atoms as exactly as they were read from the\nPDB file\n\ndefault == PDB-atom-name\n" );
         
         }
         { //::SireIO::PDBParameters::pdbChainName
@@ -198,7 +207,8 @@ void register_PDBParameters_class(){
             PDBParameters_exposer.def( 
                 "pdbChainName"
                 , pdbChainName_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property that will contain all of\nthe names of the chains in exactly the format as read from the\nPDB file\n\ndefault == PDB-chain-name\n" );
         
         }
         { //::SireIO::PDBParameters::pdbResidueName
@@ -209,7 +219,8 @@ void register_PDBParameters_class(){
             PDBParameters_exposer.def( 
                 "pdbResidueName"
                 , pdbResidueName_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property that will contain all of\nthe names of the residues in exactly the format as read from the\nPDB file\n\ndefault == PDB-residue-name\n" );
         
         }
         { //::SireIO::PDBParameters::pdbSegmentName
@@ -220,7 +231,8 @@ void register_PDBParameters_class(){
             PDBParameters_exposer.def( 
                 "pdbSegmentName"
                 , pdbSegmentName_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property that will contain all of\nthe names of the segments in exactly the format as read from the\nPDB file\n\ndefault == PDB-segment-name\n" );
         
         }
         { //::SireIO::PDBParameters::residueNameMangler
@@ -231,7 +243,8 @@ void register_PDBParameters_class(){
             PDBParameters_exposer.def( 
                 "residueNameMangler"
                 , residueNameMangler_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "The function used to process residue names. Must be a StringMangler()\n\nsource  == residue-name-mangler\ndefault == TrimString()\n" );
         
         }
         { //::SireIO::PDBParameters::segmentNameMangler
@@ -242,7 +255,8 @@ void register_PDBParameters_class(){
             PDBParameters_exposer.def( 
                 "segmentNameMangler"
                 , segmentNameMangler_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "The function used to process segment names. Must be a StringMangler()\n\nsource  == segment-name-mangler\ndefault == TrimString()\n" );
         
         }
         PDBParameters_exposer.def( "__copy__", &__copy__);

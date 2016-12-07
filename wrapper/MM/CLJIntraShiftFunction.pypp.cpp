@@ -41,18 +41,18 @@ void register_CLJIntraShiftFunction_class(){
 
     { //::SireMM::CLJIntraShiftFunction
         typedef bp::class_< SireMM::CLJIntraShiftFunction, bp::bases< SireMM::CLJIntraFunction, SireMM::CLJCutoffFunction, SireMM::CLJFunction, SireBase::Property > > CLJIntraShiftFunction_exposer_t;
-        CLJIntraShiftFunction_exposer_t CLJIntraShiftFunction_exposer = CLJIntraShiftFunction_exposer_t( "CLJIntraShiftFunction", bp::init< >() );
+        CLJIntraShiftFunction_exposer_t CLJIntraShiftFunction_exposer = CLJIntraShiftFunction_exposer_t( "CLJIntraShiftFunction", "This CLJFunction calculates the intramolecular coulomb and LJ energy of the passed\nCLJAtoms using a force shifted electrostatics cutoff\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope CLJIntraShiftFunction_scope( CLJIntraShiftFunction_exposer );
-        CLJIntraShiftFunction_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("cutoff") )) );
-        CLJIntraShiftFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("coul_cutoff"), bp::arg("lj_cutoff") )) );
-        CLJIntraShiftFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length >(( bp::arg("space"), bp::arg("cutoff") )) );
-        CLJIntraShiftFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("space"), bp::arg("coul_cutoff"), bp::arg("lj_cutoff") )) );
-        CLJIntraShiftFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("cutoff"), bp::arg("combining_rules") )) );
-        CLJIntraShiftFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("coul_cutoff"), bp::arg("lj_cutoff"), bp::arg("combining_rules") )) );
-        CLJIntraShiftFunction_exposer.def( bp::init< SireVol::Space const &, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("space"), bp::arg("combining_rules") )) );
-        CLJIntraShiftFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("space"), bp::arg("cutoff"), bp::arg("combining_rules") )) );
-        CLJIntraShiftFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length, SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("space"), bp::arg("coul_cutoff"), bp::arg("lj_cutoff"), bp::arg("combining_rules") )) );
-        CLJIntraShiftFunction_exposer.def( bp::init< SireMM::CLJIntraShiftFunction const & >(( bp::arg("other") )) );
+        CLJIntraShiftFunction_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("cutoff") ), "Copy constructor") );
+        CLJIntraShiftFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("coul_cutoff"), bp::arg("lj_cutoff") ), "") );
+        CLJIntraShiftFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length >(( bp::arg("space"), bp::arg("cutoff") ), "") );
+        CLJIntraShiftFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("space"), bp::arg("coul_cutoff"), bp::arg("lj_cutoff") ), "") );
+        CLJIntraShiftFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("cutoff"), bp::arg("combining_rules") ), "") );
+        CLJIntraShiftFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("coul_cutoff"), bp::arg("lj_cutoff"), bp::arg("combining_rules") ), "") );
+        CLJIntraShiftFunction_exposer.def( bp::init< SireVol::Space const &, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("space"), bp::arg("combining_rules") ), "") );
+        CLJIntraShiftFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("space"), bp::arg("cutoff"), bp::arg("combining_rules") ), "") );
+        CLJIntraShiftFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length, SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("space"), bp::arg("coul_cutoff"), bp::arg("lj_cutoff"), bp::arg("combining_rules") ), "") );
+        CLJIntraShiftFunction_exposer.def( bp::init< SireMM::CLJIntraShiftFunction const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::CLJIntraShiftFunction::defaultShiftFunction
         
             typedef ::SireMM::CLJFunctionPtr ( *defaultShiftFunction_function_type )(  );
@@ -60,7 +60,8 @@ void register_CLJIntraShiftFunction_class(){
             
             CLJIntraShiftFunction_exposer.def( 
                 "defaultShiftFunction"
-                , defaultShiftFunction_function_value );
+                , defaultShiftFunction_function_value
+                , "" );
         
         }
         CLJIntraShiftFunction_exposer.def( bp::self != bp::self );
@@ -73,7 +74,8 @@ void register_CLJIntraShiftFunction_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CLJIntraShiftFunction_exposer.def( bp::self == bp::self );
@@ -84,7 +86,8 @@ void register_CLJIntraShiftFunction_class(){
             
             CLJIntraShiftFunction_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::CLJIntraShiftFunction::what
@@ -94,7 +97,8 @@ void register_CLJIntraShiftFunction_class(){
             
             CLJIntraShiftFunction_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         CLJIntraShiftFunction_exposer.staticmethod( "defaultShiftFunction" );

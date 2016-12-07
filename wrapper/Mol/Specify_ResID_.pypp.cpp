@@ -63,11 +63,11 @@ void register_Specify_ResID__class(){
 
     { //::SireID::Specify< SireMol::ResID >
         typedef bp::class_< SireID::Specify< SireMol::ResID >, bp::bases< SireMol::ResID, SireID::ID > > Specify_ResID__exposer_t;
-        Specify_ResID__exposer_t Specify_ResID__exposer = Specify_ResID__exposer_t( "Specify_ResID_", bp::init< >() );
+        Specify_ResID__exposer_t Specify_ResID__exposer = Specify_ResID__exposer_t( "Specify_ResID_", "", bp::init< >("") );
         bp::scope Specify_ResID__scope( Specify_ResID__exposer );
-        Specify_ResID__exposer.def( bp::init< SireMol::ResID const &, qint32 >(( bp::arg("id"), bp::arg("i") )) );
-        Specify_ResID__exposer.def( bp::init< SireMol::ResID const &, qint32, qint32 >(( bp::arg("id"), bp::arg("i"), bp::arg("j") )) );
-        Specify_ResID__exposer.def( bp::init< SireID::Specify< SireMol::ResID > const & >(( bp::arg("other") )) );
+        Specify_ResID__exposer.def( bp::init< SireMol::ResID const &, qint32 >(( bp::arg("id"), bp::arg("i") ), "") );
+        Specify_ResID__exposer.def( bp::init< SireMol::ResID const &, qint32, qint32 >(( bp::arg("id"), bp::arg("i"), bp::arg("j") ), "") );
+        Specify_ResID__exposer.def( bp::init< SireID::Specify< SireMol::ResID > const & >(( bp::arg("other") ), "") );
         { //::SireID::Specify< SireMol::ResID >::hash
         
             typedef SireID::Specify< SireMol::ResID > exported_class_t;
@@ -76,7 +76,8 @@ void register_Specify_ResID__class(){
             
             Specify_ResID__exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireID::Specify< SireMol::ResID >::isNull
@@ -87,19 +88,21 @@ void register_Specify_ResID__class(){
             
             Specify_ResID__exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireID::Specify< SireMol::ResID >::map
         
             typedef SireID::Specify< SireMol::ResID > exported_class_t;
-            typedef ::QList< SireMol::ResIdx > ( ::SireID::Specify< SireMol::ResID >::*map_function_type)( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::ResIdx > ( ::SireID::Specify< SireMol::ResID >::*map_function_type)( ::SireMol::ResID::SearchObject const & ) const;
             map_function_type map_function_value( &::SireID::Specify< SireMol::ResID >::map );
             
             Specify_ResID__exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("obj") ) );
+                , ( bp::arg("obj") )
+                , "" );
         
         }
         Specify_ResID__exposer.def( bp::self != bp::self );
@@ -113,7 +116,8 @@ void register_Specify_ResID__class(){
             Specify_ResID__exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireID::Specify< SireMol::ResID >::operator()
@@ -125,7 +129,8 @@ void register_Specify_ResID__class(){
             Specify_ResID__exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireID::Specify< SireMol::ResID >::operator=
@@ -138,7 +143,8 @@ void register_Specify_ResID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Specify_ResID__exposer.def( bp::self == bp::self );
@@ -152,7 +158,8 @@ void register_Specify_ResID__class(){
             Specify_ResID__exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireID::Specify< SireMol::ResID >::toString
@@ -163,7 +170,8 @@ void register_Specify_ResID__class(){
             
             Specify_ResID__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireID::Specify< SireMol::ResID >::typeName
@@ -174,7 +182,8 @@ void register_Specify_ResID__class(){
             
             Specify_ResID__exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireID::Specify< SireMol::ResID >::what
@@ -185,7 +194,8 @@ void register_Specify_ResID__class(){
             
             Specify_ResID__exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Specify_ResID__exposer.staticmethod( "typeName" );

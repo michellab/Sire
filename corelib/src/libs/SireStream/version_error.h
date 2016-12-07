@@ -33,6 +33,8 @@
 
 #include "versionid.h"
 
+#include <QObject>
+
 SIRE_BEGIN_HEADER
 
 namespace SireStream
@@ -76,10 +78,7 @@ public:
 
     static const char* typeName();
 
-    const char* what() const throw()
-    {
-        return SireStream::version_error::typeName();
-    }
+    const char* what() const throw();
     
     void throwSelf() const
     {

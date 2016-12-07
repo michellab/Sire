@@ -43,12 +43,13 @@ void register_IDAndSet_MGID__class(){
 
     { //::SireID::IDAndSet< SireMol::MGID >
         typedef bp::class_< SireID::IDAndSet< SireMol::MGID >, bp::bases< SireMol::MGID, SireID::ID > > IDAndSet_MGID__exposer_t;
-        IDAndSet_MGID__exposer_t IDAndSet_MGID__exposer = IDAndSet_MGID__exposer_t( "IDAndSet_MGID_", bp::init< >() );
+        IDAndSet_MGID__exposer_t IDAndSet_MGID__exposer = IDAndSet_MGID__exposer_t( "IDAndSet_MGID_", "", bp::init< >("") );
         bp::scope IDAndSet_MGID__scope( IDAndSet_MGID__exposer );
-        IDAndSet_MGID__exposer.def( bp::init< SireMol::MGID const & >(( bp::arg("id") )) );
-        IDAndSet_MGID__exposer.def( bp::init< SireMol::MGID const &, SireMol::MGID const & >(( bp::arg("id0"), bp::arg("id1") )) );
-        IDAndSet_MGID__exposer.def( bp::init< QList< SireMol::MGIdentifier > const & >(( bp::arg("ids") )) );
-        IDAndSet_MGID__exposer.def( bp::init< SireID::IDAndSet< SireMol::MGID > const & >(( bp::arg("other") )) );
+        IDAndSet_MGID__exposer.def( bp::init< SireMol::MGID const & >(( bp::arg("id") ), "") );
+        IDAndSet_MGID__exposer.def( bp::init< SireMol::MGID const &, SireMol::MGID const & >(( bp::arg("id0"), bp::arg("id1") ), "") );
+        IDAndSet_MGID__exposer.def( bp::init< QList< SireMol::MGIdentifier > const & >(( bp::arg("ids") ), "") );
+        IDAndSet_MGID__exposer.def( bp::init< SireID::IDAndSet< SireMol::MGID > const & >(( bp::arg("ids") ), "") );
+        IDAndSet_MGID__exposer.def( bp::init< SireID::IDAndSet< SireMol::MGID > const & >(( bp::arg("other") ), "") );
         { //::SireID::IDAndSet< SireMol::MGID >::IDs
         
             typedef SireID::IDAndSet< SireMol::MGID > exported_class_t;
@@ -58,7 +59,8 @@ void register_IDAndSet_MGID__class(){
             IDAndSet_MGID__exposer.def( 
                 "IDs"
                 , IDs_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireMol::MGID >::hash
@@ -69,7 +71,8 @@ void register_IDAndSet_MGID__class(){
             
             IDAndSet_MGID__exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireMol::MGID >::isNull
@@ -80,19 +83,21 @@ void register_IDAndSet_MGID__class(){
             
             IDAndSet_MGID__exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireMol::MGID >::map
         
             typedef SireID::IDAndSet< SireMol::MGID > exported_class_t;
-            typedef ::QList< SireMol::MGNum > ( ::SireID::IDAndSet< SireMol::MGID >::*map_function_type)( ::SireMol::MolGroupsBase const & ) const;
+            typedef ::QList< SireMol::MGNum > ( ::SireID::IDAndSet< SireMol::MGID >::*map_function_type)( ::SireID::IDAndSet< SireMol::MGID >::SearchObject const & ) const;
             map_function_type map_function_value( &::SireID::IDAndSet< SireMol::MGID >::map );
             
             IDAndSet_MGID__exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("obj") ) );
+                , ( bp::arg("obj") )
+                , "" );
         
         }
         IDAndSet_MGID__exposer.def( bp::self != bp::other< SireID::ID >() );
@@ -108,7 +113,8 @@ void register_IDAndSet_MGID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireMol::MGID >::operator=
@@ -121,7 +127,8 @@ void register_IDAndSet_MGID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         IDAndSet_MGID__exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -135,7 +142,8 @@ void register_IDAndSet_MGID__class(){
             
             IDAndSet_MGID__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireMol::MGID >::typeName
@@ -146,7 +154,8 @@ void register_IDAndSet_MGID__class(){
             
             IDAndSet_MGID__exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireID::IDAndSet< SireMol::MGID >::what
@@ -157,7 +166,8 @@ void register_IDAndSet_MGID__class(){
             
             IDAndSet_MGID__exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         IDAndSet_MGID__exposer.staticmethod( "typeName" );

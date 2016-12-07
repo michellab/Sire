@@ -48,14 +48,14 @@ void register_VolMapMonitor_class(){
 
     { //::SireSystem::VolMapMonitor
         typedef bp::class_< SireSystem::VolMapMonitor, bp::bases< SireSystem::SystemMonitor, SireBase::Property > > VolMapMonitor_exposer_t;
-        VolMapMonitor_exposer_t VolMapMonitor_exposer = VolMapMonitor_exposer_t( "VolMapMonitor", bp::init< >() );
+        VolMapMonitor_exposer_t VolMapMonitor_exposer = VolMapMonitor_exposer_t( "VolMapMonitor", "This class create an occupation volume map showing the\nregions of space that are occupied by the monitored atoms\non average during the simulation\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope VolMapMonitor_scope( VolMapMonitor_exposer );
-        VolMapMonitor_exposer.def( bp::init< SireUnits::Dimension::Length const & >(( bp::arg("grid_spacing") )) );
-        VolMapMonitor_exposer.def( bp::init< SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("group"), bp::arg("map")=SireBase::PropertyMap() )) );
-        VolMapMonitor_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireUnits::Dimension::Length const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("group"), bp::arg("grid_spacing"), bp::arg("map")=SireBase::PropertyMap() )) );
-        VolMapMonitor_exposer.def( bp::init< SireMol::MoleculeGroup const &, bool, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("group"), bp::arg("skip_light_atoms"), bp::arg("map")=SireBase::PropertyMap() )) );
-        VolMapMonitor_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireUnits::Dimension::Length const &, bool, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("group"), bp::arg("grid_spacing"), bp::arg("skip_light_atoms"), bp::arg("map")=SireBase::PropertyMap() )) );
-        VolMapMonitor_exposer.def( bp::init< SireSystem::VolMapMonitor const & >(( bp::arg("other") )) );
+        VolMapMonitor_exposer.def( bp::init< SireUnits::Dimension::Length const & >(( bp::arg("grid_spacing") ), "Construct specifying the grid spacing") );
+        VolMapMonitor_exposer.def( bp::init< SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("group"), bp::arg("map")=SireBase::PropertyMap() ), "Construct, specifying the molecule group to be monitored") );
+        VolMapMonitor_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireUnits::Dimension::Length const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("group"), bp::arg("grid_spacing"), bp::arg("map")=SireBase::PropertyMap() ), "Construct, specifying the molecule group to be monitored and the grid spacing\nfor the occupancy grid") );
+        VolMapMonitor_exposer.def( bp::init< SireMol::MoleculeGroup const &, bool, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("group"), bp::arg("skip_light_atoms"), bp::arg("map")=SireBase::PropertyMap() ), "Construct, specifying the molecule group to be monitored\nand whether or not to ignore light atoms") );
+        VolMapMonitor_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireUnits::Dimension::Length const &, bool, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("group"), bp::arg("grid_spacing"), bp::arg("skip_light_atoms"), bp::arg("map")=SireBase::PropertyMap() ), "Construct, specifying the molecule group to be monitored, the grid spacing\nfor the occupancy grid, and whether or not to ignore light atoms") );
+        VolMapMonitor_exposer.def( bp::init< SireSystem::VolMapMonitor const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireSystem::VolMapMonitor::averageOccupancy
         
             typedef ::QVector< float > ( ::SireSystem::VolMapMonitor::*averageOccupancy_function_type)(  ) const;
@@ -63,7 +63,8 @@ void register_VolMapMonitor_class(){
             
             VolMapMonitor_exposer.def( 
                 "averageOccupancy"
-                , averageOccupancy_function_value );
+                , averageOccupancy_function_value
+                , "Return the average occupancy. This is a linear array that can be\naccessed using the accompanying GridInfo returned by gridInfo()" );
         
         }
         { //::SireSystem::VolMapMonitor::clearStatistics
@@ -73,7 +74,8 @@ void register_VolMapMonitor_class(){
             
             VolMapMonitor_exposer.def( 
                 "clearStatistics"
-                , clearStatistics_function_value );
+                , clearStatistics_function_value
+                , "Clear all statistics" );
         
         }
         { //::SireSystem::VolMapMonitor::gridInfo
@@ -83,7 +85,8 @@ void register_VolMapMonitor_class(){
             
             VolMapMonitor_exposer.def( 
                 "gridInfo"
-                , gridInfo_function_value );
+                , gridInfo_function_value
+                , "Return the grid dimensions" );
         
         }
         { //::SireSystem::VolMapMonitor::gridSpacing
@@ -93,7 +96,8 @@ void register_VolMapMonitor_class(){
             
             VolMapMonitor_exposer.def( 
                 "gridSpacing"
-                , gridSpacing_function_value );
+                , gridSpacing_function_value
+                , "Return the spacing of the grid" );
         
         }
         { //::SireSystem::VolMapMonitor::group
@@ -104,7 +108,8 @@ void register_VolMapMonitor_class(){
             VolMapMonitor_exposer.def( 
                 "group"
                 , group_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the molecule group whose atoms are being monitored" );
         
         }
         { //::SireSystem::VolMapMonitor::map
@@ -114,7 +119,8 @@ void register_VolMapMonitor_class(){
             
             VolMapMonitor_exposer.def( 
                 "map"
-                , map_function_value );
+                , map_function_value
+                , "Return the property map used to find the properties needed by this monitor" );
         
         }
         { //::SireSystem::VolMapMonitor::monitor
@@ -125,7 +131,8 @@ void register_VolMapMonitor_class(){
             VolMapMonitor_exposer.def( 
                 "monitor"
                 , monitor_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "Monitor the system" );
         
         }
         { //::SireSystem::VolMapMonitor::nSamples
@@ -135,7 +142,8 @@ void register_VolMapMonitor_class(){
             
             VolMapMonitor_exposer.def( 
                 "nSamples"
-                , nSamples_function_value );
+                , nSamples_function_value
+                , "Return the number of samples recorded so far" );
         
         }
         VolMapMonitor_exposer.def( bp::self != bp::self );
@@ -148,7 +156,8 @@ void register_VolMapMonitor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         VolMapMonitor_exposer.def( bp::self == bp::self );
@@ -160,7 +169,8 @@ void register_VolMapMonitor_class(){
             VolMapMonitor_exposer.def( 
                 "setGridSpacing"
                 , setGridSpacing_function_value
-                , ( bp::arg("grid_spacing") ) );
+                , ( bp::arg("grid_spacing") )
+                , "Set the grid spacing on which we monitor the space" );
         
         }
         { //::SireSystem::VolMapMonitor::setGroup
@@ -171,7 +181,8 @@ void register_VolMapMonitor_class(){
             VolMapMonitor_exposer.def( 
                 "setGroup"
                 , setGroup_function_value
-                , ( bp::arg("group"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("group"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Set the molecule group being monitored (together with the property map\nused to get the required properties from that group)" );
         
         }
         { //::SireSystem::VolMapMonitor::setPropertyMap
@@ -182,7 +193,8 @@ void register_VolMapMonitor_class(){
             VolMapMonitor_exposer.def( 
                 "setPropertyMap"
                 , setPropertyMap_function_value
-                , ( bp::arg("map") ) );
+                , ( bp::arg("map") )
+                , "Set the property map to be used by this monitor" );
         
         }
         { //::SireSystem::VolMapMonitor::setSkipLightAtoms
@@ -193,7 +205,8 @@ void register_VolMapMonitor_class(){
             VolMapMonitor_exposer.def( 
                 "setSkipLightAtoms"
                 , setSkipLightAtoms_function_value
-                , ( bp::arg("on") ) );
+                , ( bp::arg("on") )
+                , "Turn on skipping light atoms" );
         
         }
         { //::SireSystem::VolMapMonitor::skippingLightAtoms
@@ -203,7 +216,8 @@ void register_VolMapMonitor_class(){
             
             VolMapMonitor_exposer.def( 
                 "skippingLightAtoms"
-                , skippingLightAtoms_function_value );
+                , skippingLightAtoms_function_value
+                , "Return whether or not we are skipping light atoms (e.g. hydrogen)" );
         
         }
         { //::SireSystem::VolMapMonitor::toString
@@ -213,7 +227,8 @@ void register_VolMapMonitor_class(){
             
             VolMapMonitor_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireSystem::VolMapMonitor::typeName
@@ -223,7 +238,8 @@ void register_VolMapMonitor_class(){
             
             VolMapMonitor_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireSystem::VolMapMonitor::volumeMap
@@ -233,7 +249,8 @@ void register_VolMapMonitor_class(){
             
             VolMapMonitor_exposer.def( 
                 "volumeMap"
-                , volumeMap_function_value );
+                , volumeMap_function_value
+                , "Return the actual volume map" );
         
         }
         { //::SireSystem::VolMapMonitor::what
@@ -243,7 +260,8 @@ void register_VolMapMonitor_class(){
             
             VolMapMonitor_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         VolMapMonitor_exposer.staticmethod( "typeName" );

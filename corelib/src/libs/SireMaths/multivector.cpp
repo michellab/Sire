@@ -517,12 +517,15 @@ MultiVector& MultiVector::operator/=(const MultiDouble &val)
     return *this;
 }
 
-/** Increment, decrement, negate etc. */
-MultiVector SIREMATHS_EXPORT SireMaths::operator/(const MultiVector &p1, const MultiDouble &c)
+namespace SireMaths
 {
-    MultiVector result(p1);
-    result /= c;
-    return result;
+    /** Increment, decrement, negate etc. */
+    MultiVector SIREMATHS_EXPORT operator/(const MultiVector &p1, const MultiDouble &c)
+    {
+        MultiVector result(p1);
+        result /= c;
+        return result;
+    }
 }
 
 const char* MultiVector::typeName()

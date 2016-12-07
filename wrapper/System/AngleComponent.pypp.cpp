@@ -38,11 +38,11 @@ void register_AngleComponent_class(){
 
     { //::SireSystem::AngleComponent
         typedef bp::class_< SireSystem::AngleComponent, bp::bases< SireSystem::GeometryComponent, SireSystem::Constraint, SireBase::Property > > AngleComponent_exposer_t;
-        AngleComponent_exposer_t AngleComponent_exposer = AngleComponent_exposer_t( "AngleComponent", bp::init< >() );
+        AngleComponent_exposer_t AngleComponent_exposer = AngleComponent_exposer_t( "AngleComponent", "This is a constraint that constrains a symbol to equal the\nvalue of an expression that involves an angle between three points\nor atoms\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope AngleComponent_scope( AngleComponent_exposer );
-        AngleComponent_exposer.def( bp::init< SireCAS::Symbol const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("constrained_symbol"), bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("map")=SireBase::PropertyMap() )) );
-        AngleComponent_exposer.def( bp::init< SireCAS::Symbol const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("constrained_symbol"), bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("geometry_expression"), bp::arg("map")=SireBase::PropertyMap() )) );
-        AngleComponent_exposer.def( bp::init< SireSystem::AngleComponent const & >(( bp::arg("other") )) );
+        AngleComponent_exposer.def( bp::init< SireCAS::Symbol const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("constrained_symbol"), bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to set the value of constrained_symbol equal to the\nangle between the three points point0, point1 and point2") );
+        AngleComponent_exposer.def( bp::init< SireCAS::Symbol const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("constrained_symbol"), bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("geometry_expression"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to set the value of constrained_symbol equal to the\nexpression based on the angles within the three points\npoint0, point1 and point2") );
+        AngleComponent_exposer.def( bp::init< SireSystem::AngleComponent const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireSystem::AngleComponent::nPoints
         
             typedef int ( ::SireSystem::AngleComponent::*nPoints_function_type)(  ) const;
@@ -50,7 +50,8 @@ void register_AngleComponent_class(){
             
             AngleComponent_exposer.def( 
                 "nPoints"
-                , nPoints_function_value );
+                , nPoints_function_value
+                , "Return the number of points (3)" );
         
         }
         AngleComponent_exposer.def( bp::self != bp::self );
@@ -63,7 +64,8 @@ void register_AngleComponent_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AngleComponent_exposer.def( bp::self == bp::self );
@@ -76,7 +78,8 @@ void register_AngleComponent_class(){
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the ith point\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireSystem::AngleComponent::point0
@@ -87,7 +90,8 @@ void register_AngleComponent_class(){
             AngleComponent_exposer.def( 
                 "point0"
                 , point0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the first point between which the angle is calculated" );
         
         }
         { //::SireSystem::AngleComponent::point1
@@ -98,7 +102,8 @@ void register_AngleComponent_class(){
             AngleComponent_exposer.def( 
                 "point1"
                 , point1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the second point between which the angle is calculated" );
         
         }
         { //::SireSystem::AngleComponent::point2
@@ -109,7 +114,8 @@ void register_AngleComponent_class(){
             AngleComponent_exposer.def( 
                 "point2"
                 , point2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the third point between which the angle is calculated" );
         
         }
         { //::SireSystem::AngleComponent::r01
@@ -120,7 +126,8 @@ void register_AngleComponent_class(){
             AngleComponent_exposer.def( 
                 "r01"
                 , r01_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol that represents the 0-1 distance" );
         
         }
         { //::SireSystem::AngleComponent::r02
@@ -131,7 +138,8 @@ void register_AngleComponent_class(){
             AngleComponent_exposer.def( 
                 "r02"
                 , r02_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol that represents the 0-2 distance" );
         
         }
         { //::SireSystem::AngleComponent::r12
@@ -142,7 +150,8 @@ void register_AngleComponent_class(){
             AngleComponent_exposer.def( 
                 "r12"
                 , r12_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol that represents the 1-2 distance" );
         
         }
         { //::SireSystem::AngleComponent::theta
@@ -153,7 +162,8 @@ void register_AngleComponent_class(){
             AngleComponent_exposer.def( 
                 "theta"
                 , theta_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol that represents the central angle between\nthe three points" );
         
         }
         { //::SireSystem::AngleComponent::theta012
@@ -164,7 +174,8 @@ void register_AngleComponent_class(){
             AngleComponent_exposer.def( 
                 "theta012"
                 , theta012_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol that represents the angle 012 between\nthe three points" );
         
         }
         { //::SireSystem::AngleComponent::theta021
@@ -175,7 +186,8 @@ void register_AngleComponent_class(){
             AngleComponent_exposer.def( 
                 "theta021"
                 , theta021_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol that represents the angle 021 between\nthe three points" );
         
         }
         { //::SireSystem::AngleComponent::theta102
@@ -186,7 +198,8 @@ void register_AngleComponent_class(){
             AngleComponent_exposer.def( 
                 "theta102"
                 , theta102_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol that represents the angle 102 between\nthe three points" );
         
         }
         { //::SireSystem::AngleComponent::toString
@@ -196,7 +209,8 @@ void register_AngleComponent_class(){
             
             AngleComponent_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireSystem::AngleComponent::typeName
@@ -206,7 +220,8 @@ void register_AngleComponent_class(){
             
             AngleComponent_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         AngleComponent_exposer.staticmethod( "r01" );

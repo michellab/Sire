@@ -23,7 +23,7 @@ void register_ID_class(){
 
     { //::SireID::ID
         typedef bp::class_< SireID::ID, boost::noncopyable > ID_exposer_t;
-        ID_exposer_t ID_exposer = ID_exposer_t( "ID", bp::no_init );
+        ID_exposer_t ID_exposer = ID_exposer_t( "ID", "This is the base class of all ID objects. An ID object\nis an object that is used to identify another object.\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope ID_scope( ID_exposer );
         { //::SireID::ID::hash
         
@@ -32,7 +32,8 @@ void register_ID_class(){
             
             ID_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Return a hash for this ID object - this allows\nthis object to be used as a key in a dictionary" );
         
         }
         { //::SireID::ID::isNull
@@ -42,7 +43,8 @@ void register_ID_class(){
             
             ID_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Return whether or not this ID is null" );
         
         }
         ID_exposer.def( bp::self != bp::self );
@@ -54,7 +56,8 @@ void register_ID_class(){
             
             ID_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this ID" );
         
         }
         { //::SireID::ID::typeName
@@ -64,7 +67,8 @@ void register_ID_class(){
             
             ID_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireID::ID::what
@@ -74,7 +78,8 @@ void register_ID_class(){
             
             ID_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "Return the type name of this ID object." );
         
         }
         ID_exposer.staticmethod( "typeName" );

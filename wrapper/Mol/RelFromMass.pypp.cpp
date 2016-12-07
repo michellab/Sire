@@ -39,9 +39,9 @@ void register_RelFromMass_class(){
 
     { //::SireMol::RelFromMass
         typedef bp::class_< SireMol::RelFromMass, bp::bases< SireMol::WeightFunction, SireBase::Property > > RelFromMass_exposer_t;
-        RelFromMass_exposer_t RelFromMass_exposer = RelFromMass_exposer_t( "RelFromMass", bp::init< >() );
+        RelFromMass_exposer_t RelFromMass_exposer = RelFromMass_exposer_t( "RelFromMass", "This class calculates the weight by assigning the weight based on the\nratio of the masses of the two groups.\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope RelFromMass_scope( RelFromMass_exposer );
-        RelFromMass_exposer.def( bp::init< SireMol::RelFromMass const & >(( bp::arg("other") )) );
+        RelFromMass_exposer.def( bp::init< SireMol::RelFromMass const & >(( bp::arg("other") ), "") );
         RelFromMass_exposer.def( bp::self != bp::self );
         { //::SireMol::RelFromMass::operator()
         
@@ -51,7 +51,8 @@ void register_RelFromMass_class(){
             RelFromMass_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("moldata"), bp::arg("group0"), bp::arg("group1"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("moldata"), bp::arg("group0"), bp::arg("group1"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::RelFromMass::operator()
@@ -62,7 +63,8 @@ void register_RelFromMass_class(){
             RelFromMass_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("view0"), bp::arg("map0"), bp::arg("view1"), bp::arg("map1") ) );
+                , ( bp::arg("view0"), bp::arg("map0"), bp::arg("view1"), bp::arg("map1") )
+                , "" );
         
         }
         { //::SireMol::RelFromMass::operator=
@@ -74,7 +76,8 @@ void register_RelFromMass_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("arg0") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         RelFromMass_exposer.def( bp::self == bp::self );
@@ -85,7 +88,8 @@ void register_RelFromMass_class(){
             
             RelFromMass_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         RelFromMass_exposer.staticmethod( "typeName" );

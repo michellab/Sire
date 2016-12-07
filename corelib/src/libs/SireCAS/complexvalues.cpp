@@ -26,6 +26,8 @@
   *
 \*********************************************/
 
+#include <QDataStream>
+
 #include "complexvalues.h"
 #include "symbol.h"
 

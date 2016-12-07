@@ -23,11 +23,11 @@ void register_CLJNBPairs_class(){
 
     { //::SireMM::CLJNBPairs
         typedef bp::class_< SireMM::CLJNBPairs, bp::bases< SireMM::AtomPairs<SireMM::CLJScaleFactor>, SireMol::MoleculeProperty, SireMol::MolViewProperty, SireBase::Property > > CLJNBPairs_exposer_t;
-        CLJNBPairs_exposer_t CLJNBPairs_exposer = CLJNBPairs_exposer_t( "CLJNBPairs", bp::init< >() );
+        CLJNBPairs_exposer_t CLJNBPairs_exposer = CLJNBPairs_exposer_t( "CLJNBPairs", "This class holds all of the non-bonded scale factors that are used\nto scale the intramolecular atom-atom coulomb and Lennard-Jones\ninteractions between pairs of atoms, e.g. for most MM forcefields,\nthe scale factors for 1-1, 1-2 and 1-3 pairs are zero, the\n1-4 pairs are scaled by a coulomb and LJ factor (e.g. 0.5 for OPLS)\nand the 1-5 and above pairs are not scaled (i.e. the coulomb and\nLJ factors equal 1)\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope CLJNBPairs_scope( CLJNBPairs_exposer );
-        CLJNBPairs_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireMM::CLJScaleFactor const & > >(( bp::arg("molview"), bp::arg("default_scale")=SireMM::CLJScaleFactor(1.0e+0, 1.0e+0) )) );
-        CLJNBPairs_exposer.def( bp::init< SireMol::MoleculeInfoData const &, bp::optional< SireMM::CLJScaleFactor const & > >(( bp::arg("molinfo"), bp::arg("default_scale")=SireMM::CLJScaleFactor(1.0e+0, 1.0e+0) )) );
-        CLJNBPairs_exposer.def( bp::init< SireMM::CLJNBPairs const & >(( bp::arg("other") )) );
+        CLJNBPairs_exposer.def( bp::init< SireMol::MoleculeView const &, bp::optional< SireMM::CLJScaleFactor const & > >(( bp::arg("molview"), bp::arg("default_scale")=SireMM::CLJScaleFactor(1, 1) ), "Construct for the molecule viewed in molview") );
+        CLJNBPairs_exposer.def( bp::init< SireMol::MoleculeInfoData const &, bp::optional< SireMM::CLJScaleFactor const & > >(( bp::arg("molinfo"), bp::arg("default_scale")=SireMM::CLJScaleFactor(1, 1) ), "Construct, using default_scale for all of the atom-atom\ninteractions in the molecule molinfo") );
+        CLJNBPairs_exposer.def( bp::init< SireMM::CLJNBPairs const & >(( bp::arg("other") ), "Copy constructor") );
         CLJNBPairs_exposer.def( bp::self != bp::self );
         { //::SireMM::CLJNBPairs::operator=
         
@@ -38,7 +38,8 @@ void register_CLJNBPairs_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CLJNBPairs_exposer.def( bp::self == bp::self );
@@ -49,7 +50,8 @@ void register_CLJNBPairs_class(){
             
             CLJNBPairs_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         CLJNBPairs_exposer.staticmethod( "typeName" );

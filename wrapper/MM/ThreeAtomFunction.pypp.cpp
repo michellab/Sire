@@ -38,10 +38,10 @@ void register_ThreeAtomFunction_class(){
 
     { //::SireMM::ThreeAtomFunction
         typedef bp::class_< SireMM::ThreeAtomFunction, bp::bases< SireMM::AtomFunction > > ThreeAtomFunction_exposer_t;
-        ThreeAtomFunction_exposer_t ThreeAtomFunction_exposer = ThreeAtomFunction_exposer_t( "ThreeAtomFunction", bp::init< >() );
+        ThreeAtomFunction_exposer_t ThreeAtomFunction_exposer = ThreeAtomFunction_exposer_t( "ThreeAtomFunction", "This class holds a function that acts using the\ncoordinate information of just three atoms", bp::init< >("Constructor") );
         bp::scope ThreeAtomFunction_scope( ThreeAtomFunction_exposer );
-        ThreeAtomFunction_exposer.def( bp::init< SireMol::CGAtomIdx const &, SireMol::CGAtomIdx const &, SireMol::CGAtomIdx const &, SireCAS::Expression const & >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("function") )) );
-        ThreeAtomFunction_exposer.def( bp::init< SireMM::ThreeAtomFunction const & >(( bp::arg("other") )) );
+        ThreeAtomFunction_exposer.def( bp::init< SireMol::CGAtomIdx const &, SireMol::CGAtomIdx const &, SireMol::CGAtomIdx const &, SireCAS::Expression const & >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("function") ), "Construct for the specified pair of atoms with the specified function") );
+        ThreeAtomFunction_exposer.def( bp::init< SireMM::ThreeAtomFunction const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::ThreeAtomFunction::atom0
         
             typedef ::SireMol::CGAtomIdx const & ( ::SireMM::ThreeAtomFunction::*atom0_function_type)(  ) const;
@@ -50,7 +50,8 @@ void register_ThreeAtomFunction_class(){
             ThreeAtomFunction_exposer.def( 
                 "atom0"
                 , atom0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::ThreeAtomFunction::atom1
@@ -61,7 +62,8 @@ void register_ThreeAtomFunction_class(){
             ThreeAtomFunction_exposer.def( 
                 "atom1"
                 , atom1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::ThreeAtomFunction::atom2
@@ -72,7 +74,8 @@ void register_ThreeAtomFunction_class(){
             ThreeAtomFunction_exposer.def( 
                 "atom2"
                 , atom2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         ThreeAtomFunction_exposer.def( bp::self != bp::self );
@@ -85,7 +88,8 @@ void register_ThreeAtomFunction_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         ThreeAtomFunction_exposer.def( bp::self == bp::self );
@@ -96,7 +100,8 @@ void register_ThreeAtomFunction_class(){
             
             ThreeAtomFunction_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation" );
         
         }
         ThreeAtomFunction_exposer.def( "__copy__", &__copy__);

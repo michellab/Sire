@@ -33,7 +33,7 @@ void register_CuttingFunction_class(){
 
     { //::SireMol::CuttingFunction
         typedef bp::class_< SireMol::CuttingFunction, bp::bases< SireBase::Property >, boost::noncopyable > CuttingFunction_exposer_t;
-        CuttingFunction_exposer_t CuttingFunction_exposer = CuttingFunction_exposer_t( "CuttingFunction", bp::no_init );
+        CuttingFunction_exposer_t CuttingFunction_exposer = CuttingFunction_exposer_t( "CuttingFunction", "This is the base class of all cutting functions. These are\nfunctions that divide a molecule up into CutGroups.\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope CuttingFunction_scope( CuttingFunction_exposer );
         { //::SireMol::CuttingFunction::null
         
@@ -43,7 +43,8 @@ void register_CuttingFunction_class(){
             CuttingFunction_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::CuttingFunction::operator()
@@ -54,7 +55,8 @@ void register_CuttingFunction_class(){
             CuttingFunction_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("molecule") ) );
+                , ( bp::arg("molecule") )
+                , "" );
         
         }
         { //::SireMol::CuttingFunction::operator()
@@ -65,7 +67,8 @@ void register_CuttingFunction_class(){
             CuttingFunction_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("moleditor") ) );
+                , ( bp::arg("moleditor") )
+                , "" );
         
         }
         { //::SireMol::CuttingFunction::typeName
@@ -75,7 +78,8 @@ void register_CuttingFunction_class(){
             
             CuttingFunction_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         CuttingFunction_exposer.staticmethod( "null" );

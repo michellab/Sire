@@ -45,9 +45,9 @@ void register_NullRestraint_class(){
 
     { //::SireMM::NullRestraint
         typedef bp::class_< SireMM::NullRestraint, bp::bases< SireMM::Restraint3D, SireMM::Restraint, SireBase::Property > > NullRestraint_exposer_t;
-        NullRestraint_exposer_t NullRestraint_exposer = NullRestraint_exposer_t( "NullRestraint", bp::init< >() );
+        NullRestraint_exposer_t NullRestraint_exposer = NullRestraint_exposer_t( "NullRestraint", "This is a null restraint, that does not affect the energy\nor force on any molecule\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope NullRestraint_scope( NullRestraint_exposer );
-        NullRestraint_exposer.def( bp::init< SireMM::NullRestraint const & >(( bp::arg("other") )) );
+        NullRestraint_exposer.def( bp::init< SireMM::NullRestraint const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::NullRestraint::builtinSymbols
         
             typedef ::SireCAS::Symbols ( ::SireMM::NullRestraint::*builtinSymbols_function_type)(  ) const;
@@ -55,7 +55,8 @@ void register_NullRestraint_class(){
             
             NullRestraint_exposer.def( 
                 "builtinSymbols"
-                , builtinSymbols_function_value );
+                , builtinSymbols_function_value
+                , "Return the symbols that are built into this restraint" );
         
         }
         { //::SireMM::NullRestraint::builtinValues
@@ -65,7 +66,8 @@ void register_NullRestraint_class(){
             
             NullRestraint_exposer.def( 
                 "builtinValues"
-                , builtinValues_function_value );
+                , builtinValues_function_value
+                , "Return the values that are built into this restraint" );
         
         }
         { //::SireMM::NullRestraint::contains
@@ -76,7 +78,8 @@ void register_NullRestraint_class(){
             NullRestraint_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "There are no molecules in the NullRestraint" );
         
         }
         { //::SireMM::NullRestraint::contains
@@ -87,7 +90,8 @@ void register_NullRestraint_class(){
             NullRestraint_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molid") ) );
+                , ( bp::arg("molid") )
+                , "There are no molecules in the NullRestraint" );
         
         }
         { //::SireMM::NullRestraint::differentiate
@@ -98,7 +102,8 @@ void register_NullRestraint_class(){
             NullRestraint_exposer.def( 
                 "differentiate"
                 , differentiate_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return the differential of this restraint with respect to the\nsymbol symbol\nThrow: SireCAS::unavailable_differential\n" );
         
         }
         { //::SireMM::NullRestraint::energy
@@ -108,7 +113,8 @@ void register_NullRestraint_class(){
             
             NullRestraint_exposer.def( 
                 "energy"
-                , energy_function_value );
+                , energy_function_value
+                , "The null restraint has no energy" );
         
         }
         { //::SireMM::NullRestraint::force
@@ -119,7 +125,8 @@ void register_NullRestraint_class(){
             NullRestraint_exposer.def( 
                 "force"
                 , force_function_value
-                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 ) );
+                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
+                , "The null restraint will not change the force" );
         
         }
         { //::SireMM::NullRestraint::force
@@ -130,7 +137,8 @@ void register_NullRestraint_class(){
             NullRestraint_exposer.def( 
                 "force"
                 , force_function_value
-                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 ) );
+                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
+                , "The null restraint will not change the force" );
         
         }
         { //::SireMM::NullRestraint::getValue
@@ -141,7 +149,8 @@ void register_NullRestraint_class(){
             NullRestraint_exposer.def( 
                 "getValue"
                 , getValue_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return the value of the symbol symbol in this restraint. This\nraises an exception if this symbol is not used\nThrow: SireCAS::missing_symbol\n" );
         
         }
         { //::SireMM::NullRestraint::hasValue
@@ -152,7 +161,8 @@ void register_NullRestraint_class(){
             NullRestraint_exposer.def( 
                 "hasValue"
                 , hasValue_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return whether or not this restraint has a value for the symbol symbol" );
         
         }
         { //::SireMM::NullRestraint::molecules
@@ -162,7 +172,8 @@ void register_NullRestraint_class(){
             
             NullRestraint_exposer.def( 
                 "molecules"
-                , molecules_function_value );
+                , molecules_function_value
+                , "There are no molecules in the NullRestraint" );
         
         }
         NullRestraint_exposer.def( bp::self != bp::self );
@@ -175,7 +186,8 @@ void register_NullRestraint_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         NullRestraint_exposer.def( bp::self == bp::self );
@@ -187,7 +199,8 @@ void register_NullRestraint_class(){
             NullRestraint_exposer.def( 
                 "setValue"
                 , setValue_function_value
-                , ( bp::arg("symbol"), bp::arg("value") ) );
+                , ( bp::arg("symbol"), bp::arg("value") )
+                , "Set the value of the symbol symbol in this restraint to value.\nThis does nothing if this symbol is not used in this restraint" );
         
         }
         { //::SireMM::NullRestraint::symbols
@@ -197,7 +210,8 @@ void register_NullRestraint_class(){
             
             NullRestraint_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "Return all of the symbols uses by this restraint" );
         
         }
         { //::SireMM::NullRestraint::toString
@@ -207,7 +221,8 @@ void register_NullRestraint_class(){
             
             NullRestraint_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this restraint" );
         
         }
         { //::SireMM::NullRestraint::typeName
@@ -217,7 +232,8 @@ void register_NullRestraint_class(){
             
             NullRestraint_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::NullRestraint::update
@@ -228,7 +244,8 @@ void register_NullRestraint_class(){
             NullRestraint_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("moldata") ) );
+                , ( bp::arg("moldata") )
+                , "The null restraint cannot be updated" );
         
         }
         { //::SireMM::NullRestraint::update
@@ -239,7 +256,8 @@ void register_NullRestraint_class(){
             NullRestraint_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "The null restraint cannot be updated" );
         
         }
         { //::SireMM::NullRestraint::userSymbols
@@ -249,7 +267,8 @@ void register_NullRestraint_class(){
             
             NullRestraint_exposer.def( 
                 "userSymbols"
-                , userSymbols_function_value );
+                , userSymbols_function_value
+                , "Return the symbols that can be set by the user" );
         
         }
         { //::SireMM::NullRestraint::userValues
@@ -259,7 +278,8 @@ void register_NullRestraint_class(){
             
             NullRestraint_exposer.def( 
                 "userValues"
-                , userValues_function_value );
+                , userValues_function_value
+                , "Return the values that have been supplied by the user" );
         
         }
         { //::SireMM::NullRestraint::usesMoleculesIn
@@ -270,7 +290,8 @@ void register_NullRestraint_class(){
             NullRestraint_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("forcetable") ) );
+                , ( bp::arg("forcetable") )
+                , "There are no molecules in the NullRestraint" );
         
         }
         { //::SireMM::NullRestraint::usesMoleculesIn
@@ -281,7 +302,8 @@ void register_NullRestraint_class(){
             NullRestraint_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "There are no molecules in the NullRestraint" );
         
         }
         { //::SireMM::NullRestraint::values
@@ -291,7 +313,8 @@ void register_NullRestraint_class(){
             
             NullRestraint_exposer.def( 
                 "values"
-                , values_function_value );
+                , values_function_value
+                , "Return all of the values of all of the symbols used in this restraint" );
         
         }
         NullRestraint_exposer.staticmethod( "typeName" );

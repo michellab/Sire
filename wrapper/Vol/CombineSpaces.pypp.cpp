@@ -31,15 +31,15 @@ void register_CombineSpaces_class(){
 
     { //::SireVol::CombineSpaces
         typedef bp::class_< SireVol::CombineSpaces, bp::bases< SireBase::CombineProperties, SireBase::Property > > CombineSpaces_exposer_t;
-        CombineSpaces_exposer_t CombineSpaces_exposer = CombineSpaces_exposer_t( "CombineSpaces", bp::init< >() );
+        CombineSpaces_exposer_t CombineSpaces_exposer = CombineSpaces_exposer_t( "CombineSpaces", "This is a property which creates a SireVol::CombinedSpace object\nof the specified properties (which must all be space objects\nthemselves)\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope CombineSpaces_scope( CombineSpaces_exposer );
-        CombineSpaces_exposer.def( bp::init< SireBase::PropertyName const & >(( bp::arg("source") )) );
-        CombineSpaces_exposer.def( bp::init< SireBase::PropertyName const &, SireBase::PropertyName const & >(( bp::arg("source0"), bp::arg("source1") )) );
-        CombineSpaces_exposer.def( bp::init< QList< SireBase::PropertyName > const & >(( bp::arg("sources") )) );
-        CombineSpaces_exposer.def( bp::init< QVector< SireBase::PropertyName > const & >(( bp::arg("sources") )) );
-        CombineSpaces_exposer.def( bp::init< QList< QString > const & >(( bp::arg("sources") )) );
-        CombineSpaces_exposer.def( bp::init< QVector< QString > const & >(( bp::arg("sources") )) );
-        CombineSpaces_exposer.def( bp::init< SireVol::CombineSpaces const & >(( bp::arg("other") )) );
+        CombineSpaces_exposer.def( bp::init< SireBase::PropertyName const & >(( bp::arg("source") ), "Construct to use just as single space, from the supplied source") );
+        CombineSpaces_exposer.def( bp::init< SireBase::PropertyName const &, SireBase::PropertyName const & >(( bp::arg("source0"), bp::arg("source1") ), "Construct to combine together the two spaces specified by the\ntwo supplied sources") );
+        CombineSpaces_exposer.def( bp::init< QList< SireBase::PropertyName > const & >(( bp::arg("sources") ), "Construct to combine together the spaces from the passed sources") );
+        CombineSpaces_exposer.def( bp::init< QVector< SireBase::PropertyName > const & >(( bp::arg("sources") ), "Construct to combine together the spaces from the passed sources") );
+        CombineSpaces_exposer.def( bp::init< QList< QString > const & >(( bp::arg("sources") ), "Construct to combine together the spaces from the passed sources") );
+        CombineSpaces_exposer.def( bp::init< QVector< QString > const & >(( bp::arg("sources") ), "Construct to combine together the spaces from the passed sources") );
+        CombineSpaces_exposer.def( bp::init< SireVol::CombineSpaces const & >(( bp::arg("other") ), "Copy constructor") );
         CombineSpaces_exposer.def( bp::self != bp::self );
         { //::SireVol::CombineSpaces::operator=
         
@@ -50,7 +50,8 @@ void register_CombineSpaces_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CombineSpaces_exposer.def( bp::self == bp::self );
@@ -61,7 +62,8 @@ void register_CombineSpaces_class(){
             
             CombineSpaces_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireVol::CombineSpaces::updateFrom
@@ -72,7 +74,8 @@ void register_CombineSpaces_class(){
             CombineSpaces_exposer.def( 
                 "updateFrom"
                 , updateFrom_function_value
-                , ( bp::arg("properties") ) );
+                , ( bp::arg("properties") )
+                , "Update this combined space by extracting the required space\nproperties from properties\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         CombineSpaces_exposer.staticmethod( "typeName" );

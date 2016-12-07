@@ -32,7 +32,7 @@ void register_GTOPair_class(){
 
     { //::Squire::GTOPair
         typedef bp::class_< Squire::GTOPair, bp::bases< Squire::ShellPair, SireBase::Property >, boost::noncopyable > GTOPair_exposer_t;
-        GTOPair_exposer_t GTOPair_exposer = GTOPair_exposer_t( "GTOPair", bp::no_init );
+        GTOPair_exposer_t GTOPair_exposer = GTOPair_exposer_t( "GTOPair", "This is the base class of all of the combined shell-pairs\n(e.g. SS_GTO, PS_GTO etc.)\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope GTOPair_scope( GTOPair_exposer );
         { //::Squire::GTOPair::K
         
@@ -41,7 +41,8 @@ void register_GTOPair_class(){
             
             GTOPair_exposer.def( 
                 "K"
-                , K_function_value );
+                , K_function_value
+                , "" );
         
         }
         { //::Squire::GTOPair::K_AB
@@ -51,7 +52,8 @@ void register_GTOPair_class(){
             
             GTOPair_exposer.def( 
                 "K_AB"
-                , K_AB_function_value );
+                , K_AB_function_value
+                , "" );
         
         }
         { //::Squire::GTOPair::K_CD
@@ -61,7 +63,8 @@ void register_GTOPair_class(){
             
             GTOPair_exposer.def( 
                 "K_CD"
-                , K_CD_function_value );
+                , K_CD_function_value
+                , "" );
         
         }
         { //::Squire::GTOPair::P
@@ -72,7 +75,8 @@ void register_GTOPair_class(){
             GTOPair_exposer.def( 
                 "P"
                 , P_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::Squire::GTOPair::Q
@@ -83,7 +87,8 @@ void register_GTOPair_class(){
             GTOPair_exposer.def( 
                 "Q"
                 , Q_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::Squire::GTOPair::Q_AB
@@ -93,7 +98,8 @@ void register_GTOPair_class(){
             
             GTOPair_exposer.def( 
                 "Q_AB"
-                , Q_AB_function_value );
+                , Q_AB_function_value
+                , "" );
         
         }
         { //::Squire::GTOPair::Q_CD
@@ -103,7 +109,8 @@ void register_GTOPair_class(){
             
             GTOPair_exposer.def( 
                 "Q_CD"
-                , Q_CD_function_value );
+                , Q_CD_function_value
+                , "" );
         
         }
         { //::Squire::GTOPair::R2
@@ -113,7 +120,8 @@ void register_GTOPair_class(){
             
             GTOPair_exposer.def( 
                 "R2"
-                , R2_function_value );
+                , R2_function_value
+                , "" );
         
         }
         { //::Squire::GTOPair::T
@@ -124,7 +132,8 @@ void register_GTOPair_class(){
             GTOPair_exposer.def( 
                 "T"
                 , T_function_value
-                , ( bp::arg("P"), bp::arg("Q") ) );
+                , ( bp::arg("P"), bp::arg("Q") )
+                , "Return the T value for the two passed GTOPair pairs\nT = rho (P-Q)^2\n" );
         
         }
         { //::Squire::GTOPair::W
@@ -135,7 +144,8 @@ void register_GTOPair_class(){
             GTOPair_exposer.def( 
                 "W"
                 , W_function_value
-                , ( bp::arg("P"), bp::arg("Q") ) );
+                , ( bp::arg("P"), bp::arg("Q") )
+                , "Return the W value for the two passed GTOPair pairs\nW = (zeta(zeta+eta)) P + (eta(zeta+eta)) Q\n" );
         
         }
         { //::Squire::GTOPair::eta
@@ -145,7 +155,8 @@ void register_GTOPair_class(){
             
             GTOPair_exposer.def( 
                 "eta"
-                , eta_function_value );
+                , eta_function_value
+                , "" );
         
         }
         { //::Squire::GTOPair::isNull
@@ -155,7 +166,8 @@ void register_GTOPair_class(){
             
             GTOPair_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Return whether or not this pair is null" );
         
         }
         { //::Squire::GTOPair::null
@@ -166,7 +178,8 @@ void register_GTOPair_class(){
             GTOPair_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::Squire::GTOPair::preFac
@@ -177,7 +190,8 @@ void register_GTOPair_class(){
             GTOPair_exposer.def( 
                 "preFac"
                 , preFac_function_value
-                , ( bp::arg("P"), bp::arg("Q") ) );
+                , ( bp::arg("P"), bp::arg("Q") )
+                , "Return the prefactor value for the two passed GTOPair pairs\npreFac = K_AB K_CD  Sqrt(zeta+eta)\n" );
         
         }
         { //::Squire::GTOPair::rho
@@ -188,7 +202,8 @@ void register_GTOPair_class(){
             GTOPair_exposer.def( 
                 "rho"
                 , rho_function_value
-                , ( bp::arg("P"), bp::arg("Q") ) );
+                , ( bp::arg("P"), bp::arg("Q") )
+                , "Return the rho value for the two passed GTOPair pairs\nrho = (zeta  eta)  (zeta + eta)\n" );
         
         }
         { //::Squire::GTOPair::ss
@@ -198,7 +213,8 @@ void register_GTOPair_class(){
             
             GTOPair_exposer.def( 
                 "ss"
-                , ss_function_value );
+                , ss_function_value
+                , "" );
         
         }
         { //::Squire::GTOPair::typeName
@@ -208,7 +224,8 @@ void register_GTOPair_class(){
             
             GTOPair_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::Squire::GTOPair::xi
@@ -218,7 +235,8 @@ void register_GTOPair_class(){
             
             GTOPair_exposer.def( 
                 "xi"
-                , xi_function_value );
+                , xi_function_value
+                , "" );
         
         }
         { //::Squire::GTOPair::zeta
@@ -228,7 +246,8 @@ void register_GTOPair_class(){
             
             GTOPair_exposer.def( 
                 "zeta"
-                , zeta_function_value );
+                , zeta_function_value
+                , "" );
         
         }
         GTOPair_exposer.staticmethod( "T" );

@@ -37,11 +37,11 @@ void register_DoubleArrayProperty_class(){
 
     { //::SireBase::DoubleArrayProperty
         typedef bp::class_< SireBase::DoubleArrayProperty, bp::bases< SireBase::Property > > DoubleArrayProperty_exposer_t;
-        DoubleArrayProperty_exposer_t DoubleArrayProperty_exposer = DoubleArrayProperty_exposer_t( "DoubleArrayProperty", bp::init< >() );
+        DoubleArrayProperty_exposer_t DoubleArrayProperty_exposer = DoubleArrayProperty_exposer_t( "DoubleArrayProperty", "", bp::init< >("") );
         bp::scope DoubleArrayProperty_scope( DoubleArrayProperty_exposer );
-        DoubleArrayProperty_exposer.def( bp::init< QList< double > const & >(( bp::arg("array") )) );
-        DoubleArrayProperty_exposer.def( bp::init< QVector< double > const & >(( bp::arg("array") )) );
-        DoubleArrayProperty_exposer.def( bp::init< SireBase::DoubleArrayProperty const & >(( bp::arg("other") )) );
+        DoubleArrayProperty_exposer.def( bp::init< QList< double > const & >(( bp::arg("array") ), "") );
+        DoubleArrayProperty_exposer.def( bp::init< QVector< double > const & >(( bp::arg("array") ), "") );
+        DoubleArrayProperty_exposer.def( bp::init< SireBase::DoubleArrayProperty const & >(( bp::arg("other") ), "") );
         DoubleArrayProperty_exposer.def( bp::self != bp::self );
         DoubleArrayProperty_exposer.def( bp::self + bp::self );
         { //::SireBase::DoubleArrayProperty::operator=
@@ -53,7 +53,8 @@ void register_DoubleArrayProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         DoubleArrayProperty_exposer.def( bp::self == bp::self );
@@ -64,7 +65,8 @@ void register_DoubleArrayProperty_class(){
             
             DoubleArrayProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         DoubleArrayProperty_exposer.staticmethod( "typeName" );

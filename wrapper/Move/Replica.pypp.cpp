@@ -40,10 +40,10 @@ void register_Replica_class(){
 
     { //::SireMove::Replica
         typedef bp::class_< SireMove::Replica, bp::bases< SireMove::SupraSubSystem, SireBase::Property > > Replica_exposer_t;
-        Replica_exposer_t Replica_exposer = Replica_exposer_t( "Replica", bp::init< >() );
+        Replica_exposer_t Replica_exposer = Replica_exposer_t( "Replica", "This is a replica within a replica exchange simulation\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope Replica_scope( Replica_exposer );
-        Replica_exposer.def( bp::init< SireMove::SupraSubSystem const & >(( bp::arg("subsystem") )) );
-        Replica_exposer.def( bp::init< SireMove::Replica const & >(( bp::arg("other") )) );
+        Replica_exposer.def( bp::init< SireMove::SupraSubSystem const & >(( bp::arg("subsystem") ), "Construct from another SubSystem") );
+        Replica_exposer.def( bp::init< SireMove::Replica const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::Replica::chemicalPotential
         
             typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::Replica::*chemicalPotential_function_type)(  ) const;
@@ -51,7 +51,8 @@ void register_Replica_class(){
             
             Replica_exposer.def( 
                 "chemicalPotential"
-                , chemicalPotential_function_value );
+                , chemicalPotential_function_value
+                , "Return the chemical potential of the replica (if the moves\nsample a constant chemical potential ensemble)\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMove::Replica::energy
@@ -61,7 +62,8 @@ void register_Replica_class(){
             
             Replica_exposer.def( 
                 "energy"
-                , energy_function_value );
+                , energy_function_value
+                , "Return the total energy of this replica" );
         
         }
         { //::SireMove::Replica::energyComponent
@@ -72,7 +74,8 @@ void register_Replica_class(){
             Replica_exposer.def( 
                 "energyComponent"
                 , energyComponent_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the energy component that describes the Hamiltonian\nthat is sampled by this replica" );
         
         }
         { //::SireMove::Replica::ensemble
@@ -83,7 +86,8 @@ void register_Replica_class(){
             Replica_exposer.def( 
                 "ensemble"
                 , ensemble_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the ensemble defined by the moves of this replica" );
         
         }
         { //::SireMove::Replica::fugacity
@@ -93,7 +97,8 @@ void register_Replica_class(){
             
             Replica_exposer.def( 
                 "fugacity"
-                , fugacity_function_value );
+                , fugacity_function_value
+                , "Return the fugacity of the replica (if the moves sample\na constant chemical potential ensemble)\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMove::Replica::isConstantChemicalPotential
@@ -103,7 +108,8 @@ void register_Replica_class(){
             
             Replica_exposer.def( 
                 "isConstantChemicalPotential"
-                , isConstantChemicalPotential_function_value );
+                , isConstantChemicalPotential_function_value
+                , "Return whether the moves keep the same chemical potential" );
         
         }
         { //::SireMove::Replica::isConstantEnergy
@@ -113,7 +119,8 @@ void register_Replica_class(){
             
             Replica_exposer.def( 
                 "isConstantEnergy"
-                , isConstantEnergy_function_value );
+                , isConstantEnergy_function_value
+                , "Return whether or not this is a constant energy replica\n(all moves sample the same total energy)" );
         
         }
         { //::SireMove::Replica::isConstantFugacity
@@ -123,7 +130,8 @@ void register_Replica_class(){
             
             Replica_exposer.def( 
                 "isConstantFugacity"
-                , isConstantFugacity_function_value );
+                , isConstantFugacity_function_value
+                , "Return whether the moves keep the same fugacity" );
         
         }
         { //::SireMove::Replica::isConstantLambda
@@ -134,7 +142,8 @@ void register_Replica_class(){
             Replica_exposer.def( 
                 "isConstantLambda"
                 , isConstantLambda_function_value
-                , ( bp::arg("lam") ) );
+                , ( bp::arg("lam") )
+                , "Return whether or not this is a constant lambda replica\n(there is a lambda component, lam, and all moves sample the\nsame value of this lambda coordinate)" );
         
         }
         { //::SireMove::Replica::isConstantNParticles
@@ -144,7 +153,8 @@ void register_Replica_class(){
             
             Replica_exposer.def( 
                 "isConstantNParticles"
-                , isConstantNParticles_function_value );
+                , isConstantNParticles_function_value
+                , "Return whether or not the number of particles is constant\n(all moves keep the same number of particles)" );
         
         }
         { //::SireMove::Replica::isConstantPressure
@@ -154,7 +164,8 @@ void register_Replica_class(){
             
             Replica_exposer.def( 
                 "isConstantPressure"
-                , isConstantPressure_function_value );
+                , isConstantPressure_function_value
+                , "Return whether or not this is a constant pressure replica\n(all moves sample the same pressure)" );
         
         }
         { //::SireMove::Replica::isConstantTemperature
@@ -164,7 +175,8 @@ void register_Replica_class(){
             
             Replica_exposer.def( 
                 "isConstantTemperature"
-                , isConstantTemperature_function_value );
+                , isConstantTemperature_function_value
+                , "Return whether or not this is a constant temperature replica\n(all moves sample the same temperature)" );
         
         }
         { //::SireMove::Replica::isConstantVolume
@@ -174,7 +186,8 @@ void register_Replica_class(){
             
             Replica_exposer.def( 
                 "isConstantVolume"
-                , isConstantVolume_function_value );
+                , isConstantVolume_function_value
+                , "Return whether or not this is a constant volume replica\n(all moves sample the same volume)" );
         
         }
         { //::SireMove::Replica::lambdaComponent
@@ -185,7 +198,8 @@ void register_Replica_class(){
             Replica_exposer.def( 
                 "lambdaComponent"
                 , lambdaComponent_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the component that can be used to change the Hamiltonian\nfor Hamiltonian replica exchange - this is a null symbol if\nthis replica is not used in Hamiltonian replica exchange" );
         
         }
         { //::SireMove::Replica::lambdaValue
@@ -195,7 +209,8 @@ void register_Replica_class(){
             
             Replica_exposer.def( 
                 "lambdaValue"
-                , lambdaValue_function_value );
+                , lambdaValue_function_value
+                , "Return the value of the lambda component - this returns 0 if\nthis replica is not suited for Hamiltonian replica exchange" );
         
         }
         Replica_exposer.def( bp::self != bp::self );
@@ -208,7 +223,8 @@ void register_Replica_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Replica_exposer.def( bp::self == bp::self );
@@ -219,7 +235,8 @@ void register_Replica_class(){
             
             Replica_exposer.def( 
                 "pressure"
-                , pressure_function_value );
+                , pressure_function_value
+                , "Return the pressure of the replica (if the moves sample\na constant pressure ensemble)\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMove::Replica::spaceProperty
@@ -230,7 +247,8 @@ void register_Replica_class(){
             Replica_exposer.def( 
                 "spaceProperty"
                 , spaceProperty_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property containing the simulation box\nthat is sampled by this replica - this is used to get the\nvolume of the simulation space" );
         
         }
         { //::SireMove::Replica::temperature
@@ -240,7 +258,8 @@ void register_Replica_class(){
             
             Replica_exposer.def( 
                 "temperature"
-                , temperature_function_value );
+                , temperature_function_value
+                , "Return the temperature of the replica (if the moves sample\na constant temperature ensemble)\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMove::Replica::typeName
@@ -250,7 +269,8 @@ void register_Replica_class(){
             
             Replica_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMove::Replica::volume
@@ -260,7 +280,8 @@ void register_Replica_class(){
             
             Replica_exposer.def( 
                 "volume"
-                , volume_function_value );
+                , volume_function_value
+                , "Return the current volume of the replicas simulation space\n(this could be infinite)" );
         
         }
         Replica_exposer.staticmethod( "typeName" );

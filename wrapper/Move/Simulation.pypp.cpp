@@ -23,9 +23,9 @@ void register_Simulation_class(){
 
     { //::SireMove::Simulation
         typedef bp::class_< SireMove::Simulation > Simulation_exposer_t;
-        Simulation_exposer_t Simulation_exposer = Simulation_exposer_t( "Simulation", bp::init< >() );
+        Simulation_exposer_t Simulation_exposer = Simulation_exposer_t( "Simulation", "This class is used start and manage an active\nsimulation. A simulation consists of a collection\nof moves that are being applied to a System\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope Simulation_scope( Simulation_exposer );
-        Simulation_exposer.def( bp::init< SireMove::Simulation const & >(( bp::arg("other") )) );
+        Simulation_exposer.def( bp::init< SireMove::Simulation const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::Simulation::abort
         
             typedef void ( ::SireMove::Simulation::*abort_function_type)(  ) ;
@@ -33,7 +33,8 @@ void register_Simulation_class(){
             
             Simulation_exposer.def( 
                 "abort"
-                , abort_function_value );
+                , abort_function_value
+                , "Abort the simulation" );
         
         }
         { //::SireMove::Simulation::hasFinished
@@ -43,7 +44,8 @@ void register_Simulation_class(){
             
             Simulation_exposer.def( 
                 "hasFinished"
-                , hasFinished_function_value );
+                , hasFinished_function_value
+                , "Return whether or not the simulation has finished\n(completed all of the moves)" );
         
         }
         { //::SireMove::Simulation::initialMoves
@@ -53,7 +55,8 @@ void register_Simulation_class(){
             
             Simulation_exposer.def( 
                 "initialMoves"
-                , initialMoves_function_value );
+                , initialMoves_function_value
+                , "Return the Moves in the state they were in before the simulation started" );
         
         }
         { //::SireMove::Simulation::initialSystem
@@ -63,7 +66,8 @@ void register_Simulation_class(){
             
             Simulation_exposer.def( 
                 "initialSystem"
-                , initialSystem_function_value );
+                , initialSystem_function_value
+                , "Return the System in the state it was in before the simulation started" );
         
         }
         { //::SireMove::Simulation::input
@@ -73,7 +77,8 @@ void register_Simulation_class(){
             
             Simulation_exposer.def( 
                 "input"
-                , input_function_value );
+                , input_function_value
+                , "Return the initial input simulation WorkPacket" );
         
         }
         { //::SireMove::Simulation::interimMoves
@@ -83,7 +88,8 @@ void register_Simulation_class(){
             
             Simulation_exposer.def( 
                 "interimMoves"
-                , interimMoves_function_value );
+                , interimMoves_function_value
+                , "Return the current state of the moves (updated while the simulation\nis running). This will throw an exception if the system hits an\nerror state" );
         
         }
         { //::SireMove::Simulation::interimResult
@@ -93,7 +99,8 @@ void register_Simulation_class(){
             
             Simulation_exposer.def( 
                 "interimResult"
-                , interimResult_function_value );
+                , interimResult_function_value
+                , "Return the simulation WorkPacket from an intermediate point along\nthe simulation. This will throw an error if the simulation is in an\nerror state, and the initial packet if the simulation\nwas aborted" );
         
         }
         { //::SireMove::Simulation::interimSystem
@@ -103,7 +110,8 @@ void register_Simulation_class(){
             
             Simulation_exposer.def( 
                 "interimSystem"
-                , interimSystem_function_value );
+                , interimSystem_function_value
+                , "Return the current state of the System (updated while the simulation\nis running). This will throw an exception if the system hits an\nerror state" );
         
         }
         { //::SireMove::Simulation::isError
@@ -113,7 +121,8 @@ void register_Simulation_class(){
             
             Simulation_exposer.def( 
                 "isError"
-                , isError_function_value );
+                , isError_function_value
+                , "Return whether or not this simulation is in an error state" );
         
         }
         { //::SireMove::Simulation::isRunning
@@ -123,7 +132,8 @@ void register_Simulation_class(){
             
             Simulation_exposer.def( 
                 "isRunning"
-                , isRunning_function_value );
+                , isRunning_function_value
+                , "Return whether or not this simulation is running" );
         
         }
         { //::SireMove::Simulation::moves
@@ -133,7 +143,8 @@ void register_Simulation_class(){
             
             Simulation_exposer.def( 
                 "moves"
-                , moves_function_value );
+                , moves_function_value
+                , "Return the final state of the moves after the simulation. This\nblocks until the simulation has finished and will throw an\nexception if the system hits an error state" );
         
         }
         Simulation_exposer.def( bp::self != bp::self );
@@ -146,7 +157,8 @@ void register_Simulation_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Simulation_exposer.def( bp::self == bp::self );
@@ -157,7 +169,8 @@ void register_Simulation_class(){
             
             Simulation_exposer.def( 
                 "progress"
-                , progress_function_value );
+                , progress_function_value
+                , "Return the progress of the simulation (as a percentage)" );
         
         }
         { //::SireMove::Simulation::result
@@ -167,7 +180,8 @@ void register_Simulation_class(){
             
             Simulation_exposer.def( 
                 "result"
-                , result_function_value );
+                , result_function_value
+                , "Return the final result of the simulation. This blocks until\nthe simulation has stopped, and will throw an exception if the\nsimulation is in an error state. This returns the initial\nsimulation WorkPacket if the simulation was aborted" );
         
         }
         { //::SireMove::Simulation::run
@@ -178,7 +192,8 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "run"
                 , run_function_value
-                , ( bp::arg("system"), bp::arg("moves"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("system"), bp::arg("moves"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , "Run a simulation consisting of nmoves moves (in moves)\nof the System system, optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation in the current thread" );
         
         }
         { //::SireMove::Simulation::run
@@ -189,7 +204,8 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "run"
                 , run_function_value
-                , ( bp::arg("system"), bp::arg("moves"), bp::arg("nmoves"), bp::arg("nmoves_per_chunk"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("system"), bp::arg("moves"), bp::arg("nmoves"), bp::arg("nmoves_per_chunk"), bp::arg("record_stats")=(bool)(true) )
+                , "Run a simulation consisting of nmoves moves (in moves)\nof the System system, optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation in the current thread. This runs nmoves_per_chunk\nmoves in every chunk of the simulation." );
         
         }
         { //::SireMove::Simulation::run
@@ -200,7 +216,8 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "run"
                 , run_function_value
-                , ( bp::arg("system"), bp::arg("move"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("system"), bp::arg("move"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , "Run a simulation consisting of nmoves moves (in move)\nof the System system, optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation in the current thread" );
         
         }
         { //::SireMove::Simulation::run
@@ -211,7 +228,8 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "run"
                 , run_function_value
-                , ( bp::arg("system"), bp::arg("move"), bp::arg("nmoves"), bp::arg("nmoves_per_chunk"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("system"), bp::arg("move"), bp::arg("nmoves"), bp::arg("nmoves_per_chunk"), bp::arg("record_stats")=(bool)(true) )
+                , "Run a simulation consisting of nmoves moves (in move)\nof the System system, optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation in the current thread. This runs nmoves_per_chunk\nmoves in every chunk of the simulation." );
         
         }
         { //::SireMove::Simulation::run
@@ -222,7 +240,8 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "run"
                 , run_function_value
-                , ( bp::arg("simstore"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("simstore"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , "Run a simulation consisting of nmoves moves of the system\nin simstore (which also contains the moves) optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation in the current thread" );
         
         }
         { //::SireMove::Simulation::run
@@ -233,7 +252,8 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "run"
                 , run_function_value
-                , ( bp::arg("simstore"), bp::arg("nmoves"), bp::arg("nmoves_per_chunk"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("simstore"), bp::arg("nmoves"), bp::arg("nmoves_per_chunk"), bp::arg("record_stats")=(bool)(true) )
+                , "Run a simulation consisting of nmoves moves of the system\nin simstore (which also contains the moves) optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation in the current thread. This runs nmoves_per_chunk\nmoves in every chunk of the simulation." );
         
         }
         { //::SireMove::Simulation::run
@@ -244,7 +264,8 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "run"
                 , run_function_value
-                , ( bp::arg("simpacket") ) );
+                , ( bp::arg("simpacket") )
+                , "Run the simulation contained in the simulation WorkPacket simpacket\nin the current thread" );
         
         }
         { //::SireMove::Simulation::run
@@ -255,7 +276,8 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "run"
                 , run_function_value
-                , ( bp::arg("node"), bp::arg("system"), bp::arg("moves"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("node"), bp::arg("system"), bp::arg("moves"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , "Run a simulation consisting of nmoves moves (in moves)\nof the System system, optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation on the node node. This runs nmoves_per_chunk\nmoves in every chunk of the simulation." );
         
         }
         { //::SireMove::Simulation::run
@@ -266,7 +288,8 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "run"
                 , run_function_value
-                , ( bp::arg("node"), bp::arg("system"), bp::arg("moves"), bp::arg("nmoves"), bp::arg("nmoves_per_chunk"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("node"), bp::arg("system"), bp::arg("moves"), bp::arg("nmoves"), bp::arg("nmoves_per_chunk"), bp::arg("record_stats")=(bool)(true) )
+                , "Run a simulation consisting of nmoves moves (in moves)\nof the System system, optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation on the node node. This runs nmoves_per_chunk\nmoves in every chunk of the simulation." );
         
         }
         { //::SireMove::Simulation::run
@@ -277,7 +300,8 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "run"
                 , run_function_value
-                , ( bp::arg("node"), bp::arg("system"), bp::arg("move"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("node"), bp::arg("system"), bp::arg("move"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , "Run a simulation consisting of nmoves moves (in move)\nof the System system, optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation on the node node. This runs nmoves_per_chunk\nmoves in every chunk of the simulation." );
         
         }
         { //::SireMove::Simulation::run
@@ -288,7 +312,8 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "run"
                 , run_function_value
-                , ( bp::arg("node"), bp::arg("system"), bp::arg("move"), bp::arg("nmoves"), bp::arg("nmoves_per_chunk"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("node"), bp::arg("system"), bp::arg("move"), bp::arg("nmoves"), bp::arg("nmoves_per_chunk"), bp::arg("record_stats")=(bool)(true) )
+                , "Run a simulation consisting of nmoves moves (in move)\nof the System system, optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation on the node node. This runs nmoves_per_chunk\nmoves in every chunk of the simulation." );
         
         }
         { //::SireMove::Simulation::run
@@ -299,7 +324,8 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "run"
                 , run_function_value
-                , ( bp::arg("node"), bp::arg("simstore"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("node"), bp::arg("simstore"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , "Run a simulation consisting of nmoves moves of the system\nin simstore (which also contains the moves) optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation on the node node. This runs nmoves_per_chunk\nmoves in every chunk of the simulation." );
         
         }
         { //::SireMove::Simulation::run
@@ -310,7 +336,8 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "run"
                 , run_function_value
-                , ( bp::arg("node"), bp::arg("simstore"), bp::arg("nmoves"), bp::arg("nmoves_per_chunk"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("node"), bp::arg("simstore"), bp::arg("nmoves"), bp::arg("nmoves_per_chunk"), bp::arg("record_stats")=(bool)(true) )
+                , "Run a simulation consisting of nmoves moves  of the system\nin simstore (which also contains the moves) optionally recording simulation\nstatistics if record_stats is true. This runs the\nsimulation on the node node. This runs nmoves_per_chunk\nmoves in every chunk of the simulation." );
         
         }
         { //::SireMove::Simulation::run
@@ -321,7 +348,8 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "run"
                 , run_function_value
-                , ( bp::arg("node"), bp::arg("simpacket") ) );
+                , ( bp::arg("node"), bp::arg("simpacket") )
+                , "Run the simulation contained in the simulation WorkPacket simpacket\non the node node" );
         
         }
         { //::SireMove::Simulation::stop
@@ -331,7 +359,8 @@ void register_Simulation_class(){
             
             Simulation_exposer.def( 
                 "stop"
-                , stop_function_value );
+                , stop_function_value
+                , "Stop the simulation" );
         
         }
         { //::SireMove::Simulation::system
@@ -341,7 +370,8 @@ void register_Simulation_class(){
             
             Simulation_exposer.def( 
                 "system"
-                , system_function_value );
+                , system_function_value
+                , "Return the final state of the system after the simulation. This\nblocks until the simulation has finished and will throw an\nexception if the system hits an error state" );
         
         }
         { //::SireMove::Simulation::throwError
@@ -351,7 +381,8 @@ void register_Simulation_class(){
             
             Simulation_exposer.def( 
                 "throwError"
-                , throwError_function_value );
+                , throwError_function_value
+                , "Throw any error associated with this simulation - this does\nnothing if we are not in an error state" );
         
         }
         { //::SireMove::Simulation::wait
@@ -361,7 +392,8 @@ void register_Simulation_class(){
             
             Simulation_exposer.def( 
                 "wait"
-                , wait_function_value );
+                , wait_function_value
+                , "Wait for the simulation to stop running\n(which can be either because it finished, was stopped,\nwas aborted or ended in error)" );
         
         }
         { //::SireMove::Simulation::wait
@@ -372,7 +404,8 @@ void register_Simulation_class(){
             Simulation_exposer.def( 
                 "wait"
                 , wait_function_value
-                , ( bp::arg("timeout") ) );
+                , ( bp::arg("timeout") )
+                , "Wait for the simulation to stop running, or for timeout\nmilliseconds to pass, whichever comes soonest. This returns\nwhether or not the simulation has stopped" );
         
         }
         { //::SireMove::Simulation::wasAborted
@@ -382,7 +415,8 @@ void register_Simulation_class(){
             
             Simulation_exposer.def( 
                 "wasAborted"
-                , wasAborted_function_value );
+                , wasAborted_function_value
+                , "Return whether or not the simulation was aborted" );
         
         }
         { //::SireMove::Simulation::wasStopped
@@ -392,7 +426,8 @@ void register_Simulation_class(){
             
             Simulation_exposer.def( 
                 "wasStopped"
-                , wasStopped_function_value );
+                , wasStopped_function_value
+                , "Return whether or not the simulation was stopped" );
         
         }
         Simulation_exposer.staticmethod( "run" );

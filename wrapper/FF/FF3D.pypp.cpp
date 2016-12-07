@@ -19,7 +19,7 @@ void register_FF3D_class(){
 
     { //::SireFF::FF3D
         typedef bp::class_< SireFF::FF3D, boost::noncopyable > FF3D_exposer_t;
-        FF3D_exposer_t FF3D_exposer = FF3D_exposer_t( "FF3D", bp::no_init );
+        FF3D_exposer_t FF3D_exposer = FF3D_exposer_t( "FF3D", "This class provides the virtual interface for the 3D\nforcefields. These are forcefields that use 3D coordinates\nfor the atoms, and therefore you can calculate 3D forces\non the atoms. This class provides a virtual interface,\nand should be multiply inherited with FF to be used.\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope FF3D_scope( FF3D_exposer );
         { //::SireFF::FF3D::energy
         
@@ -29,7 +29,8 @@ void register_FF3D_class(){
             FF3D_exposer.def( 
                 "energy"
                 , energy_function_value
-                , ( bp::arg("energytable"), bp::arg("scale_energy")=1 ) );
+                , ( bp::arg("energytable"), bp::arg("scale_energy")=1 )
+                , "Calculate all of the energies of the\nmolecules in the forcetable forcetable due to the\nmolecules interactions in this forcefield" );
         
         }
         { //::SireFF::FF3D::energy
@@ -40,7 +41,8 @@ void register_FF3D_class(){
             FF3D_exposer.def( 
                 "energy"
                 , energy_function_value
-                , ( bp::arg("energytable"), bp::arg("component"), bp::arg("scale_energy")=1 ) );
+                , ( bp::arg("energytable"), bp::arg("component"), bp::arg("scale_energy")=1 )
+                , "Calculate all of the energies acting on all of the\nmolecules in the energytable energytable due to the\nspecified component of the molecules interactions in\nthis forcefield" );
         
         }
         { //::SireFF::FF3D::field
@@ -51,7 +53,8 @@ void register_FF3D_class(){
             FF3D_exposer.def( 
                 "field"
                 , field_function_value
-                , ( bp::arg("fieldtable"), bp::arg("scale_field")=1 ) );
+                , ( bp::arg("fieldtable"), bp::arg("scale_field")=1 )
+                , "Calculate the fields acting at all of the points\nin fieldtable due to the molecules in this forcefield" );
         
         }
         { //::SireFF::FF3D::field
@@ -62,7 +65,8 @@ void register_FF3D_class(){
             FF3D_exposer.def( 
                 "field"
                 , field_function_value
-                , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("scale_field")=1 ) );
+                , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("scale_field")=1 )
+                , "Calculate the fields acting at all of the points\nin fieldtable due to the specified component component\nfrom the molecules in this forcefield" );
         
         }
         { //::SireFF::FF3D::field
@@ -73,7 +77,8 @@ void register_FF3D_class(){
             FF3D_exposer.def( 
                 "field"
                 , field_function_value
-                , ( bp::arg("fieldtable"), bp::arg("probe"), bp::arg("scale_field")=1 ) );
+                , ( bp::arg("fieldtable"), bp::arg("probe"), bp::arg("scale_field")=1 )
+                , "Calculate the fields acting at all of the points\nin fieldtable due to the molecules in this forcefield" );
         
         }
         { //::SireFF::FF3D::field
@@ -84,7 +89,8 @@ void register_FF3D_class(){
             FF3D_exposer.def( 
                 "field"
                 , field_function_value
-                , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_field")=1 ) );
+                , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_field")=1 )
+                , "Calculate the fields acting at all of the points\nin fieldtable due to the specified component component\nfrom the molecules in this forcefield" );
         
         }
         { //::SireFF::FF3D::force
@@ -95,7 +101,8 @@ void register_FF3D_class(){
             FF3D_exposer.def( 
                 "force"
                 , force_function_value
-                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 ) );
+                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
+                , "Calculate all of the forces acting on all of the\nmolecules in the forcetable forcetable due to the\nmolecules interactions in this forcefield" );
         
         }
         { //::SireFF::FF3D::force
@@ -106,7 +113,8 @@ void register_FF3D_class(){
             FF3D_exposer.def( 
                 "force"
                 , force_function_value
-                , ( bp::arg("forcetable"), bp::arg("component"), bp::arg("scale_force")=1 ) );
+                , ( bp::arg("forcetable"), bp::arg("component"), bp::arg("scale_force")=1 )
+                , "Calculate all of the forces acting on all of the\nmolecules in the forcetable forcetable due to the\nspecified component of the molecules interactions in\nthis forcefield" );
         
         }
         { //::SireFF::FF3D::potential
@@ -117,7 +125,8 @@ void register_FF3D_class(){
             FF3D_exposer.def( 
                 "potential"
                 , potential_function_value
-                , ( bp::arg("potentialtable"), bp::arg("scale_potential")=1 ) );
+                , ( bp::arg("potentialtable"), bp::arg("scale_potential")=1 )
+                , "Calculate the potential acting at the points in potentialtable\ndue to the molecules in this forcefield" );
         
         }
         { //::SireFF::FF3D::potential
@@ -128,7 +137,8 @@ void register_FF3D_class(){
             FF3D_exposer.def( 
                 "potential"
                 , potential_function_value
-                , ( bp::arg("potentialtable"), bp::arg("probe"), bp::arg("scale_potential")=1 ) );
+                , ( bp::arg("potentialtable"), bp::arg("probe"), bp::arg("scale_potential")=1 )
+                , "Calculate the potential acting at the points in potentialtable\ndue to the molecules in this forcefield" );
         
         }
         { //::SireFF::FF3D::potential
@@ -139,7 +149,8 @@ void register_FF3D_class(){
             FF3D_exposer.def( 
                 "potential"
                 , potential_function_value
-                , ( bp::arg("potentialtable"), bp::arg("component"), bp::arg("scale_potential")=1 ) );
+                , ( bp::arg("potentialtable"), bp::arg("component"), bp::arg("scale_potential")=1 )
+                , "Calculate the potential acting at the points in potentialtable\ndue to the specified component component from the molecules in\nthis table" );
         
         }
         { //::SireFF::FF3D::potential
@@ -150,7 +161,8 @@ void register_FF3D_class(){
             FF3D_exposer.def( 
                 "potential"
                 , potential_function_value
-                , ( bp::arg("potentialtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_potential")=1 ) );
+                , ( bp::arg("potentialtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_potential")=1 )
+                , "Calculate the potential acting at the points in potentialtable\ndue to the specified component component from the molecules in\nthis table" );
         
         }
         { //::SireFF::FF3D::typeName
@@ -160,7 +172,8 @@ void register_FF3D_class(){
             
             FF3D_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         FF3D_exposer.staticmethod( "typeName" );

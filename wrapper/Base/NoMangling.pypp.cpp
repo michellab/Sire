@@ -27,9 +27,9 @@ void register_NoMangling_class(){
 
     { //::SireBase::NoMangling
         typedef bp::class_< SireBase::NoMangling, bp::bases< SireBase::StringMangler, SireBase::Property > > NoMangling_exposer_t;
-        NoMangling_exposer_t NoMangling_exposer = NoMangling_exposer_t( "NoMangling", bp::init< >() );
+        NoMangling_exposer_t NoMangling_exposer = NoMangling_exposer_t( "NoMangling", "This mangler does absolutely nothing to the string\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope NoMangling_scope( NoMangling_exposer );
-        NoMangling_exposer.def( bp::init< SireBase::NoMangling const & >(( bp::arg("other") )) );
+        NoMangling_exposer.def( bp::init< SireBase::NoMangling const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireBase::NoMangling::mangle
         
             typedef ::QString ( ::SireBase::NoMangling::*mangle_function_type)( ::QString const & ) const;
@@ -38,7 +38,8 @@ void register_NoMangling_class(){
             NoMangling_exposer.def( 
                 "mangle"
                 , mangle_function_value
-                , ( bp::arg("input") ) );
+                , ( bp::arg("input") )
+                , "Mangle the string - remove all initial and trailing spaces" );
         
         }
         NoMangling_exposer.def( bp::self != bp::self );
@@ -51,7 +52,8 @@ void register_NoMangling_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         NoMangling_exposer.def( bp::self == bp::self );
@@ -62,7 +64,8 @@ void register_NoMangling_class(){
             
             NoMangling_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         NoMangling_exposer.staticmethod( "typeName" );

@@ -12,6 +12,12 @@ INSTALLATION INSTRUCTIONS
    to allow you to download Sire and for the Sire build to automatically
    download all of its dependencies.
 
+   Note, on OS X you must make sure that you have installed XCode
+   and the command line developer tools. Install the tools using
+   "xcode-select --install" and following the instructions. Without
+   the tools, you will find that some dependencies won't compile,
+   with errors like "Cannot find stdio.h"
+
 2. Download Sire using
 
    ``git clone git@github.com:michellab/Sire.git``

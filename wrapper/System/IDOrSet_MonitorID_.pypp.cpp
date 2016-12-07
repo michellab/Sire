@@ -31,12 +31,13 @@ void register_IDOrSet_MonitorID__class(){
 
     { //::SireID::IDOrSet< SireSystem::MonitorID >
         typedef bp::class_< SireID::IDOrSet< SireSystem::MonitorID >, bp::bases< SireSystem::MonitorID, SireID::ID > > IDOrSet_MonitorID__exposer_t;
-        IDOrSet_MonitorID__exposer_t IDOrSet_MonitorID__exposer = IDOrSet_MonitorID__exposer_t( "IDOrSet_MonitorID_", bp::init< >() );
+        IDOrSet_MonitorID__exposer_t IDOrSet_MonitorID__exposer = IDOrSet_MonitorID__exposer_t( "IDOrSet_MonitorID_", "", bp::init< >("") );
         bp::scope IDOrSet_MonitorID__scope( IDOrSet_MonitorID__exposer );
-        IDOrSet_MonitorID__exposer.def( bp::init< SireSystem::MonitorID const & >(( bp::arg("id") )) );
-        IDOrSet_MonitorID__exposer.def( bp::init< SireSystem::MonitorID const &, SireSystem::MonitorID const & >(( bp::arg("id0"), bp::arg("id1") )) );
-        IDOrSet_MonitorID__exposer.def( bp::init< QList< SireSystem::MonitorIdentifier > const & >(( bp::arg("ids") )) );
-        IDOrSet_MonitorID__exposer.def( bp::init< SireID::IDOrSet< SireSystem::MonitorID > const & >(( bp::arg("other") )) );
+        IDOrSet_MonitorID__exposer.def( bp::init< SireSystem::MonitorID const & >(( bp::arg("id") ), "") );
+        IDOrSet_MonitorID__exposer.def( bp::init< SireSystem::MonitorID const &, SireSystem::MonitorID const & >(( bp::arg("id0"), bp::arg("id1") ), "") );
+        IDOrSet_MonitorID__exposer.def( bp::init< QList< SireSystem::MonitorIdentifier > const & >(( bp::arg("ids") ), "") );
+        IDOrSet_MonitorID__exposer.def( bp::init< SireID::IDOrSet< SireSystem::MonitorID > const & >(( bp::arg("ids") ), "") );
+        IDOrSet_MonitorID__exposer.def( bp::init< SireID::IDOrSet< SireSystem::MonitorID > const & >(( bp::arg("other") ), "") );
         { //::SireID::IDOrSet< SireSystem::MonitorID >::IDs
         
             typedef SireID::IDOrSet< SireSystem::MonitorID > exported_class_t;
@@ -46,7 +47,8 @@ void register_IDOrSet_MonitorID__class(){
             IDOrSet_MonitorID__exposer.def( 
                 "IDs"
                 , IDs_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireID::IDOrSet< SireSystem::MonitorID >::hash
@@ -57,7 +59,8 @@ void register_IDOrSet_MonitorID__class(){
             
             IDOrSet_MonitorID__exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireID::IDOrSet< SireSystem::MonitorID >::isNull
@@ -68,19 +71,21 @@ void register_IDOrSet_MonitorID__class(){
             
             IDOrSet_MonitorID__exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireID::IDOrSet< SireSystem::MonitorID >::map
         
             typedef SireID::IDOrSet< SireSystem::MonitorID > exported_class_t;
-            typedef ::QList< SireSystem::MonitorName > ( ::SireID::IDOrSet< SireSystem::MonitorID >::*map_function_type)( ::SireSystem::SystemMonitors const & ) const;
+            typedef ::QList< SireSystem::MonitorName > ( ::SireID::IDOrSet< SireSystem::MonitorID >::*map_function_type)( ::SireID::IDOrSet< SireSystem::MonitorID >::SearchObject const & ) const;
             map_function_type map_function_value( &::SireID::IDOrSet< SireSystem::MonitorID >::map );
             
             IDOrSet_MonitorID__exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("obj") ) );
+                , ( bp::arg("obj") )
+                , "" );
         
         }
         IDOrSet_MonitorID__exposer.def( bp::self != bp::other< SireID::ID >() );
@@ -96,7 +101,8 @@ void register_IDOrSet_MonitorID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireID::IDOrSet< SireSystem::MonitorID >::operator=
@@ -109,7 +115,8 @@ void register_IDOrSet_MonitorID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         IDOrSet_MonitorID__exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -123,7 +130,8 @@ void register_IDOrSet_MonitorID__class(){
             
             IDOrSet_MonitorID__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireID::IDOrSet< SireSystem::MonitorID >::typeName
@@ -134,7 +142,8 @@ void register_IDOrSet_MonitorID__class(){
             
             IDOrSet_MonitorID__exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireID::IDOrSet< SireSystem::MonitorID >::what
@@ -145,7 +154,8 @@ void register_IDOrSet_MonitorID__class(){
             
             IDOrSet_MonitorID__exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         IDOrSet_MonitorID__exposer.staticmethod( "typeName" );

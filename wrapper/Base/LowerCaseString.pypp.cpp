@@ -27,9 +27,9 @@ void register_LowerCaseString_class(){
 
     { //::SireBase::LowerCaseString
         typedef bp::class_< SireBase::LowerCaseString, bp::bases< SireBase::StringMangler, SireBase::Property > > LowerCaseString_exposer_t;
-        LowerCaseString_exposer_t LowerCaseString_exposer = LowerCaseString_exposer_t( "LowerCaseString", bp::init< >() );
+        LowerCaseString_exposer_t LowerCaseString_exposer = LowerCaseString_exposer_t( "LowerCaseString", "This mangler just trims spaces away from the beginning\nand end of the string and lower-cases the whole string\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope LowerCaseString_scope( LowerCaseString_exposer );
-        LowerCaseString_exposer.def( bp::init< SireBase::LowerCaseString const & >(( bp::arg("other") )) );
+        LowerCaseString_exposer.def( bp::init< SireBase::LowerCaseString const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireBase::LowerCaseString::mangle
         
             typedef ::QString ( ::SireBase::LowerCaseString::*mangle_function_type)( ::QString const & ) const;
@@ -38,7 +38,8 @@ void register_LowerCaseString_class(){
             LowerCaseString_exposer.def( 
                 "mangle"
                 , mangle_function_value
-                , ( bp::arg("input") ) );
+                , ( bp::arg("input") )
+                , "Mangle the string - remove all initial and trailing spaces" );
         
         }
         LowerCaseString_exposer.def( bp::self != bp::self );
@@ -51,7 +52,8 @@ void register_LowerCaseString_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         LowerCaseString_exposer.def( bp::self == bp::self );
@@ -62,7 +64,8 @@ void register_LowerCaseString_class(){
             
             LowerCaseString_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         LowerCaseString_exposer.staticmethod( "typeName" );

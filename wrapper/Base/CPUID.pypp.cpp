@@ -27,9 +27,9 @@ void register_CPUID_class(){
 
     { //::SireBase::CPUID
         typedef bp::class_< SireBase::CPUID, bp::bases< SireBase::Property > > CPUID_exposer_t;
-        CPUID_exposer_t CPUID_exposer = CPUID_exposer_t( "CPUID", bp::init< >() );
+        CPUID_exposer_t CPUID_exposer = CPUID_exposer_t( "CPUID", "This class obtains and displays the capabilities and ID of\nthe CPU at runtime\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope CPUID_scope( CPUID_exposer );
-        CPUID_exposer.def( bp::init< SireBase::CPUID const & >(( bp::arg("other") )) );
+        CPUID_exposer.def( bp::init< SireBase::CPUID const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireBase::CPUID::brand
         
             typedef ::QString ( ::SireBase::CPUID::*brand_function_type)(  ) const;
@@ -37,7 +37,8 @@ void register_CPUID_class(){
             
             CPUID_exposer.def( 
                 "brand"
-                , brand_function_value );
+                , brand_function_value
+                , "Return the Brand string for this CPU" );
         
         }
         { //::SireBase::CPUID::clockSpeed
@@ -47,7 +48,8 @@ void register_CPUID_class(){
             
             CPUID_exposer.def( 
                 "clockSpeed"
-                , clockSpeed_function_value );
+                , clockSpeed_function_value
+                , "Return the clockspeed of this processor. A value of -1 is returned\nif this is not known" );
         
         }
         { //::SireBase::CPUID::numCores
@@ -57,7 +59,8 @@ void register_CPUID_class(){
             
             CPUID_exposer.def( 
                 "numCores"
-                , numCores_function_value );
+                , numCores_function_value
+                , "Return the number of cores of this processor. A value of 1 is returned\nif this is not known (as we must have at least 1 core)" );
         
         }
         CPUID_exposer.def( bp::self != bp::self );
@@ -70,7 +73,8 @@ void register_CPUID_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CPUID_exposer.def( bp::self == bp::self );
@@ -81,7 +85,8 @@ void register_CPUID_class(){
             
             CPUID_exposer.def( 
                 "supportableFeatures"
-                , supportableFeatures_function_value );
+                , supportableFeatures_function_value
+                , "Return the list of all searchable supportable features" );
         
         }
         { //::SireBase::CPUID::supportedFeatures
@@ -91,7 +96,8 @@ void register_CPUID_class(){
             
             CPUID_exposer.def( 
                 "supportedFeatures"
-                , supportedFeatures_function_value );
+                , supportedFeatures_function_value
+                , "Return the list of all features supported on this CPU" );
         
         }
         { //::SireBase::CPUID::supports
@@ -102,7 +108,8 @@ void register_CPUID_class(){
             CPUID_exposer.def( 
                 "supports"
                 , supports_function_value
-                , ( bp::arg("feature") ) );
+                , ( bp::arg("feature") )
+                , "Returns whether or not the CPU supports the passed feature.\nNote that the passed feature must be one of the strings\nas returned by supportableFeatures" );
         
         }
         { //::SireBase::CPUID::supportsAVX
@@ -112,7 +119,8 @@ void register_CPUID_class(){
             
             CPUID_exposer.def( 
                 "supportsAVX"
-                , supportsAVX_function_value );
+                , supportsAVX_function_value
+                , "Return whether or not this processor supports AVX vector instructions" );
         
         }
         { //::SireBase::CPUID::supportsSSE2
@@ -122,7 +130,8 @@ void register_CPUID_class(){
             
             CPUID_exposer.def( 
                 "supportsSSE2"
-                , supportsSSE2_function_value );
+                , supportsSSE2_function_value
+                , "Return whether or not this processor supports SSE2 vector instructions" );
         
         }
         { //::SireBase::CPUID::toString
@@ -132,7 +141,8 @@ void register_CPUID_class(){
             
             CPUID_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireBase::CPUID::typeName
@@ -142,7 +152,8 @@ void register_CPUID_class(){
             
             CPUID_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireBase::CPUID::vendor
@@ -152,7 +163,8 @@ void register_CPUID_class(){
             
             CPUID_exposer.def( 
                 "vendor"
-                , vendor_function_value );
+                , vendor_function_value
+                , "Return the Vendor string for this CPU" );
         
         }
         { //::SireBase::CPUID::what
@@ -162,7 +174,8 @@ void register_CPUID_class(){
             
             CPUID_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         CPUID_exposer.staticmethod( "typeName" );

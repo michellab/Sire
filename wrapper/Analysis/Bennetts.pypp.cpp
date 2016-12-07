@@ -39,11 +39,11 @@ void register_Bennetts_class(){
 
     { //::SireAnalysis::Bennetts
         typedef bp::class_< SireAnalysis::Bennetts, bp::bases< SireBase::Property > > Bennetts_exposer_t;
-        Bennetts_exposer_t Bennetts_exposer = Bennetts_exposer_t( "Bennetts", bp::init< >() );
+        Bennetts_exposer_t Bennetts_exposer = Bennetts_exposer_t( "Bennetts", "This class is used to analyse the free energies that are\ncalculated during a Bennetts Acceptance Ratio simulation\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope Bennetts_scope( Bennetts_exposer );
-        Bennetts_exposer.def( bp::init< QList< double > const &, QMap< double, SireMaths::BennettsFreeEnergyAverage > const &, QMap< double, SireMaths::BennettsFreeEnergyAverage > const & >(( bp::arg("windows"), bp::arg("forwards_ratios"), bp::arg("backwards_ratios") )) );
-        Bennetts_exposer.def( bp::init< SireAnalysis::BennettsRatios const & >(( bp::arg("ratios") )) );
-        Bennetts_exposer.def( bp::init< SireAnalysis::Bennetts const & >(( bp::arg("other") )) );
+        Bennetts_exposer.def( bp::init< QList< double > const &, QMap< double, SireMaths::BennettsFreeEnergyAverage > const &, QMap< double, SireMaths::BennettsFreeEnergyAverage > const & >(( bp::arg("windows"), bp::arg("forwards_ratios"), bp::arg("backwards_ratios") ), "Construct to use the passed windows, with the free energy ratios from\neach window to the window above in forwards_ratios and from the window\nbelow to each window in backwards_ratios") );
+        Bennetts_exposer.def( bp::init< SireAnalysis::BennettsRatios const & >(( bp::arg("ratios") ), "Construct to use the passed Bennetts ratios") );
+        Bennetts_exposer.def( bp::init< SireAnalysis::Bennetts const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireAnalysis::Bennetts::add
         
             typedef void ( ::SireAnalysis::Bennetts::*add_function_type)( ::QList< double > const &,::QMap< double, SireMaths::BennettsFreeEnergyAverage > const &,::QMap< double, SireMaths::BennettsFreeEnergyAverage > const & ) ;
@@ -52,7 +52,8 @@ void register_Bennetts_class(){
             Bennetts_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("windows"), bp::arg("forwards_ratios"), bp::arg("backwards_ratios") ) );
+                , ( bp::arg("windows"), bp::arg("forwards_ratios"), bp::arg("backwards_ratios") )
+                , "Add the data for the next iteration, which contains the ratios for the passed windows,\nwith forwards_ratios containing the free energy from each window to the next window,\nand backwards_ratios containing the free energy from the previous window to each window" );
         
         }
         { //::SireAnalysis::Bennetts::add
@@ -63,7 +64,8 @@ void register_Bennetts_class(){
             Bennetts_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("ratios") ) );
+                , ( bp::arg("ratios") )
+                , "Add the data for the next iteration" );
         
         }
         { //::SireAnalysis::Bennetts::at
@@ -74,7 +76,8 @@ void register_Bennetts_class(){
             Bennetts_exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return the deltas for the ith iteration" );
         
         }
         { //::SireAnalysis::Bennetts::clear
@@ -84,7 +87,8 @@ void register_Bennetts_class(){
             
             Bennetts_exposer.def( 
                 "clear"
-                , clear_function_value );
+                , clear_function_value
+                , "Remove all values from the histogram" );
         
         }
         { //::SireAnalysis::Bennetts::count
@@ -94,7 +98,8 @@ void register_Bennetts_class(){
             
             Bennetts_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of iterations" );
         
         }
         { //::SireAnalysis::Bennetts::lambdaValues
@@ -104,7 +109,8 @@ void register_Bennetts_class(){
             
             Bennetts_exposer.def( 
                 "lambdaValues"
-                , lambdaValues_function_value );
+                , lambdaValues_function_value
+                , "Return the values of all windows" );
         
         }
         { //::SireAnalysis::Bennetts::merge
@@ -115,7 +121,8 @@ void register_Bennetts_class(){
             Bennetts_exposer.def( 
                 "merge"
                 , merge_function_value
-                , ( bp::arg("start"), bp::arg("end") ) );
+                , ( bp::arg("start"), bp::arg("end") )
+                , "Merge the deltas for iterations start->end" );
         
         }
         { //::SireAnalysis::Bennetts::merge
@@ -126,7 +133,8 @@ void register_Bennetts_class(){
             Bennetts_exposer.def( 
                 "merge"
                 , merge_function_value
-                , ( bp::arg("indicies") ) );
+                , ( bp::arg("indicies") )
+                , "Merge the deltas at the passed indicies" );
         
         }
         { //::SireAnalysis::Bennetts::nIterations
@@ -136,7 +144,8 @@ void register_Bennetts_class(){
             
             Bennetts_exposer.def( 
                 "nIterations"
-                , nIterations_function_value );
+                , nIterations_function_value
+                , "Return the number of iterations" );
         
         }
         { //::SireAnalysis::Bennetts::nLambdaValues
@@ -146,7 +155,8 @@ void register_Bennetts_class(){
             
             Bennetts_exposer.def( 
                 "nLambdaValues"
-                , nLambdaValues_function_value );
+                , nLambdaValues_function_value
+                , "Return the number of lambda values (windows)" );
         
         }
         { //::SireAnalysis::Bennetts::nSamples
@@ -156,7 +166,8 @@ void register_Bennetts_class(){
             
             Bennetts_exposer.def( 
                 "nSamples"
-                , nSamples_function_value );
+                , nSamples_function_value
+                , "Return the total number of samples in the simulation" );
         
         }
         { //::SireAnalysis::Bennetts::nWindows
@@ -166,7 +177,8 @@ void register_Bennetts_class(){
             
             Bennetts_exposer.def( 
                 "nWindows"
-                , nWindows_function_value );
+                , nWindows_function_value
+                , "Return the number of windows" );
         
         }
         Bennetts_exposer.def( bp::self != bp::self );
@@ -179,7 +191,8 @@ void register_Bennetts_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Bennetts_exposer.def( bp::self == bp::self );
@@ -191,7 +204,8 @@ void register_Bennetts_class(){
             Bennetts_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireAnalysis::Bennetts::ratios
@@ -201,7 +215,8 @@ void register_Bennetts_class(){
             
             Bennetts_exposer.def( 
                 "ratios"
-                , ratios_function_value );
+                , ratios_function_value
+                , "Return the deltas for all iterations" );
         
         }
         { //::SireAnalysis::Bennetts::removeAt
@@ -212,7 +227,8 @@ void register_Bennetts_class(){
             Bennetts_exposer.def( 
                 "removeAt"
                 , removeAt_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Remove the data for iteration i" );
         
         }
         { //::SireAnalysis::Bennetts::removeRange
@@ -223,7 +239,8 @@ void register_Bennetts_class(){
             Bennetts_exposer.def( 
                 "removeRange"
                 , removeRange_function_value
-                , ( bp::arg("start"), bp::arg("end") ) );
+                , ( bp::arg("start"), bp::arg("end") )
+                , "Remove every iteration from start to end (inclusively)" );
         
         }
         { //::SireAnalysis::Bennetts::rollingAverage
@@ -234,7 +251,8 @@ void register_Bennetts_class(){
             Bennetts_exposer.def( 
                 "rollingAverage"
                 , rollingAverage_function_value
-                , ( bp::arg("niterations") ) );
+                , ( bp::arg("niterations") )
+                , "Return a list of Gradients that represents the rolling average over niterations\niterations over this TI data set. If this data set contains 100 iterations, and\nwe calculate the rolling average over 50 iterations, then the returned Gradients\nwill be the average from 1-50, then 2-51, 3-52.....51-100" );
         
         }
         { //::SireAnalysis::Bennetts::set
@@ -245,7 +263,8 @@ void register_Bennetts_class(){
             Bennetts_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("i"), bp::arg("windows"), bp::arg("forwards_ratios"), bp::arg("backwards_ratios") ) );
+                , ( bp::arg("i"), bp::arg("windows"), bp::arg("forwards_ratios"), bp::arg("backwards_ratios") )
+                , "Set the deltas for the ith iteration" );
         
         }
         { //::SireAnalysis::Bennetts::set
@@ -256,7 +275,8 @@ void register_Bennetts_class(){
             Bennetts_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("i"), bp::arg("ratios") ) );
+                , ( bp::arg("i"), bp::arg("ratios") )
+                , "Set the deltas for the ith iteration" );
         
         }
         { //::SireAnalysis::Bennetts::size
@@ -266,7 +286,8 @@ void register_Bennetts_class(){
             
             Bennetts_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "Return the number of iterations" );
         
         }
         { //::SireAnalysis::Bennetts::toString
@@ -276,7 +297,8 @@ void register_Bennetts_class(){
             
             Bennetts_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireAnalysis::Bennetts::typeName
@@ -286,7 +308,8 @@ void register_Bennetts_class(){
             
             Bennetts_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireAnalysis::Bennetts::what
@@ -296,7 +319,8 @@ void register_Bennetts_class(){
             
             Bennetts_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         { //::SireAnalysis::Bennetts::windows
@@ -306,7 +330,8 @@ void register_Bennetts_class(){
             
             Bennetts_exposer.def( 
                 "windows"
-                , windows_function_value );
+                , windows_function_value
+                , "Return the value of all windows" );
         
         }
         Bennetts_exposer.staticmethod( "typeName" );

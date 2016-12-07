@@ -19,12 +19,12 @@ void register_Celsius_class(){
 
     { //::SireUnits::Celsius
         typedef bp::class_< SireUnits::Celsius, bp::bases< SireUnits::Dimension::TempBase > > Celsius_exposer_t;
-        Celsius_exposer_t Celsius_exposer = Celsius_exposer_t( "Celsius", bp::init< >() );
+        Celsius_exposer_t Celsius_exposer = Celsius_exposer_t( "Celsius", "", bp::init< >("") );
         bp::scope Celsius_scope( Celsius_exposer );
-        Celsius_exposer.def( bp::init< double >(( bp::arg("value") )) );
-        Celsius_exposer.def( bp::init< SireUnits::Dimension::Temperature const & >(( bp::arg("temp") )) );
-        Celsius_exposer.def( bp::init< SireUnits::Dimension::TempBase const & >(( bp::arg("other") )) );
-        Celsius_exposer.def( bp::init< SireUnits::Celsius const & >(( bp::arg("other") )) );
+        Celsius_exposer.def( bp::init< double >(( bp::arg("value") ), "") );
+        Celsius_exposer.def( bp::init< SireUnits::Dimension::Temperature const & >(( bp::arg("temp") ), "") );
+        Celsius_exposer.def( bp::init< SireUnits::Dimension::TempBase const & >(( bp::arg("other") ), "") );
+        Celsius_exposer.def( bp::init< SireUnits::Celsius const & >(( bp::arg("other") ), "") );
         { //::SireUnits::Celsius::convertFromInternal
         
             typedef double ( ::SireUnits::Celsius::*convertFromInternal_function_type)( double ) const;
@@ -33,7 +33,8 @@ void register_Celsius_class(){
             Celsius_exposer.def( 
                 "convertFromInternal"
                 , convertFromInternal_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireUnits::Celsius::convertFromInternal
@@ -43,7 +44,8 @@ void register_Celsius_class(){
             
             Celsius_exposer.def( 
                 "convertFromInternal"
-                , convertFromInternal_function_value );
+                , convertFromInternal_function_value
+                , "" );
         
         }
         { //::SireUnits::Celsius::convertToInternal
@@ -54,7 +56,8 @@ void register_Celsius_class(){
             Celsius_exposer.def( 
                 "convertToInternal"
                 , convertToInternal_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         Celsius_exposer.def( bp::self * bp::other< double >() );
@@ -75,7 +78,8 @@ void register_Celsius_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireUnits::Celsius::operator=
@@ -87,13 +91,14 @@ void register_Celsius_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("temp") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
-        Celsius_exposer.def( bp::other< int >() * bp::self );
         Celsius_exposer.def( bp::other< double >() * bp::self );
-        Celsius_exposer.def( bp::other< int >() / bp::self );
+        Celsius_exposer.def( bp::other< int >() * bp::self );
         Celsius_exposer.def( bp::other< double >() / bp::self );
+        Celsius_exposer.def( bp::other< int >() / bp::self );
         Celsius_exposer.def( bp::other<double>() * bp::self );
         Celsius_exposer.def( bp::other<double>() / bp::self );
         Celsius_exposer.def( "__copy__", &__copy__);

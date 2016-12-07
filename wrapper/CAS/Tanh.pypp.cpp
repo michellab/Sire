@@ -33,10 +33,10 @@ void register_Tanh_class(){
 
     { //::SireCAS::Tanh
         typedef bp::class_< SireCAS::Tanh, bp::bases< SireCAS::SingleFunc, SireCAS::ExBase > > Tanh_exposer_t;
-        Tanh_exposer_t Tanh_exposer = Tanh_exposer_t( "Tanh", bp::init< >() );
+        Tanh_exposer_t Tanh_exposer = Tanh_exposer_t( "Tanh", "Hyperbolic tangent", bp::init< >("Null constructor") );
         bp::scope Tanh_scope( Tanh_exposer );
-        Tanh_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") )) );
-        Tanh_exposer.def( bp::init< SireCAS::Tanh const & >(( bp::arg("other") )) );
+        Tanh_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") ), "Construct cos(expression)") );
+        Tanh_exposer.def( bp::init< SireCAS::Tanh const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::Tanh::evaluate
         
             typedef double ( ::SireCAS::Tanh::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -45,7 +45,8 @@ void register_Tanh_class(){
             Tanh_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::Tanh::evaluate
@@ -56,7 +57,8 @@ void register_Tanh_class(){
             Tanh_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         Tanh_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -67,7 +69,8 @@ void register_Tanh_class(){
             
             Tanh_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::Tanh::what
@@ -77,7 +80,8 @@ void register_Tanh_class(){
             
             Tanh_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Tanh_exposer.staticmethod( "typeName" );

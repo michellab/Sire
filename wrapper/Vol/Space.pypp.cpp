@@ -31,7 +31,7 @@ void register_Space_class(){
 
     { //::SireVol::Space
         typedef bp::class_< SireVol::Space, bp::bases< SireBase::Property >, boost::noncopyable > Space_exposer_t;
-        Space_exposer_t Space_exposer = Space_exposer_t( "Space", bp::no_init );
+        Space_exposer_t Space_exposer = Space_exposer_t( "Space", "\nThis pure virtual base class represents the volume of space within which a SimSystem\nresides. This class provides functions that calculate the distances between CoordGroups\nin this volume, and has most of the optimisation (since most of the hard-work\ndouble distance loops occur in this class). Key overloaded classes that inherit\nSpace are Cartesian, which represents infinite 3D cartesian space, and\nPeriodicBox which represents a 3D periodic box.\n\nAs this class is used right in the heart of the double loop it is very important\nthat it is not implemented in a way that requires a lot of virtual function calls.\nThis means that the class is implemented to calculate the distances of all pairs of points\nbetween two CoordGroups in a single virtual function call. The results are held\nin a special matrix that can be queried via read-only, inline, non-virtual\nfunctions, with the items ordered in memory in the same order that you would get\nby iterating over all pairs (group1 in outer loop, group2 in inner loop). An advantage\nof this approach is that as the distances are calculated in one go, it is possible for\nthe Space class to find out whether two CoordGroups are within the non-bonded cutoff\ndistance before any further calculation is performed.\n\nTo prevent continual reallocation, the Space class works on an already-allocated\nmatrix class. This is only reallocated if it is found that it is not sufficiently\nlarge to hold the pair of CoordGroups.\n\nAs a further optimisation, the distance matrix may be populated with the interpoint\ndistances, or the square of the interatomic distances, or the 1  distances\nor 1  distances^2\n\nThe inheritors of this class should be the only parts of this code where\ndistance calculations are calculated between and within CoordGroups. This will\nallow you to change the space of the system here, and have that space used in the\nrest of the code that uses CoordGroups.\n\nThis is a virtual class that is designed to be used with SharedPolyPointer.\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope Space_scope( Space_exposer );
         { //::SireVol::Space::beyond
         
@@ -41,7 +41,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "beyond"
                 , beyond_function_value
-                , ( bp::arg("dist"), bp::arg("group0"), bp::arg("group1") ) );
+                , ( bp::arg("dist"), bp::arg("group0"), bp::arg("group1") )
+                , "Return whether or not these two groups are definitely beyond the distance dist.\n\nWarning: Note beyond does not mean definitely within the distance\n" );
         
         }
         { //::SireVol::Space::beyond
@@ -52,7 +53,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "beyond"
                 , beyond_function_value
-                , ( bp::arg("dist"), bp::arg("aabox0"), bp::arg("aabox1") ) );
+                , ( bp::arg("dist"), bp::arg("aabox0"), bp::arg("aabox1") )
+                , "Return whether or not two groups that are enclosed by the AABoxes\naabox0 and aabox1 are beyond the cutoff distance dist.\n\nWarning: Note beyond does not mean definitely within the distance\n" );
         
         }
         { //::SireVol::Space::calcAngle
@@ -63,7 +65,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "calcAngle"
                 , calcAngle_function_value
-                , ( bp::arg("point0"), bp::arg("point1"), bp::arg("point2") ) );
+                , ( bp::arg("point0"), bp::arg("point1"), bp::arg("point2") )
+                , "Calculate the angle between the passed three points. This should return\nthe acute angle between the points, which should lie between 0 and 180 degrees" );
         
         }
         { //::SireVol::Space::calcDihedral
@@ -74,7 +77,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "calcDihedral"
                 , calcDihedral_function_value
-                , ( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3") ) );
+                , ( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3") )
+                , "Calculate the torsion angle between the passed four points. This should\nreturn the torsion angle measured clockwise when looking down the\ntorsion from point0-point1-point2-point3. This will lie between 0 and 360\ndegrees" );
         
         }
         { //::SireVol::Space::calcDist
@@ -85,7 +89,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "calcDist"
                 , calcDist_function_value
-                , ( bp::arg("point0"), bp::arg("point1") ) );
+                , ( bp::arg("point0"), bp::arg("point1") )
+                , "Calculate the distance between two points" );
         
         }
         { //::SireVol::Space::calcDist
@@ -96,7 +101,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "calcDist"
                 , calcDist_function_value
-                , ( bp::arg("group"), bp::arg("distmat") ) );
+                , ( bp::arg("group"), bp::arg("distmat") )
+                , "Populate the matrix mat with the distances between all of the\npoints within a CoordGroup. This creates a symmetrical matrix,\nwith a 0 diagonal. This returns the shortest distance between\ntwo points within the group." );
         
         }
         { //::SireVol::Space::calcDist
@@ -107,7 +113,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "calcDist"
                 , calcDist_function_value
-                , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") ) );
+                , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") )
+                , "Populate the matrix mat with the distances between all of the\npoints of the two CoordGroups. Return the shortest distance^2 between the two\nCoordGroups." );
         
         }
         { //::SireVol::Space::calcDist
@@ -118,7 +125,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "calcDist"
                 , calcDist_function_value
-                , ( bp::arg("group"), bp::arg("point"), bp::arg("distmat") ) );
+                , ( bp::arg("group"), bp::arg("point"), bp::arg("distmat") )
+                , "Populate the matrix distmat with the distances between all of the\npoints in group to the point point. This returns the shortest\ndistance between the group points and point" );
         
         }
         { //::SireVol::Space::calcDist2
@@ -129,7 +137,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "calcDist2"
                 , calcDist2_function_value
-                , ( bp::arg("point0"), bp::arg("point1") ) );
+                , ( bp::arg("point0"), bp::arg("point1") )
+                , "Calculate the distance squared between two points" );
         
         }
         { //::SireVol::Space::calcDist2
@@ -140,7 +149,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "calcDist2"
                 , calcDist2_function_value
-                , ( bp::arg("group"), bp::arg("distmat") ) );
+                , ( bp::arg("group"), bp::arg("distmat") )
+                , "Populate the matrix mat with the distances^2 between all of the\npoints within a CoordGroup. This creates a symmetrical matrix,\nwith a 0 diagonal. This returns the shortest distance^2 between\ntwo points within the group." );
         
         }
         { //::SireVol::Space::calcDist2
@@ -151,7 +161,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "calcDist2"
                 , calcDist2_function_value
-                , ( bp::arg("group"), bp::arg("point"), bp::arg("distmat") ) );
+                , ( bp::arg("group"), bp::arg("point"), bp::arg("distmat") )
+                , "Populate the matrix distmat with the distances squared between all of the\npoints in group to the point point. This returns the shortest\ndistance between the group points and point" );
         
         }
         { //::SireVol::Space::calcDist2
@@ -162,7 +173,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "calcDist2"
                 , calcDist2_function_value
-                , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") ) );
+                , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") )
+                , "Populate the matrix mat with the distances^2 between all of the\npoints of the two CoordGroups. Return the shortest distance^2 between the\ntwo CoordGroups." );
         
         }
         { //::SireVol::Space::calcDistVector
@@ -173,7 +185,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "calcDistVector"
                 , calcDistVector_function_value
-                , ( bp::arg("point0"), bp::arg("point1") ) );
+                , ( bp::arg("point0"), bp::arg("point1") )
+                , "Calculate the distance vector between two points" );
         
         }
         { //::SireVol::Space::calcDistVectors
@@ -184,7 +197,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "calcDistVectors"
                 , calcDistVectors_function_value
-                , ( bp::arg("group"), bp::arg("distmat") ) );
+                , ( bp::arg("group"), bp::arg("distmat") )
+                , "Populate the matrix distmat with all of the interpoint distance vectors\nbetween all points within the CoordGroup. This is not a symmetrical matrix,\nas the direction from point A to point B is the negative of the\ndirection from point B to point A. This returns the shortest distance\nbetween two points in the group (that is not the self-self distance)" );
         
         }
         { //::SireVol::Space::calcDistVectors
@@ -195,7 +209,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "calcDistVectors"
                 , calcDistVectors_function_value
-                , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") ) );
+                , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") )
+                , "Populate the matrix distmat between all the points of the two CoordGroups\ngroup1 and group2 - the returned matrix has the vectors pointing\nfrom each point in group1 to each point in group2. This returns\nthe shortest distance between two points in the group" );
         
         }
         { //::SireVol::Space::calcDistVectors
@@ -206,7 +221,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "calcDistVectors"
                 , calcDistVectors_function_value
-                , ( bp::arg("group"), bp::arg("point"), bp::arg("distmat") ) );
+                , ( bp::arg("group"), bp::arg("point"), bp::arg("distmat") )
+                , "Populate the matrix distmat with the distances between all of the\npoints in group to the point point. This returns the shortest\ndistance between the group points and point" );
         
         }
         { //::SireVol::Space::calcInvDist
@@ -217,7 +233,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "calcInvDist"
                 , calcInvDist_function_value
-                , ( bp::arg("group"), bp::arg("distmat") ) );
+                , ( bp::arg("group"), bp::arg("distmat") )
+                , "Populate the matrix mat with the inverse distances between all of the\npoints within a CoordGroup. This creates a symmetrical matrix,\nwith a 0 diagonal. This returns the the largest inverse distance between\ntwo points within the group." );
         
         }
         { //::SireVol::Space::calcInvDist
@@ -228,7 +245,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "calcInvDist"
                 , calcInvDist_function_value
-                , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") ) );
+                , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") )
+                , "Populate the matrix mat with the inverse distances between all of the\npoints of the two CoordGroups. Return the largest inverse distance between the two\nCoordGroups." );
         
         }
         { //::SireVol::Space::calcInvDist2
@@ -239,7 +257,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "calcInvDist2"
                 , calcInvDist2_function_value
-                , ( bp::arg("group"), bp::arg("distmat") ) );
+                , ( bp::arg("group"), bp::arg("distmat") )
+                , "Populate the matrix mat with the inverse distances^2 between all of the\npoints within a CoordGroup. This creates a symmetrical matrix,\nwith a 0 diagonal. This returns the the largest inverse distance^2 between\ntwo points within the group." );
         
         }
         { //::SireVol::Space::calcInvDist2
@@ -250,7 +269,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "calcInvDist2"
                 , calcInvDist2_function_value
-                , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") ) );
+                , ( bp::arg("group1"), bp::arg("group2"), bp::arg("distmat") )
+                , "Populate the matrix mat with the inverse distances^2 between all of the\npoints of the two CoordGroups. Return the largest inverse distance^2 between the two\nCoordGroups." );
         
         }
         { //::SireVol::Space::changeVolume
@@ -261,7 +281,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "changeVolume"
                 , changeVolume_function_value
-                , ( bp::arg("delta") ) );
+                , ( bp::arg("delta") )
+                , "Change the volume of this space by delta" );
         
         }
         { //::SireVol::Space::getBoxCenter
@@ -272,7 +293,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "getBoxCenter"
                 , getBoxCenter_function_value
-                , ( bp::arg("p") ) );
+                , ( bp::arg("p") )
+                , "Return the center of the box that contains the point p assuming\nthat the center for the central box is located at the origin" );
         
         }
         { //::SireVol::Space::getBoxCenter
@@ -283,7 +305,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "getBoxCenter"
                 , getBoxCenter_function_value
-                , ( bp::arg("p"), bp::arg("center") ) );
+                , ( bp::arg("p"), bp::arg("center") )
+                , "Return the center of the box that contains the point p assuming\nthat the center for the central box is located at center" );
         
         }
         { //::SireVol::Space::getCopiesWithin
@@ -294,7 +317,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "getCopiesWithin"
                 , getCopiesWithin_function_value
-                , ( bp::arg("group"), bp::arg("center"), bp::arg("dist") ) );
+                , ( bp::arg("group"), bp::arg("center"), bp::arg("dist") )
+                , "" );
         
         }
         { //::SireVol::Space::getImagesWithin
@@ -305,7 +329,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "getImagesWithin"
                 , getImagesWithin_function_value
-                , ( bp::arg("point"), bp::arg("center"), bp::arg("dist") ) );
+                , ( bp::arg("point"), bp::arg("center"), bp::arg("dist") )
+                , "Return all periodic images of point with respect to center within\ndist distance of center" );
         
         }
         { //::SireVol::Space::getMinimumImage
@@ -316,7 +341,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "getMinimumImage"
                 , getMinimumImage_function_value
-                , ( bp::arg("group"), bp::arg("center") ) );
+                , ( bp::arg("group"), bp::arg("center") )
+                , "Return the minimum image copy of group with respect to center.\nFor periodic spaces, this translates group into the box that\nhas its center at center (i.e. returns the closest copy of\ngroup to center according to the minimum image convention)" );
         
         }
         { //::SireVol::Space::getMinimumImage
@@ -327,7 +353,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "getMinimumImage"
                 , getMinimumImage_function_value
-                , ( bp::arg("groups"), bp::arg("center"), bp::arg("translate_as_one")=(bool)(false) ) );
+                , ( bp::arg("groups"), bp::arg("center"), bp::arg("translate_as_one")=(bool)(false) )
+                , "Return the minimum image copy of groups with respect to center.\nFor periodic spaces, this translates groups into the box that\nhas its center at center (i.e. returns the closest copy of\neach group to center according to the minimum image convention)" );
         
         }
         { //::SireVol::Space::getMinimumImage
@@ -338,7 +365,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "getMinimumImage"
                 , getMinimumImage_function_value
-                , ( bp::arg("aabox"), bp::arg("center") ) );
+                , ( bp::arg("aabox"), bp::arg("center") )
+                , "Return the minimum image copy of aabox with respect to center.\nFor periodic spaces, this returns the AABox translated into the\nbox that has its center at center" );
         
         }
         { //::SireVol::Space::getMinimumImage
@@ -349,7 +377,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "getMinimumImage"
                 , getMinimumImage_function_value
-                , ( bp::arg("point"), bp::arg("center") ) );
+                , ( bp::arg("point"), bp::arg("center") )
+                , "Return the minimum image copy of point with respect to center.\nFor periodic spaces, this returns the point translated into the\nbox that has its center at center" );
         
         }
         { //::SireVol::Space::getRandomPoint
@@ -360,7 +389,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "getRandomPoint"
                 , getRandomPoint_function_value
-                , ( bp::arg("center"), bp::arg("generator") ) );
+                , ( bp::arg("center"), bp::arg("generator") )
+                , "Return a random point within this space, using the passed\nrandom number generator to generate the necessary random numbers,\nand placing the center of the box at center" );
         
         }
         { //::SireVol::Space::getRandomPoint
@@ -371,7 +401,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "getRandomPoint"
                 , getRandomPoint_function_value
-                , ( bp::arg("center") ) );
+                , ( bp::arg("center") )
+                , "Return a random point within this space using the global\nrandom number generator and with the box centered at center" );
         
         }
         { //::SireVol::Space::getRandomPoint
@@ -382,7 +413,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "getRandomPoint"
                 , getRandomPoint_function_value
-                , ( bp::arg("generator") ) );
+                , ( bp::arg("generator") )
+                , "Return a random point within this space using the passed\nrandom number generator to generate any necessary random\nnumbers, and centering the box at the origin" );
         
         }
         { //::SireVol::Space::getRandomPoint
@@ -392,7 +424,8 @@ void register_Space_class(){
             
             Space_exposer.def( 
                 "getRandomPoint"
-                , getRandomPoint_function_value );
+                , getRandomPoint_function_value
+                , "Return a random point within this space using the global\nrandom number generator, and with the box centered at the origin" );
         
         }
         { //::SireVol::Space::isCartesian
@@ -402,7 +435,8 @@ void register_Space_class(){
             
             Space_exposer.def( 
                 "isCartesian"
-                , isCartesian_function_value );
+                , isCartesian_function_value
+                , "Return whether or not this space is cartesian\n( x==y==z == 1 and all angle between x-y, y-z, x-z all 90 degrees )" );
         
         }
         { //::SireVol::Space::isPeriodic
@@ -412,7 +446,8 @@ void register_Space_class(){
             
             Space_exposer.def( 
                 "isPeriodic"
-                , isPeriodic_function_value );
+                , isPeriodic_function_value
+                , "Return whether or not this space is periodic" );
         
         }
         { //::SireVol::Space::minimumDistance
@@ -423,7 +458,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "minimumDistance"
                 , minimumDistance_function_value
-                , ( bp::arg("group0"), bp::arg("group1") ) );
+                , ( bp::arg("group0"), bp::arg("group1") )
+                , "Return the minimum distance between the points in group0 and group1.\nIf this is a periodic space then this uses the minimum image convention\n(i.e. the minimum distance between the closest periodic replicas are\nused)" );
         
         }
         { //::SireVol::Space::minimumDistance
@@ -434,7 +470,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "minimumDistance"
                 , minimumDistance_function_value
-                , ( bp::arg("group") ) );
+                , ( bp::arg("group") )
+                , "Return the minimum distance between points within the group group." );
         
         }
         { //::SireVol::Space::minimumDistance
@@ -445,7 +482,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "minimumDistance"
                 , minimumDistance_function_value
-                , ( bp::arg("box0"), bp::arg("box1") ) );
+                , ( bp::arg("box0"), bp::arg("box1") )
+                , "Return the minimum distance between the two AABoxes" );
         
         }
         { //::SireVol::Space::null
@@ -456,7 +494,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the default space (Cartesian infinite box)" );
         
         }
         { //::SireVol::Space::setVolume
@@ -467,7 +506,8 @@ void register_Space_class(){
             Space_exposer.def( 
                 "setVolume"
                 , setVolume_function_value
-                , ( bp::arg("volume") ) );
+                , ( bp::arg("volume") )
+                , "Return a copy of this space with the volume of set to volume\n- this will scale the space uniformly, keeping the center at\nthe same location, to achieve this volume" );
         
         }
         { //::SireVol::Space::toString
@@ -477,7 +517,8 @@ void register_Space_class(){
             
             Space_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this space" );
         
         }
         { //::SireVol::Space::typeName
@@ -487,7 +528,8 @@ void register_Space_class(){
             
             Space_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireVol::Space::volume
@@ -497,7 +539,8 @@ void register_Space_class(){
             
             Space_exposer.def( 
                 "volume"
-                , volume_function_value );
+                , volume_function_value
+                , "Return the volume of the central box of this space. This\nthrows an exception if it is not possible to calculate the\nvolume of this space (e.g. it is an infinite space)" );
         
         }
         Space_exposer.staticmethod( "null" );

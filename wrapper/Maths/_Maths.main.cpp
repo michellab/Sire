@@ -55,6 +55,8 @@
 
 #include "MultiUInt.pypp.hpp"
 
+#include "MultiVector.pypp.hpp"
+
 #include "N4Matrix.pypp.hpp"
 
 #include "NMatrix.pypp.hpp"
@@ -161,6 +163,8 @@ BOOST_PYTHON_MODULE(_Maths){
     register_MultiInt_class();
 
     register_MultiUInt_class();
+
+    register_MultiVector_class();
 
     register_N4Matrix_class();
 

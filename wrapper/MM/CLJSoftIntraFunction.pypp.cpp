@@ -55,7 +55,7 @@ void register_CLJSoftIntraFunction_class(){
 
     { //::SireMM::CLJSoftIntraFunction
         typedef bp::class_< SireMM::CLJSoftIntraFunction, bp::bases< SireMM::CLJIntraFunction, SireMM::CLJCutoffFunction, SireMM::CLJFunction, SireBase::Property >, boost::noncopyable > CLJSoftIntraFunction_exposer_t;
-        CLJSoftIntraFunction_exposer_t CLJSoftIntraFunction_exposer = CLJSoftIntraFunction_exposer_t( "CLJSoftIntraFunction", bp::no_init );
+        CLJSoftIntraFunction_exposer_t CLJSoftIntraFunction_exposer = CLJSoftIntraFunction_exposer_t( "CLJSoftIntraFunction", "This is the base class of all intramolecular soft-core CLJ functions that have a cutoff\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope CLJSoftIntraFunction_scope( CLJSoftIntraFunction_exposer );
         { //::SireMM::CLJSoftIntraFunction::alpha
         
@@ -64,7 +64,8 @@ void register_CLJSoftIntraFunction_class(){
             
             CLJSoftIntraFunction_exposer.def( 
                 "alpha"
-                , alpha_function_value );
+                , alpha_function_value
+                , "Return the soft-core alpha value. A value of 0 is a completely hard\npotential, while increasing values of alpha will increasingly soften\nthe potential" );
         
         }
         { //::SireMM::CLJSoftIntraFunction::containsProperty
@@ -75,7 +76,8 @@ void register_CLJSoftIntraFunction_class(){
             CLJSoftIntraFunction_exposer.def( 
                 "containsProperty"
                 , containsProperty_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "Return whether or not this function contains a property called name" );
         
         }
         { //::SireMM::CLJSoftIntraFunction::coulombPower
@@ -85,7 +87,8 @@ void register_CLJSoftIntraFunction_class(){
             
             CLJSoftIntraFunction_exposer.def( 
                 "coulombPower"
-                , coulombPower_function_value );
+                , coulombPower_function_value
+                , "Return the soft-core coulomb_power parameter. This is used to soften\nthe electrostatic interactions" );
         
         }
         { //::SireMM::CLJSoftIntraFunction::isSoftened
@@ -95,7 +98,8 @@ void register_CLJSoftIntraFunction_class(){
             
             CLJSoftIntraFunction_exposer.def( 
                 "isSoftened"
-                , isSoftened_function_value );
+                , isSoftened_function_value
+                , "Return whether or not this is a softened function" );
         
         }
         { //::SireMM::CLJSoftIntraFunction::properties
@@ -105,7 +109,8 @@ void register_CLJSoftIntraFunction_class(){
             
             CLJSoftIntraFunction_exposer.def( 
                 "properties"
-                , properties_function_value );
+                , properties_function_value
+                , "Return the properties that can be set in this function" );
         
         }
         { //::SireMM::CLJSoftIntraFunction::property
@@ -116,7 +121,8 @@ void register_CLJSoftIntraFunction_class(){
             CLJSoftIntraFunction_exposer.def( 
                 "property"
                 , property_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "Return the value of the property with name name" );
         
         }
         { //::SireMM::CLJSoftIntraFunction::setAlpha
@@ -127,7 +133,8 @@ void register_CLJSoftIntraFunction_class(){
             CLJSoftIntraFunction_exposer.def( 
                 "setAlpha"
                 , setAlpha_function_value
-                , ( bp::arg("alpha") ) );
+                , ( bp::arg("alpha") )
+                , "Set the soft-core alpha parameter" );
         
         }
         { //::SireMM::CLJSoftIntraFunction::setCoulombPower
@@ -138,7 +145,8 @@ void register_CLJSoftIntraFunction_class(){
             CLJSoftIntraFunction_exposer.def( 
                 "setCoulombPower"
                 , setCoulombPower_function_value
-                , ( bp::arg("power") ) );
+                , ( bp::arg("power") )
+                , "Set the soft-core coulomb power parameter" );
         
         }
         { //::SireMM::CLJSoftIntraFunction::setProperty
@@ -149,7 +157,8 @@ void register_CLJSoftIntraFunction_class(){
             CLJSoftIntraFunction_exposer.def( 
                 "setProperty"
                 , setProperty_function_value
-                , ( bp::arg("name"), bp::arg("value") ) );
+                , ( bp::arg("name"), bp::arg("value") )
+                , "Set the property with name name to value value" );
         
         }
         { //::SireMM::CLJSoftIntraFunction::setShiftDelta
@@ -160,7 +169,8 @@ void register_CLJSoftIntraFunction_class(){
             CLJSoftIntraFunction_exposer.def( 
                 "setShiftDelta"
                 , setShiftDelta_function_value
-                , ( bp::arg("shift") ) );
+                , ( bp::arg("shift") )
+                , "Set the soft-core shift delta parameter" );
         
         }
         { //::SireMM::CLJSoftIntraFunction::shiftDelta
@@ -170,7 +180,8 @@ void register_CLJSoftIntraFunction_class(){
             
             CLJSoftIntraFunction_exposer.def( 
                 "shiftDelta"
-                , shiftDelta_function_value );
+                , shiftDelta_function_value
+                , "Return the soft-core shift_delta parameter. This is used to soften\nthe LJ interactions" );
         
         }
         { //::SireMM::CLJSoftIntraFunction::typeName
@@ -180,7 +191,8 @@ void register_CLJSoftIntraFunction_class(){
             
             CLJSoftIntraFunction_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         CLJSoftIntraFunction_exposer.staticmethod( "typeName" );

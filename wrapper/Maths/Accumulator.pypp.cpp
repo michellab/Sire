@@ -35,7 +35,7 @@ void register_Accumulator_class(){
 
     { //::SireMaths::Accumulator
         typedef bp::class_< SireMaths::Accumulator, bp::bases< SireBase::Property >, boost::noncopyable > Accumulator_exposer_t;
-        Accumulator_exposer_t Accumulator_exposer = Accumulator_exposer_t( "Accumulator", bp::no_init );
+        Accumulator_exposer_t Accumulator_exposer = Accumulator_exposer_t( "Accumulator", "This is the base class of all Accumulators - these are objects\nthat can accumulate values and calculate properties of that\ncollection of values - e.g. they could accumulate the values\nso that the mean average could be collected, or so that the\nmaximum and minimum values could be determined etc.\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope Accumulator_scope( Accumulator_exposer );
         { //::SireMaths::Accumulator::accumulate
         
@@ -45,7 +45,8 @@ void register_Accumulator_class(){
             Accumulator_exposer.def( 
                 "accumulate"
                 , accumulate_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Accumulate the value value onto the sample" );
         
         }
         { //::SireMaths::Accumulator::accumulate
@@ -56,7 +57,8 @@ void register_Accumulator_class(){
             Accumulator_exposer.def( 
                 "accumulate"
                 , accumulate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Accumulate many values" );
         
         }
         { //::SireMaths::Accumulator::accumulate
@@ -67,7 +69,8 @@ void register_Accumulator_class(){
             Accumulator_exposer.def( 
                 "accumulate"
                 , accumulate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Accumulate many values" );
         
         }
         { //::SireMaths::Accumulator::clear
@@ -77,7 +80,8 @@ void register_Accumulator_class(){
             
             Accumulator_exposer.def( 
                 "clear"
-                , clear_function_value );
+                , clear_function_value
+                , "Completely clear the statistics in this accumulator" );
         
         }
         { //::SireMaths::Accumulator::nSamples
@@ -87,7 +91,8 @@ void register_Accumulator_class(){
             
             Accumulator_exposer.def( 
                 "nSamples"
-                , nSamples_function_value );
+                , nSamples_function_value
+                , "Return the number of values that have been sampled" );
         
         }
         { //::SireMaths::Accumulator::null
@@ -98,7 +103,8 @@ void register_Accumulator_class(){
             Accumulator_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMaths::Accumulator::typeName
@@ -108,7 +114,8 @@ void register_Accumulator_class(){
             
             Accumulator_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         Accumulator_exposer.staticmethod( "null" );

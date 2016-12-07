@@ -32,7 +32,7 @@ void register_SupraMoves_class(){
 
     { //::SireMove::SupraMoves
         typedef bp::class_< SireMove::SupraMoves, bp::bases< SireBase::Property >, boost::noncopyable > SupraMoves_exposer_t;
-        SupraMoves_exposer_t SupraMoves_exposer = SupraMoves_exposer_t( "SupraMoves", bp::no_init );
+        SupraMoves_exposer_t SupraMoves_exposer = SupraMoves_exposer_t( "SupraMoves", "This is the base class of all sets of moves that can be applied\nto supra-systems\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope SupraMoves_scope( SupraMoves_exposer );
         { //::SireMove::SupraMoves::clearStatistics
         
@@ -41,7 +41,8 @@ void register_SupraMoves_class(){
             
             SupraMoves_exposer.def( 
                 "clearStatistics"
-                , clearStatistics_function_value );
+                , clearStatistics_function_value
+                , "" );
         
         }
         { //::SireMove::SupraMoves::count
@@ -51,7 +52,8 @@ void register_SupraMoves_class(){
             
             SupraMoves_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of different types of move in this set" );
         
         }
         { //::SireMove::SupraMoves::move
@@ -62,7 +64,8 @@ void register_SupraMoves_class(){
             SupraMoves_exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , "" );
         
         }
         { //::SireMove::SupraMoves::moves
@@ -72,7 +75,8 @@ void register_SupraMoves_class(){
             
             SupraMoves_exposer.def( 
                 "moves"
-                , moves_function_value );
+                , moves_function_value
+                , "" );
         
         }
         { //::SireMove::SupraMoves::nMoves
@@ -82,7 +86,8 @@ void register_SupraMoves_class(){
             
             SupraMoves_exposer.def( 
                 "nMoves"
-                , nMoves_function_value );
+                , nMoves_function_value
+                , "" );
         
         }
         { //::SireMove::SupraMoves::nSubMoveTypes
@@ -92,7 +97,8 @@ void register_SupraMoves_class(){
             
             SupraMoves_exposer.def( 
                 "nSubMoveTypes"
-                , nSubMoveTypes_function_value );
+                , nSubMoveTypes_function_value
+                , "Return the number of different types of move in this set" );
         
         }
         { //::SireMove::SupraMoves::null
@@ -103,7 +109,8 @@ void register_SupraMoves_class(){
             SupraMoves_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the global null SupraMoves object" );
         
         }
         { //::SireMove::SupraMoves::operator[]
@@ -115,7 +122,8 @@ void register_SupraMoves_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMove::SupraMoves::size
@@ -125,7 +133,8 @@ void register_SupraMoves_class(){
             
             SupraMoves_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "Return the number of different types of move in this set" );
         
         }
         { //::SireMove::SupraMoves::toString
@@ -135,7 +144,8 @@ void register_SupraMoves_class(){
             
             SupraMoves_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMove::SupraMoves::typeName
@@ -145,7 +155,8 @@ void register_SupraMoves_class(){
             
             SupraMoves_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         SupraMoves_exposer.staticmethod( "null" );

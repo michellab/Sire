@@ -67,10 +67,10 @@ void register_ResNum_class(){
 
     { //::SireMol::ResNum
         typedef bp::class_< SireMol::ResNum, bp::bases< SireMol::ResID, SireID::ID, SireID::Number > > ResNum_exposer_t;
-        ResNum_exposer_t ResNum_exposer = ResNum_exposer_t( "ResNum", bp::init< >() );
+        ResNum_exposer_t ResNum_exposer = ResNum_exposer_t( "ResNum", "This ID number is used to identify a CutGroup by the user-supplied\nnumber\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope ResNum_scope( ResNum_exposer );
-        ResNum_exposer.def( bp::init< quint32 >(( bp::arg("num") )) );
-        ResNum_exposer.def( bp::init< SireMol::ResNum const & >(( bp::arg("other") )) );
+        ResNum_exposer.def( bp::init< quint32 >(( bp::arg("num") ), "") );
+        ResNum_exposer.def( bp::init< SireMol::ResNum const & >(( bp::arg("other") ), "") );
         { //::SireMol::ResNum::hash
         
             typedef ::uint ( ::SireMol::ResNum::*hash_function_type)(  ) const;
@@ -78,7 +78,8 @@ void register_ResNum_class(){
             
             ResNum_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::ResNum::isNull
@@ -88,7 +89,8 @@ void register_ResNum_class(){
             
             ResNum_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::ResNum::map
@@ -99,7 +101,8 @@ void register_ResNum_class(){
             ResNum_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         ResNum_exposer.def( bp::self != bp::self );
@@ -114,7 +117,8 @@ void register_ResNum_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         ResNum_exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -128,7 +132,8 @@ void register_ResNum_class(){
             
             ResNum_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::ResNum::typeName
@@ -138,7 +143,8 @@ void register_ResNum_class(){
             
             ResNum_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::ResNum::what
@@ -148,7 +154,8 @@ void register_ResNum_class(){
             
             ResNum_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ResNum_exposer.staticmethod( "typeName" );

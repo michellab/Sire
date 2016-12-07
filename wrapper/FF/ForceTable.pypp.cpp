@@ -39,10 +39,10 @@ void register_ForceTable_class(){
 
     { //::SireFF::ForceTable
         typedef bp::class_< SireFF::ForceTable > ForceTable_exposer_t;
-        ForceTable_exposer_t ForceTable_exposer = ForceTable_exposer_t( "ForceTable", bp::init< >() );
+        ForceTable_exposer_t ForceTable_exposer = ForceTable_exposer_t( "ForceTable", "A ForceTable is a workspace within which all of the forces acting\non the atoms of several molecules may be stored. A ForceTable is\nused as storing the forces requires lots of memory, and continually\ncreating a deleting such large amouts of memory would be inefficient.\nAlso, using a ForceTable allows for forces to be accumalated directly,\nrather than requiring intermediate storage space for the\nindividual components.\n\nYou create a forcetable to hold all of the forces on all of\nthe atoms of all of the molecules in a specified MoleculeGroup.\nThe forces are held in an array that holds the forces for\nthe molecules in the same order as the molecules appear\nin the molecule group. The forcetable also comes with\nan index so you can quickly look up the forces for\na specific molecule.\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope ForceTable_scope( ForceTable_exposer );
-        ForceTable_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("molgroup") )) );
-        ForceTable_exposer.def( bp::init< SireFF::ForceTable const & >(( bp::arg("other") )) );
+        ForceTable_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("molgroup") ), "Construct a table that holds all of the forces on all of the atoms\nfor all of the CutGroups viewed in all of the molecules in the passed\nmolecule group") );
+        ForceTable_exposer.def( bp::init< SireFF::ForceTable const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireFF::ForceTable::add
         
             typedef void ( ::SireFF::ForceTable::*add_function_type)( ::SireFF::ForceTable const & ) ;
@@ -51,7 +51,8 @@ void register_ForceTable_class(){
             ForceTable_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Add the contents of the table other onto this table. This will only\nadd the forces for the molecules  grids that are in both tables" );
         
         }
         { //::SireFF::ForceTable::add
@@ -62,7 +63,8 @@ void register_ForceTable_class(){
             ForceTable_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("force") ) );
+                , ( bp::arg("force") )
+                , "Add the force force onto all of the atom  grid points in this table" );
         
         }
         { //::SireFF::ForceTable::assertContainsTableFor
@@ -73,7 +75,8 @@ void register_ForceTable_class(){
             ForceTable_exposer.def( 
                 "assertContainsTableFor"
                 , assertContainsTableFor_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Assert that this forcetable contains a table for the\nforces for the molecule at number molnum\nThrow: SireMol::missing_molecule\n" );
         
         }
         { //::SireFF::ForceTable::constGetTable
@@ -85,7 +88,8 @@ void register_ForceTable_class(){
                 "constGetTable"
                 , constGetTable_function_value
                 , ( bp::arg("molnum") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireFF::ForceTable::containsTable
@@ -96,7 +100,8 @@ void register_ForceTable_class(){
             ForceTable_exposer.def( 
                 "containsTable"
                 , containsTable_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "" );
         
         }
         { //::SireFF::ForceTable::count
@@ -106,7 +111,8 @@ void register_ForceTable_class(){
             
             ForceTable_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireFF::ForceTable::divide
@@ -117,7 +123,8 @@ void register_ForceTable_class(){
             ForceTable_exposer.def( 
                 "divide"
                 , divide_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Divide the force at all atom and grid points by value" );
         
         }
         { //::SireFF::ForceTable::getTable
@@ -129,7 +136,8 @@ void register_ForceTable_class(){
                 "getTable"
                 , getTable_function_value
                 , ( bp::arg("molnum") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireFF::ForceTable::index
@@ -140,7 +148,8 @@ void register_ForceTable_class(){
             ForceTable_exposer.def( 
                 "index"
                 , index_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireFF::ForceTable::indexOf
@@ -151,7 +160,8 @@ void register_ForceTable_class(){
             ForceTable_exposer.def( 
                 "indexOf"
                 , indexOf_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Return the index of the molecule with number molnum in this table\nThrow: SireMol::missing_molecule\n" );
         
         }
         { //::SireFF::ForceTable::initialiseTable
@@ -162,7 +172,8 @@ void register_ForceTable_class(){
             ForceTable_exposer.def( 
                 "initialiseTable"
                 , initialiseTable_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Initialise all of the forces for the table for the molecule\nwith number molnum\nThrow: SireMol::missing_molecule\n" );
         
         }
         { //::SireFF::ForceTable::initialiseTables
@@ -172,7 +183,8 @@ void register_ForceTable_class(){
             
             ForceTable_exposer.def( 
                 "initialiseTables"
-                , initialiseTables_function_value );
+                , initialiseTables_function_value
+                , "Initialise all of the tables - this resets all of the forces\nback to zero" );
         
         }
         { //::SireFF::ForceTable::molNums
@@ -182,7 +194,8 @@ void register_ForceTable_class(){
             
             ForceTable_exposer.def( 
                 "molNums"
-                , molNums_function_value );
+                , molNums_function_value
+                , "" );
         
         }
         { //::SireFF::ForceTable::multiply
@@ -193,7 +206,8 @@ void register_ForceTable_class(){
             ForceTable_exposer.def( 
                 "multiply"
                 , multiply_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Multiply the force at all atom and grid points by value" );
         
         }
         ForceTable_exposer.def( bp::self != bp::self );
@@ -213,7 +227,8 @@ void register_ForceTable_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireFF::ForceTable::operator=
@@ -225,7 +240,8 @@ void register_ForceTable_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("force") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         ForceTable_exposer.def( bp::self == bp::self );
@@ -237,7 +253,8 @@ void register_ForceTable_class(){
             ForceTable_exposer.def( 
                 "setAll"
                 , setAll_function_value
-                , ( bp::arg("force") ) );
+                , ( bp::arg("force") )
+                , "Set the force at all atom and grid points equal to force" );
         
         }
         { //::SireFF::ForceTable::setTable
@@ -248,7 +265,8 @@ void register_ForceTable_class(){
             ForceTable_exposer.def( 
                 "setTable"
                 , setTable_function_value
-                , ( bp::arg("molnum"), bp::arg("table") ) );
+                , ( bp::arg("molnum"), bp::arg("table") )
+                , "" );
         
         }
         { //::SireFF::ForceTable::subtract
@@ -259,7 +277,8 @@ void register_ForceTable_class(){
             ForceTable_exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Subtract the contents of the table other from this table. This will only\nsubtract the forces for the molecules  grids that are in both tables" );
         
         }
         { //::SireFF::ForceTable::subtract
@@ -270,7 +289,8 @@ void register_ForceTable_class(){
             ForceTable_exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("force") ) );
+                , ( bp::arg("force") )
+                , "Subtract the force force from all of the atom  grid points in this table" );
         
         }
         { //::SireFF::ForceTable::typeName
@@ -280,7 +300,8 @@ void register_ForceTable_class(){
             
             ForceTable_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireFF::ForceTable::what
@@ -290,7 +311,8 @@ void register_ForceTable_class(){
             
             ForceTable_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ForceTable_exposer.staticmethod( "typeName" );

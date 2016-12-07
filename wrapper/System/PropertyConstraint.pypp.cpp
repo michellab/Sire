@@ -37,11 +37,11 @@ void register_PropertyConstraint_class(){
 
     { //::SireSystem::PropertyConstraint
         typedef bp::class_< SireSystem::PropertyConstraint, bp::bases< SireSystem::Constraint, SireBase::Property > > PropertyConstraint_exposer_t;
-        PropertyConstraint_exposer_t PropertyConstraint_exposer = PropertyConstraint_exposer_t( "PropertyConstraint", bp::init< >() );
+        PropertyConstraint_exposer_t PropertyConstraint_exposer = PropertyConstraint_exposer_t( "PropertyConstraint", "This constraint is used to constrain the value of a\nnumerical property of the system (or part of the system)\nto a specific value, or to the result of an expression.\n\nYou can use this constraint, for example, to constrain\nthe value of alpha for soft-core forcefields to map\nto the value of lambda\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope PropertyConstraint_scope( PropertyConstraint_exposer );
-        PropertyConstraint_exposer.def( bp::init< QString const &, SireCAS::Expression const & >(( bp::arg("name"), bp::arg("expression") )) );
-        PropertyConstraint_exposer.def( bp::init< QString const &, SireFF::FFID const &, SireCAS::Expression const & >(( bp::arg("name"), bp::arg("ffid"), bp::arg("expression") )) );
-        PropertyConstraint_exposer.def( bp::init< SireSystem::PropertyConstraint const & >(( bp::arg("other") )) );
+        PropertyConstraint_exposer.def( bp::init< QString const &, SireCAS::Expression const & >(( bp::arg("name"), bp::arg("expression") ), "Construct to constrain the property with name name in all forcefields\nto have the value resulting from the expression expression") );
+        PropertyConstraint_exposer.def( bp::init< QString const &, SireFF::FFID const &, SireCAS::Expression const & >(( bp::arg("name"), bp::arg("ffid"), bp::arg("expression") ), "Construct to constrain the property with name name in the forcefield(s)\nthat match the ID ffid to have the value resulting the expression\nexpression") );
+        PropertyConstraint_exposer.def( bp::init< SireSystem::PropertyConstraint const & >(( bp::arg("other") ), "Copy constructor") );
         PropertyConstraint_exposer.def( bp::self != bp::self );
         { //::SireSystem::PropertyConstraint::operator=
         
@@ -52,7 +52,8 @@ void register_PropertyConstraint_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         PropertyConstraint_exposer.def( bp::self == bp::self );
@@ -63,7 +64,8 @@ void register_PropertyConstraint_class(){
             
             PropertyConstraint_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of the constraint" );
         
         }
         { //::SireSystem::PropertyConstraint::typeName
@@ -73,7 +75,8 @@ void register_PropertyConstraint_class(){
             
             PropertyConstraint_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         PropertyConstraint_exposer.staticmethod( "typeName" );

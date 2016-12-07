@@ -33,9 +33,9 @@ void register_NullQMChargeCalculator_class(){
 
     { //::Squire::NullQMChargeCalculator
         typedef bp::class_< Squire::NullQMChargeCalculator, bp::bases< Squire::QMChargeCalculator, SireBase::Property > > NullQMChargeCalculator_exposer_t;
-        NullQMChargeCalculator_exposer_t NullQMChargeCalculator_exposer = NullQMChargeCalculator_exposer_t( "NullQMChargeCalculator", bp::init< >() );
+        NullQMChargeCalculator_exposer_t NullQMChargeCalculator_exposer = NullQMChargeCalculator_exposer_t( "NullQMChargeCalculator", "This is a null charge calculator - this returns zero\ncharges for every molecule", bp::init< >("Constructor") );
         bp::scope NullQMChargeCalculator_scope( NullQMChargeCalculator_exposer );
-        NullQMChargeCalculator_exposer.def( bp::init< Squire::NullQMChargeCalculator const & >(( bp::arg("other") )) );
+        NullQMChargeCalculator_exposer.def( bp::init< Squire::NullQMChargeCalculator const & >(( bp::arg("other") ), "Copy constructor") );
         { //::Squire::NullQMChargeCalculator::mayChangeCharges
         
             typedef bool ( ::Squire::NullQMChargeCalculator::*mayChangeCharges_function_type)( ::SireMol::PartialMolecule const &,::SireMol::PartialMolecule const &,::SireBase::PropertyMap const & ) const;
@@ -44,7 +44,8 @@ void register_NullQMChargeCalculator_class(){
             NullQMChargeCalculator_exposer.def( 
                 "mayChangeCharges"
                 , mayChangeCharges_function_value
-                , ( bp::arg("arg0"), bp::arg("arg1"), bp::arg("arg2") ) );
+                , ( bp::arg("arg0"), bp::arg("arg1"), bp::arg("arg2") )
+                , "Return whether or not the change from oldmol to newmol\nmay change the charges. Use this function to see if\na charge calculation is required" );
         
         }
         NullQMChargeCalculator_exposer.def( bp::self != bp::self );
@@ -56,7 +57,8 @@ void register_NullQMChargeCalculator_class(){
             NullQMChargeCalculator_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::Squire::NullQMChargeCalculator::operator=
@@ -68,7 +70,8 @@ void register_NullQMChargeCalculator_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         NullQMChargeCalculator_exposer.def( bp::self == bp::self );
@@ -79,7 +82,8 @@ void register_NullQMChargeCalculator_class(){
             
             NullQMChargeCalculator_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         NullQMChargeCalculator_exposer.staticmethod( "typeName" );

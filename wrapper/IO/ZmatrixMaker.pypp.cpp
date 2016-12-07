@@ -57,7 +57,7 @@ void register_ZmatrixMaker_class(){
 
     { //::SireIO::ZmatrixMaker
         typedef bp::class_< SireIO::ZmatrixMaker > ZmatrixMaker_exposer_t;
-        ZmatrixMaker_exposer_t ZmatrixMaker_exposer = ZmatrixMaker_exposer_t( "ZmatrixMaker", bp::init< >() );
+        ZmatrixMaker_exposer_t ZmatrixMaker_exposer = ZmatrixMaker_exposer_t( "ZmatrixMaker", "This class is used to read templates describing how a residue can be moved using zmatrix moves\nand to create a zmatrix property for residues whose template is available.\n\nAuthor: Julien Michel\n", bp::init< >("Default constructor") );
         bp::scope ZmatrixMaker_scope( ZmatrixMaker_exposer );
         { //::SireIO::ZmatrixMaker::applyTemplates
         
@@ -67,7 +67,8 @@ void register_ZmatrixMaker_class(){
             ZmatrixMaker_exposer.def( 
                 "applyTemplates"
                 , applyTemplates_function_value
-                , ( bp::arg("molecule") ) );
+                , ( bp::arg("molecule") )
+                , "Add the property z-matrix to molecule" );
         
         }
         { //::SireIO::ZmatrixMaker::loadTemplates
@@ -78,7 +79,8 @@ void register_ZmatrixMaker_class(){
             ZmatrixMaker_exposer.def( 
                 "loadTemplates"
                 , loadTemplates_function_value
-                , ( bp::arg("templatesfile") ) );
+                , ( bp::arg("templatesfile") )
+                , "Read the contents of an input file to create a set of ZmatrixResidues" );
         
         }
         { //::SireIO::ZmatrixMaker::typeName
@@ -88,7 +90,8 @@ void register_ZmatrixMaker_class(){
             
             ZmatrixMaker_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireIO::ZmatrixMaker::what
@@ -98,7 +101,8 @@ void register_ZmatrixMaker_class(){
             
             ZmatrixMaker_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ZmatrixMaker_exposer.staticmethod( "typeName" );

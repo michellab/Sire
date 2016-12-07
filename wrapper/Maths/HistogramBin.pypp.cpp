@@ -31,10 +31,10 @@ void register_HistogramBin_class(){
 
     { //::SireMaths::HistogramBin
         typedef bp::class_< SireMaths::HistogramBin > HistogramBin_exposer_t;
-        HistogramBin_exposer_t HistogramBin_exposer = HistogramBin_exposer_t( "HistogramBin", bp::init< >() );
+        HistogramBin_exposer_t HistogramBin_exposer = HistogramBin_exposer_t( "HistogramBin", "This class represents a single histogram bin", bp::init< >("Null constructor") );
         bp::scope HistogramBin_scope( HistogramBin_exposer );
-        HistogramBin_exposer.def( bp::init< double, double >(( bp::arg("minval"), bp::arg("maxval") )) );
-        HistogramBin_exposer.def( bp::init< SireMaths::HistogramBin const & >(( bp::arg("other") )) );
+        HistogramBin_exposer.def( bp::init< double, double >(( bp::arg("minval"), bp::arg("maxval") ), "Construct a bin that contains the values that match\nminval <= value < maxval") );
+        HistogramBin_exposer.def( bp::init< SireMaths::HistogramBin const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMaths::HistogramBin::maximum
         
             typedef double ( ::SireMaths::HistogramBin::*maximum_function_type)(  ) const;
@@ -42,7 +42,8 @@ void register_HistogramBin_class(){
             
             HistogramBin_exposer.def( 
                 "maximum"
-                , maximum_function_value );
+                , maximum_function_value
+                , "Return the maximum value of the bin" );
         
         }
         { //::SireMaths::HistogramBin::middle
@@ -52,7 +53,8 @@ void register_HistogramBin_class(){
             
             HistogramBin_exposer.def( 
                 "middle"
-                , middle_function_value );
+                , middle_function_value
+                , "Return the value at the middle of the bin" );
         
         }
         { //::SireMaths::HistogramBin::minimum
@@ -62,7 +64,8 @@ void register_HistogramBin_class(){
             
             HistogramBin_exposer.def( 
                 "minimum"
-                , minimum_function_value );
+                , minimum_function_value
+                , "Return the minimum value of the bin" );
         
         }
         HistogramBin_exposer.def( bp::self != bp::self );
@@ -75,7 +78,8 @@ void register_HistogramBin_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         HistogramBin_exposer.def( bp::self == bp::self );
@@ -86,7 +90,8 @@ void register_HistogramBin_class(){
             
             HistogramBin_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation" );
         
         }
         HistogramBin_exposer.def( "__copy__", &__copy__);

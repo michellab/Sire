@@ -35,14 +35,14 @@ void register_N4Matrix_class(){
 
     { //::SireMaths::N4Matrix
         typedef bp::class_< SireMaths::N4Matrix > N4Matrix_exposer_t;
-        N4Matrix_exposer_t N4Matrix_exposer = N4Matrix_exposer_t( "N4Matrix", bp::init< >() );
+        N4Matrix_exposer_t N4Matrix_exposer = N4Matrix_exposer_t( "N4Matrix", "This is a dense, double, general NMLK 4-dimensional matrix.\nThe data is stored as a column-major 2D matrix of column-major\n2D matricies (so each 2D sub-matrix is suitable for\nuse with Fortran BLAS or LAPACK functions). This is\ndesigned for high speed.\n\nThe data is implicitly shared (copy on write), so\ncopying a matrix is very fast.\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope N4Matrix_scope( N4Matrix_exposer );
-        N4Matrix_exposer.def( bp::init< int, int, int, int >(( bp::arg("nbigrows"), bp::arg("nbigcolumns"), bp::arg("nrows"), bp::arg("columns") )) );
-        N4Matrix_exposer.def( bp::init< int, int, int, int, double >(( bp::arg("nbigrows"), bp::arg("nbigcolumn"), bp::arg("nrows"), bp::arg("ncolumns"), bp::arg("initial_value") )) );
-        N4Matrix_exposer.def( bp::init< SireMaths::NMatrix const & >(( bp::arg("matrix") )) );
-        N4Matrix_exposer.def( bp::init< SireBase::Array2D< SireMaths::NMatrix > const & >(( bp::arg("matrix") )) );
-        N4Matrix_exposer.def( bp::init< QVector< QVector< QVector< QVector< double > > > > const & >(( bp::arg("matrix") )) );
-        N4Matrix_exposer.def( bp::init< SireMaths::N4Matrix const & >(( bp::arg("other") )) );
+        N4Matrix_exposer.def( bp::init< int, int, int, int >(( bp::arg("nbigrows"), bp::arg("nbigcolumns"), bp::arg("nrows"), bp::arg("columns") ), "Construct a matrix with nbigrows big rows, nbigcolumns big columns,\nnrows rows and ncolumns columns. The values in the matrix are not initialised") );
+        N4Matrix_exposer.def( bp::init< int, int, int, int, double >(( bp::arg("nbigrows"), bp::arg("nbigcolumn"), bp::arg("nrows"), bp::arg("ncolumns"), bp::arg("initial_value") ), "Construct a matrix with nbigrows big rows, nbigcolumns big columns,\nnrows rows and ncolumns columns. The values in the matrix are\ninitialised to be equal to initial_value") );
+        N4Matrix_exposer.def( bp::init< SireMaths::NMatrix const & >(( bp::arg("matrix") ), "Construct from the passed matrix - this creates a matrix\nof dimension [1, 1, matrix.nRows(), matrix.nColumns()]") );
+        N4Matrix_exposer.def( bp::init< SireBase::Array2D< SireMaths::NMatrix > const & >(( bp::arg("matrix") ), "Construct from the passed Array or Matricies") );
+        N4Matrix_exposer.def( bp::init< QVector< QVector< QVector< QVector< double > > > > const & >(( bp::arg("matrix") ), "Construct from the passed vector of vector of vector of vectors...") );
+        N4Matrix_exposer.def( bp::init< SireMaths::N4Matrix const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMaths::N4Matrix::add
         
             typedef void ( ::SireMaths::N4Matrix::*add_function_type)( int,int,::SireMaths::NMatrix const & ) ;
@@ -51,7 +51,8 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("i"), bp::arg("j"), bp::arg("matrix") ) );
+                , ( bp::arg("i"), bp::arg("j"), bp::arg("matrix") )
+                , "Add the contents of matrix to the sub-matrix view at [i,j]\nThrow: SireError::invalid_index\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMaths::N4Matrix::assertNBigColumns
@@ -62,7 +63,8 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "assertNBigColumns"
                 , assertNBigColumns_function_value
-                , ( bp::arg("nbigcolumns") ) );
+                , ( bp::arg("nbigcolumns") )
+                , "Assert that this matrix has nbigcolumns big columns\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMaths::N4Matrix::assertNBigRows
@@ -73,7 +75,8 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "assertNBigRows"
                 , assertNBigRows_function_value
-                , ( bp::arg("nbigrows") ) );
+                , ( bp::arg("nbigrows") )
+                , "Assert that this matrix has nbigrows big rows\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMaths::N4Matrix::assertNColumns
@@ -84,7 +87,8 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "assertNColumns"
                 , assertNColumns_function_value
-                , ( bp::arg("ncolumns") ) );
+                , ( bp::arg("ncolumns") )
+                , "Assert that this matrix has ncolumns columns\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMaths::N4Matrix::assertNRows
@@ -95,7 +99,8 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "assertNRows"
                 , assertNRows_function_value
-                , ( bp::arg("nrows") ) );
+                , ( bp::arg("nrows") )
+                , "Assert that this matrix has nrows rows\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMaths::N4Matrix::assertValidBigColumn
@@ -106,7 +111,8 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "assertValidBigColumn"
                 , assertValidBigColumn_function_value
-                , ( bp::arg("j") ) );
+                , ( bp::arg("j") )
+                , "Assert that there is an jth big column\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMaths::N4Matrix::assertValidBigRow
@@ -117,7 +123,8 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "assertValidBigRow"
                 , assertValidBigRow_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Assert that there is an ith big row\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMaths::N4Matrix::assertValidColumn
@@ -128,7 +135,8 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "assertValidColumn"
                 , assertValidColumn_function_value
-                , ( bp::arg("l") ) );
+                , ( bp::arg("l") )
+                , "Assert that there is an lth column\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMaths::N4Matrix::assertValidIndex
@@ -139,7 +147,8 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "assertValidIndex"
                 , assertValidIndex_function_value
-                , ( bp::arg("i"), bp::arg("j"), bp::arg("k"), bp::arg("l") ) );
+                , ( bp::arg("i"), bp::arg("j"), bp::arg("k"), bp::arg("l") )
+                , "Assert that the index [i,j,k,l] is valid for this matrix\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMaths::N4Matrix::assertValidRow
@@ -150,7 +159,8 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "assertValidRow"
                 , assertValidRow_function_value
-                , ( bp::arg("k") ) );
+                , ( bp::arg("k") )
+                , "Assert that there is an kth row\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMaths::N4Matrix::checkedOffset
@@ -161,7 +171,8 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "checkedOffset"
                 , checkedOffset_function_value
-                , ( bp::arg("i"), bp::arg("j"), bp::arg("k"), bp::arg("l") ) );
+                , ( bp::arg("i"), bp::arg("j"), bp::arg("k"), bp::arg("l") )
+                , "Calculate the offset in the 1D array of the value\nat index [i,j,k,l]\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMaths::N4Matrix::memory
@@ -171,7 +182,8 @@ void register_N4Matrix_class(){
             
             N4Matrix_exposer.def( 
                 "memory"
-                , memory_function_value );
+                , memory_function_value
+                , "Return the raw QVector memory used by this matrix" );
         
         }
         { //::SireMaths::N4Matrix::nBigColumns
@@ -181,7 +193,8 @@ void register_N4Matrix_class(){
             
             N4Matrix_exposer.def( 
                 "nBigColumns"
-                , nBigColumns_function_value );
+                , nBigColumns_function_value
+                , "Return the number of big columns in this matrix" );
         
         }
         { //::SireMaths::N4Matrix::nBigRows
@@ -191,7 +204,8 @@ void register_N4Matrix_class(){
             
             N4Matrix_exposer.def( 
                 "nBigRows"
-                , nBigRows_function_value );
+                , nBigRows_function_value
+                , "Return the number of big rows in this matrix" );
         
         }
         { //::SireMaths::N4Matrix::nColumns
@@ -201,7 +215,8 @@ void register_N4Matrix_class(){
             
             N4Matrix_exposer.def( 
                 "nColumns"
-                , nColumns_function_value );
+                , nColumns_function_value
+                , "Return the number of columns in this matrix" );
         
         }
         { //::SireMaths::N4Matrix::nRows
@@ -211,7 +226,8 @@ void register_N4Matrix_class(){
             
             N4Matrix_exposer.def( 
                 "nRows"
-                , nRows_function_value );
+                , nRows_function_value
+                , "Return the number of rows in this matrix" );
         
         }
         { //::SireMaths::N4Matrix::offset
@@ -222,7 +238,8 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "offset"
                 , offset_function_value
-                , ( bp::arg("i"), bp::arg("j"), bp::arg("k"), bp::arg("l") ) );
+                , ( bp::arg("i"), bp::arg("j"), bp::arg("k"), bp::arg("l") )
+                , "" );
         
         }
         N4Matrix_exposer.def( bp::self != bp::self );
@@ -235,7 +252,8 @@ void register_N4Matrix_class(){
                 "__call__"
                 , __call___function_value
                 , ( bp::arg("i"), bp::arg("j"), bp::arg("k"), bp::arg("l") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMaths::N4Matrix::operator()
@@ -246,7 +264,8 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         N4Matrix_exposer.def( bp::self * bp::other< double >() );
@@ -263,7 +282,8 @@ void register_N4Matrix_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         N4Matrix_exposer.def( bp::self == bp::self );
@@ -275,7 +295,8 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "redimension"
                 , redimension_function_value
-                , ( bp::arg("nbigrows"), bp::arg("nbigcolumns"), bp::arg("nrows"), bp::arg("ncolumns") ) );
+                , ( bp::arg("nbigrows"), bp::arg("nbigcolumns"), bp::arg("nrows"), bp::arg("ncolumns") )
+                , "Redimension this matrix to have nbigrows big rows,\nnbigcolumns big columns, nrows rows and ncolumns\ncolumns. The contents of this matrix are undefined after\nthis redimension. This function will only reallocate\nmemory if there is not enough memory allocated to store\nthe new matrix. Use this function if you want to use\nthe same piece of memory over and over again for lots\nof different size matricies - just create a matrix with\nthe maximum dimension, then call this redimension function\nwhenever you want to change. It is very fast, as it just\nupdates the internal record of the size of the matrix" );
         
         }
         { //::SireMaths::N4Matrix::set
@@ -286,7 +307,8 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("i"), bp::arg("j"), bp::arg("matrix") ) );
+                , ( bp::arg("i"), bp::arg("j"), bp::arg("matrix") )
+                , "Set the view at [i,j] equal to matrix\nThrow: SireError::invalid_index\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMaths::N4Matrix::set
@@ -297,7 +319,8 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("i"), bp::arg("j"), bp::arg("k"), bp::arg("l"), bp::arg("value") ) );
+                , ( bp::arg("i"), bp::arg("j"), bp::arg("k"), bp::arg("l"), bp::arg("value") )
+                , "Set the value at [i,j,k,l] equal to value\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMaths::N4Matrix::setAll
@@ -308,7 +331,8 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "setAll"
                 , setAll_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Set all entries in the matrix to the value value" );
         
         }
         { //::SireMaths::N4Matrix::subtract
@@ -319,7 +343,8 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("i"), bp::arg("j"), bp::arg("matrix") ) );
+                , ( bp::arg("i"), bp::arg("j"), bp::arg("matrix") )
+                , "Subtract the contents of matrix from the sub-matrix view at [i,j]\nThrow: SireError::invalid_index\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMaths::N4Matrix::toString
@@ -329,7 +354,8 @@ void register_N4Matrix_class(){
             
             N4Matrix_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this matrix" );
         
         }
         { //::SireMaths::N4Matrix::typeName
@@ -339,7 +365,8 @@ void register_N4Matrix_class(){
             
             N4Matrix_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMaths::N4Matrix::view
@@ -350,7 +377,8 @@ void register_N4Matrix_class(){
             N4Matrix_exposer.def( 
                 "view"
                 , view_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "Return the sub-matrix view at [i,j,k,l]\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMaths::N4Matrix::what
@@ -360,7 +388,8 @@ void register_N4Matrix_class(){
             
             N4Matrix_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         N4Matrix_exposer.staticmethod( "typeName" );

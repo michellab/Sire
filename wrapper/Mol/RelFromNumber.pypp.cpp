@@ -39,9 +39,9 @@ void register_RelFromNumber_class(){
 
     { //::SireMol::RelFromNumber
         typedef bp::class_< SireMol::RelFromNumber, bp::bases< SireMol::WeightFunction, SireBase::Property > > RelFromNumber_exposer_t;
-        RelFromNumber_exposer_t RelFromNumber_exposer = RelFromNumber_exposer_t( "RelFromNumber", bp::init< >() );
+        RelFromNumber_exposer_t RelFromNumber_exposer = RelFromNumber_exposer_t( "RelFromNumber", "This class calculates the weight by assigning the weight based on the\nratio of the number of atoms in the two groups.\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope RelFromNumber_scope( RelFromNumber_exposer );
-        RelFromNumber_exposer.def( bp::init< SireMol::RelFromNumber const & >(( bp::arg("other") )) );
+        RelFromNumber_exposer.def( bp::init< SireMol::RelFromNumber const & >(( bp::arg("other") ), "") );
         RelFromNumber_exposer.def( bp::self != bp::self );
         { //::SireMol::RelFromNumber::operator()
         
@@ -51,7 +51,8 @@ void register_RelFromNumber_class(){
             RelFromNumber_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("moldata"), bp::arg("group0"), bp::arg("group1"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("moldata"), bp::arg("group0"), bp::arg("group1"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::RelFromNumber::operator()
@@ -62,7 +63,8 @@ void register_RelFromNumber_class(){
             RelFromNumber_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("view0"), bp::arg("map0"), bp::arg("view1"), bp::arg("map1") ) );
+                , ( bp::arg("view0"), bp::arg("map0"), bp::arg("view1"), bp::arg("map1") )
+                , "" );
         
         }
         { //::SireMol::RelFromNumber::operator=
@@ -74,7 +76,8 @@ void register_RelFromNumber_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("arg0") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         RelFromNumber_exposer.def( bp::self == bp::self );
@@ -85,7 +88,8 @@ void register_RelFromNumber_class(){
             
             RelFromNumber_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         RelFromNumber_exposer.staticmethod( "typeName" );

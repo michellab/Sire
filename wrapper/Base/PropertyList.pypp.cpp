@@ -38,10 +38,10 @@ void register_PropertyList_class(){
 
     { //::SireBase::PropertyList
         typedef bp::class_< SireBase::PropertyList, bp::bases< SireBase::Property > > PropertyList_exposer_t;
-        PropertyList_exposer_t PropertyList_exposer = PropertyList_exposer_t( "PropertyList", bp::init< >() );
+        PropertyList_exposer_t PropertyList_exposer = PropertyList_exposer_t( "PropertyList", "This class provides a simple list of properties. This is useful,\ne.g. if the user wants to store a list of values in a molecule.\n\nThis class is designed to be used with StringProperty, NumberProperty\nand VectorProperty (from SireMaths) to make it easy to attach\narbitrary data to any Sire object, e.g. storing a fixed center\npoint in a molecule, saving a list of velocities with a molecule,\netc.\n\nNote also that Properties already provides a Property dictionary.\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope PropertyList_scope( PropertyList_exposer );
-        PropertyList_exposer.def( bp::init< QList< SireBase::PropPtr< SireBase::Property > > const & >(( bp::arg("props") )) );
-        PropertyList_exposer.def( bp::init< SireBase::PropertyList const & >(( bp::arg("other") )) );
+        PropertyList_exposer.def( bp::init< QList< SireBase::PropPtr< SireBase::Property > > const & >(( bp::arg("props") ), "Construct from the passed list") );
+        PropertyList_exposer.def( bp::init< SireBase::PropertyList const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireBase::PropertyList::append
         
             typedef void ( ::SireBase::PropertyList::*append_function_type)( ::SireBase::Property const & ) ;
@@ -50,7 +50,8 @@ void register_PropertyList_class(){
             PropertyList_exposer.def( 
                 "append"
                 , append_function_value
-                , ( bp::arg("property") ) );
+                , ( bp::arg("property") )
+                , "Add the passed property onto the end of this list" );
         
         }
         { //::SireBase::PropertyList::append
@@ -61,7 +62,8 @@ void register_PropertyList_class(){
             PropertyList_exposer.def( 
                 "append"
                 , append_function_value
-                , ( bp::arg("props") ) );
+                , ( bp::arg("props") )
+                , "Append the list of properties onto the end of this list" );
         
         }
         { //::SireBase::PropertyList::array
@@ -71,7 +73,8 @@ void register_PropertyList_class(){
             
             PropertyList_exposer.def( 
                 "array"
-                , array_function_value );
+                , array_function_value
+                , "" );
         
         }
         { //::SireBase::PropertyList::at
@@ -83,7 +86,8 @@ void register_PropertyList_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the element at index i" );
         
         }
         { //::SireBase::PropertyList::clear
@@ -93,7 +97,8 @@ void register_PropertyList_class(){
             
             PropertyList_exposer.def( 
                 "clear"
-                , clear_function_value );
+                , clear_function_value
+                , "Clear the list" );
         
         }
         { //::SireBase::PropertyList::count
@@ -103,7 +108,8 @@ void register_PropertyList_class(){
             
             PropertyList_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of elements in the list" );
         
         }
         { //::SireBase::PropertyList::empty
@@ -113,7 +119,8 @@ void register_PropertyList_class(){
             
             PropertyList_exposer.def( 
                 "empty"
-                , empty_function_value );
+                , empty_function_value
+                , "Return whether or not the list is empty" );
         
         }
         { //::SireBase::PropertyList::insert
@@ -124,7 +131,8 @@ void register_PropertyList_class(){
             PropertyList_exposer.def( 
                 "insert"
                 , insert_function_value
-                , ( bp::arg("i"), bp::arg("value") ) );
+                , ( bp::arg("i"), bp::arg("value") )
+                , "Insert the passed value at index i" );
         
         }
         { //::SireBase::PropertyList::isEmpty
@@ -134,7 +142,8 @@ void register_PropertyList_class(){
             
             PropertyList_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether or not the list is empty" );
         
         }
         { //::SireBase::PropertyList::mid
@@ -145,7 +154,8 @@ void register_PropertyList_class(){
             PropertyList_exposer.def( 
                 "mid"
                 , mid_function_value
-                , ( bp::arg("pos"), bp::arg("length")=(int)(-0x00000000000000001) ) );
+                , ( bp::arg("pos"), bp::arg("length")=(int)(-1) )
+                , "Return the sub-set of this list from list[pos] to list[pos+length]. If\nlength is -1 then the whole rest of the list is returned" );
         
         }
         { //::SireBase::PropertyList::move
@@ -156,7 +166,8 @@ void register_PropertyList_class(){
             PropertyList_exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("from"), bp::arg("to") ) );
+                , ( bp::arg("from"), bp::arg("to") )
+                , "Move an element of the list from index from to index to" );
         
         }
         PropertyList_exposer.def( bp::self != bp::self );
@@ -170,7 +181,8 @@ void register_PropertyList_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         PropertyList_exposer.def( bp::self == bp::self );
@@ -183,7 +195,8 @@ void register_PropertyList_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireBase::PropertyList::pop_back
@@ -193,7 +206,8 @@ void register_PropertyList_class(){
             
             PropertyList_exposer.def( 
                 "pop_back"
-                , pop_back_function_value );
+                , pop_back_function_value
+                , "Pop off an element from the back of the list" );
         
         }
         { //::SireBase::PropertyList::pop_front
@@ -203,7 +217,8 @@ void register_PropertyList_class(){
             
             PropertyList_exposer.def( 
                 "pop_front"
-                , pop_front_function_value );
+                , pop_front_function_value
+                , "Pop off an element from the front of the list" );
         
         }
         { //::SireBase::PropertyList::prepend
@@ -214,7 +229,8 @@ void register_PropertyList_class(){
             PropertyList_exposer.def( 
                 "prepend"
                 , prepend_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Prepend the passed property to the beginning of the list" );
         
         }
         { //::SireBase::PropertyList::push_back
@@ -225,7 +241,8 @@ void register_PropertyList_class(){
             PropertyList_exposer.def( 
                 "push_back"
                 , push_back_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Push the passed value onto the back of the list" );
         
         }
         { //::SireBase::PropertyList::push_front
@@ -236,7 +253,8 @@ void register_PropertyList_class(){
             PropertyList_exposer.def( 
                 "push_front"
                 , push_front_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Push the passed value onto the front of the list" );
         
         }
         { //::SireBase::PropertyList::removeAt
@@ -247,7 +265,8 @@ void register_PropertyList_class(){
             PropertyList_exposer.def( 
                 "removeAt"
                 , removeAt_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Remove the item at index i" );
         
         }
         { //::SireBase::PropertyList::removeFirst
@@ -257,7 +276,8 @@ void register_PropertyList_class(){
             
             PropertyList_exposer.def( 
                 "removeFirst"
-                , removeFirst_function_value );
+                , removeFirst_function_value
+                , "Remove the first element from the list" );
         
         }
         { //::SireBase::PropertyList::removeLast
@@ -267,7 +287,8 @@ void register_PropertyList_class(){
             
             PropertyList_exposer.def( 
                 "removeLast"
-                , removeLast_function_value );
+                , removeLast_function_value
+                , "Remove the last element from the list" );
         
         }
         { //::SireBase::PropertyList::replace
@@ -278,7 +299,8 @@ void register_PropertyList_class(){
             PropertyList_exposer.def( 
                 "replace"
                 , replace_function_value
-                , ( bp::arg("i"), bp::arg("value") ) );
+                , ( bp::arg("i"), bp::arg("value") )
+                , "Replace the element at index i with value" );
         
         }
         { //::SireBase::PropertyList::size
@@ -288,7 +310,8 @@ void register_PropertyList_class(){
             
             PropertyList_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "Return the number of elements in the list" );
         
         }
         { //::SireBase::PropertyList::swap
@@ -299,7 +322,8 @@ void register_PropertyList_class(){
             PropertyList_exposer.def( 
                 "swap"
                 , swap_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Swap this list with other" );
         
         }
         { //::SireBase::PropertyList::swap
@@ -310,7 +334,8 @@ void register_PropertyList_class(){
             PropertyList_exposer.def( 
                 "swap"
                 , swap_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "Swap elements i and j" );
         
         }
         { //::SireBase::PropertyList::takeAt
@@ -321,7 +346,8 @@ void register_PropertyList_class(){
             PropertyList_exposer.def( 
                 "takeAt"
                 , takeAt_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Take the element at index i" );
         
         }
         { //::SireBase::PropertyList::takeFirst
@@ -331,7 +357,8 @@ void register_PropertyList_class(){
             
             PropertyList_exposer.def( 
                 "takeFirst"
-                , takeFirst_function_value );
+                , takeFirst_function_value
+                , "Take the first element" );
         
         }
         { //::SireBase::PropertyList::takeLast
@@ -341,7 +368,8 @@ void register_PropertyList_class(){
             
             PropertyList_exposer.def( 
                 "takeLast"
-                , takeLast_function_value );
+                , takeLast_function_value
+                , "Take the last element" );
         
         }
         { //::SireBase::PropertyList::toList
@@ -351,7 +379,8 @@ void register_PropertyList_class(){
             
             PropertyList_exposer.def( 
                 "toList"
-                , toList_function_value );
+                , toList_function_value
+                , "Return this as a QList<PropertyPtr>" );
         
         }
         { //::SireBase::PropertyList::toString
@@ -361,7 +390,8 @@ void register_PropertyList_class(){
             
             PropertyList_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireBase::PropertyList::toVector
@@ -371,7 +401,8 @@ void register_PropertyList_class(){
             
             PropertyList_exposer.def( 
                 "toVector"
-                , toVector_function_value );
+                , toVector_function_value
+                , "Return this as a QVector<PropertyPtr>" );
         
         }
         { //::SireBase::PropertyList::typeName
@@ -381,7 +412,8 @@ void register_PropertyList_class(){
             
             PropertyList_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireBase::PropertyList::value
@@ -392,7 +424,8 @@ void register_PropertyList_class(){
             PropertyList_exposer.def( 
                 "value"
                 , value_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return the value at index i, or a null property if this is\nan invalid index" );
         
         }
         { //::SireBase::PropertyList::value
@@ -403,7 +436,8 @@ void register_PropertyList_class(){
             PropertyList_exposer.def( 
                 "value"
                 , value_function_value
-                , ( bp::arg("i"), bp::arg("default_value") ) );
+                , ( bp::arg("i"), bp::arg("default_value") )
+                , "Return the value at index i or default_value if this is an invalid index" );
         
         }
         PropertyList_exposer.staticmethod( "typeName" );

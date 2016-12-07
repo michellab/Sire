@@ -27,9 +27,9 @@ void register_Torsion_class(){
 
     { //::SireMaths::Torsion
         typedef bp::class_< SireMaths::Torsion > Torsion_exposer_t;
-        Torsion_exposer_t Torsion_exposer = Torsion_exposer_t( "Torsion", bp::init< >() );
+        Torsion_exposer_t Torsion_exposer = Torsion_exposer_t( "Torsion", "\nThis class represents a torsion in three dimensional space, e.g. four points\nin space, not necessarily lying in a plane. A torsion is used to calculate\ndihedral angles (imagine each point is an atom). I am not happy with the\nname of this class, and welcome suggestions :-)\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a zero torsion") );
         bp::scope Torsion_scope( Torsion_exposer );
-        Torsion_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const &, SireMaths::Vector const &, SireMaths::Vector const & >(( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3") )) );
+        Torsion_exposer.def( bp::init< SireMaths::Vector const &, SireMaths::Vector const &, SireMaths::Vector const &, SireMaths::Vector const & >(( bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3") ), "Construct a torsion from the points 0 to 4") );
         { //::SireMaths::Torsion::angle
         
             typedef ::SireUnits::Dimension::Angle ( ::SireMaths::Torsion::*angle_function_type)(  ) const;
@@ -37,7 +37,8 @@ void register_Torsion_class(){
             
             Torsion_exposer.def( 
                 "angle"
-                , angle_function_value );
+                , angle_function_value
+                , "Return the torsion angle of this torsion (the torsion angle 0-1-2-3\naround the 1-2 line)" );
         
         }
         { //::SireMaths::Torsion::at
@@ -49,7 +50,8 @@ void register_Torsion_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the point at index i" );
         
         }
         { //::SireMaths::Torsion::count
@@ -59,7 +61,8 @@ void register_Torsion_class(){
             
             Torsion_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of points in a torsion (4)" );
         
         }
         { //::SireMaths::Torsion::improperAngle
@@ -69,7 +72,8 @@ void register_Torsion_class(){
             
             Torsion_exposer.def( 
                 "improperAngle"
-                , improperAngle_function_value );
+                , improperAngle_function_value
+                , "Return the improper angle of this torsion (the acute angle between the\nvector 0-1 and the plane formed by 1-2-3)" );
         
         }
         { //::SireMaths::Torsion::line03
@@ -79,7 +83,8 @@ void register_Torsion_class(){
             
             Torsion_exposer.def( 
                 "line03"
-                , line03_function_value );
+                , line03_function_value
+                , "Return the line from point 0 to point 3" );
         
         }
         { //::SireMaths::Torsion::line12
@@ -89,7 +94,8 @@ void register_Torsion_class(){
             
             Torsion_exposer.def( 
                 "line12"
-                , line12_function_value );
+                , line12_function_value
+                , "Return the line from point 1 to point 2" );
         
         }
         { //::SireMaths::Torsion::operator[]
@@ -101,7 +107,8 @@ void register_Torsion_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMaths::Torsion::point
@@ -113,7 +120,8 @@ void register_Torsion_class(){
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the point at index i" );
         
         }
         { //::SireMaths::Torsion::toString
@@ -123,7 +131,8 @@ void register_Torsion_class(){
             
             Torsion_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this torsion" );
         
         }
         { //::SireMaths::Torsion::triangle1
@@ -133,7 +142,8 @@ void register_Torsion_class(){
             
             Torsion_exposer.def( 
                 "triangle1"
-                , triangle1_function_value );
+                , triangle1_function_value
+                , "Return the triangle around point 1, i.e. point0-point1-point2" );
         
         }
         { //::SireMaths::Torsion::triangle2
@@ -143,7 +153,8 @@ void register_Torsion_class(){
             
             Torsion_exposer.def( 
                 "triangle2"
-                , triangle2_function_value );
+                , triangle2_function_value
+                , "Return the triangle around point 2, i.e. point1-point2-point3" );
         
         }
         { //::SireMaths::Torsion::typeName
@@ -153,7 +164,8 @@ void register_Torsion_class(){
             
             Torsion_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMaths::Torsion::vector03
@@ -163,7 +175,8 @@ void register_Torsion_class(){
             
             Torsion_exposer.def( 
                 "vector03"
-                , vector03_function_value );
+                , vector03_function_value
+                , "Return the vector from point 0 to point 3" );
         
         }
         { //::SireMaths::Torsion::vector12
@@ -173,7 +186,8 @@ void register_Torsion_class(){
             
             Torsion_exposer.def( 
                 "vector12"
-                , vector12_function_value );
+                , vector12_function_value
+                , "Return the vector from point 1 to point 2" );
         
         }
         { //::SireMaths::Torsion::what
@@ -183,7 +197,8 @@ void register_Torsion_class(){
             
             Torsion_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Torsion_exposer.staticmethod( "typeName" );

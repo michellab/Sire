@@ -27,13 +27,13 @@ void register_NumberProperty_class(){
 
     { //::SireBase::NumberProperty
         typedef bp::class_< SireBase::NumberProperty, bp::bases< SireBase::Property > > NumberProperty_exposer_t;
-        NumberProperty_exposer_t NumberProperty_exposer = NumberProperty_exposer_t( "NumberProperty", bp::init< >() );
+        NumberProperty_exposer_t NumberProperty_exposer = NumberProperty_exposer_t( "NumberProperty", "This class provides a thin Property wrapper around numbers (doubles and ints)\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor - this constructs the integer 0") );
         bp::scope NumberProperty_scope( NumberProperty_exposer );
-        NumberProperty_exposer.def( bp::init< double >(( bp::arg("value") )) );
-        NumberProperty_exposer.def( bp::init< int >(( bp::arg("value") )) );
-        NumberProperty_exposer.def( bp::init< qint64 >(( bp::arg("value") )) );
-        NumberProperty_exposer.def( bp::init< SireBase::VariantProperty const & >(( bp::arg("other") )) );
-        NumberProperty_exposer.def( bp::init< SireBase::NumberProperty const & >(( bp::arg("other") )) );
+        NumberProperty_exposer.def( bp::init< double >(( bp::arg("value") ), "Construct from the passed double") );
+        NumberProperty_exposer.def( bp::init< int >(( bp::arg("value") ), "Construct from the passed integer") );
+        NumberProperty_exposer.def( bp::init< qint64 >(( bp::arg("value") ), "Construct from the passed integer") );
+        NumberProperty_exposer.def( bp::init< SireBase::VariantProperty const & >(( bp::arg("other") ), "Construct from the passed VariantProperty") );
+        NumberProperty_exposer.def( bp::init< SireBase::NumberProperty const & >(( bp::arg("other") ), "Copy constructor") );
         NumberProperty_exposer.def( bp::self != bp::self );
         { //::SireBase::NumberProperty::operator=
         
@@ -44,7 +44,8 @@ void register_NumberProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         NumberProperty_exposer.def( bp::self == bp::self );
@@ -55,7 +56,8 @@ void register_NumberProperty_class(){
             
             NumberProperty_exposer.def( 
                 "toDouble"
-                , toDouble_function_value );
+                , toDouble_function_value
+                , "Return this number cast as a double" );
         
         }
         { //::SireBase::NumberProperty::toInt
@@ -65,7 +67,8 @@ void register_NumberProperty_class(){
             
             NumberProperty_exposer.def( 
                 "toInt"
-                , toInt_function_value );
+                , toInt_function_value
+                , "Return this number cast as an integer" );
         
         }
         { //::SireBase::NumberProperty::toString
@@ -75,7 +78,8 @@ void register_NumberProperty_class(){
             
             NumberProperty_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireBase::NumberProperty::typeName
@@ -85,7 +89,8 @@ void register_NumberProperty_class(){
             
             NumberProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireBase::NumberProperty::value
@@ -95,7 +100,8 @@ void register_NumberProperty_class(){
             
             NumberProperty_exposer.def( 
                 "value"
-                , value_function_value );
+                , value_function_value
+                , "Return this number cast as a double" );
         
         }
         NumberProperty_exposer.staticmethod( "typeName" );

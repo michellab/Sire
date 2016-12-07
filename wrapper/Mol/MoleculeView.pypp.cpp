@@ -47,7 +47,7 @@ void register_MoleculeView_class(){
 
     { //::SireMol::MoleculeView
         typedef bp::class_< SireMol::MoleculeView, bp::bases< SireBase::Property >, boost::noncopyable > MoleculeView_exposer_t;
-        MoleculeView_exposer_t MoleculeView_exposer = MoleculeView_exposer_t( "MoleculeView", bp::no_init );
+        MoleculeView_exposer_t MoleculeView_exposer = MoleculeView_exposer_t( "MoleculeView", "This is the base class of all views of a Molecule. Derived\nclasses include Molecule, Segment, Chain, CutGroup, Residue and Atom.\n\n(and the manipulator classes of each of these)\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope MoleculeView_scope( MoleculeView_exposer );
         { //::SireMol::MoleculeView::assertContains
         
@@ -57,7 +57,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "assertContains"
                 , assertContains_function_value
-                , ( bp::arg("atomidx") ) );
+                , ( bp::arg("atomidx") )
+                , "Assert that this view contains the atom at index atomidx\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeView::assertHasMetadata
@@ -68,7 +69,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "assertHasMetadata"
                 , assertHasMetadata_function_value
-                , ( bp::arg("metakey") ) );
+                , ( bp::arg("metakey") )
+                , "Assert that this contains some metadata at metakey metakey\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::MoleculeView::assertHasMetadata
@@ -79,7 +81,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "assertHasMetadata"
                 , assertHasMetadata_function_value
-                , ( bp::arg("key"), bp::arg("metakey") ) );
+                , ( bp::arg("key"), bp::arg("metakey") )
+                , "Assert that this contains some metadata at metakey metakey\nfor the property at key key\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::MoleculeView::assertHasProperty
@@ -90,7 +93,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "assertHasProperty"
                 , assertHasProperty_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "Assert that this contains a property at key key\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::MoleculeView::assertSameMolecule
@@ -101,7 +105,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "assertSameMolecule"
                 , assertSameMolecule_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Assert that this is a view of the same molecule as other\n(albeit at a different version)\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::MoleculeView::assertSameMolecule
@@ -112,7 +117,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "assertSameMolecule"
                 , assertSameMolecule_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Assert that this view is looking at the molecule whose data is\nin other (albeit perhaps a different version of that molecule)\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMol::MoleculeView::atom
@@ -123,7 +129,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "atom"
                 , atom_function_value
-                , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the atom in this view that matches the ID atomid\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_atom\n" );
         
         }
         { //::SireMol::MoleculeView::atom
@@ -133,7 +140,8 @@ void register_MoleculeView_class(){
             
             MoleculeView_exposer.def( 
                 "atom"
-                , atom_function_value );
+                , atom_function_value
+                , "Return this view as a Atom - this will only work if\nthis view contains only a single atom\nThrow: SireMol::duplicate_atom\n" );
         
         }
         { //::SireMol::MoleculeView::atoms
@@ -144,7 +152,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "atoms"
                 , atoms_function_value
-                , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the atoms from this view that match the ID atomid\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeView::atoms
@@ -154,7 +163,8 @@ void register_MoleculeView_class(){
             
             MoleculeView_exposer.def( 
                 "atoms"
-                , atoms_function_value );
+                , atoms_function_value
+                , "Return all of the atoms in this view\nThrow: SireMol::missing_atom\n" );
         
         }
         { //::SireMol::MoleculeView::chain
@@ -165,7 +175,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "chain"
                 , chain_function_value
-                , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the chain that is involved with this view that matches\nthe ID chainid\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_chain\n" );
         
         }
         { //::SireMol::MoleculeView::chain
@@ -175,7 +186,8 @@ void register_MoleculeView_class(){
             
             MoleculeView_exposer.def( 
                 "chain"
-                , chain_function_value );
+                , chain_function_value
+                , "Return the chain that is involved with this view\nThrow: SireMol::missing_chain\nThrow: SireMol::duplicate_chain\n" );
         
         }
         { //::SireMol::MoleculeView::chains
@@ -186,7 +198,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "chains"
                 , chains_function_value
-                , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the chains that are involved with this view that match\nthe ID chainid\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_chain\n" );
         
         }
         { //::SireMol::MoleculeView::chains
@@ -196,7 +209,8 @@ void register_MoleculeView_class(){
             
             MoleculeView_exposer.def( 
                 "chains"
-                , chains_function_value );
+                , chains_function_value
+                , "Return the chains that are involved with this view\nThrow: SireMol::missing_chain\n" );
         
         }
         { //::SireMol::MoleculeView::constData
@@ -207,7 +221,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "constData"
                 , constData_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the MoleculeData that contains all of the information\nabout the molecule which this view is showing" );
         
         }
         { //::SireMol::MoleculeView::cutGroup
@@ -218,7 +233,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "cutGroup"
                 , cutGroup_function_value
-                , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the CutGroup whose atoms are in this view that matches\nthe ID in cgid\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_cutgroup\n" );
         
         }
         { //::SireMol::MoleculeView::cutGroup
@@ -228,7 +244,8 @@ void register_MoleculeView_class(){
             
             MoleculeView_exposer.def( 
                 "cutGroup"
-                , cutGroup_function_value );
+                , cutGroup_function_value
+                , "Return the CutGroup that contains the atom(s) in this view\nThrow: SireMol::missing_cutgroup\nThrow: SireMol::duplicate_cutgroup\n" );
         
         }
         { //::SireMol::MoleculeView::cutGroups
@@ -239,7 +256,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "cutGroups"
                 , cutGroups_function_value
-                , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the CutGroups whose atoms are in this view that match\nthe ID in cgid\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeView::cutGroups
@@ -249,7 +267,8 @@ void register_MoleculeView_class(){
             
             MoleculeView_exposer.def( 
                 "cutGroups"
-                , cutGroups_function_value );
+                , cutGroups_function_value
+                , "Return all of the CutGroups that are involved in this view\nThrow: SireMol::missing_cutgroup\n" );
         
         }
         { //::SireMol::MoleculeView::data
@@ -260,7 +279,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "data"
                 , data_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the MoleculeData that contains all of the information\nabout the molecule which this view is showing" );
         
         }
         { //::SireMol::MoleculeView::hasMetadata
@@ -271,7 +291,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "hasMetadata"
                 , hasMetadata_function_value
-                , ( bp::arg("metakey") ) );
+                , ( bp::arg("metakey") )
+                , "Return whether or not this view has the metadata at metakey metakey\n- note that this returns true only if there is some metadata,\nand it fits the view (e.g. is an AtomProperty if this\nis a view of an Atom or group of Atoms)" );
         
         }
         { //::SireMol::MoleculeView::hasMetadata
@@ -282,7 +303,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "hasMetadata"
                 , hasMetadata_function_value
-                , ( bp::arg("key"), bp::arg("metakey") ) );
+                , ( bp::arg("key"), bp::arg("metakey") )
+                , "Return whether or not this view has the metadata at metakey\nmetakey for the property at key key\n- note that this returns true only if there is some metadata,\nand it fits the view (e.g. is an AtomProperty if this\nis a view of an Atom or group of Atoms)" );
         
         }
         { //::SireMol::MoleculeView::hasProperty
@@ -293,7 +315,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "hasProperty"
                 , hasProperty_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "Return whether or not this view has the property at key key\n- note that this returns true only if there is a property,\nand it fits the view (e.g. is an AtomProperty if this\nis a view of an Atom or group of Atoms)" );
         
         }
         { //::SireMol::MoleculeView::isEmpty
@@ -303,7 +326,8 @@ void register_MoleculeView_class(){
             
             MoleculeView_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether or not this molecule view is empty" );
         
         }
         { //::SireMol::MoleculeView::isNull
@@ -313,7 +337,8 @@ void register_MoleculeView_class(){
             
             MoleculeView_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Return whether or not this molecule view is null" );
         
         }
         { //::SireMol::MoleculeView::isSameMolecule
@@ -324,7 +349,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "isSameMolecule"
                 , isSameMolecule_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return whether or not this view is of the same molecule as other\n(albeit perhaps a different version of the molecule)" );
         
         }
         { //::SireMol::MoleculeView::isSameMolecule
@@ -335,7 +361,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "isSameMolecule"
                 , isSameMolecule_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return whether or not this view is of the same molecule as other\n(albeit perhaps a different version of the molecule)" );
         
         }
         { //::SireMol::MoleculeView::metadataKeys
@@ -345,7 +372,8 @@ void register_MoleculeView_class(){
             
             MoleculeView_exposer.def( 
                 "metadataKeys"
-                , metadataKeys_function_value );
+                , metadataKeys_function_value
+                , "Return the list of metakeys of metadata that fit this view,\ne.g. if this is a view of an atom, or group of atoms, then\nthis returns the metakeys of all AtomProperty derived objects" );
         
         }
         { //::SireMol::MoleculeView::metadataKeys
@@ -356,7 +384,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "metadataKeys"
                 , metadataKeys_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "Return the list of metakeys of metadata for the\nproperty at key key that fit this view,\ne.g. if this is a view of an atom, or group of atoms, then\nthis returns the metakeys of all AtomProperty derived objects" );
         
         }
         { //::SireMol::MoleculeView::metadataType
@@ -367,7 +396,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "metadataType"
                 , metadataType_function_value
-                , ( bp::arg("metakey") ) );
+                , ( bp::arg("metakey") )
+                , "Return the type of the metadata at metakey metakey\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::MoleculeView::metadataType
@@ -378,7 +408,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "metadataType"
                 , metadataType_function_value
-                , ( bp::arg("key"), bp::arg("metakey") ) );
+                , ( bp::arg("key"), bp::arg("metakey") )
+                , "Return the type of the metadata at metakey metakey\nfor the property at key key\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::MoleculeView::molecule
@@ -388,7 +419,8 @@ void register_MoleculeView_class(){
             
             MoleculeView_exposer.def( 
                 "molecule"
-                , molecule_function_value );
+                , molecule_function_value
+                , "Return the molecule involved with this view" );
         
         }
         { //::SireMol::MoleculeView::propertyKeys
@@ -398,7 +430,8 @@ void register_MoleculeView_class(){
             
             MoleculeView_exposer.def( 
                 "propertyKeys"
-                , propertyKeys_function_value );
+                , propertyKeys_function_value
+                , "Return the list of keys of properties that fit this view,\ne.g. if this is a view of an atom, or group of atoms, then\nthis returns the keys of all AtomProperty derived objects" );
         
         }
         { //::SireMol::MoleculeView::propertyType
@@ -409,7 +442,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "propertyType"
                 , propertyType_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "Return the type of the property at key key\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::MoleculeView::residue
@@ -420,7 +454,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "residue"
                 , residue_function_value
-                , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the residue from this view that matches the ID resid\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_residue\n" );
         
         }
         { //::SireMol::MoleculeView::residue
@@ -430,7 +465,8 @@ void register_MoleculeView_class(){
             
             MoleculeView_exposer.def( 
                 "residue"
-                , residue_function_value );
+                , residue_function_value
+                , "Return the residue that is part of this view\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\n" );
         
         }
         { //::SireMol::MoleculeView::residues
@@ -441,7 +477,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "residues"
                 , residues_function_value
-                , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the residues from this view that match the ID resid\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeView::residues
@@ -451,7 +488,8 @@ void register_MoleculeView_class(){
             
             MoleculeView_exposer.def( 
                 "residues"
-                , residues_function_value );
+                , residues_function_value
+                , "Return all of the residues that are involved with this view\nThrow: SireMol::missing_residue\n" );
         
         }
         { //::SireMol::MoleculeView::segment
@@ -462,7 +500,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "segment"
                 , segment_function_value
-                , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the segment that is involved with this view that matches\nthe ID segid\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_segment\n" );
         
         }
         { //::SireMol::MoleculeView::segment
@@ -472,7 +511,8 @@ void register_MoleculeView_class(){
             
             MoleculeView_exposer.def( 
                 "segment"
-                , segment_function_value );
+                , segment_function_value
+                , "Return the segment that is involved with this view\nThrow: SireMol::missing_segment\nThrow: SireMol::duplicate_segment\n" );
         
         }
         { //::SireMol::MoleculeView::segments
@@ -483,7 +523,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "segments"
                 , segments_function_value
-                , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the segments that are involved with this view that match\nthe ID segid\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeView::segments
@@ -493,7 +534,8 @@ void register_MoleculeView_class(){
             
             MoleculeView_exposer.def( 
                 "segments"
-                , segments_function_value );
+                , segments_function_value
+                , "Return the segments that are involved with this view\nThrow: SireMol::missing_segment\n" );
         
         }
         { //::SireMol::MoleculeView::select
@@ -504,7 +546,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the CutGroup whose atoms are in this view that matches\nthe ID in cgid\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_cutgroup\n" );
         
         }
         { //::SireMol::MoleculeView::select
@@ -515,7 +558,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the residue from this view that matches the ID resid\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_residue\n" );
         
         }
         { //::SireMol::MoleculeView::select
@@ -526,7 +570,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the chain that is involved with this view that matches\nthe ID chainid\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_chain\n" );
         
         }
         { //::SireMol::MoleculeView::select
@@ -537,7 +582,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the segment that is involved with this view that matches\nthe ID segid\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_segment\n" );
         
         }
         { //::SireMol::MoleculeView::select
@@ -548,7 +594,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the atom in this view that matches the ID atomid\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_atom\n" );
         
         }
         { //::SireMol::MoleculeView::selectAll
@@ -559,7 +606,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "selectAll"
                 , selectAll_function_value
-                , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the atoms from this view that match the ID atomid\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeView::selectAll
@@ -569,7 +617,8 @@ void register_MoleculeView_class(){
             
             MoleculeView_exposer.def( 
                 "selectAll"
-                , selectAll_function_value );
+                , selectAll_function_value
+                , "Return all of the atoms in this view\nThrow: SireMol::missing_atom\n" );
         
         }
         { //::SireMol::MoleculeView::selectAll
@@ -580,7 +629,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "selectAll"
                 , selectAll_function_value
-                , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the CutGroups whose atoms are in this view that match\nthe ID in cgid\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeView::selectAll
@@ -591,7 +641,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "selectAll"
                 , selectAll_function_value
-                , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the residues from this view that match the ID resid\nThrow: SireMol::missing_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeView::selectAll
@@ -602,7 +653,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "selectAll"
                 , selectAll_function_value
-                , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the chains that are involved with this view that match\nthe ID chainid\nThrow: SireMol::missing_chain\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_chain\n" );
         
         }
         { //::SireMol::MoleculeView::selectAll
@@ -613,7 +665,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "selectAll"
                 , selectAll_function_value
-                , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the segments that are involved with this view that match\nthe ID segid\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MoleculeView::selectAllAtoms
@@ -623,7 +676,8 @@ void register_MoleculeView_class(){
             
             MoleculeView_exposer.def( 
                 "selectAllAtoms"
-                , selectAllAtoms_function_value );
+                , selectAllAtoms_function_value
+                , "Return all of the atoms in this view\nThrow: SireMol::missing_atom\n" );
         
         }
         { //::SireMol::MoleculeView::selectAllChains
@@ -633,7 +687,8 @@ void register_MoleculeView_class(){
             
             MoleculeView_exposer.def( 
                 "selectAllChains"
-                , selectAllChains_function_value );
+                , selectAllChains_function_value
+                , "Return the chains that are involved with this view\nThrow: SireMol::missing_chain\n" );
         
         }
         { //::SireMol::MoleculeView::selectAllCutGroups
@@ -643,7 +698,8 @@ void register_MoleculeView_class(){
             
             MoleculeView_exposer.def( 
                 "selectAllCutGroups"
-                , selectAllCutGroups_function_value );
+                , selectAllCutGroups_function_value
+                , "Return all of the CutGroups that are involved in this view\nThrow: SireMol::missing_cutgroup\n" );
         
         }
         { //::SireMol::MoleculeView::selectAllResidues
@@ -653,7 +709,8 @@ void register_MoleculeView_class(){
             
             MoleculeView_exposer.def( 
                 "selectAllResidues"
-                , selectAllResidues_function_value );
+                , selectAllResidues_function_value
+                , "Return all of the residues that are involved with this view\nThrow: SireMol::missing_residue\n" );
         
         }
         { //::SireMol::MoleculeView::selectAllSegments
@@ -663,7 +720,8 @@ void register_MoleculeView_class(){
             
             MoleculeView_exposer.def( 
                 "selectAllSegments"
-                , selectAllSegments_function_value );
+                , selectAllSegments_function_value
+                , "Return the segments that are involved with this view\nThrow: SireMol::missing_segment\n" );
         
         }
         { //::SireMol::MoleculeView::selectedAll
@@ -673,7 +731,8 @@ void register_MoleculeView_class(){
             
             MoleculeView_exposer.def( 
                 "selectedAll"
-                , selectedAll_function_value );
+                , selectedAll_function_value
+                , "Return whether or not this molecule view holds a complete\nview of a molecule" );
         
         }
         { //::SireMol::MoleculeView::selection
@@ -683,7 +742,8 @@ void register_MoleculeView_class(){
             
             MoleculeView_exposer.def( 
                 "selection"
-                , selection_function_value );
+                , selection_function_value
+                , "Return the atoms that are selected as part of this view" );
         
         }
         { //::SireMol::MoleculeView::toString
@@ -693,7 +753,8 @@ void register_MoleculeView_class(){
             
             MoleculeView_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this molecule view" );
         
         }
         { //::SireMol::MoleculeView::typeName
@@ -703,7 +764,8 @@ void register_MoleculeView_class(){
             
             MoleculeView_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::MoleculeView::update
@@ -714,7 +776,8 @@ void register_MoleculeView_class(){
             MoleculeView_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("moldata") ) );
+                , ( bp::arg("moldata") )
+                , "Update this view with a new version of the molecule. You\ncan only update the molecule if it has the same layout UID\n(so same atoms, residues, cutgroups etc.)\nThrow: SireError::incompatible_error\n" );
         
         }
         MoleculeView_exposer.staticmethod( "typeName" );

@@ -59,12 +59,13 @@ void register_IDOrSet_ChainID__class(){
 
     { //::SireID::IDOrSet< SireMol::ChainID >
         typedef bp::class_< SireID::IDOrSet< SireMol::ChainID >, bp::bases< SireMol::ChainID, SireID::ID > > IDOrSet_ChainID__exposer_t;
-        IDOrSet_ChainID__exposer_t IDOrSet_ChainID__exposer = IDOrSet_ChainID__exposer_t( "IDOrSet_ChainID_", bp::init< >() );
+        IDOrSet_ChainID__exposer_t IDOrSet_ChainID__exposer = IDOrSet_ChainID__exposer_t( "IDOrSet_ChainID_", "", bp::init< >("") );
         bp::scope IDOrSet_ChainID__scope( IDOrSet_ChainID__exposer );
-        IDOrSet_ChainID__exposer.def( bp::init< SireMol::ChainID const & >(( bp::arg("id") )) );
-        IDOrSet_ChainID__exposer.def( bp::init< SireMol::ChainID const &, SireMol::ChainID const & >(( bp::arg("id0"), bp::arg("id1") )) );
-        IDOrSet_ChainID__exposer.def( bp::init< QList< SireMol::ChainIdentifier > const & >(( bp::arg("ids") )) );
-        IDOrSet_ChainID__exposer.def( bp::init< SireID::IDOrSet< SireMol::ChainID > const & >(( bp::arg("other") )) );
+        IDOrSet_ChainID__exposer.def( bp::init< SireMol::ChainID const & >(( bp::arg("id") ), "") );
+        IDOrSet_ChainID__exposer.def( bp::init< SireMol::ChainID const &, SireMol::ChainID const & >(( bp::arg("id0"), bp::arg("id1") ), "") );
+        IDOrSet_ChainID__exposer.def( bp::init< QList< SireMol::ChainIdentifier > const & >(( bp::arg("ids") ), "") );
+        IDOrSet_ChainID__exposer.def( bp::init< SireID::IDOrSet< SireMol::ChainID > const & >(( bp::arg("ids") ), "") );
+        IDOrSet_ChainID__exposer.def( bp::init< SireID::IDOrSet< SireMol::ChainID > const & >(( bp::arg("other") ), "") );
         { //::SireID::IDOrSet< SireMol::ChainID >::IDs
         
             typedef SireID::IDOrSet< SireMol::ChainID > exported_class_t;
@@ -74,7 +75,8 @@ void register_IDOrSet_ChainID__class(){
             IDOrSet_ChainID__exposer.def( 
                 "IDs"
                 , IDs_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireID::IDOrSet< SireMol::ChainID >::hash
@@ -85,7 +87,8 @@ void register_IDOrSet_ChainID__class(){
             
             IDOrSet_ChainID__exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireID::IDOrSet< SireMol::ChainID >::isNull
@@ -96,19 +99,21 @@ void register_IDOrSet_ChainID__class(){
             
             IDOrSet_ChainID__exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireID::IDOrSet< SireMol::ChainID >::map
         
             typedef SireID::IDOrSet< SireMol::ChainID > exported_class_t;
-            typedef ::QList< SireMol::ChainIdx > ( ::SireID::IDOrSet< SireMol::ChainID >::*map_function_type)( ::SireMol::MolInfo const & ) const;
+            typedef ::QList< SireMol::ChainIdx > ( ::SireID::IDOrSet< SireMol::ChainID >::*map_function_type)( ::SireID::IDOrSet< SireMol::ChainID >::SearchObject const & ) const;
             map_function_type map_function_value( &::SireID::IDOrSet< SireMol::ChainID >::map );
             
             IDOrSet_ChainID__exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("obj") ) );
+                , ( bp::arg("obj") )
+                , "" );
         
         }
         IDOrSet_ChainID__exposer.def( bp::self != bp::other< SireID::ID >() );
@@ -124,7 +129,8 @@ void register_IDOrSet_ChainID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireID::IDOrSet< SireMol::ChainID >::operator=
@@ -137,7 +143,8 @@ void register_IDOrSet_ChainID__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         IDOrSet_ChainID__exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -151,7 +158,8 @@ void register_IDOrSet_ChainID__class(){
             
             IDOrSet_ChainID__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireID::IDOrSet< SireMol::ChainID >::typeName
@@ -162,7 +170,8 @@ void register_IDOrSet_ChainID__class(){
             
             IDOrSet_ChainID__exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireID::IDOrSet< SireMol::ChainID >::what
@@ -173,7 +182,8 @@ void register_IDOrSet_ChainID__class(){
             
             IDOrSet_ChainID__exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         IDOrSet_ChainID__exposer.staticmethod( "typeName" );

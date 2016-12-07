@@ -40,13 +40,13 @@ void register_TwoAtomPerturbation_class(){
 
     { //::SireMM::TwoAtomPerturbation
         typedef bp::class_< SireMM::TwoAtomPerturbation, bp::bases< SireMM::InternalPerturbation, SireMol::Perturbation, SireBase::Property > > TwoAtomPerturbation_exposer_t;
-        TwoAtomPerturbation_exposer_t TwoAtomPerturbation_exposer = TwoAtomPerturbation_exposer_t( "TwoAtomPerturbation", bp::init< >() );
+        TwoAtomPerturbation_exposer_t TwoAtomPerturbation_exposer = TwoAtomPerturbation_exposer_t( "TwoAtomPerturbation", "This class represents a perturbation that maps the two-atom potential\nfunction using a perturbation function\n\nFor example, the perturbation function for a bond could be;\n\nE_{r,lambda} = [ (1-lambda) k_b + lambda k_f ]\n[ ((1-lambda) r0_b + lambda r0_f) - r ]^2\n\nThe perturbation will insert the value of lambda into this\nexpression and set the molecules bond function to the resulting\nexpression, e.g at lambda=0\n\nE_{r,0} = k_b  (r0_b - r)^2\n\nand at lambda=1\n\nE_{r,1} = k_f  (r0_f - r)^2\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope TwoAtomPerturbation_scope( TwoAtomPerturbation_exposer );
-        TwoAtomPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireCAS::Expression const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("initial_form"), bp::arg("final_form"), bp::arg("map")=SireBase::PropertyMap() )) );
-        TwoAtomPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireCAS::Expression const &, SireCAS::Expression const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("initial_form"), bp::arg("final_form"), bp::arg("mapping_function"), bp::arg("map")=SireBase::PropertyMap() )) );
-        TwoAtomPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireCAS::Expression const &, SireCAS::Identities const &, SireCAS::Identities const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("base_expression"), bp::arg("initial_forms"), bp::arg("final_forms"), bp::arg("map")=SireBase::PropertyMap() )) );
-        TwoAtomPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireCAS::Expression const &, SireCAS::Identities const &, SireCAS::Identities const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("base_expression"), bp::arg("initial_forms"), bp::arg("final_forms"), bp::arg("mapping_function"), bp::arg("map")=SireBase::PropertyMap() )) );
-        TwoAtomPerturbation_exposer.def( bp::init< SireMM::TwoAtomPerturbation const & >(( bp::arg("other") )) );
+        TwoAtomPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireCAS::Expression const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("initial_form"), bp::arg("final_form"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perturb the function between the atoms atom0 and atom1\nto use initial_form at the initial state and final_form at the\nfinal state, where the functions are mapped between these two states\nusing the default mapping function") );
+        TwoAtomPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireCAS::Expression const &, SireCAS::Expression const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("initial_form"), bp::arg("final_form"), bp::arg("mapping_function"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perturb the function between the atoms atom0 and atom1\nto use initial_form at the initial state and final_form at the\nfinal state, where the functions are mapped between these two states\nusing mapping_function") );
+        TwoAtomPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireCAS::Expression const &, SireCAS::Identities const &, SireCAS::Identities const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("base_expression"), bp::arg("initial_forms"), bp::arg("final_forms"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perturb the function between the atoms atom0 and atom1\nto use base_expression populated with the identities in initial_forms\nat the initial state, and populated with the identities in final_forms\nat the final state, where the identities are mapped between the initial\nand final states using the default mapping function") );
+        TwoAtomPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireCAS::Expression const &, SireCAS::Identities const &, SireCAS::Identities const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("base_expression"), bp::arg("initial_forms"), bp::arg("final_forms"), bp::arg("mapping_function"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perturb the function between the atoms atom0 and atom1\nto use base_expression populated with the identities in initial_forms\nat the initial state, and populated with the identities in final_forms\nat the final state, where the identities are mapped between the initial\nand final states using mapping_function") );
+        TwoAtomPerturbation_exposer.def( bp::init< SireMM::TwoAtomPerturbation const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::TwoAtomPerturbation::atom0
         
             typedef ::SireMol::AtomID const & ( ::SireMM::TwoAtomPerturbation::*atom0_function_type)(  ) const;
@@ -55,7 +55,8 @@ void register_TwoAtomPerturbation_class(){
             TwoAtomPerturbation_exposer.def( 
                 "atom0"
                 , atom0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the first of the two atoms whose potential is being changed" );
         
         }
         { //::SireMM::TwoAtomPerturbation::atom1
@@ -66,7 +67,8 @@ void register_TwoAtomPerturbation_class(){
             TwoAtomPerturbation_exposer.def( 
                 "atom1"
                 , atom1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the second of the two atoms whose potential is being changed" );
         
         }
         TwoAtomPerturbation_exposer.def( bp::self != bp::self );
@@ -79,7 +81,8 @@ void register_TwoAtomPerturbation_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         TwoAtomPerturbation_exposer.def( bp::self == bp::self );
@@ -90,7 +93,8 @@ void register_TwoAtomPerturbation_class(){
             
             TwoAtomPerturbation_exposer.def( 
                 "requiredProperties"
-                , requiredProperties_function_value );
+                , requiredProperties_function_value
+                , "Return the properties required or changed by this perturbation" );
         
         }
         { //::SireMM::TwoAtomPerturbation::toString
@@ -100,7 +104,8 @@ void register_TwoAtomPerturbation_class(){
             
             TwoAtomPerturbation_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this perturbation" );
         
         }
         { //::SireMM::TwoAtomPerturbation::typeName
@@ -110,7 +115,8 @@ void register_TwoAtomPerturbation_class(){
             
             TwoAtomPerturbation_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::TwoAtomPerturbation::wouldChange
@@ -121,7 +127,8 @@ void register_TwoAtomPerturbation_class(){
             TwoAtomPerturbation_exposer.def( 
                 "wouldChange"
                 , wouldChange_function_value
-                , ( bp::arg("molecule"), bp::arg("values") ) );
+                , ( bp::arg("molecule"), bp::arg("values") )
+                , "Return whether or not this perturbation with the passed values would\nchange the molecule molecule" );
         
         }
         TwoAtomPerturbation_exposer.staticmethod( "typeName" );

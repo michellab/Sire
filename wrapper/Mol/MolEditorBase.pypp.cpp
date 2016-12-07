@@ -56,7 +56,7 @@ void register_MolEditorBase_class(){
 
     { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >
         typedef bp::class_< SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >, bp::bases< SireMol::Molecule, SireMol::MoleculeView, SireBase::Property >, boost::noncopyable > MolEditorBase_exposer_t;
-        MolEditorBase_exposer_t MolEditorBase_exposer = MolEditorBase_exposer_t( "MolEditorBase", bp::no_init );
+        MolEditorBase_exposer_t MolEditorBase_exposer = MolEditorBase_exposer_t( "MolEditorBase", "", bp::no_init );
         bp::scope MolEditorBase_scope( MolEditorBase_exposer );
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::atom
         
@@ -66,7 +66,8 @@ void register_MolEditorBase_class(){
             
             MolEditorBase_exposer.def( 
                 "atom"
-                , atom_function_value );
+                , atom_function_value
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::atom
@@ -78,7 +79,8 @@ void register_MolEditorBase_class(){
             MolEditorBase_exposer.def( 
                 "atom"
                 , atom_function_value
-                , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::chain
@@ -89,7 +91,8 @@ void register_MolEditorBase_class(){
             
             MolEditorBase_exposer.def( 
                 "chain"
-                , chain_function_value );
+                , chain_function_value
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::chain
@@ -101,7 +104,8 @@ void register_MolEditorBase_class(){
             MolEditorBase_exposer.def( 
                 "chain"
                 , chain_function_value
-                , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::cutGroup
@@ -112,7 +116,8 @@ void register_MolEditorBase_class(){
             
             MolEditorBase_exposer.def( 
                 "cutGroup"
-                , cutGroup_function_value );
+                , cutGroup_function_value
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::cutGroup
@@ -124,7 +129,8 @@ void register_MolEditorBase_class(){
             MolEditorBase_exposer.def( 
                 "cutGroup"
                 , cutGroup_function_value
-                , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::molecule
@@ -135,7 +141,8 @@ void register_MolEditorBase_class(){
             
             MolEditorBase_exposer.def( 
                 "molecule"
-                , molecule_function_value );
+                , molecule_function_value
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::operator=
@@ -148,7 +155,8 @@ void register_MolEditorBase_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::operator=
@@ -161,7 +169,8 @@ void register_MolEditorBase_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::removeMetadata
@@ -174,7 +183,8 @@ void register_MolEditorBase_class(){
                 "removeMetadata"
                 , removeMetadata_function_value
                 , ( bp::arg("metakey") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::removeMetadata
@@ -187,7 +197,8 @@ void register_MolEditorBase_class(){
                 "removeMetadata"
                 , removeMetadata_function_value
                 , ( bp::arg("key"), bp::arg("metakey") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::removeProperty
@@ -200,7 +211,8 @@ void register_MolEditorBase_class(){
                 "removeProperty"
                 , removeProperty_function_value
                 , ( bp::arg("key") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::residue
@@ -211,7 +223,8 @@ void register_MolEditorBase_class(){
             
             MolEditorBase_exposer.def( 
                 "residue"
-                , residue_function_value );
+                , residue_function_value
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::residue
@@ -223,7 +236,8 @@ void register_MolEditorBase_class(){
             MolEditorBase_exposer.def( 
                 "residue"
                 , residue_function_value
-                , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::segment
@@ -234,7 +248,8 @@ void register_MolEditorBase_class(){
             
             MolEditorBase_exposer.def( 
                 "segment"
-                , segment_function_value );
+                , segment_function_value
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::segment
@@ -246,7 +261,8 @@ void register_MolEditorBase_class(){
             MolEditorBase_exposer.def( 
                 "segment"
                 , segment_function_value
-                , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::select
@@ -258,7 +274,8 @@ void register_MolEditorBase_class(){
             MolEditorBase_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("atomid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::select
@@ -270,7 +287,8 @@ void register_MolEditorBase_class(){
             MolEditorBase_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("cgid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::select
@@ -282,7 +300,8 @@ void register_MolEditorBase_class(){
             MolEditorBase_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("resid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::select
@@ -294,7 +313,8 @@ void register_MolEditorBase_class(){
             MolEditorBase_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("chainid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::Editor< SireMol::MolEditor, SireMol::Molecule >::select
@@ -306,7 +326,8 @@ void register_MolEditorBase_class(){
             MolEditorBase_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("segid"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         MolEditorBase_exposer.def( "setProperty",

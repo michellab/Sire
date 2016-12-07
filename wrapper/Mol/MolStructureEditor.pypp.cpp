@@ -50,11 +50,11 @@ void register_MolStructureEditor_class(){
 
     { //::SireMol::MolStructureEditor
         typedef bp::class_< SireMol::MolStructureEditor > MolStructureEditor_exposer_t;
-        MolStructureEditor_exposer_t MolStructureEditor_exposer = MolStructureEditor_exposer_t( "MolStructureEditor", bp::init< >() );
+        MolStructureEditor_exposer_t MolStructureEditor_exposer = MolStructureEditor_exposer_t( "MolStructureEditor", "This class is used to edit structural parts of the molecule,\ni.e. adding, moving or removing atoms, residues etc.\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope MolStructureEditor_scope( MolStructureEditor_exposer );
-        MolStructureEditor_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molview") )) );
-        MolStructureEditor_exposer.def( bp::init< SireMol::StructureEditor const & >(( bp::arg("other") )) );
-        MolStructureEditor_exposer.def( bp::init< SireMol::MolStructureEditor const & >(( bp::arg("other") )) );
+        MolStructureEditor_exposer.def( bp::init< SireMol::MoleculeView const & >(( bp::arg("molview") ), "Construct a structure editor of the molecule viewed by molview") );
+        MolStructureEditor_exposer.def( bp::init< SireMol::StructureEditor const & >(( bp::arg("other") ), "Copy constructor") );
+        MolStructureEditor_exposer.def( bp::init< SireMol::MolStructureEditor const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::MolStructureEditor::add
         
             typedef ::SireMol::AtomStructureEditor ( ::SireMol::MolStructureEditor::*add_function_type)( ::SireMol::AtomName const & ) ;
@@ -63,7 +63,8 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("atom") ) );
+                , ( bp::arg("atom") )
+                , "Add an atom called name to this molecule and return an\neditor for this atom" );
         
         }
         { //::SireMol::MolStructureEditor::add
@@ -74,7 +75,8 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("atom") ) );
+                , ( bp::arg("atom") )
+                , "Add an atom with number number to this molecule and\nreturn an editor for this atom" );
         
         }
         { //::SireMol::MolStructureEditor::add
@@ -85,7 +87,8 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("residue") ) );
+                , ( bp::arg("residue") )
+                , "Add a residue called name to this molecule and return an\neditor for this residue" );
         
         }
         { //::SireMol::MolStructureEditor::add
@@ -96,7 +99,8 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("residue") ) );
+                , ( bp::arg("residue") )
+                , "Add a residue with number number to this molecule and\nreturn an editor for this residue" );
         
         }
         { //::SireMol::MolStructureEditor::add
@@ -107,7 +111,8 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("cutgroup") ) );
+                , ( bp::arg("cutgroup") )
+                , "Add a CutGroup called name to this molecule and return an\neditor for this CutGroup" );
         
         }
         { //::SireMol::MolStructureEditor::add
@@ -118,7 +123,8 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("chain") ) );
+                , ( bp::arg("chain") )
+                , "Add a chain called name to this molecule and return an\neditor for this chain" );
         
         }
         { //::SireMol::MolStructureEditor::add
@@ -129,7 +135,8 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("segment") ) );
+                , ( bp::arg("segment") )
+                , "Add a segment called name to this molecule and return an\neditor for this segment" );
         
         }
         { //::SireMol::MolStructureEditor::atom
@@ -140,7 +147,8 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "atom"
                 , atom_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "Return an editor for the atom at ID atomid\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MolStructureEditor::chain
@@ -151,7 +159,8 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "chain"
                 , chain_function_value
-                , ( bp::arg("chainid") ) );
+                , ( bp::arg("chainid") )
+                , "Return an editor for the chain at ID chainid\nThrow: SireMol::missing_chain\nThrow: SireMol::duplicate_chain\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MolStructureEditor::commit
@@ -161,7 +170,8 @@ void register_MolStructureEditor_class(){
             
             MolStructureEditor_exposer.def( 
                 "commit"
-                , commit_function_value );
+                , commit_function_value
+                , "Commit the changes and return a Molecule copy" );
         
         }
         { //::SireMol::MolStructureEditor::cutGroup
@@ -172,7 +182,8 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "cutGroup"
                 , cutGroup_function_value
-                , ( bp::arg("cgid") ) );
+                , ( bp::arg("cgid") )
+                , "Return an editor for the CutGroup at ID cgid\nThrow: SireMol::missing_cutgroup\nThrow: SireMol::duplicate_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MolStructureEditor::nAtoms
@@ -182,7 +193,8 @@ void register_MolStructureEditor_class(){
             
             MolStructureEditor_exposer.def( 
                 "nAtoms"
-                , nAtoms_function_value );
+                , nAtoms_function_value
+                , "Return the number of atoms in this molecule (may be zero)" );
         
         }
         { //::SireMol::MolStructureEditor::nChains
@@ -192,7 +204,8 @@ void register_MolStructureEditor_class(){
             
             MolStructureEditor_exposer.def( 
                 "nChains"
-                , nChains_function_value );
+                , nChains_function_value
+                , "Return the number of chains in this molecule (may be zero)" );
         
         }
         { //::SireMol::MolStructureEditor::nCutGroups
@@ -202,7 +215,8 @@ void register_MolStructureEditor_class(){
             
             MolStructureEditor_exposer.def( 
                 "nCutGroups"
-                , nCutGroups_function_value );
+                , nCutGroups_function_value
+                , "Return the number of CutGroups in this molecule (may be zero)" );
         
         }
         { //::SireMol::MolStructureEditor::nResidues
@@ -212,7 +226,8 @@ void register_MolStructureEditor_class(){
             
             MolStructureEditor_exposer.def( 
                 "nResidues"
-                , nResidues_function_value );
+                , nResidues_function_value
+                , "Return the number of residues in this molecule (may be zero)" );
         
         }
         { //::SireMol::MolStructureEditor::nSegments
@@ -222,7 +237,8 @@ void register_MolStructureEditor_class(){
             
             MolStructureEditor_exposer.def( 
                 "nSegments"
-                , nSegments_function_value );
+                , nSegments_function_value
+                , "Return the number of segments in this molecule (may be zero)" );
         
         }
         { //::SireMol::MolStructureEditor::name
@@ -233,7 +249,8 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the name of this molecule" );
         
         }
         { //::SireMol::MolStructureEditor::number
@@ -243,7 +260,8 @@ void register_MolStructureEditor_class(){
             
             MolStructureEditor_exposer.def( 
                 "number"
-                , number_function_value );
+                , number_function_value
+                , "Return this molecules ID number" );
         
         }
         { //::SireMol::MolStructureEditor::operator=
@@ -255,7 +273,8 @@ void register_MolStructureEditor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("molview") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::MolStructureEditor::operator=
@@ -267,7 +286,8 @@ void register_MolStructureEditor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::MolStructureEditor::operator=
@@ -279,7 +299,8 @@ void register_MolStructureEditor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::MolStructureEditor::remove
@@ -291,7 +312,8 @@ void register_MolStructureEditor_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("atomid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Remove all atoms that match the ID atomid - this does\nnothing if there are no atoms that match this ID" );
         
         }
         { //::SireMol::MolStructureEditor::remove
@@ -303,7 +325,8 @@ void register_MolStructureEditor_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("cgid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Remove all CutGroups that match the ID cgid - this does\nnothing if there are no CutGroups that match this ID" );
         
         }
         { //::SireMol::MolStructureEditor::remove
@@ -315,7 +338,8 @@ void register_MolStructureEditor_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("resid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Remove all residues that match the ID resid - this does\nnothing if there are no residues that match this ID" );
         
         }
         { //::SireMol::MolStructureEditor::remove
@@ -327,7 +351,8 @@ void register_MolStructureEditor_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("chainid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Remove all chains that match the ID chainid - this does\nnothing if there are no chains that match this ID" );
         
         }
         { //::SireMol::MolStructureEditor::remove
@@ -339,7 +364,8 @@ void register_MolStructureEditor_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("segid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Remove all segments that match the ID segid - this does\nnothing if there are no segments that match this ID" );
         
         }
         { //::SireMol::MolStructureEditor::removeAllAtoms
@@ -350,7 +376,8 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "removeAllAtoms"
                 , removeAllAtoms_function_value
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Remove all atoms from this molecule" );
         
         }
         { //::SireMol::MolStructureEditor::removeAllChains
@@ -361,7 +388,8 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "removeAllChains"
                 , removeAllChains_function_value
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Remove all chains from this molecule" );
         
         }
         { //::SireMol::MolStructureEditor::removeAllCutGroups
@@ -372,7 +400,8 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "removeAllCutGroups"
                 , removeAllCutGroups_function_value
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Remove all CutGroups from this molecule" );
         
         }
         { //::SireMol::MolStructureEditor::removeAllResidues
@@ -383,7 +412,8 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "removeAllResidues"
                 , removeAllResidues_function_value
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Remove all residues from this molecule" );
         
         }
         { //::SireMol::MolStructureEditor::removeAllSegments
@@ -394,7 +424,8 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "removeAllSegments"
                 , removeAllSegments_function_value
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Remove all segments from this molecule" );
         
         }
         { //::SireMol::MolStructureEditor::rename
@@ -406,7 +437,8 @@ void register_MolStructureEditor_class(){
                 "rename"
                 , rename_function_value
                 , ( bp::arg("newname") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Rename this molecule to newname" );
         
         }
         { //::SireMol::MolStructureEditor::renumber
@@ -418,7 +450,8 @@ void register_MolStructureEditor_class(){
                 "renumber"
                 , renumber_function_value
                 , ( bp::arg("newnum") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Renumber this molecule to have the number newnum" );
         
         }
         { //::SireMol::MolStructureEditor::renumber
@@ -429,7 +462,8 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "renumber"
                 , renumber_function_value
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Give this molecule a new, unique ID number" );
         
         }
         { //::SireMol::MolStructureEditor::residue
@@ -440,7 +474,8 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "residue"
                 , residue_function_value
-                , ( bp::arg("resid") ) );
+                , ( bp::arg("resid") )
+                , "Return an editor for the residue at ID resid\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MolStructureEditor::segment
@@ -451,7 +486,8 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "segment"
                 , segment_function_value
-                , ( bp::arg("segid") ) );
+                , ( bp::arg("segid") )
+                , "Return an editor for the segment at ID segid\nThrow: SireMol::missing_segment\nThrow: SireMol::duplicate_segment\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MolStructureEditor::select
@@ -462,7 +498,8 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "Return an editor for the atom at ID atomid\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MolStructureEditor::select
@@ -473,7 +510,8 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("cgid") ) );
+                , ( bp::arg("cgid") )
+                , "Return an editor for the CutGroup at ID cgid\nThrow: SireMol::missing_cutgroup\nThrow: SireMol::duplicate_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MolStructureEditor::select
@@ -484,7 +522,8 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("resid") ) );
+                , ( bp::arg("resid") )
+                , "Return an editor for the residue at ID resid\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MolStructureEditor::select
@@ -495,7 +534,8 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("chainid") ) );
+                , ( bp::arg("chainid") )
+                , "Return an editor for the chain at ID chainid\nThrow: SireMol::missing_chain\nThrow: SireMol::duplicate_chain\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MolStructureEditor::select
@@ -506,7 +546,8 @@ void register_MolStructureEditor_class(){
             MolStructureEditor_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("segid") ) );
+                , ( bp::arg("segid") )
+                , "Return an editor for the segment at ID segid\nThrow: SireMol::missing_segment\nThrow: SireMol::duplicate_segment\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MolStructureEditor::selectedAll
@@ -516,7 +557,8 @@ void register_MolStructureEditor_class(){
             
             MolStructureEditor_exposer.def( 
                 "selectedAll"
-                , selectedAll_function_value );
+                , selectedAll_function_value
+                , "Return whether or not this is a complete molecule" );
         
         }
         { //::SireMol::MolStructureEditor::toString
@@ -526,7 +568,8 @@ void register_MolStructureEditor_class(){
             
             MolStructureEditor_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this editor" );
         
         }
         { //::SireMol::MolStructureEditor::typeName
@@ -536,7 +579,8 @@ void register_MolStructureEditor_class(){
             
             MolStructureEditor_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::MolStructureEditor::what
@@ -546,7 +590,8 @@ void register_MolStructureEditor_class(){
             
             MolStructureEditor_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         MolStructureEditor_exposer.staticmethod( "typeName" );

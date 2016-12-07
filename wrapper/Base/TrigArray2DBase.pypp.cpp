@@ -27,7 +27,7 @@ void register_TrigArray2DBase_class(){
 
     { //::SireBase::TrigArray2DBase
         typedef bp::class_< SireBase::TrigArray2DBase, boost::noncopyable > TrigArray2DBase_exposer_t;
-        TrigArray2DBase_exposer_t TrigArray2DBase_exposer = TrigArray2DBase_exposer_t( "TrigArray2DBase", bp::no_init );
+        TrigArray2DBase_exposer_t TrigArray2DBase_exposer = TrigArray2DBase_exposer_t( "TrigArray2DBase", "Base class of the TrigArray2D<T> class\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope TrigArray2DBase_scope( TrigArray2DBase_exposer );
         { //::SireBase::TrigArray2DBase::assertValidIndex
         
@@ -37,7 +37,8 @@ void register_TrigArray2DBase_class(){
             TrigArray2DBase_exposer.def( 
                 "assertValidIndex"
                 , assertValidIndex_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireBase::TrigArray2DBase::checkedOffset
@@ -48,7 +49,8 @@ void register_TrigArray2DBase_class(){
             TrigArray2DBase_exposer.def( 
                 "checkedOffset"
                 , checkedOffset_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireBase::TrigArray2DBase::count
@@ -58,7 +60,8 @@ void register_TrigArray2DBase_class(){
             
             TrigArray2DBase_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireBase::TrigArray2DBase::map
@@ -69,7 +72,8 @@ void register_TrigArray2DBase_class(){
             TrigArray2DBase_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireBase::TrigArray2DBase::nColumns
@@ -79,7 +83,8 @@ void register_TrigArray2DBase_class(){
             
             TrigArray2DBase_exposer.def( 
                 "nColumns"
-                , nColumns_function_value );
+                , nColumns_function_value
+                , "" );
         
         }
         { //::SireBase::TrigArray2DBase::nRows
@@ -89,7 +94,8 @@ void register_TrigArray2DBase_class(){
             
             TrigArray2DBase_exposer.def( 
                 "nRows"
-                , nRows_function_value );
+                , nRows_function_value
+                , "" );
         
         }
         { //::SireBase::TrigArray2DBase::offset
@@ -100,7 +106,8 @@ void register_TrigArray2DBase_class(){
             TrigArray2DBase_exposer.def( 
                 "offset"
                 , offset_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         { //::SireBase::TrigArray2DBase::size
@@ -110,7 +117,8 @@ void register_TrigArray2DBase_class(){
             
             TrigArray2DBase_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "" );
         
         }
         TrigArray2DBase_exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireBase::TrigArray2DBase >,

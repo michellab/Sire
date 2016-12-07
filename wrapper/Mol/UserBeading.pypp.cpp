@@ -44,10 +44,10 @@ void register_UserBeading_class(){
 
     { //::SireMol::UserBeading
         typedef bp::class_< SireMol::UserBeading, bp::bases< SireMol::Beading, SireMol::MolViewProperty, SireBase::Property > > UserBeading_exposer_t;
-        UserBeading_exposer_t UserBeading_exposer = UserBeading_exposer_t( "UserBeading", bp::init< >() );
+        UserBeading_exposer_t UserBeading_exposer = UserBeading_exposer_t( "UserBeading", "This is a beading function that divides a molecule into\nuser-defined beads\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor - this looks for the bead property in bead") );
         bp::scope UserBeading_scope( UserBeading_exposer );
-        UserBeading_exposer.def( bp::init< SireMol::AtomBeads const & >(( bp::arg("beads") )) );
-        UserBeading_exposer.def( bp::init< SireMol::UserBeading const & >(( bp::arg("other") )) );
+        UserBeading_exposer.def( bp::init< SireMol::AtomBeads const & >(( bp::arg("beads") ), "Constructor used to specify the beads for each atom") );
+        UserBeading_exposer.def( bp::init< SireMol::UserBeading const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::UserBeading::atomBeads
         
             typedef ::SireMol::AtomBeads const & ( ::SireMol::UserBeading::*atomBeads_function_type)(  ) const;
@@ -56,7 +56,8 @@ void register_UserBeading_class(){
             UserBeading_exposer.def( 
                 "atomBeads"
                 , atomBeads_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the bead specification for each atom" );
         
         }
         { //::SireMol::UserBeading::isCompatibleWith
@@ -67,7 +68,8 @@ void register_UserBeading_class(){
             UserBeading_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "Return whether or not this beading is compatible with the passed molecule info" );
         
         }
         UserBeading_exposer.def( bp::self != bp::self );
@@ -80,7 +82,8 @@ void register_UserBeading_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         UserBeading_exposer.def( bp::self == bp::self );
@@ -91,7 +94,8 @@ void register_UserBeading_class(){
             
             UserBeading_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         UserBeading_exposer.staticmethod( "typeName" );

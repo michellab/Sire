@@ -17,7 +17,7 @@ void register_TempBase_class(){
 
     { //::SireUnits::Dimension::TempBase
         typedef bp::class_< SireUnits::Dimension::TempBase, boost::noncopyable > TempBase_exposer_t;
-        TempBase_exposer_t TempBase_exposer = TempBase_exposer_t( "TempBase", bp::no_init );
+        TempBase_exposer_t TempBase_exposer = TempBase_exposer_t( "TempBase", "", bp::no_init );
         bp::scope TempBase_scope( TempBase_exposer );
         { //::SireUnits::Dimension::TempBase::convertFromInternal
         
@@ -27,7 +27,8 @@ void register_TempBase_class(){
             TempBase_exposer.def( 
                 "convertFromInternal"
                 , convertFromInternal_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireUnits::Dimension::TempBase::convertFromInternal
@@ -37,7 +38,8 @@ void register_TempBase_class(){
             
             TempBase_exposer.def( 
                 "convertFromInternal"
-                , convertFromInternal_function_value );
+                , convertFromInternal_function_value
+                , "" );
         
         }
         { //::SireUnits::Dimension::TempBase::convertToInternal
@@ -48,7 +50,8 @@ void register_TempBase_class(){
             TempBase_exposer.def( 
                 "convertToInternal"
                 , convertToInternal_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireUnits::Dimension::TempBase::in
@@ -59,7 +62,8 @@ void register_TempBase_class(){
             TempBase_exposer.def( 
                 "in"
                 , in_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireUnits::Dimension::TempBase::in
@@ -70,7 +74,8 @@ void register_TempBase_class(){
             TempBase_exposer.def( 
                 "in"
                 , in_function_value
-                , ( bp::arg("temp") ) );
+                , ( bp::arg("temp") )
+                , "" );
         
         }
         TempBase_exposer.def( bp::self != bp::self );
@@ -84,7 +89,8 @@ void register_TempBase_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireUnits::Dimension::TempBase::operator=
@@ -96,7 +102,8 @@ void register_TempBase_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("temp") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         TempBase_exposer.def( bp::self == bp::self );
@@ -109,7 +116,8 @@ void register_TempBase_class(){
             TempBase_exposer.def( 
                 "to"
                 , to_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         { //::SireUnits::Dimension::TempBase::toString
@@ -119,7 +127,8 @@ void register_TempBase_class(){
             
             TempBase_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireUnits::Dimension::TempBase::value
@@ -129,7 +138,8 @@ void register_TempBase_class(){
             
             TempBase_exposer.def( 
                 "value"
-                , value_function_value );
+                , value_function_value
+                , "" );
         
         }
         TempBase_exposer.def( "__str__", &__str__< ::SireUnits::Dimension::TempBase > );

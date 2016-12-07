@@ -39,10 +39,10 @@ void register_ArcCosh_class(){
 
     { //::SireCAS::ArcCosh
         typedef bp::class_< SireCAS::ArcCosh, bp::bases< SireCAS::SingleFunc, SireCAS::ExBase > > ArcCosh_exposer_t;
-        ArcCosh_exposer_t ArcCosh_exposer = ArcCosh_exposer_t( "ArcCosh", bp::init< >() );
+        ArcCosh_exposer_t ArcCosh_exposer = ArcCosh_exposer_t( "ArcCosh", "Inverse-hyperbolic-cosine", bp::init< >("Null constructor") );
         bp::scope ArcCosh_scope( ArcCosh_exposer );
-        ArcCosh_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") )) );
-        ArcCosh_exposer.def( bp::init< SireCAS::ArcCosh const & >(( bp::arg("other") )) );
+        ArcCosh_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") ), "Construct cos(expression)") );
+        ArcCosh_exposer.def( bp::init< SireCAS::ArcCosh const & >(( bp::arg("other") ), "Create cos(cos(expression))") );
         { //::SireCAS::ArcCosh::evaluate
         
             typedef double ( ::SireCAS::ArcCosh::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -51,7 +51,8 @@ void register_ArcCosh_class(){
             ArcCosh_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::ArcCosh::evaluate
@@ -62,7 +63,8 @@ void register_ArcCosh_class(){
             ArcCosh_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         ArcCosh_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -73,7 +75,8 @@ void register_ArcCosh_class(){
             
             ArcCosh_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::ArcCosh::what
@@ -83,7 +86,8 @@ void register_ArcCosh_class(){
             
             ArcCosh_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ArcCosh_exposer.staticmethod( "typeName" );

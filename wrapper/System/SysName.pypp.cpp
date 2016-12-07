@@ -21,10 +21,10 @@ void register_SysName_class(){
 
     { //::SireSystem::SysName
         typedef bp::class_< SireSystem::SysName, bp::bases< SireSystem::SysID, SireID::ID, SireID::Name > > SysName_exposer_t;
-        SysName_exposer_t SysName_exposer = SysName_exposer_t( "SysName", bp::init< >() );
+        SysName_exposer_t SysName_exposer = SysName_exposer_t( "SysName", "This class holds the name of a simulation system\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope SysName_scope( SysName_exposer );
-        SysName_exposer.def( bp::init< QString const & >(( bp::arg("name") )) );
-        SysName_exposer.def( bp::init< SireSystem::SysName const & >(( bp::arg("other") )) );
+        SysName_exposer.def( bp::init< QString const & >(( bp::arg("name") ), "") );
+        SysName_exposer.def( bp::init< SireSystem::SysName const & >(( bp::arg("other") ), "") );
         { //::SireSystem::SysName::hash
         
             typedef ::uint ( ::SireSystem::SysName::*hash_function_type)(  ) const;
@@ -32,7 +32,8 @@ void register_SysName_class(){
             
             SysName_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireSystem::SysName::isNull
@@ -42,7 +43,8 @@ void register_SysName_class(){
             
             SysName_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireSystem::SysName::map
@@ -53,7 +55,8 @@ void register_SysName_class(){
             SysName_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("systems") ) );
+                , ( bp::arg("systems") )
+                , "" );
         
         }
         SysName_exposer.def( bp::self != bp::self );
@@ -66,7 +69,8 @@ void register_SysName_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         SysName_exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -78,7 +82,8 @@ void register_SysName_class(){
             
             SysName_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireSystem::SysName::typeName
@@ -88,7 +93,8 @@ void register_SysName_class(){
             
             SysName_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireSystem::SysName::what
@@ -98,7 +104,8 @@ void register_SysName_class(){
             
             SysName_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         SysName_exposer.staticmethod( "typeName" );

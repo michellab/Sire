@@ -45,9 +45,9 @@ void register_NullVelocityGenerator_class(){
 
     { //::SireMove::NullVelocityGenerator
         typedef bp::class_< SireMove::NullVelocityGenerator, bp::bases< SireMove::VelocityGenerator, SireBase::Property > > NullVelocityGenerator_exposer_t;
-        NullVelocityGenerator_exposer_t NullVelocityGenerator_exposer = NullVelocityGenerator_exposer_t( "NullVelocityGenerator", bp::init< >() );
+        NullVelocityGenerator_exposer_t NullVelocityGenerator_exposer = NullVelocityGenerator_exposer_t( "NullVelocityGenerator", "This is the null velocity generator\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope NullVelocityGenerator_scope( NullVelocityGenerator_exposer );
-        NullVelocityGenerator_exposer.def( bp::init< SireMove::NullVelocityGenerator const & >(( bp::arg("other") )) );
+        NullVelocityGenerator_exposer.def( bp::init< SireMove::NullVelocityGenerator const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::NullVelocityGenerator::generate
         
             typedef ::SireMol::AtomVelocities ( ::SireMove::NullVelocityGenerator::*generate_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
@@ -56,7 +56,8 @@ void register_NullVelocityGenerator_class(){
             NullVelocityGenerator_exposer.def( 
                 "generate"
                 , generate_function_value
-                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Zero velocities are generated" );
         
         }
         NullVelocityGenerator_exposer.def( bp::self != bp::self );
@@ -69,7 +70,8 @@ void register_NullVelocityGenerator_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         NullVelocityGenerator_exposer.def( bp::self == bp::self );
@@ -80,7 +82,8 @@ void register_NullVelocityGenerator_class(){
             
             NullVelocityGenerator_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         NullVelocityGenerator_exposer.staticmethod( "typeName" );

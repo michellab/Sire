@@ -60,10 +60,10 @@ void register_IntraGroupFF_class(){
 
     { //::SireMM::IntraGroupFF
         typedef bp::class_< SireMM::IntraGroupFF, bp::bases< SireFF::G2FF, SireFF::FF, SireMol::MolGroupsBase, SireBase::Property > > IntraGroupFF_exposer_t;
-        IntraGroupFF_exposer_t IntraGroupFF_exposer = IntraGroupFF_exposer_t( "IntraGroupFF", bp::init< >() );
+        IntraGroupFF_exposer_t IntraGroupFF_exposer = IntraGroupFF_exposer_t( "IntraGroupFF", "This forcefield is used to calculate the intramolecular\ncoulomb and LJ energy of the contained molecules. Note\nthat this is the coulomb and LJ energy of the non-bonded\natoms only, i.e. it does not contain the scaled\n1-4 coulomb and LJ energies. These should be calculated\nseparately, e.g. via additional terms added to InternalFF\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope IntraGroupFF_scope( IntraGroupFF_exposer );
-        IntraGroupFF_exposer.def( bp::init< QString const & >(( bp::arg("name") )) );
-        IntraGroupFF_exposer.def( bp::init< SireMM::IntraGroupFF const & >(( bp::arg("other") )) );
+        IntraGroupFF_exposer.def( bp::init< QString const & >(( bp::arg("name") ), "Construct, specifying the name of the forcefield") );
+        IntraGroupFF_exposer.def( bp::init< SireMM::IntraGroupFF const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::IntraGroupFF::accept
         
             typedef void ( ::SireMM::IntraGroupFF::*accept_function_type)(  ) ;
@@ -71,7 +71,8 @@ void register_IntraGroupFF_class(){
             
             IntraGroupFF_exposer.def( 
                 "accept"
-                , accept_function_value );
+                , accept_function_value
+                , "Tell the forcefield that the last move was accepted. This tells the\nforcefield to make permanent any temporary changes that were used a workspace\nto avoid memory allocation during a move" );
         
         }
         { //::SireMM::IntraGroupFF::cljFunction
@@ -82,7 +83,8 @@ void register_IntraGroupFF_class(){
             IntraGroupFF_exposer.def( 
                 "cljFunction"
                 , cljFunction_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the function used to calculate the energy" );
         
         }
         { //::SireMM::IntraGroupFF::cljFunction
@@ -94,7 +96,8 @@ void register_IntraGroupFF_class(){
                 "cljFunction"
                 , cljFunction_function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the CLJFunction associated with the passed key" );
         
         }
         { //::SireMM::IntraGroupFF::cljFunctionKeys
@@ -104,7 +107,8 @@ void register_IntraGroupFF_class(){
             
             IntraGroupFF_exposer.def( 
                 "cljFunctionKeys"
-                , cljFunctionKeys_function_value );
+                , cljFunctionKeys_function_value
+                , "Return the keys of all CLJFunctions added to this forcefield" );
         
         }
         { //::SireMM::IntraGroupFF::cljFunctions
@@ -114,7 +118,8 @@ void register_IntraGroupFF_class(){
             
             IntraGroupFF_exposer.def( 
                 "cljFunctions"
-                , cljFunctions_function_value );
+                , cljFunctions_function_value
+                , "Return the hash of all CLJFunctions in this forcefield, indexed by their key" );
         
         }
         { //::SireMM::IntraGroupFF::components
@@ -125,7 +130,8 @@ void register_IntraGroupFF_class(){
             IntraGroupFF_exposer.def( 
                 "components"
                 , components_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the energy components of this forcefield" );
         
         }
         { //::SireMM::IntraGroupFF::containsProperty
@@ -136,7 +142,8 @@ void register_IntraGroupFF_class(){
             IntraGroupFF_exposer.def( 
                 "containsProperty"
                 , containsProperty_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "Return whether or not this forcefield contains the property property" );
         
         }
         { //::SireMM::IntraGroupFF::disableParallelCalculation
@@ -146,7 +153,8 @@ void register_IntraGroupFF_class(){
             
             IntraGroupFF_exposer.def( 
                 "disableParallelCalculation"
-                , disableParallelCalculation_function_value );
+                , disableParallelCalculation_function_value
+                , "Turn off use of a multicore parallel calculation of the energy.\nThis may be quicker if you have few atoms in the forcefield,\nor if you are only planning on allocating one core per forcefield" );
         
         }
         { //::SireMM::IntraGroupFF::disableReproducibleCalculation
@@ -156,7 +164,8 @@ void register_IntraGroupFF_class(){
             
             IntraGroupFF_exposer.def( 
                 "disableReproducibleCalculation"
-                , disableReproducibleCalculation_function_value );
+                , disableReproducibleCalculation_function_value
+                , "Turn off an energy summing algorithm that guarantees the same energy\nregardless of whether a single core or multicore calculation is being\nperformed (i.e. rounding errors in both cases will not be identical)" );
         
         }
         { //::SireMM::IntraGroupFF::enableParallelCalculation
@@ -166,7 +175,8 @@ void register_IntraGroupFF_class(){
             
             IntraGroupFF_exposer.def( 
                 "enableParallelCalculation"
-                , enableParallelCalculation_function_value );
+                , enableParallelCalculation_function_value
+                , "Turn on use of a multicore parallel calculation of the energy.\nThis is on by default, and spreads the energy calculations over\navailable cores" );
         
         }
         { //::SireMM::IntraGroupFF::enableReproducibleCalculation
@@ -176,7 +186,8 @@ void register_IntraGroupFF_class(){
             
             IntraGroupFF_exposer.def( 
                 "enableReproducibleCalculation"
-                , enableReproducibleCalculation_function_value );
+                , enableReproducibleCalculation_function_value
+                , "Turn on an energy summing algorithm that guarantees the same energy\nregardless of whether a single core or multicore calculation is being\nperformed (i.e. rounding errors in both cases will be identical)" );
         
         }
         { //::SireMM::IntraGroupFF::mustNowRecalculateFromScratch
@@ -186,7 +197,8 @@ void register_IntraGroupFF_class(){
             
             IntraGroupFF_exposer.def( 
                 "mustNowRecalculateFromScratch"
-                , mustNowRecalculateFromScratch_function_value );
+                , mustNowRecalculateFromScratch_function_value
+                , "Signal that this forcefield must now be recalculated from scratch" );
         
         }
         { //::SireMM::IntraGroupFF::nCLJFunctions
@@ -196,7 +208,8 @@ void register_IntraGroupFF_class(){
             
             IntraGroupFF_exposer.def( 
                 "nCLJFunctions"
-                , nCLJFunctions_function_value );
+                , nCLJFunctions_function_value
+                , "Return the number of CLJ functions in this forcefield. There should always\nbe at least one" );
         
         }
         { //::SireMM::IntraGroupFF::needsAccepting
@@ -206,7 +219,8 @@ void register_IntraGroupFF_class(){
             
             IntraGroupFF_exposer.def( 
                 "needsAccepting"
-                , needsAccepting_function_value );
+                , needsAccepting_function_value
+                , "Return whether or not this forcefield is using a temporary workspace that\nneeds to be accepted" );
         
         }
         IntraGroupFF_exposer.def( bp::self != bp::self );
@@ -219,7 +233,8 @@ void register_IntraGroupFF_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         IntraGroupFF_exposer.def( bp::self == bp::self );
@@ -231,7 +246,8 @@ void register_IntraGroupFF_class(){
             IntraGroupFF_exposer.def( 
                 "properties"
                 , properties_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return all of the properties of this function" );
         
         }
         { //::SireMM::IntraGroupFF::property
@@ -243,7 +259,8 @@ void register_IntraGroupFF_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the value of the forcefield property with name name" );
         
         }
         { //::SireMM::IntraGroupFF::removeAllCLJFunctions
@@ -253,7 +270,8 @@ void register_IntraGroupFF_class(){
             
             IntraGroupFF_exposer.def( 
                 "removeAllCLJFunctions"
-                , removeAllCLJFunctions_function_value );
+                , removeAllCLJFunctions_function_value
+                , "Function to remove all of the CLJFunctions (except for the default function)" );
         
         }
         { //::SireMM::IntraGroupFF::removeCLJFunctionAt
@@ -264,7 +282,8 @@ void register_IntraGroupFF_class(){
             IntraGroupFF_exposer.def( 
                 "removeCLJFunctionAt"
                 , removeCLJFunctionAt_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "Remove the CLJ function with key key - note that you cannot remove\nthe default CLJ function" );
         
         }
         { //::SireMM::IntraGroupFF::setCLJFunction
@@ -275,7 +294,8 @@ void register_IntraGroupFF_class(){
             IntraGroupFF_exposer.def( 
                 "setCLJFunction"
                 , setCLJFunction_function_value
-                , ( bp::arg("cljfunc") ) );
+                , ( bp::arg("cljfunc") )
+                , "Function used to set the CLJIntraFunction used to calculate\nthe intramolecular energy" );
         
         }
         { //::SireMM::IntraGroupFF::setCLJFunction
@@ -286,7 +306,8 @@ void register_IntraGroupFF_class(){
             IntraGroupFF_exposer.def( 
                 "setCLJFunction"
                 , setCLJFunction_function_value
-                , ( bp::arg("key"), bp::arg("cljfunc") ) );
+                , ( bp::arg("key"), bp::arg("cljfunc") )
+                , "Set the CLJFunction with key key equal to cljfunc" );
         
         }
         { //::SireMM::IntraGroupFF::setProperty
@@ -297,7 +318,8 @@ void register_IntraGroupFF_class(){
             IntraGroupFF_exposer.def( 
                 "setProperty"
                 , setProperty_function_value
-                , ( bp::arg("name"), bp::arg("property") ) );
+                , ( bp::arg("name"), bp::arg("property") )
+                , "Set the forcefield property called name to the value property. Note that\nthis only affects the default CLJFunction. Additional functions must\nbe configured before adding them to the forcefield" );
         
         }
         { //::SireMM::IntraGroupFF::setUseParallelCalculation
@@ -308,7 +330,8 @@ void register_IntraGroupFF_class(){
             IntraGroupFF_exposer.def( 
                 "setUseParallelCalculation"
                 , setUseParallelCalculation_function_value
-                , ( bp::arg("on") ) );
+                , ( bp::arg("on") )
+                , "Set whether or not to use a multicore parallel algorithm\nto calculate the energy" );
         
         }
         { //::SireMM::IntraGroupFF::setUseReproducibleCalculation
@@ -319,7 +342,8 @@ void register_IntraGroupFF_class(){
             IntraGroupFF_exposer.def( 
                 "setUseReproducibleCalculation"
                 , setUseReproducibleCalculation_function_value
-                , ( bp::arg("on") ) );
+                , ( bp::arg("on") )
+                , "Switch on or off use of an energy summing algorithm that guarantees the\nsame energy regardless of whether a single core or multicore calculation\nis being performed" );
         
         }
         { //::SireMM::IntraGroupFF::typeName
@@ -329,7 +353,8 @@ void register_IntraGroupFF_class(){
             
             IntraGroupFF_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::IntraGroupFF::usesParallelCalculation
@@ -339,7 +364,8 @@ void register_IntraGroupFF_class(){
             
             IntraGroupFF_exposer.def( 
                 "usesParallelCalculation"
-                , usesParallelCalculation_function_value );
+                , usesParallelCalculation_function_value
+                , "Return whether or not a parallel algorithm is used to calculate energies" );
         
         }
         { //::SireMM::IntraGroupFF::usesReproducibleCalculation
@@ -349,7 +375,8 @@ void register_IntraGroupFF_class(){
             
             IntraGroupFF_exposer.def( 
                 "usesReproducibleCalculation"
-                , usesReproducibleCalculation_function_value );
+                , usesReproducibleCalculation_function_value
+                , "Return whether or not a reproducible energy summing algorithm is being\nused to accumulate the energies" );
         
         }
         { //::SireMM::IntraGroupFF::what
@@ -359,7 +386,8 @@ void register_IntraGroupFF_class(){
             
             IntraGroupFF_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         IntraGroupFF_exposer.staticmethod( "typeName" );

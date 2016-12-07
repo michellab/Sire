@@ -30,7 +30,7 @@ void register_GeometryComponent_class(){
 
     { //::SireSystem::GeometryComponent
         typedef bp::class_< SireSystem::GeometryComponent, bp::bases< SireSystem::Constraint, SireBase::Property >, boost::noncopyable > GeometryComponent_exposer_t;
-        GeometryComponent_exposer_t GeometryComponent_exposer = GeometryComponent_exposer_t( "GeometryComponent", bp::no_init );
+        GeometryComponent_exposer_t GeometryComponent_exposer = GeometryComponent_exposer_t( "GeometryComponent", "This is the base class of constraints that constrains the value\nof a system component\nto be equal to a geometric expression. For example, you could\nuse this to constrain the value of the component r_diff to be\nequal to the difference between the distances between two pairs\nof atoms\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope GeometryComponent_scope( GeometryComponent_exposer );
         { //::SireSystem::GeometryComponent::component
         
@@ -40,7 +40,8 @@ void register_GeometryComponent_class(){
             GeometryComponent_exposer.def( 
                 "component"
                 , component_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol representing the constrained component" );
         
         }
         { //::SireSystem::GeometryComponent::expression
@@ -51,7 +52,8 @@ void register_GeometryComponent_class(){
             GeometryComponent_exposer.def( 
                 "expression"
                 , expression_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the expression used to calculate the constrained value\nfrom the geometry" );
         
         }
         { //::SireSystem::GeometryComponent::typeName
@@ -61,7 +63,8 @@ void register_GeometryComponent_class(){
             
             GeometryComponent_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         GeometryComponent_exposer.staticmethod( "typeName" );

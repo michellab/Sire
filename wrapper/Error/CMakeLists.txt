@@ -49,6 +49,8 @@ set( INSTALLDIR ${SIRE_PYTHON}/Sire/Error )
 
 install( TARGETS Error
          LIBRARY DESTINATION ${INSTALLDIR}
+         ARCHIVE DESTINATION ${INSTALLDIR}
+         RUNTIME DESTINATION ${INSTALLDIR}
        )
 
 install( FILES __init__.py

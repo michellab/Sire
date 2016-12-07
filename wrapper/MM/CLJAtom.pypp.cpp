@@ -53,10 +53,10 @@ void register_CLJAtom_class(){
 
     { //::SireMM::CLJAtom
         typedef bp::class_< SireMM::CLJAtom > CLJAtom_exposer_t;
-        CLJAtom_exposer_t CLJAtom_exposer = CLJAtom_exposer_t( "CLJAtom", bp::init< >() );
+        CLJAtom_exposer_t CLJAtom_exposer = CLJAtom_exposer_t( "CLJAtom", "This class holds everything about a single CLJAtom", bp::init< >("Null constructor") );
         bp::scope CLJAtom_scope( CLJAtom_exposer );
-        CLJAtom_exposer.def( bp::init< SireMaths::Vector, SireUnits::Dimension::Charge, SireMM::LJParameter, bp::optional< qint32 > >(( bp::arg("coords"), bp::arg("charge"), bp::arg("ljparam"), bp::arg("idnum")=(::qint32)(1) )) );
-        CLJAtom_exposer.def( bp::init< SireMM::CLJAtom const & >(( bp::arg("other") )) );
+        CLJAtom_exposer.def( bp::init< SireMaths::Vector, SireUnits::Dimension::Charge, SireMM::LJParameter, bp::optional< qint32 > >(( bp::arg("coords"), bp::arg("charge"), bp::arg("ljparam"), bp::arg("idnum")=(::qint32)(1) ), "Construct from the passed coordinates, charge and LJ parameters") );
+        CLJAtom_exposer.def( bp::init< SireMM::CLJAtom const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::CLJAtom::ID
         
             typedef ::qint32 ( ::SireMM::CLJAtom::*ID_function_type)(  ) const;
@@ -64,7 +64,8 @@ void register_CLJAtom_class(){
             
             CLJAtom_exposer.def( 
                 "ID"
-                , ID_function_value );
+                , ID_function_value
+                , "Return the ID number for the atom" );
         
         }
         { //::SireMM::CLJAtom::buildFrom
@@ -75,7 +76,8 @@ void register_CLJAtom_class(){
             CLJAtom_exposer.def( 
                 "buildFrom"
                 , buildFrom_function_value
-                , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Construct an array of CLJAtom atoms from the passed molecule view" );
         
         }
         { //::SireMM::CLJAtom::charge
@@ -85,7 +87,8 @@ void register_CLJAtom_class(){
             
             CLJAtom_exposer.def( 
                 "charge"
-                , charge_function_value );
+                , charge_function_value
+                , "Return the partial charge of the atom" );
         
         }
         { //::SireMM::CLJAtom::coordinates
@@ -95,7 +98,8 @@ void register_CLJAtom_class(){
             
             CLJAtom_exposer.def( 
                 "coordinates"
-                , coordinates_function_value );
+                , coordinates_function_value
+                , "Return the coordinates of the atom" );
         
         }
         { //::SireMM::CLJAtom::isDummy
@@ -105,7 +109,8 @@ void register_CLJAtom_class(){
             
             CLJAtom_exposer.def( 
                 "isDummy"
-                , isDummy_function_value );
+                , isDummy_function_value
+                , "Return whether or not this is a dummy atom (has no ID number)" );
         
         }
         { //::SireMM::CLJAtom::isNull
@@ -115,7 +120,8 @@ void register_CLJAtom_class(){
             
             CLJAtom_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Return whether or not this atom is null (no information)" );
         
         }
         { //::SireMM::CLJAtom::ljParameter
@@ -125,7 +131,8 @@ void register_CLJAtom_class(){
             
             CLJAtom_exposer.def( 
                 "ljParameter"
-                , ljParameter_function_value );
+                , ljParameter_function_value
+                , "Return the LJ parameters of the atom" );
         
         }
         { //::SireMM::CLJAtom::negate
@@ -135,7 +142,8 @@ void register_CLJAtom_class(){
             
             CLJAtom_exposer.def( 
                 "negate"
-                , negate_function_value );
+                , negate_function_value
+                , "Return the negative of this atom - this returns a copy where\nthe reduced charge and reduced epsilon values have been negated" );
         
         }
         CLJAtom_exposer.def( bp::self != bp::self );
@@ -148,7 +156,8 @@ void register_CLJAtom_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CLJAtom_exposer.def( bp::self == bp::self );
@@ -159,7 +168,8 @@ void register_CLJAtom_class(){
             
             CLJAtom_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMM::CLJAtom::typeName
@@ -169,7 +179,8 @@ void register_CLJAtom_class(){
             
             CLJAtom_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::CLJAtom::what
@@ -179,7 +190,8 @@ void register_CLJAtom_class(){
             
             CLJAtom_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         CLJAtom_exposer.staticmethod( "buildFrom" );

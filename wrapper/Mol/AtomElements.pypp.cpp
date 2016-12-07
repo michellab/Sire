@@ -25,13 +25,13 @@ void register_AtomElements_class(){
 
     { //::SireMol::AtomProperty< SireMol::Element >
         typedef bp::class_< SireMol::AtomProperty< SireMol::Element >, bp::bases< SireMol::AtomProp, SireMol::MolViewProperty, SireBase::Property > > AtomElements_exposer_t;
-        AtomElements_exposer_t AtomElements_exposer = AtomElements_exposer_t( "AtomElements", bp::init< >() );
+        AtomElements_exposer_t AtomElements_exposer = AtomElements_exposer_t( "AtomElements", "", bp::init< >("") );
         bp::scope AtomElements_scope( AtomElements_exposer );
-        AtomElements_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") )) );
-        AtomElements_exposer.def( bp::init< SireMol::MoleculeInfoData const &, SireMol::Element const & >(( bp::arg("molinfo"), bp::arg("default_value") )) );
-        AtomElements_exposer.def( bp::init< SireMol::Element const & >(( bp::arg("value") )) );
-        AtomElements_exposer.def( bp::init< SireBase::PackedArray2D< SireMol::Element > const & >(( bp::arg("values") )) );
-        AtomElements_exposer.def( bp::init< SireMol::AtomProperty< SireMol::Element > const & >(( bp::arg("other") )) );
+        AtomElements_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "") );
+        AtomElements_exposer.def( bp::init< SireMol::MoleculeInfoData const &, SireMol::Element const & >(( bp::arg("molinfo"), bp::arg("default_value") ), "") );
+        AtomElements_exposer.def( bp::init< SireMol::Element const & >(( bp::arg("value") ), "") );
+        AtomElements_exposer.def( bp::init< SireBase::PackedArray2D< SireMol::Element > const & >(( bp::arg("values") ), "") );
+        AtomElements_exposer.def( bp::init< SireMol::AtomProperty< SireMol::Element > const & >(( bp::arg("other") ), "") );
         { //::SireMol::AtomProperty< SireMol::Element >::array
         
             typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;
@@ -41,7 +41,8 @@ void register_AtomElements_class(){
             AtomElements_exposer.def( 
                 "array"
                 , array_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::assertCanConvert
@@ -53,7 +54,8 @@ void register_AtomElements_class(){
             AtomElements_exposer.def( 
                 "assertCanConvert"
                 , assertCanConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::assignFrom
@@ -65,20 +67,22 @@ void register_AtomElements_class(){
             AtomElements_exposer.def( 
                 "assignFrom"
                 , assignFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::at
         
             typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< SireMol::Element > const & ( ::SireMol::AtomProperty< SireMol::Element >::*at_function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< SireMol::Element >::Array const & ( ::SireMol::AtomProperty< SireMol::Element >::*at_function_type)( ::SireMol::CGIdx ) const;
             at_function_type at_function_value( &::SireMol::AtomProperty< SireMol::Element >::at );
             
             AtomElements_exposer.def( 
                 "at"
                 , at_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::at
@@ -91,7 +95,8 @@ void register_AtomElements_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::canConvert
@@ -103,7 +108,8 @@ void register_AtomElements_class(){
             AtomElements_exposer.def( 
                 "canConvert"
                 , canConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::copyFrom
@@ -115,7 +121,8 @@ void register_AtomElements_class(){
             AtomElements_exposer.def( 
                 "copyFrom"
                 , copyFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::copyFrom
@@ -127,7 +134,8 @@ void register_AtomElements_class(){
             AtomElements_exposer.def( 
                 "copyFrom"
                 , copyFrom_function_value
-                , ( bp::arg("values"), bp::arg("selection") ) );
+                , ( bp::arg("values"), bp::arg("selection") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::count
@@ -138,31 +146,34 @@ void register_AtomElements_class(){
             
             AtomElements_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::divide
         
             typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMol::Element >::*divide_function_type)( ::QVector< SireMol::AtomSelection > const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireMol::Element >::*divide_function_type)( ::QVector< SireMol::AtomSelection > const & ) const;
             divide_function_type divide_function_value( &::SireMol::AtomProperty< SireMol::Element >::divide );
             
             AtomElements_exposer.def( 
                 "divide"
                 , divide_function_value
-                , ( bp::arg("beads") ) );
+                , ( bp::arg("beads") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::divideByResidue
         
             typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMol::Element >::*divideByResidue_function_type)( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireMol::Element >::*divideByResidue_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             divideByResidue_function_type divideByResidue_function_value( &::SireMol::AtomProperty< SireMol::Element >::divideByResidue );
             
             AtomElements_exposer.def( 
                 "divideByResidue"
                 , divideByResidue_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::fromVariant
@@ -174,20 +185,22 @@ void register_AtomElements_class(){
             AtomElements_exposer.def( 
                 "fromVariant"
                 , fromVariant_function_value
-                , ( bp::arg("variant") ) );
+                , ( bp::arg("variant") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::get
         
             typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< SireMol::Element > const & ( ::SireMol::AtomProperty< SireMol::Element >::*get_function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< SireMol::Element >::Array const & ( ::SireMol::AtomProperty< SireMol::Element >::*get_function_type)( ::SireMol::CGIdx ) const;
             get_function_type get_function_value( &::SireMol::AtomProperty< SireMol::Element >::get );
             
             AtomElements_exposer.def( 
                 "get"
                 , get_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::get
@@ -200,7 +213,8 @@ void register_AtomElements_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::isCompatibleWith
@@ -212,7 +226,8 @@ void register_AtomElements_class(){
             AtomElements_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::isEmpty
@@ -223,7 +238,8 @@ void register_AtomElements_class(){
             
             AtomElements_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::matchToSelection
@@ -235,19 +251,21 @@ void register_AtomElements_class(){
             AtomElements_exposer.def( 
                 "matchToSelection"
                 , matchToSelection_function_value
-                , ( bp::arg("selection") ) );
+                , ( bp::arg("selection") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::merge
         
             typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;
-            typedef ::SireBase::PropPtr< SireBase::Property > ( ::SireMol::AtomProperty< SireMol::Element >::*merge_function_type)( ::SireMol::MoleculeInfoData const & ) const;
+            typedef ::SireBase::PropertyPtr ( ::SireMol::AtomProperty< SireMol::Element >::*merge_function_type)( ::SireMol::MoleculeInfoData const & ) const;
             merge_function_type merge_function_value( &::SireMol::AtomProperty< SireMol::Element >::merge );
             
             AtomElements_exposer.def( 
                 "merge"
                 , merge_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::nAtoms
@@ -258,7 +276,8 @@ void register_AtomElements_class(){
             
             AtomElements_exposer.def( 
                 "nAtoms"
-                , nAtoms_function_value );
+                , nAtoms_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::nAtoms
@@ -270,7 +289,8 @@ void register_AtomElements_class(){
             AtomElements_exposer.def( 
                 "nAtoms"
                 , nAtoms_function_value
-                , ( bp::arg("cgidx") ) );
+                , ( bp::arg("cgidx") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::nCutGroups
@@ -281,7 +301,8 @@ void register_AtomElements_class(){
             
             AtomElements_exposer.def( 
                 "nCutGroups"
-                , nCutGroups_function_value );
+                , nCutGroups_function_value
+                , "" );
         
         }
         AtomElements_exposer.def( bp::self != bp::self );
@@ -295,21 +316,23 @@ void register_AtomElements_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         AtomElements_exposer.def( bp::self == bp::self );
         { //::SireMol::AtomProperty< SireMol::Element >::operator[]
         
             typedef SireMol::AtomProperty< SireMol::Element > exported_class_t;
-            typedef ::SireBase::detail::PackedArray2D_Array< SireMol::Element > const & ( ::SireMol::AtomProperty< SireMol::Element >::*__getitem___function_type)( ::SireMol::CGIdx ) const;
+            typedef ::SireBase::PackedArray2D< SireMol::Element >::Array const & ( ::SireMol::AtomProperty< SireMol::Element >::*__getitem___function_type)( ::SireMol::CGIdx ) const;
             __getitem___function_type __getitem___function_value( &::SireMol::AtomProperty< SireMol::Element >::operator[] );
             
             AtomElements_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::operator[]
@@ -322,7 +345,8 @@ void register_AtomElements_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("cgatomidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::set
@@ -335,7 +359,8 @@ void register_AtomElements_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("cgatomidx"), bp::arg("value") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::set
@@ -348,7 +373,8 @@ void register_AtomElements_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("cgidx"), bp::arg("values") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::size
@@ -359,7 +385,8 @@ void register_AtomElements_class(){
             
             AtomElements_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::toString
@@ -370,7 +397,8 @@ void register_AtomElements_class(){
             
             AtomElements_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::toVariant
@@ -381,7 +409,8 @@ void register_AtomElements_class(){
             
             AtomElements_exposer.def( 
                 "toVariant"
-                , toVariant_function_value );
+                , toVariant_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::toVector
@@ -392,7 +421,8 @@ void register_AtomElements_class(){
             
             AtomElements_exposer.def( 
                 "toVector"
-                , toVector_function_value );
+                , toVector_function_value
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::toVector
@@ -404,7 +434,8 @@ void register_AtomElements_class(){
             AtomElements_exposer.def( 
                 "toVector"
                 , toVector_function_value
-                , ( bp::arg("selection") ) );
+                , ( bp::arg("selection") )
+                , "" );
         
         }
         { //::SireMol::AtomProperty< SireMol::Element >::typeName
@@ -415,7 +446,8 @@ void register_AtomElements_class(){
             
             AtomElements_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         AtomElements_exposer.staticmethod( "fromVariant" );

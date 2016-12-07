@@ -43,13 +43,13 @@ void register_CoordGroupArray_class(){
 
     { //::SireVol::CoordGroupArray
         typedef bp::class_< SireVol::CoordGroupArray > CoordGroupArray_exposer_t;
-        CoordGroupArray_exposer_t CoordGroupArray_exposer = CoordGroupArray_exposer_t( "CoordGroupArray", bp::init< >() );
+        CoordGroupArray_exposer_t CoordGroupArray_exposer = CoordGroupArray_exposer_t( "CoordGroupArray", "This class holds an array of CoordGroups. While you could\nof course just use a QVector<CoordGroup>, this array\noptimises the memory layout of all of the CoordGroups\nso that they all lie contiguously along the same piece\nof memory (and indeed, all of the AABoxes are grouped\ntogether, while all of the coordinates are grouped together).\n\nThe memory packing means that this array is much more\nlimited than a QVector<CoordGroup>, i.e. you cant\nadd or remove CoordGroups from the array, and you cant\ndo anything to the contained CoordGroups except for\nchange their coordinates.\n\nThis class is really meant to be used as a fast container\nthat allow rapid iteration over all of the contained\nCoordGroups  coordinates\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope CoordGroupArray_scope( CoordGroupArray_exposer );
-        CoordGroupArray_exposer.def( bp::init< SireVol::CoordGroup const & >(( bp::arg("cgroup") )) );
-        CoordGroupArray_exposer.def( bp::init< QVector< QVector< SireMaths::Vector > > const & >(( bp::arg("points") )) );
-        CoordGroupArray_exposer.def( bp::init< QVector< SireVol::CoordGroup > const & >(( bp::arg("cgroups") )) );
-        CoordGroupArray_exposer.def( bp::init< SireVol::CoordGroupArray const &, SireVol::CoordGroupArray const & >(( bp::arg("array0"), bp::arg("array1") )) );
-        CoordGroupArray_exposer.def( bp::init< SireVol::CoordGroupArray const & >(( bp::arg("other") )) );
+        CoordGroupArray_exposer.def( bp::init< SireVol::CoordGroup const & >(( bp::arg("cgroup") ), "Construct an array that holds just the passed CoordGroup") );
+        CoordGroupArray_exposer.def( bp::init< QVector< QVector< SireMaths::Vector > > const & >(( bp::arg("points") ), "Construct from a double-vector") );
+        CoordGroupArray_exposer.def( bp::init< QVector< SireVol::CoordGroup > const & >(( bp::arg("cgroups") ), "Construct from an array of CoordGroups") );
+        CoordGroupArray_exposer.def( bp::init< SireVol::CoordGroupArray const &, SireVol::CoordGroupArray const & >(( bp::arg("array0"), bp::arg("array1") ), "Construct from a pair of CoordGroupArrays") );
+        CoordGroupArray_exposer.def( bp::init< SireVol::CoordGroupArray const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireVol::CoordGroupArray::aaBox
         
             typedef ::SireVol::AABox ( ::SireVol::CoordGroupArray::*aaBox_function_type)(  ) const;
@@ -57,7 +57,8 @@ void register_CoordGroupArray_class(){
             
             CoordGroupArray_exposer.def( 
                 "aaBox"
-                , aaBox_function_value );
+                , aaBox_function_value
+                , "Return an AABox that complete encompasses all of the CoordGroups\nin this array" );
         
         }
         { //::SireVol::CoordGroupArray::append
@@ -68,7 +69,8 @@ void register_CoordGroupArray_class(){
             CoordGroupArray_exposer.def( 
                 "append"
                 , append_function_value
-                , ( bp::arg("cgroup") ) );
+                , ( bp::arg("cgroup") )
+                , "Append the passed CoordGroup onto the end of this array" );
         
         }
         { //::SireVol::CoordGroupArray::append
@@ -79,7 +81,8 @@ void register_CoordGroupArray_class(){
             CoordGroupArray_exposer.def( 
                 "append"
                 , append_function_value
-                , ( bp::arg("cgroups") ) );
+                , ( bp::arg("cgroups") )
+                , "Append the passed CoordGroups onto the end of this array" );
         
         }
         { //::SireVol::CoordGroupArray::assertValidCoordGroup
@@ -90,7 +93,8 @@ void register_CoordGroupArray_class(){
             CoordGroupArray_exposer.def( 
                 "assertValidCoordGroup"
                 , assertValidCoordGroup_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Assert that the index i points to a valid CoordGroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireVol::CoordGroupArray::assertValidCoordinate
@@ -101,7 +105,8 @@ void register_CoordGroupArray_class(){
             CoordGroupArray_exposer.def( 
                 "assertValidCoordinate"
                 , assertValidCoordinate_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Assert that the index i points a valid coordinate\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireVol::CoordGroupArray::assertValidIndex
@@ -112,7 +117,8 @@ void register_CoordGroupArray_class(){
             CoordGroupArray_exposer.def( 
                 "assertValidIndex"
                 , assertValidIndex_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Assert that the index i points to a valid CoordGroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireVol::CoordGroupArray::at
@@ -124,7 +130,8 @@ void register_CoordGroupArray_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return a reference to the ith CoordGroup\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireVol::CoordGroupArray::changeFrame
@@ -135,7 +142,8 @@ void register_CoordGroupArray_class(){
             CoordGroupArray_exposer.def( 
                 "changeFrame"
                 , changeFrame_function_value
-                , ( bp::arg("from_frame"), bp::arg("to_frame") ) );
+                , ( bp::arg("from_frame"), bp::arg("to_frame") )
+                , "Change all of the coordinates in this array from the\ncoordinate frame from_frame to the coordinate frame to_frame" );
         
         }
         { //::SireVol::CoordGroupArray::changeFrame
@@ -146,7 +154,8 @@ void register_CoordGroupArray_class(){
             CoordGroupArray_exposer.def( 
                 "changeFrame"
                 , changeFrame_function_value
-                , ( bp::arg("i"), bp::arg("from_frame"), bp::arg("to_frame") ) );
+                , ( bp::arg("i"), bp::arg("from_frame"), bp::arg("to_frame") )
+                , "Change all of the coordinates in the ith CoordGroup from\nthe coordinate frame from_frame to the coordinate frame\nto_frame\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireVol::CoordGroupArray::count
@@ -156,7 +165,8 @@ void register_CoordGroupArray_class(){
             
             CoordGroupArray_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of CoordGroups in this array" );
         
         }
         { //::SireVol::CoordGroupArray::isEmpty
@@ -166,7 +176,8 @@ void register_CoordGroupArray_class(){
             
             CoordGroupArray_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether or not this array is empty" );
         
         }
         { //::SireVol::CoordGroupArray::mapInto
@@ -177,7 +188,8 @@ void register_CoordGroupArray_class(){
             CoordGroupArray_exposer.def( 
                 "mapInto"
                 , mapInto_function_value
-                , ( bp::arg("axes") ) );
+                , ( bp::arg("axes") )
+                , "Map all of the coordinates in this array into the coordinate\nframe represented by axes" );
         
         }
         { //::SireVol::CoordGroupArray::mapInto
@@ -188,7 +200,8 @@ void register_CoordGroupArray_class(){
             CoordGroupArray_exposer.def( 
                 "mapInto"
                 , mapInto_function_value
-                , ( bp::arg("i"), bp::arg("axes") ) );
+                , ( bp::arg("i"), bp::arg("axes") )
+                , "Map all of the coordinates of the CoordGroup at index i\ninto the coordinate frame represented by axes\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireVol::CoordGroupArray::merge
@@ -198,7 +211,8 @@ void register_CoordGroupArray_class(){
             
             CoordGroupArray_exposer.def( 
                 "merge"
-                , merge_function_value );
+                , merge_function_value
+                , "Merge this array of CoordGroups back into a single CoordGroup" );
         
         }
         { //::SireVol::CoordGroupArray::nCoordGroups
@@ -208,7 +222,8 @@ void register_CoordGroupArray_class(){
             
             CoordGroupArray_exposer.def( 
                 "nCoordGroups"
-                , nCoordGroups_function_value );
+                , nCoordGroups_function_value
+                , "Return the number of CoordGroups in this array" );
         
         }
         { //::SireVol::CoordGroupArray::nCoords
@@ -218,7 +233,8 @@ void register_CoordGroupArray_class(){
             
             CoordGroupArray_exposer.def( 
                 "nCoords"
-                , nCoords_function_value );
+                , nCoords_function_value
+                , "Return the number of coordinates in this array" );
         
         }
         CoordGroupArray_exposer.def( bp::self != bp::self );
@@ -231,7 +247,8 @@ void register_CoordGroupArray_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CoordGroupArray_exposer.def( bp::self == bp::self );
@@ -244,7 +261,8 @@ void register_CoordGroupArray_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireVol::CoordGroupArray::remove
@@ -255,7 +273,8 @@ void register_CoordGroupArray_class(){
             CoordGroupArray_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Remove the ith CoordGroup from the array" );
         
         }
         { //::SireVol::CoordGroupArray::remove
@@ -266,7 +285,8 @@ void register_CoordGroupArray_class(){
             CoordGroupArray_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("i"), bp::arg("count") ) );
+                , ( bp::arg("i"), bp::arg("count") )
+                , "Remove count CoordGroups from the array, starting with the ith CoordGroup" );
         
         }
         { //::SireVol::CoordGroupArray::remove
@@ -277,7 +297,8 @@ void register_CoordGroupArray_class(){
             CoordGroupArray_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("idxs") ) );
+                , ( bp::arg("idxs") )
+                , "Remove the specified CoordGroups from the array" );
         
         }
         { //::SireVol::CoordGroupArray::rotate
@@ -288,7 +309,8 @@ void register_CoordGroupArray_class(){
             CoordGroupArray_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("quat"), bp::arg("point") ) );
+                , ( bp::arg("quat"), bp::arg("point") )
+                , "Rotate all of the coordinates in this array using the quaternion\nquat around the point point" );
         
         }
         { //::SireVol::CoordGroupArray::rotate
@@ -299,7 +321,8 @@ void register_CoordGroupArray_class(){
             CoordGroupArray_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("rotmat"), bp::arg("point") ) );
+                , ( bp::arg("rotmat"), bp::arg("point") )
+                , "Rotate all of coordinates in this array using the matrix rotmat\nabout the point point" );
         
         }
         { //::SireVol::CoordGroupArray::rotate
@@ -310,7 +333,8 @@ void register_CoordGroupArray_class(){
             CoordGroupArray_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("i"), bp::arg("quat"), bp::arg("point") ) );
+                , ( bp::arg("i"), bp::arg("quat"), bp::arg("point") )
+                , "Rotate all of the coordinates in the CoordGroup at index i using\nthe quaternion quat about the point point\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireVol::CoordGroupArray::rotate
@@ -321,7 +345,8 @@ void register_CoordGroupArray_class(){
             CoordGroupArray_exposer.def( 
                 "rotate"
                 , rotate_function_value
-                , ( bp::arg("i"), bp::arg("rotmat"), bp::arg("point") ) );
+                , ( bp::arg("i"), bp::arg("rotmat"), bp::arg("point") )
+                , "Rotate all of the coordinates in the CoordGroup at index i using\nthe matrix rotmat about the point point\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireVol::CoordGroupArray::size
@@ -331,7 +356,8 @@ void register_CoordGroupArray_class(){
             
             CoordGroupArray_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "Return the number of CoordGroups in this array" );
         
         }
         { //::SireVol::CoordGroupArray::toString
@@ -341,7 +367,8 @@ void register_CoordGroupArray_class(){
             
             CoordGroupArray_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this array" );
         
         }
         { //::SireVol::CoordGroupArray::transform
@@ -352,7 +379,8 @@ void register_CoordGroupArray_class(){
             CoordGroupArray_exposer.def( 
                 "transform"
                 , transform_function_value
-                , ( bp::arg("t") ) );
+                , ( bp::arg("t") )
+                , "Transform all of coordinates in this array using the transformation t" );
         
         }
         { //::SireVol::CoordGroupArray::transform
@@ -363,7 +391,8 @@ void register_CoordGroupArray_class(){
             CoordGroupArray_exposer.def( 
                 "transform"
                 , transform_function_value
-                , ( bp::arg("i"), bp::arg("t") ) );
+                , ( bp::arg("i"), bp::arg("t") )
+                , "Transform all of the coordinates in the CoordGroup at index i using\nthe transformation t\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireVol::CoordGroupArray::translate
@@ -374,7 +403,8 @@ void register_CoordGroupArray_class(){
             CoordGroupArray_exposer.def( 
                 "translate"
                 , translate_function_value
-                , ( bp::arg("delta") ) );
+                , ( bp::arg("delta") )
+                , "Translate all of the coordinates in this array by delta" );
         
         }
         { //::SireVol::CoordGroupArray::translate
@@ -385,7 +415,8 @@ void register_CoordGroupArray_class(){
             CoordGroupArray_exposer.def( 
                 "translate"
                 , translate_function_value
-                , ( bp::arg("i"), bp::arg("delta") ) );
+                , ( bp::arg("i"), bp::arg("delta") )
+                , "Translate all of the coordinates in the ith CoordGroup by delta" );
         
         }
         { //::SireVol::CoordGroupArray::typeName
@@ -395,7 +426,8 @@ void register_CoordGroupArray_class(){
             
             CoordGroupArray_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireVol::CoordGroupArray::update
@@ -406,7 +438,8 @@ void register_CoordGroupArray_class(){
             CoordGroupArray_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("i"), bp::arg("cgroup") ) );
+                , ( bp::arg("i"), bp::arg("cgroup") )
+                , "Update the CoordGroup at index i so that it is equal to cgroup. Note\nthat cgroup must contain the same number of coordinates as the existing\nCoordGroup at this index\nThrow: SireError::invalid_index\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireVol::CoordGroupArray::update
@@ -417,7 +450,8 @@ void register_CoordGroupArray_class(){
             CoordGroupArray_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("i"), bp::arg("coords") ) );
+                , ( bp::arg("i"), bp::arg("coords") )
+                , "Update the CoordGroup at index i so that it has coordinates coords\nThere must contain the same number of coordinates as the existing\nCoordGroup at this index\nThrow: SireError::invalid_index\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireVol::CoordGroupArray::update
@@ -428,7 +462,8 @@ void register_CoordGroupArray_class(){
             CoordGroupArray_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("i"), bp::arg("coords"), bp::arg("ncoords") ) );
+                , ( bp::arg("i"), bp::arg("coords"), bp::arg("ncoords") )
+                , "Update the CoordGroup at index i so that it has coordinates coords\n(there are ncoords coordinates in this array)\nThere must contain the same number of coordinates as the existing\nCoordGroup at this index\nThrow: SireError::invalid_index\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireVol::CoordGroupArray::what
@@ -438,7 +473,8 @@ void register_CoordGroupArray_class(){
             
             CoordGroupArray_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         CoordGroupArray_exposer.staticmethod( "typeName" );

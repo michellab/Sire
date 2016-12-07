@@ -31,10 +31,10 @@ void register_Min_class(){
 
     { //::SireCAS::Min
         typedef bp::class_< SireCAS::Min, bp::bases< SireCAS::DoubleFunc, SireCAS::ExBase > > Min_exposer_t;
-        Min_exposer_t Min_exposer = Min_exposer_t( "Min", bp::init< >() );
+        Min_exposer_t Min_exposer = Min_exposer_t( "Min", "Minimum value of two expressions", bp::init< >("Constructor") );
         bp::scope Min_scope( Min_exposer );
-        Min_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Expression const & >(( bp::arg("x"), bp::arg("y") )) );
-        Min_exposer.def( bp::init< SireCAS::Min const & >(( bp::arg("other") )) );
+        Min_exposer.def( bp::init< SireCAS::Expression const &, SireCAS::Expression const & >(( bp::arg("x"), bp::arg("y") ), "Construct min(x(), y())") );
+        Min_exposer.def( bp::init< SireCAS::Min const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::Min::evaluate
         
             typedef double ( ::SireCAS::Min::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -43,7 +43,8 @@ void register_Min_class(){
             Min_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::Min::evaluate
@@ -54,7 +55,8 @@ void register_Min_class(){
             Min_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         Min_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -65,7 +67,8 @@ void register_Min_class(){
             
             Min_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::Min::what
@@ -75,7 +78,8 @@ void register_Min_class(){
             
             Min_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Min_exposer.staticmethod( "typeName" );

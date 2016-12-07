@@ -43,18 +43,18 @@ void register_CLJRFFunction_class(){
 
     { //::SireMM::CLJRFFunction
         typedef bp::class_< SireMM::CLJRFFunction, bp::bases< SireMM::CLJCutoffFunction, SireMM::CLJFunction, SireBase::Property > > CLJRFFunction_exposer_t;
-        CLJRFFunction_exposer_t CLJRFFunction_exposer = CLJRFFunction_exposer_t( "CLJRFFunction", bp::init< >() );
+        CLJRFFunction_exposer_t CLJRFFunction_exposer = CLJRFFunction_exposer_t( "CLJRFFunction", "This CLJFunction calculates the intermolecular coulomb and LJ energy of the passed\nCLJAtoms using a reaction field cutoff\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope CLJRFFunction_scope( CLJRFFunction_exposer );
-        CLJRFFunction_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("cutoff") )) );
-        CLJRFFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("coul_cutoff"), bp::arg("lj_cutoff") )) );
-        CLJRFFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length >(( bp::arg("space"), bp::arg("cutoff") )) );
-        CLJRFFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("space"), bp::arg("coul_cutoff"), bp::arg("lj_cutoff") )) );
-        CLJRFFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("cutoff"), bp::arg("combining_rules") )) );
-        CLJRFFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("coul_cutoff"), bp::arg("lj_cutoff"), bp::arg("combining_rules") )) );
-        CLJRFFunction_exposer.def( bp::init< SireVol::Space const &, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("space"), bp::arg("combining_rules") )) );
-        CLJRFFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("space"), bp::arg("cutoff"), bp::arg("combining_rules") )) );
-        CLJRFFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length, SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("space"), bp::arg("coul_cutoff"), bp::arg("lj_cutoff"), bp::arg("combining_rules") )) );
-        CLJRFFunction_exposer.def( bp::init< SireMM::CLJRFFunction const & >(( bp::arg("other") )) );
+        CLJRFFunction_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("cutoff") ), "Copy constructor") );
+        CLJRFFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("coul_cutoff"), bp::arg("lj_cutoff") ), "") );
+        CLJRFFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length >(( bp::arg("space"), bp::arg("cutoff") ), "") );
+        CLJRFFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("space"), bp::arg("coul_cutoff"), bp::arg("lj_cutoff") ), "") );
+        CLJRFFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("cutoff"), bp::arg("combining_rules") ), "") );
+        CLJRFFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("coul_cutoff"), bp::arg("lj_cutoff"), bp::arg("combining_rules") ), "") );
+        CLJRFFunction_exposer.def( bp::init< SireVol::Space const &, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("space"), bp::arg("combining_rules") ), "") );
+        CLJRFFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("space"), bp::arg("cutoff"), bp::arg("combining_rules") ), "") );
+        CLJRFFunction_exposer.def( bp::init< SireVol::Space const &, SireUnits::Dimension::Length, SireUnits::Dimension::Length, SireMM::CLJFunction::COMBINING_RULES >(( bp::arg("space"), bp::arg("coul_cutoff"), bp::arg("lj_cutoff"), bp::arg("combining_rules") ), "") );
+        CLJRFFunction_exposer.def( bp::init< SireMM::CLJRFFunction const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::CLJRFFunction::containsProperty
         
             typedef bool ( ::SireMM::CLJRFFunction::*containsProperty_function_type)( ::QString const & ) const;
@@ -63,7 +63,8 @@ void register_CLJRFFunction_class(){
             CLJRFFunction_exposer.def( 
                 "containsProperty"
                 , containsProperty_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "Return whether or not this function contains a property called name" );
         
         }
         { //::SireMM::CLJRFFunction::defaultRFFunction
@@ -73,7 +74,8 @@ void register_CLJRFFunction_class(){
             
             CLJRFFunction_exposer.def( 
                 "defaultRFFunction"
-                , defaultRFFunction_function_value );
+                , defaultRFFunction_function_value
+                , "" );
         
         }
         { //::SireMM::CLJRFFunction::dielectric
@@ -83,7 +85,8 @@ void register_CLJRFFunction_class(){
             
             CLJRFFunction_exposer.def( 
                 "dielectric"
-                , dielectric_function_value );
+                , dielectric_function_value
+                , "Return the value of the dielectric constant" );
         
         }
         CLJRFFunction_exposer.def( bp::self != bp::self );
@@ -96,7 +99,8 @@ void register_CLJRFFunction_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CLJRFFunction_exposer.def( bp::self == bp::self );
@@ -107,7 +111,8 @@ void register_CLJRFFunction_class(){
             
             CLJRFFunction_exposer.def( 
                 "properties"
-                , properties_function_value );
+                , properties_function_value
+                , "Return the properties of this function" );
         
         }
         { //::SireMM::CLJRFFunction::property
@@ -118,7 +123,8 @@ void register_CLJRFFunction_class(){
             CLJRFFunction_exposer.def( 
                 "property"
                 , property_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "Return the value of the property with name name" );
         
         }
         { //::SireMM::CLJRFFunction::setDielectric
@@ -129,7 +135,8 @@ void register_CLJRFFunction_class(){
             CLJRFFunction_exposer.def( 
                 "setDielectric"
                 , setDielectric_function_value
-                , ( bp::arg("dielectric") ) );
+                , ( bp::arg("dielectric") )
+                , "Set the dielectric constant to dielectric" );
         
         }
         { //::SireMM::CLJRFFunction::setProperty
@@ -140,7 +147,8 @@ void register_CLJRFFunction_class(){
             CLJRFFunction_exposer.def( 
                 "setProperty"
                 , setProperty_function_value
-                , ( bp::arg("name"), bp::arg("value") ) );
+                , ( bp::arg("name"), bp::arg("value") )
+                , "Return a copy of this function where the property name has been set to the\nvalue value" );
         
         }
         { //::SireMM::CLJRFFunction::supportsGridCalculation
@@ -150,7 +158,8 @@ void register_CLJRFFunction_class(){
             
             CLJRFFunction_exposer.def( 
                 "supportsGridCalculation"
-                , supportsGridCalculation_function_value );
+                , supportsGridCalculation_function_value
+                , "This function does support calculations using a grid" );
         
         }
         { //::SireMM::CLJRFFunction::toString
@@ -160,7 +169,8 @@ void register_CLJRFFunction_class(){
             
             CLJRFFunction_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMM::CLJRFFunction::typeName
@@ -170,7 +180,8 @@ void register_CLJRFFunction_class(){
             
             CLJRFFunction_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::CLJRFFunction::what
@@ -180,7 +191,8 @@ void register_CLJRFFunction_class(){
             
             CLJRFFunction_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         CLJRFFunction_exposer.staticmethod( "defaultRFFunction" );

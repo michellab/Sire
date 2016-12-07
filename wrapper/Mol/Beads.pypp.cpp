@@ -28,10 +28,10 @@ void register_Beads_class(){
 
     { //::SireMol::Beads
         typedef bp::class_< SireMol::Beads, bp::bases< SireMol::MoleculeView, SireBase::Property > > Beads_exposer_t;
-        Beads_exposer_t Beads_exposer = Beads_exposer_t( "Beads", bp::init< >() );
+        Beads_exposer_t Beads_exposer = Beads_exposer_t( "Beads", "This class is a view of all of the beads (for a specific Beading)\nin a molecule\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope Beads_scope( Beads_exposer );
-        Beads_exposer.def( bp::init< SireMol::MoleculeData const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("moldata"), bp::arg("map")=SireBase::PropertyMap() )) );
-        Beads_exposer.def( bp::init< SireMol::Beads const & >(( bp::arg("other") )) );
+        Beads_exposer.def( bp::init< SireMol::MoleculeData const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("moldata"), bp::arg("map")=SireBase::PropertyMap() ), "Construct the beads view of the passed molecule, using\nthe passed (optional) property map to find the beading property") );
+        Beads_exposer.def( bp::init< SireMol::Beads const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::Beads::at
         
             typedef ::SireMol::Bead ( ::SireMol::Beads::*at_function_type)( ::SireMol::BeadIdx ) const;
@@ -40,7 +40,8 @@ void register_Beads_class(){
             Beads_exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("beadidx") ) );
+                , ( bp::arg("beadidx") )
+                , "Return the bead at index beadidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::Beads::atomIdxs
@@ -50,7 +51,8 @@ void register_Beads_class(){
             
             Beads_exposer.def( 
                 "atomIdxs"
-                , atomIdxs_function_value );
+                , atomIdxs_function_value
+                , "Return the indicies of all of the atoms in all of the beads" );
         
         }
         { //::SireMol::Beads::atomProperty
@@ -61,7 +63,8 @@ void register_Beads_class(){
             Beads_exposer.def( 
                 "atomProperty"
                 , atomProperty_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "Return the atom properties for all of the atoms in the beads, in\nBeadIdxIndex order" );
         
         }
         { //::SireMol::Beads::bead
@@ -72,7 +75,8 @@ void register_Beads_class(){
             Beads_exposer.def( 
                 "bead"
                 , bead_function_value
-                , ( bp::arg("beadidx") ) );
+                , ( bp::arg("beadidx") )
+                , "Return the bead at index beadidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::Beads::beading
@@ -83,7 +87,8 @@ void register_Beads_class(){
             Beads_exposer.def( 
                 "beading"
                 , beading_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the beading function used to create the beads" );
         
         }
         { //::SireMol::Beads::contains
@@ -94,7 +99,8 @@ void register_Beads_class(){
             Beads_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("atomidx") ) );
+                , ( bp::arg("atomidx") )
+                , "Return whether any of the beads contains the atom with index atomidx" );
         
         }
         { //::SireMol::Beads::contains
@@ -105,7 +111,8 @@ void register_Beads_class(){
             Beads_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "Return whether or not any of the beads contains the atom with ID atomid" );
         
         }
         { //::SireMol::Beads::count
@@ -115,7 +122,8 @@ void register_Beads_class(){
             
             Beads_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of beads" );
         
         }
         { //::SireMol::Beads::evaluate
@@ -125,7 +133,8 @@ void register_Beads_class(){
             
             Beads_exposer.def( 
                 "evaluate"
-                , evaluate_function_value );
+                , evaluate_function_value
+                , "Return an evaluator for all of the beads" );
         
         }
         { //::SireMol::Beads::hasMetadata
@@ -136,7 +145,8 @@ void register_Beads_class(){
             Beads_exposer.def( 
                 "hasMetadata"
                 , hasMetadata_function_value
-                , ( bp::arg("metakey") ) );
+                , ( bp::arg("metakey") )
+                , "At the moment, the Beads object has no properties or metadata" );
         
         }
         { //::SireMol::Beads::hasMetadata
@@ -147,7 +157,8 @@ void register_Beads_class(){
             Beads_exposer.def( 
                 "hasMetadata"
                 , hasMetadata_function_value
-                , ( bp::arg("key"), bp::arg("metakey") ) );
+                , ( bp::arg("key"), bp::arg("metakey") )
+                , "At the moment, the Beads object has no properties or metadata" );
         
         }
         { //::SireMol::Beads::hasProperty
@@ -158,7 +169,8 @@ void register_Beads_class(){
             Beads_exposer.def( 
                 "hasProperty"
                 , hasProperty_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "At the moment, the Beads object has no properties or metadata" );
         
         }
         { //::SireMol::Beads::intersects
@@ -169,7 +181,8 @@ void register_Beads_class(){
             Beads_exposer.def( 
                 "intersects"
                 , intersects_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "Return whether or not any of the beads contains the atom with ID atomid" );
         
         }
         { //::SireMol::Beads::isEmpty
@@ -179,7 +192,8 @@ void register_Beads_class(){
             
             Beads_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether or not this is empty" );
         
         }
         { //::SireMol::Beads::metadataKeys
@@ -189,7 +203,8 @@ void register_Beads_class(){
             
             Beads_exposer.def( 
                 "metadataKeys"
-                , metadataKeys_function_value );
+                , metadataKeys_function_value
+                , "At the moment, the Beads object has no properties or metadata" );
         
         }
         { //::SireMol::Beads::metadataKeys
@@ -200,7 +215,8 @@ void register_Beads_class(){
             Beads_exposer.def( 
                 "metadataKeys"
                 , metadataKeys_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "At the moment, the Beads object has no properties or metadata" );
         
         }
         { //::SireMol::Beads::move
@@ -210,7 +226,8 @@ void register_Beads_class(){
             
             Beads_exposer.def( 
                 "move"
-                , move_function_value );
+                , move_function_value
+                , "Return a mover that acts of all of the beads" );
         
         }
         { //::SireMol::Beads::nAtoms
@@ -220,7 +237,8 @@ void register_Beads_class(){
             
             Beads_exposer.def( 
                 "nAtoms"
-                , nAtoms_function_value );
+                , nAtoms_function_value
+                , "Return the number of atoms in the beads" );
         
         }
         { //::SireMol::Beads::nBeads
@@ -230,7 +248,8 @@ void register_Beads_class(){
             
             Beads_exposer.def( 
                 "nBeads"
-                , nBeads_function_value );
+                , nBeads_function_value
+                , "Return the number of beads" );
         
         }
         Beads_exposer.def( bp::self != bp::self );
@@ -243,7 +262,8 @@ void register_Beads_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Beads_exposer.def( bp::self == bp::self );
@@ -255,7 +275,8 @@ void register_Beads_class(){
             Beads_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("beadidx") ) );
+                , ( bp::arg("beadidx") )
+                , "" );
         
         }
         { //::SireMol::Beads::propertyKeys
@@ -265,7 +286,8 @@ void register_Beads_class(){
             
             Beads_exposer.def( 
                 "propertyKeys"
-                , propertyKeys_function_value );
+                , propertyKeys_function_value
+                , "At the moment, the Beads object has no properties or metadata" );
         
         }
         { //::SireMol::Beads::selectedAll
@@ -275,7 +297,8 @@ void register_Beads_class(){
             
             Beads_exposer.def( 
                 "selectedAll"
-                , selectedAll_function_value );
+                , selectedAll_function_value
+                , "Return whether or not these beads contain all atoms" );
         
         }
         { //::SireMol::Beads::selection
@@ -285,7 +308,8 @@ void register_Beads_class(){
             
             Beads_exposer.def( 
                 "selection"
-                , selection_function_value );
+                , selection_function_value
+                , "Return the selection of atoms that are part of the beads" );
         
         }
         { //::SireMol::Beads::size
@@ -295,7 +319,8 @@ void register_Beads_class(){
             
             Beads_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "Return the number of beads" );
         
         }
         { //::SireMol::Beads::toString
@@ -305,7 +330,8 @@ void register_Beads_class(){
             
             Beads_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of these beads" );
         
         }
         { //::SireMol::Beads::typeName
@@ -315,7 +341,8 @@ void register_Beads_class(){
             
             Beads_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::Beads::update
@@ -326,7 +353,8 @@ void register_Beads_class(){
             Beads_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("moldata") ) );
+                , ( bp::arg("moldata") )
+                , "Update these beads with the new molecule data" );
         
         }
         Beads_exposer.staticmethod( "typeName" );

@@ -27,10 +27,10 @@ void register_CGAtomIdx_class(){
 
     { //::SireMol::CGAtomIdx
         typedef bp::class_< SireMol::CGAtomIdx, bp::bases< SireMol::AtomID, SireID::ID > > CGAtomIdx_exposer_t;
-        CGAtomIdx_exposer_t CGAtomIdx_exposer = CGAtomIdx_exposer_t( "CGAtomIdx", bp::init< >() );
+        CGAtomIdx_exposer_t CGAtomIdx_exposer = CGAtomIdx_exposer_t( "CGAtomIdx", "This is the basic type used to ID atoms within a molecule. This\nprovides the fastest way of indexing atoms and is the base\ntype that all other AtomID classes map to.\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope CGAtomIdx_scope( CGAtomIdx_exposer );
-        CGAtomIdx_exposer.def( bp::init< SireMol::CGIdx, SireID::Index >(( bp::arg("cgid"), bp::arg("atomid") )) );
-        CGAtomIdx_exposer.def( bp::init< SireMol::CGAtomIdx const & >(( bp::arg("other") )) );
+        CGAtomIdx_exposer.def( bp::init< SireMol::CGIdx, SireID::Index >(( bp::arg("cgid"), bp::arg("atomid") ), "") );
+        CGAtomIdx_exposer.def( bp::init< SireMol::CGAtomIdx const & >(( bp::arg("other") ), "") );
         { //::SireMol::CGAtomIdx::atom
         
             typedef ::SireID::Index ( ::SireMol::CGAtomIdx::*atom_function_type)(  ) const;
@@ -38,7 +38,8 @@ void register_CGAtomIdx_class(){
             
             CGAtomIdx_exposer.def( 
                 "atom"
-                , atom_function_value );
+                , atom_function_value
+                , "" );
         
         }
         { //::SireMol::CGAtomIdx::cutGroup
@@ -48,7 +49,8 @@ void register_CGAtomIdx_class(){
             
             CGAtomIdx_exposer.def( 
                 "cutGroup"
-                , cutGroup_function_value );
+                , cutGroup_function_value
+                , "" );
         
         }
         { //::SireMol::CGAtomIdx::hash
@@ -58,7 +60,8 @@ void register_CGAtomIdx_class(){
             
             CGAtomIdx_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::CGAtomIdx::isNull
@@ -68,7 +71,8 @@ void register_CGAtomIdx_class(){
             
             CGAtomIdx_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::CGAtomIdx::map
@@ -79,7 +83,8 @@ void register_CGAtomIdx_class(){
             CGAtomIdx_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::CGAtomIdx::null
@@ -89,7 +94,8 @@ void register_CGAtomIdx_class(){
             
             CGAtomIdx_exposer.def( 
                 "null"
-                , null_function_value );
+                , null_function_value
+                , "" );
         
         }
         CGAtomIdx_exposer.def( bp::self != bp::self );
@@ -102,7 +108,8 @@ void register_CGAtomIdx_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CGAtomIdx_exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -114,7 +121,8 @@ void register_CGAtomIdx_class(){
             
             CGAtomIdx_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::CGAtomIdx::typeName
@@ -124,7 +132,8 @@ void register_CGAtomIdx_class(){
             
             CGAtomIdx_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::CGAtomIdx::what
@@ -134,7 +143,8 @@ void register_CGAtomIdx_class(){
             
             CGAtomIdx_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         CGAtomIdx_exposer.staticmethod( "null" );

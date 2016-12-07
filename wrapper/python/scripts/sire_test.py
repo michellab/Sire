@@ -96,6 +96,23 @@ testdir = unittestdir
 if len(sys.argv) > 1:
     testdirs = sys.argv[1:]
     sys.argv = [sys.argv[0]]
+
+    drop = []
+
+    for dir in testdirs:
+        if dir.startswith("-"):
+            drop.append(dir)
+
+    if len(drop) > 0:
+        testdirs = []
+
+        dirs = os.listdir(testdir)
+
+        for dir in dirs:
+            for d in drop:
+                if d[1:] != dir:
+                    testdirs.append(dir)
+
 else:
     testdirs = os.listdir(testdir)
 

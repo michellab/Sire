@@ -40,13 +40,13 @@ void register_FourAtomPerturbation_class(){
 
     { //::SireMM::FourAtomPerturbation
         typedef bp::class_< SireMM::FourAtomPerturbation, bp::bases< SireMM::InternalPerturbation, SireMol::Perturbation, SireBase::Property > > FourAtomPerturbation_exposer_t;
-        FourAtomPerturbation_exposer_t FourAtomPerturbation_exposer = FourAtomPerturbation_exposer_t( "FourAtomPerturbation", bp::init< >() );
+        FourAtomPerturbation_exposer_t FourAtomPerturbation_exposer = FourAtomPerturbation_exposer_t( "FourAtomPerturbation", "This class represents a perturbation that maps the four-atom potential\nfunction using a perturbation function\n\nFor example, the perturbation function for a dihedral could be;\n\nE_{phi,lambda} = (1-lambda)(cos(5 phi)) + lambda (cos(3 phi))\n\nThe perturbation will insert the value of lambda into this\nexpression and set the molecules bond function to the resulting\nexpression, e.g at lambda=0\n\nE_{phi,0} = cos(5 phi)\n\nand at lambda=1\n\nE_{phi,1} = cos(3 phi)\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope FourAtomPerturbation_scope( FourAtomPerturbation_exposer );
-        FourAtomPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireCAS::Expression const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3"), bp::arg("initial_form"), bp::arg("final_form"), bp::arg("map")=SireBase::PropertyMap() )) );
-        FourAtomPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireCAS::Expression const &, SireCAS::Expression const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3"), bp::arg("initial_form"), bp::arg("final_form"), bp::arg("mapping_function"), bp::arg("map")=SireBase::PropertyMap() )) );
-        FourAtomPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireCAS::Expression const &, SireCAS::Identities const &, SireCAS::Identities const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3"), bp::arg("base_expression"), bp::arg("initial_forms"), bp::arg("final_forms"), bp::arg("map")=SireBase::PropertyMap() )) );
-        FourAtomPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireCAS::Expression const &, SireCAS::Identities const &, SireCAS::Identities const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3"), bp::arg("base_expression"), bp::arg("initial_forms"), bp::arg("final_forms"), bp::arg("mapping_function"), bp::arg("map")=SireBase::PropertyMap() )) );
-        FourAtomPerturbation_exposer.def( bp::init< SireMM::FourAtomPerturbation const & >(( bp::arg("other") )) );
+        FourAtomPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireCAS::Expression const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3"), bp::arg("initial_form"), bp::arg("final_form"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perturb the function between the atoms\nto use initial_form at the initial state and final_form at the\nfinal state, where the functions are mapped between these two states\nusing the default mapping function") );
+        FourAtomPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireCAS::Expression const &, SireCAS::Expression const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3"), bp::arg("initial_form"), bp::arg("final_form"), bp::arg("mapping_function"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perturb the function between the atoms\nto use initial_form at the initial state and final_form at the\nfinal state, where the functions are mapped between these two states\nusing mapping_function") );
+        FourAtomPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireCAS::Expression const &, SireCAS::Identities const &, SireCAS::Identities const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3"), bp::arg("base_expression"), bp::arg("initial_forms"), bp::arg("final_forms"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perturb the function between the atoms\nto use base_expression populated with the identities in initial_forms\nat the initial state, and populated with the identities in final_forms\nat the final state, where the identities are mapped between the initial\nand final states using the default mapping function") );
+        FourAtomPerturbation_exposer.def( bp::init< SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireMol::AtomID const &, SireCAS::Expression const &, SireCAS::Identities const &, SireCAS::Identities const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3"), bp::arg("base_expression"), bp::arg("initial_forms"), bp::arg("final_forms"), bp::arg("mapping_function"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to perturb the function between the atoms\nto use base_expression populated with the identities in initial_forms\nat the initial state, and populated with the identities in final_forms\nat the final state, where the identities are mapped between the initial\nand final states using mapping_function") );
+        FourAtomPerturbation_exposer.def( bp::init< SireMM::FourAtomPerturbation const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::FourAtomPerturbation::atom0
         
             typedef ::SireMol::AtomID const & ( ::SireMM::FourAtomPerturbation::*atom0_function_type)(  ) const;
@@ -55,7 +55,8 @@ void register_FourAtomPerturbation_class(){
             FourAtomPerturbation_exposer.def( 
                 "atom0"
                 , atom0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the first of the four atoms whose potential is being changed" );
         
         }
         { //::SireMM::FourAtomPerturbation::atom1
@@ -66,7 +67,8 @@ void register_FourAtomPerturbation_class(){
             FourAtomPerturbation_exposer.def( 
                 "atom1"
                 , atom1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the second of the four atoms whose potential is being changed" );
         
         }
         { //::SireMM::FourAtomPerturbation::atom2
@@ -77,7 +79,8 @@ void register_FourAtomPerturbation_class(){
             FourAtomPerturbation_exposer.def( 
                 "atom2"
                 , atom2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the third of the four atoms whose potential is being changed" );
         
         }
         { //::SireMM::FourAtomPerturbation::atom3
@@ -88,7 +91,8 @@ void register_FourAtomPerturbation_class(){
             FourAtomPerturbation_exposer.def( 
                 "atom3"
                 , atom3_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the fourth of the four atoms whose potential is being changed" );
         
         }
         FourAtomPerturbation_exposer.def( bp::self != bp::self );
@@ -101,7 +105,8 @@ void register_FourAtomPerturbation_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         FourAtomPerturbation_exposer.def( bp::self == bp::self );
@@ -112,7 +117,8 @@ void register_FourAtomPerturbation_class(){
             
             FourAtomPerturbation_exposer.def( 
                 "requiredProperties"
-                , requiredProperties_function_value );
+                , requiredProperties_function_value
+                , "Return the properties required or changed by this perturbation" );
         
         }
         { //::SireMM::FourAtomPerturbation::toString
@@ -122,7 +128,8 @@ void register_FourAtomPerturbation_class(){
             
             FourAtomPerturbation_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this perturbation" );
         
         }
         { //::SireMM::FourAtomPerturbation::typeName
@@ -132,7 +139,8 @@ void register_FourAtomPerturbation_class(){
             
             FourAtomPerturbation_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::FourAtomPerturbation::wouldChange
@@ -143,7 +151,8 @@ void register_FourAtomPerturbation_class(){
             FourAtomPerturbation_exposer.def( 
                 "wouldChange"
                 , wouldChange_function_value
-                , ( bp::arg("molecule"), bp::arg("values") ) );
+                , ( bp::arg("molecule"), bp::arg("values") )
+                , "Return whether or not this perturbation with the passed values would\nchange the molecule molecule" );
         
         }
         FourAtomPerturbation_exposer.staticmethod( "typeName" );

@@ -47,10 +47,10 @@ void register_RepExSubMove_class(){
 
     { //::SireMove::RepExSubMove
         typedef bp::class_< SireMove::RepExSubMove, bp::bases< SireMove::SupraSubMove, SireBase::Property > > RepExSubMove_exposer_t;
-        RepExSubMove_exposer_t RepExSubMove_exposer = RepExSubMove_exposer_t( "RepExSubMove", bp::init< >() );
+        RepExSubMove_exposer_t RepExSubMove_exposer = RepExSubMove_exposer_t( "RepExSubMove", "This is the sub-move that is applied to each replica in the supra-ensemble\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope RepExSubMove_scope( RepExSubMove_exposer );
-        RepExSubMove_exposer.def( bp::init< SireMove::Replica const &, SireMove::Replica const & >(( bp::arg("replica_a"), bp::arg("replica_b") )) );
-        RepExSubMove_exposer.def( bp::init< SireMove::RepExSubMove const & >(( bp::arg("other") )) );
+        RepExSubMove_exposer.def( bp::init< SireMove::Replica const &, SireMove::Replica const & >(( bp::arg("replica_a"), bp::arg("replica_b") ), "Construct the sub-move that will perform a move on replica_a, after\nwhich it will then calculate the values necessary to test the\nswap from replica_a to replica_b") );
+        RepExSubMove_exposer.def( bp::init< SireMove::RepExSubMove const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::RepExSubMove::energy_i
         
             typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::RepExSubMove::*energy_i_function_type)(  ) const;
@@ -58,7 +58,8 @@ void register_RepExSubMove_class(){
             
             RepExSubMove_exposer.def( 
                 "energy_i"
-                , energy_i_function_value );
+                , energy_i_function_value
+                , "Return the energy of the replica in its normal state at the\nend of the block of moves" );
         
         }
         { //::SireMove::RepExSubMove::energy_j
@@ -68,7 +69,8 @@ void register_RepExSubMove_class(){
             
             RepExSubMove_exposer.def( 
                 "energy_j"
-                , energy_j_function_value );
+                , energy_j_function_value
+                , "Return the energy of the replica in its partner state\nat the end of the block of moves" );
         
         }
         { //::SireMove::RepExSubMove::move
@@ -79,7 +81,8 @@ void register_RepExSubMove_class(){
             RepExSubMove_exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("system"), bp::arg("n_supra_moves"), bp::arg("n_supra_moves_per_block"), bp::arg("record_stats") ) );
+                , ( bp::arg("system"), bp::arg("n_supra_moves"), bp::arg("n_supra_moves_per_block"), bp::arg("record_stats") )
+                , "Perform the sub-moves on the passed sub-system" );
         
         }
         RepExSubMove_exposer.def( bp::self != bp::self );
@@ -92,7 +95,8 @@ void register_RepExSubMove_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         RepExSubMove_exposer.def( bp::self == bp::self );
@@ -103,7 +107,8 @@ void register_RepExSubMove_class(){
             
             RepExSubMove_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this move" );
         
         }
         { //::SireMove::RepExSubMove::typeName
@@ -113,7 +118,8 @@ void register_RepExSubMove_class(){
             
             RepExSubMove_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMove::RepExSubMove::volume_i
@@ -123,7 +129,8 @@ void register_RepExSubMove_class(){
             
             RepExSubMove_exposer.def( 
                 "volume_i"
-                , volume_i_function_value );
+                , volume_i_function_value
+                , "Return the volume of the replica in its normal state at\nthe end of the block of moves" );
         
         }
         { //::SireMove::RepExSubMove::volume_j
@@ -133,7 +140,8 @@ void register_RepExSubMove_class(){
             
             RepExSubMove_exposer.def( 
                 "volume_j"
-                , volume_j_function_value );
+                , volume_j_function_value
+                , "Return the volume of the replica in its partner state\nat the end of the block of moves" );
         
         }
         RepExSubMove_exposer.staticmethod( "typeName" );

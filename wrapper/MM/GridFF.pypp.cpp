@@ -45,10 +45,10 @@ void register_GridFF_class(){
 
     { //::SireMM::GridFF
         typedef bp::class_< SireMM::GridFF, bp::bases< SireFF::Inter2B2G3DFF<SireMM::CLJPotentialInterface<SireMM::InterCLJPotential> >, SireFF::FF3D, SireFF::Inter2B2GFF<SireMM::CLJPotentialInterface<SireMM::InterCLJPotential> >, SireMM::CLJPotentialInterface<SireMM::InterCLJPotential>, SireFF::G2FF, SireFF::FF, SireMol::MolGroupsBase, SireBase::Property > > GridFF_exposer_t;
-        GridFF_exposer_t GridFF_exposer = GridFF_exposer_t( "GridFF", bp::init< >() );
+        GridFF_exposer_t GridFF_exposer = GridFF_exposer_t( "GridFF", "This class calculates the coulomb and LJ energy between\nall molecules in group 1 and all molecules in group 2.\nThe calculation is optimised, as the molecules in group 2\nare represented using a grid. This is ideal for situations\nwhere the molecules on group 2 move little, or not at all.\n\nAuthor: Christopher Woods\n", bp::init< >("Empty constructor") );
         bp::scope GridFF_scope( GridFF_exposer );
-        GridFF_exposer.def( bp::init< QString const & >(( bp::arg("name") )) );
-        GridFF_exposer.def( bp::init< SireMM::GridFF const & >(( bp::arg("other") )) );
+        GridFF_exposer.def( bp::init< QString const & >(( bp::arg("name") ), "Construct a grid forcefield with a specified name") );
+        GridFF_exposer.def( bp::init< SireMM::GridFF const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::GridFF::addFixedAtoms
         
             typedef void ( ::SireMM::GridFF::*addFixedAtoms_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) ;
@@ -57,7 +57,8 @@ void register_GridFF_class(){
             GridFF_exposer.def( 
                 "addFixedAtoms"
                 , addFixedAtoms_function_value
-                , ( bp::arg("fixed_atoms"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("fixed_atoms"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Add fixed atoms to the grid. These are atoms that will never change\nposition or charge during the simulation, and that you wish to be\nincluded in the energy expression. The atoms can be placed here, and\nthen do not need to be added to the simulation System. This is useful\nif you are simulating a small cutout of the system and do not want to\nhave all of the atoms loaded into the system during the simulation" );
         
         }
         { //::SireMM::GridFF::addFixedAtoms
@@ -68,7 +69,8 @@ void register_GridFF_class(){
             GridFF_exposer.def( 
                 "addFixedAtoms"
                 , addFixedAtoms_function_value
-                , ( bp::arg("fixed_atoms"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("fixed_atoms"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Add fixed atoms to the grid. These are atoms that will never change\nposition or charge during the simulation, and that you wish to be\nincluded in the energy expression. The atoms can be placed here, and\nthen do not need to be added to the simulation System. This is useful\nif you are simulating a small cutout of the system and do not want to\nhave all of the atoms loaded into the system during the simulation" );
         
         }
         { //::SireMM::GridFF::addFixedAtoms
@@ -79,7 +81,8 @@ void register_GridFF_class(){
             GridFF_exposer.def( 
                 "addFixedAtoms"
                 , addFixedAtoms_function_value
-                , ( bp::arg("fixed_atoms"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("fixed_atoms"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Add fixed atoms to the grid. These are atoms that will never change\nposition or charge during the simulation, and that you wish to be\nincluded in the energy expression. The atoms can be placed here, and\nthen do not need to be added to the simulation System. This is useful\nif you are simulating a small cutout of the system and do not want to\nhave all of the atoms loaded into the system during the simulation" );
         
         }
         { //::SireMM::GridFF::addFixedAtoms
@@ -90,7 +93,8 @@ void register_GridFF_class(){
             GridFF_exposer.def( 
                 "addFixedAtoms"
                 , addFixedAtoms_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Add fixed atoms to the grid. This will copy the fixed atoms from\nthe passed GridFF. This allows multiple grid forcefields to share the\nmemory cost of a shared set of fixed atoms" );
         
         }
         { //::SireMM::GridFF::buffer
@@ -100,7 +104,8 @@ void register_GridFF_class(){
             
             GridFF_exposer.def( 
                 "buffer"
-                , buffer_function_value );
+                , buffer_function_value
+                , "Return the buffer size used when building grids" );
         
         }
         { //::SireMM::GridFF::coulombCutoff
@@ -110,7 +115,8 @@ void register_GridFF_class(){
             
             GridFF_exposer.def( 
                 "coulombCutoff"
-                , coulombCutoff_function_value );
+                , coulombCutoff_function_value
+                , "Return the cutoff for the coulomb energy" );
         
         }
         { //::SireMM::GridFF::ljCutoff
@@ -120,7 +126,8 @@ void register_GridFF_class(){
             
             GridFF_exposer.def( 
                 "ljCutoff"
-                , ljCutoff_function_value );
+                , ljCutoff_function_value
+                , "Return the cutoff for the LJ energy" );
         
         }
         { //::SireMM::GridFF::mustNowRecalculateFromScratch
@@ -130,7 +137,8 @@ void register_GridFF_class(){
             
             GridFF_exposer.def( 
                 "mustNowRecalculateFromScratch"
-                , mustNowRecalculateFromScratch_function_value );
+                , mustNowRecalculateFromScratch_function_value
+                , "Ensure that the next energy evaluation is from scratch" );
         
         }
         GridFF_exposer.def( bp::self != bp::self );
@@ -143,7 +151,8 @@ void register_GridFF_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         GridFF_exposer.def( bp::self == bp::self );
@@ -155,7 +164,8 @@ void register_GridFF_class(){
             GridFF_exposer.def( 
                 "setBuffer"
                 , setBuffer_function_value
-                , ( bp::arg("buffer") ) );
+                , ( bp::arg("buffer") )
+                , "Set the buffer when building the grid. This adds a buffer space\naround the grid when it is built, to try to reduce the number of\ntimes it needs to be rebuilt" );
         
         }
         { //::SireMM::GridFF::setCoulombCutoff
@@ -166,7 +176,8 @@ void register_GridFF_class(){
             GridFF_exposer.def( 
                 "setCoulombCutoff"
                 , setCoulombCutoff_function_value
-                , ( bp::arg("cutoff") ) );
+                , ( bp::arg("cutoff") )
+                , "Set the cutoff for the coulomb energy - this can be greater\nthan the box size as multiple periodic images can be used" );
         
         }
         { //::SireMM::GridFF::setGridSpacing
@@ -177,7 +188,8 @@ void register_GridFF_class(){
             GridFF_exposer.def( 
                 "setGridSpacing"
                 , setGridSpacing_function_value
-                , ( bp::arg("spacing") ) );
+                , ( bp::arg("spacing") )
+                , "Set the grid spacing (the distance between grid points). The\nsmaller the spacing the more memory is required to hold the grid,\nbut the more accurate the energy" );
         
         }
         { //::SireMM::GridFF::setLJCutoff
@@ -188,7 +200,8 @@ void register_GridFF_class(){
             GridFF_exposer.def( 
                 "setLJCutoff"
                 , setLJCutoff_function_value
-                , ( bp::arg("cutoff") ) );
+                , ( bp::arg("cutoff") )
+                , "Set the cutoff for the LJ energy - this can be greater than\nthe box size as multiple periodic images can be used" );
         
         }
         { //::SireMM::GridFF::setReactionFieldDielectric
@@ -199,7 +212,8 @@ void register_GridFF_class(){
             GridFF_exposer.def( 
                 "setReactionFieldDielectric"
                 , setReactionFieldDielectric_function_value
-                , ( bp::arg("dielectric") ) );
+                , ( bp::arg("dielectric") )
+                , "Set the dielectric constant to use with the reaction field potential" );
         
         }
         { //::SireMM::GridFF::setShiftElectrostatics
@@ -210,7 +224,8 @@ void register_GridFF_class(){
             GridFF_exposer.def( 
                 "setShiftElectrostatics"
                 , setShiftElectrostatics_function_value
-                , ( bp::arg("on") ) );
+                , ( bp::arg("on") )
+                , "Turn on or off use of the force shifted potential" );
         
         }
         { //::SireMM::GridFF::setUseReactionField
@@ -221,7 +236,8 @@ void register_GridFF_class(){
             GridFF_exposer.def( 
                 "setUseReactionField"
                 , setUseReactionField_function_value
-                , ( bp::arg("on") ) );
+                , ( bp::arg("on") )
+                , "Turn on or off the use of the reaction field" );
         
         }
         { //::SireMM::GridFF::spacing
@@ -231,7 +247,8 @@ void register_GridFF_class(){
             
             GridFF_exposer.def( 
                 "spacing"
-                , spacing_function_value );
+                , spacing_function_value
+                , "Return the spacing between grid points" );
         
         }
         { //::SireMM::GridFF::typeName
@@ -241,7 +258,8 @@ void register_GridFF_class(){
             
             GridFF_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::GridFF::what
@@ -251,7 +269,8 @@ void register_GridFF_class(){
             
             GridFF_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         GridFF_exposer.staticmethod( "typeName" );

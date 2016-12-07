@@ -27,11 +27,11 @@ void register_BooleanProperty_class(){
 
     { //::SireBase::BooleanProperty
         typedef bp::class_< SireBase::BooleanProperty, bp::bases< SireBase::Property > > BooleanProperty_exposer_t;
-        BooleanProperty_exposer_t BooleanProperty_exposer = BooleanProperty_exposer_t( "BooleanProperty", bp::init< >() );
+        BooleanProperty_exposer_t BooleanProperty_exposer = BooleanProperty_exposer_t( "BooleanProperty", "This class provides a thin Property wrapper around bools\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor - this constructs the integer 0") );
         bp::scope BooleanProperty_scope( BooleanProperty_exposer );
-        BooleanProperty_exposer.def( bp::init< bool >(( bp::arg("value") )) );
-        BooleanProperty_exposer.def( bp::init< SireBase::VariantProperty const & >(( bp::arg("other") )) );
-        BooleanProperty_exposer.def( bp::init< SireBase::BooleanProperty const & >(( bp::arg("other") )) );
+        BooleanProperty_exposer.def( bp::init< bool >(( bp::arg("value") ), "Construct from the passed boolean") );
+        BooleanProperty_exposer.def( bp::init< SireBase::VariantProperty const & >(( bp::arg("other") ), "Construct from a VariantProperty") );
+        BooleanProperty_exposer.def( bp::init< SireBase::BooleanProperty const & >(( bp::arg("other") ), "Copy constructor") );
         BooleanProperty_exposer.def( bp::self != bp::self );
         { //::SireBase::BooleanProperty::operator=
         
@@ -42,7 +42,8 @@ void register_BooleanProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         BooleanProperty_exposer.def( bp::self == bp::self );
@@ -53,7 +54,8 @@ void register_BooleanProperty_class(){
             
             BooleanProperty_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireBase::BooleanProperty::typeName
@@ -63,7 +65,8 @@ void register_BooleanProperty_class(){
             
             BooleanProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireBase::BooleanProperty::value
@@ -73,7 +76,8 @@ void register_BooleanProperty_class(){
             
             BooleanProperty_exposer.def( 
                 "value"
-                , value_function_value );
+                , value_function_value
+                , "Return this number cast as a double" );
         
         }
         BooleanProperty_exposer.staticmethod( "typeName" );

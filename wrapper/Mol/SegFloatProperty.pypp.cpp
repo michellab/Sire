@@ -25,11 +25,11 @@ void register_SegFloatProperty_class(){
 
     { //::SireMol::SegProperty< double >
         typedef bp::class_< SireMol::SegProperty< double >, bp::bases< SireMol::SegProp, SireMol::MolViewProperty, SireBase::Property > > SegFloatProperty_exposer_t;
-        SegFloatProperty_exposer_t SegFloatProperty_exposer = SegFloatProperty_exposer_t( "SegFloatProperty", bp::init< >() );
+        SegFloatProperty_exposer_t SegFloatProperty_exposer = SegFloatProperty_exposer_t( "SegFloatProperty", "", bp::init< >("") );
         bp::scope SegFloatProperty_scope( SegFloatProperty_exposer );
-        SegFloatProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") )) );
-        SegFloatProperty_exposer.def( bp::init< QVector< double > const & >(( bp::arg("values") )) );
-        SegFloatProperty_exposer.def( bp::init< SireMol::SegProperty< double > const & >(( bp::arg("other") )) );
+        SegFloatProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "") );
+        SegFloatProperty_exposer.def( bp::init< QVector< double > const & >(( bp::arg("values") ), "") );
+        SegFloatProperty_exposer.def( bp::init< SireMol::SegProperty< double > const & >(( bp::arg("other") ), "") );
         { //::SireMol::SegProperty< double >::array
         
             typedef SireMol::SegProperty< double > exported_class_t;
@@ -39,7 +39,8 @@ void register_SegFloatProperty_class(){
             SegFloatProperty_exposer.def( 
                 "array"
                 , array_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::SegProperty< double >::assertCanConvert
@@ -51,7 +52,8 @@ void register_SegFloatProperty_class(){
             SegFloatProperty_exposer.def( 
                 "assertCanConvert"
                 , assertCanConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::SegProperty< double >::assignFrom
@@ -63,7 +65,8 @@ void register_SegFloatProperty_class(){
             SegFloatProperty_exposer.def( 
                 "assignFrom"
                 , assignFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::SegProperty< double >::at
@@ -76,7 +79,8 @@ void register_SegFloatProperty_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("segidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::SegProperty< double >::canConvert
@@ -88,7 +92,8 @@ void register_SegFloatProperty_class(){
             SegFloatProperty_exposer.def( 
                 "canConvert"
                 , canConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::SegProperty< double >::count
@@ -99,7 +104,8 @@ void register_SegFloatProperty_class(){
             
             SegFloatProperty_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMol::SegProperty< double >::fromVariant
@@ -111,7 +117,8 @@ void register_SegFloatProperty_class(){
             SegFloatProperty_exposer.def( 
                 "fromVariant"
                 , fromVariant_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::SegProperty< double >::get
@@ -124,7 +131,8 @@ void register_SegFloatProperty_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("segidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::SegProperty< double >::isCompatibleWith
@@ -136,7 +144,8 @@ void register_SegFloatProperty_class(){
             SegFloatProperty_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::SegProperty< double >::isEmpty
@@ -147,7 +156,8 @@ void register_SegFloatProperty_class(){
             
             SegFloatProperty_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMol::SegProperty< double >::nSegments
@@ -158,7 +168,8 @@ void register_SegFloatProperty_class(){
             
             SegFloatProperty_exposer.def( 
                 "nSegments"
-                , nSegments_function_value );
+                , nSegments_function_value
+                , "" );
         
         }
         SegFloatProperty_exposer.def( bp::self != bp::self );
@@ -172,7 +183,8 @@ void register_SegFloatProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         SegFloatProperty_exposer.def( bp::self == bp::self );
@@ -186,7 +198,8 @@ void register_SegFloatProperty_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("segidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::SegProperty< double >::set
@@ -199,7 +212,8 @@ void register_SegFloatProperty_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("segidx"), bp::arg("value") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::SegProperty< double >::size
@@ -210,7 +224,8 @@ void register_SegFloatProperty_class(){
             
             SegFloatProperty_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "" );
         
         }
         { //::SireMol::SegProperty< double >::toString
@@ -221,7 +236,8 @@ void register_SegFloatProperty_class(){
             
             SegFloatProperty_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::SegProperty< double >::toVariant
@@ -232,7 +248,8 @@ void register_SegFloatProperty_class(){
             
             SegFloatProperty_exposer.def( 
                 "toVariant"
-                , toVariant_function_value );
+                , toVariant_function_value
+                , "" );
         
         }
         { //::SireMol::SegProperty< double >::typeName
@@ -243,7 +260,8 @@ void register_SegFloatProperty_class(){
             
             SegFloatProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         SegFloatProperty_exposer.staticmethod( "fromVariant" );

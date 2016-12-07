@@ -31,10 +31,10 @@ void register_MGIdx_class(){
 
     { //::SireMol::MGIdx
         typedef bp::class_< SireMol::MGIdx, bp::bases< SireMol::MGID, SireID::ID, SireID::IndexBase > > MGIdx_exposer_t;
-        MGIdx_exposer_t MGIdx_exposer = MGIdx_exposer_t( "MGIdx", bp::init< >() );
+        MGIdx_exposer_t MGIdx_exposer = MGIdx_exposer_t( "MGIdx", "This is an ID object that is used to index molecule groups (e.g. index\nin a list or array, or in a MoleculeGroups set).\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope MGIdx_scope( MGIdx_exposer );
-        MGIdx_exposer.def( bp::init< qint32 >(( bp::arg("idx") )) );
-        MGIdx_exposer.def( bp::init< SireMol::MGIdx const & >(( bp::arg("other") )) );
+        MGIdx_exposer.def( bp::init< qint32 >(( bp::arg("idx") ), "") );
+        MGIdx_exposer.def( bp::init< SireMol::MGIdx const & >(( bp::arg("other") ), "") );
         { //::SireMol::MGIdx::hash
         
             typedef ::uint ( ::SireMol::MGIdx::*hash_function_type)(  ) const;
@@ -42,7 +42,8 @@ void register_MGIdx_class(){
             
             MGIdx_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::MGIdx::isNull
@@ -52,7 +53,8 @@ void register_MGIdx_class(){
             
             MGIdx_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::MGIdx::map
@@ -63,7 +65,8 @@ void register_MGIdx_class(){
             MGIdx_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molgroups") ) );
+                , ( bp::arg("molgroups") )
+                , "" );
         
         }
         { //::SireMol::MGIdx::null
@@ -73,7 +76,8 @@ void register_MGIdx_class(){
             
             MGIdx_exposer.def( 
                 "null"
-                , null_function_value );
+                , null_function_value
+                , "" );
         
         }
         { //::SireMol::MGIdx::operator=
@@ -85,7 +89,8 @@ void register_MGIdx_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::MGIdx::toString
@@ -95,7 +100,8 @@ void register_MGIdx_class(){
             
             MGIdx_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::MGIdx::typeName
@@ -105,7 +111,8 @@ void register_MGIdx_class(){
             
             MGIdx_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::MGIdx::what
@@ -115,7 +122,8 @@ void register_MGIdx_class(){
             
             MGIdx_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         MGIdx_exposer.staticmethod( "null" );

@@ -187,6 +187,18 @@ import Sire.Config
 
 __version__ = Sire.Config.__version__
 
+def _versionString():
+    """Return a nicely formatted string that describes the current Sire version"""
+    import Sire.Base
+
+    return """Sire %s [%s|%s, %s]""" % \
+              (Sire.Base.getReleaseVersion(), 
+               Sire.Base.getRepositoryBranch(),
+               Sire.Config.sire_repository_version[0:7],
+               ["unclean", "clean"][Sire.Base.getRepositoryVersionIsClean()])    
+
+Sire.Config.versionString = _versionString
+
 sent_usage_data = None
 
 def _getOSInfo():
@@ -217,12 +229,32 @@ def _uploadUsageData():
             # don't send data twice
             return
 
-        import os as _os
-    
-        if "SIRE_DONT_PHONEHOME" in _os.environ:
-           # respect user wish to not phone home
-           return
+        import time as _time
+        # wait a couple of seconds before uploading. This 
+        # stops annoying uploads when people print help
+        _time.sleep(2)
 
+        import os as _os
+
+        if "SIRE_DONT_PHONEHOME" in _os.environ:
+            # respect user wish to not phone home
+            if not "SIRE_SILENT_PHONEHOME" in _os.environ:
+                print("\n=======================================================")
+                print("Respecting your privacy - not sending usage statistics.")
+                print("Please see http://siremol.org/analytics for more information.")
+                print("=======================================================\n")
+                return
+        else:
+            if not "SIRE_SILENT_PHONEHOME" in _os.environ:
+                print("\n==============================================================")
+                print("Sending anonymous Sire usage statistics to http://siremol.org.")
+                print("For more information, see http://siremol.org/analytics")
+                print("To disable, set the environment variable 'SIRE_DONT_PHONEHOME' to 1")
+                print("To see the information sent, set the environment variable ")
+                print("SIRE_VERBOSE_PHONEHOME equal to 1. To silence this message, set")
+                print("the environment variable SIRE_SILENT_PHONEHOME to 1.")
+                print("==============================================================\n")
+    
         from Sire.Base import CPUID as _CPUID
 
         id = _CPUID()
@@ -244,6 +276,9 @@ def _uploadUsageData():
             data["OS"] = _pf.mac_ver()[0]
         elif _pf.system().startswith("Linux"):
             ld = _pf.linux_distribution()
+            data["OS"] = "%s (%s %s)" % (ld[0],ld[1],ld[2])
+        elif _pf.system().startswith("Windows"):
+            ld = _pf.win32_ver()
             data["OS"] = "%s (%s %s)" % (ld[0],ld[1],ld[2])
         else:
             data["OS"] = "unknown"
@@ -271,8 +306,13 @@ def _uploadUsageData():
         headers = {"Content-type": "application/x-www-form-urlencoded", 
                    "Accept": "text/plain"}
 
-        #print(_parse.urlencode({'data' : _json.dumps(data)}))
-        #print(headers)
+        if "SIRE_VERBOSE_PHONEHOME" in _os.environ:
+            print("Information sent to http://siremol.org is...")
+            keys = list(data.keys())
+            keys.sort()
+            for key in keys:
+                print(" -- %s == %s" % (key,data[key]))
+            print("\n")
 
         sent_usage_data = data
 

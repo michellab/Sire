@@ -46,7 +46,7 @@ void register_G1FF_class(){
 
     { //::SireFF::G1FF
         typedef bp::class_< SireFF::G1FF, bp::bases< SireFF::FF, SireMol::MolGroupsBase, SireBase::Property >, boost::noncopyable > G1FF_exposer_t;
-        G1FF_exposer_t G1FF_exposer = G1FF_exposer_t( "G1FF", bp::no_init );
+        G1FF_exposer_t G1FF_exposer = G1FF_exposer_t( "G1FF", "This is the base class of all forcefields that hold just\na single group of molecules\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope G1FF_scope( G1FF_exposer );
         { //::SireFF::G1FF::accept
         
@@ -55,7 +55,8 @@ void register_G1FF_class(){
             
             G1FF_exposer.def( 
                 "accept"
-                , accept_function_value );
+                , accept_function_value
+                , "Tell the forcefield that the last move was accepted. This tells the\nforcefield to make permanent any temporary changes that were used a workspace\nto avoid memory allocation during a move" );
         
         }
         { //::SireFF::G1FF::add
@@ -66,7 +67,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molview"), bp::arg("map") ) );
+                , ( bp::arg("molview"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireFF::G1FF::add
@@ -77,7 +79,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molviews"), bp::arg("map") ) );
+                , ( bp::arg("molviews"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireFF::G1FF::add
@@ -88,7 +91,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molecules"), bp::arg("map") ) );
+                , ( bp::arg("molecules"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireFF::G1FF::add
@@ -99,7 +103,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molgroup"), bp::arg("map") ) );
+                , ( bp::arg("molgroup"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireFF::G1FF::add
@@ -110,7 +115,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "" );
         
         }
         { //::SireFF::G1FF::add
@@ -121,7 +127,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molviews") ) );
+                , ( bp::arg("molviews") )
+                , "" );
         
         }
         { //::SireFF::G1FF::add
@@ -132,7 +139,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "" );
         
         }
         { //::SireFF::G1FF::add
@@ -143,7 +151,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "" );
         
         }
         { //::SireFF::G1FF::addIfUnique
@@ -154,7 +163,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molview"), bp::arg("map") ) );
+                , ( bp::arg("molview"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireFF::G1FF::addIfUnique
@@ -165,7 +175,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molviews"), bp::arg("map") ) );
+                , ( bp::arg("molviews"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireFF::G1FF::addIfUnique
@@ -176,7 +187,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molecules"), bp::arg("map") ) );
+                , ( bp::arg("molecules"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireFF::G1FF::addIfUnique
@@ -187,7 +199,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molgroup"), bp::arg("map") ) );
+                , ( bp::arg("molgroup"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireFF::G1FF::addIfUnique
@@ -198,7 +211,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "" );
         
         }
         { //::SireFF::G1FF::addIfUnique
@@ -209,7 +223,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molviews") ) );
+                , ( bp::arg("molviews") )
+                , "" );
         
         }
         { //::SireFF::G1FF::addIfUnique
@@ -220,7 +235,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "" );
         
         }
         { //::SireFF::G1FF::addIfUnique
@@ -231,7 +247,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "" );
         
         }
         { //::SireFF::G1FF::assertContains
@@ -242,7 +259,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "assertContains"
                 , assertContains_function_value
-                , ( bp::arg("mgnum") ) );
+                , ( bp::arg("mgnum") )
+                , "Assert that this forcefield contains the group with number mgnum\nThrow: SireMol::missing_group\n" );
         
         }
         { //::SireFF::G1FF::at
@@ -254,7 +272,8 @@ void register_G1FF_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("mgnum") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the molecule group with number mgnum\nThrow: SireMol::missing_group\n" );
         
         }
         { //::SireFF::G1FF::needsAccepting
@@ -264,7 +283,8 @@ void register_G1FF_class(){
             
             G1FF_exposer.def( 
                 "needsAccepting"
-                , needsAccepting_function_value );
+                , needsAccepting_function_value
+                , "Return whether or not this forcefield is using temporary workspace that needs\nto be accepted" );
         
         }
         { //::SireFF::G1FF::remove
@@ -275,7 +295,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "" );
         
         }
         { //::SireFF::G1FF::remove
@@ -286,7 +307,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molviews") ) );
+                , ( bp::arg("molviews") )
+                , "" );
         
         }
         { //::SireFF::G1FF::remove
@@ -297,7 +319,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "" );
         
         }
         { //::SireFF::G1FF::remove
@@ -308,7 +331,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "" );
         
         }
         { //::SireFF::G1FF::remove
@@ -319,7 +343,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "" );
         
         }
         { //::SireFF::G1FF::remove
@@ -330,7 +355,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molnums") ) );
+                , ( bp::arg("molnums") )
+                , "" );
         
         }
         { //::SireFF::G1FF::removeAll
@@ -340,7 +366,8 @@ void register_G1FF_class(){
             
             G1FF_exposer.def( 
                 "removeAll"
-                , removeAll_function_value );
+                , removeAll_function_value
+                , "" );
         
         }
         { //::SireFF::G1FF::removeAll
@@ -351,7 +378,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "" );
         
         }
         { //::SireFF::G1FF::removeAll
@@ -362,7 +390,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
-                , ( bp::arg("molviews") ) );
+                , ( bp::arg("molviews") )
+                , "" );
         
         }
         { //::SireFF::G1FF::removeAll
@@ -373,7 +402,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "" );
         
         }
         { //::SireFF::G1FF::removeAll
@@ -384,7 +414,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "" );
         
         }
         { //::SireFF::G1FF::setContents
@@ -395,7 +426,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "" );
         
         }
         { //::SireFF::G1FF::setContents
@@ -406,7 +438,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("molview") ) );
+                , ( bp::arg("molview") )
+                , "" );
         
         }
         { //::SireFF::G1FF::setContents
@@ -417,7 +450,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "" );
         
         }
         { //::SireFF::G1FF::setContents
@@ -428,7 +462,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "" );
         
         }
         { //::SireFF::G1FF::setContents
@@ -439,7 +474,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("molview"), bp::arg("map") ) );
+                , ( bp::arg("molview"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireFF::G1FF::setContents
@@ -450,7 +486,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("molviews"), bp::arg("map") ) );
+                , ( bp::arg("molviews"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireFF::G1FF::setContents
@@ -461,7 +498,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("molecules"), bp::arg("map") ) );
+                , ( bp::arg("molecules"), bp::arg("map") )
+                , "" );
         
         }
         { //::SireFF::G1FF::setContents
@@ -472,7 +510,8 @@ void register_G1FF_class(){
             G1FF_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("molgroup"), bp::arg("map") ) );
+                , ( bp::arg("molgroup"), bp::arg("map") )
+                , "" );
         
         }
         G1FF_exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireFF::G1FF >,

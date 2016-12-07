@@ -40,13 +40,13 @@ void register_MolAtomID_class(){
 
     { //::SireMol::MolAtomID
         typedef bp::class_< SireMol::MolAtomID, bp::bases< SireMol::AtomID, SireID::ID > > MolAtomID_exposer_t;
-        MolAtomID_exposer_t MolAtomID_exposer = MolAtomID_exposer_t( "MolAtomID", bp::init< >() );
+        MolAtomID_exposer_t MolAtomID_exposer = MolAtomID_exposer_t( "MolAtomID", "This class represents an ID that is used to identify\na specific atom (or atoms) in a specific molecule\n(of molecules)\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a MolAtomID that matches everything") );
         bp::scope MolAtomID_scope( MolAtomID_exposer );
-        MolAtomID_exposer.def( bp::init< SireMol::MolID const &, SireMol::AtomID const & >(( bp::arg("molid"), bp::arg("atomid") )) );
-        MolAtomID_exposer.def( bp::init< SireMol::AtomID const &, SireMol::MolID const & >(( bp::arg("atomid"), bp::arg("molid") )) );
-        MolAtomID_exposer.def( bp::init< boost::tuples::tuple< SireMol::MolIdentifier, SireMol::AtomIdentifier, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > const & >(( bp::arg("molatomid") )) );
-        MolAtomID_exposer.def( bp::init< boost::tuples::tuple< SireMol::AtomIdentifier, SireMol::MolIdentifier, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > const & >(( bp::arg("molatomid") )) );
-        MolAtomID_exposer.def( bp::init< SireMol::MolAtomID const & >(( bp::arg("other") )) );
+        MolAtomID_exposer.def( bp::init< SireMol::MolID const &, SireMol::AtomID const & >(( bp::arg("molid"), bp::arg("atomid") ), "Construct a MolAtomID that matches the atoms identified by atomid\nin the molecules identified by molid") );
+        MolAtomID_exposer.def( bp::init< SireMol::AtomID const &, SireMol::MolID const & >(( bp::arg("atomid"), bp::arg("molid") ), "Construct a MolAtomID that matches the atoms identified by atomid\nin the molecules identified by molid") );
+        MolAtomID_exposer.def( bp::init< boost::tuples::tuple< SireMol::MolIdentifier, SireMol::AtomIdentifier, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > const & >(( bp::arg("molatomid") ), "Construct a MolAtomID that matches the specified atoms in the specified\nmolecules") );
+        MolAtomID_exposer.def( bp::init< boost::tuples::tuple< SireMol::AtomIdentifier, SireMol::MolIdentifier, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > const & >(( bp::arg("molatomid") ), "Construct a MolAtomID that matches the specified atoms in the specified\nmolecules") );
+        MolAtomID_exposer.def( bp::init< SireMol::MolAtomID const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::MolAtomID::atomID
         
             typedef ::SireMol::AtomID const & ( ::SireMol::MolAtomID::*atomID_function_type)(  ) const;
@@ -55,7 +55,8 @@ void register_MolAtomID_class(){
             MolAtomID_exposer.def( 
                 "atomID"
                 , atomID_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the AtomID part of this match" );
         
         }
         { //::SireMol::MolAtomID::hash
@@ -65,7 +66,8 @@ void register_MolAtomID_class(){
             
             MolAtomID_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Return a hash of this ID" );
         
         }
         { //::SireMol::MolAtomID::isNull
@@ -75,7 +77,8 @@ void register_MolAtomID_class(){
             
             MolAtomID_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "Return whether or not this is null" );
         
         }
         { //::SireMol::MolAtomID::map
@@ -86,7 +89,8 @@ void register_MolAtomID_class(){
             MolAtomID_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "Map this ID to the indicies of the matching atoms\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::MolAtomID::molID
@@ -97,7 +101,8 @@ void register_MolAtomID_class(){
             MolAtomID_exposer.def( 
                 "molID"
                 , molID_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the MolID part of this match" );
         
         }
         MolAtomID_exposer.def( bp::self != bp::self );
@@ -110,7 +115,8 @@ void register_MolAtomID_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MolAtomID_exposer.def( bp::self == bp::other< SireID::ID >() );
@@ -123,7 +129,8 @@ void register_MolAtomID_class(){
             MolAtomID_exposer.def( 
                 "selectAllFrom"
                 , selectAllFrom_function_value
-                , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::MolAtomID::selectAllFrom
@@ -134,7 +141,8 @@ void register_MolAtomID_class(){
             MolAtomID_exposer.def( 
                 "selectAllFrom"
                 , selectAllFrom_function_value
-                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::MolAtomID::selectAllFrom
@@ -145,7 +153,8 @@ void register_MolAtomID_class(){
             MolAtomID_exposer.def( 
                 "selectAllFrom"
                 , selectAllFrom_function_value
-                , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMol::MolAtomID::toString
@@ -155,7 +164,8 @@ void register_MolAtomID_class(){
             
             MolAtomID_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this ID" );
         
         }
         { //::SireMol::MolAtomID::typeName
@@ -165,7 +175,8 @@ void register_MolAtomID_class(){
             
             MolAtomID_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::MolAtomID::what
@@ -175,7 +186,8 @@ void register_MolAtomID_class(){
             
             MolAtomID_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         MolAtomID_exposer.staticmethod( "typeName" );

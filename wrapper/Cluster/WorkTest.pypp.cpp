@@ -31,10 +31,10 @@ void register_WorkTest_class(){
 
     { //::SireCluster::WorkTest
         typedef bp::class_< SireCluster::WorkTest, bp::bases< SireCluster::WorkPacketBase > > WorkTest_exposer_t;
-        WorkTest_exposer_t WorkTest_exposer = WorkTest_exposer_t( "WorkTest", bp::init< >() );
+        WorkTest_exposer_t WorkTest_exposer = WorkTest_exposer_t( "WorkTest", "This is a small test packet that can be used to test\nthat everything is working", bp::init< >("Constructor") );
         bp::scope WorkTest_scope( WorkTest_exposer );
-        WorkTest_exposer.def( bp::init< int, int, bp::optional< int > >(( bp::arg("start"), bp::arg("end"), bp::arg("step")=(int)(1) )) );
-        WorkTest_exposer.def( bp::init< SireCluster::WorkTest const & >(( bp::arg("other") )) );
+        WorkTest_exposer.def( bp::init< int, int, bp::optional< int > >(( bp::arg("start"), bp::arg("end"), bp::arg("step")=(int)(1) ), "Construct a work test that counts from start to end in steps of step") );
+        WorkTest_exposer.def( bp::init< SireCluster::WorkTest const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCluster::WorkTest::approximatePacketSize
         
             typedef int ( ::SireCluster::WorkTest::*approximatePacketSize_function_type)(  ) const;
@@ -42,7 +42,8 @@ void register_WorkTest_class(){
             
             WorkTest_exposer.def( 
                 "approximatePacketSize"
-                , approximatePacketSize_function_value );
+                , approximatePacketSize_function_value
+                , "Return the approximate maximum size (in bytes) of the WorkPacket. This\ndoesnt have to exact (or indeed accurate) - it is used\nto help the WorkPacket::pack() function reserve enough\nspace when serialising this packet to a binary array.\nThe only penalty of getting this wrong is that youll\neither allocate too much space, or be reallocating while\nthe packet is being written" );
         
         }
         { //::SireCluster::WorkTest::hasFinished
@@ -52,7 +53,8 @@ void register_WorkTest_class(){
             
             WorkTest_exposer.def( 
                 "hasFinished"
-                , hasFinished_function_value );
+                , hasFinished_function_value
+                , "Return whether or not the work has finished" );
         
         }
         { //::SireCluster::WorkTest::operator=
@@ -64,7 +66,8 @@ void register_WorkTest_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireCluster::WorkTest::typeName
@@ -74,7 +77,8 @@ void register_WorkTest_class(){
             
             WorkTest_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCluster::WorkTest::what
@@ -84,7 +88,8 @@ void register_WorkTest_class(){
             
             WorkTest_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         WorkTest_exposer.staticmethod( "typeName" );

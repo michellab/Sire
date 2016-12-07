@@ -63,10 +63,10 @@ void register_SegIdx_class(){
 
     { //::SireMol::SegIdx
         typedef bp::class_< SireMol::SegIdx, bp::bases< SireMol::SegID, SireID::ID, SireID::IndexBase > > SegIdx_exposer_t;
-        SegIdx_exposer_t SegIdx_exposer = SegIdx_exposer_t( "SegIdx", bp::init< >() );
+        SegIdx_exposer_t SegIdx_exposer = SegIdx_exposer_t( "SegIdx", "This is an ID object that is used to index CutGroups\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope SegIdx_scope( SegIdx_exposer );
-        SegIdx_exposer.def( bp::init< quint32 >(( bp::arg("idx") )) );
-        SegIdx_exposer.def( bp::init< SireMol::SegIdx const & >(( bp::arg("other") )) );
+        SegIdx_exposer.def( bp::init< quint32 >(( bp::arg("idx") ), "") );
+        SegIdx_exposer.def( bp::init< SireMol::SegIdx const & >(( bp::arg("other") ), "") );
         { //::SireMol::SegIdx::hash
         
             typedef ::uint ( ::SireMol::SegIdx::*hash_function_type)(  ) const;
@@ -74,7 +74,8 @@ void register_SegIdx_class(){
             
             SegIdx_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::SegIdx::isNull
@@ -84,7 +85,8 @@ void register_SegIdx_class(){
             
             SegIdx_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::SegIdx::map
@@ -95,7 +97,8 @@ void register_SegIdx_class(){
             SegIdx_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::SegIdx::null
@@ -105,7 +108,8 @@ void register_SegIdx_class(){
             
             SegIdx_exposer.def( 
                 "null"
-                , null_function_value );
+                , null_function_value
+                , "" );
         
         }
         { //::SireMol::SegIdx::operator=
@@ -117,7 +121,8 @@ void register_SegIdx_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::SegIdx::toString
@@ -127,7 +132,8 @@ void register_SegIdx_class(){
             
             SegIdx_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::SegIdx::typeName
@@ -137,7 +143,8 @@ void register_SegIdx_class(){
             
             SegIdx_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::SegIdx::what
@@ -147,7 +154,8 @@ void register_SegIdx_class(){
             
             SegIdx_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         SegIdx_exposer.staticmethod( "null" );

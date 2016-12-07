@@ -55,7 +55,7 @@ void register_CGID_class(){
 
     { //::SireMol::CGID
         typedef bp::class_< SireMol::CGID, bp::bases< SireID::ID >, boost::noncopyable > CGID_exposer_t;
-        CGID_exposer_t CGID_exposer = CGID_exposer_t( "CGID", bp::no_init );
+        CGID_exposer_t CGID_exposer = CGID_exposer_t( "CGID", "This is the base class of all identifiers that are used\nto identify a CutGroup\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope CGID_scope( CGID_exposer );
         { //::SireMol::CGID::atom
         
@@ -65,7 +65,8 @@ void register_CGID_class(){
             CGID_exposer.def( 
                 "atom"
                 , atom_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return a specific atom in the matching residues" );
         
         }
         { //::SireMol::CGID::atoms
@@ -75,7 +76,8 @@ void register_CGID_class(){
             
             CGID_exposer.def( 
                 "atoms"
-                , atoms_function_value );
+                , atoms_function_value
+                , "Return the atoms in the matching residues" );
         
         }
         { //::SireMol::CGID::atoms
@@ -86,7 +88,8 @@ void register_CGID_class(){
             CGID_exposer.def( 
                 "atoms"
                 , atoms_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "Return a range of atoms in the matching residues" );
         
         }
         { //::SireMol::CGID::map
@@ -97,7 +100,8 @@ void register_CGID_class(){
             CGID_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "Map this ID back to the indicies of the CutGroups\nwithin the molecule described by the info in molinfo" );
         
         }
         { //::SireMol::CGID::map
@@ -108,7 +112,8 @@ void register_CGID_class(){
             CGID_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Map this CGICutGroupD to the CutGroups in the passed molecule view\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\n" );
         
         }
         CGID_exposer.def( bp::self & bp::self );
@@ -124,7 +129,8 @@ void register_CGID_class(){
             CGID_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::CGID::operator()
@@ -135,7 +141,8 @@ void register_CGID_class(){
             CGID_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         CGID_exposer.def( bp::self * bp::self );
@@ -152,7 +159,8 @@ void register_CGID_class(){
             CGID_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         CGID_exposer.def( bp::self | bp::self );
@@ -164,7 +172,8 @@ void register_CGID_class(){
             CGID_exposer.def( 
                 "selectAllFrom"
                 , selectAllFrom_function_value
-                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Select all the CutGroups from the passed view that match this ID\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_cutgroup\n" );
         
         }
         { //::SireMol::CGID::selectAllFrom
@@ -175,7 +184,8 @@ void register_CGID_class(){
             CGID_exposer.def( 
                 "selectAllFrom"
                 , selectAllFrom_function_value
-                , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return all of the CutGroups from the molecules that match\nthis ID\nThrow: SireMol::missing_cutgroup\n" );
         
         }
         { //::SireMol::CGID::selectAllFrom
@@ -186,7 +196,8 @@ void register_CGID_class(){
             CGID_exposer.def( 
                 "selectAllFrom"
                 , selectAllFrom_function_value
-                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the atoms from the molecule group molgroup that match\nthis ID\nThrow: SireMol::missing_cutgroup\n" );
         
         }
         { //::SireMol::CGID::selectAllFrom
@@ -197,7 +208,8 @@ void register_CGID_class(){
             CGID_exposer.def( 
                 "selectAllFrom"
                 , selectAllFrom_function_value
-                , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the set of atoms that match this ID in the molecule groups\nset molgroups\nThrow: SireMol::missing_cutgroup\n" );
         
         }
         { //::SireMol::CGID::selectFrom
@@ -208,7 +220,8 @@ void register_CGID_class(){
             CGID_exposer.def( 
                 "selectFrom"
                 , selectFrom_function_value
-                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Select the CutGroup from the passed view that matches this ID\nThrow: SireMol::missing_cutgroup\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_cutgroup\n" );
         
         }
         { //::SireMol::CGID::selectFrom
@@ -219,7 +232,8 @@ void register_CGID_class(){
             CGID_exposer.def( 
                 "selectFrom"
                 , selectFrom_function_value
-                , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the atom from the molecules molecules that matches\nthis ID\nThrow: SireMol::missing_cutgroup\nThrow: SireMol::duplicate_cutgroup\n" );
         
         }
         { //::SireMol::CGID::selectFrom
@@ -230,7 +244,8 @@ void register_CGID_class(){
             CGID_exposer.def( 
                 "selectFrom"
                 , selectFrom_function_value
-                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the atom from the molecule group molgroup that matches\nthis ID\nThrow: SireMol::missing_cutgroup\nThrow: SireMol::duplicate_cutgroup\n" );
         
         }
         { //::SireMol::CGID::selectFrom
@@ -241,7 +256,8 @@ void register_CGID_class(){
             CGID_exposer.def( 
                 "selectFrom"
                 , selectFrom_function_value
-                , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the atom from the molecule groups molgroups that matches\nthis ID\nThrow: SireMol::missing_cutgroup\nThrow: SireMol::duplicate_cutgroup\n" );
         
         }
         { //::SireMol::CGID::typeName
@@ -251,7 +267,8 @@ void register_CGID_class(){
             
             CGID_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         CGID_exposer.staticmethod( "typeName" );

@@ -39,7 +39,7 @@ void register_Integrator_class(){
 
     { //::SireMove::Integrator
         typedef bp::class_< SireMove::Integrator, bp::bases< SireBase::Property >, boost::noncopyable > Integrator_exposer_t;
-        Integrator_exposer_t Integrator_exposer = Integrator_exposer_t( "Integrator", bp::no_init );
+        Integrator_exposer_t Integrator_exposer = Integrator_exposer_t( "Integrator", "This is the virtual base class of all dynamics integrators. An integrator\nis the kernel used to advance the coordinates of the system from one\ntimestep to the next\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope Integrator_scope( Integrator_exposer );
         { //::SireMove::Integrator::createWorkspace
         
@@ -49,7 +49,8 @@ void register_Integrator_class(){
             Integrator_exposer.def( 
                 "createWorkspace"
                 , createWorkspace_function_value
-                , ( bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMove::Integrator::createWorkspace
@@ -60,7 +61,8 @@ void register_Integrator_class(){
             Integrator_exposer.def( 
                 "createWorkspace"
                 , createWorkspace_function_value
-                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMove::Integrator::ensemble
@@ -70,7 +72,8 @@ void register_Integrator_class(){
             
             Integrator_exposer.def( 
                 "ensemble"
-                , ensemble_function_value );
+                , ensemble_function_value
+                , "" );
         
         }
         { //::SireMove::Integrator::integrate
@@ -81,7 +84,8 @@ void register_Integrator_class(){
             Integrator_exposer.def( 
                 "integrate"
                 , integrate_function_value
-                , ( bp::arg("workspace"), bp::arg("nrg_component"), bp::arg("timestep"), bp::arg("nmoves"), bp::arg("record_stats") ) );
+                , ( bp::arg("workspace"), bp::arg("nrg_component"), bp::arg("timestep"), bp::arg("nmoves"), bp::arg("record_stats") )
+                , "" );
         
         }
         { //::SireMove::Integrator::isTimeReversible
@@ -91,7 +95,8 @@ void register_Integrator_class(){
             
             Integrator_exposer.def( 
                 "isTimeReversible"
-                , isTimeReversible_function_value );
+                , isTimeReversible_function_value
+                , "" );
         
         }
         { //::SireMove::Integrator::null
@@ -102,7 +107,8 @@ void register_Integrator_class(){
             Integrator_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return a NullIntegrator" );
         
         }
         { //::SireMove::Integrator::toString
@@ -112,7 +118,8 @@ void register_Integrator_class(){
             
             Integrator_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMove::Integrator::typeName
@@ -122,7 +129,8 @@ void register_Integrator_class(){
             
             Integrator_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         Integrator_exposer.staticmethod( "null" );

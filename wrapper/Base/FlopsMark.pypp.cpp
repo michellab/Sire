@@ -25,9 +25,9 @@ void register_FlopsMark_class(){
 
     { //::SireBase::FlopsMark
         typedef bp::class_< SireBase::FlopsMark > FlopsMark_exposer_t;
-        FlopsMark_exposer_t FlopsMark_exposer = FlopsMark_exposer_t( "FlopsMark", bp::init< >() );
+        FlopsMark_exposer_t FlopsMark_exposer = FlopsMark_exposer_t( "FlopsMark", "This class contains a marker that may be\nused to get the flops per second\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor - this creates a mark for NOW") );
         bp::scope FlopsMark_scope( FlopsMark_exposer );
-        FlopsMark_exposer.def( bp::init< SireBase::FlopsMark const & >(( bp::arg("other") )) );
+        FlopsMark_exposer.def( bp::init< SireBase::FlopsMark const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireBase::FlopsMark::benchmark
         
             typedef double ( *benchmark_function_type )(  );
@@ -35,7 +35,8 @@ void register_FlopsMark_class(){
             
             FlopsMark_exposer.def( 
                 "benchmark"
-                , benchmark_function_value );
+                , benchmark_function_value
+                , "Perform a simple benchmark to work out what the realistic maximum\nFLOPS count for this processor (compiled with this compiler)\nif a mixture of additions, products and sqrts are used" );
         
         }
         { //::SireBase::FlopsMark::benchmarkProduct
@@ -45,7 +46,8 @@ void register_FlopsMark_class(){
             
             FlopsMark_exposer.def( 
                 "benchmarkProduct"
-                , benchmarkProduct_function_value );
+                , benchmarkProduct_function_value
+                , "Perform a simple benchmark to work out what the realistic maximum\nFLOPS count for this processor (compiled with this compiler)\nif a mixture of additions and products are used" );
         
         }
         { //::SireBase::FlopsMark::benchmarkQuotient
@@ -55,7 +57,8 @@ void register_FlopsMark_class(){
             
             FlopsMark_exposer.def( 
                 "benchmarkQuotient"
-                , benchmarkQuotient_function_value );
+                , benchmarkQuotient_function_value
+                , "Perform a simple benchmark to work out what the realistic maximum\nFLOPS count for this processor (compiled with this compiler)\nif a mixture of additions and divides are used" );
         
         }
         { //::SireBase::FlopsMark::benchmarkSum
@@ -65,7 +68,8 @@ void register_FlopsMark_class(){
             
             FlopsMark_exposer.def( 
                 "benchmarkSum"
-                , benchmarkSum_function_value );
+                , benchmarkSum_function_value
+                , "Perform a simple benchmark to work out what the realistic maximum\nFLOPS count for this processor (compiled with this compiler)\nif only additions are used" );
         
         }
         { //::SireBase::FlopsMark::nFlops
@@ -75,7 +79,8 @@ void register_FlopsMark_class(){
             
             FlopsMark_exposer.def( 
                 "nFlops"
-                , nFlops_function_value );
+                , nFlops_function_value
+                , "Return the total number of flops from all threads up to this point" );
         
         }
         { //::SireBase::FlopsMark::nThreads
@@ -85,7 +90,8 @@ void register_FlopsMark_class(){
             
             FlopsMark_exposer.def( 
                 "nThreads"
-                , nThreads_function_value );
+                , nThreads_function_value
+                , "Return the total number of threads that contributed to this\nflop count" );
         
         }
         FlopsMark_exposer.def( bp::self - bp::self );
@@ -98,7 +104,8 @@ void register_FlopsMark_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireBase::FlopsMark::operator[]
@@ -109,7 +116,8 @@ void register_FlopsMark_class(){
             FlopsMark_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireBase::FlopsMark::threadFlops
@@ -120,7 +128,8 @@ void register_FlopsMark_class(){
             FlopsMark_exposer.def( 
                 "threadFlops"
                 , threadFlops_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return a FlopsMark object that contains just the information\nfor the ith thread\nThrow: SireError::invalid_index\n" );
         
         }
         FlopsMark_exposer.staticmethod( "benchmark" );

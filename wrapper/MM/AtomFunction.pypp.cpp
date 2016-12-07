@@ -27,7 +27,7 @@ void register_AtomFunction_class(){
 
     { //::SireMM::AtomFunction
         typedef bp::class_< SireMM::AtomFunction, boost::noncopyable > AtomFunction_exposer_t;
-        AtomFunction_exposer_t AtomFunction_exposer = AtomFunction_exposer_t( "AtomFunction", bp::no_init );
+        AtomFunction_exposer_t AtomFunction_exposer = AtomFunction_exposer_t( "AtomFunction", "This is the base class of all objects that hold the raw data\nfor an AtomFunction (a function that acts between\na set number of atoms)\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope AtomFunction_scope( AtomFunction_exposer );
         { //::SireMM::AtomFunction::function
         
@@ -37,7 +37,8 @@ void register_AtomFunction_class(){
             AtomFunction_exposer.def( 
                 "function"
                 , function_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         AtomFunction_exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireMM::AtomFunction >,

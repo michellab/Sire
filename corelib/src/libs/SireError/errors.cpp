@@ -189,6 +189,35 @@ QString SIREERROR_EXPORT processError(const QString &executable,
     QString err = QObject::tr("There was an error while running the program \"%1\". ")
                           .arg(executable);
 
+    #ifdef Q_OS_WIN
+    switch (process.error())
+    {
+        case QProcess::FailedToStart:
+            return err + QObject::tr("The process failed to start.");
+
+        case QProcess::Crashed:
+            return err + QObject::tr("The process crashed! (exit code %1)")
+                                    .arg(process.exitCode());
+        case QProcess::Timedout:
+            return err + QObject::tr("The last operation timed out (something went wrong?). "
+                                     "Exit status == %1, Exit code == %2")
+                                        .arg(exitStatusString(process.exitStatus()))
+                                        .arg(process.exitCode());
+
+        case QProcess::WriteError:
+            return err + QObject::tr("There was a write error!");
+
+        case QProcess::ReadError:
+            return err + QObject::tr("There was a read error!");
+
+        case QProcess::UnknownError:
+        default:
+            return err + QObject::tr("There was an unknown error! ."
+                                     "Exit status == %2, Exit code == %3")
+                                        .arg(exitStatusString(process.exitStatus()))
+                                        .arg(process.exitCode());
+    }
+    #else
     switch (process.error())
     {
         case QProcess::FailedToStart:
@@ -218,6 +247,7 @@ QString SIREERROR_EXPORT processError(const QString &executable,
                                         .arg(exitStatusString(process.exitStatus()))
                                         .arg(process.exitCode());
     }
+    #endif
 }
 
 const char* program_bug::typeName()

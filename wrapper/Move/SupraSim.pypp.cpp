@@ -25,9 +25,9 @@ void register_SupraSim_class(){
 
     { //::SireMove::SupraSim
         typedef bp::class_< SireMove::SupraSim > SupraSim_exposer_t;
-        SupraSim_exposer_t SupraSim_exposer = SupraSim_exposer_t( "SupraSim", bp::init< >() );
+        SupraSim_exposer_t SupraSim_exposer = SupraSim_exposer_t( "SupraSim", "This class is used to start and manage an active\nsupra-simulation (a simulation of a SupraSystem).\n\nA supra-simulation consists of a collection of\nsupra-moves that are applied to a supra-system.\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope SupraSim_scope( SupraSim_exposer );
-        SupraSim_exposer.def( bp::init< SireMove::SupraSim const & >(( bp::arg("other") )) );
+        SupraSim_exposer.def( bp::init< SireMove::SupraSim const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::SupraSim::abort
         
             typedef void ( ::SireMove::SupraSim::*abort_function_type)(  ) ;
@@ -35,7 +35,8 @@ void register_SupraSim_class(){
             
             SupraSim_exposer.def( 
                 "abort"
-                , abort_function_value );
+                , abort_function_value
+                , "Abort the simulation" );
         
         }
         { //::SireMove::SupraSim::hasFinished
@@ -45,7 +46,8 @@ void register_SupraSim_class(){
             
             SupraSim_exposer.def( 
                 "hasFinished"
-                , hasFinished_function_value );
+                , hasFinished_function_value
+                , "Return whether or not the simulation has finished\n(completed all of the moves)" );
         
         }
         { //::SireMove::SupraSim::initialMoves
@@ -55,7 +57,8 @@ void register_SupraSim_class(){
             
             SupraSim_exposer.def( 
                 "initialMoves"
-                , initialMoves_function_value );
+                , initialMoves_function_value
+                , "Return the Moves in the state they were in before the simulation started" );
         
         }
         { //::SireMove::SupraSim::initialSystem
@@ -65,7 +68,8 @@ void register_SupraSim_class(){
             
             SupraSim_exposer.def( 
                 "initialSystem"
-                , initialSystem_function_value );
+                , initialSystem_function_value
+                , "Return the System in the state it was in before the simulation started" );
         
         }
         { //::SireMove::SupraSim::input
@@ -75,7 +79,8 @@ void register_SupraSim_class(){
             
             SupraSim_exposer.def( 
                 "input"
-                , input_function_value );
+                , input_function_value
+                , "Return the initial input simulation WorkPacket" );
         
         }
         { //::SireMove::SupraSim::interimMoves
@@ -85,7 +90,8 @@ void register_SupraSim_class(){
             
             SupraSim_exposer.def( 
                 "interimMoves"
-                , interimMoves_function_value );
+                , interimMoves_function_value
+                , "Return the current state of the moves (updated while the simulation\nis running). This will throw an exception if the system hits an\nerror state" );
         
         }
         { //::SireMove::SupraSim::interimResult
@@ -95,7 +101,8 @@ void register_SupraSim_class(){
             
             SupraSim_exposer.def( 
                 "interimResult"
-                , interimResult_function_value );
+                , interimResult_function_value
+                , "Return the simulation WorkPacket from an intermediate point along\nthe simulation. This will throw an error if the simulation is in an\nerror state, and the initial packet if the simulation\nwas aborted" );
         
         }
         { //::SireMove::SupraSim::interimSystem
@@ -105,7 +112,8 @@ void register_SupraSim_class(){
             
             SupraSim_exposer.def( 
                 "interimSystem"
-                , interimSystem_function_value );
+                , interimSystem_function_value
+                , "Return the current state of the System (updated while the simulation\nis running). This will throw an exception if the system hits an\nerror state" );
         
         }
         { //::SireMove::SupraSim::isError
@@ -115,7 +123,8 @@ void register_SupraSim_class(){
             
             SupraSim_exposer.def( 
                 "isError"
-                , isError_function_value );
+                , isError_function_value
+                , "Return whether or not this simulation is in an error state" );
         
         }
         { //::SireMove::SupraSim::isRunning
@@ -125,7 +134,8 @@ void register_SupraSim_class(){
             
             SupraSim_exposer.def( 
                 "isRunning"
-                , isRunning_function_value );
+                , isRunning_function_value
+                , "Return whether or not this simulation is running" );
         
         }
         { //::SireMove::SupraSim::moves
@@ -135,7 +145,8 @@ void register_SupraSim_class(){
             
             SupraSim_exposer.def( 
                 "moves"
-                , moves_function_value );
+                , moves_function_value
+                , "Return the final state of the moves after the simulation. This\nblocks until the simulation has finished and will throw an\nexception if the system hits an error state" );
         
         }
         SupraSim_exposer.def( bp::self != bp::self );
@@ -148,7 +159,8 @@ void register_SupraSim_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         SupraSim_exposer.def( bp::self == bp::self );
@@ -159,7 +171,8 @@ void register_SupraSim_class(){
             
             SupraSim_exposer.def( 
                 "progress"
-                , progress_function_value );
+                , progress_function_value
+                , "Return the progress of the simulation (as a percentage)" );
         
         }
         { //::SireMove::SupraSim::result
@@ -169,7 +182,8 @@ void register_SupraSim_class(){
             
             SupraSim_exposer.def( 
                 "result"
-                , result_function_value );
+                , result_function_value
+                , "Return the final result of the simulation. This blocks until\nthe simulation has stopped, and will throw an exception if the\nsimulation is in an error state. This returns the initial\nsimulation WorkPacket if the simulation was aborted" );
         
         }
         { //::SireMove::SupraSim::run
@@ -180,7 +194,8 @@ void register_SupraSim_class(){
             SupraSim_exposer.def( 
                 "run"
                 , run_function_value
-                , ( bp::arg("system"), bp::arg("moves"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("system"), bp::arg("moves"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , "Run the supra-system simulation applying nmoves moves from moves\non the supra-system system, recording statistics if record_stats\nis true. The simulation is run in the current thread" );
         
         }
         { //::SireMove::SupraSim::run
@@ -191,7 +206,8 @@ void register_SupraSim_class(){
             SupraSim_exposer.def( 
                 "run"
                 , run_function_value
-                , ( bp::arg("system"), bp::arg("move"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("system"), bp::arg("move"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , "Run the supra-system simulation applying nmoves moves from moves\non the supra-system system, recording statistics if record_stats\nis true. The simulation is run in the current thread" );
         
         }
         { //::SireMove::SupraSim::run
@@ -202,7 +218,8 @@ void register_SupraSim_class(){
             SupraSim_exposer.def( 
                 "run"
                 , run_function_value
-                , ( bp::arg("simpacket") ) );
+                , ( bp::arg("simpacket") )
+                , "Run the supra-system simulation described in simpacket in the\ncurrent thread" );
         
         }
         { //::SireMove::SupraSim::run
@@ -213,7 +230,8 @@ void register_SupraSim_class(){
             SupraSim_exposer.def( 
                 "run"
                 , run_function_value
-                , ( bp::arg("node"), bp::arg("system"), bp::arg("moves"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("node"), bp::arg("system"), bp::arg("moves"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , "Run the supra-system simulation applying nmoves moves from moves\non the supra-system system, recording statistics if record_stats\nis true. The simulation is run on the node node and a handle is\nreturned to the running simulation" );
         
         }
         { //::SireMove::SupraSim::run
@@ -224,7 +242,8 @@ void register_SupraSim_class(){
             SupraSim_exposer.def( 
                 "run"
                 , run_function_value
-                , ( bp::arg("node"), bp::arg("system"), bp::arg("move"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("node"), bp::arg("system"), bp::arg("move"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , "Run the supra-system simulation applying nmoves moves from moves\non the supra-system system, recording statistics if record_stats\nis true. The simulation is run on the node node and a handle is\nreturned to the running simulation" );
         
         }
         { //::SireMove::SupraSim::run
@@ -235,7 +254,8 @@ void register_SupraSim_class(){
             SupraSim_exposer.def( 
                 "run"
                 , run_function_value
-                , ( bp::arg("node"), bp::arg("simpacket") ) );
+                , ( bp::arg("node"), bp::arg("simpacket") )
+                , "Run the supra-system simulation described in simpacket on the\nnode node, returning a handle to the running simulation" );
         
         }
         { //::SireMove::SupraSim::stop
@@ -245,7 +265,8 @@ void register_SupraSim_class(){
             
             SupraSim_exposer.def( 
                 "stop"
-                , stop_function_value );
+                , stop_function_value
+                , "Stop the simulation" );
         
         }
         { //::SireMove::SupraSim::system
@@ -255,7 +276,8 @@ void register_SupraSim_class(){
             
             SupraSim_exposer.def( 
                 "system"
-                , system_function_value );
+                , system_function_value
+                , "Return the final state of the system after the simulation. This\nblocks until the simulation has finished and will throw an\nexception if the system hits an error state" );
         
         }
         { //::SireMove::SupraSim::throwError
@@ -265,7 +287,8 @@ void register_SupraSim_class(){
             
             SupraSim_exposer.def( 
                 "throwError"
-                , throwError_function_value );
+                , throwError_function_value
+                , "Throw any error associated with this simulation - this does\nnothing if we are not in an error state" );
         
         }
         { //::SireMove::SupraSim::wait
@@ -275,7 +298,8 @@ void register_SupraSim_class(){
             
             SupraSim_exposer.def( 
                 "wait"
-                , wait_function_value );
+                , wait_function_value
+                , "Wait until the simulation has finished" );
         
         }
         { //::SireMove::SupraSim::wait
@@ -286,7 +310,8 @@ void register_SupraSim_class(){
             SupraSim_exposer.def( 
                 "wait"
                 , wait_function_value
-                , ( bp::arg("timeout") ) );
+                , ( bp::arg("timeout") )
+                , "Wait for the simulation to stop running, or for timeout\nmilliseconds to pass, whichever comes soonest. This returns\nwhether or not the simulation has stopped" );
         
         }
         { //::SireMove::SupraSim::wasAborted
@@ -296,7 +321,8 @@ void register_SupraSim_class(){
             
             SupraSim_exposer.def( 
                 "wasAborted"
-                , wasAborted_function_value );
+                , wasAborted_function_value
+                , "Return whether or not the simulation was aborted" );
         
         }
         { //::SireMove::SupraSim::wasStopped
@@ -306,7 +332,8 @@ void register_SupraSim_class(){
             
             SupraSim_exposer.def( 
                 "wasStopped"
-                , wasStopped_function_value );
+                , wasStopped_function_value
+                , "Return whether or not the simulation was stopped" );
         
         }
         SupraSim_exposer.staticmethod( "run" );

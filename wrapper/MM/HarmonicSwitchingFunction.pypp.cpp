@@ -37,13 +37,13 @@ void register_HarmonicSwitchingFunction_class(){
 
     { //::SireMM::HarmonicSwitchingFunction
         typedef bp::class_< SireMM::HarmonicSwitchingFunction, bp::bases< SireMM::SwitchingFunction, SireBase::Property > > HarmonicSwitchingFunction_exposer_t;
-        HarmonicSwitchingFunction_exposer_t HarmonicSwitchingFunction_exposer = HarmonicSwitchingFunction_exposer_t( "HarmonicSwitchingFunction", bp::init< >() );
+        HarmonicSwitchingFunction_exposer_t HarmonicSwitchingFunction_exposer = HarmonicSwitchingFunction_exposer_t( "HarmonicSwitchingFunction", "This class implements harmonic switching functions - these scale the energy\nharmonically down to zero.\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a null harmonic switching function (no cutoff)") );
         bp::scope HarmonicSwitchingFunction_scope( HarmonicSwitchingFunction_exposer );
-        HarmonicSwitchingFunction_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("cutoffdist") )) );
-        HarmonicSwitchingFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("cutoffdist"), bp::arg("featherdist") )) );
-        HarmonicSwitchingFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("cutoffdist"), bp::arg("elecfeather"), bp::arg("vdwfeather") )) );
-        HarmonicSwitchingFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length, SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("eleccutoff"), bp::arg("elecfeather"), bp::arg("vdwcutoff"), bp::arg("vdwfeather") )) );
-        HarmonicSwitchingFunction_exposer.def( bp::init< SireMM::HarmonicSwitchingFunction const & >(( bp::arg("other") )) );
+        HarmonicSwitchingFunction_exposer.def( bp::init< SireUnits::Dimension::Length >(( bp::arg("cutoffdist") ), "Construct an harmonic switching function which represents a hard\ncutoff of both the electrostatic and vdw interactions at a distance\nof cutoffdist") );
+        HarmonicSwitchingFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("cutoffdist"), bp::arg("featherdist") ), "Construct an harmonic switching function which represents the smoothed\ncutoff, with the cutoff at cutoffdist, but smoothed down using an\nharmonic function from featherdist. If featherdist >= cutoffdist\nthen this represents a hard cutoff") );
+        HarmonicSwitchingFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("cutoffdist"), bp::arg("elecfeather"), bp::arg("vdwfeather") ), "Construct an harmonic switching function which represents the smoothed\ncutoff, with the cutoff at cutoffdist, but with the electrostatic\ninteractions smoothed down using a harmonic function from\nelecfeather and the vdw interactions smoothed down using\nan harmonic function from vdwfeather. If either feather distance\nis greater than the cutoff, then a hard cutoff for that interaction\nwill be used.") );
+        HarmonicSwitchingFunction_exposer.def( bp::init< SireUnits::Dimension::Length, SireUnits::Dimension::Length, SireUnits::Dimension::Length, SireUnits::Dimension::Length >(( bp::arg("eleccutoff"), bp::arg("elecfeather"), bp::arg("vdwcutoff"), bp::arg("vdwfeather") ), "Construct an harmonic switching function which represents the smoothed\ncutoff, with the electrostatic interactions cutoff at eleccutoff, and\nsmoothed down using an harmonic function from elecfeather, and the\nvdw interactions cutoff at vdwcutoff and smoothed down using an\nharmonic function from vdwfeather. If either feather distance is\ngreater than the corresponding cutoff, then a hard cutoff will be\nused for that interaction.") );
+        HarmonicSwitchingFunction_exposer.def( bp::init< SireMM::HarmonicSwitchingFunction const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::HarmonicSwitchingFunction::dElectrostaticScaleFactor
         
             typedef double ( ::SireMM::HarmonicSwitchingFunction::*dElectrostaticScaleFactor_function_type)( ::SireUnits::Dimension::Length ) const;
@@ -52,7 +52,8 @@ void register_HarmonicSwitchingFunction_class(){
             HarmonicSwitchingFunction_exposer.def( 
                 "dElectrostaticScaleFactor"
                 , dElectrostaticScaleFactor_function_value
-                , ( bp::arg("dist") ) );
+                , ( bp::arg("dist") )
+                , "This throws an exception as the harmonic switching function has\na discontinuous first derivative, so is not suitable for force evaluations\nThrow: SireFF::missing_derivative\n" );
         
         }
         { //::SireMM::HarmonicSwitchingFunction::dVDWScaleFactor
@@ -63,7 +64,8 @@ void register_HarmonicSwitchingFunction_class(){
             HarmonicSwitchingFunction_exposer.def( 
                 "dVDWScaleFactor"
                 , dVDWScaleFactor_function_value
-                , ( bp::arg("dist") ) );
+                , ( bp::arg("dist") )
+                , "This throws an exception as the harmonic switching function has\na discontinuous first derivative, so is not suitable for force evaluations\nThrow: SireFF::missing_derivative\n" );
         
         }
         { //::SireMM::HarmonicSwitchingFunction::electrostaticScaleFactor
@@ -74,7 +76,8 @@ void register_HarmonicSwitchingFunction_class(){
             HarmonicSwitchingFunction_exposer.def( 
                 "electrostaticScaleFactor"
                 , electrostaticScaleFactor_function_value
-                , ( bp::arg("dist") ) );
+                , ( bp::arg("dist") )
+                , "Return the scale factor for the electrostatic interaction for the\n" );
         
         }
         HarmonicSwitchingFunction_exposer.def( bp::self != bp::self );
@@ -87,7 +90,8 @@ void register_HarmonicSwitchingFunction_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         HarmonicSwitchingFunction_exposer.def( bp::self == bp::self );
@@ -98,7 +102,8 @@ void register_HarmonicSwitchingFunction_class(){
             
             HarmonicSwitchingFunction_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this switching function" );
         
         }
         { //::SireMM::HarmonicSwitchingFunction::typeName
@@ -108,7 +113,8 @@ void register_HarmonicSwitchingFunction_class(){
             
             HarmonicSwitchingFunction_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::HarmonicSwitchingFunction::vdwScaleFactor
@@ -119,7 +125,8 @@ void register_HarmonicSwitchingFunction_class(){
             HarmonicSwitchingFunction_exposer.def( 
                 "vdwScaleFactor"
                 , vdwScaleFactor_function_value
-                , ( bp::arg("dist") ) );
+                , ( bp::arg("dist") )
+                , "Return the scale factor for the vdw interaction for the\n" );
         
         }
         HarmonicSwitchingFunction_exposer.staticmethod( "typeName" );

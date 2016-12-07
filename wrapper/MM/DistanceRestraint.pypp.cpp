@@ -40,11 +40,11 @@ void register_DistanceRestraint_class(){
 
     { //::SireMM::DistanceRestraint
         typedef bp::class_< SireMM::DistanceRestraint, bp::bases< SireMM::Restraint3D, SireMM::Restraint, SireBase::Property > > DistanceRestraint_exposer_t;
-        DistanceRestraint_exposer_t DistanceRestraint_exposer = DistanceRestraint_exposer_t( "DistanceRestraint", bp::init< >() );
+        DistanceRestraint_exposer_t DistanceRestraint_exposer = DistanceRestraint_exposer_t( "DistanceRestraint", "This is a restraint that operates on the distance between\ntwo SireMM::Point objects (e.g. two atoms in a molecule,\na point in space and the center of a molecule, the\ncenter of geometry of one molecule with the center of\nmass of the solvent)\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope DistanceRestraint_scope( DistanceRestraint_exposer );
-        DistanceRestraint_exposer.def( bp::init< SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const & >(( bp::arg("point0"), bp::arg("point1"), bp::arg("restraint") )) );
-        DistanceRestraint_exposer.def( bp::init< SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const &, SireCAS::Values const & >(( bp::arg("point0"), bp::arg("point1"), bp::arg("restraint"), bp::arg("values") )) );
-        DistanceRestraint_exposer.def( bp::init< SireMM::DistanceRestraint const & >(( bp::arg("other") )) );
+        DistanceRestraint_exposer.def( bp::init< SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const & >(( bp::arg("point0"), bp::arg("point1"), bp::arg("restraint") ), "Construct a restraint that acts between the two points point0 and point1,\nrestraining the distance between these points using the expression\nrestraint") );
+        DistanceRestraint_exposer.def( bp::init< SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const &, SireCAS::Values const & >(( bp::arg("point0"), bp::arg("point1"), bp::arg("restraint"), bp::arg("values") ), "Construct a restraint that acts between the two points point0 and point1,\nrestraining the distance between these points using the expression\nrestraint, with supplied values for this expression in values.\nNote that any extra values in values that arent in the expression\nrestraint are ignored") );
+        DistanceRestraint_exposer.def( bp::init< SireMM::DistanceRestraint const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::DistanceRestraint::builtinSymbols
         
             typedef ::SireCAS::Symbols ( ::SireMM::DistanceRestraint::*builtinSymbols_function_type)(  ) const;
@@ -52,7 +52,8 @@ void register_DistanceRestraint_class(){
             
             DistanceRestraint_exposer.def( 
                 "builtinSymbols"
-                , builtinSymbols_function_value );
+                , builtinSymbols_function_value
+                , "Return the built-in symbols of this restraint" );
         
         }
         { //::SireMM::DistanceRestraint::builtinValues
@@ -62,7 +63,8 @@ void register_DistanceRestraint_class(){
             
             DistanceRestraint_exposer.def( 
                 "builtinValues"
-                , builtinValues_function_value );
+                , builtinValues_function_value
+                , "Return the built-in values of this restraint" );
         
         }
         { //::SireMM::DistanceRestraint::contains
@@ -73,7 +75,8 @@ void register_DistanceRestraint_class(){
             DistanceRestraint_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Return whether or not this restraint affects the molecule\nwith number molnum" );
         
         }
         { //::SireMM::DistanceRestraint::contains
@@ -84,7 +87,8 @@ void register_DistanceRestraint_class(){
             DistanceRestraint_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molid") ) );
+                , ( bp::arg("molid") )
+                , "Return whether or not this restraint affects the molecule\nwith ID molid" );
         
         }
         { //::SireMM::DistanceRestraint::differentialRestraintFunction
@@ -95,7 +99,8 @@ void register_DistanceRestraint_class(){
             DistanceRestraint_exposer.def( 
                 "differentialRestraintFunction"
                 , differentialRestraintFunction_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the function used to calculate the restraint force" );
         
         }
         { //::SireMM::DistanceRestraint::differentiate
@@ -106,7 +111,8 @@ void register_DistanceRestraint_class(){
             DistanceRestraint_exposer.def( 
                 "differentiate"
                 , differentiate_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return the restraint that is the differential of this restraint\nwith respect to the symbol symbol\nThrow: SireCAS::unavailable_differential\n" );
         
         }
         { //::SireMM::DistanceRestraint::force
@@ -117,7 +123,8 @@ void register_DistanceRestraint_class(){
             DistanceRestraint_exposer.def( 
                 "force"
                 , force_function_value
-                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 ) );
+                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
+                , "Calculate the force acting on the molecule in the forcetable forcetable\ncaused by this restraint, and add it on to the forcetable scaled by\nscale_force" );
         
         }
         { //::SireMM::DistanceRestraint::force
@@ -128,7 +135,8 @@ void register_DistanceRestraint_class(){
             DistanceRestraint_exposer.def( 
                 "force"
                 , force_function_value
-                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 ) );
+                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
+                , "Calculate the force acting on the molecules in the forcetable forcetable\ncaused by this restraint, and add it on to the forcetable scaled by\nscale_force" );
         
         }
         { //::SireMM::DistanceRestraint::halfHarmonic
@@ -139,7 +147,8 @@ void register_DistanceRestraint_class(){
             DistanceRestraint_exposer.def( 
                 "halfHarmonic"
                 , halfHarmonic_function_value
-                , ( bp::arg("point0"), bp::arg("point1"), bp::arg("distance"), bp::arg("force_constant") ) );
+                , ( bp::arg("point0"), bp::arg("point1"), bp::arg("distance"), bp::arg("force_constant") )
+                , "Return a distance restraint that applied a half-harmonic potential\nbetween the points point0 and point1 above a distance distance\nusing a force constant force_constant" );
         
         }
         { //::SireMM::DistanceRestraint::harmonic
@@ -150,7 +159,8 @@ void register_DistanceRestraint_class(){
             DistanceRestraint_exposer.def( 
                 "harmonic"
                 , harmonic_function_value
-                , ( bp::arg("point0"), bp::arg("point1"), bp::arg("force_constant") ) );
+                , ( bp::arg("point0"), bp::arg("point1"), bp::arg("force_constant") )
+                , "Return a distance restraint that applies a harmonic potential between\nthe points point0 and point1 using a force constant force_constant" );
         
         }
         { //::SireMM::DistanceRestraint::molecules
@@ -160,7 +170,8 @@ void register_DistanceRestraint_class(){
             
             DistanceRestraint_exposer.def( 
                 "molecules"
-                , molecules_function_value );
+                , molecules_function_value
+                , "Return the molecules used in this restraint" );
         
         }
         { //::SireMM::DistanceRestraint::nPoints
@@ -170,7 +181,8 @@ void register_DistanceRestraint_class(){
             
             DistanceRestraint_exposer.def( 
                 "nPoints"
-                , nPoints_function_value );
+                , nPoints_function_value
+                , "This restraint involves two points" );
         
         }
         DistanceRestraint_exposer.def( bp::self != bp::self );
@@ -183,7 +195,8 @@ void register_DistanceRestraint_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         DistanceRestraint_exposer.def( bp::self == bp::self );
@@ -196,7 +209,8 @@ void register_DistanceRestraint_class(){
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the ith point" );
         
         }
         { //::SireMM::DistanceRestraint::point0
@@ -207,7 +221,8 @@ void register_DistanceRestraint_class(){
             DistanceRestraint_exposer.def( 
                 "point0"
                 , point0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the first point" );
         
         }
         { //::SireMM::DistanceRestraint::point1
@@ -218,7 +233,8 @@ void register_DistanceRestraint_class(){
             DistanceRestraint_exposer.def( 
                 "point1"
                 , point1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the second point" );
         
         }
         { //::SireMM::DistanceRestraint::r
@@ -229,7 +245,8 @@ void register_DistanceRestraint_class(){
             DistanceRestraint_exposer.def( 
                 "r"
                 , r_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol that represents the distance between the\ntwo points (r)" );
         
         }
         { //::SireMM::DistanceRestraint::setSpace
@@ -240,7 +257,8 @@ void register_DistanceRestraint_class(){
             DistanceRestraint_exposer.def( 
                 "setSpace"
                 , setSpace_function_value
-                , ( bp::arg("space") ) );
+                , ( bp::arg("space") )
+                , "Set the space used to evaluate the energy of this restraint\nThrow: SireVol::incompatible_space\n" );
         
         }
         { //::SireMM::DistanceRestraint::typeName
@@ -250,7 +268,8 @@ void register_DistanceRestraint_class(){
             
             DistanceRestraint_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::DistanceRestraint::update
@@ -261,7 +280,8 @@ void register_DistanceRestraint_class(){
             DistanceRestraint_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("moldata") ) );
+                , ( bp::arg("moldata") )
+                , "Update the points of this restraint using new molecule data from moldata\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMM::DistanceRestraint::update
@@ -272,7 +292,8 @@ void register_DistanceRestraint_class(){
             DistanceRestraint_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Update the points of this restraint using new molecule data from molecules\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMM::DistanceRestraint::usesMoleculesIn
@@ -283,7 +304,8 @@ void register_DistanceRestraint_class(){
             DistanceRestraint_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("forcetable") ) );
+                , ( bp::arg("forcetable") )
+                , "Return whether or not this restraint involves any of the molecules\nthat are in the forcetable forcetable" );
         
         }
         { //::SireMM::DistanceRestraint::usesMoleculesIn
@@ -294,7 +316,8 @@ void register_DistanceRestraint_class(){
             DistanceRestraint_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "Return whether or not this restraint involves any of the molecules\nin molecules" );
         
         }
         DistanceRestraint_exposer.staticmethod( "halfHarmonic" );

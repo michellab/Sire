@@ -1058,8 +1058,8 @@ InternalEnergy::InternalEnergy(double bondnrg, double anglenrg,
                                double impropernrg, double ubnrg,
                                double ssnrg, double sbnrg,
                                double bbnrg, double sbtnrg,
-                               double cnrg, double ljnrg)
-               : i14nrg(cnrg,ljnrg),
+                               Intra14Energy inrg)
+               : i14nrg(inrg),
                  ibndnrg(bondnrg), iangnrg(anglenrg),
                  idihnrg(dihedralnrg), 
                  iimpnrg(impropernrg), iubnrg(ubnrg),

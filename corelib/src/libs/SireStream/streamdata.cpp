@@ -41,8 +41,8 @@
 #include <boost/config.hpp>
 
 #ifdef Q_OS_UNIX
-    #include <unistd.h>
-    #include <sys/utsname.h>
+    #include <unistd.h>        // CONDITIONAL_INCLUDE
+    #include <sys/utsname.h>   // CONDITIONAL_INCLUDE
 #endif
     
 #include "streamdata.hpp"
@@ -839,12 +839,17 @@ FileHeader::FileHeader(const QStringList &typ_names,
                        const QByteArray &compressed_data,
                        const QByteArray &raw_data) : version_number(0)
 {
-    //these two may be UNIX only...
-    created_by = std::getenv("USER");
+    #ifdef Q_OS_WIN
+      created_by = "Windows user";
+      created_where = "Windows machine";
+    #else
+      //these two may be UNIX only...
+      created_by = std::getenv("USER");
 
-    char buffer[128];
-    gethostname(buffer, 128);
-    created_where = buffer;
+      char buffer[128];
+      gethostname(buffer, 128);
+      created_where = buffer;
+    #endif
 
     created_when = QDateTime::currentDateTime();
     

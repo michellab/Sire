@@ -37,9 +37,9 @@ void register_ExpAverage_class(){
 
     { //::SireMaths::ExpAverage
         typedef bp::class_< SireMaths::ExpAverage, bp::bases< SireMaths::Accumulator, SireBase::Property > > ExpAverage_exposer_t;
-        ExpAverage_exposer_t ExpAverage_exposer = ExpAverage_exposer_t( "ExpAverage", bp::init< bp::optional< double > >(( bp::arg("scale")=1 )) );
+        ExpAverage_exposer_t ExpAverage_exposer = ExpAverage_exposer_t( "ExpAverage", "This class is used to accumulate the exponential average\nof a collection of values - this is the average formed\nas;\n\navg =  scale  ln( Mean of e^(valuescale) )\n\nIt is used to weight the average, e.g. if scale = -kT\nthen this Boltzmann weights the average\n\nAuthor: Christopher Woods\n", bp::init< bp::optional< double > >(( bp::arg("scale")=1 ), "Construct an empty average using the passed scale factor.\nThrow: SireError::invalid_arg\n") );
         bp::scope ExpAverage_scope( ExpAverage_exposer );
-        ExpAverage_exposer.def( bp::init< SireMaths::ExpAverage const & >(( bp::arg("other") )) );
+        ExpAverage_exposer.def( bp::init< SireMaths::ExpAverage const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMaths::ExpAverage::accumulate
         
             typedef void ( ::SireMaths::ExpAverage::*accumulate_function_type)( double ) ;
@@ -48,7 +48,8 @@ void register_ExpAverage_class(){
             ExpAverage_exposer.def( 
                 "accumulate"
                 , accumulate_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Accumulate the passed value onto the average" );
         
         }
         { //::SireMaths::ExpAverage::average
@@ -58,7 +59,8 @@ void register_ExpAverage_class(){
             
             ExpAverage_exposer.def( 
                 "average"
-                , average_function_value );
+                , average_function_value
+                , "Return the average value" );
         
         }
         { //::SireMaths::ExpAverage::average2
@@ -68,7 +70,8 @@ void register_ExpAverage_class(){
             
             ExpAverage_exposer.def( 
                 "average2"
-                , average2_function_value );
+                , average2_function_value
+                , "Return the average of the squared value" );
         
         }
         { //::SireMaths::ExpAverage::clear
@@ -78,7 +81,8 @@ void register_ExpAverage_class(){
             
             ExpAverage_exposer.def( 
                 "clear"
-                , clear_function_value );
+                , clear_function_value
+                , "Completely clear the statistics in this accumulator" );
         
         }
         ExpAverage_exposer.def( bp::self != bp::self );
@@ -92,7 +96,8 @@ void register_ExpAverage_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         ExpAverage_exposer.def( bp::self == bp::self );
@@ -103,7 +108,8 @@ void register_ExpAverage_class(){
             
             ExpAverage_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         ExpAverage_exposer.staticmethod( "typeName" );

@@ -57,7 +57,9 @@ set( INSTALLDIR ${SIRE_PYTHON}/Sire/Stream )
 
 install( TARGETS Stream
          LIBRARY DESTINATION ${INSTALLDIR}
-       )
+         ARCHIVE DESTINATION ${INSTALLDIR}
+         RUNTIME DESTINATION ${INSTALLDIR}
+        )
 
 install( FILES __init__.py
          DESTINATION ${INSTALLDIR} 

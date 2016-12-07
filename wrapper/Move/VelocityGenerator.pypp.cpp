@@ -43,7 +43,7 @@ void register_VelocityGenerator_class(){
 
     { //::SireMove::VelocityGenerator
         typedef bp::class_< SireMove::VelocityGenerator, bp::bases< SireBase::Property >, boost::noncopyable > VelocityGenerator_exposer_t;
-        VelocityGenerator_exposer_t VelocityGenerator_exposer = VelocityGenerator_exposer_t( "VelocityGenerator", bp::no_init );
+        VelocityGenerator_exposer_t VelocityGenerator_exposer = VelocityGenerator_exposer_t( "VelocityGenerator", "This is the base class of generators that are used\nto get velocities for molecules\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope VelocityGenerator_scope( VelocityGenerator_exposer );
         { //::SireMove::VelocityGenerator::generate
         
@@ -53,7 +53,8 @@ void register_VelocityGenerator_class(){
             VelocityGenerator_exposer.def( 
                 "generate"
                 , generate_function_value
-                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMove::VelocityGenerator::null
@@ -64,7 +65,8 @@ void register_VelocityGenerator_class(){
             VelocityGenerator_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the global null generator" );
         
         }
         { //::SireMove::VelocityGenerator::setGenerator
@@ -75,7 +77,8 @@ void register_VelocityGenerator_class(){
             VelocityGenerator_exposer.def( 
                 "setGenerator"
                 , setGenerator_function_value
-                , ( bp::arg("generator") ) );
+                , ( bp::arg("generator") )
+                , "Set the random number generator that may be used to help\ngenerate the initial velocities" );
         
         }
         { //::SireMove::VelocityGenerator::typeName
@@ -85,7 +88,8 @@ void register_VelocityGenerator_class(){
             
             VelocityGenerator_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         VelocityGenerator_exposer.staticmethod( "null" );

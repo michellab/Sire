@@ -66,7 +66,6 @@
 
 #include "SireBase/tempdir.h"
 #include "SireBase/findexe.h"
-#include "SireBase/process.h"
 
 #include "SireError/errors.h"
 #include "SireIO/errors.h"

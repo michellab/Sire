@@ -31,6 +31,7 @@
 
 #include "montecarlo.h"
 #include "sampler.h"
+#include "getpoint.h"
 
 SIRE_BEGIN_HEADER
 
@@ -85,7 +86,6 @@ friend QDataStream& ::operator<<(QDataStream&, const InternalMove&);
 friend QDataStream& ::operator>>(QDataStream&, InternalMove&);
 
 public:
-
     InternalMove(const PropertyMap &map = PropertyMap() );
     
     InternalMove(const MoleculeGroup &molgroup,
@@ -119,6 +119,9 @@ public:
 
     void setGenerator(const RanGenerator &rangenerator);
 
+    void setCenterOfMolecule(const GetPoint &center_function);
+    const GetPoint& centerOfMolecule() const;
+
     void move(System &system, int nmoves, bool record_stats=true);
 
 protected:
@@ -127,6 +130,9 @@ protected:
 private:
     /** The sampler used to select random molecules for the move */
     SamplerPtr smplr;
+
+    /** The function used to get the center of each molecule */
+    GetPointPtr center_function;
 
     /** The name of the property that contains the flexibility*/
     PropertyName flexibility_property;

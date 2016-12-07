@@ -37,7 +37,7 @@ void register_InternalSymbolsBase_class(){
 
     { //::SireMM::InternalSymbolsBase
         typedef bp::class_< SireMM::InternalSymbolsBase, boost::noncopyable > InternalSymbolsBase_exposer_t;
-        InternalSymbolsBase_exposer_t InternalSymbolsBase_exposer = InternalSymbolsBase_exposer_t( "InternalSymbolsBase", bp::no_init );
+        InternalSymbolsBase_exposer_t InternalSymbolsBase_exposer = InternalSymbolsBase_exposer_t( "InternalSymbolsBase", "This is the base of all of the classes used to hold the symbols\nfor the internal parameters", bp::no_init );
         bp::scope InternalSymbolsBase_scope( InternalSymbolsBase_exposer );
         InternalSymbolsBase_exposer.def( "__str__", &pvt_get_name);
         InternalSymbolsBase_exposer.def( "__repr__", &pvt_get_name);

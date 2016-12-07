@@ -28,9 +28,9 @@ void register_MultiCLJComponent_class(){
 
     { //::SireMM::MultiCLJComponent
         typedef bp::class_< SireMM::MultiCLJComponent, bp::bases< SireFF::FFComponent, SireCAS::Symbol, SireCAS::ExBase > > MultiCLJComponent_exposer_t;
-        MultiCLJComponent_exposer_t MultiCLJComponent_exposer = MultiCLJComponent_exposer_t( "MultiCLJComponent", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("name")=SireFF::FFName() )) );
+        MultiCLJComponent_exposer_t MultiCLJComponent_exposer = MultiCLJComponent_exposer_t( "MultiCLJComponent", "This class is used to hold the symbols for CLJ forcefields\nthat allow multiple CLJ functions to be indexed by key\n\nAuthor: Christopher Woods\n", bp::init< bp::optional< SireFF::FFName const & > >(( bp::arg("name")=SireFF::FFName() ), "Construct with just a single, default, CLJComponent for the\nforcefield with the passed name") );
         bp::scope MultiCLJComponent_scope( MultiCLJComponent_exposer );
-        MultiCLJComponent_exposer.def( bp::init< SireMM::MultiCLJComponent const & >(( bp::arg("other") )) );
+        MultiCLJComponent_exposer.def( bp::init< SireMM::MultiCLJComponent const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::MultiCLJComponent::add
         
             typedef int ( ::SireMM::MultiCLJComponent::*add_function_type)( ::QString ) ;
@@ -39,7 +39,8 @@ void register_MultiCLJComponent_class(){
             MultiCLJComponent_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "Add new CLJ components with the passed key. This returns the index\nof the new component" );
         
         }
         { //::SireMM::MultiCLJComponent::changeEnergy
@@ -50,7 +51,8 @@ void register_MultiCLJComponent_class(){
             MultiCLJComponent_exposer.def( 
                 "changeEnergy"
                 , changeEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("cljnrg") ) );
+                , ( bp::arg("ff"), bp::arg("cljnrg") )
+                , "Change the energy in the forcefield from the passed cljnrg object" );
         
         }
         { //::SireMM::MultiCLJComponent::coulomb
@@ -61,7 +63,8 @@ void register_MultiCLJComponent_class(){
             MultiCLJComponent_exposer.def( 
                 "coulomb"
                 , coulomb_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the default coulomb component" );
         
         }
         { //::SireMM::MultiCLJComponent::coulomb
@@ -73,7 +76,8 @@ void register_MultiCLJComponent_class(){
                 "coulomb"
                 , coulomb_function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the coulomb component for the key key" );
         
         }
         { //::SireMM::MultiCLJComponent::count
@@ -83,7 +87,20 @@ void register_MultiCLJComponent_class(){
             
             MultiCLJComponent_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of CLJComponents  number of keys" );
+        
+        }
+        { //::SireMM::MultiCLJComponent::hasKey
+        
+            typedef bool ( ::SireMM::MultiCLJComponent::*hasKey_function_type)( ::QString ) const;
+            hasKey_function_type hasKey_function_value( &::SireMM::MultiCLJComponent::hasKey );
+            
+            MultiCLJComponent_exposer.def( 
+                "hasKey"
+                , hasKey_function_value
+                , ( bp::arg("key") )
+                , "" );
         
         }
         { //::SireMM::MultiCLJComponent::indexOf
@@ -94,7 +111,8 @@ void register_MultiCLJComponent_class(){
             MultiCLJComponent_exposer.def( 
                 "indexOf"
                 , indexOf_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "Return the index of the component with key key" );
         
         }
         { //::SireMM::MultiCLJComponent::keys
@@ -104,7 +122,8 @@ void register_MultiCLJComponent_class(){
             
             MultiCLJComponent_exposer.def( 
                 "keys"
-                , keys_function_value );
+                , keys_function_value
+                , "Return all of the keys for the different CLJComponents" );
         
         }
         { //::SireMM::MultiCLJComponent::lj
@@ -115,7 +134,8 @@ void register_MultiCLJComponent_class(){
             MultiCLJComponent_exposer.def( 
                 "lj"
                 , lj_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the default LJ component" );
         
         }
         { //::SireMM::MultiCLJComponent::lj
@@ -127,7 +147,8 @@ void register_MultiCLJComponent_class(){
                 "lj"
                 , lj_function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the LJ component for the key key" );
         
         }
         { //::SireMM::MultiCLJComponent::nKeys
@@ -137,7 +158,8 @@ void register_MultiCLJComponent_class(){
             
             MultiCLJComponent_exposer.def( 
                 "nKeys"
-                , nKeys_function_value );
+                , nKeys_function_value
+                , "Return the number of CLJComponents  number of keys" );
         
         }
         MultiCLJComponent_exposer.def( bp::self != bp::self );
@@ -150,7 +172,8 @@ void register_MultiCLJComponent_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MultiCLJComponent_exposer.def( bp::self == bp::self );
@@ -162,7 +185,8 @@ void register_MultiCLJComponent_class(){
             MultiCLJComponent_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("key") ) );
+                , ( bp::arg("key") )
+                , "Remove the component with key key. This returns the index of the component\nthat was removed, or -1 if there was no such component" );
         
         }
         { //::SireMM::MultiCLJComponent::removeAll
@@ -172,7 +196,8 @@ void register_MultiCLJComponent_class(){
             
             MultiCLJComponent_exposer.def( 
                 "removeAll"
-                , removeAll_function_value );
+                , removeAll_function_value
+                , "Remove all keys from the index (except default)" );
         
         }
         { //::SireMM::MultiCLJComponent::rename
@@ -183,7 +208,8 @@ void register_MultiCLJComponent_class(){
             MultiCLJComponent_exposer.def( 
                 "rename"
                 , rename_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "Return a copy of this MultiCLJComponent that has been renamed for\nthe passed forcefield" );
         
         }
         { //::SireMM::MultiCLJComponent::setEnergy
@@ -194,7 +220,8 @@ void register_MultiCLJComponent_class(){
             MultiCLJComponent_exposer.def( 
                 "setEnergy"
                 , setEnergy_function_value
-                , ( bp::arg("ff"), bp::arg("cljnrg") ) );
+                , ( bp::arg("ff"), bp::arg("cljnrg") )
+                , "Set the energy in the forcefield from the passed cljnrg object" );
         
         }
         { //::SireMM::MultiCLJComponent::size
@@ -204,7 +231,8 @@ void register_MultiCLJComponent_class(){
             
             MultiCLJComponent_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "Return the number of CLJComponents  number of keys" );
         
         }
         { //::SireMM::MultiCLJComponent::symbols
@@ -214,7 +242,8 @@ void register_MultiCLJComponent_class(){
             
             MultiCLJComponent_exposer.def( 
                 "symbols"
-                , symbols_function_value );
+                , symbols_function_value
+                , "Return all of the symbols used by these components" );
         
         }
         { //::SireMM::MultiCLJComponent::toString
@@ -224,7 +253,8 @@ void register_MultiCLJComponent_class(){
             
             MultiCLJComponent_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of these components" );
         
         }
         { //::SireMM::MultiCLJComponent::total
@@ -235,7 +265,8 @@ void register_MultiCLJComponent_class(){
             MultiCLJComponent_exposer.def( 
                 "total"
                 , total_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the default total component" );
         
         }
         { //::SireMM::MultiCLJComponent::total
@@ -247,7 +278,8 @@ void register_MultiCLJComponent_class(){
                 "total"
                 , total_function_value
                 , ( bp::arg("key") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the total component for the key key" );
         
         }
         { //::SireMM::MultiCLJComponent::typeName
@@ -257,7 +289,8 @@ void register_MultiCLJComponent_class(){
             
             MultiCLJComponent_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::MultiCLJComponent::what
@@ -267,7 +300,8 @@ void register_MultiCLJComponent_class(){
             
             MultiCLJComponent_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         MultiCLJComponent_exposer.staticmethod( "typeName" );

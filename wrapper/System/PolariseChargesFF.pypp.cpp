@@ -70,11 +70,11 @@ void register_PolariseChargesFF_class(){
 
     { //::SireSystem::PolariseChargesFF
         typedef bp::class_< SireSystem::PolariseChargesFF, bp::bases< SireFF::G1FF, SireFF::FF, SireMol::MolGroupsBase, SireBase::Property > > PolariseChargesFF_exposer_t;
-        PolariseChargesFF_exposer_t PolariseChargesFF_exposer = PolariseChargesFF_exposer_t( "PolariseChargesFF", bp::init< >() );
+        PolariseChargesFF_exposer_t PolariseChargesFF_exposer = PolariseChargesFF_exposer_t( "PolariseChargesFF", "This class implements the forcefield that is used to calculate\nthe self-energy of polarising the charges. This is a companion\nforcefield to the PolariseCharges constraint and is not\ndesigned to be used on its own\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope PolariseChargesFF_scope( PolariseChargesFF_exposer );
-        PolariseChargesFF_exposer.def( bp::init< SireSystem::PolariseCharges const & >(( bp::arg("constraint") )) );
-        PolariseChargesFF_exposer.def( bp::init< QString const &, SireSystem::PolariseCharges const & >(( bp::arg("name"), bp::arg("constraint") )) );
-        PolariseChargesFF_exposer.def( bp::init< SireSystem::PolariseChargesFF const & >(( bp::arg("other") )) );
+        PolariseChargesFF_exposer.def( bp::init< SireSystem::PolariseCharges const & >(( bp::arg("constraint") ), "Construct to calculate the self energy of the molecules affected\nby the passed constraint - note that this forcefield wont notice\nif molecules are added or removed from the constraint, so you must\nmake sure that you add or remove molecules from this forcefield whenever\nyou add or remove molecules from this constraint") );
+        PolariseChargesFF_exposer.def( bp::init< QString const &, SireSystem::PolariseCharges const & >(( bp::arg("name"), bp::arg("constraint") ), "Construct to calculate the self energy of the molecules affected\nby the passed constraint - note that this forcefield wont notice\nif molecules are added or removed from the constraint, so you must\nmake sure that you add or remove molecules from this forcefield whenever\nyou add or remove molecules from this constraint") );
+        PolariseChargesFF_exposer.def( bp::init< SireSystem::PolariseChargesFF const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireSystem::PolariseChargesFF::components
         
             typedef ::SireFF::SingleComponent const & ( ::SireSystem::PolariseChargesFF::*components_function_type)(  ) const;
@@ -83,7 +83,8 @@ void register_PolariseChargesFF_class(){
             PolariseChargesFF_exposer.def( 
                 "components"
                 , components_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the components of this forcefield" );
         
         }
         { //::SireSystem::PolariseChargesFF::containsProperty
@@ -94,7 +95,8 @@ void register_PolariseChargesFF_class(){
             PolariseChargesFF_exposer.def( 
                 "containsProperty"
                 , containsProperty_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "This forcefield doesnt contain any properties" );
         
         }
         { //::SireSystem::PolariseChargesFF::mustNowRecalculateFromScratch
@@ -104,7 +106,8 @@ void register_PolariseChargesFF_class(){
             
             PolariseChargesFF_exposer.def( 
                 "mustNowRecalculateFromScratch"
-                , mustNowRecalculateFromScratch_function_value );
+                , mustNowRecalculateFromScratch_function_value
+                , "Tell the forcefield that the energy must now be recalculated\nfrom scratch" );
         
         }
         PolariseChargesFF_exposer.def( bp::self != bp::self );
@@ -117,7 +120,8 @@ void register_PolariseChargesFF_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         PolariseChargesFF_exposer.def( bp::self == bp::self );
@@ -129,7 +133,8 @@ void register_PolariseChargesFF_class(){
             PolariseChargesFF_exposer.def( 
                 "properties"
                 , properties_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "This forcefield doesnt contain any properties" );
         
         }
         { //::SireSystem::PolariseChargesFF::property
@@ -141,7 +146,8 @@ void register_PolariseChargesFF_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "This forcefield doesnt contain any properties\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireSystem::PolariseChargesFF::setProperty
@@ -152,7 +158,8 @@ void register_PolariseChargesFF_class(){
             PolariseChargesFF_exposer.def( 
                 "setProperty"
                 , setProperty_function_value
-                , ( bp::arg("name"), bp::arg("property") ) );
+                , ( bp::arg("name"), bp::arg("property") )
+                , "You cannot set any properties of this forcefield\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireSystem::PolariseChargesFF::typeName
@@ -162,7 +169,8 @@ void register_PolariseChargesFF_class(){
             
             PolariseChargesFF_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         PolariseChargesFF_exposer.staticmethod( "typeName" );

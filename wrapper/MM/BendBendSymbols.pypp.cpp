@@ -40,7 +40,7 @@ void register_BendBendSymbols_class(){
 
     { //::SireMM::BendBendSymbols
         typedef bp::class_< SireMM::BendBendSymbols, bp::bases< SireMM::InternalSymbolsBase > > BendBendSymbols_exposer_t;
-        BendBendSymbols_exposer_t BendBendSymbols_exposer = BendBendSymbols_exposer_t( "BendBendSymbols", bp::init< >() );
+        BendBendSymbols_exposer_t BendBendSymbols_exposer = BendBendSymbols_exposer_t( "BendBendSymbols", "This class holds the symbols required for the bend-bend parameters.\nThese are functions of the three angles within the four atoms\n0, 1, 2, 3, where atom 1 is in the middle. The angles are\ntherefore 0-1-2 (theta012), 2-1-3 (theta213) and 3-1-0 (theta310)", bp::init< >("") );
         bp::scope BendBendSymbols_scope( BendBendSymbols_exposer );
         { //::SireMM::BendBendSymbols::theta012
         
@@ -50,7 +50,8 @@ void register_BendBendSymbols_class(){
             BendBendSymbols_exposer.def( 
                 "theta012"
                 , theta012_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol representing the angle between atoms 0-1-2, theta_\n{012}" );
         
         }
         { //::SireMM::BendBendSymbols::theta213
@@ -61,7 +62,8 @@ void register_BendBendSymbols_class(){
             BendBendSymbols_exposer.def( 
                 "theta213"
                 , theta213_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol representing the angle between atoms 2-1-3, theta_\n{213}" );
         
         }
         { //::SireMM::BendBendSymbols::theta310
@@ -72,7 +74,8 @@ void register_BendBendSymbols_class(){
             BendBendSymbols_exposer.def( 
                 "theta310"
                 , theta310_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol representing the angle between atoms 3-1-0, theta_\n{310}" );
         
         }
         BendBendSymbols_exposer.def( "__copy__", &__copy__);

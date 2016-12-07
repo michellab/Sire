@@ -23,12 +23,12 @@ void register_Velocity3D_class(){
 
     { //::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > >
         typedef bp::class_< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > > > Velocity3D_exposer_t;
-        Velocity3D_exposer_t Velocity3D_exposer = Velocity3D_exposer_t( "Velocity3D", bp::init< >() );
+        Velocity3D_exposer_t Velocity3D_exposer = Velocity3D_exposer_t( "Velocity3D", "", bp::init< >("") );
         bp::scope Velocity3D_scope( Velocity3D_exposer );
-        Velocity3D_exposer.def( bp::init< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > const & >(( bp::arg("val") )) );
-        Velocity3D_exposer.def( bp::init< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > const &, SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > const &, SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > const & >(( bp::arg("x"), bp::arg("y"), bp::arg("z") )) );
-        Velocity3D_exposer.def( bp::init< SireMaths::Vector const & >(( bp::arg("v") )) );
-        Velocity3D_exposer.def( bp::init< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > > const & >(( bp::arg("other") )) );
+        Velocity3D_exposer.def( bp::init< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > const & >(( bp::arg("val") ), "") );
+        Velocity3D_exposer.def( bp::init< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > const &, SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > const &, SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > const & >(( bp::arg("x"), bp::arg("y"), bp::arg("z") ), "") );
+        Velocity3D_exposer.def( bp::init< SireMaths::Vector const & >(( bp::arg("v") ), "") );
+        Velocity3D_exposer.def( bp::init< SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > > const & >(( bp::arg("other") ), "") );
         { //::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > >::at
         
             typedef SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > > exported_class_t;
@@ -39,7 +39,8 @@ void register_Velocity3D_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > >::count
@@ -50,7 +51,8 @@ void register_Velocity3D_class(){
             
             Velocity3D_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         Velocity3D_exposer.def( bp::self != bp::self );
@@ -69,7 +71,8 @@ void register_Velocity3D_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Velocity3D_exposer.def( bp::self == bp::self );
@@ -83,7 +86,8 @@ void register_Velocity3D_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > >::set
@@ -95,7 +99,8 @@ void register_Velocity3D_class(){
             Velocity3D_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("i"), bp::arg("value") ) );
+                , ( bp::arg("i"), bp::arg("value") )
+                , "" );
         
         }
         { //::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > >::toString
@@ -106,7 +111,8 @@ void register_Velocity3D_class(){
             
             Velocity3D_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > >::typeName
@@ -117,7 +123,8 @@ void register_Velocity3D_class(){
             
             Velocity3D_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > >::value
@@ -128,7 +135,8 @@ void register_Velocity3D_class(){
             
             Velocity3D_exposer.def( 
                 "value"
-                , value_function_value );
+                , value_function_value
+                , "" );
         
         }
         { //::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > >::x
@@ -140,7 +148,8 @@ void register_Velocity3D_class(){
             Velocity3D_exposer.def( 
                 "x"
                 , x_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > >::y
@@ -152,7 +161,8 @@ void register_Velocity3D_class(){
             Velocity3D_exposer.def( 
                 "y"
                 , y_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMaths::Vector3D< SireUnits::Dimension::PhysUnit< 0, 1, -1, 0, 0, 0, 0 > >::z
@@ -164,7 +174,8 @@ void register_Velocity3D_class(){
             Velocity3D_exposer.def( 
                 "z"
                 , z_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         Velocity3D_exposer.staticmethod( "typeName" );

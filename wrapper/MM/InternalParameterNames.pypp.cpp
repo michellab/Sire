@@ -53,7 +53,7 @@ void register_InternalParameterNames_class(){
 
     { //::SireMM::InternalParameterNames
         typedef bp::class_< SireMM::InternalParameterNames, bp::bases< SireMM::StretchBendTorsionParameterName, SireMM::BendBendParameterName, SireMM::StretchBendParameterName, SireMM::StretchStretchParameterName, SireMM::UreyBradleyParameterName, SireMM::ImproperParameterName, SireMM::DihedralParameterName, SireMM::AngleParameterName, SireMM::BondParameterName > > InternalParameterNames_exposer_t;
-        InternalParameterNames_exposer_t InternalParameterNames_exposer = InternalParameterNames_exposer_t( "InternalParameterNames", bp::init< >() );
+        InternalParameterNames_exposer_t InternalParameterNames_exposer = InternalParameterNames_exposer_t( "InternalParameterNames", "This class provides the default name of the properties\nthat contain the bond, angle, dihedral and Urey-Bradley parameters", bp::init< >("") );
         bp::scope InternalParameterNames_scope( InternalParameterNames_exposer );
         InternalParameterNames_exposer.def( "__copy__", &__copy__);
         InternalParameterNames_exposer.def( "__deepcopy__", &__copy__);

@@ -39,11 +39,11 @@ void register_Array2D_SireMaths_AccumulatorPtr__class(){
 
     { //::SireBase::Array2D< SireBase::PropPtr< SireMaths::Accumulator > >
         typedef bp::class_< SireBase::Array2D< SireBase::PropPtr< SireMaths::Accumulator > >, bp::bases< SireBase::Array2DBase > > Array2D_SireMaths_AccumulatorPtr__exposer_t;
-        Array2D_SireMaths_AccumulatorPtr__exposer_t Array2D_SireMaths_AccumulatorPtr__exposer = Array2D_SireMaths_AccumulatorPtr__exposer_t( "Array2D_SireMaths_AccumulatorPtr_", bp::init< >() );
+        Array2D_SireMaths_AccumulatorPtr__exposer_t Array2D_SireMaths_AccumulatorPtr__exposer = Array2D_SireMaths_AccumulatorPtr__exposer_t( "Array2D_SireMaths_AccumulatorPtr_", "", bp::init< >("") );
         bp::scope Array2D_SireMaths_AccumulatorPtr__scope( Array2D_SireMaths_AccumulatorPtr__exposer );
-        Array2D_SireMaths_AccumulatorPtr__exposer.def( bp::init< int, int >(( bp::arg("nrows"), bp::arg("ncolumns") )) );
-        Array2D_SireMaths_AccumulatorPtr__exposer.def( bp::init< int, int, SireBase::PropPtr< SireMaths::Accumulator > const & >(( bp::arg("nrows"), bp::arg("ncolumns"), bp::arg("default_value") )) );
-        Array2D_SireMaths_AccumulatorPtr__exposer.def( bp::init< SireBase::Array2D< SireBase::PropPtr< SireMaths::Accumulator > > const & >(( bp::arg("other") )) );
+        Array2D_SireMaths_AccumulatorPtr__exposer.def( bp::init< int, int >(( bp::arg("nrows"), bp::arg("ncolumns") ), "") );
+        Array2D_SireMaths_AccumulatorPtr__exposer.def( bp::init< int, int, SireBase::PropPtr< SireMaths::Accumulator > const & >(( bp::arg("nrows"), bp::arg("ncolumns"), bp::arg("default_value") ), "") );
+        Array2D_SireMaths_AccumulatorPtr__exposer.def( bp::init< SireBase::Array2D< SireBase::PropPtr< SireMaths::Accumulator > > const & >(( bp::arg("other") ), "") );
         { //::SireBase::Array2D< SireBase::PropPtr< SireMaths::Accumulator > >::at
         
             typedef SireBase::Array2D< SireBase::PropPtr< SireMaths::Accumulator > > exported_class_t;
@@ -54,7 +54,8 @@ void register_Array2D_SireMaths_AccumulatorPtr__class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i"), bp::arg("j") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireBase::Array2D< SireBase::PropPtr< SireMaths::Accumulator > >::get
@@ -67,7 +68,8 @@ void register_Array2D_SireMaths_AccumulatorPtr__class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("i"), bp::arg("j") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         Array2D_SireMaths_AccumulatorPtr__exposer.def( bp::self != bp::self );
@@ -81,7 +83,8 @@ void register_Array2D_SireMaths_AccumulatorPtr__class(){
                 "__call__"
                 , __call___function_value
                 , ( bp::arg("i"), bp::arg("j") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireBase::Array2D< SireBase::PropPtr< SireMaths::Accumulator > >::operator=
@@ -94,7 +97,8 @@ void register_Array2D_SireMaths_AccumulatorPtr__class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Array2D_SireMaths_AccumulatorPtr__exposer.def( bp::self == bp::self );
@@ -107,7 +111,8 @@ void register_Array2D_SireMaths_AccumulatorPtr__class(){
             Array2D_SireMaths_AccumulatorPtr__exposer.def( 
                 "redimension"
                 , redimension_function_value
-                , ( bp::arg("nrows"), bp::arg("ncolumns") ) );
+                , ( bp::arg("nrows"), bp::arg("ncolumns") )
+                , "" );
         
         }
         { //::SireBase::Array2D< SireBase::PropPtr< SireMaths::Accumulator > >::set
@@ -119,7 +124,8 @@ void register_Array2D_SireMaths_AccumulatorPtr__class(){
             Array2D_SireMaths_AccumulatorPtr__exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("i"), bp::arg("j"), bp::arg("value") ) );
+                , ( bp::arg("i"), bp::arg("j"), bp::arg("value") )
+                , "" );
         
         }
         { //::SireBase::Array2D< SireBase::PropPtr< SireMaths::Accumulator > >::setAll
@@ -131,7 +137,8 @@ void register_Array2D_SireMaths_AccumulatorPtr__class(){
             Array2D_SireMaths_AccumulatorPtr__exposer.def( 
                 "setAll"
                 , setAll_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireBase::Array2D< SireBase::PropPtr< SireMaths::Accumulator > >::toString
@@ -142,7 +149,8 @@ void register_Array2D_SireMaths_AccumulatorPtr__class(){
             
             Array2D_SireMaths_AccumulatorPtr__exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireBase::Array2D< SireBase::PropPtr< SireMaths::Accumulator > >::transpose
@@ -153,7 +161,8 @@ void register_Array2D_SireMaths_AccumulatorPtr__class(){
             
             Array2D_SireMaths_AccumulatorPtr__exposer.def( 
                 "transpose"
-                , transpose_function_value );
+                , transpose_function_value
+                , "" );
         
         }
         Array2D_SireMaths_AccumulatorPtr__exposer.def( "__copy__", &__copy__);

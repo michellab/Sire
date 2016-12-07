@@ -23,7 +23,7 @@ void register_ShellPair_class(){
 
     { //::Squire::ShellPair
         typedef bp::class_< Squire::ShellPair, bp::bases< SireBase::Property >, boost::noncopyable > ShellPair_exposer_t;
-        ShellPair_exposer_t ShellPair_exposer = ShellPair_exposer_t( "ShellPair", bp::no_init );
+        ShellPair_exposer_t ShellPair_exposer = ShellPair_exposer_t( "ShellPair", "The base class of all combined pair orbitals", bp::no_init );
         bp::scope ShellPair_scope( ShellPair_exposer );
         { //::Squire::ShellPair::angularMomentum0
         
@@ -32,7 +32,8 @@ void register_ShellPair_class(){
             
             ShellPair_exposer.def( 
                 "angularMomentum0"
-                , angularMomentum0_function_value );
+                , angularMomentum0_function_value
+                , "" );
         
         }
         { //::Squire::ShellPair::angularMomentum1
@@ -42,7 +43,8 @@ void register_ShellPair_class(){
             
             ShellPair_exposer.def( 
                 "angularMomentum1"
-                , angularMomentum1_function_value );
+                , angularMomentum1_function_value
+                , "" );
         
         }
         { //::Squire::ShellPair::nOrbitals0
@@ -52,7 +54,8 @@ void register_ShellPair_class(){
             
             ShellPair_exposer.def( 
                 "nOrbitals0"
-                , nOrbitals0_function_value );
+                , nOrbitals0_function_value
+                , "" );
         
         }
         { //::Squire::ShellPair::nOrbitals1
@@ -62,7 +65,8 @@ void register_ShellPair_class(){
             
             ShellPair_exposer.def( 
                 "nOrbitals1"
-                , nOrbitals1_function_value );
+                , nOrbitals1_function_value
+                , "" );
         
         }
         { //::Squire::ShellPair::typeName
@@ -72,7 +76,8 @@ void register_ShellPair_class(){
             
             ShellPair_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         ShellPair_exposer.staticmethod( "typeName" );

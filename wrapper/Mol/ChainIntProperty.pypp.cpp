@@ -25,11 +25,11 @@ void register_ChainIntProperty_class(){
 
     { //::SireMol::ChainProperty< long long >
         typedef bp::class_< SireMol::ChainProperty< long long >, bp::bases< SireMol::ChainProp, SireMol::MolViewProperty, SireBase::Property > > ChainIntProperty_exposer_t;
-        ChainIntProperty_exposer_t ChainIntProperty_exposer = ChainIntProperty_exposer_t( "ChainIntProperty", bp::init< >() );
+        ChainIntProperty_exposer_t ChainIntProperty_exposer = ChainIntProperty_exposer_t( "ChainIntProperty", "", bp::init< >("") );
         bp::scope ChainIntProperty_scope( ChainIntProperty_exposer );
-        ChainIntProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") )) );
-        ChainIntProperty_exposer.def( bp::init< QVector< long long > const & >(( bp::arg("values") )) );
-        ChainIntProperty_exposer.def( bp::init< SireMol::ChainProperty< long long > const & >(( bp::arg("other") )) );
+        ChainIntProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "") );
+        ChainIntProperty_exposer.def( bp::init< QVector< long long > const & >(( bp::arg("values") ), "") );
+        ChainIntProperty_exposer.def( bp::init< SireMol::ChainProperty< long long > const & >(( bp::arg("other") ), "") );
         { //::SireMol::ChainProperty< long long >::array
         
             typedef SireMol::ChainProperty< long long > exported_class_t;
@@ -39,7 +39,8 @@ void register_ChainIntProperty_class(){
             ChainIntProperty_exposer.def( 
                 "array"
                 , array_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::ChainProperty< long long >::assertCanConvert
@@ -51,7 +52,8 @@ void register_ChainIntProperty_class(){
             ChainIntProperty_exposer.def( 
                 "assertCanConvert"
                 , assertCanConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::ChainProperty< long long >::assignFrom
@@ -63,7 +65,8 @@ void register_ChainIntProperty_class(){
             ChainIntProperty_exposer.def( 
                 "assignFrom"
                 , assignFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::ChainProperty< long long >::at
@@ -76,7 +79,8 @@ void register_ChainIntProperty_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("chainidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::ChainProperty< long long >::canConvert
@@ -88,7 +92,8 @@ void register_ChainIntProperty_class(){
             ChainIntProperty_exposer.def( 
                 "canConvert"
                 , canConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::ChainProperty< long long >::count
@@ -99,7 +104,8 @@ void register_ChainIntProperty_class(){
             
             ChainIntProperty_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMol::ChainProperty< long long >::fromVariant
@@ -111,7 +117,8 @@ void register_ChainIntProperty_class(){
             ChainIntProperty_exposer.def( 
                 "fromVariant"
                 , fromVariant_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::ChainProperty< long long >::get
@@ -124,7 +131,8 @@ void register_ChainIntProperty_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("chainidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::ChainProperty< long long >::isCompatibleWith
@@ -136,7 +144,8 @@ void register_ChainIntProperty_class(){
             ChainIntProperty_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::ChainProperty< long long >::isEmpty
@@ -147,7 +156,8 @@ void register_ChainIntProperty_class(){
             
             ChainIntProperty_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMol::ChainProperty< long long >::nChains
@@ -158,7 +168,8 @@ void register_ChainIntProperty_class(){
             
             ChainIntProperty_exposer.def( 
                 "nChains"
-                , nChains_function_value );
+                , nChains_function_value
+                , "" );
         
         }
         ChainIntProperty_exposer.def( bp::self != bp::self );
@@ -172,7 +183,8 @@ void register_ChainIntProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         ChainIntProperty_exposer.def( bp::self == bp::self );
@@ -186,7 +198,8 @@ void register_ChainIntProperty_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("chainidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::ChainProperty< long long >::set
@@ -199,7 +212,8 @@ void register_ChainIntProperty_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("chainidx"), bp::arg("value") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::ChainProperty< long long >::size
@@ -210,7 +224,8 @@ void register_ChainIntProperty_class(){
             
             ChainIntProperty_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "" );
         
         }
         { //::SireMol::ChainProperty< long long >::toString
@@ -221,7 +236,8 @@ void register_ChainIntProperty_class(){
             
             ChainIntProperty_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::ChainProperty< long long >::toVariant
@@ -232,7 +248,8 @@ void register_ChainIntProperty_class(){
             
             ChainIntProperty_exposer.def( 
                 "toVariant"
-                , toVariant_function_value );
+                , toVariant_function_value
+                , "" );
         
         }
         { //::SireMol::ChainProperty< long long >::typeName
@@ -243,7 +260,8 @@ void register_ChainIntProperty_class(){
             
             ChainIntProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         ChainIntProperty_exposer.staticmethod( "fromVariant" );

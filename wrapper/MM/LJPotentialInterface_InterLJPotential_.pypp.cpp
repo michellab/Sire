@@ -24,7 +24,7 @@ void register_LJPotentialInterface_InterLJPotential__class(){
 
     { //::SireMM::LJPotentialInterface< SireMM::InterLJPotential >
         typedef bp::class_< SireMM::LJPotentialInterface< SireMM::InterLJPotential >, boost::noncopyable > LJPotentialInterface_InterLJPotential__exposer_t;
-        LJPotentialInterface_InterLJPotential__exposer_t LJPotentialInterface_InterLJPotential__exposer = LJPotentialInterface_InterLJPotential__exposer_t( "LJPotentialInterface_InterLJPotential_", bp::no_init );
+        LJPotentialInterface_InterLJPotential__exposer_t LJPotentialInterface_InterLJPotential__exposer = LJPotentialInterface_InterLJPotential__exposer_t( "LJPotentialInterface_InterLJPotential_", "", bp::no_init );
         bp::scope LJPotentialInterface_InterLJPotential__scope( LJPotentialInterface_InterLJPotential__exposer );
         { //::SireMM::LJPotentialInterface< SireMM::InterLJPotential >::combiningRules
         
@@ -35,7 +35,8 @@ void register_LJPotentialInterface_InterLJPotential__class(){
             LJPotentialInterface_InterLJPotential__exposer.def( 
                 "combiningRules"
                 , combiningRules_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::LJPotentialInterface< SireMM::InterLJPotential >::containsProperty
@@ -47,18 +48,20 @@ void register_LJPotentialInterface_InterLJPotential__class(){
             LJPotentialInterface_InterLJPotential__exposer.def( 
                 "containsProperty"
                 , containsProperty_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "" );
         
         }
         { //::SireMM::LJPotentialInterface< SireMM::InterLJPotential >::parameters
         
             typedef SireMM::LJPotentialInterface< SireMM::InterLJPotential > exported_class_t;
-            typedef ::SireMM::LJParameterName3D ( *parameters_function_type )(  );
+            typedef ::SireMM::InterLJPotential::ParameterNames ( *parameters_function_type )(  );
             parameters_function_type parameters_function_value( &::SireMM::LJPotentialInterface< SireMM::InterLJPotential >::parameters );
             
             LJPotentialInterface_InterLJPotential__exposer.def( 
                 "parameters"
-                , parameters_function_value );
+                , parameters_function_value
+                , "" );
         
         }
         { //::SireMM::LJPotentialInterface< SireMM::InterLJPotential >::properties
@@ -70,7 +73,8 @@ void register_LJPotentialInterface_InterLJPotential__class(){
             LJPotentialInterface_InterLJPotential__exposer.def( 
                 "properties"
                 , properties_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::LJPotentialInterface< SireMM::InterLJPotential >::property
@@ -83,7 +87,8 @@ void register_LJPotentialInterface_InterLJPotential__class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::LJPotentialInterface< SireMM::InterLJPotential >::setCombiningRules
@@ -95,7 +100,8 @@ void register_LJPotentialInterface_InterLJPotential__class(){
             LJPotentialInterface_InterLJPotential__exposer.def( 
                 "setCombiningRules"
                 , setCombiningRules_function_value
-                , ( bp::arg("combiningrules") ) );
+                , ( bp::arg("combiningrules") )
+                , "" );
         
         }
         { //::SireMM::LJPotentialInterface< SireMM::InterLJPotential >::setProperty
@@ -107,7 +113,8 @@ void register_LJPotentialInterface_InterLJPotential__class(){
             LJPotentialInterface_InterLJPotential__exposer.def( 
                 "setProperty"
                 , setProperty_function_value
-                , ( bp::arg("name"), bp::arg("value") ) );
+                , ( bp::arg("name"), bp::arg("value") )
+                , "" );
         
         }
         { //::SireMM::LJPotentialInterface< SireMM::InterLJPotential >::setSpace
@@ -119,7 +126,8 @@ void register_LJPotentialInterface_InterLJPotential__class(){
             LJPotentialInterface_InterLJPotential__exposer.def( 
                 "setSpace"
                 , setSpace_function_value
-                , ( bp::arg("new_space") ) );
+                , ( bp::arg("new_space") )
+                , "" );
         
         }
         { //::SireMM::LJPotentialInterface< SireMM::InterLJPotential >::setSwitchingFunction
@@ -131,7 +139,8 @@ void register_LJPotentialInterface_InterLJPotential__class(){
             LJPotentialInterface_InterLJPotential__exposer.def( 
                 "setSwitchingFunction"
                 , setSwitchingFunction_function_value
-                , ( bp::arg("new_switchfunc") ) );
+                , ( bp::arg("new_switchfunc") )
+                , "" );
         
         }
         { //::SireMM::LJPotentialInterface< SireMM::InterLJPotential >::space
@@ -143,7 +152,8 @@ void register_LJPotentialInterface_InterLJPotential__class(){
             LJPotentialInterface_InterLJPotential__exposer.def( 
                 "space"
                 , space_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMM::LJPotentialInterface< SireMM::InterLJPotential >::switchingFunction
@@ -155,7 +165,8 @@ void register_LJPotentialInterface_InterLJPotential__class(){
             LJPotentialInterface_InterLJPotential__exposer.def( 
                 "switchingFunction"
                 , switchingFunction_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         LJPotentialInterface_InterLJPotential__exposer.staticmethod( "parameters" );

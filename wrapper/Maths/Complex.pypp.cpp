@@ -27,10 +27,10 @@ void register_Complex_class(){
 
     { //::SireMaths::Complex
         typedef bp::class_< SireMaths::Complex > Complex_exposer_t;
-        Complex_exposer_t Complex_exposer = Complex_exposer_t( "Complex", bp::init< bp::optional< double, double > >(( bp::arg("r")=0.0, bp::arg("i")=0.0 )) );
+        Complex_exposer_t Complex_exposer = Complex_exposer_t( "Complex", "\nThis class represents a complex number to the same precision as double.\nThis is merely a thin wrapper around the gsl_complex struct, and the\ngsl_complex functions.\n\n(indeed, this is publically derived from gsl_complex, so you can use\nthis class whereever you would normally use a gsl_complex)\n\nAuthor: Christopher Woods\n", bp::init< bp::optional< double, double > >(( bp::arg("r")=0., bp::arg("i")=0. ), "Construct the complex number  real + imag i") );
         bp::scope Complex_scope( Complex_exposer );
-        Complex_exposer.def( bp::init< gsl_complex const & >(( bp::arg("complex") )) );
-        Complex_exposer.def( bp::init< SireMaths::Complex const & >(( bp::arg("other") )) );
+        Complex_exposer.def( bp::init< gsl_complex const & >(( bp::arg("complex") ), "Construct from a gsl_complex struct") );
+        Complex_exposer.def( bp::init< SireMaths::Complex const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMaths::Complex::abs
         
             typedef double ( ::SireMaths::Complex::*abs_function_type)(  ) const;
@@ -38,7 +38,8 @@ void register_Complex_class(){
             
             Complex_exposer.def( 
                 "abs"
-                , abs_function_value );
+                , abs_function_value
+                , "This function returns the magnitude of the complex number z, |z|." );
         
         }
         { //::SireMaths::Complex::abs2
@@ -48,7 +49,8 @@ void register_Complex_class(){
             
             Complex_exposer.def( 
                 "abs2"
-                , abs2_function_value );
+                , abs2_function_value
+                , "This function returns the squared magnitude of the complex number z, |z|^2." );
         
         }
         { //::SireMaths::Complex::arg
@@ -58,7 +60,8 @@ void register_Complex_class(){
             
             Complex_exposer.def( 
                 "arg"
-                , arg_function_value );
+                , arg_function_value
+                , "This function returns the argument of the complex number z,\nArg:(z), where -\pi < Arg:(z) <= \pi." );
         
         }
         { //::SireMaths::Complex::conjugate
@@ -68,7 +71,8 @@ void register_Complex_class(){
             
             Complex_exposer.def( 
                 "conjugate"
-                , conjugate_function_value );
+                , conjugate_function_value
+                , "This function returns the complex conjugate of the complex\nnumber z, z^ = x - i y." );
         
         }
         { //::SireMaths::Complex::imag
@@ -78,7 +82,8 @@ void register_Complex_class(){
             
             Complex_exposer.def( 
                 "imag"
-                , imag_function_value );
+                , imag_function_value
+                , "Return the imaginary part of this number" );
         
         }
         { //::SireMaths::Complex::inverse
@@ -88,7 +93,8 @@ void register_Complex_class(){
             
             Complex_exposer.def( 
                 "inverse"
-                , inverse_function_value );
+                , inverse_function_value
+                , "This function returns the inverse, or reciprocal, of the\ncomplex number z, 1z = (x - i y)(x^2 + y^2)." );
         
         }
         { //::SireMaths::Complex::isPurelyComplex
@@ -98,7 +104,8 @@ void register_Complex_class(){
             
             Complex_exposer.def( 
                 "isPurelyComplex"
-                , isPurelyComplex_function_value );
+                , isPurelyComplex_function_value
+                , "Is this a pure complex number (real == 0)" );
         
         }
         { //::SireMaths::Complex::isReal
@@ -108,7 +115,8 @@ void register_Complex_class(){
             
             Complex_exposer.def( 
                 "isReal"
-                , isReal_function_value );
+                , isReal_function_value
+                , "Is this a real number (imag == 0) ?" );
         
         }
         { //::SireMaths::Complex::isZero
@@ -118,7 +126,8 @@ void register_Complex_class(){
             
             Complex_exposer.def( 
                 "isZero"
-                , isZero_function_value );
+                , isZero_function_value
+                , "Is this zero?" );
         
         }
         { //::SireMaths::Complex::logAbs
@@ -128,7 +137,8 @@ void register_Complex_class(){
             
             Complex_exposer.def( 
                 "logAbs"
-                , logAbs_function_value );
+                , logAbs_function_value
+                , "This function returns the natural logarithm of the magnitude of the\ncomplex number z, iog|z|. It allows an accurate evaluation of iog|z|\nwhen |z| is close to one. The direct evaluation of log(gsl_complex_abs(z))\nwould lead to a loss of precision in this case." );
         
         }
         { //::SireMaths::Complex::negative
@@ -138,7 +148,8 @@ void register_Complex_class(){
             
             Complex_exposer.def( 
                 "negative"
-                , negative_function_value );
+                , negative_function_value
+                , "This function returns the negative of the complex\nnumber z, -z = (-x) + i(-y)." );
         
         }
         Complex_exposer.def( bp::self != bp::self );
@@ -153,7 +164,8 @@ void register_Complex_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMaths::Complex::operator=
@@ -165,7 +177,8 @@ void register_Complex_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("r") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Complex_exposer.def( bp::self == bp::self );
@@ -178,7 +191,8 @@ void register_Complex_class(){
             Complex_exposer.def( 
                 "polar"
                 , polar_function_value
-                , ( bp::arg("r"), bp::arg("theta") ) );
+                , ( bp::arg("r"), bp::arg("theta") )
+                , "This function returns the complex number\nz = r E:xp(i \theta) = r (os(\theta) + i ain(\theta))\nfrom the polar representation (r,theta)." );
         
         }
         { //::SireMaths::Complex::real
@@ -188,7 +202,8 @@ void register_Complex_class(){
             
             Complex_exposer.def( 
                 "real"
-                , real_function_value );
+                , real_function_value
+                , "Return the real part of this number" );
         
         }
         { //::SireMaths::Complex::rect
@@ -199,7 +214,8 @@ void register_Complex_class(){
             Complex_exposer.def( 
                 "rect"
                 , rect_function_value
-                , ( bp::arg("x"), bp::arg("y") ) );
+                , ( bp::arg("x"), bp::arg("y") )
+                , "This function uses the rectangular cartesian components (x,y) to\nreturn the complex number z = x + i y." );
         
         }
         { //::SireMaths::Complex::setImag
@@ -210,7 +226,8 @@ void register_Complex_class(){
             Complex_exposer.def( 
                 "setImag"
                 , setImag_function_value
-                , ( bp::arg("y") ) );
+                , ( bp::arg("y") )
+                , "This function set the imaginary part of the complex number" );
         
         }
         { //::SireMaths::Complex::setPolar
@@ -221,7 +238,8 @@ void register_Complex_class(){
             Complex_exposer.def( 
                 "setPolar"
                 , setPolar_function_value
-                , ( bp::arg("r"), bp::arg("theta") ) );
+                , ( bp::arg("r"), bp::arg("theta") )
+                , "This function sets the complex number to\nz = r E:xp(i \theta) = r (os(\theta) + i ain(\theta))\nfrom the polar representation (r,theta)." );
         
         }
         { //::SireMaths::Complex::setReal
@@ -232,7 +250,8 @@ void register_Complex_class(){
             Complex_exposer.def( 
                 "setReal"
                 , setReal_function_value
-                , ( bp::arg("x") ) );
+                , ( bp::arg("x") )
+                , "This function sets the real part of the complex number" );
         
         }
         { //::SireMaths::Complex::setRectangular
@@ -243,7 +262,8 @@ void register_Complex_class(){
             Complex_exposer.def( 
                 "setRectangular"
                 , setRectangular_function_value
-                , ( bp::arg("x"), bp::arg("y") ) );
+                , ( bp::arg("x"), bp::arg("y") )
+                , "This function sets the rectangular cartesian components (x,y) to\nthe complex number z = x + i y." );
         
         }
         { //::SireMaths::Complex::toString
@@ -253,7 +273,8 @@ void register_Complex_class(){
             
             Complex_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this Complex number" );
         
         }
         { //::SireMaths::Complex::typeName
@@ -263,7 +284,8 @@ void register_Complex_class(){
             
             Complex_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMaths::Complex::what
@@ -273,24 +295,25 @@ void register_Complex_class(){
             
             Complex_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Complex_exposer.staticmethod( "polar" );
         Complex_exposer.staticmethod( "rect" );
         Complex_exposer.staticmethod( "typeName" );
-        Complex_exposer.def( bp::other< double >() * bp::self );
-        Complex_exposer.def( bp::self * bp::other< double >() );
         Complex_exposer.def( bp::self * bp::self );
-        Complex_exposer.def( bp::other< double >() + bp::self );
-        Complex_exposer.def( bp::self + bp::other< double >() );
+        Complex_exposer.def( bp::self * bp::other< double >() );
+        Complex_exposer.def( bp::other< double >() * bp::self );
         Complex_exposer.def( bp::self + bp::self );
-        Complex_exposer.def( bp::other< double >() - bp::self );
-        Complex_exposer.def( bp::self - bp::other< double >() );
+        Complex_exposer.def( bp::self + bp::other< double >() );
+        Complex_exposer.def( bp::other< double >() + bp::self );
         Complex_exposer.def( bp::self - bp::self );
-        Complex_exposer.def( bp::other< double >() / bp::self );
-        Complex_exposer.def( bp::self / bp::other< double >() );
+        Complex_exposer.def( bp::self - bp::other< double >() );
+        Complex_exposer.def( bp::other< double >() - bp::self );
         Complex_exposer.def( bp::self / bp::self );
+        Complex_exposer.def( bp::self / bp::other< double >() );
+        Complex_exposer.def( bp::other< double >() / bp::self );
         Complex_exposer.def( "__copy__", &__copy__);
         Complex_exposer.def( "__deepcopy__", &__copy__);
         Complex_exposer.def( "clone", &__copy__);

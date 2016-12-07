@@ -47,13 +47,13 @@ void register_Vector_class(){
 
     { //::SireMaths::Vector
         typedef bp::class_< SireMaths::Vector > Vector_exposer_t;
-        Vector_exposer_t Vector_exposer = Vector_exposer_t( "Vector", bp::init< bp::optional< double > >(( bp::arg("val")=0.0 )) );
+        Vector_exposer_t Vector_exposer = Vector_exposer_t( "Vector", "", bp::init< bp::optional< double > >(( bp::arg("val")=0. ), "Construct from a tuple of three values") );
         bp::scope Vector_scope( Vector_exposer );
-        Vector_exposer.def( bp::init< double, double, double >(( bp::arg("xpos"), bp::arg("ypos"), bp::arg("zpos") )) );
-        Vector_exposer.def( bp::init< boost::tuples::tuple< double, double, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > const & >(( bp::arg("pos") )) );
-        Vector_exposer.def( bp::init< QString const & >(( bp::arg("str") )) );
-        Vector_exposer.def( bp::init< SireMaths::NVector const & >(( bp::arg("other") )) );
-        Vector_exposer.def( bp::init< SireMaths::Vector const & >(( bp::arg("other") )) );
+        Vector_exposer.def( bp::init< double, double, double >(( bp::arg("xpos"), bp::arg("ypos"), bp::arg("zpos") ), "") );
+        Vector_exposer.def( bp::init< boost::tuples::tuple< double, double, double, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type > const & >(( bp::arg("pos") ), "Construct from a tuple of three values") );
+        Vector_exposer.def( bp::init< QString const & >(( bp::arg("str") ), "Construct from a QString\nThrow: SireError::invalid_arg\n") );
+        Vector_exposer.def( bp::init< SireMaths::NVector const & >(( bp::arg("other") ), "Copy constructor") );
+        Vector_exposer.def( bp::init< SireMaths::Vector const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMaths::Vector::angle
         
             typedef ::SireUnits::Dimension::Angle ( *angle_function_type )( ::SireMaths::Vector const &,::SireMaths::Vector const & );
@@ -62,7 +62,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "angle"
                 , angle_function_value
-                , ( bp::arg("v0"), bp::arg("v1") ) );
+                , ( bp::arg("v0"), bp::arg("v1") )
+                , "Return the angle between vectors v0 and v1 - this is the smallest\nangle, and will always lie between 0 and 180 degrees" );
         
         }
         { //::SireMaths::Vector::angle
@@ -73,7 +74,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "angle"
                 , angle_function_value
-                , ( bp::arg("v0"), bp::arg("v1"), bp::arg("v2") ) );
+                , ( bp::arg("v0"), bp::arg("v1"), bp::arg("v2") )
+                , "Return the angle between v0-v1-v2 (treating the vectors as points in space)" );
         
         }
         { //::SireMaths::Vector::at
@@ -84,7 +86,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Access elements by index" );
         
         }
         { //::SireMaths::Vector::b
@@ -94,7 +97,8 @@ void register_Vector_class(){
             
             Vector_exposer.def( 
                 "b"
-                , b_function_value );
+                , b_function_value
+                , "Return the components via rgb (limited between 0 and 1)" );
         
         }
         { //::SireMaths::Vector::bearing
@@ -104,7 +108,8 @@ void register_Vector_class(){
             
             Vector_exposer.def( 
                 "bearing"
-                , bearing_function_value );
+                , bearing_function_value
+                , "Return the bearing of this vector against (0,1,0) (north) on the xy plane" );
         
         }
         { //::SireMaths::Vector::bearingXY
@@ -115,7 +120,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "bearingXY"
                 , bearingXY_function_value
-                , ( bp::arg("v") ) );
+                , ( bp::arg("v") )
+                , "Return the bearing of this vector against v on the xy plane" );
         
         }
         { //::SireMaths::Vector::bearingXZ
@@ -126,7 +132,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "bearingXZ"
                 , bearingXZ_function_value
-                , ( bp::arg("v") ) );
+                , ( bp::arg("v") )
+                , "Return the bearing of this vector against v on the xz plane" );
         
         }
         { //::SireMaths::Vector::bearingYZ
@@ -137,7 +144,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "bearingYZ"
                 , bearingYZ_function_value
-                , ( bp::arg("v") ) );
+                , ( bp::arg("v") )
+                , "Return the bearing of this vector against v on the yz plane" );
         
         }
         { //::SireMaths::Vector::count
@@ -147,7 +155,8 @@ void register_Vector_class(){
             
             Vector_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the size of the Vector (always 3 - unless you disagree\nwith me that we should be living in a 3-dimensional space)" );
         
         }
         { //::SireMaths::Vector::cross
@@ -158,7 +167,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "cross"
                 , cross_function_value
-                , ( bp::arg("v0"), bp::arg("v1") ) );
+                , ( bp::arg("v0"), bp::arg("v1") )
+                , "Return the cross product of v0 and v1" );
         
         }
         { //::SireMaths::Vector::dihedral
@@ -169,7 +179,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "dihedral"
                 , dihedral_function_value
-                , ( bp::arg("v0"), bp::arg("v1"), bp::arg("v2"), bp::arg("v3") ) );
+                , ( bp::arg("v0"), bp::arg("v1"), bp::arg("v2"), bp::arg("v3") )
+                , "Return the dihedral angle between v0-v1-v2-v3 (treating the vectors as points)" );
         
         }
         { //::SireMaths::Vector::direction
@@ -179,7 +190,8 @@ void register_Vector_class(){
             
             Vector_exposer.def( 
                 "direction"
-                , direction_function_value );
+                , direction_function_value
+                , "Return the unit vector pointing in the direction of this vector" );
         
         }
         { //::SireMaths::Vector::distance
@@ -190,7 +202,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "distance"
                 , distance_function_value
-                , ( bp::arg("v1"), bp::arg("v2") ) );
+                , ( bp::arg("v1"), bp::arg("v2") )
+                , "Return the distance between two vectors" );
         
         }
         { //::SireMaths::Vector::distance2
@@ -201,7 +214,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "distance2"
                 , distance2_function_value
-                , ( bp::arg("v1"), bp::arg("v2") ) );
+                , ( bp::arg("v1"), bp::arg("v2") )
+                , "Return the distance squared between two vectors" );
         
         }
         { //::SireMaths::Vector::dot
@@ -212,7 +226,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "dot"
                 , dot_function_value
-                , ( bp::arg("v0"), bp::arg("v1") ) );
+                , ( bp::arg("v0"), bp::arg("v1") )
+                , "Return the dot product of v0 and v1" );
         
         }
         { //::SireMaths::Vector::fromString
@@ -223,7 +238,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "fromString"
                 , fromString_function_value
-                , ( bp::arg("str") ) );
+                , ( bp::arg("str") )
+                , "Construct a Vector from the QString representation returned by toString()\nThrow: SireError::invalid_arg\n" );
         
         }
         { //::SireMaths::Vector::g
@@ -233,7 +249,8 @@ void register_Vector_class(){
             
             Vector_exposer.def( 
                 "g"
-                , g_function_value );
+                , g_function_value
+                , "Return the components via rgb (limited between 0 and 1)" );
         
         }
         { //::SireMaths::Vector::generate
@@ -244,7 +261,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "generate"
                 , generate_function_value
-                , ( bp::arg("dst"), bp::arg("v1"), bp::arg("ang"), bp::arg("v2"), bp::arg("dih"), bp::arg("v3") ) );
+                , ( bp::arg("dst"), bp::arg("v1"), bp::arg("ang"), bp::arg("v2"), bp::arg("dih"), bp::arg("v3") )
+                , "Generate a vector, v0, that has distance dst v0-v1, angle ang v0-v1-v2,\nand dihedral dih v0-v1-v2-v3" );
         
         }
         { //::SireMaths::Vector::getitem
@@ -255,7 +273,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "getitem"
                 , getitem_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Access elements by index (used by python)" );
         
         }
         { //::SireMaths::Vector::invDistance
@@ -266,7 +285,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "invDistance"
                 , invDistance_function_value
-                , ( bp::arg("v1"), bp::arg("v2") ) );
+                , ( bp::arg("v1"), bp::arg("v2") )
+                , "Return the 1  distance between two vectors" );
         
         }
         { //::SireMaths::Vector::invDistance2
@@ -277,7 +297,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "invDistance2"
                 , invDistance2_function_value
-                , ( bp::arg("v1"), bp::arg("v2") ) );
+                , ( bp::arg("v1"), bp::arg("v2") )
+                , "Return 1  distance2 between two vectors" );
         
         }
         { //::SireMaths::Vector::invLength
@@ -287,7 +308,8 @@ void register_Vector_class(){
             
             Vector_exposer.def( 
                 "invLength"
-                , invLength_function_value );
+                , invLength_function_value
+                , "" );
         
         }
         { //::SireMaths::Vector::invLength2
@@ -297,7 +319,8 @@ void register_Vector_class(){
             
             Vector_exposer.def( 
                 "invLength2"
-                , invLength2_function_value );
+                , invLength2_function_value
+                , "Return the inverse length squared" );
         
         }
         { //::SireMaths::Vector::isZero
@@ -307,7 +330,8 @@ void register_Vector_class(){
             
             Vector_exposer.def( 
                 "isZero"
-                , isZero_function_value );
+                , isZero_function_value
+                , "Return whether or not this is a zero length vector" );
         
         }
         { //::SireMaths::Vector::length
@@ -317,7 +341,8 @@ void register_Vector_class(){
             
             Vector_exposer.def( 
                 "length"
-                , length_function_value );
+                , length_function_value
+                , "" );
         
         }
         { //::SireMaths::Vector::length2
@@ -327,7 +352,8 @@ void register_Vector_class(){
             
             Vector_exposer.def( 
                 "length2"
-                , length2_function_value );
+                , length2_function_value
+                , "" );
         
         }
         { //::SireMaths::Vector::magnitude
@@ -337,7 +363,8 @@ void register_Vector_class(){
             
             Vector_exposer.def( 
                 "magnitude"
-                , magnitude_function_value );
+                , magnitude_function_value
+                , "Return the length of this vector" );
         
         }
         { //::SireMaths::Vector::manhattanLength
@@ -347,7 +374,8 @@ void register_Vector_class(){
             
             Vector_exposer.def( 
                 "manhattanLength"
-                , manhattanLength_function_value );
+                , manhattanLength_function_value
+                , "Return the manhattan length of the vector" );
         
         }
         { //::SireMaths::Vector::max
@@ -358,7 +386,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "max"
                 , max_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return a vector that has the maximum xyz components out of this\nand other" );
         
         }
         { //::SireMaths::Vector::metricTensor
@@ -368,7 +397,8 @@ void register_Vector_class(){
             
             Vector_exposer.def( 
                 "metricTensor"
-                , metricTensor_function_value );
+                , metricTensor_function_value
+                , "Return the metric tensor of a vector, i.e.\n| yy + zz,    -xy    -xz      |\n|    -yx,   xx + zz  -yz      |\n|    -zx       -zy    xx + yy |\n" );
         
         }
         { //::SireMaths::Vector::min
@@ -379,7 +409,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "min"
                 , min_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return a vector that has the minimum components" );
         
         }
         { //::SireMaths::Vector::normalise
@@ -389,7 +420,8 @@ void register_Vector_class(){
             
             Vector_exposer.def( 
                 "normalise"
-                , normalise_function_value );
+                , normalise_function_value
+                , "Return a normalised form of the vector" );
         
         }
         Vector_exposer.def( bp::self != bp::self );
@@ -407,7 +439,8 @@ void register_Vector_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         Vector_exposer.def( bp::self == bp::self );
@@ -419,7 +452,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMaths::Vector::r
@@ -429,7 +463,8 @@ void register_Vector_class(){
             
             Vector_exposer.def( 
                 "r"
-                , r_function_value );
+                , r_function_value
+                , "Return the components via rgb (limited between 0 and 1)" );
         
         }
         { //::SireMaths::Vector::set
@@ -440,7 +475,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("x"), bp::arg("y"), bp::arg("z") ) );
+                , ( bp::arg("x"), bp::arg("y"), bp::arg("z") )
+                , "Set individual values of the vector" );
         
         }
         { //::SireMaths::Vector::set
@@ -451,7 +487,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "set"
                 , set_function_value
-                , ( bp::arg("i"), bp::arg("v") ) );
+                , ( bp::arg("i"), bp::arg("v") )
+                , "Set individual values of the vector" );
         
         }
         { //::SireMaths::Vector::setB
@@ -462,7 +499,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "setB"
                 , setB_function_value
-                , ( bp::arg("z") ) );
+                , ( bp::arg("z") )
+                , "Set individual values of the vector" );
         
         }
         { //::SireMaths::Vector::setG
@@ -473,7 +511,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "setG"
                 , setG_function_value
-                , ( bp::arg("y") ) );
+                , ( bp::arg("y") )
+                , "Set individual values of the vector" );
         
         }
         { //::SireMaths::Vector::setMax
@@ -484,7 +523,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "setMax"
                 , setMax_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Set this Vector so that it has the maximum xyz components out of\nthis and other (e.g. this->x = max(this->x(),other.x() etc.)" );
         
         }
         { //::SireMaths::Vector::setMin
@@ -495,7 +535,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "setMin"
                 , setMin_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Set this Vector so that it has the minimum xyz components" );
         
         }
         { //::SireMaths::Vector::setR
@@ -506,7 +547,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "setR"
                 , setR_function_value
-                , ( bp::arg("x") ) );
+                , ( bp::arg("x") )
+                , "Set individual values of the vector" );
         
         }
         { //::SireMaths::Vector::setX
@@ -517,7 +559,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "setX"
                 , setX_function_value
-                , ( bp::arg("x") ) );
+                , ( bp::arg("x") )
+                , "Set individual values of the vector" );
         
         }
         { //::SireMaths::Vector::setY
@@ -528,7 +571,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "setY"
                 , setY_function_value
-                , ( bp::arg("y") ) );
+                , ( bp::arg("y") )
+                , "Set individual values of the vector" );
         
         }
         { //::SireMaths::Vector::setZ
@@ -539,7 +583,8 @@ void register_Vector_class(){
             Vector_exposer.def( 
                 "setZ"
                 , setZ_function_value
-                , ( bp::arg("z") ) );
+                , ( bp::arg("z") )
+                , "Set individual values of the vector" );
         
         }
         { //::SireMaths::Vector::toString
@@ -549,7 +594,8 @@ void register_Vector_class(){
             
             Vector_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a QString representation of the vector" );
         
         }
         { //::SireMaths::Vector::typeName
@@ -559,7 +605,8 @@ void register_Vector_class(){
             
             Vector_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMaths::Vector::what
@@ -569,7 +616,8 @@ void register_Vector_class(){
             
             Vector_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         { //::SireMaths::Vector::x
@@ -579,7 +627,8 @@ void register_Vector_class(){
             
             Vector_exposer.def( 
                 "x"
-                , x_function_value );
+                , x_function_value
+                , "" );
         
         }
         { //::SireMaths::Vector::y
@@ -589,7 +638,8 @@ void register_Vector_class(){
             
             Vector_exposer.def( 
                 "y"
-                , y_function_value );
+                , y_function_value
+                , "" );
         
         }
         { //::SireMaths::Vector::z
@@ -599,7 +649,8 @@ void register_Vector_class(){
             
             Vector_exposer.def( 
                 "z"
-                , z_function_value );
+                , z_function_value
+                , "" );
         
         }
         Vector_exposer.staticmethod( "angle" );
@@ -614,8 +665,8 @@ void register_Vector_class(){
         Vector_exposer.staticmethod( "invDistance2" );
         Vector_exposer.staticmethod( "typeName" );
         Vector_exposer.def( bp::self * bp::other< SireMaths::Quaternion >() );
-        Vector_exposer.def( bp::other< double >() * bp::self );
         Vector_exposer.def( bp::self * bp::other< double >() );
+        Vector_exposer.def( bp::other< double >() * bp::self );
         Vector_exposer.def( bp::self + bp::self );
         Vector_exposer.def( bp::self - bp::self );
         Vector_exposer.def( bp::self / bp::other< double >() );

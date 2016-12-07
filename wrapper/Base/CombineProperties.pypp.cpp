@@ -30,7 +30,7 @@ void register_CombineProperties_class(){
 
     { //::SireBase::CombineProperties
         typedef bp::class_< SireBase::CombineProperties, bp::bases< SireBase::Property >, boost::noncopyable > CombineProperties_exposer_t;
-        CombineProperties_exposer_t CombineProperties_exposer = CombineProperties_exposer_t( "CombineProperties", bp::no_init );
+        CombineProperties_exposer_t CombineProperties_exposer = CombineProperties_exposer_t( "CombineProperties", "This is the base class of a property alias which provides\na combination of existing properties. Use this to build\nproperties that dont exist independently, but are\nrather built by combining together other properties.\n\nFor a good example, see SireVol::CombineSpaces\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope CombineProperties_scope( CombineProperties_exposer );
         { //::SireBase::CombineProperties::at
         
@@ -41,7 +41,8 @@ void register_CombineProperties_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the ith property source\nThrow: SireID::invalid_index\n" );
         
         }
         { //::SireBase::CombineProperties::combinedProperty
@@ -52,7 +53,8 @@ void register_CombineProperties_class(){
             CombineProperties_exposer.def( 
                 "combinedProperty"
                 , combinedProperty_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the combined property. This will be null if this property\nhas not been updated, or if there are no properties to combine" );
         
         }
         { //::SireBase::CombineProperties::count
@@ -62,7 +64,8 @@ void register_CombineProperties_class(){
             
             CombineProperties_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the number of properties that are combined together\nto form this property" );
         
         }
         { //::SireBase::CombineProperties::isEmpty
@@ -72,7 +75,8 @@ void register_CombineProperties_class(){
             
             CombineProperties_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether or not this is empty (has no properties)" );
         
         }
         { //::SireBase::CombineProperties::nSources
@@ -82,7 +86,8 @@ void register_CombineProperties_class(){
             
             CombineProperties_exposer.def( 
                 "nSources"
-                , nSources_function_value );
+                , nSources_function_value
+                , "Return the number of properties that are combined together\nto form this property" );
         
         }
         { //::SireBase::CombineProperties::operator[]
@@ -94,7 +99,8 @@ void register_CombineProperties_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireBase::CombineProperties::size
@@ -104,7 +110,8 @@ void register_CombineProperties_class(){
             
             CombineProperties_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "Return the number of properties that are combined together\nto form this property" );
         
         }
         { //::SireBase::CombineProperties::toString
@@ -114,7 +121,8 @@ void register_CombineProperties_class(){
             
             CombineProperties_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this combination" );
         
         }
         { //::SireBase::CombineProperties::typeName
@@ -124,7 +132,8 @@ void register_CombineProperties_class(){
             
             CombineProperties_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireBase::CombineProperties::updateFrom
@@ -135,7 +144,8 @@ void register_CombineProperties_class(){
             CombineProperties_exposer.def( 
                 "updateFrom"
                 , updateFrom_function_value
-                , ( bp::arg("properties") ) );
+                , ( bp::arg("properties") )
+                , "Update this combined property by fetching the necessary\nproperties to combine from properties\n\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         CombineProperties_exposer.staticmethod( "typeName" );

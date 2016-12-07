@@ -326,7 +326,7 @@ bool replicaTest(Replica &replica_a, Replica &replica_b,
         double H_b_i = replica_b.energy().value();
 
         double H_a_j = H_a_i;
-        double H_b_j = H_b_j;
+        double H_b_j = H_b_i;
 
         if (replica_a.lambdaValue() != replica_b.lambdaValue() or
             replica_a.energyComponent() != replica_b.energyComponent())

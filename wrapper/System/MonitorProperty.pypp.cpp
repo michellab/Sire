@@ -40,14 +40,14 @@ void register_MonitorProperty_class(){
 
     { //::SireSystem::MonitorProperty
         typedef bp::class_< SireSystem::MonitorProperty, bp::bases< SireSystem::SystemMonitor, SireBase::Property > > MonitorProperty_exposer_t;
-        MonitorProperty_exposer_t MonitorProperty_exposer = MonitorProperty_exposer_t( "MonitorProperty", bp::init< >() );
+        MonitorProperty_exposer_t MonitorProperty_exposer = MonitorProperty_exposer_t( "MonitorProperty", "This monitor is used to monitor the value of system, forcefield or\nmolecule properties during a simulation\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope MonitorProperty_scope( MonitorProperty_exposer );
-        MonitorProperty_exposer.def( bp::init< QString const & >(( bp::arg("property") )) );
-        MonitorProperty_exposer.def( bp::init< QString const &, SireMol::MoleculeGroup const & >(( bp::arg("property"), bp::arg("molgroup") )) );
-        MonitorProperty_exposer.def( bp::init< QString const &, SireMol::MGID const & >(( bp::arg("property"), bp::arg("mgid") )) );
-        MonitorProperty_exposer.def( bp::init< QString const &, SireFF::FF const & >(( bp::arg("property"), bp::arg("forcefield") )) );
-        MonitorProperty_exposer.def( bp::init< QString const &, SireFF::FFID const & >(( bp::arg("property"), bp::arg("ffid") )) );
-        MonitorProperty_exposer.def( bp::init< SireSystem::MonitorProperty const & >(( bp::arg("other") )) );
+        MonitorProperty_exposer.def( bp::init< QString const & >(( bp::arg("property") ), "Construct to monitor the system property property") );
+        MonitorProperty_exposer.def( bp::init< QString const &, SireMol::MoleculeGroup const & >(( bp::arg("property"), bp::arg("molgroup") ), "Construct to monitor the property property of the molecule(s) contained\nin the molecule group molgroup") );
+        MonitorProperty_exposer.def( bp::init< QString const &, SireMol::MGID const & >(( bp::arg("property"), bp::arg("mgid") ), "Construct to monitor the property property of the molecule(s) contained\nin the molecule group(s) that matches the ID mgid") );
+        MonitorProperty_exposer.def( bp::init< QString const &, SireFF::FF const & >(( bp::arg("property"), bp::arg("forcefield") ), "Construct to monitor the property property of the passed forcefield") );
+        MonitorProperty_exposer.def( bp::init< QString const &, SireFF::FFID const & >(( bp::arg("property"), bp::arg("ffid") ), "Construct to monitor the property property of the passed forcefield") );
+        MonitorProperty_exposer.def( bp::init< SireSystem::MonitorProperty const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireSystem::MonitorProperty::clearStatistics
         
             typedef void ( ::SireSystem::MonitorProperty::*clearStatistics_function_type)(  ) ;
@@ -55,7 +55,8 @@ void register_MonitorProperty_class(){
             
             MonitorProperty_exposer.def( 
                 "clearStatistics"
-                , clearStatistics_function_value );
+                , clearStatistics_function_value
+                , "Clear all statistics" );
         
         }
         { //::SireSystem::MonitorProperty::ffID
@@ -66,7 +67,8 @@ void register_MonitorProperty_class(){
             MonitorProperty_exposer.def( 
                 "ffID"
                 , ffID_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the ID of the forcefield(s) that are being monitored" );
         
         }
         { //::SireSystem::MonitorProperty::mgID
@@ -77,7 +79,8 @@ void register_MonitorProperty_class(){
             MonitorProperty_exposer.def( 
                 "mgID"
                 , mgID_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the ID of the molecule group(s) whose molecules\nare being monitored" );
         
         }
         { //::SireSystem::MonitorProperty::monitor
@@ -88,7 +91,8 @@ void register_MonitorProperty_class(){
             MonitorProperty_exposer.def( 
                 "monitor"
                 , monitor_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "Monitor the system" );
         
         }
         { //::SireSystem::MonitorProperty::monitoredMolecules
@@ -98,7 +102,8 @@ void register_MonitorProperty_class(){
             
             MonitorProperty_exposer.def( 
                 "monitoredMolecules"
-                , monitoredMolecules_function_value );
+                , monitoredMolecules_function_value
+                , "Return the numbers of molecules whose properties have been monitored" );
         
         }
         { //::SireSystem::MonitorProperty::monitoringForceFieldProperty
@@ -108,7 +113,8 @@ void register_MonitorProperty_class(){
             
             MonitorProperty_exposer.def( 
                 "monitoringForceFieldProperty"
-                , monitoringForceFieldProperty_function_value );
+                , monitoringForceFieldProperty_function_value
+                , "Return whether or not this is monitoring a forcefield property" );
         
         }
         { //::SireSystem::MonitorProperty::monitoringMoleculeProperty
@@ -118,7 +124,8 @@ void register_MonitorProperty_class(){
             
             MonitorProperty_exposer.def( 
                 "monitoringMoleculeProperty"
-                , monitoringMoleculeProperty_function_value );
+                , monitoringMoleculeProperty_function_value
+                , "Return whether or not this is monitoring a molecule property\nof molecules in molecule groups" );
         
         }
         { //::SireSystem::MonitorProperty::monitoringSystemProperty
@@ -128,7 +135,8 @@ void register_MonitorProperty_class(){
             
             MonitorProperty_exposer.def( 
                 "monitoringSystemProperty"
-                , monitoringSystemProperty_function_value );
+                , monitoringSystemProperty_function_value
+                , "Return whether or not this is monitoring a system property" );
         
         }
         MonitorProperty_exposer.def( bp::self != bp::self );
@@ -141,7 +149,8 @@ void register_MonitorProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MonitorProperty_exposer.def( bp::self == bp::self );
@@ -152,7 +161,8 @@ void register_MonitorProperty_class(){
             
             MonitorProperty_exposer.def( 
                 "properties"
-                , properties_function_value );
+                , properties_function_value
+                , "Return the values of the monitored system or forcefield properties" );
         
         }
         { //::SireSystem::MonitorProperty::properties
@@ -163,7 +173,8 @@ void register_MonitorProperty_class(){
             MonitorProperty_exposer.def( 
                 "properties"
                 , properties_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Return the values of the monitored molecule properties for molecule molnum.\nThrow: SireMol::missing_molecule\n" );
         
         }
         { //::SireSystem::MonitorProperty::property
@@ -174,7 +185,8 @@ void register_MonitorProperty_class(){
             MonitorProperty_exposer.def( 
                 "property"
                 , property_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the name of the property being monitored" );
         
         }
         { //::SireSystem::MonitorProperty::toString
@@ -184,7 +196,8 @@ void register_MonitorProperty_class(){
             
             MonitorProperty_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireSystem::MonitorProperty::typeName
@@ -194,7 +207,8 @@ void register_MonitorProperty_class(){
             
             MonitorProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireSystem::MonitorProperty::writeToDisk
@@ -205,7 +219,8 @@ void register_MonitorProperty_class(){
             MonitorProperty_exposer.def( 
                 "writeToDisk"
                 , writeToDisk_function_value
-                , ( bp::arg("filename") ) );
+                , ( bp::arg("filename") )
+                , "Write all of the properties to disk in text format to the\nfile filename. The aim of this function is to provide something\nquick and dirty to follow the properties. To properly save the properties\nyou should use the streaming functions" );
         
         }
         MonitorProperty_exposer.staticmethod( "typeName" );

@@ -8,6 +8,8 @@
 
 namespace bp = boost::python;
 
+#include "SireMaths/vectorproperty.h"
+
 #include "SireMol/angleid.h"
 
 #include "SireMol/atomidx.h"
@@ -60,11 +62,23 @@ void register_InternalMove_class(){
 
     { //::SireMove::InternalMove
         typedef bp::class_< SireMove::InternalMove, bp::bases< SireMove::MonteCarlo, SireMove::Move, SireBase::Property > > InternalMove_exposer_t;
-        InternalMove_exposer_t InternalMove_exposer = InternalMove_exposer_t( "InternalMove", bp::init< bp::optional< SireBase::PropertyMap const & > >(( bp::arg("map")=SireBase::PropertyMap() )) );
+        InternalMove_exposer_t InternalMove_exposer = InternalMove_exposer_t( "InternalMove", "This class implements an intramolecular Monte Carlo move that uses\nthe move() method to perturb intramolecular degrees of freedom and\nthat may be applied to a random molecule (or part of a molecule)\nwithin a MoleculeGroup. It is based on the ZMatMove class.\n\nAuthor: Julien Michel\n", bp::init< bp::optional< SireBase::PropertyMap const & > >(( bp::arg("map")=SireBase::PropertyMap() ), "Null constructor") );
         bp::scope InternalMove_scope( InternalMove_exposer );
-        InternalMove_exposer.def( bp::init< SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )) );
-        InternalMove_exposer.def( bp::init< SireMove::Sampler const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("sampler"), bp::arg("map")=SireBase::PropertyMap() )) );
-        InternalMove_exposer.def( bp::init< SireMove::InternalMove const & >(( bp::arg("other") )) );
+        InternalMove_exposer.def( bp::init< SireMol::MoleculeGroup const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ), "Construct the mover move for the passed group of molecules") );
+        InternalMove_exposer.def( bp::init< SireMove::Sampler const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("sampler"), bp::arg("map")=SireBase::PropertyMap() ), "Construct the mover move that samples molecules from the\npassed sampler") );
+        InternalMove_exposer.def( bp::init< SireMove::InternalMove const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireMove::InternalMove::centerOfMolecule
+        
+            typedef ::SireMove::GetPoint const & ( ::SireMove::InternalMove::*centerOfMolecule_function_type)(  ) const;
+            centerOfMolecule_function_type centerOfMolecule_function_value( &::SireMove::InternalMove::centerOfMolecule );
+            
+            InternalMove_exposer.def( 
+                "centerOfMolecule"
+                , centerOfMolecule_function_value
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the function used to find the center of the molecule" );
+        
+        }
         { //::SireMove::InternalMove::flexibilityProperty
         
             typedef ::SireBase::PropertyName const & ( ::SireMove::InternalMove::*flexibilityProperty_function_type)(  ) const;
@@ -73,7 +87,8 @@ void register_InternalMove_class(){
             InternalMove_exposer.def( 
                 "flexibilityProperty"
                 , flexibilityProperty_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the property used to find the flexibility of each molecule" );
         
         }
         { //::SireMove::InternalMove::moleculeGroup
@@ -84,7 +99,8 @@ void register_InternalMove_class(){
             InternalMove_exposer.def( 
                 "moleculeGroup"
                 , moleculeGroup_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the molecule group that is sampled for this move" );
         
         }
         { //::SireMove::InternalMove::move
@@ -95,7 +111,8 @@ void register_InternalMove_class(){
             InternalMove_exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , "Actually perform nmoves moves of the molecules in the\nsystem system, optionally recording simulation statistics\nif record_stats is true" );
         
         }
         InternalMove_exposer.def( bp::self != bp::self );
@@ -108,7 +125,8 @@ void register_InternalMove_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         InternalMove_exposer.def( bp::self == bp::self );
@@ -120,7 +138,20 @@ void register_InternalMove_class(){
             InternalMove_exposer.def( 
                 "sampler"
                 , sampler_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the sampler used to sample molecules to move" );
+        
+        }
+        { //::SireMove::InternalMove::setCenterOfMolecule
+        
+            typedef void ( ::SireMove::InternalMove::*setCenterOfMolecule_function_type)( ::SireMove::GetPoint const & ) ;
+            setCenterOfMolecule_function_type setCenterOfMolecule_function_value( &::SireMove::InternalMove::setCenterOfMolecule );
+            
+            InternalMove_exposer.def( 
+                "setCenterOfMolecule"
+                , setCenterOfMolecule_function_value
+                , ( bp::arg("center_function") )
+                , "Set the function used to find the center of the molecule" );
         
         }
         { //::SireMove::InternalMove::setFlexibilityProperty
@@ -131,7 +162,8 @@ void register_InternalMove_class(){
             InternalMove_exposer.def( 
                 "setFlexibilityProperty"
                 , setFlexibilityProperty_function_value
-                , ( bp::arg("property") ) );
+                , ( bp::arg("property") )
+                , "Set the name of the property used to find the flexibility of each molecule" );
         
         }
         { //::SireMove::InternalMove::setGenerator
@@ -142,7 +174,8 @@ void register_InternalMove_class(){
             InternalMove_exposer.def( 
                 "setGenerator"
                 , setGenerator_function_value
-                , ( bp::arg("rangenerator") ) );
+                , ( bp::arg("rangenerator") )
+                , "Set the random number generator used to generate the random\nnumber used for this move" );
         
         }
         { //::SireMove::InternalMove::setSampler
@@ -153,7 +186,8 @@ void register_InternalMove_class(){
             InternalMove_exposer.def( 
                 "setSampler"
                 , setSampler_function_value
-                , ( bp::arg("sampler") ) );
+                , ( bp::arg("sampler") )
+                , "Set the sampler used to sample molecules for this move" );
         
         }
         { //::SireMove::InternalMove::setSampler
@@ -164,7 +198,8 @@ void register_InternalMove_class(){
             InternalMove_exposer.def( 
                 "setSampler"
                 , setSampler_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "Set the sampler so that it draws molecules uniformly from the\nmolecule group molgroup" );
         
         }
         { //::SireMove::InternalMove::toString
@@ -174,7 +209,8 @@ void register_InternalMove_class(){
             
             InternalMove_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this move" );
         
         }
         { //::SireMove::InternalMove::typeName
@@ -184,7 +220,8 @@ void register_InternalMove_class(){
             
             InternalMove_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         InternalMove_exposer.staticmethod( "typeName" );

@@ -35,10 +35,10 @@ void register_ResAtomID_class(){
 
     { //::SireMol::GroupAtomID< SireMol::ResID, SireMol::AtomID >
         typedef bp::class_< SireMol::GroupAtomID< SireMol::ResID, SireMol::AtomID >, bp::bases< SireMol::GroupAtomIDBase, SireMol::AtomID, SireID::ID > > ResAtomID_exposer_t;
-        ResAtomID_exposer_t ResAtomID_exposer = ResAtomID_exposer_t( "ResAtomID", bp::init< >() );
+        ResAtomID_exposer_t ResAtomID_exposer = ResAtomID_exposer_t( "ResAtomID", "", bp::init< >("") );
         bp::scope ResAtomID_scope( ResAtomID_exposer );
-        ResAtomID_exposer.def( bp::init< SireMol::ResID const &, SireMol::AtomID const & >(( bp::arg("group"), bp::arg("atom") )) );
-        ResAtomID_exposer.def( bp::init< SireMol::GroupAtomID< SireMol::ResID, SireMol::AtomID > const & >(( bp::arg("other") )) );
+        ResAtomID_exposer.def( bp::init< SireMol::ResID const &, SireMol::AtomID const & >(( bp::arg("group"), bp::arg("atom") ), "") );
+        ResAtomID_exposer.def( bp::init< SireMol::GroupAtomID< SireMol::ResID, SireMol::AtomID > const & >(( bp::arg("other") ), "") );
         { //::SireMol::GroupAtomID< SireMol::ResID, SireMol::AtomID >::hash
         
             typedef SireMol::GroupAtomID< SireMol::ResID, SireMol::AtomID > exported_class_t;
@@ -47,7 +47,8 @@ void register_ResAtomID_class(){
             
             ResAtomID_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireMol::GroupAtomID< SireMol::ResID, SireMol::AtomID >::isNull
@@ -58,7 +59,8 @@ void register_ResAtomID_class(){
             
             ResAtomID_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireMol::GroupAtomID< SireMol::ResID, SireMol::AtomID >::map
@@ -70,7 +72,8 @@ void register_ResAtomID_class(){
             ResAtomID_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         ResAtomID_exposer.def( bp::self != bp::self );
@@ -84,7 +87,8 @@ void register_ResAtomID_class(){
             
             ResAtomID_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::GroupAtomID< SireMol::ResID, SireMol::AtomID >::typeName
@@ -95,7 +99,8 @@ void register_ResAtomID_class(){
             
             ResAtomID_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::GroupAtomID< SireMol::ResID, SireMol::AtomID >::what
@@ -106,7 +111,8 @@ void register_ResAtomID_class(){
             
             ResAtomID_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ResAtomID_exposer.staticmethod( "typeName" );

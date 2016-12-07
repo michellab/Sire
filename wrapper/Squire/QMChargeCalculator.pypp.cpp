@@ -31,7 +31,7 @@ void register_QMChargeCalculator_class(){
 
     { //::Squire::QMChargeCalculator
         typedef bp::class_< Squire::QMChargeCalculator, bp::bases< SireBase::Property >, boost::noncopyable > QMChargeCalculator_exposer_t;
-        QMChargeCalculator_exposer_t QMChargeCalculator_exposer = QMChargeCalculator_exposer_t( "QMChargeCalculator", bp::no_init );
+        QMChargeCalculator_exposer_t QMChargeCalculator_exposer = QMChargeCalculator_exposer_t( "QMChargeCalculator", "This is the base class of all functions which are used\nto calculate atomic partial charges of molecules from\nan underlying QM Hamiltonian\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope QMChargeCalculator_scope( QMChargeCalculator_exposer );
         { //::Squire::QMChargeCalculator::calculate
         
@@ -41,7 +41,8 @@ void register_QMChargeCalculator_class(){
             QMChargeCalculator_exposer.def( 
                 "calculate"
                 , calculate_function_value
-                , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the partial charges on the molecule molecule" );
         
         }
         { //::Squire::QMChargeCalculator::mayChangeCharges
@@ -52,7 +53,8 @@ void register_QMChargeCalculator_class(){
             QMChargeCalculator_exposer.def( 
                 "mayChangeCharges"
                 , mayChangeCharges_function_value
-                , ( bp::arg("oldmol"), bp::arg("newmol"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("oldmol"), bp::arg("newmol"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::Squire::QMChargeCalculator::null
@@ -63,7 +65,8 @@ void register_QMChargeCalculator_class(){
             QMChargeCalculator_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::Squire::QMChargeCalculator::operator()
@@ -74,7 +77,8 @@ void register_QMChargeCalculator_class(){
             QMChargeCalculator_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecule"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::Squire::QMChargeCalculator::scaleFactor
@@ -84,7 +88,8 @@ void register_QMChargeCalculator_class(){
             
             QMChargeCalculator_exposer.def( 
                 "scaleFactor"
-                , scaleFactor_function_value );
+                , scaleFactor_function_value
+                , "Return the scale factor for the charges" );
         
         }
         { //::Squire::QMChargeCalculator::setScaleFactor
@@ -95,7 +100,8 @@ void register_QMChargeCalculator_class(){
             QMChargeCalculator_exposer.def( 
                 "setScaleFactor"
                 , setScaleFactor_function_value
-                , ( bp::arg("sclfactor") ) );
+                , ( bp::arg("sclfactor") )
+                , "Set the scale factor for the charges" );
         
         }
         { //::Squire::QMChargeCalculator::typeName
@@ -105,7 +111,8 @@ void register_QMChargeCalculator_class(){
             
             QMChargeCalculator_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         QMChargeCalculator_exposer.staticmethod( "null" );

@@ -35,10 +35,10 @@ void register_ArcSin_class(){
 
     { //::SireCAS::ArcSin
         typedef bp::class_< SireCAS::ArcSin, bp::bases< SireCAS::SingleFunc, SireCAS::ExBase > > ArcSin_exposer_t;
-        ArcSin_exposer_t ArcSin_exposer = ArcSin_exposer_t( "ArcSin", bp::init< >() );
+        ArcSin_exposer_t ArcSin_exposer = ArcSin_exposer_t( "ArcSin", "Inverse-sine", bp::init< >("Null constructor") );
         bp::scope ArcSin_scope( ArcSin_exposer );
-        ArcSin_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") )) );
-        ArcSin_exposer.def( bp::init< SireCAS::ArcSin const & >(( bp::arg("other") )) );
+        ArcSin_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("ex") ), "Construct cos(expression)") );
+        ArcSin_exposer.def( bp::init< SireCAS::ArcSin const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::ArcSin::evaluate
         
             typedef double ( ::SireCAS::ArcSin::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -47,7 +47,8 @@ void register_ArcSin_class(){
             ArcSin_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this function" );
         
         }
         { //::SireCAS::ArcSin::evaluate
@@ -58,7 +59,8 @@ void register_ArcSin_class(){
             ArcSin_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluation" );
         
         }
         ArcSin_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -69,7 +71,8 @@ void register_ArcSin_class(){
             
             ArcSin_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::ArcSin::what
@@ -79,7 +82,8 @@ void register_ArcSin_class(){
             
             ArcSin_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ArcSin_exposer.staticmethod( "typeName" );

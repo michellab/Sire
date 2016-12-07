@@ -35,9 +35,9 @@ void register_TitrationMove_class(){
 
     { //::SireMove::TitrationMove
         typedef bp::class_< SireMove::TitrationMove, bp::bases< SireMove::MonteCarlo, SireMove::Move, SireBase::Property > > TitrationMove_exposer_t;
-        TitrationMove_exposer_t TitrationMove_exposer = TitrationMove_exposer_t( "TitrationMove", bp::init< >() );
+        TitrationMove_exposer_t TitrationMove_exposer = TitrationMove_exposer_t( "TitrationMove", "This class performs a Monte Carlo titration move. This moves\na charge from one place to another by swapping the coordinates\nof once molecule with another, e.g. swapping a charge with a water.\nThis allows ions to move quickly through a simulation box, and for\nions to equilibrate between boxes (e.g. during a WSRC calcualtion)\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope TitrationMove_scope( TitrationMove_exposer );
-        TitrationMove_exposer.def( bp::init< SireMove::TitrationMove const & >(( bp::arg("other") )) );
+        TitrationMove_exposer.def( bp::init< SireMove::TitrationMove const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::TitrationMove::move
         
             typedef void ( ::SireMove::TitrationMove::*move_function_type)( ::SireSystem::System &,int,bool ) ;
@@ -46,7 +46,8 @@ void register_TitrationMove_class(){
             TitrationMove_exposer.def( 
                 "move"
                 , move_function_value
-                , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) ) );
+                , ( bp::arg("system"), bp::arg("nmoves"), bp::arg("record_stats")=(bool)(true) )
+                , "Actually perform the move" );
         
         }
         TitrationMove_exposer.def( bp::self != bp::self );
@@ -59,7 +60,8 @@ void register_TitrationMove_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         TitrationMove_exposer.def( bp::self == bp::self );
@@ -70,7 +72,8 @@ void register_TitrationMove_class(){
             
             TitrationMove_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of the move" );
         
         }
         { //::SireMove::TitrationMove::typeName
@@ -80,7 +83,8 @@ void register_TitrationMove_class(){
             
             TitrationMove_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMove::TitrationMove::what
@@ -90,7 +94,8 @@ void register_TitrationMove_class(){
             
             TitrationMove_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         TitrationMove_exposer.staticmethod( "typeName" );

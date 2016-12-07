@@ -9,7 +9,7 @@ namespace bp = boost::python;
 
 #include "SireError/errors.h"
 
-#include "process.h"
+#include "sire_process.h"
 
 #include <QDebug>
 
@@ -23,19 +23,7 @@ namespace bp = boost::python;
 
 #include <boost/weak_ptr.hpp>
 
-#include <errno.h>
-
-#include <signal.h>
-
-#include <string.h>
-
-#include <sys/types.h>
-
-#include <sys/wait.h>
-
-#include <unistd.h>
-
-#include "process.h"
+#include "sire_process.h"
 
 SireBase::Process __copy__(const SireBase::Process &other){ return SireBase::Process(other); }
 
@@ -45,9 +33,9 @@ void register_Process_class(){
 
     { //::SireBase::Process
         typedef bp::class_< SireBase::Process > Process_exposer_t;
-        Process_exposer_t Process_exposer = Process_exposer_t( "Process", bp::init< >() );
+        Process_exposer_t Process_exposer = Process_exposer_t( "Process", "This class provides a means to run an external process\n(executable). This provides the equivalent of\nstd::system, but with added error handling and\nsignal handling (which ensures that any child processes\nare killed when Sire exits)\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope Process_scope( Process_exposer );
-        Process_exposer.def( bp::init< SireBase::Process const & >(( bp::arg("other") )) );
+        Process_exposer.def( bp::init< SireBase::Process const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireBase::Process::hasFinished
         
             typedef bool ( ::SireBase::Process::*hasFinished_function_type)(  ) ;
@@ -55,7 +43,8 @@ void register_Process_class(){
             
             Process_exposer.def( 
                 "hasFinished"
-                , hasFinished_function_value );
+                , hasFinished_function_value
+                , "Return whether or not this process has finished running" );
         
         }
         { //::SireBase::Process::isError
@@ -65,7 +54,8 @@ void register_Process_class(){
             
             Process_exposer.def( 
                 "isError"
-                , isError_function_value );
+                , isError_function_value
+                , "Return whether or not the process exited in error" );
         
         }
         { //::SireBase::Process::isRunning
@@ -75,7 +65,8 @@ void register_Process_class(){
             
             Process_exposer.def( 
                 "isRunning"
-                , isRunning_function_value );
+                , isRunning_function_value
+                , "Return whether or not the job is running" );
         
         }
         { //::SireBase::Process::kill
@@ -85,7 +76,8 @@ void register_Process_class(){
             
             Process_exposer.def( 
                 "kill"
-                , kill_function_value );
+                , kill_function_value
+                , "Kill this process" );
         
         }
         { //::SireBase::Process::killAll
@@ -95,7 +87,8 @@ void register_Process_class(){
             
             Process_exposer.def( 
                 "killAll"
-                , killAll_function_value );
+                , killAll_function_value
+                , "Use this function to kill all of the jobs that are currently running" );
         
         }
         Process_exposer.def( bp::self != bp::self );
@@ -108,7 +101,8 @@ void register_Process_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Process_exposer.def( bp::self == bp::self );
@@ -120,7 +114,8 @@ void register_Process_class(){
             Process_exposer.def( 
                 "run"
                 , run_function_value
-                , ( bp::arg("command") ) );
+                , ( bp::arg("command") )
+                , "Run the command command and return a Process object that can be\nused to monitor the command" );
         
         }
         { //::SireBase::Process::run
@@ -131,7 +126,8 @@ void register_Process_class(){
             Process_exposer.def( 
                 "run"
                 , run_function_value
-                , ( bp::arg("command"), bp::arg("arg") ) );
+                , ( bp::arg("command"), bp::arg("arg") )
+                , "Run the command command with the solitary argument arg" );
         
         }
         { //::SireBase::Process::run
@@ -142,7 +138,8 @@ void register_Process_class(){
             Process_exposer.def( 
                 "run"
                 , run_function_value
-                , ( bp::arg("command"), bp::arg("arguments") ) );
+                , ( bp::arg("command"), bp::arg("arguments") )
+                , "Run the command command with the arguments arguments, and\nreturn a Process object that can be used to query and control the\njob" );
         
         }
         { //::SireBase::Process::typeName
@@ -152,7 +149,8 @@ void register_Process_class(){
             
             Process_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireBase::Process::wait
@@ -162,7 +160,8 @@ void register_Process_class(){
             
             Process_exposer.def( 
                 "wait"
-                , wait_function_value );
+                , wait_function_value
+                , "Wait until the process has finished" );
         
         }
         { //::SireBase::Process::wait
@@ -173,7 +172,8 @@ void register_Process_class(){
             Process_exposer.def( 
                 "wait"
                 , wait_function_value
-                , ( bp::arg("ms") ) );
+                , ( bp::arg("ms") )
+                , "Wait until the process has finished, or until ms milliseconds have passed.\nThis returns whether or not the process has finished" );
         
         }
         { //::SireBase::Process::wasKilled
@@ -183,7 +183,8 @@ void register_Process_class(){
             
             Process_exposer.def( 
                 "wasKilled"
-                , wasKilled_function_value );
+                , wasKilled_function_value
+                , "Return whether or not the process was killed" );
         
         }
         { //::SireBase::Process::what
@@ -193,7 +194,8 @@ void register_Process_class(){
             
             Process_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Process_exposer.staticmethod( "killAll" );

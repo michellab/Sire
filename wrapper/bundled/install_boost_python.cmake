@@ -4,9 +4,24 @@
 ###
 
 unset(BOOST_PYTHON_LIBRARY CACHE)
-find_library( BOOST_PYTHON_LIBRARY 
-              NAMES boost_python
-              PATHS ${BUNDLE_STAGEDIR}/lib NO_DEFAULT_PATH )
+
+if ( ANACONDA_BUILD )
+  find_library( BOOST_PYTHON_LIBRARY
+                NAMES boost_python
+                PATHS ${BUNDLE_STAGEDIR}/lib NO_DEFAULT_PATH )
+
+elseif ( MSYS )
+  message( STATUS "Looking for MSYS version of boost::python..." )
+  set (BOOST_ALL_DYN_LINK "YES")
+  find_package( Boost 1.31 COMPONENTS python3 REQUIRED )
+  set ( BOOST_PYTHON_LIBRARY "${Boost_LIBRARIES}" )
+  set ( BOOST_PYTHON_HEADERS "${Boost_INCLUDE_DIR}" )
+
+else()
+  find_library( BOOST_PYTHON_LIBRARY 
+                NAMES boost_python
+                PATHS ${BUNDLE_STAGEDIR}/lib NO_DEFAULT_PATH )
+endif()
 
 if ( BOOST_PYTHON_LIBRARY )
   message( STATUS "Have already compiled a bundled version of boost::python")
@@ -23,12 +38,17 @@ else()
       execute_process(
           COMMAND ${CMAKE_COMMAND} -E tar xzf ${BOOST_PYTHON_ZIPFILE}
           WORKING_DIRECTORY ${BUNDLE_BUILDDIR}
+          OUTPUT_QUIET ERROR_QUIET
       )
     endif()
   endif()
 
   message( STATUS "Patience... Configuring boost::python" )
-  list( APPEND COMPILE_OPTIONS "-DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}" )
+  if (MSYS)
+    list( APPEND COMPILE_OPTIONS "-G" )
+    list( APPEND COMPILE_OPTIONS "MSYS Makefiles" )
+  endif()
+
   list( APPEND COMPILE_OPTIONS "-DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}" )
   list( APPEND COMPILE_OPTIONS "-DPYTHON_LIBRARIES=${PYTHON_LIBRARIES}" )
   list( APPEND COMPILE_OPTIONS "-DPYTHON_INCLUDE_DIR=${PYTHON_INCLUDE_DIR}" )
@@ -41,18 +61,21 @@ else()
   execute_process(
           COMMAND ${CMAKE_COMMAND} ${COMPILE_OPTIONS}
           WORKING_DIRECTORY ${BOOST_PYTHON_BUILD_DIR}
+          OUTPUT_QUIET ERROR_QUIET
   )
 
   message( STATUS "Patience... Building boost::python" )
   execute_process(
           COMMAND ${CMAKE_MAKE_PROGRAM} -k -j ${NCORES}
           WORKING_DIRECTORY ${BOOST_PYTHON_BUILD_DIR}
+          OUTPUT_QUIET ERROR_QUIET
   )
 
   message( STATUS "Patience... Installing boost::python" )
   execute_process(
           COMMAND ${CMAKE_MAKE_PROGRAM} install
           WORKING_DIRECTORY ${BOOST_PYTHON_BUILD_DIR}
+          OUTPUT_QUIET ERROR_QUIET
   )
 
   if (APPLE)
@@ -63,10 +86,18 @@ else()
 
 endif()
 
-if ( BOOST_PYTHON_LIBRARY )
-  set( BOOST_PYTHON_HEADERS "${BUNDLE_STAGEDIR}/include" )
-  message( STATUS "Using bundled boost::python in ${BOOST_PYTHON_LIBRARY} | ${BOOST_PYTHON_HEADERS}" )
-  set( SIRE_FOUND_BOOST_PYTHON TRUE )
+if ( MSYS )
+  if ( BOOST_PYTHON_LIBRARY )
+    message( STATUS "Using boost::python in ${BOOST_PYTHON_LIBRARY} | ${BOOST_PYTHON_HEADERS}" )
+  else()
+    message( FATAL_ERROR "Cannot find boost::python in MSYS!" )
+  endif()
 else()
-  message( STATUS "Strange? Cannot find the installed boost::python library. We cannot compile it, so will need to rely on the system version..." )
+  if ( BOOST_PYTHON_LIBRARY )
+    set( BOOST_PYTHON_HEADERS "${BUNDLE_STAGEDIR}/include" )
+    message( STATUS "Using bundled boost::python in ${BOOST_PYTHON_LIBRARY} | ${BOOST_PYTHON_HEADERS}" )
+    set( SIRE_FOUND_BOOST_PYTHON TRUE )
+  else()
+    message( STATUS "Strange? Cannot find the installed boost::python library. We cannot compile it, so will need to rely on the system version..." )
+  endif()
 endif()

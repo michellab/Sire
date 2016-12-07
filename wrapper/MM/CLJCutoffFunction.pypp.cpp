@@ -55,7 +55,7 @@ void register_CLJCutoffFunction_class(){
 
     { //::SireMM::CLJCutoffFunction
         typedef bp::class_< SireMM::CLJCutoffFunction, bp::bases< SireMM::CLJFunction, SireBase::Property >, boost::noncopyable > CLJCutoffFunction_exposer_t;
-        CLJCutoffFunction_exposer_t CLJCutoffFunction_exposer = CLJCutoffFunction_exposer_t( "CLJCutoffFunction", bp::no_init );
+        CLJCutoffFunction_exposer_t CLJCutoffFunction_exposer = CLJCutoffFunction_exposer_t( "CLJCutoffFunction", "This is the base class of all CLJ functions that have a cutoff\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope CLJCutoffFunction_scope( CLJCutoffFunction_exposer );
         { //::SireMM::CLJCutoffFunction::containsProperty
         
@@ -65,7 +65,8 @@ void register_CLJCutoffFunction_class(){
             CLJCutoffFunction_exposer.def( 
                 "containsProperty"
                 , containsProperty_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "Return whether or not this function contains a property called name" );
         
         }
         { //::SireMM::CLJCutoffFunction::coulombCutoff
@@ -75,7 +76,8 @@ void register_CLJCutoffFunction_class(){
             
             CLJCutoffFunction_exposer.def( 
                 "coulombCutoff"
-                , coulombCutoff_function_value );
+                , coulombCutoff_function_value
+                , "Return the coulomb cutoff distance" );
         
         }
         { //::SireMM::CLJCutoffFunction::hasCutoff
@@ -85,7 +87,8 @@ void register_CLJCutoffFunction_class(){
             
             CLJCutoffFunction_exposer.def( 
                 "hasCutoff"
-                , hasCutoff_function_value );
+                , hasCutoff_function_value
+                , "Return whether or not this function has a cutoff" );
         
         }
         { //::SireMM::CLJCutoffFunction::ljCutoff
@@ -95,7 +98,8 @@ void register_CLJCutoffFunction_class(){
             
             CLJCutoffFunction_exposer.def( 
                 "ljCutoff"
-                , ljCutoff_function_value );
+                , ljCutoff_function_value
+                , "Return the LJ cutoff distance" );
         
         }
         { //::SireMM::CLJCutoffFunction::properties
@@ -105,7 +109,8 @@ void register_CLJCutoffFunction_class(){
             
             CLJCutoffFunction_exposer.def( 
                 "properties"
-                , properties_function_value );
+                , properties_function_value
+                , "Return the properties that can be set in this function" );
         
         }
         { //::SireMM::CLJCutoffFunction::property
@@ -116,7 +121,8 @@ void register_CLJCutoffFunction_class(){
             CLJCutoffFunction_exposer.def( 
                 "property"
                 , property_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "Return the value of the property with name name" );
         
         }
         { //::SireMM::CLJCutoffFunction::setCoulombCutoff
@@ -127,7 +133,8 @@ void register_CLJCutoffFunction_class(){
             CLJCutoffFunction_exposer.def( 
                 "setCoulombCutoff"
                 , setCoulombCutoff_function_value
-                , ( bp::arg("distance") ) );
+                , ( bp::arg("distance") )
+                , "Set the coulomb cutoff to the specified distance" );
         
         }
         { //::SireMM::CLJCutoffFunction::setCutoff
@@ -138,7 +145,8 @@ void register_CLJCutoffFunction_class(){
             CLJCutoffFunction_exposer.def( 
                 "setCutoff"
                 , setCutoff_function_value
-                , ( bp::arg("distance") ) );
+                , ( bp::arg("distance") )
+                , "Set the coulomb and LJ cutoff distances to distance" );
         
         }
         { //::SireMM::CLJCutoffFunction::setCutoff
@@ -149,7 +157,8 @@ void register_CLJCutoffFunction_class(){
             CLJCutoffFunction_exposer.def( 
                 "setCutoff"
                 , setCutoff_function_value
-                , ( bp::arg("coulomb_cutoff"), bp::arg("lj_cutoff") ) );
+                , ( bp::arg("coulomb_cutoff"), bp::arg("lj_cutoff") )
+                , "Set the coulomb and LJ cutoff distances to the specified values" );
         
         }
         { //::SireMM::CLJCutoffFunction::setLJCutoff
@@ -160,7 +169,8 @@ void register_CLJCutoffFunction_class(){
             CLJCutoffFunction_exposer.def( 
                 "setLJCutoff"
                 , setLJCutoff_function_value
-                , ( bp::arg("distance") ) );
+                , ( bp::arg("distance") )
+                , "Set the LJ cutoff to the specified distance" );
         
         }
         { //::SireMM::CLJCutoffFunction::setProperty
@@ -171,7 +181,8 @@ void register_CLJCutoffFunction_class(){
             CLJCutoffFunction_exposer.def( 
                 "setProperty"
                 , setProperty_function_value
-                , ( bp::arg("name"), bp::arg("value") ) );
+                , ( bp::arg("name"), bp::arg("value") )
+                , "Set the property with name name to value value" );
         
         }
         { //::SireMM::CLJCutoffFunction::toString
@@ -181,7 +192,8 @@ void register_CLJCutoffFunction_class(){
             
             CLJCutoffFunction_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMM::CLJCutoffFunction::typeName
@@ -191,7 +203,8 @@ void register_CLJCutoffFunction_class(){
             
             CLJCutoffFunction_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         CLJCutoffFunction_exposer.staticmethod( "typeName" );

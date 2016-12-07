@@ -27,7 +27,7 @@ void register_SystemMonitor_class(){
 
     { //::SireSystem::SystemMonitor
         typedef bp::class_< SireSystem::SystemMonitor, bp::bases< SireBase::Property >, boost::noncopyable > SystemMonitor_exposer_t;
-        SystemMonitor_exposer_t SystemMonitor_exposer = SystemMonitor_exposer_t( "SystemMonitor", bp::no_init );
+        SystemMonitor_exposer_t SystemMonitor_exposer = SystemMonitor_exposer_t( "SystemMonitor", "This is the virtual base class of all system monitors. A system\nmonitor is an object that monitors a system during a simulation,\ne.g. collecting the average energy, saving a radial distribution\nfunction etc.\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope SystemMonitor_scope( SystemMonitor_exposer );
         { //::SireSystem::SystemMonitor::clearStatistics
         
@@ -36,7 +36,8 @@ void register_SystemMonitor_class(){
             
             SystemMonitor_exposer.def( 
                 "clearStatistics"
-                , clearStatistics_function_value );
+                , clearStatistics_function_value
+                , "" );
         
         }
         { //::SireSystem::SystemMonitor::monitor
@@ -47,7 +48,8 @@ void register_SystemMonitor_class(){
             SystemMonitor_exposer.def( 
                 "monitor"
                 , monitor_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "" );
         
         }
         { //::SireSystem::SystemMonitor::null
@@ -58,7 +60,8 @@ void register_SystemMonitor_class(){
             SystemMonitor_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireSystem::SystemMonitor::typeName
@@ -68,7 +71,8 @@ void register_SystemMonitor_class(){
             
             SystemMonitor_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         SystemMonitor_exposer.staticmethod( "null" );

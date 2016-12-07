@@ -38,7 +38,7 @@ void register_WeightFunction_class(){
 
     { //::SireMol::WeightFunction
         typedef bp::class_< SireMol::WeightFunction, bp::bases< SireBase::Property >, boost::noncopyable > WeightFunction_exposer_t;
-        WeightFunction_exposer_t WeightFunction_exposer = WeightFunction_exposer_t( "WeightFunction", bp::no_init );
+        WeightFunction_exposer_t WeightFunction_exposer = WeightFunction_exposer_t( "WeightFunction", "This is the base class of all weight functions. A weight function\nis a simple function that takes two groups in a molecule, and\nreturns the relative weight of those two groups (0 == 100% group A,\n0.5 == 50% group A, 50% group B, 1 == 100% groupB)\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope WeightFunction_scope( WeightFunction_exposer );
         { //::SireMol::WeightFunction::null
         
@@ -48,7 +48,8 @@ void register_WeightFunction_class(){
             WeightFunction_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireMol::WeightFunction::operator()
@@ -59,7 +60,8 @@ void register_WeightFunction_class(){
             WeightFunction_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("moldata"), bp::arg("group0"), bp::arg("group1"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("moldata"), bp::arg("group0"), bp::arg("group1"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the relative weight of group0 and group1 in the\nmolecule whose data is in moldata, using the supplied\nmap to find the required properties\n\nThrow: SireError::incompatible_error\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::WeightFunction::operator()
@@ -70,7 +72,8 @@ void register_WeightFunction_class(){
             WeightFunction_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("view0"), bp::arg("map0"), bp::arg("view1"), bp::arg("map1") ) );
+                , ( bp::arg("view0"), bp::arg("map0"), bp::arg("view1"), bp::arg("map1") )
+                , "Return the relative weight of two molecule views (view0\nand view1), using map0 to find the required properties\nfrom view0, and map1 to find the required properties from\nview1.\n\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::WeightFunction::operator()
@@ -81,7 +84,8 @@ void register_WeightFunction_class(){
             WeightFunction_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("view0"), bp::arg("view1"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("view0"), bp::arg("view1"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the relative weight of the two molecule views\n(view0 and view1) using the supplied map to find the\nrequired properties from both views\n\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireMol::WeightFunction::typeName
@@ -91,7 +95,8 @@ void register_WeightFunction_class(){
             
             WeightFunction_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         WeightFunction_exposer.staticmethod( "null" );

@@ -29,10 +29,10 @@ void register_Exp_class(){
 
     { //::SireCAS::Exp
         typedef bp::class_< SireCAS::Exp, bp::bases< SireCAS::PowerFunction, SireCAS::ExBase > > Exp_exposer_t;
-        Exp_exposer_t Exp_exposer = Exp_exposer_t( "Exp", bp::init< >() );
+        Exp_exposer_t Exp_exposer = Exp_exposer_t( "Exp", "\nThis is the exponential function, e^x\n\nAuthor: Christopher Woods\n", bp::init< >("Construct an empty Exp (e^0)") );
         bp::scope Exp_scope( Exp_exposer );
-        Exp_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("power") )) );
-        Exp_exposer.def( bp::init< SireCAS::Exp const & >(( bp::arg("other") )) );
+        Exp_exposer.def( bp::init< SireCAS::Expression const & >(( bp::arg("power") ), "Construct e^power") );
+        Exp_exposer.def( bp::init< SireCAS::Exp const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::Exp::core
         
             typedef ::SireCAS::Expression ( ::SireCAS::Exp::*core_function_type)(  ) const;
@@ -40,7 +40,8 @@ void register_Exp_class(){
             
             Exp_exposer.def( 
                 "core"
-                , core_function_value );
+                , core_function_value
+                , "Return the core of this power" );
         
         }
         { //::SireCAS::Exp::differentiate
@@ -51,7 +52,8 @@ void register_Exp_class(){
             Exp_exposer.def( 
                 "differentiate"
                 , differentiate_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Differentiatial of e^x is e^x" );
         
         }
         { //::SireCAS::Exp::evaluate
@@ -62,7 +64,8 @@ void register_Exp_class(){
             Exp_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this expression at values" );
         
         }
         { //::SireCAS::Exp::evaluate
@@ -73,7 +76,8 @@ void register_Exp_class(){
             Exp_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Complex evaluate" );
         
         }
         { //::SireCAS::Exp::hash
@@ -83,7 +87,8 @@ void register_Exp_class(){
             
             Exp_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Return a hash of this Exp function" );
         
         }
         { //::SireCAS::Exp::integrate
@@ -94,7 +99,8 @@ void register_Exp_class(){
             Exp_exposer.def( 
                 "integrate"
                 , integrate_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Integral of e^x is e^x + c" );
         
         }
         Exp_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -105,7 +111,8 @@ void register_Exp_class(){
             
             Exp_exposer.def( 
                 "power"
-                , power_function_value );
+                , power_function_value
+                , "Return the power of this power" );
         
         }
         { //::SireCAS::Exp::toString
@@ -115,7 +122,8 @@ void register_Exp_class(){
             
             Exp_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this function" );
         
         }
         { //::SireCAS::Exp::typeName
@@ -125,7 +133,8 @@ void register_Exp_class(){
             
             Exp_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::Exp::what
@@ -135,7 +144,8 @@ void register_Exp_class(){
             
             Exp_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Exp_exposer.staticmethod( "typeName" );

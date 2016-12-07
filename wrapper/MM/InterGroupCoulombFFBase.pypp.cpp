@@ -28,20 +28,21 @@ void register_InterGroupCoulombFFBase_class(){
 
     { //::SireFF::Inter2B2GFF< SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential > >
         typedef bp::class_< SireFF::Inter2B2GFF< SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential > >, bp::bases< SireMM::CoulombPotentialInterface<SireMM::InterCoulombPotential>, SireFF::G2FF, SireFF::FF, SireMol::MolGroupsBase, SireBase::Property > > InterGroupCoulombFFBase_exposer_t;
-        InterGroupCoulombFFBase_exposer_t InterGroupCoulombFFBase_exposer = InterGroupCoulombFFBase_exposer_t( "InterGroupCoulombFFBase", bp::init< >() );
+        InterGroupCoulombFFBase_exposer_t InterGroupCoulombFFBase_exposer = InterGroupCoulombFFBase_exposer_t( "InterGroupCoulombFFBase", "", bp::init< >("") );
         bp::scope InterGroupCoulombFFBase_scope( InterGroupCoulombFFBase_exposer );
-        InterGroupCoulombFFBase_exposer.def( bp::init< QString const & >(( bp::arg("name") )) );
-        InterGroupCoulombFFBase_exposer.def( bp::init< SireFF::Inter2B2GFF< SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential > > const & >(( bp::arg("other") )) );
+        InterGroupCoulombFFBase_exposer.def( bp::init< QString const & >(( bp::arg("name") ), "") );
+        InterGroupCoulombFFBase_exposer.def( bp::init< SireFF::Inter2B2GFF< SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential > > const & >(( bp::arg("other") ), "") );
         { //::SireFF::Inter2B2GFF< SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential > >::components
         
             typedef SireFF::Inter2B2GFF< SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential > > exported_class_t;
-            typedef ::SireMM::CoulombComponent const & ( ::SireFF::Inter2B2GFF< SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential > >::*components_function_type)(  ) const;
+            typedef ::SireFF::Inter2B2GFF< SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential > >::Components const & ( ::SireFF::Inter2B2GFF< SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential > >::*components_function_type)(  ) const;
             components_function_type components_function_value( &::SireFF::Inter2B2GFF< SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential > >::components );
             
             InterGroupCoulombFFBase_exposer.def( 
                 "components"
                 , components_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireFF::Inter2B2GFF< SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential > >::containsProperty
@@ -53,7 +54,8 @@ void register_InterGroupCoulombFFBase_class(){
             InterGroupCoulombFFBase_exposer.def( 
                 "containsProperty"
                 , containsProperty_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "" );
         
         }
         { //::SireFF::Inter2B2GFF< SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential > >::mustNowRecalculateFromScratch
@@ -64,7 +66,8 @@ void register_InterGroupCoulombFFBase_class(){
             
             InterGroupCoulombFFBase_exposer.def( 
                 "mustNowRecalculateFromScratch"
-                , mustNowRecalculateFromScratch_function_value );
+                , mustNowRecalculateFromScratch_function_value
+                , "" );
         
         }
         InterGroupCoulombFFBase_exposer.def( bp::self != bp::self );
@@ -78,7 +81,8 @@ void register_InterGroupCoulombFFBase_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         InterGroupCoulombFFBase_exposer.def( bp::self == bp::self );
@@ -91,7 +95,8 @@ void register_InterGroupCoulombFFBase_class(){
             InterGroupCoulombFFBase_exposer.def( 
                 "properties"
                 , properties_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireFF::Inter2B2GFF< SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential > >::property
@@ -104,7 +109,8 @@ void register_InterGroupCoulombFFBase_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireFF::Inter2B2GFF< SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential > >::setProperty
@@ -116,7 +122,8 @@ void register_InterGroupCoulombFFBase_class(){
             InterGroupCoulombFFBase_exposer.def( 
                 "setProperty"
                 , setProperty_function_value
-                , ( bp::arg("name"), bp::arg("property") ) );
+                , ( bp::arg("name"), bp::arg("property") )
+                , "" );
         
         }
         { //::SireFF::Inter2B2GFF< SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential > >::typeName
@@ -127,7 +134,8 @@ void register_InterGroupCoulombFFBase_class(){
             
             InterGroupCoulombFFBase_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireFF::Inter2B2GFF< SireMM::CoulombPotentialInterface< SireMM::InterCoulombPotential > >::what
@@ -138,7 +146,8 @@ void register_InterGroupCoulombFFBase_class(){
             
             InterGroupCoulombFFBase_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         InterGroupCoulombFFBase_exposer.staticmethod( "typeName" );

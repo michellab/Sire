@@ -9,7 +9,7 @@ namespace bp = boost::python;
 
 #include "SireBase/findexe.h"
 
-#include "SireBase/process.h"
+#include "SireBase/sire_process.h"
 
 #include "SireBase/tempdir.h"
 
@@ -85,10 +85,10 @@ void register_PerturbationsTemplate_class(){
 
     { //::SireIO::PerturbationsTemplate
         typedef bp::class_< SireIO::PerturbationsTemplate > PerturbationsTemplate_exposer_t;
-        PerturbationsTemplate_exposer_t PerturbationsTemplate_exposer = PerturbationsTemplate_exposer_t( "PerturbationsTemplate", bp::init< >() );
+        PerturbationsTemplate_exposer_t PerturbationsTemplate_exposer = PerturbationsTemplate_exposer_t( "PerturbationsTemplate", "Internal class used to store the data describing a single perturbations template\n\nAuthor: Julien Michel\n", bp::init< >("Constructor") );
         bp::scope PerturbationsTemplate_scope( PerturbationsTemplate_exposer );
-        PerturbationsTemplate_exposer.def( bp::init< QString const & >(( bp::arg("name") )) );
-        PerturbationsTemplate_exposer.def( bp::init< SireIO::PerturbationsTemplate const & >(( bp::arg("other") )) );
+        PerturbationsTemplate_exposer.def( bp::init< QString const & >(( bp::arg("name") ), "Copy constructor") );
+        PerturbationsTemplate_exposer.def( bp::init< SireIO::PerturbationsTemplate const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireIO::PerturbationsTemplate::getAngles
         
             typedef ::QList< SireMol::AngleID > ( ::SireIO::PerturbationsTemplate::*getAngles_function_type)(  ) const;
@@ -96,7 +96,8 @@ void register_PerturbationsTemplate_class(){
             
             PerturbationsTemplate_exposer.def( 
                 "getAngles"
-                , getAngles_function_value );
+                , getAngles_function_value
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::getBonds
@@ -106,7 +107,8 @@ void register_PerturbationsTemplate_class(){
             
             PerturbationsTemplate_exposer.def( 
                 "getBonds"
-                , getBonds_function_value );
+                , getBonds_function_value
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::getDihedrals
@@ -116,7 +118,8 @@ void register_PerturbationsTemplate_class(){
             
             PerturbationsTemplate_exposer.def( 
                 "getDihedrals"
-                , getDihedrals_function_value );
+                , getDihedrals_function_value
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::getFinalAngleK
@@ -127,7 +130,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "getFinalAngleK"
                 , getFinalAngleK_function_value
-                , ( bp::arg("angle") ) );
+                , ( bp::arg("angle") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::getFinalAngleT
@@ -138,7 +142,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "getFinalAngleT"
                 , getFinalAngleT_function_value
-                , ( bp::arg("angle") ) );
+                , ( bp::arg("angle") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::getFinalBondK
@@ -149,7 +154,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "getFinalBondK"
                 , getFinalBondK_function_value
-                , ( bp::arg("bond") ) );
+                , ( bp::arg("bond") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::getFinalBondR
@@ -160,7 +166,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "getFinalBondR"
                 , getFinalBondR_function_value
-                , ( bp::arg("bond") ) );
+                , ( bp::arg("bond") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::getFinalCharge
@@ -171,7 +178,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "getFinalCharge"
                 , getFinalCharge_function_value
-                , ( bp::arg("atomname") ) );
+                , ( bp::arg("atomname") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::getFinalDihParams
@@ -182,7 +190,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "getFinalDihParams"
                 , getFinalDihParams_function_value
-                , ( bp::arg("dihedral") ) );
+                , ( bp::arg("dihedral") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::getFinalImpParams
@@ -193,7 +202,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "getFinalImpParams"
                 , getFinalImpParams_function_value
-                , ( bp::arg("improper") ) );
+                , ( bp::arg("improper") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::getFinalLJ
@@ -204,7 +214,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "getFinalLJ"
                 , getFinalLJ_function_value
-                , ( bp::arg("atomname") ) );
+                , ( bp::arg("atomname") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::getFinalType
@@ -215,7 +226,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "getFinalType"
                 , getFinalType_function_value
-                , ( bp::arg("atomname") ) );
+                , ( bp::arg("atomname") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::getImpropers
@@ -225,7 +237,8 @@ void register_PerturbationsTemplate_class(){
             
             PerturbationsTemplate_exposer.def( 
                 "getImpropers"
-                , getImpropers_function_value );
+                , getImpropers_function_value
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::getInitAngleK
@@ -236,7 +249,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "getInitAngleK"
                 , getInitAngleK_function_value
-                , ( bp::arg("angle") ) );
+                , ( bp::arg("angle") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::getInitAngleT
@@ -247,7 +261,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "getInitAngleT"
                 , getInitAngleT_function_value
-                , ( bp::arg("angle") ) );
+                , ( bp::arg("angle") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::getInitBondK
@@ -258,7 +273,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "getInitBondK"
                 , getInitBondK_function_value
-                , ( bp::arg("bond") ) );
+                , ( bp::arg("bond") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::getInitBondR
@@ -269,7 +285,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "getInitBondR"
                 , getInitBondR_function_value
-                , ( bp::arg("bond") ) );
+                , ( bp::arg("bond") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::getInitCharge
@@ -280,7 +297,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "getInitCharge"
                 , getInitCharge_function_value
-                , ( bp::arg("atomname") ) );
+                , ( bp::arg("atomname") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::getInitDihParams
@@ -291,7 +309,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "getInitDihParams"
                 , getInitDihParams_function_value
-                , ( bp::arg("dihedral") ) );
+                , ( bp::arg("dihedral") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::getInitImpParams
@@ -302,7 +321,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "getInitImpParams"
                 , getInitImpParams_function_value
-                , ( bp::arg("improper") ) );
+                , ( bp::arg("improper") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::getInitLJ
@@ -313,7 +333,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "getInitLJ"
                 , getInitLJ_function_value
-                , ( bp::arg("atomname") ) );
+                , ( bp::arg("atomname") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::getInitType
@@ -324,7 +345,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "getInitType"
                 , getInitType_function_value
-                , ( bp::arg("atomname") ) );
+                , ( bp::arg("atomname") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::getName
@@ -334,7 +356,8 @@ void register_PerturbationsTemplate_class(){
             
             PerturbationsTemplate_exposer.def( 
                 "getName"
-                , getName_function_value );
+                , getName_function_value
+                , "" );
         
         }
         PerturbationsTemplate_exposer.def( bp::self != bp::self );
@@ -347,7 +370,8 @@ void register_PerturbationsTemplate_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         PerturbationsTemplate_exposer.def( bp::self == bp::self );
@@ -359,7 +383,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "setFinalAngleK"
                 , setFinalAngleK_function_value
-                , ( bp::arg("angle"), bp::arg("k") ) );
+                , ( bp::arg("angle"), bp::arg("k") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::setFinalAngleT
@@ -370,7 +395,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "setFinalAngleT"
                 , setFinalAngleT_function_value
-                , ( bp::arg("angle"), bp::arg("r") ) );
+                , ( bp::arg("angle"), bp::arg("r") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::setFinalBondK
@@ -381,7 +407,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "setFinalBondK"
                 , setFinalBondK_function_value
-                , ( bp::arg("bond"), bp::arg("k") ) );
+                , ( bp::arg("bond"), bp::arg("k") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::setFinalBondR
@@ -392,7 +419,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "setFinalBondR"
                 , setFinalBondR_function_value
-                , ( bp::arg("bond"), bp::arg("r") ) );
+                , ( bp::arg("bond"), bp::arg("r") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::setFinalCharge
@@ -403,7 +431,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "setFinalCharge"
                 , setFinalCharge_function_value
-                , ( bp::arg("atomname"), bp::arg("atomcharge") ) );
+                , ( bp::arg("atomname"), bp::arg("atomcharge") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::setFinalDihParams
@@ -414,7 +443,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "setFinalDihParams"
                 , setFinalDihParams_function_value
-                , ( bp::arg("dihedral"), bp::arg("params") ) );
+                , ( bp::arg("dihedral"), bp::arg("params") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::setFinalImpParams
@@ -425,7 +455,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "setFinalImpParams"
                 , setFinalImpParams_function_value
-                , ( bp::arg("improper"), bp::arg("params") ) );
+                , ( bp::arg("improper"), bp::arg("params") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::setFinalLJ
@@ -436,7 +467,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "setFinalLJ"
                 , setFinalLJ_function_value
-                , ( bp::arg("atomname"), bp::arg("atomlj") ) );
+                , ( bp::arg("atomname"), bp::arg("atomlj") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::setFinalType
@@ -447,7 +479,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "setFinalType"
                 , setFinalType_function_value
-                , ( bp::arg("atomname"), bp::arg("atype") ) );
+                , ( bp::arg("atomname"), bp::arg("atype") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::setInitAngleK
@@ -458,7 +491,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "setInitAngleK"
                 , setInitAngleK_function_value
-                , ( bp::arg("angle"), bp::arg("k") ) );
+                , ( bp::arg("angle"), bp::arg("k") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::setInitAngleT
@@ -469,7 +503,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "setInitAngleT"
                 , setInitAngleT_function_value
-                , ( bp::arg("angle"), bp::arg("r") ) );
+                , ( bp::arg("angle"), bp::arg("r") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::setInitBondK
@@ -480,7 +515,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "setInitBondK"
                 , setInitBondK_function_value
-                , ( bp::arg("bond"), bp::arg("k") ) );
+                , ( bp::arg("bond"), bp::arg("k") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::setInitBondR
@@ -491,7 +527,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "setInitBondR"
                 , setInitBondR_function_value
-                , ( bp::arg("bond"), bp::arg("r") ) );
+                , ( bp::arg("bond"), bp::arg("r") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::setInitCharge
@@ -502,7 +539,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "setInitCharge"
                 , setInitCharge_function_value
-                , ( bp::arg("atomname"), bp::arg("atomcharge") ) );
+                , ( bp::arg("atomname"), bp::arg("atomcharge") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::setInitDihParams
@@ -513,7 +551,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "setInitDihParams"
                 , setInitDihParams_function_value
-                , ( bp::arg("dihedral"), bp::arg("params") ) );
+                , ( bp::arg("dihedral"), bp::arg("params") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::setInitImpParams
@@ -524,7 +563,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "setInitImpParams"
                 , setInitImpParams_function_value
-                , ( bp::arg("improper"), bp::arg("params") ) );
+                , ( bp::arg("improper"), bp::arg("params") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::setInitLJ
@@ -535,7 +575,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "setInitLJ"
                 , setInitLJ_function_value
-                , ( bp::arg("atomname"), bp::arg("atomlj") ) );
+                , ( bp::arg("atomname"), bp::arg("atomlj") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::setInitType
@@ -546,7 +587,8 @@ void register_PerturbationsTemplate_class(){
             PerturbationsTemplate_exposer.def( 
                 "setInitType"
                 , setInitType_function_value
-                , ( bp::arg("atomname"), bp::arg("atype") ) );
+                , ( bp::arg("atomname"), bp::arg("atype") )
+                , "" );
         
         }
         { //::SireIO::PerturbationsTemplate::typeName
@@ -556,7 +598,8 @@ void register_PerturbationsTemplate_class(){
             
             PerturbationsTemplate_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         PerturbationsTemplate_exposer.staticmethod( "typeName" );

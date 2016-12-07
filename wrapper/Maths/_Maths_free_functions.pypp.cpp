@@ -115,6 +115,14 @@ namespace bp = boost::python;
 
 #include "gamma.h"
 
+#include "gamma.h"
+
+#include <cmath>
+
+#include <gsl/gsl_sf_gamma.h>
+
+#include "gamma.h"
+
 #include "SireError/errors.h"
 
 #include "SireMaths/accumulator.h"
@@ -341,25 +349,27 @@ void register_free_functions(){
 
     { //::SireMaths::Gamma
     
-        typedef double ( *Gamma_function_type )( double,double );
-        Gamma_function_type Gamma_function_value( &::SireMaths::Gamma );
-        
-        bp::def( 
-            "Gamma"
-            , Gamma_function_value
-            , ( bp::arg("alpha"), bp::arg("x") ) );
-    
-    }
-
-    { //::SireMaths::Gamma
-    
         typedef double ( *Gamma_function_type )( double );
         Gamma_function_type Gamma_function_value( &::SireMaths::Gamma );
         
         bp::def( 
             "Gamma"
             , Gamma_function_value
-            , ( bp::arg("alpha") ) );
+            , ( bp::arg("alpha") )
+            , "" );
+    
+    }
+
+    { //::SireMaths::Gamma
+    
+        typedef double ( *Gamma_function_type )( double,double );
+        Gamma_function_type Gamma_function_value( &::SireMaths::Gamma );
+        
+        bp::def( 
+            "Gamma"
+            , Gamma_function_value
+            , ( bp::arg("alpha"), bp::arg("x") )
+            , "" );
     
     }
 
@@ -371,19 +381,8 @@ void register_free_functions(){
         bp::def( 
             "align"
             , align_function_value
-            , ( bp::arg("p"), bp::arg("q"), bp::arg("fit")=(bool)(true) ) );
-    
-    }
-
-    { //::SireMaths::boys
-    
-        typedef double ( *boys_function_type )( int,double );
-        boys_function_type boys_function_value( &::SireMaths::boys );
-        
-        bp::def( 
-            "boys"
-            , boys_function_value
-            , ( bp::arg("m"), bp::arg("x") ) );
+            , ( bp::arg("p"), bp::arg("q"), bp::arg("fit")=(bool)(true) )
+            , "" );
     
     }
 
@@ -395,7 +394,21 @@ void register_free_functions(){
         bp::def( 
             "boys"
             , boys_function_value
-            , ( bp::arg("m"), bp::arg("x") ) );
+            , ( bp::arg("m"), bp::arg("x") )
+            , "" );
+    
+    }
+
+    { //::SireMaths::boys
+    
+        typedef double ( *boys_function_type )( int,double );
+        boys_function_type boys_function_value( &::SireMaths::boys );
+        
+        bp::def( 
+            "boys"
+            , boys_function_value
+            , ( bp::arg("m"), bp::arg("x") )
+            , "" );
     
     }
 
@@ -407,7 +420,8 @@ void register_free_functions(){
         bp::def( 
             "brute_force_linear_assignment"
             , brute_force_linear_assignment_function_value
-            , ( bp::arg("costs") ) );
+            , ( bp::arg("costs") )
+            , "" );
     
     }
 
@@ -419,19 +433,8 @@ void register_free_functions(){
         bp::def( 
             "calculate_total_cost"
             , calculate_total_cost_function_value
-            , ( bp::arg("costs"), bp::arg("rows_to_columns") ) );
-    
-    }
-
-    { //::SireMaths::gamma
-    
-        typedef double ( *gamma_function_type )( double,double );
-        gamma_function_type gamma_function_value( &::SireMaths::gamma );
-        
-        bp::def( 
-            "gamma"
-            , gamma_function_value
-            , ( bp::arg("alpha"), bp::arg("x") ) );
+            , ( bp::arg("costs"), bp::arg("rows_to_columns") )
+            , "" );
     
     }
 
@@ -443,9 +446,24 @@ void register_free_functions(){
         bp::def( 
             "gamma"
             , gamma_function_value
-            , ( bp::arg("alpha") ) );
+            , ( bp::arg("alpha") )
+            , "" );
     
     }
+
+    { //::SireMaths::gamma
+    
+        typedef double ( *gamma_function_type )( double,double );
+        gamma_function_type gamma_function_value( &::SireMaths::gamma );
+        
+        bp::def( 
+            "gamma"
+            , gamma_function_value
+            , ( bp::arg("alpha"), bp::arg("x") )
+            , "" );
+    
+    }
+
 
     { //::SireMaths::getAlignment
     
@@ -455,7 +473,8 @@ void register_free_functions(){
         bp::def( 
             "getAlignment"
             , getAlignment_function_value
-            , ( bp::arg("p"), bp::arg("q"), bp::arg("fit")=(bool)(true) ) );
+            , ( bp::arg("p"), bp::arg("q"), bp::arg("fit")=(bool)(true) )
+            , "" );
     
     }
 
@@ -467,7 +486,8 @@ void register_free_functions(){
         bp::def( 
             "getCentroid"
             , getCentroid_function_value
-            , ( bp::arg("p"), bp::arg("n")=(int)(-0x00000000000000001) ) );
+            , ( bp::arg("p"), bp::arg("n")=(int)(-1) )
+            , "" );
     
     }
 
@@ -479,7 +499,8 @@ void register_free_functions(){
         bp::def( 
             "getRMSD"
             , getRMSD_function_value
-            , ( bp::arg("p"), bp::arg("q"), bp::arg("n")=(int)(-0x00000000000000001) ) );
+            , ( bp::arg("p"), bp::arg("q"), bp::arg("n")=(int)(-1) )
+            , "" );
     
     }
 
@@ -491,7 +512,8 @@ void register_free_functions(){
         bp::def( 
             "get_lowest_total_cost"
             , get_lowest_total_cost_function_value
-            , ( bp::arg("costs") ) );
+            , ( bp::arg("costs") )
+            , "" );
     
     }
 
@@ -503,7 +525,8 @@ void register_free_functions(){
         bp::def( 
             "incomplete_gamma_higher"
             , incomplete_gamma_higher_function_value
-            , ( bp::arg("alpha"), bp::arg("x") ) );
+            , ( bp::arg("alpha"), bp::arg("x") )
+            , "" );
     
     }
 
@@ -515,7 +538,8 @@ void register_free_functions(){
         bp::def( 
             "incomplete_gamma_lower"
             , incomplete_gamma_lower_function_value
-            , ( bp::arg("alpha"), bp::arg("x") ) );
+            , ( bp::arg("alpha"), bp::arg("x") )
+            , "" );
     
     }
 
@@ -527,7 +551,8 @@ void register_free_functions(){
         bp::def( 
             "kabasch"
             , kabasch_function_value
-            , ( bp::arg("p"), bp::arg("q") ) );
+            , ( bp::arg("p"), bp::arg("q") )
+            , "" );
     
     }
 
@@ -539,19 +564,8 @@ void register_free_functions(){
         bp::def( 
             "kabaschFit"
             , kabaschFit_function_value
-            , ( bp::arg("p"), bp::arg("q") ) );
-    
-    }
-
-    { //::SireMaths::multi_boys
-    
-        typedef ::QVector< double > ( *multi_boys_function_type )( double,int,int );
-        multi_boys_function_type multi_boys_function_value( &::SireMaths::multi_boys );
-        
-        bp::def( 
-            "multi_boys"
-            , multi_boys_function_value
-            , ( bp::arg("x"), bp::arg("n"), bp::arg("start") ) );
+            , ( bp::arg("p"), bp::arg("q") )
+            , "" );
     
     }
 
@@ -563,7 +577,21 @@ void register_free_functions(){
         bp::def( 
             "multi_boys"
             , multi_boys_function_value
-            , ( bp::arg("x"), bp::arg("n") ) );
+            , ( bp::arg("x"), bp::arg("n") )
+            , "" );
+    
+    }
+
+    { //::SireMaths::multi_boys
+    
+        typedef ::QVector< double > ( *multi_boys_function_type )( double,int,int );
+        multi_boys_function_type multi_boys_function_value( &::SireMaths::multi_boys );
+        
+        bp::def( 
+            "multi_boys"
+            , multi_boys_function_value
+            , ( bp::arg("x"), bp::arg("n"), bp::arg("start") )
+            , "" );
     
     }
 
@@ -575,7 +603,8 @@ void register_free_functions(){
         bp::def( 
             "rotate"
             , rotate_function_value
-            , ( bp::arg("input"), bp::arg("rotmat"), bp::arg("point") ) );
+            , ( bp::arg("input"), bp::arg("rotmat"), bp::arg("point") )
+            , "Function that rotates the input vector input by the rotation\nmatrix rotmat about the point point. The output is returned." );
     
     }
 
@@ -587,31 +616,8 @@ void register_free_functions(){
         bp::def( 
             "solve_linear_assignment"
             , solve_linear_assignment_function_value
-            , ( bp::arg("costs"), bp::arg("check_result")=(bool)(false) ) );
-    
-    }
-
-    { //::SireMaths::wrap
-    
-        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::QList< SireMaths::Vector > const & );
-        wrap_function_type wrap_function_value( &::SireMaths::wrap );
-        
-        bp::def( 
-            "wrap"
-            , wrap_function_value
-            , ( bp::arg("vector") ) );
-    
-    }
-
-    { //::SireMaths::wrap
-    
-        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::QVector< SireMaths::Vector > const & );
-        wrap_function_type wrap_function_value( &::SireMaths::wrap );
-        
-        bp::def( 
-            "wrap"
-            , wrap_function_value
-            , ( bp::arg("vector") ) );
+            , ( bp::arg("costs"), bp::arg("check_result")=(bool)(false) )
+            , "" );
     
     }
 
@@ -623,7 +629,34 @@ void register_free_functions(){
         bp::def( 
             "wrap"
             , wrap_function_value
-            , ( bp::arg("vector") ) );
+            , ( bp::arg("vector") )
+            , "" );
+    
+    }
+
+    { //::SireMaths::wrap
+    
+        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::QVector< SireMaths::Vector > const & );
+        wrap_function_type wrap_function_value( &::SireMaths::wrap );
+        
+        bp::def( 
+            "wrap"
+            , wrap_function_value
+            , ( bp::arg("vector") )
+            , "" );
+    
+    }
+
+    { //::SireMaths::wrap
+    
+        typedef ::SireBase::PropertyPtr ( *wrap_function_type )( ::QList< SireMaths::Vector > const & );
+        wrap_function_type wrap_function_value( &::SireMaths::wrap );
+        
+        bp::def( 
+            "wrap"
+            , wrap_function_value
+            , ( bp::arg("vector") )
+            , "" );
     
     }
 

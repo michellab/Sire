@@ -5,24 +5,60 @@
 
 if (ANACONDA_BUILD)
   # we will just use the python that comes with anaconda
-  set (PYTHON_EXECUTABLE "${ANACONDA_BASE}/bin/python3" )
+  if (MSYS)
+    set (PYTHON_EXECUTABLE "${ANACONDA_BASE}/python" )
+  else()
+    set (PYTHON_EXECUTABLE "${ANACONDA_BASE}/bin/python3" )
+  endif()
+
   find_package( PythonInterp REQUIRED )
 
   set( PYTHON_VERSION "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}" )
-  set( PYTHON_ABIFLAGS "m" )
 
   unset(PYTHON_LIBRARY CACHE)
+  set( PYTHON_ABIFLAGS "m" )
 
   # Find the python library that comes with anaconda
-  find_library( PYTHON_LIBRARY
-                NAMES python${PYTHON_VERSION}${PYTHON_ABIFLAGS}
-                PATHS ${ANACONDA_BASE}/lib NO_DEFAULT_PATH )
+  if (MSYS)
+    message( STATUS "Find python${PYTHON_VERSION} in ${ANACONDA_BASE}")
+    set( PYTHON_LIBRARY "${ANACONDA_BASE}/lib/python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}.lib" )
+    set( PYTHON_INCLUDE_DIR "${ANACONDA_BASE}/include" )
+    find_package(PythonLibs ${PYTHON_VERSION} REQUIRED)
+  else()
+    find_library( PYTHON_LIBRARY
+                  NAMES python${PYTHON_VERSION}${PYTHON_ABIFLAGS}
+                  PATHS ${ANACONDA_BASE}/lib NO_DEFAULT_PATH )
+  endif()
 
   if (NOT PYTHON_LIBRARY)
-    message( FATAL_ERROR "Where is the python library that comes with anaconda?"
-                         "It cannot be found. Please check that your anaconda"
+    message( FATAL_ERROR "Where is the python library that comes with anaconda? "
+                         "It cannot be found. Please check that your anaconda "
                          "installation is complete." )
   endif()
+
+elseif (MSYS)
+  # use the python that comes with msys
+  unset(PYTHON_LIBRARY CACHE)
+
+
+  if ( PYTHON_EXECUTABLE )
+    message( STATUS "Found Python executable ${PYTHON_EXECUTABLE}" )
+  else()
+    message( FATAL_ERROR "Where is the python executable?" )
+  endif()
+
+  find_package( PythonLibs 3.3  )
+
+  if ( PYTHON_LIBRARIES )
+    message( STATUS "Python paths ${PYTHON_LIBRARIES} | ${PYTHON_INCLUDE_DIR} | ${PYTHON_VERSION}" )
+  else()
+    message( FATAL_ERROR "Cannot find the msys installation of Python!" )
+  endif()
+
+  find_package( PythonInterp 3.3 )
+
+  set( SIRE_FOUND_PYTHON TRUE )
+
 else()
   # Need to set the version of Python bundled with Sire
   set( PYTHON_VERSION "3.3" )
@@ -138,9 +174,14 @@ endif()
 
 if ( ANACONDA_BUILD )
   set( PYTHON_LIBRARIES "${PYTHON_LIBRARY}" )
-  set( PYTHON_INCLUDE_DIR "${ANACONDA_BASE}/include/python${PYTHON_VERSION}${PYTHON_ABIFLAGS}")
   set( PYTHON_SITE_DIR "../../lib/python${PYTHON_VERSION}/site-packages" )
-  set( PYTHON_MODULE_EXTENSION ".so" )
+
+  if (MSYS)
+    set( PYTHON_MODULE_EXTENSION ".pyd" )
+  else()
+    set( PYTHON_MODULE_EXTENSION ".so" )
+    set( PYTHON_INCLUDE_DIR "${ANACONDA_BASE}/include/python${PYTHON_VERSION}${PYTHON_ABIFLAGS}")
+  endif()
 
   if (APPLE)
     # we have to make sure that the anaconda python library is called @rpath/libpython...
@@ -162,6 +203,22 @@ if ( ANACONDA_BUILD )
   message( STATUS "Python modules will be installed to ${PYTHON_SITE_DIR}" )
 
   set( SIRE_FOUND_PYTHON TRUE )
+
+elseif ( MSYS )
+  set( PYTHON_LIBRARIES "${PYTHON_LIBRARY}" )
+
+  # call python to tell it the site-packages directory itself
+  execute_process(
+     COMMAND "${PYTHON_EXECUTABLE}" -c "from distutils import sysconfig as sc
+print(sc.get_python_lib(prefix='', plat_specific=True))"
+     OUTPUT_VARIABLE PYTHON_SITE
+     OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+  set( PYTHON_SITE_DIR "${SIRE_INSTALL_PREFIX}/${PYTHON_SITE}" )
+  set( PYTHON_MODULE_EXTENSION ".pyd" )
+
+  message( STATUS "Using msys python in ${PYTHON_LIBRARIES} | ${PYTHON_INCLUDE_DIR}" )
+  message( STATUS "Python modules will be installed to ${PYTHON_SITE_DIR}" )
 
 elseif ( PYTHON_LIBRARY )
   set( PYTHON_LIBRARIES "${PYTHON_LIBRARY}" )

@@ -28,11 +28,11 @@ void register_MonitorComponent_class(){
 
     { //::SireSystem::MonitorComponent
         typedef bp::class_< SireSystem::MonitorComponent, bp::bases< SireSystem::SystemMonitor, SireBase::Property > > MonitorComponent_exposer_t;
-        MonitorComponent_exposer_t MonitorComponent_exposer = MonitorComponent_exposer_t( "MonitorComponent", bp::init< >() );
+        MonitorComponent_exposer_t MonitorComponent_exposer = MonitorComponent_exposer_t( "MonitorComponent", "This monitor is used to monitor the value of a component of the system.\nIt can be used to generate an average of that component. It could be\nused, for example, to generate average energies, or accumulate\nfree energies during a simulation\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope MonitorComponent_scope( MonitorComponent_exposer );
-        MonitorComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("component") )) );
-        MonitorComponent_exposer.def( bp::init< SireCAS::Symbol const &, SireMaths::Accumulator const & >(( bp::arg("component"), bp::arg("accumulator") )) );
-        MonitorComponent_exposer.def( bp::init< SireSystem::MonitorComponent const & >(( bp::arg("other") )) );
+        MonitorComponent_exposer.def( bp::init< SireCAS::Symbol const & >(( bp::arg("component") ), "Construct a monitor to collect the average value of the component\nrepresented by the symbol component") );
+        MonitorComponent_exposer.def( bp::init< SireCAS::Symbol const &, SireMaths::Accumulator const & >(( bp::arg("component"), bp::arg("accumulator") ), "Construct a monitor to accumulate the value of the component\nrepresented by the symbol component using the accumulator\nin accumulator") );
+        MonitorComponent_exposer.def( bp::init< SireSystem::MonitorComponent const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireSystem::MonitorComponent::accumulator
         
             typedef ::SireMaths::Accumulator const & ( ::SireSystem::MonitorComponent::*accumulator_function_type)(  ) const;
@@ -41,7 +41,8 @@ void register_MonitorComponent_class(){
             MonitorComponent_exposer.def( 
                 "accumulator"
                 , accumulator_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the accumulator that is being used to accumulate the\nvalues of the component being monitored" );
         
         }
         { //::SireSystem::MonitorComponent::clearStatistics
@@ -51,7 +52,8 @@ void register_MonitorComponent_class(){
             
             MonitorComponent_exposer.def( 
                 "clearStatistics"
-                , clearStatistics_function_value );
+                , clearStatistics_function_value
+                , "Clear the statistics in this monitor" );
         
         }
         { //::SireSystem::MonitorComponent::component
@@ -62,7 +64,8 @@ void register_MonitorComponent_class(){
             MonitorComponent_exposer.def( 
                 "component"
                 , component_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol representing the component being monitored" );
         
         }
         { //::SireSystem::MonitorComponent::monitor
@@ -73,7 +76,8 @@ void register_MonitorComponent_class(){
             MonitorComponent_exposer.def( 
                 "monitor"
                 , monitor_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "Call this function to add the statistics of the monitored\ncomponent from the passed system to the accumulator" );
         
         }
         MonitorComponent_exposer.def( bp::self != bp::self );
@@ -86,7 +90,8 @@ void register_MonitorComponent_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MonitorComponent_exposer.def( bp::self == bp::self );
@@ -97,7 +102,8 @@ void register_MonitorComponent_class(){
             
             MonitorComponent_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         MonitorComponent_exposer.staticmethod( "typeName" );

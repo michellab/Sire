@@ -35,7 +35,7 @@ void register_ElementParameterName_class(){
 
     { //::Squire::ElementParameterName
         typedef bp::class_< Squire::ElementParameterName > ElementParameterName_exposer_t;
-        ElementParameterName_exposer_t ElementParameterName_exposer = ElementParameterName_exposer_t( "ElementParameterName", bp::init< >() );
+        ElementParameterName_exposer_t ElementParameterName_exposer = ElementParameterName_exposer_t( "ElementParameterName", "This class provides the default name of the\nproperty that contains the element parameters", bp::init< >("") );
         bp::scope ElementParameterName_scope( ElementParameterName_exposer );
         { //::Squire::ElementParameterName::element
         
@@ -45,7 +45,8 @@ void register_ElementParameterName_class(){
             ElementParameterName_exposer.def( 
                 "element"
                 , element_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         ElementParameterName_exposer.def( "__copy__", &__copy__);

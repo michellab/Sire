@@ -23,12 +23,12 @@ void register_PackedArray2D_QString_Array_class(){
 
     { //::SireBase::detail::PackedArray2D_Array< QString >
         typedef bp::class_< SireBase::detail::PackedArray2D_Array< QString > > PackedArray2D_QString_Array_exposer_t;
-        PackedArray2D_QString_Array_exposer_t PackedArray2D_QString_Array_exposer = PackedArray2D_QString_Array_exposer_t( "PackedArray2D_QString_Array", bp::init< >() );
+        PackedArray2D_QString_Array_exposer_t PackedArray2D_QString_Array_exposer = PackedArray2D_QString_Array_exposer_t( "PackedArray2D_QString_Array", "", bp::init< >("") );
         bp::scope PackedArray2D_QString_Array_scope( PackedArray2D_QString_Array_exposer );
-        PackedArray2D_QString_Array_exposer.def( bp::init< quint32 >(( bp::arg("sz") )) );
-        PackedArray2D_QString_Array_exposer.def( bp::init< quint32, QString const & >(( bp::arg("sz"), bp::arg("value") )) );
-        PackedArray2D_QString_Array_exposer.def( bp::init< QVector< QString > const & >(( bp::arg("values") )) );
-        PackedArray2D_QString_Array_exposer.def( bp::init< SireBase::detail::PackedArray2D_Array< QString > const & >(( bp::arg("other") )) );
+        PackedArray2D_QString_Array_exposer.def( bp::init< quint32 >(( bp::arg("sz") ), "") );
+        PackedArray2D_QString_Array_exposer.def( bp::init< quint32, QString const & >(( bp::arg("sz"), bp::arg("value") ), "") );
+        PackedArray2D_QString_Array_exposer.def( bp::init< QVector< QString > const & >(( bp::arg("values") ), "") );
+        PackedArray2D_QString_Array_exposer.def( bp::init< SireBase::detail::PackedArray2D_Array< QString > const & >(( bp::arg("other") ), "") );
         { //::SireBase::detail::PackedArray2D_Array< QString >::assertValidIndex
         
             typedef SireBase::detail::PackedArray2D_Array< QString > exported_class_t;
@@ -38,7 +38,8 @@ void register_PackedArray2D_QString_Array_class(){
             PackedArray2D_QString_Array_exposer.def( 
                 "assertValidIndex"
                 , assertValidIndex_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireBase::detail::PackedArray2D_Array< QString >::at
@@ -51,7 +52,8 @@ void register_PackedArray2D_QString_Array_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireBase::detail::PackedArray2D_Array< QString >::count
@@ -62,7 +64,8 @@ void register_PackedArray2D_QString_Array_class(){
             
             PackedArray2D_QString_Array_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireBase::detail::PackedArray2D_Array< QString >::isEmpty
@@ -73,7 +76,8 @@ void register_PackedArray2D_QString_Array_class(){
             
             PackedArray2D_QString_Array_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireBase::detail::PackedArray2D_Array< QString >::nValues
@@ -84,7 +88,8 @@ void register_PackedArray2D_QString_Array_class(){
             
             PackedArray2D_QString_Array_exposer.def( 
                 "nValues"
-                , nValues_function_value );
+                , nValues_function_value
+                , "" );
         
         }
         PackedArray2D_QString_Array_exposer.def( bp::self != bp::self );
@@ -98,7 +103,8 @@ void register_PackedArray2D_QString_Array_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         PackedArray2D_QString_Array_exposer.def( bp::self == bp::self );
@@ -112,7 +118,8 @@ void register_PackedArray2D_QString_Array_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireBase::detail::PackedArray2D_Array< QString >::operator[]
@@ -125,7 +132,8 @@ void register_PackedArray2D_QString_Array_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("i") )
-                , bp::return_internal_reference< >() );
+                , bp::return_internal_reference< >()
+                , "" );
         
         }
         { //::SireBase::detail::PackedArray2D_Array< QString >::size
@@ -136,7 +144,8 @@ void register_PackedArray2D_QString_Array_class(){
             
             PackedArray2D_QString_Array_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "" );
         
         }
         { //::SireBase::detail::PackedArray2D_Array< QString >::toQVector
@@ -147,7 +156,8 @@ void register_PackedArray2D_QString_Array_class(){
             
             PackedArray2D_QString_Array_exposer.def( 
                 "toQVector"
-                , toQVector_function_value );
+                , toQVector_function_value
+                , "" );
         
         }
         { //::SireBase::detail::PackedArray2D_Array< QString >::toString
@@ -158,7 +168,8 @@ void register_PackedArray2D_QString_Array_class(){
             
             PackedArray2D_QString_Array_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireBase::detail::PackedArray2D_Array< QString >::update
@@ -170,7 +181,8 @@ void register_PackedArray2D_QString_Array_class(){
             PackedArray2D_QString_Array_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "" );
         
         }
         PackedArray2D_QString_Array_exposer.def( "__copy__", &__copy__);

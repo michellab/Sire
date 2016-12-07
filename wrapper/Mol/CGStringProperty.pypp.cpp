@@ -25,11 +25,11 @@ void register_CGStringProperty_class(){
 
     { //::SireMol::CGProperty< QString >
         typedef bp::class_< SireMol::CGProperty< QString >, bp::bases< SireMol::CGProp, SireMol::MolViewProperty, SireBase::Property > > CGStringProperty_exposer_t;
-        CGStringProperty_exposer_t CGStringProperty_exposer = CGStringProperty_exposer_t( "CGStringProperty", bp::init< >() );
+        CGStringProperty_exposer_t CGStringProperty_exposer = CGStringProperty_exposer_t( "CGStringProperty", "", bp::init< >("") );
         bp::scope CGStringProperty_scope( CGStringProperty_exposer );
-        CGStringProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") )) );
-        CGStringProperty_exposer.def( bp::init< QVector< QString > const & >(( bp::arg("values") )) );
-        CGStringProperty_exposer.def( bp::init< SireMol::CGProperty< QString > const & >(( bp::arg("other") )) );
+        CGStringProperty_exposer.def( bp::init< SireMol::MoleculeInfoData const & >(( bp::arg("molinfo") ), "") );
+        CGStringProperty_exposer.def( bp::init< QVector< QString > const & >(( bp::arg("values") ), "") );
+        CGStringProperty_exposer.def( bp::init< SireMol::CGProperty< QString > const & >(( bp::arg("other") ), "") );
         { //::SireMol::CGProperty< QString >::array
         
             typedef SireMol::CGProperty< QString > exported_class_t;
@@ -39,7 +39,8 @@ void register_CGStringProperty_class(){
             CGStringProperty_exposer.def( 
                 "array"
                 , array_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::CGProperty< QString >::assertCanConvert
@@ -51,7 +52,8 @@ void register_CGStringProperty_class(){
             CGStringProperty_exposer.def( 
                 "assertCanConvert"
                 , assertCanConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::CGProperty< QString >::assignFrom
@@ -63,7 +65,8 @@ void register_CGStringProperty_class(){
             CGStringProperty_exposer.def( 
                 "assignFrom"
                 , assignFrom_function_value
-                , ( bp::arg("variant") ) );
+                , ( bp::arg("variant") )
+                , "" );
         
         }
         { //::SireMol::CGProperty< QString >::at
@@ -76,7 +79,8 @@ void register_CGStringProperty_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::CGProperty< QString >::canConvert
@@ -88,7 +92,8 @@ void register_CGStringProperty_class(){
             CGStringProperty_exposer.def( 
                 "canConvert"
                 , canConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::CGProperty< QString >::count
@@ -99,7 +104,8 @@ void register_CGStringProperty_class(){
             
             CGStringProperty_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "" );
         
         }
         { //::SireMol::CGProperty< QString >::fromVariant
@@ -111,7 +117,8 @@ void register_CGStringProperty_class(){
             CGStringProperty_exposer.def( 
                 "fromVariant"
                 , fromVariant_function_value
-                , ( bp::arg("variant") ) );
+                , ( bp::arg("variant") )
+                , "" );
         
         }
         { //::SireMol::CGProperty< QString >::get
@@ -124,7 +131,8 @@ void register_CGStringProperty_class(){
                 "get"
                 , get_function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::CGProperty< QString >::isCompatibleWith
@@ -136,7 +144,8 @@ void register_CGStringProperty_class(){
             CGStringProperty_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "" );
         
         }
         { //::SireMol::CGProperty< QString >::isEmpty
@@ -147,7 +156,8 @@ void register_CGStringProperty_class(){
             
             CGStringProperty_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMol::CGProperty< QString >::nCutGroups
@@ -158,7 +168,8 @@ void register_CGStringProperty_class(){
             
             CGStringProperty_exposer.def( 
                 "nCutGroups"
-                , nCutGroups_function_value );
+                , nCutGroups_function_value
+                , "" );
         
         }
         CGStringProperty_exposer.def( bp::self != bp::self );
@@ -172,7 +183,8 @@ void register_CGStringProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CGStringProperty_exposer.def( bp::self == bp::self );
@@ -186,7 +198,8 @@ void register_CGStringProperty_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("cgidx") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::CGProperty< QString >::set
@@ -199,7 +212,8 @@ void register_CGStringProperty_class(){
                 "set"
                 , set_function_value
                 , ( bp::arg("cgidx"), bp::arg("value") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::CGProperty< QString >::size
@@ -210,7 +224,8 @@ void register_CGStringProperty_class(){
             
             CGStringProperty_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "" );
         
         }
         { //::SireMol::CGProperty< QString >::toString
@@ -221,7 +236,8 @@ void register_CGStringProperty_class(){
             
             CGStringProperty_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::CGProperty< QString >::toVariant
@@ -232,7 +248,8 @@ void register_CGStringProperty_class(){
             
             CGStringProperty_exposer.def( 
                 "toVariant"
-                , toVariant_function_value );
+                , toVariant_function_value
+                , "" );
         
         }
         { //::SireMol::CGProperty< QString >::typeName
@@ -243,7 +260,8 @@ void register_CGStringProperty_class(){
             
             CGStringProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         CGStringProperty_exposer.staticmethod( "fromVariant" );

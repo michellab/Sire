@@ -40,7 +40,7 @@ void register_VolumeChanger_class(){
 
     { //::SireMove::VolumeChanger
         typedef bp::class_< SireMove::VolumeChanger, bp::bases< SireBase::Property >, boost::noncopyable > VolumeChanger_exposer_t;
-        VolumeChanger_exposer_t VolumeChanger_exposer = VolumeChanger_exposer_t( "VolumeChanger", bp::no_init );
+        VolumeChanger_exposer_t VolumeChanger_exposer = VolumeChanger_exposer_t( "VolumeChanger", "This is the base class of all volume changing function classes.\nThese classes are used to change the volume of a system\ni.e. during a VolumeMove\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope VolumeChanger_scope( VolumeChanger_exposer );
         { //::SireMove::VolumeChanger::changeVolume
         
@@ -50,7 +50,8 @@ void register_VolumeChanger_class(){
             VolumeChanger_exposer.def( 
                 "changeVolume"
                 , changeVolume_function_value
-                , ( bp::arg("system"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("system"), bp::arg("delta"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Change the volume of the passed system system by delta, using\nthe optionally supplied property map to find the names of the\nnecessary properties\nThis returns the number of molecules which were involved in\nthe volume change\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::unsupported\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMove::VolumeChanger::generator
@@ -61,7 +62,8 @@ void register_VolumeChanger_class(){
             VolumeChanger_exposer.def( 
                 "generator"
                 , generator_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the random number generator that may be used to generate\nnew volumes" );
         
         }
         { //::SireMove::VolumeChanger::groupID
@@ -72,7 +74,8 @@ void register_VolumeChanger_class(){
             VolumeChanger_exposer.def( 
                 "groupID"
                 , groupID_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the ID of the molecule group(s) that will be affected\nby this volume changer" );
         
         }
         { //::SireMove::VolumeChanger::null
@@ -83,7 +86,8 @@ void register_VolumeChanger_class(){
             VolumeChanger_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the global null changer (which doesnt change anything)" );
         
         }
         { //::SireMove::VolumeChanger::randomChangeVolume
@@ -94,7 +98,8 @@ void register_VolumeChanger_class(){
             VolumeChanger_exposer.def( 
                 "randomChangeVolume"
                 , randomChangeVolume_function_value
-                , ( bp::arg("system"), bp::arg("maxvolchange"), bp::arg("new_bias"), bp::arg("old_bias"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("system"), bp::arg("maxvolchange"), bp::arg("new_bias"), bp::arg("old_bias"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Change the volume of the passed system system by a random\namount between -maxvolchange and maxvolchange, using\nthe optionally supplied property map to find the names of the\nnecessary properties.\nIf this move is biased, then this sets old_bias to the\nbias before the move, and new_bias to the bias afterwards.\nThis returns the number of molecules which were involved in\nthe volume change\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::unsupported\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireMove::VolumeChanger::setGenerator
@@ -105,7 +110,8 @@ void register_VolumeChanger_class(){
             VolumeChanger_exposer.def( 
                 "setGenerator"
                 , setGenerator_function_value
-                , ( bp::arg("generator") ) );
+                , ( bp::arg("generator") )
+                , "Set the random number generator that may be used to generate\nnew volumes" );
         
         }
         { //::SireMove::VolumeChanger::setGroup
@@ -116,7 +122,8 @@ void register_VolumeChanger_class(){
             VolumeChanger_exposer.def( 
                 "setGroup"
                 , setGroup_function_value
-                , ( bp::arg("mgid") ) );
+                , ( bp::arg("mgid") )
+                , "Set the ID of the molecule group(s) that will be affected by\nthis volume changer" );
         
         }
         { //::SireMove::VolumeChanger::setGroup
@@ -127,7 +134,8 @@ void register_VolumeChanger_class(){
             VolumeChanger_exposer.def( 
                 "setGroup"
                 , setGroup_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "Set the molecule group that is affected by this volume changer\n- this will match the group based on its molecule group number" );
         
         }
         { //::SireMove::VolumeChanger::setVolume
@@ -138,7 +146,8 @@ void register_VolumeChanger_class(){
             VolumeChanger_exposer.def( 
                 "setVolume"
                 , setVolume_function_value
-                , ( bp::arg("system"), bp::arg("volume"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("system"), bp::arg("volume"), bp::arg("map")=SireBase::PropertyMap() )
+                , "" );
         
         }
         { //::SireMove::VolumeChanger::typeName
@@ -148,7 +157,8 @@ void register_VolumeChanger_class(){
             
             VolumeChanger_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         VolumeChanger_exposer.staticmethod( "null" );

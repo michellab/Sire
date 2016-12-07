@@ -51,10 +51,10 @@ void register_ThisThread_class(){
 
     { //::SireCluster::ThisThread
         typedef bp::class_< SireCluster::ThisThread > ThisThread_exposer_t;
-        ThisThread_exposer_t ThisThread_exposer = ThisThread_exposer_t( "ThisThread", bp::init< >() );
+        ThisThread_exposer_t ThisThread_exposer = ThisThread_exposer_t( "ThisThread", "This simple class is used to allow the current thread\nto be made available to a Nodes object\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a null locker") );
         bp::scope ThisThread_scope( ThisThread_exposer );
-        ThisThread_exposer.def( bp::init< SireCluster::ThisThread const & >(( bp::arg("other") )) );
-        ThisThread_exposer.def( bp::init< SireCluster::Nodes const & >(( bp::arg("nodes") )) );
+        ThisThread_exposer.def( bp::init< SireCluster::ThisThread const & >(( bp::arg("other") ), "Copy constructor") );
+        ThisThread_exposer.def( bp::init< SireCluster::Nodes const & >(( bp::arg("nodes") ), "Construct a lock for this thread being added to\nthe nodes object nodes") );
         { //::SireCluster::ThisThread::operator=
         
             typedef ::SireCluster::ThisThread & ( ::SireCluster::ThisThread::*assign_function_type)( ::SireCluster::ThisThread const & ) ;
@@ -64,7 +64,8 @@ void register_ThisThread_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireCluster::ThisThread::reclaim
@@ -74,7 +75,8 @@ void register_ThisThread_class(){
             
             ThisThread_exposer.def( 
                 "reclaim"
-                , reclaim_function_value );
+                , reclaim_function_value
+                , "Reclaim this thread" );
         
         }
         ThisThread_exposer.def( "__copy__", &__copy__);

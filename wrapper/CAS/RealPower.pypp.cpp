@@ -41,10 +41,10 @@ void register_RealPower_class(){
 
     { //::SireCAS::RealPower
         typedef bp::class_< SireCAS::RealPower, bp::bases< SireCAS::PowerFunction, SireCAS::ExBase > > RealPower_exposer_t;
-        RealPower_exposer_t RealPower_exposer = RealPower_exposer_t( "RealPower", bp::init< >() );
+        RealPower_exposer_t RealPower_exposer = RealPower_exposer_t( "RealPower", "This class represents an expression raised to a real power", bp::init< >("Null constructor") );
         bp::scope RealPower_scope( RealPower_exposer );
-        RealPower_exposer.def( bp::init< SireCAS::Expression const &, double >(( bp::arg("expression"), bp::arg("power") )) );
-        RealPower_exposer.def( bp::init< SireCAS::RealPower const & >(( bp::arg("other") )) );
+        RealPower_exposer.def( bp::init< SireCAS::Expression const &, double >(( bp::arg("expression"), bp::arg("power") ), "Construct expression^power") );
+        RealPower_exposer.def( bp::init< SireCAS::RealPower const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireCAS::RealPower::evaluate
         
             typedef double ( ::SireCAS::RealPower::*evaluate_function_type)( ::SireCAS::Values const & ) const;
@@ -53,7 +53,8 @@ void register_RealPower_class(){
             RealPower_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this power" );
         
         }
         { //::SireCAS::RealPower::evaluate
@@ -64,7 +65,8 @@ void register_RealPower_class(){
             RealPower_exposer.def( 
                 "evaluate"
                 , evaluate_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "Evaluate this power" );
         
         }
         { //::SireCAS::RealPower::hash
@@ -74,7 +76,8 @@ void register_RealPower_class(){
             
             RealPower_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "Return a hash of this power" );
         
         }
         RealPower_exposer.def( bp::self == bp::other< SireCAS::ExBase >() );
@@ -85,7 +88,8 @@ void register_RealPower_class(){
             
             RealPower_exposer.def( 
                 "power"
-                , power_function_value );
+                , power_function_value
+                , "" );
         
         }
         { //::SireCAS::RealPower::typeName
@@ -95,7 +99,8 @@ void register_RealPower_class(){
             
             RealPower_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireCAS::RealPower::what
@@ -105,7 +110,8 @@ void register_RealPower_class(){
             
             RealPower_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         RealPower_exposer.staticmethod( "typeName" );

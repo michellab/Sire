@@ -86,12 +86,12 @@ void register_ForceFields_class(){
 
     { //::SireFF::ForceFields
         typedef bp::class_< SireFF::ForceFields, bp::bases< SireMol::MolGroupsBase, SireBase::Property > > ForceFields_exposer_t;
-        ForceFields_exposer_t ForceFields_exposer = ForceFields_exposer_t( "ForceFields", bp::init< >() );
+        ForceFields_exposer_t ForceFields_exposer = ForceFields_exposer_t( "ForceFields", "A ForceFields object contains a collection of forcefields,\ntogether with energy functions that allow energiesforces\nof a combination of forcefield components to be evaluated.\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope ForceFields_scope( ForceFields_exposer );
-        ForceFields_exposer.def( bp::init< SireFF::FF const & >(( bp::arg("forcefield") )) );
-        ForceFields_exposer.def( bp::init< QList< SireBase::PropPtr< SireFF::FF > > const & >(( bp::arg("forcefields") )) );
-        ForceFields_exposer.def( bp::init< QVector< SireBase::PropPtr< SireFF::FF > > const & >(( bp::arg("forcefields") )) );
-        ForceFields_exposer.def( bp::init< SireFF::ForceFields const & >(( bp::arg("other") )) );
+        ForceFields_exposer.def( bp::init< SireFF::FF const & >(( bp::arg("forcefield") ), "Construct a group that holds just a single forcefield") );
+        ForceFields_exposer.def( bp::init< QList< SireBase::PropPtr< SireFF::FF > > const & >(( bp::arg("forcefields") ), "Construct a group that holds lots of forcefields") );
+        ForceFields_exposer.def( bp::init< QVector< SireBase::PropPtr< SireFF::FF > > const & >(( bp::arg("forcefields") ), "Construct a group that holds lots of forcefields") );
+        ForceFields_exposer.def( bp::init< SireFF::ForceFields const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireFF::ForceFields::accept
         
             typedef void ( ::SireFF::ForceFields::*accept_function_type)(  ) ;
@@ -99,7 +99,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "accept"
-                , accept_function_value );
+                , accept_function_value
+                , "Ensure that any forcefields that are using temporary workspace have that accepted" );
         
         }
         { //::SireFF::ForceFields::add
@@ -110,7 +111,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("forcefield") ) );
+                , ( bp::arg("forcefield") )
+                , "Add the forcefield forcefield to this set. This will raise\nan exception if this forcefield (or one with the same name)\nis already present in this set. Note that if the added\nforcefield will be updated to contain the versions of\nany molecules that are already present in any of the\nother forcefields.\nThrow: SireFF::duplicate_forcefield\nThrow: SireMol::duplicate_group\n" );
         
         }
         { //::SireFF::ForceFields::add
@@ -121,7 +123,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molview"), bp::arg("mgid"), bp::arg("map") ) );
+                , ( bp::arg("molview"), bp::arg("mgid"), bp::arg("map") )
+                , "Add the molecule view molview to the molecule groups identified\nby mgid, using the supplied property map to find the properties\nrequired for the forcefield\nThrow: SireMol::missing_group\nThrow: SireBase::missing_parameter\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::add
@@ -132,7 +135,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molviews"), bp::arg("mgid"), bp::arg("map") ) );
+                , ( bp::arg("molviews"), bp::arg("mgid"), bp::arg("map") )
+                , "Add the views of the molecule in molviews to the molecule groups identified\nby mgid, using the supplied property map to find the properties\nrequired for the forcefield\nThrow: SireMol::missing_group\nThrow: SireBase::missing_parameter\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::add
@@ -143,7 +147,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molecules"), bp::arg("mgid"), bp::arg("map") ) );
+                , ( bp::arg("molecules"), bp::arg("mgid"), bp::arg("map") )
+                , "Add the molecules in molecules to the molecule groups identified\nby mgid, using the supplied property map to find the properties\nrequired for the forcefield\nThrow: SireMol::missing_group\nThrow: SireBase::missing_parameter\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::add
@@ -154,7 +159,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molgroup"), bp::arg("mgid"), bp::arg("map") ) );
+                , ( bp::arg("molgroup"), bp::arg("mgid"), bp::arg("map") )
+                , "Add the molecules in the molecule group molgroup to the molecule\ngroups identified by mgid, using the supplied property map to find the\nproperties required for the forcefield\nThrow: SireMol::missing_group\nThrow: SireBase::missing_parameter\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::add
@@ -165,7 +171,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molview"), bp::arg("mgid") ) );
+                , ( bp::arg("molview"), bp::arg("mgid") )
+                , "Add the molecule view molview to the molecule groups identified\nby mgid, using the default locations to find any properties\nrequired by the forcefields.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_parameter\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::add
@@ -176,7 +183,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molviews"), bp::arg("mgid") ) );
+                , ( bp::arg("molviews"), bp::arg("mgid") )
+                , "Add the molecule views in molviews to the molecule groups identified\nby mgid, using the supplied property map to find the properties\nrequired for the forcefield\nThrow: SireMol::missing_group\nThrow: SireBase::missing_parameter\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::add
@@ -187,7 +195,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molecules"), bp::arg("mgid") ) );
+                , ( bp::arg("molecules"), bp::arg("mgid") )
+                , "Add the molecules in molecules to the molecule groups identified\nby mgid, using the supplied property map to find the properties\nrequired for the forcefield\nThrow: SireMol::missing_group\nThrow: SireBase::missing_parameter\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::add
@@ -198,7 +207,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("molgroup"), bp::arg("mgid") ) );
+                , ( bp::arg("molgroup"), bp::arg("mgid") )
+                , "Add the molecules in the molecule group molgroup to the molecule\ngroups identified by mgid, using the supplied property map to\nfind the properties required for the forcefield\nThrow: SireMol::missing_group\nThrow: SireBase::missing_parameter\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::addIfUnique
@@ -209,7 +219,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molview"), bp::arg("mgid"), bp::arg("map") ) );
+                , ( bp::arg("molview"), bp::arg("mgid"), bp::arg("map") )
+                , "Add the molecule view molview to the molecule groups identified\nby mgid, using the supplied property map to find the properties\nrequired for the forcefield. This only adds the view to groups\nthat dont already contain this view.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_parameter\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::addIfUnique
@@ -220,7 +231,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molviews"), bp::arg("mgid"), bp::arg("map") ) );
+                , ( bp::arg("molviews"), bp::arg("mgid"), bp::arg("map") )
+                , "Add the molecule views in molviews to the molecule groups identified\nby mgid, using the supplied property map to find the properties\nrequired for the forcefield. This only adds the view to groups\nthat dont already contain this view.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_parameter\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::addIfUnique
@@ -231,7 +243,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molecules"), bp::arg("mgid"), bp::arg("map") ) );
+                , ( bp::arg("molecules"), bp::arg("mgid"), bp::arg("map") )
+                , "Add the molecules in molecules to the molecule groups identified\nby mgid, using the supplied property map to find the properties\nrequired for the forcefield. This only adds the view to groups\nthat dont already contain this view.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_parameter\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::addIfUnique
@@ -242,7 +255,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molgroup"), bp::arg("mgid"), bp::arg("map") ) );
+                , ( bp::arg("molgroup"), bp::arg("mgid"), bp::arg("map") )
+                , "Add the molecules in the molecule group molgroup to the molecule\ngroups identified by mgid, using the supplied property map to\nfind the properties required for the forcefield. This only adds the\nview to groups that dont already contain this view.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_parameter\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::addIfUnique
@@ -253,7 +267,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molview"), bp::arg("mgid") ) );
+                , ( bp::arg("molview"), bp::arg("mgid") )
+                , "Add the molecule view molview to the molecule groups identified\nby mgid, using the supplied property map to find the properties\nrequired for the forcefield. Only views that arent already in\nthe forcefield are added.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_parameter\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::addIfUnique
@@ -264,7 +279,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molviews"), bp::arg("mgid") ) );
+                , ( bp::arg("molviews"), bp::arg("mgid") )
+                , "Add the molecule views in molviews to the molecule groups identified\nby mgid, using the supplied property map to find the properties\nrequired for the forcefield. Only views that arent already in\nthe forcefield are added.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_parameter\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::addIfUnique
@@ -275,7 +291,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molecules"), bp::arg("mgid") ) );
+                , ( bp::arg("molecules"), bp::arg("mgid") )
+                , "Add the molecules in molecules to the molecule groups identified\nby mgid, using the supplied property map to find the properties\nrequired for the forcefield. Only views that arent already in\nthe forcefield are added.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_parameter\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::addIfUnique
@@ -286,7 +303,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "addIfUnique"
                 , addIfUnique_function_value
-                , ( bp::arg("molgroup"), bp::arg("mgid") ) );
+                , ( bp::arg("molgroup"), bp::arg("mgid") )
+                , "Add the molecules in the molecule group molgroup to the molecule\ngroups identified by mgid, using the supplied property map to\nfind the properties required for the forcefield. Only views that\narent already in the forcefield are added.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_parameter\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::at
@@ -298,7 +316,8 @@ void register_ForceFields_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("ffname") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the forcefield with name ffname\nThrow: SireFF::missing_forcefield\n" );
         
         }
         { //::SireFF::ForceFields::at
@@ -310,7 +329,8 @@ void register_ForceFields_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("ffidx") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the forcefield at index ffidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::at
@@ -322,7 +342,8 @@ void register_ForceFields_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("ffid") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the forcefield with ID ffid\nThrow: SireFF::missing_forcefield\nThrow: SireFF::duplicate_forcefield\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::at
@@ -334,7 +355,8 @@ void register_ForceFields_class(){
                 "at"
                 , at_function_value
                 , ( bp::arg("mgnum") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "overloading MolGroupsBase virtual functions" );
         
         }
         { //::SireFF::ForceFields::builtinProperties
@@ -344,7 +366,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "builtinProperties"
-                , builtinProperties_function_value );
+                , builtinProperties_function_value
+                , "Return all of the built-in properties of the forcefields in this set" );
         
         }
         { //::SireFF::ForceFields::builtinProperty
@@ -356,7 +379,8 @@ void register_ForceFields_class(){
                 "builtinProperty"
                 , builtinProperty_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the built-in property at name. This will by-pass any\nuser-supplied property with this name, and will raise an\nexception if there is no built-in property with this name\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireFF::ForceFields::componentExpression
@@ -367,7 +391,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "componentExpression"
                 , componentExpression_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return the expression for the constant or energy component\nrepresented by symbol\nThrow: SireFF::missing_component\n" );
         
         }
         { //::SireFF::ForceFields::componentExpressions
@@ -378,7 +403,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "componentExpressions"
                 , componentExpressions_function_value
-                , ( bp::arg("symbols") ) );
+                , ( bp::arg("symbols") )
+                , "Return all of the expressions for the constant or energy\ncomponents whose symbols are in symbols\nThrow: SireFF::missing_component\n" );
         
         }
         { //::SireFF::ForceFields::componentExpressions
@@ -388,7 +414,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "componentExpressions"
-                , componentExpressions_function_value );
+                , componentExpressions_function_value
+                , "Return all of the constant and energy expressions attached\nto these forcefields" );
         
         }
         { //::SireFF::ForceFields::componentSymbols
@@ -398,7 +425,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "componentSymbols"
-                , componentSymbols_function_value );
+                , componentSymbols_function_value
+                , "Return the symbols representing all of the constant and energy components" );
         
         }
         { //::SireFF::ForceFields::componentValue
@@ -409,7 +437,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "componentValue"
                 , componentValue_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return the energy or constant component associated with the symbol symbol\nThrow: SireFF::missing_component\n" );
         
         }
         { //::SireFF::ForceFields::componentValues
@@ -420,7 +449,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "componentValues"
                 , componentValues_function_value
-                , ( bp::arg("symbols") ) );
+                , ( bp::arg("symbols") )
+                , "Return the values of the energy or constant components whose\nsymbols are in symbols\nThrow: SireFF::missing_component\n" );
         
         }
         { //::SireFF::ForceFields::componentValues
@@ -430,7 +460,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "componentValues"
-                , componentValues_function_value );
+                , componentValues_function_value
+                , "Return the values of all energy and constant components" );
         
         }
         { //::SireFF::ForceFields::compoundProperty
@@ -442,7 +473,8 @@ void register_ForceFields_class(){
                 "compoundProperty"
                 , compoundProperty_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the raw compound property with name name - this returns\nthe property representing the link, or the combined property,\nand raises an exception if a compound property with this name\ndoes not exist\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireFF::ForceFields::constant
@@ -453,7 +485,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "constant"
                 , constant_function_value
-                , ( bp::arg("component") ) );
+                , ( bp::arg("component") )
+                , "Return the value associated with the constant component component\nThrow: SireFF::missing_component\n" );
         
         }
         { //::SireFF::ForceFields::constantComponents
@@ -463,7 +496,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "constantComponents"
-                , constantComponents_function_value );
+                , constantComponents_function_value
+                , "Synonym for ForceFields::constants()" );
         
         }
         { //::SireFF::ForceFields::constantExpression
@@ -474,7 +508,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "constantExpression"
                 , constantExpression_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return the expression for the constant component symbol\nThrow: SireFF::missing_component\n" );
         
         }
         { //::SireFF::ForceFields::constantExpressions
@@ -485,7 +520,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "constantExpressions"
                 , constantExpressions_function_value
-                , ( bp::arg("symbols") ) );
+                , ( bp::arg("symbols") )
+                , "Return the expressions for the constant components in symbols\nThrow: SireFF::missing_component\n" );
         
         }
         { //::SireFF::ForceFields::constantExpressions
@@ -495,7 +531,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "constantExpressions"
-                , constantExpressions_function_value );
+                , constantExpressions_function_value
+                , "Return all of the constant expressions in the forcefields" );
         
         }
         { //::SireFF::ForceFields::constantSymbols
@@ -505,7 +542,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "constantSymbols"
-                , constantSymbols_function_value );
+                , constantSymbols_function_value
+                , "Return the symbols representing the constant forcefield components" );
         
         }
         { //::SireFF::ForceFields::constants
@@ -515,7 +553,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "constants"
-                , constants_function_value );
+                , constants_function_value
+                , "Return the values of all constant components in the forcefields" );
         
         }
         { //::SireFF::ForceFields::constants
@@ -526,7 +565,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "constants"
                 , constants_function_value
-                , ( bp::arg("components") ) );
+                , ( bp::arg("components") )
+                , "Return the constant values associated with the constant components\nin components\nThrow: SireFF::missing_component\n" );
         
         }
         { //::SireFF::ForceFields::containsProperty
@@ -537,7 +577,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "containsProperty"
                 , containsProperty_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "Return whether or not any of the forcefields contain the property\nwith name name" );
         
         }
         { //::SireFF::ForceFields::containsProperty
@@ -548,7 +589,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "containsProperty"
                 , containsProperty_function_value
-                , ( bp::arg("ffid"), bp::arg("name") ) );
+                , ( bp::arg("ffid"), bp::arg("name") )
+                , "Return whether or not any of the forcefields that match the ID ffid\ncontain the property with name name\nNote that because this operates on the level of individual forcefields,\nit can only return built-in properties, and ignores any\nuser-supplied properties\nThrow: SireFF::missing_forcefield\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::containsProperty
@@ -559,7 +601,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "containsProperty"
                 , containsProperty_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "Return whether or not any of the forcefields contain the property\nwith name name" );
         
         }
         { //::SireFF::ForceFields::containsProperty
@@ -570,7 +613,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "containsProperty"
                 , containsProperty_function_value
-                , ( bp::arg("ffid"), bp::arg("name") ) );
+                , ( bp::arg("ffid"), bp::arg("name") )
+                , "Return whether or not any of the forcefields that match the ID ffid\ncontain the property with name name\nNote that because this operates on the level of individual forcefields,\nit can only return built-in properties, and ignores any\nuser-supplied properties\nThrow: SireFF::missing_forcefield\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::energies
@@ -580,7 +624,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "energies"
-                , energies_function_value );
+                , energies_function_value
+                , "Return the energies of all of the energy components of all of the forcefields,\nconstants and expressions" );
         
         }
         { //::SireFF::ForceFields::energies
@@ -591,7 +636,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "energies"
                 , energies_function_value
-                , ( bp::arg("components") ) );
+                , ( bp::arg("components") )
+                , "Return the energies of all of the energy components whose symbols are\nlisted in components\nThrow: SireFF::missing_component\n" );
         
         }
         { //::SireFF::ForceFields::energy
@@ -601,7 +647,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "energy"
-                , energy_function_value );
+                , energy_function_value
+                , "Return the energy of this set of forcefields. This uses the supplied\ntotal energy function to calculate the energy, if one exists,\nor it just calculates the sum of the total energies of all of the\ncontained forcefields" );
         
         }
         { //::SireFF::ForceFields::energy
@@ -612,7 +659,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "energy"
                 , energy_function_value
-                , ( bp::arg("component") ) );
+                , ( bp::arg("component") )
+                , "Return the energy associated with the symbol component. This component\nmay either be a component of one of the constituent forcefields,\nor it may represent a function of the forcefield components\nThrow: SireFF::missing_component\n" );
         
         }
         { //::SireFF::ForceFields::energy
@@ -623,7 +671,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "energy"
                 , energy_function_value
-                , ( bp::arg("energytable"), bp::arg("scale_energy")=1 ) );
+                , ( bp::arg("energytable"), bp::arg("scale_energy")=1 )
+                , "Add the energies due to the forcefields in this set to the molecules\nin the energy table energytable, scaled by scale_energy" );
         
         }
         { //::SireFF::ForceFields::energy
@@ -634,7 +683,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "energy"
                 , energy_function_value
-                , ( bp::arg("energytable"), bp::arg("component"), bp::arg("scale_energy")=1 ) );
+                , ( bp::arg("energytable"), bp::arg("component"), bp::arg("scale_energy")=1 )
+                , "" );
         
         }
         { //::SireFF::ForceFields::energyComponents
@@ -644,7 +694,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "energyComponents"
-                , energyComponents_function_value );
+                , energyComponents_function_value
+                , "Synonym for ForceFields::energies()" );
         
         }
         { //::SireFF::ForceFields::energyExpression
@@ -655,7 +706,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "energyExpression"
                 , energyExpression_function_value
-                , ( bp::arg("expression") ) );
+                , ( bp::arg("expression") )
+                , "Return the energy expression for the symbol component\nThrow: SireFF::missing_component\n" );
         
         }
         { //::SireFF::ForceFields::energyExpressions
@@ -666,7 +718,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "energyExpressions"
                 , energyExpressions_function_value
-                , ( bp::arg("symbols") ) );
+                , ( bp::arg("symbols") )
+                , "Return the energy expressions for the components whose\nsymbols are in symbols\nThrow: SireFF::missing_component\n" );
         
         }
         { //::SireFF::ForceFields::energyExpressions
@@ -676,7 +729,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "energyExpressions"
-                , energyExpressions_function_value );
+                , energyExpressions_function_value
+                , "Return all of the energy expressions in this forcefield" );
         
         }
         { //::SireFF::ForceFields::energySymbols
@@ -686,7 +740,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "energySymbols"
-                , energySymbols_function_value );
+                , energySymbols_function_value
+                , "Return all of the symbols that represent energy components" );
         
         }
         { //::SireFF::ForceFields::ffIdx
@@ -697,7 +752,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "ffIdx"
                 , ffIdx_function_value
-                , ( bp::arg("ffname") ) );
+                , ( bp::arg("ffname") )
+                , "Return the index of the forcefield with name ffname\nThrow: SireFF::missing_forcefield\nThrow: SireFF::duplicate_forcefield\n" );
         
         }
         { //::SireFF::ForceFields::ffIdx
@@ -708,7 +764,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "ffIdx"
                 , ffIdx_function_value
-                , ( bp::arg("ffidx") ) );
+                , ( bp::arg("ffidx") )
+                , "Simple function that allows a shortcut for ffIdx(FFIdx)\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::ffIdx
@@ -719,7 +776,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "ffIdx"
                 , ffIdx_function_value
-                , ( bp::arg("ffid") ) );
+                , ( bp::arg("ffid") )
+                , "Return the FFIdx of the forcefield that matches the ID ffid\nThrow: SireFF::missing_forcefield\nThrow: SireFF::duplicate_forcefield\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::ffName
@@ -731,7 +789,8 @@ void register_ForceFields_class(){
                 "ffName"
                 , ffName_function_value
                 , ( bp::arg("ffname") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Simple function that short cuts ffName(FFName)\nThrow: SireFF::missing_forcefield\n" );
         
         }
         { //::SireFF::ForceFields::ffName
@@ -743,7 +802,8 @@ void register_ForceFields_class(){
                 "ffName"
                 , ffName_function_value
                 , ( bp::arg("ffidx") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the name of the forcefield at index ffidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::ffName
@@ -755,7 +815,8 @@ void register_ForceFields_class(){
                 "ffName"
                 , ffName_function_value
                 , ( bp::arg("ffid") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the name of the forcefield that matches the ID ffid\nThrow: SireFF::missing_forcefield\nThrow: SireFF::duplicate_forcefield\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::ffNames
@@ -765,7 +826,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "ffNames"
-                , ffNames_function_value );
+                , ffNames_function_value
+                , "Return a list of all of the forcefield names, ordered in the same\norder as the forcefields appear in this set" );
         
         }
         { //::SireFF::ForceFields::ffNames
@@ -776,7 +838,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "ffNames"
                 , ffNames_function_value
-                , ( bp::arg("ffid") ) );
+                , ( bp::arg("ffid") )
+                , "Return the names of all of the forcefields that match the ID ffid\nThrow: SireFF::missing_forcefield\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::field
@@ -787,7 +850,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "field"
                 , field_function_value
-                , ( bp::arg("fieldtable"), bp::arg("scale_field")=1 ) );
+                , ( bp::arg("fieldtable"), bp::arg("scale_field")=1 )
+                , "Add the fields due to the forcefields in this set to the molecules\nin the field table fieldtable, scaled by scale_field" );
         
         }
         { //::SireFF::ForceFields::field
@@ -798,7 +862,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "field"
                 , field_function_value
-                , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("scale_field")=1 ) );
+                , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("scale_field")=1 )
+                , "Add the field due to the component component to the molecules\nin the field table fieldtable, scaled by scale_field\nThrow: SireFF::missing_component\n" );
         
         }
         { //::SireFF::ForceFields::field
@@ -809,7 +874,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "field"
                 , field_function_value
-                , ( bp::arg("fieldtable"), bp::arg("probe"), bp::arg("scale_field")=1 ) );
+                , ( bp::arg("fieldtable"), bp::arg("probe"), bp::arg("scale_field")=1 )
+                , "Add the fields due to the forcefields in this set to the molecules\nin the field table fieldtable, scaled by scale_field" );
         
         }
         { //::SireFF::ForceFields::field
@@ -820,7 +886,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "field"
                 , field_function_value
-                , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_field")=1 ) );
+                , ( bp::arg("fieldtable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_field")=1 )
+                , "Add the field due to the component component to the molecules\nin the field table fieldtable, scaled by scale_field\nThrow: SireFF::missing_component\n" );
         
         }
         { //::SireFF::ForceFields::force
@@ -831,7 +898,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "force"
                 , force_function_value
-                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 ) );
+                , ( bp::arg("forcetable"), bp::arg("scale_force")=1 )
+                , "Add the forces due to the forcefields in this set to the molecules\nin the force table forcetable, scaled by scale_force" );
         
         }
         { //::SireFF::ForceFields::force
@@ -842,7 +910,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "force"
                 , force_function_value
-                , ( bp::arg("forcetable"), bp::arg("component"), bp::arg("scale_force")=1 ) );
+                , ( bp::arg("forcetable"), bp::arg("component"), bp::arg("scale_force")=1 )
+                , "Add the force due to the component component to the molecules\nin the force table forcetable, scaled by scale_force\nThrow: SireFF::missing_component\n" );
         
         }
         { //::SireFF::ForceFields::forceField
@@ -854,7 +923,8 @@ void register_ForceFields_class(){
                 "forceField"
                 , forceField_function_value
                 , ( bp::arg("ffname") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the forcefield with name ffname\nThrow: SireFF::missing_forcefield\n" );
         
         }
         { //::SireFF::ForceFields::forceField
@@ -866,7 +936,8 @@ void register_ForceFields_class(){
                 "forceField"
                 , forceField_function_value
                 , ( bp::arg("ffidx") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the forcefield at index ffidx\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::forceField
@@ -878,7 +949,8 @@ void register_ForceFields_class(){
                 "forceField"
                 , forceField_function_value
                 , ( bp::arg("ffid") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the forcefield with ID ffid\nThrow: SireFF::missing_forcefield\nThrow: SireFF::duplicate_forcefield\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::forceField
@@ -890,7 +962,8 @@ void register_ForceFields_class(){
                 "forceField"
                 , forceField_function_value
                 , ( bp::arg("mgnum") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the forcefield that contains the molecule group with\nnumber mgnum\nThrow: SireMol::missing_group\n" );
         
         }
         { //::SireFF::ForceFields::forceFields
@@ -901,7 +974,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "forceFields"
                 , forceFields_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return an array containing all of the forcefields in this set, ordered\nin the same order as they appear in this set" );
         
         }
         { //::SireFF::ForceFields::forceFields
@@ -912,7 +986,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "forceFields"
                 , forceFields_function_value
-                , ( bp::arg("ffid") ) );
+                , ( bp::arg("ffid") )
+                , "Return the list of all forcefields that match the ID ffid\nThrow: SireFF::missing_forcefield\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::forceFieldsWithProperty
@@ -923,7 +998,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "forceFieldsWithProperty"
                 , forceFieldsWithProperty_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "Return the list of all forcefields that contain a property with name name\nNote that because this operates on the level of individual forcefields,\nit can only return built-in properties, and ignores any\nuser-supplied properties\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireFF::ForceFields::forceFieldsWithProperty
@@ -934,7 +1010,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "forceFieldsWithProperty"
                 , forceFieldsWithProperty_function_value
-                , ( bp::arg("ffid"), bp::arg("name") ) );
+                , ( bp::arg("ffid"), bp::arg("name") )
+                , "Return the list of forcefields that match the ID ffid and that\ncontain the property with name name\nNote that because this operates on the level of individual forcefields,\nit can only return built-in properties, and ignores any\nuser-supplied properties\nThrow: SireFF::missing_forcefield\nThrow: SireBase::missing_property\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::hasComponent
@@ -945,7 +1022,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "hasComponent"
                 , hasComponent_function_value
-                , ( bp::arg("symbol") ) );
+                , ( bp::arg("symbol") )
+                , "Return whether or not there is a constant or energy component with symbol symbol" );
         
         }
         { //::SireFF::ForceFields::hasConstantComponent
@@ -956,7 +1034,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "hasConstantComponent"
                 , hasConstantComponent_function_value
-                , ( bp::arg("component") ) );
+                , ( bp::arg("component") )
+                , "Return whether or not there is a constant component in the\nforcefield expressions with symbol component" );
         
         }
         { //::SireFF::ForceFields::hasEnergyComponent
@@ -967,7 +1046,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "hasEnergyComponent"
                 , hasEnergyComponent_function_value
-                , ( bp::arg("component") ) );
+                , ( bp::arg("component") )
+                , "Return whether or not the forcefields have an energy component\nwith symbol component" );
         
         }
         { //::SireFF::ForceFields::isBuiltinProperty
@@ -978,7 +1058,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "isBuiltinProperty"
                 , isBuiltinProperty_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "Return whether or not the property name exists and is a builtin\nproperty of one of the forcefields in this set" );
         
         }
         { //::SireFF::ForceFields::isClean
@@ -988,7 +1069,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "isClean"
-                , isClean_function_value );
+                , isClean_function_value
+                , "Return whether or not all of the forcefields in this set are clean\n(there have been no changes since the last energy evaluation)" );
         
         }
         { //::SireFF::ForceFields::isCompoundProperty
@@ -999,7 +1081,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "isCompoundProperty"
                 , isCompoundProperty_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "Return whether or not the property name exists and is a compound\nproperty (either a link or a combined property)" );
         
         }
         { //::SireFF::ForceFields::isConstantComponent
@@ -1010,7 +1093,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "isConstantComponent"
                 , isConstantComponent_function_value
-                , ( bp::arg("component") ) );
+                , ( bp::arg("component") )
+                , "Return whether or not the forcefield component component\nis a constant component\nThrow: SireFF::missing_component\n" );
         
         }
         { //::SireFF::ForceFields::isDirty
@@ -1020,7 +1104,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "isDirty"
-                , isDirty_function_value );
+                , isDirty_function_value
+                , "Return whether or not any of the forcefields in this set are dirty\n(the molecules have changed since the last energy calculation)" );
         
         }
         { //::SireFF::ForceFields::isEnergyComponent
@@ -1031,7 +1116,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "isEnergyComponent"
                 , isEnergyComponent_function_value
-                , ( bp::arg("component") ) );
+                , ( bp::arg("component") )
+                , "Return whether or not the forcefield component component\nis an energy component\nThrow: SireFF::missing_component\n" );
         
         }
         { //::SireFF::ForceFields::isUserProperty
@@ -1042,7 +1128,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "isUserProperty"
                 , isUserProperty_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "Return whether or not the property name exists and is a user\nsupplied property (either a compound property or an extra\nForceFields property)" );
         
         }
         { //::SireFF::ForceFields::list
@@ -1053,7 +1140,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "list"
                 , list_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return an array containing all of the forcefields in this set, ordered\nin the same order as they appear in this set" );
         
         }
         { //::SireFF::ForceFields::map
@@ -1064,7 +1152,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("ffid") ) );
+                , ( bp::arg("ffid") )
+                , "" );
         
         }
         { //::SireFF::ForceFields::map
@@ -1075,7 +1164,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("ffidx") ) );
+                , ( bp::arg("ffidx") )
+                , "" );
         
         }
         { //::SireFF::ForceFields::map
@@ -1086,7 +1176,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("ffname") ) );
+                , ( bp::arg("ffname") )
+                , "" );
         
         }
         { //::SireFF::ForceFields::mustNowRecalculateFromScratch
@@ -1096,7 +1187,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "mustNowRecalculateFromScratch"
-                , mustNowRecalculateFromScratch_function_value );
+                , mustNowRecalculateFromScratch_function_value
+                , "Tell all of the forcefields that they must now recalculate their\nenergies from scratch. This is a good way to debug the forcefields,\nbut may also speed up cases where you know in advance that you will\nbe moving most (or all) of the molecules between energy calculations" );
         
         }
         { //::SireFF::ForceFields::nForceFields
@@ -1106,7 +1198,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "nForceFields"
-                , nForceFields_function_value );
+                , nForceFields_function_value
+                , "Return the number of forcefields in this set" );
         
         }
         { //::SireFF::ForceFields::names
@@ -1116,7 +1209,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "names"
-                , names_function_value );
+                , names_function_value
+                , "Return a list of all of the forcefield names, ordered in the same\norder as the forcefields appear in this set" );
         
         }
         { //::SireFF::ForceFields::needsAccepting
@@ -1126,7 +1220,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "needsAccepting"
-                , needsAccepting_function_value );
+                , needsAccepting_function_value
+                , "Return whether or not these forcefields are using any temporary workspace that needs\nto be accepted" );
         
         }
         ForceFields_exposer.def( bp::self != bp::self );
@@ -1139,7 +1234,8 @@ void register_ForceFields_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         ForceFields_exposer.def( bp::self == bp::self );
@@ -1152,7 +1248,8 @@ void register_ForceFields_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("ffname") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireFF::ForceFields::operator[]
@@ -1164,7 +1261,8 @@ void register_ForceFields_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("ffidx") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireFF::ForceFields::operator[]
@@ -1176,7 +1274,8 @@ void register_ForceFields_class(){
                 "__getitem__"
                 , __getitem___function_value
                 , ( bp::arg("ffid") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireFF::ForceFields::potential
@@ -1187,7 +1286,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "potential"
                 , potential_function_value
-                , ( bp::arg("pottable"), bp::arg("probe"), bp::arg("scale_potential")=1 ) );
+                , ( bp::arg("pottable"), bp::arg("probe"), bp::arg("scale_potential")=1 )
+                , "Add the potential due to the forcefields in this set to the molecules\nin the potential table pottable, scaled by scale_potential" );
         
         }
         { //::SireFF::ForceFields::potential
@@ -1198,7 +1298,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "potential"
                 , potential_function_value
-                , ( bp::arg("pottable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_potential")=1 ) );
+                , ( bp::arg("pottable"), bp::arg("component"), bp::arg("probe"), bp::arg("scale_potential")=1 )
+                , "Add the potential due to the component component to the molecules\nin the potential table pottable, scaled by scale_potential\nThrow: SireFF::missing_component\n" );
         
         }
         { //::SireFF::ForceFields::potential
@@ -1209,7 +1310,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "potential"
                 , potential_function_value
-                , ( bp::arg("pottable"), bp::arg("scale_potential")=1 ) );
+                , ( bp::arg("pottable"), bp::arg("scale_potential")=1 )
+                , "Add the potential due to the forcefields in this set to the molecules\nin the potential table pottable, scaled by scale_potential" );
         
         }
         { //::SireFF::ForceFields::potential
@@ -1220,7 +1322,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "potential"
                 , potential_function_value
-                , ( bp::arg("pottable"), bp::arg("component"), bp::arg("scale_potential")=1 ) );
+                , ( bp::arg("pottable"), bp::arg("component"), bp::arg("scale_potential")=1 )
+                , "Add the potential due to the component component to the molecules\nin the potential table pottable, scaled by scale_potential\nThrow: SireFF::missing_component\n" );
         
         }
         { //::SireFF::ForceFields::properties
@@ -1230,7 +1333,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "properties"
-                , properties_function_value );
+                , properties_function_value
+                , "Return all of the properties in all of the forcefields. This will raise\nan error if there are properties with the same name in different\nforcefields that have different values.\nThrow: SireBase::duplicate_property\n" );
         
         }
         { //::SireFF::ForceFields::properties
@@ -1241,7 +1345,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "properties"
                 , properties_function_value
-                , ( bp::arg("ffid") ) );
+                , ( bp::arg("ffid") )
+                , "Return all of the properties in all of the forcefields identified by\nthe ID ffid. This will raise an error if there are properties with\nthe same name in different forcefields that have different values.\nNote that because this operates on the level of individual forcefields,\nit can only return built-in properties, and ignores any\nuser-supplied properties\nThrow: SireBase::duplicate_property\n" );
         
         }
         { //::SireFF::ForceFields::property
@@ -1253,7 +1358,8 @@ void register_ForceFields_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the value of the property with name name. This returns\nthe property if it exists in at least one forcefield, and\nif all occurances of the property have the same value\nThrow: SireBase::duplicate_property\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireFF::ForceFields::property
@@ -1265,7 +1371,8 @@ void register_ForceFields_class(){
                 "property"
                 , property_function_value
                 , ( bp::arg("ffid"), bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the value of the property name in the forcefields identified\nby the ID ffid\nNote that because this operates on the level of individual forcefields,\nit can only return built-in properties, and ignores any\nuser-supplied properties\nThrow: SireBase::duplicate_property\nThrow: SireFF::missing_forcefield\nThrow: SireFF::duplicate_forcefield\nThrow: SireBase::missing_property\n" );
         
         }
         { //::SireFF::ForceFields::propertyKeys
@@ -1275,7 +1382,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "propertyKeys"
-                , propertyKeys_function_value );
+                , propertyKeys_function_value
+                , "Return the names of all of the properties in all of the forcefields" );
         
         }
         { //::SireFF::ForceFields::propertyKeys
@@ -1286,7 +1394,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "propertyKeys"
                 , propertyKeys_function_value
-                , ( bp::arg("ffid") ) );
+                , ( bp::arg("ffid") )
+                , "Return the names of all of the properties in the forcefields\nidentified by the ID ffid\nNote that because this operates on the level of individual forcefields,\nit can only return built-in properties, and ignores any\nuser-supplied properties\nThrow: SireFF::missing_forcefield\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::remove
@@ -1297,7 +1406,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("ffidx") ) );
+                , ( bp::arg("ffidx") )
+                , "Remove the forcefield at index ffidx from this set\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::remove
@@ -1308,7 +1418,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("ffname") ) );
+                , ( bp::arg("ffname") )
+                , "Remove the forcefield with name ffname.\nThrow: SireFF::missing_forcefield\n" );
         
         }
         { //::SireFF::ForceFields::remove
@@ -1319,7 +1430,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("ffid") ) );
+                , ( bp::arg("ffid") )
+                , "Remove the forcefield(s) that match the ID ffid\nThrow: SireFF::missing_forcefield\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::remove
@@ -1330,7 +1442,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molview"), bp::arg("mgid") ) );
+                , ( bp::arg("molview"), bp::arg("mgid") )
+                , "Remove the view molview from the specified groups in this\nforcefield. Note that this only removes the specific view\n(and indeed only the first copy of this view if there\nare duplicates) - it does not remove the atoms in this\nview from all of the other views\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::remove
@@ -1341,7 +1454,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molviews"), bp::arg("mgid") ) );
+                , ( bp::arg("molviews"), bp::arg("mgid") )
+                , "Remove the views in molviews from the specified groups in this\nforcefield. Note that this only removes the specific views\n(and indeed only the first copy of this view if there\nare duplicates) - it does not remove the atoms in this\nview from all of the other views\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::remove
@@ -1352,7 +1466,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molecules"), bp::arg("mgid") ) );
+                , ( bp::arg("molecules"), bp::arg("mgid") )
+                , "Remove them molecules in molecules from the specified groups in this\nforcefield. Note that this only removes the specific views\n(and indeed only the first copy of this view if there\nare duplicates) - it does not remove the atoms in this\nview from all of the other views\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::remove
@@ -1363,7 +1478,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molgroup"), bp::arg("mgid") ) );
+                , ( bp::arg("molgroup"), bp::arg("mgid") )
+                , "Remove the views in the molecule group molgroup from the specified\ngroups in this forcefield. Note that this only removes the specific views\n(and indeed only the first copy of this view if there\nare duplicates) - it does not remove the atoms in this\nview from all of the other views\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::remove
@@ -1374,7 +1490,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molnum"), bp::arg("mgid") ) );
+                , ( bp::arg("molnum"), bp::arg("mgid") )
+                , "Remove all views of the molecule with number molnum from the molecule\ngroups identified by mgid\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::remove
@@ -1385,7 +1502,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("molnums"), bp::arg("mgid") ) );
+                , ( bp::arg("molnums"), bp::arg("mgid") )
+                , "Remove all of the molecules whose numbers are in molnums from\nall of the molecule groups identified by the ID mgid\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::removeAll
@@ -1396,7 +1514,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
-                , ( bp::arg("mgid") ) );
+                , ( bp::arg("mgid") )
+                , "Remove all of the molecule views that are contained in the molecule\ngroups identified by the ID mgid\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::removeAll
@@ -1407,7 +1526,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
-                , ( bp::arg("molview"), bp::arg("mgid") ) );
+                , ( bp::arg("molview"), bp::arg("mgid") )
+                , "Remove the all copies of the view in molview from the specified\ngroups in this forcefield. Note that this only removes the specific views\n- it does not remove the atoms in this view from all of the other views\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::removeAll
@@ -1418,7 +1538,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
-                , ( bp::arg("molviews"), bp::arg("mgid") ) );
+                , ( bp::arg("molviews"), bp::arg("mgid") )
+                , "Remove the all copies of the views in molviews from the specified\ngroups in this forcefield. Note that this only removes the specific views\n- it does not remove the atoms in this view from all of the other views\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::removeAll
@@ -1429,7 +1550,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
-                , ( bp::arg("molecules"), bp::arg("mgid") ) );
+                , ( bp::arg("molecules"), bp::arg("mgid") )
+                , "Remove the all copies of the molecules in molecules from the specified\ngroups in this forcefield. Note that this only removes the specific views\n- it does not remove the atoms in this view from all of the other views\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::removeAll
@@ -1440,7 +1562,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "removeAll"
                 , removeAll_function_value
-                , ( bp::arg("molgroup"), bp::arg("mgid") ) );
+                , ( bp::arg("molgroup"), bp::arg("mgid") )
+                , "Remove the all copies of the molecules in the molecule group molgroup\nfrom the specified groups in this forcefield. Note that this only removes\nthe specific views - it does not remove the atoms in this view from all\nof the other views\nThrow: SireMol::missing_group\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireFF::ForceFields::removeAllForceFields
@@ -1450,7 +1573,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "removeAllForceFields"
-                , removeAllForceFields_function_value );
+                , removeAllForceFields_function_value
+                , "Remove all of the forcefields from this set" );
         
         }
         { //::SireFF::ForceFields::removeProperty
@@ -1461,7 +1585,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "removeProperty"
                 , removeProperty_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "Remove the property with name name. Note that this can only\nremove user-level properties - it cannot remove built-in properties\nof the forcefields. This does nothing if there is no user-level\nproperty with this name" );
         
         }
         { //::SireFF::ForceFields::setComponent
@@ -1472,7 +1597,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "setComponent"
                 , setComponent_function_value
-                , ( bp::arg("symbol"), bp::arg("value") ) );
+                , ( bp::arg("symbol"), bp::arg("value") )
+                , "Set the component represented by the symbol symbol equal to the\nvalue value. This replaces any existing component with this value.\nNote that an exception will be raised if you try to replace a component\nthat exists in one of the constituent forcefields.\nThis is a convenient shorthand for ForceFields::setConstantComponent(symbol, value)\nThrow: SireFF::duplicate_component\n" );
         
         }
         { //::SireFF::ForceFields::setComponent
@@ -1483,7 +1609,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "setComponent"
                 , setComponent_function_value
-                , ( bp::arg("symbol"), bp::arg("expression") ) );
+                , ( bp::arg("symbol"), bp::arg("expression") )
+                , "Set the component represented by the symbol symbol equal to the expression\ncontained in expression. This replaces any existing constant or\nenergy component with this expression.\nNote that this expression must only involve terms that are linear in\nforcefield components, and there may be no products of forcefield\ncomponents (i.e. each term of the expression must have dimensions\nof energy)\nNote that an exception will be raised if you try to replace a\ncomponent that exists in one of the constituent forcefields\nThis is a convenient short-hand for\nForceFields::setEnergyComponent(symbol,expression)\nThrow: SireFF::duplicate_component\n" );
         
         }
         { //::SireFF::ForceFields::setConstantComponent
@@ -1494,7 +1621,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "setConstantComponent"
                 , setConstantComponent_function_value
-                , ( bp::arg("symbol"), bp::arg("value") ) );
+                , ( bp::arg("symbol"), bp::arg("value") )
+                , "Set the constant component represented by the symbol symbol equal to the\nvalue value. This replaces any existing constant or energy component with\nthis value. Note that an exception will be raised if you try to replace a component\nthat exists in one of the constituent forcefields.\nThrow: SireFF::duplicate_component\n" );
         
         }
         { //::SireFF::ForceFields::setConstantComponent
@@ -1505,7 +1633,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "setConstantComponent"
                 , setConstantComponent_function_value
-                , ( bp::arg("symbol"), bp::arg("expression") ) );
+                , ( bp::arg("symbol"), bp::arg("expression") )
+                , "Set the constant component represented by the symbol symbol equal to the\nexpression expression. This replaces any existing constant or energy component with\nthis value.\nNote that this expression must only involve constants, or other constant\ncomponents. A constant expression may not depend on a forcefield energy\nNote that an exception will be raised if you try to replace a component\nthat exists in one of the constituent forcefields.\nThrow: SireFF::duplicate_component\n" );
         
         }
         { //::SireFF::ForceFields::setContents
@@ -1516,7 +1645,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("mgid"), bp::arg("molview"), bp::arg("map") ) );
+                , ( bp::arg("mgid"), bp::arg("molview"), bp::arg("map") )
+                , "Set the contents of the molecule groups identified by the ID mgid\nso that they only contain the view of the molecule in molview.\nThe passed property map is used to find any properties that are\nneeded by the forcefields\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::setContents
@@ -1527,7 +1657,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("mgid"), bp::arg("molviews"), bp::arg("map") ) );
+                , ( bp::arg("mgid"), bp::arg("molviews"), bp::arg("map") )
+                , "Set the contents of the molecule groups identified by the ID mgid\nso that they only contain the views of the molecule in molviews.\nThe passed property map is used to find any properties that are\nneeded by the forcefields\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::setContents
@@ -1538,7 +1669,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("mgid"), bp::arg("molecules"), bp::arg("map") ) );
+                , ( bp::arg("mgid"), bp::arg("molecules"), bp::arg("map") )
+                , "Set the contents of the molecule groups identified by the ID mgid\nso that they only contain the molecules in molecules.\nThe passed property map is used to find any properties that are\nneeded by the forcefields\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::setContents
@@ -1549,7 +1681,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("mgid"), bp::arg("molgroup"), bp::arg("map") ) );
+                , ( bp::arg("mgid"), bp::arg("molgroup"), bp::arg("map") )
+                , "Set the contents of the molecule groups identified by the ID mgid\nso that they only contain the molecules in the group molgroup.\nThe passed property map is used to find any properties that are\nneeded by the forcefields\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::setContents
@@ -1560,7 +1693,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("mgid"), bp::arg("molview") ) );
+                , ( bp::arg("mgid"), bp::arg("molview") )
+                , "Set the contents of the molecule groups identified by the ID mgid\nso that they only contain the view of the molecule in molview.\nProperties required by the forcefields are searched for in the\ndefault properties.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::setContents
@@ -1571,7 +1705,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("mgid"), bp::arg("molviews") ) );
+                , ( bp::arg("mgid"), bp::arg("molviews") )
+                , "Set the contents of the molecule groups identified by the ID mgid\nso that they only contain the views of the molecule in molviews.\nProperties required by the forcefields are searched for in the\ndefault properties.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::setContents
@@ -1582,7 +1717,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("mgid"), bp::arg("molecules") ) );
+                , ( bp::arg("mgid"), bp::arg("molecules") )
+                , "Set the contents of the molecule groups identified by the ID mgid\nso that they only contain the molecules in molecules.\nProperties required by the forcefields are searched for in the\ndefault properties.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::setContents
@@ -1593,7 +1729,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "setContents"
                 , setContents_function_value
-                , ( bp::arg("mgid"), bp::arg("molgroup") ) );
+                , ( bp::arg("mgid"), bp::arg("molgroup") )
+                , "Set the contents of the molecule groups identified by the ID mgid\nso that they only contain the molecules in the molecule group molgroup.\nProperties required by the forcefields are searched for in the\ndefault properties.\nThrow: SireMol::missing_group\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::setEnergyComponent
@@ -1604,7 +1741,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "setEnergyComponent"
                 , setEnergyComponent_function_value
-                , ( bp::arg("symbol"), bp::arg("expression") ) );
+                , ( bp::arg("symbol"), bp::arg("expression") )
+                , "Set the component represented by the symbol symbol equal to the expression\ncontained in expression. This replaces any existing constant or\nenergy component with this expression.\nNote that this expression must only involve terms that are linear in\nforcefield components, and there may be no products of forcefield\ncomponents (i.e. each term of the expression must have dimensions\nof energy)\nNote that an exception will be raised if you try to replace a\ncomponent that exists in one of the constituent forcefields\nThrow: SireFF::duplicate_component\n" );
         
         }
         { //::SireFF::ForceFields::setProperty
@@ -1615,7 +1753,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "setProperty"
                 , setProperty_function_value
-                , ( bp::arg("name"), bp::arg("value") ) );
+                , ( bp::arg("name"), bp::arg("value") )
+                , "Set the property name to have the value value in all of the\nforcefields contained in this set\nThrow: SireError::incompatible_error\nThrow: SireError::invalid_cast\n" );
         
         }
         { //::SireFF::ForceFields::setProperty
@@ -1626,7 +1765,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "setProperty"
                 , setProperty_function_value
-                , ( bp::arg("ffid"), bp::arg("name"), bp::arg("value") ) );
+                , ( bp::arg("ffid"), bp::arg("name"), bp::arg("value") )
+                , "Set the built-in property name to have the value value in all of the forcefields\nin this set that match the ID ffid\nNote that because this operates on the level of individual forcefields,\nit operates only on built-in properties, not on user-supplied properties\nNote also that if this breaks any links or combined properties then\nthe broken links and combined properties (including all those that\ndepend on them) will be removed\nThrow: SireFF::missing_forcefield\nThrow: SireError::invalid_index\nThrow: SireError::incompatible_error\nThrow: SireError::invalid_cast\n" );
         
         }
         { //::SireFF::ForceFields::toString
@@ -1636,7 +1776,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this set" );
         
         }
         { //::SireFF::ForceFields::totalComponent
@@ -1647,7 +1788,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "totalComponent"
                 , totalComponent_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol representing the total energy component" );
         
         }
         { //::SireFF::ForceFields::typeName
@@ -1657,7 +1799,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireFF::ForceFields::update
@@ -1668,7 +1811,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("moldata"), bp::arg("auto_commit")=(bool)(true) ) );
+                , ( bp::arg("moldata"), bp::arg("auto_commit")=(bool)(true) )
+                , "Update all of the forcefields so that they use the version of the data\nof the molecule held in moldata\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::update
@@ -1679,7 +1823,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molecules"), bp::arg("auto_commit")=(bool)(true) ) );
+                , ( bp::arg("molecules"), bp::arg("auto_commit")=(bool)(true) )
+                , "Update all of the forcefields in this group so that they have the\nsame version of the molecules that are present in molecules\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::update
@@ -1690,7 +1835,8 @@ void register_ForceFields_class(){
             ForceFields_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molgroup"), bp::arg("auto_commit")=(bool)(true) ) );
+                , ( bp::arg("molgroup"), bp::arg("auto_commit")=(bool)(true) )
+                , "Update all of the forcefields in this group so that they have the\nsame version of the molecules that are present in the molecule\ngroup molgroup\nThrow: SireBase::missing_property\nThrow: SireError::invalid_cast\nThrow: SireError::incompatible_error\n" );
         
         }
         { //::SireFF::ForceFields::userProperties
@@ -1700,7 +1846,8 @@ void register_ForceFields_class(){
             
             ForceFields_exposer.def( 
                 "userProperties"
-                , userProperties_function_value );
+                , userProperties_function_value
+                , "Return all of the user-supplied properties in this set of forcefields" );
         
         }
         { //::SireFF::ForceFields::userProperty
@@ -1712,7 +1859,8 @@ void register_ForceFields_class(){
                 "userProperty"
                 , userProperty_function_value
                 , ( bp::arg("name") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the user-supplied property at name. This raises an\nexception if there is no user-supplied property with this name\nThrow: SireBase::missing_property\n" );
         
         }
         ForceFields_exposer.staticmethod( "totalComponent" );

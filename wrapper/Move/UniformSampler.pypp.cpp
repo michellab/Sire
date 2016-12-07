@@ -33,10 +33,10 @@ void register_UniformSampler_class(){
 
     { //::SireMove::UniformSampler
         typedef bp::class_< SireMove::UniformSampler, bp::bases< SireMove::Sampler, SireBase::Property > > UniformSampler_exposer_t;
-        UniformSampler_exposer_t UniformSampler_exposer = UniformSampler_exposer_t( "UniformSampler", bp::init< >() );
+        UniformSampler_exposer_t UniformSampler_exposer = UniformSampler_exposer_t( "UniformSampler", "This class is used to pick a molecule at random\nfrom the molecule group. Each view of each molecule\nhas an equal chance of being chosen.\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope UniformSampler_scope( UniformSampler_exposer );
-        UniformSampler_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("molgroup") )) );
-        UniformSampler_exposer.def( bp::init< SireMove::UniformSampler const & >(( bp::arg("other") )) );
+        UniformSampler_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("molgroup") ), "Constructor a sampler that chooses views at random from the\npassed molecule group") );
+        UniformSampler_exposer.def( bp::init< SireMove::UniformSampler const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::UniformSampler::operator=
         
             typedef ::SireMove::UniformSampler & ( ::SireMove::UniformSampler::*assign_function_type)( ::SireMove::UniformSampler const & ) ;
@@ -46,7 +46,8 @@ void register_UniformSampler_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMove::UniformSampler::probabilityOf
@@ -57,7 +58,8 @@ void register_UniformSampler_class(){
             UniformSampler_exposer.def( 
                 "probabilityOf"
                 , probabilityOf_function_value
-                , ( bp::arg("molecule") ) );
+                , ( bp::arg("molecule") )
+                , "Return the probability of selecting the view in molview from\nthe system system. A probability of zero is returned if\nthis view cannot be chosen from the molecule group." );
         
         }
         { //::SireMove::UniformSampler::probabilityOfMolecule
@@ -68,7 +70,8 @@ void register_UniformSampler_class(){
             UniformSampler_exposer.def( 
                 "probabilityOfMolecule"
                 , probabilityOfMolecule_function_value
-                , ( bp::arg("molecule") ) );
+                , ( bp::arg("molecule") )
+                , "Return the probability of selecting the molecule molecule from\nthe system system. A probability of zero is returned if\nthis molecule cannot be chosen from the molecule group" );
         
         }
         { //::SireMove::UniformSampler::sample
@@ -78,7 +81,8 @@ void register_UniformSampler_class(){
             
             UniformSampler_exposer.def( 
                 "sample"
-                , sample_function_value );
+                , sample_function_value
+                , "Return a random view molecule from the molecule group, together with\nthe probability of choosing that view." );
         
         }
         { //::SireMove::UniformSampler::sampleMolecule
@@ -88,7 +92,8 @@ void register_UniformSampler_class(){
             
             UniformSampler_exposer.def( 
                 "sampleMolecule"
-                , sampleMolecule_function_value );
+                , sampleMolecule_function_value
+                , "Return a random molecule from the molecule group, together with\nthe probability of choosing that molecule. This returns the entire\nmolecule even if only a part of the molecule is in the group" );
         
         }
         { //::SireMove::UniformSampler::typeName
@@ -98,7 +103,8 @@ void register_UniformSampler_class(){
             
             UniformSampler_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         UniformSampler_exposer.staticmethod( "typeName" );

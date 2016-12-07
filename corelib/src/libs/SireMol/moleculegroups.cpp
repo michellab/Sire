@@ -2300,7 +2300,7 @@ bool MoleculeGroups::_pvt_remove(MGNum mgnum)
      MoleculeGroups::remove(molgroup.number()) */
 bool MoleculeGroups::remove(const MoleculeGroup &molgroup)
 {
-    return this->remove(molgroup.molecules());
+    return MolGroupsBase::remove(molgroup.molecules());
 }
 
 /** Remove the groups that match the ID 'mgid' from this set. This

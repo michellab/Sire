@@ -55,7 +55,7 @@ void register_SegID_class(){
 
     { //::SireMol::SegID
         typedef bp::class_< SireMol::SegID, bp::bases< SireID::ID >, boost::noncopyable > SegID_exposer_t;
-        SegID_exposer_t SegID_exposer = SegID_exposer_t( "SegID", bp::no_init );
+        SegID_exposer_t SegID_exposer = SegID_exposer_t( "SegID", "This is the base class of all identifiers that are used\nto identify a Segment within a Molecule\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope SegID_scope( SegID_exposer );
         { //::SireMol::SegID::atom
         
@@ -65,7 +65,8 @@ void register_SegID_class(){
             SegID_exposer.def( 
                 "atom"
                 , atom_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return a specific atom in the matching residues" );
         
         }
         { //::SireMol::SegID::atoms
@@ -75,7 +76,8 @@ void register_SegID_class(){
             
             SegID_exposer.def( 
                 "atoms"
-                , atoms_function_value );
+                , atoms_function_value
+                , "Return the atoms in the matching residues" );
         
         }
         { //::SireMol::SegID::atoms
@@ -86,7 +88,8 @@ void register_SegID_class(){
             SegID_exposer.def( 
                 "atoms"
                 , atoms_function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "Return a range of atoms in the matching residues" );
         
         }
         { //::SireMol::SegID::map
@@ -97,7 +100,8 @@ void register_SegID_class(){
             SegID_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "Map this ID back to the indicies of the segments in the molecule,\nusing the passed MoleculeInfo to do the mapping" );
         
         }
         { //::SireMol::SegID::map
@@ -108,7 +112,8 @@ void register_SegID_class(){
             SegID_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Map this SegID to the atoms in the passed molecule view\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\n" );
         
         }
         SegID_exposer.def( bp::self & bp::self );
@@ -124,7 +129,8 @@ void register_SegID_class(){
             SegID_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMol::SegID::operator()
@@ -135,7 +141,8 @@ void register_SegID_class(){
             SegID_exposer.def( 
                 "__call__"
                 , __call___function_value
-                , ( bp::arg("i"), bp::arg("j") ) );
+                , ( bp::arg("i"), bp::arg("j") )
+                , "" );
         
         }
         SegID_exposer.def( bp::self * bp::self );
@@ -152,7 +159,8 @@ void register_SegID_class(){
             SegID_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         SegID_exposer.def( bp::self | bp::self );
@@ -164,7 +172,8 @@ void register_SegID_class(){
             SegID_exposer.def( 
                 "selectAllFrom"
                 , selectAllFrom_function_value
-                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Select all the atoms from the passed view that match this ID\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_segment\n" );
         
         }
         { //::SireMol::SegID::selectAllFrom
@@ -175,7 +184,8 @@ void register_SegID_class(){
             SegID_exposer.def( 
                 "selectAllFrom"
                 , selectAllFrom_function_value
-                , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return all of the atoms from the molecules that match\nthis ID\nThrow: SireMol::missing_segment\n" );
         
         }
         { //::SireMol::SegID::selectAllFrom
@@ -186,7 +196,8 @@ void register_SegID_class(){
             SegID_exposer.def( 
                 "selectAllFrom"
                 , selectAllFrom_function_value
-                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the atoms from the molecule group molgroup that match\nthis ID\nThrow: SireMol::missing_segment\n" );
         
         }
         { //::SireMol::SegID::selectAllFrom
@@ -197,7 +208,8 @@ void register_SegID_class(){
             SegID_exposer.def( 
                 "selectAllFrom"
                 , selectAllFrom_function_value
-                , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the set of atoms that match this ID in the molecule groups\nset molgroups\nThrow: SireMol::missing_segment\n" );
         
         }
         { //::SireMol::SegID::selectFrom
@@ -208,7 +220,8 @@ void register_SegID_class(){
             SegID_exposer.def( 
                 "selectFrom"
                 , selectFrom_function_value
-                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Select the atom from the passed view that matches this ID\nThrow: SireMol::missing_segment\nThrow: SireError::invalid_index\nThrow: SireMol::duplicate_segment\n" );
         
         }
         { //::SireMol::SegID::selectFrom
@@ -219,7 +232,8 @@ void register_SegID_class(){
             SegID_exposer.def( 
                 "selectFrom"
                 , selectFrom_function_value
-                , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molecules"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the atom from the molecules molecules that matches\nthis ID\nThrow: SireMol::missing_segment\nThrow: SireMol::duplicate_segment\n" );
         
         }
         { //::SireMol::SegID::selectFrom
@@ -230,7 +244,8 @@ void register_SegID_class(){
             SegID_exposer.def( 
                 "selectFrom"
                 , selectFrom_function_value
-                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molgroup"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the atom from the molecule group molgroup that matches\nthis ID\nThrow: SireMol::missing_segment\nThrow: SireMol::duplicate_segment\n" );
         
         }
         { //::SireMol::SegID::selectFrom
@@ -241,7 +256,8 @@ void register_SegID_class(){
             SegID_exposer.def( 
                 "selectFrom"
                 , selectFrom_function_value
-                , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molgroups"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the atom from the molecule groups molgroups that matches\nthis ID\nThrow: SireMol::missing_segment\nThrow: SireMol::duplicate_segment\n" );
         
         }
         { //::SireMol::SegID::typeName
@@ -251,7 +267,8 @@ void register_SegID_class(){
             
             SegID_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         SegID_exposer.staticmethod( "typeName" );

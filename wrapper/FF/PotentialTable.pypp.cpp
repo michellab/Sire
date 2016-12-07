@@ -39,14 +39,14 @@ void register_PotentialTable_class(){
 
     { //::SireFF::PotentialTable
         typedef bp::class_< SireFF::PotentialTable > PotentialTable_exposer_t;
-        PotentialTable_exposer_t PotentialTable_exposer = PotentialTable_exposer_t( "PotentialTable", bp::init< >() );
+        PotentialTable_exposer_t PotentialTable_exposer = PotentialTable_exposer_t( "PotentialTable", "A PotentialTable is a workspace within which all of the potentials\nat the points of atoms in molecules, or the points on a grid\nmay be stored. A PotentialTable is used as storing the potentials\nmay require lots of memory, and continually\ncreating a deleting such large amouts of memory would be inefficient.\nAlso, using a PotentialTable allows for potentials to be accumalated directly,\nrather than requiring intermediate storage space for the\nindividual components.\n\nYou create a potential table to hold all of the potentials at all of\nthe atoms of all of the molecules in a specified MoleculeGroup,\nor at all of the points of a passed Grid.\n\nThe potentials are held in an array that holds the potentials for\nthe molecules in the same order as the molecules appear\nin the molecule group, or in an array that holds the potentials\nin the same order as they appear in the grid.\nThe potential table also comes with an index so you can quickly\nlook up the potential for a specific molecule.\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope PotentialTable_scope( PotentialTable_exposer );
-        PotentialTable_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("molgroup") )) );
-        PotentialTable_exposer.def( bp::init< SireVol::Grid const & >(( bp::arg("grid") )) );
-        PotentialTable_exposer.def( bp::init< QVector< SireBase::PropPtr< SireVol::Grid > > const & >(( bp::arg("grids") )) );
-        PotentialTable_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireVol::Grid const & >(( bp::arg("molgroup"), bp::arg("grid") )) );
-        PotentialTable_exposer.def( bp::init< SireMol::MoleculeGroup const &, QVector< SireBase::PropPtr< SireVol::Grid > > const & >(( bp::arg("molgroup"), bp::arg("grids") )) );
-        PotentialTable_exposer.def( bp::init< SireFF::PotentialTable const & >(( bp::arg("other") )) );
+        PotentialTable_exposer.def( bp::init< SireMol::MoleculeGroup const & >(( bp::arg("molgroup") ), "Construct the table to hold the potentials at the points of all\nof the atoms in the CutGroups that are viewed in the molecules\nin molgroup") );
+        PotentialTable_exposer.def( bp::init< SireVol::Grid const & >(( bp::arg("grid") ), "Construct the table to hold the potentials at all of the points\nin the passed grid") );
+        PotentialTable_exposer.def( bp::init< QVector< SireBase::PropPtr< SireVol::Grid > > const & >(( bp::arg("grids") ), "Construct the table to hold the potentials at all of the points\nof all of the passed grids") );
+        PotentialTable_exposer.def( bp::init< SireMol::MoleculeGroup const &, SireVol::Grid const & >(( bp::arg("molgroup"), bp::arg("grid") ), "Construct the table to hold the potentials at the points of all\nof the atoms in the CutGroups that are viewed in the molecules\nin molgroup, and all of the grid points in the passed grid") );
+        PotentialTable_exposer.def( bp::init< SireMol::MoleculeGroup const &, QVector< SireBase::PropPtr< SireVol::Grid > > const & >(( bp::arg("molgroup"), bp::arg("grids") ), "Construct the table to hold the potentials at the points of all\nof the atoms in the CutGroups that are viewed in the molecules\nin molgroup, and all of the grid points in the passed grids") );
+        PotentialTable_exposer.def( bp::init< SireFF::PotentialTable const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireFF::PotentialTable::add
         
             typedef void ( ::SireFF::PotentialTable::*add_function_type)( ::SireFF::PotentialTable const & ) ;
@@ -55,7 +55,8 @@ void register_PotentialTable_class(){
             PotentialTable_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Add the contents of the table other onto this table. This will only\nadd the potentials for the molecules  grids that are in both tables" );
         
         }
         { //::SireFF::PotentialTable::add
@@ -66,7 +67,8 @@ void register_PotentialTable_class(){
             PotentialTable_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("potential") ) );
+                , ( bp::arg("potential") )
+                , "Add the potential potential onto all of the atom  grid points in this table" );
         
         }
         { //::SireFF::PotentialTable::assertContainsTableFor
@@ -77,7 +79,8 @@ void register_PotentialTable_class(){
             PotentialTable_exposer.def( 
                 "assertContainsTableFor"
                 , assertContainsTableFor_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Assert that this contains a table for the molecule with number molnum\nThrow: SireError::unavailable_resource\n" );
         
         }
         { //::SireFF::PotentialTable::assertContainsTableFor
@@ -88,7 +91,8 @@ void register_PotentialTable_class(){
             PotentialTable_exposer.def( 
                 "assertContainsTableFor"
                 , assertContainsTableFor_function_value
-                , ( bp::arg("grid") ) );
+                , ( bp::arg("grid") )
+                , "Assert that this contains a table for the passed grid\nThrow: SireError::unavailable_resource\n" );
         
         }
         { //::SireFF::PotentialTable::constGetTable
@@ -100,7 +104,8 @@ void register_PotentialTable_class(){
                 "constGetTable"
                 , constGetTable_function_value
                 , ( bp::arg("molnum") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the potential table for the passed grid\nThrow: SireError::unavailable_resource\n" );
         
         }
         { //::SireFF::PotentialTable::constGetTable
@@ -112,7 +117,8 @@ void register_PotentialTable_class(){
                 "constGetTable"
                 , constGetTable_function_value
                 , ( bp::arg("grid") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the potential table for the passed grid\nThrow: SireError::unavailable_resource\n" );
         
         }
         { //::SireFF::PotentialTable::contains
@@ -123,7 +129,8 @@ void register_PotentialTable_class(){
             PotentialTable_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Return whether or not this contains a table for the passed grid" );
         
         }
         { //::SireFF::PotentialTable::contains
@@ -134,7 +141,8 @@ void register_PotentialTable_class(){
             PotentialTable_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("grid") ) );
+                , ( bp::arg("grid") )
+                , "Return whether or not this contains a table for the passed grid" );
         
         }
         { //::SireFF::PotentialTable::divide
@@ -145,7 +153,8 @@ void register_PotentialTable_class(){
             PotentialTable_exposer.def( 
                 "divide"
                 , divide_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Divide the potential at all atom and grid points by value" );
         
         }
         { //::SireFF::PotentialTable::getTable
@@ -157,7 +166,8 @@ void register_PotentialTable_class(){
                 "getTable"
                 , getTable_function_value
                 , ( bp::arg("molnum") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the potential table for the passed grid\nThrow: SireError::unavailable_resource\n" );
         
         }
         { //::SireFF::PotentialTable::getTable
@@ -169,7 +179,8 @@ void register_PotentialTable_class(){
                 "getTable"
                 , getTable_function_value
                 , ( bp::arg("grid") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the potential table for the passed grid\nThrow: SireError::unavailable_resource\n" );
         
         }
         { //::SireFF::PotentialTable::index
@@ -180,7 +191,8 @@ void register_PotentialTable_class(){
             PotentialTable_exposer.def( 
                 "index"
                 , index_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireFF::PotentialTable::indexOf
@@ -191,7 +203,8 @@ void register_PotentialTable_class(){
             PotentialTable_exposer.def( 
                 "indexOf"
                 , indexOf_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Return the index of the molecule with number molnum in this table\nThrow: SireMol::missing_molecule\n" );
         
         }
         { //::SireFF::PotentialTable::initialiseTable
@@ -202,7 +215,8 @@ void register_PotentialTable_class(){
             PotentialTable_exposer.def( 
                 "initialiseTable"
                 , initialiseTable_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "Initialise the table for the molecule with number molnum" );
         
         }
         { //::SireFF::PotentialTable::initialiseTable
@@ -213,7 +227,8 @@ void register_PotentialTable_class(){
             PotentialTable_exposer.def( 
                 "initialiseTable"
                 , initialiseTable_function_value
-                , ( bp::arg("grid") ) );
+                , ( bp::arg("grid") )
+                , "Initialise the table for the grid grid" );
         
         }
         { //::SireFF::PotentialTable::initialiseTables
@@ -223,7 +238,8 @@ void register_PotentialTable_class(){
             
             PotentialTable_exposer.def( 
                 "initialiseTables"
-                , initialiseTables_function_value );
+                , initialiseTables_function_value
+                , "Initialise all of the tables to have a zero potential" );
         
         }
         { //::SireFF::PotentialTable::isEmpty
@@ -233,7 +249,8 @@ void register_PotentialTable_class(){
             
             PotentialTable_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "Return whether or not this table is empty" );
         
         }
         { //::SireFF::PotentialTable::molNums
@@ -243,7 +260,8 @@ void register_PotentialTable_class(){
             
             PotentialTable_exposer.def( 
                 "molNums"
-                , molNums_function_value );
+                , molNums_function_value
+                , "" );
         
         }
         { //::SireFF::PotentialTable::multiply
@@ -254,7 +272,8 @@ void register_PotentialTable_class(){
             PotentialTable_exposer.def( 
                 "multiply"
                 , multiply_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "Multiply the potential at all atom and grid points by value" );
         
         }
         { //::SireFF::PotentialTable::nGrids
@@ -264,7 +283,8 @@ void register_PotentialTable_class(){
             
             PotentialTable_exposer.def( 
                 "nGrids"
-                , nGrids_function_value );
+                , nGrids_function_value
+                , "" );
         
         }
         { //::SireFF::PotentialTable::nMolecules
@@ -274,7 +294,8 @@ void register_PotentialTable_class(){
             
             PotentialTable_exposer.def( 
                 "nMolecules"
-                , nMolecules_function_value );
+                , nMolecules_function_value
+                , "" );
         
         }
         PotentialTable_exposer.def( bp::self != bp::self );
@@ -294,7 +315,8 @@ void register_PotentialTable_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireFF::PotentialTable::operator=
@@ -306,7 +328,8 @@ void register_PotentialTable_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("potential") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         PotentialTable_exposer.def( bp::self == bp::self );
@@ -318,7 +341,8 @@ void register_PotentialTable_class(){
             PotentialTable_exposer.def( 
                 "setAll"
                 , setAll_function_value
-                , ( bp::arg("potential") ) );
+                , ( bp::arg("potential") )
+                , "Set the potential at all atom and grid points equal to potential" );
         
         }
         { //::SireFF::PotentialTable::subtract
@@ -329,7 +353,8 @@ void register_PotentialTable_class(){
             PotentialTable_exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Subtract the contents of the table other from this table. This will only\nsubtract the potentials for the molecules  grids that are in both tables" );
         
         }
         { //::SireFF::PotentialTable::subtract
@@ -340,7 +365,8 @@ void register_PotentialTable_class(){
             PotentialTable_exposer.def( 
                 "subtract"
                 , subtract_function_value
-                , ( bp::arg("potential") ) );
+                , ( bp::arg("potential") )
+                , "Subtract the potential potential from all of the atom  grid points in this table" );
         
         }
         { //::SireFF::PotentialTable::typeName
@@ -350,7 +376,8 @@ void register_PotentialTable_class(){
             
             PotentialTable_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireFF::PotentialTable::what
@@ -360,7 +387,8 @@ void register_PotentialTable_class(){
             
             PotentialTable_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         PotentialTable_exposer.staticmethod( "typeName" );

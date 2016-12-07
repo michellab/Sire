@@ -30,6 +30,10 @@ wsrc_tools_dir = "%s/Tools/WSRC" % Sire.Config.share_directory
 # ALL OF THE GLOBAL USER-AVAILABLE LSRC PARAMETERS #
 ####################################################
 
+mcs_timeout = Parameter("match timeout", 5*second,
+                        """The maximum amount of time to give the maximum common substructure
+                           algorithm to find a match between the two ligands.""")
+
 cutoff_method = Parameter("cutoff method", "shift electrostatics",
                           """Method used to apply the non-bonded electrostatic cutoff.""")
 
@@ -49,6 +53,9 @@ grid_buffer = Parameter("grid buffer", 2*angstrom,
                            in the grid-based forcefields.""")
 
 disable_grid = Parameter("disable grid", False, """Whether or not to disable use of the grid""")
+
+use_oldff = Parameter("use old forcefields", True, """For debugging, use the old forcefields rather than the 
+                                                      new forcefields""")
 
 temperature = Parameter("temperature", 25*celsius, """Simulation temperature""")
 random_seed = Parameter("random seed", None, """Random number seed. Set this if you
@@ -141,19 +148,11 @@ water_s3file = Parameter("water s3file", "waterbox.s3",
 outdir = Parameter("output directory", "output",
                    """Name of the directory in which to place all of the output files.""")
 
-restart_file1 = Parameter("restart file 1", "lsrc_restart1.s3",
-                          """Name of the restart file to use to save progress during the stage 1 calculation of 
-                             the relative binding free energy of ligand 0 to ligand 1.""")
+restart_file = Parameter("restart file", "lsrc_restart.s3",
+                         """Name of the restart file to use to save progress during the calculation of 
+                            the relative binding free energy of ligand 0 to ligand 1.""")
 
-restart_file2 = Parameter("restart file 2", "lsrc_restart2.s3",
-                           """Name of the restart file to use to save progress during the stage 2 calculation of 
-                              the relative binding free energy of ligand 1 to ligand 0.""")
-
-restart_file3 = Parameter("restart file 3", "lsrc_restart3.s3",
-                          """Name of the restart file to use to save progress during the stage 3 calculation of 
-                             the swap of ligand 0 and ligand 1 in the bound complex.""")
-
-nmoves = Parameter("nmoves", 500, """Number of RETI moves to perform during the simulation.""")
+nmoves = Parameter("nmoves", 1000, """Number of RETI moves to perform during the simulation.""")
 
 nequilmoves = Parameter("nequilmoves", 50000,
                         """Number of equilibration moves to perform before setting up the free energy simulation.""")
@@ -169,14 +168,6 @@ use_single_topology = Parameter("single topology", False,
 
 use_dual_topology = Parameter("dual topology", True,
                               """Whether or not to use dual topology to morph from ligand 0 to ligand 1.""")
-
-mirror_stages = Parameter("mirror stages", False,
-                     """Whether or not to mirror the stages, i.e. make stage 2 into a
-                        mirror of stage 1. This will mean that stage 2 will be ligand 1
-                        bound to the protein in its conformation for ligand 0, swapped
-                        to ligand 0 bound to the protein in its conformation for ligand 0.
-                        This result should be exactly equal and opposite to the stage 
-                        1 result.""")
 
 save_pdb = Parameter("save pdb", True,
                      """Whether or not to write a PDB of the system after each iteration.""")
@@ -229,6 +220,85 @@ def setCLJProperties(forcefield):
     forcefield.setSpace(Cartesian())
     forcefield.setSwitchingFunction( HarmonicSwitchingFunction(coul_cutoff.val,coul_cutoff.val,
                                                                lj_cutoff.val,lj_cutoff.val) )
+
+    return forcefield
+
+
+def setCLJFuncProperties(cljfunc):
+    cljfunc.setSpace(Cartesian())
+    cljfunc.setCoulombCutoff(coul_cutoff.val)
+    cljfunc.setLJCutoff(lj_cutoff.val)
+    cljfunc.setArithmeticCombiningRules( True )
+
+    return cljfunc
+
+def getInterCLJFunction():
+    if cutoff_method.val.find("shift electrostatics") != -1:
+        cljfunc = CLJShiftFunction()
+
+    elif cutoff_method.val.find("reaction field") != -1:
+        cljfunc = CLJRFFunction()
+        cljfunc.setDielectric(rf_dielectric.val)
+
+    else:
+        print("Cannot interpret the cutoff method from \"%s\"" % cutoff_method.val, file=sys.stderr)
+
+    return setCLJFuncProperties(cljfunc)
+
+def getSoftInterCLJFunction():
+    if cutoff_method.val.find("shift electrostatics") != -1:
+        cljfunc = CLJSoftShiftFunction()
+
+    elif cutoff_method.val.find("reaction field") != -1:
+        cljfunc = CLJSoftRFFunction()
+        cljfunc.setDielectric(rf_dielectric.val)
+
+    else:
+        print("Cannot interpret the cutoff method from \"%s\"" % cutoff_method.val, file=sys.stderr)
+
+    cljfunc.setAlpha(0.0)
+    cljfunc.setShiftDelta(shift_delta.val)
+    cljfunc.setCoulombPower(coul_power.val)
+
+    return setCLJFuncProperties(cljfunc)
+
+def getIntraCLJFunction():
+    if cutoff_method.val.find("shift electrostatics") != -1:
+        cljfunc = CLJIntraShiftFunction()
+
+    elif cutoff_method.val.find("reaction field") != -1:
+        cljfunc = CLJIntraRFFunction()
+        cljfunc.setDielectric(rf_dielectric.val)
+
+    else:
+        print("Cannot interpret the cutoff method from \"%s\"" % cutoff_method.val, file=sys.stderr)
+
+    return setCLJFuncProperties(cljfunc)
+
+def getSoftIntraCLJFunction():
+    if cutoff_method.val.find("shift electrostatics") != -1:
+        cljfunc = CLJSoftIntraShiftFunction()
+
+    elif cutoff_method.val.find("reaction field") != -1:
+        cljfunc = CLJSoftIntraRFFunction()
+        cljfunc.setDielectric(rf_dielectric.val)
+
+    else:
+        print("Cannot interpret the cutoff method from \"%s\"" % cutoff_method.val, file=sys.stderr)
+
+    cljfunc.setAlpha(0.0)
+    cljfunc.setShiftDelta(shift_delta.val)
+    cljfunc.setCoulombPower(coul_power.val)
+
+    return setCLJFuncProperties(cljfunc)
+
+def setNewGridProperties(forcefield, extra_buffer=0*angstrom):
+    if disable_grid.val:
+        forcefield.disableGrid()
+    else:
+        forcefield.enableGrid()
+        forcefield.setGridSpacing(grid_spacing.val)
+        forcefield.setGridBuffer(grid_buffer.val + extra_buffer)
 
     return forcefield
 
@@ -373,9 +443,9 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
     mols = Molecules()
     mols.add(ligand_mol0)
     mols.add(ligand_mol1)
-    print("\nPLEASE CHECK: Writing alignment of ligands for %s to the file %s.pdb." % (stage,stage))
+    print("\nPLEASE CHECK: Writing alignment of ligands to the file aligned_ligands.pdb.")
     print("PLEASE CHECK: View this file in a PDB viewer to check that the ligands are aligned.\n")
-    PDB().write(mols, "%s.pdb" % stage )
+    PDB().write(mols, "aligned_ligands.pdb")
 
     # create a molecule group for the ligand
     ligand_group0 = MoleculeGroup("ligand0")
@@ -619,15 +689,28 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
     ### INTRA-ENERGY OF THE LIGAND AND CLUSTER
     ###
     
-    # intramolecular energy of the ligands
-    ligand_intraclj = IntraCLJFF("ligand:intraclj")
-    ligand_intraclj = setCLJProperties(ligand_intraclj)
-    ligand_intraclj.add(ligand_mol0)
-    ligand_intraclj.add(ligand_mol1)
+    if use_oldff.val:
+        # intramolecular energy of the ligands
+        ligand_intraclj = IntraCLJFF("ligand:intraclj")
+        ligand_intraclj = setCLJProperties(ligand_intraclj)
+        ligand_intraclj.add(ligand_mol0)
+        ligand_intraclj.add(ligand_mol1)
 
-    ligand_intraff = InternalFF("ligand:intra")
-    ligand_intraff.add(ligand_mol0)
-    ligand_intraff.add(ligand_mol1)
+        ligand_intraff = InternalFF("ligand:intra")
+        ligand_intraff.add(ligand_mol0)
+        ligand_intraff.add(ligand_mol1)
+    else:
+        print("Using the NEW PARALLEL FORCEFIELDS :-)")
+        # intramolecular energy of the ligands
+        ligand_intraclj = IntraFF("ligand:intraclj")
+        ligand_intraclj.setCLJFunction( getIntraCLJFunction() )
+        ligand_intraclj.add(ligand_mol0)
+        ligand_intraclj.add(ligand_mol1)
+
+        ligand_intraff = InternalFF("ligand:intra")
+        ligand_intraff.setUse14Calculation(True)
+        ligand_intraff.add(ligand_mol0)
+        ligand_intraff.add(ligand_mol1)
 
     ###
     ### FORCEFIELDS INVOLVING THE LIGAND/CLUSTER BOUND LEG
@@ -635,57 +718,93 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
 
     # forcefield holding the energy between the ligand and the mobile atoms in the
     # bound leg
-    bound_ligand0_mobile = InterGroupSoftCLJFF("bound:ligand0-mobile")
-    bound_ligand0_mobile = setCLJProperties(bound_ligand0_mobile)
-    bound_ligand0_mobile = setSoftCoreProperties(bound_ligand0_mobile)
+    if use_oldff.val:
+        bound_ligand0_mobile = InterGroupSoftCLJFF("bound:ligand0-mobile")
+        bound_ligand0_mobile = setCLJProperties(bound_ligand0_mobile)
+        bound_ligand0_mobile = setSoftCoreProperties(bound_ligand0_mobile)
 
-    bound_ligand0_mobile.add(ligand_mol0, MGIdx(0))
-    bound_ligand0_mobile.add(mobile_bound_mols, MGIdx(1))
+        bound_ligand0_mobile.add(ligand_mol0, MGIdx(0))
+        bound_ligand0_mobile.add(mobile_bound_mols, MGIdx(1))
 
-    bound_ligand1_mobile = InterGroupSoftCLJFF("bound:ligand1-mobile")
-    bound_ligand1_mobile = setCLJProperties(bound_ligand1_mobile)
-    bound_ligand1_mobile = setSoftCoreProperties(bound_ligand1_mobile)
+        bound_ligand1_mobile = InterGroupSoftCLJFF("bound:ligand1-mobile")
+        bound_ligand1_mobile = setCLJProperties(bound_ligand1_mobile)
+        bound_ligand1_mobile = setSoftCoreProperties(bound_ligand1_mobile)
 
-    bound_ligand1_mobile.add(ligand_mol1, MGIdx(0))
-    bound_ligand1_mobile.add(mobile_bound_mols, MGIdx(1))
+        bound_ligand1_mobile.add(ligand_mol1, MGIdx(0))
+        bound_ligand1_mobile.add(mobile_bound_mols, MGIdx(1))
 
-    # Whether or not to disable the grid and calculate all energies atomisticly
-    if disable_grid:
-        # we need to renumber all of the fixed molecules so that they don't clash
-        # with the mobile molecules
-        print("Renumbering fixed molecules...")
-        fixed_bound_group = renumberMolecules(fixed_bound_group)
-        fixed_free_group = renumberMolecules(fixed_free_group)
+        # Whether or not to disable the grid and calculate all energies atomisticly
+        if disable_grid.val:
+            # we need to renumber all of the fixed molecules so that they don't clash
+            # with the mobile molecules
+            print("Renumbering fixed molecules...")
+            fixed_bound_group = renumberMolecules(fixed_bound_group)
+            fixed_free_group = renumberMolecules(fixed_free_group)
 
-    # forcefield holding the energy between the ligand and the fixed atoms in the bound leg
-    if disable_grid:
-        bound_ligand0_fixed = InterGroupCLJFF("bound:ligand0-fixed")
-        bound_ligand0_fixed = setCLJProperties(bound_ligand0_fixed)
-        bound_ligand0_fixed = setFakeGridProperties(bound_ligand0_fixed)
+        # forcefield holding the energy between the ligand and the fixed atoms in the bound leg
+        if disable_grid.val:
+            bound_ligand0_fixed = InterGroupCLJFF("bound:ligand0-fixed")
+            bound_ligand0_fixed = setCLJProperties(bound_ligand0_fixed)
+            bound_ligand0_fixed = setFakeGridProperties(bound_ligand0_fixed)
 
-        bound_ligand0_fixed.add(ligand_mol0, MGIdx(0))
-        bound_ligand0_fixed.add(fixed_bound_group, MGIdx(1))
+            bound_ligand0_fixed.add(ligand_mol0, MGIdx(0))
+            bound_ligand0_fixed.add(fixed_bound_group, MGIdx(1))
 
-        bound_ligand1_fixed = InterGroupCLJFF("bound:ligand1-fixed")
-        bound_ligand1_fixed = setCLJProperties(bound_ligand1_fixed)
-        bound_ligand1_fixed = setFakeGridProperties(bound_ligand1_fixed)
+            bound_ligand1_fixed = InterGroupCLJFF("bound:ligand1-fixed")
+            bound_ligand1_fixed = setCLJProperties(bound_ligand1_fixed)
+            bound_ligand1_fixed = setFakeGridProperties(bound_ligand1_fixed)
 
-        bound_ligand1_fixed.add(ligand_mol1, MGIdx(0))
-        bound_ligand1_fixed.add(fixed_bound_group, MGIdx(1))
+            bound_ligand1_fixed.add(ligand_mol1, MGIdx(0))
+            bound_ligand1_fixed.add(fixed_bound_group, MGIdx(1))
+        else:
+            bound_ligand0_fixed = GridFF2("bound:ligand0-fixed")
+            bound_ligand0_fixed = setCLJProperties(bound_ligand0_fixed)
+            bound_ligand0_fixed = setGridProperties(bound_ligand0_fixed)
+
+            bound_ligand0_fixed.add(ligand_mol0, MGIdx(0))
+            bound_ligand0_fixed.addFixedAtoms( fixed_bound_group )
+
+            bound_ligand1_fixed = GridFF2("bound:ligand1-fixed")
+            bound_ligand1_fixed = setCLJProperties(bound_ligand1_fixed)
+            bound_ligand1_fixed = setGridProperties(bound_ligand1_fixed)
+
+            bound_ligand1_fixed.add(ligand_mol1, MGIdx(0))
+            bound_ligand1_fixed.addFixedAtoms( fixed_bound_group )
     else:
-        bound_ligand0_fixed = GridFF2("bound:ligand0-fixed")
-        bound_ligand0_fixed = setCLJProperties(bound_ligand0_fixed)
-        bound_ligand0_fixed = setGridProperties(bound_ligand0_fixed)
+        # Using the new forcefields, that are much easier to work with :-)
+        bound_ligand0_mobile = InterGroupFF("bound:ligand0-mobile")
+        bound_ligand0_mobile.setCLJFunction( getSoftInterCLJFunction() )
+        bound_ligand0_mobile.setCLJFunction( "f", getSoftInterCLJFunction() )
+        bound_ligand0_mobile.setCLJFunction( "b", getSoftInterCLJFunction() )
+        bound_ligand0_mobile.setCLJFunction( "next", getSoftInterCLJFunction() )
+        bound_ligand0_mobile.setCLJFunction( "prev", getSoftInterCLJFunction() )
+
+        bound_ligand0_mobile.add(ligand_mol0, MGIdx(0))
+        bound_ligand0_mobile.add(mobile_bound_mols, MGIdx(1))
+
+        bound_ligand0_fixed = InterGroupFF("bound:ligand0-fixed")
+        bound_ligand0_fixed.setCLJFunction( getInterCLJFunction() )
+        bound_ligand0_fixed = setNewGridProperties(bound_ligand0_fixed)
 
         bound_ligand0_fixed.add(ligand_mol0, MGIdx(0))
-        bound_ligand0_fixed.addFixedAtoms( fixed_bound_group )
+        bound_ligand0_fixed.addFixedAtoms(fixed_bound_group.molecules())
 
-        bound_ligand1_fixed = GridFF2("bound:ligand1-fixed")
-        bound_ligand1_fixed = setCLJProperties(bound_ligand1_fixed)
-        bound_ligand1_fixed = setGridProperties(bound_ligand1_fixed)
+        bound_ligand1_mobile = InterGroupFF("bound:ligand1-mobile")
+        bound_ligand1_mobile.setCLJFunction( getSoftInterCLJFunction() )
+        bound_ligand1_mobile.setCLJFunction( "f", getSoftInterCLJFunction() )
+        bound_ligand1_mobile.setCLJFunction( "b", getSoftInterCLJFunction() )
+        bound_ligand1_mobile.setCLJFunction( "next", getSoftInterCLJFunction() )
+        bound_ligand1_mobile.setCLJFunction( "prev", getSoftInterCLJFunction() )
+
+        bound_ligand1_mobile.add(ligand_mol1, MGIdx(0))
+        bound_ligand1_mobile.add(mobile_bound_mols, MGIdx(1))
+ 
+        bound_ligand1_fixed = InterGroupFF("bound:ligand1-fixed")
+        bound_ligand1_fixed.setCLJFunction( getInterCLJFunction() )
+        bound_ligand1_fixed = setNewGridProperties(bound_ligand1_fixed)
 
         bound_ligand1_fixed.add(ligand_mol1, MGIdx(0))
-        bound_ligand1_fixed.addFixedAtoms( fixed_bound_group )
+        bound_ligand1_fixed.addFixedAtoms(fixed_bound_group.molecules())
 
     ###
     ### FORCEFIELDS INVOLVING THE LIGAND/CLUSTER FREE LEG
@@ -693,147 +812,243 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
 
     # forcefield holding the energy between the ligand and the mobile atoms
     # in the free leg
-    free_ligand0_mobile = InterGroupSoftCLJFF("free:ligand0-mobile")
-    free_ligand0_mobile = setCLJProperties(free_ligand0_mobile)
-    free_ligand0_mobile = setSoftCoreProperties(free_ligand0_mobile)
+    if use_oldff.val:
+        free_ligand0_mobile = InterGroupSoftCLJFF("free:ligand0-mobile")
+        free_ligand0_mobile = setCLJProperties(free_ligand0_mobile)
+        free_ligand0_mobile = setSoftCoreProperties(free_ligand0_mobile)
 
-    free_ligand0_mobile.add(ligand_mol0, MGIdx(0))
-    free_ligand0_mobile.add(mobile_free_mols, MGIdx(1))
+        free_ligand0_mobile.add(ligand_mol0, MGIdx(0))
+        free_ligand0_mobile.add(mobile_free_mols, MGIdx(1))
 
-    free_ligand1_mobile = InterGroupSoftCLJFF("free:ligand1-mobile")
-    free_ligand1_mobile = setCLJProperties(free_ligand1_mobile)
-    free_ligand1_mobile = setSoftCoreProperties(free_ligand1_mobile)
+        free_ligand1_mobile = InterGroupSoftCLJFF("free:ligand1-mobile")
+        free_ligand1_mobile = setCLJProperties(free_ligand1_mobile)
+        free_ligand1_mobile = setSoftCoreProperties(free_ligand1_mobile)
 
-    free_ligand1_mobile.add(ligand_mol1, MGIdx(0))
-    free_ligand1_mobile.add(mobile_free_mols, MGIdx(1))
+        free_ligand1_mobile.add(ligand_mol1, MGIdx(0))
+        free_ligand1_mobile.add(mobile_free_mols, MGIdx(1))
 
-    # forcefield holding the energy between the ligand and the fixed atoms
-    # in the free leg
-    if disable_grid.val:
-        free_ligand0_fixed = InterGroupCLJFF("free:ligand0_fixed")
-        free_ligand0_fixed = setCLJProperties(free_ligand0_fixed)
-        free_ligand0_fixed = setFakeGridProperties(free_ligand0_fixed)
+        # forcefield holding the energy between the ligand and the fixed atoms
+        # in the free leg
+        if disable_grid.val:
+            free_ligand0_fixed = InterGroupCLJFF("free:ligand0_fixed")
+            free_ligand0_fixed = setCLJProperties(free_ligand0_fixed)
+            free_ligand0_fixed = setFakeGridProperties(free_ligand0_fixed)
 
-        free_ligand0_fixed.add(ligand_mol0, MGIdx(0))
-        free_ligand0_fixed.add(fixed_free_group, MGIdx(1))
+            free_ligand0_fixed.add(ligand_mol0, MGIdx(0))
+            free_ligand0_fixed.add(fixed_free_group, MGIdx(1))
 
-        free_ligand1_fixed = InterGroupCLJFF("free:ligand1_fixed")
-        free_ligand1_fixed = setCLJProperties(free_ligand1_fixed)
-        free_ligand1_fixed = setFakeGridProperties(free_ligand1_fixed)
+            free_ligand1_fixed = InterGroupCLJFF("free:ligand1_fixed")
+            free_ligand1_fixed = setCLJProperties(free_ligand1_fixed)
+            free_ligand1_fixed = setFakeGridProperties(free_ligand1_fixed)
 
-        free_ligand1_fixed.add(ligand_mol1, MGIdx(0))
-        free_ligand1_fixed.add(fixed_free_group, MGIdx(1))
+            free_ligand1_fixed.add(ligand_mol1, MGIdx(0))
+            free_ligand1_fixed.add(fixed_free_group, MGIdx(1))
+        else:
+            free_ligand0_fixed = GridFF2("free:ligand0-fixed")
+            free_ligand0_fixed = setCLJProperties(free_ligand0_fixed)
+            free_ligand0_fixed = setGridProperties(free_ligand0_fixed)
+
+            free_ligand0_fixed.add(ligand_mol0, MGIdx(0))
+            free_ligand0_fixed.addFixedAtoms(fixed_free_group)
+
+            free_ligand1_fixed = GridFF2("free:ligand1-fixed")
+            free_ligand1_fixed = setCLJProperties(free_ligand1_fixed)
+            free_ligand1_fixed = setGridProperties(free_ligand1_fixed)
+
+            free_ligand1_fixed.add(ligand_mol1, MGIdx(0))
+            free_ligand1_fixed.addFixedAtoms(fixed_free_group)
     else:
-        free_ligand0_fixed = GridFF2("free:ligand0-fixed")
-        free_ligand0_fixed = setCLJProperties(free_ligand0_fixed)
-        free_ligand0_fixed = setGridProperties(free_ligand0_fixed)
+        free_ligand0_mobile = InterGroupFF("free:ligand0-mobile")
+        free_ligand0_mobile.setCLJFunction( getSoftInterCLJFunction() )
+        free_ligand0_mobile.setCLJFunction( "f", getSoftInterCLJFunction() )
+        free_ligand0_mobile.setCLJFunction( "b", getSoftInterCLJFunction() )
+        free_ligand0_mobile.setCLJFunction( "next", getSoftInterCLJFunction() )
+        free_ligand0_mobile.setCLJFunction( "prev", getSoftInterCLJFunction() )
+
+        free_ligand0_mobile.add(ligand_mol0, MGIdx(0))
+        free_ligand0_mobile.add(mobile_free_mols, MGIdx(1))
+
+        free_ligand0_fixed = InterGroupFF("free:ligand0-fixed")
+        free_ligand0_fixed.setCLJFunction( getInterCLJFunction() )
+        free_ligand0_fixed = setNewGridProperties(free_ligand0_fixed)
 
         free_ligand0_fixed.add(ligand_mol0, MGIdx(0))
-        free_ligand0_fixed.addFixedAtoms(fixed_free_group)
+        free_ligand0_fixed.addFixedAtoms(fixed_free_group.molecules())
 
-        free_ligand1_fixed = GridFF2("free:ligand1-fixed")
-        free_ligand1_fixed = setCLJProperties(free_ligand1_fixed)
-        free_ligand1_fixed = setGridProperties(free_ligand1_fixed)
+        free_ligand1_mobile = InterGroupFF("free:ligand1-mobile")
+        free_ligand1_mobile.setCLJFunction( getSoftInterCLJFunction() )
+        free_ligand1_mobile.setCLJFunction( "f", getSoftInterCLJFunction() )
+        free_ligand1_mobile.setCLJFunction( "b", getSoftInterCLJFunction() )
+        free_ligand1_mobile.setCLJFunction( "next", getSoftInterCLJFunction() )
+        free_ligand1_mobile.setCLJFunction( "prev", getSoftInterCLJFunction() )
+
+        free_ligand1_mobile.add(ligand_mol1, MGIdx(0))
+        free_ligand1_mobile.add(mobile_free_mols, MGIdx(1))
+
+        free_ligand1_fixed = InterGroupFF("free:ligand1-fixed")
+        free_ligand1_fixed.setCLJFunction( getInterCLJFunction() )
+        free_ligand1_fixed = setNewGridProperties(free_ligand1_fixed)
 
         free_ligand1_fixed.add(ligand_mol1, MGIdx(0))
-        free_ligand1_fixed.addFixedAtoms(fixed_free_group)
+        free_ligand1_fixed.addFixedAtoms(fixed_free_group.molecules())
+
 
     ###
     ### FORCEFIELDS LOCAL ONLY TO THE BOUND LEG
     ###
     bound_forcefields = []
 
-    # forcefield holding the energy between the bound leg mobile atoms and  
-    # the bound leg fixed atoms
-    if disable_grid.val:
-        bound_mobile_fixed = InterGroupCLJFF("bound:mobile-fixed")
-        bound_mobile_fixed = setCLJProperties(bound_mobile_fixed)
-        bound_mobile_fixed = setFakeGridProperties(bound_mobile_fixed)
-        bound_mobile_fixed.add(mobile_buffered_bound_mols, MGIdx(0))
-        bound_mobile_fixed.add(fixed_bound_group, MGIdx(1))
-        bound_forcefields.append(bound_mobile_fixed)
+    if use_oldff.val:
+        # forcefield holding the energy between the bound leg mobile atoms and  
+        # the bound leg fixed atoms
+        if disable_grid.val:
+            bound_mobile_fixed = InterGroupCLJFF("bound:mobile-fixed")
+            bound_mobile_fixed = setCLJProperties(bound_mobile_fixed)
+            bound_mobile_fixed = setFakeGridProperties(bound_mobile_fixed)
+            bound_mobile_fixed.add(mobile_buffered_bound_mols, MGIdx(0))
+            bound_mobile_fixed.add(fixed_bound_group, MGIdx(1))
+            bound_forcefields.append(bound_mobile_fixed)
+        else:
+            bound_mobile_fixed = GridFF2("bound:mobile-fixed")
+            bound_mobile_fixed = setCLJProperties(bound_mobile_fixed)
+            bound_mobile_fixed = setGridProperties(bound_mobile_fixed)
+
+            # we use mobile_buffered_bound_group as this group misses out atoms that are bonded
+            # to fixed atoms (thus preventing large energies caused by incorrect non-bonded calculations)
+            bound_mobile_fixed.add(mobile_buffered_bound_mols, MGIdx(0))
+            bound_mobile_fixed.addFixedAtoms(fixed_bound_group)
+
+            bound_forcefields.append(bound_mobile_fixed)
+
+        # forcefield holding the intermolecular energy between all bound molecules
+        bound_mobile_mobile = InterCLJFF("bound:mobile-mobile")
+        bound_mobile_mobile = setCLJProperties(bound_mobile_mobile)
+
+        bound_mobile_mobile.add(mobile_bound_mols)
+
+        bound_forcefields.append(bound_mobile_mobile)
     else:
-        bound_mobile_fixed = GridFF2("bound:mobile-fixed")
-        bound_mobile_fixed = setCLJProperties(bound_mobile_fixed)
-        bound_mobile_fixed = setGridProperties(bound_mobile_fixed)
+        # forcefield holding the energy between
+        # the bound molecules and bound fixed atoms
+        bound_mobile_fixed = InterGroupFF("bound:mobile-fixed")
+        bound_mobile_fixed.setCLJFunction( getInterCLJFunction() )
+        bound_mobile_fixed = setNewGridProperties(bound_mobile_fixed)
 
         # we use mobile_buffered_bound_group as this group misses out atoms that are bonded
         # to fixed atoms (thus preventing large energies caused by incorrect non-bonded calculations)
         bound_mobile_fixed.add(mobile_buffered_bound_mols, MGIdx(0))
-        bound_mobile_fixed.addFixedAtoms(fixed_bound_group)
-
+        bound_mobile_fixed.addFixedAtoms(fixed_bound_group.molecules())
         bound_forcefields.append(bound_mobile_fixed)
 
-    # forcefield holding the intermolecular energy between all bound molecules
-    bound_mobile_mobile = InterCLJFF("bound:mobile-mobile")
-    bound_mobile_mobile = setCLJProperties(bound_mobile_mobile)
-
-    bound_mobile_mobile.add(mobile_bound_mols)
-
-    bound_forcefields.append(bound_mobile_mobile)
+        # forcefield holding the energy between all bound mobile molecules
+        bound_mobile_mobile = InterFF("bound:mobile-mobile")
+        bound_mobile_mobile.setCLJFunction( getInterCLJFunction() )
+        bound_mobile_mobile.add(mobile_bound_mols)
+        bound_forcefields.append(bound_mobile_mobile)
 
     # intramolecular energy of the protein
     if bound_protein_intra_mols.nMolecules() > 0:
-        protein_intraclj = IntraCLJFF("bound:protein_intraclj")
-        protein_intraclj = setCLJProperties(protein_intraclj)
+        if use_oldff.val:
+            protein_intraclj = IntraCLJFF("bound:protein_intraclj")
+            protein_intraclj = setCLJProperties(protein_intraclj)
 
-        protein_intraff = InternalFF("bound:protein_intra")
+            protein_intraff = InternalFF("bound:protein_intra")
 
-        for molnum in bound_protein_intra_mols.molNums():
-            protein_mol = bound_protein_intra_mols[molnum].join()
-            protein_intraclj.add(protein_mol)
-            protein_intraff.add(protein_mol)
+            for molnum in bound_protein_intra_mols.molNums():
+                protein_mol = bound_protein_intra_mols[molnum].join()
+                protein_intraclj.add(protein_mol)
+                protein_intraff.add(protein_mol)
 
-        bound_forcefields.append(protein_intraclj)
-        bound_forcefields.append(protein_intraff)
+            bound_forcefields.append(protein_intraclj)
+            bound_forcefields.append(protein_intraff)
+        else:
+            protein_intraclj = IntraFF("bound:protein_intraclj")
+            protein_intraclj.setCLJFunction( getIntraCLJFunction() )
+            protein_intraff = InternalFF("bound:protein_intra")
+            protein_intraff.setUse14Calculation(True)
+
+            for molnum in bound_protein_intra_mols.molNums():
+                protein_mol = bound_protein_intra_mols[molnum].join()
+                protein_intraclj.add(protein_mol)
+                protein_intraff.add(protein_mol)
+
+            bound_forcefields.append(protein_intraclj)
+            bound_forcefields.append(protein_intraff)
 
     # intramolecular energy of any other solutes
     if bound_solute_intra_mols.nMolecules() > 0:
-        solute_intraclj = IntraCLJFF("bound:solute_intraclj")
-        solute_intraclj = setCLJProperties(solute_intraclj)
+        if use_oldff.val:
+            solute_intraclj = IntraCLJFF("bound:solute_intraclj")
+            solute_intraclj = setCLJProperties(solute_intraclj)
 
-        solute_intraff = InternalFF("bound:solute_intra")
+            solute_intraff = InternalFF("bound:solute_intra")
 
-        for molnum in bound_solute_intra_mols.molNums():
-            solute_mol = bound_solute_intra_mols[molnum].join()
-            solute_intraclj.add(solute_mol)
-            solute_intraff.add(solute_mol)
+            for molnum in bound_solute_intra_mols.molNums():
+                solute_mol = bound_solute_intra_mols[molnum].join()
+                solute_intraclj.add(solute_mol)
+                solute_intraff.add(solute_mol)
 
-        bound_forcefields.append(solute_intraclj)
-        bound_forcefields.append(solute_intraff)
+            bound_forcefields.append(solute_intraclj)
+            bound_forcefields.append(solute_intraff)
+        else:
+            solute_intraclj = IntraFF("bound:solute_intraclj")
+            solute_intraclj.setCLJFunction( getIntraCLJFunction() )
+            solute_intraff = InternalFF("bound:solute_intra")
+            solute_intraff.setUse14Calculation(True)
 
+            for molnum in bound_solute_intra_mols.molNums():
+                solute_mol = bound_solute_intra_mols[molnum].join()
+                solute_intraclj.add(solute_mol)
+                solute_intraff.add(solute_mol)
+
+            bound_forcefields.append(solute_intraclj)
+            bound_forcefields.append(solute_intraff)
+            
     ###
     ### FORCEFIELDS LOCAL ONLY TO THE FREE LEG
     ###
     free_forcefields = []
 
-    # forcefield holding the energy between the mobile free molecules and the
-    # fixed free molecules
-    if disable_grid:
-        free_mobile_fixed = InterGroupCLJFF("free:mobile-fixed")
-        free_mobile_fixed = setCLJProperties(free_mobile_fixed)
-        free_mobile_fixed = setFakeGridProperties(free_mobile_fixed)
+    if use_oldff.val:
+        # forcefield holding the energy between the mobile free molecules and the
+        # fixed free molecules
+        if disable_grid:
+            free_mobile_fixed = InterGroupCLJFF("free:mobile-fixed")
+            free_mobile_fixed = setCLJProperties(free_mobile_fixed)
+            free_mobile_fixed = setFakeGridProperties(free_mobile_fixed)
 
-        free_mobile_fixed.add(mobile_free_mols, MGIdx(0))
-        free_mobile_fixed.add(fixed_free_group, MGIdx(1))
-        free_forcefields.append(free_mobile_fixed)
+            free_mobile_fixed.add(mobile_free_mols, MGIdx(0))
+            free_mobile_fixed.add(fixed_free_group, MGIdx(1))
+            free_forcefields.append(free_mobile_fixed)
+        else:
+            free_mobile_fixed = GridFF2("free:mobile-fixed")
+            free_mobile_fixed = setCLJProperties(free_mobile_fixed)
+            free_mobile_fixed = setGridProperties(free_mobile_fixed)
+
+            free_mobile_fixed.add(mobile_free_mols, MGIdx(0))
+            free_mobile_fixed.addFixedAtoms(fixed_free_group)
+
+            free_forcefields.append(free_mobile_fixed)
+
+        # forcefield holding the intermolecular energy between the mobile free molecules
+        free_mobile_mobile = InterCLJFF("free:mobile-mobile")
+        free_mobile_mobile = setCLJProperties(free_mobile_mobile)
+
+        free_mobile_mobile.add(mobile_free_mols)
+
+        free_forcefields.append(free_mobile_mobile)
+
     else:
-        free_mobile_fixed = GridFF2("free:mobile-fixed")
-        free_mobile_fixed = setCLJProperties(free_mobile_fixed)
-        free_mobile_fixed = setGridProperties(free_mobile_fixed)
+        # forcefield holding the energy between the mobile free molecules, and their
+        # interaction with the fixed free molecules
+        free_mobile = InterFF("free:mobile")
+        free_mobile.setCLJFunction( getInterCLJFunction() )
+        free_mobile = setNewGridProperties( free_mobile )
 
-        free_mobile_fixed.add(mobile_free_mols, MGIdx(0))
-        free_mobile_fixed.addFixedAtoms(fixed_free_group)
+        free_mobile.add(mobile_free_mols)
+        free_mobile.addFixedAtoms(fixed_free_group.molecules())
 
-        free_forcefields.append(free_mobile_fixed)
-    
-    # forcefield holding the intermolecular energy between the mobile free molecules
-    free_mobile_mobile = InterCLJFF("free:mobile-mobile")
-    free_mobile_mobile = setCLJProperties(free_mobile_mobile)
-
-    free_mobile_mobile.add(mobile_free_mols)
-
-    free_forcefields.append(free_mobile_mobile)
+        free_forcefields.append(free_mobile)
 
     ###
     ### NOW ADD THE FORCEFIELDS TO THE SYSTEM
@@ -842,96 +1057,157 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
     ### SETTING THE FORCEFIELD EXPRESSIONS
     ###
 
-    bound_ligand0_fixed_nrg = bound_ligand0_fixed.components().total()
-    free_ligand0_fixed_nrg = free_ligand0_fixed.components().total()
-    bound_ligand1_fixed_nrg = bound_ligand1_fixed.components().total()
-    free_ligand1_fixed_nrg = free_ligand1_fixed.components().total()
-
     ligand_int_nrg_sym = Symbol("E_{ligand:internal}")
     ligand_int_nrg = ligand_intraclj.components().total() + \
                      ligand_intraff.components().total()
 
     ligand0_bound_nrg_sym = Symbol("E_{ligand0:bound}")
-
-    ligand0_bound_nrg = bound_ligand0_mobile.components().total(0) + \
-                        bound_ligand0_fixed_nrg
-
     ligand0_bound_nrg_f_sym = Symbol("E_{ligand0:bound_{f}}")
-    ligand0_bound_nrg_f = bound_ligand0_mobile.components().total(1) + \
-                          bound_ligand0_fixed_nrg
-
     ligand0_bound_nrg_b_sym = Symbol("E_{ligand0:bound_{b}}")
-    ligand0_bound_nrg_b = bound_ligand0_mobile.components().total(2) + \
-                          bound_ligand0_fixed_nrg
-
     ligand0_bound_nrg_next_sym = Symbol("E_{ligand0:bound_{next}}")
-    ligand0_bound_nrg_next = bound_ligand0_mobile.components().total(3) + \
-                             bound_ligand0_fixed_nrg
-
     ligand0_bound_nrg_prev_sym = Symbol("E_{ligand0:bound_{prev}}")
-    ligand0_bound_nrg_prev = bound_ligand0_mobile.components().total(4) + \
-                             bound_ligand0_fixed_nrg
-
     ligand1_bound_nrg_sym = Symbol("E_{ligand1:bound}")
-
-    ligand1_bound_nrg = bound_ligand1_mobile.components().total(0) + \
-                        bound_ligand1_fixed_nrg
-
     ligand1_bound_nrg_f_sym = Symbol("E_{ligand1:bound_{f}}")
-    ligand1_bound_nrg_f = bound_ligand1_mobile.components().total(1) + \
-                          bound_ligand1_fixed_nrg
-
     ligand1_bound_nrg_b_sym = Symbol("E_{ligand1:bound_{b}}")
-    ligand1_bound_nrg_b = bound_ligand1_mobile.components().total(2) + \
-                          bound_ligand1_fixed_nrg
-
     ligand1_bound_nrg_next_sym = Symbol("E_{ligand1:bound_{next}}")
-    ligand1_bound_nrg_next = bound_ligand1_mobile.components().total(3) + \
-                             bound_ligand1_fixed_nrg
-
     ligand1_bound_nrg_prev_sym = Symbol("E_{ligand1:bound_{prev}}")
-    ligand1_bound_nrg_prev = bound_ligand1_mobile.components().total(4) + \
-                             bound_ligand1_fixed_nrg
 
     ligand0_free_nrg_sym = Symbol("E_{ligand0:free}")
-    ligand0_free_nrg = free_ligand0_mobile.components().total(0) + \
-                       free_ligand0_fixed_nrg
-
     ligand0_free_nrg_f_sym = Symbol("E_{ligand0:free_{f}}")
-    ligand0_free_nrg_f = free_ligand0_mobile.components().total(1) + \
-                         free_ligand0_fixed_nrg
-
     ligand0_free_nrg_b_sym = Symbol("E_{ligand0:free_{b}}")
-    ligand0_free_nrg_b = free_ligand0_mobile.components().total(2) + \
-                         free_ligand0_fixed_nrg
-
     ligand0_free_nrg_next_sym = Symbol("E_{ligand0:free_{next}}")
-    ligand0_free_nrg_next = free_ligand0_mobile.components().total(3) + \
-                            free_ligand0_fixed_nrg
-
     ligand0_free_nrg_prev_sym = Symbol("E_{ligand0:free_{prev}}")
-    ligand0_free_nrg_prev = free_ligand0_mobile.components().total(4) + \
-                            free_ligand0_fixed_nrg
-
     ligand1_free_nrg_sym = Symbol("E_{ligand1:free}")
-    ligand1_free_nrg = free_ligand1_mobile.components().total(0) + \
-                       free_ligand1_fixed_nrg
-
     ligand1_free_nrg_f_sym = Symbol("E_{ligand1:free_{f}}")
-    ligand1_free_nrg_f = free_ligand1_mobile.components().total(1) + \
-                         free_ligand1_fixed_nrg
-
     ligand1_free_nrg_b_sym = Symbol("E_{ligand1:free_{b}}")
-    ligand1_free_nrg_b = free_ligand1_mobile.components().total(2) + \
-                         free_ligand1_fixed_nrg
-
     ligand1_free_nrg_next_sym = Symbol("E_{ligand1:free_{next}}")
-    ligand1_free_nrg_next = free_ligand1_mobile.components().total(3) + \
-                            free_ligand1_fixed_nrg
-
     ligand1_free_nrg_prev_sym = Symbol("E_{ligand1:free_{prev}}")
-    ligand1_free_nrg_prev = free_ligand1_mobile.components().total(4) + \
-                            free_ligand1_fixed_nrg
+
+    bound_ligand0_fixed_nrg = bound_ligand0_fixed.components().total()
+    free_ligand0_fixed_nrg = free_ligand0_fixed.components().total()
+    bound_ligand1_fixed_nrg = bound_ligand1_fixed.components().total()
+    free_ligand1_fixed_nrg = free_ligand1_fixed.components().total()
+
+    if use_oldff.val:
+        ligand0_bound_nrg = bound_ligand0_mobile.components().total(0) + \
+                            bound_ligand0_fixed_nrg
+
+        ligand0_bound_nrg_f = bound_ligand0_mobile.components().total(1) + \
+                              bound_ligand0_fixed_nrg
+
+        ligand0_bound_nrg_b = bound_ligand0_mobile.components().total(2) + \
+                              bound_ligand0_fixed_nrg
+
+        ligand0_bound_nrg_next = bound_ligand0_mobile.components().total(3) + \
+                                 bound_ligand0_fixed_nrg
+
+        ligand0_bound_nrg_prev = bound_ligand0_mobile.components().total(4) + \
+                                 bound_ligand0_fixed_nrg
+
+        ligand1_bound_nrg = bound_ligand1_mobile.components().total(0) + \
+                            bound_ligand1_fixed_nrg
+
+        ligand1_bound_nrg_f = bound_ligand1_mobile.components().total(1) + \
+                              bound_ligand1_fixed_nrg
+
+        ligand1_bound_nrg_b = bound_ligand1_mobile.components().total(2) + \
+                              bound_ligand1_fixed_nrg
+
+        ligand1_bound_nrg_next = bound_ligand1_mobile.components().total(3) + \
+                                 bound_ligand1_fixed_nrg
+
+        ligand1_bound_nrg_prev = bound_ligand1_mobile.components().total(4) + \
+                                 bound_ligand1_fixed_nrg
+
+        ligand0_free_nrg = free_ligand0_mobile.components().total(0) + \
+                           free_ligand0_fixed_nrg
+
+        ligand0_free_nrg_f = free_ligand0_mobile.components().total(1) + \
+                             free_ligand0_fixed_nrg
+
+        ligand0_free_nrg_b = free_ligand0_mobile.components().total(2) + \
+                             free_ligand0_fixed_nrg
+
+        ligand0_free_nrg_next = free_ligand0_mobile.components().total(3) + \
+                                free_ligand0_fixed_nrg
+
+        ligand0_free_nrg_prev = free_ligand0_mobile.components().total(4) + \
+                                free_ligand0_fixed_nrg
+
+        ligand1_free_nrg = free_ligand1_mobile.components().total(0) + \
+                           free_ligand1_fixed_nrg
+
+        ligand1_free_nrg_f = free_ligand1_mobile.components().total(1) + \
+                             free_ligand1_fixed_nrg
+
+        ligand1_free_nrg_b = free_ligand1_mobile.components().total(2) + \
+                             free_ligand1_fixed_nrg
+
+        ligand1_free_nrg_next = free_ligand1_mobile.components().total(3) + \
+                                free_ligand1_fixed_nrg
+
+        ligand1_free_nrg_prev = free_ligand1_mobile.components().total(4) + \
+                                free_ligand1_fixed_nrg
+    else:
+        ligand0_bound_nrg = bound_ligand0_mobile.components().total() + \
+                            bound_ligand0_fixed_nrg
+
+        ligand0_bound_nrg_f = bound_ligand0_mobile.components().total("f") + \
+                              bound_ligand0_fixed_nrg
+
+        ligand0_bound_nrg_b = bound_ligand0_mobile.components().total("b") + \
+                              bound_ligand0_fixed_nrg
+
+        ligand0_bound_nrg_next = bound_ligand0_mobile.components().total("next") + \
+                                 bound_ligand0_fixed_nrg
+
+        ligand0_bound_nrg_prev = bound_ligand0_mobile.components().total("prev") + \
+                                 bound_ligand0_fixed_nrg
+
+        ligand1_bound_nrg = bound_ligand1_mobile.components().total() + \
+                            bound_ligand1_fixed_nrg
+
+        ligand1_bound_nrg_f = bound_ligand1_mobile.components().total("f") + \
+                              bound_ligand1_fixed_nrg
+
+        ligand1_bound_nrg_b = bound_ligand1_mobile.components().total("b") + \
+                              bound_ligand1_fixed_nrg
+
+        ligand1_bound_nrg_next = bound_ligand1_mobile.components().total("next") + \
+                                 bound_ligand1_fixed_nrg
+
+        ligand1_bound_nrg_prev = bound_ligand1_mobile.components().total("prev") + \
+                                 bound_ligand1_fixed_nrg
+
+        ligand0_free_nrg = free_ligand0_mobile.components().total() + \
+                           free_ligand0_fixed_nrg
+
+        ligand0_free_nrg_f = free_ligand0_mobile.components().total("f") + \
+                             free_ligand0_fixed_nrg
+
+        ligand0_free_nrg_b = free_ligand0_mobile.components().total("b") + \
+                             free_ligand0_fixed_nrg
+
+        ligand0_free_nrg_next = free_ligand0_mobile.components().total("next") + \
+                                free_ligand0_fixed_nrg
+
+        ligand0_free_nrg_prev = free_ligand0_mobile.components().total("prev") + \
+                                free_ligand0_fixed_nrg
+
+        ligand1_free_nrg = free_ligand1_mobile.components().total() + \
+                           free_ligand1_fixed_nrg
+
+        ligand1_free_nrg_f = free_ligand1_mobile.components().total("f") + \
+                             free_ligand1_fixed_nrg
+
+        ligand1_free_nrg_b = free_ligand1_mobile.components().total("b") + \
+                             free_ligand1_fixed_nrg
+
+        ligand1_free_nrg_next = free_ligand1_mobile.components().total("next") + \
+                                free_ligand1_fixed_nrg
+
+        ligand1_free_nrg_prev = free_ligand1_mobile.components().total("prev") + \
+                                free_ligand1_fixed_nrg
 
     lam = Symbol("lambda")
     lam_f = Symbol("lambda_{f}")
@@ -943,10 +1219,11 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
     system.add(ligand_intraff)
     system.add(bound_ligand0_mobile)
     system.add(free_ligand0_mobile)
-    system.add(bound_ligand0_fixed)
-    system.add(free_ligand0_fixed)
     system.add(bound_ligand1_mobile)
     system.add(free_ligand1_mobile)
+
+    system.add(bound_ligand0_fixed)
+    system.add(free_ligand0_fixed)
     system.add(bound_ligand1_fixed)
     system.add(free_ligand1_fixed)
 
@@ -1131,40 +1408,76 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
     system.add( ComponentConstraint( alpha_off, alpha_scale.val * (1-lam) ) )
 
     # Now constrain alpha to follow lambda
-    # First, the reference state (alpha0)
-    system.add( PropertyConstraint( "alpha0", FFName("free:ligand1-mobile"), alpha_scale.val * lam ) )
-    system.add( PropertyConstraint( "alpha0", FFName("bound:ligand1-mobile"), alpha_scale.val * (1 - lam) ) )
+    if use_oldff.val:
+        # First, the reference state (alpha0)
+        system.add( PropertyConstraint( "alpha0", FFName("free:ligand1-mobile"), alpha_scale.val * lam ) )
+        system.add( PropertyConstraint( "alpha0", FFName("bound:ligand1-mobile"), alpha_scale.val * (1 - lam) ) )
 
-    system.add( PropertyConstraint( "alpha0", FFName("bound:ligand0-mobile"), alpha_scale.val * lam ) )
-    system.add( PropertyConstraint( "alpha0", FFName("free:ligand0-mobile"), alpha_scale.val * (1 - lam) ) )
+        system.add( PropertyConstraint( "alpha0", FFName("bound:ligand0-mobile"), alpha_scale.val * lam ) )
+        system.add( PropertyConstraint( "alpha0", FFName("free:ligand0-mobile"), alpha_scale.val * (1 - lam) ) )
 
-    # Now the forwards perturbed state (alpha1)
-    system.add( PropertyConstraint( "alpha1", FFName("free:ligand1-mobile"),  alpha_scale.val * lam_f ) )
-    system.add( PropertyConstraint( "alpha1", FFName("bound:ligand1-mobile"),  alpha_scale.val * (1 - lam_f) ) )
+        # Now the forwards perturbed state (alpha1)
+        system.add( PropertyConstraint( "alpha1", FFName("free:ligand1-mobile"),  alpha_scale.val * lam_f ) )
+        system.add( PropertyConstraint( "alpha1", FFName("bound:ligand1-mobile"),  alpha_scale.val * (1 - lam_f) ) )
 
-    system.add( PropertyConstraint( "alpha1", FFName("bound:ligand0-mobile"),  alpha_scale.val * lam_f ) )
-    system.add( PropertyConstraint( "alpha1", FFName("free:ligand0-mobile"),  alpha_scale.val * (1 - lam_f) ) )
+        system.add( PropertyConstraint( "alpha1", FFName("bound:ligand0-mobile"),  alpha_scale.val * lam_f ) )
+        system.add( PropertyConstraint( "alpha1", FFName("free:ligand0-mobile"),  alpha_scale.val * (1 - lam_f) ) )
 
-    # Now the backwards perturbed state (alpha2)
-    system.add( PropertyConstraint( "alpha2", FFName("free:ligand1-mobile"),  alpha_scale.val * lam_b ) )
-    system.add( PropertyConstraint( "alpha2", FFName("bound:ligand1-mobile"),  alpha_scale.val * (1 - lam_b) ) )
+        # Now the backwards perturbed state (alpha2)
+        system.add( PropertyConstraint( "alpha2", FFName("free:ligand1-mobile"),  alpha_scale.val * lam_b ) )
+        system.add( PropertyConstraint( "alpha2", FFName("bound:ligand1-mobile"),  alpha_scale.val * (1 - lam_b) ) )
 
-    system.add( PropertyConstraint( "alpha2", FFName("bound:ligand0-mobile"),  alpha_scale.val * lam_b ) )
-    system.add( PropertyConstraint( "alpha2", FFName("free:ligand0-mobile"),  alpha_scale.val * (1 - lam_b) ) )
+        system.add( PropertyConstraint( "alpha2", FFName("bound:ligand0-mobile"),  alpha_scale.val * lam_b ) )
+        system.add( PropertyConstraint( "alpha2", FFName("free:ligand0-mobile"),  alpha_scale.val * (1 - lam_b) ) )
 
-    # Now the next window perturbed state (alpha3)
-    system.add( PropertyConstraint( "alpha3", FFName("free:ligand1-mobile"),  alpha_scale.val * lam_next ) )
-    system.add( PropertyConstraint( "alpha3", FFName("bound:ligand1-mobile"),  alpha_scale.val * (1 - lam_next) ) )
+        # Now the next window perturbed state (alpha3)
+        system.add( PropertyConstraint( "alpha3", FFName("free:ligand1-mobile"),  alpha_scale.val * lam_next ) )
+        system.add( PropertyConstraint( "alpha3", FFName("bound:ligand1-mobile"),  alpha_scale.val * (1 - lam_next) ) )
 
-    system.add( PropertyConstraint( "alpha3", FFName("bound:ligand0-mobile"),  alpha_scale.val * lam_next ) )
-    system.add( PropertyConstraint( "alpha3", FFName("free:ligand0-mobile"),  alpha_scale.val * (1 - lam_next) ) )
+        system.add( PropertyConstraint( "alpha3", FFName("bound:ligand0-mobile"),  alpha_scale.val * lam_next ) )
+        system.add( PropertyConstraint( "alpha3", FFName("free:ligand0-mobile"),  alpha_scale.val * (1 - lam_next) ) )
 
-    # Now the previous window perturbed state (alpha4)
-    system.add( PropertyConstraint( "alpha4", FFName("free:ligand1-mobile"),  alpha_scale.val * lam_prev ) )
-    system.add( PropertyConstraint( "alpha4", FFName("bound:ligand1-mobile"),  alpha_scale.val * (1 - lam_prev) ) )
+        # Now the previous window perturbed state (alpha4)
+        system.add( PropertyConstraint( "alpha4", FFName("free:ligand1-mobile"),  alpha_scale.val * lam_prev ) )
+        system.add( PropertyConstraint( "alpha4", FFName("bound:ligand1-mobile"),  alpha_scale.val * (1 - lam_prev) ) )
 
-    system.add( PropertyConstraint( "alpha4", FFName("bound:ligand0-mobile"),  alpha_scale.val * lam_prev ) )
-    system.add( PropertyConstraint( "alpha4", FFName("free:ligand0-mobile"),  alpha_scale.val * (1 - lam_prev) ) )
+        system.add( PropertyConstraint( "alpha4", FFName("bound:ligand0-mobile"),  alpha_scale.val * lam_prev ) )
+        system.add( PropertyConstraint( "alpha4", FFName("free:ligand0-mobile"),  alpha_scale.val * (1 - lam_prev) ) )
+    else:
+        # First, the reference state (alpha)
+        system.add( PropertyConstraint( "alpha", FFName("free:ligand1-mobile"), alpha_scale.val * lam ) )
+        system.add( PropertyConstraint( "alpha", FFName("bound:ligand1-mobile"), alpha_scale.val * (1 - lam) ) )
+
+        system.add( PropertyConstraint( "alpha", FFName("bound:ligand0-mobile"), alpha_scale.val * lam ) )
+        system.add( PropertyConstraint( "alpha", FFName("free:ligand0-mobile"), alpha_scale.val * (1 - lam) ) )
+
+        # Now the forwards perturbed state (alpha[f])
+        system.add( PropertyConstraint( "alpha[f]", FFName("free:ligand1-mobile"),  alpha_scale.val * lam_f ) )
+        system.add( PropertyConstraint( "alpha[f]", FFName("bound:ligand1-mobile"),  alpha_scale.val * (1 - lam_f) ) )
+
+        system.add( PropertyConstraint( "alpha[f]", FFName("bound:ligand0-mobile"),  alpha_scale.val * lam_f ) )
+        system.add( PropertyConstraint( "alpha[f]", FFName("free:ligand0-mobile"),  alpha_scale.val * (1 - lam_f) ) )
+
+        # Now the backwards perturbed state (alpha[b])
+        system.add( PropertyConstraint( "alpha[b]", FFName("free:ligand1-mobile"),  alpha_scale.val * lam_b ) )
+        system.add( PropertyConstraint( "alpha[b]", FFName("bound:ligand1-mobile"),  alpha_scale.val * (1 - lam_b) ) )
+
+        system.add( PropertyConstraint( "alpha[b]", FFName("bound:ligand0-mobile"),  alpha_scale.val * lam_b ) )
+        system.add( PropertyConstraint( "alpha[b]", FFName("free:ligand0-mobile"),  alpha_scale.val * (1 - lam_b) ) )
+
+        # Now the next window perturbed state (alpha[next])
+        system.add( PropertyConstraint( "alpha[next]", FFName("free:ligand1-mobile"),  alpha_scale.val * lam_next ) )
+        system.add( PropertyConstraint( "alpha[next]", FFName("bound:ligand1-mobile"),  alpha_scale.val * (1 - lam_next) ) )
+
+        system.add( PropertyConstraint( "alpha[next]", FFName("bound:ligand0-mobile"),  alpha_scale.val * lam_next ) )
+        system.add( PropertyConstraint( "alpha[next]", FFName("free:ligand0-mobile"),  alpha_scale.val * (1 - lam_next) ) )
+
+        # Now the previous window perturbed state (alpha[prev])
+        system.add( PropertyConstraint( "alpha[prev]", FFName("free:ligand1-mobile"),  alpha_scale.val * lam_prev ) )
+        system.add( PropertyConstraint( "alpha[prev]", FFName("bound:ligand1-mobile"),  alpha_scale.val * (1 - lam_prev) ) )
+
+        system.add( PropertyConstraint( "alpha[prev]", FFName("bound:ligand0-mobile"),  alpha_scale.val * lam_prev ) )
+        system.add( PropertyConstraint( "alpha[prev]", FFName("free:ligand0-mobile"),  alpha_scale.val * (1 - lam_prev) ) )
 
     # Now lets create all of the groups for moves based on the above
 
@@ -1332,18 +1645,52 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
         printEnergies(system.energies(), sys.stdout)
         moves.clearStatistics()
 
+        # validate that we haven't leaked any energy
+        oldnrgs = system.energies()
+        system2 = System(system)
+        system2.mustNowRecalculateFromScratch()
+        newnrgs = system2.energies()
+
+        broken_nrgs = {}
+
+        for key in oldnrgs.keys():
+            if abs( oldnrgs[key] - newnrgs[key] ) > 0.05:
+                broken_nrgs[key] = (oldnrgs[key], newnrgs[key])
+
+        broken_keys = list(broken_nrgs.keys())
+        broken_keys.sort()
+
+        if len(broken_keys) > 0:
+            print("ERROR - PROGRAM BUG : SOME OF THE FORCEFIELDS ARE LEAKING ENERGY")
+            for key in broken_keys:
+                print("%s : %s versus %s" % (key, broken_nrgs[key][0], broken_nrgs[key][1]))
+            print("ERROR: Please send 'broken_system.s3' in for debugging, along with everything printed above!")
+            Sire.Stream.save( (system,moves), "broken_system.s3")
+            sys.exit(-1)
+
     return (system, moves)
 
 
 def mergeLSRC(sys0, ligand0_mol, sys1, ligand1_mol, watersys):
     
     if watersys:
-        print("Merging the two ligand complexes with the water system to create the stage 1 and stage 2 systems...")
+        print("Merging the two ligand complexes with the water system to create the ligandswap system...")
     else:
-        print("Merging the two ligand complexes with a vacuum box to create the stage 1 and stage 2 systems...")
+        print("Merging the two ligand complexes with a vacuum box to create the ligandswap system...")
 
     print("\nFirst, mapping the atoms from the first ligand to the atoms of the second...")
-    mapping = AtomMCSMatcher(1*second).match(ligand0_mol, PropertyMap(), ligand1_mol, PropertyMap())
+    mapping = AtomMCSMatcher(mcs_timeout.val).match(ligand0_mol, PropertyMap(), 
+                                                    ligand1_mol, PropertyMap())
+
+    # try the reverse mapping, as sometimes it finds a better result
+    #rmapping = AtomMCSMatcher(mcs_timeout.val).match(ligand1_mol, PropertyMap(),
+    #                                                 ligand0_mol, PropertyMap())
+
+    #if len(rmapping) > len(mapping):
+    #    print("Reverse map did better than the forward map. Using the reverse map as a key...")
+    #    mapping = AtomMCSMatcher( AtomResultMatcher(rmapping,True), mcs_timeout.val ) \
+    #               .match(ligand0_mol, PropertyMap(),
+    #                      ligand1_mol, PropertyMap())
 
     lines = []
     for key in mapping.keys():
@@ -1353,8 +1700,7 @@ def mergeLSRC(sys0, ligand0_mol, sys1, ligand1_mol, watersys):
     lines.sort()
     print("Mapping:\n%s\n" % "\n".join(lines))
 
-    stage1 = System("LSRC stage 1 ( A => B )")
-    stage2 = System("LSRC stage 2 ( A <= B )")
+    lsrc_sys = System("LSRC stage 1 ( A => B )")
 
     if sys0.containsProperty("reflection center"):
         if not sys1.containsProperty("reflection center"):
@@ -1392,44 +1738,25 @@ def mergeLSRC(sys0, ligand0_mol, sys1, ligand1_mol, watersys):
 
             sys.exit(-1)
 
-        stage1.setProperty("reflection center", AtomCoords(CoordGroup(1,reflection_center0)))
-        stage1.setProperty("reflection sphere radius", VariantProperty(reflection_radius0))
-
-        stage2.setProperty("reflection center", AtomCoords(CoordGroup(1,reflection_center0)))
-        stage2.setProperty("reflection sphere radius", VariantProperty(reflection_radius0))
+        lsrc_sys.setProperty("reflection center", AtomCoords(CoordGroup(1,reflection_center0)))
+        lsrc_sys.setProperty("reflection sphere radius", VariantProperty(reflection_radius0))
 
     elif sys1.containsProperty("reflection center"):
         print("Lack of reflection sphere in sys0 when it exists in sys1!")
         sys.exit(-1)
 
     if sys0.containsProperty("average solute translation delta"):
-        stage1.setProperty("average solute translation delta", \
-                           sys0.property("average solute translation delta"))
-        stage2.setProperty("average solute translation delta", \
-                           sys0.property("average solute translation delta"))
+        lsrc_sys.setProperty("average solute translation delta", \
+                             sys0.property("average solute translation delta"))
 
     if sys0.containsProperty("average solute rotation delta"):
-        stage1.setProperty("average solute rotation delta", \
-                           sys0.property("average solute rotation delta"))
-        stage2.setProperty("average solute rotation delta", \
-                           sys0.property("average solute rotation delta"))
+        lsrc_sys.setProperty("average solute rotation delta", \
+                             sys0.property("average solute rotation delta"))
 
-    # first create stage 1
-    (stage1,moves1) = createStage(stage1, sys0, ligand0_mol, ligand1_mol, watersys, AtomResultMatcher(mapping), "stage1")
+    # create the merged system
+    (lsrc_sys,lsrc_moves) = createStage(lsrc_sys, sys0, ligand0_mol, ligand1_mol, watersys, AtomResultMatcher(mapping), "lsrc")
 
-    # now create stage 2
-    if mirror_stages.val:
-        # Update the coordinates of ligand 1 so that they are aligned to the 
-        # bound copy of ligand 0
-        ligand1_mol = stage1[ligand1_mol.number()].molecule()
-        Sire.Stream.save( (ligand0_mol,ligand1_mol), "ligands.s3")
-        (stage2,moves2) = createStage(stage2, sys0, ligand1_mol, ligand0_mol, 
-                                      watersys, AtomResultMatcher(mapping,True), "stage2")
-    else:
-        (stage2,moves2) = createStage(stage2, sys1, ligand1_mol, ligand0_mol, 
-                                      watersys, AtomResultMatcher(mapping,True), "stage2")
-
-    return (stage1, moves1, stage2, moves2)
+    return (lsrc_sys, lsrc_moves)
 
 
 def loadWater():
@@ -1535,7 +1862,7 @@ def makeRETI(system, moves):
         replicas.add( nrgmon, MonitorMonitor(MonitorName(nrgmon), True) )
 
     # now create the replica exchange moves for the replicas
-    replica_moves = RepExMove()
+    replica_moves = RepExMove2()
     #replica_moves.setDisableSwaps(True)
     replica_moves.setGenerator( RanGenerator(seed+7) )
 
@@ -1543,66 +1870,28 @@ def makeRETI(system, moves):
     return (replicas, replica_moves)
 
 
-def loadSystem0():
-    """This function loads the ligand 0 system"""
-    return loadSystem(topfile0.val, crdfile0.val, s3file0.val, ligand_name0.val)
-
-
-def loadSystem1():
-    """This function loads the ligand 1 system"""
-    return loadSystem(topfile1.val, crdfile1.val, s3file1.val, ligand_name1.val)
-
-
-def loadStage1And2():
-    """This is a high level function that loads the stage 1 and 2 systems that calculates the 
+def loadInput():
+    """This is a high level function that loads the LSRC system that calculates the 
        relative binding free energy of swapping bound ligand 0 with free ligand 1"""
 
-    have_stage1 = False
-    have_stage2 = False
+    have_sys = False
 
-    if os.path.exists(restart_file1.val):
-        (lsrc_system1,lsrc_moves1) = Sire.Stream.load(restart_file1.val)
-        have_stage1 = True
+    if os.path.exists(restart_file.val):
+        (lsrc_system,lsrc_moves) = Sire.Stream.load(restart_file.val)
+        have_sys = True
 
-    if os.path.exists(restart_file2.val):
-        (lsrc_system2,lsrc_moves2) = Sire.Stream.load(restart_file2.val)
-        have_stage2 = True
-
-    if not (have_stage1 or have_stage2):
-        # need to load both systems
-        (sys0, ligand0_mol) = loadSystem0()
-        (sys1, ligand1_mol) = loadSystem1()
+    if not have_sys:
+        # need to load the system
+        (sys0, ligand0_mol) = loadSystem(topfile0.val, crdfile0.val, s3file0.val, ligand_name0.val)
+        (sys1, ligand1_mol) = loadSystem(topfile1.val, crdfile1.val, s3file1.val, ligand_name1.val)
         watersys = loadWater()
 
-        (lsrc_system1,lsrc_moves1,lsrc_system2,lsrc_moves2) = mergeLSRC(sys0,ligand0_mol, sys1,ligand1_mol, watersys)
+        (lsrc_system,lsrc_moves) = mergeLSRC(sys0,ligand0_mol, sys1,ligand1_mol, watersys)
+        (lsrc_system,lsrc_moves) = makeRETI(lsrc_system, lsrc_moves)
 
-        (lsrc_system1,lsrc_moves1) = makeRETI(lsrc_system1, lsrc_moves1)
-        (lsrc_system2,lsrc_moves2) = makeRETI(lsrc_system2, lsrc_moves2)
-
-        Sire.Stream.save( (lsrc_system1,lsrc_moves1), restart_file1.val )
-        Sire.Stream.save( (lsrc_system2,lsrc_moves2), restart_file2.val )
-
-    return (lsrc_system1,lsrc_moves1,lsrc_system2,lsrc_moves2)
-
-
-def loadStage3():
-    """This is a high level function that runs the stage 3 calculation that calculates the
-       relative free energy of swapping bound ligand 0 with bound ligand 1"""
-
-    print("\nRUNNING STAGE 3\nSwapping bound ligand 0 with bound ligand 1\n")
-
-    if os.path.exists(restart_file1.val):
-        (lsrc_system,lsrc_moves) = Sire.Stream.load(restart_file3.val)
-    else:
-        (sys0, ligand0_mol) = loadSystem0()
-        (sys1, ligand1_mol) = loadSystem1()
-
-        (lsrc_system,lsrc_moves) = mergeLSRCBound(sys0,ligand0_mol, sys1,ligand1_mol)
-        Sire.Stream.save( (lsrc_system,lsrc_moves), restart_file3.val)
+        Sire.Stream.save( (lsrc_system,lsrc_moves), restart_file.val )
 
     return (lsrc_system,lsrc_moves)
-
-    return
 
 
 def printEnergies(nrgs, FILE):
@@ -1632,131 +1921,9 @@ def printFreeEnergy(key1, key2, key3, total, bound, free, FILE):
                             free.integrate().values()[-1].y()), file=FILE)
 
 
-def analyseLSRC3(dirname, replicas, iteration, bennetts_freenrgs, fep_freenrgs, ti_freenrgs, bound0_freenrgs, bound1_freenrgs,
-                 res0_freenrgs, res1_freenrgs, bound0_water_freenrgs, bound1_water_freenrgs):
-    """This function is used to perform all analysis of iteration 'it' of the passed stage 3 LSRC system"""
-
-    # read the value of delta_lambda from the first system
-    system = replicas[0].subSystem()
-    delta_lambda = system.constant(Symbol("delta_lambda"))
-
-    logfile = "%s/results_%0004d.log" % (dirname, iteration)
-
-    FILE = open(logfile, "w")
-
-    print("===========================", file=FILE)
-    print(" Results for iteration %d" % iteration, file=FILE)
-    print("===========================", file=FILE)
-
-    print("\ndelta_lambda == %f" % delta_lambda, file=FILE)
-    print("temperature == %f K\n" % replicas[0].subMoves().temperature().to(kelvin), file=FILE) 
-
-    nreplicas = replicas.nReplicas()
-
-    # extract all of the monitors from the replicas
-    lambda_values = []
-
-    dg_f = {}
-    dg_b = {}
-
-    dg_next = {}
-    dg_prev = {}
-
-    dg_bound0_f = {}
-    dg_bound0_b = {}
-    
-    dg_bound1_f = {}
-    dg_bound1_b = {}
-
-    dg_residue0 = {}
-    dg_residue1 = {}
-    dg_boundwater0 = {}
-    dg_boundwater1 = {}
-
-    write_pdbs = (save_pdb.val) and (iteration % pdb_frequency.val == 0)
-
-    if write_pdbs:
-        print("Saving PDBs of the system at iteration %d..." % iteration)
-
-    for i in range(0, nreplicas):
-        replica = replicas[i]
-        monitors = replica.monitors()
-        lamval = replica.lambdaValue()
-        lambda_values.append(lamval)
-
-        if write_pdbs:
-            if save_all_pdbs.val or (i == 0) or (i == nreplicas-1):
-                # Save a PDB of the final configuration for the bound and free legs for each lambda value
-                system = replica.subSystem()
-                bound0_leg = system[MGName("bound0_leg")]
-                bound1_leg = system[MGName("bound1_leg")]
-
-                PDB().write(bound0_leg, "%s/bound0_mobile_%000006d_%.5f.pdb" % (dirname, iteration, lamval))
-                PDB().write(bound1_leg, "%s/bound1_mobile_%000006d_%.5f.pdb" % (dirname, iteration, lamval))
-
-        dg_f[lamval] = monitors[MonitorName("delta_g^{F}")][-1].accumulator()
-        dg_b[lamval] = monitors[MonitorName("delta_g^{B}")][-1].accumulator()
-        dg_next[lamval] = monitors[MonitorName("delta_g^{next}")][-1].accumulator()
-        dg_prev[lamval] = monitors[MonitorName("delta_g^{prev}")][-1].accumulator()
-        dg_bound0_f[lamval] = monitors[MonitorName("delta_bound0_g^{F}")][-1].accumulator()
-        dg_bound0_b[lamval] = monitors[MonitorName("delta_bound0_g^{B}")][-1].accumulator()
-        dg_bound1_f[lamval] = monitors[MonitorName("delta_bound1_g^{F}")][-1].accumulator()
-        dg_bound1_b[lamval] = monitors[MonitorName("delta_bound1_g^{B}")][-1].accumulator()
-
-        dg_residue0[lamval] = monitors[MonitorName("residue0_nrgmon")][-1]
-        dg_residue1[lamval] = monitors[MonitorName("residue1_nrgmon")][-1]
-
-        dg_boundwater0[lamval] = monitors[MonitorName("boundwater0_nrgmon")][-1]
-        dg_boundwater1[lamval] = monitors[MonitorName("boundwater1_nrgmon")][-1]
-
-    windows = copy.deepcopy(lambda_values)
-    windows.sort()
-
-    if windows[-1] != 1:
-        windows.append(1)
-
-    if windows[0] != 0:
-        windows.insert(0,0)
-
-    bennetts_freenrgs.set( iteration, windows, dg_next, dg_prev )
-    fep_freenrgs.set( iteration, windows, dg_next, dg_prev )
-    ti_freenrgs.set( iteration, dg_f, dg_b, delta_lambda )
-
-    bound0_freenrgs.set( iteration, dg_bound0_f, dg_bound0_b, delta_lambda )
-    bound1_freenrgs.set( iteration, dg_bound1_f, dg_bound1_b, delta_lambda )
-
-    print("\nRELATIVE FREE ENERGY\n", file=FILE)
-    printFreeEnergy("TOTAL", "BOUND_0", "BOUND_1",
-                    ti_freenrgs[iteration], bound0_freenrgs[iteration], bound1_freenrgs[iteration], FILE)
-
-    res0_freenrgs.set( iteration, dg_residue0 )
-    res1_freenrgs.set( iteration, dg_residue1 )
-    bound0_water_freenrgs.set( iteration, dg_boundwater0 )
-    bound1_water_freenrgs.set( iteration, dg_boundwater1 )
-
-    print("\nRESIDUE 0 FREE ENERGY COMPONENTS\n", file=FILE)
-    printComponents(res0_freenrgs[iteration], FILE)
-
-    print("\nRESIDUE 1 FREE ENERGY COMPONENTS\n", file=FILE)
-    printComponents(res1_freenrgs[iteration], FILE)
-
-    print("\nPROTEIN BOX 0 WATER FREE ENERGY COMPONENTS\n", file=FILE)
-    printComponents(bound0_water_freenrgs[iteration], FILE)
-
-    print("\nPROTEIN BOX 1 WATER FREE ENERGY COMPONENTS\n", file=FILE)
-    printComponents(bound1_water_freenrgs[iteration], FILE)
-
-    print("\n=============", file=FILE)
-    print("Relative free energy for iteration %d equals %s" % (iteration, \
-                        ti_freenrgs[iteration].integrate().values()[-1].y()), file=FILE)
-    print("==============", file=FILE)
-
-    FILE.close()
-
-
 def analyseLSRC(dirname, replicas, iteration, bennetts_freenrgs, fep_freenrgs, ti_freenrgs, bound_freenrgs, free_freenrgs,
                 res_freenrgs, bound_water_freenrgs, free_water_freenrgs):
-    """This function is used to perform all analysis of iteration 'it' of the passed stage 1 or stage 2 LSRC system"""
+    """This function is used to perform all analysis of iteration 'it' of the passed LSRC system"""
 
     # read the value of delta_lambda from the first system
     system = replicas[0].subSystem()
@@ -1886,185 +2053,98 @@ def mustMakeDir(dirname):
 def run():
     """This is a very high level function that does everything to run a LSRC simulation"""
 
-    (lsrc1_system,lsrc1_moves,lsrc2_system,lsrc2_moves) = loadStage1And2()
-    #(lsrc3_system,lsrc3_moves) = loadStage3()
+    (lsrc_system,lsrc_moves) = loadInput()
 
-    n1 = lsrc1_moves.nMoves()
-    n2 = lsrc2_moves.nMoves()
-    #n3 = lsrc3_moves.nMoves()
+    nmax = lsrc_moves.nMoves()
 
-    nmax = max(n1,n2)
-    nmin = min(n1,n2)
+    print("Number of iterations to perform: %d. Number of iterations completed: %d." % (nmoves.val, nmax))
 
-    print("Number of iterations to perform: %d. Number of iterations completed: %d, %d." % (nmoves.val, n1, n2))
-
-    if nmax >= nmoves.val and nmin == nmax:
+    if nmax >= nmoves.val:
         print("All iterations complete. Simulation complete.")
         sys.exit(0)
 
     # make sure all of the output directories exist
     mustMakeDir(outdir.val)
-    mustMakeDir("%s/stage1" % outdir.val)
-    mustMakeDir("%s/stage2" % outdir.val)
 
     # See if we have any existing free energy statistics files...
     t = QTime()
     t.start()
-    freenrgs_file1 = "%s/stage1/freenrgs.s3" % outdir.val
+    freenrgs_file = "%s/freenrgs.s3" % outdir.val
 
-    if not os.path.exists(freenrgs_file1):
-        bennetts_freenrgs1 = Bennetts()
-        fep_freenrgs1 = FEP()
-        ti_freenrgs1 = TI()
+    if not os.path.exists(freenrgs_file):
+        bennetts_freenrgs = Bennetts()
+        fep_freenrgs = FEP()
+        ti_freenrgs = TI()
     else:
-        [bennetts_freenrgs1, fep_freenrgs1, ti_freenrgs1] = Sire.Stream.load(freenrgs_file1)
+        [bennetts_freenrgs, fep_freenrgs, ti_freenrgs] = Sire.Stream.load(freenrgs_file)
 
-    freenrg_parts_file1 = "%s/stage1/freenrg_parts.s3" % outdir.val
+    freenrg_parts_file = "%s/freenrg_parts.s3" % outdir.val
 
-    if not os.path.exists(freenrg_parts_file1):
-        bound_freenrgs1 = TI()
-        free_freenrgs1 = TI()
+    if not os.path.exists(freenrg_parts_file):
+        bound_freenrgs = TI()
+        free_freenrgs = TI()
     else:
-        [bound_freenrgs1, free_freenrgs1] = Sire.Stream.load(freenrg_parts_file1)
+        [bound_freenrgs, free_freenrgs] = Sire.Stream.load(freenrg_parts_file)
 
-    freenrg_components_file1 = "%s/stage1/freenrg_components.s3" % outdir.val
+    freenrg_components_file = "%s/freenrg_components.s3" % outdir.val
 
-    if not os.path.exists(freenrg_components_file1):
-        res_freenrgs1 = TIComponents()
-        bound_water_freenrgs1 = TIComponents()
-        free_water_freenrgs1 = TIComponents()
+    if not os.path.exists(freenrg_components_file):
+        res_freenrgs = TIComponents()
+        bound_water_freenrgs = TIComponents()
+        free_water_freenrgs = TIComponents()
     else:
-        [res_freenrgs1, bound_water_freenrgs1, free_water_freenrgs1] = Sire.Stream.load(freenrg_components_file1)
-
-    freenrgs_file2 = "%s/stage2/freenrgs.s3" % outdir.val
-
-    if not os.path.exists(freenrgs_file2):
-        bennetts_freenrgs2 = Bennetts()
-        fep_freenrgs2 = FEP()
-        ti_freenrgs2 = TI()
-    else:
-        [bennetts_freenrgs2, fep_freenrgs2, ti_freenrgs2] = Sire.Stream.load(freenrgs_file2)
-
-    freenrg_parts_file2 = "%s/stage2/freenrg_parts.s3" % outdir.val
-
-    if not os.path.exists(freenrg_parts_file2):
-        bound_freenrgs2 = TI()
-        free_freenrgs2 = TI()
-    else:
-        [bound_freenrgs2, free_freenrgs2] = Sire.Stream.load(freenrg_parts_file2)
-
-    freenrg_components_file2 = "%s/stage2/freenrg_components.s3" % outdir.val
-
-    if not os.path.exists(freenrg_components_file2):
-        res_freenrgs2 = TIComponents()
-        bound_water_freenrgs2 = TIComponents()
-        free_water_freenrgs2 = TIComponents()
-    else:
-        [res_freenrgs2, bound_water_freenrgs2, free_water_freenrgs2] = Sire.Stream.load(freenrg_components_file2)
+        [res_freenrgs, bound_water_freenrgs, free_water_freenrgs] = Sire.Stream.load(freenrg_components_file)
 
     print("Initialising / loading the free energy files took %d ms" % t.elapsed())
 
-    while (nmin != nmax) or (nmax < nmoves.val):
+    while nmax < nmoves.val:
         t.start()
-        sim1 = SupraSim()
-        sim2 = SupraSim()
 
-        if nmin != nmax:
-            print("Catching up some of the stages: %d vs. %d" % (n1,n2))
-
-            if n1 < nmax:
-                sim1 = SupraSim.run( lsrc1_system, lsrc1_moves, 1, True )
-
-            if n2 < nmax:
-                sim2 = SupraSim.run( lsrc2_system, lsrc2_moves, 1, True )
-
-        else:
-            print("Performing iteration %d..." % (nmax+1))
-            sim1 = SupraSim.run( lsrc1_system, lsrc1_moves, 1, True )
-            sim2 = SupraSim.run( lsrc2_system, lsrc2_moves, 1, True )
-
-        sim1.wait()
-        sim2.wait()
+        print("Performing iteration %d..." % (nmax+1))
+        lsrc_moves.move(lsrc_system, 1, True)
 
         ms = t.elapsed()
         print("...iteration complete. Took %d ms" % ms)
-
-        if nmin != nmax:
-            if n1 < nmax:
-                lsrc1_system = sim1.system()
-                lsrc1_moves = sim1.moves()
-
-            if n2 < nmax:
-                lsrc2_system = sim2.system()
-                lsrc2_moves = sim2.moves()
-
-        else:
-            lsrc1_system = sim1.system()
-            lsrc1_moves = sim1.moves()
-            lsrc2_system = sim2.system()
-            lsrc2_moves = sim2.moves()
    
-        n1 = lsrc1_moves.nMoves()
-        n2 = lsrc2_moves.nMoves()
-
-        nmax = max(n1,n2)
-        nmin = min(n1,n2)
+        nmax = lsrc_moves.nMoves()
         
-        if nmin == nmax:
-            # we have successfully completed one iteration of each system
-            iteration = nmax
+        # we have successfully completed one iteration of each system
+        iteration = nmax
 
-            # perform analysis
+        # perform analysis
+        t.start()
+        print("Analysing iteration %d..." % iteration)
+        analyseLSRC(outdir.val,
+                    lsrc_system, iteration, bennetts_freenrgs, fep_freenrgs, ti_freenrgs, bound_freenrgs, free_freenrgs,
+                    res_freenrgs, bound_water_freenrgs, free_water_freenrgs)
+
+        lsrc_system.clearAllStatistics()
+
+        print("...analysis complete (took %d ms)" % t.elapsed())
+
+        # write a restart file for all of the free energies and component - this simplifies post-run analysis
+        if iteration % restart_frequency.val == 0 or iteration == nmoves.val:
             t.start()
-            print("Analysing iteration %d..." % iteration)
-            analyseLSRC("%s/stage1" % outdir.val,
-                        lsrc1_system, iteration, bennetts_freenrgs1, fep_freenrgs1, ti_freenrgs1, bound_freenrgs1, free_freenrgs1,
-                        res_freenrgs1, bound_water_freenrgs1, free_water_freenrgs1)
+            print("Saving the free energy analysis files from iteration %d..." % iteration)
+            tryBackup(freenrgs_file)
+            tryBackup(freenrg_components_file)
+            tryBackup(freenrg_parts_file)
 
-            lsrc1_system.clearAllStatistics()
+            Sire.Stream.save( [bennetts_freenrgs, fep_freenrgs, ti_freenrgs], freenrgs_file )
+            Sire.Stream.save( [bound_freenrgs, free_freenrgs], freenrg_parts_file )
+            Sire.Stream.save( [res_freenrgs, bound_water_freenrgs, free_water_freenrgs], freenrg_components_file )
 
-            analyseLSRC("%s/stage2" % outdir.val,
-                        lsrc2_system, iteration, bennetts_freenrgs2, fep_freenrgs2, ti_freenrgs2, bound_freenrgs2, free_freenrgs2,
-                        res_freenrgs2, bound_water_freenrgs2, free_water_freenrgs2)
-
-            lsrc2_system.clearAllStatistics()
-
-            print("...analysis complete (took %d ms)" % t.elapsed())
-
-            # write a restart file for all of the free energies and component - this simplifies post-run analysis
-            if iteration % restart_frequency.val == 0 or iteration == nmoves.val:
-                t.start()
-                print("Saving the free energy analysis files from iteration %d..." % iteration)
-                tryBackup(freenrgs_file1)
-                tryBackup(freenrg_components_file1)
-                tryBackup(freenrg_parts_file1)
-                tryBackup(freenrgs_file2)
-                tryBackup(freenrg_components_file2)
-                tryBackup(freenrg_parts_file2)
-
-                Sire.Stream.save( [bennetts_freenrgs1, fep_freenrgs1, ti_freenrgs1], freenrgs_file1 )
-                Sire.Stream.save( [bound_freenrgs1, free_freenrgs1], freenrg_parts_file1 )
-                Sire.Stream.save( [res_freenrgs1, bound_water_freenrgs1, free_water_freenrgs1], freenrg_components_file1 )
-
-                Sire.Stream.save( [bennetts_freenrgs2, fep_freenrgs2, ti_freenrgs2], freenrgs_file2 )
-                Sire.Stream.save( [bound_freenrgs2, free_freenrgs2], freenrg_parts_file2 )
-                Sire.Stream.save( [res_freenrgs2, bound_water_freenrgs2, free_water_freenrgs2], freenrg_components_file2 )
-          
-                print("...save complete (took %d ms)" % t.elapsed())
+            print("...save complete (took %d ms)" % t.elapsed())
 
             # write a restart file every N moves in case of crash or run out of time
-            if iteration % restart_frequency.val == 0 or iteration == nmoves.val:
-                t.start()
-                print("Saving the restart file from iteration %d..." % iteration)
+            t.start()
+            print("Saving the restart file from iteration %d..." % iteration)
 
-                # save the old file to a backup
-                tryBackup(restart_file1.val)
-                tryBackup(restart_file2.val)
+            # save the old file to a backup
+            tryBackup(restart_file.val)
+            Sire.Stream.save( (lsrc_system, lsrc_moves), restart_file.val )
 
-                Sire.Stream.save( (lsrc1_system, lsrc1_moves), restart_file1.val )
-                Sire.Stream.save( (lsrc1_system, lsrc2_moves), restart_file2.val )
-
-                print("...save complete (took %d ms)" % t.elapsed())
+            print("...save complete (took %d ms)" % t.elapsed())
 
 
     print("All iterations complete.")

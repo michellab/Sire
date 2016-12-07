@@ -52,11 +52,11 @@ void register_ResStructureEditor_class(){
 
     { //::SireMol::ResStructureEditor
         typedef bp::class_< SireMol::ResStructureEditor > ResStructureEditor_exposer_t;
-        ResStructureEditor_exposer_t ResStructureEditor_exposer = ResStructureEditor_exposer_t( "ResStructureEditor", bp::init< >() );
+        ResStructureEditor_exposer_t ResStructureEditor_exposer = ResStructureEditor_exposer_t( "ResStructureEditor", "This is the class used to edit a residues structure\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope ResStructureEditor_scope( ResStructureEditor_exposer );
-        ResStructureEditor_exposer.def( bp::init< SireMol::Residue const & >(( bp::arg("residue") )) );
-        ResStructureEditor_exposer.def( bp::init< SireMol::StructureEditor const &, SireMol::ResIdx >(( bp::arg("data"), bp::arg("residx") )) );
-        ResStructureEditor_exposer.def( bp::init< SireMol::ResStructureEditor const & >(( bp::arg("other") )) );
+        ResStructureEditor_exposer.def( bp::init< SireMol::Residue const & >(( bp::arg("residue") ), "Construct an editor to edit the structure of a copy of the\nresidue residue") );
+        ResStructureEditor_exposer.def( bp::init< SireMol::StructureEditor const &, SireMol::ResIdx >(( bp::arg("data"), bp::arg("residx") ), "Construct an editor to edit the residue at index residx in the\neditor whose data is in data\nThrow: SireError::invalid_index\n") );
+        ResStructureEditor_exposer.def( bp::init< SireMol::ResStructureEditor const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::ResStructureEditor::add
         
             typedef ::SireMol::AtomStructureEditor ( ::SireMol::ResStructureEditor::*add_function_type)( ::SireMol::AtomName const & ) ;
@@ -65,7 +65,8 @@ void register_ResStructureEditor_class(){
             ResStructureEditor_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("atomname") ) );
+                , ( bp::arg("atomname") )
+                , "Add a new atom called name to this residue - this returns\nan editor that can be used to further edit this atom" );
         
         }
         { //::SireMol::ResStructureEditor::add
@@ -76,7 +77,8 @@ void register_ResStructureEditor_class(){
             ResStructureEditor_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("atomnum") ) );
+                , ( bp::arg("atomnum") )
+                , "Add a new atom with the number number to this residue - this\nreturns an editor that can be used to further edit this atom" );
         
         }
         { //::SireMol::ResStructureEditor::atom
@@ -87,7 +89,8 @@ void register_ResStructureEditor_class(){
             ResStructureEditor_exposer.def( 
                 "atom"
                 , atom_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return an editor for the ith atom in this residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ResStructureEditor::atom
@@ -98,7 +101,8 @@ void register_ResStructureEditor_class(){
             ResStructureEditor_exposer.def( 
                 "atom"
                 , atom_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "Return an editor for the atom with ID == atomid in\nthis residue\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ResStructureEditor::chain
@@ -108,7 +112,8 @@ void register_ResStructureEditor_class(){
             
             ResStructureEditor_exposer.def( 
                 "chain"
-                , chain_function_value );
+                , chain_function_value
+                , "Return an editor for the chain that contains this residue" );
         
         }
         { //::SireMol::ResStructureEditor::commit
@@ -118,7 +123,8 @@ void register_ResStructureEditor_class(){
             
             ResStructureEditor_exposer.def( 
                 "commit"
-                , commit_function_value );
+                , commit_function_value
+                , "Commit the changes made by this editor and return the updated residue" );
         
         }
         { //::SireMol::ResStructureEditor::index
@@ -128,7 +134,8 @@ void register_ResStructureEditor_class(){
             
             ResStructureEditor_exposer.def( 
                 "index"
-                , index_function_value );
+                , index_function_value
+                , "Return the index of this residue in the molecule" );
         
         }
         { //::SireMol::ResStructureEditor::molecule
@@ -138,7 +145,8 @@ void register_ResStructureEditor_class(){
             
             ResStructureEditor_exposer.def( 
                 "molecule"
-                , molecule_function_value );
+                , molecule_function_value
+                , "Return an editor for the molecule that contains this residue" );
         
         }
         { //::SireMol::ResStructureEditor::nAtoms
@@ -148,7 +156,8 @@ void register_ResStructureEditor_class(){
             
             ResStructureEditor_exposer.def( 
                 "nAtoms"
-                , nAtoms_function_value );
+                , nAtoms_function_value
+                , "Return the number of atoms in this residue - this may be zero" );
         
         }
         { //::SireMol::ResStructureEditor::name
@@ -159,7 +168,8 @@ void register_ResStructureEditor_class(){
             ResStructureEditor_exposer.def( 
                 "name"
                 , name_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the name of this residue" );
         
         }
         { //::SireMol::ResStructureEditor::number
@@ -169,7 +179,8 @@ void register_ResStructureEditor_class(){
             
             ResStructureEditor_exposer.def( 
                 "number"
-                , number_function_value );
+                , number_function_value
+                , "Return the number of this residue" );
         
         }
         { //::SireMol::ResStructureEditor::operator=
@@ -181,7 +192,8 @@ void register_ResStructureEditor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("residue") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::ResStructureEditor::operator=
@@ -193,7 +205,8 @@ void register_ResStructureEditor_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireMol::ResStructureEditor::reindex
@@ -205,7 +218,8 @@ void register_ResStructureEditor_class(){
                 "reindex"
                 , reindex_function_value
                 , ( bp::arg("index") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Change the index of this residue to newidx. If this\nis larger than the number of residues in the molecule\nthen this residue is moved to the end" );
         
         }
         { //::SireMol::ResStructureEditor::remove
@@ -216,7 +230,8 @@ void register_ResStructureEditor_class(){
             ResStructureEditor_exposer.def( 
                 "remove"
                 , remove_function_value
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Completely remove this residue from the molecule - this returns\na MolStructureEditor that can be used to further edit the molecule" );
         
         }
         { //::SireMol::ResStructureEditor::remove
@@ -228,7 +243,8 @@ void register_ResStructureEditor_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("atomid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Remove all atoms with ID atomid from this residue\nThrow: SireMol::missing_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ResStructureEditor::remove
@@ -240,7 +256,8 @@ void register_ResStructureEditor_class(){
                 "remove"
                 , remove_function_value
                 , ( bp::arg("i") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Remove the ith atom from this residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ResStructureEditor::rename
@@ -252,7 +269,8 @@ void register_ResStructureEditor_class(){
                 "rename"
                 , rename_function_value
                 , ( bp::arg("name") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Rename this residue to newname" );
         
         }
         { //::SireMol::ResStructureEditor::renumber
@@ -264,7 +282,8 @@ void register_ResStructureEditor_class(){
                 "renumber"
                 , renumber_function_value
                 , ( bp::arg("number") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Renumber this residue to newnum" );
         
         }
         { //::SireMol::ResStructureEditor::reparent
@@ -276,7 +295,8 @@ void register_ResStructureEditor_class(){
                 "reparent"
                 , reparent_function_value
                 , ( bp::arg("chainid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Move this residue into the chain with ID chainid\nThrow: SireMol::missing_chain\nThrow: SireMol::duplicate_chain\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ResStructureEditor::select
@@ -287,7 +307,8 @@ void register_ResStructureEditor_class(){
             ResStructureEditor_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return an editor for the ith atom in this residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ResStructureEditor::select
@@ -298,7 +319,8 @@ void register_ResStructureEditor_class(){
             ResStructureEditor_exposer.def( 
                 "select"
                 , select_function_value
-                , ( bp::arg("atomid") ) );
+                , ( bp::arg("atomid") )
+                , "Return an editor for the atom with ID == atomid in\nthis residue\nThrow: SireMol::missing_atom\nThrow: SireMol::duplicate_atom\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ResStructureEditor::selectedAll
@@ -308,7 +330,8 @@ void register_ResStructureEditor_class(){
             
             ResStructureEditor_exposer.def( 
                 "selectedAll"
-                , selectedAll_function_value );
+                , selectedAll_function_value
+                , "Is this editor editing the entire molecule?" );
         
         }
         { //::SireMol::ResStructureEditor::toString
@@ -318,7 +341,8 @@ void register_ResStructureEditor_class(){
             
             ResStructureEditor_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this editor" );
         
         }
         { //::SireMol::ResStructureEditor::transfer
@@ -330,7 +354,8 @@ void register_ResStructureEditor_class(){
                 "transfer"
                 , transfer_function_value
                 , ( bp::arg("atomid"), bp::arg("resid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Transfer all atoms that match the ID atomid into the residue that\nmatches the ID resid\nThrow: SireMol::missing_atom\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ResStructureEditor::transfer
@@ -342,7 +367,8 @@ void register_ResStructureEditor_class(){
                 "transfer"
                 , transfer_function_value
                 , ( bp::arg("i"), bp::arg("resid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Transfer the ith atom from this residue into the residue that\nmatches the ID resid\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ResStructureEditor::transferAll
@@ -354,7 +380,8 @@ void register_ResStructureEditor_class(){
                 "transferAll"
                 , transferAll_function_value
                 , ( bp::arg("resid") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "Transfer all atoms from this residue into the residue with ID resid\nThrow: SireMol::missing_residue\nThrow: SireMol::duplicate_residue\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireMol::ResStructureEditor::typeName
@@ -364,7 +391,8 @@ void register_ResStructureEditor_class(){
             
             ResStructureEditor_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::ResStructureEditor::what
@@ -374,7 +402,8 @@ void register_ResStructureEditor_class(){
             
             ResStructureEditor_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         ResStructureEditor_exposer.staticmethod( "typeName" );

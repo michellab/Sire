@@ -51,12 +51,12 @@ void register_DofID_class(){
 
     { //::SireMove::DofID
         typedef bp::class_< SireMove::DofID > DofID_exposer_t;
-        DofID_exposer_t DofID_exposer = DofID_exposer_t( "DofID", bp::init< >() );
+        DofID_exposer_t DofID_exposer = DofID_exposer_t( "DofID", "This class implements an unique label of degrees of freedom based\non atomic indices. It is based on the IDQuad class from SireMMfouratomfunctions.h\n\nAuthor: Julien Michel\n", bp::init< >("Null constructor") );
         bp::scope DofID_scope( DofID_exposer );
-        DofID_exposer.def( bp::init< SireMol::AtomIdx const &, SireMol::AtomIdx const & >(( bp::arg("atom0"), bp::arg("atom1") )) );
-        DofID_exposer.def( bp::init< SireMol::AtomIdx const &, SireMol::AtomIdx const &, SireMol::AtomIdx const & >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") )) );
-        DofID_exposer.def( bp::init< SireMol::AtomIdx const &, SireMol::AtomIdx const &, SireMol::AtomIdx const &, SireMol::AtomIdx const & >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3") )) );
-        DofID_exposer.def( bp::init< SireMove::DofID const & >(( bp::arg("other") )) );
+        DofID_exposer.def( bp::init< SireMol::AtomIdx const &, SireMol::AtomIdx const & >(( bp::arg("atom0"), bp::arg("atom1") ), "Constructor for a set of 2 AtomIdxs") );
+        DofID_exposer.def( bp::init< SireMol::AtomIdx const &, SireMol::AtomIdx const &, SireMol::AtomIdx const & >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2") ), "Constructor for a set of 3 AtomIdxs") );
+        DofID_exposer.def( bp::init< SireMol::AtomIdx const &, SireMol::AtomIdx const &, SireMol::AtomIdx const &, SireMol::AtomIdx const & >(( bp::arg("atom0"), bp::arg("atom1"), bp::arg("atom2"), bp::arg("atom3") ), "Constructor for a set of 4 AtomIdxs") );
+        DofID_exposer.def( bp::init< SireMove::DofID const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::DofID::atom0
         
             typedef ::SireMol::AtomIdx ( ::SireMove::DofID::*atom0_function_type)(  ) const;
@@ -64,7 +64,8 @@ void register_DofID_class(){
             
             DofID_exposer.def( 
                 "atom0"
-                , atom0_function_value );
+                , atom0_function_value
+                , "" );
         
         }
         { //::SireMove::DofID::atom1
@@ -74,7 +75,8 @@ void register_DofID_class(){
             
             DofID_exposer.def( 
                 "atom1"
-                , atom1_function_value );
+                , atom1_function_value
+                , "" );
         
         }
         { //::SireMove::DofID::atom2
@@ -84,7 +86,8 @@ void register_DofID_class(){
             
             DofID_exposer.def( 
                 "atom2"
-                , atom2_function_value );
+                , atom2_function_value
+                , "" );
         
         }
         { //::SireMove::DofID::atom3
@@ -94,7 +97,8 @@ void register_DofID_class(){
             
             DofID_exposer.def( 
                 "atom3"
-                , atom3_function_value );
+                , atom3_function_value
+                , "" );
         
         }
         { //::SireMove::DofID::isAngle
@@ -104,7 +108,8 @@ void register_DofID_class(){
             
             DofID_exposer.def( 
                 "isAngle"
-                , isAngle_function_value );
+                , isAngle_function_value
+                , "" );
         
         }
         { //::SireMove::DofID::isBond
@@ -114,7 +119,8 @@ void register_DofID_class(){
             
             DofID_exposer.def( 
                 "isBond"
-                , isBond_function_value );
+                , isBond_function_value
+                , "" );
         
         }
         { //::SireMove::DofID::isDihedral
@@ -124,7 +130,8 @@ void register_DofID_class(){
             
             DofID_exposer.def( 
                 "isDihedral"
-                , isDihedral_function_value );
+                , isDihedral_function_value
+                , "" );
         
         }
         { //::SireMove::DofID::isNull
@@ -134,7 +141,8 @@ void register_DofID_class(){
             
             DofID_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         DofID_exposer.def( bp::self != bp::self );
@@ -147,7 +155,8 @@ void register_DofID_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         DofID_exposer.def( bp::self == bp::self );
@@ -158,7 +167,8 @@ void register_DofID_class(){
             
             DofID_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         DofID_exposer.staticmethod( "typeName" );

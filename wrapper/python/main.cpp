@@ -10,7 +10,7 @@
 #include "SireError/errors.h"
 #include "SireError/printerror.h"
 
-#include "SireBase/process.h"
+#include "SireBase/sire_process.h"
 #include "SireBase/getinstalldir.h"
 #include "SireBase/cpuid.h"
 
@@ -157,6 +157,8 @@ int main(int argc, char **argv)
         qputenv("PYTHONHOME", python_home.canonicalPath().toUtf8());
         */
 
+       
+
         //now look at the name of the executable. If there is a script with this
         //name in share/scripts then run that script
         QDir scripts_dir( QString("%1/scripts").arg(getShareDir()) );
@@ -164,7 +166,6 @@ int main(int argc, char **argv)
         if (scripts_dir.exists())
         {
             QFileInfo my_script( scripts_dir, QString("%1.py").arg( QString(argv[0]).split("/").last() ) );
-            qDebug() << my_script.absoluteFilePath();
 
             if (my_script.exists())
             {

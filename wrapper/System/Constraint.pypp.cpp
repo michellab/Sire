@@ -36,7 +36,7 @@ void register_Constraint_class(){
 
     { //::SireSystem::Constraint
         typedef bp::class_< SireSystem::Constraint, bp::bases< SireBase::Property >, boost::noncopyable > Constraint_exposer_t;
-        Constraint_exposer_t Constraint_exposer = Constraint_exposer_t( "Constraint", bp::no_init );
+        Constraint_exposer_t Constraint_exposer = Constraint_exposer_t( "Constraint", "This is the base class of all constraints. A constraint is an object\nthat is added to a System that tries to ensure that a condition is\nenforced. For example, a constraint could be used to change\nthe geometry of molecules with respect to lambda, or to change\nforcefield parameters with respect to alpha\n\nA Constraint class does its best to enforce a constraint - if it\ncant, then an exception is raised when a violation of the\nconstraint is detected (SireSystem::constraint_error)\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope Constraint_scope( Constraint_exposer );
         { //::SireSystem::Constraint::apply
         
@@ -46,7 +46,8 @@ void register_Constraint_class(){
             Constraint_exposer.def( 
                 "apply"
                 , apply_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "Apply this constraint to the passed system, returning\na new system in which the constraint is satisfied" );
         
         }
         { //::SireSystem::Constraint::assertSatisfied
@@ -57,7 +58,8 @@ void register_Constraint_class(){
             Constraint_exposer.def( 
                 "assertSatisfied"
                 , assertSatisfied_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "Assert that the constraint is satisfied in the passed system\nThrow: SireSystem::constraint_error\n" );
         
         }
         { //::SireSystem::Constraint::isSatisfied
@@ -68,7 +70,8 @@ void register_Constraint_class(){
             Constraint_exposer.def( 
                 "isSatisfied"
                 , isSatisfied_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "Return whether or not this constraint is satisfied for\nthe passed system" );
         
         }
         { //::SireSystem::Constraint::mayAffect
@@ -79,7 +82,8 @@ void register_Constraint_class(){
             Constraint_exposer.def( 
                 "mayAffect"
                 , mayAffect_function_value
-                , ( bp::arg("delta") ) );
+                , ( bp::arg("delta") )
+                , "Return whether or not this constraint may affect the passed delta" );
         
         }
         { //::SireSystem::Constraint::null
@@ -90,7 +94,8 @@ void register_Constraint_class(){
             Constraint_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "" );
         
         }
         { //::SireSystem::Constraint::typeName
@@ -100,7 +105,8 @@ void register_Constraint_class(){
             
             Constraint_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         Constraint_exposer.staticmethod( "null" );

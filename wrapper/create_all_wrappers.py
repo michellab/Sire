@@ -2,6 +2,8 @@
 import os
 import sys
 
+from multiprocessing import Pool
+
 dirs = [ "Analysis", \
          "Base", \
          "CAS", \
@@ -24,9 +26,11 @@ def create_wrappers(dir):
     os.system("%s ../AutoGenerate/create_wrappers.py" % sys.executable)
     os.chdir("..")
 
-for dir in dirs:
-    create_wrappers(dir)
+if __name__ == "__main__":
+    pool = Pool()
 
-#os.chdir("Qt")
-#os.system("%s create_qt_wrappers.py" % sys.executable)
-#os.chdir("..")
+    pool.map( create_wrappers, dirs )
+
+    #os.chdir("Qt")
+    #os.system("%s create_qt_wrappers.py" % sys.executable)
+    #os.chdir("..")

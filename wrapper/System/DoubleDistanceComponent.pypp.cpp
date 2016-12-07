@@ -34,11 +34,11 @@ void register_DoubleDistanceComponent_class(){
 
     { //::SireSystem::DoubleDistanceComponent
         typedef bp::class_< SireSystem::DoubleDistanceComponent, bp::bases< SireSystem::GeometryComponent, SireSystem::Constraint, SireBase::Property > > DoubleDistanceComponent_exposer_t;
-        DoubleDistanceComponent_exposer_t DoubleDistanceComponent_exposer = DoubleDistanceComponent_exposer_t( "DoubleDistanceComponent", bp::init< >() );
+        DoubleDistanceComponent_exposer_t DoubleDistanceComponent_exposer = DoubleDistanceComponent_exposer_t( "DoubleDistanceComponent", "This is a constraint that constrains a symbol to equal the\nvalue of an expression that involves a distance between\ntwo pairs of atoms\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope DoubleDistanceComponent_scope( DoubleDistanceComponent_exposer );
-        DoubleDistanceComponent_exposer.def( bp::init< SireCAS::Symbol const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("constrained_symbol"), bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("map")=SireBase::PropertyMap() )) );
-        DoubleDistanceComponent_exposer.def( bp::init< SireCAS::Symbol const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("constrained_symbol"), bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("geometry_expression"), bp::arg("map")=SireBase::PropertyMap() )) );
-        DoubleDistanceComponent_exposer.def( bp::init< SireSystem::DoubleDistanceComponent const & >(( bp::arg("other") )) );
+        DoubleDistanceComponent_exposer.def( bp::init< SireCAS::Symbol const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("constrained_symbol"), bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to set the value of constrained_symbol equal to the\ndistance between the two points point0 and point1") );
+        DoubleDistanceComponent_exposer.def( bp::init< SireCAS::Symbol const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireFF::PointRef const &, SireCAS::Expression const &, bp::optional< SireBase::PropertyMap const & > >(( bp::arg("constrained_symbol"), bp::arg("point0"), bp::arg("point1"), bp::arg("point2"), bp::arg("point3"), bp::arg("geometry_expression"), bp::arg("map")=SireBase::PropertyMap() ), "Construct to set the value of constrained_symbol equal to the\nexpression based on the distance between the two points\npoint0 and point1") );
+        DoubleDistanceComponent_exposer.def( bp::init< SireSystem::DoubleDistanceComponent const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireSystem::DoubleDistanceComponent::nPoints
         
             typedef int ( ::SireSystem::DoubleDistanceComponent::*nPoints_function_type)(  ) const;
@@ -46,7 +46,8 @@ void register_DoubleDistanceComponent_class(){
             
             DoubleDistanceComponent_exposer.def( 
                 "nPoints"
-                , nPoints_function_value );
+                , nPoints_function_value
+                , "Return the number of points (4)" );
         
         }
         DoubleDistanceComponent_exposer.def( bp::self != bp::self );
@@ -59,7 +60,8 @@ void register_DoubleDistanceComponent_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         DoubleDistanceComponent_exposer.def( bp::self == bp::self );
@@ -72,7 +74,8 @@ void register_DoubleDistanceComponent_class(){
                 "point"
                 , point_function_value
                 , ( bp::arg("i") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the ith point\nThrow: SireError::invalid_index\n" );
         
         }
         { //::SireSystem::DoubleDistanceComponent::point0
@@ -83,7 +86,8 @@ void register_DoubleDistanceComponent_class(){
             DoubleDistanceComponent_exposer.def( 
                 "point0"
                 , point0_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the first point between which the first distance is calculated" );
         
         }
         { //::SireSystem::DoubleDistanceComponent::point1
@@ -94,7 +98,8 @@ void register_DoubleDistanceComponent_class(){
             DoubleDistanceComponent_exposer.def( 
                 "point1"
                 , point1_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the second point between which the first distance is calculated" );
         
         }
         { //::SireSystem::DoubleDistanceComponent::point2
@@ -105,7 +110,8 @@ void register_DoubleDistanceComponent_class(){
             DoubleDistanceComponent_exposer.def( 
                 "point2"
                 , point2_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the first point between which the second distance is calculated" );
         
         }
         { //::SireSystem::DoubleDistanceComponent::point3
@@ -116,7 +122,8 @@ void register_DoubleDistanceComponent_class(){
             DoubleDistanceComponent_exposer.def( 
                 "point3"
                 , point3_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the second point between which the second distance is calculated" );
         
         }
         { //::SireSystem::DoubleDistanceComponent::r01
@@ -127,7 +134,8 @@ void register_DoubleDistanceComponent_class(){
             DoubleDistanceComponent_exposer.def( 
                 "r01"
                 , r01_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol that represents the distance between the\npoints .point0() and .point1() (r01)" );
         
         }
         { //::SireSystem::DoubleDistanceComponent::r23
@@ -138,7 +146,8 @@ void register_DoubleDistanceComponent_class(){
             DoubleDistanceComponent_exposer.def( 
                 "r23"
                 , r23_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the symbol that represents the distance between the\npoints .point2() and .point2() (r23)" );
         
         }
         { //::SireSystem::DoubleDistanceComponent::toString
@@ -148,7 +157,8 @@ void register_DoubleDistanceComponent_class(){
             
             DoubleDistanceComponent_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireSystem::DoubleDistanceComponent::typeName
@@ -158,7 +168,8 @@ void register_DoubleDistanceComponent_class(){
             
             DoubleDistanceComponent_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         DoubleDistanceComponent_exposer.staticmethod( "r01" );

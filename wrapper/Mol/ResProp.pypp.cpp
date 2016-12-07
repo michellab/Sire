@@ -19,7 +19,7 @@ void register_ResProp_class(){
 
     { //::SireMol::ResProp
         typedef bp::class_< SireMol::ResProp, bp::bases< SireMol::MolViewProperty, SireBase::Property >, boost::noncopyable > ResProp_exposer_t;
-        ResProp_exposer_t ResProp_exposer = ResProp_exposer_t( "ResProp", bp::no_init );
+        ResProp_exposer_t ResProp_exposer = ResProp_exposer_t( "ResProp", "Small class used to provide a common base for all ResProperty types", bp::no_init );
         bp::scope ResProp_scope( ResProp_exposer );
         { //::SireMol::ResProp::assertCanConvert
         
@@ -29,7 +29,8 @@ void register_ResProp_class(){
             ResProp_exposer.def( 
                 "assertCanConvert"
                 , assertCanConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::ResProp::assignFrom
@@ -40,7 +41,8 @@ void register_ResProp_class(){
             ResProp_exposer.def( 
                 "assignFrom"
                 , assignFrom_function_value
-                , ( bp::arg("values") ) );
+                , ( bp::arg("values") )
+                , "" );
         
         }
         { //::SireMol::ResProp::canConvert
@@ -51,7 +53,8 @@ void register_ResProp_class(){
             ResProp_exposer.def( 
                 "canConvert"
                 , canConvert_function_value
-                , ( bp::arg("value") ) );
+                , ( bp::arg("value") )
+                , "" );
         
         }
         { //::SireMol::ResProp::toVariant
@@ -61,7 +64,8 @@ void register_ResProp_class(){
             
             ResProp_exposer.def( 
                 "toVariant"
-                , toVariant_function_value );
+                , toVariant_function_value
+                , "" );
         
         }
         ResProp_exposer.def( "__rlshift__", &__rlshift__QDataStream< ::SireMol::ResProp >,

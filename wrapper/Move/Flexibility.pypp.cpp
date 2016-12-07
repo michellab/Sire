@@ -51,10 +51,10 @@ void register_Flexibility_class(){
 
     { //::SireMove::Flexibility
         typedef bp::class_< SireMove::Flexibility, bp::bases< SireMol::MoleculeProperty, SireMol::MolViewProperty, SireBase::Property > > Flexibility_exposer_t;
-        Flexibility_exposer_t Flexibility_exposer = Flexibility_exposer_t( "Flexibility", bp::init< >() );
+        Flexibility_exposer_t Flexibility_exposer = Flexibility_exposer_t( "Flexibility", "This class holds a the list of bonds, angles and dihedrals of a molecule that\ncan be moved by a MoverMove object, as well as the maximum rotations and\ntranslations that are applied to a molecule by a rigid body move object\n\nAuthor: Julien Michel\n", bp::init< >("Null Constructor") );
         bp::scope Flexibility_scope( Flexibility_exposer );
-        Flexibility_exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("molecule") )) );
-        Flexibility_exposer.def( bp::init< SireMove::Flexibility const & >(( bp::arg("other") )) );
+        Flexibility_exposer.def( bp::init< SireMol::MoleculeData const & >(( bp::arg("molecule") ), "Constructor for the passed molecule") );
+        Flexibility_exposer.def( bp::init< SireMove::Flexibility const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::Flexibility::add
         
             typedef void ( ::SireMove::Flexibility::*add_function_type)( ::SireMol::BondID const &,::SireUnits::Dimension::Length const & ) ;
@@ -63,7 +63,8 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("bond"), bp::arg("delta") ) );
+                , ( bp::arg("bond"), bp::arg("delta") )
+                , "Add bond with delta to this flexibility" );
         
         }
         { //::SireMove::Flexibility::add
@@ -74,7 +75,8 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("angle"), bp::arg("delta") ) );
+                , ( bp::arg("angle"), bp::arg("delta") )
+                , "Add angle with delta to this flexibility" );
         
         }
         { //::SireMove::Flexibility::add
@@ -85,7 +87,8 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("dihedral"), bp::arg("delta") ) );
+                , ( bp::arg("dihedral"), bp::arg("delta") )
+                , "Add dihedral with delta to this flexibility" );
         
         }
         { //::SireMove::Flexibility::contains
@@ -96,7 +99,8 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("bond") ) );
+                , ( bp::arg("bond") )
+                , "Check if bond is present in this flexibility" );
         
         }
         { //::SireMove::Flexibility::contains
@@ -107,7 +111,8 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("angle") ) );
+                , ( bp::arg("angle") )
+                , "Check if angle is present in this flexibility" );
         
         }
         { //::SireMove::Flexibility::contains
@@ -118,7 +123,8 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("dihedral") ) );
+                , ( bp::arg("dihedral") )
+                , "Check if angle is present in this flexibility" );
         
         }
         { //::SireMove::Flexibility::delta
@@ -129,7 +135,8 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "delta"
                 , delta_function_value
-                , ( bp::arg("bond") ) );
+                , ( bp::arg("bond") )
+                , "Return the delta value of bond in this flexibility" );
         
         }
         { //::SireMove::Flexibility::delta
@@ -140,7 +147,8 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "delta"
                 , delta_function_value
-                , ( bp::arg("angle") ) );
+                , ( bp::arg("angle") )
+                , "Return the delta value of angle in this flexibility" );
         
         }
         { //::SireMove::Flexibility::delta
@@ -151,7 +159,8 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "delta"
                 , delta_function_value
-                , ( bp::arg("dihedral") ) );
+                , ( bp::arg("dihedral") )
+                , "Return the delta value of angle in this flexibility" );
         
         }
         { //::SireMove::Flexibility::flexibleAngles
@@ -161,7 +170,8 @@ void register_Flexibility_class(){
             
             Flexibility_exposer.def( 
                 "flexibleAngles"
-                , flexibleAngles_function_value );
+                , flexibleAngles_function_value
+                , "Return the list of all flexible angles" );
         
         }
         { //::SireMove::Flexibility::flexibleBonds
@@ -171,7 +181,8 @@ void register_Flexibility_class(){
             
             Flexibility_exposer.def( 
                 "flexibleBonds"
-                , flexibleBonds_function_value );
+                , flexibleBonds_function_value
+                , "Return the list of all flexible bonds" );
         
         }
         { //::SireMove::Flexibility::flexibleDihedrals
@@ -181,7 +192,8 @@ void register_Flexibility_class(){
             
             Flexibility_exposer.def( 
                 "flexibleDihedrals"
-                , flexibleDihedrals_function_value );
+                , flexibleDihedrals_function_value
+                , "Return the list of all flexible dihedrals" );
         
         }
         { //::SireMove::Flexibility::info
@@ -192,7 +204,8 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "info"
                 , info_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the layout of the molecule whose flexibility is contained\nin this object" );
         
         }
         { //::SireMove::Flexibility::isCompatibleWith
@@ -203,7 +216,8 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "isCompatibleWith"
                 , isCompatibleWith_function_value
-                , ( bp::arg("molinfo") ) );
+                , ( bp::arg("molinfo") )
+                , "Return whether or not this flexibility is compatible with the molecule\nwhose info is in molinfo" );
         
         }
         { //::SireMove::Flexibility::maximumAngleVar
@@ -213,7 +227,8 @@ void register_Flexibility_class(){
             
             Flexibility_exposer.def( 
                 "maximumAngleVar"
-                , maximumAngleVar_function_value );
+                , maximumAngleVar_function_value
+                , "" );
         
         }
         { //::SireMove::Flexibility::maximumBondVar
@@ -223,7 +238,8 @@ void register_Flexibility_class(){
             
             Flexibility_exposer.def( 
                 "maximumBondVar"
-                , maximumBondVar_function_value );
+                , maximumBondVar_function_value
+                , "Return the maximum number of dofs that will be sampled in one move" );
         
         }
         { //::SireMove::Flexibility::maximumDihedralVar
@@ -233,7 +249,8 @@ void register_Flexibility_class(){
             
             Flexibility_exposer.def( 
                 "maximumDihedralVar"
-                , maximumDihedralVar_function_value );
+                , maximumDihedralVar_function_value
+                , "" );
         
         }
         Flexibility_exposer.def( bp::self != bp::self );
@@ -246,7 +263,8 @@ void register_Flexibility_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Flexibility_exposer.def( bp::self == bp::self );
@@ -258,7 +276,8 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("bond") ) );
+                , ( bp::arg("bond") )
+                , "Remove bond from this flexibility" );
         
         }
         { //::SireMove::Flexibility::remove
@@ -269,7 +288,8 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("angle") ) );
+                , ( bp::arg("angle") )
+                , "Remove angle from this flexibility" );
         
         }
         { //::SireMove::Flexibility::remove
@@ -280,7 +300,8 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("dihedral") ) );
+                , ( bp::arg("dihedral") )
+                , "Remove dihedral from this flexibility" );
         
         }
         { //::SireMove::Flexibility::rotation
@@ -290,7 +311,8 @@ void register_Flexibility_class(){
             
             Flexibility_exposer.def( 
                 "rotation"
-                , rotation_function_value );
+                , rotation_function_value
+                , "Return the maximum rotation of this flexibility" );
         
         }
         { //::SireMove::Flexibility::setDelta
@@ -301,7 +323,8 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "setDelta"
                 , setDelta_function_value
-                , ( bp::arg("bond"), bp::arg("delta") ) );
+                , ( bp::arg("bond"), bp::arg("delta") )
+                , "set the delta value of bond to delta" );
         
         }
         { //::SireMove::Flexibility::setDelta
@@ -312,7 +335,8 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "setDelta"
                 , setDelta_function_value
-                , ( bp::arg("angle"), bp::arg("delta") ) );
+                , ( bp::arg("angle"), bp::arg("delta") )
+                , "set the delta value of bond to delta" );
         
         }
         { //::SireMove::Flexibility::setDelta
@@ -323,7 +347,8 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "setDelta"
                 , setDelta_function_value
-                , ( bp::arg("dihedral"), bp::arg("delta") ) );
+                , ( bp::arg("dihedral"), bp::arg("delta") )
+                , "set the delta value of bond to delta" );
         
         }
         { //::SireMove::Flexibility::setMaximumAngleVar
@@ -334,7 +359,8 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "setMaximumAngleVar"
                 , setMaximumAngleVar_function_value
-                , ( bp::arg("maxvar") ) );
+                , ( bp::arg("maxvar") )
+                , "" );
         
         }
         { //::SireMove::Flexibility::setMaximumBondVar
@@ -345,7 +371,8 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "setMaximumBondVar"
                 , setMaximumBondVar_function_value
-                , ( bp::arg("maxvar") ) );
+                , ( bp::arg("maxvar") )
+                , "Set the maximum number of degrees of freedom that will be sampled in one move" );
         
         }
         { //::SireMove::Flexibility::setMaximumDihedralVar
@@ -356,7 +383,8 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "setMaximumDihedralVar"
                 , setMaximumDihedralVar_function_value
-                , ( bp::arg("maxvar") ) );
+                , ( bp::arg("maxvar") )
+                , "" );
         
         }
         { //::SireMove::Flexibility::setRotation
@@ -367,7 +395,8 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "setRotation"
                 , setRotation_function_value
-                , ( bp::arg("rotation") ) );
+                , ( bp::arg("rotation") )
+                , "Set the maximum rotation of this flexibility" );
         
         }
         { //::SireMove::Flexibility::setTranslation
@@ -378,7 +407,8 @@ void register_Flexibility_class(){
             Flexibility_exposer.def( 
                 "setTranslation"
                 , setTranslation_function_value
-                , ( bp::arg("translation") ) );
+                , ( bp::arg("translation") )
+                , "Set the maximum translation of this flexibility" );
         
         }
         { //::SireMove::Flexibility::toString
@@ -388,7 +418,8 @@ void register_Flexibility_class(){
             
             Flexibility_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of this flexibility" );
         
         }
         { //::SireMove::Flexibility::translation
@@ -398,7 +429,8 @@ void register_Flexibility_class(){
             
             Flexibility_exposer.def( 
                 "translation"
-                , translation_function_value );
+                , translation_function_value
+                , "Return the maximum translation of this flexibility" );
         
         }
         { //::SireMove::Flexibility::typeName
@@ -408,7 +440,8 @@ void register_Flexibility_class(){
             
             Flexibility_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         Flexibility_exposer.staticmethod( "typeName" );

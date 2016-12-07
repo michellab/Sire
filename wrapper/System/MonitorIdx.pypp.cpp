@@ -25,10 +25,10 @@ void register_MonitorIdx_class(){
 
     { //::SireSystem::MonitorIdx
         typedef bp::class_< SireSystem::MonitorIdx, bp::bases< SireSystem::MonitorID, SireID::ID, SireID::IndexBase > > MonitorIdx_exposer_t;
-        MonitorIdx_exposer_t MonitorIdx_exposer = MonitorIdx_exposer_t( "MonitorIdx", bp::init< >() );
+        MonitorIdx_exposer_t MonitorIdx_exposer = MonitorIdx_exposer_t( "MonitorIdx", "This is an ID object that is used to index system monitors (e.g. index\nin a list or array).\n\nAuthor: Christopher Woods\n", bp::init< >("") );
         bp::scope MonitorIdx_scope( MonitorIdx_exposer );
-        MonitorIdx_exposer.def( bp::init< qint32 >(( bp::arg("idx") )) );
-        MonitorIdx_exposer.def( bp::init< SireSystem::MonitorIdx const & >(( bp::arg("other") )) );
+        MonitorIdx_exposer.def( bp::init< qint32 >(( bp::arg("idx") ), "") );
+        MonitorIdx_exposer.def( bp::init< SireSystem::MonitorIdx const & >(( bp::arg("other") ), "") );
         { //::SireSystem::MonitorIdx::hash
         
             typedef ::uint ( ::SireSystem::MonitorIdx::*hash_function_type)(  ) const;
@@ -36,7 +36,8 @@ void register_MonitorIdx_class(){
             
             MonitorIdx_exposer.def( 
                 "hash"
-                , hash_function_value );
+                , hash_function_value
+                , "" );
         
         }
         { //::SireSystem::MonitorIdx::isNull
@@ -46,7 +47,8 @@ void register_MonitorIdx_class(){
             
             MonitorIdx_exposer.def( 
                 "isNull"
-                , isNull_function_value );
+                , isNull_function_value
+                , "" );
         
         }
         { //::SireSystem::MonitorIdx::map
@@ -57,7 +59,8 @@ void register_MonitorIdx_class(){
             MonitorIdx_exposer.def( 
                 "map"
                 , map_function_value
-                , ( bp::arg("monitors") ) );
+                , ( bp::arg("monitors") )
+                , "" );
         
         }
         { //::SireSystem::MonitorIdx::null
@@ -67,7 +70,8 @@ void register_MonitorIdx_class(){
             
             MonitorIdx_exposer.def( 
                 "null"
-                , null_function_value );
+                , null_function_value
+                , "" );
         
         }
         { //::SireSystem::MonitorIdx::operator=
@@ -79,7 +83,8 @@ void register_MonitorIdx_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::SireSystem::MonitorIdx::toString
@@ -89,7 +94,8 @@ void register_MonitorIdx_class(){
             
             MonitorIdx_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireSystem::MonitorIdx::typeName
@@ -99,7 +105,8 @@ void register_MonitorIdx_class(){
             
             MonitorIdx_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireSystem::MonitorIdx::what
@@ -109,7 +116,8 @@ void register_MonitorIdx_class(){
             
             MonitorIdx_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         MonitorIdx_exposer.staticmethod( "null" );

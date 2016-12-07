@@ -39,10 +39,10 @@ void register_UniformInserter_class(){
 
     { //::SireMove::UniformInserter
         typedef bp::class_< SireMove::UniformInserter, bp::bases< SireMove::MolInserter, SireBase::Property > > UniformInserter_exposer_t;
-        UniformInserter_exposer_t UniformInserter_exposer = UniformInserter_exposer_t( "UniformInserter", bp::init< >() );
+        UniformInserter_exposer_t UniformInserter_exposer = UniformInserter_exposer_t( "UniformInserter", "This inserter inserts a molecule to a random point in space, using\na random orientation, chosen uniformly at random\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope UniformInserter_scope( UniformInserter_exposer );
-        UniformInserter_exposer.def( bp::init< SireMol::MGIDsAndMaps const & >(( bp::arg("mgids") )) );
-        UniformInserter_exposer.def( bp::init< SireMove::UniformInserter const & >(( bp::arg("other") )) );
+        UniformInserter_exposer.def( bp::init< SireMol::MGIDsAndMaps const & >(( bp::arg("mgids") ), "Construct to insert molecules into the groups identified in mgids\n(using the associated property maps to find the properties needed\nfor those insertions)") );
+        UniformInserter_exposer.def( bp::init< SireMove::UniformInserter const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::UniformInserter::insert
         
             typedef double ( ::SireMove::UniformInserter::*insert_function_type)( ::SireMol::Molecule const &,::SireSystem::System &,::SireVol::Space const & ) ;
@@ -51,7 +51,8 @@ void register_UniformInserter_class(){
             UniformInserter_exposer.def( 
                 "insert"
                 , insert_function_value
-                , ( bp::arg("molecule"), bp::arg("system"), bp::arg("space") ) );
+                , ( bp::arg("molecule"), bp::arg("system"), bp::arg("space") )
+                , "This funciton inserts the molecule molecule into system at\na random orientation and position within the space space" );
         
         }
         { //::SireMove::UniformInserter::insert
@@ -62,7 +63,8 @@ void register_UniformInserter_class(){
             UniformInserter_exposer.def( 
                 "insert"
                 , insert_function_value
-                , ( bp::arg("molecule"), bp::arg("system"), bp::arg("space") ) );
+                , ( bp::arg("molecule"), bp::arg("system"), bp::arg("space") )
+                , "This funciton inserts the molecule molecule into system at\na random orientation and position within the space space" );
         
         }
         UniformInserter_exposer.def( bp::self != bp::self );
@@ -75,7 +77,8 @@ void register_UniformInserter_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         UniformInserter_exposer.def( bp::self == bp::self );
@@ -86,7 +89,8 @@ void register_UniformInserter_class(){
             
             UniformInserter_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         UniformInserter_exposer.staticmethod( "typeName" );

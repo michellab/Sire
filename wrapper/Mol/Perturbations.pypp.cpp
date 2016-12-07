@@ -37,11 +37,11 @@ void register_Perturbations_class(){
 
     { //::SireMol::Perturbations
         typedef bp::class_< SireMol::Perturbations, bp::bases< SireMol::Perturbation, SireBase::Property > > Perturbations_exposer_t;
-        Perturbations_exposer_t Perturbations_exposer = Perturbations_exposer_t( "Perturbations", bp::init< >() );
+        Perturbations_exposer_t Perturbations_exposer = Perturbations_exposer_t( "Perturbations", "This class holds a collection of perturbations that can\nbe applied to a molecule\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope Perturbations_scope( Perturbations_exposer );
-        Perturbations_exposer.def( bp::init< SireMol::Perturbation const & >(( bp::arg("perturbation") )) );
-        Perturbations_exposer.def( bp::init< QList< SireBase::PropPtr< SireMol::Perturbation > > const & >(( bp::arg("perturbations") )) );
-        Perturbations_exposer.def( bp::init< SireMol::Perturbations const & >(( bp::arg("other") )) );
+        Perturbations_exposer.def( bp::init< SireMol::Perturbation const & >(( bp::arg("perturbation") ), "Construct just to perform the passed perturbation") );
+        Perturbations_exposer.def( bp::init< QList< SireBase::PropPtr< SireMol::Perturbation > > const & >(( bp::arg("perturbations") ), "Construct to perform the passed perturbations") );
+        Perturbations_exposer.def( bp::init< SireMol::Perturbations const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMol::Perturbations::children
         
             typedef ::QList< SireBase::PropPtr< SireMol::Perturbation > > ( ::SireMol::Perturbations::*children_function_type)(  ) const;
@@ -49,7 +49,8 @@ void register_Perturbations_class(){
             
             Perturbations_exposer.def( 
                 "children"
-                , children_function_value );
+                , children_function_value
+                , "Return a list of all of the children of this perturbation\n(and the children of these children etc.)" );
         
         }
         Perturbations_exposer.def( bp::self != bp::self );
@@ -62,7 +63,8 @@ void register_Perturbations_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         Perturbations_exposer.def( bp::self == bp::self );
@@ -73,7 +75,8 @@ void register_Perturbations_class(){
             
             Perturbations_exposer.def( 
                 "perturbations"
-                , perturbations_function_value );
+                , perturbations_function_value
+                , "Return a list of all perturbations performed by this object" );
         
         }
         { //::SireMol::Perturbations::recreate
@@ -84,7 +87,8 @@ void register_Perturbations_class(){
             Perturbations_exposer.def( 
                 "recreate"
                 , recreate_function_value
-                , ( bp::arg("mapping_function") ) );
+                , ( bp::arg("mapping_function") )
+                , "Return a re-created version of this set of perturbations where all child\nperturbations are changed to use the passed mapping function" );
         
         }
         { //::SireMol::Perturbations::recreate
@@ -95,7 +99,8 @@ void register_Perturbations_class(){
             Perturbations_exposer.def( 
                 "recreate"
                 , recreate_function_value
-                , ( bp::arg("map") ) );
+                , ( bp::arg("map") )
+                , "Return a re-created version of this set of perturbations where all child\nperturbations are changed to use the passed property map" );
         
         }
         { //::SireMol::Perturbations::recreate
@@ -106,7 +111,8 @@ void register_Perturbations_class(){
             Perturbations_exposer.def( 
                 "recreate"
                 , recreate_function_value
-                , ( bp::arg("mapping_function"), bp::arg("map") ) );
+                , ( bp::arg("mapping_function"), bp::arg("map") )
+                , "Return a re-created version of this set of perturbations where all child\nperturbations are changed to use the passed mapping function and property map" );
         
         }
         { //::SireMol::Perturbations::requiredProperties
@@ -116,7 +122,8 @@ void register_Perturbations_class(){
             
             Perturbations_exposer.def( 
                 "requiredProperties"
-                , requiredProperties_function_value );
+                , requiredProperties_function_value
+                , "Return all of the properties that are needed or affected by\nthese perturbations" );
         
         }
         { //::SireMol::Perturbations::requiredSymbols
@@ -126,7 +133,8 @@ void register_Perturbations_class(){
             
             Perturbations_exposer.def( 
                 "requiredSymbols"
-                , requiredSymbols_function_value );
+                , requiredSymbols_function_value
+                , "Return all of the symbols that need to be input to these perturbations" );
         
         }
         { //::SireMol::Perturbations::substitute
@@ -137,7 +145,8 @@ void register_Perturbations_class(){
             Perturbations_exposer.def( 
                 "substitute"
                 , substitute_function_value
-                , ( bp::arg("identities") ) );
+                , ( bp::arg("identities") )
+                , "Substitute the identities in identities in all of the mapping functions\nused by this perturbation. This is useful if, for example, you want to\nswitch from using lambda to control the perturbation to using alpha, e.g.\n" );
         
         }
         { //::SireMol::Perturbations::substitute
@@ -148,7 +157,8 @@ void register_Perturbations_class(){
             Perturbations_exposer.def( 
                 "substitute"
                 , substitute_function_value
-                , ( bp::arg("old_symbol"), bp::arg("new_symbol") ) );
+                , ( bp::arg("old_symbol"), bp::arg("new_symbol") )
+                , "" );
         
         }
         { //::SireMol::Perturbations::toString
@@ -158,7 +168,8 @@ void register_Perturbations_class(){
             
             Perturbations_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMol::Perturbations::typeName
@@ -168,7 +179,8 @@ void register_Perturbations_class(){
             
             Perturbations_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::Perturbations::wouldChange
@@ -179,7 +191,8 @@ void register_Perturbations_class(){
             Perturbations_exposer.def( 
                 "wouldChange"
                 , wouldChange_function_value
-                , ( bp::arg("molecule"), bp::arg("values") ) );
+                , ( bp::arg("molecule"), bp::arg("values") )
+                , "Return whether or not these perturbations with the passed values would\nchange the molecule molecule" );
         
         }
         Perturbations_exposer.staticmethod( "typeName" );

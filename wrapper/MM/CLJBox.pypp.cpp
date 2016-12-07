@@ -45,11 +45,11 @@ void register_CLJBox_class(){
 
     { //::SireMM::CLJBox
         typedef bp::class_< SireMM::CLJBox > CLJBox_exposer_t;
-        CLJBox_exposer_t CLJBox_exposer = CLJBox_exposer_t( "CLJBox", bp::init< >() );
+        CLJBox_exposer_t CLJBox_exposer = CLJBox_exposer_t( "CLJBox", "This class represents a single box of CLJ atoms. The CLJ calculation\nworks by dividing space into a series of boxes and working out which\nboxes are close enough to be within cutoff distance\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope CLJBox_scope( CLJBox_exposer );
-        CLJBox_exposer.def( bp::init< SireMM::CLJBoxIndex const &, SireUnits::Dimension::Length >(( bp::arg("index"), bp::arg("box_length") )) );
-        CLJBox_exposer.def( bp::init< SireMM::CLJBoxIndex const &, SireUnits::Dimension::Length, SireMM::CLJAtoms const & >(( bp::arg("index"), bp::arg("box_length"), bp::arg("atoms") )) );
-        CLJBox_exposer.def( bp::init< SireMM::CLJBox const & >(( bp::arg("other") )) );
+        CLJBox_exposer.def( bp::init< SireMM::CLJBoxIndex const &, SireUnits::Dimension::Length >(( bp::arg("index"), bp::arg("box_length") ), "Construct an empty box at a specific location") );
+        CLJBox_exposer.def( bp::init< SireMM::CLJBoxIndex const &, SireUnits::Dimension::Length, SireMM::CLJAtoms const & >(( bp::arg("index"), bp::arg("box_length"), bp::arg("atoms") ), "Construct a box that holds the passed atoms") );
+        CLJBox_exposer.def( bp::init< SireMM::CLJBox const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMM::CLJBox::add
         
             typedef ::SireMM::CLJBoxIndex ( ::SireMM::CLJBox::*add_function_type)( ::SireMM::CLJAtom const & ) ;
@@ -58,7 +58,8 @@ void register_CLJBox_class(){
             CLJBox_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("atom") ) );
+                , ( bp::arg("atom") )
+                , "Add the passed atoms into this box. This returns the indicies\nof each added atom (in the same order as they were added)" );
         
         }
         { //::SireMM::CLJBox::add
@@ -69,7 +70,8 @@ void register_CLJBox_class(){
             CLJBox_exposer.def( 
                 "add"
                 , add_function_value
-                , ( bp::arg("atoms") ) );
+                , ( bp::arg("atoms") )
+                , "Add the passed atoms into this box. This returns the indicies\nof each added atom (in the same order as they were added)" );
         
         }
         { //::SireMM::CLJBox::at
@@ -80,7 +82,8 @@ void register_CLJBox_class(){
             CLJBox_exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return the ith CLJAtom - this uses the CLJAtoms index, i.e. includes\ndummy atoms and padding" );
         
         }
         { //::SireMM::CLJBox::atoms
@@ -91,7 +94,8 @@ void register_CLJBox_class(){
             CLJBox_exposer.def( 
                 "atoms"
                 , atoms_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::CLJBox::boxLength
@@ -101,7 +105,8 @@ void register_CLJBox_class(){
             
             CLJBox_exposer.def( 
                 "boxLength"
-                , boxLength_function_value );
+                , boxLength_function_value
+                , "" );
         
         }
         { //::SireMM::CLJBox::count
@@ -111,7 +116,8 @@ void register_CLJBox_class(){
             
             CLJBox_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the count of the box - this includes dummy atoms and padding" );
         
         }
         { //::SireMM::CLJBox::dimensions
@@ -121,7 +127,8 @@ void register_CLJBox_class(){
             
             CLJBox_exposer.def( 
                 "dimensions"
-                , dimensions_function_value );
+                , dimensions_function_value
+                , "Return the dimensions of this box" );
         
         }
         { //::SireMM::CLJBox::getitem
@@ -132,7 +139,8 @@ void register_CLJBox_class(){
             CLJBox_exposer.def( 
                 "getitem"
                 , getitem_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Return the ith CLJAtom - this uses the CLJAtoms index, i.e. includes\ndummy atoms and padding" );
         
         }
         { //::SireMM::CLJBox::index
@@ -143,7 +151,8 @@ void register_CLJBox_class(){
             CLJBox_exposer.def( 
                 "index"
                 , index_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMM::CLJBox::isEmpty
@@ -153,7 +162,8 @@ void register_CLJBox_class(){
             
             CLJBox_exposer.def( 
                 "isEmpty"
-                , isEmpty_function_value );
+                , isEmpty_function_value
+                , "" );
         
         }
         { //::SireMM::CLJBox::nAtoms
@@ -163,7 +173,8 @@ void register_CLJBox_class(){
             
             CLJBox_exposer.def( 
                 "nAtoms"
-                , nAtoms_function_value );
+                , nAtoms_function_value
+                , "Return the number of atoms in the box. This is equal to the\nnumber of actual atoms (i.e. not including padding or dummy atoms)" );
         
         }
         CLJBox_exposer.def( bp::self != bp::self );
@@ -177,7 +188,8 @@ void register_CLJBox_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         CLJBox_exposer.def( bp::self == bp::self );
@@ -189,7 +201,8 @@ void register_CLJBox_class(){
             CLJBox_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMM::CLJBox::remove
@@ -200,7 +213,8 @@ void register_CLJBox_class(){
             CLJBox_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("atom") ) );
+                , ( bp::arg("atom") )
+                , "Remove the atom at index atom from the box" );
         
         }
         { //::SireMM::CLJBox::remove
@@ -211,7 +225,8 @@ void register_CLJBox_class(){
             CLJBox_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("atoms") ) );
+                , ( bp::arg("atoms") )
+                , "Remove the atoms whose indicies are in atoms" );
         
         }
         { //::SireMM::CLJBox::remove
@@ -222,7 +237,8 @@ void register_CLJBox_class(){
             CLJBox_exposer.def( 
                 "remove"
                 , remove_function_value
-                , ( bp::arg("atoms") ) );
+                , ( bp::arg("atoms") )
+                , "Remove the atoms at the specified indicies" );
         
         }
         { //::SireMM::CLJBox::size
@@ -232,7 +248,8 @@ void register_CLJBox_class(){
             
             CLJBox_exposer.def( 
                 "size"
-                , size_function_value );
+                , size_function_value
+                , "Return the count of the box - this includes dummy atoms and padding" );
         
         }
         { //::SireMM::CLJBox::squeeze
@@ -242,7 +259,8 @@ void register_CLJBox_class(){
             
             CLJBox_exposer.def( 
                 "squeeze"
-                , squeeze_function_value );
+                , squeeze_function_value
+                , "Return a copy of this box where the CLJAtoms are squeezed" );
         
         }
         { //::SireMM::CLJBox::take
@@ -253,7 +271,8 @@ void register_CLJBox_class(){
             CLJBox_exposer.def( 
                 "take"
                 , take_function_value
-                , ( bp::arg("atom") ) );
+                , ( bp::arg("atom") )
+                , "Remove the atom at index atom, returning the atom removed" );
         
         }
         { //::SireMM::CLJBox::toString
@@ -263,7 +282,8 @@ void register_CLJBox_class(){
             
             CLJBox_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "" );
         
         }
         { //::SireMM::CLJBox::typeName
@@ -273,7 +293,8 @@ void register_CLJBox_class(){
             
             CLJBox_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMM::CLJBox::what
@@ -283,7 +304,8 @@ void register_CLJBox_class(){
             
             CLJBox_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         CLJBox_exposer.staticmethod( "typeName" );

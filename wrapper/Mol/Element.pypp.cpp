@@ -21,13 +21,13 @@ void register_Element_class(){
 
     { //::SireMol::Element
         typedef bp::class_< SireMol::Element > Element_exposer_t;
-        Element_exposer_t Element_exposer = Element_exposer_t( "Element", bp::init< >() );
+        Element_exposer_t Element_exposer = Element_exposer_t( "Element", "\nThis class is used to represent a chemical element. The implementation\nof this class is such that it is quick and easy to pass and copy\nElements, while the storage requirements are very low (just a single\npointer). The actual element data is held in a private ElementData\nclass that is declared in elementdb.cpp\n\nAuthor: Christopher Woods\n", bp::init< >("Construct a dummy element") );
         bp::scope Element_scope( Element_exposer );
-        Element_exposer.def( bp::init< QString >(( bp::arg("element") )) );
-        Element_exposer.def( bp::init< char const * >(( bp::arg("element") )) );
-        Element_exposer.def( bp::init< unsigned int >(( bp::arg("nprotons") )) );
-        Element_exposer.def( bp::init< int >(( bp::arg("nprotons") )) );
-        Element_exposer.def( bp::init< SireMol::Element const & >(( bp::arg("element") )) );
+        Element_exposer.def( bp::init< QString >(( bp::arg("element") ), "Construct an element from the string element. If the string\ncontains 1 or 2 characters, then it is interpreted as an IUPAC\nchemical symbol (e.g. C, or Al), else it is interpreted as\nthe name of the element in the local language of the application.\nIf the string cannot be interpreted then the element is set to\nthe dummy element. Note ca is Calcium, not C-alpha") );
+        Element_exposer.def( bp::init< char const * >(( bp::arg("element") ), "Overload so that const char is interpreted as a QString, and not\nas an unsigned int") );
+        Element_exposer.def( bp::init< unsigned int >(( bp::arg("nprotons") ), "Construct an element with proton number nprot. If there is no\nelement with this number of protons, or if the proton number is 0,\nthen a dummy elements is constructed") );
+        Element_exposer.def( bp::init< int >(( bp::arg("nprotons") ), "Overload to disambiguate the call to Element(int)") );
+        Element_exposer.def( bp::init< SireMol::Element const & >(( bp::arg("element") ), "Copy constructor. This is very quick as it involves copying\nonly a single pointer.") );
         { //::SireMol::Element::actinide
         
             typedef bool ( ::SireMol::Element::*actinide_function_type)(  ) const;
@@ -35,7 +35,8 @@ void register_Element_class(){
             
             Element_exposer.def( 
                 "actinide"
-                , actinide_function_value );
+                , actinide_function_value
+                , "Return whether or not this is an actinide" );
         
         }
         { //::SireMol::Element::alkaliEarthMetal
@@ -45,7 +46,8 @@ void register_Element_class(){
             
             Element_exposer.def( 
                 "alkaliEarthMetal"
-                , alkaliEarthMetal_function_value );
+                , alkaliEarthMetal_function_value
+                , "Return whether or not this is an alkali earth metal (group 2)" );
         
         }
         { //::SireMol::Element::alkaliMetal
@@ -55,7 +57,8 @@ void register_Element_class(){
             
             Element_exposer.def( 
                 "alkaliMetal"
-                , alkaliMetal_function_value );
+                , alkaliMetal_function_value
+                , "Return whether or not this is an alkali metal (group 1 or 2)" );
         
         }
         { //::SireMol::Element::biological
@@ -65,7 +68,8 @@ void register_Element_class(){
             
             Element_exposer.def( 
                 "biological"
-                , biological_function_value );
+                , biological_function_value
+                , "Return whether or not this is biological\n(in first three periods and not a noble gas)\n(this does preclude iron, potassium and calcium, which are\nrather biological... :-)" );
         
         }
         { //::SireMol::Element::biologicalElement
@@ -76,7 +80,8 @@ void register_Element_class(){
             Element_exposer.def( 
                 "biologicalElement"
                 , biologicalElement_function_value
-                , ( bp::arg("name") ) );
+                , ( bp::arg("name") )
+                , "Return a biological element that has been guessed from the passed name.\nNote that if no biological element was guessed, then the nearest\nnon-biological element match is used. A biological element is one that\nis in the first couple of rows (proton number < 18) and is not a noble gas." );
         
         }
         { //::SireMol::Element::blue
@@ -86,7 +91,8 @@ void register_Element_class(){
             
             Element_exposer.def( 
                 "blue"
-                , blue_function_value );
+                , blue_function_value
+                , "Return the blue colour components (0.0->1.0) for\nthe colour of this element" );
         
         }
         { //::SireMol::Element::bondOrderRadius
@@ -96,7 +102,8 @@ void register_Element_class(){
             
             Element_exposer.def( 
                 "bondOrderRadius"
-                , bondOrderRadius_function_value );
+                , bondOrderRadius_function_value
+                , "Return the bond order radius" );
         
         }
         { //::SireMol::Element::covalentRadius
@@ -106,7 +113,8 @@ void register_Element_class(){
             
             Element_exposer.def( 
                 "covalentRadius"
-                , covalentRadius_function_value );
+                , covalentRadius_function_value
+                , "Return the elements covalent radius" );
         
         }
         { //::SireMol::Element::elementWithMass
@@ -117,7 +125,8 @@ void register_Element_class(){
             Element_exposer.def( 
                 "elementWithMass"
                 , elementWithMass_function_value
-                , ( bp::arg("mass") ) );
+                , ( bp::arg("mass") )
+                , "Return an element which has the closest mass to mass (in atomic\nmass units, g mol-1)" );
         
         }
         { //::SireMol::Element::green
@@ -127,7 +136,8 @@ void register_Element_class(){
             
             Element_exposer.def( 
                 "green"
-                , green_function_value );
+                , green_function_value
+                , "Return the green colour components (0.0->1.0) for\nthe colour of this element" );
         
         }
         { //::SireMol::Element::group
@@ -137,7 +147,8 @@ void register_Element_class(){
             
             Element_exposer.def( 
                 "group"
-                , group_function_value );
+                , group_function_value
+                , "Return the group number of this element (IUPAC group, from 1-18)\n(lanthanides and actinides have a group number of 0 - this should\nnot be too big a problem as I would be surprised to hear of anyone\nusing this code to simulate them...)" );
         
         }
         { //::SireMol::Element::halogen
@@ -147,7 +158,8 @@ void register_Element_class(){
             
             Element_exposer.def( 
                 "halogen"
-                , halogen_function_value );
+                , halogen_function_value
+                , "Return whether or not this is a halogen" );
         
         }
         { //::SireMol::Element::lanthanide
@@ -157,7 +169,8 @@ void register_Element_class(){
             
             Element_exposer.def( 
                 "lanthanide"
-                , lanthanide_function_value );
+                , lanthanide_function_value
+                , "Return whether or not this is a lanthanide" );
         
         }
         { //::SireMol::Element::mass
@@ -167,7 +180,8 @@ void register_Element_class(){
             
             Element_exposer.def( 
                 "mass"
-                , mass_function_value );
+                , mass_function_value
+                , "Return the average mass of this element" );
         
         }
         { //::SireMol::Element::maxBonds
@@ -177,7 +191,8 @@ void register_Element_class(){
             
             Element_exposer.def( 
                 "maxBonds"
-                , maxBonds_function_value );
+                , maxBonds_function_value
+                , "Return the maximum number of simultaneous bonds that this\nelement can form" );
         
         }
         { //::SireMol::Element::nProtons
@@ -187,7 +202,8 @@ void register_Element_class(){
             
             Element_exposer.def( 
                 "nProtons"
-                , nProtons_function_value );
+                , nProtons_function_value
+                , "Return the number of protons in the element" );
         
         }
         { //::SireMol::Element::name
@@ -197,7 +213,8 @@ void register_Element_class(){
             
             Element_exposer.def( 
                 "name"
-                , name_function_value );
+                , name_function_value
+                , "Return the name of the element in the local language" );
         
         }
         { //::SireMol::Element::nobleGas
@@ -207,7 +224,8 @@ void register_Element_class(){
             
             Element_exposer.def( 
                 "nobleGas"
-                , nobleGas_function_value );
+                , nobleGas_function_value
+                , "Return whether or not this is a noble gas" );
         
         }
         Element_exposer.def( bp::self != bp::self );
@@ -222,7 +240,8 @@ void register_Element_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("element") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         Element_exposer.def( bp::self == bp::self );
@@ -235,7 +254,8 @@ void register_Element_class(){
             
             Element_exposer.def( 
                 "period"
-                , period_function_value );
+                , period_function_value
+                , "Return the period (the row number) of the element (IUPAC period, from 1-7)" );
         
         }
         { //::SireMol::Element::rareEarth
@@ -245,7 +265,8 @@ void register_Element_class(){
             
             Element_exposer.def( 
                 "rareEarth"
-                , rareEarth_function_value );
+                , rareEarth_function_value
+                , "Return whether or not this is a rare earth element (e.g. a lanthanide or actinide)" );
         
         }
         { //::SireMol::Element::red
@@ -255,7 +276,8 @@ void register_Element_class(){
             
             Element_exposer.def( 
                 "red"
-                , red_function_value );
+                , red_function_value
+                , "Return the red colour components (0.0->1.0) for\nthe colour of this element" );
         
         }
         { //::SireMol::Element::symbol
@@ -265,7 +287,8 @@ void register_Element_class(){
             
             Element_exposer.def( 
                 "symbol"
-                , symbol_function_value );
+                , symbol_function_value
+                , "Return the IUPAC symbol for the element" );
         
         }
         { //::SireMol::Element::toString
@@ -275,7 +298,8 @@ void register_Element_class(){
             
             Element_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation of the Element" );
         
         }
         { //::SireMol::Element::transitionMetal
@@ -285,7 +309,8 @@ void register_Element_class(){
             
             Element_exposer.def( 
                 "transitionMetal"
-                , transitionMetal_function_value );
+                , transitionMetal_function_value
+                , "Return whether or not this is a transition metal" );
         
         }
         { //::SireMol::Element::typeName
@@ -295,7 +320,8 @@ void register_Element_class(){
             
             Element_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMol::Element::vdwRadius
@@ -305,7 +331,8 @@ void register_Element_class(){
             
             Element_exposer.def( 
                 "vdwRadius"
-                , vdwRadius_function_value );
+                , vdwRadius_function_value
+                , "Return the van der waals radius" );
         
         }
         { //::SireMol::Element::what
@@ -315,7 +342,8 @@ void register_Element_class(){
             
             Element_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         Element_exposer.staticmethod( "biologicalElement" );

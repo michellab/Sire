@@ -34,13 +34,13 @@ void register_MonitorComponents_class(){
 
     { //::SireSystem::MonitorComponents
         typedef bp::class_< SireSystem::MonitorComponents, bp::bases< SireSystem::SystemMonitor, SireBase::Property > > MonitorComponents_exposer_t;
-        MonitorComponents_exposer_t MonitorComponents_exposer = MonitorComponents_exposer_t( "MonitorComponents", bp::init< >() );
+        MonitorComponents_exposer_t MonitorComponents_exposer = MonitorComponents_exposer_t( "MonitorComponents", "This is a monitor that can be used to monitor large numbers\nof components of the system (of even all components). This\nmonitor is similar to MonitorComponent, but is better suited\nto situations where you want to monitor everything (or\neverything except for a small number of components), where\nit would be messy to specify lots of individual MonitorComponent\nmonitors\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope MonitorComponents_scope( MonitorComponents_exposer );
-        MonitorComponents_exposer.def( bp::init< SireMaths::Accumulator const & >(( bp::arg("accumulator") )) );
-        MonitorComponents_exposer.def( bp::init< SireCAS::Symbol const &, bp::optional< SireMaths::Accumulator const & > >(( bp::arg("component"), bp::arg("accumulator")=SireMaths::Average() )) );
-        MonitorComponents_exposer.def( bp::init< SireCAS::Symbols const &, bp::optional< SireMaths::Accumulator const & > >(( bp::arg("components"), bp::arg("accumulator")=SireMaths::Average() )) );
-        MonitorComponents_exposer.def( bp::init< SireSystem::MonitorComponent const & >(( bp::arg("component_monitor") )) );
-        MonitorComponents_exposer.def( bp::init< SireSystem::MonitorComponents const & >(( bp::arg("other") )) );
+        MonitorComponents_exposer.def( bp::init< SireMaths::Accumulator const & >(( bp::arg("accumulator") ), "Construct a monitor to monitor all components using the\naccumulator accumulator") );
+        MonitorComponents_exposer.def( bp::init< SireCAS::Symbol const &, bp::optional< SireMaths::Accumulator const & > >(( bp::arg("component"), bp::arg("accumulator")=SireMaths::Average() ), "Construct a monitor to monitor the components components\nusing the accumulator accumulator") );
+        MonitorComponents_exposer.def( bp::init< SireCAS::Symbols const &, bp::optional< SireMaths::Accumulator const & > >(( bp::arg("components"), bp::arg("accumulator")=SireMaths::Average() ), "Construct a monitor to monitor the components components\nusing the accumulator accumulator") );
+        MonitorComponents_exposer.def( bp::init< SireSystem::MonitorComponent const & >(( bp::arg("component_monitor") ), "Construct a MonitorComponents that is the (near) equivalent of\nthe MonitorComponent component_monitor") );
+        MonitorComponents_exposer.def( bp::init< SireSystem::MonitorComponents const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireSystem::MonitorComponents::accumulator
         
             typedef ::SireMaths::Accumulator const & ( ::SireSystem::MonitorComponents::*accumulator_function_type)( ::SireCAS::Symbol const & ) const;
@@ -50,7 +50,8 @@ void register_MonitorComponents_class(){
                 "accumulator"
                 , accumulator_function_value
                 , ( bp::arg("component") )
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the accumulator for the component component\nThrow: SireCAS::missing_symbol\n" );
         
         }
         { //::SireSystem::MonitorComponents::accumulatorTemplate
@@ -61,7 +62,8 @@ void register_MonitorComponents_class(){
             MonitorComponents_exposer.def( 
                 "accumulatorTemplate"
                 , accumulatorTemplate_function_value
-                , bp::return_value_policy<bp::clone_const_reference>() );
+                , bp::return_value_policy<bp::clone_const_reference>()
+                , "Return the accumulator that is the template used for new accumulators\nthat are created when a new component is monitored" );
         
         }
         { //::SireSystem::MonitorComponents::clearStatistics
@@ -71,7 +73,8 @@ void register_MonitorComponents_class(){
             
             MonitorComponents_exposer.def( 
                 "clearStatistics"
-                , clearStatistics_function_value );
+                , clearStatistics_function_value
+                , "Completely clear the statistics" );
         
         }
         { //::SireSystem::MonitorComponents::excludeComponent
@@ -82,7 +85,8 @@ void register_MonitorComponents_class(){
             MonitorComponents_exposer.def( 
                 "excludeComponent"
                 , excludeComponent_function_value
-                , ( bp::arg("component") ) );
+                , ( bp::arg("component") )
+                , "Make sure that the components in components are not monitored" );
         
         }
         { //::SireSystem::MonitorComponents::excludeComponent
@@ -93,7 +97,8 @@ void register_MonitorComponents_class(){
             MonitorComponents_exposer.def( 
                 "excludeComponent"
                 , excludeComponent_function_value
-                , ( bp::arg("components") ) );
+                , ( bp::arg("components") )
+                , "Make sure that the components in components are not monitored" );
         
         }
         { //::SireSystem::MonitorComponents::excludeComponents
@@ -104,7 +109,8 @@ void register_MonitorComponents_class(){
             MonitorComponents_exposer.def( 
                 "excludeComponents"
                 , excludeComponents_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the components that will definitely not be monitored" );
         
         }
         { //::SireSystem::MonitorComponents::includeComponents
@@ -115,7 +121,8 @@ void register_MonitorComponents_class(){
             MonitorComponents_exposer.def( 
                 "includeComponents"
                 , includeComponents_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the components that will be monitored\n(if they exist, and not if they are excluded). If this\nis empty, then all components are monitored" );
         
         }
         { //::SireSystem::MonitorComponents::monitor
@@ -126,7 +133,8 @@ void register_MonitorComponents_class(){
             MonitorComponents_exposer.def( 
                 "monitor"
                 , monitor_function_value
-                , ( bp::arg("system") ) );
+                , ( bp::arg("system") )
+                , "Monitor the system system - this will only accumulate symbols\nthat represent existing components - this does nothing for components\nthat dont exist in the system" );
         
         }
         { //::SireSystem::MonitorComponents::monitoredComponents
@@ -136,7 +144,8 @@ void register_MonitorComponents_class(){
             
             MonitorComponents_exposer.def( 
                 "monitoredComponents"
-                , monitoredComponents_function_value );
+                , monitoredComponents_function_value
+                , "Return the set of symbols that have been monitored so far\n(so have valid accumulators)" );
         
         }
         MonitorComponents_exposer.def( bp::self != bp::self );
@@ -149,7 +158,8 @@ void register_MonitorComponents_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         MonitorComponents_exposer.def( bp::self == bp::self );
@@ -160,7 +170,8 @@ void register_MonitorComponents_class(){
             
             MonitorComponents_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         MonitorComponents_exposer.staticmethod( "typeName" );

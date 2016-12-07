@@ -45,10 +45,10 @@ void register_VelocitiesFromProperty_class(){
 
     { //::SireMove::VelocitiesFromProperty
         typedef bp::class_< SireMove::VelocitiesFromProperty, bp::bases< SireMove::VelocityGenerator, SireBase::Property > > VelocitiesFromProperty_exposer_t;
-        VelocitiesFromProperty_exposer_t VelocitiesFromProperty_exposer = VelocitiesFromProperty_exposer_t( "VelocitiesFromProperty", bp::init< >() );
+        VelocitiesFromProperty_exposer_t VelocitiesFromProperty_exposer = VelocitiesFromProperty_exposer_t( "VelocitiesFromProperty", "This is a velocity generator that extracts velocities from a\nspecified molecular property\n\nAuthor: Christopher Woods\n", bp::init< >("Constructor") );
         bp::scope VelocitiesFromProperty_scope( VelocitiesFromProperty_exposer );
-        VelocitiesFromProperty_exposer.def( bp::init< SireBase::PropertyName const & >(( bp::arg("property") )) );
-        VelocitiesFromProperty_exposer.def( bp::init< SireMove::VelocitiesFromProperty const & >(( bp::arg("other") )) );
+        VelocitiesFromProperty_exposer.def( bp::init< SireBase::PropertyName const & >(( bp::arg("property") ), "Construct to get the velocities from the property property") );
+        VelocitiesFromProperty_exposer.def( bp::init< SireMove::VelocitiesFromProperty const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMove::VelocitiesFromProperty::generate
         
             typedef ::SireMol::AtomVelocities ( ::SireMove::VelocitiesFromProperty::*generate_function_type)( ::SireMol::MoleculeView const &,::SireBase::PropertyMap const & ) const;
@@ -57,7 +57,8 @@ void register_VelocitiesFromProperty_class(){
             VelocitiesFromProperty_exposer.def( 
                 "generate"
                 , generate_function_value
-                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() ) );
+                , ( bp::arg("molview"), bp::arg("map")=SireBase::PropertyMap() )
+                , "Return the velocities from the specified property" );
         
         }
         VelocitiesFromProperty_exposer.def( bp::self != bp::self );
@@ -70,7 +71,8 @@ void register_VelocitiesFromProperty_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         VelocitiesFromProperty_exposer.def( bp::self == bp::self );
@@ -81,7 +83,8 @@ void register_VelocitiesFromProperty_class(){
             
             VelocitiesFromProperty_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         VelocitiesFromProperty_exposer.staticmethod( "typeName" );

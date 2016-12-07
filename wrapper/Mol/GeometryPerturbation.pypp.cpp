@@ -35,7 +35,7 @@ void register_GeometryPerturbation_class(){
 
     { //::SireMol::GeometryPerturbation
         typedef bp::class_< SireMol::GeometryPerturbation, bp::bases< SireMol::Perturbation, SireBase::Property >, boost::noncopyable > GeometryPerturbation_exposer_t;
-        GeometryPerturbation_exposer_t GeometryPerturbation_exposer = GeometryPerturbation_exposer_t( "GeometryPerturbation", bp::no_init );
+        GeometryPerturbation_exposer_t GeometryPerturbation_exposer = GeometryPerturbation_exposer_t( "GeometryPerturbation", "This is the base class of all geometry perturbations.\nThese are perturbations that affect the geometry\nof a molecule\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope GeometryPerturbation_scope( GeometryPerturbation_exposer );
         { //::SireMol::GeometryPerturbation::null
         
@@ -45,7 +45,8 @@ void register_GeometryPerturbation_class(){
             GeometryPerturbation_exposer.def( 
                 "null"
                 , null_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         { //::SireMol::GeometryPerturbation::requiredProperties
@@ -55,7 +56,8 @@ void register_GeometryPerturbation_class(){
             
             GeometryPerturbation_exposer.def( 
                 "requiredProperties"
-                , requiredProperties_function_value );
+                , requiredProperties_function_value
+                , "Return the properties required or affected by this perturbation" );
         
         }
         { //::SireMol::GeometryPerturbation::typeName
@@ -65,7 +67,8 @@ void register_GeometryPerturbation_class(){
             
             GeometryPerturbation_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         GeometryPerturbation_exposer.staticmethod( "null" );

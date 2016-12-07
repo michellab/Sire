@@ -135,7 +135,7 @@
 #include "sireglobal.h"
 /* End Mod */
 
-static void
+void
 SIRE_EXPORT
 md5_process(md5_state_t *pms, const md5_byte_t *data /*[64]*/)
 {

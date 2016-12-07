@@ -43,10 +43,10 @@ void register_VectorPoint_class(){
 
     { //::SireFF::VectorPoint
         typedef bp::class_< SireFF::VectorPoint, bp::bases< SireFF::Point, SireBase::Property > > VectorPoint_exposer_t;
-        VectorPoint_exposer_t VectorPoint_exposer = VectorPoint_exposer_t( "VectorPoint", bp::init< >() );
+        VectorPoint_exposer_t VectorPoint_exposer = VectorPoint_exposer_t( "VectorPoint", "This is a simple wrapper for a point in space", bp::init< >("Constructor") );
         bp::scope VectorPoint_scope( VectorPoint_exposer );
-        VectorPoint_exposer.def( bp::init< SireMaths::Vector const & >(( bp::arg("point") )) );
-        VectorPoint_exposer.def( bp::init< SireFF::VectorPoint const & >(( bp::arg("other") )) );
+        VectorPoint_exposer.def( bp::init< SireMaths::Vector const & >(( bp::arg("point") ), "Constructor for the specified point") );
+        VectorPoint_exposer.def( bp::init< SireFF::VectorPoint const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireFF::VectorPoint::addForce
         
             typedef bool ( ::SireFF::VectorPoint::*addForce_function_type)( ::SireFF::MolForceTable &,::SireMaths::Vector const & ) const;
@@ -55,7 +55,8 @@ void register_VectorPoint_class(){
             VectorPoint_exposer.def( 
                 "addForce"
                 , addForce_function_value
-                , ( bp::arg("molforces"), bp::arg("force") ) );
+                , ( bp::arg("molforces"), bp::arg("force") )
+                , "No forces on a point" );
         
         }
         { //::SireFF::VectorPoint::addForce
@@ -66,7 +67,8 @@ void register_VectorPoint_class(){
             VectorPoint_exposer.def( 
                 "addForce"
                 , addForce_function_value
-                , ( bp::arg("forces"), bp::arg("force") ) );
+                , ( bp::arg("forces"), bp::arg("force") )
+                , "No forces on a point" );
         
         }
         { //::SireFF::VectorPoint::contains
@@ -77,7 +79,8 @@ void register_VectorPoint_class(){
             VectorPoint_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molnum") ) );
+                , ( bp::arg("molnum") )
+                , "No molecules are needed to create this point" );
         
         }
         { //::SireFF::VectorPoint::contains
@@ -88,7 +91,8 @@ void register_VectorPoint_class(){
             VectorPoint_exposer.def( 
                 "contains"
                 , contains_function_value
-                , ( bp::arg("molid") ) );
+                , ( bp::arg("molid") )
+                , "No molecules are needed to create this point" );
         
         }
         { //::SireFF::VectorPoint::isExtraMoleculePoint
@@ -98,7 +102,8 @@ void register_VectorPoint_class(){
             
             VectorPoint_exposer.def( 
                 "isExtraMoleculePoint"
-                , isExtraMoleculePoint_function_value );
+                , isExtraMoleculePoint_function_value
+                , "Return whether or not this is an extramolecular point (it is independent\nof the coordinates of atoms in any molecule, i.e. it is just a point in space)" );
         
         }
         { //::SireFF::VectorPoint::isInterMoleculePoint
@@ -108,7 +113,8 @@ void register_VectorPoint_class(){
             
             VectorPoint_exposer.def( 
                 "isInterMoleculePoint"
-                , isInterMoleculePoint_function_value );
+                , isInterMoleculePoint_function_value
+                , "Return whether or not this is an intermolecular point (it depends on\ncoordinates of atoms from than one molecule)" );
         
         }
         { //::SireFF::VectorPoint::isIntraMoleculePoint
@@ -118,7 +124,8 @@ void register_VectorPoint_class(){
             
             VectorPoint_exposer.def( 
                 "isIntraMoleculePoint"
-                , isIntraMoleculePoint_function_value );
+                , isIntraMoleculePoint_function_value
+                , "Return whether this is an intramolecular point (it depends on coordinates\nof atoms in just one molecule)" );
         
         }
         { //::SireFF::VectorPoint::molecules
@@ -128,7 +135,8 @@ void register_VectorPoint_class(){
             
             VectorPoint_exposer.def( 
                 "molecules"
-                , molecules_function_value );
+                , molecules_function_value
+                , "No molecules are needed to create this point" );
         
         }
         { //::SireFF::VectorPoint::nMolecules
@@ -138,7 +146,8 @@ void register_VectorPoint_class(){
             
             VectorPoint_exposer.def( 
                 "nMolecules"
-                , nMolecules_function_value );
+                , nMolecules_function_value
+                , "No molecules are needed to create this point" );
         
         }
         VectorPoint_exposer.def( bp::self != bp::self );
@@ -151,7 +160,8 @@ void register_VectorPoint_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         VectorPoint_exposer.def( bp::self == bp::self );
@@ -162,7 +172,8 @@ void register_VectorPoint_class(){
             
             VectorPoint_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a string representation" );
         
         }
         { //::SireFF::VectorPoint::typeName
@@ -172,7 +183,8 @@ void register_VectorPoint_class(){
             
             VectorPoint_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireFF::VectorPoint::update
@@ -183,7 +195,8 @@ void register_VectorPoint_class(){
             VectorPoint_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("moldata") ) );
+                , ( bp::arg("moldata") )
+                , "A VectorPoint is not updatable" );
         
         }
         { //::SireFF::VectorPoint::update
@@ -194,7 +207,8 @@ void register_VectorPoint_class(){
             VectorPoint_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "A VectorPoint is not updatable" );
         
         }
         { //::SireFF::VectorPoint::update
@@ -205,7 +219,8 @@ void register_VectorPoint_class(){
             VectorPoint_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "A VectorPoint is not updatable" );
         
         }
         { //::SireFF::VectorPoint::update
@@ -216,7 +231,8 @@ void register_VectorPoint_class(){
             VectorPoint_exposer.def( 
                 "update"
                 , update_function_value
-                , ( bp::arg("molgroups") ) );
+                , ( bp::arg("molgroups") )
+                , "A VectorPoint is not updatable" );
         
         }
         { //::SireFF::VectorPoint::usesMoleculesIn
@@ -227,7 +243,8 @@ void register_VectorPoint_class(){
             VectorPoint_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("forcetable") ) );
+                , ( bp::arg("forcetable") )
+                , "No molecules are needed to create this point" );
         
         }
         { //::SireFF::VectorPoint::usesMoleculesIn
@@ -238,7 +255,8 @@ void register_VectorPoint_class(){
             VectorPoint_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "No molecules are needed to create this point" );
         
         }
         { //::SireFF::VectorPoint::usesMoleculesIn
@@ -249,7 +267,8 @@ void register_VectorPoint_class(){
             VectorPoint_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "No molecules are needed to create this point" );
         
         }
         { //::SireFF::VectorPoint::usesMoleculesIn
@@ -260,7 +279,8 @@ void register_VectorPoint_class(){
             VectorPoint_exposer.def( 
                 "usesMoleculesIn"
                 , usesMoleculesIn_function_value
-                , ( bp::arg("molgroups") ) );
+                , ( bp::arg("molgroups") )
+                , "No molecules are needed to create this point" );
         
         }
         { //::SireFF::VectorPoint::wouldUpdate
@@ -271,7 +291,8 @@ void register_VectorPoint_class(){
             VectorPoint_exposer.def( 
                 "wouldUpdate"
                 , wouldUpdate_function_value
-                , ( bp::arg("moldata") ) );
+                , ( bp::arg("moldata") )
+                , "A VectorPoint is not updatable" );
         
         }
         { //::SireFF::VectorPoint::wouldUpdate
@@ -282,7 +303,8 @@ void register_VectorPoint_class(){
             VectorPoint_exposer.def( 
                 "wouldUpdate"
                 , wouldUpdate_function_value
-                , ( bp::arg("molecules") ) );
+                , ( bp::arg("molecules") )
+                , "A VectorPoint is not updatable" );
         
         }
         { //::SireFF::VectorPoint::wouldUpdate
@@ -293,7 +315,8 @@ void register_VectorPoint_class(){
             VectorPoint_exposer.def( 
                 "wouldUpdate"
                 , wouldUpdate_function_value
-                , ( bp::arg("molgroup") ) );
+                , ( bp::arg("molgroup") )
+                , "A VectorPoint is not updatable" );
         
         }
         { //::SireFF::VectorPoint::wouldUpdate
@@ -304,7 +327,8 @@ void register_VectorPoint_class(){
             VectorPoint_exposer.def( 
                 "wouldUpdate"
                 , wouldUpdate_function_value
-                , ( bp::arg("molgroups") ) );
+                , ( bp::arg("molgroups") )
+                , "A VectorPoint is not updatable" );
         
         }
         VectorPoint_exposer.staticmethod( "typeName" );

@@ -33,10 +33,10 @@ void register_SS_GTOs_class(){
 
     { //::Squire::SS_GTOs
         typedef bp::class_< Squire::SS_GTOs > SS_GTOs_exposer_t;
-        SS_GTOs_exposer_t SS_GTOs_exposer = SS_GTOs_exposer_t( "SS_GTOs", bp::init< >() );
+        SS_GTOs_exposer_t SS_GTOs_exposer = SS_GTOs_exposer_t( "SS_GTOs", "This class is used to calculate integrals involving just SS pairs.\nIt is used to aid in the calculation of integrals.\n\nAuthor: Christopher Woods\n", bp::init< >("Null constructor") );
         bp::scope SS_GTOs_scope( SS_GTOs_exposer );
-        SS_GTOs_exposer.def( bp::init< QVector< Squire::S_GTO > const &, QVector< SireMaths::Vector > const & >(( bp::arg("s_gtos"), bp::arg("centers") )) );
-        SS_GTOs_exposer.def( bp::init< Squire::SS_GTOs const & >(( bp::arg("other") )) );
+        SS_GTOs_exposer.def( bp::init< QVector< Squire::S_GTO > const &, QVector< SireMaths::Vector > const & >(( bp::arg("s_gtos"), bp::arg("centers") ), "Construct for the passed set of S orbitals (on the associated\ncenters)\nThrow: SireError::incompatible_error\n") );
+        SS_GTOs_exposer.def( bp::init< Squire::SS_GTOs const & >(( bp::arg("other") ), "Copy constructor") );
         { //::Squire::SS_GTOs::coulomb_integral
         
             typedef ::SireMaths::TrigMatrix ( ::Squire::SS_GTOs::*coulomb_integral_function_type)( ::Squire::SS_GTOs const & ) const;
@@ -45,7 +45,8 @@ void register_SS_GTOs_class(){
             SS_GTOs_exposer.def( 
                 "coulomb_integral"
                 , coulomb_integral_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return the coulomb integral between this set of pair of\nS orbitals and the pairs other S orbitals in other" );
         
         }
         { //::Squire::SS_GTOs::exchange_integral
@@ -56,7 +57,8 @@ void register_SS_GTOs_class(){
             SS_GTOs_exposer.def( 
                 "exchange_integral"
                 , exchange_integral_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return the exchange integral between this set of pair of\norbitals and the other set of pairs in other" );
         
         }
         { //::Squire::SS_GTOs::kinetic_integral
@@ -66,7 +68,8 @@ void register_SS_GTOs_class(){
             
             SS_GTOs_exposer.def( 
                 "kinetic_integral"
-                , kinetic_integral_function_value );
+                , kinetic_integral_function_value
+                , "Return the kinetic energy integral between all pairs of S orbitals in this set" );
         
         }
         { //::Squire::SS_GTOs::operator=
@@ -78,7 +81,8 @@ void register_SS_GTOs_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_self< >() );
+                , bp::return_self< >()
+                , "" );
         
         }
         { //::Squire::SS_GTOs::overlap_integral
@@ -88,7 +92,8 @@ void register_SS_GTOs_class(){
             
             SS_GTOs_exposer.def( 
                 "overlap_integral"
-                , overlap_integral_function_value );
+                , overlap_integral_function_value
+                , "Return the overlap integrals between all pairs of S orbitals in this set" );
         
         }
         { //::Squire::SS_GTOs::potential_integral
@@ -99,7 +104,8 @@ void register_SS_GTOs_class(){
             SS_GTOs_exposer.def( 
                 "potential_integral"
                 , potential_integral_function_value
-                , ( bp::arg("C") ) );
+                , ( bp::arg("C") )
+                , "Return the potential energy integral of all pairs of S orbitals in this\nset with the array of point charges in C" );
         
         }
         { //::Squire::SS_GTOs::potential_integral
@@ -110,7 +116,8 @@ void register_SS_GTOs_class(){
             SS_GTOs_exposer.def( 
                 "potential_integral"
                 , potential_integral_function_value
-                , ( bp::arg("C"), bp::arg("m") ) );
+                , ( bp::arg("C"), bp::arg("m") )
+                , "Return the mth auxilliary potential energy integral of all pairs of S\norbitals in this set with the array of point charges in C" );
         
         }
         SS_GTOs_exposer.def( "__copy__", &__copy__);

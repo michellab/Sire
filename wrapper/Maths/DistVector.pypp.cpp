@@ -39,10 +39,10 @@ void register_DistVector_class(){
 
     { //::SireMaths::DistVector
         typedef bp::class_< SireMaths::DistVector > DistVector_exposer_t;
-        DistVector_exposer_t DistVector_exposer = DistVector_exposer_t( "DistVector", bp::init< >() );
+        DistVector_exposer_t DistVector_exposer = DistVector_exposer_t( "DistVector", "This is a vector that stores the vector as a unit vector giving\nthe direction, and a scalar giving the magnitude\n\nAuthor: Christopher Woods\n", bp::init< >("Create the zero vector") );
         bp::scope DistVector_scope( DistVector_exposer );
-        DistVector_exposer.def( bp::init< SireMaths::Vector const & >(( bp::arg("vec") )) );
-        DistVector_exposer.def( bp::init< SireMaths::DistVector const & >(( bp::arg("other") )) );
+        DistVector_exposer.def( bp::init< SireMaths::Vector const & >(( bp::arg("vec") ), "Create from the passed vector") );
+        DistVector_exposer.def( bp::init< SireMaths::DistVector const & >(( bp::arg("other") ), "Copy constructor") );
         { //::SireMaths::DistVector::angle
         
             typedef ::SireUnits::Dimension::Angle ( *angle_function_type )( ::SireMaths::DistVector const &,::SireMaths::DistVector const & );
@@ -51,7 +51,8 @@ void register_DistVector_class(){
             DistVector_exposer.def( 
                 "angle"
                 , angle_function_value
-                , ( bp::arg("v0"), bp::arg("v1") ) );
+                , ( bp::arg("v0"), bp::arg("v1") )
+                , "Return the angle between vectors v0 and v1 - this is the smallest\nangle, and will always lie between 0 and 180 degrees" );
         
         }
         { //::SireMaths::DistVector::angle
@@ -62,7 +63,8 @@ void register_DistVector_class(){
             DistVector_exposer.def( 
                 "angle"
                 , angle_function_value
-                , ( bp::arg("v0"), bp::arg("v1"), bp::arg("v2") ) );
+                , ( bp::arg("v0"), bp::arg("v1"), bp::arg("v2") )
+                , "Return the angle between v0-v1-v2 (treating the vectors as points in space)" );
         
         }
         { //::SireMaths::DistVector::at
@@ -73,7 +75,8 @@ void register_DistVector_class(){
             DistVector_exposer.def( 
                 "at"
                 , at_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "Access elements by index" );
         
         }
         { //::SireMaths::DistVector::b
@@ -83,7 +86,8 @@ void register_DistVector_class(){
             
             DistVector_exposer.def( 
                 "b"
-                , b_function_value );
+                , b_function_value
+                , "Return the components via rgb (limited between 0 and 1)" );
         
         }
         { //::SireMaths::DistVector::bearing
@@ -93,7 +97,8 @@ void register_DistVector_class(){
             
             DistVector_exposer.def( 
                 "bearing"
-                , bearing_function_value );
+                , bearing_function_value
+                , "Return the bearing of this vector against (0,1,0) (north) on the xy plane" );
         
         }
         { //::SireMaths::DistVector::bearingXY
@@ -104,7 +109,8 @@ void register_DistVector_class(){
             DistVector_exposer.def( 
                 "bearingXY"
                 , bearingXY_function_value
-                , ( bp::arg("v") ) );
+                , ( bp::arg("v") )
+                , "Return the bearing of this vector against v on the xy plane" );
         
         }
         { //::SireMaths::DistVector::bearingXZ
@@ -115,7 +121,8 @@ void register_DistVector_class(){
             DistVector_exposer.def( 
                 "bearingXZ"
                 , bearingXZ_function_value
-                , ( bp::arg("v") ) );
+                , ( bp::arg("v") )
+                , "Return the bearing of this vector against v on the xz plane" );
         
         }
         { //::SireMaths::DistVector::bearingYZ
@@ -126,7 +133,8 @@ void register_DistVector_class(){
             DistVector_exposer.def( 
                 "bearingYZ"
                 , bearingYZ_function_value
-                , ( bp::arg("v") ) );
+                , ( bp::arg("v") )
+                , "Return the bearing of this vector against v on the yz plane" );
         
         }
         { //::SireMaths::DistVector::count
@@ -136,7 +144,8 @@ void register_DistVector_class(){
             
             DistVector_exposer.def( 
                 "count"
-                , count_function_value );
+                , count_function_value
+                , "Return the size of the Vector (always 3 - unless you disagree\nwith me that we should be living in a 3-dimensional space)" );
         
         }
         { //::SireMaths::DistVector::cross
@@ -147,7 +156,8 @@ void register_DistVector_class(){
             DistVector_exposer.def( 
                 "cross"
                 , cross_function_value
-                , ( bp::arg("v0"), bp::arg("v1") ) );
+                , ( bp::arg("v0"), bp::arg("v1") )
+                , "Return the cross product of v0 and v1" );
         
         }
         { //::SireMaths::DistVector::dihedral
@@ -158,7 +168,8 @@ void register_DistVector_class(){
             DistVector_exposer.def( 
                 "dihedral"
                 , dihedral_function_value
-                , ( bp::arg("v0"), bp::arg("v1"), bp::arg("v2"), bp::arg("v3") ) );
+                , ( bp::arg("v0"), bp::arg("v1"), bp::arg("v2"), bp::arg("v3") )
+                , "Return the dihedral angle between v0-v1-v2-v3 (treating the vectors as points)" );
         
         }
         { //::SireMaths::DistVector::direction
@@ -169,7 +180,8 @@ void register_DistVector_class(){
             DistVector_exposer.def( 
                 "direction"
                 , direction_function_value
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "Return the direction of this vector" );
         
         }
         { //::SireMaths::DistVector::distance
@@ -180,7 +192,8 @@ void register_DistVector_class(){
             DistVector_exposer.def( 
                 "distance"
                 , distance_function_value
-                , ( bp::arg("v1"), bp::arg("v2") ) );
+                , ( bp::arg("v1"), bp::arg("v2") )
+                , "Return the distance between two vectors" );
         
         }
         { //::SireMaths::DistVector::distance2
@@ -191,7 +204,8 @@ void register_DistVector_class(){
             DistVector_exposer.def( 
                 "distance2"
                 , distance2_function_value
-                , ( bp::arg("v1"), bp::arg("v2") ) );
+                , ( bp::arg("v1"), bp::arg("v2") )
+                , "Return the distance squared between two vectors" );
         
         }
         { //::SireMaths::DistVector::dot
@@ -202,7 +216,8 @@ void register_DistVector_class(){
             DistVector_exposer.def( 
                 "dot"
                 , dot_function_value
-                , ( bp::arg("v0"), bp::arg("v1") ) );
+                , ( bp::arg("v0"), bp::arg("v1") )
+                , "Return the dot product of v0 and v1" );
         
         }
         { //::SireMaths::DistVector::fromString
@@ -213,7 +228,8 @@ void register_DistVector_class(){
             DistVector_exposer.def( 
                 "fromString"
                 , fromString_function_value
-                , ( bp::arg("str") ) );
+                , ( bp::arg("str") )
+                , "Construct a DistVector from the QString representation returned by toString()\nThrow: SireError::invalid_arg\n" );
         
         }
         { //::SireMaths::DistVector::g
@@ -223,7 +239,8 @@ void register_DistVector_class(){
             
             DistVector_exposer.def( 
                 "g"
-                , g_function_value );
+                , g_function_value
+                , "Return the components via rgb (limited between 0 and 1)" );
         
         }
         { //::SireMaths::DistVector::generate
@@ -234,7 +251,8 @@ void register_DistVector_class(){
             DistVector_exposer.def( 
                 "generate"
                 , generate_function_value
-                , ( bp::arg("dst"), bp::arg("v1"), bp::arg("ang"), bp::arg("v2"), bp::arg("dih"), bp::arg("v3") ) );
+                , ( bp::arg("dst"), bp::arg("v1"), bp::arg("ang"), bp::arg("v2"), bp::arg("dih"), bp::arg("v3") )
+                , "Generate a vector, v0, that has distance dst v0-v1, angle ang v0-v1-v2,\nand dihedral dih v0-v1-v2-v3" );
         
         }
         { //::SireMaths::DistVector::getitem
@@ -245,7 +263,8 @@ void register_DistVector_class(){
             DistVector_exposer.def( 
                 "getitem"
                 , getitem_function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMaths::DistVector::invDistance
@@ -256,7 +275,8 @@ void register_DistVector_class(){
             DistVector_exposer.def( 
                 "invDistance"
                 , invDistance_function_value
-                , ( bp::arg("v1"), bp::arg("v2") ) );
+                , ( bp::arg("v1"), bp::arg("v2") )
+                , "Return the 1  distance between two vectors" );
         
         }
         { //::SireMaths::DistVector::invDistance2
@@ -267,7 +287,8 @@ void register_DistVector_class(){
             DistVector_exposer.def( 
                 "invDistance2"
                 , invDistance2_function_value
-                , ( bp::arg("v1"), bp::arg("v2") ) );
+                , ( bp::arg("v1"), bp::arg("v2") )
+                , "Return 1  distance2 between two vectors" );
         
         }
         { //::SireMaths::DistVector::invLength
@@ -277,7 +298,8 @@ void register_DistVector_class(){
             
             DistVector_exposer.def( 
                 "invLength"
-                , invLength_function_value );
+                , invLength_function_value
+                , "Return the inverse of the length of the vector" );
         
         }
         { //::SireMaths::DistVector::invLength2
@@ -287,7 +309,8 @@ void register_DistVector_class(){
             
             DistVector_exposer.def( 
                 "invLength2"
-                , invLength2_function_value );
+                , invLength2_function_value
+                , "Return the inverse length squared" );
         
         }
         { //::SireMaths::DistVector::isZero
@@ -297,7 +320,8 @@ void register_DistVector_class(){
             
             DistVector_exposer.def( 
                 "isZero"
-                , isZero_function_value );
+                , isZero_function_value
+                , "Return whether or not this is a zero length vector" );
         
         }
         { //::SireMaths::DistVector::length
@@ -307,7 +331,8 @@ void register_DistVector_class(){
             
             DistVector_exposer.def( 
                 "length"
-                , length_function_value );
+                , length_function_value
+                , "Return the length of the vector" );
         
         }
         { //::SireMaths::DistVector::length2
@@ -317,7 +342,8 @@ void register_DistVector_class(){
             
             DistVector_exposer.def( 
                 "length2"
-                , length2_function_value );
+                , length2_function_value
+                , "Return the length^2 of the vector" );
         
         }
         { //::SireMaths::DistVector::magnitude
@@ -327,7 +353,8 @@ void register_DistVector_class(){
             
             DistVector_exposer.def( 
                 "magnitude"
-                , magnitude_function_value );
+                , magnitude_function_value
+                , "Return the magnitude of this vector" );
         
         }
         { //::SireMaths::DistVector::manhattanLength
@@ -337,7 +364,8 @@ void register_DistVector_class(){
             
             DistVector_exposer.def( 
                 "manhattanLength"
-                , manhattanLength_function_value );
+                , manhattanLength_function_value
+                , "Return the manhattan length of the vector" );
         
         }
         { //::SireMaths::DistVector::max
@@ -348,7 +376,8 @@ void register_DistVector_class(){
             DistVector_exposer.def( 
                 "max"
                 , max_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return a vector that has the maximum xyz components out of this\nand other" );
         
         }
         { //::SireMaths::DistVector::metricTensor
@@ -358,7 +387,8 @@ void register_DistVector_class(){
             
             DistVector_exposer.def( 
                 "metricTensor"
-                , metricTensor_function_value );
+                , metricTensor_function_value
+                , "Return the metric tensor of a vector, i.e.\n| yy + zz,    -xy    -xz      |\n|    -yx,   xx + zz  -yz      |\n|    -zx       -zy    xx + yy |\n" );
         
         }
         { //::SireMaths::DistVector::min
@@ -369,7 +399,8 @@ void register_DistVector_class(){
             DistVector_exposer.def( 
                 "min"
                 , min_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Return a vector that has the minimum components" );
         
         }
         { //::SireMaths::DistVector::normalise
@@ -379,7 +410,8 @@ void register_DistVector_class(){
             
             DistVector_exposer.def( 
                 "normalise"
-                , normalise_function_value );
+                , normalise_function_value
+                , "Return a normalised form of the vector" );
         
         }
         DistVector_exposer.def( bp::self != bp::self );
@@ -397,7 +429,8 @@ void register_DistVector_class(){
                 "assign"
                 , assign_function_value
                 , ( bp::arg("other") )
-                , bp::return_value_policy< bp::copy_const_reference >() );
+                , bp::return_value_policy< bp::copy_const_reference >()
+                , "" );
         
         }
         DistVector_exposer.def( bp::self == bp::self );
@@ -409,7 +442,8 @@ void register_DistVector_class(){
             DistVector_exposer.def( 
                 "__getitem__"
                 , __getitem___function_value
-                , ( bp::arg("i") ) );
+                , ( bp::arg("i") )
+                , "" );
         
         }
         { //::SireMaths::DistVector::r
@@ -419,7 +453,8 @@ void register_DistVector_class(){
             
             DistVector_exposer.def( 
                 "r"
-                , r_function_value );
+                , r_function_value
+                , "Return the components via rgb (limited between 0 and 1)" );
         
         }
         { //::SireMaths::DistVector::setMax
@@ -430,7 +465,8 @@ void register_DistVector_class(){
             DistVector_exposer.def( 
                 "setMax"
                 , setMax_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Set this Vector so that it has the maximum xyz components out of\nthis and other (e.g. this->x = max(this->x(),other.x() etc.)" );
         
         }
         { //::SireMaths::DistVector::setMin
@@ -441,7 +477,8 @@ void register_DistVector_class(){
             DistVector_exposer.def( 
                 "setMin"
                 , setMin_function_value
-                , ( bp::arg("other") ) );
+                , ( bp::arg("other") )
+                , "Set this Vector so that it has the minimum xyz components" );
         
         }
         { //::SireMaths::DistVector::toString
@@ -451,7 +488,8 @@ void register_DistVector_class(){
             
             DistVector_exposer.def( 
                 "toString"
-                , toString_function_value );
+                , toString_function_value
+                , "Return a QString representation of the vector" );
         
         }
         { //::SireMaths::DistVector::typeName
@@ -461,7 +499,8 @@ void register_DistVector_class(){
             
             DistVector_exposer.def( 
                 "typeName"
-                , typeName_function_value );
+                , typeName_function_value
+                , "" );
         
         }
         { //::SireMaths::DistVector::what
@@ -471,7 +510,8 @@ void register_DistVector_class(){
             
             DistVector_exposer.def( 
                 "what"
-                , what_function_value );
+                , what_function_value
+                , "" );
         
         }
         { //::SireMaths::DistVector::x
@@ -481,7 +521,8 @@ void register_DistVector_class(){
             
             DistVector_exposer.def( 
                 "x"
-                , x_function_value );
+                , x_function_value
+                , "Return the x component of the vector" );
         
         }
         { //::SireMaths::DistVector::y
@@ -491,7 +532,8 @@ void register_DistVector_class(){
             
             DistVector_exposer.def( 
                 "y"
-                , y_function_value );
+                , y_function_value
+                , "Return the y component of the vector" );
         
         }
         { //::SireMaths::DistVector::z
@@ -501,7 +543,8 @@ void register_DistVector_class(){
             
             DistVector_exposer.def( 
                 "z"
-                , z_function_value );
+                , z_function_value
+                , "Return the z component of the vector" );
         
         }
         DistVector_exposer.staticmethod( "angle" );

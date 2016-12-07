@@ -5,8 +5,15 @@
 
 unset(TBB_LIBRARY CACHE)
 unset(TBB_MALLOC_LIBRARY CACHE)
-find_library( TBB_LIBRARY "tbb" PATHS "${BUNDLE_STAGEDIR}/lib" NO_DEFAULT_PATH )
-find_library( TBB_MALLOC_LIBRARY "tbbmalloc" PATHS "${BUNDLE_STAGEDIR}/lib" NO_DEFAULT_PATH )
+
+if ( MSYS )
+  message( STATUS "Looking for MSYS version of TBB..." )
+  find_library( TBB_LIBRARY "tbb" PATHS "/msys64/lib" )
+  find_library( TBB_MALLOC_LIBRARY "tbbmalloc" PATHS "/msys64/lib" )
+else()
+  find_library( TBB_LIBRARY "tbb" PATHS "${BUNDLE_STAGEDIR}/lib" NO_DEFAULT_PATH )
+  find_library( TBB_MALLOC_LIBRARY "tbbmalloc" PATHS "${BUNDLE_STAGEDIR}/lib" NO_DEFAULT_PATH )
+endif()
 
 if ( TBB_LIBRARY AND TBB_MALLOC_LIBRARY )
   message( STATUS "Have already compiled a bundled version of TBB" )
@@ -24,6 +31,7 @@ else()
       execute_process(
           COMMAND ${CMAKE_COMMAND} -E tar xzf ${TBB_ZIPFILE}
           WORKING_DIRECTORY ${BUNDLE_BUILDDIR}
+          OUTPUT_QUIET ERROR_QUIET
       )
     endif()
 
@@ -64,12 +72,14 @@ else()
     message( STATUS "Patience... Compiling TBB from source...")
     execute_process( COMMAND ${CMAKE_MAKE_PROGRAM} -j ${NCORES} ${TBB_OPTIONS} tbb
                      WORKING_DIRECTORY ${TBB_BUILD_DIR}
+                     OUTPUT_QUIET ERROR_QUIET
                    )
     message( STATUS "...complete" )
 
     message( STATUS "Patience... Compiling TBB malloc from source...")
     execute_process( COMMAND ${CMAKE_MAKE_PROGRAM} -j ${NCORES} ${TBB_OPTIONS} tbbmalloc
                      WORKING_DIRECTORY ${TBB_BUILD_DIR}
+                     OUTPUT_QUIET ERROR_QUIET
                     )
     message( STATUS "...complete" )
 
