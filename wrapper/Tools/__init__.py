@@ -39,16 +39,7 @@ def readParams( filename ):
             if value.find("#") != -1:
                 value = value[0:value.find("#")].lstrip().rstrip()
 
-            # now see if we have to turn the value from a string into a python object
-            try:
-                exec("testval = %s" % value, globals())
-                value = testval
-            except:
-                pass
-
             params[key] = value
-
-    print("\n", end=' ')
 
     return params
 
@@ -127,13 +118,54 @@ def resolveParameters(func):
        is called, and pops them off after"""
     def inner(params = {}):
 
+        broken_parameters = []
+
         print("Using parameters:")
         keys = list(params.keys())
         keys.sort()
         print("===============")
         for key in keys:
+            value = params[key].lstrip().rstrip()
+
+            # execute the parameter, so that it is parsed
+            try:
+                exec("_pvt_val = %s" % value, globals())
+            except:
+                _pvt_words = value.split()
+
+                _pvt_ok = False
+
+                if len(_pvt_words) == 2:
+                    # try the form N * unit
+                    try:
+                        exec("_pvt_val = %s * %s" % (_pvt_words[0],_pvt_words[1]), globals())
+                        _pvt_ok = True
+                    except:
+                        pass
+                else:
+                    # maybe this is a string?
+                    try:
+                        exec("_pvt_val = \"%s\"" % value, globals())
+                        _pvt_ok = True
+                    except:
+                        pass
+
+                if not _pvt_ok:
+                    broken_parameters.append( (key, value) )
+
+            params[key] = _pvt_val
             print("%s == %s" % (key,params[key]))
-        print("===============\n")
+
+        print("===============")
+
+        if len(broken_parameters) > 0:
+            print("\n!!!FATAL!!!\nCould not understand the following parameters!\n")
+
+            for p in broken_parameters:
+                print("%s = %s" % p)
+
+            print("\nCANNOT CONTINUE - PROGRAM EXITING")
+            sys.exit(-1)
 
         Parameter.push(params)
         try:
