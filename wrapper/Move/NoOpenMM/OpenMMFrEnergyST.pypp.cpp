@@ -63,8 +63,6 @@ namespace bp = boost::python;
 
 #include "SireVol/periodicbox.h"
 
-#include "dcd_writer.h"
-
 #include "ensemble.h"
 
 #include "openmmfrenergyst.h"
