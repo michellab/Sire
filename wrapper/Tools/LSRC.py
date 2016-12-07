@@ -2099,17 +2099,12 @@ def run():
 
     while nmax < nmoves.val:
         t.start()
-        sim = SupraSim()
 
         print("Performing iteration %d..." % (nmax+1))
-        sim = SupraSim.run( lsrc_system, lsrc_moves, 1, True )
-        sim.wait()
+        lsrc_moves.move(lsrc_system, 1, True)
 
         ms = t.elapsed()
         print("...iteration complete. Took %d ms" % ms)
-
-        lsrc_system = sim.system()
-        lsrc_moves = sim.moves()
    
         nmax = lsrc_moves.nMoves()
         
