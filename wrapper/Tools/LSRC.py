@@ -1862,7 +1862,7 @@ def makeRETI(system, moves):
         replicas.add( nrgmon, MonitorMonitor(MonitorName(nrgmon), True) )
 
     # now create the replica exchange moves for the replicas
-    replica_moves = RepExMove()
+    replica_moves = RepExMove2()
     #replica_moves.setDisableSwaps(True)
     replica_moves.setGenerator( RanGenerator(seed+7) )
 
