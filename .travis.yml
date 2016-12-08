@@ -18,7 +18,7 @@ addons:
     packages:
       - cmake
       - cmake-data
-      - g++-5.2
+      - g++-5
 
 before_install:
   - export NCORES=4
