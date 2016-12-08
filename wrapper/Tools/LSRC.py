@@ -54,8 +54,8 @@ grid_buffer = Parameter("grid buffer", 2*angstrom,
 
 disable_grid = Parameter("disable grid", False, """Whether or not to disable use of the grid""")
 
-use_oldff = Parameter("use old forcefields", True, """For debugging, use the old forcefields rather than the 
-                                                      new forcefields""")
+use_oldff = Parameter("use old forcefields", False, """For debugging, use the old forcefields rather than the 
+                                                       new forcefields""")
 
 temperature = Parameter("temperature", 25*celsius, """Simulation temperature""")
 random_seed = Parameter("random seed", None, """Random number seed. Set this if you
@@ -697,6 +697,7 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
         ligand_intraclj.add(ligand_mol1)
 
         ligand_intraff = InternalFF("ligand:intra")
+        ligand_intraff.setUse14Calculation(False)
         ligand_intraff.add(ligand_mol0)
         ligand_intraff.add(ligand_mol1)
     else:
@@ -1058,8 +1059,6 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
     ###
 
     ligand_int_nrg_sym = Symbol("E_{ligand:internal}")
-    ligand_int_nrg = ligand_intraclj.components().total() + \
-                     ligand_intraff.components().total()
 
     ligand0_bound_nrg_sym = Symbol("E_{ligand0:bound}")
     ligand0_bound_nrg_f_sym = Symbol("E_{ligand0:bound_{f}}")
@@ -1082,6 +1081,9 @@ def createStage(system, protein_system, ligand_mol0, ligand_mol1, water_system, 
     ligand1_free_nrg_b_sym = Symbol("E_{ligand1:free_{b}}")
     ligand1_free_nrg_next_sym = Symbol("E_{ligand1:free_{next}}")
     ligand1_free_nrg_prev_sym = Symbol("E_{ligand1:free_{prev}}")
+
+    ligand_int_nrg = ligand_intraclj.components().total() + \
+                     ligand_intraff.components().total()
 
     bound_ligand0_fixed_nrg = bound_ligand0_fixed.components().total()
     free_ligand0_fixed_nrg = free_ligand0_fixed.components().total()
