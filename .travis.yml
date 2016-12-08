@@ -24,7 +24,7 @@ before_install:
   - export NCORES=4
   - export SIRE_DONT_PHONEHOME=1
   - export INSTALL_SIRE_DIR=$HOME/sire.app
-  - if [ "$CC" = "gcc"   ]; then export CC=gcc-5.2 CXX=g++-5.2; fi
+  - if [ "$CC" = "gcc"   ]; then export CC=gcc-5 CXX=g++-5; fi
   - if [ "$CC" = "clang" ]; then export CC=clang-3.6 CXX=clang++-3.6; fi
 
 script:
