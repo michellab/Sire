@@ -383,6 +383,14 @@ def setSoftCoreProperties(forcefield):
     return forcefield
 
 
+def setCLJFuncProperties(cljfunc):
+    cljfunc.setSpace(Cartesian())
+    cljfunc.setCoulombCutoff(coul_cutoff.val)
+    cljfunc.setLJCutoff(lj_cutoff.val)
+    cljfunc.setArithmeticCombiningRules( True )
+
+    return cljfunc
+
 def getInterCLJFunction():
     if cutoff_method.val.find("shift electrostatics") != -1:
         cljfunc = CLJShiftFunction()
@@ -653,6 +661,15 @@ def getLambdaValues():
                 lamvals.append(lam)
 
         return lamvals
+
+
+def printEnergies(nrgs, FILE):
+    """This function prints all of the energies in 'nrgs' to the file 'FILE'"""
+    keys = list(nrgs.keys())
+    keys.sort()
+
+    for key in keys:
+        FILE.write("%s  ==  %s kcal mol-1\n" % (key, nrgs[key]))
 
 
 def mergeSystems(protein_system, water_system, ligand_mol):
@@ -1817,10 +1834,10 @@ def mergeSystems(protein_system, water_system, ligand_mol):
         swap_free_lj_nrg_next = free_swap_mobile.components().lj("next") + \
                                 free_swap_fixed_lj_nrg
 
-        swap_free_coul_nrg_prev = free_swap_mobile.components().coulomb("back") + \
+        swap_free_coul_nrg_prev = free_swap_mobile.components().coulomb("prev") + \
                                   free_swap_fixed_coul_nrg
 
-        swap_free_lj_nrg_prev = free_swap_mobile.components().lj("back") + \
+        swap_free_lj_nrg_prev = free_swap_mobile.components().lj("prev") + \
                                 free_swap_fixed_lj_nrg
 
     system.add(ligand_intraclj)
@@ -2447,6 +2464,19 @@ def mergeSystems(protein_system, water_system, ligand_mol):
         nrgmons[key].setTemperature(temperature.val)
 
         system.add(key, nrgmons[key], nrgmon_frequency.val)
+
+    # now calculate the total energy of the system - this initialises grids etc.
+    # ensuring that, when we make the replicas, the maximum amount of sharing between
+    # replicas occurs
+    print("\nEnergies of this system at lambda == 0...")
+    system.setConstant(lam, 0.0)
+    printEnergies(system.energies(), sys.stdout)
+
+    print("\nEnergies of this system at lambda == 1...")
+    system.setConstant(lam, 1.0)
+    printEnergies(system.energies(), sys.stdout)
+
+    system.setConstant(lam, 0.0)
 
     return system
 
