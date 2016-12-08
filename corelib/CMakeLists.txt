@@ -347,7 +347,7 @@ endif()
 option( SIRE_DISABLE_MPI "Turn off MPI compilation and linking" ON )
 
 # Add an option to say whether or not to use OpenMM
-option( SIRE_USE_OPENMM "Set whether or not to compile in support for OpenMM" OFF )
+option( SIRE_USE_OPENMM "Set whether or not to compile in support for OpenMM" ON )
 save_sire_variable( "SIRE_USE_OPENMM" "${SIRE_USE_OPENMM}" )
 
 #############
