@@ -18,6 +18,7 @@ set ( SCRIPTS
         QuantumToMM.py
         OpenMMMD.py
         Plot.py
+        StandardState.py
         WaterChanger.py
         WaterView.py
         WSRC.py
