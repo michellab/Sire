@@ -520,25 +520,19 @@ def createWSRCMoves(system):
                     rb_moves = RigidBodyMC(mobile_ligand)
                     rb_moves.setMaximumTranslation(flex.translation())
                     rb_moves.setMaximumRotation(flex.rotation())
-
-                    # must rotate about the middle atom of the ligand so that intramolecular
-                    # moves don't change the center of rotation - this is also important if
-                    # we use the reflection sphere (as otherwise an intramolecular move could
-                    # move the ligand center out of the sphere)
-                    nearestcog_atom = getAtomNearCOG( mobile_ligand.moleculeAt(0).molecule() )
-                    print("Rotation moves of the ligand will use atom %s as the center of rotation" % nearestcog_atom)
-                    rb_moves.setCenterOfRotation( GetCOGPoint( nearestcog_atom.name() ) )
+                    rb_moves.setCenterOfRotation(GetCOMPoint())
 
                     # the ligand is not allowed to move away from its original position,
                     # as we don't want to sample "unbound" states
                     if not ligand_reflection_radius.val is None:
-                        rb_moves.setReflectionSphere(mobile_ligand.moleculeAt(0).molecule().evaluate().center(), 
+                        rb_moves.setReflectionSphere(mobile_ligand.moleculeAt(0).molecule().evaluate().centerOfMass(), 
                                                      ligand_reflection_radius.val)
 
                     scale_moves = scale_moves / 2
                     moves.add( rb_moves, scale_moves * mobile_ligand.nViews() )
 
             intra_moves = InternalMove(mobile_ligand)
+            intra_moves.setCenterOfMolecule(GetCOMPoint())
             moves.add( intra_moves, scale_moves * mobile_ligand.nViews() )
 
     if mobile_solutes.nViews() > 0:
