@@ -39,7 +39,10 @@
 
 #include "SireError/errors.h"
 
+#include <QElapsedTimer>
+
 using namespace SireMove;
+using namespace SireMaths;
 using namespace SireSystem;
 using namespace SireBase;
 using namespace SireUnits;
@@ -54,7 +57,7 @@ static const RegisterMetaType<WeightedMoves> r_weightedmoves;
 QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, 
                                         const WeightedMoves &weightedmoves)
 {
-    writeHeader(ds, r_weightedmoves, 2);
+    writeHeader(ds, r_weightedmoves, 3);
     
     SharedDataStream sds(ds);
     
@@ -68,7 +71,7 @@ QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds,
         sds << mvs_array[i].get<0>() << mvs_array[i].get<1>();
     }
     
-    sds << weightedmoves.rangenerator << weightedmoves.combined_space
+    sds << weightedmoves.avgtimes << weightedmoves.rangenerator << weightedmoves.combined_space
         << static_cast<const Moves&>(weightedmoves);
     
     return ds;
@@ -79,7 +82,35 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, WeightedMoves &weighted
 {
     VersionID v = readHeader(ds, r_weightedmoves);
     
-    if (v == 1 or v == 2)
+    if (v == 3)
+    {
+        SharedDataStream sds(ds);
+        
+        qint32 nmoves;
+        
+        sds >> nmoves;
+        
+        QVector< tuple<MovePtr,double> > mvs(nmoves);
+        tuple<MovePtr,double> *mvs_array = mvs.data();
+        
+        for (int i=0; i<nmoves; ++i)
+        {
+            MovePtr mv; double weight;
+            
+            sds >> mv >> weight;
+            mvs_array[i] = tuple<MovePtr,double>(mv, weight);
+        }
+        
+        weightedmoves.mvs = mvs;
+        
+        sds >> weightedmoves.avgtimes
+            >> weightedmoves.rangenerator
+            >> weightedmoves.combined_space
+            >> static_cast<Moves&>(weightedmoves);
+        
+        weightedmoves.recalculateWeights();
+    }
+    else if (v == 1 or v == 2)
     {
         SharedDataStream sds(ds);
         
@@ -125,7 +156,8 @@ WeightedMoves::WeightedMoves()
 /** Copy constructor */
 WeightedMoves::WeightedMoves(const WeightedMoves &other)
               : ConcreteProperty<WeightedMoves,Moves>(other),
-                mvs(other.mvs), rangenerator(other.rangenerator), 
+                mvs(other.mvs), avgtimes(other.avgtimes),
+                rangenerator(other.rangenerator),
                 combined_space(other.combined_space),
                 maxweight(other.maxweight)
 {}
@@ -138,6 +170,7 @@ WeightedMoves::~WeightedMoves()
 WeightedMoves& WeightedMoves::operator=(const WeightedMoves &other)
 {
     mvs = other.mvs;
+    avgtimes = other.avgtimes;
     rangenerator = other.rangenerator;
     combined_space = other.combined_space;
     maxweight = other.maxweight;
@@ -157,7 +190,9 @@ static bool operator==(const tuple<MovePtr,double> &t0,
 /** Comparison operator */
 bool WeightedMoves::operator==(const WeightedMoves &other) const
 {
-    return mvs == other.mvs and combined_space == other.combined_space;
+    return mvs == other.mvs and avgtimes == other.avgtimes and
+           combined_space == other.combined_space and
+           Moves::operator==(other);
 }
 
 /** Comparison operator */
@@ -173,10 +208,11 @@ QString WeightedMoves::toString() const
     
     for (int i=0; i<mvs.count(); ++i)
     {
-        moves.append( QObject::tr("  %1 : weight == %2\n"
-                                  "       %3").arg(i+1)
-                                              .arg(mvs.at(i).get<1>())
-                                              .arg(mvs.at(i).get<0>()->toString()) );
+        moves.append( QObject::tr("  %1 : weight == %2, timing = %3 ms\n"
+                                  "       %4").arg(i+1)
+                          .arg(mvs.at(i).get<1>())
+                          .arg((avgtimes.at(i).average() * nanosecond).to(millisecond))
+                          .arg(mvs.at(i).get<0>()->toString()) );
     }
     
     return QObject::tr("WeightedMoves{\n%1\n}")
@@ -245,6 +281,8 @@ void WeightedMoves::add(const Move &move, double weight)
     }
     
     mvs.append( tuple<MovePtr,double>(move, weight) );
+    avgtimes.append( Average() );
+    
     this->recalculateWeights();
 }
 
@@ -271,6 +309,8 @@ System WeightedMoves::move(const System &system, int nmoves, bool record_stats)
 
     try
     {
+        QElapsedTimer t;
+
         Moves::preCheck(run_system);
     
         int n = mvs.count();
@@ -278,7 +318,15 @@ System WeightedMoves::move(const System &system, int nmoves, bool record_stats)
 
         if (n == 1)
         {
+            t.start();
             mvs_array[0].get<0>().edit().move(run_system, nmoves, record_stats);
+            
+            qint64 ns = t.nsecsElapsed();
+            
+            for (int i=0; i<nmoves; ++i)
+            {
+                avgtimes[0].accumulate( (1.0*ns)/nmoves );
+            }
             
             Moves::postCheck(run_system);
             
@@ -302,7 +350,12 @@ System WeightedMoves::move(const System &system, int nmoves, bool record_stats)
                 if ( generator().rand(maxweight) <= move.get<1>() )
                 {
                     //use this move
+                    t.start();
                     move.get<0>().edit().move(run_system, 1, record_stats);
+                    qint64 ns = t.nsecsElapsed();
+                    
+                    avgtimes[idx].accumulate( 1.0*ns );
+                    
                     break;
                 }
             }
@@ -566,6 +619,28 @@ QList<MovePtr> WeightedMoves::moves() const
     }
     
     return moves;
+}
+
+/** Return the average time to perform each move */
+QList<SireUnits::Dimension::Time> WeightedMoves::timing() const
+{
+    QList<SireUnits::Dimension::Time> times;
+    
+    for (int i=0; i<avgtimes.count(); ++i)
+    {
+        times.append( avgtimes[i].average() * nanosecond );
+    }
+    
+    return times;
+}
+
+/** Clear all of the timing information */
+void WeightedMoves::clearTiming()
+{
+    for (int i=0; i<avgtimes.count(); ++i)
+    {
+        avgtimes[i] = Average();
+    }
 }
 
 const char* WeightedMoves::typeName()

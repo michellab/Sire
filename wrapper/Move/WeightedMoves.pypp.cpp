@@ -64,6 +64,17 @@ void register_WeightedMoves_class(){
                 , "Completely clear all of the move statistics" );
         
         }
+        { //::SireMove::WeightedMoves::clearTiming
+        
+            typedef void ( ::SireMove::WeightedMoves::*clearTiming_function_type)(  ) ;
+            clearTiming_function_type clearTiming_function_value( &::SireMove::WeightedMoves::clearTiming );
+            
+            WeightedMoves_exposer.def( 
+                "clearTiming"
+                , clearTiming_function_value
+                , "" );
+        
+        }
         { //::SireMove::WeightedMoves::energyComponent
         
             typedef ::SireCAS::Symbol const & ( ::SireMove::WeightedMoves::*energyComponent_function_type)(  ) const;
@@ -195,6 +206,17 @@ void register_WeightedMoves_class(){
                 , spaceProperty_function_value
                 , bp::return_value_policy< bp::copy_const_reference >()
                 , "Return the space property used by these moves. An exception\nwill be raised if the component moves use different space\nproperties to one another\nThrow: SireError::incompatible_error\n" );
+        
+        }
+        { //::SireMove::WeightedMoves::timing
+        
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 0, 1, 0, 0, 0, 0 > > ( ::SireMove::WeightedMoves::*timing_function_type)(  ) const;
+            timing_function_type timing_function_value( &::SireMove::WeightedMoves::timing );
+            
+            WeightedMoves_exposer.def( 
+                "timing"
+                , timing_function_value
+                , "" );
         
         }
         { //::SireMove::WeightedMoves::toString

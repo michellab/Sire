@@ -47,9 +47,12 @@
 #include "SireStream/datastream.h"
 #include "SireStream/shareddatastream.h"
 
+#include <QElapsedTimer>
+
 #include <QDebug>
 
 using namespace SireMove;
+using namespace SireMaths;
 using namespace SireSystem;
 using namespace SireCAS;
 using namespace SireUnits;
@@ -67,9 +70,10 @@ static const RegisterMetaType<Moves> r_moves( MAGIC_ONLY, "SireMove::Moves" );
 /** Serialise to a binary datastream */
 QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const Moves &moves)
 {
-    writeHeader(ds, r_moves, 1);
+    writeHeader(ds, r_moves, 2);
     
-    ds << static_cast<const Property&>(moves);
+    ds << moves.acceptable_delta << moves.check_running_total
+       << static_cast<const Property&>(moves);
     
     return ds;
 }
@@ -79,27 +83,53 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, Moves &moves)
 {
     VersionID v = readHeader(ds, r_moves);
     
-    if (v == 1)
+    if (v == 2)
     {
+        ds >> moves.acceptable_delta >> moves.check_running_total
+           >> static_cast<Property&>(moves);
+    }
+    else if (v == 1)
+    {
+        moves.acceptable_delta = 1e-2;
+        moves.check_running_total = true;
+    
         ds >> static_cast<Property&>(moves);
     }
     else
-        throw version_error(v, "1", r_moves, CODELOC);
+        throw version_error(v, "1,2", r_moves, CODELOC);
         
     return ds;
 }
 
 /** Constructor */
-Moves::Moves() : Property()
+Moves::Moves() : Property(), acceptable_delta(1e-2), check_running_total(true)
 {}
 
 /** Copy constructor */
-Moves::Moves(const Moves &other) : Property(other)
+Moves::Moves(const Moves &other)
+      : Property(other), acceptable_delta(other.acceptable_delta),
+        check_running_total(other.check_running_total)
 {}
 
 /** Destructor */
 Moves::~Moves()
 {}
+
+/** Copy assignemnt operator */
+Moves& Moves::operator=(const Moves &other)
+{
+    acceptable_delta = other.acceptable_delta;
+    check_running_total = other.check_running_total;
+    Property::operator=(other);
+    return *this;
+}
+
+/** Comparison operator */
+bool Moves::operator==(const Moves &other) const
+{
+    return acceptable_delta == other.acceptable_delta and
+           check_running_total == other.check_running_total;
+}
 
 /** Return the ith Move object in this set of Moves
 
@@ -110,6 +140,15 @@ const Move& Moves::operator[](int i) const
     QList<MovePtr> mvs = this->moves();
     
     return mvs.at( Index(i).map(mvs.count()) ).read();
+}
+
+/** Return the average time per move for the ith Move object in this set 
+    of Moves. This returns 0 if no timing data is available */
+SireUnits::Dimension::Time Moves::timing(int i) const
+{
+    QList<SireUnits::Dimension::Time> times = this->timing();
+    
+    return times.at( Index(i).map(times.count()) );
 }
 
 /** Return the number of different move types in this set of Moves 
@@ -480,6 +519,45 @@ void Moves::postCheck(System &system) const
                     .arg(unsatisfied_constraints.join("\n"))
                     .arg(this->toString()), CODELOC );
     }
+    
+    if (check_running_total)
+    {
+        //now check that the total energy equals the accumulated total energy
+        SireCAS::Values oldnrgs = system.energies();
+        
+        system.mustNowRecalculateFromScratch();
+        
+        SireCAS::Values newnrgs = system.energies();
+        
+        QStringList broken_nrgs;
+        
+        for (SireCAS::Symbol key : oldnrgs.keys())
+        {
+            double delta = std::abs( newnrgs[key] - oldnrgs[key] );
+            
+            if (delta > acceptable_delta)
+            {
+                broken_nrgs.append( QString(
+                    "%1: %2 versus %3 kcal mol-1. Difference equals %4 kcal mol-1")
+                        .arg(key.toString())
+                        .arg(oldnrgs[key]).arg(newnrgs[key])
+                        .arg(delta) );
+            }
+        }
+        
+        if (not broken_nrgs.isEmpty())
+        {
+            throw SireError::program_bug( QObject::tr(
+                    "The running total energy (%1 kcal mol-1) disagrees with the "
+                    "total energy as calculated from scratch (%2 kcal mol-1). "
+                    "Energy components which show disagreements greater than %3 kcal mol-1 "
+                    "are listed below:\n")
+                        .arg(oldnrgs[system.totalComponent()])
+                        .arg(newnrgs[system.totalComponent()])
+                        .arg(acceptable_delta)
+                        .arg(broken_nrgs.join("\n")), CODELOC );
+        }
+    }
 }
 
 ///////
@@ -491,11 +569,11 @@ static const RegisterMetaType<SameMoves> r_samemoves;
 /** Serialise to a binary datastream */
 QDataStream SIREMOVE_EXPORT &operator<<(QDataStream &ds, const SameMoves &samemoves)
 {
-    writeHeader(ds, r_samemoves, 1);
+    writeHeader(ds, r_samemoves, 2);
     
     SharedDataStream sds(ds);
     
-    sds << samemoves.mv << static_cast<const Moves&>(samemoves);
+    sds << samemoves.mv << samemoves.avgtime << static_cast<const Moves&>(samemoves);
     
     return ds;
 }
@@ -505,14 +583,22 @@ QDataStream SIREMOVE_EXPORT &operator>>(QDataStream &ds, SameMoves &samemoves)
 {
     VersionID v = readHeader(ds, r_samemoves);
     
-    if (v == 1)
+    if (v == 2)
     {
         SharedDataStream sds(ds);
+        
+        sds >> samemoves.mv >> samemoves.avgtime >> static_cast<Moves&>(samemoves);
+    }
+    else if (v == 1)
+    {
+        SharedDataStream sds(ds);
+        
+        samemoves.avgtime = Average();
         
         sds >> samemoves.mv >> static_cast<Moves&>(samemoves);
     }
     else
-        throw version_error(v, "1", r_samemoves, CODELOC);
+        throw version_error(v, "1,2", r_samemoves, CODELOC);
         
     return ds;
 }
@@ -543,7 +629,8 @@ SameMoves::SameMoves(const Move &move)
 
 /** Copy constructor */
 SameMoves::SameMoves(const SameMoves &other)
-          : ConcreteProperty<SameMoves,Moves>(other), mv(other.mv)
+          : ConcreteProperty<SameMoves,Moves>(other),
+            mv(other.mv), avgtime(other.avgtime)
 {}
 
 /** Destructor */
@@ -554,6 +641,7 @@ SameMoves::~SameMoves()
 SameMoves& SameMoves::operator=(const SameMoves &other)
 {
     mv = other.mv;
+    avgtime = other.avgtime;
     Moves::operator=(other);
     return *this;
 }
@@ -561,7 +649,8 @@ SameMoves& SameMoves::operator=(const SameMoves &other)
 /** Comparison operator */
 bool SameMoves::operator==(const SameMoves &other) const
 {
-    return mv == other.mv;
+    return mv == other.mv and avgtime == other.avgtime and
+           Moves::operator==(other);
 }
 
 /** Comparison operator */
@@ -573,7 +662,9 @@ bool SameMoves::operator!=(const SameMoves &other) const
 /** Return a string representation of these moves */
 QString SameMoves::toString() const
 {
-    return QObject::tr("SameMoves( %1 )").arg( mv.read().toString() );
+    return QObject::tr("SameMoves( %1 { %2 ms per move } )")
+                .arg( mv.read().toString() )
+                .arg( (avgtime.average() * nanosecond).to(millisecond) );
 }
 
 /** Set the random number generator used at all points in all of the moves */
@@ -586,6 +677,9 @@ void SameMoves::setGenerator(const RanGenerator &rangenerator)
     the result */
 System SameMoves::move(const System &system, int nmoves, bool record_stats)
 {
+    if (nmoves <= 0)
+        return system;
+
     SameMoves old_state(*this);
     System new_system(system);
     
@@ -594,8 +688,18 @@ System SameMoves::move(const System &system, int nmoves, bool record_stats)
         //ensure that the system is in a sane state before the moves
         this->preCheck(new_system);
 
+        QElapsedTimer t;
+        t.start();
+
         //perform the moves
         mv.edit().move(new_system, nmoves, record_stats);
+        
+        qint64 ns = t.nsecsElapsed();
+        
+        for (int i=0; i<nmoves; ++i)
+        {
+            avgtime.accumulate( (1.0*ns) / nmoves );
+        }
         
         //ensure that the system has been placed into a sane state
         //after the moves
@@ -608,6 +712,22 @@ System SameMoves::move(const System &system, int nmoves, bool record_stats)
     }
     
     return new_system;
+}
+
+/** Return the list of average times for the move */
+QList<SireUnits::Dimension::Time> SameMoves::timing() const
+{
+    QList<SireUnits::Dimension::Time> times;
+    
+    times.append( avgtime.average() * nanosecond );
+
+    return times;
+}
+
+/** Clear all of the timing statistics */
+void SameMoves::clearTiming()
+{
+    avgtime = Average();
 }
 
 /** Set the energy component of all of the moves to 'component' */

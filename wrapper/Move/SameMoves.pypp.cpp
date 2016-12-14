@@ -56,6 +56,17 @@ void register_SameMoves_class(){
         bp::scope SameMoves_scope( SameMoves_exposer );
         SameMoves_exposer.def( bp::init< SireMove::Move const & >(( bp::arg("move") ), "Construct to run the move move multiple times") );
         SameMoves_exposer.def( bp::init< SireMove::SameMoves const & >(( bp::arg("other") ), "Copy constructor") );
+        { //::SireMove::SameMoves::checkingRunningTotal
+        
+            typedef bool ( ::SireMove::SameMoves::*checkingRunningTotal_function_type)(  ) const;
+            checkingRunningTotal_function_type checkingRunningTotal_function_value( &::SireMove::SameMoves::checkingRunningTotal );
+            
+            SameMoves_exposer.def( 
+                "checkingRunningTotal"
+                , checkingRunningTotal_function_value
+                , "" );
+        
+        }
         { //::SireMove::SameMoves::clearStatistics
         
             typedef void ( ::SireMove::SameMoves::*clearStatistics_function_type)(  ) ;
@@ -65,6 +76,17 @@ void register_SameMoves_class(){
                 "clearStatistics"
                 , clearStatistics_function_value
                 , "Clear the move statistics" );
+        
+        }
+        { //::SireMove::SameMoves::clearTiming
+        
+            typedef void ( ::SireMove::SameMoves::*clearTiming_function_type)(  ) ;
+            clearTiming_function_type clearTiming_function_value( &::SireMove::SameMoves::clearTiming );
+            
+            SameMoves_exposer.def( 
+                "clearTiming"
+                , clearTiming_function_value
+                , "" );
         
         }
         { //::SireMove::SameMoves::energyComponent
@@ -117,6 +139,18 @@ void register_SameMoves_class(){
         
         }
         SameMoves_exposer.def( bp::self == bp::self );
+        { //::SireMove::SameMoves::setCheckRunningTotal
+        
+            typedef void ( ::SireMove::SameMoves::*setCheckRunningTotal_function_type)( bool ) ;
+            setCheckRunningTotal_function_type setCheckRunningTotal_function_value( &::SireMove::SameMoves::setCheckRunningTotal );
+            
+            SameMoves_exposer.def( 
+                "setCheckRunningTotal"
+                , setCheckRunningTotal_function_value
+                , ( bp::arg("on") )
+                , "" );
+        
+        }
         { //::SireMove::SameMoves::setEnergyComponent
         
             typedef void ( ::SireMove::SameMoves::*setEnergyComponent_function_type)( ::SireCAS::Symbol const & ) ;
@@ -163,6 +197,17 @@ void register_SameMoves_class(){
                 , spaceProperty_function_value
                 , bp::return_value_policy< bp::copy_const_reference >()
                 , "Return the space property used to calculate the system volume" );
+        
+        }
+        { //::SireMove::SameMoves::timing
+        
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 0, 1, 0, 0, 0, 0 > > ( ::SireMove::SameMoves::*timing_function_type)(  ) const;
+            timing_function_type timing_function_value( &::SireMove::SameMoves::timing );
+            
+            SameMoves_exposer.def( 
+                "timing"
+                , timing_function_value
+                , "" );
         
         }
         { //::SireMove::SameMoves::toString

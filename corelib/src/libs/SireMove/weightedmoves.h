@@ -102,6 +102,10 @@ public:
     
     const RanGenerator& generator() const;
 
+    QList<SireUnits::Dimension::Time> timing() const;
+    
+    void clearTiming();
+
 protected:
     void _pvt_setTemperature(const SireUnits::Dimension::Temperature &temperature);
     void _pvt_setPressure(const SireUnits::Dimension::Pressure &pressure);
@@ -112,6 +116,9 @@ private:
     
     /** The list of moves, together with their associated weights */
     QVector< boost::tuple<MovePtr,double> > mvs;
+    
+    /** The list of average times for each move */
+    QVector<SireMaths::Average> avgtimes;
     
     /** The random number generator used to pick moves */
     RanGenerator rangenerator;

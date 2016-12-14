@@ -74,6 +74,17 @@ void register_Moves_class(){
                 , "" );
         
         }
+        { //::SireMove::Moves::clearTiming
+        
+            typedef void ( ::SireMove::Moves::*clearTiming_function_type)(  ) ;
+            clearTiming_function_type clearTiming_function_value( &::SireMove::Moves::clearTiming );
+            
+            Moves_exposer.def( 
+                "clearTiming"
+                , clearTiming_function_value
+                , "" );
+        
+        }
         { //::SireMove::Moves::count
         
             typedef int ( ::SireMove::Moves::*count_function_type)(  ) const;
@@ -406,6 +417,29 @@ void register_Moves_class(){
                 "temperature"
                 , temperature_function_value
                 , "Return the constant temperature that these moves sample\nThrow: SireError::incompatible_error\n" );
+        
+        }
+        { //::SireMove::Moves::timing
+        
+            typedef ::SireUnits::Dimension::Time ( ::SireMove::Moves::*timing_function_type)( int ) const;
+            timing_function_type timing_function_value( &::SireMove::Moves::timing );
+            
+            Moves_exposer.def( 
+                "timing"
+                , timing_function_value
+                , ( bp::arg("i") )
+                , "" );
+        
+        }
+        { //::SireMove::Moves::timing
+        
+            typedef ::QList< SireUnits::Dimension::PhysUnit< 0, 0, 1, 0, 0, 0, 0 > > ( ::SireMove::Moves::*timing_function_type)(  ) const;
+            timing_function_type timing_function_value( &::SireMove::Moves::timing );
+            
+            Moves_exposer.def( 
+                "timing"
+                , timing_function_value
+                , "" );
         
         }
         { //::SireMove::Moves::toString
