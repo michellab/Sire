@@ -52,6 +52,28 @@ void register_Moves_class(){
         typedef bp::class_< SireMove::Moves, bp::bases< SireBase::Property >, boost::noncopyable > Moves_exposer_t;
         Moves_exposer_t Moves_exposer = Moves_exposer_t( "Moves", "This is the base class of all Moves objects. These are objects\nthat contain a collection of moves that are applied to a system\n\nAuthor: Christopher Woods\n", bp::no_init );
         bp::scope Moves_scope( Moves_exposer );
+        { //::SireMove::Moves::acceptableDelta
+        
+            typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::Moves::*acceptableDelta_function_type)(  ) const;
+            acceptableDelta_function_type acceptableDelta_function_value( &::SireMove::Moves::acceptableDelta );
+            
+            Moves_exposer.def( 
+                "acceptableDelta"
+                , acceptableDelta_function_value
+                , "" );
+        
+        }
+        { //::SireMove::Moves::checkingRunningTotal
+        
+            typedef bool ( ::SireMove::Moves::*checkingRunningTotal_function_type)(  ) const;
+            checkingRunningTotal_function_type checkingRunningTotal_function_value( &::SireMove::Moves::checkingRunningTotal );
+            
+            Moves_exposer.def( 
+                "checkingRunningTotal"
+                , checkingRunningTotal_function_value
+                , "" );
+        
+        }
         { //::SireMove::Moves::chemicalPotential
         
             typedef ::SireUnits::Dimension::MolarEnergy ( ::SireMove::Moves::*chemicalPotential_function_type)(  ) const;
@@ -299,6 +321,30 @@ void register_Moves_class(){
                 "pressure"
                 , pressure_function_value
                 , "Return the constant pressure that these moves sample\nThrow: SireError::incompatible_error\n" );
+        
+        }
+        { //::SireMove::Moves::setAcceptableDelta
+        
+            typedef void ( ::SireMove::Moves::*setAcceptableDelta_function_type)( ::SireUnits::Dimension::MolarEnergy ) ;
+            setAcceptableDelta_function_type setAcceptableDelta_function_value( &::SireMove::Moves::setAcceptableDelta );
+            
+            Moves_exposer.def( 
+                "setAcceptableDelta"
+                , setAcceptableDelta_function_value
+                , ( bp::arg("delta") )
+                , "" );
+        
+        }
+        { //::SireMove::Moves::setCheckRunningTotal
+        
+            typedef void ( ::SireMove::Moves::*setCheckRunningTotal_function_type)( bool ) ;
+            setCheckRunningTotal_function_type setCheckRunningTotal_function_value( &::SireMove::Moves::setCheckRunningTotal );
+            
+            Moves_exposer.def( 
+                "setCheckRunningTotal"
+                , setCheckRunningTotal_function_value
+                , ( bp::arg("on") )
+                , "" );
         
         }
         { //::SireMove::Moves::setChemicalPotential

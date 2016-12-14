@@ -56,17 +56,6 @@ void register_SameMoves_class(){
         bp::scope SameMoves_scope( SameMoves_exposer );
         SameMoves_exposer.def( bp::init< SireMove::Move const & >(( bp::arg("move") ), "Construct to run the move move multiple times") );
         SameMoves_exposer.def( bp::init< SireMove::SameMoves const & >(( bp::arg("other") ), "Copy constructor") );
-        { //::SireMove::SameMoves::checkingRunningTotal
-        
-            typedef bool ( ::SireMove::SameMoves::*checkingRunningTotal_function_type)(  ) const;
-            checkingRunningTotal_function_type checkingRunningTotal_function_value( &::SireMove::SameMoves::checkingRunningTotal );
-            
-            SameMoves_exposer.def( 
-                "checkingRunningTotal"
-                , checkingRunningTotal_function_value
-                , "" );
-        
-        }
         { //::SireMove::SameMoves::clearStatistics
         
             typedef void ( ::SireMove::SameMoves::*clearStatistics_function_type)(  ) ;
@@ -139,18 +128,6 @@ void register_SameMoves_class(){
         
         }
         SameMoves_exposer.def( bp::self == bp::self );
-        { //::SireMove::SameMoves::setCheckRunningTotal
-        
-            typedef void ( ::SireMove::SameMoves::*setCheckRunningTotal_function_type)( bool ) ;
-            setCheckRunningTotal_function_type setCheckRunningTotal_function_value( &::SireMove::SameMoves::setCheckRunningTotal );
-            
-            SameMoves_exposer.def( 
-                "setCheckRunningTotal"
-                , setCheckRunningTotal_function_value
-                , ( bp::arg("on") )
-                , "" );
-        
-        }
         { //::SireMove::SameMoves::setEnergyComponent
         
             typedef void ( ::SireMove::SameMoves::*setEnergyComponent_function_type)( ::SireCAS::Symbol const & ) ;

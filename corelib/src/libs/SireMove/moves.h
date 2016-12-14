@@ -127,6 +127,13 @@ public:
                         int nmoves=1, bool record_stats=false)=0;
     
     virtual void clearStatistics()=0;
+
+    void setCheckRunningTotal(bool on);
+    void setAcceptableDelta(SireUnits::Dimension::MolarEnergy delta);
+    
+    SireUnits::Dimension::MolarEnergy acceptableDelta() const;
+    
+    bool checkingRunningTotal() const;
     
     virtual QList<MovePtr> moves() const=0;
 
@@ -221,10 +228,6 @@ public:
 
     QList<SireUnits::Dimension::Time> timing() const;
     void clearTiming();
-
-    void setCheckRunningTotal(bool on);
-    
-    bool checkingRunningTotal() const;
 
 private:
     void _pvt_setTemperature(const SireUnits::Dimension::Temperature &temperature);

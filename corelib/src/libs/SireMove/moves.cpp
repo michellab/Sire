@@ -487,6 +487,30 @@ void Moves::preCheck(System &system) const
     }
 }
 
+/** Switch on or off the checking of the running total energy */
+void Moves::setCheckRunningTotal(bool on)
+{
+    check_running_total = on;
+}
+
+/** Set the acceptable level of drift in the running total from the recalculated total energy */
+void Moves::setAcceptableDelta(SireUnits::Dimension::MolarEnergy delta)
+{
+    acceptable_delta = delta.to(kcal_per_mol);
+}
+
+/** Return the acceptable level of drift in the running total from the recalculated total energy */
+SireUnits::Dimension::MolarEnergy Moves::acceptableDelta() const
+{
+    return acceptable_delta * kcal_per_mol;
+}
+
+/** Return whether or not we are checking of the running total energy */
+bool Moves::checkingRunningTotal() const
+{
+    return check_running_total;
+}
+
 /** Perform a post-check to ensure that the system is in a sane state
     after the moves have run */
 void Moves::postCheck(System &system) const
