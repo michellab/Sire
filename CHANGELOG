@@ -3,6 +3,14 @@ SIRE changelog
 
 devel branch:
 
+    [2016.3.0] December 22 2016 - Public release containing full LigandSwap. Uses
+     new optimised forcefields for energy calculations, built on top of Intel Threaded
+     Building Blocks for parallelisation. New code is significantly faster with better
+     scaling.
+
+    [2016.2.0] June 3 2016 - Semi-private release for the CCP-BioSim workshops. Included
+     the first version of LigandSwap and general bug fixes
+
     [2016.1.0] April 29 2016 - Merge of Bristol and Edinburgh codes, moved to miniconda
      and clean packaging system, including OpenMM fully, added in nautilus, somd etc.,
      added optimised forcefields, added a proper unit testing suite.
