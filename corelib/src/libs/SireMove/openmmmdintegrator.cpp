@@ -1780,6 +1780,7 @@ void OpenMMMDIntegrator::updateBoxDimensions(OpenMM::State &state_openmm,
                                              QVector< Vector> &buffered_dimensions, 
                                              bool Debug, AtomicVelocityWorkspace &ws)
 {
+    Debug = false;
     OpenMM::Vec3 a;
     OpenMM::Vec3 b;
     OpenMM::Vec3 c;
