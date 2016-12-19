@@ -1,12 +1,16 @@
-
-from Sire.Tools import OpenMMMD
-from Sire.Tools import readParams
-
 import Sire.Config
 
 import argparse
 import os
 import sys
+
+try:
+    numpy = Sire.try_import("numpy")
+except:
+    pass
+from Sire.Tools import OpenMMMD
+from Sire.Tools import readParams
+
 
 parser = argparse.ArgumentParser(description="Perform molecular dynamics single topology free energy calculations "
                                              "using OpenMM",
