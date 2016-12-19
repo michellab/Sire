@@ -6,6 +6,8 @@
 #   author: Antonia Mey <antonia.mey@ed.ac.uk>                                                     #
 #                                                                                                  #
 ####################################################################################################
+from Sire.Analysis import *
+import Sire.Stream
 
 try:
     numpy = Sire.try_import("numpy")
