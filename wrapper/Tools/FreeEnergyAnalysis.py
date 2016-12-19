@@ -8,10 +8,11 @@
 ####################################################################################################
 
 try:
-    import numpy as np
+    numpy = Sire.try_import("numpy")
 except ImportError:
     raise ImportError('Numpy is not installed. Please install numpy in order to use MBAR for your free energy analysis.')
 try:
+    pymbar = Sire.try_import("pymbar")
     from pymbar import MBAR
     from pymbar import timeseries
 except ImportError:
