@@ -10,7 +10,7 @@ from Sire.Analysis import *
 import Sire.Stream
 
 try:
-    np = Sire.try_import("numpy")
+    numpy = Sire.try_import("numpy")
 except ImportError:
     raise ImportError('Numpy is not installed. Please install numpy in order to use MBAR for your free energy analysis.')
 try:
@@ -64,13 +64,13 @@ class FreeEnergies(object):
         if cubic_spline:
             NotImplementedError("Cubic Spline TI has not been implemented yet")
         else:
-            means = np.mean(self._gradients_kn, axis=1)
-            self._pmf_ti = np.zeros(shape=(self._lambda_array.shape[0], 2))
+            means = numpy.mean(self._gradients_kn, axis=1)
+            self._pmf_ti = numpy.zeros(shape=(self._lambda_array.shape[0], 2))
             self._pmf_ti[:, 0] = self._lambda_array
             for i in range(1, self._lambda_array.shape[0]):
-                self._pmf_ti[i-1][1] = np.trapz(means[0:i], self._lambda_array[0:i])
-            self._pmf_ti[-1][1] = np.trapz(means, self._lambda_array)
-            self._deltaF_ti = np.trapz(means, self._lambda_array)
+                self._pmf_ti[i-1][1] = numpy.trapz(means[0:i], self._lambda_array[0:i])
+            self._pmf_ti[-1][1] = numpy.trapz(means, self._lambda_array)
+            self._deltaF_ti = numpy.trapz(means, self._lambda_array)
 
 
     def run_mbar(self):
@@ -80,7 +80,7 @@ class FreeEnergies(object):
         (deltaF_ij, dDeltaF_ij, theta_ij) = MBAR_obj.getFreeEnergyDifferences()
         self._deltaF_mbar = deltaF_ij[0, self._lambda_array.shape[0]-1]
         self._dDeltaF_mbar = dDeltaF_ij[0, self._lambda_array.shape[0]-1]
-        self._pmf_mbar = np.zeros(shape=(self._lambda_array.shape[0], 2))
+        self._pmf_mbar = numpy.zeros(shape=(self._lambda_array.shape[0], 2))
         self._pmf_mbar[:, 0] = self._lambda_array
         self._pmf_mbar[:, 1] = self._f_k
 
@@ -154,8 +154,8 @@ class SubSample(object):
                                "you discarding initial data. Please set percentage to another value than 100!")
             percentage_removal = self._N_k*(1-self.percentage/100.0)
             self._subsampled_N_k_gradients = self._N_k-percentage_removal
-            N_max = np.max(self._subsampled_N_k_gradients)
-            self._subsampled_grad_kn = np.zeros(shape=(self._N_k.shape[0], N_max))
+            N_max = numpy.max(self._subsampled_N_k_gradients)
+            self._subsampled_grad_kn = numpy.zeros(shape=(self._N_k.shape[0], N_max))
             for p in range(percentage_removal.shape[0]):
                 self._subsampled_grad_kn[p,:] = self._gradients_kn[p,percentage_removal[p]:]
             if N_max <=100:
@@ -165,21 +165,21 @@ class SubSample(object):
             print("We are doing a timeseries analysis using the timeseries analysis module in pymbar and will subsample"
                   " according to that.")
             #first we compute statistical inefficiency
-            g_k = np.zeros(shape=(self._gradients_kn.shape[0]))
-            self._subsampled_N_k_gradients = np.zeros(shape=(self._gradients_kn.shape[0]))
+            g_k = numpy.zeros(shape=(self._gradients_kn.shape[0]))
+            self._subsampled_N_k_gradients = numpy.zeros(shape=(self._gradients_kn.shape[0]))
             for i in range(g_k.shape[0]):
                 g_k[i] = timeseries.statisticalInefficiency(self._gradients_kn[i,:])
-            g = np.max(g_k)
+            g = numpy.max(g_k)
             #now we need to figure out what the indices in the data are for subsampling
             indices_k = []
             for i in range(g_k.shape[0]):
                 indices_k.append(timeseries.subsampleCorrelatedData(self._gradients_kn[i,:], g=g))
                 self._subsampled_N_k_gradients[i]=len(indices_k[i])
-            N_max = np.max(self._subsampled_N_k_gradients)
+            N_max = numpy.max(self._subsampled_N_k_gradients)
             if N_max <=100:
                 RuntimeWarning("You have reduced your data to less than 100 samples, the results from these might not "
                                "be trustworthy. ")
-            self._subsampled_grad_kn = np.zeros([self._gradients_kn.shape[0], N_max], np.float64)
+            self._subsampled_grad_kn = numpy.zeros([self._gradients_kn.shape[0], N_max], numpy.float64)
             for k in range(self._gradients_kn.shape[0]):
                 self._subsampled_grad_kn[k, :] = self._gradients_kn[k, indices_k[k]]
 
@@ -194,8 +194,8 @@ class SubSample(object):
 
             percentage_removal = self._N_k*(1-self.percentage/100.0)
             self._subsampled_N_k_energies = self._N_k-percentage_removal
-            N_max = np.max(self._subsampled_N_k_energies)
-            self._subsampled_u_kln = np.zeros(shape=(self._N_k.shape[0], self._N_k.shape[0], N_max))
+            N_max = numpy.max(self._subsampled_N_k_energies)
+            self._subsampled_u_kln = numpy.zeros(shape=(self._N_k.shape[0], self._N_k.shape[0], N_max))
             for i in range(percentage_removal.shape[0]):
                 for j in range(percentage_removal.shape[0]):
                     self._subsampled_u_kln[i,j,:] = self._u_kln[i,j,percentage_removal[j]:]
@@ -207,22 +207,22 @@ class SubSample(object):
                   " according to that.")
 
             #first we compute statistical inefficiency
-            g_k = np.zeros(shape=(self._energies_kn.shape[0]))
+            g_k = numpy.zeros(shape=(self._energies_kn.shape[0]))
             for i in range(g_k.shape[0]):
                 g_k[i] = timeseries.statisticalInefficiency(self._energies_kn[i,:])
-            g = np.max(g_k)
+            g = numpy.max(g_k)
             #now we need to figure out what the indices in the data are for subsampling
             indices_k = []
-            self._subsampled_N_k_energies = np.zeros(shape=(self._gradients_kn.shape[0]))
+            self._subsampled_N_k_energies = numpy.zeros(shape=(self._gradients_kn.shape[0]))
             for i in range(g_k.shape[0]):
                 indices_k.append(timeseries.subsampleCorrelatedData(self._energies_kn[i,:], g=g))
                 self._subsampled_N_k_energies[i]=len(indices_k[i])
-            #self._subsampled_N_k_energies = (np.ceil(self._N_k / g)).astype(int)
-            N_max = np.max(self._subsampled_N_k_energies)
+            #self._subsampled_N_k_energies = (numpy.ceil(self._N_k / g)).astype(int)
+            N_max = numpy.max(self._subsampled_N_k_energies)
             if N_max <=100:
                 RuntimeWarning("You have reduced your data to less than 100 samples, the results from these might not "
                                "be trustworthy. ")
-            self._subsampled_u_kln = np.zeros([self._gradients_kn.shape[0],self._gradients_kn.shape[0], N_max], np.float64)
+            self._subsampled_u_kln = numpy.zeros([self._gradients_kn.shape[0],self._gradients_kn.shape[0], N_max], numpy.float64)
             for k in range(self._gradients_kn.shape[0]):
                 self._subsampled_u_kln[k,:,:] = self._u_kln[k,:,indices_k[k]].transpose()
 
