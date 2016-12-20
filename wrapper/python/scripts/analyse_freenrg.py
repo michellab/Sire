@@ -70,6 +70,10 @@ parser.add_argument('-i', '--input', nargs=1,
                     help="Supply the name of the Sire Streamed Save (.s3) file containing the "
                          "free energies to be analysed.")
 
+parser.add_argument('-l', '--sim_input', nargs='*',
+                    help="Supply the name of the Sire simulation file/s containing gradients and perturbed energies to "
+                         "be analysed. ")
+
 parser.add_argument('-g', '--gradients', nargs='*',
                     help="Supply the name of the Sire Streamed gradients (.s3) files containing the "
                          "gradients to be analysed.")

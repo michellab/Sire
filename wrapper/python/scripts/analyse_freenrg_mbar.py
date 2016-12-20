@@ -40,7 +40,7 @@ parser.add_argument('--author', action="store_true",
 parser.add_argument('--version', action="store_true",
                     help="Get version information about this script.")
 
-parser.add_argument('-i', '--input', nargs='*',
+parser.add_argument('-l', '--sim_input', nargs='*',
                     help="Supply the name of the Sire simulation file/s containing gradients and perturbed energies to "
                          "be analysed. ")
 
