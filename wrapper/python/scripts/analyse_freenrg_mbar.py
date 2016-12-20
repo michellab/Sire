@@ -13,7 +13,10 @@ get in touch via the Sire users mailing list, or by creating a github issue.
 import argparse
 import sys
 import os
-import numpy as np
+try:
+    numpy = Sire.try_import("numpy")
+except:
+    pass
 from Sire.Tools.FreeEnergyAnalysis import SubSample
 from Sire.Tools.FreeEnergyAnalysis import FreeEnergies
 from Sire.Units import *
