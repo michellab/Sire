@@ -103,7 +103,7 @@ else:
     T = None
 
 if not args.lam is None:
-    lam = np.array(args.lam)
+    lam = numpy.array(args.lam)
 else:
     lam = None
 
