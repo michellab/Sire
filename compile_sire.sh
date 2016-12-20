@@ -108,11 +108,11 @@ fi
 if [ "$(uname)" == "Darwin" ]; then
     # This is running on a Mac
     PLATFORM="OSX"
-    MINICONDA="http://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-MacOSX-${BIT_TYPE}.sh"
+    MINICONDA="https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-MacOSX-${BIT_TYPE}.sh"
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     # This is running on Linux
     PLATFORM="Linux"
-    MINICONDA="http://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-${BIT_TYPE}.sh"
+    MINICONDA="https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-${BIT_TYPE}.sh"
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
     # This is running on Windows NT
     echo "Compilation on windows is not supported."

@@ -1684,16 +1684,6 @@ def mergeLSRC(sys0, ligand0_mol, sys1, ligand1_mol, watersys):
     mapping = AtomMCSMatcher(mcs_timeout.val).match(ligand0_mol, PropertyMap(), 
                                                     ligand1_mol, PropertyMap())
 
-    # try the reverse mapping, as sometimes it finds a better result
-    #rmapping = AtomMCSMatcher(mcs_timeout.val).match(ligand1_mol, PropertyMap(),
-    #                                                 ligand0_mol, PropertyMap())
-
-    #if len(rmapping) > len(mapping):
-    #    print("Reverse map did better than the forward map. Using the reverse map as a key...")
-    #    mapping = AtomMCSMatcher( AtomResultMatcher(rmapping,True), mcs_timeout.val ) \
-    #               .match(ligand0_mol, PropertyMap(),
-    #                      ligand1_mol, PropertyMap())
-
     lines = []
     for key in mapping.keys():
         lines.append( "%s <=> %s" % (ligand0_mol.atom(key).name().value(), \
