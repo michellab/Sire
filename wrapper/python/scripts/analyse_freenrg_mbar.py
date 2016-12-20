@@ -137,7 +137,7 @@ if len(lam) != num_inputfiles:
 #We will load all the data now
 data = []
 for i in range(num_inputfiles):
-    data.append(np.loadtxt(input_file[i]))
+    data.append(numpy.loadtxt(input_file[i]))
 
 #array of generating lambdas to check that they agree with provided lambdas
 lam_sanity = []
@@ -155,12 +155,12 @@ if T is None:
     sys.exit(-1)
 
 k_boltz_J = 0.0083144621
-data = np.array(data)
+data = numpy.array(data)
 grad_kn = data[:,:,2] #extract the reduced gradients
 energies_kn = data[:,:,1] #extract the potential energies
 
 #N_k is the number of samples at generating thermodynamic state (lambda) k
-N_k = np.zeros(shape=lam.shape[0])
+N_k = numpy.zeros(shape=lam.shape[0])
 for k in range(0, lam.shape[0]):
     N_k[k] = data[k].shape[0]
 
@@ -169,7 +169,7 @@ for k in range(0, lam.shape[0]):
 u_kln = []
 for k in range(0, len(lam)):
     u_kln.append(data[k][:,5:].transpose())
-u_kln=np.array(u_kln)
+u_kln=numpy.array(u_kln)
 
 #now we use the subsampling information to subsample the data.
 subsample_obj = SubSample(grad_kn, energies_kn, u_kln, N_k, percentage=percentage, subsample=subsampling)
@@ -184,7 +184,7 @@ free_energy_obj.run_ti()
 pmf_mbar = free_energy_obj.pmf_mbar
 if T != None:
     pmf_mbar[:,1] = pmf_mbar[:,1]*T*k_boltz
-np.savetxt(FILE, pmf_mbar, fmt=['%f.2', '%f'])
+numpy.savetxt(FILE, pmf_mbar, fmt=['%f.2', '%f'])
 FILE.close()
 
 pmf_ti = free_energy_obj.pmf_ti
@@ -193,7 +193,7 @@ if T != None:
 
 
 ti_out = os.path.join(os.path.dirname(output_file),'TI_'+os.path.basename(output_file))
-np.savetxt(ti_out, pmf_ti, fmt=['%f.2', '%f'])
+numpy.savetxt(ti_out, pmf_ti, fmt=['%f.2', '%f'])
 
 #writing out free energy differences and errors
 #TODO: rewrite this with a decorator!
