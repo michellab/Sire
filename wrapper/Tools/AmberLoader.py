@@ -213,16 +213,37 @@ def findMolecule(system, molname):
     return None
 
 
-def createSystem(top_file, crd_file, naming_scheme = NamingScheme()):
-    
-    system = System(top_file)
+def addMoleculeToSystem(molecule, system, naming_scheme = NamingScheme()):
+    """This function adds the passed molecule to the passed system
+       using the passed naming scheme to assign the molecule to the 
+       correct molecule group"""
 
-    # Load all of the molecules and their parameters from
-    # the topology and coordinate files
-    amber = Amber()
-    print("Loading the molecules from the Amber files \"%s\" and \"%s\"..." % \
-                  (crd_file, top_file))
-    (molecules, space) = amber.readCrdTop(crd_file, top_file)
+    resnams = getResidueNames(molecule)
+
+    system.add(molecule, MGName(naming_scheme.allMoleculesGroupName().value()))
+
+    if naming_scheme.isSolute(resnams):
+        system.add(molecule, MGName(naming_scheme.solutesGroupName().value()))
+    elif naming_scheme.isProtein(resnams):
+        system.add(molecule, MGName(naming_scheme.proteinsGroupName().value()))
+    elif naming_scheme.isWater(resnams):
+        system.add(molecule, MGName(naming_scheme.watersGroupName().value()))
+        system.add(molecule, MGName(naming_scheme.solventsGroupName().value()))    
+    elif naming_scheme.isIon(resnams):
+        system.add(molecule, MGName(naming_scheme.ionsGroupName().value()))
+        system.add(molecule, MGName(naming_scheme.solventsGroupName().value()))
+    elif molecule.nResidues() == 1:
+        system.add(molecule, MGName(naming_scheme.solventsGroupName().value()))
+    else:
+        system.add(molecule, MGName(naming_scheme.solutesGroupName().value()))
+
+
+def createSystemFrom(molecules, space, system_name, naming_scheme = NamingScheme()):
+    """Create a new System from the passed molecules and space,
+       sorting the molecules into different molecule groups based on the
+       passed naming scheme"""
+
+    system = System(system_name)
 
     # If requested, change the water model for all water molecules
     if water_model.val == "tip4p":
@@ -365,9 +386,26 @@ def createSystem(top_file, crd_file, naming_scheme = NamingScheme()):
     return system
 
 
+def createSystem(top_file, crd_file, naming_scheme = NamingScheme()):
+    """Create a new System from the molecules read in from the passed amber 
+       topology and coordinate files. This sorts the molecules into different
+       molecule groups based on the passed naming scheme"""
+    
+    system = System(top_file)
+
+    # Load all of the molecules and their parameters from
+    # the topology and coordinate files
+    amber = Amber()
+    print("Loading the molecules from the Amber files \"%s\" and \"%s\"..." % \
+                  (crd_file, top_file))
+    (molecules, space) = amber.readCrdTop(crd_file, top_file)
+
+    return createSystemFrom(molecules, space, top_file, naming_scheme)
+
+
 def centerSystem(system, molecule):
     print("Setting the origin of the system to the center of molecule %s (%s)..." % (molecule, molecule.number()))
-    center = molecule.evaluate().center()
+    center = molecule.evaluate().centerOfMass()
     print("This requires translating everything by %s..." % (-center))    
     
     moved_mols = Molecules()
